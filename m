@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1872F4C8884
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA57E4C8888
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiCAJtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S233965AbiCAJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234040AbiCAJtO (ORCPT
+        with ESMTP id S231785AbiCAJvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:49:14 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCE1D8C7E6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:48:31 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-4-_kwR_xRLO7eUfka9jM6qhg-1; Tue, 01 Mar 2022 09:48:29 +0000
-X-MC-Unique: _kwR_xRLO7eUfka9jM6qhg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 09:48:28 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 09:48:28 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Masahiro Yamada' <masahiroy@kernel.org>
-CC:     Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Michal Marek" <michal.lkml@markovi.net>
-Subject: RE: [PATCH v2] fixdep: use fflush() and ferror() to ensure successful
- write to files
-Thread-Topic: [PATCH v2] fixdep: use fflush() and ferror() to ensure
- successful write to files
-Thread-Index: AQHYLPcP7Y0QFZ9bvkmwHjXtsXkLWaypyorwgABysACAAAsbwA==
-Date:   Tue, 1 Mar 2022 09:48:28 +0000
-Message-ID: <723970e562d04b22899fe3855d599cab@AcuMS.aculab.com>
-References: <20220225144245.182659-1-masahiroy@kernel.org>
- <CAKwvOd=WjnHSHKLVRJifHxV2tyDsLTkek80NWU=do=FSHhNLug@mail.gmail.com>
- <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
- <CAK7LNARKxd-kr3pABzTC2+uGhEKbyLtXDCSoxn56P0go--bg1A@mail.gmail.com>
-In-Reply-To: <CAK7LNARKxd-kr3pABzTC2+uGhEKbyLtXDCSoxn56P0go--bg1A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Mar 2022 04:51:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3419D434BD;
+        Tue,  1 Mar 2022 01:50:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEB66B817D0;
+        Tue,  1 Mar 2022 09:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F51C340EE;
+        Tue,  1 Mar 2022 09:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646128232;
+        bh=lOOsSw7Tk3bXo6gVmqcvsCoSXzM9PQBSIvg1gEmMSoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rPEdBVePmBJHXmE+N8egu9mj/nL23kiZe+v7tqCnT+vpjUQuOgSHSpPF/1dMX0+tc
+         wT78dPr/klG9dHslrMfoZuMis72pLmhRlJWPQUafPHXwx3bWlZik4L20i5uerbJwFF
+         N4ndm2yNIyjwlcgmNTI3QChvL1naCwiyef7bvnHyMuRsGVUZ+rS0WEWRV6N5R7jndO
+         qRkBKvluUFRJ9e7KSI8vNymdWp1fgmrfp2ceNtJ0ZFUVqpoT/5j24jO/XV9CrmqXDM
+         +C0B2C8TcbEldyOWYSlAXRhMK9y+Ob7VzG5v04FlQgu6Rr6x4B7NppCDVR6MsscTaV
+         WnBc0wHZmeXlw==
+Received: by pali.im (Postfix)
+        id B2C6AC77; Tue,  1 Mar 2022 10:50:29 +0100 (CET)
+Date:   Tue, 1 Mar 2022 10:50:29 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
+ Set_Slot_Power_Limit message
+Message-ID: <20220301095029.sihzfk2vextf7gpz@pali>
+References: <20220225125407.wglplhyisgges3zk@pali>
+ <20220225170225.GA363593@bhelgaas>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220225170225.GA363593@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWFzYWhpcm8gWWFtYWRhDQo+IFNlbnQ6IDAxIE1hcmNoIDIwMjIgMDk6MDYNCj4gDQo+
-IE9uIFR1ZSwgTWFyIDEsIDIwMjIgYXQgMTE6MjggQU0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWln
-aHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBUaGUgcmV0dXJuIHZhbHVlIGZyb20gZnBy
-aW50ZigpIGlzIG5vcm1hbGx5IHRoZSBudW1iZXIgb2YgYnl0ZXMgd3JpdHRlbiB0bw0KPiA+IHRo
-ZSBpbnRlcm5hbCBidWZmZXIgKDhrIGluIGdsaWJjPykNCj4gPg0KPiA+IE9ubHkgaWYgdGhlIGJ1
-ZmZlciBpcyBmdWxsIGFuZCBhbiBhY3R1YWwgd3JpdGUoKSBpcyBkb25lIGRvIHlvdSBnZXQgYW55
-IGluZGljYXRpb24gb2YgYW4gZXJyb3IuDQo+ID4NCj4gPiBTbyB5b3UgY2FuIHVzZSB0aGUgZXJy
-b3IgcmV0dXJuIGZyb20gZnByaW50ZigpIHRvIHRlcm1pbmF0ZSBhIGxvb3Ag4oCTIGJ1dCBpdCB1
-c3VhbGx5DQo+ID4ganVzdCBpc27igJl0IHdvcnRoIHRoZSBlZmZvcnQuDQo+ID4NCj4gPiBUaGUg
-ZXJyb3Igc3RhdHVzIHJldHVybmVkIGJ5IGZlcnJvcigpIGlzIOKAmHN0aWNreeKAmSwgc28geW91
-IG5lZWQgb25seSBjaGVjayBvbmNlLg0KPiA+DQo+ID4gQnV0IHlvdSBuZWVkIHRvIGNoZWNrIGJl
-Zm9yZSBmY2xvc2UoKS4NCj4gPg0KPiA+IFNpbmNlIGZjbG9zZSgpIGhhcyB0byB3cml0ZSBvdXQg
-dGhlIGJ1ZmZlciDigJMgdGhhdCB3cml0ZSBjYW4gYWxzbyBmYWlsLg0KPiA+DQo+ID4gSeKAmW0g
-bm90IHN1cmUgd2hldGhlciBmY2xvc2UoKSByZXR1cm5zIGFuZCBlcnJvciBpbiB0aGF0IGNhc2Us
-IGJ1dCBhZGRpbmcgZmZsdXNoKCkNCj4gPiBtYWtlcyB0aGUgY29kaW5nIGVhc2llci4NCj4gDQo+
-IA0KPiBJIGp1c3QgY2hlY2tlZCB0aGlzLg0KPiANCj4gZmNsb3NlKCkgcmV0dXJucyAtMSBpZiBp
-dCBmYWlscyB0byBmbHVzaCB0aGUgYnVmZmVyLg0KDQpCdXQgeW91IHN0aWxsIG5lZWQgdG8gY2hl
-Y2sgZmVycm9yKCkgYmVmb3JlIGl0Lg0KU28geW91IG1pZ2h0IGFzIHdlbGwgZG8gZmZsdXNoKCk7
-IGlmIChmZXJyb3IoKSk7IGZjbG9zZSgpOw0KDQpUaGVuIHRoZXJlIGlzIG9ubHkgb25lIGVycm9y
-IGV4aXQgcGF0aC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Friday 25 February 2022 11:02:25 Bjorn Helgaas wrote:
+> On Fri, Feb 25, 2022 at 01:54:07PM +0100, Pali Rohár wrote:
+> > On Thursday 24 February 2022 15:28:11 Bjorn Helgaas wrote:
+> > > On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
+> > > > This PCIe message is sent automatically by mvebu HW when link changes
+> > > > status from down to up.
+>  
+> > > PCIe r6.0, sec 2.2.8.5 and 7.5.3.9, also say Set_Slot_Power_Limit must
+> > > be sent on a config write to Slot Capabilities.  I don't really
+> > > understand that, since AFAICS, everything in that register is
+> > > read-only.  But there must be some use case for forcing a message.
+> > 
+> > I understood it in this way: Capabilities register is read-only hw-init
+> > and so firmware / driver can write initialization values into this
+> > register. And when firmware / driver is doing this write then Root port
+> > should send that Set_Slot_Power_Limit message.
+> 
+> Sec 7.5.3.9 describes the behavior of Slot Capabilities in config
+> space, where it must be read-only.  Firmware (or the mvebu driver)
+> must use a different mechanism to initialize the values.
+> 
+> FWIW, I found this implementation note in PCIe r6.0, sec 6.9 that
+> explains why config writes to this read-only register would be useful:
+> 
+>   IMPLEMENTATION NOTE: AUTO SLOT POWER LIMIT DISABLE
+> 
+>   In some environments host software may wish to directly manage the
+>   transmission of a Set_Slot_Power_Limit message by performing a
+>   Configuration Write to the Slot Capabilities register rather than
+>   have the transmission automatically occur when the Link transitions
+>   from a non-DL_Up to a DL_Up status. This allows host software to
+>   limit power supply surge current by staggering the transition of
+>   Endpoints to a higher power state following a Link Down or when
+>   multiple Endpoints are simultaneously hot-added due to cable or
+>   adapter insertion.
+> 
+> Bjorn
 
+Hm... I did not understand from this description what should happen when
+write operation is performed to the slot capabilities register. It is
+allowed to change content of this register?
+
+Or better question, what should write hook in pci-mvebu.c driver for
+slot capabilities do?

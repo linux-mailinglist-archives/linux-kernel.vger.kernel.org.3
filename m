@@ -2,160 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B1B4C9181
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5444C9184
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbiCAR3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S236492AbiCARaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiCAR3J (ORCPT
+        with ESMTP id S233592AbiCARa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:29:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9E220F60
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:28:27 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so1701047wmj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:28:27 -0800 (PST)
+        Tue, 1 Mar 2022 12:30:29 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEFD2A253
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:29:47 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id cp23-20020a17090afb9700b001bbfe0fbe94so2811660pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:29:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y86hBfPWj9E4aTo+XMBrAu6Y5p4SQMawkPD4Q/SuKPY=;
-        b=ifR445Ptk0kZIwyK/iR5LauUeexT4h+Xm5fWIS9UfHsJTwIXI+TBUH0b1B1nklV58Q
-         e3posB9tDmWAuXNqOByYa8OEIeuEgFpyIkDoWKkxe1RAiCnFE6ZEzQVCpMvS62fGzNFV
-         nWcw5JV2lmoD9jxvmDMFuNVsgy/NwYWUQ6a0I1zB2e5jSr3/JFEIp9xW/NRIDhtT+/y6
-         uvAB7/5ZICC2qcmaHb2EAlpVYU+L8My5syB7aELi6iajmzjea09g2vNncJq3GY6hv/nP
-         g2d17hu4ZYUIRYCXpyuRUhAY/Kr9r3k7MyrtDEVfLOZZZFWPJ239r6w7DpTzLNolCHHw
-         A62A==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=2oNpK26q2m6Xy1nhECvVdzb9bqyZgEj4dQVtxGQNBDs=;
+        b=BHfJ0FHd1Coau+LOYNsZsVB8kOtSFmA6BEPwpphBU2aloxrCe2B0jf9YCDPIztHZLQ
+         EICWMfm9XajoxPzMSnn7PoVdCLAfTqqc48f+TMfZ4luwi3CcwQvRP/t1ktBRSTBwwyBm
+         X49RGa8LBYAZ0digj3MfFtaS8MmGKwbIbtxTwqEDqdRZELHgAcxaHuq06wFmx+ChxNrc
+         ULY9ocjHI1Tg5CUU07FrJIOrM8VBTQiWXbyeEAfLxDkLltphHrbO1zPKtKF3nRhpDx3M
+         pnVDs2kqcaPIG7xrSOX+OGnm2uY4KlmI2vnxKTA7W+4sM6VtACLrDomcT2qnlkBc9xpW
+         vzQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y86hBfPWj9E4aTo+XMBrAu6Y5p4SQMawkPD4Q/SuKPY=;
-        b=mWvEGWNOL8/6yfyWCWvEvBDVOwBHPCxJ0EZaSZQuIKt08uE1affpPkgwMYgmEOiQHA
-         VieNsXtjG51HQS37DOPi+n9iz1teTh5VxaFwcptpsxXnsDJYBTl72pFv/t2joL6BIR1v
-         X1u4nyW0uFPnUSbb71oNNuAfUJMv2bgPV6ddmfslXkxp0uU2H51OIfIXgrYQWbdnLYyu
-         suzyBIQhjmrF1g8ZkasNKE+BOI2SqLTcH9ZnTB+V1UUCNdkOJHl7SVYJto21bV1LonUO
-         oExv4mmyRJOA46KlgVUF4ey6EC4fwAdBwcqFf0R1TxpwOSnKlM6J3/juDbb5XIIf4Z5X
-         VN8A==
-X-Gm-Message-State: AOAM533j1XZMdVko2UCdIWlc6e+AnSnXeOb2xP+XDdYsyoHf+J9PShOS
-        yrZ6O8unRQP+wGUVFSsZ2scW+g==
-X-Google-Smtp-Source: ABdhPJyP4zzjkBPeDrhk1IU4HHA4Z4mVRSeyWw7DiZ4BmjKx+FbF6/CkwhxttMvqrC0XO+mqNoqKvQ==
-X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr18173339wmq.139.1646155705687;
-        Tue, 01 Mar 2022 09:28:25 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id c4-20020adfed84000000b001e5b8d5b8dasm20457807wro.36.2022.03.01.09.28.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 09:28:24 -0800 (PST)
-Message-ID: <5f481315-021c-39d6-8c6c-91918851ab13@linaro.org>
-Date:   Tue, 1 Mar 2022 17:28:22 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=2oNpK26q2m6Xy1nhECvVdzb9bqyZgEj4dQVtxGQNBDs=;
+        b=8BRBCU1CWwaIbAPixiVR1JxjDLkOr2N7gxIHxjlS3JB7V04iDP9229k1bjHNF5jFC8
+         0O4HI0a9R9JNdpAbelfoNd+Cz1Vyqgao/6TSh+LSlkC2ADbdn2zteArrpND4v5an7lVF
+         8zudnKu/v6dy1Gnr01GL0dWb7lhFQ7IKeGvySLms4C4W49bI7mdgocbdhv+6R2pzUV9n
+         b+V/mMj8e3CiV5l9Uu0Glc7+9twtZ1GLiJpIoPKQDTyl7kSbFffMuZ+UijnpKaVQ3WmR
+         IWN/OcvbDms0cAzkSs3sALG3ZF5g4cB/c7DTwWG6UDDyn/YiPab6I4mDF3FRVi3gkZW8
+         VH/Q==
+X-Gm-Message-State: AOAM532vFfiNTKs2kei3Lkl7nctO9YCW2pbaffsV2j+inF9h1gop4vJB
+        Yy7XM8q8OuGkTznSSRpFNigiDJBCQwwvDblim27hLg==
+X-Google-Smtp-Source: ABdhPJwyHcGgYRV6ulnduStD4+XYTEcWUCI6ji8Qj9JOv5J7fxk+4Z6aC9W+VnvzfE8JpFvhG34PVYafBwpkFJmUHVc=
+X-Received: by 2002:a17:90a:5a85:b0:1bc:8bda:6a42 with SMTP id
+ n5-20020a17090a5a8500b001bc8bda6a42mr23106990pji.4.1646155787286; Tue, 01 Mar
+ 2022 09:29:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 10/11] slimbus: qcom-ngd: Fix kfree() of static memory
- on setting driver_override
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, stable@vger.kernel.org
-References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
- <20220227135329.145862-4-krzysztof.kozlowski@canonical.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220227135329.145862-4-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220218133348.628962-1-jsd@semihalf.com> <Yh44rYi6m9csyF28@ninjato>
+In-Reply-To: <Yh44rYi6m9csyF28@ninjato>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Tue, 1 Mar 2022 18:29:36 +0100
+Message-ID: <CAOtMz3N+wv1N_VmN-iGx0AeptvgYKw47PtaTv73CDqHkaCKMtg@mail.gmail.com>
+Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
+To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>, upstream@semihalf.com,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+wt., 1 mar 2022 o 16:16 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
+>
+> On Fri, Feb 18, 2022 at 02:33:48PM +0100, Jan Dabros wrote:
+> > Kernel test robot reported incorrect type in argument 1 of readl(), but
+> > more importantly it brought attention that MMIO accessor shouldn't be
+> > used in this case, since req->hdr.status is part of a command-response
+> > buffer in system memory.
+> >
+> > Since its value may be altered by PSP outside of the scope of current
+> > thread (somehow similar to IRQ handler case), we need to use
+> > READ_ONCE() to ensure compiler won't optimize this call.
+> >
+> > Fix also 'status' variable type to reflect that corresponding field in
+> > command-response buffer is platform-independent u32.
+> >
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+>
+> Applied to for-next, thanks!
 
+Thanks!
 
-On 27/02/2022 13:53, Krzysztof Kozlowski wrote:
-> The driver_override field from platform driver should not be initialized
-> from static memory (string literal) because the core later kfree() it,
-> for example when driver_override is set via sysfs.
-> 
-> Use dedicated helper to set driver_override properly.
-> 
-> Fixes: 917809e2280b ("slimbus: ngd: Add qcom SLIMBus NGD driver")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Jan, I wonder if you want to be the maintainer for this driver? If you'd
+> like, then please send me the patch adding you to MAINTAINERS. So, you
+> will get notified if people want to enhance this driver.
 
-LGTM,
+So actually I've already added myself as a R:eviewer for
+i2c-designware-* files in one of the previous patches with the purpose
+of reviewing code touching this driver. This makes sense since I can
+also test modifications on my device.
 
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-> ---
->   drivers/slimbus/qcom-ngd-ctrl.c | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-> index 7040293c2ee8..e5d9fdb81eb0 100644
-> --- a/drivers/slimbus/qcom-ngd-ctrl.c
-> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
-> @@ -1434,6 +1434,7 @@ static int of_qcom_slim_ngd_register(struct device *parent,
->   	const struct of_device_id *match;
->   	struct device_node *node;
->   	u32 id;
-> +	int ret;
->   
->   	match = of_match_node(qcom_slim_ngd_dt_match, parent->of_node);
->   	data = match->data;
-> @@ -1455,7 +1456,17 @@ static int of_qcom_slim_ngd_register(struct device *parent,
->   		}
->   		ngd->id = id;
->   		ngd->pdev->dev.parent = parent;
-> -		ngd->pdev->driver_override = QCOM_SLIM_NGD_DRV_NAME;
-> +
-> +		ret = driver_set_override(&ngd->pdev->dev,
-> +					  &ngd->pdev->driver_override,
-> +					  QCOM_SLIM_NGD_DRV_NAME,
-> +					  strlen(QCOM_SLIM_NGD_DRV_NAME));
-> +		if (ret) {
-> +			platform_device_put(ngd->pdev);
-> +			kfree(ngd);
-> +			of_node_put(node);
-> +			return ret;
-> +		}
->   		ngd->pdev->dev.of_node = node;
->   		ctrl->ngd = ngd;
->   
+Best Regards,
+Jan

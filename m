@@ -2,247 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06A94C8655
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931C54C8657
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiCAIU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiCAIUz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230129AbiCAIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 1 Mar 2022 03:20:55 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B86C93E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:20:14 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id f38so13825102ybi.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=l2awJBHW6HyJ4vDzHlRPr73FDADh7U/A5qrCjIA65qA=;
-        b=dqkd0mjg8qjjzXR7SL3tvFBWjrUMf2qK+3cwcx7A62QOLN5nifl5FJKYe1ubOejcSv
-         JmxhT/reSmVgO9izawvVeqGMSEYThIVH6CsyH8gNntOxkaAdXn8rBkoPmklXg9hbYKmw
-         sPNZLf4vAD7hxs7ZZTDuu0MjCgYsBW6HfMj6wmJUe/ZtFk0B6JxzwABp7nwDZgQjrIQh
-         5M8ZaNR0n6KfOV47lJ3hJwkH9MpenZk4wbXpoM0xwjLMhk/wDgkQkn31s/lN3LNAcV8F
-         1FLRCd99nhK7D0KhOfTApuzdiPUO+xPmWaDILjbTNLreODwBc/VKjjKvZDSXcQPrxzgW
-         N9DQ==
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230197AbiCAIUx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Mar 2022 03:20:53 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AF86C1F9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:20:13 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 625DA3FCAA
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646122811;
+        bh=wrc3c7oIUMwYQxhE3r5p7FIJPm98qYbXpx/SJrulnFQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=kokhnWHxZdm3LAyaRDkLvt2GK6tJbfbgaH7tMQEP/VgszUXfz/HLod5OwrBHuBNn4
+         KfNfirIwWJw7/L1BLPXvcWfA4oibuER+gT6R9AXbT/z74ZCdJ/q4kzEIYaUjxUd7az
+         Bhgm2ClmvlrO9JOMw6FgiwfWOOcJ5CKl77FxihcKQ5Q0oPabFzVp2bNkwGNS0j1guF
+         4WUZIdrI1sZUY+gMWMOuIdSBpSqgp3FZ6180pXtHpDVUZ63umsL3fjNlkCbfB6pWmy
+         Cd/0y6+Hha2C3Yo9PvkMXIgC9bCedtieV+wJ3Fe/UJx3ABrgPLWQl6bvXbSVT3nv8q
+         YYoduWlOGMB/w==
+Received: by mail-ej1-f72.google.com with SMTP id j6-20020a170906830600b006d6e2eb61f7so1037649ejx.15
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:20:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=l2awJBHW6HyJ4vDzHlRPr73FDADh7U/A5qrCjIA65qA=;
-        b=CaYw5UseZ+iN421BXlVCMZsYETi079MoNuPwTnJhF3LetEylD/D3f2oxkae9/FShZJ
-         k8ETVJr0Vgsk0I1rRENdQWdnnAygmA3aaHBnYMNIa031PHbpL2WV+8nmHIhlnEKIFXN8
-         lVNGTTA3f3h82JTokYSoH0fDDLOkj/DT/i2B299Eo5AFQpnUuy7/yBYmwBLP5jWmhni7
-         kDgQfEChPcwUtZSXgwu1oySDOlgu6+CY/DBcvhbj35qYaHyyd8jGA/jqJrsz1XsJ6RRb
-         NgZpEfz7wF08YKP7uQYwe8+pCNjKPFoIDQEi7Dt+Fu25sx3nFehiP1R2MIolJop6abkr
-         wcMg==
-X-Gm-Message-State: AOAM530ua2q9gF2flvhbhhdKnWknvRbcjcXI7uQ9W7pZpsH7IAwvbsgD
-        YFY0KWjG9zdQTzUNzOf4I6qP/qhVB1aYo8lwfIQ+og==
-X-Google-Smtp-Source: ABdhPJwCHXlfYc7ypDIf9MAema56cN/LvwcRiTljRHA/T+EjhzcrKxVx/uZDeYuEwPi3csUJ7+8eIqfBjJEhg2YLpyE=
-X-Received: by 2002:a25:338b:0:b0:610:a221:af23 with SMTP id
- z133-20020a25338b000000b00610a221af23mr23528030ybz.474.1646122813959; Tue, 01
- Mar 2022 00:20:13 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wrc3c7oIUMwYQxhE3r5p7FIJPm98qYbXpx/SJrulnFQ=;
+        b=OfyMIuaLToxYkzLIowFBYVxM5ZtkYrZst5X1vSzWYt8ltdp38saQZz3ujyqAcTstLT
+         vJJSvn+j6FDdOsxgh5VKS+LC09acwA6VMcs3mjTz+m5Awh1PBbfaJ3N8ZFygja1qFqoQ
+         TwJMK17qdJnq0tUjCzxi3W4KXfYt+pkyBgGM98P3QjVUIlgAHvRMZq1m2XxF6+v9uFq6
+         PiOGwLaEmpF2hZ6ItJLSynqSz0lIilEU8dnYjl5Tq4cc/s1Y3PZAWEK0WZBjpO1P8BeG
+         nlDe8LpHbZQPTwnUTMzeIr1kOVNQvEpAbKMdBaOZZdsVeJD8/1vMYZPd+4BFCL49ii15
+         EjMQ==
+X-Gm-Message-State: AOAM531dosN+mcQNCRXEB5LKLLF/2EsFIQYSVgyIB6Q/QObzemdCqzXV
+        wQan7FU4EQ8AX1nplDI9IjI4yFrHfUQ8rYWidYRc5Vwg/rFivr5mMrYMDR8uqUI4Xfsmh3iEUpC
+        eQNT1dkHYtxVhGXhQCRvAPlSTrNPzdsH3xQbUoKysFw==
+X-Received: by 2002:a17:906:4688:b0:6d6:e103:5e36 with SMTP id a8-20020a170906468800b006d6e1035e36mr2781922ejr.407.1646122810406;
+        Tue, 01 Mar 2022 00:20:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyyBQ6isFVLqMehtypRvFgUjjtT929Gj5H/cCPXv89jKdof9042ejhK/i0Dq+tOJBkQ+j+I7g==
+X-Received: by 2002:a17:906:4688:b0:6d6:e103:5e36 with SMTP id a8-20020a170906468800b006d6e1035e36mr2781916ejr.407.1646122810225;
+        Tue, 01 Mar 2022 00:20:10 -0800 (PST)
+Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id gj7-20020a170907740700b006cf57a6648esm5091934ejc.90.2022.03.01.00.20.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 00:20:09 -0800 (PST)
+Message-ID: <664af071-badf-5cc9-c065-c702b0c8a13d@canonical.com>
+Date:   Tue, 1 Mar 2022 09:20:08 +0100
 MIME-Version: 1.0
-References: <20220228172359.567256961@linuxfoundation.org>
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Mar 2022 13:50:02 +0530
-Message-ID: <CA+G9fYuJU2KYgZxbWg+NG1B-JzNpmFDnJRBU4P185-cV3EodCw@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/164] 5.16.12-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] net/nfc/nci: use memset avoid infoleaks
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220301081750.2053246-1-chi.minghao@zte.com.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220301081750.2053246-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 23:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.12 release.
-> There are 164 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.12-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 01/03/2022 09:17, cgel.zte@gmail.com wrote:
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> 
+> Use memset to initialize structs to preventing infoleaks
+> in nci_set_config
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> ---
+>  net/nfc/nci/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
+> index d2537383a3e8..32be42be1152 100644
+> --- a/net/nfc/nci/core.c
+> +++ b/net/nfc/nci/core.c
+> @@ -641,6 +641,7 @@ int nci_set_config(struct nci_dev *ndev, __u8 id, size_t len, const __u8 *val)
+>  	if (!val || !len)
+>  		return 0;
+>  
+> +	memset(&param, 0x0, sizeof(param));
+>  	param.id = id;
+>  	param.len = len;
+>  	param.val = val;
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The entire 'param' is overwritten in later code, so what could leak here?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.16.12-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: dc69c736a4039f3f7c3d26910013103cdb517bce
-* git describe: v5.16.11-165-gdc69c736a403
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.11-165-gdc69c736a403
-
-## Test Regressions (compared to v5.16.10-228-ga75faa1f1534)
-No test regressions found.
-
-## Metric Regressions (compared to v5.16.10-228-ga75faa1f1534)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16.10-228-ga75faa1f1534)
-No test fixes found.
-
-## Metric Fixes (compared to v5.16.10-228-ga75faa1f1534)
-No metric fixes found.
-
-## Test result summary
-total: 105073, pass: 89294, fail: 1663, skip: 13057, xfail: 1059
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 141 total, 138 passed, 3 failed
-* arm64: 47 total, 44 passed, 3 failed
-* dragonboard-410c: 2 total, 2 passed, 0 failed
-* hi6220-hikey: 2 total, 2 passed, 0 failed
-* i386: 46 total, 42 passed, 4 failed
-* juno-r2: 2 total, 2 passed, 0 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 50 passed, 15 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 2 total, 2 passed, 0 failed
-* x86: 2 total, 2 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

@@ -2,326 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABDE4C847D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908784C8481
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbiCAHBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S232442AbiCAHCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiCAHBI (ORCPT
+        with ESMTP id S229633AbiCAHCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:01:08 -0500
-Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300119.outbound.protection.outlook.com [40.107.130.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C756582C;
-        Mon, 28 Feb 2022 23:00:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZcEKhzH2S4p50cTX3Buv7450mW/uo0+ZVh+bqkv+4Op95zpSYX1faJ2siCujDDL9Suqc58YxiPSOh2cui9CA+NrcMDCiU96tKMpyk8z2ztQr7uV7hI/a2lriTErzosvYpQHstWl5dW2AIwSRwK0fRAPD7OPgqQ3V7tK4QkVk2W0+ReRDuv56MYH2Vb9Dt3AeC/ue5EJbrzCczK3xjNg7qGHei+Jweyh/sA6UW6CnHDtqTmtsMzhi1BF2dmlnUZ/Y2d0u0YceasPCZm2Du6g9V3/FR11r8wkNyzvyV9YIXsSfrKAmhsIB0BwtfyWPb5MgB0OJq9zV3piyVGcHTqrLLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zmxl0jAzYmkVy9OtL8deraJFeT+A73qcA8KoBrYH8nQ=;
- b=b2JLQQkph2z9AxdN/0fPkk0Nrf4jIv/sNP+pA94gV2ddgLs1l4aukRZ8G2mBlWU0wl3sSx4hIcMssePAjM35V2QlsX8rXtQD/naKnvY1yOriK7hu0KauJ0JnHwK5bQZjG8HdlxUn2nZI9G6/tVRKyR8AUbCLXzKvNQTmlsouTpJdaqCJiS7T10Y49sgR5sJaaEjT8kXOHNPTHO74NBoI6tTO01KbMuVGF10x3rcwWRSjY3plI+9WOFhwqeG6QRsGFGIYHRPuf/dhxcYaEOGJLrsWJJ741fgmsdOcRQ2Oa5j2G6EJile0GH9MdpN3m1IMlMQTb5yxSwjw8wHdSch48w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zmxl0jAzYmkVy9OtL8deraJFeT+A73qcA8KoBrYH8nQ=;
- b=DRgRzxvFb80QLaHRFylMWiY4v2FYQ++ZJrnxCmijcGAV258BsqBxRm8xhyRFcIWWA4nILRKm2AvbYdS9XqudZWUoqhKYQ7T0Bkfx21SAgqda4E0IXNup9nvQbljaJ2deM1mRaRYZM5Ls9T6klAJqEGGjbZ4jmE/wKJaA1jWZpHkeehQ7ZVKV0UC9ZYR+py5+3GCcBexUzEWSW17O+TbQufsbOeobWTnYWbXabyZ54Ltd2s+6JGIoNOGPa3voWYalj6vuFthehWsQpygrNXwuhLrGl21xueGGTDfYfma418p6HFw1LdXbHARG4UVJPYzotKEeK79BSbIexmxP1O2UhQ==
-Received: from SG2PR06MB4818.apcprd06.prod.outlook.com (2603:1096:4:172::13)
- by PS2PR06MB2920.apcprd06.prod.outlook.com (2603:1096:300:53::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Tue, 1 Mar
- 2022 07:00:17 +0000
-Received: from SG2PR06MB4818.apcprd06.prod.outlook.com
- ([fe80::8da2:593e:eb2d:8713]) by SG2PR06MB4818.apcprd06.prod.outlook.com
- ([fe80::8da2:593e:eb2d:8713%9]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 07:00:17 +0000
-From:   Tommy Huang <tommy_huang@aspeedtech.com>
-To:     Joel Stanley <joel@jms.id.au>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v5 5/7] drm/aspeed: Add reset and clock for AST2600
-Thread-Topic: [PATCH v5 5/7] drm/aspeed: Add reset and clock for AST2600
-Thread-Index: AQHX69OpoFQZvxq+kkaL0spHVAz7VaypOaQAgAFf0mA=
-Date:   Tue, 1 Mar 2022 07:00:16 +0000
-Message-ID: <SG2PR06MB4818A370D5DDEC18D1B34FE6E1029@SG2PR06MB4818.apcprd06.prod.outlook.com>
-References: <20211208013337.13806-1-tommy_huang@aspeedtech.com>
- <20211208013337.13806-6-tommy_huang@aspeedtech.com>
- <CACPK8XfA8Mz6tU2r=G+PxuVkvTZ5Nzw0g-V7EAoBhkKO-TOPfQ@mail.gmail.com>
-In-Reply-To: <CACPK8XfA8Mz6tU2r=G+PxuVkvTZ5Nzw0g-V7EAoBhkKO-TOPfQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b22616e3-b2c9-47cc-0c89-08d9fb51246c
-x-ms-traffictypediagnostic: PS2PR06MB2920:EE_
-x-microsoft-antispam-prvs: <PS2PR06MB2920C93F9F93B725FFC442DCE1029@PS2PR06MB2920.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eC+0XE/733xe9AyuK1mUqrRLsS8zC3mfhSQFtpbaQagcDAETSuB/wZGhareVynETvBZLWaX75YKGqSPLmk5VQkr6WOmYDocW3Ery99gVvR6xfd6KjQvbyoSAqnt6m6p0mQ04DkbCrzBvO7rG7rrj8e3L0bn/fFDCUA6CTuVmSIIB4OLziAYWn2JFp7PssxZ6nBzLGSGGegtMthOcTlCu80+zu2/c5GP+Ud07YiBra5pY1sC3FmrmtBRJ5dbLlxriEuFLVM72nCv8gt3U94v0AX6QuOQOvknyr7RUD9MVjwDQNebJpEBXOnACVzWugMcBw/3cXGGKMe6S1SFqgp6JZ64WQoYg6Nrx+y/ElEWbIlzytLvFGRF24QEl9J+WMPDyi/S9pXExBJsFFRTQQ6XVlFb9Szjp4jSn2gejQc2sF+TIfAlNcLNJnwQcKKWh3HLXUWTLhwcDwDaLQq/lBtKKjyxNemzORtoo1FPU3/dD0dfmDprk9z2MV4zH54jvbbm8TvIxta1vmgDgerrX9aov3F0BQAzOhpr2ePRqzpphAtCaN7c1Zhi52wGpr9a1tuuK4oFqIwV2FwFbyOP7mzdjbk4+pHxePmbDgqXoI7N2Zd54cTH2QU3+Pv2olL5aZtJASUJrmkUJuxVd840XvfvCKMs661zs5vOOyCDyAYVxK1n3Xuj6Rj7FqnvD6sIff1cWMS6NPijRUkEvJDf3W3zkkg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB4818.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(136003)(376002)(39850400004)(346002)(396003)(366004)(86362001)(38070700005)(5660300002)(107886003)(4326008)(7696005)(8936002)(316002)(52536014)(66946007)(66446008)(66476007)(64756008)(66556008)(76116006)(8676002)(7416002)(2906002)(33656002)(186003)(26005)(38100700002)(6506007)(53546011)(71200400001)(122000001)(508600001)(55016003)(83380400001)(54906003)(6916009)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bTlJc1YzSklUaDNyMVBSL0NOZXZiaTlOOFBlbkpBU3UxbHBCZ2xleU5xa1hF?=
- =?utf-8?B?Q0FGNXM1UTdpb05lTWFzNk1lMFZReGNPZkQ4ZktzSDhGSm1CemJrQ3QrMGFP?=
- =?utf-8?B?WnFYa0ViQjVLZ0tHQktBVFI2c1hhTFYxaG5IQ01ua2hGTUpQcm4ySXZqMFZi?=
- =?utf-8?B?R3Q4WFJ2Zngvc2hlRG9QYVJnMThCWjBNZjV6bytiMU9yYlFKMUVJTGo1SEYw?=
- =?utf-8?B?dWVVbDdOR2duL3Z3ZTJQMHp5OU9LRlFBQW84RzFkeFlYNE5MSkZXYXR5bjFD?=
- =?utf-8?B?NGFlZ0F3MUpXNFp3Y3o4R3gySkltUWRKNGY0T1J6ZE1ZZTF0UzVTRmVtRGd4?=
- =?utf-8?B?ZVhybUZUTWx0anovOWUxUCtSaWNvU012WXV3eUhaZ05OcExiQk5mZVJOSnJx?=
- =?utf-8?B?KzhvUzZKcE9mZ1pYSDJETnFTbjBTYWZmTXkwemVSdGFrZENpMU5hNTM4Y09k?=
- =?utf-8?B?a3FVRlpreENZQzh2UUVXYmYydHJwSEN1N2p2a0VZMjJ3L3BVYmlMRWVyb3RC?=
- =?utf-8?B?a2x0cDZSNExZcktieFN0VDlkcVUzM3J5citMZFhEa1o5NjFpbWx3OGdCbkZU?=
- =?utf-8?B?R2ZVK1RDSmRZZVlrbm0wQUhKNjlLUzNCUnllbm90OS9KMjl0WWRITXdwVEpw?=
- =?utf-8?B?Q1VhOE9HNE4rYXpRbXJISlYyYlpMcHJNNjU4QUs5Um5RWVRtSzZxYnp4bzFr?=
- =?utf-8?B?UWluYXA3Z2RtRHFlbTBGZ0wyN1IyamUzVkxwWWxSZlNIUm16dTc2dUlJbXNs?=
- =?utf-8?B?QWdJWko0cE01T0JlTGpDbTFKWFlmcjFrY2VrcGwyc0FPbEQraG5hWGlobGdN?=
- =?utf-8?B?ZzN3Tjl4aTJSdEhQOGsvVm1kaDNKZmhZR3NiSlJNV2gyZm5xRXM1c1NOWHZS?=
- =?utf-8?B?NDBOZzExZ1VlZ3BDcDcyeEZkV1BGWmZTelYvUGI1UGhFcW82am1HS0ZNeXJJ?=
- =?utf-8?B?WFE1UUV1Vlp1VUh3cHcrS21zUllJWGlWT0JxdERQOFE1ZWhGbGs2RnBIMmtH?=
- =?utf-8?B?dEkxSGhsN0NZRVlWRmVPQ245ODc4QW9Ed2tTQW4rQ0JnVEkvejg1QmtoQmp3?=
- =?utf-8?B?cVZmbDhxdEc0S3orZjZxKzIveTBWUmxLcyt5THRNT1RkejFsWG1KNGhaM25W?=
- =?utf-8?B?NnR5T1o5MTZkVU5MSVBEK0cvazJzQWpRWEJsN1NRZUNQYmNpQjg4cjdQdjNv?=
- =?utf-8?B?RTJVOURFVTRYRWlOaWRCMjRTd0VKckdQNVgxN0hOMHBkbnVRWXlyREhmMkly?=
- =?utf-8?B?czZLaG9JMXFhNkdJS0JLZEFzRVBML1hETGxZMVl6Kzc3VzB4dkN0L2NlajV0?=
- =?utf-8?B?ZUxrNTBZNmhydWUrY0dnb0hqQWQ2SVRUVmJYbTJFdGcvWlFHSkswbFozOEli?=
- =?utf-8?B?WUNYcXNyOFNFUDF5QmtHam5pZUVYZjUwdVdza0JLaTl3MlBHdG8wdmw2VnJC?=
- =?utf-8?B?M3g1WnBYNm56YnNWT2RaaW15Ri9SRDVTb1dJT053VFBlL0o5TnhVd01hZ2hE?=
- =?utf-8?B?MERzUG1FVjlZbHZmcDZ3ak1uSnNLNjlxY1h6SlFoWXMyVysvWFY4S0RHcTFo?=
- =?utf-8?B?eXJVL0Z0N29rOElWSE1EdUhOMXJCdWlWamZpaTFXUHRGUlRONCtPZlJ2cDdS?=
- =?utf-8?B?ZDJxWjdpS0UwU0hWaE04b3NEb1BCNWxXN3k5OXRLK0orUGp3Y085R2RpSFZ6?=
- =?utf-8?B?Nk04OVh0eGZuVHE0SDNFNklhT2RTZ2hyMHRWY2hDOEFZL0pGWXc0M2RFeXFF?=
- =?utf-8?B?VmpXTW15MTFPcURJMkdkUHo3SUVxUFprcmozWllNcnZUSlk0SE1iSVZRZGR6?=
- =?utf-8?B?RUltdHhTS2VVNUNHVXZTYk1ybmxsSzZ0eUtzbkc5dXVSdnJRUmIxYnRuQjMw?=
- =?utf-8?B?WHg2dlNhNUxKZkRiQllaVDVIQ2tDTnczTVpGclEzREh4dmRtVFR4b0xlQUF3?=
- =?utf-8?B?UGh3dHVqdDBhTE4ycks2YkExb2N1cURMdnc0VnBaT1VZV1luY1pRL3JsYldE?=
- =?utf-8?B?MUJIYlBYMmZKaVN5UEF2ekNwMHpvb3I3c2loQmtjWVYxajRUREVYQkRsN0dT?=
- =?utf-8?B?Y2hGbGlvY3hGQlUxRzdOd2E3SlU3anFmYVVkVmcxWi9uZnpKQ3Y4YXlFOG11?=
- =?utf-8?B?K1VMREdoYldITEJQYnU1RGYxa0lIWkdsYlhhZExNaUduN3diaUhPbXZsajVK?=
- =?utf-8?B?RWhLZUthbXpqMmhsdjFpOHFvZzdKTE44blAzNi8xN0VXWVdma1p2eVlHeXpP?=
- =?utf-8?B?YXJpdkEybUF0MHV6ZVVIYVJJaUt3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 1 Mar 2022 02:02:18 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5C9654B0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646118098; x=1677654098;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=35HJmXKfxBi/prrSB2I1QkaptGFdsXRKRkwKG2qraxI=;
+  b=SnKzdPSY4o1EODWUrnhdltreRFep9lhD1y+P//qy0IZsjtozmpM6WJBQ
+   cKlWO/DSmFYgJrLWujLJHeDvwm6xtzL7ze1H4jWEsC3jdIctFOJS5NAHN
+   pfrPqDWXPL7kZn5bOFad89qJt91JX3UJxy2iteD2xI1lOftCRpvsWqaUu
+   cpEi6AsMlpcch1UZn/pBvGTWFbw90kcUongpgVtIyjbx8MfRedJ+1fvC9
+   qJYU7ARY3QBSVPSSJL8Tf0IO+MUrl/OgLueytj0UxCDSZyNN/iUpP5X9E
+   yuwph8jDOJwuPZWZarcrJLUTvlG4o1sGbRFPxvWGafyFoYq83BNhrAhX5
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252805911"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="252805911"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 23:01:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="708950428"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 23:01:30 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOwVm-00005R-0Y; Tue, 01 Mar 2022 07:01:30 +0000
+Date:   Tue, 1 Mar 2022 15:00:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     kbuild-all@lists.01.org, David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+Subject: Re: [PATCH v2] mm/slub: initialize stack depot in boot process
+Message-ID: <202203011429.a87fKdU7-lkp@intel.com>
+References: <Yh2Uxh9DMndwjGcb@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB4818.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b22616e3-b2c9-47cc-0c89-08d9fb51246c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2022 07:00:17.0057
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HFPnLOtPF8TVXMtaLyZblD+R17AzceI/9M33Ti2XjD+z7huuMyYRFi3gpbZwV6oj7EwvxqH/Vv4EIR/LOvmDqX6Ud8xG5/zrXXhnfEFjfgg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS2PR06MB2920
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh2Uxh9DMndwjGcb@ip-172-31-19-208.ap-northeast-1.compute.internal>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSm9lbCwNCg0KCUl0IHNlZW1zIHRoYXQgdGhlIHJlc2V0IGNvbnRyb2wgY291bGQga2VlcCBv
-cmlnaW5hbCBjb2RlIGJlaGF2aW9yLg0KCUp1c3QgY2hhbmdlIHRoZSByZXNldCBkZWZpbmUgaW4g
-dGhlIC5kdHNpIGZpbGUgZnJvbSBBU1BFRURfUkVTRVRfQ1JUMSBpbnRvIEFTUEVFRF9SRVNFVF9H
-UkFQSElDUy4NCg0KCUJ5IHRoZSB3YXksIHRoZSBIVyBjb250cm9sbGVyIHN0YXRlcyBhbmQgRlcg
-cHJvZ3JhbW1pbmcgcmVnaXN0ZXIgd2lsbCBiZSByZXNldCBieSBDUlQgcmVzZXQgbGluZS4NCglB
-bmQgYW5vdGhlciBwYXJ0IEhXIGNvbnRyb2xsZXIgc3RhdGVzIHdpbGwgYmUgcmVzZXQgYnkgZW5n
-aW5lIHJlc2V0IGxpbmUuDQoNCglUaGFua3MsDQoNCglCeSBUb21teQ0KDQo+IC0tLS0tT3JpZ2lu
-YWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEpvZWwgU3RhbmxleSA8am9lbEBqbXMuaWQuYXU+DQo+
-IFNlbnQ6IE1vbmRheSwgRmVicnVhcnkgMjgsIDIwMjIgNTo1MSBQTQ0KPiBUbzogVG9tbXkgSHVh
-bmcgPHRvbW15X2h1YW5nQGFzcGVlZHRlY2guY29tPg0KPiBDYzogRGF2aWQgQWlybGllIDxhaXJs
-aWVkQGxpbnV4LmllPjsgRGFuaWVsIFZldHRlciA8ZGFuaWVsQGZmd2xsLmNoPjsgUm9iDQo+IEhl
-cnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEFuZHJldyBKZWZmZXJ5IDxhbmRyZXdAYWouaWQu
-YXU+Ow0KPiBsaW51eC1hc3BlZWQgPGxpbnV4LWFzcGVlZEBsaXN0cy5vemxhYnMub3JnPjsgb3Bl
-biBsaXN0OkRSTSBEUklWRVJTDQo+IDxkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnPjsg
-ZGV2aWNldHJlZSA8ZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc+Ow0KPiBMaW51eCBBUk0gPGxp
-bnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz47IExpbnV4IEtlcm5lbCBNYWlsaW5n
-IExpc3QNCj4gPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+OyBCTUMtU1cgPEJNQy1TV0Bh
-c3BlZWR0ZWNoLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NSA1LzddIGRybS9hc3BlZWQ6
-IEFkZCByZXNldCBhbmQgY2xvY2sgZm9yIEFTVDI2MDANCj4gDQo+IE9uIFdlZCwgOCBEZWMgMjAy
-MSBhdCAwMTozNCwgVG9tbXkgSGF1bmcNCj4gPHRvbW15X2h1YW5nQGFzcGVlZHRlY2guY29tPiB3
-cm90ZToNCj4gPg0KPiA+IEZyb206IHRvbW15LWh1YW5nIDx0b21teV9odWFuZ0Bhc3BlZWR0ZWNo
-LmNvbT4NCj4gPg0KPiA+IEFkZCBtb3JlIHJlc2V0IGFuZCBjbG9jayBzZWxlY3QgY29kZSBmb3Ig
-QVNUMjYwMC4NCj4gPiBUaGUgZ2Z4X2ZsYWdzIHBhcmFtZXRlciB3YXMgYWRkZWQgZm9yIGNoaXAg
-Y2FwcyBpZGVuaWZpZWQuDQo+IA0KPiBDYW4geW91IHRlbGwgbWUgYSBiaXQgbW9yZSBhYm91dCB0
-aGUgdHdvIHJlc2V0IGxpbmVzOg0KPiANCj4gV2hhdCBpcyB0aGUgQ1JUIHJlc2V0IGxpbmUgY29u
-dHJvbGxpbmc/DQo+IA0KPiBXaGF0IGRvZXMgdGhlIGVuZ2luZSByZXNldCBsaW5lIGNvbnRyb2w/
-DQo+IA0KPiBDYW4gd2UgdXNlIGRldm1fcmVzZXRfY29udHJvbF9hcnJheV9nZXQoKSB0byBnZXQg
-d2hpY2hldmVyIGFyZSBzcGVjaWZpZWQgaW4NCj4gdGhlIGRldmljZSB0cmVlLCBzbyB3ZSBkb24n
-dCBuZWVkIHRvIGhhdmUgZGlmZmVyZW50IGxvZ2ljIGZvciB0aGUgMjYwMCBhbmQNCj4gZWFybGll
-ciBjaGlwcz8NCj4gDQo+IA0KPiANCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IHRvbW15LWh1YW5n
-IDx0b21teV9odWFuZ0Bhc3BlZWR0ZWNoLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9ncHUv
-ZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4LmggICAgICB8IDE2ICsrKysrKystDQo+ID4gIGRyaXZlcnMv
-Z3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9jcnRjLmMgfCAxNiArKysrKysrKw0KPiA+IGRyaXZl
-cnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9kcnYuYyAgfCA1MA0KPiArKysrKysrKysrKysr
-KysrKysrKysrLS0NCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCA3NyBpbnNlcnRpb25zKCspLCA1IGRl
-bGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hc3BlZWQv
-YXNwZWVkX2dmeC5oDQo+ID4gYi9kcml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnguaA0K
-PiA+IGluZGV4IDRlNmE0NDJjMzg4Ni4uMmM3MzMyMjVkM2M3IDEwMDY0NA0KPiA+IC0tLSBhL2Ry
-aXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeC5oDQo+ID4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4LmgNCj4gPiBAQCAtOCw3ICs4LDggQEAgc3RydWN0IGFzcGVl
-ZF9nZnggew0KPiA+ICAgICAgICAgc3RydWN0IGRybV9kZXZpY2UgICAgICAgICAgICAgICBkcm07
-DQo+ID4gICAgICAgICB2b2lkIF9faW9tZW0gICAgICAgICAgICAgICAgICAgICpiYXNlOw0KPiA+
-ICAgICAgICAgc3RydWN0IGNsayAgICAgICAgICAgICAgICAgICAgICAqY2xrOw0KPiA+IC0gICAg
-ICAgc3RydWN0IHJlc2V0X2NvbnRyb2wgICAgICAgICAgICAqcnN0Ow0KPiA+ICsgICAgICAgc3Ry
-dWN0IHJlc2V0X2NvbnRyb2wgICAgICAgICAgICAqcnN0X2NydDsNCj4gPiArICAgICAgIHN0cnVj
-dCByZXNldF9jb250cm9sICAgICAgICAgICAgKnJzdF9lbmdpbmU7DQo+ID4gICAgICAgICBzdHJ1
-Y3QgcmVnbWFwICAgICAgICAgICAgICAgICAgICpzY3U7DQo+ID4NCj4gPiAgICAgICAgIHUzMiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgZGFjX3JlZzsNCj4gPiBAQCAtMTYsNiArMTcsNyBA
-QCBzdHJ1Y3QgYXNwZWVkX2dmeCB7DQo+ID4gICAgICAgICB1MzIgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHZnYV9zY3JhdGNoX3JlZzsNCj4gPiAgICAgICAgIHUzMiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgdGhyb2RfdmFsOw0KPiA+ICAgICAgICAgdTMyICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBzY2FuX2xpbmVfbWF4Ow0KPiA+ICsgICAgICAgdTMyICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBmbGFnczsNCj4gPg0KPiA+ICAgICAgICAgc3RydWN0IGRybV9zaW1w
-bGVfZGlzcGxheV9waXBlICBwaXBlOw0KPiA+ICAgICAgICAgc3RydWN0IGRybV9jb25uZWN0b3Ig
-ICAgICAgICAgICBjb25uZWN0b3I7DQo+ID4gQEAgLTEwNiwzICsxMDgsMTUgQEAgaW50IGFzcGVl
-ZF9nZnhfY3JlYXRlX291dHB1dChzdHJ1Y3QgZHJtX2RldmljZQ0KPiA+ICpkcm0pOw0KPiA+ICAv
-KiBDUlRfVEhST0QgKi8NCj4gPiAgI2RlZmluZSBDUlRfVEhST0RfTE9XKHgpICAgICAgICAgICAg
-ICAgKHgpDQo+ID4gICNkZWZpbmUgQ1JUX1RIUk9EX0hJR0goeCkgICAgICAgICAgICAgICgoeCkg
-PDwgOCkNCj4gPiArDQo+ID4gKy8qIFNDVSBjb250cm9sICovDQo+ID4gKyNkZWZpbmUgU0NVX0c2
-X0NMS19DT1VSQ0UgICAgICAgICAgICAgIDB4MzAwDQo+ID4gKw0KPiA+ICsvKiBHRlggRkxBR1Mg
-Ki8NCj4gPiArI2RlZmluZSBSRVNFVF9NQVNLICAgICAgICAgICAgICAgICAgICAgQklUKDApDQo+
-ID4gKyNkZWZpbmUgUkVTRVRfRzYgICAgICAgICAgICAgICAgICAgICAgIEJJVCgwKQ0KPiA+ICsj
-ZGVmaW5lIENMS19NQVNLICAgICAgICAgICAgICAgICAgICAgICBCSVQoNCkNCj4gPiArI2RlZmlu
-ZSBDTEtfRzYgICAgICAgICAgICAgICAgICAgICAgICAgQklUKDQpDQo+ID4gKw0KPiA+ICsjZGVm
-aW5lIEc2X0NMS19NQVNLICAgICAgICAgICAgICAgICAgICAoQklUKDgpIHwgQklUKDkpIHwgQklU
-KDEwKSkNCj4gPiArI2RlZmluZSBHNl9VU0JfNDBfQ0xLICAgICAgICAgICAgICAgICAgQklUKDkp
-DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9jcnRj
-LmMNCj4gPiBiL2RyaXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9jcnRjLmMNCj4gPiBp
-bmRleCA4MjdlNjJjMWRhYmEuLmUwOTc1ZWNkYTkyZCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJz
-L2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhfY3J0Yy5jDQo+ID4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X2NydGMuYw0KPiA+IEBAIC03Nyw2ICs3NywxOCBAQCBzdGF0
-aWMgdm9pZCBhc3BlZWRfZ2Z4X2Rpc2FibGVfY29udHJvbGxlcihzdHJ1Y3QNCj4gYXNwZWVkX2dm
-eCAqcHJpdikNCj4gPiAgICAgICAgIHJlZ21hcF91cGRhdGVfYml0cyhwcml2LT5zY3UsIHByaXYt
-PmRhY19yZWcsIEJJVCgxNiksIDApOyAgfQ0KPiA+DQo+ID4gK3N0YXRpYyB2b2lkIGFzcGVlZF9n
-Znhfc2V0X2NsayhzdHJ1Y3QgYXNwZWVkX2dmeCAqcHJpdikgew0KPiA+ICsgICAgICAgc3dpdGNo
-IChwcml2LT5mbGFncyAmIENMS19NQVNLKSB7DQo+ID4gKyAgICAgICBjYXNlIENMS19HNjoNCj4g
-PiArICAgICAgICAgICAgICAgcmVnbWFwX3VwZGF0ZV9iaXRzKHByaXYtPnNjdSwgU0NVX0c2X0NM
-S19DT1VSQ0UsDQo+IEc2X0NMS19NQVNLLCAweDApOw0KPiA+ICsgICAgICAgICAgICAgICByZWdt
-YXBfdXBkYXRlX2JpdHMocHJpdi0+c2N1LCBTQ1VfRzZfQ0xLX0NPVVJDRSwNCj4gRzZfQ0xLX01B
-U0ssIEc2X1VTQl80MF9DTEspOw0KPiA+ICsgICAgICAgICAgICAgICBicmVhazsNCj4gPiArICAg
-ICAgIGRlZmF1bHQ6DQo+ID4gKyAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsgICAgICAgfQ0K
-PiA+ICt9DQo+ID4gKw0KPiA+ICBzdGF0aWMgdm9pZCBhc3BlZWRfZ2Z4X2NydGNfbW9kZV9zZXRf
-bm9mYihzdHJ1Y3QgYXNwZWVkX2dmeCAqcHJpdikgIHsNCj4gPiAgICAgICAgIHN0cnVjdCBkcm1f
-ZGlzcGxheV9tb2RlICptID0NCj4gPiAmcHJpdi0+cGlwZS5jcnRjLnN0YXRlLT5hZGp1c3RlZF9t
-b2RlOw0KPiA+IEBAIC04Nyw2ICs5OSw4IEBAIHN0YXRpYyB2b2lkIGFzcGVlZF9nZnhfY3J0Y19t
-b2RlX3NldF9ub2ZiKHN0cnVjdA0KPiBhc3BlZWRfZ2Z4ICpwcml2KQ0KPiA+ICAgICAgICAgaWYg
-KGVycikNCj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+DQo+ID4gKyAgICAgICBhc3Bl
-ZWRfZ2Z4X3NldF9jbGsocHJpdik7DQo+ID4gKw0KPiA+ICAjaWYgMA0KPiA+ICAgICAgICAgLyog
-VE9ETzogd2UgaGF2ZSBvbmx5IGJlZW4gYWJsZSB0byB0ZXN0IHdpdGggdGhlIDQwTUh6IFVTQg0K
-PiBjbG9jay4gVGhlDQo+ID4gICAgICAgICAgKiBjbG9jayBpcyBmaXhlZCwgc28gd2UgY2Fubm90
-IGFkanVzdCBpdCBoZXJlLiAqLyBAQCAtMTkzLDYNCj4gPiArMjA3LDcgQEAgc3RhdGljIHZvaWQg
-YXNwZWVkX2dmeF9waXBlX3VwZGF0ZShzdHJ1Y3QNCj4gPiBkcm1fc2ltcGxlX2Rpc3BsYXlfcGlw
-ZSAqcGlwZSwgIHN0YXRpYyBpbnQNCj4gPiBhc3BlZWRfZ2Z4X2VuYWJsZV92Ymxhbmsoc3RydWN0
-IGRybV9zaW1wbGVfZGlzcGxheV9waXBlICpwaXBlKSAgew0KPiA+ICAgICAgICAgc3RydWN0IGFz
-cGVlZF9nZnggKnByaXYgPSBkcm1fcGlwZV90b19hc3BlZWRfZ2Z4KHBpcGUpOw0KPiA+ICsNCj4g
-PiAgICAgICAgIHUzMiByZWcgPSByZWFkbChwcml2LT5iYXNlICsgQ1JUX0NUUkwxKTsNCj4gPg0K
-PiA+ICAgICAgICAgLyogQ2xlYXIgcGVuZGluZyBWQkxBTksgSVJRICovIEBAIC0yMDcsNiArMjIy
-LDcgQEAgc3RhdGljIGludA0KPiA+IGFzcGVlZF9nZnhfZW5hYmxlX3ZibGFuayhzdHJ1Y3QgZHJt
-X3NpbXBsZV9kaXNwbGF5X3BpcGUgKnBpcGUpICBzdGF0aWMNCj4gPiB2b2lkIGFzcGVlZF9nZnhf
-ZGlzYWJsZV92Ymxhbmsoc3RydWN0IGRybV9zaW1wbGVfZGlzcGxheV9waXBlICpwaXBlKQ0KPiA+
-IHsNCj4gPiAgICAgICAgIHN0cnVjdCBhc3BlZWRfZ2Z4ICpwcml2ID0gZHJtX3BpcGVfdG9fYXNw
-ZWVkX2dmeChwaXBlKTsNCj4gPiArDQo+ID4gICAgICAgICB1MzIgcmVnID0gcmVhZGwocHJpdi0+
-YmFzZSArIENSVF9DVFJMMSk7DQo+ID4NCj4gPiAgICAgICAgIHJlZyAmPSB+Q1JUX0NUUkxfVkVS
-VElDQUxfSU5UUl9FTjsgZGlmZiAtLWdpdA0KPiA+IGEvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9h
-c3BlZWRfZ2Z4X2Rydi5jDQo+ID4gYi9kcml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhf
-ZHJ2LmMNCj4gPiBpbmRleCBkMTAyNDZiMWQxYzIuLjU5YTBkZTkyNjUwZiAxMDA2NDQNCj4gPiAt
-LS0gYS9kcml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhfZHJ2LmMNCj4gPiArKysgYi9k
-cml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhfZHJ2LmMNCj4gPiBAQCAtNjQsNiArNjQs
-NyBAQCBzdHJ1Y3QgYXNwZWVkX2dmeF9jb25maWcgew0KPiA+ICAgICAgICAgdTMyIHZnYV9zY3Jh
-dGNoX3JlZzsgICAgLyogVkdBIHNjcmF0Y2ggcmVnaXN0ZXIgaW4gU0NVICovDQo+ID4gICAgICAg
-ICB1MzIgdGhyb2RfdmFsOyAgICAgICAgICAvKiBEZWZhdWx0IFRocmVzaG9sZCBTZXRpbmcgKi8N
-Cj4gPiAgICAgICAgIHUzMiBzY2FuX2xpbmVfbWF4OyAgICAgIC8qIE1heCBtZW1vcnkgc2l6ZSBv
-ZiBvbmUgc2NhbiBsaW5lICovDQo+ID4gKyAgICAgICB1MzIgZ2Z4X2ZsYWdzOyAgICAgICAgICAv
-KiBGbGFncyBmb3IgZ2Z4IGNoaXAgY2FwcyAqLw0KPiA+ICB9Ow0KPiA+DQo+ID4gIHN0YXRpYyBj
-b25zdCBzdHJ1Y3QgYXNwZWVkX2dmeF9jb25maWcgYXN0MjQwMF9jb25maWcgPSB7IEBAIC03Miw2
-DQo+ID4gKzczLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBhc3BlZWRfZ2Z4X2NvbmZpZyBhc3Qy
-NDAwX2NvbmZpZyA9IHsNCj4gPiAgICAgICAgIC52Z2Ffc2NyYXRjaF9yZWcgPSAweDUwLA0KPiA+
-ICAgICAgICAgLnRocm9kX3ZhbCA9IENSVF9USFJPRF9MT1coMHgxZSkgfCBDUlRfVEhST0RfSElH
-SCgweDEyKSwNCj4gPiAgICAgICAgIC5zY2FuX2xpbmVfbWF4ID0gNjQsDQo+ID4gKyAgICAgICAu
-Z2Z4X2ZsYWdzID0gMCwNCj4gPiAgfTsNCj4gPg0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGFz
-cGVlZF9nZnhfY29uZmlnIGFzdDI1MDBfY29uZmlnID0geyBAQCAtODAsNg0KPiA+ICs4Miw3IEBA
-IHN0YXRpYyBjb25zdCBzdHJ1Y3QgYXNwZWVkX2dmeF9jb25maWcgYXN0MjUwMF9jb25maWcgPSB7
-DQo+ID4gICAgICAgICAudmdhX3NjcmF0Y2hfcmVnID0gMHg1MCwNCj4gPiAgICAgICAgIC50aHJv
-ZF92YWwgPSBDUlRfVEhST0RfTE9XKDB4MjQpIHwgQ1JUX1RIUk9EX0hJR0goMHgzYyksDQo+ID4g
-ICAgICAgICAuc2Nhbl9saW5lX21heCA9IDEyOCwNCj4gPiArICAgICAgIC5nZnhfZmxhZ3MgPSAw
-LA0KPiA+ICB9Ow0KPiA+DQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYXNwZWVkX2dmeF9jb25m
-aWcgYXN0MjYwMF9jb25maWcgPSB7IEBAIC04OCw2DQo+ID4gKzkxLDcgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCBhc3BlZWRfZ2Z4X2NvbmZpZyBhc3QyNjAwX2NvbmZpZyA9IHsNCj4gPiAgICAgICAg
-IC52Z2Ffc2NyYXRjaF9yZWcgPSAweDUwLA0KPiA+ICAgICAgICAgLnRocm9kX3ZhbCA9IENSVF9U
-SFJPRF9MT1coMHg1MCkgfCBDUlRfVEhST0RfSElHSCgweDcwKSwNCj4gPiAgICAgICAgIC5zY2Fu
-X2xpbmVfbWF4ID0gMTI4LA0KPiA+ICsgICAgICAgLmdmeF9mbGFncyA9IFJFU0VUX0c2IHwgQ0xL
-X0c2LA0KPiA+ICB9Ow0KPiA+DQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lk
-IGFzcGVlZF9nZnhfbWF0Y2hbXSA9IHsgQEAgLTEzOCw2DQo+ID4gKzE0Miw0NCBAQCBzdGF0aWMg
-aXJxcmV0dXJuX3QgYXNwZWVkX2dmeF9pcnFfaGFuZGxlcihpbnQgaXJxLCB2b2lkICpkYXRhKQ0K
-PiA+ICAgICAgICAgcmV0dXJuIElSUV9OT05FOw0KPiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGlu
-dCBhc3BlZWRfZ2Z4X3Jlc2V0KHN0cnVjdCBkcm1fZGV2aWNlICpkcm0pIHsNCj4gPiArICAgICAg
-IHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYgPSB0b19wbGF0Zm9ybV9kZXZpY2UoZHJtLT5k
-ZXYpOw0KPiA+ICsgICAgICAgc3RydWN0IGFzcGVlZF9nZnggKnByaXYgPSB0b19hc3BlZWRfZ2Z4
-KGRybSk7DQo+ID4gKw0KPiA+ICsgICAgICAgc3dpdGNoIChwcml2LT5mbGFncyAmIFJFU0VUX01B
-U0spIHsNCj4gPiArICAgICAgIGNhc2UgUkVTRVRfRzY6DQo+ID4gKyAgICAgICAgICAgICAgIHBy
-aXYtPnJzdF9jcnQgPSBkZXZtX3Jlc2V0X2NvbnRyb2xfZ2V0KCZwZGV2LT5kZXYsDQo+ICJjcnQi
-KTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKElTX0VSUihwcml2LT5yc3RfY3J0KSkgew0KPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGRldl9lcnIoJnBkZXYtPmRldiwNCj4gPiArICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICJtaXNzaW5nIG9yIGludmFsaWQgY3J0IHJlc2V0IGNv
-bnRyb2xsZXINCj4gZGV2aWNlIHRyZWUgZW50cnkiKTsNCj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICByZXR1cm4gUFRSX0VSUihwcml2LT5yc3RfY3J0KTsNCj4gPiArICAgICAgICAgICAgICAg
-fQ0KPiA+ICsgICAgICAgICAgICAgICByZXNldF9jb250cm9sX2RlYXNzZXJ0KHByaXYtPnJzdF9j
-cnQpOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgcHJpdi0+cnN0X2VuZ2luZSA9IGRldm1f
-cmVzZXRfY29udHJvbF9nZXQoJnBkZXYtPmRldiwNCj4gImVuZ2luZSIpOw0KPiA+ICsgICAgICAg
-ICAgICAgICBpZiAoSVNfRVJSKHByaXYtPnJzdF9lbmdpbmUpKSB7DQo+ID4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgZGV2X2VycigmcGRldi0+ZGV2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIm1pc3Npbmcgb3IgaW52YWxpZCBlbmdpbmUgcmVzZXQNCj4gY29udHJvbGxl
-ciBkZXZpY2UgdHJlZSBlbnRyeSIpOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldHVy
-biBQVFJfRVJSKHByaXYtPnJzdF9lbmdpbmUpOw0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4g
-KyAgICAgICAgICAgICAgIHJlc2V0X2NvbnRyb2xfZGVhc3NlcnQocHJpdi0+cnN0X2VuZ2luZSk7
-DQo+ID4gKyAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsNCj4gPiArICAgICAgIGRlZmF1bHQ6
-DQo+ID4gKyAgICAgICAgICAgICAgIHByaXYtPnJzdF9jcnQgPQ0KPiBkZXZtX3Jlc2V0X2NvbnRy
-b2xfZ2V0X2V4Y2x1c2l2ZSgmcGRldi0+ZGV2LCBOVUxMKTsNCj4gPiArICAgICAgICAgICAgICAg
-aWYgKElTX0VSUihwcml2LT5yc3RfY3J0KSkgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGRldl9lcnIoJnBkZXYtPmRldiwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICJtaXNzaW5nIG9yIGludmFsaWQgcmVzZXQgY29udHJvbGxlcg0KPiBkZXZpY2UgdHJlZSBlbnRy
-eSIpOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKHByaXYtPnJz
-dF9jcnQpOw0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gKyAgICAgICAgICAgICAgIHJlc2V0
-X2NvbnRyb2xfZGVhc3NlcnQocHJpdi0+cnN0X2NydCk7DQo+ID4gKyAgICAgICAgICAgICAgIGJy
-ZWFrOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiAwOw0KPiA+ICt9
-DQo+ID4gKw0KPiA+ICBzdGF0aWMgaW50IGFzcGVlZF9nZnhfbG9hZChzdHJ1Y3QgZHJtX2Rldmlj
-ZSAqZHJtKSAgew0KPiA+ICAgICAgICAgc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiA9IHRv
-X3BsYXRmb3JtX2RldmljZShkcm0tPmRldik7DQo+ID4gQEAgLTE2Myw2ICsyMDUsNyBAQCBzdGF0
-aWMgaW50IGFzcGVlZF9nZnhfbG9hZChzdHJ1Y3QgZHJtX2RldmljZSAqZHJtKQ0KPiA+ICAgICAg
-ICAgcHJpdi0+dmdhX3NjcmF0Y2hfcmVnID0gY29uZmlnLT52Z2Ffc2NyYXRjaF9yZWc7DQo+ID4g
-ICAgICAgICBwcml2LT50aHJvZF92YWwgPSBjb25maWctPnRocm9kX3ZhbDsNCj4gPiAgICAgICAg
-IHByaXYtPnNjYW5fbGluZV9tYXggPSBjb25maWctPnNjYW5fbGluZV9tYXg7DQo+ID4gKyAgICAg
-ICBwcml2LT5mbGFncyA9IGNvbmZpZy0+Z2Z4X2ZsYWdzOw0KPiA+DQo+ID4gICAgICAgICBwcml2
-LT5zY3UgPSBzeXNjb25fcmVnbWFwX2xvb2t1cF9ieV9waGFuZGxlKG5wLCAic3lzY29uIik7DQo+
-ID4gICAgICAgICBpZiAoSVNfRVJSKHByaXYtPnNjdSkpIHsNCj4gPiBAQCAtMTg2LDEzICsyMjks
-MTIgQEAgc3RhdGljIGludCBhc3BlZWRfZ2Z4X2xvYWQoc3RydWN0IGRybV9kZXZpY2UNCj4gKmRy
-bSkNCj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiAgICAgICAgIH0NCj4gPg0K
-PiA+IC0gICAgICAgcHJpdi0+cnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9leGNsdXNpdmUo
-JnBkZXYtPmRldiwgTlVMTCk7DQo+ID4gLSAgICAgICBpZiAoSVNfRVJSKHByaXYtPnJzdCkpIHsN
-Cj4gPiArICAgICAgIHJldCA9IGFzcGVlZF9nZnhfcmVzZXQoZHJtKTsNCj4gPiArICAgICAgIGlm
-IChyZXQpIHsNCj4gPiAgICAgICAgICAgICAgICAgZGV2X2VycigmcGRldi0+ZGV2LA0KPiA+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICJtaXNzaW5nIG9yIGludmFsaWQgcmVzZXQgY29udHJvbGxl
-ciBkZXZpY2UgdHJlZQ0KPiBlbnRyeSIpOw0KPiA+IC0gICAgICAgICAgICAgICByZXR1cm4gUFRS
-X0VSUihwcml2LT5yc3QpOw0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICAg
-ICAgICAgfQ0KPiA+IC0gICAgICAgcmVzZXRfY29udHJvbF9kZWFzc2VydChwcml2LT5yc3QpOw0K
-PiA+DQo+ID4gICAgICAgICBwcml2LT5jbGsgPSBkZXZtX2Nsa19nZXQoZHJtLT5kZXYsIE5VTEwp
-Ow0KPiA+ICAgICAgICAgaWYgKElTX0VSUihwcml2LT5jbGspKSB7DQo+ID4gLS0NCj4gPiAyLjE3
-LjENCj4gPg0K
+Hi Hyeonggon,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on vbabka/slub-stackdepot-v1]
+[also build test ERROR on linus/master v5.17-rc6 next-20220228]
+[cannot apply to hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Hyeonggon-Yoo/mm-slub-initialize-stack-depot-in-boot-process/20220301-113825
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-stackdepot-v1
+config: m68k-randconfig-r014-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011429.a87fKdU7-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/dd9dbeec7444b13b510dc4a863e9593d1799f965
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Hyeonggon-Yoo/mm-slub-initialize-stack-depot-in-boot-process/20220301-113825
+        git checkout dd9dbeec7444b13b510dc4a863e9593d1799f965
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/coldfire/ mm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from include/linux/irq.h:21,
+                    from include/asm-generic/hardirq.h:17,
+                    from ./arch/m68k/include/generated/asm/hardirq.h:1,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/kernel_stat.h:9,
+                    from arch/m68k/kernel/asm-offsets.c:16:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/irq.h:21,
+                    from arch/m68k/coldfire/vectors.c:14:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/vectors.c:43:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
+      43 | void __init trap_init(void)
+         |             ^~~~~~~~~
+--
+   In file included from include/linux/irq.h:21,
+                    from include/asm-generic/hardirq.h:17,
+                    from ./arch/m68k/include/generated/asm/hardirq.h:1,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from arch/m68k/coldfire/intc-simr.c:16:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/intc-simr.c:177:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
+     177 | void __init init_IRQ(void)
+         |             ^~~~~~~~
+--
+   In file included from include/linux/irq.h:21,
+                    from include/linux/gpio/driver.h:7,
+                    from arch/m68k/coldfire/gpio.c:12:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:19:5: warning: no previous prototype for '__mcfgpio_get_value' [-Wmissing-prototypes]
+      19 | int __mcfgpio_get_value(unsigned gpio)
+         |     ^~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:25:6: warning: no previous prototype for '__mcfgpio_set_value' [-Wmissing-prototypes]
+      25 | void __mcfgpio_set_value(unsigned gpio, int value)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:50:5: warning: no previous prototype for '__mcfgpio_direction_input' [-Wmissing-prototypes]
+      50 | int __mcfgpio_direction_input(unsigned gpio)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:65:5: warning: no previous prototype for '__mcfgpio_direction_output' [-Wmissing-prototypes]
+      65 | int __mcfgpio_direction_output(unsigned gpio, int value)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:96:5: warning: no previous prototype for '__mcfgpio_request' [-Wmissing-prototypes]
+      96 | int __mcfgpio_request(unsigned gpio)
+         |     ^~~~~~~~~~~~~~~~~
+   arch/m68k/coldfire/gpio.c:102:6: warning: no previous prototype for '__mcfgpio_free' [-Wmissing-prototypes]
+     102 | void __mcfgpio_free(unsigned gpio)
+         |      ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/stackdepot.h:15,
+                    from include/linux/page_ext.h:7,
+                    from include/linux/mm.h:25,
+                    from mm/page_alloc.c:19:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c:3820:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
+    3820 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/stackdepot.h:15,
+                    from include/linux/page_ext.h:7,
+                    from include/linux/mm.h:25,
+                    from mm/page_poison.c:4:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   mm/page_poison.c:102:6: warning: no previous prototype for '__kernel_map_pages' [-Wmissing-prototypes]
+     102 | void __kernel_map_pages(struct page *page, int numpages, int enable)
+         |      ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/stackdepot.h:15,
+                    from include/linux/page_ext.h:7,
+                    from include/linux/mm.h:25,
+                    from mm/slub.c:13:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+>> mm/slub.c:651:5: error: redefinition of 'slab_stack_depot_init'
+     651 | int slab_stack_depot_init(void)
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/stackdepot.h:15,
+                    from include/linux/page_ext.h:7,
+                    from include/linux/mm.h:25,
+                    from mm/slub.c:13:
+   include/linux/slab.h:769:5: note: previous definition of 'slab_stack_depot_init' with type 'int(void)'
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/irq.h:21,
+                    from include/asm-generic/hardirq.h:17,
+                    from ./arch/m68k/include/generated/asm/hardirq.h:1,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/kernel_stat.h:9,
+                    from arch/m68k/kernel/asm-offsets.c:16:
+>> include/linux/slab.h:769:5: warning: no previous prototype for 'slab_stack_depot_init' [-Wmissing-prototypes]
+     769 | int slab_stack_depot_init(void) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/slab_stack_depot_init +651 mm/slub.c
+
+   650	
+ > 651	int slab_stack_depot_init(void)
+   652	{
+   653		if (init_stack_depot)
+   654			stack_depot_init();
+   655		return 0;
+   656	}
+   657	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

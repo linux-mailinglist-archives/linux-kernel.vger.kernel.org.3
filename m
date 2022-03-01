@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528394C8742
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614D24C8745
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbiCAJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S233586AbiCAJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCAJB7 (ORCPT
+        with ESMTP id S229491AbiCAJCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:01:59 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C25989CF8;
-        Tue,  1 Mar 2022 01:01:18 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 1 Mar
- 2022 17:01:15 +0800
-Message-ID: <0054cf2f-f09d-5b01-d6ca-0dc877a757c3@amlogic.com>
-Date:   Tue, 1 Mar 2022 17:01:15 +0800
+        Tue, 1 Mar 2022 04:02:19 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8C08A309;
+        Tue,  1 Mar 2022 01:01:38 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id C225D1C0010;
+        Tue,  1 Mar 2022 09:01:34 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 10:01:32 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH v7 2/2] Driver for ON Semi AR0521 camera sensor
+Message-ID: <20220301090132.g5xsodoeotcm6h2q@uno.localdomain>
+References: <m3czl9eylt.fsf@t19.piap.pl>
+ <m34k6leyb1.fsf@t19.piap.pl>
+ <20220109153439.bfnfigocaeeeghmp@uno.localdomain>
+ <m35yp387n4.fsf@t19.piap.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220225073922.3947-1-yu.tu@amlogic.com>
- <1j8rtvxnkv.fsf@starbuckisacylon.baylibre.com>
- <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
- <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <m35yp387n4.fsf@t19.piap.pl>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,85 +47,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerome,
+Hi Krzysztof
 
-On 2022/3/1 16:36, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Tue 01 Mar 2022 at 13:54, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
->>
->> On 2022/2/28 18:59, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On Fri 25 Feb 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> Using the common Clock code to describe the UART baud rate
->>>> clock makes it easier for the UART driver to be compatible
->>>> with the baud rate requirements of the UART IP on different
->>>> meson chips. Add Meson S4 SoC compatible.
->>>>
->>>> The test method:
->>>> Start the console and run the following commands in turn:
->>>> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
->>>>
->>>> Since most SoCs are too old, I was able to find all the platforms myself
->>>> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
->>>> G12A and S4.
->>> GXL based board are still very common an easy to come by.
->>> I'm quite surprised that you are unable to test on this SoC family
->> The fact of the matter is that the S4 is our end-2020 chip, the G12A is
->> five years old, and the GXL is seven years old. If you must ask for a
->> test, I will report this problem to the leadership to coordinate resources.
-> 
-> The age of the SoC is irrelevant. SoCs don't get deprecated based on age
-> in mainline. It is not just GXL, same goes for meson8.
-> 
-> These SoCs are actively used. Boards with these SoCs are still sold and
-> easily available. See the VIM1 or the Libretech boards.
-> 
-> Breaking things for the the users of these SoCs is not acceptable.
-> So yes, looking at your series, I strongly recommend you do more tests.
-> 
-You have a point there. Let's go back to the root of the problem. I aim 
-to increase S4. The S4 uses 12MHZ to calculate baud. That's all.
-Change it to CCF as you suggested. The changes are so large that you ask 
-to test all the chips.
-I also mentioned last time that using CCF would lead to a longer drive 
-probe time and affect the board startup time. If this problem is not 
-solved, can we reject the way you suggest using CCF?
->>>
->>>>
->>>> Yu Tu (6):
->>>>     tty: serial: meson: Move request the register region to probe
->>>>     tty: serial: meson: Use devm_ioremap_resource to get register mapped
->>>>       memory
->>>>     tty: serial: meson: Describes the calculation of the UART baud rate
->>>>       clock using a clock frame
->>>>     tty: serial: meson: Make some bit of the REG5 register writable
->>>>     tty: serial: meson: The system stuck when you run the stty command on
->>>>       the console to change the baud rate
->>>>     tty: serial: meson: Added S4 SOC compatibility
->>>>
->>>> V6 -> V7: To solve the system stuck when you run the stty command on
->>>> the console to change the baud rate.
->>>> V5 -> V6: Change error format as discussed in the email.
->>>> V4 -> V5: Change error format.
->>>> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
->>>> in the email.
->>>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
->>>> the DTS before it can be deleted
->>>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
->>>> discussed in the email
->>>>
->>>> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/
->>>>
->>>>    drivers/tty/serial/meson_uart.c | 221 ++++++++++++++++++++++----------
->>>>    1 file changed, 154 insertions(+), 67 deletions(-)
->>>>
->>>>
->>>> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
->>>
-> 
+On Fri, Feb 25, 2022 at 01:15:11PM +0100, Krzysztof Hałasa wrote:
+> Hi Jacopo,
+>
+> Sorry it took that long. Unfortunately I no longer have much time to
+> work on this, thus the delays.
+>
+
+No worries! sorry it took me a few days to reply
+
+> Jacopo Mondi <jacopo@jmondi.org> writes:
+>
+> >> +static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
+> >> +{
+> >> +	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+> >> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
+> >> +	int ret;
+> >> +
+> >> +	/* v4l2_ctrl_lock() locks our own mutex */
+> >> +
+> >> +	dev_dbg(&sensor->i2c_client->dev, "%s(0x%X)\n", __func__, ctrl->id);
+> >> +
+> >> +	switch (ctrl->id) {
+> >> +	case V4L2_CID_HBLANK:
+> >> +	case V4L2_CID_VBLANK:
+> >> +		sensor->total_width = sensor->fmt.width +
+> >> +			sensor->ctrls.hblank->val;
+> >> +		sensor->total_height = sensor->fmt.width +
+> >> +			sensor->ctrls.vblank->val;
+> >> +		break;
+> >> +	default:
+> >> +		ret = -EINVAL;
+> >> +		break;
+> >> +	}
+> >> +
+> >> +	// access the sensor only if it's powered up
+> >> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
+> >
+> > As you correctly do not access the chip's registers if it's powered
+> > off, you have to call __v4l2_ctrl_handler_setup() at power on time to
+> > make sure controls are actually set.
+>
+> These registers are also written in ar0521_set_stream(), isn't it
+> enough?
+
+Oh I see, set_stream() sets gains and then calls write_mode() which
+handles blankings, exposure and test pattern so yes, all controls seem
+to be covered. It's usually safer to go through the control handler
+to make sure that any control that is added later is not left behind.
+But for now it's all right!
+
+>
+> >> +	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK,
+> >> +					  AR0521_WIDTH_BLANKING_MIN, 4094, 1,
+> >> +					  AR0521_WIDTH_BLANKING_MIN);
+> >> +	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
+> >> +					  AR0521_HEIGHT_BLANKING_MIN, 4094, 2,
+> >> +					  AR0521_HEIGHT_BLANKING_MIN);
+> >> +	v4l2_ctrl_cluster(2, &ctrls->hblank);
+> >
+> > Is it intended to have vblank and hblank as cluster, can't they change
+> > independently ?
+>
+> They can. It appears, though, that clusters aren't about controls which
+> can't change independently. Both of the two are written to the hardware
+> at the same time, which appears to be a valid reason to combine them
+> into a cluster.
+
+Is there a reason to write them to hw at the same time ? :)
+
+> This is similar to the gain/balance controls, and BTW the use of
+> clusters there was suggested by you.
+
+
+>
+> Please correct me if I'm wrong.
+
+I don't think it's strictly necessary to clusterize them, but
+defintely not a big deal
+
+>
+> >> +	/* Read-only */
+> >> +	ctrls->pixrate = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
+> >> +					   AR0521_PIXEL_CLOCK_MIN,
+> >> +					   AR0521_PIXEL_CLOCK_MAX, 1,
+> >> +					   AR0521_PIXEL_CLOCK_RATE);
+> >
+> > so you have to mark it as read-only
+>
+> Oh, I'd be happy for this control to be R/W. Unfortunately the core
+> media core enforces R/O. This is only a comment about what the core code
+> does, currently at least.
+
+You right, the core does that for you
+
+>
+> >> +	dev_dbg(dev, "%s()\n", __func__);
+> >
+> > Rather useless, please drop. Same for all other debug functions that
+> > just print the current function name in other parts of the driver.
+> > While maybe useful when developing, they're mostly noise for users
+> > imo.
+>
+> Fine, will drop the rest of the debug. In fact, I already dropped the
+> most useful parts (I2C register access debugging).
+>
+> >> +	endpoint = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0,
+> >> +						   FWNODE_GRAPH_ENDPOINT_NEXT);
+> >
+> > The drivers supports a single endpoint right ? Then
+> > fwnode_graph_get_next_enpoint() can be used
+>
+> Well, I originally used
+> fwnode_graph_get_next_endpoint(of_fwnode_handle(dev->of_node), NULL).
+> Sakari suggested I should use the above
+> fwnode_graph_get_endpoint_by_id().
+> It could be a good idea to agree on this. Not sure about the difference.
+>
+
+Let's stick with what Sakari suggested.
+
+> >> +	for (cnt = 0; cnt < ARRAY_SIZE(ar0521_supply_names); cnt++) {
+> >> +		struct regulator *supply = devm_regulator_get(dev,
+> >> +						ar0521_supply_names[cnt]);
+> >> +
+> >> +		if (IS_ERR(supply)) {
+> >> +			dev_info(dev, "no %s regulator found: %li\n",
+> >> +				 ar0521_supply_names[cnt], PTR_ERR(supply));
+> >> +			return PTR_ERR(supply);
+> >> +		}
+> >> +		sensor->supplies[cnt] = supply;
+> >> +	}
+> >
+> > Using the regulator bulk api would simplify this.
+> > See drivers/media/i2c/ccs/ccs-core.c
+>
+> The bulk API doesn't allow for delays between individual supplies, does it?
+> The delays are mandated by the manufacturer.
+>
+
+Ack then, no bulk API
+
+> >> +
+> >> +	mutex_init(&sensor->lock);
+> >> +
+> >> +	ret = ar0521_init_controls(sensor);
+> >> +	if (ret)
+> >> +		goto entity_cleanup;
+> >> +
+> >> +	ar0521_adj_fmt(&sensor->fmt);
+> >
+> > Called already here above.
+>
+> Right, I will remove the first one.
+>
+> >> +	ret = v4l2_async_register_subdev(&sensor->sd);
+> >> +	if (ret)
+> >> +		goto free_ctrls;
+> >> +
+> >> +	/* Turn on the device and enable runtime PM */
+> >> +	ret = ar0521_power_on(&client->dev);
+> >> +	if (ret)
+> >> +		goto disable;
+> >
+> > Does the device stay powered all the time ?
+>
+> Depends on the hw, but the power could be disabled, yes.
+>
+> > Doesn't your resume callback call power_on() already ?
+>
+> It does, when the PM is enabled.
+>
+> Should the above code be changed?
+>
+
+As it doesn't seem to me you access registers during probe (to
+identify the sensor in example) there's no need to power up the device
+during probe, but should be enough to let runtime_pm do so when
+requested.
+
+> >> +static struct i2c_driver ar0521_i2c_driver = {
+> >> +	.driver = {
+> >> +		.name  = "ar0521",
+> >> +		.pm = &ar0521_pm_ops,
+> >> +		.of_match_table	= ar0521_dt_ids,
+> >> +	},
+> >> +	.probe    = ar0521_probe,
+> >
+> > You could use probe_new and drop the "const struct i2c_device_id *id"
+> > argument to probe()
+>
+> You are right again.
+>
+> That said, I wonder if it would be better (like easier) to have this
+> driver added to the staging area instead.
+
+Personally I don't think this driver qualifies for staging, it can
+be accepted in this form and be eventually changed on top in
+drivers/media. Let's see what maintainers think.
+
+I'll review the last version and hope to see this merged soon.
+
+Thanks
+  j
+
+
+> --
+> Krzysztof "Chris" Hałasa
+>
+> Sieć Badawcza Łukasiewicz
+> Przemysłowy Instytut Automatyki i Pomiarów PIAP
+> Al. Jerozolimskie 202, 02-486 Warszawa

@@ -2,369 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4C04C9358
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153EA4C935E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiCASh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        id S236979AbiCASiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiCASh1 (ORCPT
+        with ESMTP id S237095AbiCASiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:37:27 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B5583BF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:36:44 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id u11so23058363lju.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=laq0kj8LMyGe/L1lT4KstA0XXC6SaMCcvXF5TxzEHJE=;
-        b=cseWP725xZEV5DG7/7HhVJRXJnnaYgNPB1QfXwbbjJWC6NVSFyAMkJnSMdzVYN+n60
-         V9cvbOA4GrTsck7K9O3QNmy+H7nsE3YEuIxG2cCOrCVGYwH5NihTAIdmy8y3gSNZmwx4
-         zLlcJNhvp1ZVSQpebvj6G95RGqsP1b0x1EdFxN6sakgkUVzwYaQ2r21HHjUR5Lpex4Ka
-         lVrffVkbgA0ULYB9m7sL+IwDm7FOTcFUBVz3PLwJTl2oJs/7FFRLf1IyXCFtabrPKm5W
-         0pd0zgJgGqprZsjC25j1xKjr0ocnOLOF5Zt0aAbsJ8YLb1XM0lCdrL2AwaD3wIuqntwK
-         Rsrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=laq0kj8LMyGe/L1lT4KstA0XXC6SaMCcvXF5TxzEHJE=;
-        b=rGqQHGf2AUqSV6t0EEcsgT4Yip3lPkS4Y2kd5wdJ5CECYKJiA/nlqs18WEQEzd26ny
-         URtEQJ5RTMLcqpzw4c+X4e/8BnI/1JUmp4O/jvmZC45LH4mbDoNbyi2WI1Nyryp9WgCQ
-         2xCO4CC18cQTNdtK6HNns3/TiB1pl+uO2r4ZloxLK+iJ1m5uqnbo7VdiOeFmiB1OoNMk
-         qk6+sU2z3xXGgUF4nbBTVHi/5pkUAPxpbXXMIXElBMZmx0jruGs0qepuDmbenOYlTw9R
-         HddY/hBd+jGBT3tO15+uRqCGFokdGxD+Q/qPs5rbrG/YTxs6lGsqkz9SMb126j2HiWlD
-         UX9w==
-X-Gm-Message-State: AOAM530J8odjT8IwJuxoSNuhDr9FmjRNtYVKLu1KF3eYzTlr9k3s8/w2
-        rWbPp8bCdxTXv7Do9hYrMrR3RDIVKVDNKYMoD915aCj2IgI=
-X-Google-Smtp-Source: ABdhPJxz4/POajrQSh8J95G0LI2PlY3NITd9Zvp3oAgJtLNGpqE4DU9eXJyf3aKPc/XYqvLBavqMBoHZX32nQhO2HJA=
-X-Received: by 2002:a2e:8942:0:b0:246:4536:cf22 with SMTP id
- b2-20020a2e8942000000b002464536cf22mr17923344ljk.235.1646159798280; Tue, 01
- Mar 2022 10:36:38 -0800 (PST)
+        Tue, 1 Mar 2022 13:38:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEFB25EB0;
+        Tue,  1 Mar 2022 10:37:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91235B81BFB;
+        Tue,  1 Mar 2022 18:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9E0C340EE;
+        Tue,  1 Mar 2022 18:37:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aQfeTqt3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646159840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VSlbgJdpoP+AY+bV5mfkN+zErWZpSrp0RJgkPDVSc0A=;
+        b=aQfeTqt3Blqmd7xwmnnemPOkABs2OSRQfD3vrWDfSpclMht5sVb5NhIpVgxjRlEiCLkj7u
+        TWiA9VszkWjvxE0Yx8q/qb/9de6ZpRvFOxGB1JCkF6eZfpa4GxXxMZ/IWhlVmVPlgRK2e5
+        TKYSF2+nWIzlxjGcVXAAqFsV6gVdKi4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 61d2a11b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 18:37:20 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2dc0364d2ceso5938327b3.7;
+        Tue, 01 Mar 2022 10:37:18 -0800 (PST)
+X-Gm-Message-State: AOAM533aWgITWalmDDlDTyk01ub1VY3yAnLIG9sIfSRQ0gWxD6mJQdbF
+        LnsLkRs33jUjOwpRvgltivZHmvFIxVgMa1kgT8I=
+X-Google-Smtp-Source: ABdhPJxjsymwg5XYl+9GOoc41diKHCjvuVitOGfsmWq8BKG7jLc7Bwscjb/8sbN68Rx5awXeXGZ28M5wy+3vS8Wf7hE=
+X-Received: by 2002:a81:8984:0:b0:2db:6b04:be0c with SMTP id
+ z126-20020a818984000000b002db6b04be0cmr13093941ywf.2.1646159837032; Tue, 01
+ Mar 2022 10:37:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225144245.182659-1-masahiroy@kernel.org> <CAKwvOd=WjnHSHKLVRJifHxV2tyDsLTkek80NWU=do=FSHhNLug@mail.gmail.com>
- <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com> <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
-In-Reply-To: <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 1 Mar 2022 10:36:26 -0800
-Message-ID: <CAKwvOdmC5J-KpA-oyQQApt=vGCxSSd84ZRdHiS3t3fjvG_d7iA@mail.gmail.com>
-Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure successful
- write to files
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com> <20220301121419-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220301121419-mutt-send-email-mst@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 1 Mar 2022 19:37:06 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+Message-ID: <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+Subject: Re: propagating vmgenid outward and upward
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 12:22 AM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> David answered most of the questions from Nick.
->
->
-> Let me answer this question:
-> "Why call ferror as opposed to checking the return code of fflush?
-> Reading the man page closer:"
->
->
-> When fprintf() happens to need to write data to the end device,
-> the internal buffer is cleared anyway (even if the writing to the
-> end device fails).
-> (We do not notice the failure of this because this patch is
-> removing xprintf().)
->
->
-> If the buffer has been cleared by the previous fprintf() call,
-> fflush() succeeds because there is no data in the internal buffer.
->
-> So, checking the return value of fflush() is not enough.
->
-> That's my understanding.
-> (I ran a small piece of test code under "ulimit -f")
->
->
-> So, we have two options:
->
-> [1] Check the return values in *all* the call-sites
->     of fprintf() and fflush().
->
->
-> [2] Call fprintf() and fflush() or whatever without checking
->      their return values.
->     And, check ferror() at the last moment.
->
->
->
->
-> If you are really sure that all the return values are checked,
-> you can go with [1], then you do not need to call ferror(),
-> but it is generally less fragile than [2].
+Hi Michael,
 
-Sure, doesn't matter much to me; was more curious "why."
-Reviewd-by: Nick Desaulniers <ndesaulniers@google.com>
+On Tue, Mar 1, 2022 at 6:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> Hmm okay, so it's a performance optimization... some batching then? Do
+> you really need to worry about every packet? Every 64 packets not
+> enough?  Packets are after all queued at NICs etc, and VM fork can
+> happen after they leave wireguard ...
 
->
->
->
->
->
->
-> On Tue, Mar 1, 2022 at 11:28 AM David Laight <David.Laight@aculab.com> wr=
-ote:
-> >
-> > Someone send HTML mail =E2=80=93 outlook is broken =E2=80=93 only lets =
-you top post :-(
-> >
-> >
-> >
-> > The return value from fprintf() is normally the number of bytes written=
- to
-> >
-> > the internal buffer (8k in glibc?)
-> >
-> > Only if the buffer is full and an actual write() is done do you get any=
- indication of an error.
-> >
-> > So you can use the error return from fprintf() to terminate a loop =E2=
-=80=93 but it usually
-> >
-> > just isn=E2=80=99t worth the effort.
-> >
-> > The error status returned by ferror() is =E2=80=98sticky=E2=80=99, so y=
-ou need only check once.
-> >
-> > But you need to check before fclose().
-> >
-> > Since fclose() has to write out the buffer =E2=80=93 that write can als=
-o fail.
-> >
-> > I=E2=80=99m not sure whether fclose() returns and error in that case, b=
-ut adding fflush()
-> >
-> > makes the coding easier.
-> >
-> >
-> >
-> > So if you have lots of fprintf() adding data to a file (which is often =
-the case)
-> >
-> > almost all of them always succeed =E2=80=93 even if the disk is full.
-> >
-> > Adding the error paths that can never really happen just makes the
-> >
-> > code harder to read and clutters things up.
-> >
-> >
-> >
-> >                 David
-> >
-> >
-> >
-> > From: Nick Desaulniers <ndesaulniers@google.com>
-> > Sent: 28 February 2022 23:01
-> > To: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>; David Lai=
-ght <David.Laight@ACULAB.COM>; LKML <linux-kernel@vger.kernel.org>; Michal =
-Marek <michal.lkml@markovi.net>
-> > Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure suc=
-cessful write to files
-> >
-> >
-> >
-> > On Fri, Feb 25, 2022 at 6:43 AM Masahiro Yamada <masahiroy@kernel.org> =
-wrote:
-> > >
-> > > Checking the return value of (v)printf does not ensure the successful
-> > > write to the .cmd file.
-> >
-> > Masahiro,
-> > Apologies for my delay reviewing; I was on vacation last week.
-> >
-> > Do you have more context for why this change is necessary? Perhaps you =
-might describe further in the commit message the use case you're trying to =
-support?
-> >
-> > Reading the man pages for vprintf(3), fflush(3), and ferror(3), I'm cur=
-ious why checking the return value of ferror(3) after not doing so for `vpr=
-intf` and `fflush` is preferred?
-> >
-> > Why not simply unconditionally add a call to fflush while leaving the e=
-xisting return code checking on vprintf?
-> >
-> > >
-> > > Call fflush() and ferror() to make sure that everything has been
-> > > written to the file.
-> > >
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >   - add error message
-> > >
-> > >  scripts/basic/fixdep.c | 46 +++++++++++++++++-----------------------=
---
-> > >  1 file changed, 19 insertions(+), 27 deletions(-)
-> > >
-> > > diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-> > > index 44e887cff49b..2328f9a641da 100644
-> > > --- a/scripts/basic/fixdep.c
-> > > +++ b/scripts/basic/fixdep.c
-> > > @@ -105,25 +105,6 @@ static void usage(void)
-> > >         exit(1);
-> > >  }
-> > >
-> > > -/*
-> > > - * In the intended usage of this program, the stdout is redirected t=
-o .*.cmd
-> > > - * files. The return value of printf() must be checked to catch any =
-error,
-> > > - * e.g. "No space left on device".
-> > > - */
-> > > -static void xprintf(const char *format, ...)
-> > > -{
-> > > -       va_list ap;
-> > > -       int ret;
-> > > -
-> > > -       va_start(ap, format);
-> > > -       ret =3D vprintf(format, ap);
-> > > -       if (ret < 0) {
-> > > -               perror("fixdep");
-> > > -               exit(1);
-> >
-> > Wouldn't the existing approach abort sooner if there was an error encou=
-ntered?
-> >
-> > > -       }
-> > > -       va_end(ap);
-> > > -}
-> > > -
-> > >  struct item {
-> > >         struct item     *next;
-> > >         unsigned int    len;
-> > > @@ -189,7 +170,7 @@ static void use_config(const char *m, int slen)
-> > >
-> > >         define_config(m, slen, hash);
-> > >         /* Print out a dependency path from a symbol name. */
-> > > -       xprintf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> > > +       printf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> > >  }
-> > >
-> > >  /* test if s ends in sub */
-> > > @@ -318,13 +299,13 @@ static void parse_dep_file(char *m, const char =
-*target)
-> > >                                  */
-> > >                                 if (!saw_any_target) {
-> > >                                         saw_any_target =3D 1;
-> > > -                                       xprintf("source_%s :=3D %s\n\=
-n",
-> > > -                                               target, m);
-> > > -                                       xprintf("deps_%s :=3D \\\n", =
-target);
-> > > +                                       printf("source_%s :=3D %s\n\n=
-",
-> > > +                                              target, m);
-> > > +                                       printf("deps_%s :=3D \\\n", t=
-arget);
-> > >                                 }
-> > >                                 is_first_dep =3D 0;
-> > >                         } else {
-> > > -                               xprintf("  %s \\\n", m);
-> > > +                               printf("  %s \\\n", m);
-> > >                         }
-> > >
-> > >                         buf =3D read_file(m);
-> > > @@ -347,8 +328,8 @@ static void parse_dep_file(char *m, const char *t=
-arget)
-> > >                 exit(1);
-> > >         }
-> > >
-> > > -       xprintf("\n%s: $(deps_%s)\n\n", target, target);
-> > > -       xprintf("$(deps_%s):\n", target);
-> > > +       printf("\n%s: $(deps_%s)\n\n", target, target);
-> > > +       printf("$(deps_%s):\n", target);
-> > >  }
-> > >
-> > >  int main(int argc, char *argv[])
-> > > @@ -363,11 +344,22 @@ int main(int argc, char *argv[])
-> > >         target =3D argv[2];
-> > >         cmdline =3D argv[3];
-> > >
-> > > -       xprintf("cmd_%s :=3D %s\n\n", target, cmdline);
-> > > +       printf("cmd_%s :=3D %s\n\n", target, cmdline);
-> > >
-> > >         buf =3D read_file(depfile);
-> > >         parse_dep_file(buf, target);
-> > >         free(buf);
-> > >
-> > > +       fflush(stdout);
-> > > +
-> > > +       /*
-> > > +        * In the intended usage, the stdout is redirected to .*.cmd =
-files.
-> > > +        * Call ferror() to catch errors such as "No space left on de=
-vice".
-> > > +        */
-> > > +       if (ferror(stdout)) {
-> >
-> > Why call ferror as opposed to checking the return code of fflush?  Read=
-ing the man page closer:
-> >
-> >        The  function feof() tests the end-of-file indicator for the str=
-eam pointed to by stream, returning nonzero if it is set.  The end-of-file =
-indicator can be cleared only by the function
-> >        clearerr().
-> >
-> >        The function ferror() tests the error indicator for the stream p=
-ointed to by stream, returning nonzero if it is set.  The error indicator c=
-an be reset only by the clearerr() function.
-> >
-> > Does that imply that "the end-of-file indicator" is distinct from "the =
-error indicator?"
-> >
-> > > +               fprintf(stderr, "fixdep: not all data was written to =
-the output\n");
-> > > +               exit(1);
-> > > +       }
-> > > +
-> > >         return 0;
-> > >  }
-> > > --
-> > > 2.32.0
-> > >
-> >
-> >
-> >
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, M=
-K1 1PT, UK
-> > Registration No: 1397386 (Wales)
-> >
-> > P Please consider the environment and don't print this e-mail unless yo=
-u really need to
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Unfortunately, yes, this is an "every packet" sort of thing -- if the
+race is to be avoided in a meaningful way. It's really extra bad:
+ChaCha20 and AES-CTR work by xoring a secret stream of bytes with
+plaintext to produce a ciphertext. If you use that same secret stream
+and xor it with a second plaintext and transmit that too, an attacker
+can combine the two different ciphertexts to learn things about the
+original plaintext.
 
+But, anyway, it seems like the race is here to stay given what we have
+_currently_ available with the virtual hardware. That's why I'm
+focused on trying to get something going that's the least bad with
+what we've currently got, which is racy by design. How vitally
+important is it to have something that doesn't race in the far future?
+I don't know, really. It seems plausible that that ACPI notifier
+triggers so early that nothing else really even has a chance, so the
+race concern is purely theoretical. But I haven't tried to measure
+that so I'm not sure.
 
-
---=20
-Thanks,
-~Nick Desaulniers
+Jason

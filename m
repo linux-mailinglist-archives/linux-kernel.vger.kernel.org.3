@@ -2,140 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98164C8A0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AA64C8A0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbiCAK4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S232285AbiCAKzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiCAK4J (ORCPT
+        with ESMTP id S231251AbiCAKzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:56:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 548C06582F;
-        Tue,  1 Mar 2022 02:55:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8396ED1;
-        Tue,  1 Mar 2022 02:55:27 -0800 (PST)
-Received: from [10.57.71.121] (unknown [10.57.71.121])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B2333F73D;
-        Tue,  1 Mar 2022 02:55:24 -0800 (PST)
-Subject: Re: [PATCH 2/2] perf arm-spe: Parse more SPE fields and store source
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ali Saidi <alisaidi@amazon.com>, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        benh@kernel.crashing.org, james.clark@arm.com,
-        john.garry@huawei.com, jolsa@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-References: <b1b3697d-4a0a-d041-5cbd-e08fec9e658c@arm.com>
- <20220128210245.4628-1-alisaidi@amazon.com>
- <7eca7a1d-a5a2-2aab-b3cf-5d83cb8ccf4f@arm.com>
- <20220212041927.GA763461@leoy-ThinkPad-X240s>
- <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
- <20220227132019.GA107053@leoy-ThinkPad-X240s>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <923cb8b4-f854-e7bb-9bb3-e5b871f64d5d@arm.com>
-Date:   Tue, 1 Mar 2022 10:54:33 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 1 Mar 2022 05:55:43 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E42D1CD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:55:01 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id r10so19865729wrp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:55:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
+        b=fYMVAihAYq9J0SIqjc+WIOtnDT9inS98fW1fEi2Sn7ghMnAI3y501AUdeK0R7blrUp
+         0/CzDMOfXmbb80tqsD1JDwEQEQP1Qh2s7zs0K7f0tNTVS6JrKl3ecELo5nx5seZBwdK9
+         vimGyhAwh/LYebJwbHA4Arcm5BmPeEsFLJemnowLmgAGOAWL7CLRKIOXAOmFWoMYREKi
+         4D5KcCD9faaxJIMc6EXKsN/8k3vN7ip7tcOFf8mCfX35R4RqMZGH8fUsTBlUuZtZAyZv
+         CgB9l4S31auUQUUfGqDIj/536k5mlGOJJf5Q1qNYme3xdjdar0ZUR698ZnnbUX1H+b1/
+         4v6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
+        b=YH9Wv5BXtmTRWLB1F/T7ff3NyyRZa8epNdBW/YvL+0USAwSAaFayYThFNUJnDb4DhC
+         HImwpfSzdvAsHHP9hUoXxBjWXavuVusTDJhHXfLWquRxbiTJti20+P46GtQ/EyfC+lVd
+         XM9z0W4h1OHpKt5Xit/JySxTajKRrigrXlkC20w8TXg4h2vYv6/wjg2l23uV+/DsvRM1
+         VDhA1tLH4iBZELpBjJO81KjbAnsR5BiRVX05EAiec7dcKhXq9M0gb/d+BeDuTQYxI6o9
+         eqRe4Y9dOfQM2ncGFxeid4MMmEeUZsfbUDycjZ/A4xW8W9pZoi0rhufnTiAdtw5W13Az
+         mYwQ==
+X-Gm-Message-State: AOAM533HjYqkL4Nm4WVNN5eegjiOKd8Pt++MyjtwDLVq3baVd+M2Rq35
+        29P7667KaftM/R243CE0HqJ8Mg==
+X-Google-Smtp-Source: ABdhPJzdYMhou6o5WrZ52n2EdXq1yT7EjObFb+PF0Vlfb5l46Xdgw8+pUJp/NLWi38XzB8Ln5nF/ug==
+X-Received: by 2002:adf:a512:0:b0:1ea:9656:958b with SMTP id i18-20020adfa512000000b001ea9656958bmr18797120wrb.241.1646132099524;
+        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm2438734wmb.48.2022.03.01.02.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
+Date:   Tue, 1 Mar 2022 10:54:57 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
+Message-ID: <Yh37gTCPaESkgNzV@google.com>
+References: <20220228193928.3ec6ee98@canb.auug.org.au>
+ <YhyPfcjJtIKNQtF8@google.com>
+ <Yhyn72NO/roH1gA8@kroah.com>
+ <YhzENKPtY+WOp566@google.com>
+ <Yh09/r/nT2LeE82n@kroah.com>
+ <Yh3pZXQPP9kmcSSx@google.com>
+ <Yh325S5PyPiJf4F5@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20220227132019.GA107053@leoy-ThinkPad-X240s>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yh325S5PyPiJf4F5@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On Tue, 01 Mar 2022, Greg KH wrote:
 
-Thanks for taking the time, and sorry for the late reply
+> On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
+> > On Mon, 28 Feb 2022, Greg KH wrote:
+> > 
+> > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
+> > > > On Mon, 28 Feb 2022, Greg KH wrote:
+> > > > 
+> > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
+> > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
+> > > > > > 
+> > > > > > > Hi all,
+> > > > > > > 
+> > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > > > > > 
+> > > > > > I did ask for this *not* to be merged when it was in -testing.
+> > > > > 
+> > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
+> > > > > it.
+> > > > > 
+> > > > > > I'll follow-up with Greg.
+> > > > > 
+> > > > > Should I revert this from my tree?
+> > > > 
+> > > > I did try to catch it before a revert would have been required.
+> > > 
+> > > My fault.
+> > > 
+> > > > But yes, please revert it.
+> > > 
+> > > Will go do so now.
+> > 
+> > Thank you.
+> > 
+> > > > The Ack is not standard and should not be merged.
+> > > 
+> > > I do not understand this, what went wrong here?
+> > 
+> > The "Ack" you saw was just a placeholder.
+> > 
+> > When I provided it, I would have done so like this:
+> > 
+> >     "For my own reference (apply this as-is to your sign-off block):
+> > 
+> >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
+> > 
+> > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
+> > 
+> > The majority of maintainers I regularly work with know this to mean
+> > that the set is due to be routed via MFD (with a subsequent
+> > pull-request to an immutable branch to follow), since MFD is often
+> > the centre piece (parent) of the patch-sets I deal with.
+> > 
+> > I appreciate that this could cause confusion, but I'm not sure of a
+> > better way to convey this information such that it survives through
+> > various submission iterations.
+> 
+> But what else is another maintainer supposed to think if they see that
+> ack on the patch?  Ignore it?  I took that to mean "this is good from a
+> mfd-point-of-view" which meant it can go through whatever tree it is
+> supposed to.
+> 
+> Are you wanting this individual patch to go through your tree now only?
+> If so, you should say that by NOT acking it :)
 
-On 27/02/2022 13:20, Leo Yan wrote:
-> On Mon, Feb 21, 2022 at 08:41:43PM +0000, German Gomez wrote:
->
-> [...]
->
->> Some comments:
->>
->> # ARM_SPE_OP_ATOMIC
->>
->> This might be a hack, but can we not represent it as both LD&SR as the
->> atomic op would combine both?
->>
->> data_src.mem_op = PERF_MEM_OP_LOAD | PERF_MEM_OP_STORE;
-> BTH, I don't understand well for this question, but let me explain a
-> bit:
->
-> We cannot use 'LOAD | STORE' to present the atomic operation.  Please
-> see Armv8 ARM section D10.2.7 Operation Type packet, it would give out
-> more details.  Atomic operation is an extra attribution for a load or
-> store operations, it could be an atomic load or store, or
-> load-acquire/store-release instructions, or
-> load-exclusive/store-exclusive instructions.
+It's not quite as easy as that.
 
-I will check, thanks.
+It wouldn't be fair to the contributor to start reviews once all the
+other patches in the set are ready to be merged.  So how would I
+indicate that the MFD part is ready, fully expecting some of the other
+patches in the set to be reworked and subsequent revisions are to be
+submitted?
 
-My thinking was that atomics perform some load-modify-store operation
-hence why I suggested combining LOAD&STORE flags. But I admit didn't try
-running the instructions myself so I didn't check the actual records.
+This method actually works really well the majority of the time, and
+has done for a number of years.  However, I am always willing to
+improve on my processes given the opportunity.
 
-> [...]
->
->> # ARM_SPE_OP_SVE_SG
->>
->> (I'm sorry if this is too far out of scope of the original patch. Let
->> me know if you would prefer to discuss it on a separate channel)
->>
->> On a separate note, I'm also looking at incorporating some of the SVE
->> bits in the perf samples.
->>
->> For this, do you think it makes sense to have two mem_* categories in
->> perf_mem_data_src:
->>
->> mem_vector (2 bits)
->> - simd
->> - other (SVE in arm64)
-> I think we can define below vector types:
->
-> PERF_MEM_VECTOR_SIMD
-> PERF_MEM_VECTOR_SVE
->
-> The tricky thing is "other"... Based on the description for "Operation
-> Type packet payload (Other)" in the Armv8 Arm, I think we even need to
-> add an extra operation type PERF_MEM_OP_OTHER and assign it to
-> data_src.mem_op field.
->
->> mem_src (1 bit)
->> - sparse (scatter/gather loads/stores in SVE, as well as simd)
-> How about the naming "mem_attr" for new field and define two
-> attributions:
->
-> PERF_MEM_ATTR_SPARSE  -> Gather/Scatter operation
-> PERF_MEM_ATTR_PRED    -> Predicated operation
->
-> Just remind, we cannot only approve within Arm related developers,
-> it's good to seek more wider review from other Arch developers when
-> you send new patch set.
+> How do you want to see this merged?
 
-Agree. On second thought, the mention of sve seems very arch-specific
-for this...
+The plan is for the whole set to be merged together via MFD.
 
-Recently the idea of adding arch-specific flags to the branch entries
-was mentioned in [1]. Perhaps we could suggest something similar for
-this. Or leave simd/sve as a perf-tool-only feature for now.
+All of the other maintainers have now Acked, so it's ready to go:
 
-[1] https://lore.kernel.org/all/Ygv4cmO%2Fzb3qO48q@robh.at.kernel.org/
+  https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
 
->
-> Thanks,
-> Leo
+Looking at the diff, I'm not entirely sure why you took it in the
+first place?
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

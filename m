@@ -2,278 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941F4C87DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0094C87DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbiCAJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S233765AbiCAJah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbiCAJal (ORCPT
+        with ESMTP id S232878AbiCAJaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:30:41 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134976C940
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:30:00 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id i1so12982907plr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:30:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tOXanIeqoV4tge34B0/qTL2YOxSkwo0wt9c05w9sWp8=;
-        b=XkqF0ayMLmXrjrs8YI7nDCz0XLMxOrO42LSpjKMpgUEoZyNbpdt2qYjLMPCZrs1jYC
-         UEeDyR5dlmM19LPsOBSnv58Xzwv+A3BcNMGsHyByUr8PRlZ/LuLpPIz1haU8UvenHWJY
-         Rs9RJU9YWbfsG8Y+OSVZg/qzeiMPBcN86gEQp74oXWw+PT8j/4revsfnaElY9d8oW8ex
-         meBtL/Fc50V1hyBULeatutPrrqfaXl1XkB5uGsKtIVHfkGK7k1+HGQ8IyBixUYnMv8NT
-         LG5/lcT9Y92AGjKIH7Sh6UxTF/0if5OyxcuY2lfZNSCswG38tl4rd9oIfJowwCo2lSkz
-         3xFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tOXanIeqoV4tge34B0/qTL2YOxSkwo0wt9c05w9sWp8=;
-        b=znoobNauNs04rVuu1DCGm9pcaZv7aHZF9uHgdORJW0WkztseDVxHB7CmrAm2/3R3LP
-         AOWIlRce3BrpfufqCjknhSHCeHZJBAJhAOAkl+z6N6xtRZSKozqAp0YEkXyfvMiBYGml
-         JBvoFTN7JwtSpUJCm+FG43MlW0rSOlRlhqTkqoXIOYRQikahWHh9CdQYPZHoya/uaUmb
-         Mje6wRANIogbBFxc/r2c35E3aywgDzJvQPfr3VToGMikvLFp/R6h1Xi7jZnm/zRDqwey
-         E/PiLSdj4fM0ucdrF0iTSZWbe9JEac+jMrw8FKNWSI++FM1jCBwGuERXGJx8VFVQrIOn
-         y/SA==
-X-Gm-Message-State: AOAM533IRwdRFJd0XqkWjz02LaSPsGH1wMKGBwSs9uMAFjsZj8m+RsUT
-        e7wQNLjIAmJMvKLhmE9769g=
-X-Google-Smtp-Source: ABdhPJx8mUuSlwUvLBTivxH4H6RTpz3AQeg9c7dsvL+JgzAHniNxPFsZtSQtktOYSw4/aEQDVjd/4Q==
-X-Received: by 2002:a17:90a:de96:b0:1be:e427:8745 with SMTP id n22-20020a17090ade9600b001bee4278745mr866665pjv.175.1646126999545;
-        Tue, 01 Mar 2022 01:29:59 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm15848730pfl.135.2022.03.01.01.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 01:29:59 -0800 (PST)
-Date:   Tue, 1 Mar 2022 09:29:52 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Zqiang <qiang.zhang@windriver.com>
-Subject: Re: [PATCH v3] mm/slub: initialize stack depot in boot process
-Message-ID: <Yh3nkGD2glQ0u+4A@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <Yh3erDM9anwFXkD8@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <3cc16aa0-c8b8-624d-bd39-1bb7a3ec5756@suse.cz>
+        Tue, 1 Mar 2022 04:30:35 -0500
+Received: from mg.sunplus.com (mswedge2.sunplus.com [60.248.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 310E35C674;
+        Tue,  1 Mar 2022 01:29:52 -0800 (PST)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(59926:0:AUTH_RELAY)
+        (envelope-from <edwin.chiu@sunplus.com>); Tue, 01 Mar 2022 17:30:12 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Tue, 1 Mar 2022 17:30:06 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Tue, 1 Mar 2022 17:30:06 +0800
+From:   =?utf-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Thread-Topic: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Thread-Index: AQHYJvM6KsEFetK2rkm3Rlg2+5O/D6ydsX4AgAybu1A=
+Date:   Tue, 1 Mar 2022 09:30:06 +0000
+Message-ID: <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
+References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
+ <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+ <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
+In-Reply-To: <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3cc16aa0-c8b8-624d-bd39-1bb7a3ec5756@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 10:14:30AM +0100, Vlastimil Babka wrote:
-> On 3/1/22 09:51, Hyeonggon Yoo wrote:
-> > commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
-> > objects") initializes stack depot in cache creation if SLAB_STORE_USER
-> > flag is set.
-> 
-> As pointed out, this is not a stable commit, the series was just posted for
-> review and there will be v2. So instead of "this fixes the commit..." I
-> suggest writing the patch assuming it's a preparation for the patch
-> "mm/slub: use stackdepot"... and I can then make it part of the series.
-> So it should instead explain that for slub_debug we will need a way to
-> trigger stack_depot_early_init() based on boot options and so this patch
-> introduces it...
->
-
-Agreed.
-
-> > This can make kernel crash because a cache can be crashed in various
-> > contexts. For example if user sets slub_debug=U, kernel crashes
-> > because create_boot_cache() calls stack_depot_init(), which tries to
-> > allocate hash table using memblock_alloc() if slab is not available.
-> > But memblock is also not available at that time.
-> > 
-> > This patch solves the problem by initializing stack depot early
-> > in boot process if SLAB_STORE_USER debug flag is set globally
-> > or the flag is set for at least one cache.
-> > 
-> > [ elver@google.com: initialize stack depot depending on slub_debug
-> >   parameter instead of allowing stack_depot_init() to be called
-> >   during kmem_cache_init() for simplicity. ]
-> > 
-> > [ vbabka@suse.cz: parse slub_debug parameter in setup_slub_debug()
-> >   and initialize stack depot in stack_depot_early_init(). ]
-> > 
-> > [ lkp@intel.com: Fix build error. ]
-> > 
-> > Link: https://lore.kernel.org/all/YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal/
-> > Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > ---
-> >  include/linux/slab.h       |  1 +
-> >  include/linux/stackdepot.h |  3 ++-
-> >  mm/slab.c                  |  5 +++++
-> >  mm/slob.c                  |  5 +++++
-> >  mm/slub.c                  | 19 ++++++++++++++++---
-> >  5 files changed, 29 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/include/linux/slab.h b/include/linux/slab.h
-> > index 37bde99b74af..d2b0f8f9e5e6 100644
-> > --- a/include/linux/slab.h
-> > +++ b/include/linux/slab.h
-> > @@ -762,6 +762,7 @@ extern void kvfree_sensitive(const void *addr, size_t len);
-> >  
-> >  unsigned int kmem_cache_size(struct kmem_cache *s);
-> >  void __init kmem_cache_init_late(void);
-> > +int __init slab_stack_depot_init(void);
-> >  
-> >  #if defined(CONFIG_SMP) && defined(CONFIG_SLAB)
-> >  int slab_prepare_cpu(unsigned int cpu);
-> > diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-> > index 17f992fe6355..a813a2673c48 100644
-> > --- a/include/linux/stackdepot.h
-> > +++ b/include/linux/stackdepot.h
-> > @@ -12,6 +12,7 @@
-> >  #define _LINUX_STACKDEPOT_H
-> >  
-> >  #include <linux/gfp.h>
-> > +#include <linux/slab.h>
-> >  
-> >  typedef u32 depot_stack_handle_t;
-> >  
-> > @@ -32,7 +33,7 @@ int stack_depot_init(void);
-> >  #ifdef CONFIG_STACKDEPOT_ALWAYS_INIT
-> >  static inline int stack_depot_early_init(void)	{ return stack_depot_init(); }
-> >  #else
-> > -static inline int stack_depot_early_init(void)	{ return 0; }
-> > +static inline int stack_depot_early_init(void)	{ return slab_stack_depot_init(); }
-> >  #endif
-> 
-> I think the approach should be generic for stackdepot, not tied to a
-> function that belongs to slab with 3 different implementations.
-> E.g. in stackdepot.h declare a variable e.g. "stack_depot_want_early_init"
-> that is checked in stack_depot_early_init() above to call stack_depot_init().
-
-Hmm yeah if we define it in stack depot, that would be nice.
-I just didn't want to expose global variable that is specific to slub.
-
-> >  depot_stack_handle_t stack_depot_save(unsigned long *entries,
-> > diff --git a/mm/slab.c b/mm/slab.c
-> > index ddf5737c63d9..c7f929665fbe 100644
-> > --- a/mm/slab.c
-> > +++ b/mm/slab.c
-> > @@ -1196,6 +1196,11 @@ static void __init set_up_node(struct kmem_cache *cachep, int index)
-> >  	}
-> >  }
-> >  
-> > +int __init slab_stack_depot_init(void)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> >  /*
-> >   * Initialisation.  Called after the page allocator have been initialised and
-> >   * before smp_init().
-> > diff --git a/mm/slob.c b/mm/slob.c
-> > index 60c5842215f1..7597c219f061 100644
-> > --- a/mm/slob.c
-> > +++ b/mm/slob.c
-> > @@ -725,3 +725,8 @@ void __init kmem_cache_init_late(void)
-> >  {
-> >  	slab_state = FULL;
-> >  }
-> > +
-> > +int __init slab_stack_depot_init(void)
-> > +{
-> > +	return 0;
-> > +}
-> > diff --git a/mm/slub.c b/mm/slub.c
-> > index a74afe59a403..8f130f917977 100644
-> > --- a/mm/slub.c
-> > +++ b/mm/slub.c
-> > @@ -646,6 +646,16 @@ static slab_flags_t slub_debug;
-> >  
-> >  static char *slub_debug_string;
-> >  static int disable_higher_order_debug;
-> > +static bool __initdata init_stack_depot;
-> > +
-> > +int __init slab_stack_depot_init(void)
-> > +{
-> > +#ifdef CONFIG_STACKDEPOT
-> > +	if (init_stack_depot)
-> > +		stack_depot_init();
-> > +#endif
-> > +	return 0;
-> > +}
-> 
-> 
-> 
-> >  /*
-> >   * slub is about to manipulate internal object metadata.  This memory lies
-> > @@ -1531,6 +1541,8 @@ static int __init setup_slub_debug(char *str)
-> >  			global_slub_debug_changed = true;
-> >  		} else {
-> >  			slab_list_specified = true;
-> > +			if (flags & SLAB_STORE_USER)
-> > +				init_stack_depot = true;
-> >  		}
-> >  	}
-> >  
-> > @@ -1546,6 +1558,10 @@ static int __init setup_slub_debug(char *str)
-> >  			global_flags = slub_debug;
-> >  		slub_debug_string = saved_str;
-> >  	}
-> > +
-> > +	if (global_flags & SLAB_STORE_USER)
-> > +		init_stack_depot = true;
-> 
-> This looks good, it would just set the "stack_depot_want_early_init"
-> variable instead. But logically should be part of "mm/slub: use
-> stackdepot...", not part of patch that introduces the variable. That so if
-> you don't mind I would move it there with credit.
->
-
-Oh I don't mind that.
-Then I will expect this to be solved in next series...
-
-I'm looking forward to next version. Thanks!
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
-
-> >  out:
-> >  	slub_debug = global_flags;
-> >  	if (slub_debug != 0 || slub_debug_string)
-> > @@ -4221,9 +4237,6 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
-> >  	s->remote_node_defrag_ratio = 1000;
-> >  #endif
-> >  
-> > -	if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
-> > -		stack_depot_init();
-> > -
-> >  	/* Initialize the pre-computed randomized freelist if slab is up */
-> >  	if (slab_state >= UP) {
-> >  		if (init_cache_random_seq(s))
-> 
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
+d3NraSA8a3J6a0BrZXJuZWwub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBGZWJydWFyeSAyMiwgMjAy
+MiAxMjo0OCBBTQ0KPiBUbzogRWR3aW4gQ2hpdSA8ZWR3aW5jaGl1MDUwNXR3QGdtYWlsLmNvbT47
+IEVkd2luIENoaXUg6YKx5Z6C5bOwIDxlZHdpbi5jaGl1QHN1bnBsdXMuY29tPjsNCj4gcm9iaCtk
+dEBrZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZn
+ZXIua2VybmVsLm9yZzsgcmFmYWVsQGtlcm5lbC5vcmc7DQo+IGRhbmllbC5sZXpjYW5vQGxpbmFy
+by5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY1
+XSBjcHVpZGxlOiBzdW5wbHVzOiBDcmVhdGUgY3B1aWRsZSBkcml2ZXIgZm9yIHN1bnBsdXMgc3A3
+MDIxDQo+IA0KPiBPbiAyMS8wMi8yMDIyIDA4OjI2LCBFZHdpbiBDaGl1IHdyb3RlOg0KPiA+IENy
+ZWF0ZSBjcHVpZGxlIGRyaXZlciBmb3Igc3VucGx1cyBzcDcwMjEgY2hpcA0KPiA+DQo+ID4gU2ln
+bmVkLW9mZi1ieTogRWR3aW4gQ2hpdSA8ZWR3aW5jaGl1MDUwNXR3QGdtYWlsLmNvbT4NCj4gPiAt
+LS0NCj4gPiBDaGFuZ2VzIGluIHYzDQo+ID4gIC0gUmVhcnJhbmdlbWVudCAjaW5jbHVkZSBzZXF1
+ZW5jZQ0KPiA+ICAtIENoYW5nZSByZW1hcmsgc3R5bGUgdG8gLyp+Ki8NCj4gPiAgLSBBbGlnbiBh
+dXRob3IgZW1haWwgYWRkcmVzcyB0byBzYW1lIGFzIHNvYg0KPiA+ICAtIE9wdGltYWwgY29kZQ0K
+PiA+IENoYW5nZXMgaW4gdjQNCj4gPiAgLSBBY2NvcmRpbmcgUm9iIEhlcnJpbmdyb2JoJ3MgY29t
+bWVudA0KPiA+ICAgIFRoZXJlIGlzIG5vIG5lZWQgZm9yIHRoaXMgYmluZGluZy4NCj4gPiAgICBK
+dXN0IHdhbnRpbmcgYSBkaWZmZXJlbnQgZHJpdmVyIGlzIG5vdCBhIHJlYXNvbg0KPiA+ICAgIGZv
+ciBhIGR1cGxpY2F0ZSBzY2hlbWEuDQo+ID4gICAgU28gcmVtb3ZlIHlhbWwgZmlsZSBhbmQgc3Vi
+bWl0IGRyaXZlciBhZ2Fpbi4NCj4gPiBDaGFuZ2VzIGluIHY1DQo+ID4gIC0gQWNjb3JkaW5nIEty
+enlzenRvZidzIGNvbW1lbnQNCj4gPiAgICBZb3UgZWl0aGVyIHVzZSBhcHByb3ByaWF0ZSBjb21w
+YXRpYmxlIGluIERUDQo+ID4gICAgb3IgYWRkIHlvdXIgY29tcGF0aWJsZSB0byBjcHVpZGxlLWFy
+bS4NCj4gPiAgICBFdmVuIGlmIHRoaXMgZGlkIG5vdCB3b3JrLCB0aGVuIHRoZSBzb2x1dGlvbiBp
+cyB0bw0KPiA+ICAgIHVzZSBjb21tb24gcGFydHMsIG5vdCB0byBkdXBsaWNhdGUgZW50aXJlIGRy
+aXZlci4NCj4gPiAgICBBY2NvcmRpbmcgU3VkZWVwJ3MgY29tbWVudA0KPiA+ICAgIEluIHNob3J0
+IE5BQ0sgZm9yIGFueSBkZWRpY2F0ZWQgZHJpdmVyIGZvciB0aGlzIHBsYXRmb3JtLA0KPiA+ICAg
+IHVzZSB0aGUgZ2VuZXJpYyBjcHVpZGxlLWFybSBkcml2ZXIgd2l0aCBhcHByb3ByaWF0ZSBwbGF0
+Zm9ybSBob29rcw0KPiA+ICAgIENyZWF0ZSBjcHVpZGxlLXN1bnBsdXMuYyBpbiBhcmNoL2FybS9t
+YWNoLXN1bnBsdXMvDQo+ID4gICAgZm9yIGhvb2sgZ2VuZXJpYyBjcHVpZGxlLWFybSBkcml2ZXIN
+Cj4gPg0KPiA+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgNiArKw0KPiA+ICBhcmNoL2FybS9tYWNoLXN1bnBsdXMvY3B1aWRsZS1zdW5wbHVzLmMgICAg
+ICAgfCA4OCArKysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2Rh
+dGEvY3B1aWRsZS1zdW5wbHVzLmggfCAxMiArKysrDQo+ID4gIDMgZmlsZXMgY2hhbmdlZCwgMTA2
+IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL21hY2gtc3Vu
+cGx1cy9jcHVpZGxlLXN1bnBsdXMuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9s
+aW51eC9wbGF0Zm9ybV9kYXRhL2NwdWlkbGUtc3VucGx1cy5oDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
+IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUyBpbmRleCBlMGRjYThmLi41Yzk2NDI4IDEwMDY0
+NA0KPiA+IC0tLSBhL01BSU5UQUlORVJTDQo+ID4gKysrIGIvTUFJTlRBSU5FUlMNCj4gPiBAQCAt
+MTgyNTIsNiArMTgyNTIsMTIgQEAgTDoJbmV0ZGV2QHZnZXIua2VybmVsLm9yZw0KPiA+ICBTOglN
+YWludGFpbmVkDQo+ID4gIEY6CWRyaXZlcnMvbmV0L2V0aGVybmV0L2RsaW5rL3N1bmRhbmNlLmMN
+Cj4gPg0KPiA+ICtTVU5QTFVTIENQVUlETEUgRFJJVkVSDQo+ID4gK006CUVkd2luIENoaXUgPGVk
+d2luY2hpdTA1MDV0d0BnbWFpbC5jb20+DQo+ID4gK1M6CU1haW50YWluZWQNCj4gPiArRjoJYXJj
+aC9hcm0vbWFjaC1zdW5wbHVzL2NwdWlkbGUtc3VucGx1cy5jDQo+ID4gK0Y6CWluY2x1ZGUvbGlu
+dXgvcGxhdGZvcm1fZGF0YS9jcHVpZGxlLXN1bnBsdXMuaA0KPiA+ICsNCj4gPiAgU1VQRVJIDQo+
+ID4gIE06CVlvc2hpbm9yaSBTYXRvIDx5c2F0b0B1c2Vycy5zb3VyY2Vmb3JnZS5qcD4NCj4gPiAg
+TToJUmljaCBGZWxrZXIgPGRhbGlhc0BsaWJjLm9yZz4NCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9h
+cm0vbWFjaC1zdW5wbHVzL2NwdWlkbGUtc3VucGx1cy5jDQo+ID4gYi9hcmNoL2FybS9tYWNoLXN1
+bnBsdXMvY3B1aWRsZS1zdW5wbHVzLmMNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGlu
+ZGV4IDAwMDAwMDAuLmU5ZDk3MzgNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvYXJjaC9h
+cm0vbWFjaC1zdW5wbHVzL2NwdWlkbGUtc3VucGx1cy5jDQo+ID4gQEAgLTAsMCArMSw4OCBAQA0K
+PiA+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vbmx5DQo+ID4gKy8qDQo+
+ID4gKyAqIFNQNzAyMSBjcHUgaWRsZSBEcml2ZXIuDQo+ID4gKyAqIENvcHlyaWdodCAoQykgU3Vu
+cGx1cyBUZWNoIC8gVGliYm8gVGVjaC4NCj4gPiArICovDQo+ID4gKyNkZWZpbmUgcHJfZm10KGZt
+dCkgIkNQVWlkbGUgYXJtOiAiIGZtdA0KPiA+ICsNCj4gPiArI2luY2x1ZGUgPGxpbnV4L2NwdWlk
+bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29mX2RldmljZS5oPg0KPiA+ICsjaW5jbHVkZSA8
+bGludXgvcGxhdGZvcm1fZGF0YS9jcHVpZGxlLXN1bnBsdXMuaD4NCj4gPiArDQo+ID4gKyNpbmNs
+dWRlIDxhc20vY3B1aWRsZS5oPg0KPiA+ICsNCj4gPiArdHlwZWRlZiBpbnQgKCppZGxlX2ZuKSh2
+b2lkKTsNCj4gPiArDQo+ID4gK3N0YXRpYyBERUZJTkVfUEVSX0NQVShpZGxlX2ZuKiwgc3A3MDIx
+X2lkbGVfb3BzKTsNCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgc3A3MDIxX2NwdWlkbGVfZW50ZXIo
+dW5zaWduZWQgbG9uZyBpbmRleCkgew0KPiA+ICsJcmV0dXJuIF9fdGhpc19jcHVfcmVhZChzcDcw
+MjFfaWRsZV9vcHMpW2luZGV4XSgpOw0KPiA+ICt9DQo+ID4gK3N0YXRpYyBpbnQgc3A3MDIxX2Nw
+dV9zcGModm9pZCkNCj4gPiArew0KPiA+ICsJY3B1X3Y3X2RvX2lkbGUoKTsgICAvKiBpZGxlIHRv
+IFdGSSAqLw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArc3RhdGljIGNvbnN0IHN0cnVj
+dCBvZl9kZXZpY2VfaWQgc3A3MDIxX2lkbGVfc3RhdGVfbWF0Y2hbXSA9IHsNCj4gPiArCXsgLmNv
+bXBhdGlibGUgPSAiYXJtLGlkbGUtc3RhdGUiLCAuZGF0YSA9IHNwNzAyMV9jcHVfc3BjIH0sDQo+
+ID4gKwl7IH0sDQo+ID4gK307DQo+IA0KPiBUaGlzIGlzIGNvbmZ1c2luZy4gWW91IHdhbnQgdG8g
+aGF2ZSB0d28gZHJpdmVycyB0byBiaW5kIHRvIHRoZSBzYW1lIGNvbXBhdGlibGU/IEFzIEkgd3Jv
+dGUgaW4gdGhlDQo+IHByZXZpb3VzIG1lc3NhZ2VzLCB5b3Ugc2hvdWxkIHNpbXBseSB1c2UgYXJt
+LGlkbGUtc3RhdGUganVzdCBsaWtlIGZldyBvdGhlciBhcmNoaXRlY3R1cmVzLg0KPiANCj4gDQo+
+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQoNCg0KVGhlIHBhdGNoIHY1IGltcGxlbWVudGVk
+IGFjY29yZGluZyB5b3VyIGNvbW1lbnQuDQpVc2VkIGNvbW1vbiBwYXJ0IG9mIGFybSxpZGxlLXN0
+YXRlLg0KQ3JlYXRlIG5ldyBlbmFibGUtbWV0aG9kIGZvciBjcHVpZGxlLm9wcyBmdW5jdGlvbi4N
+Ckl0IG9ubHkgaGF2ZSBhcm0gY3B1aWRsZSBkcml2ZXIgZXhpc3Qgbm93LCBubyB0d28gZHJpdmVy
+cyB0byBiaW5kIHRvIHRoZSBzYW1lIGNvbXBhdGlibGUuDQoNCldoYXQgZG8geW91IG1lYW4gIiBz
+aW1wbHkgdXNlIGFybSxpZGxlLXN0YXRlIGp1c3QgbGlrZSBmZXcgb3RoZXIgYXJjaGl0ZWN0dXJl
+cyAiPw0KDQoNCumCseWeguWzsCBFZHdpbkNoaXUNCuaZuuiDvemBi+eul+WwiOahiA0KVDogKzg4
+Ni0zLTU3ODYwMDUgZXh0LjI1OTANCmVkd2luLmNoaXVAc3VucGx1cy5jb20NCjMwMCDmlrDnq7nn
+p5HlrbjlnJLljYDlibXmlrDkuIDot68xOeiZnw0KDQo=

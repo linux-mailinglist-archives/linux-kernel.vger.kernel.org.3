@@ -2,295 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF04C8B27
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3174C8B31
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234659AbiCALyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S234654AbiCAMAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234647AbiCALyp (ORCPT
+        with ESMTP id S231856AbiCAMAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:54:45 -0500
-Received: from smtpbg511.qq.com (smtpbg511.qq.com [203.205.250.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3DC8B6CE
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:54:01 -0800 (PST)
-X-QQ-mid: bizesmtp74t1646135634tl2iodvi
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 01 Mar 2022 19:53:52 +0800 (CST)
-X-QQ-SSF: 01400000002000C0G000B00B0000000
-X-QQ-FEAT: P0DaXoo1QzjcMAhnK4u/yQYMF3zXBXRrn0JQ1SpLLeqEqnYuApefM8hFxxdnf
-        8NQ//F8ooD5ibQr8xHxCd8D3ttwb7A2i8HMMcgJUGJPKOvgGc1ry3juXG5/VyoRg3Bf4ek2
-        mkpLuL1HBw5FdppUvjmb8HSOQszXGWiZx5uF2MhvkyRu/115m0ZyDnuc5VOq+28FOcXPf95
-        R/H85R+2NO6Eg8r09JPeZ6bJbGqxaiLY9gM+GfZBsMtgH2VtkyRs+W4lbOQeeqP9K12NKCL
-        UzCffxsHZ7GEKIcOJYne3nHRAO5Bk4QMP0qTXSHBNXzdzryo79wT/EBRxIekdPnZDBEeBKw
-        Yo87KeoxnwQsk1C5zH4Ni1k69XHXsZY4h2YUZUL6DMOQxgKR/A=
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        ebiederm@xmission.com, willy@infradead.org
-Cc:     nixiaoming@huawei.com, nizhen@uniontech.com,
-        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH v2 2/2] fs/proc: sysctl: optimize register single one ctl_table
-Date:   Tue,  1 Mar 2022 19:53:41 +0800
-Message-Id: <20220301115341.30101-2-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220301115341.30101-1-tangmeng@uniontech.com>
-References: <20220301115341.30101-1-tangmeng@uniontech.com>
+        Tue, 1 Mar 2022 07:00:30 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEF19C05
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:59:48 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j15so26403124lfe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:59:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Si9aW8LCRt5/GwrO2//8BMDIlBc8iSDjacAKlZRx+TQ=;
+        b=s1igJK3l+Va0dZp8E9uNa6ojypPkViWmCK7B6e/ivbYdOTCg3Pxemn0dYyX08MJlg6
+         DO9kJrrltWp20LX/G/XNek5ZFAjnNCnnV45kbAZAdl0tBFVBTDMH69/LJK7lU1lOoIUB
+         R79279OBeExrxDiEvz/UrEhsjPY5bb6YYIT4lqpfa+Mlba84ZzFQmu5fOChpZIVlXFzd
+         lj/c5T3G09z+n3AhJ1/d+vPfdsJOeKJW/Or03SiGSvo+dVU9LpPAJKlvqxjZSl+DaSvr
+         qhnAILKJPfrCyYjZvNCpiGTiMwF51AEgxsHIjIFHG2z4yrqCAE2AQ9tXEV3i55/lMHtw
+         qB5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Si9aW8LCRt5/GwrO2//8BMDIlBc8iSDjacAKlZRx+TQ=;
+        b=ECHU8nHy4+kNCyGuYi0g4AcO56hgXWVkok1TWB6DqxOfgPB2MmN1lyhwn4HhTgbyap
+         FS0EPGt/zbLb6u56ldKyvcY/mkjpC0TsNC8++l7H1lXx9pLQfkB0EldXMgz5fMHaVKXp
+         Qd7llzaE6KxvxhEg7SQCFf7Ji1Exx15eTOl6oNarasgGqwWUGhWKLQu9kXjfscJWQXw+
+         NJcN1fBmbgHuhYTP2m0Kq1TW4A588bpPaBHJUk1q8mO2tlf8TUhme1XU+3P79+7fEFT7
+         YLPII9t3T1O2+izV8oiizjquQyj2KkgF2iuL87NWqk8kYb0Ve4xmMltTmtXXB/an0zKp
+         q0tg==
+X-Gm-Message-State: AOAM5315H6yJ2FnENJkUEsUy22dzack77FTcrnhCKvTVX1g2fGrXBhGk
+        lbA7Fsrq1Dr+3s2VQfy9XF2K2A==
+X-Google-Smtp-Source: ABdhPJzpYUIzhepTGM8F34Cw9Ax1tyYQ6Gh+ZuCx4zapfvFyQ2yyS8kip73EUxgDfz3vgszQd5WPxw==
+X-Received: by 2002:a05:6512:202c:b0:443:3ce0:22a with SMTP id s12-20020a056512202c00b004433ce0022amr15627934lfs.74.1646135986201;
+        Tue, 01 Mar 2022 03:59:46 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id t12-20020ac2548c000000b004435947cf11sm1453672lfk.201.2022.03.01.03.59.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 03:59:45 -0800 (PST)
+Message-ID: <ce32cafe-8dd9-526d-5413-ad81df7b78eb@linaro.org>
+Date:   Tue, 1 Mar 2022 14:59:45 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 6/7] arm64: dts: qcom: sm8150: Add pcie nodes for
+ SM8150
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhupesh.linux@gmail.com, lorenzo.pieralisi@arm.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        svarbanov@mm-sol.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org
+References: <20220301072511.117818-1-bhupesh.sharma@linaro.org>
+ <20220301072511.117818-7-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220301072511.117818-7-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sysctls are being moved out of kernel/sysctl.c and out to
-their own respective subsystems / users to help with easier
-maintance and avoid merge conflicts. But when we move just
-one entry and to its own new file the last entry for this
-new file must be empty, so we are essentialy bloating the
-kernel one extra empty entry per each newly moved sysctl.
+On 01/03/2022 10:25, Bhupesh Sharma wrote:
+> Add nodes for the two PCIe controllers founds on the
+> SM8150 SoC.
+> 
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8150.dtsi | 243 +++++++++++++++++++++++++++
+>   1 file changed, 243 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index 6012322a5984..b97f04ec9c6b 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -1626,6 +1626,203 @@ system-cache-controller@9200000 {
+>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>   		};
+>   
+> +		pcie0: pci@1c00000 {
+> +			compatible = "qcom,pcie-sm8150", "snps,dw-pcie";
+> +			reg = <0 0x01c00000 0 0x3000>,
+> +			      <0 0x60000000 0 0xf1d>,
+> +			      <0 0x60000f20 0 0xa8>,
+> +			      <0 0x60001000 0 0x1000>,
+> +			      <0 0x60100000 0 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> +			device_type = "pci";
+> +			linux,pci-domain = <0>;
+> +			bus-range = <0x00 0xff>;
+> +			num-lanes = <1>;
+> +
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +
+> +			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+> +
+> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "msi";
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 151 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 152 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			clocks = <&gcc GCC_PCIE_0_PIPE_CLK>,
+> +				 <&gcc GCC_PCIE_0_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
+> +			clock-names = "pipe",
+> +				      "aux",
+> +				      "cfg",
+> +				      "bus_master",
+> +				      "bus_slave",
+> +				      "slave_q2a",
+> +				      "tbu";
+> +
+> +			iommus = <&apps_smmu 0x1d80 0x7f>;
+> +			iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
+> +				    <0x100 &apps_smmu 0x1d81 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_0_BCR>;
+> +			reset-names = "pci";
+> +
+> +			power-domains = <&gcc PCIE_0_GDSC>;
+> +
+> +			phys = <&pcie0_lane>;
+> +			phy-names = "pciephy";
+> +
+> +			perst-gpio = <&tlmm 35 GPIO_ACTIVE_HIGH>;
+> +			enable-gpio = <&tlmm 37 GPIO_ACTIVE_HIGH>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pcie0_default_state>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie0_phy: phy@1c06000 {
+> +			compatible = "qcom,sm8150-qmp-gen3x1-pcie-phy";
+> +			reg = <0 0x01c06000 0 0x1c0>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE0_PHY_REFGEN_CLK>;
+> +			clock-names = "aux", "cfg_ahb", "refgen";
+> +
+> +			resets = <&gcc GCC_PCIE_0_PHY_BCR>;
+> +			reset-names = "phy";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE0_PHY_REFGEN_CLK>;
+> +			assigned-clock-rates = <100000000>;
+> +
+> +			status = "disabled";
+> +
+> +			pcie0_lane: phy@1c06200 {
+> +				reg = <0 0x1c06200 0 0x170>, /* tx */
+> +				      <0 0x1c06400 0 0x200>, /* rx */
+> +				      <0 0x1c06800 0 0x1f0>, /* pcs */
+> +				      <0 0x1c06c00 0 0xf4>; /* "pcs_lane" same as pcs_misc? */
+> +				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +
+> +				#phy-cells = <0>;
+> +				clock-output-names = "pcie_0_pipe_clk";
+> +			};
+> +		};
+> +
+> +		pcie1: pci@1c08000 {
+> +			compatible = "qcom,pcie-sm8150", "snps,dw-pcie";
+> +			reg = <0 0x01c08000 0 0x3000>,
+> +			      <0 0x40000000 0 0xf1d>,
+> +			      <0 0x40000f20 0 0xa8>,
+> +			      <0 0x40001000 0 0x1000>,
+> +			      <0 0x40100000 0 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> +			device_type = "pci";
+> +			linux,pci-domain = <1>;
+> +			bus-range = <0x00 0xff>;
+> +			num-lanes = <2>;
+> +
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +
+> +			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
+> +
+> +			interrupts = <GIC_SPI 306 IRQ_TYPE_EDGE_RISING>;
 
-To help with this, I have added support for registering just
-one ctl_table, therefore not bloating the kernel when we
-move a single ctl_table to its own file.
+This should be 307
 
-The optimization has been implemented in the previous patch,
-here use register_sysctl_single() to register single one
-ctl_table.
+> +			interrupt-names = "msi";
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 438 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 439 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
+> +				 <&gcc GCC_PCIE_1_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
+> +			clock-names = "pipe",
+> +				      "aux",
+> +				      "cfg",
+> +				      "bus_master",
+> +				      "bus_slave",
+> +				      "slave_q2a",
+> +				      "tbu";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+> +			assigned-clock-rates = <19200000>;
+> +
+> +			iommus = <&apps_smmu 0x1e00 0x7f>;
+> +			iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
+> +				    <0x100 &apps_smmu 0x1e01 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_1_BCR>;
+> +			reset-names = "pci";
+> +
+> +			power-domains = <&gcc PCIE_1_GDSC>;
+> +
+> +			phys = <&pcie1_lane>;
+> +			phy-names = "pciephy";
+> +
+> +			perst-gpio = <&tlmm 102 GPIO_ACTIVE_HIGH>;
+> +			enable-gpio = <&tlmm 104 GPIO_ACTIVE_HIGH>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pcie1_default_state>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie1_phy: phy@1c0e000 {
+> +			compatible = "qcom,sm8150-qmp-gen3x2-pcie-phy";
+> +			reg = <0 0x01c0e000 0 0x1c0>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE1_PHY_REFGEN_CLK>;
+> +			clock-names = "aux", "cfg_ahb", "refgen";
+> +
+> +			resets = <&gcc GCC_PCIE_1_PHY_BCR>;
+> +			reset-names = "phy";
+> +
+> +			assigned-clocks = <&gcc GCC_PCIE1_PHY_REFGEN_CLK>;
+> +			assigned-clock-rates = <100000000>;
+> +
+> +			status = "disabled";
+> +
+> +			pcie1_lane: phy@1c0e200 {
+> +				reg = <0 0x1c0e200 0 0x170>, /* tx0 */
+> +				      <0 0x1c0e400 0 0x200>, /* rx0 */
+> +				      <0 0x1c0ea00 0 0x1f0>, /* pcs */
+> +				      <0 0x1c0e600 0 0x170>, /* tx1 */
+> +				      <0 0x1c0e800 0 0x200>, /* rx1 */
+> +				      <0 0x1c0ee00 0 0xf4>; /* "pcs_com" same as pcs_misc? */
+> +				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +
+> +				#phy-cells = <0>;
+> +				clock-output-names = "pcie_1_pipe_clk";
+> +			};
+> +		};
+> +
+>   		ufs_mem_hc: ufshc@1d84000 {
+>   			compatible = "qcom,sm8150-ufshc", "qcom,ufshc",
+>   				     "jedec,ufs-2.0";
+> @@ -2327,6 +2524,52 @@ qup_spi19_default: qup-spi19-default {
+>   				drive-strength = <6>;
+>   				bias-disable;
+>   			};
+> +
+> +			pcie0_default_state: pcie0-default {
+> +				perst {
+> +					pins = "gpio35";
+> +					function = "gpio";
+> +					drive-strength = <2>;
+> +					bias-pull-down;
+> +				};
+> +
+> +				clkreq {
+> +					pins = "gpio36";
+> +					function = "pci_e0";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				wake {
+> +					pins = "gpio37";
+> +					function = "gpio";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +			};
+> +
+> +			pcie1_default_state: pcie1-default {
+> +				perst {
+> +					pins = "gpio102";
+> +					function = "gpio";
+> +					drive-strength = <2>;
+> +					bias-pull-down;
+> +				};
+> +
+> +				clkreq {
+> +					pins = "gpio103";
+> +					function = "pci_e1";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +
+> +				wake {
+> +					pins = "gpio104";
+> +					function = "gpio";
+> +					drive-strength = <2>;
+> +					bias-pull-up;
+> +				};
+> +			};
+>   		};
+>   
+>   		remoteproc_mpss: remoteproc@4080000 {
 
-In this modification, I counted the size changes of each
-object file during the compilation process.
 
-When there is no strip, size changes are as follows:
- 			    before    now    save space
-fs/dcache.o                  904936  904760   176bytes
-fs/exec.o                    883584  883440   144bytes
-fs/namespace.o              1614776 1614616   160bytes
-fs/notify/dnotify/dnotify.o  255992  255872   120bytes
-init/do_mounts_initrd.o      296552  296392   160bytes
-kernel/acct.o                459184  459032   152bytes
-kernel/delayacct.o           208680  208536   144bytes
-kernel/kprobes.o             794968  794936    32bytes
-kernel/panic.o               367696  367560   136bytes
-
-When there is exec with 'strip -d', size changes are as follows:
-     			    before    now    save space
-fs/dcache.o                  79040   78952     88bytes
-fs/exec.o                    57960   57864     96bytes
-fs/namespace.o              111904  111824     80bytes
-fs/notify/dnotify/dnotify.o   8816    8736     80bytes
-init/do_mounts_initrd.o       4872    4760    112bytes
-kernel/acct.o                18104   18000    104bytes
-kernel/delayacct.o            8768    8664    104bytes
-kernel/kprobes.o             63192   63104     88bytes
-kernel/panic.o               26760   26672     88bytes
-
-Suggested-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- fs/dcache.c                 | 5 ++---
- fs/exec.c                   | 5 ++---
- fs/namespace.c              | 5 ++---
- fs/notify/dnotify/dnotify.c | 5 ++---
- init/do_mounts_initrd.c     | 5 ++---
- kernel/acct.c               | 5 ++---
- kernel/delayacct.c          | 5 ++---
- kernel/kprobes.c            | 5 ++---
- kernel/panic.c              | 5 ++---
- 9 files changed, 18 insertions(+), 27 deletions(-)
-
-diff --git a/fs/dcache.c b/fs/dcache.c
-index c84269c6e8bf..29fed2df79d1 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -190,13 +190,12 @@ static struct ctl_table fs_dcache_sysctls[] = {
- 		.maxlen		= 6*sizeof(long),
- 		.mode		= 0444,
- 		.proc_handler	= proc_nr_dentry,
--	},
--	{ }
-+	}
- };
- 
- static int __init init_fs_dcache_sysctls(void)
- {
--	register_sysctl_init("fs", fs_dcache_sysctls);
-+	register_sysctl_single("fs", fs_dcache_sysctls);
- 	return 0;
- }
- fs_initcall(init_fs_dcache_sysctls);
-diff --git a/fs/exec.c b/fs/exec.c
-index c2586b791b87..58e9e50b9d98 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -2140,13 +2140,12 @@ static struct ctl_table fs_exec_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax_coredump,
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_TWO,
--	},
--	{ }
-+	}
- };
- 
- static int __init init_fs_exec_sysctls(void)
- {
--	register_sysctl_init("fs", fs_exec_sysctls);
-+	register_sysctl_single("fs", fs_exec_sysctls);
- 	return 0;
- }
- 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index df172818e1f8..1384fa7f8c79 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4673,13 +4673,12 @@ static struct ctl_table fs_namespace_sysctls[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ONE,
--	},
--	{ }
-+	}
- };
- 
- static int __init init_fs_namespace_sysctls(void)
- {
--	register_sysctl_init("fs", fs_namespace_sysctls);
-+	register_sysctl_single("fs", fs_namespace_sysctls);
- 	return 0;
- }
- fs_initcall(init_fs_namespace_sysctls);
-diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-index 829dd4a61b66..813a22825be5 100644
---- a/fs/notify/dnotify/dnotify.c
-+++ b/fs/notify/dnotify/dnotify.c
-@@ -28,12 +28,11 @@ static struct ctl_table dnotify_sysctls[] = {
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
--	},
--	{}
-+	}
- };
- static void __init dnotify_sysctl_init(void)
- {
--	register_sysctl_init("fs", dnotify_sysctls);
-+	register_sysctl_single("fs", dnotify_sysctls);
- }
- #else
- #define dnotify_sysctl_init() do { } while (0)
-diff --git a/init/do_mounts_initrd.c b/init/do_mounts_initrd.c
-index 327962ea354c..d37f24959aa3 100644
---- a/init/do_mounts_initrd.c
-+++ b/init/do_mounts_initrd.c
-@@ -28,13 +28,12 @@ static struct ctl_table kern_do_mounts_initrd_table[] = {
- 		.maxlen         = sizeof(int),
- 		.mode           = 0644,
- 		.proc_handler   = proc_dointvec,
--	},
--	{ }
-+	}
- };
- 
- static __init int kernel_do_mounts_initrd_sysctls_init(void)
- {
--	register_sysctl_init("kernel", kern_do_mounts_initrd_table);
-+	register_sysctl_single("kernel", kern_do_mounts_initrd_table);
- 	return 0;
- }
- late_initcall(kernel_do_mounts_initrd_sysctls_init);
-diff --git a/kernel/acct.c b/kernel/acct.c
-index 62200d799b9b..c628808c9213 100644
---- a/kernel/acct.c
-+++ b/kernel/acct.c
-@@ -83,13 +83,12 @@ static struct ctl_table kern_acct_table[] = {
- 		.maxlen         = 3*sizeof(int),
- 		.mode           = 0644,
- 		.proc_handler   = proc_dointvec,
--	},
--	{ }
-+	}
- };
- 
- static __init int kernel_acct_sysctls_init(void)
- {
--	register_sysctl_init("kernel", kern_acct_table);
-+	register_sysctl_single("kernel", kern_acct_table);
- 	return 0;
- }
- late_initcall(kernel_acct_sysctls_init);
-diff --git a/kernel/delayacct.c b/kernel/delayacct.c
-index 2c1e18f7c5cf..6b776cbcb559 100644
---- a/kernel/delayacct.c
-+++ b/kernel/delayacct.c
-@@ -73,13 +73,12 @@ static struct ctl_table kern_delayacct_table[] = {
- 		.proc_handler   = sysctl_delayacct,
- 		.extra1         = SYSCTL_ZERO,
- 		.extra2         = SYSCTL_ONE,
--	},
--	{ }
-+	}
- };
- 
- static __init int kernel_delayacct_sysctls_init(void)
- {
--	register_sysctl_init("kernel", kern_delayacct_table);
-+	register_sysctl_single("kernel", kern_delayacct_table);
- 	return 0;
- }
- late_initcall(kernel_delayacct_sysctls_init);
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 94cab8c9ce56..1cf54662e2ed 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -970,13 +970,12 @@ static struct ctl_table kprobe_sysctls[] = {
- 		.proc_handler	= proc_kprobes_optimization_handler,
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
--	},
--	{}
-+	}
- };
- 
- static void __init kprobe_sysctls_init(void)
- {
--	register_sysctl_init("debug", kprobe_sysctls);
-+	register_sysctl_single("debug", kprobe_sysctls);
- }
- #endif /* CONFIG_SYSCTL */
- 
-diff --git a/kernel/panic.c b/kernel/panic.c
-index ae5c0ca86016..90f1a0f25139 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -85,13 +85,12 @@ static struct ctl_table kern_panic_table[] = {
- 		.proc_handler   = proc_dointvec_minmax,
- 		.extra1         = SYSCTL_ZERO,
- 		.extra2         = SYSCTL_ONE,
--	},
--	{ }
-+	}
- };
- 
- static __init int kernel_panic_sysctls_init(void)
- {
--	register_sysctl_init("kernel", kern_panic_table);
-+	register_sysctl_single("kernel", kern_panic_table);
- 	return 0;
- }
- late_initcall(kernel_panic_sysctls_init);
 -- 
-2.20.1
-
-
-
+With best wishes
+Dmitry

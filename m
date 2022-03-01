@@ -2,217 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452194C94A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457D24C94AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbiCAToJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S235829AbiCATpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiCAToG (ORCPT
+        with ESMTP id S235863AbiCATpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:44:06 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE0136E32
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:43:24 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso2798105pjk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:43:24 -0800 (PST)
+        Tue, 1 Mar 2022 14:45:18 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C86C93E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:44:35 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso23644652oon.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:44:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ExyEERu3AkDFampoHdGKmwAuWIWkw1zHgxCYaeTfSN0=;
-        b=iC7WOxSIu8qRR6xAcrTg7odgwEG5EAsNJ70vuhK1/2ktCqiGK6Q5fecfEbHPCbL1vU
-         s0coRLTxAE8Y/sAtU58Hf34ruf7TUg9YYnjbRtVH7Kvtd2L+yFM0fF84YP/YgXnH8VmT
-         Cvo5CS+v41uk/YyT9L5w85Ip8v3KGWnXSM2u45NimENXcCV2PBzUWpaoH6/bFIG201De
-         JIdnfF8EKtfdNvHjsQtg/B5NjcNQZnhsKDHK1KaezZrf7j08xmMIV8MKCH7j+hWnOdl4
-         OypLFbXtevRXdI9CiLe79n3mG0v8ZwRAWtvciUO8T6f7tXZKu8x53p74NHuGUV3G9WQ6
-         FsEg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1uzo2Ip3l9Z2WQS9kRS2aI5MRe3AqAqtHQ4fqs0dZqM=;
+        b=j+4eI4mL8Io4pIpAK1lB2FDt4unR4+dJaAUcY/Ewwp0MUPjXgCmMEWHzcv9mFI3hJV
+         vsBIhtV0uj3na59CjWp0U7657THTQVG6F/IOtlGEPGWk7V4axGAm0IHZGINRt4SsHJl2
+         9R3/Z2mavRX91oq19CYyBKM/yv2xNxpxlJCKKYrqbLchAcgcgcfWVaQPAMsjhN2ZP3tT
+         zDJsd4yJPLcClsEOnzBHhUSS/XiDkZRztOdmAdNZA2Ag+40kkSMVfMwriqEj745RH90V
+         9x3oA3nXFSRlaAkrDAEnhUQwYGXPVylQ9gzhT8be9YcvvUxEpxowei3QfMWFQT7MJRBe
+         qHkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ExyEERu3AkDFampoHdGKmwAuWIWkw1zHgxCYaeTfSN0=;
-        b=ic3jHmNeyB9ZOBWTroHLlmicXrg0Ilb8HACJG2xmLsTHRsxS9ED+6VT7gYNRcpHwbN
-         jZHQpoiunNX9+3MPLocuaqgKYjW1q2WqbhkAPrMgEjEoxdVr71JE8iYRPR7oulLm8Pmr
-         G8BZf1vphPnyv84ZWwW4zAdtXlNx3wRto3WE5bw54s3KOuwcJ+a94J1PCUZVN/M030Sf
-         OUS0VCbhpqhTqA8rtxckbW2cqaExGhzdDkuhDZ3/aeQTN5mNbm+imk6ik7fIUxLQe1uD
-         FSWK3cE3DILpo3qYYYfSDETLYV5C8Q9aEQpSUvJI9uaoUlFcq/qageVgf0TS4Ju6y4ba
-         5hWg==
-X-Gm-Message-State: AOAM530i7ZF072MMEiwdnRM7m8UFA7qDSxBF46Dim/XerB3JJ4IxF7k5
-        RrloOzhvzqYWJIgbLgJaL371aQ==
-X-Google-Smtp-Source: ABdhPJw666GK2ejmaGUqjIlBqKH6rwDnAltZH5Hn5HVEPhH/e3a3ftZx+jwZ75PDbxamFeFfcqfZ7w==
-X-Received: by 2002:a17:902:ea81:b0:14f:a4ce:ef79 with SMTP id x1-20020a170902ea8100b0014fa4ceef79mr26855032plb.136.1646163804034;
-        Tue, 01 Mar 2022 11:43:24 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v189-20020a6389c6000000b00372e3b6fe90sm13856320pgd.55.2022.03.01.11.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 11:43:23 -0800 (PST)
-Date:   Tue, 1 Mar 2022 19:43:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v3 20/28] KVM: x86/mmu: Allow yielding when zapping GFNs
- for defunct TDP MMU root
-Message-ID: <Yh53V23gSJ6jphnS@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-21-seanjc@google.com>
- <28276890-c90c-e9a9-3cab-15264617ef5a@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1uzo2Ip3l9Z2WQS9kRS2aI5MRe3AqAqtHQ4fqs0dZqM=;
+        b=VGj8+at/4BnSX/0vmJ9TeYBgRGFP2BUMleZlxo58nZ7QEApG94KxK0sK3xDgr4YHNf
+         1JCKcI/DagzJAWp6GuzpeduOJWi/ncLWsNcr9CAqcopb0EC4PhyozD/j3ECDN8AYBh24
+         IqSds7AHEXQYl8O7FKvEZH17RMemrODMC9e7pWOURM1wI8u3QExPlOGwzZplbWCDRI0z
+         wSx/HKebDXh7ivoX2h8Y64CtKC0N+R2NMb3O/06ZT6ww6F0VbsirkN+YoP3qtAksHzuw
+         Uq+9PbaxYRqsCFJzRv5bnR4D4r5/hPMj2r/wOVhnTPn1o+JZ6ESsb4yl8JPUegnmT1j8
+         DPng==
+X-Gm-Message-State: AOAM532CxHZDrPjhYZydDzKocpgDMMVuvGel9OJakE48of5sMpNQizI8
+        RoB/2gfH3tVCBSGpCsJRcl0HXLgXz68SvbjQanqHyw==
+X-Google-Smtp-Source: ABdhPJyEUajenDJbWbNCZz42qYV3Igx3HUl6FSLFUPlIyhD+EGMYK6EzbuBvtIdRnbAST4QpaJIH5PqobnizZtwZDXI=
+X-Received: by 2002:a05:6870:434f:b0:bf:9f2a:26f0 with SMTP id
+ x15-20020a056870434f00b000bf9f2a26f0mr5166687oah.40.1646163874720; Tue, 01
+ Mar 2022 11:44:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28276890-c90c-e9a9-3cab-15264617ef5a@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
+ <20220126221725.710167-9-bhupesh.sharma@linaro.org> <Yfh5Pjpw693ZMteC@builder.lan>
+In-Reply-To: <Yfh5Pjpw693ZMteC@builder.lan>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 2 Mar 2022 01:14:23 +0530
+Message-ID: <CAH=2Ntw7niiKSS-Nw6QKO+3JCGwvqv71ycZpCOb5fRjYh-dPmQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] clk: qcom: gcc-sm8150: Use PWRSTS_ON (only) as a
+ workaround for emac gdsc
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
+        tdas@codeaurora.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, davem@davemloft.net,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022, Paolo Bonzini wrote:
-> On 2/26/22 01:15, Sean Christopherson wrote:
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 3031b42c27a6..b838cfa984ad 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -91,21 +91,66 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> >   	WARN_ON(!root->tdp_mmu_page);
-> > -	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> > -	list_del_rcu(&root->link);
-> > -	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> > +	/*
-> > +	 * Ensure root->role.invalid is read after the refcount reaches zero to
-> > +	 * avoid zapping the root multiple times, e.g. if a different task
-> > +	 * acquires a reference (after the root was marked invalid) and puts
-> > +	 * the last reference, all while holding mmu_lock for read.  Pairs
-> > +	 * with the smp_mb__before_atomic() below.
-> > +	 */
-> > +	smp_mb__after_atomic();
-> > +
-> > +	/*
-> > +	 * Free the root if it's already invalid.  Invalid roots must be zapped
-> > +	 * before their last reference is put, i.e. there's no work to be done,
-> > +	 * and all roots must be invalidated (see below) before they're freed.
-> > +	 * Re-zapping invalid roots would put KVM into an infinite loop (again,
-> > +	 * see below).
-> > +	 */
-> > +	if (root->role.invalid) {
-> > +		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> > +		list_del_rcu(&root->link);
-> > +		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> > +
-> > +		call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
-> > +		return;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Invalidate the root to prevent it from being reused by a vCPU, and
-> > +	 * so that KVM doesn't re-zap the root when its last reference is put
-> > +	 * again (see above).
-> > +	 */
-> > +	root->role.invalid = true;
-> > +
-> > +	/*
-> > +	 * Ensure role.invalid is visible if a concurrent reader acquires a
-> > +	 * reference after the root's refcount is reset.  Pairs with the
-> > +	 * smp_mb__after_atomic() above.
-> > +	 */
-> > +	smp_mb__before_atomic();
-> 
-> I have reviewed the series and I only have very minor comments... but this
-> part is beyond me.  The lavish comments don't explain what is an
-> optimization and what is a requirement, 
+Hi Bjorn,
 
-Ah, they're all requirements, but the invalid part also optimizes the case where
-a root was marked invalid before its last reference was was ever put.
+On Tue, 1 Feb 2022 at 05:35, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Wed 26 Jan 16:17 CST 2022, Bhupesh Sharma wrote:
+>
+> > EMAC GDSC currently has issues (seen on SA8155p-ADP) when its
+> > turn'ed ON, once its already in OFF state. So, use PWRSTS_ON
+> > state (only) as a workaround for now.
+> >
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  drivers/clk/qcom/gcc-sm8150.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
+> > index 2e71afed81fd..fd7e931d3c09 100644
+> > --- a/drivers/clk/qcom/gcc-sm8150.c
+> > +++ b/drivers/clk/qcom/gcc-sm8150.c
+> > @@ -3449,12 +3449,16 @@ static struct clk_branch gcc_video_xo_clk = {
+> >       },
+> >  };
+> >
+> > +/* To Do: EMAC GDSC currently has issues when its turn'ed ON, once
+> > + * its already in OFF state. So use PWRSTS_ON state (only) as a
+> > + * workaround for now.
+>
+> So you're not able to turn on the GDSC after turning it off?
 
-What I really meant to refer to by "zapping" was the entire sequence of restoring
-the refcount to '1', zapping the root, and recursively re-dropping that ref.  Avoiding
-that "zap" is a requirement, otherwise KVM would get stuck in an infinite loop.
+Indeed. On the SM8150 platform (SA8155p ADP board), what I am
+observing is that the
+ethernet interface CLKs (RGMII clock etc) cannot be turned on once the
+EMAC GDSC is moved
+from an OFF to ON state. This is because the EMAC GDSC cannot be
+properly turned ON once it is
+in the OFF state.
 
-> and after spending quite some time I wonder if all this should just be
-> 
->         if (refcount_dec_not_one(&root->tdp_mmu_root_count))
->                 return;
-> 
-> 	if (!xchg(&root->role.invalid, true) {
+So, basically if we leave the EMAC GDSC on from boot (which is default
+bootloader setting), the eth interface
+can always come up fine and it can also be used for traffic tx/rx.
 
-The refcount being '1' means there's another task currently using root, marking
-the root invalid will mean checks on the root's validity are non-deterministic
-for the other task.  
+> > + */
+> >  static struct gdsc emac_gdsc = {
+> >       .gdscr = 0x6004,
+> >       .pd = {
+> >               .name = "emac_gdsc",
+> >       },
+> > -     .pwrsts = PWRSTS_OFF_ON,
+> > +     .pwrsts = PWRSTS_ON,
+>
+> Doesn't this tell the gdsc driver that the only state supported is "on"
+> and hence prohibit you from turning it on in the first place?
 
-> 	 	tdp_mmu_zap_root(kvm, root, shared);
-> 
-> 		/*
-> 		 * Do not assume the refcount is still 1: because
-> 		 * tdp_mmu_zap_root can yield, a different task
-> 		 * might have grabbed a reference to this root.
-> 		 *
-> 	        if (refcount_dec_not_one(&root->tdp_mmu_root_count))
+That's correct indeed.  Without this hack in place, the EMAC GDSC is not able to
+switch from an OFF to ON state, so when the 'eth' interface is turned
+up it fails (as RGMII CLK is unavailable):
 
-This is wrong, _this_ task can't drop a reference taken by the other task.
+qcom-ethqos 20000.ethernet eth0: PHY [stmmac-0:07] driver [Micrel
+KSZ9031 Gigabit PHY] (irq=150)
+<..snip..>
+qcom-ethqos 20000.ethernet: Failed to reset the dma
+qcom-ethqos 20000.ethernet eth0: stmmac_hw_setup: DMA engine
+initialization failed
+qcom-ethqos 20000.ethernet eth0: stmmac_open: Hw setup failed
 
->         	        return;
-> 	}
-> 
-> 	/*
-> 	 * The root is invalid, and its reference count has reached
-> 	 * zero.  It must have been zapped either in the "if" above or
-> 	 * by someone else, and we're definitely the last thread to see
-> 	 * it apart from RCU-protected page table walks.
-> 	 */
-> 	refcount_set(&root->tdp_mmu_root_count, 0);
+> >       .flags = POLL_CFG_GDSCR,
+>
+> You could add ALWAYS_ON to .flags, but we need a better description of
+> the actual problem that you're working around.
 
-Not sure what you intended here, KVM should never force a refcount to '0'.
+I agree. Let me add the above 'stmmac dma reset' issue while
+describing the workaround in the next version of the patch.
 
-> 	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> 	list_del_rcu(&root->link);
-> 	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> 
-> 	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
-> 
-> (Yay for xchg's implicit memory barriers)
+Regards,
+Bhupesh
 
-xchg() is a very good idea.  The smp_mb_*() stuff was carried over from the previous
-version where this sequence set another flag in addition to role.invalid.
-
-Is this less funky (untested)?
-
-	/*
-	 * Invalidate the root to prevent it from being reused by a vCPU while
-	 * the root is being zapped, i.e. to allow yielding while zapping the
-	 * root (see below).
-	 *
-	 * Free the root if it's already invalid.  Invalid roots must be zapped
-	 * before their last reference is put, i.e. there's no work to be done,
-	 * and all roots must be invalidated before they're freed (this code).
-	 * Re-zapping invalid roots would put KVM into an infinite loop.
-	 *
-	 * Note, xchg() provides an implicit barrier to ensure role.invalid is
-	 * visible if a concurrent reader acquires a reference after the root's
-	 * refcount is reset.
-	 */
-	if (xchg(root->role.invalid, true))
-		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-		list_del_rcu(&root->link);
-		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-
-		call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
-		return;
-	}
-
-
+> >  };
+> >
+> > --
+> > 2.34.1
+> >

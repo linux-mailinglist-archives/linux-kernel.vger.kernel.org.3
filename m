@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27614C7F7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 542AF4C7F8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiCAAph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 19:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S231895AbiCAAqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiCAApf (ORCPT
+        with ESMTP id S231868AbiCAAqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 19:45:35 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2330FE6;
-        Mon, 28 Feb 2022 16:44:55 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id w63so24035339ybe.10;
-        Mon, 28 Feb 2022 16:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Nf/egCx0Q4I70uptkgfjEanQfEaR61lPRDpLPBXJeg=;
-        b=M+GwEY56nFU9oLTxjb+5lEoD3/IkffH/Jqm+d2voDBhw0M2ZssZlz68XVTNiqKyZex
-         2VYv/3KS0AQxzBjYeFCfmGuNnryR//ge5e5Xzm15Z8mqNUp9KLUmbhXKpD0W1YE64Uaa
-         IXn7ED/d8T57Da2dbfaXSdp54mQuJ2ItYjUdGIrH5tPeWIgO8fNoJ8fTosV3Gt1AzSS3
-         dyLNdP/Ree1IpO9xk4qOB31rUq8Uudb14yBkgUz4WKmb33H3RDnQD9+2QL9BSy62y8Wj
-         Dykqh/rhsuUV/UiD50AK1Bvrt55DvegldSmB0GzIImVTOuiw+BZboMZn95y5UAoMewJR
-         8EOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Nf/egCx0Q4I70uptkgfjEanQfEaR61lPRDpLPBXJeg=;
-        b=VUreuHBzKsqw3BAw0IpLFshNwj0+RBTrJAmvUD7eDFi1jdscwQsopmjoYkQm60N1FU
-         68xobvmoscpGzCjTl/cOCjX5vZmwbarTwtsHEi0W96lGaxdQLt5iGzSP1kW3xeN/tS3m
-         QaS6TEqJN81cXZYSgGYDU/A7/3t1pepGzaeW/EWEOUErAQXBbTIrLuNRhHxkgh478z2w
-         Saipwpm9ZNWZO+XU/R4NnR7kXD1HuMB6blkNuxDEEDSgkoL6wqvzlbaaJC37s2IndV8U
-         udQeNHSUMMjL4WfEWJ6D75E+PssJIFhACABS4LobNwLH93CkEvN9mzIRRSASKPmQB1qG
-         3sKQ==
-X-Gm-Message-State: AOAM532L8pvyv7SA+gFg1D+sOEfaYF6aTgu8RcmaIIXN3yQD1QNmTTC7
-        UEtXWeoF9tLLU3kfMMDYIUj06LXK94sPl+5pzGs=
-X-Google-Smtp-Source: ABdhPJwsZJOjFD+cAucEDnn2/44FhTiZJamnT2r0djxxGeEJQ+yLbZW1dmeCwnmdpyrs9rjHJusatuYijDxFVPCWY3I=
-X-Received: by 2002:a25:f80c:0:b0:624:40aa:44ab with SMTP id
- u12-20020a25f80c000000b0062440aa44abmr21715244ybd.51.1646095495077; Mon, 28
- Feb 2022 16:44:55 -0800 (PST)
+        Mon, 28 Feb 2022 19:46:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8922DE3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:45:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646095542; x=1677631542;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A1M2o61/sQ2bPl3vTO7eHWNh6H9JFtsdHmHIpBkcMBk=;
+  b=PxP/4ECqV4amcKiGiLAglqRd6lcWain3d0jbDKeKhWPG6PYUw/W9l9td
+   AStkFFiIWAGx6jpbxs+CmRZaUyW7H510i3gkBoYQUD6g5srHXxgCoCLj6
+   hJDcsAwCFNdu2IWT9rOKXWEflm+QnX2tphW4lK3ftTx2Nq7cVdE0HoPQd
+   RL2Lf6nZDSCAsiIHYo+xmla5AhaS9C5M0E26jSngvSXU+IMEtSw4SFfup
+   xmUGjh3yt4xvbkdlgiOxMhGCV7vY5Wag1bU2R8Eq50xVkj70TQYLA0lwo
+   ZUUtU7WmGZMMlhXUDcmkha6rhYVYzPGx5s5PlFfp+HplrryibNKVIJuto
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277686284"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="277686284"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:45:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="629832301"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Feb 2022 16:45:38 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOqe1-0007wg-Vr; Tue, 01 Mar 2022 00:45:37 +0000
+Date:   Tue, 1 Mar 2022 08:45:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [amir73il:sb_iostats 3/8] fs/nfsd/export.c:337:16: error: implicit
+ declaration of function 'percpu_counters_init'; did you mean
+ 'percpu_counter_init'?
+Message-ID: <202203010840.WX3EvHHw-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220228233057.1140817-1-pgwipeout@gmail.com> <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
-In-Reply-To: <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 28 Feb 2022 19:44:43 -0500
-Message-ID: <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
-Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 7:14 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Feb 28, 2022 at 06:30:57PM -0500, Peter Geis wrote:
-> > The sentinel compatible entry whitespace causes automatic module loading
-> > to fail with certain userspace utilities. Fix this by removing the
-> > whitespace and sentinel comment, which is unnecessary.
->
-> Umm. How does it fail?
+tree:   https://github.com/amir73il/linux sb_iostats
+head:   ecfdb413f2105083296e9cb45290eb1f01b0ef5c
+commit: ec86002f8d5abb285345a931587f2f554d995825 [3/8] lib/percpu_counter: add helpers for arrays of counters
+config: alpha-defconfig (https://download.01.org/0day-ci/archive/20220301/202203010840.WX3EvHHw-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/amir73il/linux/commit/ec86002f8d5abb285345a931587f2f554d995825
+        git remote add amir73il https://github.com/amir73il/linux
+        git fetch --no-tags amir73il sb_iostats
+        git checkout ec86002f8d5abb285345a931587f2f554d995825
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash fs/nfsd/
 
-It simply does not auto load the module by device id match.
-Manually loading the module after the fact works fine.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >  static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
-> >       { PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
-> > -     { /* sentinal */ }
-> > +     {}
->
-> These two should be 100% identical in terms of the object code produced,
-> and thus should have no bearing on the ability for the module to be
-> loaded.
->
-> Have you investigated the differences in the produced object code?
+All errors (new ones prefixed by >>):
 
-Yes, you are correct, I just compared the produced files and they are identical.
-This patch can get dropped then.
-I'm curious now why it seemed to make a difference.
+   fs/nfsd/export.c: In function 'export_stats_init':
+>> fs/nfsd/export.c:337:16: error: implicit declaration of function 'percpu_counters_init'; did you mean 'percpu_counter_init'? [-Werror=implicit-function-declaration]
+     337 |         return percpu_counters_init(stats->counter, EXP_STATS_COUNTERS_NUM, 0,
+         |                ^~~~~~~~~~~~~~~~~~~~
+         |                percpu_counter_init
+   fs/nfsd/export.c: In function 'export_stats_reset':
+>> fs/nfsd/export.c:343:9: error: implicit declaration of function 'percpu_counters_set'; did you mean 'percpu_counter_set'? [-Werror=implicit-function-declaration]
+     343 |         percpu_counters_set(stats->counter, EXP_STATS_COUNTERS_NUM, 0);
+         |         ^~~~~~~~~~~~~~~~~~~
+         |         percpu_counter_set
+   fs/nfsd/export.c: In function 'export_stats_destroy':
+>> fs/nfsd/export.c:348:9: error: implicit declaration of function 'percpu_counters_destroy'; did you mean 'percpu_counter_destroy'? [-Werror=implicit-function-declaration]
+     348 |         percpu_counters_destroy(stats->counter, EXP_STATS_COUNTERS_NUM);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         percpu_counter_destroy
+   fs/nfsd/export.c: In function 'exp_rootfh':
+   fs/nfsd/export.c:980:34: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
+     980 |         struct inode            *inode;
+         |                                  ^~~~~
+   cc1: some warnings being treated as errors
+--
+   fs/nfsd/nfscache.c: In function 'nfsd_reply_cache_stats_init':
+>> fs/nfsd/nfscache.c:159:16: error: implicit declaration of function 'nfsd_percpu_counters_init'; did you mean 'percpu_counter_init'? [-Werror=implicit-function-declaration]
+     159 |         return nfsd_percpu_counters_init(nn->counter, NFSD_NET_COUNTERS_NUM);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                percpu_counter_init
+   fs/nfsd/nfscache.c: In function 'nfsd_reply_cache_stats_destroy':
+>> fs/nfsd/nfscache.c:164:9: error: implicit declaration of function 'nfsd_percpu_counters_destroy'; did you mean 'percpu_counter_destroy'? [-Werror=implicit-function-declaration]
+     164 |         nfsd_percpu_counters_destroy(nn->counter, NFSD_NET_COUNTERS_NUM);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         percpu_counter_destroy
+   cc1: some warnings being treated as errors
+--
+   fs/nfsd/stats.c: In function 'nfsd_stat_counters_init':
+>> fs/nfsd/stats.c:89:16: error: implicit declaration of function 'percpu_counters_init'; did you mean 'percpu_counter_init'? [-Werror=implicit-function-declaration]
+      89 |         return percpu_counters_init(nfsdstats.counter, NFSD_STATS_COUNTERS_NUM,
+         |                ^~~~~~~~~~~~~~~~~~~~
+         |                percpu_counter_init
+   fs/nfsd/stats.c: In function 'nfsd_stat_counters_destroy':
+>> fs/nfsd/stats.c:95:9: error: implicit declaration of function 'percpu_counters_destroy'; did you mean 'percpu_counter_destroy'? [-Werror=implicit-function-declaration]
+      95 |         percpu_counters_destroy(nfsdstats.counter, NFSD_STATS_COUNTERS_NUM);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         percpu_counter_destroy
+   cc1: some warnings being treated as errors
 
-I am not familiar enough with how the various userspace elements
-decide to match the modules to determine exactly why this is failing.
-It seems to be hit or miss if userspace decides to auto load this, for
-instance Ubuntu 20.04 was happy to load my kernel module built with
-the arm64 official toolchain, but Manjaro will not load their self
-built kernel module.
-I originally suspected it was due to the manufacturer id being all zeros.
-Unless there's some weird compiler optimization that I'm not seeing in
-my configuration.
 
-Any ideas would be appreciated.
-Thanks!
+vim +337 fs/nfsd/export.c
 
-> If not, please do so, and describe what they were. Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+   333	
+   334	static int export_stats_init(struct export_stats *stats)
+   335	{
+   336		stats->start_time = ktime_get_seconds();
+ > 337		return percpu_counters_init(stats->counter, EXP_STATS_COUNTERS_NUM, 0,
+   338					    GFP_KERNEL);
+   339	}
+   340	
+   341	static void export_stats_reset(struct export_stats *stats)
+   342	{
+ > 343		percpu_counters_set(stats->counter, EXP_STATS_COUNTERS_NUM, 0);
+   344	}
+   345	
+   346	static void export_stats_destroy(struct export_stats *stats)
+   347	{
+ > 348		percpu_counters_destroy(stats->counter, EXP_STATS_COUNTERS_NUM);
+   349	}
+   350	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

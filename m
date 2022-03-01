@@ -2,157 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F094C8152
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB154C8154
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbiCAC4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 21:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S231933AbiCAC4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 21:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiCAC4b (ORCPT
+        with ESMTP id S231902AbiCAC4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 21:56:31 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F222F026;
-        Mon, 28 Feb 2022 18:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646103352; x=1677639352;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/z7xcV6dl5VH6iMxyI/FmOZYADVup3Kf2UPfn1iS7uU=;
-  b=WC7OMSMeOs4NLtfBcS/hP7TP9X4MgwzjjPwd/Vmlr5x3qRsg9TP5ONNp
-   GKQ8ejVVR9Wl72dCrroXGPXm9N64Icc6zaU+U6ciFOqKmS3CqYr6toikd
-   VQpTGzG+q0ZpvhRZ32hF8B8UI7tZr10ZBAdAEkYxT2/pzpqu4VobV4bY3
-   QPO3LdE1co+G4JMZEKSIOBanf2ULSKekfNxwxLMu0hA1g0rXEctcdtrQc
-   M1D++CQoy6SFU//ZhUtpj9DJT8KKgW8hsjiHJyrxqe5OGahPUyKAkFCiM
-   vPz36h1xC3/SaMJuZY/u6FpGaohE/IPnEWmCOhPhpDTB3iPRyuQej23GM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253233751"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="253233751"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 18:55:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="534724101"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga007.jf.intel.com with ESMTP; 28 Feb 2022 18:55:43 -0800
-Message-ID: <80672557-59ab-8eb9-2fcf-d045ff52104b@linux.intel.com>
-Date:   Tue, 1 Mar 2022 10:54:09 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v7 06/11] PCI: portdrv: Set driver_managed_dma
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20220228195628.GA515785@bhelgaas>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220228195628.GA515785@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 21:56:42 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5A5506EF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:56:03 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id bx5so12896646pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+oP2AO871oIpXAcC/nDmnIsSYJzx7JMC4/HUdgahwKY=;
+        b=eRUXUXcLipShqDTQl0hZsfJ4zjNtH8BaqLFAUxSVWgweLN8ybhgSDAjhdMVp3zetn8
+         jS0lMbS1Eo/cYnWn+5r9pGJTMqYOk86RqPDq8c/0Zrb+UKY2dHAVHA4O9jAaZVIuGHTO
+         SfYBvzXpRIHtvCtEhi2AjDHApRRJUssYd1Nc9x9pFFqlcPPDhOREN2mqpC3wjPnHbMrY
+         ZeYCDrAimJtEbn6VS9OoKp55gpV2/3F03ht3VfSFeJPbe2aOfp+jF+NVB0VAzdRij95Q
+         ULK/DYzBPfyxVBi7OFnIXEnEIUNDYCNSu52x+o1mIm210wmTsi8/xbgthGYp2DUFClfZ
+         /hBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+oP2AO871oIpXAcC/nDmnIsSYJzx7JMC4/HUdgahwKY=;
+        b=iM+fo8vazaOZqnWv0sZYY5obtXXvPTkR+PBxnrkPPr9GoL0VOtTQe6oEstz8TGacRX
+         CP+pGHcC3ABlvotzIXbblZpv1vNU0zZ7+i1IaiEZfLpamSQ01ewmKVrdVD8xtVFuPVe8
+         yQeJxvKWpW80cyofcGkZm7MK2Te6PaDyK3HNIpBKizgs1XYnrH1xsXUKPZCJzVHbKUw0
+         JR8T+StJR2E9U0cwWTTTqWqxHzbvankQQfJw/YsnZGQfFOUPzJqTCDddFHu2ze5lR0rh
+         SHxi9tcNjbdnhbd1rw/IIsdEQpe48K5QQ3v0PJLNiNIl9Ng3VNXKVPVFvx66PAyNXsdl
+         9A1w==
+X-Gm-Message-State: AOAM5339w83x0tbOjokQVTMMU+l9sw/ZtmrPdn3uivzA/J1tf/R/8Qnq
+        zvynBvjMdaz5S945A5ET8Mc=
+X-Google-Smtp-Source: ABdhPJxII7ASR0VniO0WOpVAL6u+IKiKmvnlF6UECkG2RZDQzn74RWG9jMPgBrVKRye5xOf8va7pvQ==
+X-Received: by 2002:a17:902:ea86:b0:14f:b4be:6f83 with SMTP id x6-20020a170902ea8600b0014fb4be6f83mr23118659plb.99.1646103362801;
+        Mon, 28 Feb 2022 18:56:02 -0800 (PST)
+Received: from meizu.meizu.com ([137.59.103.163])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056a00238600b004e1906b3bb2sm15372383pfc.12.2022.02.28.18.56.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 18:56:02 -0800 (PST)
+From:   Haowen Bai <baihaowen88@gmail.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org
+Cc:     longman@redhat.com, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, Haowen Bai <baihaowen88@gmail.com>
+Subject: [PATCH] locking/rwbase: Return true/false (not 1/0) from bool functions
+Date:   Tue,  1 Mar 2022 10:55:58 +0800
+Message-Id: <1646103358-21591-1-git-send-email-baihaowen88@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Return boolean values ("true" or "false") instead of 1 or 0 from bool 
+functions.  This fixes the following warnings from coccicheck:
 
-On 3/1/22 3:56 AM, Bjorn Helgaas wrote:
-> On Mon, Feb 28, 2022 at 08:50:51AM +0800, Lu Baolu wrote:
->> If a switch lacks ACS P2P Request Redirect, a device below the switch can
->> bypass the IOMMU and DMA directly to other devices below the switch, so
->> all the downstream devices must be in the same IOMMU group as the switch
->> itself.
->>
->> The existing VFIO framework allows the portdrv driver to be bound to the
->> bridge while its downstream devices are assigned to user space. The
->> pci_dma_configure() marks the IOMMU group as containing only devices
->> with kernel drivers that manage DMA. Avoid this default behavior for the
->> portdrv driver in order for compatibility with the current VFIO usage.
-> 
-> It would be nice to explicitly say here how we can look at portdrv
-> (and pci_stub) and conclude that ".driver_managed_dma = true" is safe.
-> 
-> Otherwise I won't know what kind of future change to portdrv might
-> make it unsafe.
+kernel/locking/rwbase_rt.c:226:9-10: WARNING: return of 0/1 in function '__rwbase_write_trylock' with return type bool
 
-Fair enough. We can add below words:
 
-We achieve this by setting ".driver_managed_dma = true" in pci_driver
-structure. It is safe because the portdrv driver meets below criteria:
+Signed-off-by: Haowen Bai <baihaowen88@gmail.com>
+---
+ kernel/locking/rwbase_rt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-- This driver doesn't use DMA, as you can't find any related calls like
-   pci_set_master() or any kernel DMA API (dma_map_*() and etc.).
-- It doesn't use MMIO as you can't find ioremap() or similar calls. It's
-   tolerant to userspace possibly also touching the same MMIO registers
-   via P2P DMA access.
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index 6fd3162..e3dd458 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -223,10 +223,10 @@ static inline bool __rwbase_write_trylock(struct rwbase_rt *rwb)
+ 	 */
+ 	if (!atomic_read_acquire(&rwb->readers)) {
+ 		atomic_set(&rwb->readers, WRITER_BIAS);
+-		return 1;
++		return true;
+ 	}
+ 
+-	return 0;
++	return false;
+ }
+ 
+ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+-- 
+2.7.4
 
-> 
->> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->> Suggested-by: Kevin Tian <kevin.tian@intel.com>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Thank you!
-
-Best regards,
-baolu
-
-> 
->> ---
->>   drivers/pci/pcie/portdrv_pci.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/pci/pcie/portdrv_pci.c b/drivers/pci/pcie/portdrv_pci.c
->> index 35eca6277a96..6b2adb678c21 100644
->> --- a/drivers/pci/pcie/portdrv_pci.c
->> +++ b/drivers/pci/pcie/portdrv_pci.c
->> @@ -202,6 +202,8 @@ static struct pci_driver pcie_portdriver = {
->>   
->>   	.err_handler	= &pcie_portdrv_err_handler,
->>   
->> +	.driver_managed_dma = true,
->> +
->>   	.driver.pm	= PCIE_PORTDRV_PM_OPS,
->>   };
->>   
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> iommu mailing list
->> iommu@lists.linux-foundation.org
->> https://lists.linuxfoundation.org/mailman/listinfo/iommu

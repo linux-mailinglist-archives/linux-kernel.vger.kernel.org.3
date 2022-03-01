@@ -2,128 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9427B4C8690
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DCB4C8713
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiCAIeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S231127AbiCAIuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbiCAIea (ORCPT
+        with ESMTP id S233569AbiCAIug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:34:30 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07F928E14
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:33:49 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 65152407C6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646123628;
-        bh=UT1Wzz4wpktDA/wQ5edeBOYkNXdbIzJM75NIJS96iDU=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=sh/h1Hi+4ppq/rrzJBBzGo+h8iwOrieah+AwF+Cn+smJOFrmXgrjPjKeyZS6cIYoI
-         yV86CvKmw1E2joRhvZHpKWH3PP3QNVufMx+jUTQZrUDaQ4ZYTOHjoq8AygUtADymYt
-         MHrCt1jeH7HcLZ06LOlsM+fM1N8Epl95n0fSvaCTiocG/zmMx0aF3VCXi90Sv1JnWW
-         6SzGF5H3Jj3yRSNOguatl4BxxHZOecXyhl00AVCW86EB3/ftafkmEwg4tA13evNU7K
-         Ve48ve16M9qHDJxsAoNDwL/6i/Lqhm/nusDy53eeQ73IRkttEZaG4IrgJlLSkk3zHY
-         mV2QnaWNCrvjA==
-Received: by mail-ej1-f71.google.com with SMTP id la22-20020a170907781600b006a7884de505so6484281ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:33:48 -0800 (PST)
+        Tue, 1 Mar 2022 03:50:36 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134E58932E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:49:54 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id q17so21007919edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:49:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=XXHAzHSUKx1FZRpzOVh0FkOoc+KpTYgeqdRYpbFwNrY=;
+        b=F+esdrn2u/7IDUUa1QkHWhRVrp8WFnBvGjuqIGJHuagwFCGXLVP7vSZU2U3+wERsQT
+         fWvJ+xVv29r9Vrmb9tn5rHED5cU1X8tK2CqfvV6RM7ezsNCdpa2It3cm4FlFR47szVMA
+         eCVvAxQXUxdGb0T/KPMTEqz/zILzvrx4TfoVmIeR9sr3xkFKjk0FSai0zNLjIqNh5sn+
+         fN7DjLfFSGC311dIGwM3xCmkbA+CJ1cOM9qaZ/yG4C4X3O31AX151x7loCW6uKWMF9W6
+         WUL5RqWHhqfJFCCTDtQlIVQP7aw4ks1mo9jMmZArFpwcyWc6pxYrEW01WCNfjPO6TnlG
+         /IUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=UT1Wzz4wpktDA/wQ5edeBOYkNXdbIzJM75NIJS96iDU=;
-        b=5irBmR40Lhs0yq4tn1HM6oMs2sU0pqwU7d0JhXh+hJ+iMXH9mBUhyRmS7siFxXJ3wM
-         v7vlgqmzd1s7roqasJJFPhDMMIyi5QL0l+fqcHUXmyed3VIpEk7BBQkWzwpH8q7KPwwN
-         B8Gt3413ng3tPcKrNgw+/dukMDsC0FJhSvSsoA+ug1fiBhVorN85G7uzbIE+VxtqELBv
-         Kf/q7UJL5W40nGqgWPn0kUU9/B86IKRgWDlnNsNqDOZA7lEdXhZ/r6kBR5zAP2Rx35Pn
-         DT0/6xvt0v/7AfmooPnlaA/f7tICq0//mEtBuQDdmaM3VesXgXG2nIhOknKFDmjl7Fge
-         NJAw==
-X-Gm-Message-State: AOAM533mOwiZFh+25xOICjyItfVcAij+pzvy7nYMEqbFM0iVdMnGYdNe
-        zCGw23CVZWX+tIAOZ5WWKw2OjNB0K2MPJWqHpReiz5e7tYuytGf7d99kBOFLkFXb04mksxPC7SC
-        XJ2t91ABFZx16XWrcuWeewGwD1U36sGmNFzEmclqYdA==
-X-Received: by 2002:a50:fe14:0:b0:410:8621:6e0c with SMTP id f20-20020a50fe14000000b0041086216e0cmr22830643edt.356.1646123627831;
-        Tue, 01 Mar 2022 00:33:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxEPrnoA3fQNEEAjhdiffSfB+NwlBhlPUCIVWodAeFoRpldBhnYq7BoMI2/T4od9758NGQfVg==
-X-Received: by 2002:a50:fe14:0:b0:410:8621:6e0c with SMTP id f20-20020a50fe14000000b0041086216e0cmr22830629edt.356.1646123627627;
-        Tue, 01 Mar 2022 00:33:47 -0800 (PST)
-Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170906275500b006d10c07fabesm5100378ejd.201.2022.03.01.00.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:33:47 -0800 (PST)
-Message-ID: <926ccc54-6388-37be-0064-df3fd3972da2@canonical.com>
-Date:   Tue, 1 Mar 2022 09:33:46 +0100
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=XXHAzHSUKx1FZRpzOVh0FkOoc+KpTYgeqdRYpbFwNrY=;
+        b=Ii6pAaJkReLwTEG+c+8Mayceb5Z1SgA+YWUaVLk9wZI3OGksl7JwhAToRhmzA3nWBD
+         iirHukgmiMW/ClFvVIrwW9igLkQq3N4/d4C2FCmHRr1ZCIYsKUrTgb/xXbZ8/CK7FvSW
+         fXHzH258/WuPAdQJDJN23XIwA2oarsXLhdiROJbPAaLGon0Gy55Yu2xasNfjyoQIW2Fz
+         +VNRN7rvHV4/N03lli+fpFX8nX1JRsYiLlveK78uBkVb17M2TJqLKTnue9sQniRWboAz
+         gjhV38J4BdXaBhV1HQGd1gbKQyjxwnnQE1RI2s+T8t8xYXKM4EFLrdP2t0oPpw4rm5yw
+         LGyQ==
+X-Gm-Message-State: AOAM532qqkDi+bjrZwoxTe0sgzSikwA/nxLcrIqLxg31VhsyGHsBnBGI
+        eRxvslKnOljrMiuSuPWKCRpbDg==
+X-Google-Smtp-Source: ABdhPJwwv92nJBUIPZ3wtAe+ZLpDEefHhE/W3cCSrhFs9ZkbcU/booLmLagFYpQio8mA18rbBXJFSQ==
+X-Received: by 2002:a05:6402:5207:b0:412:806b:6424 with SMTP id s7-20020a056402520700b00412806b6424mr23434103edd.131.1646124592564;
+        Tue, 01 Mar 2022 00:49:52 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id d2-20020a50cf42000000b004135b6eef60sm6931187edk.94.2022.03.01.00.49.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 00:49:52 -0800 (PST)
+References: <20220225073922.3947-1-yu.tu@amlogic.com>
+ <1j8rtvxnkv.fsf@starbuckisacylon.baylibre.com>
+ <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
+Date:   Tue, 01 Mar 2022 09:36:07 +0100
+In-reply-to: <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
+Message-ID: <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net/nfc/nci: use memset avoid infoleaks
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     cgel.zte@gmail.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220301081750.2053246-1-chi.minghao@zte.com.cn>
- <664af071-badf-5cc9-c065-c702b0c8a13d@canonical.com>
-In-Reply-To: <664af071-badf-5cc9-c065-c702b0c8a13d@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2022 09:20, Krzysztof Kozlowski wrote:
-> On 01/03/2022 09:17, cgel.zte@gmail.com wrote:
->> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
->>
->> Use memset to initialize structs to preventing infoleaks
->> in nci_set_config
->>
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-One more thing. This report seems to be hidden, not public. Reported-by
-tag means someone reported something and you want to give credits for
-that. Using internal tool in a hidden, secret, non-public way does not
-fit open-source collaboration method.
+On Tue 01 Mar 2022 at 13:54, Yu Tu <yu.tu@amlogic.com> wrote:
 
-What is more: the email is invalid. "User unknown id"
+> Hi Jerome,
+>
+> On 2022/2/28 18:59, Jerome Brunet wrote:
+>> [ EXTERNAL EMAIL ]
+>> 
+>> On Fri 25 Feb 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
+>> 
+>>> Using the common Clock code to describe the UART baud rate
+>>> clock makes it easier for the UART driver to be compatible
+>>> with the baud rate requirements of the UART IP on different
+>>> meson chips. Add Meson S4 SoC compatible.
+>>>
+>>> The test method:
+>>> Start the console and run the following commands in turn:
+>>> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
+>>>
+>>> Since most SoCs are too old, I was able to find all the platforms myself
+>>> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
+>>> G12A and S4.
+>> GXL based board are still very common an easy to come by.
+>> I'm quite surprised that you are unable to test on this SoC family
+> The fact of the matter is that the S4 is our end-2020 chip, the G12A is
+> five years old, and the GXL is seven years old. If you must ask for a 
+> test, I will report this problem to the leadership to coordinate resources.
 
->> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
->> ---
->>  net/nfc/nci/core.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
->> index d2537383a3e8..32be42be1152 100644
->> --- a/net/nfc/nci/core.c
->> +++ b/net/nfc/nci/core.c
->> @@ -641,6 +641,7 @@ int nci_set_config(struct nci_dev *ndev, __u8 id, size_t len, const __u8 *val)
->>  	if (!val || !len)
->>  		return 0;
->>  
->> +	memset(&param, 0x0, sizeof(param));
->>  	param.id = id;
->>  	param.len = len;
->>  	param.val = val;
-> 
-> The entire 'param' is overwritten in later code, so what could leak here?
-> 
-> Best regards,
-> Krzysztof
+The age of the SoC is irrelevant. SoCs don't get deprecated based on age
+in mainline. It is not just GXL, same goes for meson8.
 
+These SoCs are actively used. Boards with these SoCs are still sold and
+easily available. See the VIM1 or the Libretech boards.
 
-Best regards,
-Krzysztof
+Breaking things for the the users of these SoCs is not acceptable.
+So yes, looking at your series, I strongly recommend you do more tests.
+
+>> 
+>>>
+>>> Yu Tu (6):
+>>>    tty: serial: meson: Move request the register region to probe
+>>>    tty: serial: meson: Use devm_ioremap_resource to get register mapped
+>>>      memory
+>>>    tty: serial: meson: Describes the calculation of the UART baud rate
+>>>      clock using a clock frame
+>>>    tty: serial: meson: Make some bit of the REG5 register writable
+>>>    tty: serial: meson: The system stuck when you run the stty command on
+>>>      the console to change the baud rate
+>>>    tty: serial: meson: Added S4 SOC compatibility
+>>>
+>>> V6 -> V7: To solve the system stuck when you run the stty command on
+>>> the console to change the baud rate.
+>>> V5 -> V6: Change error format as discussed in the email.
+>>> V4 -> V5: Change error format.
+>>> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
+>>> in the email.
+>>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
+>>> the DTS before it can be deleted
+>>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
+>>> discussed in the email
+>>>
+>>> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/
+>>>
+>>>   drivers/tty/serial/meson_uart.c | 221 ++++++++++++++++++++++----------
+>>>   1 file changed, 154 insertions(+), 67 deletions(-)
+>>>
+>>>
+>>> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
+>> 
+

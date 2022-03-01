@@ -2,121 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7105A4C8AC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636EC4C8ACF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiCALb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S234585AbiCALc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiCALbw (ORCPT
+        with ESMTP id S232498AbiCALcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:31:52 -0500
+        Tue, 1 Mar 2022 06:32:25 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10A0B47AC4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:31:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A32849245
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:31:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646134270;
+        s=mimecast20190719; t=1646134301;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5HepxbpN83DIqhMjscBSIvi4DPm0dpQVM/jHxq0zEcE=;
-        b=hrWYkIAeqUyH+d+wJDvemH6tgu6fceH590pWb0NW/9BqFvHtv2TIUXBGYFMBLDQGncdhn0
-        RDXrZpm3Kv0nO+Dr2+8esfV0Ru1OBC/R94bvRTzjzBWd7ZkxpYJDWdOwT2xPsR5/jWpSwa
-        hRJRtcbKDQul99b7VldGJpC1jeaIPyE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=00HQH/gJk4+FkSrUA5MwoQnd1kXjVciWiqxvQ3N3LN4=;
+        b=iYIAihlgDLIK6HlQ+qZFgpofsxmzbLSbluAu/sYGk+UQPiGIITkALy5TeKxbl7Io/VaE9S
+        EjJ552zg3lDZqzn4IVZUtCY5mE3itChSkHuOiBoA7et4FmUmvfWauBxNbcyK+1I0ebKriK
+        +t3DwDyVJJNAEsyiO1gvFcDhqUJOBeE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-HaXInFRVMQ2Bz4UfJ9xirg-1; Tue, 01 Mar 2022 06:31:09 -0500
-X-MC-Unique: HaXInFRVMQ2Bz4UfJ9xirg-1
-Received: by mail-wm1-f72.google.com with SMTP id p35-20020a05600c1da300b0038151176781so1064409wms.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 03:31:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5HepxbpN83DIqhMjscBSIvi4DPm0dpQVM/jHxq0zEcE=;
-        b=eVOlzMQtQckEuNLzWR4MG7kIgn0Hq4hiIxHOPvYPzV4q32xKRnL0Hs7pWKYPxiFBCf
-         hkcQiYd9qYuFb5uMUlFczfY9oP3C0c5HBEBOapKth8cYA35v9HA4TXRPqd8a61gCWdn+
-         0KVlTlUXmH/681EGt8a/njm/aCGlceGdTnW0BBLukYy+UaU6ImrRGiLpicatibDHXeBx
-         ns4EF1rE0agdzH2hFBL0BtXKbfRSHtyjEqnRqoYEXK9NWj518Q+YfQVcCFFo37MsQxyF
-         3sOxm4r5ZgKKLuKU27D+U9+zZRUu/iYosypmUGqxrpZLobuBs9iOK4UmDXd+6kwJqtYG
-         H4lA==
-X-Gm-Message-State: AOAM531ZSeq8tmCKi9Cc8cHFvmMwQ8Jkftd9fZsDZ4s9RJMW9S9j+jBM
-        XG4u/sOiIFpNWY+DAGWL69VPIfK4IIcIWYPKkMg8Ks4Fg4eMgHqOqm0HSgfR8BXN2lCL0GpKGHU
-        tl/N7cBleGyX38hggGcvxENb7
-X-Received: by 2002:a05:600c:35c4:b0:381:782e:9645 with SMTP id r4-20020a05600c35c400b00381782e9645mr5407323wmq.63.1646134268027;
-        Tue, 01 Mar 2022 03:31:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwk0Dx3Q8cHuVfFkxp4ENLl3euwKFEBu2FIYalvl46CtUefBv2zFAewdqkEFwpSVChJLDaMgw==
-X-Received: by 2002:a05:600c:35c4:b0:381:782e:9645 with SMTP id r4-20020a05600c35c400b00381782e9645mr5407305wmq.63.1646134267847;
-        Tue, 01 Mar 2022 03:31:07 -0800 (PST)
-Received: from vian.redhat.com ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id l6-20020adfa386000000b001ede14dcd74sm13609131wrb.104.2022.03.01.03.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 03:31:07 -0800 (PST)
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     mingo@redhat.com, peterz@infradead.org, frederic@kernel.org,
-        rostedt@goodmis.org
-Cc:     tglx@linutronix.de, mtosatti@redhat.com, bristot@redhat.com,
-        linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: [PATCH v2 2/2] tracing: Avoid isolated CPUs when queueing fsnotify irqwork
-Date:   Tue,  1 Mar 2022 12:30:53 +0100
-Message-Id: <20220301113053.141514-2-nsaenzju@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220301113053.141514-1-nsaenzju@redhat.com>
-References: <20220301113053.141514-1-nsaenzju@redhat.com>
+ us-mta-355-TpH5T0knOb6iwZWOhY6vPg-1; Tue, 01 Mar 2022 06:31:38 -0500
+X-MC-Unique: TpH5T0knOb6iwZWOhY6vPg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A2BADFC80;
+        Tue,  1 Mar 2022 11:31:36 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 13E1576115;
+        Tue,  1 Mar 2022 11:31:33 +0000 (UTC)
+Message-ID: <264f1282c315dd66cd34cfb74f71f53fe3c84126.camel@redhat.com>
+Subject: Re: [RFC PATCH 05/13] KVM: SVM: Update max number of vCPUs
+ supported for x2AVIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Tue, 01 Mar 2022 13:31:32 +0200
+In-Reply-To: <c17e954b-0f62-e0ad-77f0-1429dcc94f6d@amd.com>
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+         <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
+         <9143d9d24d1b169668062a18a5f49bb8cf8e877b.camel@redhat.com>
+         <c17e954b-0f62-e0ad-77f0-1429dcc94f6d@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There isn't any need for this irq_work to be run locally, so avoid doing
-so when the CPU is isolated.
+On Tue, 2022-03-01 at 17:47 +0700, Suravee Suthikulpanit wrote:
+> Hi Maxim,
+> 
+> On 2/25/22 12:18 AM, Maxim Levitsky wrote:
+> > On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+> > > xAVIC and x2AVIC modes can support diffferent number of vcpus.
+> > > Update existing logics to support each mode accordingly.
+> > > 
+> > > Also, modify the maximum physical APIC ID for AVIC to 255 to reflect
+> > > the actual value supported by the architecture.
+> > > 
+> > > Signed-off-by: Suravee Suthikulpanit<suravee.suthikulpanit@amd.com>
+> > > ---
+> > >   arch/x86/include/asm/svm.h | 12 +++++++++---
+> > >   arch/x86/kvm/svm/avic.c    |  8 +++++---
+> > >   2 files changed, 14 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> > > index 7a7a2297165b..681a348a9365 100644
+> > > --- a/arch/x86/include/asm/svm.h
+> > > +++ b/arch/x86/include/asm/svm.h
+> > > @@ -250,10 +250,16 @@ enum avic_ipi_failure_cause {
+> > >   
+> > >   
+> > >   /*
+> > > - * 0xff is broadcast, so the max index allowed for physical APIC ID
+> > > - * table is 0xfe.  APIC IDs above 0xff are reserved.
+> > > + * For AVIC, the max index allowed for physical APIC ID
+> > > + * table is 0xff (255).
+> > >    */
+> > > -#define AVIC_MAX_PHYSICAL_ID_COUNT	0xff
+> > > +#define AVIC_MAX_PHYSICAL_ID		0XFFULL
+> > > +
+> > > +/*
+> > > + * For x2AVIC, the max index allowed for physical APIC ID
+> > > + * table is 0x1ff (511).
+> > > + */
+> > > +#define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
+> > Yep, physid page can't hold more entries...
+> > 
+> > This brings the inventible question of what to do when a VM has more
+> > that 512 vCPUs...
+> > 
+> > With AVIC, since it is xapic, it would be easy - xapic supports up to
+> > 254 CPUs.
+> 
+> Actually, 255 vCPUs.
 
-Note that this is especially bad as queueing it into a local isolated
-CPU might add noise to what was meant to be traced in the first place.
+Sorry for off-by-one mistake - just remembered that 0xFF is reserved,
+but then 255 is already 1 less that 256.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
----
+> 
+> > But with x2apic, there is no such restriction on max 512 CPUs,
+> > thus it is legal to create a VM with x2apic and more that 512 CPUs,
+> > and x2AVIC won't work well in this case.
+> > 
+> > I guess AVIC_IPI_FAILURE_INVALID_TARGET, has to be extened to support those
+> > cases, even with loss of performance, or we need to inhibit x2AVIC.
+> 
+> In case of x2APIC-enabled guest w/ vCPU exceeding the max APIC ID (512) limit,
+> the ioctl operation for KVM_CREATE_VCPU will fail. For QEMU, this would
+> exit with error code. Would this be sufficient?
+Yes, this is the best.
 
-Changes since v1:
- - Rebase to cater for:
-     04d4e665a609 ("sched/isolation: Use single feature type while
-     referring to housekeeping cpumask")
 
- kernel/trace/trace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Best regards,
+	Maxim Levitsky
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index bb2caf6aac01..250603b4eb3e 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -12,6 +12,7 @@
-  *  Copyright (C) 2004-2006 Ingo Molnar
-  *  Copyright (C) 2004 Nadia Yvette Chambers
-  */
-+#include <linux/sched/isolation.h>
- #include <linux/ring_buffer.h>
- #include <generated/utsrelease.h>
- #include <linux/stacktrace.h>
-@@ -1726,7 +1727,7 @@ void latency_fsnotify(struct trace_array *tr)
- 	 * possible that we are called from __schedule() or do_idle(), which
- 	 * could cause a deadlock.
- 	 */
--	irq_work_queue(&tr->fsnotify_irqwork);
-+	irq_work_queue_on(&tr->fsnotify_irqwork, housekeeping_any_cpu(HK_TYPE_MISC));
- }
- 
- #elif defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)	\
--- 
-2.35.1
+
+> 
+> Regards,
+> Suravee
+> 
+> 
+> 
+
 

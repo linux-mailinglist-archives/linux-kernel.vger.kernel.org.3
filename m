@@ -2,192 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7DC4C972C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428634C9719
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238327AbiCAUoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S237629AbiCAUi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237647AbiCAUny (ORCPT
+        with ESMTP id S234838AbiCAUiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:43:54 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2055B4B844
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:43:12 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id cm8so23629982edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rAZcpGOFnijhfBt719P+IqprCBqe8sD9TF0Sez9IwiQ=;
-        b=F+7BPGYsO9QeRc6BTbvPUJxguXCTYika7fzNVLbSEfMjTVK29FjvhOtCtbBO2oalkB
-         9cweHARFFeQAeiDWhTrtcdfTzbCEOfTOrVCN9rTTV3Ek5jpvIVUt3aua8OA61CgDhA1w
-         zQABsshAfnGl6gFdFI9HcnnKU8AOre3uWnEew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rAZcpGOFnijhfBt719P+IqprCBqe8sD9TF0Sez9IwiQ=;
-        b=ocv4LDaSVM9Yz0yWuGR1odEsZzTGj/47ukShLTyBAX+RMH6HcH24hC7Ti2nBY6Pidz
-         YArd4NVCdmFaLc8U1gcbezrjC9E8qJFWjgQRgvbF3m4ukOS9c15yoUSrZ7DgWzr5KyCF
-         +pbRS4xv5emeNCb9vMl5GmOJbIzfNAgLzzRFO8lUUuceEB2ZPQA22TBtXHiRSCu3FvHm
-         N4zcY+vUoKp/tx5HA6t6IxlBwpFuUP29vypUDRHK3I+G173RNQQ6oRJ7CCQyDWVwwQZe
-         oGTq7wAu7Nss3BEu2HphyLppiq1/eXLu9zJ0d3xNheEorYYsD9R5e+V3T4/ABWyYDaqz
-         qgpw==
-X-Gm-Message-State: AOAM531R92yHu9W6FrWjnlCHiE2WR6uOxdrVwIKD3F8FM8j/hnvO5Zfl
-        ArppZeS/c2Fz6d6XRHZbhPKuOXnPmjKohPCEDjo=
-X-Google-Smtp-Source: ABdhPJypb6MigwwArUdlMd2dDTxxYTvI3Ksw+R1fUSeGwr4zHiZPoqdBVA5d6UoQ+DYRNiAFQrZiGQ==
-X-Received: by 2002:aa7:c986:0:b0:413:30cc:cfd8 with SMTP id c6-20020aa7c986000000b0041330cccfd8mr26365903edt.122.1646167390427;
-        Tue, 01 Mar 2022 12:43:10 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm5707545ejj.142.2022.03.01.12.43.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:43:10 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id cm8so23629947edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:43:10 -0800 (PST)
-X-Received: by 2002:ac2:44a4:0:b0:445:8fc5:a12a with SMTP id
- c4-20020ac244a4000000b004458fc5a12amr10608648lfm.27.1646166980002; Tue, 01
- Mar 2022 12:36:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-7-jakobkoschel@gmail.com>
-In-Reply-To: <20220228110822.491923-7-jakobkoschel@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 12:36:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgLtKofBbn9kSXRU3MpdX7S2OxN1V5Mc679oJpFnp_VnQ@mail.gmail.com>
-Message-ID: <CAHk-=wgLtKofBbn9kSXRU3MpdX7S2OxN1V5Mc679oJpFnp_VnQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] treewide: remove check of list iterator against head
- past the loop body
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-sgx@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux1394-devel@lists.sourceforge.net,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Tue, 1 Mar 2022 15:38:24 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0067D29CB7;
+        Tue,  1 Mar 2022 12:37:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646167042;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=enUl4JsrLhrG2ZRTNPwk0f5xsufFIJ2pEEMEeqkBDQY=;
+    b=qoaCbST4XMW18rHVYihdg0wovg73mOulySTYQqkRjiopnvLmPoosis+1Gg3HSdtCcA
+    S1cwieVNCzK1I2O+vs9H4QScr74kBvXTWkbfZrMAa0zFNKh2PPfljv/ae2OFgpUPpTog
+    svrIoTxdE3OvmtmTk+1Jf+4VT0CaKaS6nhsHuhExtVKoR2bYp0zXRmUU9mrOrVYpX/og
+    QVk0mKsf5kTJrg9GN+W+Yz50jczFb+tGQf/qp7ikjbzSE7tXP5yoGoYiQpDP0vqmR3d/
+    5QzM+vMh4xr0Vv05psmycwKdbwr5hqkjkyupeXerkL/zVAHLNPxHLPLY4CFOdlUkahSK
+    OKCg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47sdXM="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id V41e6fy21KbKQst
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 1 Mar 2022 21:37:20 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
+ for 8 bit modes
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
+Date:   Tue, 1 Mar 2022 21:37:20 +0100
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, Netdev <netdev@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org, KVM list <kvm@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical@lists.samba.org,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        v9fs-developer@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Jonas Karlman <jonas@kwiboo.se>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
+References: <cover.1645895582.git.hns@goldelico.com>
+ <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
+ <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So looking at this patch, I really reacted to the fact that quite
-often the "use outside the loop" case is all kinds of just plain
-unnecessary, but _used_ to be a convenience feature.
+Hi Neil,
 
-I'll just quote the first chunk in it's entirely as an example - not
-because I think this chunk is particularly important, but because it's
-a good example:
 
-On Mon, Feb 28, 2022 at 3:09 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
->
-> diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
-> index 6794e2db1ad5..fc47c107059b 100644
-> --- a/arch/arm/mach-mmp/sram.c
-> +++ b/arch/arm/mach-mmp/sram.c
-> @@ -39,19 +39,22 @@ static LIST_HEAD(sram_bank_list);
->  struct gen_pool *sram_get_gpool(char *pool_name)
->  {
->         struct sram_bank_info *info = NULL;
-> +       struct sram_bank_info *tmp;
->
->         if (!pool_name)
->                 return NULL;
->
->         mutex_lock(&sram_lock);
->
-> -       list_for_each_entry(info, &sram_bank_list, node)
-> -               if (!strcmp(pool_name, info->pool_name))
-> +       list_for_each_entry(tmp, &sram_bank_list, node)
-> +               if (!strcmp(pool_name, tmp->pool_name)) {
-> +                       info = tmp;
->                         break;
-> +               }
->
->         mutex_unlock(&sram_lock);
->
-> -       if (&info->node == &sram_bank_list)
-> +       if (!info)
->                 return NULL;
->
->         return info->gpool;
+> Am 01.03.2022 um 10:18 schrieb Neil Armstrong =
+<narmstrong@baylibre.com>:
+>=20
+> Hi,
+>=20
+> On 26/02/2022 18:13, H. Nikolaus Schaller wrote:
+>> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
+fmts callbacks")
+>> introduced a new mechanism to negotiate bus formats between hdmi =
+connectors
+>> and bridges which is to be used e.g. for the jz4780 based CI20 board.
+>> In this case dw-hdmi sets up a list of formats in
+>> dw_hdmi_bridge_atomic_get_output_bus_fmts().
+>> This includes e.g. MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the =
+CI20 but
+>> only produces a black screen.
+>> Analysis revealed an omission in
+>> Commit 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format =
+negociation")
+>> to check for 8 bit with when adding UYVY8 or YUV8 formats.
+>> This fix is based on the observation that max_bpc =3D 0 when running =
+this
+>> function while info->bpc =3D 8.
+>=20
+> In fact if bpc =3D 0, it should be considered as 8, so the issue is =
+elsewhere.
+>=20
+>> Adding the proposed patch makes the jz4780/CI20 panel work again with =
+default
+>> MEDIA_BUS_FMT_RGB888_1X24 mode.
+>> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
+fmts callbacks")
+>> Fixes: 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format =
+negociation")
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 10 ++++++----
+>>  1 file changed, 6 insertions(+), 4 deletions(-)
+>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
+b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> index 43e375da131e8..c08e2cc96584c 100644
+>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> @@ -2621,11 +2621,13 @@ static u32 =
+*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>>  		output_fmts[i++] =3D MEDIA_BUS_FMT_RGB101010_1X30;
+>>  	}
+>>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>> -		output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
+>> +	if (max_bpc >=3D 8 && info->bpc >=3D 8) {
+>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>> +			output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
+>>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>> -		output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>> +			output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+>> +	}
+>=20
+> It should not select YUV here if it's not possible, so something is =
+wrong.
+>=20
+> Can you check if =
+https://lore.kernel.org/r/20220119123656.1456355-2-narmstrong@baylibre.com=
+ fixes this issue instead ?
 
-I realize this was probably at least auto-generated with coccinelle,
-but maybe that script could be taught to do avoid the "use after loop"
-by simply moving the code _into_ the loop.
+Well, I had to manually fix it to be appliable to drm-misc/drm-misc-next
+and specifically:
 
-IOW, this all would be cleaner and clear written as
+c03d0b52ff71 ("drm/connector: Fix typo in output format")
 
-        if (!pool_name)
-                return NULL;
+My resulting patch is attached.
 
-        mutex_lock(&sram_lock);
-        list_for_each_entry(info, &sram_bank_list, node) {
-                if (!strcmp(pool_name, info->pool_name)) {
-                        mutex_unlock(&sram_lock);
-                        return info;
-                }
+Unfortunately it did not work.
+
+I added a printk for hdmi->sink_is_hdmi. This returns 1. Which IMHO is =
+to be expected
+since I am using a HDMI connector and panel... So your patch will still =
+add the UYVY formats.
+
+Either the synposys module inside the jz4780 or the panel does not =
+understand them.
+
+Here is the EDID. Unfortunately it does not pretty print the extended =
+descriptors for UYVY etc.
+so that I don't know the exact capabilities of the panel. And what I am =
+not sure is if the
+jz4780 SoC can convert to UYVY or how it can.
+
+root@letux:~# parse-edid =
+</sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/edid
+Checksum Correct
+
+Section "Monitor"
+        Identifier "LEN L1950wD"
+        ModelName "LEN L1950wD"
+        VendorName "LEN"
+        # Monitor Manufactured week 34 of 2011
+        # EDID version 1.3
+        # Digital Display
+        DisplaySize 410 260
+        Gamma 2.20
+        Option "DPMS" "true"
+        Horizsync 30-81
+        VertRefresh 50-76
+        # Maximum pixel clock is 140MHz
+        #Not giving standard mode: 1152x864, 75Hz
+        #Not giving standard mode: 1280x720, 60Hz
+        #Not giving standard mode: 1280x1024, 60Hz
+        #Not giving standard mode: 1280x1024, 60Hz
+        #Not giving standard mode: 1280x1024, 60Hz
+        #Not giving standard mode: 1440x900, 60Hz
+        #Not giving standard mode: 1440x900, 75Hz
+        #Not giving standard mode: 1920x1080, 60Hz
+
+        #Extension block found. Parsing...
+        Modeline        "Mode 15" -hsync -vsync=20
+        Modeline        "Mode 0" -hsync +vsync=20
+        Modeline        "Mode 1" 27.027 1440 1478 1602 1716 480 484 487 =
+525 -hsync -vsync interlace
+        Modeline        "Mode 2" 27.027 1440 1478 1602 1716 480 484 487 =
+525 -hsync -vsync interlace
+        Modeline        "Mode 3" 27.027 720 736 798 858 480 489 495 525 =
+-hsync -vsync
+        Modeline        "Mode 4" 27.027 720 736 798 858 480 489 495 525 =
+-hsync -vsync
+        Modeline        "Mode 5" 27.000 1440 1464 1590 1728 576 578 581 =
+625 -hsync -vsync interlace
+        Modeline        "Mode 6" 27.000 1440 1464 1590 1728 576 578 581 =
+625 -hsync -vsync interlace
+        Modeline        "Mode 7" 27.000 720 732 796 864 576 581 586 625 =
+-hsync -vsync
+        Modeline        "Mode 8" 27.000 720 732 796 864 576 581 586 625 =
+-hsync -vsync
+        Modeline        "Mode 9" 74.250 1280 1720 1760 1980 720 725 730 =
+750 +hsync +vsync
+        Modeline        "Mode 10" 74.250 1280 1390 1420 1650 720 725 730 =
+750 +hsync +vsync
+        Modeline        "Mode 11" 74.250 1920 2448 2492 2640 1080 1082 =
+1089 1125 +hsync +vsync interlace
+        Modeline        "Mode 12" 74.250 1920 2008 2052 2200 1080 1082 =
+1087 1125 +hsync +vsync interlace
+        Modeline        "Mode 13" 148.500 1920 2448 2492 2640 1080 1084 =
+1089 1125 +hsync +vsync
+        Modeline        "Mode 14" 148.500 1920 2008 2052 2200 1080 1084 =
+1089 1125 +hsync +vsync
+        Modeline        "Mode 16" +hsync +vsync interlace
+        Modeline        "Mode 17" +hsync +vsync interlace
+        Modeline        "Mode 18" +hsync +vsync=20
+        Option "PreferredMode" "Mode 15"
+EndSection
+root@letux:~# xxd =
+/sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/=20
+00000000: 00ff ffff ffff ff00 30ae 8610 0101 0101  ........0.......
+00000010: 2215 0103 8029 1a78 eee5 b5a3 5549 9927  "....).x....UI.'
+00000020: 1350 54af ef00 714f 81c0 8180 8180 8180  .PT...qO........
+00000030: 9500 950f d1c0 2413 0020 4158 1620 050d  ......$.. AX. ..
+00000040: 2300 ffff 0000 001c 0000 00fc 004c 454e  #............LEN
+00000050: 204c 3139 3530 7744 0a20 0000 00fd 0032   L1950wD. .....2
+00000060: 4c1e 510e 000a 2020 2020 2020 0000 00ff  L.Q...      ....
+00000070: 0042 3334 3332 3834 350a 2020 2020 0101  .B3432845.    ..
+00000080: 0203 2171 4e06 0702 0315 9611 1213 0414  ..!qN...........
+00000090: 051f 9023 0907 0783 0100 0065 030c 0010  ...#.......e....
+000000a0: 008c 0ad0 9020 4031 200c 4055 00b9 8821  ..... @1 .@U...!
+000000b0: 0000 1801 1d80 1871 1c16 2058 2c25 00b9  .......q.. X,%..
+000000c0: 8821 0000 9e01 1d80 d072 1c16 2010 2c25  .!.......r.. .,%
+000000d0: 80b9 8821 0000 9e01 1d00 bc52 d01e 20b8  ...!.......R.. .
+000000e0: 2855 40b9 8821 0000 1e02 3a80 d072 382d  (U@..!....:..r8-
+000000f0: 4010 2c45 80b9 8821 0000 1e00 0000 00d0  @.,E...!........
+root@letux:~# root@letux:~# dmesg|grep dw.hdmi
+[    9.622138] dw-hdmi-ingenic 10180000.hdmi: Detected HDMI TX =
+controller v1.31a with HDCP (DWC HDMI 3D TX PHY)
+[    9.727840] dw-hdmi-ingenic 10180000.hdmi: registered DesignWare HDMI =
+I2C bus driver
+[   10.103864] dw_hdmi_bridge_atomic_get_output_bus_fmts: =
+hdmi->sink_is_hdmi=3D1
+
+So please let me know which parameters I should try to printk()...
+
+BR and thanks,
+Nikolaus
+
+
+------
+
+=46rom c84a3c4a500684e57b1243fe5386696c48fa1e1b Mon Sep 17 00:00:00 2001
+From: Neil Armstrong <narmstrong@baylibre.com>
+Date: Wed, 19 Jan 2022 13:36:56 +0100
+Subject: [PATCH] drm/bridge: dw-hdmi: filter out YUV output formats when =
+DVI
+
+When the display is not an HDMI sink, only the RGB output format is
+valid. Thus stop returning YUV output formats when sink is not HDMI.
+
+Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format =
+negociation")
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
+b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 43e375da131e8..0ec0cbe448e05 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -2538,6 +2538,7 @@ static u32 =
+*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+        struct drm_connector *conn =3D conn_state->connector;
+        struct drm_display_info *info =3D &conn->display_info;
+        struct drm_display_mode *mode =3D &crtc_state->mode;
++       struct dw_hdmi *hdmi =3D bridge->driver_private;
+        u8 max_bpc =3D conn_state->max_requested_bpc;
+        bool is_hdmi2_sink =3D info->hdmi.scdc.supported ||
+                             (info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR420);
+@@ -2564,7 +2565,7 @@ static u32 =
+*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+         * If the current mode enforces 4:2:0, force the output but =
+format
+         * to 4:2:0 and do not add the YUV422/444/RGB formats
+         */
+-       if (conn->ycbcr_420_allowed &&
++       if (hdmi->sink_is_hdmi && conn->ycbcr_420_allowed &&
+            (drm_mode_is_420_only(info, mode) ||
+             (is_hdmi2_sink && drm_mode_is_420_also(info, mode)))) {
+=20
+@@ -2595,36 +2596,36 @@ static u32 =
+*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+         */
+=20
+        if (max_bpc >=3D 16 && info->bpc =3D=3D 16) {
+-               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
++               if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR444)
+                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV16_1X48;
+=20
+                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB161616_1X48;
         }
-        mutex_unlock(&sram_lock);
-        return NULL;
+=20
+        if (max_bpc >=3D 12 && info->bpc >=3D 12) {
+-               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
++               if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR422)
+                        output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY12_1X24;
+=20
+-               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
++               if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR444)
+                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV12_1X36;
+=20
+                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB121212_1X36;
+        }
+=20
+        if (max_bpc >=3D 10 && info->bpc >=3D 10) {
+-               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
++               if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR422)
+                        output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY10_1X20;
+=20
+-               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
++               if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR444)
+                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV10_1X30;
+=20
+                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB101010_1X30;
+        }
+=20
+-       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
++       if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR422)
+                output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
+=20
+-       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
++       if (hdmi->sink_is_hdmi && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR444)
+                output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+=20
+        /* Default 8bit RGB fallback */
+--=20
+2.33.0
 
-Ta-daa - no use outside the loop, no need for new variables, just a
-simple "just do it inside the loop". Yes, we end up having that lock
-thing twice, but it looks worth it from a "make the code obvious"
-standpoint.
 
-Would it be even cleaner if the locking was done in the caller, and
-the loop was some simple helper function? It probably would. But that
-would require a bit more smarts than probably a simple coccinelle
-script would do.
-
-                Linus

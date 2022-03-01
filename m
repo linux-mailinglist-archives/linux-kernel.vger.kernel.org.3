@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEB54C96EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C094C96DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbiCAU2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S238431AbiCAU1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbiCAUYh (ORCPT
+        with ESMTP id S239207AbiCAUYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:24:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222344249C;
-        Tue,  1 Mar 2022 12:22:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFC9FB81D4E;
-        Tue,  1 Mar 2022 20:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE04C340EE;
-        Tue,  1 Mar 2022 20:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646166159;
-        bh=BDnBhaYylqMWjGosUmpheFv+jQ3QbOsW+wySpY/V6y0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XzYtY5Gh6ZeDqaKALEB5zcd8MGDxP32CuXLR8sPN5J1XFfh20Pm4+7pmvf+54Lqeq
-         5MSF3yjtF1p2dK0DhWNt19SgNjSX7aSyB9b3EUwBY54jzQ83g2vKIYDRxB8znyVEc+
-         V9XH2BR613o3lSy4A9IBi/yqi49tFlnhT5AyfjeiaFmusxXGcdf+4IOhZ52i40A8TV
-         K1dANVk6mdLdm5I2DDHu9Qsc6cxWZ2RO9XB5ksAl/+TZYiheVh4nSN41QIz+PT5Xd4
-         9A44WUulMzErQ7hz0LeYSryc6ziigbAFjafUfRBw9b78azfKhBdDu6bp4GbTm/huR0
-         pV94LINrvFjaA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com
-Subject: [PATCH AUTOSEL 4.9 5/6] tracing: Ensure trace buffer is at least 4096 bytes large
-Date:   Tue,  1 Mar 2022 15:22:09 -0500
-Message-Id: <20220301202212.19419-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220301202212.19419-1-sashal@kernel.org>
-References: <20220301202212.19419-1-sashal@kernel.org>
+        Tue, 1 Mar 2022 15:24:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1956540938
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646166137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UnhjscoVXwV58qxo7/KqdtLFU4F0yTvnAGVTxy5/ZzA=;
+        b=XFSPj90LsCqMl1F+OjWK36l9np/y8CsP2sPJulr9b5iQWRvSSUqQneG8a49p1TyLorYs0j
+        t8zz+YXD7d6TgcGeVP3AXoazS2QCI9FdrF0IW5AUsdsthd0wOtuerKe2KeD/sqxYALEAt7
+        DvEsPGk0WA/QGrxFDke8buPSZ6WXlAA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-oiAd0L95NbmGjt5-nGBZ-Q-1; Tue, 01 Mar 2022 15:22:16 -0500
+X-MC-Unique: oiAd0L95NbmGjt5-nGBZ-Q-1
+Received: by mail-wm1-f70.google.com with SMTP id r206-20020a1c44d7000000b00380e36c6d34so1170723wma.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:22:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UnhjscoVXwV58qxo7/KqdtLFU4F0yTvnAGVTxy5/ZzA=;
+        b=4OvQI5rTm5ARdJ3dVB2N/t1QuqgE9A6ApCzIsU2UhnB8glBaCoiAGtac9ILAsTjjgs
+         7nFjPpHYBcCm9dw8zNqjYtYLsjZvCamcKxv2zkM3q+RpousdAQ0JdYK5riBmxztyLiRU
+         mWMUj9yvvpSSErkwAmfXwb0TkaOUaRtRs000L701d1MhMZX7sf6tvTVmaxICC28viDA/
+         Hb7yWbaXw2Sk25nekw8ekSRa7oY/DGEo7hIXv2Lv8qDSZqv0DRgqrdF8BaOn/zY4npQj
+         vEs5RW+7tT5imqw3kFaYpRyMhLmUhHBaRSdIPNYp35KMTDwiqmCaOVn/codrvVGRxHHw
+         QXDw==
+X-Gm-Message-State: AOAM532rnrK8bfsQBN+KEASTbsm6s82+MESaDbeMMqWKas4XcJjYdxY6
+        8Y1J2GiKTQNKZOPUfmA7T7IkRfM6X04CEODpu2ZwAe9CW0Jej9gds27MGf02p/yCD6lGk3pultb
+        B78wHGCISKRT6owRVR6Q5pmsW
+X-Received: by 2002:adf:a319:0:b0:1ef:7cc6:d03 with SMTP id c25-20020adfa319000000b001ef7cc60d03mr14982536wrb.411.1646166135156;
+        Tue, 01 Mar 2022 12:22:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzbaYo2qIYbuusP+S+lSiz716HfdkjaywKNxchsiuC/GXAlgD5Aek/kWgwRhiNQmTC7xvzYSw==
+X-Received: by 2002:adf:a319:0:b0:1ef:7cc6:d03 with SMTP id c25-20020adfa319000000b001ef7cc60d03mr14982524wrb.411.1646166134945;
+        Tue, 01 Mar 2022 12:22:14 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id u6-20020a05600c19c600b0034f5032b042sm3663786wmq.46.2022.03.01.12.22.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 12:22:14 -0800 (PST)
+Message-ID: <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+Date:   Tue, 1 Mar 2022 21:22:10 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
+ user_xfeatures to supported bits of XCR0
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Leonardo Bras <leobras@redhat.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, chang.seok.bae@intel.com, luto@kernel.org,
+        kvm@vger.kernel.org
+References: <20220301201344.18191-1-sashal@kernel.org>
+ <20220301201344.18191-7-sashal@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220301201344.18191-7-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schnelle <svens@linux.ibm.com>
+On 3/1/22 21:13, Sasha Levin wrote:
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index d28829403ed08..6ac01f9828530 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1563,7 +1563,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
+>   		fpregs_restore_userregs();
+>   
+>   	newfps->xfeatures = curfps->xfeatures | xfeatures;
+> -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> +
+> +	if (!guest_fpu)
+> +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> +
+>   	newfps->xfd = curfps->xfd & ~xfeatures;
+>   
+>   	curfps = fpu_install_fpstate(fpu, newfps);
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index bf18679757c70..875dce4aa2d28 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -276,6 +276,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>   	vcpu->arch.guest_supported_xcr0 =
+>   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+>   
+> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
+> +
+>   	kvm_update_pv_runtime(vcpu);
+>   
+>   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
 
-[ Upstream commit 7acf3a127bb7c65ff39099afd78960e77b2ca5de ]
+Leonardo, was this also buggy in 5.16?  (I should have asked for a Fixes 
+tag...).
 
-Booting the kernel with 'trace_buf_size=1' give a warning at
-boot during the ftrace selftests:
-
-[    0.892809] Running postponed tracer tests:
-[    0.892893] Testing tracer function:
-[    0.901899] Callback from call_rcu_tasks_trace() invoked.
-[    0.983829] Callback from call_rcu_tasks_rude() invoked.
-[    1.072003] .. bad ring buffer .. corrupted trace buffer ..
-[    1.091944] Callback from call_rcu_tasks() invoked.
-[    1.097695] PASSED
-[    1.097701] Testing dynamic ftrace: .. filter failed count=0 ..FAILED!
-[    1.353474] ------------[ cut here ]------------
-[    1.353478] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:1951 run_tracer_selftest+0x13c/0x1b0
-
-Therefore enforce a minimum of 4096 bytes to make the selftest pass.
-
-Link: https://lkml.kernel.org/r/20220214134456.1751749-1-svens@linux.ibm.com
-
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/trace/trace.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 12bee7043be6f..90e0fd5621da9 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1077,10 +1077,12 @@ static int __init set_buf_size(char *str)
- 	if (!str)
- 		return 0;
- 	buf_size = memparse(str, &str);
--	/* nr_entries can not be zero */
--	if (buf_size == 0)
--		return 0;
--	trace_buf_size = buf_size;
-+	/*
-+	 * nr_entries can not be zero and the startup
-+	 * tests require some buffer space. Therefore
-+	 * ensure we have at least 4096 bytes of buffer.
-+	 */
-+	trace_buf_size = max(4096UL, buf_size);
- 	return 1;
- }
- __setup("trace_buf_size=", set_buf_size);
--- 
-2.34.1
+Paolo
 

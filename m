@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF55B4C83DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C44D4C83EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiCAGT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S232618AbiCAGZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiCAGTY (ORCPT
+        with ESMTP id S232602AbiCAGZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:19:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE61433AB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:18:43 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 339B61F37D;
-        Tue,  1 Mar 2022 06:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646115522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VYJHUH0IgdfnLKYKC3tcsTkSw2HdASrxxZkAzWZIFtM=;
-        b=AAxssDfaKg+Vh+dvy85Lm9NNR4J8ET0z2mgaPAnINymAiB3UiSwmszyLlDz8m4mz1qbTF+
-        Jaw0VeJixqh0rg8L2VgliVxFCC4dZLfiBoGtBbQZQFZXInwryTKBKmGW3smqWg9H/cuhzy
-        9tPShcFvBgQsWBIqMAO+7hv/zMCCwG0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646115522;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VYJHUH0IgdfnLKYKC3tcsTkSw2HdASrxxZkAzWZIFtM=;
-        b=boAWlaocpff9pi8AIuLcWTsCXT+E901Zq6CIQqYaC+hbJYB0BFi2eQCyV19LphSjJGjs84
-        +duKdRJk1VaQp2AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEF1F139EF;
-        Tue,  1 Mar 2022 06:18:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CuodMsC6HWLvEwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 01 Mar 2022 06:18:40 +0000
-Date:   Tue, 1 Mar 2022 07:18:39 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH -V13 2/3] NUMA balancing: optimize page placement for
- memory tiering system
-Message-ID: <Yh26v+4LtnvFnWWz@localhost.localdomain>
-References: <20220221084529.1052339-1-ying.huang@intel.com>
- <20220221084529.1052339-3-ying.huang@intel.com>
- <YhzwO/lw1xx7EjNb@localhost.localdomain>
- <87czj6321p.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 1 Mar 2022 01:25:21 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664F870057;
+        Mon, 28 Feb 2022 22:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646115877; x=1677651877;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0z+d/djRZAN/bUfCevnkgRsdQIo7+qDRoRp8ZY3kjos=;
+  b=eN2eIRhvTSRfucqtst3OOi97SY60h2HD0F8UCSQJs/skP63OLtHAcxK1
+   6Y1m7W4VcrgZ1iq+6J1WEUi27Tp0xvQAD3FHImfxFcvn70zy22UIlXn3i
+   TvDPlCi8NPpvp63xZ4Ute7QbomjqDgXw2SYCSMBUHDm/Xos5wm+RulKoB
+   nHwOQVAgPWq5P4A2U/hHWW8BBCwZB38oYfYr/Gkq2MATfoXoftNcrDVzv
+   OkWWMGzMYxp3zA/C1VreZ8FadltGJI9JA1z2+qgYbQgmKupmBbO4HCE4r
+   2ggf305JY4DhEKflIoVuYPhMSdiR4H6KksbIhIdaLPOaQFRyPZmnQqiDn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="251900296"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="251900296"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 22:24:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="708941734"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 22:24:34 -0800
+From:   Tianfei zhang <tianfei.zhang@intel.com>
+To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        Tianfei zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v3 0/5] Add OFS support for DFL driver
+Date:   Tue,  1 Mar 2022 01:21:18 -0500
+Message-Id: <20220301062123.818687-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czj6321p.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:16:18AM +0800, Huang, Ying wrote:
-> Hi, Oscar,
+This is v3 patchset adding OFS (Open FPGA stack) support for
+DFL driver. OFS is a collection of RTL and open software providing
+interface to access the instantiated RTL easily in FPGA. OFS
+leverages the DFL for the implementation of the FPGA RTL design.
 
-Hi Huang Ying
+Patch 1, allows for ports without specific bar space.
+Patch 2, introduces features in dfl_fpga_cdev after DFL enumeration.
+On OFS, we will add more extensions or features in DFL in
+future, so adding a new member "features"in dfl_fpga_cdev.
+Patch 3, fixs VF creation in "Multiple VFs per PR slot" and legacy model.
+Patch 4, handles dfl's starting with AFU and allows for VFs to be created.
+Patch 5, adds architecture description about OFS support for DFL
+in documentation.
 
->  b. Make kswapd of the fast memory node to reclaim pages until the free
->     pages are a little more than the high watermark (named as promo
->     watermark).  If we want to promote some hot pages from the slow
->     memory to the fast memory, but the free pages of the fast memory
->     node will become lower than the high watermark after promotion, we
->     will wake up kswapd of the fast memory node to demote more cold
->     pages in the fast memory node to the slow memory node firstly.  This
->     will free some extra space in the fast memory node, so the hot pages
->     in the slow memory node can be promoted to the fast memory node.
+Changelog v2 -> v3:
+   - no code change, just change the name from IOFS to OFS.
 
-What about this? Somehow it sounds clear to me.
+Changelog v1 -> v2:
+   - Introducing a new member "features" in dfl_fpga_cdev for feature
+     control.
+   - Adding new flag DFL_FEAT_PORT_CONNECTED_AFU for OFS legacy model.
+   - Updates the documentation for the access models about AFU in OFS.
+   - Drop the PCI PID patch and will send it later.
 
-"b. Define a new watermark called wmark_promo which is higher than wmark_high,
-    and have kswapd reclaiming pages until free pages reach such watermark.
-    The scenario is as follows: when we want to promote hot-pages from a slow
-    memory to a fast memory, but fast memory's free pages would go lower than
-    high watermark with such promotion, we wake up kswapd with wmark_promo
-    watermark in order to demote cold pages and free us up some space.
-    So, next time we want to promote hot-pages we might have a chance of
-    doing so."
+Matthew Gerlach (2):
+  fpga: dfl: Allow for ports without specific bar space.
+  fpga: dfl: Handle dfl's starting with AFU
 
-But I am fine with your updated write up as well, so if you spin a new
-version:
+Tianfei zhang (3):
+  fpga: dfl: add features in dfl_fpga_cdev
+  fpga: dfl: fix VF creation in OFS
+  Documentation: fpga: dfl: add description of OFS
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-
+ Documentation/fpga/dfl.rst | 113 +++++++++++++++++++++++++++++++++++++
+ drivers/fpga/dfl-pci.c     |  13 ++++-
+ drivers/fpga/dfl.c         |  38 ++++++++-----
+ drivers/fpga/dfl.h         |   6 ++
+ 4 files changed, 155 insertions(+), 15 deletions(-)
 
 -- 
-Oscar Salvador
-SUSE Labs
+2.26.2
+

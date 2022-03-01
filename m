@@ -2,136 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C979A4C9949
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 00:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441D84C994C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 00:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236170AbiCAX0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 18:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S237133AbiCAX0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 18:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiCAX0G (ORCPT
+        with ESMTP id S232607AbiCAX0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 18:26:06 -0500
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718CF32071;
-        Tue,  1 Mar 2022 15:25:24 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so200452wms.4;
-        Tue, 01 Mar 2022 15:25:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zhdQMX9lSVJESfzj40t/VjwrSkjRlYETq/8QRNqEZlQ=;
-        b=XAaZP12v/DPVmZCOAtpctIG4kIeB6SxTN9ZA3+qdENbH303o3epg2ZriGSyv07irjd
-         MRvzQlAcgo0x8bdXaFbND+0z16xwTJ5kMKSDWP3nEi63/+RbTjAdXhkY6ocIf69d7Lll
-         sEHH24Bq2IeNgp9Hu7vEk0X5g2l67dHr4EHHlG3dI/SqQPBaIm8ZmFJlm73sgkRP2zKv
-         KuIqhvbC6Z0F68EjJ3eUu6/zQlhdcbg2DIGKg0aX6geh2DiEELpzsjR7hdXBN6xFgaqs
-         hwqrV9e2OQ5kctitLC4ThcPUgGX6L+/kZx3jCaTp1myHzKS5Z07K2ATclHIvdb4EceK3
-         XLDA==
-X-Gm-Message-State: AOAM533ztQ87fCx1H9LLq5K9t9bilBccD5kKAB6uDY6W97mJDyx63WtB
-        A+A17Qy8EDnXfara1Kf9xB0=
-X-Google-Smtp-Source: ABdhPJwmMtEzfPNdwOooZC2wf8A5bG/k7/4cOFDA4GsOuK+fySnMmsVg/aKO7lV23W/H+JvKF7jWdA==
-X-Received: by 2002:a05:600c:a0d:b0:381:774b:4439 with SMTP id z13-20020a05600c0a0d00b00381774b4439mr7274565wmp.48.1646177122835;
-        Tue, 01 Mar 2022 15:25:22 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id v5-20020a05600c15c500b003810188b6basm3515288wmf.28.2022.03.01.15.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 15:25:22 -0800 (PST)
-Date:   Tue, 1 Mar 2022 23:25:21 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3 04/30] drivers: hv: dxgkrnl: Creation of dxgadapter
- object
-Message-ID: <20220301232521.74utynmxngknd7qy@liuwe-devbox-debian-v2>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <03e9d393c08a348ca60539bb5f8d2dd6b5afaf0f.1646163378.git.iourit@linux.microsoft.com>
+        Tue, 1 Mar 2022 18:26:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD6D3818C;
+        Tue,  1 Mar 2022 15:26:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6034B81E9B;
+        Tue,  1 Mar 2022 23:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD09C340EE;
+        Tue,  1 Mar 2022 23:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646177158;
+        bh=51tGkB1qpUqmpT5Cc43/7n/OjIgMSooZatoxuPB4eUI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NcHlJVXzwDBnY5VOffqydsyaGaMm3jnEPkxrXr9rhkWm51OoGAlSk7d/gghRdg1Cr
+         TigkAioKjUMC4AE28nKK2u3QvfNnuvsWj3ZHNPcCgVcIWobqLlnl23of+DQPGVAjlw
+         eyC/vSWFTjwIbiizSh9nWvE0ALsffkw4YCwg/XIxIfMxnVBeGgkW6+syNLrXXBM5XZ
+         nlGbFWf2pT4ZI0tPubhASbbV8zIsrH9OkMQ44oh9T7Bx3vRuqWCUZxK4V4lxd/SqrS
+         qou1hH6Z1J33h3OaLKzkcUrjrj3NJIn8+iyOc2t3QBqCtJa7f9DMjFToGprWyEZteC
+         GVVn3zuix4M8w==
+Date:   Tue, 1 Mar 2022 15:25:57 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, Alexander Graf <graf@amazon.com>,
+        Jann Horn <jannh@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH 3/3] wireguard: device: clear keys on VM fork
+Message-ID: <20220301152557.35f1efed@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220301231038.530897-4-Jason@zx2c4.com>
+References: <20220301231038.530897-1-Jason@zx2c4.com>
+        <20220301231038.530897-4-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03e9d393c08a348ca60539bb5f8d2dd6b5afaf0f.1646163378.git.iourit@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:45:51AM -0800, Iouri Tarassov wrote:
-[...]
-> +int dxgadapter_set_vmbus(struct dxgadapter *adapter, struct hv_device *hdev)
-> +{
-> +	int ret;
-> +
-> +	guid_to_luid(&hdev->channel->offermsg.offer.if_instance,
-> +		     &adapter->luid);
-> +	pr_debug("%s: %x:%x %p %pUb\n",
-> +		    __func__, adapter->luid.b, adapter->luid.a, hdev->channel,
-> +		    &hdev->channel->offermsg.offer.if_instance);
-> +
-> +	ret = dxgvmbuschannel_init(&adapter->channel, hdev);
-> +	if (ret)
-> +		goto cleanup;
-> +
-> +	adapter->channel.adapter = adapter;
-> +	adapter->hv_dev = hdev;
-> +
-> +	ret = dxgvmb_send_open_adapter(adapter);
-> +	if (ret < 0) {
+On Wed,  2 Mar 2022 00:10:38 +0100 Jason A. Donenfeld wrote:
+> I wasn't planning on sending other WireGuard changes to net-next this
+> cycle, and this one here depends on previous things in my random.git
+> tree. Is it okay with you if I take this through my tree rather than
+> net-next?
 
-if (ret) is simpler?
+Yup,
 
-Please be consistent regarding how you check for errors.
-
-> +		pr_err("dxgvmb_send_open_adapter failed: %d\n", ret);
-> +		goto cleanup;
-> +	}
-> +
-> +	ret = dxgvmb_send_get_internal_adapter_info(adapter);
-> +	if (ret < 0)
-> +		pr_err("get_internal_adapter_info failed: %d", ret);
-> +
-> +cleanup:
-> +	if (ret)
-> +		pr_debug("err: %s %d", __func__, ret);
-> +	return ret;
-> +}
-> +
-> +void dxgadapter_start(struct dxgadapter *adapter)
-> +{
-> +	struct dxgvgpuchannel *ch = NULL;
-> +	struct dxgvgpuchannel *entry;
-> +	int ret;
-> +
-> +	pr_debug("%s %x-%x",
-> +		__func__, adapter->luid.a, adapter->luid.b);
-> +
-> +	/* Find the corresponding vGPU vm bus channel */
-> +	list_for_each_entry(entry, &dxgglobal->vgpu_ch_list_head,
-> +			    vgpu_ch_list_entry) {
-
-The mutex is not acquired in this function.
-
-I have not checked if this function is used elsewhere. But this is a
-non-static function, it should have at least a comment on the locking
-requirement?
-
-If it is not needed elsewhere, please make it static or named it
-dxgadapter_start_locked.
-
-
-[...]
-> +}
-> +
-> +void dxgadapter_stop(struct dxgadapter *adapter)
-
-Same comment applies to this function as well.
-
-Thanks,
-Wei.
+Acked-by: Jakub Kicinski <kuba@kernel.org>

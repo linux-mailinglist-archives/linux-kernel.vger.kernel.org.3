@@ -2,346 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073CE4C865D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180E54C8662
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiCAIWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S233393AbiCAIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiCAIWv (ORCPT
+        with ESMTP id S233386AbiCAIXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:22:51 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C0D6C935;
-        Tue,  1 Mar 2022 00:22:10 -0800 (PST)
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2218Lt14020571;
-        Tue, 1 Mar 2022 17:21:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2218Lt14020571
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1646122915;
-        bh=h6XYBnCgNsp1dMoMUfTg3MLYf/0POolcYazLaGN/rG0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pqatdUy1vzvaMAWA30AewrdIHhHJnZIKEM8UacuT2Fyx1y7aw+YdCAK8DA9bLGgiR
-         nohee9OgpfENeKlz32R6HHv87GrSZSPQBnwh01JH7dbIztb68qrm2RNRduq4B5xc8f
-         wlmHJWEI79GGq+oVZmZvM26EkGl90pLv8gEWjW7oYCahOzi1T8SwP4+4F6NVAhEC+8
-         JBZSlFtcgbzXwKJ9Egov+jEJMIvlGmdYX4rkHljxhdTWhmMELB3Pqo+q5bZ59RR6S0
-         JF2LhsiKQvARCQ2puwYOInE44zZnfsxk9tmK0bJLty86ua60UfpvHnjOT91FFfE3AX
-         QJwWf7Aypo1Qw==
-X-Nifty-SrcIP: [209.85.215.177]
-Received: by mail-pg1-f177.google.com with SMTP id o26so13157221pgb.8;
-        Tue, 01 Mar 2022 00:21:55 -0800 (PST)
-X-Gm-Message-State: AOAM532OPs1n9Ka979K6SUMG7h7/l1GcoxHzDEOBy7HUvJxoVBcOpP7I
-        O8PAr0cBK9OQx1TwunhZT1L9J2VeGtF6Brnr3Rg=
-X-Google-Smtp-Source: ABdhPJyoGquDMHIw6PHP8BM5AV/0OwxVcxaQ/6dKLXUPv7TUz7w2+TQGi7fiRWb0aehP4iwYcg71jbhFuU6kIAqUfwU=
-X-Received: by 2002:a63:e758:0:b0:378:8511:cfe7 with SMTP id
- j24-20020a63e758000000b003788511cfe7mr9814678pgk.126.1646122914464; Tue, 01
- Mar 2022 00:21:54 -0800 (PST)
+        Tue, 1 Mar 2022 03:23:18 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448021AC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:22:37 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id j9-20020a9d7d89000000b005ad5525ba09so11567766otn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:22:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tosKASypLvVXrNr25i9iVdhZeYDT2gXwfp+eHTQoEEc=;
+        b=q7IePSd4ZDSr0rC4WaQs2Hck81KsTkOAuEkmg5frbLPNtN1TTPLDw/H8Soa5pgoLaE
+         v/JgEr6qOQlPpKQi+w+ayfXsksZm1suQ83beh/Kl0E5clZouPyyi+pLNcD8uWfFfc7lF
+         mxb8FDo5WuKX5JfGVkgqcS+smWNAS/fraJZ47zfgjfH2nA5sjpVQpW14+xvOkynO5fHe
+         epIWggk+xHt/AKTVqrVuKAQ2ihuaqYt6H8W1/bZQsmhM9nU0TvTqKlhE6X6RxfOKBX8C
+         qmtVBoeh+1NfS9uGnBIzwrW87uBmO94rs5s24d7ny0n+h7eqT8udkU9eV7AIyIqYVWOz
+         4KPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tosKASypLvVXrNr25i9iVdhZeYDT2gXwfp+eHTQoEEc=;
+        b=IJLxAEzrviMkerz1ab2aQoSXFZ5/GVtWnvYocuRnWwPm/WVvqLkm7y/rdWTM+v4MVA
+         Vs9ofNZa3v3mZiSQO9bVJvH66u9G8zU/w3NVKRqVYKajGhTScQR9E2ouOW1aKdyOXS1Z
+         9IRxVcfUQzdXg/UEcyRj7YD6Qi/dVDF0DqjpPvcOHUkd9Ckb/MMboQ57/ayk5YZ6BiuV
+         rKJbbdoM9TirhMl+Ai2NibLpM2zh89PEN5ngDKc5xpszUrLYcjtYSsB1afw604lUZMbZ
+         f4YLdbcQShjzV9lPNz7eBD3hYsmNCV+Q1+GmA17scVI9dBcM5ehhANcqJ20DPqY1b9RP
+         oWiA==
+X-Gm-Message-State: AOAM531oYLOvE8vhzHr6E2xPXv73+2uCOBL/VVzRyO3R9uFigX3dZuu+
+        B8TmP+dikHKQXGHAN4ZWIZWOg7K9FmMDVPXI94Of8g==
+X-Google-Smtp-Source: ABdhPJySTn/ilMv7viVUZTUp94aI8GCiZqiF//jp/oGXCWlvdQoeAbndmnnwQeAkYwB9DYHC69sSdgfPNU5WpkzDfmQ=
+X-Received: by 2002:a05:6830:314c:b0:5af:dc8a:d066 with SMTP id
+ c12-20020a056830314c00b005afdc8ad066mr9037959ots.28.1646122956336; Tue, 01
+ Mar 2022 00:22:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225144245.182659-1-masahiroy@kernel.org> <CAKwvOd=WjnHSHKLVRJifHxV2tyDsLTkek80NWU=do=FSHhNLug@mail.gmail.com>
- <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
-In-Reply-To: <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 1 Mar 2022 17:21:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
-Message-ID: <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
-Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure successful
- write to files
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
+ <20220126221725.710167-8-bhupesh.sharma@linaro.org> <CAA8EJpqVP=E8GkO_BYBdPD6k84SDDD7cWduSf4yhG3M9VmbBLw@mail.gmail.com>
+In-Reply-To: <CAA8EJpqVP=E8GkO_BYBdPD6k84SDDD7cWduSf4yhG3M9VmbBLw@mail.gmail.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Tue, 1 Mar 2022 13:52:25 +0530
+Message-ID: <CAH=2Ntw5m9zfb4xfySYx71QgdmJwkAgtQ8B1=jXu19GQ84b+rg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] clk: qcom: gcc-sm8150: use runtime PM for the clock controller
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
+        tdas@codeaurora.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, bjorn.andersson@linaro.org,
+        davem@davemloft.net, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David answered most of the questions from Nick.
+Hi Dmitry,
 
+Sorry for the late reply.
 
-Let me answer this question:
-"Why call ferror as opposed to checking the return code of fflush?
-Reading the man page closer:"
-
-
-When fprintf() happens to need to write data to the end device,
-the internal buffer is cleared anyway (even if the writing to the
-end device fails).
-(We do not notice the failure of this because this patch is
-removing xprintf().)
-
-
-If the buffer has been cleared by the previous fprintf() call,
-fflush() succeeds because there is no data in the internal buffer.
-
-So, checking the return value of fflush() is not enough.
-
-That's my understanding.
-(I ran a small piece of test code under "ulimit -f")
-
-
-So, we have two options:
-
-[1] Check the return values in *all* the call-sites
-    of fprintf() and fflush().
-
-
-[2] Call fprintf() and fflush() or whatever without checking
-     their return values.
-    And, check ferror() at the last moment.
-
-
-
-
-If you are really sure that all the return values are checked,
-you can go with [1], then you do not need to call ferror(),
-but it is generally less fragile than [2].
-
-
-
-
-
-
-On Tue, Mar 1, 2022 at 11:28 AM David Laight <David.Laight@aculab.com> wrot=
-e:
+On Thu, 27 Jan 2022 at 04:04, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> Someone send HTML mail =E2=80=93 outlook is broken =E2=80=93 only lets yo=
-u top post :-(
->
->
->
-> The return value from fprintf() is normally the number of bytes written t=
-o
->
-> the internal buffer (8k in glibc?)
->
-> Only if the buffer is full and an actual write() is done do you get any i=
-ndication of an error.
->
-> So you can use the error return from fprintf() to terminate a loop =E2=80=
-=93 but it usually
->
-> just isn=E2=80=99t worth the effort.
->
-> The error status returned by ferror() is =E2=80=98sticky=E2=80=99, so you=
- need only check once.
->
-> But you need to check before fclose().
->
-> Since fclose() has to write out the buffer =E2=80=93 that write can also =
-fail.
->
-> I=E2=80=99m not sure whether fclose() returns and error in that case, but=
- adding fflush()
->
-> makes the coding easier.
->
->
->
-> So if you have lots of fprintf() adding data to a file (which is often th=
-e case)
->
-> almost all of them always succeed =E2=80=93 even if the disk is full.
->
-> Adding the error paths that can never really happen just makes the
->
-> code harder to read and clutters things up.
->
->
->
->                 David
->
->
->
-> From: Nick Desaulniers <ndesaulniers@google.com>
-> Sent: 28 February 2022 23:01
-> To: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>; David Laigh=
-t <David.Laight@ACULAB.COM>; LKML <linux-kernel@vger.kernel.org>; Michal Ma=
-rek <michal.lkml@markovi.net>
-> Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure succe=
-ssful write to files
->
->
->
-> On Fri, Feb 25, 2022 at 6:43 AM Masahiro Yamada <masahiroy@kernel.org> wr=
-ote:
+> On Thu, 27 Jan 2022 at 01:19, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
 > >
-> > Checking the return value of (v)printf does not ensure the successful
-> > write to the .cmd file.
->
-> Masahiro,
-> Apologies for my delay reviewing; I was on vacation last week.
->
-> Do you have more context for why this change is necessary? Perhaps you mi=
-ght describe further in the commit message the use case you're trying to su=
-pport?
->
-> Reading the man pages for vprintf(3), fflush(3), and ferror(3), I'm curio=
-us why checking the return value of ferror(3) after not doing so for `vprin=
-tf` and `fflush` is preferred?
->
-> Why not simply unconditionally add a call to fflush while leaving the exi=
-sting return code checking on vprintf?
->
+> > On sm8150 emac clk registers are powered up by the GDSC power
+> > domain. Use runtime PM calls to make sure that required power domain is
+> > powered on while we access clock controller's registers.
 > >
-> > Call fflush() and ferror() to make sure that everything has been
-> > written to the file.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > > ---
+> >  drivers/clk/qcom/gcc-sm8150.c | 27 +++++++++++++++++++++++++--
+> >  1 file changed, 25 insertions(+), 2 deletions(-)
 > >
-> > Changes in v2:
-> >   - add error message
+> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
+> > index ada755ad55f7..2e71afed81fd 100644
+> > --- a/drivers/clk/qcom/gcc-sm8150.c
+> > +++ b/drivers/clk/qcom/gcc-sm8150.c
+> > @@ -5,6 +5,7 @@
+> >  #include <linux/bitops.h>
+> >  #include <linux/err.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_device.h>
+> > @@ -3792,19 +3793,41 @@ static const struct of_device_id gcc_sm8150_match_table[] = {
+> >  };
+> >  MODULE_DEVICE_TABLE(of, gcc_sm8150_match_table);
 > >
-> >  scripts/basic/fixdep.c | 46 +++++++++++++++++-------------------------
-> >  1 file changed, 19 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-> > index 44e887cff49b..2328f9a641da 100644
-> > --- a/scripts/basic/fixdep.c
-> > +++ b/scripts/basic/fixdep.c
-> > @@ -105,25 +105,6 @@ static void usage(void)
-> >         exit(1);
-> >  }
-> >
-> > -/*
-> > - * In the intended usage of this program, the stdout is redirected to =
-.*.cmd
-> > - * files. The return value of printf() must be checked to catch any er=
-ror,
-> > - * e.g. "No space left on device".
-> > - */
-> > -static void xprintf(const char *format, ...)
-> > -{
-> > -       va_list ap;
-> > -       int ret;
-> > -
-> > -       va_start(ap, format);
-> > -       ret =3D vprintf(format, ap);
-> > -       if (ret < 0) {
-> > -               perror("fixdep");
-> > -               exit(1);
->
-> Wouldn't the existing approach abort sooner if there was an error encount=
-ered?
->
-> > -       }
-> > -       va_end(ap);
-> > -}
-> > -
-> >  struct item {
-> >         struct item     *next;
-> >         unsigned int    len;
-> > @@ -189,7 +170,7 @@ static void use_config(const char *m, int slen)
-> >
-> >         define_config(m, slen, hash);
-> >         /* Print out a dependency path from a symbol name. */
-> > -       xprintf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> > +       printf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> >  }
-> >
-> >  /* test if s ends in sub */
-> > @@ -318,13 +299,13 @@ static void parse_dep_file(char *m, const char *t=
-arget)
-> >                                  */
-> >                                 if (!saw_any_target) {
-> >                                         saw_any_target =3D 1;
-> > -                                       xprintf("source_%s :=3D %s\n\n"=
-,
-> > -                                               target, m);
-> > -                                       xprintf("deps_%s :=3D \\\n", ta=
-rget);
-> > +                                       printf("source_%s :=3D %s\n\n",
-> > +                                              target, m);
-> > +                                       printf("deps_%s :=3D \\\n", tar=
-get);
-> >                                 }
-> >                                 is_first_dep =3D 0;
-> >                         } else {
-> > -                               xprintf("  %s \\\n", m);
-> > +                               printf("  %s \\\n", m);
-> >                         }
-> >
-> >                         buf =3D read_file(m);
-> > @@ -347,8 +328,8 @@ static void parse_dep_file(char *m, const char *tar=
-get)
-> >                 exit(1);
-> >         }
-> >
-> > -       xprintf("\n%s: $(deps_%s)\n\n", target, target);
-> > -       xprintf("$(deps_%s):\n", target);
-> > +       printf("\n%s: $(deps_%s)\n\n", target, target);
-> > +       printf("$(deps_%s):\n", target);
-> >  }
-> >
-> >  int main(int argc, char *argv[])
-> > @@ -363,11 +344,22 @@ int main(int argc, char *argv[])
-> >         target =3D argv[2];
-> >         cmdline =3D argv[3];
-> >
-> > -       xprintf("cmd_%s :=3D %s\n\n", target, cmdline);
-> > +       printf("cmd_%s :=3D %s\n\n", target, cmdline);
-> >
-> >         buf =3D read_file(depfile);
-> >         parse_dep_file(buf, target);
-> >         free(buf);
-> >
-> > +       fflush(stdout);
+> > +static void gcc_sm8150_pm_runtime_disable(void *data)
+> > +{
+> > +       pm_runtime_disable(data);
+> > +}
 > > +
-> > +       /*
-> > +        * In the intended usage, the stdout is redirected to .*.cmd fi=
-les.
-> > +        * Call ferror() to catch errors such as "No space left on devi=
-ce".
-> > +        */
-> > +       if (ferror(stdout)) {
+> >  static int gcc_sm8150_probe(struct platform_device *pdev)
+> >  {
+> >         struct regmap *regmap;
+> > +       int ret;
+> > +
+> > +       pm_runtime_enable(&pdev->dev);
+> > +
+> > +       ret = devm_add_action_or_reset(&pdev->dev, gcc_sm8150_pm_runtime_disable, &pdev->dev);
+> > +       if (ret)
+> > +               return ret;
 >
-> Why call ferror as opposed to checking the return code of fflush?  Readin=
-g the man page closer:
->
->        The  function feof() tests the end-of-file indicator for the strea=
-m pointed to by stream, returning nonzero if it is set.  The end-of-file in=
-dicator can be cleared only by the function
->        clearerr().
->
->        The function ferror() tests the error indicator for the stream poi=
-nted to by stream, returning nonzero if it is set.  The error indicator can=
- be reset only by the clearerr() function.
->
-> Does that imply that "the end-of-file indicator" is distinct from "the er=
-ror indicator?"
->
-> > +               fprintf(stderr, "fixdep: not all data was written to th=
-e output\n");
-> > +               exit(1);
+> Please use devm_pm_runtime_enable() instead.
+
+Sure, I will fix it in v2.
+
+Thanks,
+Bhupesh
+
+> > +
+> > +       ret = pm_runtime_resume_and_get(&pdev->dev);
+> > +       if (ret)
+> > +               return ret;
+> >
+> >         regmap = qcom_cc_map(pdev, &gcc_sm8150_desc);
+> > -       if (IS_ERR(regmap))
+> > +       if (IS_ERR(regmap)) {
+> > +               pm_runtime_put(&pdev->dev);
+> >                 return PTR_ERR(regmap);
 > > +       }
+> >
+> >         /* Disable the GPLL0 active input to NPU and GPU via MISC registers */
+> >         regmap_update_bits(regmap, 0x4d110, 0x3, 0x3);
+> >         regmap_update_bits(regmap, 0x71028, 0x3, 0x3);
+> >
+> > -       return qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
+> > +       ret = qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
 > > +
-> >         return 0;
+> > +       pm_runtime_put(&pdev->dev);
+> > +
+> > +       return ret;
 > >  }
+> >
+> >  static struct platform_driver gcc_sm8150_driver = {
 > > --
-> > 2.32.0
+> > 2.34.1
 > >
 >
 >
->
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
->
-> P Please consider the environment and don't print this e-mail unless you =
-really need to
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+> --
+> With best wishes
+> Dmitry

@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BA74C9114
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6734C9116
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbiCARFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S236321AbiCARHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbiCARFN (ORCPT
+        with ESMTP id S235637AbiCARHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:05:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37A417A86
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:04:31 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221GILNI032419;
-        Tue, 1 Mar 2022 17:04:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=v/Z8iSvZNKJIfyy/RBRSF3m59VBrSRPLXV/8fS9VPZY=;
- b=AZJuiGWnDuUC2z7Kb7SUtrvSzXinDGdpAy1m4LPar2pKa9Dr24daHHDsg9NjrJGfzaHm
- GPJsV9bQGAIi2gLIzverliXxdHYDiss8uW4+W8ag5JBdjV4pz34UM2XiC60z9ll5YgJV
- dIS7o3SuYZ+hg01U6eUt2DRCIeNWgs+xSa6ORH1EmfP0YGJhuFH5hpv4VjP2DkVePvAd
- oriE5phneH7oTzLBoaCzgAi3m0TQig2O9ArKt2VoI0o6Kb6hAn+K9f89w5Zx/TUKF+W4
- E3bnzLesBuB1yanFWHUDi0BYBMMFTRB4SNEgyp/BWBs+I9cKJBBV+nKUI9xmggWiAEHh ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ehpm89rs9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 17:03:59 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221GISnl000646;
-        Tue, 1 Mar 2022 17:03:59 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ehpm89rr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 17:03:59 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221H3lBS015413;
-        Tue, 1 Mar 2022 17:03:57 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3efbu9b6vg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 17:03:57 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221Gr1l746072308
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Mar 2022 16:53:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C986D11C058;
-        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CABA11C050;
-        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
-Received: from localhost (unknown [9.43.110.204])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
-Date:   Tue, 01 Mar 2022 22:33:52 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
-        rostedt@goodmis.org, samitolvanen@google.com, x86@kernel.org
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.892372059@infradead.org>
-        <20220228150705.aab2d654b973109bab070ffe@kernel.org>
-        <20220228232513.GH11184@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220228232513.GH11184@worktop.programming.kicks-ass.net>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1646153789.geynpzwbid.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hSaf28dtkpqCPMAz-BXMHBVMHSVq3rzO
-X-Proofpoint-GUID: z-RcKJuXdoxf9LRt2EKAbxB3uRZk35GH
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 1 Mar 2022 12:07:18 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B3C115D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:06:36 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id e186so4376767ybc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:06:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XkVlnu9AtNC2+SicDtIG4fxqcqjgfAv/ZB91VRirVw0=;
+        b=XRTnXzc/bFS2NiCeBH+VzaXBII9PowNBaJw1k92sgK3ewkBotbS27s2bmuYryZYvsE
+         7TMEpf/enRtwzdTQiqLm5OR/RoV9MmWWSCtQR8bEYas8vGe6dwnZq3JQibb4bTmxSG72
+         ct85mN2DcajDL0ZtdoLL/H95LxYbKH4ro6z3tn/oeKWQaBmo+pfuYkQx1tfoK08Y7KfL
+         mOx1k4imIiTVCCl+TI2kIecEc9LdUXDRGQHZ7aw0tmU9xR+n/NilNriXqU5720mqT9tJ
+         D8KNIZkpX9lnE3ZNOYc8iA4p0/QiENfP4ypJ5+ChDtr1ZZlfUbdoPQC3sFFsdmbKpXq0
+         kcpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XkVlnu9AtNC2+SicDtIG4fxqcqjgfAv/ZB91VRirVw0=;
+        b=tMt+fFeFsjPI3fMSEqXJfor4lfB20up2A8NjLKxMxQC+Qd8Zk/4kAYiyb4i/1IezYB
+         li3+MfLKpzD1XCNHhn7FIivMyUJvYO5IABHfAC2h4KOQbNBOc3WQxaqujFFRs9/SQbMP
+         qYhBfoLPb+Xf5BknGUbGMHgYQOwupWV6YglWnDnnS/rWglVE+dvYIhPx+bSjSrTqOkmq
+         My6OGCBniUoGHle0mLJOd3f8dPTRpSn1mOYBvpz055GlMtwV2IfqIYy1dEzJnR6ZZ/f+
+         /jrhlz7953trAfLaLuxTazLyp/u4t6GaCJXRHzinAbAuC5VuISsdyVfygKO3iwAiiKKE
+         irhw==
+X-Gm-Message-State: AOAM533bJbwVMkITsyQD7llkqzEqHq/+evS20CoQ+QaNCZPoa8Bi42iM
+        dGpGOc29wCQYKtQgLEmbSR4A7blSEZSQb/0fADwamQ==
+X-Google-Smtp-Source: ABdhPJxEizutKQdV7q7qn1WzkF3e07qHyb7EKzhgajAZ8SDK394GGVIfury2LPL//VGhSYk8qYbWqbCjbsjfCUq9+bg=
+X-Received: by 2002:a25:d0c5:0:b0:621:c44b:b219 with SMTP id
+ h188-20020a25d0c5000000b00621c44bb219mr24085216ybg.88.1646154395818; Tue, 01
+ Mar 2022 09:06:35 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 clxscore=1011 mlxlogscore=777 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203010089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220228172141.744228435@linuxfoundation.org>
+In-Reply-To: <20220228172141.744228435@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 1 Mar 2022 22:36:24 +0530
+Message-ID: <CA+G9fYskrxEoW1c=4pCiJxAM5KYvAY91LpovxRpYvp60fMxw3Q@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/29] 4.9.304-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,67 +71,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Mon, 28 Feb 2022 at 22:56, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.304 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.304-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Peter Zijlstra wrote:
-> On Mon, Feb 28, 2022 at 03:07:05PM +0900, Masami Hiramatsu wrote:
->> Hi Peter,
->>=20
->> So, instead of this change, can you try below?
->> This introduce the arch_adjust_kprobe_addr() and use it in the kprobe_ad=
-dr()
->> so that it can handle the case that user passed the probe address in=20
->> _text+OFFSET format.
->=20
-> It works a little... at the very least it still needs
-> arch_kprobe_on_func_entry() allowing offset 4.
->=20
-> But looking at this, we've got:
->=20
-> kprobe_on_func_entry(addr, sym, offset)
->   _kprobe_addr(addr, sym, offset)
->     if (sym)
->       addr =3D kprobe_lookup_name()
->            =3D kallsyms_lookup_name()
->     arch_adjust_kprobe_addr(addr+offset)
->       skip_endbr()
->         kallsyms_loopup_size_offset(addr, ...)
->   kallsyms_lookup_size_offset(addr, NULL, &offset)
->   arch_kprobe_on_func_entry(offset)
->=20
-> Which is _3_ kallsyms lookups and 3 weak/arch hooks.
->=20
-> Surely we can make this a little more streamlined? The below seems to
-> work.
->=20
-> I think with a little care and testing it should be possible to fold all
-> the magic of PowerPC's kprobe_lookup_name() into this one hook as well,
-> meaning we can get rid of kprobe_lookup_name() entirely.  Naveen?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-This is timely. I've been looking at addressing a similar set of issues=20
-on powerpc:
-http://lkml.kernel.org/r/cover.1645096227.git.naveen.n.rao@linux.vnet.ibm.c=
-om
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
->=20
-> This then gets us down to a 1 kallsyms call and 1 arch hook. Hmm?
+## Build
+* kernel: 4.9.304-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: 796b7c82bdd7bb76761023d7077dc83ebc321efd
+* git describe: v4.9.303-30-g796b7c82bdd7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+03-30-g796b7c82bdd7
 
-I was going to propose making _kprobe_addr() into a weak function in=20
-place of kprobe_lookup_name() in response to Masami in the other thread,=20
-but this is looking better.
+## Test Regressions (compared to v4.9.302-34-g6686f147d38f)
+No test regressions found.
 
->=20
-> ---
->  arch/powerpc/kernel/kprobes.c  |   34 +++++++++++++++---------
->  arch/x86/kernel/kprobes/core.c |   17 ++++++++++++
->  include/linux/kprobes.h        |    3 +-
->  kernel/kprobes.c               |   56 ++++++++++++++++++++++++++++++++++=
--------
->  4 files changed, 87 insertions(+), 23 deletions(-)
+## Metric Regressions (compared to v4.9.302-34-g6686f147d38f)
+No metric regressions found.
 
-I will take a closer look at this tomorrow and revert.
+## Test Fixes (compared to v4.9.302-34-g6686f147d38f)
+No test fixes found.
 
+## Metric Fixes (compared to v4.9.302-34-g6686f147d38f)
+No metric fixes found.
 
-Thanks,
-- Naveen
+## Test result summary
+total: 77979, pass: 64313, fail: 294, skip: 11828, xfail: 1544
 
+## Build Summary
+* arm: 254 total, 238 passed, 16 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

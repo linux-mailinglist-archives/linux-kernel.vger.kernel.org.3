@@ -2,105 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB8B4C81AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964774C81AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiCADgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S232130AbiCADha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCADgg (ORCPT
+        with ESMTP id S229625AbiCADh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:36:36 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECDF3614F;
-        Mon, 28 Feb 2022 19:35:56 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id c9so12451902pll.0;
-        Mon, 28 Feb 2022 19:35:56 -0800 (PST)
+        Mon, 28 Feb 2022 22:37:26 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6749870312
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:36:46 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id bc27so4426756pgb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:36:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hp4t2uw0/sPgnHFofQlHvuw9mmi+UuEE/SFLLt4hTuw=;
-        b=Pv2oB0lHPU53DlZEWc3HQnbprZRc+OarkESkbAYQhbqrkZZYWQDt8mI0J5MbXmXHY2
-         Vli1HEkJ8u7M3YZH3HF5GaEWhFNg0nD/Npg4Y5yhN1YyxF3B3zpKFoHI9SDpkOtZ/tOs
-         jxys4Qg0+p6G4Jo+BMBtqBEcwXIcRWQUWriotjDG6EAncqoKRx3JXi/vj3aFr+IpmVjC
-         FOMmCpDgvaV6kb9RtitJW77SzXH0xWHti2PYA/uIbQP8ppYqGJ5hmad5H0jHaUVL08MQ
-         hPmvgkNOVl57bjlbD7nx5i7B/6Lt9H6etc+LCvBJ70Lj6NsS6+j742XSGuWC9esWP65b
-         AV6Q==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=wvHyMWb4Vup6fp70fcnYjPwaQlO4R7c0Csa1i6hXi9M=;
+        b=EBvBprQQ//9P3T/BVK9MgCeHo1ctnzByGpuO39blALooJrEPY4SOSpFa8BBXfnBEBI
+         ENckznChvtoDSYrxUSfH6FmKbXAdEZ+TCLtss/48tk32k5Z/IpBHE7XCXiRkm6cti8yD
+         /cADisIYld/bdrsJhdHi0AbX0lkGTj5kHUVxOkg/wITDIhgLd1g31B4ohCpIdk+vcKta
+         sbSbptc4OYc6JkXsyvQG8oqHi7I/kJlco8oZctdPPjZlWo+yJelu8QIFYfZ554YUFnd4
+         CbSSmU+YEdUVujYBt1Xg+HsW+nveNueZB/9ofo8BLovB1o0rMGZhCfdmXSlz499TYUuq
+         /O9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hp4t2uw0/sPgnHFofQlHvuw9mmi+UuEE/SFLLt4hTuw=;
-        b=Ra90NIW39uFDHYaZRMRRWkYxfKacHkIJr00d8ZwidJovozyQkLMtNTOzASPypixMB2
-         E0IsMv+fIGCZ75/q1jKUo9QuVpCkrJk8svQLtQHMdRym3MGsN+n+1FRGp94tih5bsqiQ
-         zCtM0rrJv4Qh2TvJDcOTnFX+Lg89DH+WCGQ+8X2Ar1S22jYEpCLJ7V7ZMV4BoVOwXC/R
-         FBWZ/K4jhATHOFqNEG+ta3ep26nYxFwoqOdZx9aiqO/InPv/jhBwggPHCojr9Bq6f6IP
-         fcwl6aNNs9rwj47wJacZiuepfXcJoMSp5VS6EkEMzSfLSeqKBi8bqd8V7djyuMTRXIl0
-         NF8Q==
-X-Gm-Message-State: AOAM532fTq1xNcwNfGm2SI8rmgxzq1/zFYi5PJSD9T7Ec3wAal3f90sl
-        dNy6J4ApkyN3RymABgMA96A=
-X-Google-Smtp-Source: ABdhPJwgvQYs1aylJoUqiDY6UpYCzi1VMR41xneuFI53OM39Qi3zfktNU1RjMAYGvip4+5h4z/EP2w==
-X-Received: by 2002:a17:902:d706:b0:14d:b09a:a0b with SMTP id w6-20020a170902d70600b0014db09a0a0bmr24432587ply.52.1646105756154;
-        Mon, 28 Feb 2022 19:35:56 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 17-20020a056a00071100b004f0f941d1e8sm14257058pfl.24.2022.02.28.19.35.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 19:35:55 -0800 (PST)
-Message-ID: <1b40b00d-c408-9040-7267-0325ddd72a72@gmail.com>
-Date:   Mon, 28 Feb 2022 19:35:53 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wvHyMWb4Vup6fp70fcnYjPwaQlO4R7c0Csa1i6hXi9M=;
+        b=wmx0s3th6ZHFP0OlSh62d9nxmWIep2AQmi4crWajeUkEXrDeTZj72Sg2HNXCNczdb/
+         0Efl5lcrdW0wRXnon+12vfqVkjAsTVKUQzGdK4AuwYcrV+FZ5nw3+4dgFwT5rwccuo2X
+         nUfrUamg2/tjtr3NUuG+yPFBCCD15mAMRj9fYJD1ku6SwTu2W4R9m2IA5QXR2xWPuHsw
+         gxRjsFfHCD0VM/TrIdP6bsoRmNAubEgaXGwFUrYihB0vS29vPVW7ChHMXgCjNNfj4tes
+         YSO8IEbikZg3LRpN/Jjx2vAsGkI82GXR3aso62amC84D2u7fTnnJUBdK7sYP7CA5Yywf
+         Nw/w==
+X-Gm-Message-State: AOAM532Q5uKtcKaHLlJWJEuRwTPsRpUmDxS/lV5fGw77oRlsqSkjKNeb
+        32s3T+fIgsF4RO/cSM3PSlA=
+X-Google-Smtp-Source: ABdhPJwSQICuomfFXU9pBsEdQPGrrNXV+o0mg9L9MaM7NwoauJKYFZE45/IEzWZzDBBkHG3RvGqw6g==
+X-Received: by 2002:a63:1b5e:0:b0:36f:e756:c118 with SMTP id b30-20020a631b5e000000b0036fe756c118mr19840678pgm.562.1646105805849;
+        Mon, 28 Feb 2022 19:36:45 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id 17-20020a056a00071100b004f0f941d1e8sm14258564pfl.24.2022.02.28.19.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 19:36:45 -0800 (PST)
+Date:   Tue, 1 Mar 2022 03:36:38 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+Subject: [PATCH v2] mm/slub: initialize stack depot in boot process
+Message-ID: <Yh2Uxh9DMndwjGcb@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 5.16 000/164] 5.16.12-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220228172359.567256961@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
+objects") initializes stack depot in cache creation if SLAB_STORE_USER
+flag is set.
 
+This can make kernel crash because a cache can be crashed in various
+contexts. For example if user sets slub_debug=U, kernel crashes
+because create_boot_cache() calls stack_depot_init(), which tries to
+allocate hash table using memblock_alloc() if slab is not available.
+But memblock is also not available at that time.
 
-On 2/28/2022 9:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.12 release.
-> There are 164 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+This patch solves the problem by initializing stack depot early
+in boot process if SLAB_STORE_USER debug flag is set globally
+or the flag is set for at least one cache.
 
-On ARCH_BRCMSTb using 32-bit and 64-bit ARM kernels:
+[ elver@google.com: initialize stack depot depending on slub_debug
+  parameter instead of allowing stack_depot_init() to be called
+  during kmem_cache_init() for simplicity. ]
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+[ vbabka@suse.cz: parse slub_debug parameter in setup_slub_debug()
+  and initialize stack depot in stack_depot_early_init(). ]
+
+Link: https://lore.kernel.org/all/YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal/
+Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ include/linux/slab.h       |  6 ++++++
+ include/linux/stackdepot.h |  3 ++-
+ mm/slub.c                  | 18 +++++++++++++++---
+ 3 files changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..062128e0db10 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -763,6 +763,12 @@ extern void kvfree_sensitive(const void *addr, size_t len);
+ unsigned int kmem_cache_size(struct kmem_cache *s);
+ void __init kmem_cache_init_late(void);
+ 
++#if defined(CONFIG_SLUB_DEBUG) && defined(CONFIG_STACKDEPOT)
++int slab_stack_depot_init(void);
++#else
++int slab_stack_depot_init(void) { return 0; }
++#endif
++
+ #if defined(CONFIG_SMP) && defined(CONFIG_SLAB)
+ int slab_prepare_cpu(unsigned int cpu);
+ int slab_dead_cpu(unsigned int cpu);
+diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+index 17f992fe6355..a813a2673c48 100644
+--- a/include/linux/stackdepot.h
++++ b/include/linux/stackdepot.h
+@@ -12,6 +12,7 @@
+ #define _LINUX_STACKDEPOT_H
+ 
+ #include <linux/gfp.h>
++#include <linux/slab.h>
+ 
+ typedef u32 depot_stack_handle_t;
+ 
+@@ -32,7 +33,7 @@ int stack_depot_init(void);
+ #ifdef CONFIG_STACKDEPOT_ALWAYS_INIT
+ static inline int stack_depot_early_init(void)	{ return stack_depot_init(); }
+ #else
+-static inline int stack_depot_early_init(void)	{ return 0; }
++static inline int stack_depot_early_init(void)	{ return slab_stack_depot_init(); }
+ #endif
+ 
+ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+diff --git a/mm/slub.c b/mm/slub.c
+index a74afe59a403..2419fc3cc9f3 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -646,6 +646,14 @@ static slab_flags_t slub_debug;
+ 
+ static char *slub_debug_string;
+ static int disable_higher_order_debug;
++static bool init_stack_depot;
++
++int slab_stack_depot_init(void)
++{
++	if (init_stack_depot)
++		stack_depot_init();
++	return 0;
++}
+ 
+ /*
+  * slub is about to manipulate internal object metadata.  This memory lies
+@@ -1531,6 +1539,8 @@ static int __init setup_slub_debug(char *str)
+ 			global_slub_debug_changed = true;
+ 		} else {
+ 			slab_list_specified = true;
++			if (flags & SLAB_STORE_USER)
++				init_stack_depot = true;
+ 		}
+ 	}
+ 
+@@ -1546,6 +1556,10 @@ static int __init setup_slub_debug(char *str)
+ 			global_flags = slub_debug;
+ 		slub_debug_string = saved_str;
+ 	}
++
++	if (global_flags & SLAB_STORE_USER)
++		init_stack_depot = true;
++
+ out:
+ 	slub_debug = global_flags;
+ 	if (slub_debug != 0 || slub_debug_string)
+@@ -1556,6 +1570,7 @@ static int __init setup_slub_debug(char *str)
+ 	     static_branch_unlikely(&init_on_free)) &&
+ 	    (slub_debug & SLAB_POISON))
+ 		pr_info("mem auto-init: SLAB_POISON will take precedence over init_on_alloc/init_on_free\n");
++
+ 	return 1;
+ }
+ 
+@@ -4221,9 +4236,6 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+ 	s->remote_node_defrag_ratio = 1000;
+ #endif
+ 
+-	if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
+-		stack_depot_init();
+-
+ 	/* Initialize the pre-computed randomized freelist if slab is up */
+ 	if (slab_state >= UP) {
+ 		if (init_cache_random_seq(s))
 -- 
-Florian
+2.33.1

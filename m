@@ -2,91 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01964C9795
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDCB4C9797
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbiCAVNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S237798AbiCAVPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbiCAVNk (ORCPT
+        with ESMTP id S232430AbiCAVPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:13:40 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF64496BC;
-        Tue,  1 Mar 2022 13:12:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7VMX5pr0z4xZ5;
-        Wed,  2 Mar 2022 08:12:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646169176;
-        bh=uiuVrU3xAqSXcb0ByN0vN1mn4IK+vIadarYO43hOe7k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F4vuDzn3sPJo05xVGIouWXCV6ZX3qidhVKJf+It05L/iIZT6vGuaKDmK5NL/NntY1
-         dgakNxELWqgvbk5++VK9Uu/u3H3IcS52m5M4hXJfzNRcD83U+LkqQ5QZ582esuuZtY
-         J4/O4+7tSPwZ6VFcUZuuuf/vsrZg8c0/+IEvVT1+Q8QeQrB0/BtZF0wFiTHqZjAeEX
-         7mbkAx95sYyeGc8int0cyKW7/IbkUb2rD5lKASWXj7AMhbM5Cw/0AAIKvHtlZx28aW
-         O8XjoeiagSF6QLEiJqbkbGIrZhnZmziy/0kSc0MaZKp1pePzRK6ah/LRVouQ60jiRV
-         9ZIlKpZ5GxIXg==
-Date:   Wed, 2 Mar 2022 08:12:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the pci tree
-Message-ID: <20220302081251.76dc066b@canb.auug.org.au>
+        Tue, 1 Mar 2022 16:15:14 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D125C347
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646169272; x=1677705272;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WRbNCLlAB9hSATwWO4r0Bsd4Q26nHNiL+p3iTmhVtDA=;
+  b=VtBMNa9N+dnwURKrcJUDJSG5Huxw6ouZ3LUVXlR9XNoBIMlhiVfvsqAg
+   z6XY+FAVTHInXxsSMLFw8GiKlhaTPHIBk4pjG5NDh91TDRYrnsJx62pVa
+   mU2NPgy/DTOmMq5Vol/NNCzRZhrnUkZFLUwYZ8xFclBNI7plP8YCPw9iD
+   q13KJcpHBLoJOEofgErIq8xH0nvvXpJ6sV3iRk3jJClaf9ohNf1Is0Yhg
+   n9PipL1mSFPYBnClpM8Rt0ctMnsQofTrFTMQwLJOpUHpRSKxKCLwEffS5
+   P/R+9DdiBekZv2EFEHpmmcvGyw4R5Mj6XYn/Nthk7XYOW3L4LelAEyaOU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253434803"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="253434803"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 13:14:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="709223456"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2022 13:14:30 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP9pF-00012X-O8; Tue, 01 Mar 2022 21:14:29 +0000
+Date:   Wed, 2 Mar 2022 05:13:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 38/39]
+ drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of
+ 'devlink_linecard_device_create' from incompatible pointer type
+Message-ID: <202203020522.M9GYd0HL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yEelrlr1D.zu5bu1PIbCDNN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yEelrlr1D.zu5bu1PIbCDNN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   fcef7b383481be9b69822d4d795df70f382f78f1
+commit: 6db26604520f23b4189cb7979bfceea51678df22 [38/39] TMP: devlink device type
+config: arc-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020522.M9GYd0HL-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/6db26604520f23b4189cb7979bfceea51678df22
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 6db26604520f23b4189cb7979bfceea51678df22
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/netdevsim/
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Commits
+All errors (new ones prefixed by >>):
 
-  8423706fcd6f ("PCI/VGA: Log bridge control messages when adding devices")
-  616c33aeef4d ("PCI/VGA: Move disabled VGA device detection to ADD_DEVICE =
-path")
-  3996347141f2 ("PCI/VGA: Move non-legacy VGA detection to ADD_DEVICE path")
-  74cc9ccf72f4 ("PCI/VGA: Move firmware default device detection to ADD_DEV=
-ICE path")
-  7c0045edaf90 ("PCI/VGA: Factor out default VGA device selection")
-  55019256d686 ("PCI/VGA: Move vga_arb_integrated_gpu() earlier in file")
+   drivers/net/netdevsim/dev.c: In function 'nsim_dev_linecard_devices_create':
+>> drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of 'devlink_linecard_device_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     119 |                                                         nsim_dev_linecard);
+         |                                                         ^~~~~~~~~~~~~~~~~
+         |                                                         |
+         |                                                         struct nsim_dev_linecard *
+   In file included from drivers/net/netdevsim/dev.c:29:
+   include/net/devlink.h:1580:44: note: expected 'const char *' but argument is of type 'struct nsim_dev_linecard *'
+    1580 |                                const char *type, void *priv);
+         |                                ~~~~~~~~~~~~^~~~
+>> drivers/net/netdevsim/dev.c:117:26: error: too few arguments to function 'devlink_linecard_device_create'
+     117 |                 device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/netdevsim/dev.c:29:
+   include/net/devlink.h:1577:1: note: declared here
+    1577 | devlink_linecard_device_create(struct devlink_linecard *linecard,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-are missing a Signed-off-by from their committers.
 
---=20
-Cheers,
-Stephen Rothwell
+vim +/devlink_linecard_device_create +119 drivers/net/netdevsim/dev.c
 
---Sig_/yEelrlr1D.zu5bu1PIbCDNN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+d75afab460832e Jiri Pirko 2021-05-05  100  
+d75afab460832e Jiri Pirko 2021-05-05  101  static int
+d75afab460832e Jiri Pirko 2021-05-05  102  nsim_dev_linecard_devices_create(struct nsim_dev_linecard *nsim_dev_linecard)
+d75afab460832e Jiri Pirko 2021-05-05  103  {
+d75afab460832e Jiri Pirko 2021-05-05  104  	struct devlink_linecard_device *device;
+d75afab460832e Jiri Pirko 2021-05-05  105  	char *component_name;
+d75afab460832e Jiri Pirko 2021-05-05  106  	int err;
+d75afab460832e Jiri Pirko 2021-05-05  107  	int i;
+d75afab460832e Jiri Pirko 2021-05-05  108  
+d75afab460832e Jiri Pirko 2021-05-05  109  	snprintf(nsim_dev_linecard->device_component_name,
+d75afab460832e Jiri Pirko 2021-05-05  110  		 sizeof(nsim_dev_linecard->device_component_name), "lc%u_dev0",
+d75afab460832e Jiri Pirko 2021-05-05  111  		 nsim_dev_linecard->linecard_index);
+d75afab460832e Jiri Pirko 2021-05-05  112  	component_name = nsim_dev_linecard->device_component_name;
+d75afab460832e Jiri Pirko 2021-05-05  113  
+d75afab460832e Jiri Pirko 2021-05-05  114  	for (i = 0; i < NSIM_DEV_LINECARD_DEVICE_COUNT; i++) {
+d75afab460832e Jiri Pirko 2021-05-05  115  		if (i > 0)
+d75afab460832e Jiri Pirko 2021-05-05  116  			component_name = NULL;
+d75afab460832e Jiri Pirko 2021-05-05 @117  		device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
+d75afab460832e Jiri Pirko 2021-05-05  118  							i, component_name,
+d75afab460832e Jiri Pirko 2021-05-05 @119  							nsim_dev_linecard);
+d75afab460832e Jiri Pirko 2021-05-05  120  		if (IS_ERR(device)) {
+d75afab460832e Jiri Pirko 2021-05-05  121  			err = PTR_ERR(device);
+d75afab460832e Jiri Pirko 2021-05-05  122  			goto rollback;
+d75afab460832e Jiri Pirko 2021-05-05  123  		}
+d75afab460832e Jiri Pirko 2021-05-05  124  		nsim_dev_linecard->devlink_device[i] = device;
+d75afab460832e Jiri Pirko 2021-05-05  125  	}
+d75afab460832e Jiri Pirko 2021-05-05  126  	return 0;
+d75afab460832e Jiri Pirko 2021-05-05  127  
+d75afab460832e Jiri Pirko 2021-05-05  128  rollback:
+d75afab460832e Jiri Pirko 2021-05-05  129  	for (i--; i >= 0; i--) {
+d75afab460832e Jiri Pirko 2021-05-05  130  		device = nsim_dev_linecard->devlink_device[i];
+d75afab460832e Jiri Pirko 2021-05-05  131  		devlink_linecard_device_destroy(nsim_dev_linecard->devlink_linecard,
+d75afab460832e Jiri Pirko 2021-05-05  132  						device);
+d75afab460832e Jiri Pirko 2021-05-05  133  	}
+d75afab460832e Jiri Pirko 2021-05-05  134  	return err;
+d75afab460832e Jiri Pirko 2021-05-05  135  }
+d75afab460832e Jiri Pirko 2021-05-05  136  
 
------BEGIN PGP SIGNATURE-----
+:::::: The code at line 119 was first introduced by commit
+:::::: d75afab460832ea5abcbfe1d3e7107a44e648046 netdevsim: create couple of devices on each linecard
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIejFMACgkQAVBC80lX
-0GyzSQf/a1eEYJljjECs+PceHOQ6rTy/QvozJKMxnMIC6VF9Moaz/kVrxJuWymIl
-NYvkumjqkc4eILUYAFkiY00RG1MXFJJNFvRripuEqeWh/ZGhYJygXdvOCLM0nfh4
-mpZJoOPAiW6+RGKHnl7ZEMJ4Tgsb4Z/qArBrR4czfapnsEzPix4Bkt8Y9Zr1eUcx
-0Rv0FDlrj/+EWfOla6Lqu3yafoNVxQTgrn+rYZGDB7oCn0LGsst6vf+AachUap6m
-MQmnnDcJCsgxRp6WSZFTmBKQJE3wibhcnxoM4V3ug1Hb8sLFVJd34gcjgjhWTGiQ
-S0NElcWjZygGOswqqyVP3Z9dPQtHLw==
-=lDFP
------END PGP SIGNATURE-----
+:::::: TO: Jiri Pirko <jiri@nvidia.com>
+:::::: CC: Jiri Pirko <jiri@nvidia.com>
 
---Sig_/yEelrlr1D.zu5bu1PIbCDNN--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

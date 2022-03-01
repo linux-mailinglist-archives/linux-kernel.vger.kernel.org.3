@@ -2,144 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F034C80A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08084C80BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiCACA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 21:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S231652AbiCACGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 21:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiCACAX (ORCPT
+        with ESMTP id S230378AbiCACGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 21:00:23 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C6B38D98;
-        Mon, 28 Feb 2022 17:59:29 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id a28so1782950uaf.7;
-        Mon, 28 Feb 2022 17:59:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f9mcavcZ3DY94pj3isyE2zgAKVT28x47K4KRhuEpv6Q=;
-        b=ULr67TFox3RLB7SGJSFxa+NZLUv1bHUeSyhisqV+HNwBrTddKytuBp2MNcLed/VQpe
-         l9zbE5RTm/Imu7PBpGjLc9Gz+n7hgSm9ZHy6Nw+SUOT5PZUcxF4WzMBGMg9GTDEGQCm/
-         si81w2ngBWAgaZufKKYgLdFqVRUaOw3AVWfxs6T7xIG/7YXRuqHet8+R+J9UgFSzE7/B
-         U2LfKUNMafXhYUiHtQpwlVwJ3rppiXsB8dwawdQxjiXi2Gl3tDHz0J7x0eXnukUbuX4C
-         qYq4V8UzXJ+KgSKKE5grqQJwwn64qzCD4LyaRijO2oHbhH8kK+EmMcUDxTP/Xc/S8BKE
-         TZsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f9mcavcZ3DY94pj3isyE2zgAKVT28x47K4KRhuEpv6Q=;
-        b=4y2w7r6K3PEOJMDMoj0M8KflQFCMMRJ2QTMRzYxYOc4d+8qQ6BYUHScyAk3n26hrbQ
-         juXqt3/dr84qQAtymmXKFCu4xkeSfM90momhtxbPcA1E3LxQThfbx/Kol4isdfs9nN/s
-         hv6QAnf9uqxmk1EbRrIjvH48et7o/CkYTZ2GjYt7+lPfeFrI95yoiY9D+kmv2MjhvHo7
-         F3VfYdujHpyFJmcyK7MDS1Q2Avi4MSVk3bVXkBRir2t1+VR9FyszqbLzuwksIC1gP7AY
-         Aqa/G8kSktM93Ffs488iJxtOEfOJRPtb4kYj1sL5OJGpG6ApmM4U+3o/VcX8LPti3+nX
-         fm4w==
-X-Gm-Message-State: AOAM5311AW5z7trhTRdJE3NaTneJoyhsBsNOE6hyQzepajCYB3j6yiPx
-        x5TkWQI8vVLoDISupRc99iArQtgcPADw01SfYS8=
-X-Google-Smtp-Source: ABdhPJxoiWGfFp+U7mgMRQ9mB+8YY2DQDRlM2bRtZnZScmYZqfYoRf/PUDbxoZRuX8/BkJNU9+sPwbeI2ACWEikb8kc=
-X-Received: by 2002:ab0:5b87:0:b0:33d:b78c:56ca with SMTP id
- y7-20020ab05b87000000b0033db78c56camr9261800uae.117.1646099968324; Mon, 28
- Feb 2022 17:59:28 -0800 (PST)
+        Mon, 28 Feb 2022 21:06:10 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D6B265;
+        Mon, 28 Feb 2022 18:05:24 -0800 (PST)
+X-UUID: a86095ea6c7f416fbb5dcb9564fb2e7c-20220301
+X-UUID: a86095ea6c7f416fbb5dcb9564fb2e7c-20220301
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 741999193; Tue, 01 Mar 2022 10:05:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 1 Mar 2022 10:05:19 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 10:05:19 +0800
+From:   <yf.wang@mediatek.com>
+To:     <yf.wang@mediatek.com>
+CC:     <Libo.Kang@mediatek.com>, <Ning.Li@mediatek.com>,
+        <Yong.Wu@mediatek.com>, <iommu@lists.linux-foundation.org>,
+        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <will@kernel.org>, <wsd_upstream@mediatek.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] iommu/iova: Reset max32_alloc_size after cleaning rcache in the fail path
+Date:   Tue, 1 Mar 2022 09:59:19 +0800
+Message-ID: <20220301015919.5116-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220301014246.5011-1-yf.wang@mediatek.com>
+References: <20220301014246.5011-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
-References: <20220222042700.385001-1-yusisamerican@gmail.com>
- <CAJoG2+-97KyWrxym2NXECRtjT9OxVQE_=DcNkUfOsPm_Ax90Aw@mail.gmail.com>
- <20220225155208.GA1377611@yilunxu-OptiPlex-7050> <DM6PR11MB3819C9631EAED0AFE7E8D99B85019@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB3819C9631EAED0AFE7E8D99B85019@DM6PR11MB3819.namprd11.prod.outlook.com>
-From:   Yusuf Khan <yusisamerican@gmail.com>
-Date:   Mon, 28 Feb 2022 17:59:17 -0800
-Message-ID: <CAJoG2+--e6BqpwBYO0w4d_aUwmCmJVch=mvfq7idW__PRxsv6w@mail.gmail.com>
-Subject: Re: [PATCH -next] pga: dfl: pci: Make sure DMA related error check is
- not done twice
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will do, but I do not know exactly what to remove  from the commit message,
-I understand what to do for the title
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-Yusuf
+In alloc_iova_fast function, if __alloc_and_insert_iova_range fail,
+alloc_iova_fast will try flushing rcache and retry alloc iova, but
+this has an issue:
 
-On Mon, Feb 28, 2022 at 1:58 AM Wu, Hao <hao.wu@intel.com> wrote:
->
-> > On Mon, Feb 21, 2022 at 08:39:48PM -0800, Yusuf Khan wrote:
-> > > Note: This bug was introduced here:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-
-> > next.git/patch/?id=ada3caabaf6135150077c3f729bb06e8f3b5b8f6
-> > > I saw this commit inside the linux-next branch, it is not present in
-> > > the mainline branch.
-> > > The linux-next branch was last updated 5 days ago, so I am unsure
-> > > about the state of that commit.
-> > >
-> > > On Mon, Feb 21, 2022 at 8:27 PM Yusuf Khan <yusisamerican@gmail.com>
-> > wrote:
-> > > >
-> > > > In the case that the DMA 64 bit bit mask error check does not fail,
-> > > > the error check will be done twice, this patch fixed that.
-> > > >
-> > > > NOTE: This patch is only for use in the linux-next branch as the
-> > > > commit that caused this bug happened there.
->
-> Thanks for the patch.
-> please remove this from the commit message, and fix the title
-> s/pga/fpga/
->
-> Thanks
-> Hao
->
-> > > >
-> > > > Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
-> > > > ---
-> > > >  drivers/fpga/dfl-pci.c | 9 +++++----
-> > > >  1 file changed, 5 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> > > > index 717ac9715970..6222f18aed4b 100644
-> > > > --- a/drivers/fpga/dfl-pci.c
-> > > > +++ b/drivers/fpga/dfl-pci.c
-> > > > @@ -356,11 +356,12 @@ int cci_pci_probe(struct pci_dev *pcidev, const
-> > struct pci_device_id *pcidevid)
-> > > >         pci_set_master(pcidev);
-> > > >
-> > > >         ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
-> > > > -       if (ret)
-> > > > -               ret = dma_set_mask_and_coherent(&pcidev->dev,
-> > DMA_BIT_MASK(32));
-> > > >         if (ret) {
-> > > > -               dev_err(&pcidev->dev, "No suitable DMA support available.\n");
-> > > > -               goto disable_error_report_exit;
-> > > > +               ret = dma_set_mask_and_coherent(&pcidev->dev,
-> > DMA_BIT_MASK(32));
-> > > > +               if (ret) {
-> > > > +                       dev_err(&pcidev->dev, "No suitable DMA support
-> > available.\n");
-> > > > +                       goto disable_error_report_exit;
-> > > > +               }
-> >
-> > Looks good to me.
-> >
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> >
-> > > >         }
-> > > >
-> > > >         ret = cci_init_drvdata(pcidev);
-> > > > --
-> > > > 2.25.1
-> > > >
+Since __alloc_and_insert_iova_range fail will set the current alloc
+iova size to max32_alloc_size (iovad->max32_alloc_size = size),
+when the retry is executed into the __alloc_and_insert_iova_range
+function, the retry action will be blocked by the check condition
+(size >= iovad->max32_alloc_size) and goto iova32_full directly,
+causes the action of retry regular alloc iova in
+__alloc_and_insert_iova_range to not actually be executed.
+
+Based on the above, so need reset max32_alloc_size before retry alloc
+iova when alloc iova fail, that is set the initial dma_32bit_pfn value
+of iovad to max32_alloc_size, so that the action of retry alloc iova
+in __alloc_and_insert_iova_range can be executed.
+
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.10.*
+---
+v2: Cc stable@vger.kernel.org
+    1. This patch needs to be merged stable branch, add stable@vger.kernel.org
+       in mail list.
+
+---
+ drivers/iommu/iova.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+index b28c9435b898..0c085ae8293f 100644
+--- a/drivers/iommu/iova.c
++++ b/drivers/iommu/iova.c
+@@ -453,6 +453,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
+ retry:
+ 	new_iova = alloc_iova(iovad, size, limit_pfn, true);
+ 	if (!new_iova) {
++		unsigned long flags;
+ 		unsigned int cpu;
+ 
+ 		if (!flush_rcache)
+@@ -463,6 +464,12 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
+ 		for_each_online_cpu(cpu)
+ 			free_cpu_cached_iovas(cpu, iovad);
+ 		free_global_cached_iovas(iovad);
++
++		/* Reset max32_alloc_size after flushing rcache for retry */
++		spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
++		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
++		spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
++
+ 		goto retry;
+ 	}
+ 
+-- 
+2.18.0
+

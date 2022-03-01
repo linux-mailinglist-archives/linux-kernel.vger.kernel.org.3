@@ -2,558 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A3E4C8DE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A964C8DED
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiCAOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S235319AbiCAOiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiCAOhp (ORCPT
+        with ESMTP id S235329AbiCAOiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:37:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B49A1BE7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:37:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 1 Mar 2022 09:38:08 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CAA1C103
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 06:37:27 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 08BC51F37E;
+        Tue,  1 Mar 2022 14:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646145446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uac5kDRZGDpU/Kxeg+CZWjBJUAHk7M4ZHaBjBg25V7E=;
+        b=yrZyjWBmRggo/kHm8w/I/nGUH/LLLbLfPl5WKSHercrYdb0/pqFzNLK8VPT8L/8DqkmQZK
+        zNdBqYOUT98icfWTOGS5/Sj36Fskp47ncSC7s0ucztT2hOiA9tz2Y9uTdLvupLC/xbKVXO
+        9wjYQWCCMpnti2sPQGKrDaXNGPg+/hc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646145446;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uac5kDRZGDpU/Kxeg+CZWjBJUAHk7M4ZHaBjBg25V7E=;
+        b=II2ng3TfiBBAjclgG3X3te70BDrOWi/+XSLIYbf/Jnp+/wliRLWke8cvAKcBuDbGDwmBqr
+        tFoNhrlt75EP+UBQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EA4FB81A31
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B61C340EE;
-        Tue,  1 Mar 2022 14:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646145421;
-        bh=irkWJT8/ZLr+fxlu6Qj278EE4XweUHQcnlXn48/Y3co=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SNhbpgA9Ngu+KhFXolqQKv4Bt3ffDPR6lodITHB4ulcNeWnBEik3rPPTuvc61swKu
-         ZDFXoDYnaV+KAf0uAfnXGOQDp0hefwS64qMeozEMOsO9Ky0gA+3QN84IYDtlnwhMv3
-         AfMNw3oeg74DbGL3MX0DurL0/inOUZYfJ/hKH1YiZPRIEGVEe0amblS8DQNuNWBip2
-         g/5jGI6il1xIcUwdZCrjG4GHIsrdFJCPI+pPUqpRF02DTkiQrLSKy9F1uw9ZcW8YF+
-         Akrn1SxNbYZ5mN7D6d0gqLKZc5s4FH5SkZSuHXPeIp4+O0SyNp+HYJylyQLf2mYboR
-         lGFF+rq7DyyPA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nP3cY-00BQec-4X; Tue, 01 Mar 2022 14:36:58 +0000
-Date:   Tue, 01 Mar 2022 14:36:57 +0000
-Message-ID: <87czj53fjq.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/6] RISC-V: Treat IPIs as normal Linux IRQs
-In-Reply-To: <20220301042722.401113-4-apatel@ventanamicro.com>
-References: <20220301042722.401113-1-apatel@ventanamicro.com>
-        <20220301042722.401113-4-apatel@ventanamicro.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+        by relay2.suse.de (Postfix) with ESMTPS id 85DB9A3B8B;
+        Tue,  1 Mar 2022 14:37:25 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 15:37:25 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 03/39] x86/module: Fix the paravirt vs alternative
+ order
+In-Reply-To: <20220224151322.190822141@infradead.org>
+Message-ID: <alpine.LSU.2.21.2203011537080.8402@pobox.suse.cz>
+References: <20220224145138.952963315@infradead.org> <20220224151322.190822141@infradead.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Mar 2022 04:27:19 +0000,
-Anup Patel <apatel@ventanamicro.com> wrote:
+On Thu, 24 Feb 2022, Peter Zijlstra wrote:
+
+> Ever since commit 4e6292114c741 ("x86/paravirt: Add new features for
+> paravirt patching") there is an ordering dependency between patching
+> paravirt ops and patching alternatives, the module loader still
+> violates this.
 > 
-> Currently, the RISC-V kernel provides arch specific hooks (i.e.
-> struct riscv_ipi_ops) to register IPI handling methods. The stats
-> gathering of IPIs is also arch specific in the RISC-V kernel.
-> 
-> Other architectures (such as ARM, ARM64, and MIPS) have moved away
-> from custom arch specific IPI handling methods. Currently, these
-> architectures have Linux irqchip drivers providing a range of Linux
-> IRQ numbers to be used as IPIs and IPI triggering is done using
-> generic IPI APIs. This approach allows architectures to treat IPIs
-> as normal Linux IRQs and IPI stats gathering is done by the generic
-> Linux IRQ subsystem.
-> 
-> We extend the RISC-V IPI handling as-per above approach so that arch
-> specific IPI handling methods (struct riscv_ipi_ops) can be removed
-> and the IPI handling is done through the Linux IRQ subsystem.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/Kconfig                |   1 +
->  arch/riscv/include/asm/ipi-mux.h  |  43 ++++++
->  arch/riscv/include/asm/sbi.h      |   2 +
->  arch/riscv/include/asm/smp.h      |  35 +++--
->  arch/riscv/kernel/Makefile        |   1 +
->  arch/riscv/kernel/cpu-hotplug.c   |   3 +-
->  arch/riscv/kernel/ipi-mux.c       | 222 ++++++++++++++++++++++++++++++
->  arch/riscv/kernel/irq.c           |   3 +-
->  arch/riscv/kernel/sbi.c           |  13 +-
->  arch/riscv/kernel/smp.c           | 153 ++++++++++----------
->  arch/riscv/kernel/smpboot.c       |   5 +-
->  drivers/clocksource/timer-clint.c |   8 +-
->  drivers/irqchip/irq-riscv-intc.c  |  55 ++++----
->  13 files changed, 405 insertions(+), 139 deletions(-)
+> Fixes: 4e6292114c741 ("x86/paravirt: Add new features for paravirt patching")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-This patch is huge and touches way too many things to be reviewed as
-such. Please split arch-specific stuff from clocksource and irqchip,
-going through a transition phase.
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-More below.
-
->  create mode 100644 arch/riscv/include/asm/ipi-mux.h
->  create mode 100644 arch/riscv/kernel/ipi-mux.c
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 5adcbd9b5e88..167681d6d3f8 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -54,6 +54,7 @@ config RISCV
->  	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
->  	select GENERIC_IDLE_POLL_SETUP
->  	select GENERIC_IOREMAP if MMU
-> +	select GENERIC_IRQ_IPI
->  	select GENERIC_IRQ_MULTI_HANDLER
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_IRQ_SHOW_LEVEL
-> diff --git a/arch/riscv/include/asm/ipi-mux.h b/arch/riscv/include/asm/ipi-mux.h
-> new file mode 100644
-> index 000000000000..988e2bba372a
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/ipi-mux.h
-> @@ -0,0 +1,43 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022 Ventana Micro Systems Inc.
-> + */
-> +
-> +#ifndef _ASM_RISCV_IPI_MUX_H
-> +#define _ASM_RISCV_IPI_MUX_H
-> +
-> +struct cpumask;
-> +
-> +#ifdef CONFIG_SMP
-> +
-> +/* Handle muxed IPIs */
-> +void riscv_ipi_mux_handle_irq(void);
-> +
-> +/* Create irq_domain for muxed IPIs */
-> +struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
-> +			void (*clear_ipi)(void),
-> +			void (*send_ipi)(const struct cpumask *mask));
-> +
-> +/* Destroy irq_domain for muxed IPIs */
-> +void riscv_ipi_mux_destroy(struct irq_domain *d);
-> +
-> +#else
-> +
-> +static inline void riscv_ipi_mux_handle_irq(void)
-> +{
-> +}
-> +
-> +static inline struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
-> +			void (*clear_ipi)(void),
-> +			void (*send_ipi)(const struct cpumask *mask))
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline void riscv_ipi_mux_destroy(struct irq_domain *d)
-> +{
-> +}
-> +
-> +#endif
-> +
-> +#endif /* _ASM_RISCV_IPI_MUX_H */
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index 06133b4f8e20..edd2c3135b4a 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -133,6 +133,7 @@ struct sbiret {
->  };
->  
->  void sbi_init(void);
-> +void sbi_ipi_init(void);
->  struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
->  			unsigned long arg1, unsigned long arg2,
->  			unsigned long arg3, unsigned long arg4,
-> @@ -202,6 +203,7 @@ static inline unsigned long sbi_mk_version(unsigned long major,
->  int sbi_err_map_linux_errno(int err);
->  #else /* CONFIG_RISCV_SBI */
->  static inline int sbi_remote_fence_i(const struct cpumask *cpu_mask) { return -1; }
-> +static inline void sbi_ipi_init(void) { }
->  static inline void sbi_init(void) {}
->  #endif /* CONFIG_RISCV_SBI */
->  #endif /* _ASM_RISCV_SBI_H */
-> diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-> index 23170c933d73..178fe4ada592 100644
-> --- a/arch/riscv/include/asm/smp.h
-> +++ b/arch/riscv/include/asm/smp.h
-> @@ -15,11 +15,6 @@
->  struct seq_file;
->  extern unsigned long boot_cpu_hartid;
->  
-> -struct riscv_ipi_ops {
-> -	void (*ipi_inject)(const struct cpumask *target);
-> -	void (*ipi_clear)(void);
-> -};
-> -
->  #ifdef CONFIG_SMP
->  /*
->   * Mapping between linux logical cpu index and hartid.
-> @@ -33,9 +28,6 @@ void show_ipi_stats(struct seq_file *p, int prec);
->  /* SMP initialization hook for setup_arch */
->  void __init setup_smp(void);
->  
-> -/* Called from C code, this handles an IPI. */
-> -void handle_IPI(struct pt_regs *regs);
-> -
->  /* Hook for the generic smp_call_function_many() routine. */
->  void arch_send_call_function_ipi_mask(struct cpumask *mask);
->  
-> @@ -44,11 +36,17 @@ void arch_send_call_function_single_ipi(int cpu);
->  
->  int riscv_hartid_to_cpuid(int hartid);
->  
-> -/* Set custom IPI operations */
-> -void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
-> +/* Enable IPI for CPU hotplug */
-> +void riscv_ipi_enable(void);
-> +
-> +/* Disable IPI for CPU hotplug */
-> +void riscv_ipi_disable(void);
->  
-> -/* Clear IPI for current CPU */
-> -void riscv_clear_ipi(void);
-> +/* Check if IPI interrupt numbers are available */
-> +bool riscv_ipi_have_virq_range(void);
-> +
-> +/* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
-> +void riscv_ipi_set_virq_range(int virq, int nr_irqs);
->  
->  /* Secondary hart entry */
->  asmlinkage void smp_callin(void);
-> @@ -82,11 +80,20 @@ static inline unsigned long cpuid_to_hartid_map(int cpu)
->  	return boot_cpu_hartid;
->  }
->  
-> -static inline void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
-> +static inline void riscv_ipi_enable(void)
->  {
->  }
->  
-> -static inline void riscv_clear_ipi(void)
-> +static inline void riscv_ipi_disable(void)
-> +{
-> +}
-> +
-> +static inline bool riscv_ipi_have_virq_range(void)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline void riscv_ipi_set_virq_range(int virq, int nr)
->  {
->  }
->  
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index ffc87e76b1dd..5047723e5527 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -42,6 +42,7 @@ obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
->  obj-$(CONFIG_FPU)		+= fpu.o
->  obj-$(CONFIG_SMP)		+= smpboot.o
->  obj-$(CONFIG_SMP)		+= smp.o
-> +obj-$(CONFIG_SMP)		+= ipi-mux.o
->  obj-$(CONFIG_SMP)		+= cpu_ops.o
->  
->  obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
-> diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-> index f7a832e3a1d1..39235cf50652 100644
-> --- a/arch/riscv/kernel/cpu-hotplug.c
-> +++ b/arch/riscv/kernel/cpu-hotplug.c
-> @@ -13,7 +13,7 @@
->  #include <asm/irq.h>
->  #include <asm/cpu_ops.h>
->  #include <asm/numa.h>
-> -#include <asm/sbi.h>
-> +#include <asm/smp.h>
->  
->  bool cpu_has_hotplug(unsigned int cpu)
->  {
-> @@ -43,6 +43,7 @@ int __cpu_disable(void)
->  	remove_cpu_topology(cpu);
->  	numa_remove_cpu(cpu);
->  	set_cpu_online(cpu, false);
-> +	riscv_ipi_disable();
->  	irq_migrate_all_off_this_cpu();
->  
->  	return ret;
-> diff --git a/arch/riscv/kernel/ipi-mux.c b/arch/riscv/kernel/ipi-mux.c
-> new file mode 100644
-> index 000000000000..3a0405f0e0de
-> --- /dev/null
-> +++ b/arch/riscv/kernel/ipi-mux.c
-> @@ -0,0 +1,222 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Multiplex several IPIs over a single HW IPI.
-> + *
-> + * Copyright (c) 2022 Ventana Micro Systems Inc.
-> + */
-> +
-> +#define pr_fmt(fmt) "riscv-ipi-mux: " fmt
-> +#include <linux/cpu.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/init.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqchip.h>
-> +#include <linux/irqchip/chained_irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/smp.h>
-> +#include <asm/ipi-mux.h>
-> +
-> +struct ipi_mux {
-> +	struct irq_domain *domain;
-> +	int parent_virq;
-> +	void (*clear_ipi)(void);
-> +	void (*send_ipi)(const struct cpumask *mask);
-> +};
-
-Why do you need this in the arch code? It really looks like something
-that is irqchip specific (single IPI signal on which actual IPIs are
-overlayed). It is also something that other irqchips are already
-implementing, so there is potential for consolidation.
-
-> +
-> +static struct ipi_mux ipi_mux_priv;
-> +static DEFINE_PER_CPU(unsigned long, ipi_mux_bits);
-> +
-> +static void ipi_mux_dummy(struct irq_data *d)
-> +{
-> +}
-> +
-> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
-> +{
-> +	int cpu;
-> +
-> +	/* Barrier before doing atomic bit update to IPI bits */
-> +	smp_mb__before_atomic();
-> +
-> +	for_each_cpu(cpu, mask)
-> +		set_bit(d->hwirq, per_cpu_ptr(&ipi_mux_bits, cpu));
-> +
-> +	/* Barrier after doing atomic bit update to IPI bits */
-> +	smp_mb__after_atomic();
-> +
-> +	if (ipi_mux_priv.send_ipi)
-> +		ipi_mux_priv.send_ipi(mask);
-> +}
-> +
-> +static struct irq_chip ipi_mux_chip = {
-> +	.name		= "RISC-V IPI Mux",
-> +	.irq_mask	= ipi_mux_dummy,
-> +	.irq_unmask	= ipi_mux_dummy,
-> +	.ipi_send_mask	= ipi_mux_send_mask,
-> +};
-> +
-> +static int ipi_mux_domain_map(struct irq_domain *d, unsigned int irq,
-> +			      irq_hw_number_t hwirq)
-> +{
-> +	irq_set_percpu_devid(irq);
-> +	irq_domain_set_info(d, irq, hwirq, &ipi_mux_chip, d->host_data,
-> +			    handle_percpu_devid_irq, NULL, NULL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
-> +				unsigned int nr_irqs, void *arg)
-> +{
-> +	int i, ret;
-> +	irq_hw_number_t hwirq;
-> +	unsigned int type = IRQ_TYPE_NONE;
-> +	struct irq_fwspec *fwspec = arg;
-> +
-> +	ret = irq_domain_translate_onecell(d, fwspec, &hwirq, &type);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < nr_irqs; i++) {
-> +		ret = ipi_mux_domain_map(d, virq + i, hwirq + i);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct irq_domain_ops ipi_mux_domain_ops = {
-> +	.translate	= irq_domain_translate_onecell,
-> +	.alloc		= ipi_mux_domain_alloc,
-> +	.free		= irq_domain_free_irqs_top,
-> +};
-> +
-> +void riscv_ipi_mux_handle_irq(void)
-> +{
-> +	int err;
-> +	unsigned long irqs, *bits = this_cpu_ptr(&ipi_mux_bits);
-> +	irq_hw_number_t hwirq;
-> +
-> +	while (true) {
-> +		if (ipi_mux_priv.clear_ipi)
-> +			ipi_mux_priv.clear_ipi();
-> +
-> +		/* Order bit clearing and data access. */
-> +		mb();
-> +
-> +		irqs = xchg(bits, 0);
-> +		if (!irqs)
-> +			break;
-> +
-> +		for_each_set_bit(hwirq, &irqs, BITS_PER_LONG) {
-> +			err = generic_handle_domain_irq(ipi_mux_priv.domain,
-> +							hwirq);
-> +			if (unlikely(err))
-> +				pr_warn_ratelimited(
-> +					"can't find mapping for hwirq %lu\n",
-> +					hwirq);
-> +		}
-> +	}
-> +}
-> +
-> +static void ipi_mux_handle_irq(struct irq_desc *desc)
-> +{
-> +	struct irq_chip *chip = irq_desc_get_chip(desc);
-> +
-> +	chained_irq_enter(chip, desc);
-> +	riscv_ipi_mux_handle_irq();
-> +	chained_irq_exit(chip, desc);
-> +}
-> +
-> +static int ipi_mux_dying_cpu(unsigned int cpu)
-> +{
-> +	if (ipi_mux_priv.parent_virq)
-> +		disable_percpu_irq(ipi_mux_priv.parent_virq);
-> +	return 0;
-> +}
-> +
-> +static int ipi_mux_starting_cpu(unsigned int cpu)
-> +{
-> +	if (ipi_mux_priv.parent_virq)
-> +		enable_percpu_irq(ipi_mux_priv.parent_virq,
-> +			irq_get_trigger_type(ipi_mux_priv.parent_virq));
-> +	return 0;
-> +}
-> +
-> +struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
-> +			void (*clear_ipi)(void),
-> +			void (*send_ipi)(const struct cpumask *mask))
-> +{
-
-There really shouldn't be a need for such a registration interface
-anyway (the current idiom is to allocate IPIs in the root irqchip, and
-pass them to the arch code).
-
-Why can't you model it after the existing architectures?
-
-> +	int virq, parent_virq = 0;
-> +	struct irq_domain *domain;
-> +	struct irq_fwspec ipi;
-> +
-> +	if (ipi_mux_priv.domain || riscv_ipi_have_virq_range())
-> +		return NULL;
-> +
-> +	if (use_soft_irq) {
-> +		domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-> +						  DOMAIN_BUS_ANY);
-> +		if (!domain) {
-> +			pr_err("unable to find INTC IRQ domain\n");
-> +			return NULL;
-> +		}
-> +
-> +		parent_virq = irq_create_mapping(domain, RV_IRQ_SOFT);
-> +		if (!parent_virq) {
-> +			pr_err("unable to create INTC IRQ mapping\n");
-> +			return NULL;
-> +		}
-> +	}
-> +
-> +	domain = irq_domain_add_linear(NULL, BITS_PER_LONG,
-> +				       &ipi_mux_domain_ops, NULL);
-> +	if (!domain) {
-> +		pr_err("unable to add IPI Mux domain\n");
-> +		goto fail_dispose_mapping;
-> +	}
-> +
-> +	ipi.fwnode = domain->fwnode;
-> +	ipi.param_count = 1;
-> +	ipi.param[0] = 0;
-> +	virq = __irq_domain_alloc_irqs(domain, -1, BITS_PER_LONG,
-> +				       NUMA_NO_NODE, &ipi, false, NULL);
-> +	if (virq <= 0) {
-> +		pr_err("unable to alloc IRQs from IPI Mux domain\n");
-> +		goto fail_domain_remove;
-> +	}
-> +
-> +	ipi_mux_priv.domain = domain;
-> +	ipi_mux_priv.parent_virq = parent_virq;
-> +	ipi_mux_priv.clear_ipi = clear_ipi;
-> +	ipi_mux_priv.send_ipi = send_ipi;
-> +
-> +	if (parent_virq)
-> +		irq_set_chained_handler(parent_virq, ipi_mux_handle_irq);
-> +
-> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> +			  "irqchip/riscv/ipi-mux:starting",
-> +			  ipi_mux_starting_cpu, ipi_mux_dying_cpu);
-> +
-> +	riscv_ipi_set_virq_range(virq, BITS_PER_LONG);
-> +
-> +	return ipi_mux_priv.domain;
-> +
-> +fail_domain_remove:
-> +	irq_domain_remove(domain);
-> +fail_dispose_mapping:
-> +	if (parent_virq)
-> +		irq_dispose_mapping(parent_virq);
-> +	return NULL;
-> +}
-> +
-> +void riscv_ipi_mux_destroy(struct irq_domain *d)
-> +{
-> +	if (!d || ipi_mux_priv.domain != d)
-> +		return;
-> +
-> +	irq_domain_remove(ipi_mux_priv.domain);
-> +	if (ipi_mux_priv.parent_virq)
-> +		irq_dispose_mapping(ipi_mux_priv.parent_virq);
-> +	memset(&ipi_mux_priv, 0, sizeof(ipi_mux_priv));
-> +}
-
-Err... Under which circumstances do you destroy such an irqdomain?
-Once all the CPUs have been removed from the machine?
-
-I really think you should aim for a simpler abstraction. The arch code
-should deal with the interrupts themselves, and leave the
-*implementation* of the IPI to the driver code, potentially shared
-across irqchips. This would avoid creating more new interfaces that
-are specific to one architecture or another.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+M

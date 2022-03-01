@@ -2,111 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54B14C8929
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE174C892C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiCAKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S234094AbiCAKYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiCAKVy (ORCPT
+        with ESMTP id S231911AbiCAKYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:21:54 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1993D8E1A9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:21:07 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id bn33so21224901ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:21:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=YPpWhxw82S0Ui95Y0GkaQINSCNzHySAZMXX05f1FWL8=;
-        b=J9iEjwlQdQTySZjcaZijI4KLfx1niCZJdYDkC8pgurCsUFpzEcgdofwpj88P+dBYVb
-         /MVzdO/sH8veJlKZDPjeQ8xr85DlOKqnJcJT1+v3Q2JZMnuCU++TbhnXK8C6J4HQvCrj
-         /TOnCHisB1kO/DN0YUfgcAkk9YbgruFO+a/LQTZaGOHySHFcHe0kPtoSPlLYaiaHx8CJ
-         NOSO2MMTpDsGKmD5T9QfkMDA1zRznqRkjsfLn1np5YOg8l1N+BHBblA15jdfNylDmL+H
-         zRPmQBrkHZKxTurMxKh4O9XoiVIfdqXuVWk1KlsXIYZopYOkY0bUDQwdKgjDBqeHdsIc
-         ew5A==
+        Tue, 1 Mar 2022 05:24:47 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540D956222
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:24:06 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A67CA3F1CA
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646130244;
+        bh=Xjhp/CXOOSUteuBUcGQJQGfNTsSZQGbcPmAbNzxC4NQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=MZCxDQ/CnvCAHxh3L87F9sSvqUAHig+8AKQpvR5rwtRGzHVWF9V1k9g6aDiDVOQUK
+         Ytxa3qa4ds1Y6P1dgePbRC15A4ccJE2WSxuV58ydAOZ1uC6BQPl80ZZazi5VGG3DC8
+         n8XP3WXZAB7kNicsji8lFQeF4zZnDdi8Qdj9R9sKsJle8Be7AVn1oxBfP9O4xbmPUT
+         hRwCxWB2R/fVzAjBXVKEJCKWv+fC2jv5EK/ClDhaQEQkHgEl9x9Nur31f0oUPqabwn
+         LI0gYRFwz2whX/o0v8Zh7i6W4ONnmL5dBogD73UgqjQQaWZ1u4HwLKNpgbm+5KL+Xi
+         dha17QMl3FlYQ==
+Received: by mail-ed1-f69.google.com with SMTP id l14-20020a056402344e00b0041593c729adso496509edc.18
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:24:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=YPpWhxw82S0Ui95Y0GkaQINSCNzHySAZMXX05f1FWL8=;
-        b=aMHFefg8brJEtrLPpV63mLmXMaNlKAQPUPQZFOSda0l5fjFH+l/EABeWMHLBVeC5HL
-         U+dtIW7cWqN0ZH/N8+T6SVmcH0ir9sg1EU35Yzj/zlrq/m8qJU1ynI9NWIpAtWiZz1r+
-         jy9AB5Pd0HrM6inUBudHvbWPcEuNStCA9j/duqRMmWo9LocMpdctkc66MhiDQOzVZAo3
-         K4iFWZdy5AtbJsXiGmoSuzC/CC05Oaes91x57ZJ3Qnlxzv+/AUpQOh7j7UqYFK1DvDl9
-         e8ltOLt2sQ24Z2TqV15mPDHFxsQ2uj8pXFsv5OzQTxLBGTWXTR2XyTpndxnv/VK1YaXj
-         qKyQ==
-X-Gm-Message-State: AOAM5303v5YRwVGOfsMhoLnjwWK0TDuqBRHc7rMEhs9iQ18bLtersSFX
-        hMj3lt75mOB8eqogcp5c9v+0O51YLnffmmFUnaA=
-X-Google-Smtp-Source: ABdhPJz8V2EPHjb4JtZMX24yv9Tw2PhmexxrY/vh1WRLZ7MK/RuewD8KTu58d9NzRgzUSxsQuLPQIFKsBTBjUd+tOi8=
-X-Received: by 2002:a2e:b60d:0:b0:246:3889:4755 with SMTP id
- r13-20020a2eb60d000000b0024638894755mr16843201ljn.387.1646130065239; Tue, 01
- Mar 2022 02:21:05 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xjhp/CXOOSUteuBUcGQJQGfNTsSZQGbcPmAbNzxC4NQ=;
+        b=sqMj8aOA2cA2zY+7bQOBN+RwH4fIvEpi3+1h3WAmS9vcg2Z45I4ZqGxjXxcsMafGa1
+         SgwC4P79JMuH6XOk9YpFOQgl91TrPvAnGKTZx7jzZl4IaQrPEaX5siHggkML/FlKdpXP
+         25pgfRy0S6SYtW1BWlGwUd8HkT1k7kFc73ZcI3+J4r59Zy0uUeS0wsri8xwFcyB2g3Ud
+         8lita1NUcvcpUOERtpXzHVunIW/qvHpaGC8MnNHkLJMMNjRxk9h0xkdp3UZh4jwJI5l0
+         0+JwzwoaLEEYCXw3iaBwRF++D7sCvnBawkcvABwQ9KiGIw3CZ2NRKrD8RU96sWar3+/j
+         Pi5w==
+X-Gm-Message-State: AOAM531gS2nvr2LrT820+FazxP9W3QttmXuNc/mSCsB/XUKtk/QsR48S
+        1+NMsU4rQ7yZmnL2AFhkZJTRB+MnypwIMjqfaZ+Gw/+osp3oHpIyKjJQPabojx1jmPF6VuMcDvX
+        6F5Qcg3P7fmocK2G6myR+0EzZmJJy4RkZuF4mdeGR/g==
+X-Received: by 2002:a17:907:a088:b0:6d6:f8f9:b15a with SMTP id hu8-20020a170907a08800b006d6f8f9b15amr824007ejc.203.1646130244354;
+        Tue, 01 Mar 2022 02:24:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxWe/UtN8F4RzBRq5b4m/3WBqmFuFUYvz/vZz9tEnuqk0rT7rK+KwECBeH8+rP48tkDqNED8w==
+X-Received: by 2002:a17:907:a088:b0:6d6:f8f9:b15a with SMTP id hu8-20020a170907a08800b006d6f8f9b15amr823986ejc.203.1646130244136;
+        Tue, 01 Mar 2022 02:24:04 -0800 (PST)
+Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id kw3-20020a170907770300b006b2511ea97dsm5174727ejc.42.2022.03.01.02.24.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 02:24:03 -0800 (PST)
+Message-ID: <c7fea223-b958-deea-70b2-a649e3cc0ec4@canonical.com>
+Date:   Tue, 1 Mar 2022 11:24:02 +0100
 MIME-Version: 1.0
-Sender: jenniferoscar85@gmail.com
-Received: by 2002:ab3:7546:0:0:0:0:0 with HTTP; Tue, 1 Mar 2022 02:21:04 -0800 (PST)
-From:   Aisha Al-Qaddafi <aisha.gdaff21@gmail.com>
-Date:   Tue, 1 Mar 2022 02:21:04 -0800
-X-Google-Sender-Auth: Q4Ql7qsKN6p9JSoa7p2HEU19bUA
-Message-ID: <CADQEMHQJD8LBzf_G3gpNJsQEXM9GLeO7xVVDwf2oQuWg149hoA@mail.gmail.com>
-Subject: Your Urgent Reply Will Be Appreciated
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:22b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aisha.gdaff21[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jenniferoscar85[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.1 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] net/nfc/nci: use memset avoid infoleaks
+Content-Language: en-US
+To:     Lv Ruyi <cgel.zte@gmail.com>
+Cc:     chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        zealci@zte.com.cn
+References: <664af071-badf-5cc9-c065-c702b0c8a13d@canonical.com>
+ <20220301093424.2053471-1-lv.ruyi@zte.com.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220301093424.2053471-1-lv.ruyi@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds.
-Best Regards
+On 01/03/2022 10:34, Lv Ruyi wrote:
+> hello sir
+> 
+> I think this way: On 64-bit systems, struct nci_set_config_param has 
+> an added padding of 7 bytes between struct members id and len. Even 
+> though all struct members are initialized, the 7-byte hole will 
+> contain data from the kernel stack. 
+> 
+
+That's reasonable. This explanation should be mentioned in the commit
+msg. Also just initialize the array to 0, instead of separate memset call.
+
+
+Best regards,
+Krzysztof

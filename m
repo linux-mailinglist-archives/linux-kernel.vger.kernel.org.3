@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A85C4C9161
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF46B4C9165
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiCARWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S236476AbiCARWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiCARWG (ORCPT
+        with ESMTP id S236470AbiCARWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:22:06 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB182AC66
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:21:25 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id m13-20020a17090aab0d00b001bbe267d4d1so2286218pjq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:21:25 -0800 (PST)
+        Tue, 1 Mar 2022 12:22:19 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B185C13F7F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:21:37 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id i11so22910736eda.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:21:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bDu+y+f8JQYU3RGpZYFrasVkU7NMBDyxJALCa/zmka4=;
-        b=fZDK1hgTtMcHNo/1P6qNEVs6yPXFW/deYvEker6YOPN/13zmSjk1YYcJXGviYMEHVE
-         8E5wYMvxqyk9r+yvmbYSX6r1jorlcBKFdppXneLtzmArqDVTPbn4BjCzfdnEoQYkvwpC
-         +1KPBbrEQXutzxvFKYDHODHzf6BNyzYGQyini1yAIT1q5rKocES28Miw5n8nRC4DsrUW
-         95jHg8JdltfmO7jbciMVzAMSOll3yN75VkTePIEZC/jJNJdH+LM5DcXvo1Lu0SyJaJgb
-         LvnaHbrHPb/kASBRMt331ZL1U+jq0zO09UlbhoWsibz9JmgWc/nM7dCtnLg2Pfsa+8HM
-         kCQA==
+        bh=4kKl8QGooJd4blFxXWK5FL64wYyB/9eBiL1aDG5cnC0=;
+        b=NqTQCDYuexrHCqcYN7yvD/vWOHnaDLIia6bWQYHUYOxhWU+2MBAr1DuF9IxxVWG9NL
+         4jk0G1dPP/rlDhCuRgrHzmPRTrAlRVIOMzIAnl2X8fogbZf3su4YMFi6ImkUUtRjCRQN
+         4m/umqkWZpXsYVobFC0jDrwgo09g8qIg5Lm5M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bDu+y+f8JQYU3RGpZYFrasVkU7NMBDyxJALCa/zmka4=;
-        b=sH8Z+PxJ+lqEylbrzZVaSWDntDirPAbef9SU40uk4i3Iq5J0RUdFiIiVBkMcaPUlCX
-         9rIe4a2YTPdlPwuw3X/15wK/tdoTItPi3VJHFPG+nBVqospEMPEL3Vu5321VtB00HcAj
-         Vj0q6zk1UV1PsoifIuVvqTzVAHFjEArm32agb2ZKbNJA7A7xTmF4jxtJeHw1jALljTkv
-         WnA4W6dsAvmewX02vaWoZs5DjFtyXiElfUlIrf+9jGhyiFL3KMEskhPYJ2wlmOzHnTDu
-         GNO20SENuakSfHJD32/KRefqsZNB5WTl3CBEvRs+fJnTkVWHJbPRGbLTwTBXDxkoxybU
-         8wKA==
-X-Gm-Message-State: AOAM532fmSmUPt6W+DPFCcg3h9ZdF7XBQwfvxoeR37rquvUHwmNU+JFb
-        KAXfhoaN//PPPoTJVyB0raWNiexH8HnlaKOnfmD5EA==
-X-Google-Smtp-Source: ABdhPJyt2R86MfvJOKl18sRXeH5vqN/UgE3OOP6++3snjuxTLntHdzYRzxuBoBm6IARu9orWbMDqL72UVWnlthx7f2w=
-X-Received: by 2002:a17:90a:eb0b:b0:1be:ddea:29ef with SMTP id
- j11-20020a17090aeb0b00b001beddea29efmr3604540pjz.126.1646155284124; Tue, 01
- Mar 2022 09:21:24 -0800 (PST)
+        bh=4kKl8QGooJd4blFxXWK5FL64wYyB/9eBiL1aDG5cnC0=;
+        b=8NwF4b7ZN4ynwZ2Oy5oqFD4soZccSsZ7/Kr3Vt10iloMe+bGySr+x9GPYDPLJug56W
+         SXbgzBX9D4PIxciIISzXQOxg/iMK2m0l1y2XY0L8XqijSYSXh0mJWWiNIlDabHbmHKA5
+         +9Crqszd/0JAZCxV0oMaGxx1Cuww98CbwIW5Fs1NBvYB9QFxTRWXav7bHZcCH1k1AQlq
+         Hdmtf4K2GrsCkQl2Ooc1IFxySg6kaEhpBRNWSNxv+iLJhl7TXJ5SLIE1mk7cfk7Y7/A3
+         nO+vuLQwY7YjLShsq3FmwNsAMvWFkFTYk87HbQyiSY9eLICCqhiL30iAFJ4UEEReT8vF
+         AaRw==
+X-Gm-Message-State: AOAM530rjh/CcBsBoEWNcpYeFqRg3OC6M5FcOFqOCsxP2UCQjrCWSPDz
+        oQnXIb3W1ge6Ha4DdCgTKIdlJHnDPiyr/zM5
+X-Google-Smtp-Source: ABdhPJw6+Uhgf3eVVtSkGHZzfCi1szpd+1spQP8AG326M77N2LnNekpivNe/5jHhJhenRedjhO8RGQ==
+X-Received: by 2002:a05:6402:c10:b0:40f:33cd:a39 with SMTP id co16-20020a0564020c1000b0040f33cd0a39mr25437530edb.234.1646155295892;
+        Tue, 01 Mar 2022 09:21:35 -0800 (PST)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id cq9-20020a056402220900b00413c9ab6377sm2087898edb.27.2022.03.01.09.21.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 09:21:34 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id ay10so3782181wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:21:34 -0800 (PST)
+X-Received: by 2002:a5d:64ea:0:b0:1ea:8148:6b97 with SMTP id
+ g10-20020a5d64ea000000b001ea81486b97mr19720919wri.679.1646155293603; Tue, 01
+ Mar 2022 09:21:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220226002412.113819-1-shakeelb@google.com> <Yh3h33W45+YaMo92@dhcp22.suse.cz>
-In-Reply-To: <Yh3h33W45+YaMo92@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 1 Mar 2022 09:21:12 -0800
-Message-ID: <CALvZod7aF9xRc+XvY7GPN7OnDyPitt1H6Q4yrwzAXTFzv1LzWQ@mail.gmail.com>
-Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive codepaths
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>,
-        stable <stable@vger.kernel.org>
+References: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com> <1645509309-16142-3-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <1645509309-16142-3-git-send-email-quic_c_skakit@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 1 Mar 2022 09:21:20 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Xj377iCjfXz-MA31y7+=nMMH8bsP4ZC13ao0BOCfNd4A@mail.gmail.com>
+Message-ID: <CAD=FV=Xj377iCjfXz-MA31y7+=nMMH8bsP4ZC13ao0BOCfNd4A@mail.gmail.com>
+Subject: Re: [PATCH V4 2/4] leds: Add pm8350c support to Qualcomm LPG driver
+To:     Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-leds@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 1:05 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Fri 25-02-22 16:24:12, Shakeel Butt wrote:
-> > Daniel Dao has reported [1] a regression on workloads that may trigger
-> > a lot of refaults (anon and file). The underlying issue is that flushing
-> > rstat is expensive. Although rstat flush are batched with (nr_cpus *
-> > MEMCG_BATCH) stat updates, it seems like there are workloads which
-> > genuinely do stat updates larger than batch value within short amount of
-> > time. Since the rstat flush can happen in the performance critical
-> > codepaths like page faults, such workload can suffer greatly.
-> >
-> > The easiest fix for now is for performance critical codepaths trigger
-> > the rstat flush asynchronously. This patch converts the refault codepath
-> > to use async rstat flush. In addition, this patch has premptively
-> > converted mem_cgroup_wb_stats and shrink_node to also use the async
-> > rstat flush as they may also similar performance regressions.
->
-> Why do we need to trigger flushing in the first place from those paths.
-> Later in the thread you are saying there is a regular flushing done
-> every 2 seconds. What would happen if these paths didn't flush at all?
-> Also please note that WQ context can be overwhelmed by other work so
-> these flushes can happen much much later.
->
-> So in other words why does async work (that can happen at any time
-> without any control) make more sense than no flushing?
-> --
+Hi,
 
-Without flushing the worst that can happen in the refault path is
-false (or missed) activations of the refaulted page. For reclaim code,
-some heuristics (like deactivating active LRU or cache-trim) may act
-on old information.
+On Mon, Feb 21, 2022 at 9:55 PM Satya Priya <quic_c_skakit@quicinc.com> wrote:
+>
+> Add pm8350c compatible and lpg_data to the driver.
+>
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> Changes in V2:
+>  - Added const for lpg_channel_data[] struct.
+>
+> Changes in V3:
+>  - Correct the num_channels and add respective base addresses.
+>
+> Changes in V4:
+>  - Remove .pwm_9bit_mask, add .triled_base and .triled_mask.
+>
+>  drivers/leds/rgb/leds-qcom-lpg.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-However I don't think these are too much concerning as the kernel can
-already missed or do false activations on refault. For the reclaim
-code, the kernel does force deactivation if it has skipped it in the
-initial iterations, so, not much to worry.
+Tested-by: Douglas Anderson <dianders@chromium.org>
 
-Now, coming to your question, yes, we can remove the flushing from
-these performance critical codepaths as the stats at most will be 2
-second old due to periodic flush. Now for the worst case scenario
-where that periodic flush (WQ) is not getting CPU, I think it is
-reasonable to put a sync flush if periodic flush has not happened for,
-let's say, 10 seconds.
+I'm very interested in knowing if there's anything blocking this patch
+(and the one from Bjorn that it depends on) from landing. Thanks! :-)
+
+-Doug

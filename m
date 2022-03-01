@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CDC4C8F8D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B65C4C8F90
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiCAQCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S235673AbiCAQCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235936AbiCAQB6 (ORCPT
+        with ESMTP id S235942AbiCAQCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:01:58 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B5CAA2E9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:01:17 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id b8so14425796pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:01:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FOTnEnGACgB5Bk0D14/AB+9Z+trEttYfi5rz0BAbtxY=;
-        b=I/HkopzXNorheEyhcZ/g76CVw+5ll/sQ/+aXHyYy0GCtNyb39Gco5O+XdpP2j2CTGR
-         UCp1DFd6yS2gs1jCniIkJmuUYLBEArSEXPKdwIks79kh6iuoZQOzE/i/h+cpXLRzsJS+
-         ct42/TAF7A7jxr+lgGt90tdPIAl4isDw0cdKWNs3NmNdzwigV9aU/pZqWak28uEdOecw
-         +NJ9JZljECf7fCgAfyMlRwYCcuHFdVXY9Jg4cXotUH9CXkvq5sSFUgo4tOJb69gcq/ED
-         jbNtO3YqLJ5n/WhpP79q4bJVmlegR/q6saVmeX9KwVrbRd6jXhPjpHnNo7UimSUm3Ha3
-         wpyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FOTnEnGACgB5Bk0D14/AB+9Z+trEttYfi5rz0BAbtxY=;
-        b=C+4k7Ay6uubqXJHXc6npDHJ0UKqttzezlTXj51eKTrEjYez4ENN/zCok5gBiHGqwyb
-         umNWWyTQ6/3tJ7JC42jXtVKj6Qi973rP1Y31z+CHDO4X1GL1IpTUwDRXZEyEluwfq+UI
-         A3p7+10lV60tV33QjRF1yOcixKF4cYGSIZoHcwOAQokPxe6TrKm/1/iipe62W446KQWb
-         ENBzundHu4/LivuDZO8jIhsHfKGtuamscNXDWDmeN4sNk2flko7z/BEAlA8qEUrTCald
-         t51boaHyLzPBcnz/RnicSA+enKOTFQa3pcZfgXZTCKxbTODj7deF6789FZ4nT141eQzn
-         iriw==
-X-Gm-Message-State: AOAM531wYJRuzx9JyMcHgwH2akaFyFH1obacAA/g9K6pEM7FgLVxChzE
-        bLGNUsl3JJqVC3rjuRumPFTZaQ==
-X-Google-Smtp-Source: ABdhPJwu+wbd17ov15qZLV0fRQZUccsU1xthamy45d06vJwkcDblxej43LRcZVyrB+uveMXngfSLQw==
-X-Received: by 2002:a17:902:f68b:b0:14f:c84c:ad6d with SMTP id l11-20020a170902f68b00b0014fc84cad6dmr26210741plg.155.1646150476695;
-        Tue, 01 Mar 2022 08:01:16 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 124-20020a620582000000b004dee0e77128sm16390756pff.166.2022.03.01.08.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 08:01:16 -0800 (PST)
-Date:   Tue, 1 Mar 2022 16:01:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/i8259: Remove a dead store of irq in a
- conditional block
-Message-ID: <Yh5DSMiqDrMPb/YH@google.com>
-References: <20220301120217.38092-1-likexu@tencent.com>
+        Tue, 1 Mar 2022 11:02:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBAA146A;
+        Tue,  1 Mar 2022 08:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=qm5dRt7Gv4aZmweadp/wzo25KjVUcXv8NB7v3UutMTM=; b=1814yqXWXWPNT5Q0nL4NdOCsiQ
+        mxFREAXuA62BlyPV9R6t5SGOIaheXozWprFqVyBlipNT7IC2x9hQvaaDcRdfmbsfHzj5eoHQVx9pV
+        0gk/IYVY/V2XugPGQxACJVu4tTGsvFhVLBAXNOwwNjiEmpdQUAM7SDm6jFpdK+AsAh5CQ4O1AjrAL
+        ReNRmbXUtWj4uFalvaLSbLGhHz1DKjo/F9fvXe2B7g/3nSDa+K/hRvit9AnGXNjwbNzv4r1/2yZL5
+        4RO9oTMigDahqAXRI/KtW7sxuQvsmeLa8DYRvjx0gnhK+6BLmGqiB0RwGeqGmNtFIINTgdSZLOlw6
+        ixTeZD3g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP4wF-00HSkf-KG; Tue, 01 Mar 2022 16:01:23 +0000
+Date:   Tue, 1 Mar 2022 08:01:23 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
+        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH v9 00/14] module: core code clean up
+Message-ID: <Yh5DU6n7oCRTfbtG@bombadil.infradead.org>
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <Yh1nGtM7MCMOI++l@bombadil.infradead.org>
+ <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220301120217.38092-1-likexu@tencent.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On Tue, Mar 01, 2022 at 07:44:26AM +0000, Christophe Leroy wrote:
 > 
-> The [clang-analyzer-deadcode.DeadStores] helper reports
-> that the value stored to 'irq' is never read.
 > 
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> Le 01/03/2022 à 01:21, Luis Chamberlain a écrit :
+> > 
+> > We should run kmod tests as well.
+> > 
+> 
+> I tried to build kmod tests, but I get a crazy result:
+> 
+> 
+> $ ./configure --host=ppc-linux --prefix=/usr/local
+> 
+> $ make
+> 
+> $ cd testsuite
+> 
+> $ make
+> 
+> $ file test-list
+> test-list: ELF 32-bit MSB executable, PowerPC or cisco 4500, version 1 
+> (SYSV), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 
+> 3.2.0, with debug_info, not stripped
+> 
+> $ file module-playground/mod-loop-a.ko
+> module-playground/mod-loop-a.ko: ELF 64-bit LSB relocatable, x86-64, 
+> version 1 (SYSV), 
+> BuildID[sha1]=d46956a4fd36d8d3467806c31831c81217a573f5, with debug_info, 
+> not stripped
+> 
+> 
+> 
+> How do I get it to crossbuild proper PowerPC module ?
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Lucas?
 
-> ---
-> Note: not sure if "irq2 + 8" should be needed for "s->pics[0].irq_base + irq"
-
-Nope, IRQ 2 is used to cascade PIC controllers, and the two controllers have separate
-vector offsets/bases.  The code was there in the original commit, 85f455f7ddbe ("KVM:
-Add support for in-kernel PIC emulation"), best guess is that it was leftover from
-development, e.g. maybe a flawed assumption the the second PIC's vector was simply +8?
+  Luis

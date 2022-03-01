@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE2E4C92BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEFF4C92C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236901AbiCASPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:15:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S235671AbiCASQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236844AbiCASPJ (ORCPT
+        with ESMTP id S232483AbiCASQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:15:09 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82013B55C;
-        Tue,  1 Mar 2022 10:14:17 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id c9so14155008pll.0;
-        Tue, 01 Mar 2022 10:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nnvTC2gtVVCd0mSMj/05A70ERgumEKKzDpQ3v91EDxU=;
-        b=E99TwnvlKE/+7dUSA3mRBfKLigkbHMEyKGiIFON9RFsGy7JE8QN0Mi4OzPWMQfecyn
-         wgPUZaTmRNtfp7gWGB9VJfKM6ID1M3qvNqDTe6bIDy/Sh1D3Blmn2arUKVYDzNoAoXTk
-         Ul/ReWtWMX0C2poeSFVFE0eciaMDps12A7addFitTmNyaCThq1t+Qtt/wkM8GT4nGGFF
-         lm4QVyI2CdQyOydBQ+3HAPruYoiTVxYvuIn2S35NItAg1d43gAg2InX+7V8Br5sqUi6q
-         IPaxpNslz7VlkATBmnHsNk9cDsUNP+Stt1y2ZeKPmxRmjPkfeJ+EvSOvsBsbRCZB3r6F
-         d+JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nnvTC2gtVVCd0mSMj/05A70ERgumEKKzDpQ3v91EDxU=;
-        b=G6i2X8uFLrLYgJXXAFEYDmg7LIIplFtG+6Bb9n+2QZ9Vk00dBX9J3tzsz/G3l/cHuQ
-         RmCAqFcFhSpD8QNoFvg8Hz+m0rnNZuWSpLqHcUROGjjfO8Oajsy8PFmZ6uERoaupfZDm
-         YJK8Iceo7ovTst1xUi+JB282Its4Qwclu2G/icxqtG/ivL2cb4CBmQT981qqViMzvuXd
-         VyeVbz8DNCJaB+ugHbDMTjES9K7x+QRAV3ne26Rhb37ANtwrQoBA6OBYppdlrk4nKWJk
-         pQb6UnUILMXn9d/MIuoaX1SUz69sMaaWoRQY61EMFIz4I+UP+XO4nOj+OZuVV4gH+NUN
-         mD2g==
-X-Gm-Message-State: AOAM530UqiZLX61JlP83fI0EDQocLrjwWES3gQkeMrtDdNA7LxVdvdvZ
-        /7aTLQ8DjMicE5GADDjPZtS/ikGJaB0=
-X-Google-Smtp-Source: ABdhPJzc0UxlELQq13kNnMa9jGVAQVr/GQ7RbeXIWJxryqFAGNMBWJU1MXCH2G6jIUykSJzO1WAL+A==
-X-Received: by 2002:a17:902:b189:b0:14d:6f87:7c25 with SMTP id s9-20020a170902b18900b0014d6f877c25mr27403123plr.31.1646158456915;
-        Tue, 01 Mar 2022 10:14:16 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a20-20020a056a000c9400b004f396b965a9sm18773821pfv.49.2022.03.01.10.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 10:14:16 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM STB AVS TMON
-        DRIVER), "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:BROADCOM STB AVS TMON DRIVER),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE)
-Subject: [PATCH RESEND] thermal: brcmstb_thermal: Interrupt is optional
-Date:   Tue,  1 Mar 2022 10:14:12 -0800
-Message-Id: <20220301181412.2008044-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 13:16:08 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD531211
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646158527; x=1677694527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2exBBjBLdIHC1K+wFc+04tbUBRcDoyFCQXB7El+ibuk=;
+  b=CAySWsKr5miTj17W/lESFZQGvVV3nvlN/VNNvuTQiNuoL99chGqd1Y8I
+   oqO1LykIOc890YsEv0aLxRQdcqJK4Jnawve1B+p6Uq368hF76kZIEBRtM
+   yHX8URRauf07VJiiDE+MRT4It5VhMPp7TLsMfMMTQ2h8t3LBU5cMU03vc
+   Vfsm6Pl1YGKJ7oF6NqHUyxT9yiiQxKxr8yO3ZKQs+Tv1ys79qZWeNPdnt
+   UB0z61XzPZcPhB4hHUFguXlUfwrjNZlFo4ogU2ZIb37Zs+m0zAp4vl2lI
+   WyMJvtGOeKNQho11SL7sMHojhLOwoTjuq5u9sfkLcHRmJrGb5SMZ4dz/R
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="236713345"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="236713345"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 10:15:26 -0800
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="639463469"
+Received: from bklinvil-mobl.amr.corp.intel.com (HELO localhost) ([10.212.48.220])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 10:15:26 -0800
+Date:   Tue, 1 Mar 2022 10:15:25 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 37/44] memremap_pages: Set PKS PKey in PTEs if
+ PGMAP_PROTECTIONS is requested
+Message-ID: <Yh5ivUp1dIFlih6L@iweiny-desk3>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-38-ira.weiny@intel.com>
+ <CAPcyv4go5pqWdvR7w7kDjOKQywTUwZ=Tbn-LSmOyE-4GdhZsmg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4go5pqWdvR7w7kDjOKQywTUwZ=Tbn-LSmOyE-4GdhZsmg@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Utilize platform_get_irq_optional() to silence these messages:
+On Fri, Feb 04, 2022 at 09:41:59AM -0800, Dan Williams wrote:
+> On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+> >
+> > From: Ira Weiny <ira.weiny@intel.com>
+> >
+> > When the user requests protections the dev_pagemap mappings need to have
+> > a PKEY set.
+> >
+> > Define devmap_protection_adjust_pgprot() to add the PKey to the page
+> > protections.  Call it when PGMAP_PROTECTIONS is requested when remapping
+> > pages.
+> >
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > ---
+> 
+> Does this patch have a reason to exist independent of the patch that
+> introduced devmap_protection_enable()?
+> 
+> Otherwise looks ok.
 
-brcmstb_thermal a581500.thermal: IRQ index 0 not found
+Just easier to review this specific change.  For V8 I split the patches up
+quite a bit to be much more direct to 1 change/patch.  I think it worked out
+well and I don't plan to merge much in V9 because as you say this change looks
+good.  :-D
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/thermal/broadcom/brcmstb_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
-index 8df5edef1ded..0cedb8b4f00a 100644
---- a/drivers/thermal/broadcom/brcmstb_thermal.c
-+++ b/drivers/thermal/broadcom/brcmstb_thermal.c
-@@ -351,7 +351,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
- 
- 	priv->thermal = thermal;
- 
--	irq = platform_get_irq(pdev, 0);
-+	irq = platform_get_irq_optional(pdev, 0);
- 	if (irq >= 0) {
- 		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
- 						brcmstb_tmon_irq_thread,
--- 
-2.25.1
-
+Ira

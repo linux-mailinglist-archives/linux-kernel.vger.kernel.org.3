@@ -2,254 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350924C88C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352094C88DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiCAKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S234151AbiCAKEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbiCAKDn (ORCPT
+        with ESMTP id S233082AbiCAKEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:03:43 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631A65DE63;
-        Tue,  1 Mar 2022 02:02:59 -0800 (PST)
-X-UUID: 8d456c0aed9b4526b3bf7b44a7a9c18e-20220301
-X-UUID: 8d456c0aed9b4526b3bf7b44a7a9c18e-20220301
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1500445926; Tue, 01 Mar 2022 18:02:51 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 1 Mar 2022 18:02:50 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Mar
- 2022 18:02:49 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Mar 2022 18:02:49 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v12 4/4] soc: mediatek: mutex: add functions that operate registers by CMDQ
-Date:   Tue, 1 Mar 2022 18:02:46 +0800
-Message-ID: <20220301100246.2153-5-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220301100246.2153-1-moudy.ho@mediatek.com>
-References: <20220301100246.2153-1-moudy.ho@mediatek.com>
+        Tue, 1 Mar 2022 05:04:32 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D28C8BF1E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:03:49 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bu29so26077223lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=1yqD4KQaM9b/j4qTrGplWK9SeozZApe70PduPs9Vk3k=;
+        b=ok+9qxMt9502Oui1Sb99TSBc1nMun/S4I+2zm9uMBsy9S2ZWqO/7/Wdh7OkhImeF8B
+         TF/J4GXLY3GeZKzuF/0jIH4/jxCxVZxOfqfCdfARMS462dxwd5UVXMkRJVr62Z2gxcgB
+         iopiSpgnOk6Nk7MXlQBCPGh1XpBAhDHzWvZzZif9A9V0oh1PS6qhhAh8X2w2tA9nrwR0
+         Ua1iyFST+99T1dDsWxCgqJeaeIt4wpUNMJTd+Gl2Z0iF2aJ6E7UdHkub7bDRpT86Cu5c
+         ZQkWSItIfktnccjGPegT9KTh3D/8Qin3tqiCI0SDIRZ3qvAQ3vZ8dEm7cyDqofHrjuFk
+         Hzbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=1yqD4KQaM9b/j4qTrGplWK9SeozZApe70PduPs9Vk3k=;
+        b=M/KKeIM1o7a8+CuD7uS+AufxPMnilf/ED5GaR54NMItdO/eNhZY0Sb6kxi7rfK1rGE
+         3tLltLN0YCuRt1ptGNcSohPoopQwwoiuzSudsiDUGnw1EvRM6aA5pi+p+B7yxFC5WPOg
+         Oyu6MKITk61wbutQ6UT8IfbwYW2p7GyHmZQFqf0Yrh1NdlsZuCrb9v73DwLL3aO3tY9Z
+         m6uDiI+qj1hvfdS2SkmKW62iNAGUYF8jv2S0tY0eZxw2wf4HaJE/VMLZ4eIMNgcmCIyP
+         OBV77dYOwu04L/5uvQxI8BXXM5iBDS5Qd686O3lXcUhf74jGh0ALryGxhe7o2KTl3J3A
+         funQ==
+X-Gm-Message-State: AOAM531pd5JpPZ+y42dYIzIKQWZ3K6jzN6M6laz4y/7Yn+u0V3Qm4dXX
+        yq1WXJs0BwUze1Iv6aFGWg8qYQ==
+X-Google-Smtp-Source: ABdhPJyZkqkffd6OzcKZDgXSOmBna7OCxMtSnaz/N5ibfBd4pawWA0csNQynqxC9BUFtF+f3ZljV7A==
+X-Received: by 2002:a05:6512:3caa:b0:443:7e66:b98a with SMTP id h42-20020a0565123caa00b004437e66b98amr15570936lfv.169.1646129027199;
+        Tue, 01 Mar 2022 02:03:47 -0800 (PST)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id s27-20020a05651c049b00b002460fd4252asm1826822ljc.100.2022.03.01.02.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 02:03:46 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: [PATCH v2 net-next 00/10] net: bridge: Multiple Spanning Trees
+Date:   Tue,  1 Mar 2022 11:03:11 +0100
+Message-Id: <20220301100321.951175-1-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: Westermo
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Considering that some functions have timing requirements
-in specific situation, this patch adds several interface that
-operate registers by CMDQ.
+The bridge has had per-VLAN STP support for a while now, since:
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-mutex.c       | 72 +++++++++++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h |  6 +++
- 2 files changed, 76 insertions(+), 2 deletions(-)
+https://lore.kernel.org/netdev/20200124114022.10883-1-nikolay@cumulusnetworks.com/
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index a6268ecde240..a45864183cd1 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,10 +7,14 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
-+#define MTK_MUTEX_ENABLE			BIT(0)
- 
- #define MT2701_MUTEX0_MOD0			0x2c
- #define MT2701_MUTEX0_SOF0			0x30
-@@ -173,6 +177,7 @@ struct mtk_mutex_data {
- 	const unsigned int mutex_mdp_mod_mask;
- 	const unsigned int mutex_mdp_sof_mask;
- 	const bool no_clk;
-+	const bool has_gce_client_reg;
- };
- 
- struct mtk_mutex_ctx {
-@@ -181,6 +186,8 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	struct cmdq_client_reg		cmdq_reg;
- };
- 
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -374,6 +381,7 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
- 	.mutex_mdp_mod_mask = MT8183_MUTEX_MDP_MOD_MASK,
- 	.mutex_mdp_sof_mask = MT8183_MUTEX_MDP_SOF_MASK,
- 	.no_clk = true,
-+	.has_gce_client_reg = true,
- };
- 
- static const struct mtk_mutex_data mt8186_mutex_driver_data = {
-@@ -553,6 +561,25 @@ u32 mtk_mutex_get_mdp_mod(struct mtk_mutex *mutex, enum mtk_mdp_comp_id id)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_get_mdp_mod);
- 
-+void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-+			       struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int offset;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys, mtx->addr + offset,
-+			    mod, mtx->data->mutex_mdp_mod_mask);
-+
-+	offset = DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys, mtx->addr + offset,
-+			    0, mtx->data->mutex_mdp_sof_mask);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_add_mod_by_cmdq);
-+
- void mtk_mutex_enable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -564,6 +591,20 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
- 
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    MTK_MUTEX_ENABLE, MTK_MUTEX_ENABLE);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -575,6 +616,20 @@ void mtk_mutex_disable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_disable);
- 
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    0x0, MTK_MUTEX_ENABLE);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_disable_by_cmdq);
-+
- void mtk_mutex_acquire(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -602,8 +657,8 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
--	int i;
-+	struct resource *regs, addr;
-+	int i, ret;
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
- 	if (!mtx)
-@@ -623,6 +678,19 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-+		mtx->addr = 0L;
-+	else
-+		mtx->addr = addr.start;
-+
-+	if (mtx->data->has_gce_client_reg) {
-+		ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
-+		if (ret) {
-+			dev_err(dev, "No mediatek,gce-client-reg!\n");
-+			return ret;
-+		}
-+	}
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index b2608f4220ee..05de7ad4a124 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -17,8 +17,14 @@ int mtk_mutex_prepare(struct mtk_mutex *mutex);
- void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 			enum mtk_ddp_comp_id id);
- u32 mtk_mutex_get_mdp_mod(struct mtk_mutex *mutex, enum mtk_mdp_comp_id id);
-+void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-+			       struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
- void mtk_mutex_unprepare(struct mtk_mutex *mutex);
+The current implementation has some problems:
+
+- The mapping from VLAN to STP state is fixed as 1:1, i.e. each VLAN
+  is managed independently. This is awkward from an MSTP (802.1Q-2018,
+  Clause 13.5) point of view, where the model is that multiple VLANs
+  are grouped into MST instances.
+
+  Because of the way that the standard is written, presumably, this is
+  also reflected in hardware implementations. It is not uncommon for a
+  switch to support the full 4k range of VIDs, but that the pool of
+  MST instances is much smaller. Some examples:
+
+  Marvell LinkStreet (mv88e6xxx): 4k VLANs, but only 64 MSTIs
+  Marvell Prestera: 4k VLANs, but only 128 MSTIs
+  Microchip SparX-5i: 4k VLANs, but only 128 MSTIs
+
+- By default, the feature is enabled, and there is no way to disable
+  it. This makes it hard to add offloading in a backwards compatible
+  way, since any underlying switchdevs have no way to refuse the
+  function if the hardware does not support it
+
+- The port-global STP state has precedence over per-VLAN states. In
+  MSTP, as far as I understand it, all VLANs will use the common
+  spanning tree (CST) by default - through traffic engineering you can
+  then optimize your network to group subsets of VLANs to use
+  different trees (MSTI). To my understanding, the way this is
+  typically managed in silicon is roughly:
+
+  Incoming packet:
+  .----.----.--------------.----.-------------
+  | DA | SA | 802.1Q VID=X | ET | Payload ...
+  '----'----'--------------'----'-------------
+                        |
+                        '->|\     .----------------------------.
+                           | +--> | VID | Members | ... | MSTI |
+                   PVID -->|/     |-----|---------|-----|------|
+                                  |   1 | 0001001 | ... |    0 |
+                                  |   2 | 0001010 | ... |   10 |
+                                  |   3 | 0001100 | ... |   10 |
+                                  '----------------------------'
+                                                             |
+                               .-----------------------------'
+                               |  .------------------------.
+                               '->| MSTI | Fwding | Lrning |
+                                  |------|--------|--------|
+                                  |    0 | 111110 | 111110 |
+                                  |   10 | 110111 | 110111 |
+                                  '------------------------'
+
+  What this is trying to show is that the STP state (whether MSTP is
+  used, or ye olde STP) is always accessed via the VLAN table. If STP
+  is running, all MSTI pointers in that table will reference the same
+  index in the STP stable - if MSTP is running, some VLANs may point
+  to other trees (like in this example).
+
+  The fact that in the Linux bridge, the global state (think: index 0
+  in most hardware implementations) is supposed to override the
+  per-VLAN state, is very awkward to offload. In effect, this means
+  that when the global state changes to blocking, drivers will have to
+  iterate over all MSTIs in use, and alter them all to match. This
+  also means that you have to cache whether the hardware state is
+  currently tracking the global state or the per-VLAN state. In the
+  first case, you also have to cache the per-VLAN state so that you
+  can restore it if the global state transitions back to forwarding.
+
+This series adds a new mst_enable bridge setting (as suggested by Nik)
+that can only be changed when no VLANs are configured on the
+bridge. Enabling this mode has the following effect:
+
+- The port-global STP state is used to represent the CST (Common
+  Spanning Tree) (1/10)
+
+- Ingress STP filtering is deferred until the frame's VLAN has been
+  resolved (1/10)
+
+- The preexisting per-VLAN states can no longer be controlled directly
+  (1/10). They are instead placed under the MST module's control,
+  which is managed using a new netlink interface (described in 3/10)
+
+- VLANs can br mapped to MSTIs in an arbitrary M:N fashion, using a
+  new global VLAN option (2/10)
+
+4-5/10 adds switchdev notifications so that a driver can track VID to
+MSTI mappings and MST port states.
+
+An offloading implementation is this provided for mv88e6xxx.
+
+A proposal for the corresponding iproute2 interface is available here:
+
+https://github.com/wkz/iproute2/tree/mst
+
+Tobias Waldekranz (10):
+  net: bridge: mst: Multiple Spanning Tree (MST) mode
+  net: bridge: mst: Allow changing a VLAN's MSTI
+  net: bridge: mst: Support setting and reporting MST port states
+  net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations
+  net: bridge: mst: Notify switchdev drivers of MST state changes
+  net: dsa: Pass VLAN MSTI migration notifications to driver
+  net: dsa: Pass MST state changes to driver
+  net: dsa: mv88e6xxx: Disentangle STU from VTU
+  net: dsa: mv88e6xxx: Export STU as devlink region
+  net: dsa: mv88e6xxx: MST Offloading
+
+ drivers/net/dsa/mv88e6xxx/chip.c        | 232 ++++++++++++++
+ drivers/net/dsa/mv88e6xxx/chip.h        |  38 +++
+ drivers/net/dsa/mv88e6xxx/devlink.c     |  94 ++++++
+ drivers/net/dsa/mv88e6xxx/global1.h     |  10 +
+ drivers/net/dsa/mv88e6xxx/global1_vtu.c | 311 ++++++++++--------
+ include/net/dsa.h                       |   5 +
+ include/net/switchdev.h                 |  17 +
+ include/uapi/linux/if_bridge.h          |  17 +
+ include/uapi/linux/if_link.h            |   1 +
+ include/uapi/linux/rtnetlink.h          |   5 +
+ net/bridge/Makefile                     |   2 +-
+ net/bridge/br_input.c                   |  17 +-
+ net/bridge/br_mst.c                     | 402 ++++++++++++++++++++++++
+ net/bridge/br_netlink.c                 |  17 +-
+ net/bridge/br_private.h                 |  31 ++
+ net/bridge/br_stp.c                     |   3 +
+ net/bridge/br_switchdev.c               |  57 ++++
+ net/bridge/br_vlan.c                    |  20 +-
+ net/bridge/br_vlan_options.c            |  24 +-
+ net/dsa/dsa_priv.h                      |   3 +
+ net/dsa/port.c                          |  40 +++
+ net/dsa/slave.c                         |  12 +
+ 22 files changed, 1216 insertions(+), 142 deletions(-)
+ create mode 100644 net/bridge/br_mst.c
+
 -- 
-2.18.0
+2.25.1
 

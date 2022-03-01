@@ -2,107 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144654C9870
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EDB4C9876
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbiCAWjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S238474AbiCAWpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233241AbiCAWjn (ORCPT
+        with ESMTP id S232201AbiCAWpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:39:43 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46AA3DDD3
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:39:01 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id j12so30192784ybh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 14:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3yt7b8oHQQpYaUvb/xOL7JlfwQ71+X5i0XbUTbCl8pc=;
-        b=MOiMICj8Wo+edtTXbRvEJBGehmbkn84kMCiG2WRa/hekMCxrbf1OqvNVg9dcoaTrII
-         OseVEzr4ahjRA3JZL02HlfN10JrfJP9reNBqtYfYHkrFY1gh2iDAeihUMlNfKprRsPsf
-         +iUK4ERA1lLMS7GBmWCh0zY7wAFnDrBG6lc0x1WmWhvDnRelkLQDOHsCY0pjrPePgHcp
-         WdtuvcyRzTta6RlfnDXQs+IEFoereErXffJ9g3XORW8HajxXG82U0XSELTnNzF9InJAG
-         VncslWcDbJ/rcFFffO8AzhQSGhVaLLahd1o+BrEGfonrXW1U4aZOso7oo9qGI+KsCwIZ
-         2/Rw==
+        Tue, 1 Mar 2022 17:45:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E823A77AB2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646174677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mGMUuYb5facBAKE4BWWQblYiu2u5yGmxdG+wUrk0CNE=;
+        b=FjugHSiEu2II5ASuzqYYDZmH9dCqLikwyfInSKZsc3mxiHlyFc2Dd9yY+4lUiFJmj1ab+c
+        KDtBYVGytliI36LOyiBVZ9c0gvC1mixO8dPw7GKTwsDqTYbLU1IVMJJf7/2ytb1Lalk94P
+        P/Qjlh6xPrVTbhQx7wrFj6cqSGNcv78=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-QAJITvLEPYOmxmJudhhHzw-1; Tue, 01 Mar 2022 17:44:34 -0500
+X-MC-Unique: QAJITvLEPYOmxmJudhhHzw-1
+Received: by mail-oo1-f70.google.com with SMTP id r18-20020a056820039200b0031d6f9170eeso5023165ooj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 14:44:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3yt7b8oHQQpYaUvb/xOL7JlfwQ71+X5i0XbUTbCl8pc=;
-        b=Uugx2WDqRvqxPRaYJDVw/LFLX76l8fjn/ZHgTLbpAx7tRZPNSzMam/lf3nh+hLon4x
-         L+HxV/gF387F5xmWKRh+HLttCHEJ/JSfeJ236aaIpcdOHNJHVQ4yUr81OfskWfvirqdg
-         ny+X0sMgV7LuZwQZEBSgR6S5DxA9RVvehlyoi8LvEJPzigXmANBLhYTP5A22K8clxl3J
-         4W6JHwS2VWCdyxHNCNY+Gfc/25jkUmHN51fO4sDyECZOAH7JrJZ0JicOb+z9oDVyBMDp
-         +BonRwyRi+464UwLthsXAfyE/urKCGks6gTFXIlTEqSiMxrbYeSv5OKM1NlnmmAE/qio
-         E0IQ==
-X-Gm-Message-State: AOAM533QLWWRYjEODyn0RnPT9sht+fsN9sosJcRoiIjcpz92dgAyHN+D
-        SFkcrQqtfRdaQmKoYuIygJB2AOGs0CTe5whB6ZTFmg==
-X-Google-Smtp-Source: ABdhPJwApfTtLcuZXzoEx2VW3+6EHQyuHdjbYtN8ybo8wgps1P6qvVNiTqzaLiiC34CsJcy7qQ4Kr63U4gxKZM4FfJ4=
-X-Received: by 2002:a25:32d4:0:b0:628:9974:3baf with SMTP id
- y203-20020a2532d4000000b0062899743bafmr1349119yby.497.1646174340805; Tue, 01
- Mar 2022 14:39:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=mGMUuYb5facBAKE4BWWQblYiu2u5yGmxdG+wUrk0CNE=;
+        b=jl+c68hgdtDM5b6g9kRpRSY2dYpRKaCJNmHgAcJZ51y7sxBbfJopOzEQMAkF73WMt4
+         87/n5eiscxpPReoM8jLLsZxozlEywHL/8licFZ0GNJtuRq8vZVazEichlpgpxDB7eTON
+         q5Xq10B2U46EWQ9rUc5O9FX5Sa8r25baDMws8Y2hgAal5bRvFl2de7flZqkZTG+nHbso
+         HnXp/XSBRAuncVRczZKesnT7dAqjzp5GIaM7ZHjeRAcO78cYTuFcKjitrGCIpmhu7o1h
+         yqLl+YyUJAptUff22R03/sk6aLduwKhMwQlcG0UUW7HCiNvkzh6T6DegYBUj1v9OKor5
+         foqg==
+X-Gm-Message-State: AOAM5308yhWn3rcTl0RCZAeF50Jvhma9FrWHQUIjXLEn5C55tACL4gaS
+        jmfNnZvudu7GLGkKiRag5QErQ1cgcHkz5cQyXliwtGSEL7NWv3byTCtvw7r+Y7YbrqQBUyKW7eU
+        V765LBPabs2SfyZEEOvvtc1Fr
+X-Received: by 2002:a05:6870:65a0:b0:d7:547:3c0b with SMTP id fp32-20020a05687065a000b000d705473c0bmr10477952oab.79.1646174673347;
+        Tue, 01 Mar 2022 14:44:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw0+uzXIFvxXkkhsLvg5Psp36LJMpZFA1kLIP23iFYOblelNGSikei+BKT4/FUoBnmsURZE9Q==
+X-Received: by 2002:a05:6870:65a0:b0:d7:547:3c0b with SMTP id fp32-20020a05687065a000b000d705473c0bmr10477943oab.79.1646174673084;
+        Tue, 01 Mar 2022 14:44:33 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id f10-20020a9d5e8a000000b0059fa2fa9b4bsm6918556otl.13.2022.03.01.14.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 14:44:32 -0800 (PST)
+Date:   Tue, 1 Mar 2022 15:44:31 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220301154431.42b27278.alex.williamson@redhat.com>
+In-Reply-To: <20220301203938.GY219866@nvidia.com>
+References: <20220228145731.GH219866@nvidia.com>
+        <58fa5572e8e44c91a77bd293b2ec6e33@huawei.com>
+        <20220228180520.GO219866@nvidia.com>
+        <20220228131614.27ad37dc.alex.williamson@redhat.com>
+        <20220228202919.GP219866@nvidia.com>
+        <20220228142034.024e7be6.alex.williamson@redhat.com>
+        <20220228234709.GV219866@nvidia.com>
+        <20220228214110.4deb551f.alex.williamson@redhat.com>
+        <20220301131528.GW219866@nvidia.com>
+        <20220301123047.1171c730.alex.williamson@redhat.com>
+        <20220301203938.GY219866@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <1646105865-22040-1-git-send-email-baihaowen88@gmail.com>
-In-Reply-To: <1646105865-22040-1-git-send-email-baihaowen88@gmail.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 1 Mar 2022 14:38:49 -0800
-Message-ID: <CABk29NufkSnuN_q+JHFNB=v_cO+VO+QSRLT4UL6=Awrkz8y=8w@mail.gmail.com>
-Subject: Re: [PATCH] sched/core: remove unneeded semicolon
-To:     Haowen Bai <baihaowen88@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 7:37 PM Haowen Bai <baihaowen88@gmail.com> wrote:
->
-> Eliminate the following coccicheck warning:
-> kernel/sched/core_sched.c:210:2-3: Unneeded semicolon
->
-> Signed-off-by: Haowen Bai <baihaowen88@gmail.com>
+On Tue, 1 Mar 2022 16:39:38 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Thanks,
+> On Tue, Mar 01, 2022 at 12:30:47PM -0700, Alex Williamson wrote:
+> > Wouldn't it make more sense if initial-bytes started at QM_MATCH_SIZE
+> > and dirty-bytes was always sizeof(vf_data) - QM_MATCH_SIZE?  ie. QEMU
+> > would know that it has sizeof(vf_data) - QM_MATCH_SIZE remaining even
+> > while it's getting ENOMSG after reading QM_MATCH_SIZE bytes of data.  
+> 
+> The purpose of this ioctl is to help userspace guess when moving on to
+> STOP_COPY is a good idea ie when the device has done almost all the
+> work it is going to be able to do in PRE_COPY. ENOMSG is a similar
+> indicator.
+> 
+> I expect all devices to have some additional STOP_COPY trailer_data in
+> addition to their PRE_COPY initial_data and dirty_data
+> 
+> There is a choice to make if we report the trailer_data during
+> PRE_COPY or not. As this is all estimates, it doesn't matter unless
+> the trailer_data is very big.
+> 
+> Having all devices trend toward a 0 dirty_bytes to say they are are
+> done all the pre-copy they can do makes sense from an API
+> perspective. If one device trends toward 10MB due to a big
+> trailer_data and one trends toward 0 bytes, how will qemu consistently
+> decide when best to trigger STOP_COPY? It makes the API less useful.
+>
+> So, I would not include trailer_data in the dirty_bytes.
 
-Reviewed-by: Josh Don <joshdon@google.com>
+That assumes that it's possible to keep up with the device dirty rate.
+It seems like a better approach for userspace would be to look at how
+dirty_bytes is trending.  A zero value and a steady state value are
+equivalent, there's nothing more to be gained by further iterations.  If
+the value is trending down, it might be worthwhile to iterate in
+PRE_COPY a while longer.  If the value is trending up, it might be time
+to cut to STOP_COPY or abort the migration.
 
-> ---
->  kernel/sched/core_sched.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> index c8746a9..085f188 100644
-> --- a/kernel/sched/core_sched.c
-> +++ b/kernel/sched/core_sched.c
-> @@ -207,7 +207,7 @@ int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
->         default:
->                 err = -EINVAL;
->                 goto out;
-> -       };
-> +       }
->
->         if (type == PIDTYPE_PID) {
->                 __sched_core_set(task, cookie);
-> --
-> 2.7.4
->
+If we exclude STOP_COPY trailing data from the VFIO_DEVICE_MIG_PRECOPY
+ioctl, it seems even more of a disconnect that when we enter the
+STOP_COPY state, suddenly we start getting new data out of a PRECOPY
+ioctl.
+
+BTW, "VFIO_DEVICE" should be reserved for ioctls and data structures
+relative to the device FD, appending it with _MIG is too subtle for me.
+This is also a GET operation for INFO, so I'd think for consistency
+with the existing vfio uAPI we'd name this something like
+VFIO_MIG_GET_PRECOPY_INFO where the structure might be named
+vfio_precopy_info.
+
+> Estimating when to move on to STOP_COPY and trying to enforce a SLA on
+> STOP_COPY are different tasks and will probably end up with different
+> interfaces.
+> 
+> I still think the right way to approach the SLA is to inform the
+> driver what the permitted time and data size target is for STOP_COPY
+> and the driver can proceed or not based on its own internal
+> calculation.
+
+So if we don't think this is the right approach for STOP_COPY, then why
+are we pushing that it has any purpose outside of PRECOPY or might be
+implemented by a non-PRECOPY driver for use in STOP_COPY?
+ 
+> > useful yet and you don't want to add dead kernel code, then let's
+> > define that this ioctl is only available in the PRE_COPY* states and
+> > returns -errno in the STOP_COPY state.  
+> 
+> I'm OK with that, in acc it is done by checking migf->total_bytes >
+> QM_MATCH_SIZE during the read fop
+> 
+> > devices in STOP_COPY and let's also define if there's actually anything
+> > userspace can infer about remaining STOP_COPY data size while in
+> > PRE_COPY* via this ioctl.  For example, is dirty-bytes zero or the
+> > remaining data structure size?  
+> 
+> If we keep it then I would say it doesn't matter, userspace has to sum
+> the two values to get the total remaining length estimate, it is just
+> a bit quirky.
+
+For the reasons above, I just can't figure out why wouldn't decide that
+use of this outside of PRECOPY is too quirky to bother with.  Thanks,
+
+Alex
+

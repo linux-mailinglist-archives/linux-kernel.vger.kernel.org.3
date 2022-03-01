@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19B54C8075
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBB44C8077
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiCABs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S232006AbiCABtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiCABsY (ORCPT
+        with ESMTP id S229498AbiCABtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:48:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3B0011A2B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646099262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=luuUiMnqhEGGpxdu/95KFzZYsnUnE9Pq8uUGjugbrlY=;
-        b=BUYu3uoHJT7hzqWzqywIDHjyGpod0vNeja7MYerL52/SBFk0ttPzK0k2o+w4J7AdPqWJ86
-        6AZiC4Q8zcrutpGLfxcN+mKkWCN66j6gFiKO8PkFuorv6QzyKxpMlxOgDAk9sJi5gZKtzj
-        23cwjAMdVkgg5GzDAOZ8LZ4HFb+xkbI=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-R_KWCpx1O2CFzeX0Jejmjg-1; Mon, 28 Feb 2022 20:47:41 -0500
-X-MC-Unique: R_KWCpx1O2CFzeX0Jejmjg-1
-Received: by mail-lj1-f199.google.com with SMTP id b27-20020a2ebc1b000000b00246209c497dso6561986ljf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:47:41 -0800 (PST)
+        Mon, 28 Feb 2022 20:49:20 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D4F5B3F0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:48:40 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id dr20so3755802ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:48:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qdaEKJNXyehKmI6OZeRutyAexvnsM0OhIQCRJEZlx28=;
+        b=hk62M/2R3BtupGl5Pb4JIGG6SEHCrWhREvCKfHTYpMBQ4qyhyY+4bK5b+KJJU+prb9
+         jw2/VkjB829+5rxjhC8YKv2FW83z6j482i2qwn1Sq0qRLTW3HOGlTLaPuCIa64sdQ81F
+         6HHA+4u8A39L+cEhNKhWdNpr6HcBlGxPaSH4+wuVJU/yiAvPZT1x+P19RzP0NJiTSqqd
+         HTvyvR1g9rOPUbgaKmcGVAAIMAxR6leD35by1icaadxC09XUfXdMOykTBR0JUJDXqzKP
+         V6NnInEOsPCBEJBhms88PsDL+DOV7tlECL4waxonwf7rH2nwCSmbrvFe6JU9fiKYefHu
+         I4BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=luuUiMnqhEGGpxdu/95KFzZYsnUnE9Pq8uUGjugbrlY=;
-        b=XhkTtKTcGSIBtzQC8MccnmMUDVWAl3I2UG40sAGbzgU5Fm2FXMKV/gKHJONUHSroCW
-         QaXdXKHd1x3w/VC2wLsCaMQBPLfyjg/IlcOtt1D4ROD2aIh+JE8eFHiasbMym4NvLbsM
-         zwahVLXdNGbxD0E3lOAB2Yxfe6boj+Ihbj8WT9UAzZ73tjqwdmrKojm7lwcsPkI60svN
-         35IpikcK4tU841KlGEj7Mpl3l8dFGb1P97IN+qUTuVC4NVpdsdfKl7U/m4zDMBtp0hSa
-         SPKzmno0Dy8GVhBRnI/Wb0rHRztBUpqw1pA8bDR0QXQdR2TKnVat3Y9AlYs+AWe/zu5n
-         I1fQ==
-X-Gm-Message-State: AOAM532QoK472GTBbzD8o10ACDIF3Lk7rN0kXfkql/1LYhA9j8Gy1+B2
-        oneOYX2T28Wo1BVm6nswvylymh8GPrAqI3nfoVWj+cxKXVGRh2JzSgHV7FLze0rtQ2WolqifbVD
-        L3J/TIaB63MQw44SAbeQyBV2AM0zaqHZj2A/w7iMr
-X-Received: by 2002:a05:651c:90b:b0:244:c4a4:d5d8 with SMTP id e11-20020a05651c090b00b00244c4a4d5d8mr15365306ljq.97.1646099259986;
-        Mon, 28 Feb 2022 17:47:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzJ5hCTbfyBOqrRW7yCVhA13lM9sJi5Vxe5wjHoF/hQ4fvPwxZrUmAPDewdu4KFv9hll3xHVZ0CbU9/hV+Sprk=
-X-Received: by 2002:a05:651c:90b:b0:244:c4a4:d5d8 with SMTP id
- e11-20020a05651c090b00b00244c4a4d5d8mr15365294ljq.97.1646099259773; Mon, 28
- Feb 2022 17:47:39 -0800 (PST)
+        bh=qdaEKJNXyehKmI6OZeRutyAexvnsM0OhIQCRJEZlx28=;
+        b=gtSkQnA/C/4XavNd2CDxphlS+SrK4HdxlCw2+0HcAXeM2fXDXqWH6bUX0McMBxgbsK
+         e4wZIJn/j4idvXKIkvKTmqSqBWcjyQYxVV6Gl2Y3kNZXvwlGDzHMSKnKPmR53bxdWfCw
+         +lHN5r67Hs0COTE/1/DpbxZTT38dOpiQbI17zg0DeYMSuVyAu0/Uu5oEI8e8gEHYWgLM
+         k3GmNy0WQUk4WJznlHD2ies/DbOWAq+VqOqJM1oCc3kiqfGAyBEucgFmJf4RuIKzpY24
+         A4u4AptBixDIqqC/6yWc9RpvHM42d/+O1oNpXq0VzKf5k+iq6i11/LHqPxOY29bBzb/0
+         dxyA==
+X-Gm-Message-State: AOAM531xfiQFMUFSBZoxQH3ztoyeZZO/yYRODVEEkLa5Vg2XlvL04Af1
+        VmomRFxImZEZsRMvFrQFykee+Aqx47rR87cxhDM22g==
+X-Google-Smtp-Source: ABdhPJyJnxStim8LcjtJqPLQfafGeXLVGaK+Vyh2JMgcZlT8OZOQfzz8aTwShCHtjtoXEwTHtyCJSy/5UpDO1v71xzI=
+X-Received: by 2002:a17:906:6d0b:b0:6d1:d64e:3142 with SMTP id
+ m11-20020a1709066d0b00b006d1d64e3142mr17304749ejr.631.1646099318663; Mon, 28
+ Feb 2022 17:48:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224103852.311369-1-baymaxhuang@gmail.com>
- <20220228033805.1579435-1-baymaxhuang@gmail.com> <CACGkMEtFFe3mVkXYjYJZtGdU=tAB+T5TYCqySzSxR2N5e4UV1A@mail.gmail.com>
- <20220228091539.057c80ef@hermes.local>
-In-Reply-To: <20220228091539.057c80ef@hermes.local>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 1 Mar 2022 09:47:28 +0800
-Message-ID: <CACGkMEsqKQD_mBRB5FQwoOTR-gq1Br1oEdtEoxBLhbCSt4SRgA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] tun: support NAPI for packets received from
- batched XDP buffs
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Harold Huang <baymaxhuang@gmail.com>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+References: <20220224054332.1852813-1-keescook@chromium.org>
+ <CAGS_qxp8cjG5jCX-7ziqHcy2gq_MqL8kU01-joFD_W9iPG08EA@mail.gmail.com>
+ <202202232208.B416701@keescook> <20220224091550.2b7e8784@gandalf.local.home>
+In-Reply-To: <20220224091550.2b7e8784@gandalf.local.home>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 28 Feb 2022 17:48:27 -0800
+Message-ID: <CAGS_qxoXXkp2rVGrwa4h7bem-sgHikpMufrPXQaSzOW2N==tQw@mail.gmail.com>
+Subject: Re: [PATCH] binfmt_elf: Introduce KUnit test
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        David Gow <davidgow@google.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        =?UTF-8?B?TWFnbnVzIEdyb8Of?= <magnus.gross@rwth-aachen.de>,
+        kunit-dev@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 1:15 AM Stephen Hemminger
-<stephen@networkplumber.org> wrote:
+On Thu, Feb 24, 2022 at 6:15 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> On Mon, 28 Feb 2022 15:46:56 +0800
-> Jason Wang <jasowang@redhat.com> wrote:
+> On Wed, 23 Feb 2022 22:13:25 -0800
+> Kees Cook <keescook@chromium.org> wrote:
 >
-> > On Mon, Feb 28, 2022 at 11:38 AM Harold Huang <baymaxhuang@gmail.com> wrote:
-> > >
-> > > In tun, NAPI is supported and we can also use NAPI in the path of
-> > > batched XDP buffs to accelerate packet processing. What is more, after
-> > > we use NAPI, GRO is also supported. The iperf shows that the throughput of
-> > > single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
-> > > Gbps nearly reachs the line speed of the phy nic and there is still about
-> > > 15% idle cpu core remaining on the vhost thread.
-> > >
-> > > Test topology:
-> > > [iperf server]<--->tap<--->dpdk testpmd<--->phy nic<--->[iperf client]
-> > >
-> > > Iperf stream:
-> > > iperf3 -c 10.0.0.2  -i 1 -t 10
-> > >
-> > > Before:
-> > > ...
-> > > [  5]   5.00-6.00   sec   558 MBytes  4.68 Gbits/sec    0   1.50 MBytes
-> > > [  5]   6.00-7.00   sec   556 MBytes  4.67 Gbits/sec    1   1.35 MBytes
-> > > [  5]   7.00-8.00   sec   556 MBytes  4.67 Gbits/sec    2   1.18 MBytes
-> > > [  5]   8.00-9.00   sec   559 MBytes  4.69 Gbits/sec    0   1.48 MBytes
-> > > [  5]   9.00-10.00  sec   556 MBytes  4.67 Gbits/sec    1   1.33 MBytes
-> > > - - - - - - - - - - - - - - - - - - - - - - - - -
-> > > [ ID] Interval           Transfer     Bitrate         Retr
-> > > [  5]   0.00-10.00  sec  5.39 GBytes  4.63 Gbits/sec   72          sender
-> > > [  5]   0.00-10.04  sec  5.39 GBytes  4.61 Gbits/sec               receiver
-> > >
-> > > After:
-> > > ...
-> > > [  5]   5.00-6.00   sec  1.07 GBytes  9.19 Gbits/sec    0   1.55 MBytes
-> > > [  5]   6.00-7.00   sec  1.08 GBytes  9.30 Gbits/sec    0   1.63 MBytes
-> > > [  5]   7.00-8.00   sec  1.08 GBytes  9.25 Gbits/sec    0   1.72 MBytes
-> > > [  5]   8.00-9.00   sec  1.08 GBytes  9.25 Gbits/sec   77   1.31 MBytes
-> > > [  5]   9.00-10.00  sec  1.08 GBytes  9.24 Gbits/sec    0   1.48 MBytes
-> > > - - - - - - - - - - - - - - - - - - - - - - - - -
-> > > [ ID] Interval           Transfer     Bitrate         Retr
-> > > [  5]   0.00-10.00  sec  10.8 GBytes  9.28 Gbits/sec  166          sender
-> > > [  5]   0.00-10.04  sec  10.8 GBytes  9.24 Gbits/sec               receiver
-> > >
-> > > Reported-at: https://lore.kernel.org/all/CACGkMEvTLG0Ayg+TtbN4q4pPW-ycgCCs3sC3-TF8cuRTf7Pp1A@mail.gmail.com
-> > > Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
-> >
-> > Acked-by: Jason Wang <jasowang@redhat.com>
+> > Steven, I want to do fancy live-patch kind or things to replace functions,
+> > but it doesn't need to be particularly fancy because KUnit tests (usually)
+> > run single-threaded, etc. It looks like kprobes could almost do it, but
+> > I don't see a way to have it _avoid_ making a function call.
 >
-> Would this help when using sendmmsg and recvmmsg on the TAP device?
-
-We haven't exported the socket object of tuntap to userspace. So we
-can't use sendmmsg()/recvmsg() now.
-
-> Asking because interested in speeding up another use of TAP device, and wondering
-> if this would help.
 >
+> // This is called just before the hijacked function is called
+> static void notrace my_tramp(unsigned long ip, unsigned long parent_ip,
+>                              struct ftrace_ops *ops,
+>                              struct ftrace_regs *fregs)
+> {
+>         int bit;
+>
+>         bit = ftrace_test_recursion_trylock(ip, parent_ip);
+>         if (WARN_ON_ONCE(bit < 0))
+>                 return;
+>
+>         /*
+>          * This uses the live kernel patching arch code to now return
+>          * to new_function() instead of the one that was called.
+>          * If you want to do a lookup, you can look at the "ip"
+>          * which will give you the function you are about to replace.
+>          * Note, it may not be equal to the function address,
+>          * but for that, you can have this:
+>          *   ip = ftrace_location(function_ip);
+>          * which will give the ip that is passed here.
+>          */
+>         klp_arch_set_pc(fregs, new_function);
 
-Yes, it would be interesting. We need someone to work on that.
+Ahah!
+This was the missing bit.
 
-Thanks
+David and I both got so excited by this we prototyped experimental
+APIs around this over the weekend.
+He also prototyped a more intrusive alternative to using ftrace and
+kernel livepatch since they don't work on all arches, like UML.
 
+We're splitting up responsibility and will each submit RFCs to the
+list in the coming days.
+I'll send the ftrace one based on this.
+He'll send his alternative one as well.
+I think we'll end up having both approaches as they both have their usecases.
+
+It'll take some iteration to bikeshed stuff like names and make them
+more consistent with each other.
+I've posted my working copy on Gerrit for now, if people want to take
+a look: https://kunit-review.googlesource.com/c/linux/+/5109
+
+It should be visible publicly, but it will prompt you to sign in if
+you try to post comments ;(
+If anyone has comments before we send out the RFCs, feel free to email
+me directly and CC kunit-dev@.
+
+Thanks,
+Daniel

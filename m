@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE174C892C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C564C8932
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbiCAKYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S234127AbiCAKZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiCAKYr (ORCPT
+        with ESMTP id S234165AbiCAKZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:24:47 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540D956222
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:24:06 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A67CA3F1CA
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646130244;
-        bh=Xjhp/CXOOSUteuBUcGQJQGfNTsSZQGbcPmAbNzxC4NQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=MZCxDQ/CnvCAHxh3L87F9sSvqUAHig+8AKQpvR5rwtRGzHVWF9V1k9g6aDiDVOQUK
-         Ytxa3qa4ds1Y6P1dgePbRC15A4ccJE2WSxuV58ydAOZ1uC6BQPl80ZZazi5VGG3DC8
-         n8XP3WXZAB7kNicsji8lFQeF4zZnDdi8Qdj9R9sKsJle8Be7AVn1oxBfP9O4xbmPUT
-         hRwCxWB2R/fVzAjBXVKEJCKWv+fC2jv5EK/ClDhaQEQkHgEl9x9Nur31f0oUPqabwn
-         LI0gYRFwz2whX/o0v8Zh7i6W4ONnmL5dBogD73UgqjQQaWZ1u4HwLKNpgbm+5KL+Xi
-         dha17QMl3FlYQ==
-Received: by mail-ed1-f69.google.com with SMTP id l14-20020a056402344e00b0041593c729adso496509edc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:24:04 -0800 (PST)
+        Tue, 1 Mar 2022 05:25:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6812059383
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646130258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n4x9XMBl4+PDcJH0WYTd/mxQmBLZ1Jz9DQ+RKwvFd+c=;
+        b=BMW/QILmLIuwhGUZKwVSXnpKLlfomUtw6ErGaF4T2dUvVy6RYT5ewaUKOWoibkKCkH8q63
+        i9psGDb8ribAYoPjo3xaMtzSbNH58mg+a5YVQpLY+TuZ/i9ao8b+R1ZzyLvumJ4xlIS93D
+        dRqJpTxqhfgR5qEv52z4ckprVXuJd+E=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-_LpRQ2gPOR2lz2ZEqGYgvQ-1; Tue, 01 Mar 2022 05:24:17 -0500
+X-MC-Unique: _LpRQ2gPOR2lz2ZEqGYgvQ-1
+Received: by mail-pf1-f198.google.com with SMTP id h128-20020a625386000000b004f10a219a98so9557062pfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:24:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Xjhp/CXOOSUteuBUcGQJQGfNTsSZQGbcPmAbNzxC4NQ=;
-        b=sqMj8aOA2cA2zY+7bQOBN+RwH4fIvEpi3+1h3WAmS9vcg2Z45I4ZqGxjXxcsMafGa1
-         SgwC4P79JMuH6XOk9YpFOQgl91TrPvAnGKTZx7jzZl4IaQrPEaX5siHggkML/FlKdpXP
-         25pgfRy0S6SYtW1BWlGwUd8HkT1k7kFc73ZcI3+J4r59Zy0uUeS0wsri8xwFcyB2g3Ud
-         8lita1NUcvcpUOERtpXzHVunIW/qvHpaGC8MnNHkLJMMNjRxk9h0xkdp3UZh4jwJI5l0
-         0+JwzwoaLEEYCXw3iaBwRF++D7sCvnBawkcvABwQ9KiGIw3CZ2NRKrD8RU96sWar3+/j
-         Pi5w==
-X-Gm-Message-State: AOAM531gS2nvr2LrT820+FazxP9W3QttmXuNc/mSCsB/XUKtk/QsR48S
-        1+NMsU4rQ7yZmnL2AFhkZJTRB+MnypwIMjqfaZ+Gw/+osp3oHpIyKjJQPabojx1jmPF6VuMcDvX
-        6F5Qcg3P7fmocK2G6myR+0EzZmJJy4RkZuF4mdeGR/g==
-X-Received: by 2002:a17:907:a088:b0:6d6:f8f9:b15a with SMTP id hu8-20020a170907a08800b006d6f8f9b15amr824007ejc.203.1646130244354;
-        Tue, 01 Mar 2022 02:24:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxWe/UtN8F4RzBRq5b4m/3WBqmFuFUYvz/vZz9tEnuqk0rT7rK+KwECBeH8+rP48tkDqNED8w==
-X-Received: by 2002:a17:907:a088:b0:6d6:f8f9:b15a with SMTP id hu8-20020a170907a08800b006d6f8f9b15amr823986ejc.203.1646130244136;
-        Tue, 01 Mar 2022 02:24:04 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id kw3-20020a170907770300b006b2511ea97dsm5174727ejc.42.2022.03.01.02.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 02:24:03 -0800 (PST)
-Message-ID: <c7fea223-b958-deea-70b2-a649e3cc0ec4@canonical.com>
-Date:   Tue, 1 Mar 2022 11:24:02 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n4x9XMBl4+PDcJH0WYTd/mxQmBLZ1Jz9DQ+RKwvFd+c=;
+        b=ia0bFldGkBWZrKiGNiqdlDZdv9s1GQ9v6GsDOA5hT7cqNl0afa0nEM/01nIJz4Hoha
+         Vxo6yDGdsV0t2fRYWzL6pBgaHdPcIGZSBezLsRWS2sHb+aS3r5Djc79HVciaOG6H73On
+         2Nh5WyR07v9yxeKMIXJIgGU1Y8m3r/AuKCeKpFe/H9OgsNVrO1B5cq6+ZBuGGpSkxsPs
+         BljvgXj+aeCyncJpxscl6mo2dCqIyVIcDV+AYeGRiodJHSK6NCZM6vRyoUXeFsiN25TS
+         9BfN8NIHpnkC8QXrLyyya9Sf9y44mD2DeQh3HJjZd7VJGursLQe1pCXbWIeog1aIodKn
+         LP+g==
+X-Gm-Message-State: AOAM533UeecwVQQZfkDq+ttWYz5CNYSYnfqMeLq0tll8QxsiNnvl0Clh
+        Wlk5bhOHVemVLfCODKVYlOiPJA8BhWQ3GlLPPcFU/SOqG0rdHsCVB82wvI2+9N4DHEnDUq1d47q
+        50Mr4AstLdM69I3f1dj/My1PZt9XoEZpHs51wmytF
+X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id g2-20020a17090adac200b001bdfecf6bd1mr5438293pjx.113.1646130255904;
+        Tue, 01 Mar 2022 02:24:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRiyUvQuNCG0CWeOIgtG4PltzTvJEIrudhTzB+/LMvoxrlGu5P89HlGkwPMXIg4WNmID92uFtp/3ZRNtEFwW0=
+X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id
+ g2-20020a17090adac200b001bdfecf6bd1mr5438260pjx.113.1646130255539; Tue, 01
+ Mar 2022 02:24:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net/nfc/nci: use memset avoid infoleaks
-Content-Language: en-US
-To:     Lv Ruyi <cgel.zte@gmail.com>
-Cc:     chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        zealci@zte.com.cn
-References: <664af071-badf-5cc9-c065-c702b0c8a13d@canonical.com>
- <20220301093424.2053471-1-lv.ruyi@zte.com.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220301093424.2053471-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+References: <20220218215531.1.I5dbf50eb1a7a6734ee727bda4a8573358c6d3ec0@changeid>
+ <Yh3LC8WtLdgQNyQI@google.com>
+In-Reply-To: <Yh3LC8WtLdgQNyQI@google.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 1 Mar 2022 11:24:04 +0100
+Message-ID: <CAO-hwJL2vn7-CzHAE_0S7_04oPjyfopKTD=5srwPQY0nXTxusQ@mail.gmail.com>
+Subject: Re: [PATCH v3] HID: Add mapping for KEY_DICTATE
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     William Mahon <wmahon@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        William Mahon <wmahon@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,18 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2022 10:34, Lv Ruyi wrote:
-> hello sir
-> 
-> I think this way: On 64-bit systems, struct nci_set_config_param has 
-> an added padding of 7 bytes between struct members id and len. Even 
-> though all struct members are initialized, the 7-byte hole will 
-> contain data from the kernel stack. 
-> 
+On Tue, Mar 1, 2022 at 8:28 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> On Fri, Feb 18, 2022 at 09:59:08PM +0000, William Mahon wrote:
+> > Numerous keyboards are adding dictate keys which allows for text
+> > messages to be dictated by a microphone.
+> >
+> > This patch adds a new key definition KEY_DICTATE and maps 0x0c/0x0d8
+> > usage code to this new keycode. Additionally hid-debug is adjusted to
+> > recognize this new usage code as well.
+>
+> Jiri, Benjamin, OK for me to pick it up?
 
-That's reasonable. This explanation should be mentioned in the commit
-msg. Also just initialize the array to 0, instead of separate memset call.
+If you are happy with the mapping:
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
+(and yes, please take it through your tree, same for the other one).
 
-Best regards,
-Krzysztof
+Cheers,
+Benjamin
+
+>
+> >
+> > Signed-off-by: William Mahon <wmahon@google.com>
+> > ---
+> >
+> >  drivers/hid/hid-debug.c                | 1 +
+> >  drivers/hid/hid-input.c                | 1 +
+> >  include/uapi/linux/input-event-codes.h | 1 +
+> >  3 files changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+> > index 26c31d759914..8aa68416b1d7 100644
+> > --- a/drivers/hid/hid-debug.c
+> > +++ b/drivers/hid/hid-debug.c
+> > @@ -969,6 +969,7 @@ static const char *keys[KEY_MAX + 1] = {
+> >       [KEY_ASSISTANT] = "Assistant",
+> >       [KEY_KBD_LAYOUT_NEXT] = "KbdLayoutNext",
+> >       [KEY_EMOJI_PICKER] = "EmojiPicker",
+> > +     [KEY_DICTATE] = "Dictate",
+> >       [KEY_BRIGHTNESS_MIN] = "BrightnessMin",
+> >       [KEY_BRIGHTNESS_MAX] = "BrightnessMax",
+> >       [KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
+> > diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> > index 112901d2d8d2..ce2b75a67cb8 100644
+> > --- a/drivers/hid/hid-input.c
+> > +++ b/drivers/hid/hid-input.c
+> > @@ -992,6 +992,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+> >               case 0x0cd: map_key_clear(KEY_PLAYPAUSE);       break;
+> >               case 0x0cf: map_key_clear(KEY_VOICECOMMAND);    break;
+> >
+> > +             case 0x0d8: map_key_clear(KEY_DICTATE);         break;
+> >               case 0x0d9: map_key_clear(KEY_EMOJI_PICKER);    break;
+> >
+> >               case 0x0e0: map_abs_clear(ABS_VOLUME);          break;
+> > diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+> > index 225ec87d4f22..4db5d41848e4 100644
+> > --- a/include/uapi/linux/input-event-codes.h
+> > +++ b/include/uapi/linux/input-event-codes.h
+> > @@ -612,6 +612,7 @@
+> >  #define KEY_ASSISTANT                0x247   /* AL Context-aware desktop assistant */
+> >  #define KEY_KBD_LAYOUT_NEXT  0x248   /* AC Next Keyboard Layout Select */
+> >  #define KEY_EMOJI_PICKER     0x249   /* Show/hide emoji picker (HUTRR101) */
+> > +#define KEY_DICTATE          0x24a   /* Start or Stop Voice Dictation Session (HUTRR99) */
+> >
+> >  #define KEY_BRIGHTNESS_MIN           0x250   /* Set Brightness to Minimum */
+> >  #define KEY_BRIGHTNESS_MAX           0x251   /* Set Brightness to Maximum */
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+> >
+>
+> --
+> Dmitry
+>
+

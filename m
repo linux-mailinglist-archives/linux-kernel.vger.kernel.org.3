@@ -2,47 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C934C815D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC89B4C815F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiCADAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S232005AbiCADAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiCADA2 (ORCPT
+        with ESMTP id S229498AbiCADAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:00:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A826AF9;
-        Mon, 28 Feb 2022 18:59:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K72636QfBz4xNq;
-        Tue,  1 Mar 2022 13:59:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646103580;
-        bh=7Q2XxiuZh4OAN5ROShBZBuzoqEVD2Wz8f+6nQEryq9o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EkdwkwRV1IMzOAMxVyfbQiZTPJP8X8DUM+A4GLC4QllAn4d+UU2jJ+tODJ2CR1Ea7
-         Dvhi5WFJc+CG6Tj4XhGLAJTh8twCgviEZgrorb+ndwwcA/G1FfiXt9JFTRWiA7qwDx
-         gfamZKfxL6NYzyJOkhaiuaoeE+XGWno5rdKO/te1Xl9/xZBMbwtiaB/5jWyj9C3MKB
-         WLL4nxpJ7aLHtfApG5PaB/qR9y6Xdu58uevo/xuy2f79rSg2S+QBxQ6g1310eh701n
-         jkxb5359kYiYLteUrdZBmsvcncyWawzZ1qQNoMAcxvILie+1In2v6dVR2PGAkaQpc1
-         zFkLCMRJ15gNA==
-Date:   Tue, 1 Mar 2022 13:59:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the pci tree
-Message-ID: <20220301135938.4c664beb@canb.auug.org.au>
+        Mon, 28 Feb 2022 22:00:47 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFFE64F6;
+        Mon, 28 Feb 2022 19:00:08 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id m195so3632353vka.5;
+        Mon, 28 Feb 2022 19:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PyFDsjmMKCqCZKwZNSrr3EREFHubLTbckVDLvVietaU=;
+        b=X6mnErHq65YWhzNZHRlesTamjFZcKlaJLfGucbQoHbCZgZP4nCT0epAPgEh+PSLRN1
+         +jneDkLI4XuVkBng+8fJ6Q4z+Tm6HLAy1PKzmT/faxWbM2MrR+xEyN7OxrK18NdODol+
+         XliNc9pSvAAuxPEIpNjwfNAqjxKaY6lJ4gF+uOzS+CfPip9oRbZocx9EApN/BKajjtsl
+         lPe57SpnRVx0+vccfjCIPanLjz802Jqs63UG0gHwp9TDAkVmOTqZm5lUxXwjEhp2M99Z
+         p5BYC6BaAtEjnCGgucM7ThYstqQmCxiSGLxLi7cSuknSDHlrfNWnjzN6MnrSEqcv4jRC
+         H1QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PyFDsjmMKCqCZKwZNSrr3EREFHubLTbckVDLvVietaU=;
+        b=yj58VWY4sv+L54dqdCV43LvP73q+xE7/jIqydV6dlm2VDEZRUaI1fn+nJKcRBWWmky
+         z34j9U5XL/KCVA1cVhVKVHUCiv71BmvuHORe6PrOptDUVTnaZnKOqHPeUgumCPx63Rz8
+         rRRcZFGboE9i3U6cPnGzkbV3QJ1yJ2znGyigRzrP/HJMJ5kf3QfK3z9xx3GniHEuliZC
+         1ziqlttru6I8kluuL1gBBDkyc11ieGvdcKNmVDPiHamLqEhuEB4wN9PTMNyMuAfFu8m6
+         wsIrhIt6HqYCNWM7wmbWegC0RxcMKbnAbV7cklx5/r905rjj3uXfZs57ozI8tWfO9AYm
+         1AQA==
+X-Gm-Message-State: AOAM533/BJRLR+a5UvF3Ttz4eyZPOhkaBc/gzJ9ayldH9LWKBRMgHXG5
+        r1DcKWEESQy+9oWp9AYjaPfQ16UZE3W8Mk/tDAU=
+X-Google-Smtp-Source: ABdhPJxL0JFdoBNZaFdNeJfNHoiRzjzyhhKoX1uvp6TBOA2ZxZFxbx6TVaZ20mHkYB4n4q0Y5lcnnHyUo/X8csEZAl4=
+X-Received: by 2002:a05:6122:d11:b0:331:2101:1238 with SMTP id
+ az17-20020a0561220d1100b0033121011238mr10015708vkb.22.1646103607142; Mon, 28
+ Feb 2022 19:00:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yCqVUdJx51gXcqyEHmXRtB6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220222042700.385001-1-yusisamerican@gmail.com>
+ <CAJoG2+-97KyWrxym2NXECRtjT9OxVQE_=DcNkUfOsPm_Ax90Aw@mail.gmail.com>
+ <20220225155208.GA1377611@yilunxu-OptiPlex-7050> <DM6PR11MB3819C9631EAED0AFE7E8D99B85019@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <CAJoG2+--e6BqpwBYO0w4d_aUwmCmJVch=mvfq7idW__PRxsv6w@mail.gmail.com> <DM6PR11MB3819F561A8EEB59D9EA1482685029@DM6PR11MB3819.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB3819F561A8EEB59D9EA1482685029@DM6PR11MB3819.namprd11.prod.outlook.com>
+From:   Yusuf Khan <yusisamerican@gmail.com>
+Date:   Mon, 28 Feb 2022 18:59:56 -0800
+Message-ID: <CAJoG2+8j5P11h8HQPbR7W8dQ2WnTF41dtVoztOuxhxqqk5OwDQ@mail.gmail.com>
+Subject: Re: [PATCH -next] pga: dfl: pci: Make sure DMA related error check is
+ not done twice
+To:     "Wu, Hao" <hao.wu@intel.com>
+Cc:     "Xu, Yilun" <yilun.xu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "trix@redhat.com" <trix@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,42 +73,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yCqVUdJx51gXcqyEHmXRtB6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Done. Resent
 
-Hi all,
-
-After merging the pci tree, today's linux-next build (htmldocs) produced
-these warnings:
-
-Error: Cannot open file drivers/gpu/vga/vgaarb.c
-Error: Cannot open file drivers/gpu/vga/vgaarb.c
-
-Introduced by commit
-
-  d6e1898bfa5b ("PCI/VGA: Move vgaarb to drivers/pci")
-
-The reference in Documentation/gpu/vgaarbiter.rst needs to be updated.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yCqVUdJx51gXcqyEHmXRtB6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIdjBoACgkQAVBC80lX
-0Gz3Uwf+ONzu1pGFSZr88/B5tdYtLKe1Wy5B72hNW7jJkdAfklms6rDgC0DG4P/r
-HIRCgradmq+786W5UJkG2dbH+AbesmxNo8E/AuUDvgz9xDWLRqAYdsbhF1bRF+nm
-J200tSv4AIgb9OS/cIaQ5X0eW49JQPDEfuWUNz1ZekjbFJXosZpGstuiYRHIakcP
-7wz4zk5OICts/5XYCUZilB36MRVLmwzkLidc3L/R4PjfedS9QyDxSMlZbsdzpSul
-IvY4AhfqbgVLyzKIQ8N+2AjI+L5c2Q7xddh/Lr4xK/olhrmRXS3/4ZW+ONuePzee
-FVO6Z4kBS3AN5lp9aumbvAu0JbC/Iw==
-=X93b
------END PGP SIGNATURE-----
-
---Sig_/yCqVUdJx51gXcqyEHmXRtB6--
+On Mon, Feb 28, 2022 at 6:34 PM Wu, Hao <hao.wu@intel.com> wrote:
+>
+> > -----Original Message-----
+> > From: Yusuf Khan <yusisamerican@gmail.com>
+> > Sent: Tuesday, March 1, 2022 9:59 AM
+> > To: Wu, Hao <hao.wu@intel.com>
+> > Cc: Xu, Yilun <yilun.xu@intel.com>; linux-kernel@vger.kernel.org; linux-
+> > fpga@vger.kernel.org; mdf@kernel.org; trix@redhat.com
+> > Subject: Re: [PATCH -next] pga: dfl: pci: Make sure DMA related error check is
+> > not done twice
+> >
+> > Will do, but I do not know exactly what to remove  from the commit message,
+> > I understand what to do for the title
+>
+> > > > > > NOTE: This patch is only for use in the linux-next branch as the
+> > > > > > commit that caused this bug happened there.
+>
+> Remove this NOTE
+>
+> Hao
+>
+> >
+> > Yusuf
+> >
+> > On Mon, Feb 28, 2022 at 1:58 AM Wu, Hao <hao.wu@intel.com> wrote:
+> > >
+> > > > On Mon, Feb 21, 2022 at 08:39:48PM -0800, Yusuf Khan wrote:
+> > > > > Note: This bug was introduced here:
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-
+> > > > next.git/patch/?id=ada3caabaf6135150077c3f729bb06e8f3b5b8f6
+> > > > > I saw this commit inside the linux-next branch, it is not present in
+> > > > > the mainline branch.
+> > > > > The linux-next branch was last updated 5 days ago, so I am unsure
+> > > > > about the state of that commit.
+> > > > >
+> > > > > On Mon, Feb 21, 2022 at 8:27 PM Yusuf Khan <yusisamerican@gmail.com>
+> > > > wrote:
+> > > > > >
+> > > > > > In the case that the DMA 64 bit bit mask error check does not fail,
+> > > > > > the error check will be done twice, this patch fixed that.
+> > > > > >
+> > > > > > NOTE: This patch is only for use in the linux-next branch as the
+> > > > > > commit that caused this bug happened there.
+> > >
+> > > Thanks for the patch.
+> > > please remove this from the commit message, and fix the title
+> > > s/pga/fpga/
+> > >
+> > > Thanks
+> > > Hao
+> > >
+> > > > > >
+> > > > > > Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+> > > > > > ---
+> > > > > >  drivers/fpga/dfl-pci.c | 9 +++++----
+> > > > > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> > > > > > index 717ac9715970..6222f18aed4b 100644
+> > > > > > --- a/drivers/fpga/dfl-pci.c
+> > > > > > +++ b/drivers/fpga/dfl-pci.c
+> > > > > > @@ -356,11 +356,12 @@ int cci_pci_probe(struct pci_dev *pcidev, const
+> > > > struct pci_device_id *pcidevid)
+> > > > > >         pci_set_master(pcidev);
+> > > > > >
+> > > > > >         ret = dma_set_mask_and_coherent(&pcidev->dev,
+> > DMA_BIT_MASK(64));
+> > > > > > -       if (ret)
+> > > > > > -               ret = dma_set_mask_and_coherent(&pcidev->dev,
+> > > > DMA_BIT_MASK(32));
+> > > > > >         if (ret) {
+> > > > > > -               dev_err(&pcidev->dev, "No suitable DMA support available.\n");
+> > > > > > -               goto disable_error_report_exit;
+> > > > > > +               ret = dma_set_mask_and_coherent(&pcidev->dev,
+> > > > DMA_BIT_MASK(32));
+> > > > > > +               if (ret) {
+> > > > > > +                       dev_err(&pcidev->dev, "No suitable DMA support
+> > > > available.\n");
+> > > > > > +                       goto disable_error_report_exit;
+> > > > > > +               }
+> > > >
+> > > > Looks good to me.
+> > > >
+> > > > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > > >
+> > > > > >         }
+> > > > > >
+> > > > > >         ret = cci_init_drvdata(pcidev);
+> > > > > > --
+> > > > > > 2.25.1
+> > > > > >

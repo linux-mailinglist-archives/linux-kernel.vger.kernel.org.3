@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6DA4C8B62
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2F34C8B64
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbiCAMUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S234705AbiCAMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbiCAMUW (ORCPT
+        with ESMTP id S234707AbiCAMU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:20:22 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B9947AD8;
-        Tue,  1 Mar 2022 04:19:41 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso1881843pjk.1;
-        Tue, 01 Mar 2022 04:19:41 -0800 (PST)
+        Tue, 1 Mar 2022 07:20:27 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64CB8B6DC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:19:46 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id u3so26831484ybh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 04:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=eLUB/C+djamMUPcxlH9OtmG15zAPFhIf1CVsWg5B678=;
-        b=BrL3DGi1UXY6HvEmM+b4nEXBzHgMOxZs8PokM44NJk4oP42nTS99fwy9FfWvcVHyBX
-         EHdfmXj5PjcppyVDwIC03gJWO1Drz8z8uS+sow9SnH2em5moikAbl1UHb6uUsO1wbW8/
-         SNidGPFI1mTeNZhHlEeKjdranPudlXOgaipAOIWo4EVdceW6GMRsFlYLi3nbTKUJbbAu
-         GI3p0AzCY4LGhDUIe1iJQUaC1aL10Q6udxu8dkKhQYbt6OF1h6iaU5E1kzEXNiGiZ3jN
-         JG6JK8jibdc6HdSYUuvcS6KZeNAoLyIASpmAIP65c+sZmCoKX9YSV76fT3w0/9wn2Q+4
-         sJxA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=g2ZNVVCbLbWFvHoFdGGw62aXjqOkohSTObIxoEgWGUA=;
+        b=gix1vsY2RfCg5rYq4KwA43bmZ3RwluQY2zRNMsUm3HFjGzu6kXGzw8E5AnFbdH1W4W
+         JmuUAniBKPQLTsDZhs0ShrkyYXN4tP1Xd07Uf/DuHqPkVJ1Sgu73p+ie4VmDyCBXbOAZ
+         DxI9hW087f7paMRXscpnr4TKGnKrd06W8nEccLJojJP+czW5WoNHQGKebjZmuoKxXLnw
+         IHW015G6V7IPJ6hEDgUlXywPATd//YdwfU4l8YGW8Zu8qegZY+7D7NccaNrl34Nayy3B
+         wrqmLzOx3+zufEdsX8ch8BRM046OZStZwhCPInE7PbaXxDryokYJKi7tjUv4yOcPfcCg
+         vxNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=eLUB/C+djamMUPcxlH9OtmG15zAPFhIf1CVsWg5B678=;
-        b=xZaU8bKMaVGVPtMrh3Ooo0LEvaUGekBU3ebVKCqqVjSf/LekMFSLOeaN6E9mdw2Ktl
-         mq0XkAzkY2tgBdbppP6LwcvmsT95I+xR+BCJa/xSlCKAy0zVIQkT2jOGsOxTL5QVAbQT
-         W6PBVXkvox1ZNuBde9fXuZAusxkIfJbVp2u+SggRq+dxjtnc6VWY7Lt+MbbQsT0XcG8s
-         Six2jM7JdUIGDR0Xzgk6tsawEu75eER4jOw9mWkvyBCzrRae39684vmC9KyergKKA9tR
-         zQNmQ5MnFNJH+J4T19p4W5dje0pq+WB9GAaVsuu37q+bZxUhqCL642CvhYMGYlkDQnCb
-         CxGw==
-X-Gm-Message-State: AOAM531WYtgHung7Q/iSNxraJave1O309G2NLsGFsNISAR9LgDRpyXv3
-        ZYhXkTJL1McsWq4wxmaAnuvIz7k6mlYPtQ==
-X-Google-Smtp-Source: ABdhPJxdbjja3/KtATGfh1LPduDiiplZlw3EDZeo1kf9hz4MPBW31IP/+sMfEXpQq456RHKAuRMR0g==
-X-Received: by 2002:a17:902:eaca:b0:14f:fb38:f7b8 with SMTP id p10-20020a170902eaca00b0014ffb38f7b8mr25265832pld.145.1646137181249;
-        Tue, 01 Mar 2022 04:19:41 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id o10-20020a056a0015ca00b004e0ff94313esm18615686pfu.91.2022.03.01.04.19.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 04:19:40 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     xiam0nd.tong@gmail.com
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
-        jannh@google.com, keescook@chromium.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [PATCH 4/6] mm: remove iterator use outside the loop
-Date:   Tue,  1 Mar 2022 20:19:30 +0800
-Message-Id: <20220301121930.6020-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220301075839.4156-5-xiam0nd.tong@gmail.com>
-References: <20220301075839.4156-5-xiam0nd.tong@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=g2ZNVVCbLbWFvHoFdGGw62aXjqOkohSTObIxoEgWGUA=;
+        b=Av/yiyphilZDc1JIgOUC1+bX4WNhcWNLpBQtzYhbtOOIWzjn61GkrXCNTuHN6ICd0g
+         IYKb8VrlRnJiyrKV8ohnl+UJmUwcKvxzTj32ENGo2lr/7RVcHs7X1l/OzZ+T3EKep8+H
+         DYxRVC+lgjEQaOLe1TOPgEMbSFEguEVjOrd+xB/eDIEYDSIIlBhuUC3dmf9aV3Dba2rj
+         zqIrFAT6RCLacMb15MPJIMUdKT1V7jnf7cLn1gNqv6cPeUOAEp0pfkSI3gqWYXq/IvGw
+         LEeM7MOTbByjlMP/yv0bvSrdY0qEEmxKh+felUAVpL+fX0KqpdhsdYg+VZzWM15X/uhg
+         GMMQ==
+X-Gm-Message-State: AOAM53134O/Q/RCfqi9XrnBcULpcZJU0pa6rdRvwWyvfCBzkQDicx3Dg
+        yywLMS8GNCyGcHyYVFVm7E9eacrNISXvOAhJHIe3/ItldTZlokOX
+X-Google-Smtp-Source: ABdhPJxir7Iw04CbEhZhYBqHEUpAGK0Kl6rlU9aXJwfJs8ZPFHXTW0ItNAj1KDgiIQcsP7+MLdr1dyrz0vdBDp7plfc=
+X-Received: by 2002:a25:c592:0:b0:628:9263:38ba with SMTP id
+ v140-20020a25c592000000b00628926338bamr215069ybe.291.1646137185832; Tue, 01
+ Mar 2022 04:19:45 -0800 (PST)
+MIME-Version: 1.0
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 1 Mar 2022 13:19:34 +0100
+Message-ID: <CACRpkdZmax=QpwnfgOJOR-5P3wTyKegaDn=VvhVOYz_AChc7bw@mail.gmail.com>
+Subject: Question on expiring HRtimer in-kernel
+To:     linux-power <linux-power@fi.rohmeurope.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Code Kipper <codekipper@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm sorry for have created the confusion. I made this patch to remove
-the use of iterator (in this patch is "lru", "s", "s", "s2") outside
-the list_for_each_entry* loop, using the new *_inside macros instead
-which are introduced in PATCH 2/6, and to prove the effectiveness of
-the new macros.
+I have a problem with a premature expiring HRtimer.
 
-Best regards,
---
-Xiaomeng Tong
+The HRtimer hrtimer_set_expires_range() is used in two places in
+the upstream kernel:
+kernel/futex/core.c
+drivers/power/supply/ab8500_chargalg.c
+
+Now I am testing the code in the latter, and it has seen some
+bitrot since merged in 2012. Maybe it was correct at one point.
+The timer is started like this:
+
+    hrtimer_init(&di->safety_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
+(...)
+    hrtimer_set_expires_range(&di->safety_timer,
+        ktime_set(timer_expiration * ONE_HOUR_IN_SECONDS, 0),
+        ktime_set(FIVE_MINUTES_IN_SECONDS, 0));
+    hrtimer_start_expires(&di->safety_timer, HRTIMER_MODE_REL);
+
+What the author wanted to achieve is a very definitive callback in one
+hour relative to now +/- 5 min, and that is one hour later in the
+physical world,
+as this deals with battery charging.
+
+However sometimes this fires almost immediately rather than in an hour.
+
+My first thought is to pass HRTIMER_MODE_REL also to init as
+hrtimer_set_expires_range() could make things happen immediately
+if we have ABS set, but this is all just intuitive.
+
+Any hints? Better ways to create a definitive event in one hour?
+
+Yours,
+Linus Walleij

@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768364C8EA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3C04C8EA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbiCAPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S235538AbiCAPNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235587AbiCAPLO (ORCPT
+        with ESMTP id S232130AbiCAPNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:11:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BC590254
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:10:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D88E861678
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B641C340EE;
-        Tue,  1 Mar 2022 15:10:30 +0000 (UTC)
-Date:   Tue, 1 Mar 2022 10:10:28 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, frederic@kernel.org,
-        tglx@linutronix.de, mtosatti@redhat.com, bristot@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] sched/isolation: use raw_smp_processor_id() in
- housekeeping_any_cpu()
-Message-ID: <20220301101028.1f510bf5@gandalf.local.home>
-In-Reply-To: <20220301113053.141514-1-nsaenzju@redhat.com>
-References: <20220301113053.141514-1-nsaenzju@redhat.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 1 Mar 2022 10:13:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AE48BC2E;
+        Tue,  1 Mar 2022 07:12:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAA6F1042;
+        Tue,  1 Mar 2022 07:12:22 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A55A3F70D;
+        Tue,  1 Mar 2022 07:12:21 -0800 (PST)
+Date:   Tue, 1 Mar 2022 15:12:19 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Etienne Carriere <etienne.carriere@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v8 1/2] dt-bindings: arm: Add OP-TEE transport for SCMI
+Message-ID: <Yh4304unzMxrQtoL@bogus>
+References: <20211028140009.23331-1-etienne.carriere@linaro.org>
+ <58a0e791-9573-99c2-0cc5-3920a1048113@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58a0e791-9573-99c2-0cc5-3920a1048113@pengutronix.de>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Mar 2022 12:30:52 +0100
-Nicolas Saenz Julienne <nsaenzju@redhat.com> wrote:
 
-> housekeeping_any_cpu() will return a housekeeping CPU. That's it. It'll
-> try to optimize for NUMA locality and to use the local CPU, but it's not
-> a requisite.
+Hi Ahmad,
+
+On Mon, Feb 28, 2022 at 05:01:39PM +0100, Ahmad Fatoum wrote:
+> Hello Etienne,
 > 
-> So let's use raw_smp_processor_id() instead of its vanilla counterpart
-> in order to allow users to query for housekeeping CPUs without having to
-> disable preemption.
+> On 28.10.21 16:00, Etienne Carriere wrote:
+> > Introduce compatible "linaro,scmi-optee" for SCMI transport channel
+> > based on an OP-TEE service invocation. The compatible mandates a
+> > channel ID defined with property "linaro,optee-channel-id".
+>
 
-Peter, care to ACK this, and I can take it through my tree?
+Not sure if Etienne's reply addressed your queries/concerns correctly.
+I thought I will add my view anyways.
 
--- Steve
-
+> I just found this thread via the compatible in the STM32MP131 patch set:
+> https://lore.kernel.org/all/20220225133137.813919-1-gabriel.fernandez@foss.st.com/
 > 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> ---
->  include/linux/sched/isolation.h | 2 +-
->  kernel/sched/isolation.c        | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
-> index 8c15abd67aed..0c09ff1e4599 100644
-> --- a/include/linux/sched/isolation.h
-> +++ b/include/linux/sched/isolation.h
-> @@ -31,7 +31,7 @@ extern void __init housekeeping_init(void);
->  
->  static inline int housekeeping_any_cpu(enum hk_type type)
->  {
-> -	return smp_processor_id();
-> +	return raw_smp_processor_id();
->  }
->  
->  static inline const struct cpumask *housekeeping_cpumask(enum hk_type type)
-> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-> index b4d10815c45a..c2c1f6d8bb5f 100644
-> --- a/kernel/sched/isolation.c
-> +++ b/kernel/sched/isolation.c
-> @@ -43,14 +43,14 @@ int housekeeping_any_cpu(enum hk_type type)
->  
->  	if (static_branch_unlikely(&housekeeping_overridden)) {
->  		if (housekeeping.flags & BIT(type)) {
-> -			cpu = sched_numa_find_closest(housekeeping.cpumasks[type], smp_processor_id());
-> +			cpu = sched_numa_find_closest(housekeeping.cpumasks[type], raw_smp_processor_id());
->  			if (cpu < nr_cpu_ids)
->  				return cpu;
->  
->  			return cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
->  		}
->  	}
-> -	return smp_processor_id();
-> +	return raw_smp_processor_id();
->  }
->  EXPORT_SYMBOL_GPL(housekeeping_any_cpu);
->  
+> Linux doesn't care whether PSCI is provided by TF-A, OP-TEE or something
+> else, so there is just the arm,psci* compatible.
+>
 
+Correct, the interface to the kernel is fixed and hence we must be able
+to manage with the standard and fixed sole set of bindings for the same.
+
+> What's different about SCMI that this is not possible? Why couldn't the
+> existing binding and driver be used to communicate with OP-TEE as secure
+> monitor as well?
+>
+
+However with SCMI, the spec concentrates and standardises all the aspects
+of the protocol used for the communication while it allows the transport
+used for such a communication to be implementation specific. It does
+address some standard transports like mailbox and PCC(ACPI). However,
+because of the flexibility and also depending on the hardware(or VM),
+different transports have been added to the list. SMC/HVC was the one,
+followed by the virtio and OPTEE. While I agree SMC/HVC and OPTEE seem
+to have lot of common and may have avoided separate bindings.
+
+However the FIDs for SMC/HVC is vendor defined(the spec doesn't cover this
+and hence we utilised/exploited DT). Some vendors wanted interrupt support
+too which got added. OPTEE eliminates the need for FID and can also provide
+dynamic shared memory info. In short, it does differ in a way that the driver
+needs to understand the difference and act differently with each of the
+unique transports defined in the binding.
+
+Hope that explains and addresses your concern.
+
+-- 
+Regards,
+Sudeep

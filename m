@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4904C9420
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E34D4C9422
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiCATUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S233904AbiCATVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiCATUN (ORCPT
+        with ESMTP id S233784AbiCATVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:20:13 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE94952E03;
-        Tue,  1 Mar 2022 11:19:31 -0800 (PST)
-Message-ID: <b3caabef-f91e-ff4d-dfe2-8aa0869fadb6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646162368;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zCGZe5KQEePlGgxnSZ6o3CK5/eGHzgzDBb+VMLpgJ8A=;
-        b=QWhO0xDAbsgrBwnQI4FQnEdckf5x1GaYM6J93ZRL3fYArcjMr3EiLYkNR4Dh8aVEyMlhkn
-        TCcL1mqdgaD43FJhEwcbQ7AudScncsBJg/tnlabfBWlPW9mkyL1+sPK3kYHlOV+735pqMv
-        pkua33/Pf/K0gM/8Uk9EeJ2om+3uRgo=
-Date:   Tue, 1 Mar 2022 12:19:26 -0700
+        Tue, 1 Mar 2022 14:21:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E2B52E03
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:20:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2493B81CAF
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B334BC340EF;
+        Tue,  1 Mar 2022 19:20:17 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 14:20:16 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
+        Peter Zijlstra <peterz@infradead.org>, samitolvanen@google.com,
+        x86@kernel.org
+Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
+Message-ID: <20220301142016.22e787fb@gandalf.local.home>
+In-Reply-To: <1646159447.ngbqgzj71t.naveen@linux.ibm.com>
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.714815604@infradead.org>
+        <20220225005520.c69be2fbdbd28028361792d9@kernel.org>
+        <20220224105847.5c899324@gandalf.local.home>
+        <20220225103449.6084e5314273556f35107cd9@kernel.org>
+        <20220224211919.0612a3f6@rorschach.local.home>
+        <20220225192008.d7a4f2b5558fe43c95909777@kernel.org>
+        <20220225083647.12ceb54b@gandalf.local.home>
+        <1646159447.ngbqgzj71t.naveen@linux.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [PATCH V6 0/3] PCI: vmd: Enable PCIe ASPM and LTR
-Content-Language: en-US
-To:     "David E. Box" <david.e.box@linux.intel.com>,
-        nirmal.patel@linux.intel.com, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
-        rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220301041943.2935892-1-david.e.box@linux.intel.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <20220301041943.2935892-1-david.e.box@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,40 +58,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set looks good to me
-Thanks!
+On Wed, 02 Mar 2022 00:27:51 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-Reviewed-by: Jon Derrick <jonathan.derrick@linux.dev>
+> Won't this cause issues with ftrace_set_filter_ip() and others? If the 
+> passed-in ip points to func+0 when the actual ftrace location is at some 
+> offset, the ftrace location check in ftrace_match_addr() will now pass, 
+> resulting in adding func+0 to the hash. Should we also update 
+> ftrace_match_addr() to use the ip returned by ftrace_location()?
+> 
 
-On 2/28/2022 9:19 PM, David E. Box wrote:
-> This series adds support for enabling PCIe ASPM and for setting PCIe LTR
-> values on devices on root ports reserved by VMD. Configuration of these
-> capabilities is usually done by BIOS. But for VMD ports these capabilities
-> will not be configured because those ports are not visible to BIOS. For
-> future products, post Alder Lake, the hardware team has agreed to do this
-> enabling in BIOS.  But this will not apply to current products, so this
-> work around is provided for them. Without this, laptops running in VMD mode
-> will not be able to power gate roots ports, resulting in higher power
-> consumption.
-> 
-> Since V4 we have more information from the BIOS team as to why BIOS
-> needs to program device LTRs. This is something that should be done by
-> devices, but there are many that don't provide LTR values causing them
-> to block SoC level power management. BIOS sets an initial default LTR to
-> account for such devices. This SoC specific value is the maximum latency
-> required to allow the SoC to enter the deepest power state.
-> 
-> David E. Box (2):
->    PCI: vmd: Add vmd_device_data
->    PCI: vmd: Configure PCIe ASPM and LTR
-> 
-> Michael Bottini (1):
->    PCI/ASPM: Add ASPM BIOS override function
-> 
->   drivers/pci/controller/vmd.c | 134 ++++++++++++++++++++++++++++-------
->   drivers/pci/pcie/aspm.c      |  54 ++++++++++++++
->   include/linux/pci.h          |   7 ++
->   3 files changed, 169 insertions(+), 26 deletions(-)
-> 
-> 
-> base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
+Yes, ftrace_match_addr() would need to be updated, or at least
+ftrace_set_filter_ip() which is the only user ftrace_match_addr(), and is
+currently only used by kprobes, live kernel patching and the direct
+trampoline example code.
+
+-- Steve

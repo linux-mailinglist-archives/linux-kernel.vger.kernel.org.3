@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F614C8D08
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447D64C8D0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiCAN4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S232047AbiCAN4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbiCAN4R (ORCPT
+        with ESMTP id S235161AbiCAN4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:56:17 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B54E8D684;
-        Tue,  1 Mar 2022 05:55:36 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id bg10so31663663ejb.4;
-        Tue, 01 Mar 2022 05:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1/9T1huoYjFiDqtcNJauOodI/6xx/bBNHxHqAjTy+6E=;
-        b=JFACJZpQQZU0JE8sw3SHG5rjevA8wOm7xi4vnw+bfXN3poe/QFYS10ZFCjHuil6r0K
-         wQCrNGcM8HftxNW0bonv2MSevDq04rtg265dT3b+HOw/0EVJ9memo4JRqXs4e8NcNjp3
-         fhlu/XHMAlarYxZXoXtPe9tLcs/rMeaeVSv7jnZLSI+pp+auG2pdqy5v6XVxEq47C4w+
-         nBhuv05Za1nRsTGtYo42JgGZbW2lold7TJRTNFMfLzaaF8xfyXbp0XXls04rMBwZrju4
-         YdAg3Tn6zz6kntleWbbXHm2i47doM/ZaA/DadvIMidnjXtdTZoUvt5vHnuBRAWCiJZqO
-         QWBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1/9T1huoYjFiDqtcNJauOodI/6xx/bBNHxHqAjTy+6E=;
-        b=eT8in5bo8vn43F4tFTXOPWEKOCHinhVgYIdTSt4OBKVvsd01jSDTuTDc8a8C9h+ztA
-         hoHe9EIAA4rIoW0cxayZG9rUme4uHTD84H9Rjaw2FRmkDwOelwSh5hXTK+ASMEMqum3t
-         xOT6bFf9MB+ARELKakUKWnkX2F+sKu56yQXAICL/u8XJ64TlVXwtVNnAOAI2olRfCZtL
-         BHVRJXDT7RaYKzttAMbT31CekrCnnAOQzX7HF/W4RIgnXC58xgXqA9aFK7yKFuEcSi1v
-         C1Yz9zz5DIhEfTPTH7MUGMyVFsIt/2vrSi64TnlWymklHyt54VH4VJ/V3YtRB/uz+oHB
-         Uvqw==
-X-Gm-Message-State: AOAM530w9lLNFEiLlia8Xu75B9ZlroOSyfnkHBkaFF+ZErUEUFYqGkX7
-        bmi9etS6pvbm6JAvErqc4yI=
-X-Google-Smtp-Source: ABdhPJydRWeQpk3jXWl6ROPATxujJ8IWoFpZ9DNUqTkIo1y4ybgQwkR0KVLPnfTWn94ktj9xj21aLQ==
-X-Received: by 2002:a17:906:bc8d:b0:6cf:6b41:e48e with SMTP id lv13-20020a170906bc8d00b006cf6b41e48emr18960056ejb.372.1646142934837;
-        Tue, 01 Mar 2022 05:55:34 -0800 (PST)
-Received: from heron.intern.cm-ag (p200300dc6f15d2000000000000000fd2.dip0.t-ipconnect.de. [2003:dc:6f15:d200::fd2])
-        by smtp.gmail.com with ESMTPSA id u1-20020aa7d0c1000000b004132c0a9ee3sm7281675edo.84.2022.03.01.05.55.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 05:55:34 -0800 (PST)
-From:   Max Kellermann <max.kellermann@gmail.com>
-To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Max Kellermann <max.kellermann@gmail.com>
-Subject: [PATCH] drivers/char/mem: implement splice() for /dev/zero, /dev/full
-Date:   Tue,  1 Mar 2022 14:55:21 +0100
-Message-Id: <20220301135521.2889274-1-max.kellermann@gmail.com>
-X-Mailer: git-send-email 2.34.0
+        Tue, 1 Mar 2022 08:56:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F2D29F6E4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646142943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Vh025xasYH3lAD0rZlLLEDVRC/Yu4hHgdUH3WyvQrwA=;
+        b=Xwx36A0dwlPSezA+qJ45EMQAtYA9Wp2Wzo/n1/dqbo5VZLcAh87WJYaU2D4U1UhFNNktTE
+        zfiL7d/T5QTrDQAhfBdTUE0aIs7i2XsS0S1/2D9laDj2u+y7iNH+S9RNIbVu0paC1rtuqT
+        Xb6k/AXzY8DrqLJ36g0qb5sDjXhmhMg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-zfU7u-X8PFiaxZkEB0hx8A-1; Tue, 01 Mar 2022 08:55:40 -0500
+X-MC-Unique: zfU7u-X8PFiaxZkEB0hx8A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 144E2180FD72;
+        Tue,  1 Mar 2022 13:55:38 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0AC6E1057FD1;
+        Tue,  1 Mar 2022 13:55:27 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH 0/4] SVM fixes + apic fix
+Date:   Tue,  1 Mar 2022 15:55:22 +0200
+Message-Id: <20220301135526.136554-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows splicing zeroed pages into a pipe, and allows discarding
-pages from a pipe by splicing them to /dev/zero.  Writing to /dev/zero
-should have the same effect as writing to /dev/null, and a
-"splice_write" implementation exists only for /dev/null.
-
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
----
- drivers/char/mem.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index cc296f0823bd..6c504f92c986 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -642,6 +642,7 @@ static int open_port(struct inode *inode, struct file *filp)
- #define full_lseek      null_lseek
- #define write_zero	write_null
- #define write_iter_zero	write_iter_null
-+#define splice_write_zero	splice_write_null
- #define open_mem	open_port
- 
- static const struct file_operations __maybe_unused mem_fops = {
-@@ -678,6 +679,8 @@ static const struct file_operations zero_fops = {
- 	.read_iter	= read_iter_zero,
- 	.read		= read_zero,
- 	.write_iter	= write_iter_zero,
-+	.splice_read	= generic_file_splice_read,
-+	.splice_write	= splice_write_zero,
- 	.mmap		= mmap_zero,
- 	.get_unmapped_area = get_unmapped_area_zero,
- #ifndef CONFIG_MMU
-@@ -689,6 +692,7 @@ static const struct file_operations full_fops = {
- 	.llseek		= full_lseek,
- 	.read_iter	= read_iter_zero,
- 	.write		= write_full,
-+	.splice_read	= generic_file_splice_read,
- };
- 
- static const struct memdev {
--- 
-2.34.0
+Those are few bug fixes which are in my patch queue,=0D
+rebased against current kvm/queue.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (4):=0D
+  KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW=0D
+  KVM: x86: SVM: disable preemption in avic_refresh_apicv_exec_ctrl=0D
+  KVM: x86: SVM: use vmcb01 in avic_init_vmcb=0D
+  KVM: x86: lapic: don't allow to set non default apic id when not using=0D
+    x2apic api=0D
+=0D
+ arch/x86/kvm/lapic.c    | 17 ++++++++---------=0D
+ arch/x86/kvm/svm/avic.c |  6 +++++-=0D
+ arch/x86/kvm/svm/svm.c  |  2 +-=0D
+ 3 files changed, 14 insertions(+), 11 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 

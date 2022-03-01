@@ -2,88 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DC74C883C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DBA4C886A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbiCAJly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S234039AbiCAJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiCAJlx (ORCPT
+        with ESMTP id S234023AbiCAJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:41:53 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5268AE5D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:41:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A01B219A2;
-        Tue,  1 Mar 2022 09:41:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646127671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IkEzjCntl04WMjzdipCFPXraObjVWH/A28DXmzE6ZwQ=;
-        b=NgZdrNmalRgtKeLZ4dhFGoEiahl2O3o5aAiEYWk+ZrlQFzNzXhkghEjV6svSwK6Q+KPENv
-        bOBFqddX3LgDyT9KdvEOQQpHls7i0MIsuBrY+DqetQmGtebORmwicVgkMjW6n4Ux2jMnUw
-        nPfpg3shY1EbCFuuy5LaylEwUzlFP8U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646127671;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IkEzjCntl04WMjzdipCFPXraObjVWH/A28DXmzE6ZwQ=;
-        b=bCpBKkRyV38cvGEZI5n1kUjTWXUiEW7LTgYOkUeXwbQC+adoxuu/N8x+ud8bE34BI+w/7p
-        3zRzuAz5am/yTyCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EEBC613B08;
-        Tue,  1 Mar 2022 09:41:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id A8aCOTbqHWJUYwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 01 Mar 2022 09:41:10 +0000
-Message-ID: <827b9a5a-f925-776d-1893-c35211fee7f9@suse.cz>
-Date:   Tue, 1 Mar 2022 10:41:10 +0100
+        Tue, 1 Mar 2022 04:45:12 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E038BF28
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:44:29 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id bn33so21097183ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:44:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
+        b=a8275fH6+9IRL38qqLDpyS1w3TvaCjlAatrh/47PQJbn4W9iIUucAQap9bigDyxECn
+         TXaLOGyZ8vmF2KfxrLtFGMbL5xvYfDic9jf5mRMMfkkRR7Aybbrgh+tf+R6j/jj/lp4L
+         uCUr0PvhEU0tGNaiPU9hT+w4+Op4ut5G5kMZnISMemoP4168OXOfw3jvBdq8JP1eoWq5
+         proOhu5a2wmS5TdyBmY1plpSlnDUBG4ZO3Y+ZVYUWCg2oPG82YYwJxJ0G0ZJvfphr2ZA
+         lNZQx/+ln4Ri5Yx37fm7l3jukl/i/7u/bCVcl0JY5Gv7mEpBKJJeu4xt2bHWs2p8eoHC
+         +00Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
+        b=qG3QCpl+SOAI0O2r6IwOUmrMbD1A7U5UEhOYlcwFvmuXfpOf/Jg3AiF1ns620OUTMl
+         mSl70zPA+4YtJLFdKg0eZyFZP7nY7wjbMfYON/XCxqPXS7K5L/XNDj/ekL+qjkWtUdqF
+         /eERGm9XAmdrv1ESnHikxdMTkiftRMa87C+1sHkkZFRnnt38Qec2f4e+j0tiltfmKynr
+         HUccJTA7cvQIbq+WhUWcu8sFhsLC/j2xPhbAde0rgYh0/a+Ot7O0EncVcDF59N/IuBLd
+         XH9FOaIIxEQfy42ERe7ug7YAgU5KZnD3zdz4XAM/NTn2y8gfdaB0AV+BFQX/nNfDOhgE
+         H6zQ==
+X-Gm-Message-State: AOAM530yq3Ds+0x/VEhT0js5ln5yWoG3HGZ3+AEBZkeA6yM+iaeyw7J+
+        DS61LuBwKcieCSfSYRSVDK+jrxRBG9stp6tZlCnopNYhD/ijCA==
+X-Google-Smtp-Source: ABdhPJyupqbG0bQBQuInFjyG0YrLQq20BUN2lbd8XOqgYzbsx/NwNLqnc9QaRAEmfHcJbhpij1nqLzfCko4SgKUaGbQ=
+X-Received: by 2002:a2e:86d4:0:b0:246:40eb:2c18 with SMTP id
+ n20-20020a2e86d4000000b0024640eb2c18mr17093954ljj.16.1646127867471; Tue, 01
+ Mar 2022 01:44:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
-Content-Language: en-US
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>
-References: <20220225180318.20594-1-vbabka@suse.cz>
- <YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <f194f876-1c46-f3ae-573e-d3ddd6dcf4cc@suse.cz>
- <Yh0qGY48JeH7TzdQ@linux.ibm.com>
- <7918434f-9730-3532-9b42-3e67d10d25d3@suse.cz>
- <Yh3lhDuL2DhuREp4@linux.ibm.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Yh3lhDuL2DhuREp4@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220223080323.3717853-1-s.hauer@pengutronix.de> <20220223080858.GJ9136@pengutronix.de>
+In-Reply-To: <20220223080858.GJ9136@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 1 Mar 2022 10:43:50 +0100
+Message-ID: <CAPDyKFpyCepZ_J4LNZzz-g90RLT1mVDMbQ-gNKweM8YnEWXqdg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: use dev_err_probe() to simplify error handling
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Kernel@pengutronix.de,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,206 +68,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 10:21, Mike Rapoport wrote:
-> On Tue, Mar 01, 2022 at 12:38:11AM +0100, Vlastimil Babka wrote:
->> On 2/28/22 21:01, Mike Rapoport wrote:
->> > On Mon, Feb 28, 2022 at 08:10:18PM +0100, Vlastimil Babka wrote:
->> >> On 2/26/22 08:19, Hyeonggon Yoo wrote:
->> >> > On Fri, Feb 25, 2022 at 07:03:13PM +0100, Vlastimil Babka wrote:
->> >> >> Hi,
->> >> >> 
->> >> >> this series combines and revives patches from Oliver's last year
->> >> >> bachelor thesis (where I was the advisor) that make SLUB's debugfs
->> >> >> files alloc_traces and free_traces more useful.
->> >> >> The resubmission was blocked on stackdepot changes that are now merged,
->> >> >> as explained in patch 2.
->> >> >> 
->> >> > 
->> >> > Hello. I just started review/testing this series.
->> >> > 
->> >> > it crashed on my system (arm64)
->> >> 
->> >> Hmm, interesting. On x86_64 this works for me and stackdepot is allocated
->> >> from memblock. arm64 must have memblock freeing happen earlier or something.
->> >> (CCing memblock experts)
->> >> 
->> >> > I ran with boot parameter slub_debug=U, and without KASAN.
->> >> > So CONFIG_STACKDEPOT_ALWAYS_INIT=n.
->> >> > 
->> >> > void * __init memblock_alloc_try_nid(
->> >> >                         phys_addr_t size, phys_addr_t align,
->> >> >                         phys_addr_t min_addr, phys_addr_t max_addr,
->> >> >                         int nid)
->> >> > {
->> >> >         void *ptr;
->> >> > 
->> >> >         memblock_dbg("%s: %llu bytes align=0x%llx nid=%d from=%pa max_addr=%pa %pS\n",
->> >> >                      __func__, (u64)size, (u64)align, nid, &min_addr,
->> >> >                      &max_addr, (void *)_RET_IP_);
->> >> >         ptr = memblock_alloc_internal(size, align,
->> >> >                                            min_addr, max_addr, nid, false);
->> >> >         if (ptr)
->> >> >                 memset(ptr, 0, size); <--- Crash Here
->> >> > 
->> >> >         return ptr;
->> >> > }
->> >> > 
->> >> > It crashed during create_boot_cache() -> stack_depot_init() ->
->> >> > memblock_alloc().
->> >> > 
->> >> > I think That's because, in kmem_cache_init(), both slab and memblock is not
->> >> > available. (AFAIU memblock is not available after mem_init() because of
->> >> > memblock_free_all(), right?)
->> >> 
->> >> Hm yes I see, even in x86_64 version mem_init() calls memblock_free_all().
->> >> But then, I would expect stack_depot_init() to detect that memblock_alloc()
->> >> returns NULL, we print ""Stack Depot hash table allocation failed,
->> >> disabling" and disable it. Instead it seems memblock_alloc() returns
->> >> something that's already potentially used by somebody else? Sounds like a bug?
->> > 
->> > If stack_depot_init() is called from kmem_cache_init(), there will be a
->> > confusion what allocator should be used because we use slab_is_available()
->> > to stop using memblock and start using kmalloc() instead in both
->> > stack_depot_init() and in memblock.
->> 
->> I did check that stack_depot_init() is called from kmem_cache_init()
->> *before* we make slab_is_available() true, hence assumed that memblock would
->> be still available at that point and expected no confusion. But seems if
->> memblock is already beyond memblock_free_all() then it being still available
->> is just an illusion?
-> 
-> Yeah, it appears it is an illusion :)
-> 
-> I think we have to deal with allocations that happen between
-> memblock_free_all() and slab_is_available() at the memblock level and then
-> figure out the where to put stack_depot_init() and how to allocate memory
-> there.
-> 
-> I believe something like this (untested) patch below addresses the first
-> issue. As for stack_depot_init() I'm still trying to figure out the
-> possible call paths, but it seems we can use stack_depot_early_init() for
-> SLUB debugging case. I'll try to come up with something Really Soon (tm).
+On Wed, 23 Feb 2022 at 09:09, Sascha Hauer <s.hauer@pengutronix.de> wrote:
+>
+> On Wed, Feb 23, 2022 at 09:03:23AM +0100, Sascha Hauer wrote:
+> > From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> >
+> > dev_err_probe() can reduce code size, makes the code easier to read
+> > and has the added benefit of recording the defer reason for later
+> > read out. Use it where appropriate.
+> >
+> > This also fixes an issue, where an error message in __genpd_dev_pm_attach
+> > was not terminated by a line break.
+> >
+> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> > ---
+> >  drivers/base/power/domain.c | 21 ++++++---------------
+> >  1 file changed, 6 insertions(+), 15 deletions(-)
+>
+> And of course:
+>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-Yeah as you already noticed, we are pursuing an approach to decide on
-calling stack_depot_early_init(), which should be a good way to solve this
-given how special slab is in this case. For memblock I just wanted to point
-out that it could be more robust, your patch below seems to be on the right
-patch. Maybe it just doesn't have to fallback to buddy, which could be
-considered a layering violation, but just return NULL that can be
-immediately recognized as an error?
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 50ad19662a32..4ea89d44d22a 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -90,6 +90,7 @@ struct memblock_type {
->   */
->  struct memblock {
->  	bool bottom_up;  /* is bottom up direction? */
-> +	bool mem_freed;
->  	phys_addr_t current_limit;
->  	struct memblock_type memory;
->  	struct memblock_type reserved;
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index b12a364f2766..60196dc4980e 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -120,6 +120,7 @@ struct memblock memblock __initdata_memblock = {
->  	.reserved.name		= "reserved",
->  
->  	.bottom_up		= false,
-> +	.mem_freed		= false,
->  	.current_limit		= MEMBLOCK_ALLOC_ANYWHERE,
->  };
->  
-> @@ -1487,6 +1488,13 @@ static void * __init memblock_alloc_internal(
->  	if (WARN_ON_ONCE(slab_is_available()))
->  		return kzalloc_node(size, GFP_NOWAIT, nid);
->  
-> +	if (memblock.mem_freed) {
-> +		unsigned int order = get_order(size);
-> +
-> +		pr_warn("memblock: allocating from buddy\n");
-> +		return __alloc_pages_node(nid, order, GFP_KERNEL);
-> +	}
-> +
->  	if (max_addr > memblock.current_limit)
->  		max_addr = memblock.current_limit;
->  
-> @@ -2116,6 +2124,7 @@ void __init memblock_free_all(void)
->  
->  	pages = free_low_memory_core_early();
->  	totalram_pages_add(pages);
-> +	memblock.mem_freed = true;
->  }
->  
->  #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_ARCH_KEEP_MEMBLOCK)
->  
->> > Hyeonggon, did you run your tests with panic on warn at any chance?
->> >  
->> >> > Thanks!
->> >> > 
->> >> > /*
->> >> >  * Set up kernel memory allocators
->> >> >  */
->> >> > static void __init mm_init(void)
->> >> > {
->> >> >         /*
->> >> >          * page_ext requires contiguous pages,
->> >> >          * bigger than MAX_ORDER unless SPARSEMEM.
->> >> >          */
->> >> >         page_ext_init_flatmem();
->> >> >         init_mem_debugging_and_hardening();
->> >> >         kfence_alloc_pool();
->> >> >         report_meminit();
->> >> >         stack_depot_early_init();
->> >> >         mem_init();
->> >> >         mem_init_print_info();
->> >> >         kmem_cache_init();
->> >> >         /*
->> >> >          * page_owner must be initialized after buddy is ready, and also after
->> >> >          * slab is ready so that stack_depot_init() works properly
->> >> >          */)
->> >> > 
->> >> >> Patch 1 is a new preparatory cleanup.
->> >> >> 
->> >> >> Patch 2 originally submitted here [1], was merged to mainline but
->> >> >> reverted for stackdepot related issues as explained in the patch.
->> >> >> 
->> >> >> Patches 3-5 originally submitted as RFC here [2]. In this submission I
->> >> >> have omitted the new file 'all_objects' (patch 3/3 in [2]) as it might
->> >> >> be considered too intrusive so I will postpone it for later. The docs
->> >> >> patch is adjusted accordingly.
->> >> >> 
->> >> >> Also available in git, based on v5.17-rc1:
->> >> >> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v1
->> >> >> 
->> >> >> I'd like to ask for some review before I add this to the slab tree.
->> >> >> 
->> >> >> [1] https://lore.kernel.org/all/20210414163434.4376-1-glittao@gmail.com/
->> >> >> [2] https://lore.kernel.org/all/20210521121127.24653-1-glittao@gmail.com/
->> >> >> 
->> >> >> Oliver Glitta (4):
->> >> >>   mm/slub: use stackdepot to save stack trace in objects
->> >> >>   mm/slub: aggregate and print stack traces in debugfs files
->> >> >>   mm/slub: sort debugfs output by frequency of stack traces
->> >> >>   slab, documentation: add description of debugfs files for SLUB caches
->> >> >> 
->> >> >> Vlastimil Babka (1):
->> >> >>   mm/slub: move struct track init out of set_track()
->> >> >> 
->> >> >>  Documentation/vm/slub.rst |  61 +++++++++++++++
->> >> >>  init/Kconfig              |   1 +
->> >> >>  mm/slub.c                 | 152 +++++++++++++++++++++++++-------------
->> >> >>  3 files changed, 162 insertions(+), 52 deletions(-)
->> >> >> 
->> >> >> -- 
->> >> >> 2.35.1
->> >> >> 
->> >> >> 
->> >> > 
->> >> 
->> > 
->> 
-> 
+Next time, please add me on the to-list, otherwise it's likely that I
+will fail to review your patch.
 
+Kind regards
+Uffe
+
+>
+> Sascha
+>
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 5db704f02e712..29428ae91349d 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
+> >       /* Parse genpd OPP table */
+> >       if (genpd->set_performance_state) {
+> >               ret = dev_pm_opp_of_add_table(&genpd->dev);
+> > -             if (ret) {
+> > -                     if (ret != -EPROBE_DEFER)
+> > -                             dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
+> > -                                     ret);
+> > -                     return ret;
+> > -             }
+> > +             if (ret)
+> > +                     return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
+> >
+> >               /*
+> >                * Save table for faster processing while setting performance
+> > @@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+> >               if (genpd->set_performance_state) {
+> >                       ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
+> >                       if (ret) {
+> > -                             if (ret != -EPROBE_DEFER)
+> > -                                     dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
+> > -                                             i, ret);
+> > +                             dev_err_probe(&genpd->dev, ret,
+> > +                                           "Failed to add OPP table for index %d\n", i);
+> >                               goto error;
+> >                       }
+> >
+> > @@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >       ret = genpd_add_device(pd, dev, base_dev);
+> >       mutex_unlock(&gpd_list_lock);
+> >
+> > -     if (ret < 0) {
+> > -             if (ret != -EPROBE_DEFER)
+> > -                     dev_err(dev, "failed to add to PM domain %s: %d",
+> > -                             pd->name, ret);
+> > -             return ret;
+> > -     }
+> > +     if (ret < 0)
+> > +             return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
+> >
+> >       dev->pm_domain->detach = genpd_dev_pm_detach;
+> >       dev->pm_domain->sync = genpd_dev_pm_sync;
+> > --
+> > 2.30.2
+> >
+> >
+> >
+>
+> --
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

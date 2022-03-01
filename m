@@ -2,195 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2164C93AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AEB4C93AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237138AbiCAS6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S237186AbiCAS7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237104AbiCAS6i (ORCPT
+        with ESMTP id S237160AbiCAS7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:58:38 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B8E13E01
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:57:56 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x5so23246616edd.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:57:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
-        b=DsgKcn6Wm/yJlxIPNaf7eO5rB6HLZkcIk+WPwZvNmmUc/GKiS7zpasVMBWMd0yjyki
-         2PymiLOSNKkhLrj7c1c7v7IVJJL9ebx3T2/GG+m+54Ao3Nij3T+Kv/U69gcvZMfwy/x9
-         YdiE+IPzI+yQ9l05jpGxD2qYJnkMgYlvQchIH2huu8tur7SOHmB53bQgGEd797WQW2/y
-         6hAgypa6ocRO3PMCTOPkXaktqRTJFUN1KF9zzERSOlfrT7DWKOnG3dFsCmjQ3VgLp5aS
-         3jqI+PAkElL4g99Iwaj2xFNwFuKZR5feZ0CuvnsvBqDkimO5HJbyu8mXB/vrqIRSdrUF
-         0ZBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
-        b=35hdsjhljkP548H1pSiNTmrqrl1ppjhy6ud4G2u76T0JP52P0ptI3HbFLkFBqAtBr/
-         ikC0hQ5XoyuStTTKnSF5pBhN1JE0lqK9qv2grhNA9jwPMi263yTj78ybQCZFe1mb01eP
-         k8i2Fp4Vf0k0aINyO86KlzHVTeBPWB+Zk8CqXgAhk//aBCYuiOeaFxuFVzk6dk5diRCz
-         FcZcHsKrNMTkM8G9mWwW4es0Dq+yQnJ6fbIp5IXuwgMeCfno6XKszbNpfYldWeZR0Nu7
-         YqfYlpTVmALkujPF092V1pEMUuq+I+F3SClS9vj7kUhvnwSegiDgvBZwsLfkAbf2RaV/
-         uV+A==
-X-Gm-Message-State: AOAM533JuwTKVVSiddXaTi5+Q5OaLHFNm9633ywaTb426itFWZYTm1p7
-        hzwEl7jPAWHfrNzKXmLys2WAfPw0QhbiS+xKs849uw==
-X-Google-Smtp-Source: ABdhPJyL6+SxghMQh2cJjoZTXo+JonmVRVSfrrJfTCrKlK4gFnKNqpBlNq8QOSm7nMu/fvyHPWkk+GmV57kInGebUOM=
-X-Received: by 2002:a50:da47:0:b0:410:a39a:c43b with SMTP id
- a7-20020a50da47000000b00410a39ac43bmr26283276edk.33.1646161074969; Tue, 01
- Mar 2022 10:57:54 -0800 (PST)
+        Tue, 1 Mar 2022 13:59:08 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C3610D2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:58:25 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221HclHi005259;
+        Tue, 1 Mar 2022 18:57:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fyULgp2edHxAGxvr7DKJSreIgvcHKCLbb/3axRl6veE=;
+ b=sNfThad2MLaBU5h7Ijzs8ptCV0xvlF6KXIsYkv1DPu2DWg/v/OrE6EDfC1O05bzHU7bg
+ keNqJPj/3l6cQbsUouU8gbiLhnzDvGQUSB53nwg5Ad0IOrLYOJPvIKGJlfa1mEyMZSII
+ zE4VwhH7r0OsLdji2XvGmIhAikjeYHz1pOGbZcqFRUpSFtTueEBiecZLICln8rag+Acu
+ qb+XHokQaDX+cxrlRUvX5r3EBg8PD/irJYVqF4Ajfqey+ODGdfv3ahiGtW0AX/glQEKu
+ FyybKEH4rCwzAjaaNbJOSxH4sL+X5BUxERfrxaNuXV3oHpoBlecZIg6ozZT4hft7/3zU dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpd4vp52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 18:57:58 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221HfOsc011595;
+        Tue, 1 Mar 2022 18:57:57 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpd4vp49-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 18:57:57 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221IsLdZ023428;
+        Tue, 1 Mar 2022 18:57:55 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3efbu9bc4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 18:57:55 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221Ivr3147776002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 18:57:53 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C1124C046;
+        Tue,  1 Mar 2022 18:57:53 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D18084C044;
+        Tue,  1 Mar 2022 18:57:52 +0000 (GMT)
+Received: from localhost (unknown [9.43.110.204])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Mar 2022 18:57:52 +0000 (GMT)
+Date:   Wed, 02 Mar 2022 00:27:51 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
+        Peter Zijlstra <peterz@infradead.org>, samitolvanen@google.com,
+        x86@kernel.org
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.714815604@infradead.org>
+        <20220225005520.c69be2fbdbd28028361792d9@kernel.org>
+        <20220224105847.5c899324@gandalf.local.home>
+        <20220225103449.6084e5314273556f35107cd9@kernel.org>
+        <20220224211919.0612a3f6@rorschach.local.home>
+        <20220225192008.d7a4f2b5558fe43c95909777@kernel.org>
+        <20220225083647.12ceb54b@gandalf.local.home>
+In-Reply-To: <20220225083647.12ceb54b@gandalf.local.home>
 MIME-Version: 1.0
-References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
-In-Reply-To: <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Tue, 1 Mar 2022 10:57:41 -0800
-Message-ID: <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1646159447.ngbqgzj71t.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: yGE9LF1sgFzLdfgxi2aBJzwv6M19TYgW
+X-Proofpoint-GUID: wcgWHILmLsAtH_0yXZOtMNtRoAV_lwQH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203010093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Won,
->
-> On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> > When ACPI table includes _PLD field for a Type C connector, share _PLD
-> > values in its sysfs. _PLD stands for physical location of device.
-> >
-> > Currently without connector's location information, when there are
-> > multiple Type C ports, it is hard to distinguish which connector
-> > corresponds to which physical port at which location. For example, when
-> > there are two Type C connectors, it is hard to find out which connector
-> > corresponds to the Type C port on the left panel versus the Type C port
-> > on the right panel. With location information provided, we can determin=
-e
-> > which specific device at which location is doing what.
-> >
-> > _PLD output includes much more fields, but only generic fields are adde=
+Steven Rostedt wrote:
+> On Fri, 25 Feb 2022 19:20:08 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>=20
+>> > No. It only acts like ftrace_location_range(sym, sym_end) if the passe=
 d
-> > and exposed to sysfs, so that non-ACPI devices can also support it in
-> > the future. The minimal generic fields needed for locating a port are
-> > the following.
-> > - panel
-> > - vertical_position
-> > - horizontal_position
-> > - dock
-> > - lid
-> >
-> > Signed-off-by: Won Chung <wonchung@google.com>
-> > ---
-> >
-> > Changes in v2:
-> > - Use string for location.
-> > - Clarify get_pld() with naming and return type.
-> >
-> >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
-> >  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
-> >  drivers/usb/typec/class.h                   |   3 +
-> >  3 files changed, 151 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentatio=
-n/ABI/testing/sysfs-class-typec
-> > index 75088ecad202..4497a5aeb063 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > @@ -141,6 +141,41 @@ Description:
-> >               - "reverse": CC2 orientation
-> >               - "unknown": Orientation cannot be determined.
-> >
-> > +What:                /sys/class/typec/<port>/location/panel
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes which panel surface of the system=E2=80=99s hou=
-sing the
-> > +             port resides on.
-> > +
-> > +What:                /sys/class/typec/<port>/location/vertical_positio=
-n
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes vertical position of the port on the panel surf=
-ace.
-> > +             Valid values: upper, center, lower
-> > +
-> > +What:                /sys/class/typec/<port>/location/horizontal_posit=
-ion
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes horizontal position of the port on the panel su=
-rface.
-> > +             Valid values: left, center, right
-> > +
-> > +What:                /sys/class/typec/<port>/location/dock
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set as "yes" if the port resides in a docking station or =
-a port
-> > +             replicator, otherwise set as "no".
-> > +
-> > +What:                /sys/class/typec/<port>/location/lid
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set as "yes" if the port resides on the lid of laptop sys=
-tem,
-> > +             otherwise set as "no".
-> > +
->
-> I've probable lost track of the topic during my winter break, I'm
-> sorry about that, but why are you proposing now that this should be
-> made Type-C specific?
-> This information is not Type-C specific, so it definitely does not
-> belong here.
->
-> Br,
->
-> --
-> heikki
+>> > in argument is the ip of the function (kallsyms returns offset =3D 0) =
+=20
+>>=20
+>> Got it. So now ftrace_location() will return the ftrace address
+>> when the ip =3D=3D func or ip =3D=3D mcount-call.
 
-Hi Heikki,
+Won't this cause issues with ftrace_set_filter_ip() and others? If the=20
+passed-in ip points to func+0 when the actual ftrace location is at some=20
+offset, the ftrace location check in ftrace_match_addr() will now pass,=20
+resulting in adding func+0 to the hash. Should we also update=20
+ftrace_match_addr() to use the ip returned by ftrace_location()?
 
-Thank you for the comment. Sorry that my description was not clear.
-This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
-support for _PLD" in which Rafael suggested to have generic location
-in Type C connector than adding PLD specifically to ACPI device. I was
-also convinced by Rafael since userspace code would also be quite
-ACPI-specific to access PLD in ACPI device sysfs. The discussion can
-be found in https://lore.kernel.org/all/CAOvb9yh7uNg9ZU3RsieGChsjLCfKQhHhip=
-Bi4RMuQYKEA4fu9A@mail.gmail.com/.
-For your reference, in a diverged email thread, Greg also gave a
-feedback: https://lore.kernel.org/all/Yg01TjB6DGYeMxjI@kroah.com/.
 
-Do you think it is still better to have this location information in
-ACPI device? I would appreciate it if you can share your thoughts in
-the original thread where the discussion is. Thank you very much!
-
-Won
+- Naveen

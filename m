@@ -2,78 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A453C4C97DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F7F4C97E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238343AbiCAVoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S238513AbiCAVpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiCAVoB (ORCPT
+        with ESMTP id S230285AbiCAVpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:44:01 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B6C1C137;
-        Tue,  1 Mar 2022 13:43:19 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 195so15374132pgc.6;
-        Tue, 01 Mar 2022 13:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Lb58kIninGqH33dDlVGnMq4+pgo6WtkdVDrcMZz1aRo=;
-        b=OICJMV5BhoUWd7xGXKzqVm4LJ+nbkh12WQmy2J8uLvLb5967f/WxtuNtdGVUVFUZLC
-         tClRvP/UtNLL5wvCKX1AyKDNs/ud+CW6QtFTm0HfRsj9a0he7jqcoejN1uq79syxZEAC
-         vM+qqz95PZzwBh288izoCVMx7Hhm/cnDRhNVPsCk4FlRxBPJ5q5bDjI7cTirbNZoP7nM
-         8YpwiEKp4+Y767KglC/53xb0VpqKidxwo9k/8opjCurGidjl5Yzgp2nfh30xvoZeAE5O
-         kxDfg+r0iOrdTA5CBt2TdOcrbcImjbr3U48649k35ebBhaI/YovnPLstWXtQZ9ItLubT
-         OiUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Lb58kIninGqH33dDlVGnMq4+pgo6WtkdVDrcMZz1aRo=;
-        b=4yVp4fZUD/4B5ZsKjegjb2/BJmT8GFhJi/W0ISenwuVp/EVnUlwgeCCxGX6jb4rqCc
-         B+cX1KyRqgzd4ASfhQnYrIFUS8NwZUG86w4rjkrA84NbxbrYGawjkt57jb+dra9lurBT
-         4uk86o57S8T7DPFXZ8fX2hvIkIttLOc0FmWorICv3m4bZ2frOTp1zficKyppA+yLhm/W
-         Xpd75IzuYe3Oyinla3NZPTin1bPlG/XAkZMU0dsr/TFFBWv1E/JUpGgSWNCrQVhntW58
-         f/Z+E45qhTqbDGegnSij8kC4RPtyqkJPZiSdwc52hdFZm1eRQX7nKjdt9n0IyaRrqgS/
-         lBGA==
-X-Gm-Message-State: AOAM533O0V2TZuYKRZ1invxStEX0suKKnwqUJmv7KMZElZjlRTHW/Ued
-        0yZg1cWCfB/uQ0mxjRBB4J0=
-X-Google-Smtp-Source: ABdhPJw2ch/EZmG6VJ4jUaRf99B9jwtLjGAjDNP2OylB8aAoJc/ktHNHptPdeVKyxFUMkzaN9XujPg==
-X-Received: by 2002:a63:e59:0:b0:374:a169:d558 with SMTP id 25-20020a630e59000000b00374a169d558mr23079040pgo.304.1646170999462;
-        Tue, 01 Mar 2022 13:43:19 -0800 (PST)
-Received: from localhost.localdomain ([115.195.172.220])
-        by smtp.googlemail.com with ESMTPSA id n42-20020a056a000d6a00b004d221c3e021sm17834811pfv.55.2022.03.01.13.43.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 13:43:18 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
-        jannh@google.com, kbuild-all@lists.01.org, keescook@chromium.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, lkp@intel.com, netdev@vger.kernel.org,
-        xiam0nd.tong@gmail.com
-Subject: Re: [PATCH 1/6] Kbuild: compile kernel with gnu11 std
-Date:   Wed,  2 Mar 2022 05:43:12 +0800
-Message-Id: <20220301214312.7024-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAHk-=wiuZGzc2UaNVPr6rZnK7buvaQWfadZMcDXavE=MeCXw3g@mail.gmail.com>
-References: <CAHk-=wiuZGzc2UaNVPr6rZnK7buvaQWfadZMcDXavE=MeCXw3g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 16:45:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883194F463;
+        Tue,  1 Mar 2022 13:45:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 445D6B81B0A;
+        Tue,  1 Mar 2022 21:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7968DC340EE;
+        Tue,  1 Mar 2022 21:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646171105;
+        bh=3uwjHBi4Kpijzi8jIbSYaOoMSYmXzyJTEeVMSIbESIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=koZS6u1JYkyQ/AsymFmTevOBEDEPaaFBGL6bIbEiw+654IcjZt5RiF8dHOJISRbT/
+         JFeksndmw6/gr35h37+vXWL3eYm92pB4aIsercuDesP+jF+/RmkXOJHDAyXHkg4yMK
+         UfnXJzS7je8f7jq1gI/FLooe0RYJjB29hB/b8J9fcwPZZHFuuJ9IjYmeSJsxR8/GfB
+         kEGrJF2ElSyM3+7jZGYMOqG77Dk5BwPnvW7l1KPdsBKbLJeEjGJAfKbUQNp1d8GNWh
+         biDlTh2kCDPfqMrxpWQ6nucjhgujHZpMRDGdhVjOuPyIHv1GvAt8iV6lmYyzc7EFzu
+         ubgflTWfhuiMQ==
+Date:   Tue, 1 Mar 2022 22:45:01 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
+Message-ID: <Yh6T3RSfvcXCi4sb@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
+ <8725a111-0ee2-8935-86b5-01c61774a628@collabora.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RuPdci4FI09i3u+P"
+Content-Disposition: inline
+In-Reply-To: <8725a111-0ee2-8935-86b5-01c61774a628@collabora.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sincerely thank you for your reply. I also look forward to your comments
-on other patches, especially PATCH 2/6 which provides new *_inside macros
-to make iterator invisiable outside the list_for_each_entry* loop.
 
-Best regards,
---
-Xiaomeng Tong
+--RuPdci4FI09i3u+P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Feb 14, 2022 at 12:26:30PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 18/01/22 14:33, AngeloGioacchino Del Regno ha scritto:
+> > Since depending on the SoC or specific bus functionality some clocks
+> > may be optional, we cannot get the benefit of using devm_clk_bulk_get()
+> > but, by migrating to clk-bulk, we are able to remove the custom functio=
+ns
+> > mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing common
+> > APIs usage, hence (lightly) decreasing kernel footprint.
+> >=20
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
+llabora.com>
+> > ---
+> >   drivers/i2c/busses/i2c-mt65xx.c | 127 +++++++++++++-------------------
+> >   1 file changed, 51 insertions(+), 76 deletions(-)
+> >=20
+>=20
+> Hello,
+> this is a friendly ping to request review on this patch as to avoid forge=
+tting it.
+>=20
+> Adding context, I have tested this patch on multiple (older/newer) MediaT=
+ek
+> platforms.
+
+Qii Wang, what do you think about this patch?
+
+
+--RuPdci4FI09i3u+P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIek90ACgkQFA3kzBSg
+KbafGw/9GFenif8e7sf8WDjqoiTJ19bnc5EA2wFP1yuCOK3ITglAu9Yya8tTY/3J
+phPYTkQlqYXpth6+AndEsBGv2g4sDb8T7MkcNCi6rZYper8oyS6Xro7qkprCvzqZ
+Nj6ltSANZqjsmKsQGNQjiZtXYG+uYzXMKGzbuf4SF9tSJ1GiC43usBv7KKW3wZie
+n9iP2Ii76q0nqJ5v44a2E1AIxQkyn1DQOotD4F+TFZEgpUSIIWctq2Ez3G6LpjjW
+YtERdPi5nCNB90V55nn13ksUKLv5pertnc4elqEbsFT6ZOtYUvUDYOo1oA/5sLIP
+rlLVSM2kZyRbomIPFW4n3AAX+Ag60eDc/VtBOj9rR2ZpRTe1GZCfCokk03/UIqiq
+CeWAEJPQ3kd1eqY2Hp46uNUMgS/zt5Xuc7uKNqZmSs9KIs6NUKi5ydH6/9AW1hrV
+f4xP9pm+CyZv+2/qrcMG3INfL4QRAmRgaVCIThN5n0Rapr7PELa+0bpnXND1a/AL
+SkRJUIX8r5nOMbeKGBkccTBnHr+asXr7FqY2EjO9fdzCj9CY7HaP/QXTjYzHdOsT
+Dnpz6clEeaUPmdG2zeNeS+nmjnWFpJhdQPt6Ac9CBJ6mGTXYH1tJR4C960YBQ5wF
+Tm92kQCkYCQDQE90ftGoq5AZVseXlmnPKXYiAndBXkX/9TmlUTU=
+=cpdN
+-----END PGP SIGNATURE-----
+
+--RuPdci4FI09i3u+P--

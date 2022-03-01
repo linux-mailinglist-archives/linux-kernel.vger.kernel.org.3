@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB3A4C867A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CD14C8681
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiCAI1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S233391AbiCAIaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiCAI1q (ORCPT
+        with ESMTP id S232704AbiCAIaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:27:46 -0500
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6219888C3;
-        Tue,  1 Mar 2022 00:27:05 -0800 (PST)
-Received: by mail-vs1-f43.google.com with SMTP id j3so15729129vsi.7;
-        Tue, 01 Mar 2022 00:27:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zwB4M0FfzvPist4ny08Y1gyEoTHezds+UwIqZ00x3vo=;
-        b=X+8hIQQ7mtKrv/kxqlOJc+vY7tgGiyy8vuu7ar8Lw4BBVMhYcrUFNBYzEBrpWNwmer
-         B0ohx703bZADeyxhR26hfzTQ5Myz/s0yVp6Ww9WngQLOsv3dZiHAzhOqkI43sPeL0oJj
-         Ut5fcBL6RzWsxoYrBKxiRzTixLjZnr0aTT/cEw3vUGYFkPk8fJYpfLwRO7lNyrpEXorh
-         OG4ILatr6UC711g86LwiduyDDb+cZSqPW/ao15I9riTDV934CJpusPCG75lw5/V2N4kX
-         IsK2x/CLXQPxmoYMWb9OZ2SbjL26d2G+1rUcF9OwMDoAk20dUR2Ai+RkCza/NHDvhBh9
-         g0ZQ==
-X-Gm-Message-State: AOAM530cSGZdDq8xsa0RAclYPAstOduhiQX5tU/cHATlnK5N0kKcAywa
-        X7uvJCOE9HzKI1v4MIfFF/ase8S7yX+XmA==
-X-Google-Smtp-Source: ABdhPJz7NDPZ1jf/AZqOdefwJ+fMpJuZTLPpDDplHmDLCPx9MN943y9LSA1/okLg59nKNzvxYIRDtQ==
-X-Received: by 2002:a67:f645:0:b0:31b:916e:8d92 with SMTP id u5-20020a67f645000000b0031b916e8d92mr10314447vso.72.1646123224732;
-        Tue, 01 Mar 2022 00:27:04 -0800 (PST)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id 127-20020a1f0085000000b0032d19f4946esm2026317vka.28.2022.03.01.00.27.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:27:04 -0800 (PST)
-Received: by mail-vs1-f42.google.com with SMTP id y26so15712887vsq.8;
-        Tue, 01 Mar 2022 00:27:03 -0800 (PST)
-X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id
- d19-20020a67e113000000b0030e303dd1d6mr8950618vsl.38.1646123223733; Tue, 01
- Mar 2022 00:27:03 -0800 (PST)
+        Tue, 1 Mar 2022 03:30:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6D01CFF5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WVa24oqklH98k746ClDp4T/iR77u9/DQKhanCUCi1QU=; b=OF/PSqSL3lUgxwg9ZagEuImKOJ
+        ynDFPShbK7CvcNDT+9RlWxk8GA6iwDqzZ9H2P33L1yS7SqFP4r4OOfqE7YmE0KK5yUn9NTodZci/c
+        L+ihJmjzSg9FSGTuagsM661ITU8xMnTK8bKyIfJ1TV4m9gSlOSh0BHyQDnx5oq2LtUtJWazVz/kg9
+        FFX3OY4gLAAbEB34NxSBblrZZadozo6H63b/jhEvsWZKUTSBp7+M8pRtqw51XN67BEY+F8zaL1CGA
+        zbO9tpcYSbuC+03bVghttvIc6qjF2JIUtASTtmwe3QqBFbmZvVrmhFjZ8KjNzEeMVSc8ZDudzHTlE
+        h9NyOm6Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOxsK-009Ol4-9R; Tue, 01 Mar 2022 08:28:52 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CDD183001D0;
+        Tue,  1 Mar 2022 09:28:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ACDA42024C933; Tue,  1 Mar 2022 09:28:49 +0100 (CET)
+Date:   Tue, 1 Mar 2022 09:28:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, alexei.starovoitov@gmail.com,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-ID: <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.892372059@infradead.org>
+ <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+ <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+ <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
 MIME-Version: 1.0
-References: <20220227230302.30388-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227230302.30388-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 1 Mar 2022 09:26:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWSbPrrp6WLzAgW=jt8sDrhYxHorhxzMtEq3rdnMYg-WA@mail.gmail.com>
-Message-ID: <CAMuHMdWSbPrrp6WLzAgW=jt8sDrhYxHorhxzMtEq3rdnMYg-WA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: reset: renesas,rzg2l-usbphy-ctrl: Document
- RZ/V2L USBPHY Control bindings
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:03 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add device tree binding document for RZ/V2L USBPHY Control Device.
-> RZ/V2L USBPHY Control Device is identical to one found on the RZ/G2L SoC.
-> No driver changes are required as generic compatible string
-> "renesas,rzg2l-usbphy-ctrl" will be used as a fallback.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+On Tue, Mar 01, 2022 at 11:49:05AM +0900, Masami Hiramatsu wrote:
+> > +static kprobe_opcode_t *
+> > +_kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
+> > +	     unsigned long offset, bool *on_func_entry)
+> >  {
+> >  	if ((symbol_name && addr) || (!symbol_name && !addr))
+> >  		goto invalid;
+> >  
+> >  	if (symbol_name) {
+> > +		/*
+> > +		 * Input: @sym + @offset
+> > +		 * Output: @addr + @offset
+> > +		 *
+> > +		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
+> > +		 *       argument into it's output!
+> > +		 */
+> >  		addr = kprobe_lookup_name(symbol_name, offset);
+> 
+> Hmm, there are 2 issues.
+> 
+> - the 'addr' includes the 'offset' here.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+AFAICT it doesn't (I ever wrote that in the comment on top). There's two
+implementations of kprobe_lookup_name(), the weak version doesn't even
+use the offset argument, and the PowerPC implementation only checks for
+!offset and doesn't fold it.
 
-Gr{oetje,eeting}s,
+> - the 'offset' is NOT limited under the symbol size.
+>   (e.g. symbol_name = "_text" and @offset points the offset of target symbol from _text)
+> 
+> This means we need to call kallsyms_lookup_size_offset() in this case too.
 
-                        Geert
+I'm feeling we should error out in that case. Using sym+offset beyond
+the limits of sym is just daft.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+But if you really want/need to retain that, then yes, we need that
+else branch unconditionally :/

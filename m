@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEE64C9494
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C7B4C9490
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbiCATnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S237215AbiCATmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiCATnF (ORCPT
+        with ESMTP id S232112AbiCATmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:43:05 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858AE3204D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646163744; x=1677699744;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dpxOOIB6sqQOx/PE9m23Xx1Uoq97ViXCm8f9RA7bK+k=;
-  b=Cc9xp1W42uqzywNfKMEoWmED8lxrBpTDJkP6Gk2iL7ZBz9PKo6rRfKLv
-   ek984L1ZnsRNvtioavTGfcRCB5N7/nopQ2g931I6+n1AAiZhTiAxJvNVC
-   Gp7jtWJnJRNQUWrgO7Uvos7OT9vV3qpdlozTwt/CFtIwTN1HhcnMxK6Lf
-   v2Ly0oHJ0lXyJZUxMwKVYgM57xAJIPt1JzKg3viwd73zz8VDjtC/EBr98
-   HVPPwXjE8AbVhjNn9qbA7W/Gys+cSustFhyBba67CU29PATAkrzLT3O7W
-   6xkiQaSZZ3rPZJmk4TO8qp2W1Ly9zHDCnHXcD4sqPGgnKjhVdHi+42/GK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253412865"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="253412865"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 11:42:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="575821728"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2022 11:42:08 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP8Nr-0000wH-Dd; Tue, 01 Mar 2022 19:42:07 +0000
-Date:   Wed, 2 Mar 2022 03:41:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        daniel.lezcano@linaro.org, tglx@linutronix.de
-Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 2/7] clocksource/drivers/timer-microchip-pit64b: remove
- timer-of depenency
-Message-ID: <202203020342.D25UnKWg-lkp@intel.com>
-References: <20220301123449.2816625-3-claudiu.beznea@microchip.com>
+        Tue, 1 Mar 2022 14:42:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D683465495;
+        Tue,  1 Mar 2022 11:41:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7246761632;
+        Tue,  1 Mar 2022 19:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58888C340EE;
+        Tue,  1 Mar 2022 19:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646163700;
+        bh=C1fiXSQzp/6mGSE4wF5VaDuuI40Za2PZjhJbinmIoDs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sFIIaOr3qhOtKIiGkw47+sRkCTakK6s4LOKKAyeJYuUR4/NwdOwfdasXUZZE+y2dN
+         qTfAkZtm3bVoFwgnBR5c5AAcIWhrEK1eSu+jJttv2IPEGbRWp65T3CHVpPdKS0aQpb
+         RsAEvhp7ssUECvOQfFWuscCf7xqrvhDIw/AQ44yk=
+Date:   Tue, 1 Mar 2022 20:41:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh528WPZrQn5s7vO@kroah.com>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <Yh5fbe71BTT6xc8h@kroah.com>
+ <CAHmME9oGcp7HNLeieptMKztgg7Fq4MnOuAEsiFJxsLbmjSuFCw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301123449.2816625-3-claudiu.beznea@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHmME9oGcp7HNLeieptMKztgg7Fq4MnOuAEsiFJxsLbmjSuFCw@mail.gmail.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,39 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Claudiu,
+On Tue, Mar 01, 2022 at 07:24:11PM +0100, Jason A. Donenfeld wrote:
+> Hi Greg,
+> 
+> On Tue, Mar 1, 2022 at 7:01 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > A notifier block like this makes sense, but why tie onto the PM_ stuff?
+> > This isn't power management issues, it's a system-wide change that I am
+> > sure others will want to know about that doesn't reflect any power
+> > changes.
+> >
+> > As much as I hate adding new notifiers in the kernel, that might be all
+> > you need here.
+> 
+> You might indeed be right. I guess I was thinking that "resuming from
+> suspend" and "resuming from a VM fork" are kind of the same thing.
+> There _is_ a certain kind of similarity between the two. I was hoping
+> if the similarity was a strong enough one, maybe it'd make sense to do
+> them together rather than adding another notifier. But I suppose you
+> disagree, and it sounds like Rafael might too --
+> <https://lore.kernel.org/lkml/CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com/>.
 
-I love your patch! Perhaps something to improve:
+Hey, nice, we agree!  :)
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on soc/for-next linus/master v5.17-rc6 next-20220301]
-[cannot apply to daniel-lezcano/clockevents/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Code-wise for me with WireGuard it's of course appealing to treat them
+> the same, since it's like a one line change, but if I need to add a
+> new notifier call there, it's not the end of the world.
 
-url:    https://github.com/0day-ci/linux/commits/Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220301-203520
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220302/202203020342.D25UnKWg-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/71455500f0209daebcb4729fbcee97a5e81dad14
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Claudiu-Beznea/clocksource-drivers-timer-microchip-pit64b-fixes-and-improvements/20220301-203520
-        git checkout 71455500f0209daebcb4729fbcee97a5e81dad14
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+I know there are other places in the kernel that would like to be
+notified when they have been moved to another machine so that they can
+do things like determine if the CPU functionality has changed (or not),
+and perhaps do other types of device reconfiguration.  Right now the
+kernel does not have any way of knowing this, so it makes sense that if
+the platform (i.e. ACPI here) has a way of creating such a event, it
+should and then we can start tieing in other subsystems to use it
+as-needed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+thanks,
 
-All warnings (new ones prefixed by >>):
-
->> ld: warning: orphan section `__timer_of_table' from `drivers/clocksource/timer-microchip-pit64b.o' being placed in section `__timer_of_table'
->> ld: warning: orphan section `__timer_of_table' from `drivers/clocksource/timer-microchip-pit64b.o' being placed in section `__timer_of_table'
->> ld: warning: orphan section `__timer_of_table' from `drivers/clocksource/timer-microchip-pit64b.o' being placed in section `__timer_of_table'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h

@@ -2,228 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215AE4C8FAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA8E4C8FB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbiCAQHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S235959AbiCAQIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235973AbiCAQH2 (ORCPT
+        with ESMTP id S232419AbiCAQIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:07:28 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A109EBA6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:06:47 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2d07ae0b1c0so149990287b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:06:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5ZXATWH1idWVljLBSYFysoYYRfP4q7oy1uj7Xp77Wes=;
-        b=sqLTHgZG89xSvZiHTJav7yC0zJw3cK+2YWORei7/4iHXDFR2odGC8va9Yuxvz5H37Y
-         zeDY/0/3v8xNJpi26vp4lEdl5D4wb1AYx8g8gYBFL10Pc21eRcvqMhaIhU7v9gQqKuYH
-         Od3oq4FUViEVT16rLrAfoKNn4JFq24+brSLtXf3W/XuzyynirrGfmaFB8Z6++Pe5WMXU
-         VScxzul81KIiGteUH4JKXTvOTzMUYkHYOvfUUUA0UMpYaQV/hV5sU4aUZKczZelIlOrn
-         Cqj/XiLCbEi0f2pHm4bQbJJnuK8ny1q+BBcZ1nUYOPgVH/3Dcnq0G0DoPNsYxprmDsCj
-         mraA==
+        Tue, 1 Mar 2022 11:08:39 -0500
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3B84BB87;
+        Tue,  1 Mar 2022 08:07:57 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id f38so16259929ybi.3;
+        Tue, 01 Mar 2022 08:07:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5ZXATWH1idWVljLBSYFysoYYRfP4q7oy1uj7Xp77Wes=;
-        b=wDK4YTsts/BrMDqSxLv2jSx+hUOgeFj+crnPpBsHymV8w4Vqc5+2s0pNFxqLx/TXjM
-         9zFPkCjpeqG/Wpx90HZhU6y998ERJio16GCBI0HXhEuq1pS3OjoUnqg/pcW6e1NvoLg3
-         vuKNJw/rTgL7pyi4sOYrAk3+FmJ99I4tR9kormtyma5UaxhVqH+OAuRH/69QuD095zcu
-         DLJ0mwSuIO2FDKkLYpnyjGInAmNteMmsvWhc9bTT05JF267SV7zkrmOBNQouoTierqUz
-         kH/AKZNJgrIAk9rNo4O4/oMFBRCPaONVZaDQV3UC8q871FwJOUiQDJWVrAKy/niv0kMw
-         bwcA==
-X-Gm-Message-State: AOAM532qgGzHMbdm7TNn3YduGnrqMd7+/V62VlUwRqNC3Yhgi+gNgIhb
-        W9ovS7RpDNTOiJoOhONZE5KvyGYcKgL9JfHybPjpzQ==
-X-Google-Smtp-Source: ABdhPJwL8lH0SOVvzS1cm5/oug45cK/I3RxyU9yOfG0VFgIdbrjKcgq5WTdct81ihM+voEShGwhsvz74D/Q93VtuO4E=
-X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
- d12-20020a81e90c000000b002dbd63e56ffmr5126928ywm.60.1646150806723; Tue, 01
- Mar 2022 08:06:46 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=HEeJ/FQgP1YcfXQzCrZz1Sk7yO260+E7FFUojjd4FWs=;
+        b=aKJ6vcXMa1rNfu/IpCGHZ7Un1TLkNdWqpRs0CsdSWJqV+EtV9i9GA8egSwtxyIV93g
+         ZBXCUJmd0cvZeVV4Ff5LFCLhFHygulaufbipWaKDO3ISCF7HJFUM6egvSyrwYMu2UgJ2
+         mJWkQc71ybipjLcfzA4qaBqaCbZ2W5+e44zRBnIvMc0S6LoLJHtBmhQrBqM9XnPSwHo+
+         dET0kv+Rj/SqEB39BK5UJQiM2HqVjsjJakd4wFPo4sFbg6ZRrSQesgUoBZcqzvMiMBNU
+         TRjlKkfJ9haYLpv4XOXIGdFrHsnKJDNDEq0hsl7RmmhMe0TKQXfVgBFcBAqMbUWlL/qx
+         1+cw==
+X-Gm-Message-State: AOAM532aP9N9aaS9tCxXPA2dvG6ctjSCvgG4BDcqIYGZViHTuDVOJJ7u
+        scQy3PTYPUfXY53S7fGU6LUz9agL9vB6X1zYK4I=
+X-Google-Smtp-Source: ABdhPJzhWslSmMvtH7+++uNGNjmHVGo1V4LddcDj0zC449QbnV6wuHVFVOnywkOd3I82eLRW/Y3747CPWc7SF8ghQow=
+X-Received: by 2002:a25:d90d:0:b0:615:e400:94c1 with SMTP id
+ q13-20020a25d90d000000b00615e40094c1mr24365841ybg.81.1646150876474; Tue, 01
+ Mar 2022 08:07:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228172159.515152296@linuxfoundation.org>
-In-Reply-To: <20220228172159.515152296@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Mar 2022 21:36:35 +0530
-Message-ID: <CA+G9fYsuzZVa+LT0stskODz5nrgsWhXgU7qPTXSBN2gbFfjC2g@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/31] 4.14.269-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220223100350.3523826-1-Jinzhou.Su@amd.com> <20220223100350.3523826-2-Jinzhou.Su@amd.com>
+ <CAJZ5v0iaY3tsNKFXv09Z4wg_2R3+9UsSnqfPBbOYFaqoVS1qCg@mail.gmail.com> <BL1PR12MB51447B1235E91A81309190B2F7029@BL1PR12MB5144.namprd12.prod.outlook.com>
+In-Reply-To: <BL1PR12MB51447B1235E91A81309190B2F7029@BL1PR12MB5144.namprd12.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 17:07:45 +0100
+Message-ID: <CAJZ5v0jDbNVEtRiaiUXembZB2r4uxVy3iKO0aTqOJsB0rLpV=A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Add more tracepoint for AMD
+ P-State module
+To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 22:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Mar 1, 2022 at 5:05 PM Deucher, Alexander
+<Alexander.Deucher@amd.com> wrote:
 >
-> This is the start of the stable review cycle for the 4.14.269 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> [AMD Official Use Only]
 >
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Tuesday, March 1, 2022 10:26 AM
+> > To: Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>
+> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>; Linux PM <linux-
+> > pm@vger.kernel.org>; Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>; Doug Smythies
+> > <dsmythies@telus.net>; Huang, Ray <Ray.Huang@amd.com>; Viresh Kumar
+> > <viresh.kumar@linaro.org>; Todd Brandt <todd.e.brandt@linux.intel.com>;
+> > Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Sharma, Deepak
+> > <Deepak.Sharma@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>;
+> > Yuan, Perry <Perry.Yuan@amd.com>; Meng, Li (Jassmine)
+> > <Li.Meng@amd.com>
+> > Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Add more tracepoint for AMD
+> > P-State module
+> >
+> > On Wed, Feb 23, 2022 at 11:04 AM Jinzhou Su <Jinzhou.Su@amd.com>
+> > wrote:
+> > >
+> > > Add frequency, mperf, aperf and tsc in the trace. This can be used to
+> > > debug and tune the performance of AMD P-state driver.
+> > >
+> > > Use the time difference between amd_pstate_update to calculate CPU
+> > > frequency. There could be sleep in arch_freq_get_on_cpu, so do not use
+> > > it here.
+> > >
+> > > Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> >
+> > I'm not sure what the second sign-off is for.
+> >
+> > If this is a maintainer's sign-off, it should be added by the maintainer himself
+> > and you should not add it when submitting the patch.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.269-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Both developers co-worked on the patch.  Isn't that pretty standard when you rework someone else's patch?
 
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.14.269-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 43ab82ea0bf0a7b6afb31831af7cefaa3e21c9d6
-* git describe: v4.14.268-32-g43ab82ea0bf0
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.268-32-g43ab82ea0bf0
-
-## Test Regressions (compared to v4.14.268)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.268)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.268)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.268)
-No metric fixes found.
-
-## Test result summary
-total: 79045, pass: 65997, fail: 354, skip: 11390, xfail: 1304
-
-## Build Summary
-* arm: 280 total, 270 passed, 10 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 60 total, 12 passed, 48 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+It is, but that's when Co-developed-by should be used.  Otherwise the
+meaning of the second s-o-b is unclear.

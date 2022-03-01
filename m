@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13154C861C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE584C8622
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiCAIOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S233206AbiCAIRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiCAIOf (ORCPT
+        with ESMTP id S230521AbiCAIRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:14:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA2345785;
-        Tue,  1 Mar 2022 00:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZKFMzW+Kv859HQuOCSrtHRjHr81yrDge18ehzpKSGjE=; b=Wc1YJkdbx0+7ppx32Pf7erlmtn
-        84YNscLIGC1EB1Aj+TAWGXCyTQh3AtwRW8Ccr3lALMMmjEwZ4+5Ommu6/VVnOhDUoqNMmy4NzhNvG
-        oCaWkGg8nz+rpkWbXZvof1bcNrDpSJGcD8ASv+qgYH2wAMXvNWTSXD0Pr2V79k9k3bxznmrjHK5XZ
-        REiKcBAw1B5kAlLs5CheLYJUcabGItx20jaPlMW7X0g+BD0Qjzh+uKeiyJpBMEXGym4A1QeyUd8vV
-        ADUui96TURRvs42n7iSCddMlzzV5Ml+7ZrQ1iCqkEWItpesEzeAmUYKe+LwJBkV94pGedqAvMPlCy
-        Hcq4fT3Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOxdf-00FXIk-7i; Tue, 01 Mar 2022 08:13:43 +0000
-Date:   Tue, 1 Mar 2022 00:13:43 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com,
-        michael.a.bottini@linux.intel.com, rafael@kernel.org,
-        me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 1/3] PCI/ASPM: Add pci_enable_default_link_state()
-Message-ID: <Yh3Vt6/WzoAasPxZ@infradead.org>
-References: <20220301041943.2935892-1-david.e.box@linux.intel.com>
- <20220301041943.2935892-2-david.e.box@linux.intel.com>
+        Tue, 1 Mar 2022 03:17:04 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8F83026;
+        Tue,  1 Mar 2022 00:16:23 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V5vTaqf_1646122580;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V5vTaqf_1646122580)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 01 Mar 2022 16:16:20 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     sre@kernel.org
+Cc:     support.opensource@diasemi.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] power: supply: da9150-fg: Remove unnecessary print function dev_err()
+Date:   Tue,  1 Mar 2022 16:16:19 +0800
+Message-Id: <20220301081619.121904-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301041943.2935892-2-david.e.box@linux.intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:19:41PM -0800, David E. Box wrote:
-> +	down_read(&pci_bus_sem);
-> +	mutex_lock(&aspm_lock);
-> +	link->aspm_default = 0;
-> +	if (state & PCIE_LINK_STATE_L0S)
-> +		link->aspm_default |= ASPM_STATE_L0S;
-> +	if (state & PCIE_LINK_STATE_L1)
-> +		/* L1 PM substates require L1 */
-> +		link->aspm_default |= ASPM_STATE_L1 | ASPM_STATE_L1SS;
-> +	if (state & PCIE_LINK_STATE_L1_1)
-> +		link->aspm_default |= ASPM_STATE_L1_1;
-> +	if (state & PCIE_LINK_STATE_L1_2)
-> +		link->aspm_default |= ASPM_STATE_L1_2;
-> +	if (state & PCIE_LINK_STATE_L1_1_PCIPM)
-> +		link->aspm_default |= ASPM_STATE_L1_1_PCIPM;
-> +	if (state & PCIE_LINK_STATE_L1_2_PCIPM)
-> +		link->aspm_default |= ASPM_STATE_L1_2_PCIPM;
-> +	pcie_config_aspm_link(link, policy_to_aspm_state(link));
+The print function dev_err() is redundant because
+platform_get_irq_byname() already prints an error.
 
-Is there any reason the ASPM_* values aren't passed directly to this
-function?
+Eliminate the follow coccicheck warning:
+./drivers/power/supply/da9150-fg.c:524:2-9: line 524 is redundant
+because platform_get_irq() already prints an error
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/power/supply/da9150-fg.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da9150-fg.c
+index e63fa62d1943..8c5e2c49d6c1 100644
+--- a/drivers/power/supply/da9150-fg.c
++++ b/drivers/power/supply/da9150-fg.c
+@@ -520,10 +520,8 @@ static int da9150_fg_probe(struct platform_device *pdev)
+ 
+ 	/* Register IRQ */
+ 	irq = platform_get_irq_byname(pdev, "FG");
+-	if (irq < 0) {
+-		dev_err(dev, "Failed to get IRQ FG: %d\n", irq);
++	if (irq < 0)
+ 		return irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(dev, irq, NULL, da9150_fg_irq,
+ 					IRQF_ONESHOT, "FG", fg);
+-- 
+2.20.1.7.g153144c
+

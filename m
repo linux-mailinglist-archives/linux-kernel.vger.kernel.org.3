@@ -2,82 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C834C8509
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BA74C8518
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiCAH0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S232929AbiCAH1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiCAH0k (ORCPT
+        with ESMTP id S232952AbiCAH06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:26:40 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472647B56F;
-        Mon, 28 Feb 2022 23:25:50 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id z16so13426920pfh.3;
-        Mon, 28 Feb 2022 23:25:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1xwPzYLmL8tsAcjKkLlXm2q5GxjDpfr4uBY/mxxN6f0=;
-        b=p0hUnlIqn4nB+9QAy6YtbzwVtFaaRd3iLy5CeGRJu5XFinQuo46QvcMxMAvlZ01ztU
-         +mh6iQ/P7DJY+bwlRLg36NWkpIyniBCQb0arpYppSI5gzAAuBH1Io0jqnjiBD79g4BqT
-         Koo6G2VmqJP+0hONu2wOf6bENkDdMbyj4bwGiBlIstAqz661ZuLR1ELpxudC5PNdg0nM
-         r37aPSH1Sq8Y1mm+MW4EltUhHuUWbCddplrmHG0WGMmFSVdnLDwd5ZYnmf3lVwACKRQv
-         Ly7j+WZVz6RFqrkCEB5o1hiKiSkS57kzfkMfDyfvxAaLw6JY/oor4ije/sbmdKZiwsdp
-         avZw==
+        Tue, 1 Mar 2022 02:26:58 -0500
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F5E7D006;
+        Mon, 28 Feb 2022 23:26:06 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id d3so18968972wrf.1;
+        Mon, 28 Feb 2022 23:26:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1xwPzYLmL8tsAcjKkLlXm2q5GxjDpfr4uBY/mxxN6f0=;
-        b=HQoxAQGY0K1DeezCK3veYbJPxPX+W2hxKWB0gG1d5pIYGoCIZ5NmndiatQDZ3WWTb9
-         Is3KpsAcCNXIAN8t+KnOVPOWNvmuQAjyW1GD4nOTZz92tC/8c+F5PPDR/v3+DlKxgtx1
-         9yk3Iw7XUdfGQMQS55sFZUmIl76RW+qfabJZy5qeJmlPDt7No/s0dDiu6XkX8PRhv7ME
-         6FUQocVq54VFVwobwvadto9xZ9uO7hLTHdkQEwxSjcxEbMVwHa1KPWHWY+DVvuSPKXIP
-         ZXjVo+6Tb7i4Ai9JY5Ze61QLz9qVTFYG16a6FGcFTO1oR40dUpuWUUGDvkAu7l0UmcR9
-         KFbQ==
-X-Gm-Message-State: AOAM530mq7SHM9brWxAF+xuiSNNpX8KnGrOU8l6nbo6DI6wTtzs9NKZW
-        y8y1C8vMfQCfDmARgRjsnKI=
-X-Google-Smtp-Source: ABdhPJxk2kkLGOShKr8fWcTWXMBEiU8Tp/GN26wOurQxDFduiq9JdkHrSPrhG04imVVDVCPRuqu8Bw==
-X-Received: by 2002:a05:6a00:1a04:b0:4e1:786c:cce3 with SMTP id g4-20020a056a001a0400b004e1786ccce3mr25912833pfv.81.1646119549671;
-        Mon, 28 Feb 2022 23:25:49 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:c174:264:5e49:f2cb])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm636489pfw.188.2022.02.28.23.25.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ycVXdQLM7srrY8c6er1f1RFEBefwbs4q7mdQO3Fucms=;
+        b=KIuTl6X5nAH4ynNAJoVcyH9kGU7GEXa304za85cKoMBzgfN490Ezhj4mNO59nQTNHS
+         0tSvVqPTFgY08vG92FpDgtoSC4W6B/lvwBkGxBUJdVjpSwjSitmbWz469QRXLgIOk6KP
+         +fxzrGnreibaP/+XWKSGQ0nuEg4SMsI93opp2QLmuaYimugzQXcCEePEJ4bWtrLnDQ1X
+         rgGrGQb8hfrqkdSrzHFVrIZD5eaDB05k4JScS3TqoyZgBknd9/YWnUt+OgmIqeTpOnYC
+         B3gSRynQa3DXcjMqReULJF8Hq6liP9H+AHmcOb+Zol7KP0ei4wHnnjgpIBkEFBmVrva+
+         fJjg==
+X-Gm-Message-State: AOAM531vshrgGM6e8Vxv+SoyG8/VO63qEugBva47N2n4jTFRlhq3afDm
+        S+Jp+Xf6hA3EWtO0s4eQ3h0=
+X-Google-Smtp-Source: ABdhPJxE3Km/V44Av4khjm6F1ArDMBaclXCOIRAfcaWBf51w/LDZFt9kUhQFP73MnyWw+1nYI56Bqg==
+X-Received: by 2002:adf:910a:0:b0:1ed:c3fc:2dcf with SMTP id j10-20020adf910a000000b001edc3fc2dcfmr18652299wrj.430.1646119564477;
+        Mon, 28 Feb 2022 23:26:04 -0800 (PST)
+Received: from aryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.googlemail.com with ESMTPSA id l26-20020a05600c1d1a00b00380def7d3desm1724761wms.17.2022.02.28.23.26.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 23:25:48 -0800 (PST)
-Date:   Mon, 28 Feb 2022 23:25:46 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] Input: da9063 - Use devm_delayed_work_autocancel()
-Message-ID: <Yh3KegzMC+JuUOdn@google.com>
-References: <a76ac3f4c7aee205395b89b5b3f587e30a48df96.1645205312.git.christophe.jaillet@wanadoo.fr>
+        Mon, 28 Feb 2022 23:26:04 -0800 (PST)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH] i2c: meson: Fix wrong speed use from probe
+Date:   Tue,  1 Mar 2022 07:26:00 +0000
+Message-Id: <20220301072600.12352-1-tanure@linux.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a76ac3f4c7aee205395b89b5b3f587e30a48df96.1645205312.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 06:29:13PM +0100, Christophe JAILLET wrote:
-> Use devm_delayed_work_autocancel() instead of hand-writing it.
-> This saves a few lines of code.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Having meson_i2c_set_clk_div after i2c_add_adapter
+causes issues for client drivers that try to use
+the bus before the requested speed is applied.
 
-Applied, thank you.
+The bus can be used just after i2c_add_adapter, so
+move i2c_add_adapter to the final step as
+meson_i2c_set_clk_div needs to be called before
+the bus is used.
 
+Signed-off-by: Lucas Tanure <tanure@linux.com>
+---
+ drivers/i2c/busses/i2c-meson.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+index ef73a42577cc..07eb819072c4 100644
+--- a/drivers/i2c/busses/i2c-meson.c
++++ b/drivers/i2c/busses/i2c-meson.c
+@@ -465,18 +465,18 @@ static int meson_i2c_probe(struct platform_device *pdev)
+ 	 */
+ 	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_START, 0);
+ 
+-	ret = i2c_add_adapter(&i2c->adap);
+-	if (ret < 0) {
+-		clk_disable_unprepare(i2c->clk);
+-		return ret;
+-	}
+-
+ 	/* Disable filtering */
+ 	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
+ 			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
+ 
+ 	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
+ 
++	ret = i2c_add_adapter(&i2c->adap);
++	if (ret < 0) {
++		clk_disable_unprepare(i2c->clk);
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
-Dmitry
+2.35.1
+

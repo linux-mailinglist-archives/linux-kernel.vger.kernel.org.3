@@ -2,101 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477E64C9519
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6754C951B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiCATw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S233380AbiCATwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbiCATwV (ORCPT
+        with ESMTP id S232862AbiCATwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:52:21 -0500
-Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1556A5C358
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:51:23 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V6-vyGs_1646164206;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V6-vyGs_1646164206)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 02 Mar 2022 03:50:07 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH 2/2] erofs: clean up preload_compressed_pages()
-Date:   Wed,  2 Mar 2022 03:49:51 +0800
-Message-Id: <20220301194951.106227-2-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20220301194951.106227-1-hsiangkao@linux.alibaba.com>
-References: <20220301194951.106227-1-hsiangkao@linux.alibaba.com>
+        Tue, 1 Mar 2022 14:52:20 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4BD5938A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:51:22 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221HclT0005247;
+        Tue, 1 Mar 2022 19:50:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MouVo7w91t4SsdQ6PvZTAXvOzPAp8CNaYjEobzvIgJM=;
+ b=gkp89Fnpu0Mxbcnwp4/+koCrYjRYSxL9uaxPS2QamnGfwaDuW7+QpYmiBKGszGpfogkl
+ rn9GDIxXk6lmrltHuIm8+8iclBQV/xS7Fpj8NbFofdRhdBPvZNJ5QqudygrHFB0uSir7
+ +L+raE2Bt4WPJo1UAWaSKAWkmndcIpeaW1QzEaIo2uuuUzQBIVLTARfHWG3dtm9kLZ7n
+ bb5ib4BbFpvpMHN20k+KR4eWlXBTfMG78PS2EfcPZsaucmHILSG/td1gURN+zBfOtt29
+ sUGbDWxvLHklu2QveLs2rxnqeiPp9lkiJ5+tPi1uE3L8ThP/rbcfL/6qZzSIhfySMAmA rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpd4wtx8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 19:50:17 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221JcEJF025465;
+        Tue, 1 Mar 2022 19:50:16 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpd4wtwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 19:50:16 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221JlxTO007093;
+        Tue, 1 Mar 2022 19:50:15 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3egfss5fct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 19:50:15 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221JoEwh55116082
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 19:50:14 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4174B2067;
+        Tue,  1 Mar 2022 19:50:14 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0286CB2066;
+        Tue,  1 Mar 2022 19:50:14 +0000 (GMT)
+Received: from [9.160.109.9] (unknown [9.160.109.9])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Mar 2022 19:50:13 +0000 (GMT)
+Message-ID: <825f5cba-a62b-a691-225e-22f6bb9b10a8@linux.ibm.com>
+Date:   Tue, 1 Mar 2022 11:50:13 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] powerpc: kernel: fix a refcount leak in format_show()
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Hangyu Hua <hbh25y@gmail.com>, benh@kernel.crashing.org,
+        paulus@samba.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220228091103.39749-1-hbh25y@gmail.com>
+ <87o82pomrc.fsf@mpe.ellerman.id.au>
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+In-Reply-To: <87o82pomrc.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bLTeE4ofWdYxIBK_qwW0l4KABtBqpXPu
+X-Proofpoint-GUID: jhHchhS53kz9ByTeVmiqoANFmnfJuf9F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203010097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename preload_compressed_pages() as z_erofs_bind_cache()
-since we're try to prepare for adapting folios.
+On 3/1/22 04:55, Michael Ellerman wrote:
+> Hangyu Hua <hbh25y@gmail.com> writes:
+>> node needs to be dropped when of_property_read_string fails. So an earlier call
+>> to of_node_put is required here.
+> 
+> That's true but ...
+> 
+>> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
+>> index a0a78aba2083..cd0fa7028d86 100644
+>> --- a/arch/powerpc/kernel/secvar-sysfs.c
+>> +++ b/arch/powerpc/kernel/secvar-sysfs.c
+>> @@ -30,13 +30,12 @@ static ssize_t format_show(struct kobject *kobj, struct kobj_attribute *attr,
+>>  		return -ENODEV;
+> 
+> There's also a reference leak there ^
+> 
+> So if you're going to touch this code I'd like you to fix both reference
+> leaks in a single patch please.
+> 
+> Having the error cases set rc and then goto "out" which does the
+> of_node_put() is the obvious solution I think.
 
-Also, add a comment for the gfp setting. No logic changes.
+update_kobj_size() in the same source file provides a good example of the
+suggested solution.
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/zdata.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+-Tyrel
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 2673fc105861..59aecf42e45c 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -219,13 +219,17 @@ struct z_erofs_decompress_frontend {
- static struct page *z_pagemap_global[Z_EROFS_VMAP_GLOBAL_PAGES];
- static DEFINE_MUTEX(z_pagemap_global_lock);
- 
--static void preload_compressed_pages(struct z_erofs_decompress_frontend *fe,
--				     struct address_space *mc,
--				     enum z_erofs_cache_alloctype type,
--				     struct page **pagepool)
-+static void z_erofs_bind_cache(struct z_erofs_decompress_frontend *fe,
-+			       enum z_erofs_cache_alloctype type,
-+			       struct page **pagepool)
- {
-+	struct address_space *mc = MNGD_MAPPING(EROFS_I_SB(fe->inode));
- 	struct z_erofs_pcluster *pcl = fe->pcl;
- 	bool standalone = true;
-+	/*
-+	 * optimistic allocation without direct reclaim since inplace I/O
-+	 * can be used if low memory otherwise.
-+	 */
- 	gfp_t gfp = (mapping_gfp_mask(mc) & ~__GFP_DIRECT_RECLAIM) |
- 			__GFP_NOMEMALLOC | __GFP_NORETRY | __GFP_NOWARN;
- 	struct page **pages;
-@@ -703,17 +707,15 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 		WRITE_ONCE(fe->pcl->compressed_pages[0], fe->map.buf.page);
- 		fe->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
- 	} else {
--		/* preload all compressed pages (can change mode if needed) */
-+		/* bind cache first when cached decompression is preferred */
- 		if (should_alloc_managed_pages(fe, sbi->opt.cache_strategy,
- 					       map->m_la))
- 			cache_strategy = TRYALLOC;
- 		else
- 			cache_strategy = DONTALLOC;
- 
--		preload_compressed_pages(fe, MNGD_MAPPING(sbi),
--					 cache_strategy, pagepool);
-+		z_erofs_bind_cache(fe, cache_strategy, pagepool);
- 	}
--
- hitted:
- 	/*
- 	 * Ensure the current partial page belongs to this submit chain rather
--- 
-2.24.4
+> 
+> cheers
+> 
+>>  	rc = of_property_read_string(node, "format", &format);
+>> +	of_node_put(node);
+>>  	if (rc)
+>>  		return rc;
+>>  
+>>  	rc = sprintf(buf, "%s\n", format);
+>>  
+>> -	of_node_put(node);
+>> -
+>>  	return rc;
+>>  }
+>>  
+>> -- 
+>> 2.25.1
 

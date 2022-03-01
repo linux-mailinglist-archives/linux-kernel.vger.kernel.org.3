@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7BD4C8CE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CBB4C8CEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiCANpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S235002AbiCANsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiCANpg (ORCPT
+        with ESMTP id S233904AbiCANsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:45:36 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4085C9EBBE;
-        Tue,  1 Mar 2022 05:44:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646142296; x=1677678296;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LjBrJhVMjX29DVpiyyWhBn/Si+cXwkHRPIhgP2fekLc=;
-  b=wUNJKAG3wsOB21hYnFO18WxJRf24OPybHApcOctMqQgsmK+QaieonLYi
-   k62t+tLSmyr75TQx5vlhU3fWUFu/UGmSmG4/6YMnxuhT4trsoH8mwKUXe
-   idmIAfFm94AN26cf9njsMjfsEX29aky8l2vdhxWUmgI/SIrWdllrt+Vri
-   0=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 01 Mar 2022 05:44:56 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 05:44:55 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 1 Mar 2022 05:44:54 -0800
-Received: from [10.216.30.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 1 Mar 2022
- 05:44:48 -0800
-Message-ID: <8145926a-17d7-17c6-4a4a-a92aa83e5ad0@quicinc.com>
-Date:   Tue, 1 Mar 2022 19:14:45 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 2/2] dt-bindings: soundwire: qcom: Add bindings for
- audio CSR reset control property
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <alsa-devel@alsa-project.org>, <bgoswami@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>, <judyhsiao@chromium.org>,
-        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <perex@perex.cz>,
-        <pierre-louis.bossart@linux.intel.com>, <quic_plai@quicinc.com>,
-        <robh+dt@kernel.org>, <rohitkr@codeaurora.org>,
-        <sanyog.r.kale@intel.com>, <srinivas.kandagatla@linaro.org>,
-        <tiwai@suse.com>, <yung-chuan.liao@linux.intel.com>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1646030377-12092-1-git-send-email-quic_srivasam@quicinc.com>
- <1646030377-12092-3-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n51Toe+R+GzWZ5=QGz8oQ-g2W0=AL=RvYMZviwzR8cMfwQ@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAE-0n51Toe+R+GzWZ5=QGz8oQ-g2W0=AL=RvYMZviwzR8cMfwQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 08:48:02 -0500
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE29F39B;
+        Tue,  1 Mar 2022 05:47:20 -0800 (PST)
+Received: from [45.44.224.220] (port=56376 helo=localhost)
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nP2qV-0002GI-4T; Tue, 01 Mar 2022 08:47:19 -0500
+Date:   Tue, 01 Mar 2022 08:47:18 -0500
+Message-Id: <cover.1646142288.git.olivier@trillion01.com>
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Hao Xu <haoxu@linux.alibaba.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] io_uring: Add support for napi_busy_poll
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The sqpoll thread can be used for performing the napi busy poll in a
+similar way that it does io polling for file systems supporting direct
+access bypassing the page cache.
 
-On 3/1/2022 2:33 AM, Stephen Boyd wrote:
-Thanks for your time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2022-02-27 22:39:37)
->> Update description for audio CSR reset control property, which is
->> required for latest chipsets to allow software enabling in CGCR HCLK register.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/soundwire/qcom,sdw.txt | 12 ++++++++++++
-> Any reason this can't be yamlified?
+The other way that io_uring can be used for napi busy poll is by
+calling io_uring_enter() to get events.
 
-As such nothing is blocking to yamlify. We Shall do after all Herobrine 
-audio patches upstream completed.
+If the user specify a timeout value, it is distributed between polling
+and sleeping by using the systemwide setting
+/proc/sys/net/core/busy_poll.
 
-Will add in my To Do list and pick this activity ASAP.
+The changes have been tested with this program:
+https://github.com/lano1106/io_uring_udp_ping
 
->
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
->> index b93a2b3..84c8f54 100644
->> --- a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
->> +++ b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
->> @@ -150,6 +150,18 @@ board specific bus parameters.
->>                      or applicable for the respective data port.
->>                      More info in MIPI Alliance SoundWire 1.0 Specifications.
->>
->> +- reset:
->> +       Usage: optional
->> +       Value type: <prop-encoded-array>
->> +       Definition: Should specify the SoundWire audio CSR reset controller interface,
->> +                   which is required for SoundWire version 1.6.0 and above.
->> +
->> +- reset-names:
->> +       Usage: optional
->> +       Value type: <stringlist>
->> +       Definition: should be "swr_audio_cgcr" for SoundWire audio CSR reset
->> +                   controller interface.
->> +
->>   Note:
->>          More Information on detail of encoding of these fields can be
->>   found in MIPI Alliance SoundWire 1.0 Specifications.
->> --
->> 2.7.4
->>
+and the result is:
+Without sqpoll:
+NAPI busy loop disabled:
+rtt min/avg/max/mdev = 40.631/42.050/58.667/1.547 us
+NAPI busy loop enabled:
+rtt min/avg/max/mdev = 30.619/31.753/61.433/1.456 us
+
+With sqpoll:
+NAPI busy loop disabled:
+rtt min/avg/max/mdev = 42.087/44.438/59.508/1.533 us
+NAPI busy loop enabled:
+rtt min/avg/max/mdev = 35.779/37.347/52.201/0.924 us
+
+v2:
+ * Evaluate list_empty(&ctx->napi_list) outside io_napi_busy_loop() to keep
+   __io_sq_thread() execution as fast as possible
+ * In io_cqring_wait(), move up the sig block to avoid needless computation
+   if the block exits the function
+ * In io_cqring_wait(), protect ctx->napi_list from race condition by
+   splicing it into a local list
+ * In io_cqring_wait(), allow busy polling when uts is missing
+ * Fix kernel test robot issues
+v3:
+ * Fix do_div() type mismatch warning
+ * Reduce uring_lock contention by creating a spinlock for protecting
+   napi_list
+ * Support correctly MULTISHOT poll requests
+v4:
+ * Put back benchmark result in commit text
+
+Olivier Langlois (2):
+  io_uring: minor io_cqring_wait() optimization
+  io_uring: Add support for napi_busy_poll
+
+ fs/io_uring.c | 246 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 237 insertions(+), 9 deletions(-)
+
+
+base-commit: 719fce7539cd3e186598e2aed36325fe892150cf
+-- 
+2.35.1
+

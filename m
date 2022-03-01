@@ -2,186 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461334C8F55
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A684C8F54
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235875AbiCAPns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S235863AbiCAPnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiCAPnk (ORCPT
+        with ESMTP id S230153AbiCAPnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:43:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCF34BFF6;
-        Tue,  1 Mar 2022 07:42:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 1 Mar 2022 10:43:39 -0500
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0384B866;
+        Tue,  1 Mar 2022 07:42:57 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id 69332C8008D;
+        Tue,  1 Mar 2022 16:42:55 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id x_E1zIiXs8qD; Tue,  1 Mar 2022 16:42:55 +0100 (CET)
+Received: from [192.168.176.112] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 039F46166E;
-        Tue,  1 Mar 2022 15:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29085C340EE;
-        Tue,  1 Mar 2022 15:42:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Kac+Ghbs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646149373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=JLiE20ERfAkQFV80+EpmUJ32l4pWt7u7GFd3/Smjljc=;
-        b=Kac+Ghbs0J+S7FgJnGjfLHTzX3vnHgJEAB0OxfoQbxx04yySDohXAMM2HRfEeyUEK2OqK/
-        pmZCqrjaD2690aWP1GxnDzgjg7GPEdvD3QdFZ3AFITYG1z3LFxNjADK6jlyoY+y3i54pu0
-        CjjzcBGVb2Fze1SPHfZMLuDTnBcZhtc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bf755614 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 1 Mar 2022 15:42:53 +0000 (UTC)
-Date:   Tue, 1 Mar 2022 16:42:47 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-hyperv@vger.kernel.org,
-        linux-crypto@vger.kernel.org, graf@amazon.com,
-        mikelley@microsoft.com, gregkh@linuxfoundation.org,
-        adrian@parity.io, lersek@redhat.com, berrange@redhat.com,
-        linux@dominikbrodowski.net, jannh@google.com, mst@redhat.com,
-        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        linux-pm@vger.kernel.org, colmmacc@amazon.com, tytso@mit.edu,
-        arnd@arndb.de
-Subject: propagating vmgenid outward and upward
-Message-ID: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPSA id D1AE9C80089;
+        Tue,  1 Mar 2022 16:42:54 +0100 (CET)
+Message-ID: <16c301ff-6e38-11e9-9305-efb91213e811@tuxedocomputers.com>
+Date:   Tue, 1 Mar 2022 16:42:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] input/i8042: Add TUXEDO/Clevo devices to i8042 quirk
+ tables
+Content-Language: de-DE
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, tiwai@suse.de,
+        mpdesouza@suse.com, arnd@arndb.de, samuel@cavoj.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220228114819.32949-1-wse@tuxedocomputers.com>
+ <af476269-0722-218d-0fe6-404a9bab736f@redhat.com>
+ <a6bfc728-dd47-84fa-1587-3af3049cb0c9@tuxedocomputers.com>
+ <Yh3RRT7xgY+PJfrQ@google.com>
+From:   Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <Yh3RRT7xgY+PJfrQ@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey folks,
 
-Having finally wrapped up development of the initial vmgenid driver, I
-thought I'd pull together some thoughts on vmgenid, notification, and
-propagating, from disjointed conversations I've had with a few of you
-over the last several weeks.
+Am 01.03.22 um 08:54 schrieb Dmitry Torokhov:
+> Hi,
+>
+> On Mon, Feb 28, 2022 at 07:50:55PM +0100, Werner Sembach wrote:
+>> Am 28.02.22 um 14:00 schrieb Hans de Goede:
+>>> Hi all,
+>>>
+>>> On 2/28/22 12:48, Werner Sembach wrote:
+>>>> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
+>>>> suspend, fixable with reset + nomux + nopnp + noloop. Luckily, none of them
+>>>> have an external PS/2 port so this can safely be set for all of them.
+>>>>
+>>>> I'm not entirely sure if every device listed really needs all four quirks,
+>>>> but after testing and production use. No negative effects could be
+>>>> observed when setting all four.
+>>>>
+>>>> The list is quite massive as neither the TUXEDO nor the Clevo dmi strings
+>>>> have been very consistent historically. I tried to keep the list as short
+>>>> as possible without risking on missing an affected device.
+>>>>
+>>>> This is revision 2 where the Clevo N150CU barebone is removed again, as it
+>>>> might have problems with the fix and needs further investigations. Also
+>>>> the SchenkerTechnologiesGmbH System-/Board-Vendor string variations are
+>>>> added.
+>>>>
+>>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+>>>> Cc: stable@vger.kernel.org
+>>> Looking at the patch I think it would be better to split this into
+>>> 2 patches":
+>>>
+>>> 1. Merge all the existing separate tables into 1 table and use the dmi_system_id.driver_data
+>>> field to store which combination of the 4 quirks apply to which models.
+>>>
+>>> This will already help reducing the tables since some of the models are
+>>> already listed in 2 or more tables. So you would get something like this:
+>>>
+>>> #define SERIO_QUIRK_RESET		BIT(0)
+>>> #define SERIO_QUIRK_NOMUX		BIT(1)
+>>> #define SERIO_QUIRK_NOPNP		BIT(2)
+>>> #define SERIO_QUIRK_NOLOOP		BIT(3)
+>>> #define SERIO_QUIRK_NOSELFTEST		BIT(4)
+>>> // etc.
+>>>
+>>> static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>>>         {
+>>>                 /* Entroware Proteus */
+>>>                 .matches = {
+>>>                         DMI_MATCH(DMI_SYS_VENDOR, "Entroware"),
+>>>                         DMI_MATCH(DMI_PRODUCT_NAME, "Proteus"),
+>>>                         DMI_MATCH(DMI_PRODUCT_VERSION, "EL07R4"),
+>>>                 },
+>>> 		.driver_data = (void *)(SERIO_QUIRK_RESET | SERIO_QUIRK_NOMUX)
+>>>         },
+>>> 	{}
+>>> };
+>>>
+>>> I picked the Entroware EL07R4 as example here because it needs both the reset and nomux quirks.
+>>>
+>>> And then when checking the quirks do:
+>>>
+>>> #ifdef CONFIG_X86
+>>> 	const struct dmi_system_id *dmi_id;
+>>> 	long quirks = 0;
+>>>
+>>> 	dmi_id = dmi_first_match(i8042_dmi_quirk_table);
+>>> 	if (dmi_id)
+>>> 		quirks = (long)dmi_id->driver_data;
+>>>
+>>> 	if (i8042_reset == I8042_RESET_DEFAULT) {
+>>> 		if (quirks & SERIO_QUIRK_RESET)
+>>> 			i8042_reset = I8042_RESET_ALWAYS;
+>>> 		if (quirks & SERIO_QUIRK_NOSELFTEST)
+>>> 			i8042_reset = I8042_RESET_NEVER;
+>>> 	}
+>>>
+>>> 	//etc.
+>>>
+>>>
+>>> This way you can reduce all the tables to just 1 table. Please
+>>> also sort the table alphabetically, first by vendor, then sub-sort
+>>> by model. This way you can find more entries to merge and it
+>>> is a good idea to have big tables like this sorted in some way
+>>> regardless.
+>>>
+>>>
+>>> And then once this big refactoring patch is done (sorry), you
+>>> can add a second patch on top:
+>>>
+>>> 2. Add the models you want to quirk to the new merged tabled
+>>> and now you only need to add 1 table entry per model, rather
+>>> then 4, making the patch much smaller.
+>>>
+>>>
+>>> This is a refactoring which IMHO we should likely already
+>>> have done a while ago, but now with your patch it really is
+>>> time we do this.
+>>>
+>>> I hope the above makes sense, if not don't hesitate to ask
+>>> questions. Also note this is how *I* would do this, but
+>>> I'm not the input subsys-maintainer, ultimately this is
+>>> Dmitry's call and he may actually dislike with I'm proposing!
+>> Yes, it does make sense. I could follow you and I too think it's a good idea. I will hopefully find time to work on this
+>> refactoring in the next days.
+> Yes, I think this is a great idea as we have many instances where
+> the same entries are present in several tables.
+No problem. I hope mail mails get through now ^^.
+>
+>>> I don't expect that Dmitry will dislike this, but you never know.
+>>>
+>>> Also unfortunately Dmitry lately has only a limited amount of
+>>> time to spend on input subsys maintenance so in my experience
+>>> it may be a while before you get a reply from Dmitry.
+>> Ok, thanks for the info. As I wrote in the other mail, I was worried (or paranoid xD) that I got flagged as spam or
+>> something.
+> It did indeed, I am not sure why. This does not invalidate what Hans
+> said - lately I was not able to spend as much time on input as I wanted.
+>
+> Regarding this patch - it looks like board names are pretty unique in
+> many cases, so I wonder if we could not save some memory by omitting the
+> vendor info (especially because some, like "Notebook", are very generic
+> anyways) and go simply by the board.
+Think in this case it would be helpful to have a DMI_MATCH_NOT at hand, just in case there is a collision in the future.
 
-The basic problem is: VMs can be cloned, forked, rewound, or
-snapshotted, and when this happens, a) the RNG needs to reseed itself,
-and b) cryptographic algorithms that are not reuse resistant need to
-reinitialize in one way or another. For 5.18, we're handling (a) via the
-new vmgenid driver, which implements a spec from Microsoft, whereby the
-driver receives ACPI notifications when a 16 byte unique value changes.
+Kind regards,
 
-The vmgenid driver basically works, though it is racy, because that ACPI
-notification can arrive after the system is already running again. This
-race is even worse on Windows, where they kick the notification into a
-worker thread, which then publishes it upward elsewhere to another async
-mechanism, and eventually it hits the RNG and various userspace apps.
-On Linux it's not that bad -- we reseed immediately upon receiving the
-notification -- but it still inherits this same "push"-model deficiency,
-which a "pull"-model would not have.
+Werner Sembach
 
-If we had a "pull" model, rather than just expose a 16-byte unique
-identifier, the vmgenid virtual hardware would _also_ expose a
-word-sized generation counter, which would be incremented every time the
-unique ID changed. Then, every time we would touch the RNG, we'd simply
-do an inexpensive check of this memremap()'d integer, and reinitialize
-with the unique ID if the integer changed. In this way, the race would
-be entirely eliminated. We would then be able to propagate this outwards
-to other drivers, by just exporting an extern symbol, in the manner of
-`jiffies`, and propagate it upwards to userspace, by putting it in the
-vDSO, in the manner of gettimeofday. And like that, there'd be no
-terrible async thing and things would work pretty easily.
-
-But that's not what we have, because Microsoft didn't collaborate with
-anybody on this, and now it's implemented in several hypervisors. Given
-that I'm already spending considerable time working on the RNG, entirely
-without funding, somehow I'm not super motivated to lead a
-cross-industry political effort to change Microsoft's vmgenid spec.
-Maybe somebody else has an appetite for this, but either way, those
-changes would be several years off at best.
-
-So given we have a "push"-model mechanism, there are two problems to
-tackle, perhaps in the same way, perhaps in a different way:
-
-A) Outwards propagation toward other kernel drivers: in this case, I
-   have in mind WireGuard, naturally, which very much needs to clear its
-   existing sessions when VMs are forked.
-
-B) Upwards propagation to userspace: in this case, we handle the
-   concerns of the Amazon engineers on this thread who broached this
-   topic a few years ago, in which s2n, their TLS library, wants to
-   reinitialize its userspace RNG (a silly thing, but I digress) and
-   probably clear session keys too, for the same good reason as
-   WireGuard.
-
-For (A), at least wearing my WireGuard-maintainer hat, there is an easy
-way and there is a "race-free" way. I use scare quotes there because
-we're still in a "push"-model, which means it's still racy no matter
-what.
-
-The faux "race-free" way involves having `extern u32 rng_vm_generation;`
-or similar in random.h, and then everything that generates a session key
-would snapshot this value, and every time a session key is used, a
-comparison would be made. This works, but given that we're going to be
-racy no matter what, I think I'd prefer avoiding the extra code in the
-hot path and extra per-session storage. It seems like that'd involve a
-lot of fiddly engineering for no real world benefit.
-
-The easy way, and the way that I think I prefer, would be to just have a
-sync notifier_block for this, just like we have with
-register_pm_notifier(). From my perspective, it'd be simplest to just
-piggy back on the already existing PM notifier with an extra event,
-PM_POST_VMFORK, which would join the existing set of 7, following
-PM_POST_RESTORE. I think that'd be coherent. However, if the PM people
-don't want to play ball, we could always come up with our own
-notifier_block. But I don't see the need. Plus, WireGuard *already*
-uses the PM notifier for clearing keys, so code-wise for my use case,
-that'd amount adding another case for PM_POST_VMFORK, in addition to the
-currently existing PM_HIBERNATION_PREPARE and PM_SUSPEND_PREPARE cases,
-which all would be treated the same way. Ezpz. So if that sounds like an
-interesting thing to the PM people, I think I'd like to propose a patch
-for that, possibly even for 5.18, given that it'd be very straight-
-forward.
-
-For (B), it's a little bit trickier. But I think our options follow the
-same rubric. We can expose a generation counter in the vDSO, with
-semantics akin to the extern integer I described above. Or we could
-expose that counter in a file that userspace could poll() on and receive
-notifications that way. Or perhaps a third way. I'm all ears here.
-Alex's team from Amazon last year proposed something similar to the vDSO
-idea, except using mmap on a sysfs file, though from what I can tell,
-that wound up being kind of complicated. Due to the fact that we're
-_already_ racy, I think I'm most inclined at this point toward the
-poll() approach for the same reasons as I prefer a notifier_block. But
-on userspace I could be convinced otherwise, and I'd be interested in
-totally different ideas here too.
-
-Another thing I should note is that, while I'm not currently leaning
-toward it, the vDSO approach also ties into interesting discussions
-about userspace RNGs (generally a silly idea), and their need for things
-like fork detection and also learning when the kernel RNG was last
-reseeded. So cracking open the vDSO book might invite all sorts of other
-interesting questions and discussions, which may be productive or may be
-a humongous distraction. (Also, again, I'm not super enthusiastic about
-userspace RNGs.)
-
-Also, there is an interesting question to decide with regards to
-userspace, which is whether the vmgenid driver should expose its unique
-ID to userspace, as Alex requested on an earlier thread. I am actually
-sort of opposed to this. That unique ID may or may not be secret and
-entropic; if it isn't, the crypto is designed to not be impacted
-negatively, but if it is, we should keep it secret. So, rather, I think
-the correct flow is that userspace simply calls getrandom() upon
-learning that the VM forked, which is guaranteed to have been
-reinitialized already by add_vmfork_randomness(), and that will
-guarantee a value that is unique to the VM, without having to actually
-expose that value.
-
-So, anyway, this is more or less where my thinking on this matter is.
-Would be happy to hear some fresh ideas here too.
-
-Regards,
-Jason
+>
+> Thanks.
+>

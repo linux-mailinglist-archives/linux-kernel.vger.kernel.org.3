@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC23B4C8771
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419DD4C87C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiCAJLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S233711AbiCAJX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiCAJLh (ORCPT
+        with ESMTP id S232384AbiCAJXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:11:37 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFC842A08;
-        Tue,  1 Mar 2022 01:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646125856; x=1677661856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gOJiA9z7fHS2Yo0M8c+wiWR9d2su9qM5cyve0xvlK2w=;
-  b=mAsJkdIE3MOWTYWqQmVN0h9oL7QDHap/3d97TTK8KYIS7fWM2kxsqi0x
-   Sx6EFqFMh3Bt3o1x3RdZtTtatgjhWeLXD2GcNKtWNgKbpaURPJWQKq3Lb
-   iiNVNmhlt4UiqRLvq+ZFrhHzY8mzrktNx07ZcmDzt6TYttBxdhRI5po+S
-   Rd2yp6iVdQoacuy46EnJVz13OG6CG1R1Jq6bvnNI9PTKZHjDQjGv9lDsN
-   oT1xhZliHIfO6qSeNRrlT2xoUZMbkrztqNwK6g53HHuz3pllvt18s2AZz
-   HmaANdUhCeBV3nSYRi/Xi0qsR4dgl4JyUUi1EpsWERVlMM7JX/3pW6zlU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339526804"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="339526804"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 01:10:56 -0800
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="534818793"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 01:10:50 -0800
-Date:   Tue, 1 Mar 2022 17:21:46 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
-Subject: Re: [PATCH v6 7/9] KVM: VMX: enable IPI virtualization
-Message-ID: <20220301092144.GA32619@gao-cwp>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
- <20220225082223.18288-8-guang.zeng@intel.com>
- <0e9a22e90256ed289d90956f720f36d870c92d2a.camel@redhat.com>
+        Tue, 1 Mar 2022 04:23:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF47AE7B;
+        Tue,  1 Mar 2022 01:22:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15785B81855;
+        Tue,  1 Mar 2022 09:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0972C340EE;
+        Tue,  1 Mar 2022 09:22:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646126559;
+        bh=ZpG11DD4kp9h4/beH993WEeMr4LguyKwWCvtJOaP/8Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AnDeyLB9EgfvQl+AhT8DrwEAFMRcAPKHtHDA+fV+HVqwv7K95N7zFGRi+C02gLXXw
+         s5r1eCRjv7MhkHR4z/ahqeB4jJXrLfkNGguy50QZ/En2FgqadneXBA/W5x/T5mJGUK
+         gqzit1E5G3zEbf4tWBZE6EuDHtjxx4Bqvr8hMJLK4eTzgfIPTERMFMriwGyEHBL4hM
+         kA0sp8o7K59oEvKW5QRUZoDcuIpYLoKYoNwfP7S8LvVV3vaxjZ9JZX05FD4O8oeJ5U
+         oMQUkxOfqnivmB4BXGvg8TLkEcLrCa9882/+SJGvQewS9fD6KBH/lWHDiRbD1BqHN2
+         nb4eVLfQxbbEQ==
+Date:   Tue, 1 Mar 2022 10:22:32 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        James Morris <jmorris@namei.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
+Message-ID: <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+References: <20220228215935.748017-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0e9a22e90256ed289d90956f720f36d870c92d2a.camel@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228215935.748017-1-mic@digikod.net>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,259 +69,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> +static bool vmx_can_use_ipiv_pi(struct kvm *kvm)
->> +{
->> +	return irqchip_in_kernel(kvm) && enable_ipiv;
->> +}
->> +
->> +static bool vmx_can_use_posted_interrupts(struct kvm *kvm)
->> +{
->> +	return vmx_can_use_ipiv_pi(kvm) || vmx_can_use_vtd_pi(kvm);
->
->It took me a while to figure that out.
+On Mon, Feb 28, 2022 at 10:59:35PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
 > 
->vmx_can_use_vtd_pi returns true when the VM can be targeted by posted
->interrupts from the IOMMU, which leads to
+> While transitionning to ACC_MODE() with commit 5300990c0370 ("Sanitize
+> f_flags helpers") and then fixing it with commit 6d125529c6cb ("Fix
+> ACC_MODE() for real"), we lost an open flags consistency check.  Opening
+> a file with O_WRONLY | O_RDWR leads to an f_flags containing MAY_READ |
+> MAY_WRITE (thanks to the ACC_MODE() helper) and an empty f_mode.
+> Indeed, the OPEN_FMODE() helper transforms 3 (an incorrect value) to 0.
 > 
->1. update of the NV vector and SN bit on vcpu_load/vcpu_put to let
->IOMMU knows where the vCPU really runs.
+> Fortunately, vfs_read() and vfs_write() both check for FMODE_READ, or
+> respectively FMODE_WRITE, and return an EBADF error if it is absent.
+> Before commit 5300990c0370 ("Sanitize f_flags helpers"), opening a file
+> with O_WRONLY | O_RDWR returned an EINVAL error.  Let's restore this safe
+> behavior.
+
+That specific part seems a bit risky at first glance. Given that the
+patch referenced is from 2009 this means we've been allowing O_WRONLY |
+O_RDWR to succeed for almost 13 years now.
+
 > 
->2. in vmx_pi_update_irte to configure the posted interrupts.
+> To make it consistent with ACC_MODE(), this patch also changes
+> OPEN_FMODE() to return FMODE_READ | FMODE_WRITE for O_WRONLY | O_RDWR.
+> This may help protect from potential spurious issues.
 > 
+> This issue could result in inconsistencies with AppArmor, Landlock and
+> SELinux, but the VFS checks would still forbid read and write accesses.
+> Tomoyo uses the ACC_MODE() transformation which is correct, and Smack
+> doesn't check the file mode.  Filesystems using OPEN_FMODE() should also
+> be protected by the VFS checks.
 > 
->Now IPIv will also use the same NV vector and SN bit for IPI virtualization,
->thus they have to be kept up to date on vcpu load/put.
+> Fixes: 5300990c0370 ("Sanitize f_flags helpers")
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: Darrick J. Wong <djwong@kernel.org>
+> Cc: Eric Paris <eparis@parisplace.org>
+> Cc: John Johansen <john.johansen@canonical.com>
+> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+> Cc: Miklos Szeredi <miklos@szeredi.hu>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Cc: Steve French <sfrench@samba.org>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220228215935.748017-1-mic@digikod.net
+> ---
+>  fs/file_table.c    | 3 +++
+>  include/linux/fs.h | 5 +++--
+>  2 files changed, 6 insertions(+), 2 deletions(-)
 > 
->I would appreciate a comment about this in vmx_can_use_posted_interrupts
->because posted interrupts can mean too many things, like a host->guest
->posted interrupt which is sent by just interrupt.
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index 7d2e692b66a9..b936f69525d0 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -135,6 +135,9 @@ static struct file *__alloc_file(int flags, const struct cred *cred)
+>  	struct file *f;
+>  	int error;
+>  
+> +	if ((flags & O_ACCMODE) == O_ACCMODE)
+> +		return ERR_PTR(-EINVAL);
+> +
+>  	f = kmem_cache_zalloc(filp_cachep, GFP_KERNEL);
+>  	if (unlikely(!f))
+>  		return ERR_PTR(-ENOMEM);
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index e2d892b201b0..83bc5aaf1c41 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -3527,8 +3527,9 @@ int __init list_bdev_fs_names(char *buf, size_t size);
+>  #define __FMODE_NONOTIFY	((__force int) FMODE_NONOTIFY)
+>  
+>  #define ACC_MODE(x) ("\004\002\006\006"[(x)&O_ACCMODE])
+> -#define OPEN_FMODE(flag) ((__force fmode_t)(((flag + 1) & O_ACCMODE) | \
+> -					    (flag & __FMODE_NONOTIFY)))
+> +#define OPEN_FMODE(flag) ((__force fmode_t)( \
+> +			(((flag + 1) & O_ACCMODE) ?: O_ACCMODE) | \
+> +			(flag & __FMODE_NONOTIFY)))
+>  
+>  static inline bool is_sxid(umode_t mode)
+>  {
 > 
->Maybe also rename the function to something like
+> base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
+> -- 
+> 2.35.1
 > 
->vmx_need_up_to_date_nv_sn(). Sounds silly to me so
->maybe something else.
-
-It makes sense.
-
-Will add a comment and rename the function.
-
->
->> @@ -4219,14 +4229,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->>  
->>  	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
->>  	if (cpu_has_secondary_exec_ctrls()) {
->> -		if (kvm_vcpu_apicv_active(vcpu))
->> +		if (kvm_vcpu_apicv_active(vcpu)) {
->>  			secondary_exec_controls_setbit(vmx,
->>  				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
->>  				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
->> -		else
->> +			if (cpu_has_tertiary_exec_ctrls() && enable_ipiv)
->> +				tertiary_exec_controls_setbit(vmx,
->> +						TERTIARY_EXEC_IPI_VIRT);
->> +		} else {
->>  			secondary_exec_controls_clearbit(vmx,
->>  					SECONDARY_EXEC_APIC_REGISTER_VIRT |
->>  					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
->> +			if (cpu_has_tertiary_exec_ctrls())
->> +				tertiary_exec_controls_clearbit(vmx,
->> +						TERTIARY_EXEC_IPI_VIRT);
->> +		}
->
->Why check for cpu_has_tertiary_exec_ctrls()? wouldn't it be always true
->(enable_ipiv has to be turned to false if CPU doesn't support IPIv,
->and if it does it will support tertiary exec controls).
-
-yes. Checking enable_ipiv in two if()s above is enough.
-
->
->I don't mind this as a precaution + consistency with other code.
->
->
->>  	}
->>  
->>  	vmx_update_msr_bitmap_x2apic(vcpu);
->> @@ -4260,7 +4277,16 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->>  
->>  static u64 vmx_tertiary_exec_control(struct vcpu_vmx *vmx)
->>  {
->> -	return vmcs_config.cpu_based_3rd_exec_ctrl;
->> +	u64 exec_control = vmcs_config.cpu_based_3rd_exec_ctrl;
->> +
->> +	/*
->> +	 * IPI virtualization relies on APICv. Disable IPI
->> +	 * virtualization if APICv is inhibited.
->> +	 */
->> +	if (!enable_ipiv || !kvm_vcpu_apicv_active(&vmx->vcpu))
->> +		exec_control &= ~TERTIARY_EXEC_IPI_VIRT;
->
->I am not 100% sure, but kvm_vcpu_apicv_active might not be the
->best thing to check here, as it reflects per-cpu dynamic APICv inhibit.
->
->It probably works, but it might be better to use enable_apicv
->here and rely on normal APICv inhibit, and there inibit IPIv  as well
->as you do in vmx_refresh_apicv_exec_ctrl/
->
-
-What's the difference between normal and per-cpu dynamic APICv inhibit?
-
->
->
->> +
->> +	return exec_control;
->>  }
->>  
->>  /*
->> @@ -4412,6 +4438,9 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
->>  
->>  static void init_vmcs(struct vcpu_vmx *vmx)
->>  {
->> +	struct kvm_vcpu *vcpu = &vmx->vcpu;
->> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
->> +
->>  	if (nested)
->>  		nested_vmx_set_vmcs_shadowing_bitmap();
->>  
->> @@ -4431,7 +4460,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->>  	if (cpu_has_tertiary_exec_ctrls())
->>  		tertiary_exec_controls_set(vmx, vmx_tertiary_exec_control(vmx));
->>  
->> -	if (kvm_vcpu_apicv_active(&vmx->vcpu)) {
->> +	if (kvm_vcpu_apicv_active(vcpu)) {
->
->here too (pre-existing), I also not 100% sure that kvm_vcpu_apicv_active
->should be used. I haven't studied APICv code that much to be 100% sure.
-
-I think kvm_vcpu_apicv_active is better.
-
-The question is: If CPU supports a VMX feature (APICv), but it isn't enabled
-now, is it allowed to configure VMCS fields defined by the feature?  Would CPU
-ignore the values written to the fields or retain them after enabling the
-feature later?
-
-Personally, KVM shouldn't rely on CPU's behavior in this case. So, It is better
-for KVM to write below VMCS fields only if APICv is enabled.
-
->
->
->>  		vmcs_write64(EOI_EXIT_BITMAP0, 0);
->>  		vmcs_write64(EOI_EXIT_BITMAP1, 0);
->>  		vmcs_write64(EOI_EXIT_BITMAP2, 0);
->> @@ -4441,6 +4470,13 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->>  
->>  		vmcs_write16(POSTED_INTR_NV, POSTED_INTR_VECTOR);
->>  		vmcs_write64(POSTED_INTR_DESC_ADDR, __pa((&vmx->pi_desc)));
->> +
->> +		if (enable_ipiv) {
->> +			WRITE_ONCE(kvm_vmx->pid_table[vcpu->vcpu_id],
->> +				__pa(&vmx->pi_desc) | PID_TABLE_ENTRY_VALID);
->> +			vmcs_write64(PID_POINTER_TABLE, __pa(kvm_vmx->pid_table));
->> +			vmcs_write16(LAST_PID_POINTER_INDEX, kvm_vmx->pid_last_index);
->> +		}
->>  	}
->>  
->>  	if (!kvm_pause_in_guest(vmx->vcpu.kvm)) {
->> @@ -4492,7 +4528,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->>  		vmcs_write16(GUEST_PML_INDEX, PML_ENTITY_NUM - 1);
->>  	}
->>  
->> -	vmx_write_encls_bitmap(&vmx->vcpu, NULL);
->> +	vmx_write_encls_bitmap(vcpu, NULL);
->
->I might have separated the refactoring of using vcpu instead of &vmx->vcpu
->in a separate patch, but I don't mind that that much.
->
->>  
->>  	if (vmx_pt_mode_is_host_guest()) {
->>  		memset(&vmx->pt_desc, 0, sizeof(vmx->pt_desc));
->> @@ -4508,7 +4544,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->>  
->>  	if (cpu_has_vmx_tpr_shadow()) {
->>  		vmcs_write64(VIRTUAL_APIC_PAGE_ADDR, 0);
->> -		if (cpu_need_tpr_shadow(&vmx->vcpu))
->> +		if (cpu_need_tpr_shadow(vcpu))
->>  			vmcs_write64(VIRTUAL_APIC_PAGE_ADDR,
->>  				     __pa(vmx->vcpu.arch.apic->regs));
->>  		vmcs_write32(TPR_THRESHOLD, 0);
->> @@ -7165,6 +7201,18 @@ static int vmx_vm_init(struct kvm *kvm)
->>  			break;
->>  		}
->>  	}
->> +
->> +	if (enable_ipiv) {
->> +		struct page *pages;
->> +
->> +		pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PID_TABLE_ORDER);
->> +		if (!pages)
->> +			return -ENOMEM;
->> +
->> +		to_kvm_vmx(kvm)->pid_table = (void *)page_address(pages);
->> +		to_kvm_vmx(kvm)->pid_last_index = KVM_MAX_VCPU_IDS - 1;
->> +	}
->> +
->>  	return 0;
->>  }
->>  
->> @@ -7756,6 +7804,14 @@ static bool vmx_check_apicv_inhibit_reasons(ulong bit)
->>  	return supported & BIT(bit);
->>  }
->>  
->> +static void vmx_vm_destroy(struct kvm *kvm)
->> +{
->> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
->> +
->> +	if (kvm_vmx->pid_table)
->> +		free_pages((unsigned long)kvm_vmx->pid_table, MAX_PID_TABLE_ORDER);
->
->Maybe add a warning checking that ipiv was actually enabled.
-
-Do you mean ipiv was enabled on one of vCPU or just enable_ipiv is true?
-
-The former will lead to false positives if qemu creates a VM and destroys the
-vm without creating any vCPUs.
-
->Maybe this is overkill.
->
->
->> +}
->> +
->>  static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>  	.name = "kvm_intel",
->>  
->> @@ -7768,6 +7824,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>  
->>  	.vm_size = sizeof(struct kvm_vmx),
->>  	.vm_init = vmx_vm_init,
->> +	.vm_destroy = vmx_vm_destroy,
->>  
->>  	.vcpu_create = vmx_create_vcpu,
->>  	.vcpu_free = vmx_free_vcpu,
->> @@ -8022,6 +8079,9 @@ static __init int hardware_setup(void)
->>  	if (!enable_apicv)
->>  		vmx_x86_ops.sync_pir_to_irr = NULL;
->>  
->> +	if (!enable_apicv || !cpu_has_vmx_ipiv())
->> +		enable_ipiv = false;
->> +
->>  	if (cpu_has_vmx_tsc_scaling()) {
->>  		kvm_has_tsc_control = true;
->>  		kvm_max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index d4a647d3ed4a..e7b0c00c9d43 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -365,6 +365,9 @@ struct kvm_vmx {
->>  	unsigned int tss_addr;
->>  	bool ept_identity_pagetable_done;
->>  	gpa_t ept_identity_map_addr;
->> +	/* PID table for IPI virtualization */
->> +	u64 *pid_table;
->> +	u16 pid_last_index;
->>  };
->>  
->>  bool nested_vmx_allowed(struct kvm_vcpu *vcpu);
->
->
->I might have missed something, but overall looks good.
-
-Thanks.

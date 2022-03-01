@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683FA4C814C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776364C814A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiCACxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 21:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S230168AbiCACxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 21:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiCACxP (ORCPT
+        with ESMTP id S229636AbiCACxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 21:53:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49D054990F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646103154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wtwD31/3vxlTAO3x0e3WlhDgfN73zgYlAP/xJTtBWTk=;
-        b=I6+7+QxHdZ8J/6p05l/OV96/ElySf2JaNBZI+2Y9khVD7dfsBdjXc53WU8WIsXh/n4q95K
-        3QK493xshUFAPHYtLJzQrqdWxopbNDAjNIXyO+wVr4Up+XAva0ECwd/Rqlyt5e7I1No/m+
-        XtWR64s66OX3f7OyRFClnTIXa4oq25E=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-d36KGS1MNPO9DJvbJ9_NdQ-1; Mon, 28 Feb 2022 21:52:33 -0500
-X-MC-Unique: d36KGS1MNPO9DJvbJ9_NdQ-1
-Received: by mail-qt1-f198.google.com with SMTP id a6-20020a05622a02c600b002dd2d38f153so6307952qtx.17
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:52:33 -0800 (PST)
+        Mon, 28 Feb 2022 21:53:13 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA7C48E67
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:52:34 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id z11so3951702pla.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:52:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=IN1VYmp44x+rwI/ogRY6xwm4hMfgB6hDpJsyZy4ABUc=;
+        b=oveJUp9NBB0QCEzYV1EUcq27GIoMI7Iaxme9xLjbqi/1YNZLPYZG//JmNw37Eqi4Sx
+         4+vO4pkKKZELajiL0xDksZhRPSdVp8JSKrrZitUTZ9syXBuvJQ+Jdj0q1pCLlVc8nlIQ
+         0qbvcjoR1n1Xg4Y4JNqkWeAhvP62m6P68OuwvKwY/hO43hSRR03yIPueHVEP/jbR8CRG
+         ypPW0ymK53Ep7XdcIa9z9IqN6irhW5ovflyTZ7FDQ2fwpkihOvMxUPIkLEAxrXpwVu/K
+         6HgGmX4sEqIj4y2pSkg48vog9s4k2EYYKop+qA2HU2VkgUfBjAhGaJJHL60eMYR9S06M
+         unGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wtwD31/3vxlTAO3x0e3WlhDgfN73zgYlAP/xJTtBWTk=;
-        b=RVPWIS77mCVUK0jJU/OedCNY3fVPiaqVa8xkU4+m85v/8498lPn4S8NuxJZNOsPpDr
-         l6l6ox/14vKUmbLH4XWXuD+/suXuCjuHGoqJahB+Z0WhI0qkqUEZ1m9swmjccnaEDcqO
-         aAibFPZbeZumpunmq46JGDODr4XSPo0VVZwkgY8nbLX/n9mkmhqQ6yGTtffMEsrwLKpS
-         VmdcRDdKiUvYW6ieMhimOiCjAdDdyPZCki7NUcyc2i2ZkMN9f9q4QcTragkar/B3u/Vm
-         d0GXYPrh5WMf/c6GK09rv0knHVLLKzV1ND1KBQgtCjY0uI9eF1y2OACIDNEtX9JSwJNv
-         s40g==
-X-Gm-Message-State: AOAM533W+6Q8GE7XV3X+jUcTiQ9m7dM8KI3o6rm52Y7F+AOdaV5XBZeW
-        faDdTWhLkLtsyYWMEheAK9Cp59ewtefYBit1lQWBQwNjd0hWoZdW7OKfrjDKXDGZTLjjIKp+r1d
-        HwfX0IKUpAvEZodOjFCUdSJJZ
-X-Received: by 2002:ae9:d842:0:b0:547:b883:932d with SMTP id u63-20020ae9d842000000b00547b883932dmr12459345qkf.646.1646103152638;
-        Mon, 28 Feb 2022 18:52:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy3IyXCmmpTR5dLhhN0LNYcofK/4TPhGco8CWp5Hk9TKdbj8OZ9i5OKyRghyBv/atBgK0FT8w==
-X-Received: by 2002:ae9:d842:0:b0:547:b883:932d with SMTP id u63-20020ae9d842000000b00547b883932dmr12459338qkf.646.1646103152413;
-        Mon, 28 Feb 2022 18:52:32 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id j10-20020ac85f8a000000b002dde6288fa7sm8383230qta.83.2022.02.28.18.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 18:52:31 -0800 (PST)
-From:   trix@redhat.com
-To:     roan@protonic.nl, jic23@kernel.org, lars@metafoo.de,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] iio: scd4x: check return of scd4x_write_and_fetch
-Date:   Mon, 28 Feb 2022 18:52:23 -0800
-Message-Id: <20220301025223.223223-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=IN1VYmp44x+rwI/ogRY6xwm4hMfgB6hDpJsyZy4ABUc=;
+        b=mv59oMGuc/ruXQIzutyJZ0FNm3hdJqvBKojdg0XSVjeH93uB4s4TmbCLGJOlXooU7E
+         lZvpl1rgj0UKahZQmAV1jJP6jBi/v1Kd6tUbCg7nHfd4Q7zUnrMo2QPU3z3hSx/gZlcA
+         AcSbex8kNzPKkKMP0QnrZbKhB1XZzXB7gMdFgcIB/YQpt3hGwg9py4AjXoHiAPrdTEnz
+         Lc42b499MqGtejF71a4B+oA5N7RJACGFKvrdJ13wBk8smJImzSf01JTEc6B1NZBo5RRe
+         XT7zIVBF+2TCV++dTDyOGztyeCWDRU6MmDkmAW9FT6Th/93Ttes/8hAn6xZWOvc4aE9/
+         odSg==
+X-Gm-Message-State: AOAM530Qce3IpGA/0WVg2O9bi5Mqz3HjN7hiXTpS0iwyZAMLasIN1T8k
+        TQXC3rW6Qhq+wAahkOEwMqTmA1+Zxl4XN/q/qJ4=
+X-Google-Smtp-Source: ABdhPJzTmf8K3iQdP5ygZW0I6HLdCMqpmjofcOzuSt0kmKT1TsKFBexwJFF1CqNa/s0L9S3tUj+nTw==
+X-Received: by 2002:a17:90a:f0cb:b0:1bd:2372:c992 with SMTP id fa11-20020a17090af0cb00b001bd2372c992mr12875610pjb.71.1646103153570;
+        Mon, 28 Feb 2022 18:52:33 -0800 (PST)
+Received: from meizu.meizu.com ([137.59.103.163])
+        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b004f3f2929d7asm8778950pfc.217.2022.02.28.18.52.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 18:52:33 -0800 (PST)
+From:   Haowen Bai <baihaowen88@gmail.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org
+Cc:     longman@redhat.com, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, Haowen Bai <baihaowen88@gmail.com>
+Subject: [PATCH] locking/rtmutex: Return true/false (not 1/0) from bool functions
+Date:   Tue,  1 Mar 2022 10:52:28 +0800
+Message-Id: <1646103148-21514-1-git-send-email-baihaowen88@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,45 +64,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Return boolean values ("true" or "false") instead of 1 or 0 from bool
+functions.  This fixes the following warnings from coccicheck:
 
-Clang static analysis reports this problem
-scd4x.c:474:10: warning: The left operand of '==' is a
-  garbage value
-  if (val == 0xff) {
-      ~~~ ^
-val is only set from a successful call to scd4x_write_and_fetch()
-So check it's return.
+kernel/locking/rtmutex.c:375:9-10: WARNING: return of 0/1 in function '__waiter_less' with return type bool
 
-Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Haowen Bai <baihaowen88@gmail.com>
 ---
-v2: rework return on error logic to be similar to existing code
+ kernel/locking/rtmutex.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
- drivers/iio/chemical/scd4x.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
-index 20d4e7584e923..37143b5526ee6 100644
---- a/drivers/iio/chemical/scd4x.c
-+++ b/drivers/iio/chemical/scd4x.c
-@@ -471,12 +471,15 @@ static ssize_t calibration_forced_value_store(struct device *dev,
- 	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
- 	mutex_unlock(&state->lock);
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 8555c4e..29db06a 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -372,24 +372,24 @@ static __always_inline bool __waiter_less(struct rb_node *a, const struct rb_nod
+ 	struct rt_mutex_waiter *bw = __node_2_waiter(b);
  
-+	if (ret)
-+		return ret;
-+
- 	if (val == 0xff) {
- 		dev_err(dev, "forced calibration has failed");
- 		return -EINVAL;
+ 	if (rt_mutex_waiter_less(aw, bw))
+-		return 1;
++		return true;
+ 
+ 	if (!build_ww_mutex())
+-		return 0;
++		return false;
+ 
+ 	if (rt_mutex_waiter_less(bw, aw))
+-		return 0;
++		return false;
+ 
+ 	/* NOTE: relies on waiter->ww_ctx being set before insertion */
+ 	if (aw->ww_ctx) {
+ 		if (!bw->ww_ctx)
+-			return 1;
++			return true;
+ 
+ 		return (signed long)(aw->ww_ctx->stamp -
+ 				     bw->ww_ctx->stamp) < 0;
  	}
  
--	return ret ?: len;
-+	return len;
+-	return 0;
++	return false;
  }
  
- static IIO_DEVICE_ATTR_RW(calibration_auto_enable, 0);
+ static __always_inline void
 -- 
-2.26.3
+2.7.4
 

@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486CC4C81DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AAB4C81EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbiCAEA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S232163AbiCAEH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiCAEA5 (ORCPT
+        with ESMTP id S232186AbiCAEH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:00:57 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C96F4505A;
-        Mon, 28 Feb 2022 20:00:17 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id fc19so15780067qvb.7;
-        Mon, 28 Feb 2022 20:00:17 -0800 (PST)
+        Mon, 28 Feb 2022 23:07:57 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F26A4F9EA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:16 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso1019200pjk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:07:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FtXyo60QZSjtghzy6Q0huqzwOiUzsZebKnUebVoTLPE=;
-        b=j7N3DqDy8b4YVBCpv3fcLo/UQbC6MMUAeaQ4U6D1F9YtLt/dxM1mgJ5CHX3B1xKjXi
-         rKUVdA64xlyMEq6gJEH4YsBRy++k3egJt1Y9//vE+6UOa6LLI6glhoKlDi74Pby1m3br
-         0VK8Oq3pSWMUcELQCOx0dxFI2UbA67pr69s3N6pjgs9HsvqsLwfbTOGMTpAVmh3mgW7j
-         0zEyZ9JCwUwDdMgvRm6AYopWLKNBp+PAEMbjPPefM64c8k2mYbbf4eHt7iE26xyzRr93
-         6ep3eWoOVJ3a8BDzFeCSCwbYNAs9sQ6EzV0elhCTTVTFFYTu+LkDmjsWDr7QVCpbcdPP
-         jkOg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DaUtZIJE57Vq9SZxZBhHAxebl5xJ9yYYEaN9hQal+Yc=;
+        b=zkOAS1NuNVVA37+a+9a5ZOpokz2S8PWO35PvVGMMThDauaYUOPsvyVjtc8Zr41iFQi
+         evBontnp0ibEks/7mYoY/YuqsCVhfpUaez7NR3mQ0Sa4AfaUz3NIZ7rvzqT9zXMSljSt
+         jicjvB603m34d1Vm7FPVEsF93+5HqkdpbTJlR8aaCL3RSFn22ck2ctV0flqmUD8K22aX
+         rBn1xW1ZmBx4pBckCgQoMMVFxwuuIu4PoBfFW1nuuS6InmoX/5JQDMz3HQ8pbqIOzO/o
+         WBivj9pQFfdMjgHIT5CIYTmXNNtOvZ+OWI1ZbDsQbvnZOWTjZM6+zR9aSqlKeFTtKg89
+         hDig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FtXyo60QZSjtghzy6Q0huqzwOiUzsZebKnUebVoTLPE=;
-        b=1W5lOOJ6Sekw/prQ4OI1YIDYbGX03h7EQyukDvubwCBpUeeNFHvPuTL6yHwaf+KEc/
-         BaPJ/TwtGenApv6sbKI+sqWyS2rR/LRZmVKho9vE1M4QBFQ6+jq3fa8xb4dU6DJKEfQh
-         XyOILJawQAQEZHXTmFHE+HB/09/I5+l59nLWrxHWh5mkywVCKAPzPZDjTJoE8phggWEg
-         PMkVAd7KVxR5SVM6z6ZIp7SODux5oWk+C2Ah0SSgVHNSUlTXQrBPJnLPiOHfg/Q1tk/n
-         3Hrrr13im2BFRFwHLqs7dALXRkiP6CHK2yXth227LRDGN5SYOWDkN0xzEd4r7iqlHcux
-         fYVQ==
-X-Gm-Message-State: AOAM531lzeJ2FScex4RXlOZkdVjInBmpeRPiOqW8gW/pO4+M8LYFjmZ+
-        kyyXgAoekRWdFg+yg4jfdBWOFnXHhJ4=
-X-Google-Smtp-Source: ABdhPJwfiOBSu/Ty7giTR3H87bg2AxgESx2gPXEQWljnV5lzzXXCiSTDh6BP12fjAveocrl9nIUWGA==
-X-Received: by 2002:a05:6214:29cd:b0:432:3f0d:a071 with SMTP id gh13-20020a05621429cd00b004323f0da071mr16300852qvb.86.1646107216685;
-        Mon, 28 Feb 2022 20:00:16 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:ed66:faaa:6559:18c7? ([2600:1700:2442:6db0:ed66:faaa:6559:18c7])
-        by smtp.gmail.com with ESMTPSA id x23-20020a05620a14b700b00648eb7f4ce5sm5871313qkj.35.2022.02.28.20.00.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 20:00:16 -0800 (PST)
-Message-ID: <db542880-304a-f48b-2159-d0955841c8e9@gmail.com>
-Date:   Mon, 28 Feb 2022 22:00:15 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DaUtZIJE57Vq9SZxZBhHAxebl5xJ9yYYEaN9hQal+Yc=;
+        b=qUZM8UgFz3o/FUlpetUMmEfaYamDbUeiiG4t5qtu0TuhYnCIv5A3mJWSTQsS8kQJCx
+         OJY5GwGUXyO5iXiSUzjiAZRbsfFx8De+y3EIT/rEJ6bFvUL6XK9f5Pd7zrxY3xz1xLHh
+         33wQtsEWsytO5iCPSmxzs8iVyupHiGbU+6eDMgE7x2qRUl+gJe0FqkMclBlKP6OABQao
+         3arjbnBsj9WDqZ1ly4PDOe8Cmh2ssBACwFgRqG504qmg1wgfzHqhjACzYkrMGajn6kbX
+         mgruB86pHWQTU4svFosd/btBDYJ8hBlt4x7ATlKirrr4Zo8EZeTstL3GK6O/CAdugqDI
+         Gulw==
+X-Gm-Message-State: AOAM531Z03FIqRj7mm6tgoX4PxIGoYPq2QJO6Bo2WBCV0+2ajX7VFPUa
+        2pBNCc039AXRx4iQfMhKqlH06Q==
+X-Google-Smtp-Source: ABdhPJzWqb7Tsc9wjdCtlNdc3HRUiLy0CedyQh9cebhriMji18nhdC0SewddXyCwWxQiEaQ3kO+ocg==
+X-Received: by 2002:a17:903:2448:b0:151:8173:abf5 with SMTP id l8-20020a170903244800b001518173abf5mr1730249pls.55.1646107636043;
+        Mon, 28 Feb 2022 20:07:16 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id a32-20020a631a20000000b003756899829csm11509153pga.58.2022.02.28.20.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 20:07:15 -0800 (PST)
+Date:   Tue, 1 Mar 2022 12:07:09 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, vkoul@kernel.org,
+        linux-phy@lists.infradead.org, robh+dt@kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 7/8] dt-bindings: phy: qcom,qmp: Describe phy@ subnode
+ properly
+Message-ID: <20220301040709.GF269879@dragon>
+References: <20220228123019.382037-1-bhupesh.sharma@linaro.org>
+ <20220228123019.382037-8-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/1] of: unittest: add program to process EXPECT messages
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220201181413.2719955-1-frowand.list@gmail.com>
- <CAL_JsqKrWQ1Jn2HCxFsPKYcPXbYUgyPytvc_YrS=sgkWHv1hZA@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAL_JsqKrWQ1Jn2HCxFsPKYcPXbYUgyPytvc_YrS=sgkWHv1hZA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228123019.382037-8-bhupesh.sharma@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/22 15:24, Rob Herring wrote:
-> On Tue, Feb 1, 2022 at 12:14 PM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> If unittest detects a problem it will print a warning or error message
->> to the console.  Unittest also triggers warning and error messages from
->> other kernel code as a result of intentionally bad unittest data.  This
->> has led to confusion as to whether the triggered messages are an
->> expected result of a test or whether there is a real problem that is
->> independent of unittest.
->>
->> EXPECT messages were added to unittest to report each triggered message
->> that is expected, resulting in verbose console output.
->>
->> scripts/dtc/of_unittest is a new program that processes the EXPECT
->> messages to determine whether the triggered messages occurred and
->> also removes the excess verbosity of the EXPECT messages.  More
->> information is available from 'scripts/dtc/of_unittest_expect --help'.
->>
->> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
->> ---
->> permissions for scripts/dtc/of_unittest should be 770
+On Mon, Feb 28, 2022 at 06:00:18PM +0530, Bhupesh Sharma wrote:
+> Currently the qcom,qmp-phy dt-binding doesn't describe
+> the 'reg' and '#phy-cells' properties for the phy@ subnode.
 > 
-> Why? 755 is what the patch says and what most/all executables in the kernel are.
-
-I based that on the permissions of other executables in scripts/dtc/
-
-I do like 755 better, thanks for pointing out the wider population of
-executables in the kernel.
-
--Frank
-
+> Fix the same.
 > 
-> Rob
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
->>
->> I will reply to this message with the usage message from
->> 'scripts/dtc/of_unittest_expect --help'.
->>
->> I will also reply with examples of raw and processed console logs.
->>
->>  Documentation/devicetree/of_unittest.rst |  27 +-
->>  scripts/dtc/of_unittest_expect           | 408 +++++++++++++++++++++++
->>  2 files changed, 432 insertions(+), 3 deletions(-)
->>  create mode 100755 scripts/dtc/of_unittest_expect
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index 70e7cd75e173..f8a43acd229a 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -115,6 +115,13 @@ patternProperties:
+>        Each device node of QMP phy is required to have as many child nodes as
+>        the number of lanes the PHY has.
+>      properties:
+> +      reg:
+> +        minItems: 1
+> +        maxItems: 6
+> +
+> +      "#phy-cells":
+> +        const: 0
+> +
+>        "#clock-cells":
+>          enum: [ 0, 1, 2 ]
 
+While you are at it, what about these properties?
+
+	clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+	clock-names = "pipe0";
+	clock-output-names = "usb3_phy_pipe_clk_src";
+
+Shawn

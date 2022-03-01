@@ -2,270 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF944C9811
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87554C9812
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbiCAV6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S237921AbiCAV76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiCAV6q (ORCPT
+        with ESMTP id S229664AbiCAV75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:58:46 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AB83151A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:58:04 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id a7-20020a9d5c87000000b005ad1467cb59so13377809oti.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:58:04 -0800 (PST)
+        Tue, 1 Mar 2022 16:59:57 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85650B1C
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:59:14 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id g20so23846618edw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=osJEiazF+j+70r0nxx8W83ZcWYa5eX3qUrje5oSjKKI=;
-        b=eYuUMSWqJSobnkSf8t2+SSBRYOeVXr4r5YcdnuqeuPGLpzL6RKLZ3YWAr01pI7yIrx
-         zLXYazw0H2qvNCX/kwJ8I2jiGSVEbdt+KG4urm/G3+J9C5GkUeXueRSivtLEy1tLzqOg
-         WCkGQypbdc3SOD7hQzesw8oydJy0gbJPzks+A3Vht76Axtz09Zq4wngQ6nyTlK56nYb8
-         LRwRcVQhjS1PvVvqU0p/+c1Y7zwlmrte9t4UCXBfFI62WMTC9Av5B+cQQ0xkUgExbEz3
-         T6YglGVe/O9XHvfqY2L+T2diQe7+zEV6Oz6PExl9VLE/AEhRg/ZrrqaMeT69aSoHmeJn
-         ASKw==
+        bh=F2U/oGDLGXCvl7zfChco0Uz9wH9wYJvuw5/B6215wuo=;
+        b=cW72JqGNra8LYMyOFtLSEGHXTZ/T7/tw2gxuIztP8NrfPg/C2g4r2OWGhiCF+fGx6y
+         WAaPsX8SHbaWVFT4qoXGnuPifoqCGsmxO6nW/L1b5DUU+w0uvGlKMXrqe6wV+E8dRCtD
+         lyoFhWvNDmG7USbPq3szbQ2LWG3HK949l6N4V7x5LBV5fkXnB7osrMbn0EgASACsmTbk
+         c+v2eWjW3KVsGPPD7A+o3Hiox/fzG5uxH7CSX7AhfmrBczKuBpXn/IzZeC9JgntAim3M
+         dR22kOKzD97vsGbjzqNyMcQFT45ft0JMJMqFJidQ0Qt6AAa+/pJMKSR+lL4rxcu+RaBV
+         9Aow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=osJEiazF+j+70r0nxx8W83ZcWYa5eX3qUrje5oSjKKI=;
-        b=LSdzPnJZuy+0SHpA8x4Nopn2M2iKlASoFkcqTbRba7qbKbt6dx8QHAtaE8hCY0lcOb
-         mIWBjIzzbovv1KDoQEFCGsGMdE/TKQ0lT8AmhB/G1ZScFxYhpcLS42rLMbNplVyBBfRd
-         Xi+iDOwNv3ONwbbMT6E2kRyyCr53CIeSbCxaBmwn0HsnMwcRtjLkHYEtJwkX3rjhTWS4
-         x8oyENdXuzglnhGiWuLz6gnWKhp9sqXsPYbn/cGnx2HT3/09QsSSvFFe+qb/JIMVNiGM
-         1HwG0PI7jFGg0pevrhwVuAL5X08fCVG4AbJccm+h04XyMBFzJG2JOo34RsvL/GtGOYnC
-         jz6g==
-X-Gm-Message-State: AOAM530m2OiEFqfVjndiw4/OUmyjq33sNa3KNu4fti38aXOGijGb/y/4
-        b9EDzO6BqfzfsVqCt9rlSvm316h20rbSY7nQtam9+g==
-X-Google-Smtp-Source: ABdhPJzJDTsXI/+W86nzvWNFovaIXk/hYv4kJB2ZEJHmmzMjP2ZeCsheXLIfpUvEoXoM1lJT7gLwKZjJAMGOGZghu/E=
-X-Received: by 2002:a9d:8b5:0:b0:5a4:9db6:92b4 with SMTP id
- 50-20020a9d08b5000000b005a49db692b4mr13546379otf.14.1646171883328; Tue, 01
- Mar 2022 13:58:03 -0800 (PST)
+        bh=F2U/oGDLGXCvl7zfChco0Uz9wH9wYJvuw5/B6215wuo=;
+        b=tpPyzjfU3D5vPySloYtX70w2x5Q9pVslAdZh0OGJB9X/nZ0DSo9H7W2/aBWVu5qmkd
+         r44X6aAfHflEf4rf39FPQMZw+D08WILbeOPihgJAv25Qpx2RkrqgcnROX8ePxCS3VseD
+         uVfTrSAiDw3QJ1siS5C3HikiqXC1Ft4sTQK17y5zYwQihW30NFega2b6xMmyGyhixoIS
+         jguQbSLGvJcwzIlSi+vLvESZzi6cRFNBhkkfDUVMfRztsgieNn1lqt5myWKKRV4fyZf8
+         Qng+1dwonDf3mDZZ2o6L02K0MBG8wVzcKp3mkxzhAQMe48ljHX/bpp9Bv+ffsaH6C/Rt
+         gYow==
+X-Gm-Message-State: AOAM530xeViFYLA/BX2RefyLg/37uxC9AmKjLt3rbRnjTBXNABKjFKNQ
+        DZE6iz4iJUhzqpZroNTNhRzbHLojDnNiNiZf3qyMygN9qzKt9g==
+X-Google-Smtp-Source: ABdhPJwcp4n+raVU9QPnCXlWeLtDMV1p1qwTECcnjxs5ec4DSSpNKWZu42ADS7BZtGt5uKL3DNtP7KM5Yqlz4difR24=
+X-Received: by 2002:a50:ec95:0:b0:413:4d34:642d with SMTP id
+ e21-20020a50ec95000000b004134d34642dmr27137083edr.3.1646171952915; Tue, 01
+ Mar 2022 13:59:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
- <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
- <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
- <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com> <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
- <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
- <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
- <71736b9d-9ed4-ea02-e702-74cae0340d66@intel.com> <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
- <4b2ddc09-f68d-1cc3-3d10-f7651d811fc3@intel.com> <CALMp9eQj4Xr9VAdHw4BfPEskQYptEYYHRrpmFfVU1TCQJmHwug@mail.gmail.com>
- <1cca344e-1c2d-8ebf-87ae-d9298a73306a@intel.com> <CALMp9eR_gPSAkSHtgOjAqJDEXF-=8aaoV0nXP3GmZ_J9sTBJFg@mail.gmail.com>
- <91859fc0-82e0-cb74-e519-68f08c9c796d@intel.com>
-In-Reply-To: <91859fc0-82e0-cb74-e519-68f08c9c796d@intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 1 Mar 2022 13:57:52 -0800
-Message-ID: <CALMp9eSJgGJxSjej85yYvTav-n=KHNEPo4m2hEqsET+bHrXLew@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220301085329.3210428-1-ying.huang@intel.com> <20220301085329.3210428-3-ying.huang@intel.com>
+In-Reply-To: <20220301085329.3210428-3-ying.huang@intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 1 Mar 2022 13:58:58 -0800
+Message-ID: <CAHbLzkrK0WsSq7=bE=Mn21BEgcWVmN0msc1cncyVrL7tSthyXg@mail.gmail.com>
+Subject: Re: [PATCH -V14 2/3] NUMA balancing: optimize page placement for
+ memory tiering system
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>, Wei Xu <weixugc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 9:30 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+On Tue, Mar 1, 2022 at 12:54 AM Huang Ying <ying.huang@intel.com> wrote:
 >
-> On 3/1/2022 12:32 PM, Jim Mattson wrote:
-> > On Mon, Feb 28, 2022 at 5:41 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>
-> >> On 2/28/2022 10:30 PM, Jim Mattson wrote:
-> >>> On Sun, Feb 27, 2022 at 11:10 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>>>
-> >>>> On 2/26/2022 10:24 PM, Jim Mattson wrote:
-> >>>>> On Fri, Feb 25, 2022 at 10:24 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>>>>>
-> >>>>>> On 2/26/2022 12:53 PM, Jim Mattson wrote:
-> >>>>>>> On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>>>>>>>>
-> >>>>>>>>> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
-> >>>>>>>>>> On 2/25/22 16:12, Xiaoyao Li wrote:
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> I don't like the idea of making things up without notifying userspace
-> >>>>>>>>>>>>> that this is fictional. How is my customer running nested VMs supposed
-> >>>>>>>>>>>>> to know that L2 didn't actually shutdown, but L0 killed it because the
-> >>>>>>>>>>>>> notify window was exceeded? If this information isn't reported to
-> >>>>>>>>>>>>> userspace, I have no way of getting the information to the customer.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Then, maybe a dedicated software define VM exit for it instead of
-> >>>>>>>>>>>> reusing triple fault?
-> >>>>>>>>>>>>
-> >>>>>>>>>>>
-> >>>>>>>>>>> Second thought, we can even just return Notify VM exit to L1 to tell
-> >>>>>>>>>>> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
-> >>>>>>>>>>> to L1.
-> >>>>>>>>>>
-> >>>>>>>>>> That might cause NULL pointer dereferences or other nasty occurrences.
-> >>>>>>>>>
-> >>>>>>>>> IMO, a well written VMM (in L1) should handle it correctly.
-> >>>>>>>>>
-> >>>>>>>>> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
-> >>>>>>>>> setting Notify VM exit. If a L2 causes notify_vm_exit with
-> >>>>>>>>> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
-> >>>>>>>>> support of Notify VM Exit from VMX MSR capability. Following L1 handler
-> >>>>>>>>> is possible:
-> >>>>>>>>>
-> >>>>>>>>> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
-> >>>>>>>>>                     handle in b)
-> >>>>>>>>>             } else {
-> >>>>>>>>>                     report unexpected vm exit reason to userspace;
-> >>>>>>>>>             }
-> >>>>>>>>>
-> >>>>>>>>> b)      similar handler like we implement in KVM:
-> >>>>>>>>>             if (!vm_context_invalid)
-> >>>>>>>>>                     re-enter guest;
-> >>>>>>>>>             else
-> >>>>>>>>>                     report to userspace;
-> >>>>>>>>>
-> >>>>>>>>> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
-> >>>>>>>>> unsupported exit reason
-> >>>>>>>>>
-> >>>>>>>>> As long as it belongs to any case above, I think L1 can handle it
-> >>>>>>>>> correctly. Any nasty occurrence should be caused by incorrect handler in
-> >>>>>>>>> L1 VMM, in my opinion.
-> >>>>>>>>
-> >>>>>>>> Please test some common hypervisors (e.g. ESXi and Hyper-V).
-> >>>>>>>
-> >>>>>>> I took a look at KVM in Linux v4.9 (one of our more popular guests),
-> >>>>>>> and it will not handle this case well:
-> >>>>>>>
-> >>>>>>>             if (exit_reason < kvm_vmx_max_exit_handlers
-> >>>>>>>                 && kvm_vmx_exit_handlers[exit_reason])
-> >>>>>>>                     return kvm_vmx_exit_handlers[exit_reason](vcpu);
-> >>>>>>>             else {
-> >>>>>>>                     WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
-> >>>>>>>                     kvm_queue_exception(vcpu, UD_VECTOR);
-> >>>>>>>                     return 1;
-> >>>>>>>             }
-> >>>>>>>
-> >>>>>>> At least there's an L1 kernel log message for the first unexpected
-> >>>>>>> NOTIFY VM-exit, but after that, there is silence. Just a completely
-> >>>>>>> inexplicable #UD in L2, assuming that L2 is resumable at this point.
-> >>>>>>
-> >>>>>> At least there is a message to tell L1 a notify VM exit is triggered in
-> >>>>>> L2. Yes, the inexplicable #UD won't be hit unless L2 triggers Notify VM
-> >>>>>> exit with invalid_context, which is malicious to L0 and L1.
-> >>>>>
-> >>>>> There is only an L1 kernel log message *the first time*. That's not
-> >>>>> good enough. And this is just one of the myriad of possible L1
-> >>>>> hypervisors.
-> >>>>>
-> >>>>>> If we use triple_fault (i.e., shutdown), then no info to tell L1 that
-> >>>>>> it's caused by Notify VM exit with invalid context. Triple fault needs
-> >>>>>> to be extended and L1 kernel needs to be enlightened. It doesn't help
-> >>>>>> old guest kernel.
-> >>>>>>
-> >>>>>> If we use Machine Check, it's somewhat same inexplicable to L2 unless
-> >>>>>> it's enlightened. But it doesn't help old guest kernel.
-> >>>>>>
-> >>>>>> Anyway, for Notify VM exit with invalid context from L2, I don't see a
-> >>>>>> good solution to tell L1 VMM it's a "Notify VM exit with invalid context
-> >>>>>> from L2" and keep all kinds of L1 VMM happy, especially for those with
-> >>>>>> old kernel versions.
-> >>>>>
-> >>>>> I agree that there is no way to make every conceivable L1 happy.
-> >>>>> That's why the information needs to be surfaced to the L0 userspace. I
-> >>>>> contend that any time L0 kvm violates the architectural specification
-> >>>>> in its emulation of L1 or L2, the L0 userspace *must* be informed.
-> >>>>
-> >>>> We can make the design to exit to userspace on notify vm exit
-> >>>> unconditionally with exit_qualification passed, then userspace can take
-> >>>> the same action like what this patch does in KVM that
-> >>>>
-> >>>>     - re-enter guest when context_invalid is false;
-> >>>>     - stop running the guest if context_invalid is true; (userspace can
-> >>>> definitely re-enter the guest in this case, but it needs to take the
-> >>>> fall on this)
-> >>>>
-> >>>> Then, for nested case, L0 needs to enable it transparently for L2 if
-> >>>> this feature is enabled for L1 guest (the reason as we all agreed that
-> >>>> cannot allow L1 to escape just by creating a L2). Then what should KVM
-> >>>> do when notify vm exit from L2?
-> >>>>
-> >>>>     - Exit to L0 userspace on L2's notify vm exit. L0 userspace takes the
-> >>>> same action:
-> >>>>           - re-enter if context-invalid is false;
-> >>>>           - kill L1 if context-invalid is true; (I don't know if there is any
-> >>>> interface for L0 userspace to kill L2). Then it opens the potential door
-> >>>> for malicious user to kill L1 by creating a L2 to trigger fatal notify
-> >>>> vm exit. If you guys accept it, we can implement in this way.
-> >>>>
-> >>>>
-> >>>> in conclusion, we have below solution:
-> >>>>
-> >>>> 1. Take this patch as is. The drawback is L1 VMM receives a triple_fault
-> >>>> from L2 when L2 triggers notify vm exit with invalid context. Neither of
-> >>>> L1 VMM, L1 userspace, nor L2 kernel know it's caused due to notify vm
-> >>>> exit. There is only kernel log in L0, which seems not accessible for L1
-> >>>> user or L2 guest.
-> >>>
-> >>> You are correct on that last point, and I feel that I cannot stress it
-> >>> enough. In a typical environment, the L0 kernel log is only available
-> >>> to the administrator of the L0 host.
-> >>>
-> >>>> 2. a) Inject notify vm exit back to L1 if L2 triggers notify vm exit
-> >>>> with invalid context. The drawback is, old L1 hypervisor is not
-> >>>> enlightened of it and maybe misbehave on it.
-> >>>>
-> >>>>       b) Inject a synthesized SHUTDOWN exit to L1, with additional info to
-> >>>> tell it's caused by fatal notify vm exit from L2. It has the same
-> >>>> drawback that old hypervisor has no idea of it and maybe misbehave on it.
-> >>>>
-> >>>> 3. Exit to L0 usersapce unconditionally no matter it's caused from L1 or
-> >>>> L2. Then it may open the door for L1 user to kill L1.
-> >>>>
-> >>>> Do you have any better solution other than above? If no, we need to pick> >> one from above though it cannot make everyone happy.
-> >>>
-> >>> Yes, I believe I have a better solution. We obviously need an API for
-> >>> userspace to synthesize a SHUTDOWN event for a vCPU.
-> >>
-> >> Can you elaborate on it? Do you mean userspace to inject a synthesized
-> >> SHUTDOWN to guest? If so, I have no idea how it will work.
-> >
-> > It can probably be implemented as an extension of KVM_SET_VCPU_EVENTS
-> > that invokes kvm_make_request(KVM_REQ_TRIPLE_FAULT).
+> With the advent of various new memory types, some machines will have
+> multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
+> memory subsystem of these machines can be called memory tiering
+> system, because the performance of the different types of memory are
+> usually different.
 >
-> Then, you mean
+> In such system, because of the memory accessing pattern changing etc,
+> some pages in the slow memory may become hot globally.  So in this
+> patch, the NUMA balancing mechanism is enhanced to optimize the page
+> placement among the different memory types according to hot/cold
+> dynamically.
 >
-> 1. notify vm exit from guest;
-> 2. exit to userspace on notify vm exit;
-> 3. a. if context_invalid, inject SHUTDOWN to vcpu from userspace to
-> request KVM_REQ_TRIPLE_FAULT; goto step 4;
->     b. if !context_invalid, re-run vcpu; no step 4 and 5;
-> 4. exit to userspace again with KVM_EXIT_SHUTDOWN due to triple fault;
-> 5. userspace stop running the vcpu/VM
+> In a typical memory tiering system, there are CPUs, fast memory and
+> slow memory in each physical NUMA node.  The CPUs and the fast memory
+> will be put in one logical node (called fast memory node), while the
+> slow memory will be put in another (faked) logical node (called slow
+> memory node).  That is, the fast memory is regarded as local while the
+> slow memory is regarded as remote.  So it's possible for the recently
+> accessed pages in the slow memory node to be promoted to the fast
+> memory node via the existing NUMA balancing mechanism.
 >
-> Then why not handle it as KVM_EXIT_SHUTDOWN directly in 3.a ? I don't
-> get the point of userspace to inject TRIPLE_FAULT to KVM.
+> The original NUMA balancing mechanism will stop to migrate pages if
+> the free memory of the target node becomes below the high watermark.
+> This is a reasonable policy if there's only one memory type.  But this
+> makes the original NUMA balancing mechanism almost do not work to
+> optimize page placement among different memory types.  Details are as
+> follows.
+>
+> It's the common cases that the working-set size of the workload is
+> larger than the size of the fast memory nodes.  Otherwise, it's
+> unnecessary to use the slow memory at all.  So, there are almost
+> always no enough free pages in the fast memory nodes, so that the
+> globally hot pages in the slow memory node cannot be promoted to the
+> fast memory node.  To solve the issue, we have 2 choices as follows,
+>
+> a. Ignore the free pages watermark checking when promoting hot pages
+>    from the slow memory node to the fast memory node.  This will
+>    create some memory pressure in the fast memory node, thus trigger
+>    the memory reclaiming.  So that, the cold pages in the fast memory
+>    node will be demoted to the slow memory node.
+>
+> b. Define a new watermark called wmark_promo which is higher than
+>    wmark_high, and have kswapd reclaiming pages until free pages reach
+>    such watermark.  The scenario is as follows: when we want to promote
+>    hot-pages from a slow memory to a fast memory, but fast memory's free
+>    pages would go lower than high watermark with such promotion, we wake
+>    up kswapd with wmark_promo watermark in order to demote cold pages and
+>    free us up some space.  So, next time we want to promote hot-pages we
+>    might have a chance of doing so.
+>
+> The choice "a" may create high memory pressure in the fast memory
+> node.  If the memory pressure of the workload is high, the memory
+> pressure may become so high that the memory allocation latency of the
+> workload is influenced, e.g. the direct reclaiming may be triggered.
+>
+> The choice "b" works much better at this aspect.  If the memory
+> pressure of the workload is high, the hot pages promotion will stop
+> earlier because its allocation watermark is higher than that of the
+> normal memory allocation.  So in this patch, choice "b" is
+> implemented.  A new zone watermark (WMARK_PROMO) is added.  Which is
+> larger than the high watermark and can be controlled via
+> watermark_scale_factor.
+>
+> In addition to the original page placement optimization among sockets,
+> the NUMA balancing mechanism is extended to be used to optimize page
+> placement according to hot/cold among different memory types.  So the
+> sysctl user space interface (numa_balancing) is extended in a backward
+> compatible way as follow, so that the users can enable/disable these
+> functionality individually.
+>
+> The sysctl is converted from a Boolean value to a bits field.  The
+> definition of the flags is,
+>
+> - 0: NUMA_BALANCING_DISABLED
+> - 1: NUMA_BALANCING_NORMAL
+> - 2: NUMA_BALANCING_MEMORY_TIERING
+>
+> We have tested the patch with the pmbench memory accessing benchmark
+> with the 80:20 read/write ratio and the Gauss access address
+> distribution on a 2 socket Intel server with Optane DC Persistent
+> Memory Model.  The test results shows that the pmbench score can
+> improve up to 95.9%.
+>
+> Thanks Andrew Morton to help fix the document format error.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Rik van Riel <riel@surriel.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> ---
+>  Documentation/admin-guide/sysctl/kernel.rst | 29 ++++++++++++++-------
+>  include/linux/mmzone.h                      |  1 +
+>  include/linux/sched/sysctl.h                | 10 +++++++
+>  kernel/sched/core.c                         | 21 ++++++++++++---
+>  kernel/sysctl.c                             |  2 +-
+>  mm/migrate.c                                | 16 ++++++++++--
+>  mm/page_alloc.c                             |  3 ++-
+>  mm/vmscan.c                                 |  6 ++++-
+>  8 files changed, 70 insertions(+), 18 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index d359bcfadd39..fdfd2b684822 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -595,16 +595,23 @@ Documentation/admin-guide/kernel-parameters.rst).
+>  numa_balancing
+>  ==============
+>
+> -Enables/disables automatic page fault based NUMA memory
+> -balancing. Memory is moved automatically to nodes
+> -that access it often.
+> +Enables/disables and configures automatic page fault based NUMA memory
+> +balancing.  Memory is moved automatically to nodes that access it often.
+> +The value to set can be the result of ORing the following:
+>
+> -Enables/disables automatic NUMA memory balancing. On NUMA machines, there
+> -is a performance penalty if remote memory is accessed by a CPU. When this
+> -feature is enabled the kernel samples what task thread is accessing memory
+> -by periodically unmapping pages and later trapping a page fault. At the
+> -time of the page fault, it is determined if the data being accessed should
+> -be migrated to a local memory node.
+> += =================================
+> +0 NUMA_BALANCING_DISABLED
+> +1 NUMA_BALANCING_NORMAL
+> +2 NUMA_BALANCING_MEMORY_TIERING
+> += =================================
+> +
+> +Or NUMA_BALANCING_NORMAL to optimize page placement among different
+> +NUMA nodes to reduce remote accessing.  On NUMA machines, there is a
+> +performance penalty if remote memory is accessed by a CPU. When this
+> +feature is enabled the kernel samples what task thread is accessing
+> +memory by periodically unmapping pages and later trapping a page
+> +fault. At the time of the page fault, it is determined if the data
+> +being accessed should be migrated to a local memory node.
+>
+>  The unmapping of pages and trapping faults incur additional overhead that
+>  ideally is offset by improved memory locality but there is no universal
+> @@ -615,6 +622,10 @@ faults may be controlled by the `numa_balancing_scan_period_min_ms,
+>  numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
+>  numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
+>
+> +Or NUMA_BALANCING_MEMORY_TIERING to optimize page placement among
+> +different types of memory (represented as different NUMA nodes) to
+> +place the hot pages in the fast memory.  This is implemented based on
+> +unmapping and page fault too.
+>
+>  numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms, numa_balancing_scan_size_mb
+>  ===============================================================================================================================
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 44bd054ca12b..06bc55db19bf 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -342,6 +342,7 @@ enum zone_watermarks {
+>         WMARK_MIN,
+>         WMARK_LOW,
+>         WMARK_HIGH,
+> +       WMARK_PROMO,
 
-Sure, that should work, as long as L0 userspace is notified of the
-emulation error.
+TBH I'm not a fan of another water mark since we already have quite a
+few water marks (regular water mark, water mark boost, water mark
+promo). But it is not a big deal and gated problem for now since it is
+not user visible. We definitely could try to consolidate some of them
+later.
 
-Going back to something you said previously:
+The patch looks fine to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
 
->> In addition, to avoid breaking legacy userspace, the NOTIFY VM-exit should be opt-in.
-
-> Yes, it's designed as opt-in already that the feature is off by default.
-
-I meant that userspace should opt-in, per VM. I believe your design is
-opt-in by system administrator, host-wide.
+>         NR_WMARK
+>  };
+>
+> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+> index c19dd5a2c05c..b5eec8854c5a 100644
+> --- a/include/linux/sched/sysctl.h
+> +++ b/include/linux/sched/sysctl.h
+> @@ -23,6 +23,16 @@ enum sched_tunable_scaling {
+>         SCHED_TUNABLESCALING_END,
+>  };
+>
+> +#define NUMA_BALANCING_DISABLED                0x0
+> +#define NUMA_BALANCING_NORMAL          0x1
+> +#define NUMA_BALANCING_MEMORY_TIERING  0x2
+> +
+> +#ifdef CONFIG_NUMA_BALANCING
+> +extern int sysctl_numa_balancing_mode;
+> +#else
+> +#define sysctl_numa_balancing_mode     0
+> +#endif
+> +
+>  /*
+>   *  control realtime throttling:
+>   *
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index fcf0c180617c..c25348e9ae3a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4280,7 +4280,9 @@ DEFINE_STATIC_KEY_FALSE(sched_numa_balancing);
+>
+>  #ifdef CONFIG_NUMA_BALANCING
+>
+> -void set_numabalancing_state(bool enabled)
+> +int sysctl_numa_balancing_mode;
+> +
+> +static void __set_numabalancing_state(bool enabled)
+>  {
+>         if (enabled)
+>                 static_branch_enable(&sched_numa_balancing);
+> @@ -4288,13 +4290,22 @@ void set_numabalancing_state(bool enabled)
+>                 static_branch_disable(&sched_numa_balancing);
+>  }
+>
+> +void set_numabalancing_state(bool enabled)
+> +{
+> +       if (enabled)
+> +               sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
+> +       else
+> +               sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
+> +       __set_numabalancing_state(enabled);
+> +}
+> +
+>  #ifdef CONFIG_PROC_SYSCTL
+>  int sysctl_numa_balancing(struct ctl_table *table, int write,
+>                           void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+>         struct ctl_table t;
+>         int err;
+> -       int state = static_branch_likely(&sched_numa_balancing);
+> +       int state = sysctl_numa_balancing_mode;
+>
+>         if (write && !capable(CAP_SYS_ADMIN))
+>                 return -EPERM;
+> @@ -4304,8 +4315,10 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
+>         err = proc_dointvec_minmax(&t, write, buffer, lenp, ppos);
+>         if (err < 0)
+>                 return err;
+> -       if (write)
+> -               set_numabalancing_state(state);
+> +       if (write) {
+> +               sysctl_numa_balancing_mode = state;
+> +               __set_numabalancing_state(state);
+> +       }
+>         return err;
+>  }
+>  #endif
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 5ae443b2882e..c90a564af720 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -1689,7 +1689,7 @@ static struct ctl_table kern_table[] = {
+>                 .mode           = 0644,
+>                 .proc_handler   = sysctl_numa_balancing,
+>                 .extra1         = SYSCTL_ZERO,
+> -               .extra2         = SYSCTL_ONE,
+> +               .extra2         = SYSCTL_FOUR,
+>         },
+>  #endif /* CONFIG_NUMA_BALANCING */
+>         {
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index cdeaf01e601a..08ca9b9b142e 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -51,6 +51,7 @@
+>  #include <linux/oom.h>
+>  #include <linux/memory.h>
+>  #include <linux/random.h>
+> +#include <linux/sched/sysctl.h>
+>
+>  #include <asm/tlbflush.h>
+>
+> @@ -2034,16 +2035,27 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+>  {
+>         int page_lru;
+>         int nr_pages = thp_nr_pages(page);
+> +       int order = compound_order(page);
+>
+> -       VM_BUG_ON_PAGE(compound_order(page) && !PageTransHuge(page), page);
+> +       VM_BUG_ON_PAGE(order && !PageTransHuge(page), page);
+>
+>         /* Do not migrate THP mapped by multiple processes */
+>         if (PageTransHuge(page) && total_mapcount(page) > 1)
+>                 return 0;
+>
+>         /* Avoid migrating to a node that is nearly full */
+> -       if (!migrate_balanced_pgdat(pgdat, nr_pages))
+> +       if (!migrate_balanced_pgdat(pgdat, nr_pages)) {
+> +               int z;
+> +
+> +               if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
+> +                       return 0;
+> +               for (z = pgdat->nr_zones - 1; z >= 0; z--) {
+> +                       if (populated_zone(pgdat->node_zones + z))
+> +                               break;
+> +               }
+> +               wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
+>                 return 0;
+> +       }
+>
+>         if (isolate_lru_page(page))
+>                 return 0;
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 3589febc6d31..295b8f1fc31d 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8474,7 +8474,8 @@ static void __setup_per_zone_wmarks(void)
+>
+>                 zone->watermark_boost = 0;
+>                 zone->_watermark[WMARK_LOW]  = min_wmark_pages(zone) + tmp;
+> -               zone->_watermark[WMARK_HIGH] = min_wmark_pages(zone) + tmp * 2;
+> +               zone->_watermark[WMARK_HIGH] = low_wmark_pages(zone) + tmp;
+> +               zone->_watermark[WMARK_PROMO] = high_wmark_pages(zone) + tmp;
+>
+>                 spin_unlock_irqrestore(&zone->lock, flags);
+>         }
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 6dd8f455bb82..199b8aadbdd6 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -56,6 +56,7 @@
+>
+>  #include <linux/swapops.h>
+>  #include <linux/balloon_compaction.h>
+> +#include <linux/sched/sysctl.h>
+>
+>  #include "internal.h"
+>
+> @@ -3988,7 +3989,10 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+>                 if (!managed_zone(zone))
+>                         continue;
+>
+> -               mark = high_wmark_pages(zone);
+> +               if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
+> +                       mark = wmark_pages(zone, WMARK_PROMO);
+> +               else
+> +                       mark = high_wmark_pages(zone);
+>                 if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
+>                         return true;
+>         }
+> --
+> 2.30.2
+>

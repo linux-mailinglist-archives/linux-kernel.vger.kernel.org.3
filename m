@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA404C9748
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303624C974B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238216AbiCAUr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S238406AbiCAUty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238368AbiCAUrq (ORCPT
+        with ESMTP id S238399AbiCAUtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:47:46 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FE6A051
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:47:04 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so2128856wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IWRthtglu8eRkkXULTpkF/YK78fARAhKmN/Na9bYdxE=;
-        b=raOrzakU/APpa/kW7WaNpnlDiHQsQWrah4PXR7VazQ709QDuZDRWaI5ZDGUha8asHe
-         0BgtqNM7KjebnpGOBNj44zPz4tATNqJKBCA8bAHe/qVZqIEsnCp/PrrlVsimSViKbGEu
-         kafoTuHoqY4zc6AHUteV1JTxOLOcWXB0ZbdkOx98RO9PMcV1HHb+CDjwhxfHBUiwDkNn
-         MWQHERhXBKie1Zoma1CJXznQxoJT+dIfKutalVdKK3CrMP3ud/Ke7JNGfTSjxbeo7+sG
-         K2vR7tvrnMf85YQGFnW/wFBAvyJJVti1cpVCJhKUlohibKw0kRR8tsOPWjoD4zc2bUwG
-         i3gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IWRthtglu8eRkkXULTpkF/YK78fARAhKmN/Na9bYdxE=;
-        b=IqgNEOzFwOJTGyQaZcGkxRx0+GrpZxvzJMZ93hCRCuwJEwT9Ts6/E+7otRwAd7fiAK
-         80TZ/Fuudrg8XbYl/LPQQYNCkz0VbpeCF8zngWLdicgSfTp/OnrVFj1TA54AIt+m8Vmc
-         kYin3rK+5WoO7cV7/x1GMy4pk9dvOeT/XzDuU065a+BmxLBxoftp/DXjoiP6XEXEdvxS
-         O+ZzrYErZUBAeVANXLixBJBl5gK4t62HKDk7aTlKC8I85FqUrCzQqb/14jk0kfiPjXaE
-         Ew3kRlTnkGqsMbtxYCHzadzqzICD+PMDttDShmAjTFxeZPg9Co6Ix+yYcyB4V2WfE38X
-         wx4Q==
-X-Gm-Message-State: AOAM533BvImz5WndX6/+Nj6tGkJnPGhePizmol4gq4BDhQNvapMgIPm/
-        96nLTT/zYT5obyfdRWwkBDm/dA==
-X-Google-Smtp-Source: ABdhPJx3n8Px49CnN1M4jXMPkOofCg4r6VJP+S9+FplnOiXmS4KhG67BnLgQcm8RtSYN6IosPovTKA==
-X-Received: by 2002:a05:600c:19cf:b0:381:7ab1:46ef with SMTP id u15-20020a05600c19cf00b003817ab146efmr7024095wmq.104.1646167623121;
-        Tue, 01 Mar 2022 12:47:03 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55? ([2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55])
-        by smtp.googlemail.com with ESMTPSA id f18-20020a05600c155200b003816bac83f6sm3988949wmg.27.2022.03.01.12.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:47:02 -0800 (PST)
-Message-ID: <f6f61340-24b1-770e-6b8d-9b47218a87be@linaro.org>
-Date:   Tue, 1 Mar 2022 21:47:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] thermal: brcmstb_thermal: Interrupt is optional
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Markus Mayer <mmayer@broadcom.com>,
-        "maintainer:BROADCOM STB AVS TMON DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20210426213647.704823-1-f.fainelli@gmail.com>
- <933c889e-dee0-4fc3-bf1a-b3655cabbb28@gmail.com>
- <7359c3c1-8928-d448-e503-13f587cbb567@linaro.org>
- <2f8da2c7-98c5-4061-2e16-42b7fd4f9694@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2f8da2c7-98c5-4061-2e16-42b7fd4f9694@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 1 Mar 2022 15:49:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8187331DCD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:49:09 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221Jcf1i026322;
+        Tue, 1 Mar 2022 20:48:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=NzmemcIvh2KgUCy7fzhsxYkFZy2vGLqre8sjxZP5R68=;
+ b=kF+4eIyayhrSMpnvBFd//l22qlJpx1ZYHeY8mAf6EQrsTZItnjbcIWpzkdXTkEdYOYLT
+ KEk9g/cwDBspW8qO9WbWREyOHAuYSGPlJ4JKmn7wBLZ9TqBiN9FzDrzYQHfuEwmQ0Txr
+ pfsWDCNFfsasAaH4z7uQp4ej12SI00XVADKkvWEk6bMh1LrOoH5qwbNU0OVXBkyR7hPP
+ 5jqKsGF328/pjh1ZhSFZAei7r/j6VjEB7NJfmgnwwVDc1em+ruqIQfYIeudctnBf0y7z
+ yCRv34VBvQ83usRvF01hNUpePwZ4UARtNpTVt9VzO217mga831ttQMLBbt93syS2m3jS vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehqp2vg3j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 20:48:28 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221Kf5oc013621;
+        Tue, 1 Mar 2022 20:48:28 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehqp2vg38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 20:48:27 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221Km4sK021560;
+        Tue, 1 Mar 2022 20:48:27 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03dal.us.ibm.com with ESMTP id 3egfss5ubs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 20:48:26 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221KmNoX47907140
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 20:48:23 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01CCBAE067;
+        Tue,  1 Mar 2022 20:48:23 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5484EAE066;
+        Tue,  1 Mar 2022 20:48:22 +0000 (GMT)
+Received: from localhost (unknown [9.65.81.114])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Tue,  1 Mar 2022 20:48:22 +0000 (GMT)
+From:   Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, mopsfelder@gmail.com,
+        Murilo Opsfelder Araujo <muriloo@linux.ibm.com>,
+        "Erhard F ." <erhard_f@mailbox.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Nick Child <nick.child@ibm.com>
+Subject: [PATCH v2] powerpc/64s: Fix build failure when CONFIG_PPC_64S_HASH_MMU is not set
+Date:   Tue,  1 Mar 2022 17:47:43 -0300
+Message-Id: <20220301204743.45133-1-muriloo@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
+Content-Type: text/plain; charset="utf-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: at-I7ZtJdSHfDzVpnXQa3viA3xdvEebj
+X-Proofpoint-ORIG-GUID: mprGZymhnLIFYLdSyAXV8aPK4MB-unCr
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 phishscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203010103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +97,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2022 19:05, Florian Fainelli wrote:
-> 
-> 
-> On 9/17/2021 12:51 AM, Daniel Lezcano wrote:
->>
->> Applied, thanks
-> 
-> Was it applied? I still cannot find it in linux-next or Linus' tree.
-I thought it was :/
+The following build failure occurs when CONFIG_PPC_64S_HASH_MMU is not
+set:
 
+    arch/powerpc/kernel/setup_64.c: In function ‘setup_per_cpu_areas’:
+    arch/powerpc/kernel/setup_64.c:811:21: error: ‘mmu_linear_psize’ undeclared (first use in this function); did you mean ‘mmu_virtual_psize’?
+      811 |                 if (mmu_linear_psize == MMU_PAGE_4K)
+          |                     ^~~~~~~~~~~~~~~~
+          |                     mmu_virtual_psize
+    arch/powerpc/kernel/setup_64.c:811:21: note: each undeclared identifier is reported only once for each function it appears in
 
+Move the declaration of mmu_linear_psize outside of
+CONFIG_PPC_64S_HASH_MMU ifdef.
+
+After the above is fixed, it fails later with the following error:
+
+    ld: arch/powerpc/kexec/file_load_64.o: in function `.arch_kexec_kernel_image_probe':
+    file_load_64.c:(.text+0x1c1c): undefined reference to `.add_htab_mem_range'
+
+Fix that, too, by conditioning add_htab_mem_range() symbol to
+CONFIG_PPC_64S_HASH_MMU.
+
+Fixes: 387e220a2e5e (powerpc/64s: Move hash MMU support code under CONFIG_PPC_64S_HASH_MMU)
+Reported-by: Erhard F. <erhard_f@mailbox.org>
+Signed-off-by: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Fabiano Rosas <farosas@linux.ibm.com>
+Cc: Nick Child <nick.child@ibm.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215567
+Signed-off-by: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+---
+v1: https://lore.kernel.org/linuxppc-dev/20220301164843.29170-1-muriloo@linux.ibm.com/
+
+ arch/powerpc/include/asm/book3s/64/mmu.h | 2 +-
+ arch/powerpc/include/asm/kexec_ranges.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/book3s/64/mmu.h b/arch/powerpc/include/asm/book3s/64/mmu.h
+index ba5b1becf518..006cbec70ffe 100644
+--- a/arch/powerpc/include/asm/book3s/64/mmu.h
++++ b/arch/powerpc/include/asm/book3s/64/mmu.h
+@@ -202,7 +202,6 @@ static inline struct subpage_prot_table *mm_ctx_subpage_prot(mm_context_t *ctx)
+ /*
+  * The current system page and segment sizes
+  */
+-extern int mmu_linear_psize;
+ extern int mmu_virtual_psize;
+ extern int mmu_vmalloc_psize;
+ extern int mmu_io_psize;
+@@ -213,6 +212,7 @@ extern int mmu_io_psize;
+ #define mmu_virtual_psize MMU_PAGE_4K
+ #endif
+ #endif
++extern int mmu_linear_psize;
+ extern int mmu_vmemmap_psize;
+ 
+ /* MMU initialization */
+diff --git a/arch/powerpc/include/asm/kexec_ranges.h b/arch/powerpc/include/asm/kexec_ranges.h
+index 7a90000f8d15..f83866a19e87 100644
+--- a/arch/powerpc/include/asm/kexec_ranges.h
++++ b/arch/powerpc/include/asm/kexec_ranges.h
+@@ -9,7 +9,7 @@ struct crash_mem *realloc_mem_ranges(struct crash_mem **mem_ranges);
+ int add_mem_range(struct crash_mem **mem_ranges, u64 base, u64 size);
+ int add_tce_mem_ranges(struct crash_mem **mem_ranges);
+ int add_initrd_mem_range(struct crash_mem **mem_ranges);
+-#ifdef CONFIG_PPC_BOOK3S_64
++#ifdef CONFIG_PPC_64S_HASH_MMU
+ int add_htab_mem_range(struct crash_mem **mem_ranges);
+ #else
+ static inline int add_htab_mem_range(struct crash_mem **mem_ranges)
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.35.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

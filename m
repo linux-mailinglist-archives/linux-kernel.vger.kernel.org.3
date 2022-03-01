@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426854C8A84
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869CA4C8A7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 12:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiCALTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 06:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S233089AbiCALTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 06:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiCALT0 (ORCPT
+        with ESMTP id S230385AbiCALTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 06:19:26 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5A92253C;
-        Tue,  1 Mar 2022 03:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1646133526;
-  x=1677669526;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KAoobEf0FgmH/phyTwuBEP9MQR4VO/sSwTaKsDfFC5Q=;
-  b=SUAAsqaSBWYEmuv7bWXIZEcC0p8L1gZvwMLwCgOoQCyJsZ4Bi6IeRlU5
-   y9vPHAn7ge5t9eQh5lN1x3qQOH+mv5yYAV+gIjGDvO7WnQlbdRhEOyDhO
-   V3VkBVD9YbgWDfpwuCns9Q+wBTjR5pAiZei7lNhD1h1l0DK/coJCRM8eh
-   nHPeOQ/iv9YP40QnMwZBE6h1pWw57VaXefar7E1XyPQDaIN4lwjBYFgdx
-   3CTR+ggUKtbkpf8UaIFTLLtlVVp3+e2S4NXEBZeXvriqURwP33Gsasclh
-   Gx3fRE7gqP4b8GvdlvBH0fgJQqZ9qPtyH4zeV0SamZFFT+Hi65svHrZdj
-   A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>
-CC:     <kernel@axis.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: [PATCH v2 3/3] regulator: virtual: add devicetree support
-Date:   Tue, 1 Mar 2022 12:18:31 +0100
-Message-ID: <20220301111831.3742383-4-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220301111831.3742383-1-vincent.whitchurch@axis.com>
-References: <20220301111831.3742383-1-vincent.whitchurch@axis.com>
+        Tue, 1 Mar 2022 06:19:19 -0500
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CDD1DA4B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 03:18:35 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F1F13200003;
+        Tue,  1 Mar 2022 11:18:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646133513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1onpxNnFoCXsqo506jvf7SOJaOlkoC3XKwD8NMc9uTQ=;
+        b=mrgSYljU26q9SyublNacGu2CJRJlEXAsqilOiDlbsTI3WISP1QS1VUesZ0AixgqWisvyoK
+        aEq9vGYD0V0rkIWWOwTzg2MNvz+UHfg3XCG9oTaZMcuwXfUpY6xY0T7KXBwymDFGPAwD9S
+        gGhs7Qf7QUy07EEwIgNu1ZzQkpEFpIjhSQNIIvO3mMLqFjQ18lcYmBUa6bBioQUtmu3Z7M
+        U+b+NUQZ1JjgGF7ZrDwih1ojKwcV8ATShVp0xBr4/d6jCl4VPV/gNbmEHcuBEw/1Gn8Ivd
+        C+5ippITlTrmBVKtF3sFQhz7mpHJv86z5L6Zv4n0kkH07IEPcUAeZqR93iEAcQ==
+Date:   Tue, 1 Mar 2022 12:18:32 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     codrin.ciubotariu@microchip.com, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: atmel_ssc_dai: Handle errors for clk_enable
+Message-ID: <Yh4BCPqPngcsvER1@piout.net>
+References: <20220301090637.3776558-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301090637.3776558-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reg-virt-consumer is very useful for development and testing of
-regulator drivers since it allows voltages and modes to be set from
-userspace.  However, it currently requires platform data so it cannot be
-used without patching the kernel.  Add support for probing it from the
-devicetree to remedy this.
+On 01/03/2022 17:06:37+0800, Jiasheng Jiang wrote:
+> As the potential failure of the clk_enable(),
+> it should be better to check it and return error if fals.
+> 
 
-Since this driver is only meant for testing and is a purely software
-construct, no binding documentation is added.
+As I already replied to an earlier patch, this will never, ever fail,
+this patch doesn't fix anything.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
+> Fixes: cbaadf0f90d6 ("ASoC: atmel_ssc_dai: refactor the startup and shutdown")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  sound/soc/atmel/atmel_ssc_dai.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
+> index 26e2bc690d86..c1dea8d62416 100644
+> --- a/sound/soc/atmel/atmel_ssc_dai.c
+> +++ b/sound/soc/atmel/atmel_ssc_dai.c
+> @@ -280,7 +280,10 @@ static int atmel_ssc_startup(struct snd_pcm_substream *substream,
+>  
+>  	/* Enable PMC peripheral clock for this SSC */
+>  	pr_debug("atmel_ssc_dai: Starting clock\n");
+> -	clk_enable(ssc_p->ssc->clk);
+> +	ret = clk_enable(ssc_p->ssc->clk);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ssc_p->mck_rate = clk_get_rate(ssc_p->ssc->clk);
+>  
+>  	/* Reset the SSC unless initialized to keep it in a clean state */
+> -- 
+> 2.25.1
+> 
 
-Notes:
-    v2:
-    - Only use the "default" supply name if dt
-    - Add a comment explaining the "default" supply name
-
- drivers/regulator/virtual.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/regulator/virtual.c b/drivers/regulator/virtual.c
-index 9e0abbee1df5..5d32628a5011 100644
---- a/drivers/regulator/virtual.c
-+++ b/drivers/regulator/virtual.c
-@@ -13,6 +13,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- 
- struct virtual_consumer_data {
- 	struct mutex lock;
-@@ -281,6 +282,14 @@ static const struct attribute_group regulator_virtual_attr_group = {
- 	.attrs	= regulator_virtual_attributes,
- };
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id regulator_virtual_consumer_of_match[] = {
-+	{ .compatible = "regulator-virtual-consumer" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, regulator_virtual_consumer_of_match);
-+#endif
-+
- static int regulator_virtual_probe(struct platform_device *pdev)
- {
- 	char *reg_id = dev_get_platdata(&pdev->dev);
-@@ -305,6 +314,14 @@ static int regulator_virtual_probe(struct platform_device *pdev)
- 	if (drvdata == NULL)
- 		return -ENOMEM;
- 
-+	/*
-+	 * This virtual consumer does not have any hardware-defined supply
-+	 * name, so just allow the regulator to be specified in a property
-+	 * named "default-supply" when we're being probed from devicetree.
-+	 */
-+	if (!reg_id && pdev->dev.of_node)
-+		reg_id = "default";
-+
- 	mutex_init(&drvdata->lock);
- 
- 	drvdata->regulator = devm_regulator_get(&pdev->dev, reg_id);
-@@ -345,6 +362,7 @@ static struct platform_driver regulator_virtual_consumer_driver = {
- 	.remove		= regulator_virtual_remove,
- 	.driver		= {
- 		.name		= "reg-virt-consumer",
-+		.of_match_table = of_match_ptr(regulator_virtual_consumer_of_match),
- 	},
- };
- 
 -- 
-2.34.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

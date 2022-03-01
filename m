@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C92A4C9125
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207AE4C912B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbiCARKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S236379AbiCARLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiCARKi (ORCPT
+        with ESMTP id S234865AbiCARLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:10:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C76A340907
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:09:57 -0800 (PST)
+        Tue, 1 Mar 2022 12:11:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6949938BC3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:10:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646154597;
+        s=mimecast20190719; t=1646154620;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NZUMnyvqR6wCb4IOQc4AjR2UMdvh6J4gOvtFiHLptac=;
-        b=fjPAoitSkT9DhADby6N49wm7aPQbcnNFetHOj4uOgLaiVw/1WE/gusYOfZWe0HuQjrR9CP
-        56BvaiORbWkjvy2kBD7OpM2i83G0NLz5WbDxi++YzjNR99Hc9tnv54OFJl5xy+v/NSYQtq
-        JwmNdr/XYmNdugS9zdJ5YwSatKweLmA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Hw768rDeNokjNS2ztSnOtNJE+1C5X3ieaCdhvugFp+Q=;
+        b=ESfpElxFTXQ7V7PSnTGeDbeJpZvSA95aDwXTNss3PIsK/3Xuk5c3wJ0H15UogvwRhc943B
+        06KnZ38VnAtbwuA+O2dRZSve/REW6JbmirYZdudEVTdObY+ZKk7hju4BWMPSgkdc2G3iw3
+        zaVUQAmXjvRHVYzTSNFcYqKQZuyvpiY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-459-72t2FoPLNDGItjDorhYB4A-1; Tue, 01 Mar 2022 12:09:55 -0500
-X-MC-Unique: 72t2FoPLNDGItjDorhYB4A-1
-Received: by mail-wm1-f69.google.com with SMTP id h206-20020a1c21d7000000b003552c13626cso1092060wmh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:09:55 -0800 (PST)
+ us-mta-182-e6nrlJtFMoGUraQbPqtQpw-1; Tue, 01 Mar 2022 12:10:18 -0500
+X-MC-Unique: e6nrlJtFMoGUraQbPqtQpw-1
+Received: by mail-wr1-f72.google.com with SMTP id x15-20020a5d6b4f000000b001ee6c0aa287so3557475wrw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:10:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NZUMnyvqR6wCb4IOQc4AjR2UMdvh6J4gOvtFiHLptac=;
-        b=BQu9TOCs7oFw5NhpkErvaha44sMTnvZteZ2K5IV34RoqY0we3C2or6KuC08gmpN9ER
-         rqs0KNBYkPBW77q2XB/VxKjJTXTiBLDQcdoXV8QYtcBzVzJ+7U78BcPZPHZrAesRndbn
-         bfaZb/bxWs+RftH2XuBYD6sg9jNoBQ98Etr+1iDBGavnyckyXZZl2+JrBgmuV/vEa/yd
-         tp47YATrgO3oD4yZd98M43cLGynu6LKKmrc8spCaU+scuL07PQv4G8s2B6lFFaVA/exL
-         m2/x42pqSi6qdkKIcF+20CwGgKHaGdzmxzeASWcIXMm8TcdgWFF2610LYdF+jqlzDQHJ
-         Aw1A==
-X-Gm-Message-State: AOAM531eMQgE1pAUnfWMU0/UWmlrN0EHrPXWEWLk/uNFaxUIhw5vj9du
-        I9uXCrqomOKIu4SdEYLU9H+z3632LY8XCi3DY3/oTeKujmauBP1+pt8jqvpQa/Sr4P3pxD0WbTp
-        IP3fRutCGcG/MX7SOd6BpjUKp
-X-Received: by 2002:a05:6000:18a1:b0:1ef:8e17:e82c with SMTP id b1-20020a05600018a100b001ef8e17e82cmr11966000wri.254.1646154593038;
-        Tue, 01 Mar 2022 09:09:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylMCDoPBFWrk9UBp13BlbJntex79zo8tb9uzzaaTzQ9nZhnDGchYhtkFScJKPXwMhtlbDtpQ==
-X-Received: by 2002:a05:6000:18a1:b0:1ef:8e17:e82c with SMTP id b1-20020a05600018a100b001ef8e17e82cmr11965991wri.254.1646154592831;
-        Tue, 01 Mar 2022 09:09:52 -0800 (PST)
+        bh=Hw768rDeNokjNS2ztSnOtNJE+1C5X3ieaCdhvugFp+Q=;
+        b=DyBVepYh7nDbr2kAfKOv9+ORti/xXotZm07RLoUbhGPArYey2/vPyn31L/J9BmyiyQ
+         O9PF+9c2r8Zm77fLJ9WA5r97JFkCb0M+tYyx5pGn0jXTM6inzNIArhSmrnzrMOqZpCPg
+         xLH74UsLnBO/FFWIxP1/PTXjhAAPGHt4YgiWb86pII4Lm53ILvMjhZUX1EBoY69YqQfS
+         xMgVQm83J1kRM3crSprbxA+a2MqZvK3e9pPDpsl6pAt38oWvAeFwVuzEy2RSQ4I7zFMb
+         ixC65GstMPfEL3Pich47cgcrrT+rJ+ZPXCGm1L9hUMwd3cFyXw6mYr7Uy+/cPruvu4Wk
+         i9zw==
+X-Gm-Message-State: AOAM532brrjNE7ZoOU9jPaXC1as7ZxC126BWpFNE+xCiPVqAjQ09GIyZ
+        Mu+s0OkSvbA27pEOa6rmmS588DhR/mzkWyPCuhPvAOjXNihcBSEG0lk1Wi9XQvQsMB/Nf2PJ6wo
+        fJMXqsKUznx8HR4rTthfRMR02
+X-Received: by 2002:adf:fbc4:0:b0:1e7:2060:d65 with SMTP id d4-20020adffbc4000000b001e720600d65mr19981566wrs.583.1646154617055;
+        Tue, 01 Mar 2022 09:10:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcW8kTPiZjyEQosAULzH9LNNi5qcAy9XoIyi/XnZf3u7/MFJ8aAGzGVLozZ3XC7489ddNLZw==
+X-Received: by 2002:adf:fbc4:0:b0:1e7:2060:d65 with SMTP id d4-20020adffbc4000000b001e720600d65mr19981536wrs.583.1646154616784;
+        Tue, 01 Mar 2022 09:10:16 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id r1-20020a5d4941000000b001ed89dcacbbsm14008863wrs.23.2022.03.01.09.09.51
+        by smtp.googlemail.com with ESMTPSA id o22-20020a05600c4fd600b0038133076dcesm3830827wmq.16.2022.03.01.09.10.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 09:09:52 -0800 (PST)
-Message-ID: <51a6e2a5-57d4-5f6d-79fa-13daa544266d@redhat.com>
-Date:   Tue, 1 Mar 2022 18:09:51 +0100
+        Tue, 01 Mar 2022 09:10:16 -0800 (PST)
+Message-ID: <4665e220-2efe-0040-8dda-cf17f0d8e342@redhat.com>
+Date:   Tue, 1 Mar 2022 18:10:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.16 1/2] KVM: x86: lapic: don't touch
- irr_pending in kvm_apic_update_apicv when inhibiting it
+Subject: Re: [PATCH MANUALSEL 5.16 2/2] KVM: x86: nSVM: deal with L1
+ hypervisor that intercepts interrupts but lets L2 control them
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
@@ -70,8 +70,9 @@ Cc:     Maxim Levitsky <mlevitsk@redhat.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, kvm@vger.kernel.org
 References: <20220222140522.211548-1-sashal@kernel.org>
+ <20220222140522.211548-2-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220222140522.211548-1-sashal@kernel.org>
+In-Reply-To: <20220222140522.211548-2-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,42 +89,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 2/22/22 15:05, Sasha Levin wrote:
 > From: Maxim Levitsky <mlevitsk@redhat.com>
 > 
-> [ Upstream commit 755c2bf878607dbddb1423df9abf16b82205896f ]
+> [ Upstream commit 2b0ecccb55310a4b8ad5d59c703cf8c821be6260 ]
 > 
-> kvm_apic_update_apicv is called when AVIC is still active, thus IRR bits
-> can be set by the CPU after it is called, and don't cause the irr_pending
-> to be set to true.
+> Fix a corner case in which the L1 hypervisor intercepts
+> interrupts (INTERCEPT_INTR) and either doesn't set
+> virtual interrupt masking (V_INTR_MASKING) or enters a
+> nested guest with EFLAGS.IF disabled prior to the entry.
 > 
-> Also logic in avic_kick_target_vcpu doesn't expect a race with this
-> function so to make it simple, just keep irr_pending set to true and
-> let the next interrupt injection to the guest clear it.
+> In this case, despite the fact that L1 intercepts the interrupts,
+> KVM still needs to set up an interrupt window to wait before
+> injecting the INTR vmexit.
+> 
+> Currently the KVM instead enters an endless loop of 'req_immediate_exit'.
+> 
+> Exactly the same issue also happens for SMIs and NMI.
+> Fix this as well.
+> 
+> Note that on VMX, this case is impossible as there is only
+> 'vmexit on external interrupts' execution control which either set,
+> in which case both host and guest's EFLAGS.IF
+> are ignored, or not set, in which case no VMexits are delivered.
 > 
 > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Message-Id: <20220207155447.840194-9-mlevitsk@redhat.com>
+> Message-Id: <20220207155447.840194-8-mlevitsk@redhat.com>
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->   arch/x86/kvm/lapic.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+>   arch/x86/kvm/svm/svm.c | 17 +++++++++++++----
+>   1 file changed, 13 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index e8e383fbe8868..bfac6d0933c39 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2306,7 +2306,12 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
->   		apic->irr_pending = true;
->   		apic->isr_count = 1;
->   	} else {
-> -		apic->irr_pending = (apic_search_irr(apic) != -1);
-> +		/*
-> +		 * Don't clear irr_pending, searching the IRR can race with
-> +		 * updates from the CPU as APICv is still active from hardware's
-> +		 * perspective.  The flag will be cleared as appropriate when
-> +		 * KVM injects the interrupt.
-> +		 */
->   		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
->   	}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index d6a4acaa65742..2503c99cfde3f 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3548,11 +3548,13 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>   	if (svm->nested.nested_run_pending)
+>   		return -EBUSY;
+>   
+> +	if (svm_nmi_blocked(vcpu))
+> +		return 0;
+> +
+>   	/* An NMI must not be injected into L2 if it's supposed to VM-Exit.  */
+>   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
+>   		return -EBUSY;
+> -
+> -	return !svm_nmi_blocked(vcpu);
+> +	return 1;
 >   }
+>   
+>   static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> @@ -3604,9 +3606,13 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+>   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+>   	if (svm->nested.nested_run_pending)
+>   		return -EBUSY;
+>   
+> +	if (svm_interrupt_blocked(vcpu))
+> +		return 0;
+> +
+>   	/*
+>   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+>   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+> @@ -3614,7 +3620,7 @@ static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+>   		return -EBUSY;
+>   
+> -	return !svm_interrupt_blocked(vcpu);
+> +	return 1;
+>   }
+>   
+>   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> @@ -4343,11 +4349,14 @@ static int svm_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>   	if (svm->nested.nested_run_pending)
+>   		return -EBUSY;
+>   
+> +	if (svm_smi_blocked(vcpu))
+> +		return 0;
+> +
+>   	/* An SMI must not be injected into L2 if it's supposed to VM-Exit.  */
+>   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_smi(svm))
+>   		return -EBUSY;
+>   
+> -	return !svm_smi_blocked(vcpu);
+> +	return 1;
+>   }
+>   
+>   static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+
 
 Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 

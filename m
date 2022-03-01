@@ -2,111 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B624C95B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5464C9602
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbiCAUQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S234328AbiCAUSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:18:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237805AbiCAUP6 (ORCPT
+        with ESMTP id S237831AbiCAURh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:15:58 -0500
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEACD79C6D;
-        Tue,  1 Mar 2022 12:15:01 -0800 (PST)
-Received: from [45.44.224.220] (port=57050 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1nP8tg-0006kw-90; Tue, 01 Mar 2022 15:15:00 -0500
-Message-ID: <628f7ac96c15b0a3d5f2ddcdf4df79a03950b17e.camel@trillion01.com>
-Subject: Re: [PATCH v4 2/2] io_uring: Add support for napi_busy_poll
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     Hao Xu <haoxu@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 01 Mar 2022 15:14:58 -0500
-In-Reply-To: <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
-References: <cover.1646142288.git.olivier@trillion01.com>
-         <aa38a667ef28cce54c08212fdfa1e2b3747ad3ec.1646142288.git.olivier@trillion01.com>
-         <29bad95d-06f8-ea7c-29fe-81e52823c90a@linux.alibaba.com>
-         <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.4 
+        Tue, 1 Mar 2022 15:17:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711BB74DF9;
+        Tue,  1 Mar 2022 12:16:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1819BB81D19;
+        Tue,  1 Mar 2022 20:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3D4C340EE;
+        Tue,  1 Mar 2022 20:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646165798;
+        bh=IKX32sWHzfqA+GXof/lcAj87x4fva3TL+Bqv6/XCzIk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=prwOEn72IzSKCb9n1RIPz5XQUe/UrW6yIg8Wn6v3/hmfxlibq1EZPsLBeq77g+n8L
+         vVrYdKsDAvVzLy1oBW93jN79Fnvou7LP9ZzvFva70QRNNhREP9j0KbXUyYNdwl/WUB
+         3EKZ4rQ08C4Ipu0Ny6o4MtbbeEWXDDkb37SCn35vB9VHm6zAqXgaWOR/+AmzIa7DZ5
+         Yk1CCLTq/+GxySoV3SyDpb5Frm06M5FQolZ/I+vxd0sAqUQ4mLXQInALQmNqApTvoQ
+         qnRoMznvizO70TFO5SzRbZEnT1s3AQky+/mzP21Yf+vP7Y7k7DjXslwCkxFXb8OuIA
+         EcqoWKYCT3HsA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/23] selftests/bpf: Add test for bpf_timer overwriting crash
+Date:   Tue,  1 Mar 2022 15:16:00 -0500
+Message-Id: <20220301201629.18547-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 15:06 -0500, Olivier Langlois wrote:
-> On Wed, 2022-03-02 at 02:31 +0800, Hao Xu wrote:
-> > 
-> > 
-> > How about:
-> > 
-> > if (list is singular) {
-> > 
-> >      do something;
-> > 
-> >      return;
-> > 
-> > }
-> > 
-> > while (!io_busy_loop_end() && io_napi_busy_loop())
-> > 
-> >      ;
-> > 
-> 
-> is there a concern with the current code?
-> What would be the benefit of your suggestion over current code?
-> 
-> To me, it seems that if io_blocking_napi_busy_loop() is called, a
-> reasonable expectation would be that some busy looping is done or
-> else
-> you could return the function without doing anything which would,
-> IMHO,
-> be misleading.
-> 
-> By definition, napi_busy_loop() is not blocking and if you desire the
-> device to be in busy poll mode, you need to do it once in a while or
-> else, after a certain time, the device will return back to its
-> interrupt mode.
-> 
-> IOW, io_blocking_napi_busy_loop() follows the same logic used by
-> napi_busy_loop() that does not call loop_end() before having perform
-> 1
-> loop iteration.
-> 
-> > Btw, start_time seems not used in singular branch.
-> 
-> I know. This is why it is conditionally initialized.
-> 
-> Greetings,
-> 
-Another argument for not touching the code the way that it is:
-io_napi_busy_loop() has another function on top of iterating the
-napi_list and calling napi_busy_loop() for each of them.
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-The function also check the list entries validity and frees them when
-they time out. Not calling io_napi_busy_loop() you would bypass this
-check and that could result in timed out entries to never be disposed.
+[ Upstream commit a7e75016a0753c24d6c995bc02501ae35368e333 ]
+
+Add a test that validates that timer value is not overwritten when doing
+a copy_map_value call in the kernel. Without the prior fix, this test
+triggers a crash.
+
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220209070324.1093182-3-memxor@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../selftests/bpf/prog_tests/timer_crash.c    | 32 +++++++++++
+ .../testing/selftests/bpf/progs/timer_crash.c | 54 +++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_crash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_crash.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer_crash.c b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
+new file mode 100644
+index 0000000000000..f74b82305da8c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "timer_crash.skel.h"
++
++enum {
++	MODE_ARRAY,
++	MODE_HASH,
++};
++
++static void test_timer_crash_mode(int mode)
++{
++	struct timer_crash *skel;
++
++	skel = timer_crash__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "timer_crash__open_and_load"))
++		return;
++	skel->bss->pid = getpid();
++	skel->bss->crash_map = mode;
++	if (!ASSERT_OK(timer_crash__attach(skel), "timer_crash__attach"))
++		goto end;
++	usleep(1);
++end:
++	timer_crash__destroy(skel);
++}
++
++void test_timer_crash(void)
++{
++	if (test__start_subtest("array"))
++		test_timer_crash_mode(MODE_ARRAY);
++	if (test__start_subtest("hash"))
++		test_timer_crash_mode(MODE_HASH);
++}
+diff --git a/tools/testing/selftests/bpf/progs/timer_crash.c b/tools/testing/selftests/bpf/progs/timer_crash.c
+new file mode 100644
+index 0000000000000..f8f7944e70dae
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/timer_crash.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++struct map_elem {
++	struct bpf_timer timer;
++	struct bpf_spin_lock lock;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct map_elem);
++} amap SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct map_elem);
++} hmap SEC(".maps");
++
++int pid = 0;
++int crash_map = 0; /* 0 for amap, 1 for hmap */
++
++SEC("fentry/do_nanosleep")
++int sys_enter(void *ctx)
++{
++	struct map_elem *e, value = {};
++	void *map = crash_map ? (void *)&hmap : (void *)&amap;
++
++	if (bpf_get_current_task_btf()->tgid != pid)
++		return 0;
++
++	*(void **)&value = (void *)0xdeadcaf3;
++
++	bpf_map_update_elem(map, &(int){0}, &value, 0);
++	/* For array map, doing bpf_map_update_elem will do a
++	 * check_and_free_timer_in_array, which will trigger the crash if timer
++	 * pointer was overwritten, for hmap we need to use bpf_timer_cancel.
++	 */
++	if (crash_map == 1) {
++		e = bpf_map_lookup_elem(map, &(int){0});
++		if (!e)
++			return 0;
++		bpf_timer_cancel(&e->timer);
++	}
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.34.1
 

@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2198C4C8220
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D1F4C8233
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiCAETl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S232313AbiCAEUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiCAETg (ORCPT
+        with ESMTP id S232266AbiCAEUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:19:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17311FD3A;
-        Mon, 28 Feb 2022 20:18:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=SNG8dsJKnqg4yoB1IAs+5+zuDlU3R1ic4tYvheuBHLI=; b=BIJf36tfAUXQXZqcOnbeAxttFX
-        jFYQv0XXdHsIqDASqvzeCHFWihKYilk3cBB7YnenzeaqjtnWquPL2Fw2mclByXwyKXocnLBPj/MCX
-        RaBePffOxZitWR550+mebrZDyIePhbYVH0r8PHLVLJcQx24hXPGUVuFzs6eBqsxmapMTWV5dPeUOv
-        eNLkIn+YKoTteSp0QOkIc8uZW4AlOG4kySu/x+4CVBm28T0TzNfjGU8zpoKzPkyZzXMzw/b14XGcK
-        mTSNmUW4cjUWIdFr5LGTpKGAdsPHshNUie5Tz1iOkAOHpuzMM5XNAoc7gkQiVOqLXFUI9cQd1xprT
-        kRtI7Whg==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOtyQ-00Er1X-42; Tue, 01 Mar 2022 04:18:54 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>
-Subject: [PATCH] efi: fix return value of __setup handlers
-Date:   Mon, 28 Feb 2022 20:18:51 -0800
-Message-Id: <20220301041851.12459-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 28 Feb 2022 23:20:30 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6CE2B1B6;
+        Mon, 28 Feb 2022 20:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646108389; x=1677644389;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7+GHxMCaOy/eag+P29R1wN7fPuSy9M8xFCoVkKsEOOA=;
+  b=JOmarbjFZLqg9sLxvw+dQXvLxTGSsVEqsfpXkUsqPRggnxUygSs+eT2K
+   CrLhtIsbe3jmy/5we936tXkJ0JT9ejlUyPkJokzNq7dlu4mJWrgH8dDlk
+   T5QyKl2wKI7pSKbt9n49ovl4MnezARSBO215Nq9IQecyZIWy4Qdd1jGX6
+   IYjYXck1zGZVJkDVzFsMsqvYvGQy1XJH8Y/uPL9Xrcnoc/9j3AnhmYwpq
+   iZXzui6OI79qHig/IC7IM0iVcMp5i2TZVdiKP2FrSKqMmJBOhEQrqUgQD
+   JQbfVRdvzzBL8i5KWbb8TfHj1lnKLHwfsFnDX6G+y0+AhJ2Y771SQ3Feh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252784766"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="252784766"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 20:19:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="804073353"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Feb 2022 20:19:47 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOtzG-00086g-NB; Tue, 01 Mar 2022 04:19:46 +0000
+Date:   Tue, 1 Mar 2022 12:19:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [linux-next:master 3353/9295] drivers/powercap/dtpm.c:525:22:
+ sparse: sparse: symbol 'dtpm_node_callback' was not declared. Should it be
+ static?
+Message-ID: <202203011104.TkmvSjFD-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When "dump_apple_properties" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-argument strings:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6705cd745adbbeac6b13002c7a30060f7b2568a5
+commit: 3759ec678e8944dc2ea70cab77a300408f78ae27 [3353/9295] powercap/drivers/dtpm: Add hierarchy creation
+config: x86_64-randconfig-s021-20220228 (https://download.01.org/0day-ci/archive/20220301/202203011104.TkmvSjFD-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3759ec678e8944dc2ea70cab77a300408f78ae27
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3759ec678e8944dc2ea70cab77a300408f78ae27
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/powercap/
 
-  Unknown kernel command line parameters "dump_apple_properties
-    BOOT_IMAGE=/boot/bzImage-517rc6 efivar_ssdt=newcpu_ssdt", will be
-    passed to user space.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-     dump_apple_properties
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     efivar_ssdt=newcpu_ssdt
 
-Similarly when "efivar_ssdt=somestring" is used, it is added to the
-Unknown parameter message and to init's environment strings, polluting
-them (see examples above).
+sparse warnings: (new ones prefixed by >>)
+   drivers/powercap/dtpm.c: note: in included file:
+   drivers/powercap/dtpm_subsys.h:12:24: sparse: sparse: symbol 'dtpm_subsys' was not declared. Should it be static?
+>> drivers/powercap/dtpm.c:525:22: sparse: sparse: symbol 'dtpm_node_callback' was not declared. Should it be static?
 
-Change the return value of the __setup functions to 1 to indicate
-that the __setup options have been handled.
+Please review and possibly fold the followup patch.
 
-Fixes: 58c5475aba67 ("x86/efi: Retrieve and assign Apple device properties")
-Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Matt Fleming <matt@codeblueprint.co.uk>
 ---
- drivers/firmware/efi/apple-properties.c |    2 +-
- drivers/firmware/efi/efi.c              |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
---- linux-next-20220228.orig/drivers/firmware/efi/apple-properties.c
-+++ linux-next-20220228/drivers/firmware/efi/apple-properties.c
-@@ -24,7 +24,7 @@ static bool dump_properties __initdata;
- static int __init dump_properties_enable(char *arg)
- {
- 	dump_properties = true;
--	return 0;
-+	return 1;
- }
- 
- __setup("dump_apple_properties", dump_properties_enable);
---- linux-next-20220228.orig/drivers/firmware/efi/efi.c
-+++ linux-next-20220228/drivers/firmware/efi/efi.c
-@@ -212,7 +212,7 @@ static int __init efivar_ssdt_setup(char
- 		memcpy(efivar_ssdt, str, strlen(str));
- 	else
- 		pr_warn("efivar_ssdt: name too long: %s\n", str);
--	return 0;
-+	return 1;
- }
- __setup("efivar_ssdt=", efivar_ssdt_setup);
- 
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

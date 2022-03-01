@@ -2,176 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AA64C8A0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1844C8A15
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiCAKzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S234442AbiCAK4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiCAKzn (ORCPT
+        with ESMTP id S234302AbiCAK4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:55:43 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E42D1CD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:55:01 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r10so19865729wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:55:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
-        b=fYMVAihAYq9J0SIqjc+WIOtnDT9inS98fW1fEi2Sn7ghMnAI3y501AUdeK0R7blrUp
-         0/CzDMOfXmbb80tqsD1JDwEQEQP1Qh2s7zs0K7f0tNTVS6JrKl3ecELo5nx5seZBwdK9
-         vimGyhAwh/LYebJwbHA4Arcm5BmPeEsFLJemnowLmgAGOAWL7CLRKIOXAOmFWoMYREKi
-         4D5KcCD9faaxJIMc6EXKsN/8k3vN7ip7tcOFf8mCfX35R4RqMZGH8fUsTBlUuZtZAyZv
-         CgB9l4S31auUQUUfGqDIj/536k5mlGOJJf5Q1qNYme3xdjdar0ZUR698ZnnbUX1H+b1/
-         4v6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
-        b=YH9Wv5BXtmTRWLB1F/T7ff3NyyRZa8epNdBW/YvL+0USAwSAaFayYThFNUJnDb4DhC
-         HImwpfSzdvAsHHP9hUoXxBjWXavuVusTDJhHXfLWquRxbiTJti20+P46GtQ/EyfC+lVd
-         XM9z0W4h1OHpKt5Xit/JySxTajKRrigrXlkC20w8TXg4h2vYv6/wjg2l23uV+/DsvRM1
-         VDhA1tLH4iBZELpBjJO81KjbAnsR5BiRVX05EAiec7dcKhXq9M0gb/d+BeDuTQYxI6o9
-         eqRe4Y9dOfQM2ncGFxeid4MMmEeUZsfbUDycjZ/A4xW8W9pZoi0rhufnTiAdtw5W13Az
-         mYwQ==
-X-Gm-Message-State: AOAM533HjYqkL4Nm4WVNN5eegjiOKd8Pt++MyjtwDLVq3baVd+M2Rq35
-        29P7667KaftM/R243CE0HqJ8Mg==
-X-Google-Smtp-Source: ABdhPJzdYMhou6o5WrZ52n2EdXq1yT7EjObFb+PF0Vlfb5l46Xdgw8+pUJp/NLWi38XzB8Ln5nF/ug==
-X-Received: by 2002:adf:a512:0:b0:1ea:9656:958b with SMTP id i18-20020adfa512000000b001ea9656958bmr18797120wrb.241.1646132099524;
-        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm2438734wmb.48.2022.03.01.02.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
-Date:   Tue, 1 Mar 2022 10:54:57 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh37gTCPaESkgNzV@google.com>
-References: <20220228193928.3ec6ee98@canb.auug.org.au>
- <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com>
- <YhzENKPtY+WOp566@google.com>
- <Yh09/r/nT2LeE82n@kroah.com>
- <Yh3pZXQPP9kmcSSx@google.com>
- <Yh325S5PyPiJf4F5@kroah.com>
+        Tue, 1 Mar 2022 05:56:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60F4D8BF14;
+        Tue,  1 Mar 2022 02:56:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F7FBED1;
+        Tue,  1 Mar 2022 02:56:13 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 701873F73D;
+        Tue,  1 Mar 2022 02:56:10 -0800 (PST)
+Message-ID: <4e4bb61a-377e-1ec9-5998-214055ef0a78@arm.com>
+Date:   Tue, 1 Mar 2022 10:56:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh325S5PyPiJf4F5@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v7 0/7] arm64: Default to 32-bit wide ZONE_DMA
+Content-Language: en-GB
+To:     Matt Flax <flatmax@gmail.com>, nsaenzjulienne@suse.de
+Cc:     ardb@kernel.org, catalin.marinas@arm.com,
+        devicetree@vger.kernel.org, guohanjun@huawei.com, hch@lst.de,
+        iommu@lists.linux-foundation.org, jeremy.linton@arm.com,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, lorenzo.pieralisi@arm.com,
+        robh+dt@kernel.org, will@kernel.org,
+        Matt Flax <flatmax@flatmax.com>
+References: <20201119175400.9995-1-nsaenzjulienne@suse.de>
+ <20220301030031.4025282-1-flatmax@flatmax.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220301030031.4025282-1-flatmax@flatmax.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Mar 2022, Greg KH wrote:
+Hi Matt,
 
-> On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> > On Mon, 28 Feb 2022, Greg KH wrote:
-> > 
-> > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > 
-> > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > > 
-> > > > > > > Hi all,
-> > > > > > > 
-> > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
-> > > > > > 
-> > > > > > I did ask for this *not* to be merged when it was in -testing.
-> > > > > 
-> > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > > > > it.
-> > > > > 
-> > > > > > I'll follow-up with Greg.
-> > > > > 
-> > > > > Should I revert this from my tree?
-> > > > 
-> > > > I did try to catch it before a revert would have been required.
-> > > 
-> > > My fault.
-> > > 
-> > > > But yes, please revert it.
-> > > 
-> > > Will go do so now.
-> > 
-> > Thank you.
-> > 
-> > > > The Ack is not standard and should not be merged.
-> > > 
-> > > I do not understand this, what went wrong here?
-> > 
-> > The "Ack" you saw was just a placeholder.
-> > 
-> > When I provided it, I would have done so like this:
-> > 
-> >     "For my own reference (apply this as-is to your sign-off block):
-> > 
-> >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> > 
-> > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> > 
-> > The majority of maintainers I regularly work with know this to mean
-> > that the set is due to be routed via MFD (with a subsequent
-> > pull-request to an immutable branch to follow), since MFD is often
-> > the centre piece (parent) of the patch-sets I deal with.
-> > 
-> > I appreciate that this could cause confusion, but I'm not sure of a
-> > better way to convey this information such that it survives through
-> > various submission iterations.
+On 2022-03-01 03:00, Matt Flax wrote:
+> Hi All,
 > 
-> But what else is another maintainer supposed to think if they see that
-> ack on the patch?  Ignore it?  I took that to mean "this is good from a
-> mfd-point-of-view" which meant it can go through whatever tree it is
-> supposed to.
+> It seems that the ZONE_DMA changes have broken the operation of Rochip rk3399 chipsets from v5.10.22 onwards.
 > 
-> Are you wanting this individual patch to go through your tree now only?
-> If so, you should say that by NOT acking it :)
+> It isn't clear what needs to be changed to get any of these boards up and running again. Any pointers on how/what to change ?
 
-It's not quite as easy as that.
+Your firmware/bootloader setup is mismatched. If you're using the 
+downstream Rockchip blob for BL31, you need to reserve or remove the 
+memory range 0x8400000-0x9600000 to match the behaviour of the original 
+Android BSP U-Boot. The downstream firmware firewalls this memory off 
+for the Secure world such that any attempt to touch it from Linux 
+results in a fatal SError fault as below. Any apparent correlation with 
+the ZONE_DMA changes will simply be because they've affected the 
+behaviour of the page allocator, such that it's more likely to reach 
+into the affected range of memory.
 
-It wouldn't be fair to the contributor to start reviews once all the
-other patches in the set are ready to be merged.  So how would I
-indicate that the MFD part is ready, fully expecting some of the other
-patches in the set to be reworked and subsequent revisions are to be
-submitted?
+Cheers,
+Robin.
 
-This method actually works really well the majority of the time, and
-has done for a number of years.  However, I am always willing to
-improve on my processes given the opportunity.
-
-> How do you want to see this merged?
-
-The plan is for the whole set to be merged together via MFD.
-
-All of the other maintainers have now Acked, so it's ready to go:
-
-  https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
-
-Looking at the diff, I'm not entirely sure why you took it in the
-first place?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> An easy test for debugging is to run stress :
+> 
+> stress --cpu 4 --io 4 --vm 2 --vm-bytes 128M
+> 
+> stress: info: [255] dispatching hogs: 4 cpu, 4 io, 2 vm, 0 hdd
+> [    8.070280] SError Interrupt on CPU4, code 0xbf000000 -- SError
+> [    8.070286] CPU: 4 PID: 261 Comm: stress Not tainted 5.10.21 #1
+> [    8.070289] Hardware name: FriendlyElec NanoPi M4 (DT)
+> [    8.070293] pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
+> [    8.070296] pc : clear_page+0x14/0x28
+> [    8.070298] lr : clear_subpage+0x50/0x90
+> [    8.070302] sp : ffff800012abbc40
+> [    8.070305] x29: ffff800012abbc40 x28: ffff000000f68000
+> [    8.070313] x27: 0000000000000000 x26: ffff000001f38e40
+> [    8.070320] x25: ffff8000114fd000 x24: 0000000000000000
+> [    8.070326] x23: 0000000000000000 x22: 0000000000001000
+> [    8.070334] x21: 0000ffffa7e00000 x20: fffffe0000010000
+> [    8.070341] x19: ffff000000f68000 x18: 0000000000000000
+> [    8.070348] x17: 0000000000000000 x16: 0000000000000000
+> [    8.070354] x15: 0000000000000002 x14: 0000000000000001
+> [    8.070361] x13: 0000000000075879 x12: 00000000000000c0
+> [    8.070368] x11: ffff80006c46a000 x10: 0000000000000200
+> [    8.070374] x9 : 0000000000000000 x8 : 0000000000000010
+> [    8.070381] x7 : ffff00007db800a0 x6 : ffff800011b899c0
+> [    8.070387] x5 : 0000000000000000 x4 : ffff00007db800f7
+> [    8.070394] x3 : 0000020000200000 x2 : 0000000000000004
+> [    8.070401] x1 : 0000000000000040 x0 : ffff0000085ff4c0
+> [    8.070409] Kernel panic - not syncing: Asynchronous SError Interrupt
+> [    8.070412] CPU: 4 PID: 261 Comm: stress Not tainted 5.10.21 #1
+> [    8.070415] Hardware name: FriendlyElec NanoPi M4 (DT)
+> [    8.070418] Call trace:
+> [    8.070420]  dump_backtrace+0x0/0x1b0
+> [    8.070423]  show_stack+0x18/0x70
+> [    8.070425]  dump_stack+0xd0/0x12c
+> [    8.070428]  panic+0x16c/0x334
+> [    8.070430]  nmi_panic+0x8c/0x90
+> [    8.070433]  arm64_serror_panic+0x78/0x84
+> [    8.070435]  do_serror+0x64/0x70
+> [    8.070437]  el1_error+0x88/0x108
+> [    8.070440]  clear_page+0x14/0x28
+> [    8.070443]  clear_huge_page+0x74/0x210
+> [    8.070445]  do_huge_pmd_anonymous_page+0x1b0/0x7c0
+> [    8.070448]  handle_mm_fault+0xdac/0x1290
+> [    8.070451]  do_page_fault+0x130/0x3a0
+> [    8.070453]  do_translation_fault+0xb0/0xc0
+> [    8.070456]  do_mem_abort+0x44/0xb0
+> [    8.070458]  el0_da+0x28/0x40
+> [    8.070461]  el0_sync_handler+0x168/0x1b0
+> [    8.070464]  el0_sync+0x174/0x180
+> [    8.070508] SError Interrupt on CPU0, code 0xbf000000 -- SError
+> [    8.070511] CPU: 0 PID: 258 Comm: stress Not tainted 5.10.21 #1
+> [    8.070515] Hardware name: FriendlyElec NanoPi M4 (DT)
+> [    8.070518] pstate: 80000000 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+> [    8.070520] pc : 0000aaaacec22e98
+> [    8.070523] lr : 0000aaaacec22d84
+> [    8.070525] sp : 0000ffffe67a8620
+> [    8.070528] x29: 0000ffffe67a8620 x28: 0000000000000003
+> [    8.070534] x27: 0000aaaacec34000 x26: 0000ffffaeb42610
+> [    8.070541] x25: 0000ffffa69af010 x24: 0000aaaacec23a98
+> [    8.070547] x23: 0000aaaacec35010 x22: 0000aaaacec35000
+> [    8.070554] x21: 0000000000001000 x20: ffffffffffffffff
+> [    8.070560] x19: 0000000008000000 x18: 0000000000000000
+> [    8.070567] x17: 0000000000000000 x16: 0000000000000000
+> [    8.070573] x15: 0000000000000000 x14: 0000000000000000
+> [    8.070580] x13: 0000000000008000 x12: 0000000000000000
+> [    8.070587] x11: 0000000000000020 x10: 0000000000000030
+> [    8.070593] x9 : 000000000000000a x8 : 00000000000000de
+> [    8.070599] x7 : 0000000000200000 x6 : 000000000000021b
+> [    8.070606] x5 : 0000000000000000 x4 : ffffffffffffffff
+> [    8.070613] x3 : 0000000000000000 x2 : 0000ffffaeb47000
+> [    8.070619] x1 : 000000000000005a x0 : 0000000000a58000
+> [    8.070629] SMP: stopping secondary CPUs
+> [    8.070632] Kernel Offset: disabled
+> [    8.070634] CPU features: 0x0240022,6100600c
+> [    8.070637] Memory Limit: none
+> 
+> 

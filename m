@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF614C923C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C099D4C923F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236516AbiCARzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S236638AbiCAR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiCARzj (ORCPT
+        with ESMTP id S234598AbiCAR4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:55:39 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB33F33B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:54:58 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id x18so14940031pfh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:54:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IrlX1EuXuhvZFO5dyfwsKkbcsiZCA12sMewuJW1ZcQg=;
-        b=VaCU/amEuSGHsWyLjWVzhe4lT4UoHiib+D1qJwuxcT0I0vyV/0YaAhz5h0ndF6eg8c
-         Cit87v2fsFLtpZ965a6BJbXSLH1dL2gZsxv9ZYp5SlLL3Yf4b52bk00PMi4SLUgddVDD
-         E1Nf01htX0Ejx69EUqV/ZWhuP16S1Ub8joiSbL2DtYbay7LGYmo9oigmnDhNWytR56xr
-         zHGG9Rla0TY0wMTspHpdcNjFUB/t2V6l7vXKjXlTXp65Ae+G7S5hSszJU6TAe7uhOrIW
-         x8vicH6kLZUq0hqfNFxXd9egOibFCmoFZDhWw+BijO+9X8sid1SgUKaXvwj/SULQRGLe
-         wIcg==
+        Tue, 1 Mar 2022 12:56:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B67D146650
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646157317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C1YIiZLEwfCWZucVBeA6r7mIGJsSg3Tucbm5qI7Xnyg=;
+        b=TXdysaZBLB5MSiRk/TZIkzn66wsEbWeoLpkWF55BoF61B5gKq4aV7wsTsVg2fV7D+9lsMP
+        4NmUKt3jiTzScEfce8oWxFKCKtjmJUFKSyrtNKMS9f+RiuhqWBTYJ1NvTzrdg9sRYhysiZ
+        neeou/iO1lA3qXLMBzSi3LdEtqvCdqQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-176-zW5D4xEIML6OloRcLwMUEw-1; Tue, 01 Mar 2022 12:55:16 -0500
+X-MC-Unique: zW5D4xEIML6OloRcLwMUEw-1
+Received: by mail-wr1-f71.google.com with SMTP id v17-20020adfa1d1000000b001ed9d151569so3574428wrv.21
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:55:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IrlX1EuXuhvZFO5dyfwsKkbcsiZCA12sMewuJW1ZcQg=;
-        b=eeAP3ZOI8a8nl0mOJOg1+Ufye3UoIiLDcUmuyeGyzKV/+QCWjTKVt9L7rFInwPlP0A
-         pAfGdvUEscboj66t2ekulXru9seGS/VbcCZuQv7W0vVkn3pM9PwP3nUw0pbJZmM3ZJVV
-         N3OAeQxNHORe51IAkbKqeIf9OXEiwhADd4IQvulRFagjZdx5ipcSnvriLdB6HEeFaMQq
-         BARGW7DEddfaLI91B79p+i8jtt5cNQPBwVbbak7hKo8lRxr/QxfO81KbKV9VKk0CMVQj
-         3bf9VC42rxUmHcgqYcCGvaHPUmyRhh+7S2TgQC1ORvnjl4Z36CwflH/6WfTzxv3l8uwK
-         PC1A==
-X-Gm-Message-State: AOAM531udrMf939PkC5ZH/fNjMGvs+Bfh8KNoGaqjgvdUFjBT9HkD+ub
-        046Zro336sOYVvEgjRazTEojkQ==
-X-Google-Smtp-Source: ABdhPJzQ+0ITtmk7Ryr/RS5lmTXIldDRcloM8HHgtST1nO90BTbDSEp+Dxflytdbw/6uQN1KOq5Ugg==
-X-Received: by 2002:a63:e60:0:b0:374:6620:f372 with SMTP id 32-20020a630e60000000b003746620f372mr22253197pgo.557.1646157298000;
-        Tue, 01 Mar 2022 09:54:58 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k130-20020a633d88000000b00378c359ea29sm4384360pga.12.2022.03.01.09.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 09:54:57 -0800 (PST)
-Date:   Tue, 1 Mar 2022 17:54:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peng Hao <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]  kvm: x86: Improve virtual machine startup performance
-Message-ID: <Yh5d7XBD9D4FhEe3@google.com>
-References: <20220301063756.16817-1-flyingpeng@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C1YIiZLEwfCWZucVBeA6r7mIGJsSg3Tucbm5qI7Xnyg=;
+        b=SbvIFBcgLARHS6pD1l5nNsZAsYZaHrZGMmFOjIRIo0ab/2+gLUFhRT8GvAotmQzgXs
+         sJ+sAyf5OQup9x7P5OqBrKK1dCyYPXEmqFHP+6ZFwbVL3L50rmToRarkQktQzOdJuIiY
+         xzYt6gXddjIHhCaZW4s4GWXSOF43PfQYkmGm2pPTBoW7qVnarUN2GaVYCdc8D/BfyUgw
+         rqT0GoNcwFkSTYQI9eJscRNPSErDStdvSKKzjhGqSvLQRCPKl+M7olMVqGFg5/D1aITh
+         1Y4ooeX45rotIo00i9AZ0qwv2ZxavUbAKkrmediF5VQ04fWeA1fuIUUjZV5w347/taWh
+         l4og==
+X-Gm-Message-State: AOAM531K5x8S5maCp7lZ+HWHvgLGlAX/ORD87MXVsKGr1W3HezOXgIPO
+        xse6D6me2+w/Qjk5wRz/lXc0mcKluv2N/5qfDoVUReO9K+xC9wjO9RHHEo938hOymsKUtgQq7gJ
+        /bm/sToO6J5h2+os/4gycRyVr
+X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr15308387wrp.183.1646157315556;
+        Tue, 01 Mar 2022 09:55:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRd6t6YiBjKSS8HtAllf0a/R/xRzLfl/+eN2+xfWBBjB3U07ISLYFsNd+mEn9N0S/owUGCjA==
+X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr15308374wrp.183.1646157315215;
+        Tue, 01 Mar 2022 09:55:15 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id v12-20020a5d4a4c000000b001e68ba61747sm14329725wrs.16.2022.03.01.09.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 09:55:14 -0800 (PST)
+Message-ID: <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
+Date:   Tue, 1 Mar 2022 18:55:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301063756.16817-1-flyingpeng@tencent.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
+ shadow page is zapped
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20220225182248.3812651-1-seanjc@google.com>
+ <20220225182248.3812651-5-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220225182248.3812651-5-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022, Peng Hao wrote:
->  From: Peng Hao <flyingpeng@tencent.com>
-> 
-> vcpu 0 will repeatedly enter/exit the smm state during the startup
-> phase, and kvm_init_mmu will be called repeatedly during this process.
-> There are parts of the mmu initialization code that do not need to be
-> modified after the first initialization.
-> 
-> Statistics on my server, vcpu0 when starting the virtual machine
-> Calling kvm_init_mmu more than 600 times (due to smm state switching).
-> The patch can save about 36 microseconds in total.
-> 
-> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> ---
-> @@ -5054,7 +5059,7 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
->  {
->  	kvm_mmu_unload(vcpu);
-> -	kvm_init_mmu(vcpu);
-> +	kvm_init_mmu(vcpu, false);
+On 2/25/22 19:22, Sean Christopherson wrote:
+> @@ -5656,7 +5707,7 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+>   	 * Note: we need to do this under the protection of mmu_lock,
+>   	 * otherwise, vcpu would purge shadow page but miss tlb flush.
+>   	 */
+> -	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+> +	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+>   
 
-This is wrong, kvm_mmu_reset_context() is the "big hammer" and is expected to
-unconditionally get the MMU to a known good state.  E.g. failure to initialize
-means this code:
+I was going to squash in this:
 
-	context->shadow_root_level = kvm_mmu_get_tdp_level(vcpu);
+  	 * invalidating TDP MMU roots must be done while holding mmu_lock for
+-	 * write and in the same critical section as making the reload request,
++	 * write and in the same critical section as making the free request,
+  	 * e.g. before kvm_zap_obsolete_pages() could drop mmu_lock and yield.
 
-will not update the shadow_root_level as expected in response to userspace changing
-guest.MAXPHYADDR in such a way that KVM enables/disables 5-level paging.
+But then I realized that this needs better comments and that my knowledge of
+this has serious holes.  Regarding this comment, this is my proposal:
 
-The SMM transitions definitely need to be fixed, and we're slowly getting there,
-but sadly there's no quick fix.
+         /*
+          * Invalidated TDP MMU roots are zapped within MMU read_lock to be
+          * able to walk the list of roots, but with the expectation of no
+          * concurrent change to the pages themselves.  There cannot be
+          * any yield between kvm_tdp_mmu_invalidate_all_roots and the free
+          * request, otherwise somebody could grab a reference to the root
+	 * and break that assumption.
+          */
+         if (is_tdp_mmu_enabled(kvm))
+                 kvm_tdp_mmu_invalidate_all_roots(kvm);
+
+However, for the second comment (the one in the context above), there's much
+more.  From easier to harder:
+
+1) I'm basically clueless about the TLB flush "note" above.
+
+2) It's not clear to me what needs to use for_each_tdp_mmu_root; for
+example, why would anything but the MMU notifiers use for_each_tdp_mmu_root?
+It is used in kvm_tdp_mmu_write_protect_gfn, kvm_tdp_mmu_try_split_huge_pages
+and kvm_tdp_mmu_clear_dirty_pt_masked.
+
+3) Does it make sense that yielding users of for_each_tdp_mmu_root must
+either look at valid roots only, or take MMU lock for write?  If so, can
+this be enforced in tdp_mmu_next_root?
+
+4) If the previous point is correct, _who_ could grab a reference and
+not release it before kvm_tdp_mmu_zap_invalidated_roots runs?  That is,
+is "somebody could grab a reference" an accurate explanation in the first
+comment above?
+
+Thanks,
+
+Paolo
+

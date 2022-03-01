@@ -2,87 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D8C4C8758
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACB04C8763
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiCAJGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S233699AbiCAJIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiCAJGT (ORCPT
+        with ESMTP id S233675AbiCAJIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:06:19 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290C289319;
-        Tue,  1 Mar 2022 01:05:38 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B84BD21637;
-        Tue,  1 Mar 2022 09:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646125536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wGg057MYVvEAycP3sfZdyFUbrSVStkSu0yUPk3uN7Bk=;
-        b=PJoZmxdWQDxzOd6JDIbAkU3p3tENb3df9iSpKNeHZYe93Q99vfTMJarHj+aETJi22OlE5Q
-        efK+c6N9PbE136rXo1pky4rH41gSHXh2m7J9RwIyMmRpO8MczpWn87pP2o6nC4Fl5P54lt
-        Me2wF3cUpDucfbZcglIKYCU5DXTsEoQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 76159A3B88;
-        Tue,  1 Mar 2022 09:05:36 +0000 (UTC)
-Date:   Tue, 1 Mar 2022 10:05:35 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive
- codepaths
-Message-ID: <Yh3h33W45+YaMo92@dhcp22.suse.cz>
-References: <20220226002412.113819-1-shakeelb@google.com>
+        Tue, 1 Mar 2022 04:08:01 -0500
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5A38A31C;
+        Tue,  1 Mar 2022 01:07:18 -0800 (PST)
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 22196kmS002069;
+        Tue, 1 Mar 2022 18:06:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 22196kmS002069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646125607;
+        bh=UY9OLn7hFjW9U1chVHUgkyiDXtaLJsAZWOhrge7kbXU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=l0XwBzNr1NPLGPpqyMiqVggwwCB/1A72aUdEoK79UH5a67OgyaQfm1oYMV8+RL3E5
+         E+ao5qZzHxewrO6QNfgSp6mk0edql70nkkdLBEAut6S7urcACDu6VTgWV23gEOBnvN
+         zuggLLvot9SWKVVvJcVeQgpZpJLl36cJkN6qK+Y/B2kJO1DbQKU+Dpwq9w9PTyHM/d
+         HJzs6drAtbY4D/wzs/MzOVaXS6k7wmHTde2fPZozhwpzK2tmRbUkKAlYt4xqW8UQ5p
+         lv+u6bvi4zf+AT9eD7iA/rJqgA9x03Tn6fxLnxnW+5B5pp2GfrNJsBnumCjlpvAfhP
+         qfHa/vyDGfvDw==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id z2so12937555plg.8;
+        Tue, 01 Mar 2022 01:06:47 -0800 (PST)
+X-Gm-Message-State: AOAM530t/zdrpZUuLmI6iGLy0pyvPkquiFQs3kpThFE4B9+siG2h/9mF
+        MIv79gOEWf62Owdn10QNEbuh+rWOU47HpPvqxh8=
+X-Google-Smtp-Source: ABdhPJzujXuF494nq7rmDEipHgFpDJ0z4oRNLE7toucRij1tBQ/y+Gn6/D2MY52bqp1HVdP8vvAst/HO33aU1B0usQc=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr7340286plp.162.1646125606345; Tue, 01
+ Mar 2022 01:06:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226002412.113819-1-shakeelb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220225144245.182659-1-masahiroy@kernel.org> <CAKwvOd=WjnHSHKLVRJifHxV2tyDsLTkek80NWU=do=FSHhNLug@mail.gmail.com>
+ <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
+In-Reply-To: <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 1 Mar 2022 18:06:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARKxd-kr3pABzTC2+uGhEKbyLtXDCSoxn56P0go--bg1A@mail.gmail.com>
+Message-ID: <CAK7LNARKxd-kr3pABzTC2+uGhEKbyLtXDCSoxn56P0go--bg1A@mail.gmail.com>
+Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure successful
+ write to files
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 25-02-22 16:24:12, Shakeel Butt wrote:
-> Daniel Dao has reported [1] a regression on workloads that may trigger
-> a lot of refaults (anon and file). The underlying issue is that flushing
-> rstat is expensive. Although rstat flush are batched with (nr_cpus *
-> MEMCG_BATCH) stat updates, it seems like there are workloads which
-> genuinely do stat updates larger than batch value within short amount of
-> time. Since the rstat flush can happen in the performance critical
-> codepaths like page faults, such workload can suffer greatly.
-> 
-> The easiest fix for now is for performance critical codepaths trigger
-> the rstat flush asynchronously. This patch converts the refault codepath
-> to use async rstat flush. In addition, this patch has premptively
-> converted mem_cgroup_wb_stats and shrink_node to also use the async
-> rstat flush as they may also similar performance regressions.
+On Tue, Mar 1, 2022 at 11:28 AM David Laight <David.Laight@aculab.com> wrot=
+e:
+>
+> Someone send HTML mail =E2=80=93 outlook is broken =E2=80=93 only lets yo=
+u top post :-(
+>
+>
+>
+> The return value from fprintf() is normally the number of bytes written t=
+o
+>
+> the internal buffer (8k in glibc?)
+>
+> Only if the buffer is full and an actual write() is done do you get any i=
+ndication of an error.
+>
+> So you can use the error return from fprintf() to terminate a loop =E2=80=
+=93 but it usually
+>
+> just isn=E2=80=99t worth the effort.
+>
+> The error status returned by ferror() is =E2=80=98sticky=E2=80=99, so you=
+ need only check once.
+>
+> But you need to check before fclose().
+>
+> Since fclose() has to write out the buffer =E2=80=93 that write can also =
+fail.
+>
+> I=E2=80=99m not sure whether fclose() returns and error in that case, but=
+ adding fflush()
+>
+> makes the coding easier.
 
-Why do we need to trigger flushing in the first place from those paths.
-Later in the thread you are saying there is a regular flushing done
-every 2 seconds. What would happen if these paths didn't flush at all?
-Also please note that WQ context can be overwhelmed by other work so
-these flushes can happen much much later.
 
-So in other words why does async work (that can happen at any time
-without any control) make more sense than no flushing?
--- 
-Michal Hocko
-SUSE Labs
+I just checked this.
+
+fclose() returns -1 if it fails to flush the buffer.
+
+
+
+
+
+[ test code ]
+#include <stdio.h>
+int main(void)
+{
+        char buf[2049];
+        int ret, i;
+
+        for (i =3D 0; i < 2048; i++)
+                buf[i] =3D 'a';
+
+        buf[2048] =3D 0;
+
+        ret =3D printf("%s", buf);
+        fprintf(stderr, "printf() returned: %d\n", ret);
+
+        ret =3D fclose(stdout);
+        fprintf(stderr, "fclose() returned %d\n", ret);
+
+        return 0;
+}
+
+
+I tested this on Debian buster.
+
+
+I created a very small partition with 1K size,
+then write data to that partition.
+
+
+
+
+root@buster:~# lsblk  /dev/vdb1
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+vdb1 254:17   0   1K  0 part
+root@buster:~# ./a.out  > /dev/vdb1
+printf() returned: 2048
+fclose() returned -1
+
+
+
+The buffer size seems 4k
+as far as I tested on Debian.
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada

@@ -2,163 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180E54C8662
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70324C8665
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbiCAIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S230072AbiCAIXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiCAIXS (ORCPT
+        with ESMTP id S230438AbiCAIXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:23:18 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448021AC
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:22:37 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id j9-20020a9d7d89000000b005ad5525ba09so11567766otn.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:22:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tosKASypLvVXrNr25i9iVdhZeYDT2gXwfp+eHTQoEEc=;
-        b=q7IePSd4ZDSr0rC4WaQs2Hck81KsTkOAuEkmg5frbLPNtN1TTPLDw/H8Soa5pgoLaE
-         v/JgEr6qOQlPpKQi+w+ayfXsksZm1suQ83beh/Kl0E5clZouPyyi+pLNcD8uWfFfc7lF
-         mxb8FDo5WuKX5JfGVkgqcS+smWNAS/fraJZ47zfgjfH2nA5sjpVQpW14+xvOkynO5fHe
-         epIWggk+xHt/AKTVqrVuKAQ2ihuaqYt6H8W1/bZQsmhM9nU0TvTqKlhE6X6RxfOKBX8C
-         qmtVBoeh+1NfS9uGnBIzwrW87uBmO94rs5s24d7ny0n+h7eqT8udkU9eV7AIyIqYVWOz
-         4KPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tosKASypLvVXrNr25i9iVdhZeYDT2gXwfp+eHTQoEEc=;
-        b=IJLxAEzrviMkerz1ab2aQoSXFZ5/GVtWnvYocuRnWwPm/WVvqLkm7y/rdWTM+v4MVA
-         Vs9ofNZa3v3mZiSQO9bVJvH66u9G8zU/w3NVKRqVYKajGhTScQR9E2ouOW1aKdyOXS1Z
-         9IRxVcfUQzdXg/UEcyRj7YD6Qi/dVDF0DqjpPvcOHUkd9Ckb/MMboQ57/ayk5YZ6BiuV
-         rKJbbdoM9TirhMl+Ai2NibLpM2zh89PEN5ngDKc5xpszUrLYcjtYSsB1afw604lUZMbZ
-         f4YLdbcQShjzV9lPNz7eBD3hYsmNCV+Q1+GmA17scVI9dBcM5ehhANcqJ20DPqY1b9RP
-         oWiA==
-X-Gm-Message-State: AOAM531oYLOvE8vhzHr6E2xPXv73+2uCOBL/VVzRyO3R9uFigX3dZuu+
-        B8TmP+dikHKQXGHAN4ZWIZWOg7K9FmMDVPXI94Of8g==
-X-Google-Smtp-Source: ABdhPJySTn/ilMv7viVUZTUp94aI8GCiZqiF//jp/oGXCWlvdQoeAbndmnnwQeAkYwB9DYHC69sSdgfPNU5WpkzDfmQ=
-X-Received: by 2002:a05:6830:314c:b0:5af:dc8a:d066 with SMTP id
- c12-20020a056830314c00b005afdc8ad066mr9037959ots.28.1646122956336; Tue, 01
- Mar 2022 00:22:36 -0800 (PST)
+        Tue, 1 Mar 2022 03:23:46 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BBB5FF1D;
+        Tue,  1 Mar 2022 00:23:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V5v0N2A_1646122981;
+Received: from 30.226.12.13(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V5v0N2A_1646122981)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 01 Mar 2022 16:23:02 +0800
+Message-ID: <7695c3a2-6cb0-067a-5655-0e6180170bde@linux.alibaba.com>
+Date:   Tue, 1 Mar 2022 16:23:00 +0800
 MIME-Version: 1.0
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
- <20220126221725.710167-8-bhupesh.sharma@linaro.org> <CAA8EJpqVP=E8GkO_BYBdPD6k84SDDD7cWduSf4yhG3M9VmbBLw@mail.gmail.com>
-In-Reply-To: <CAA8EJpqVP=E8GkO_BYBdPD6k84SDDD7cWduSf4yhG3M9VmbBLw@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 1 Mar 2022 13:52:25 +0530
-Message-ID: <CAH=2Ntw5m9zfb4xfySYx71QgdmJwkAgtQ8B1=jXu19GQ84b+rg@mail.gmail.com>
-Subject: Re: [PATCH 7/8] clk: qcom: gcc-sm8150: use runtime PM for the clock controller
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, bjorn.andersson@linaro.org,
-        davem@davemloft.net, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
+Content-Language: en-US
+To:     Olivier Langlois <olivier@trillion01.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+ <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
+ <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
+ <c8083ad8-076b-2f2d-4c80-fc9f75d9fcd8@linux.alibaba.com>
+ <f84e9ab7d61aef6bf58d602a466a806193f3abbc.camel@trillion01.com>
+From:   Hao Xu <haoxu@linux.alibaba.com>
+In-Reply-To: <f84e9ab7d61aef6bf58d602a466a806193f3abbc.camel@trillion01.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
 
-Sorry for the late reply.
-
-On Thu, 27 Jan 2022 at 04:04, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On 3/1/22 05:01, Olivier Langlois wrote:
+> On Tue, 2022-03-01 at 02:26 +0800, Hao Xu wrote:
+>> On 2/25/22 13:32, Olivier Langlois wrote:
+>>> On Mon, 2022-02-21 at 13:23 +0800, Hao Xu wrote:
+>>>>> @@ -5776,6 +5887,7 @@ static int __io_arm_poll_handler(struct
+>>>>> io_kiocb *req,
+>>>>>                   __io_poll_execute(req, mask);
+>>>>>                   return 0;
+>>>>>           }
+>>>>> +       io_add_napi(req->file, req->ctx);
+>>>> I think this may not be the right place to do it. the process
+>>>> will
+>>>> be:
+>>>> arm_poll sockfdA--> get invalid napi_id from sk->napi_id -->
+>>>> event
+>>>> triggered --> arm_poll for sockfdA again --> get valid napi_id
+>>>> then why not do io_add_napi() in event
+>>>> handler(apoll_task_func/poll_task_func).
+>>> You have a valid concern that the first time a socket is passed to
+>>> io_uring that napi_id might not be assigned yet.
+>>>
+>>> OTOH, getting it after data is available for reading does not help
+>>> neither since busy polling must be done before data is received.
+>>>
+>>> for both places, the extracted napi_id will only be leveraged at
+>>> the
+>>> next polling.
+>> Hi Olivier,
+>>
+>> I think we have some gap here. AFAIK, it's not 'might not', it is
+>>
+>> 'definitely not', the sk->napi_id won't be valid until the poll
+>> callback.
+>>
+>> Some driver's code FYR:
+>> (drivers/net/ethernet/intel/e1000/e1000_main.c)
+>>
+>> e1000_receive_skb-->napi_gro_receive-->napi_skb_finish--
+>>> gro_normal_one
+>> and in gro_normal_one(), it does:
+>>
+>>             if (napi->rx_count >= gro_normal_batch)
+>>                     gro_normal_list(napi);
+>>
+>>
+>> The gro_normal_list() delivers the info up to the specifical network
+>> protocol like tcp.
+>>
+>> And then sk->napi_id is set, meanwhile the poll callback is
+>> triggered.
+>>
+>> So that's why I call the napi polling technology a 'speculation'.
+>> It's
+>> totally for the
+>>
+>> future data. Correct me if I'm wrong especially for the poll callback
+>> triggering part.
+>>
+> When I said 'might not', I was meaning that from the io_uring point of
+> view, it has no idea what is the previous socket usage. If it has been
+> used outside io_uring, the napi_id could available on the first call.
 >
-> On Thu, 27 Jan 2022 at 01:19, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> >
-> > On sm8150 emac clk registers are powered up by the GDSC power
-> > domain. Use runtime PM calls to make sure that required power domain is
-> > powered on while we access clock controller's registers.
-> >
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/clk/qcom/gcc-sm8150.c | 27 +++++++++++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> > index ada755ad55f7..2e71afed81fd 100644
-> > --- a/drivers/clk/qcom/gcc-sm8150.c
-> > +++ b/drivers/clk/qcom/gcc-sm8150.c
-> > @@ -5,6 +5,7 @@
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> > @@ -3792,19 +3793,41 @@ static const struct of_device_id gcc_sm8150_match_table[] = {
-> >  };
-> >  MODULE_DEVICE_TABLE(of, gcc_sm8150_match_table);
-> >
-> > +static void gcc_sm8150_pm_runtime_disable(void *data)
-> > +{
-> > +       pm_runtime_disable(data);
-> > +}
-> > +
-> >  static int gcc_sm8150_probe(struct platform_device *pdev)
-> >  {
-> >         struct regmap *regmap;
-> > +       int ret;
-> > +
-> > +       pm_runtime_enable(&pdev->dev);
-> > +
-> > +       ret = devm_add_action_or_reset(&pdev->dev, gcc_sm8150_pm_runtime_disable, &pdev->dev);
-> > +       if (ret)
-> > +               return ret;
+> If it is really read virgin socket, neither my choosen call site or
+> your proposed sites will make the napi busy poll possible for the first
+> poll.
 >
-> Please use devm_pm_runtime_enable() instead.
-
-Sure, I will fix it in v2.
-
-Thanks,
-Bhupesh
-
-> > +
-> > +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> > +       if (ret)
-> > +               return ret;
-> >
-> >         regmap = qcom_cc_map(pdev, &gcc_sm8150_desc);
-> > -       if (IS_ERR(regmap))
-> > +       if (IS_ERR(regmap)) {
-> > +               pm_runtime_put(&pdev->dev);
-> >                 return PTR_ERR(regmap);
-> > +       }
-> >
-> >         /* Disable the GPLL0 active input to NPU and GPU via MISC registers */
-> >         regmap_update_bits(regmap, 0x4d110, 0x3, 0x3);
-> >         regmap_update_bits(regmap, 0x71028, 0x3, 0x3);
-> >
-> > -       return qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
-> > +       ret = qcom_cc_really_probe(pdev, &gcc_sm8150_desc, regmap);
-> > +
-> > +       pm_runtime_put(&pdev->dev);
-> > +
-> > +       return ret;
-> >  }
-> >
-> >  static struct platform_driver gcc_sm8150_driver = {
-> > --
-> > 2.34.1
-> >
+> I feel like there is not much to gain to argue on this point since I
+> pretty much admitted that your solution was most likely the only call
+> site making MULTIPOLL requests work correctly with napi busy poll as
+> those requests could visit __io_arm_poll_handler only once (Correct me
+> if my statement is wrong).
 >
+> The only issue was that I wasn't sure is how using your calling sites
+> would make locking work.
 >
-> --
-> With best wishes
-> Dmitry
+> I suppose that adding a dedicated spinlock for protecting napi_list
+> instead of relying on uring_lock could be a solution. Would that work?
+spinlock should be fine.

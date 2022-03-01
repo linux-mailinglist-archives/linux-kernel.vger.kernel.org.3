@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46854C97C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3CB4C97C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbiCAV2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S238213AbiCAVaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiCAV2T (ORCPT
+        with ESMTP id S231863AbiCAVaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:28:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C46B2B276;
-        Tue,  1 Mar 2022 13:27:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E57546121A;
-        Tue,  1 Mar 2022 21:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050E6C340EE;
-        Tue,  1 Mar 2022 21:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646170055;
-        bh=T/McMRYbMuu8/Croir0tdzYmDthGMYZxovzrwCbNsY8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZXir+gDxoZ8hzCA+RmVyyqaW98B0YwW4ZiehZt1BTSyp+AKFk8xVAkybHzsZImWzT
-         xH8Yo5bJDkzhEbCSks3rn8ek+g/y+Pe0gUNq1nDNlcWHIA4Nu8BhIHmP2bqQ06ehwg
-         sXlg25mSEkcRiJzl7y7ZT9ro9L2CcrJ8lPupIe5w=
-Date:   Tue, 1 Mar 2022 22:27:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     broonie@kernel.org, Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mmc@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-Message-ID: <Yh6PxD9d7Fb4VLP5@kroah.com>
-References: <20220225204055.3899986-1-broonie@kernel.org>
- <YhpCcE19y3sGqLQ3@kroah.com>
- <20220301161426.0218d519@canb.auug.org.au>
+        Tue, 1 Mar 2022 16:30:14 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9BB7F6FA;
+        Tue,  1 Mar 2022 13:29:33 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id cp23-20020a17090afb9700b001bbfe0fbe94so3389196pjb.3;
+        Tue, 01 Mar 2022 13:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DGIwCRJ08COyw7PR1rsiNp32WL6MSW0ZZqWA6FpVwow=;
+        b=ar0Fs4LovpkwmRH7wMMcKkiU9qubdM3wbK724HpGT0TYhxpkKaQ9Ezh4uEaSKL/T8c
+         OMl/yAWSESYv4eMLqxPfdVGvU0QrihF4jWM8ITHxwy0QllCLJWY8KmdImGDHtGf+8PkR
+         jSOE9kU8RvlpEvb7wsySFldURbexKbgNO7V23WlcspUYJyC7lHIjo1R7yLXPeHLxMvRP
+         xkQ7VzCIf9tY+eXuo309VImD1zKNM7OFrHPzC/V7aDlmCKBtOfwwTxjeX7DmeIVefqTu
+         l2034rt6zAnsuh3/EbUBeYUS5Aa61dS4kqGp0oy0BBarrAwckfvO6Whal7Igg6qmiK3X
+         0wMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DGIwCRJ08COyw7PR1rsiNp32WL6MSW0ZZqWA6FpVwow=;
+        b=8Ax47fSFK0yCFdVuypy4M/j+jxQMaslPTSPktjMY2RBcL+sD7R3DM0CsyTdfgcO6i4
+         uz4Rn0YECYn1YMjd+wdc4j6CaX2R4hsZ5HRAzpZxsZBIg37oY+yVpAqTg31J/+zMZwCM
+         HjQ4C4lWiSXLgTGyIIgUFDdrLEzp/8dIZSbMoH5hnD0NkLuex6PYIqJCulwG4cybVN8g
+         wPyeoDgmtJoaLrvlBRhCABrqIRVui3Vo1IvWYtrTq88nP7G/pjcwtgbzUrLkE3pisTgT
+         J0JFiXm8tgtM1LPADaQjgacVcxVY/tIQi84oD4pWPWjah3y0gUP0eWyj8vMZUdUvN0eT
+         hQPQ==
+X-Gm-Message-State: AOAM530meqKfCU5x9iQOMwnprskZzrxh/TgfS2++gR6o+fFFyxQAjEuY
+        wHGjomW9uha8njBTAcbekbs=
+X-Google-Smtp-Source: ABdhPJy0Q5dgrns/oIZkTNckMxvWJETNvP8GrishcqTCfiX+I3jtP+pr2rAYyQWHuH9xh1cox5pglA==
+X-Received: by 2002:a17:902:7083:b0:14f:bb5c:bc0f with SMTP id z3-20020a170902708300b0014fbb5cbc0fmr27462796plk.77.1646170172570;
+        Tue, 01 Mar 2022 13:29:32 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y191-20020a6264c8000000b004e1bf2f580csm17600136pfb.78.2022.03.01.13.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 13:29:31 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Subject: Re: [PATCH v4 2/5] arm64: dts: broadcom: Fix sata nodename
+Date:   Tue,  1 Mar 2022 13:29:29 -0800
+Message-Id: <20220301212929.2017324-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220301152421.57281-3-linux@fw-web.de>
+References: <20220301152421.57281-1-linux@fw-web.de> <20220301152421.57281-3-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301161426.0218d519@canb.auug.org.au>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 04:14:26PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Tue,  1 Mar 2022 16:24:18 +0100, Frank Wunderlich <linux@fw-web.de> wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> On Sat, 26 Feb 2022 16:08:32 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Feb 25, 2022 at 08:40:55PM +0000, broonie@kernel.org wrote:
-> > > 
-> > > After merging the char-misc tree, today's linux-next build (x86
-> > > allmodconfig) failed like this:
-> > > 
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >   809 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >  1084 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >  1133 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >  1159 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >  1258 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
-> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
-> > >  1311 |  struct device *dev = &host->pdev->dev;
-> > >       |                 ^~~
-> > > cc1: all warnings being treated as errors
-> > > 
-> > > Caused by commit
-> > > 
-> > >   7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
-> > > 
-> > > I have used the char-misc tree from yesterday instead.  
-> > 
-> > Kai-Heng, can you send an add-on patch to fix this?
-> > 
-> > thanks,
+> After converting ahci-platform txt binding to yaml nodename is reported
+> as not matching the standard:
 > 
-> I am still getting these build errors.
+> arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dt.yaml:
+> ahci@663f2000: $nodename:0: 'ahci@663f2000' does not match '^sata(@.*)?$'
+> 
+> Fix it to match binding.
+> 
+> Fixes: ac9aae00f0fc ("arm64: dts: Add SATA3 AHCI and SATA3 PHY DT nodes for NS2")
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
 
-Should now be fixed, sorry for the delay.
-
-greg k-h
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+--
+Florian

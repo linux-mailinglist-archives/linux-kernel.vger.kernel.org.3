@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A683D4C8E78
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E92B4C9025
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235504AbiCAPCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S234141AbiCAQSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiCAPCW (ORCPT
+        with ESMTP id S231856AbiCAQS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:02:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414D9E56E;
-        Tue,  1 Mar 2022 07:01:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C8C66CE1C48;
-        Tue,  1 Mar 2022 15:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD23EC340F2;
-        Tue,  1 Mar 2022 15:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646146898;
-        bh=fsaZzr0CCCP6M/dr2U1LFsH9eaJK6vbc1eqyfSLb/Z8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VkPclI6kDUJ0dLw1WIhtpq7EdjRgXY70C5RVnwiqdU/+UFEPxxC5BjXKYf9ihkZrC
-         fb/6pohUXMZ0QY0a64QXnE7DE9ePCNLNYaq8cutbtCXjTnKg7ITZ+kPA/xLFgc9/nY
-         mZjiy3k3CVqC6ych2388Aub3rFIFf5uImJCgdnD0GNIc8/5XK6acYilRnOIkuaxEls
-         bMmmWXQ79IwyZ4LI7Y1vMvf9Z6VlBsTyrIb+KtdVcUjWwarOM2n8AjOowQAoWc9M//
-         h3TyDOGoS6D/H/z6igGBC+vb/IGolYHKaN6EaumaBsoQ6lpjyga3pd7npiiDk4JzWP
-         vKXae5E0Djlng==
-Date:   Tue, 1 Mar 2022 09:01:36 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the pci tree
-Message-ID: <20220301150136.GA609359@bhelgaas>
+        Tue, 1 Mar 2022 11:18:27 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDEF50E00;
+        Tue,  1 Mar 2022 08:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646151466; x=1677687466;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ic2cVNr/QuZ8LZWxFs/I0VO4RNQe/bRpOebdDp7iddI=;
+  b=PyL8bOWFA7TbskcVwh74luGZn/mFymLikmVju3vDgJjWIUXwqN/VUaK6
+   kU/KjifKtX41mbfvfvH8MM9rHMXUztBhC0qfHrlBR4VYxLQDzQFcQboq6
+   asGTBs8lkCwaCpQhHl0B8Ok26vH/tf+2T4O4SgLTniuXZ0MJ5y4DbEVFd
+   TXq+EcMYwpp8oyExPu0jeUM+jgAW0PCs17oEFUTKJKQz2p3XWxAhPUdQh
+   FnmfRT9u+mV8s4wfHtnveNOPg/QdZsRx8XaT8FS16YXfLvkIC5IU/EygJ
+   zCceDtRA51OdzIEdriloKRZAEJE50NQs/3TasNF9eL7hPYrLwunoHae61
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339600528"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="339600528"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:17:46 -0800
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="545146467"
+Received: from rbrosius-mobl.amr.corp.intel.com (HELO [10.209.131.146]) ([10.209.131.146])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:17:45 -0800
+Message-ID: <01184946-ebdc-52f1-65d9-e2905be0474e@linux.intel.com>
+Date:   Tue, 1 Mar 2022 07:51:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301135938.4c664beb@canb.auug.org.au>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v3 3/3] soundwire: qcom: add in-band wake up interrupt
+ support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
+References: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
+ <20220228172528.3489-4-srinivas.kandagatla@linaro.org>
+ <28a7aa9b-8322-54df-1cfa-275805e2b044@linux.intel.com>
+ <c6b0506a-24ed-d4fd-c74e-d95c6dca6fe6@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <c6b0506a-24ed-d4fd-c74e-d95c6dca6fe6@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,19 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 01:59:38PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pci tree, today's linux-next build (htmldocs) produced
-> these warnings:
-> 
-> Error: Cannot open file drivers/gpu/vga/vgaarb.c
-> Error: Cannot open file drivers/gpu/vga/vgaarb.c
-> 
-> Introduced by commit
-> 
->   d6e1898bfa5b ("PCI/VGA: Move vgaarb to drivers/pci")
-> 
-> The reference in Documentation/gpu/vgaarbiter.rst needs to be updated.
 
-Fixed, thanks!
+
+On 3/1/22 05:13, Srinivas Kandagatla wrote:
+> 
+> 
+> On 28/02/2022 18:01, Pierre-Louis Bossart wrote:
+>>
+>>> @@ -1424,6 +1464,11 @@ static int swrm_runtime_resume(struct device
+>>> *dev)
+>>>       struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+>>>       int ret;
+>>>   +    if (ctrl->wake_irq > 0) {
+>>> +        if (!irqd_irq_disabled(irq_get_irq_data(ctrl->wake_irq)))
+>>> +            disable_irq_nosync(ctrl->wake_irq);
+>>> +    }
+>>> +
+>>>       clk_prepare_enable(ctrl->hclk);
+>>
+>> This one is quite interesting. If you disable the IRQ mechanism but
+>> haven't yet resumed the clock, that leaves a time window where the
+>> peripheral could attempt to drive the line high. what happens in that
+>> case?
+> 
+> 
+> We did call pm_runtime_get_sync() from Wake IRQ handler, which means
+> that resume should be finished as part of Wake IRQ handler. Any new
+> Interrupt conditions/status generated by slave in the meantime will be
+> cleared while handling SLAVE PEND interrupt.
+> 
+>>
+>>>         if (ctrl->clock_stop_not_supported) {
+>>> @@ -1491,6 +1536,11 @@ static int __maybe_unused
+>>> swrm_runtime_suspend(struct device *dev)
+>>>         usleep_range(300, 305);
+>>>   +    if (ctrl->wake_irq > 0) {
+>>> +        if (irqd_irq_disabled(irq_get_irq_data(ctrl->wake_irq)))
+>>> +            enable_irq(ctrl->wake_irq);
+>>> +    }
+>>> +
+>>
+>> and this one is similar, you could have a case where the peripheral
+>> signals a wake immediately after the ClockStopNow frame, but you may not
+>> yet have enabled the wake detection interrupt.
+>>
+>> Would that imply that the wake is missed?
+> Its Possible it might be missed at that instance, however as the Slave
+> interrupt source condition/status (Ex: button Press) is still not
+> cleared it should generate a Wake interrupt as soon as its enabled.
+
+ok, thanks for the answers - both make sense.

@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AAE4C8080
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2396D4C806C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiCABuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S230058AbiCABo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbiCABti (ORCPT
+        with ESMTP id S229991AbiCABoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:49:38 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73B85BD3A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:48:56 -0800 (PST)
-X-UUID: 71c0d92509264925bc3dadf911b7d004-20220301
-X-UUID: 71c0d92509264925bc3dadf911b7d004-20220301
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1344401544; Tue, 01 Mar 2022 09:48:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 1 Mar 2022 09:48:47 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Mar 2022 09:48:46 +0800
-From:   <yf.wang@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Ning Li <Ning.Li@mediatek.com>, Yong Wu <Yong.Wu@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>
-Subject: [PATCH] iommu/iova: Reset max32_alloc_size after cleaning rcache in the fail path
-Date:   Tue, 1 Mar 2022 09:42:43 +0800
-Message-ID: <20220301014246.5011-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 28 Feb 2022 20:44:54 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E710BE9;
+        Mon, 28 Feb 2022 17:44:14 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id f18so8763139qtb.3;
+        Mon, 28 Feb 2022 17:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ijVtiJoCX033kgglssHFDQK/4oP5FPrgwPvKftWG7NU=;
+        b=ol4DQL0ca5JemLcFkQ8DxS87cD8v1ik9zyBS6qePe4NhbB1LmjzqdSFTsT5TMCtPeJ
+         Y1363nX8zXjBQBQe6XDnw3x3+PfXuKZcGgnxG8WkPZmLftKMniKr1DpFEh3ZYH+QAiDe
+         vTwLrG/UqXyTQWVdWqGkRGEQapO/1QmYLn0swRkhFvo0hGEVwJxo9/XX4nUP/PqE0yed
+         ckWU3gq/c9umPznNczYWFwZdywTmLrsZ5f2McdXZMoVCCjPMO3zHNaquJt6Ey7A3RTLa
+         j7JDCGy17bZR2YE1vQaYiDGWpoagd4qLTyTIDxKnkVfYuBboVFkPkPQYpgB4bicQJ6cU
+         ddww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ijVtiJoCX033kgglssHFDQK/4oP5FPrgwPvKftWG7NU=;
+        b=nU2VC7M92PEp+geuB6A1oVCj29dsBu/G9i189lPSD9b4wjTvHjakVeY0YNPe4VlkPw
+         eZEd6RhvLwFbtV4hRacpZT14nicDDKPBntD2G/WfuokYO4ELHbQj+w1lVLSxpQiUHN2s
+         gxYvKDZDERTk8HcOkI4N1ZOUYbfqw2m/ANIqHFNL/dK5s9qS4/2/W5Lq3nsuav+4t5dM
+         +Avy88fpgBocYk9grqDCiRA0siRcN8Y0S2426dItsnnHGyD3PrJrp/qzPcbhz+yx7lxZ
+         S1dRnYGjTP4fVebXLTdpeX0PhQGwgXDp+8DmNV/2TVSeCEi23igc0vpQgnOOod0okwR/
+         mIog==
+X-Gm-Message-State: AOAM5314Npqhv1b/eFPNB2Rw4zvOYdgief4WdMPfdPvcsnFzqWfT3UqI
+        sySKU0ZFR9wZq/xjfnrvIJ6Psk999Oo=
+X-Google-Smtp-Source: ABdhPJyxWuV2ytRAvxyA9QC3jVUgo0v+W1A5Mo1+hRGqwRivfKaS8N8n31zbv1Ynuht0e2JMNYBuUA==
+X-Received: by 2002:a05:622a:4ca:b0:2de:91c4:3d7c with SMTP id q10-20020a05622a04ca00b002de91c43d7cmr19030405qtx.618.1646099053438;
+        Mon, 28 Feb 2022 17:44:13 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05622a051300b002dff3437923sm6492305qtx.11.2022.02.28.17.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 17:44:13 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] selftests: vm: remove duplicated macro and use swap() to make code cleaner
+Date:   Tue,  1 Mar 2022 01:44:04 +0000
+Message-Id: <20220301014404.2052655-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+From: "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>
 
-In alloc_iova_fast function, if __alloc_and_insert_iova_range fail,
-alloc_iova_fast will try flushing rcache and retry alloc iova, but
-this has an issue:
+The macro is duplicated, so remove one. And use swap to make code cleaner.
 
-Since __alloc_and_insert_iova_range fail will set the current alloc
-iova size to max32_alloc_size (iovad->max32_alloc_size = size),
-when the retry is executed into the __alloc_and_insert_iova_range
-function, the retry action will be blocked by the check condition
-(size >= iovad->max32_alloc_size) and goto iova32_full directly,
-causes the action of retry regular alloc iova in
-__alloc_and_insert_iova_range to not actually be executed.
-
-Based on the above, so need reset max32_alloc_size before retry alloc
-iova when alloc iova fail, that is set the initial dma_32bit_pfn value
-of iovad to max32_alloc_size, so that the action of retry alloc iova
-in __alloc_and_insert_iova_range can be executed.
-
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi (CGEL ZTE) <lv.ruyi@zte.com.cn>
 ---
- drivers/iommu/iova.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/vm/userfaultfd.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index b28c9435b898..0c085ae8293f 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -453,6 +453,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
- retry:
- 	new_iova = alloc_iova(iovad, size, limit_pfn, true);
- 	if (!new_iova) {
-+		unsigned long flags;
- 		unsigned int cpu;
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index ab394e6bff43..100f08362164 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -121,9 +121,6 @@ struct uffd_stats {
+ #define swap(a, b) \
+ 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
  
- 		if (!flush_rcache)
-@@ -463,6 +464,12 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
- 		for_each_online_cpu(cpu)
- 			free_cpu_cached_iovas(cpu, iovad);
- 		free_global_cached_iovas(iovad);
-+
-+		/* Reset max32_alloc_size after flushing rcache for retry */
-+		spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
-+		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
-+		spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
-+
- 		goto retry;
+-#define swap(a, b) \
+-	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+-
+ const char *examples =
+     "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
+     "./userfaultfd anon 100 99999\n\n"
+@@ -1424,7 +1421,6 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+ static int userfaultfd_stress(void)
+ {
+ 	void *area;
+-	char *tmp_area;
+ 	unsigned long nr;
+ 	struct uffdio_register uffdio_register;
+ 	struct uffd_stats uffd_stats[nr_cpus];
+@@ -1535,13 +1531,8 @@ static int userfaultfd_stress(void)
+ 					    count_verify[nr], nr);
+ 
+ 		/* prepare next bounce */
+-		tmp_area = area_src;
+-		area_src = area_dst;
+-		area_dst = tmp_area;
+-
+-		tmp_area = area_src_alias;
+-		area_src_alias = area_dst_alias;
+-		area_dst_alias = tmp_area;
++		swap(area_src, area_dst);
++		swap(area_src_alias, area_dst_alias);
+ 
+ 		uffd_stats_report(uffd_stats, nr_cpus);
  	}
- 
 -- 
-2.18.0
+2.25.1
 

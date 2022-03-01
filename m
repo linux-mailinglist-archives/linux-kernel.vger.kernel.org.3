@@ -2,237 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5034C92CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018DE4C92EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbiCASUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S236876AbiCASWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiCASUV (ORCPT
+        with ESMTP id S236892AbiCASWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:20:21 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959E04667C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:19:36 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id c18-20020a7bc852000000b003806ce86c6dso1742370wml.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UtPrVb0f53YYX2b6RFlODaq1yL/aXGcjZzyo6JeDgY8=;
-        b=g95HB/jmWuwfM/wFu7blazFMp1er0UHfAATqb0J38vUtYvYMCDKjgMWv1FT0vwJWYf
-         /GWaxy8Duco6mA8a0KGNJdOuS98FO2c013FObEhtlIfUD2yLuOd9jZ5u+o73D72zlecb
-         SKEcdDEpQ8U4vRL6t9/YfRtn8Ss58R7+roDU6DtAXyK37ww3R8kOVPyro/dw1ftZfFZZ
-         3BR42Jh9cEzwFGXcBx5Ooyl5+Fvl0DC3pGFhxu+hodEWnsQWlJuzz5t0AnilHZf+01tT
-         421CpvAN4AkxYWIPbDmAptu04lUEokrWWBY+dIJmQH5UxhTySyWIvQOT2W2v5adCbFYC
-         LmtQ==
+        Tue, 1 Mar 2022 13:22:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC1F5652F0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:21:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646158885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sX3ETO8oscWhws5FyzWjk22/h95q+KF0N6R5Pl0UWSM=;
+        b=ff+eI9n9Q7aSvcF4qDT5znguPIbBkhofuQiCvJ3VwBLmQaXYKauMy0PiVWI3y028oxl39I
+        7cRih89dwOgZkwSX2YQOCYNnxpyB4MEL7ZD2qc5AcG2kUUBROGRoKo7LYzfTa3Y/Bh/JKm
+        N4qFFmJSf4d3mGGxhLVAOHaXriJFXds=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-158-gysphbF4PM-2MwqX7ePGVQ-1; Tue, 01 Mar 2022 13:21:24 -0500
+X-MC-Unique: gysphbF4PM-2MwqX7ePGVQ-1
+Received: by mail-wr1-f71.google.com with SMTP id q12-20020adfbb8c000000b001ea938f79e9so3590480wrg.23
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:21:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UtPrVb0f53YYX2b6RFlODaq1yL/aXGcjZzyo6JeDgY8=;
-        b=7cVg/NDbRMVTaTeyovGOqmLItxDBU+pMnKL2EonzbLuTP8FS+VdgHr0FbtEbH1WzfD
-         k+bj98iyUnRx7qHlkK7mr9ve95LE3CDGwi27+HRTZCuoHcgnbQM9Q7LZuLKwk+gnp26H
-         4Zwreh4h1E14BNzf/83MalJ01Cf+SqaTeTJJj4OhRkXcp0ZQ3kfJP8HNKzvZ3C7gHF37
-         YD6Qb5PVWM9ftSpRzD8CX+JP80D4GPp/YeAoF/tofeemZLcLCNyqQVZjJkU5N2UQ6KiT
-         6fMVW20ey724Z1aSnmvrvE86nEI5gNywdlWJ7u6Utbzn81NUQhAyQJiV8rOo7KT7vIIp
-         8a6Q==
-X-Gm-Message-State: AOAM532d47N0NtxBwUtYouEm3wV1t6jVHQrkXtNqW9evBwrRoCSq6fg9
-        f7VMCgb9RDVkP1wwtQ/77to=
-X-Google-Smtp-Source: ABdhPJwArUy4EplXDgim3tlE+gfX5EUBMhpOuGajKvWhFwjLZvDTmdPvoA97uyTRj+kWrB2X64JA8g==
-X-Received: by 2002:a05:600c:1d08:b0:381:6eda:67d1 with SMTP id l8-20020a05600c1d0800b003816eda67d1mr7557489wms.88.1646158775052;
-        Tue, 01 Mar 2022 10:19:35 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id 10-20020adf808a000000b001edd413a952sm14535256wrl.95.2022.03.01.10.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 10:19:34 -0800 (PST)
-Date:   Tue, 1 Mar 2022 19:19:33 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: boot flooded with unwind: Index not found
-Message-ID: <Yh5jtaSn5cu+ive9@Red>
-References: <Yh5ASXVoWoMj7/Rr@Red>
- <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
- <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
- <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sX3ETO8oscWhws5FyzWjk22/h95q+KF0N6R5Pl0UWSM=;
+        b=nJ2xqvjq9JtzivJzCPXHb3noPk2Zoex0Z2JrGsakJ6dbHWCQyzenHaojSwH2Slvizm
+         u8fnDhIgX9cH79o6yYeC4Gfrx3K+wuq6mzHfPLb0sopj8Dk3qMhYdKD1OhVv6YgwnuDP
+         WAqdeRHvwUdiQuNCrgo1uJNobQQ4F1q19qA492F74IqA99VR3DXt7nqrKHkEjeMw/IbC
+         oVk7THZnvkmS2nwl6u9xxQ6rUaipJHGIiAJ3PVWgjOYAPd8mQt1CE8Hz+XOxQtjFfM3T
+         0XInoiWr77tfok4pDU7Zoek3t/i0ft20Ahjq5Wl2c2rBOEdon7iv4aWR1wC/VqgatyIg
+         3j8A==
+X-Gm-Message-State: AOAM531GLHFA/t8YAfxwnd6cutoOYiH3BeiMAqaZUL4etnmC6xYTBkx7
+        nHlqqbbuDD8nw0X2QfYJIdAyL52CyO2xv12+enXUIuiHdip/sqPpt8H4AOc95CuIQaJ9S6vGswl
+        LrwS1hsDtw5jONUWiHPvjf+rG
+X-Received: by 2002:a1c:35c9:0:b0:37b:edec:4d88 with SMTP id c192-20020a1c35c9000000b0037bedec4d88mr17971022wma.159.1646158883305;
+        Tue, 01 Mar 2022 10:21:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxIEcmz6e39C4hacm7O7sEH3Bx1ypWDR4DcxCyv7A8vcdJSP/m9x5qSKJmHfed4VGhxeVcRyg==
+X-Received: by 2002:a1c:35c9:0:b0:37b:edec:4d88 with SMTP id c192-20020a1c35c9000000b0037bedec4d88mr17971004wma.159.1646158882974;
+        Tue, 01 Mar 2022 10:21:22 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id p5-20020a05600c358500b0038167e239a2sm3947712wmq.19.2022.03.01.10.21.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 10:21:22 -0800 (PST)
+Message-ID: <28276890-c90c-e9a9-3cab-15264617ef5a@redhat.com>
+Date:   Tue, 1 Mar 2022 19:21:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 20/28] KVM: x86/mmu: Allow yielding when zapping GFNs
+ for defunct TDP MMU root
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-21-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220226001546.360188-21-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Mar 01, 2022 at 05:52:30PM +0100, Ard Biesheuvel a écrit :
-> On Tue, 1 Mar 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Tue, 1 Mar 2022 at 16:52, Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
-> > > > Hello
-> > > >
-> > > > I booted today linux-next (20220301) and my boot is flooded with:
-> > > > [    0.000000] unwind: Index not found c0f0c440
-> > > > [    0.000000] unwind: Index not found 00000000
-> > > > [    0.000000] unwind: Index not found c0f0c440
-> > > > [    0.000000] unwind: Index not found 00000000
-> > > >
-> > > > This happen on a sun8i-a83t-bananapi-m3
-> > >
-> > > Have you enabled vmapped stacks?
-> > >
-> >
-> > This is probably related to
-> >
-> > 538b9265c063 ARM: unwind: track location of LR value in stack frame
-> >
-> > which removes a kernel_text_address() check on frame->pc as it is
-> > essentially redundant, given that we won't find unwind data otherwise.
-> > Unfortunately, I failed to realise that the other check carries a
-> > pr_warn(), which may apparently fire spuriously in some cases.
-> >
-> > The 0x0 value can easily be filtered out, but i would be interesting
-> > where the other value originates from. We might be able to solve this
-> > with a simple .nounwind directive in a asm routine somewhere.
-> >
-> > I'll prepare a patch that disregards the 0x0 value - could you check
-> > in the mean time what the address 0xcf0c440 coincides with in your
-> > build?
-> 
-> Something like the below should restore the previous behavior, while
-> taking the kernel_text_address() check out of the hot path.
-> 
-> --- a/arch/arm/kernel/unwind.c
-> +++ b/arch/arm/kernel/unwind.c
-> @@ -400,7 +400,8 @@ int unwind_frame(struct stackframe *frame)
-> 
->         idx = unwind_find_idx(frame->pc);
->         if (!idx) {
-> -               pr_warn("unwind: Index not found %08lx\n", frame->pc);
-> +               if (frame->pc && kernel_text_address(frame->pc))
-> +                       pr_warn("unwind: Index not found %08lx\n", frame->pc);
->                 return -URC_FAILURE;
->         }
+On 2/26/22 01:15, Sean Christopherson wrote:
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 3031b42c27a6..b838cfa984ad 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -91,21 +91,66 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>   
+>   	WARN_ON(!root->tdp_mmu_page);
+>   
+> -	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+> -	list_del_rcu(&root->link);
+> -	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+> +	/*
+> +	 * Ensure root->role.invalid is read after the refcount reaches zero to
+> +	 * avoid zapping the root multiple times, e.g. if a different task
+> +	 * acquires a reference (after the root was marked invalid) and puts
+> +	 * the last reference, all while holding mmu_lock for read.  Pairs
+> +	 * with the smp_mb__before_atomic() below.
+> +	 */
+> +	smp_mb__after_atomic();
+> +
+> +	/*
+> +	 * Free the root if it's already invalid.  Invalid roots must be zapped
+> +	 * before their last reference is put, i.e. there's no work to be done,
+> +	 * and all roots must be invalidated (see below) before they're freed.
+> +	 * Re-zapping invalid roots would put KVM into an infinite loop (again,
+> +	 * see below).
+> +	 */
+> +	if (root->role.invalid) {
+> +		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+> +		list_del_rcu(&root->link);
+> +		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+> +
+> +		call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Invalidate the root to prevent it from being reused by a vCPU, and
+> +	 * so that KVM doesn't re-zap the root when its last reference is put
+> +	 * again (see above).
+> +	 */
+> +	root->role.invalid = true;
+> +
+> +	/*
+> +	 * Ensure role.invalid is visible if a concurrent reader acquires a
+> +	 * reference after the root's refcount is reset.  Pairs with the
+> +	 * smp_mb__after_atomic() above.
+> +	 */
+> +	smp_mb__before_atomic();
 
-Thanks, message are not shown anymore.
-But now I have other errors (perhaps not related):
-[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-[    0.000000] OF: fdt: Machine model: Banana Pi BPI-M3
-[    0.000000] earlycon: uart0 at MMIO32 0x01c28000 (options '')
-[    0.000000] printk: bootconsole [uart0] enabled
-[    0.000000] Memory policy: Data cache writealloc
-[    0.000000] cma: Reserved 16 MiB at 0xbf000000
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000040000000-0x000000006fffffff]
-[    0.000000]   HighMem  [mem 0x0000000070000000-0x00000000bfffffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000040000000-0x00000000bfffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000040000000-0x00000000bfffffff]
-[    0.000000] percpu: Embedded 16 pages/cpu s34740 r8192 d22604 u65536
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 522752
-[    0.000000] Kernel command line: console=ttyS0,115200n8 root=/dev/ram0 earlycon=uart,mmio32,0x01c28000 ip=dhcp
-[    0.000000] Dentry cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Memory: 2016360K/2097152K available (9216K kernel code, 1534K rwdata, 3328K rodata, 1024K init, 7189K bss, 64408K reserved, 16384K cma-reserved, 1294336K highmem)
-[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
-[    0.000000] trace event string verifier disabled
-[    0.000000] Running RCU self tests
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] rcu: 	RCU event tracing is enabled.
-[    0.000000] rcu: 	RCU lockdep checking is enabled.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-[    0.000000] random: get_random_bytes called from start_kernel+0x534/0x6cc with crng_init=0
-[    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (virt).
-[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
-[    0.000003] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
-[    0.008660] Switching to timer-based delay loop, resolution 41ns
-[    0.015599] clocksource: timer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 79635851949 ns
-[    0.026635] Console: colour dummy device 80x30
-[    0.031549] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-[    0.039999] ... MAX_LOCKDEP_SUBCLASSES:  8
-[    0.044452] ... MAX_LOCK_DEPTH:          48
-[    0.049004] ... MAX_LOCKDEP_KEYS:        8192
-[    0.053774] ... CLASSHASH_SIZE:          4096
-[    0.058511] ... MAX_LOCKDEP_ENTRIES:     32768
-[    0.063349] ... MAX_LOCKDEP_CHAINS:      65536
-[    0.068222] ... CHAINHASH_SIZE:          32768
-[    0.073054]  memory used by lock dependency info: 4061 kB
-[    0.078950]  memory used for stack traces: 2112 kB
-[    0.084155]  per task-struct memory footprint: 1536 bytes
-[    0.090209] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
-[    0.101504] pid_max: default: 32768 minimum: 301
-[    0.107656] Mount-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-[    0.115669] Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-[    0.127831] CPU: Testing write buffer coherency: ok
-[    0.135293] /cpus/cpu@0 missing clock-frequency property
-[    0.141394] /cpus/cpu@1 missing clock-frequency property
-[    0.147356] /cpus/cpu@2 missing clock-frequency property
-[    0.153422] /cpus/cpu@3 missing clock-frequency property
-[    0.159447] /cpus/cpu@100 missing clock-frequency property
-[    0.165760] /cpus/cpu@101 missing clock-frequency property
-[    0.172058] /cpus/cpu@102 missing clock-frequency property
-[    0.178452] /cpus/cpu@103 missing clock-frequency property
-[    0.184451] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
-[    0.196487] Setting up static identity map for 0x40100000 - 0x40100060
-[    0.206468] ARM CCI driver probed
-[    0.211477] sunxi multi cluster SMP support installed
-[    0.218724] rcu: Hierarchical SRCU implementation.
-[    0.229044] smp: Bringing up secondary CPUs ...
-[    0.239387] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
-[    0.239462] 
-[    0.239468] 
-[    0.239476] =============================
-[    0.239479] WARNING: suspicious RCU usage
-[    0.239485] 5.17.0-rc6-next-20220301-00132-gc96ac15508a4-dirty #197 Not tainted
-[    0.239493] -----------------------------
-[    0.239497] include/trace/events/lock.h:58 suspicious rcu_dereference_check() usage!
-[    0.239505] 
-[    0.239505] other info that might help us debug this:
-[    0.239505] 
-[    0.239509] 
-[    0.239509] rcu_scheduler_active = 1, debug_locks = 1
-[    0.239516] RCU used illegally from extended quiescent state!
-[    0.239521] 1 lock held by swapper/0/0:
-[    0.239527]  #0: c0f15b4c ((console_sem).lock){-...}-{2:2}, at: down_trylock+0xc/0x2c
-[    0.239598] 
-[    0.239598] stack backtrace:
-[    0.239607] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc6-next-20220301-00132-gc96ac15508a4-dirty #197
-[    0.239619] Hardware name: Allwinner A83t board
-[    0.239629]  unwind_backtrace from show_stack+0x10/0x14
-[    0.239654]  show_stack from init_stack+0x1c54/0x2000
-[    0.343881] =============================
-[    0.348205] WARNING: suspicious RCU usage
-[    0.352529] 5.17.0-rc6-next-20220301-00132-gc96ac15508a4-dirty #197 Not tainted
-[    0.360417] -----------------------------
-[    0.364741] include/trace/events/lock.h:13 suspicious rcu_dereference_check() usage!
-[    0.373098] 
-[    0.373098] other info that might help us debug this:
-[    0.373098] 
-[    0.381738] 
-[    0.381738] rcu_scheduler_active = 1, debug_locks = 1
-[    0.388787] RCU used illegally from extended quiescent state!
-[    0.394992] no locks held by swapper/0/0.
-[    0.399317] 
-[    0.399317] stack backtrace:
-[    0.404014] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc6-next-20220301-00132-gc96ac15508a4-dirty #197
-[    0.414706] Hardware name: Allwinner A83t board
-[    0.419595]  unwind_backtrace from show_stack+0x10/0x14
-[    0.425251]  show_stack from init_stack+0x1d5c/0x2000
+I have reviewed the series and I only have very minor comments... but 
+this part is beyond me.  The lavish comments don't explain what is an 
+optimization and what is a requirement, and after spending quite some 
+time I wonder if all this should just be
+
+         if (refcount_dec_not_one(&root->tdp_mmu_root_count))
+                 return;
+
+	if (!xchg(&root->role.invalid, true) {
+	 	tdp_mmu_zap_root(kvm, root, shared);
+
+		/*
+		 * Do not assume the refcount is still 1: because
+		 * tdp_mmu_zap_root can yield, a different task
+		 * might have grabbed a reference to this root.
+		 *
+	        if (refcount_dec_not_one(&root->tdp_mmu_root_count))
+         	        return;
+	}
+
+	/*
+	 * The root is invalid, and its reference count has reached
+	 * zero.  It must have been zapped either in the "if" above or
+	 * by someone else, and we're definitely the last thread to see
+	 * it apart from RCU-protected page table walks.
+	 */
+	refcount_set(&root->tdp_mmu_root_count, 0);
+
+	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+	list_del_rcu(&root->link);
+	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+
+	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+
+(Yay for xchg's implicit memory barriers)
+
+Paolo
+
+> +	/*
+> +	 * Note, if mmu_lock is held for read this can race with other readers,
+> +	 * e.g. they may acquire a reference without seeing the root as invalid,
+> +	 * and the refcount may be reset after the root is skipped.  Both races
+> +	 * are benign, as flows that must visit all roots, e.g. need to zap
+> +	 * SPTEs for correctness, must take mmu_lock for write to block page
+> +	 * faults, and the only flow that must not consume an invalid root is
+> +	 * allocating a new root for a vCPU, which also takes mmu_lock for write.
+> +	 */
+> +	refcount_set(&root->tdp_mmu_root_count, 1);
+>   
+>   	/*
+> -	 * A TLB flush is not necessary as KVM performs a local TLB flush when
+> -	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> -	 * to a different pCPU.  Note, the local TLB flush on reuse also
+> -	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> -	 * intermediate paging structures, that may be zapped, as such entries
+> -	 * are associated with the ASID on both VMX and SVM.
+> +	 * Zap the root, then put the refcount "acquired" above.   Recursively
+> +	 * call kvm_tdp_mmu_put_root() to test the above logic for avoiding an
+> +	 * infinite loop by freeing invalid roots.  By design, the root is
+> +	 * reachable while it's being zapped, thus a different task can put its
+> +	 * last reference, i.e. flowing through kvm_tdp_mmu_put_root() for a
+> +	 * defunct root is unavoidable.
+>   	 */
+>   	tdp_mmu_zap_root(kvm, root, shared);
+> -
+> -	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+> +	kvm_tdp_mmu_put_root(kvm, root, shared);
+>   }
+>   
+>   enum tdp_mmu_roots_iter_type {
+

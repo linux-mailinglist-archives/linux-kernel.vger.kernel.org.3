@@ -2,90 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA414C906D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0D34C9077
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiCAQeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S236247AbiCAQfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236007AbiCAQeG (ORCPT
+        with ESMTP id S236162AbiCAQfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:34:06 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471725FF31
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:33:25 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id x18so14710845pfh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:33:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=peE7sO9c9bIwrLDEH+P5tPx9gsKQOC+ku7JdeqViooo=;
-        b=KoTASANrVf5duaFDYBHbeH/9TtHaMvz7i+kkj9juAMUtoR1T5pwMEm3RCMva1Azq0V
-         Csx3NzdZZZ/vw0LO/tP1TSd8FA8E1Ss55qaXRBI2my9o1cGn10jS9dADrlWZ0ES9Vjp3
-         1wOZJhSniaiD7fRGtnW9d/jgK9KKMD5YIiq0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=peE7sO9c9bIwrLDEH+P5tPx9gsKQOC+ku7JdeqViooo=;
-        b=KLfjFIS5nBkk0uhVWora+sp5e9ipI/lKhpypbFRmMu/kLKNNJ6GP1BcdfxlRWTZsEb
-         EvmTtexH2X8by3rkMoKvo4P00oY33oK69xUwu8ZeQnKcXcR7HV9Pq42hbjLEA4eEuSAW
-         DXBCEbztCkFsnUyZy6oeV8QqIpwDjtfXeXX2WofOvxs5bSUwUhmXaA//3v4B8UTe9/v6
-         C6WwS7nfiS5oha1ETxmEvZUBmXwKtFGz12w+3oYNaaA0B1CazuwnyHtKhje+WQeBiwfQ
-         WntqZN0c/3wtD7VZzF8hZsxao/L2AwSBuvlN9uZ00ivmQkixSrDxa817ru6G9T9e7VgM
-         bsgA==
-X-Gm-Message-State: AOAM530U2C9K8gWkjjqrXdqVD+1RFZxWUK63Yd2uHgOPGybFs8jbQ4se
-        Zi+b7XQ6W8UAUwmFGE81dIO6zQ==
-X-Google-Smtp-Source: ABdhPJzOsZaPH+JussBROy3HgQg618t7zVhdAt+Gn2HqVPRz1lT34TD61D6g5HEnQnaGXPoKXcyJdw==
-X-Received: by 2002:a63:d47:0:b0:373:598c:e0aa with SMTP id 7-20020a630d47000000b00373598ce0aamr22407736pgn.243.1646152404787;
-        Tue, 01 Mar 2022 08:33:24 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:77d:b927:44d6:c9f5])
-        by smtp.gmail.com with UTF8SMTPSA id y12-20020a056a00190c00b004f39e28fb87sm18721077pfi.98.2022.03.01.08.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 08:33:24 -0800 (PST)
-Date:   Tue, 1 Mar 2022 08:33:22 -0800
-From:   "mka@chromium.org" <mka@chromium.org>
-To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Tao Wang (Consultant) (QUIC)" <quic_wat@quicinc.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "hadess@hadess.net" <hadess@hadess.net>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "ravisadineni@chromium.org" <ravisadineni@chromium.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "swboyd@chromium.org" <swboyd@chromium.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiDlm57lpI0=?= =?utf-8?Q?=3A?= Re: [PATCH v20
- 3/5] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yh5K0u3jp4jTXCPi@google.com>
-References: <SA1PR02MB86067ACF0C96F18B7306D208903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <SA1PR02MB860660B6F33011E5A97F7930903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <YhURQAksLKVuzU36@google.com>
- <SA1PR02MB860602E0AC4D9BD0BC4245B5903C9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <YhXolQDwIMbTi/O2@kroah.com>
- <DM8PR02MB81988555CA6B66BB3FD5E488E3019@DM8PR02MB8198.namprd02.prod.outlook.com>
- <Yh0UZUU9/9Hd6Pc1@google.com>
- <DM8PR02MB8198F2BFE9E933CC8F2C148BE3029@DM8PR02MB8198.namprd02.prod.outlook.com>
+        Tue, 1 Mar 2022 11:35:39 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9615C6007D;
+        Tue,  1 Mar 2022 08:34:56 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nP5SV-0006n6-02; Tue, 01 Mar 2022 17:34:43 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E24A9C28F1; Tue,  1 Mar 2022 17:34:11 +0100 (CET)
+Date:   Tue, 1 Mar 2022 17:34:11 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH mips-fixes] MIPS: fix fortify panic when copying asm
+ exception handlers
+Message-ID: <20220301163411.GC13091@alpha.franken.de>
+References: <20220223012338.262041-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM8PR02MB8198F2BFE9E933CC8F2C148BE3029@DM8PR02MB8198.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220223012338.262041-1-alobakin@pm.me>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,58 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 02:30:00AM +0000, Linyu Yuan (QUIC) wrote:
-> > From: mka@chromium.org <mka@chromium.org>
-> > Sent: Tuesday, March 1, 2022 2:29 AM
-> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> > Cc: gregkh@linuxfoundation.org; Tao Wang (Consultant) (QUIC)
-> > <quic_wat@quicinc.com>; balbi@kernel.org; devicetree@vger.kernel.org;
-> > dianders@chromium.org; frowand.list@gmail.com; hadess@hadess.net;
-> > krzk@kernel.org; linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > mathias.nyman@intel.com; michal.simek@xilinx.com;
-> > peter.chen@kernel.org; ravisadineni@chromium.org; robh+dt@kernel.org;
-> > rogerq@kernel.org; stern@rowland.harvard.edu; swboyd@chromium.org
-> > Subject: Re: 回复: 回复: Re: [PATCH v20 3/5] usb: misc: Add
-> > onboard_usb_hub driver
-> > 
-> > >
-> > > Hi Greg and mka,
-> > >
-> > > Let's make it clear that we are talking about once this driver is approved
-> > into usb tree,
-> > > If we use different USB HUB which have VID/PID not defined in this driver,
-> > > We need to update this driver.
-> > >
-> > > But if we defined VID/PID in device tree(for a specific board, manufacture
-> > should know VID/PID from HUB it used),
-> > > dynamic parsed by the driver,  then we don't need to change this driver
-> > (increase VID/PID table).
-> > 
-> > As per my earlier reply, the kernel/USB core uses the VID:PID reported
-> > by the USB device, the compatible string in the device tree is purely
-> > informational. That's not something that could be changed by this
-> > driver.
-> I can't fully understand this comment,  could you please share step if we want to add a new HUB support, what should we do ? nothing ?
-
-Add the VID:PID and compatible strings to onboard_usb_hub.c, analogous
-to those for the RTS5411 and RTS5414. More work will be needed if the
-hub needs a special power up or power down sequence (multiple regulators,
-GPIOs, ...)
-
-> If do nothing, can we remove id_table from  onboard_hub_usbdev_driver  ?
-> > 
-> > And even if the VID:PID from the device tree was used: how is the
-> > kernel supposed to know that the onboard_hub driver should be
-> > probed for a given VID:PID from the device tree, without listing
-> > the VID:PID (or compatible string) in the driver (which is what
-> > you seem to seek to avoid)?
-> In my opinion, if it need update VID/PID table in this driver to support a new HUB,
-> we can parse VID/PID from device tree and create dynamic VID/PID entry to id_table of onboard_hub_usbdev_driver.
+On Wed, Feb 23, 2022 at 01:30:23AM +0000, Alexander Lobakin wrote:
+> With KCFLAGS="-O3", I was able to trigger a fortify-source
+> memcpy() overflow panic on set_vi_srs_handler().
+> Although O3 level is not supported in the mainline, under some
+> conditions that may've happened with any optimization settings,
+> it's just a matter of inlining luck. The panic itself is correct,
+> more precisely, 50/50 false-positive and not at the same time.
+> >From the one side, no real overflow happens. Exception handler
+> defined in asm just gets copied to some reserved places in the
+> memory.
+> But the reason behind is that C code refers to that exception
+> handler declares it as `char`, i.e. something of 1 byte length.
+> It's obvious that the asm function itself is way more than 1 byte,
+> so fortify logics thought we are going to past the symbol declared.
+> The standard way to refer to asm symbols from C code which is not
+> supposed to be called from C is to declare them as
+> `extern const u8[]`. This is fully correct from any point of view,
+> as any code itself is just a bunch of bytes (including 0 as it is
+> for syms like _stext/_etext/etc.), and the exact size is not known
+> at the moment of compilation.
+> Adjust the type of the except_vec_vi_*() and related variables.
+> Make set_handler() take `const` as a second argument to avoid
+> cast-away warnings and give a little more room for optimization.
 > 
-> Hope you can understand what I said.
+> Fixes: e01402b115cc ("More AP / SP bits for the 34K, the Malta bits and things. Still wants")
+> Fixes: c65a5480ff29 ("[MIPS] Fix potential latency problem due to non-atomic cpu_wait.")
+> Cc: stable@vger.kernel.org # 3.10+
 
-Not really.
+I like your patch, but I have a problem with these tags. If I understand
+your description correctly there is no bug, but because of the way the
+code is written fortify-source gets confused. So if it doesn't fix
+anything, there shouldn't be Fixes tags, IMHO. If you agree, I'll
+apply this patch to mips-next and remove the tags.
 
-I doubt that what you are suggesting would work. The easiest thing
-to convince people would probably be to send a patch (based on this
-one) with a working implementation of your idea.
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

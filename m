@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4884C92B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE2E4C92BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbiCASOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        id S236901AbiCASPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235929AbiCASOv (ORCPT
+        with ESMTP id S236844AbiCASPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:14:51 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764A5A589
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:14:09 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id g1so15021215pfv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:14:09 -0800 (PST)
+        Tue, 1 Mar 2022 13:15:09 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82013B55C;
+        Tue,  1 Mar 2022 10:14:17 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id c9so14155008pll.0;
+        Tue, 01 Mar 2022 10:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N36sF4HUer+rUuc5VxWx2NxZT2Mje9G1bKhkVtQFmow=;
-        b=O9Pc4FRhQaHO8JwtvKmEa7P/p93QhIWPziYnJxBP3SmXkKfXwbS/+UXcAcizlZe2qE
-         5++D1AzgFSiNA6GVcHz58RghXwcZj0T+stAg2S8I6BdGwjnEpqEP1SHJlTJIwhdk7I/A
-         Km+JuAoSqO/aabb7J1BxN3aslickTdbOZI2Hw=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nnvTC2gtVVCd0mSMj/05A70ERgumEKKzDpQ3v91EDxU=;
+        b=E99TwnvlKE/+7dUSA3mRBfKLigkbHMEyKGiIFON9RFsGy7JE8QN0Mi4OzPWMQfecyn
+         wgPUZaTmRNtfp7gWGB9VJfKM6ID1M3qvNqDTe6bIDy/Sh1D3Blmn2arUKVYDzNoAoXTk
+         Ul/ReWtWMX0C2poeSFVFE0eciaMDps12A7addFitTmNyaCThq1t+Qtt/wkM8GT4nGGFF
+         lm4QVyI2CdQyOydBQ+3HAPruYoiTVxYvuIn2S35NItAg1d43gAg2InX+7V8Br5sqUi6q
+         IPaxpNslz7VlkATBmnHsNk9cDsUNP+Stt1y2ZeKPmxRmjPkfeJ+EvSOvsBsbRCZB3r6F
+         d+JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N36sF4HUer+rUuc5VxWx2NxZT2Mje9G1bKhkVtQFmow=;
-        b=NQBhV9krPEnsto82Fmm0RyMkKaaLgBfivKQEZdxCYWGHN6QOSYGxItKC7a4g+pc5FW
-         HMwU7gZSiDBEoJ0aamTwtefdtZzVEnluLvbxShcSQVzZY2PYhKlGYKDHKl1+QdbnXHiX
-         F2iGsDU5q18sUpfhsP0n2rh+Wg58MOxXTIm2IBxb3Rhu6lEOfFQzWwVExWBmsIF8qJof
-         INLbaKwmFkdZ0b0Ob9bxoDc0EhhoVERw5TfwRxfXgYmPkh6EECJcs4WvVA7FqE+xSAwk
-         WGEm8/GZdEhF8bHB7m5NZg7InbkjusCcEjuzgpyPtZmTgfVjXIg5ESI8UBVY6Wa84Tvi
-         IVRg==
-X-Gm-Message-State: AOAM531joqms+a+AKqQHsgkPeior2rmlij6oaa5yUi7Rpywh4U/IDp0v
-        8XT8JaT3X2y4JDLsmdxhU55COADXc7EXRA==
-X-Google-Smtp-Source: ABdhPJwl/oZl7jTR8Xbiy0diMdVywUoBtjuUV8iCsVjT5dJdX8x+nPRIiFjmEv3Xm0s1V2wXWPjOfA==
-X-Received: by 2002:a62:d156:0:b0:4cd:fd21:e406 with SMTP id t22-20020a62d156000000b004cdfd21e406mr28741951pfl.44.1646158448831;
-        Tue, 01 Mar 2022 10:14:08 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id nn10-20020a17090b38ca00b001bc3a60b324sm2540095pjb.46.2022.03.01.10.14.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nnvTC2gtVVCd0mSMj/05A70ERgumEKKzDpQ3v91EDxU=;
+        b=G6i2X8uFLrLYgJXXAFEYDmg7LIIplFtG+6Bb9n+2QZ9Vk00dBX9J3tzsz/G3l/cHuQ
+         RmCAqFcFhSpD8QNoFvg8Hz+m0rnNZuWSpLqHcUROGjjfO8Oajsy8PFmZ6uERoaupfZDm
+         YJK8Iceo7ovTst1xUi+JB282Its4Qwclu2G/icxqtG/ivL2cb4CBmQT981qqViMzvuXd
+         VyeVbz8DNCJaB+ugHbDMTjES9K7x+QRAV3ne26Rhb37ANtwrQoBA6OBYppdlrk4nKWJk
+         pQb6UnUILMXn9d/MIuoaX1SUz69sMaaWoRQY61EMFIz4I+UP+XO4nOj+OZuVV4gH+NUN
+         mD2g==
+X-Gm-Message-State: AOAM530UqiZLX61JlP83fI0EDQocLrjwWES3gQkeMrtDdNA7LxVdvdvZ
+        /7aTLQ8DjMicE5GADDjPZtS/ikGJaB0=
+X-Google-Smtp-Source: ABdhPJzc0UxlELQq13kNnMa9jGVAQVr/GQ7RbeXIWJxryqFAGNMBWJU1MXCH2G6jIUykSJzO1WAL+A==
+X-Received: by 2002:a17:902:b189:b0:14d:6f87:7c25 with SMTP id s9-20020a170902b18900b0014d6f877c25mr27403123plr.31.1646158456915;
+        Tue, 01 Mar 2022 10:14:16 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056a000c9400b004f396b965a9sm18773821pfv.49.2022.03.01.10.14.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 10:14:08 -0800 (PST)
-Date:   Tue, 1 Mar 2022 10:14:07 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Message-ID: <202203011008.AA0B5A2D@keescook>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com>
- <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org>
- <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
- <Yh1aMm3hFe/j9ZbI@casper.infradead.org>
- <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
+        Tue, 01 Mar 2022 10:14:16 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM STB AVS TMON
+        DRIVER), "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org (open list:BROADCOM STB AVS TMON DRIVER),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE)
+Subject: [PATCH RESEND] thermal: brcmstb_thermal: Interrupt is optional
+Date:   Tue,  1 Mar 2022 10:14:12 -0800
+Message-Id: <20220301181412.2008044-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 04:45:11PM -0800, Linus Torvalds wrote:
-> Really. The "-Wshadow doesn't work on the kernel" is not some new
-> issue, because you have to do completely insane things to the source
-> code to enable it.
+Utilize platform_get_irq_optional() to silence these messages:
 
-The first big glitch with -Wshadow was with shadowed global variables.
-GCC 4.8 fixed that, but it still yells about shadowed functions. What
-_almost_ works is -Wshadow=local. At first glace, all the warnings
-look solvable, but then one will eventually discover __wait_event()
-and associated macros that mix when and how deeply it intentionally
-shadows variables. :)
+brcmstb_thermal a581500.thermal: IRQ index 0 not found
 
-Another way to try to catch misused shadow variables is
--Wunused-but-set-varible, but it, too, has tons of false positives.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tried to capture some of the rationale and research here:
-https://github.com/KSPP/linux/issues/152
-
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index 8df5edef1ded..0cedb8b4f00a 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -351,7 +351,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ 
+ 	priv->thermal = thermal;
+ 
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq >= 0) {
+ 		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+ 						brcmstb_tmon_irq_thread,
 -- 
-Kees Cook
+2.25.1
+

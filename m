@@ -2,184 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6B24C9134
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CDE4C9137
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236426AbiCARLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S232847AbiCARMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiCARL3 (ORCPT
+        with ESMTP id S229532AbiCARMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:11:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 792C552B33
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646154643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PIJRnLFY1UWXUOWR2QU+D8DLrJdFCZESqRQM5Q/WC7w=;
-        b=Vg0TLwt8PNqnexac+GrYpmCbvWC7VHXN73Q8DlwF4/ZfHt9/98xqMceP+46DZnj0Ue3fiP
-        pqCeuTgi/P259OpZa/jBqo6pB6xyBzAn958Rapwf+SKIdKd0ayiBE1tkBMLySOTIolOjwq
-        S++y7GUFOJl/+w4J4WtUQZ5VKdm3y0s=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-6_Lub75sNk-_r_PsNZ5X4A-1; Tue, 01 Mar 2022 12:10:40 -0500
-X-MC-Unique: 6_Lub75sNk-_r_PsNZ5X4A-1
-Received: by mail-wm1-f71.google.com with SMTP id l19-20020a05600c4f1300b003818783847eso385622wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:10:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PIJRnLFY1UWXUOWR2QU+D8DLrJdFCZESqRQM5Q/WC7w=;
-        b=MDv1p8cXHcHkWFFqlGR8Fy0lViBdCYk2Dq774+M+4azsS4Fn9bj/YUyUfL4IDoTN1A
-         S7IIM3A1S9snRjujz0wNFh9UF/xArwxWmZoEgODSU0xln/YxjtXs+sSPJ16Ap4vKg1Ln
-         nPXth5c6X3j+9xW8cajBffJfyxVClI9/FEc+Bz/2C22jBXdO0qIFFS3xdFvlF1CQ+bEt
-         CfubQWkx684U05W8SD9C3cx/avMdc0vGolKCwK3W9Bcy6Sw+0e81/aTCCwWsqxQB2lzI
-         HRqnqY0OdGnr2A3uXUAT8V+NY/ap3c7Oae7NiMsu9GMphSK4ukOoAR+s7CMvh8DmL+3b
-         BipQ==
-X-Gm-Message-State: AOAM533Rmjb5wdMae55aT+wvBUjzBGpvHNTufmTHzEKB7Y9L1bffBrMA
-        kPM7X7hCVmx9B3eiKF+xcVdc6oqdvie8lZnD3wg+8/OrDzm8FAI+CVl2PTZ1IpQHnw9TGONpHol
-        PkcuOuAx6/hfYFOXAZPpSvW7J
-X-Received: by 2002:adf:d089:0:b0:1ed:9e86:2144 with SMTP id y9-20020adfd089000000b001ed9e862144mr19799480wrh.363.1646154639290;
-        Tue, 01 Mar 2022 09:10:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwuw7dcMqBQBwKYp5Dn5fVfKfoBsddZLZJfioYVHvc08h1r/JVDl5hRQquCb6XhxeMfCabqIw==
-X-Received: by 2002:adf:d089:0:b0:1ed:9e86:2144 with SMTP id y9-20020adfd089000000b001ed9e862144mr19799450wrh.363.1646154638858;
-        Tue, 01 Mar 2022 09:10:38 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a05600c4f8400b00380e45cd564sm3715244wmq.8.2022.03.01.09.10.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 09:10:38 -0800 (PST)
-Message-ID: <c020e65d-9528-dab4-a577-3564f939c39d@redhat.com>
-Date:   Tue, 1 Mar 2022 18:10:33 +0100
+        Tue, 1 Mar 2022 12:12:42 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48B019282;
+        Tue,  1 Mar 2022 09:11:56 -0800 (PST)
+X-UUID: 324a8ac07c6e4322b7abfc1e2e63fe3b-20220302
+X-UUID: 324a8ac07c6e4322b7abfc1e2e63fe3b-20220302
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 953268586; Wed, 02 Mar 2022 01:11:48 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 2 Mar 2022 01:11:46 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 2 Mar
+ 2022 01:11:41 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 2 Mar 2022 01:11:40 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>
+CC:     <perex@perex.cz>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH] ASoC: bt-sco: fix bt-sco-pcm-wb dai widget don't connect to the endpoint
+Date:   Wed, 2 Mar 2022 01:11:37 +0800
+Message-ID: <20220301171137.27442-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.10 2/2] KVM: x86: nSVM: deal with L1
- hypervisor that intercepts interrupts but lets L2 control them
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org
-References: <20220222140532.211620-1-sashal@kernel.org>
- <20220222140532.211620-2-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220222140532.211620-2-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 15:05, Sasha Levin wrote:
-> From: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> [ Upstream commit 2b0ecccb55310a4b8ad5d59c703cf8c821be6260 ]
-> 
-> Fix a corner case in which the L1 hypervisor intercepts
-> interrupts (INTERCEPT_INTR) and either doesn't set
-> virtual interrupt masking (V_INTR_MASKING) or enters a
-> nested guest with EFLAGS.IF disabled prior to the entry.
-> 
-> In this case, despite the fact that L1 intercepts the interrupts,
-> KVM still needs to set up an interrupt window to wait before
-> injecting the INTR vmexit.
-> 
-> Currently the KVM instead enters an endless loop of 'req_immediate_exit'.
-> 
-> Exactly the same issue also happens for SMIs and NMI.
-> Fix this as well.
-> 
-> Note that on VMX, this case is impossible as there is only
-> 'vmexit on external interrupts' execution control which either set,
-> in which case both host and guest's EFLAGS.IF
-> are ignored, or not set, in which case no VMexits are delivered.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Message-Id: <20220207155447.840194-8-mlevitsk@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/x86/kvm/svm/svm.c | 17 +++++++++++++----
->   1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index d515c8e68314c..ec9586a30a50c 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3237,11 +3237,13 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->   	if (svm->nested.nested_run_pending)
->   		return -EBUSY;
->   
-> +	if (svm_nmi_blocked(vcpu))
-> +		return 0;
-> +
->   	/* An NMI must not be injected into L2 if it's supposed to VM-Exit.  */
->   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
->   		return -EBUSY;
-> -
-> -	return !svm_nmi_blocked(vcpu);
-> +	return 1;
->   }
->   
->   static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
-> @@ -3293,9 +3295,13 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
->   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->   {
->   	struct vcpu_svm *svm = to_svm(vcpu);
-> +
->   	if (svm->nested.nested_run_pending)
->   		return -EBUSY;
->   
-> +	if (svm_interrupt_blocked(vcpu))
-> +		return 0;
-> +
->   	/*
->   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
->   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
-> @@ -3303,7 +3309,7 @@ static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
->   		return -EBUSY;
->   
-> -	return !svm_interrupt_blocked(vcpu);
-> +	return 1;
->   }
->   
->   static void enable_irq_window(struct kvm_vcpu *vcpu)
-> @@ -4023,11 +4029,14 @@ static int svm_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->   	if (svm->nested.nested_run_pending)
->   		return -EBUSY;
->   
-> +	if (svm_smi_blocked(vcpu))
-> +		return 0;
-> +
->   	/* An SMI must not be injected into L2 if it's supposed to VM-Exit.  */
->   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_smi(svm))
->   		return -EBUSY;
->   
-> -	return !svm_smi_blocked(vcpu);
-> +	return 1;
->   }
->   
->   static int svm_pre_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+This patch fix the second dai driver's dai widget can't connect to the
+endpoint. Because "bt-sco-pcm" and "bt-sco-pcm-wb" dai driver have the
+same stream_name, so it will cause they have the same widget name.
+Therefor it will just create only one route when do snd_soc_dapm_add_route
+that only find the widget through the widget name.
 
+Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+---
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+Hi maintainter,
 
-Paolo
+   Need your comments. The patch is the one that I think it makes the
+   mose sense. Maybe we can define the new stream_name for
+   "bt-sco-pcm-wb" and add the new route.
+
+ sound/soc/codecs/bt-sco.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/bt-sco.c b/sound/soc/codecs/bt-sco.c
+index 4d286844e3c8..578f9df2a25e 100644
+--- a/sound/soc/codecs/bt-sco.c
++++ b/sound/soc/codecs/bt-sco.c
+@@ -13,11 +13,16 @@
+ static const struct snd_soc_dapm_widget bt_sco_widgets[] = {
+ 	SND_SOC_DAPM_INPUT("RX"),
+ 	SND_SOC_DAPM_OUTPUT("TX"),
++	SND_SOC_DAPM_AIF_IN("BT_SCO_RX", "Playback", 0,
++			    SND_SOC_NOPM, 0, 0),
++	SND_SOC_DAPM_AIF_OUT("BT_SCO_TX", "Capture", 0,
++			     SND_SOC_NOPM, 0, 0),
+ };
+ 
+ static const struct snd_soc_dapm_route bt_sco_routes[] = {
+-	{ "Capture", NULL, "RX" },
+-	{ "TX", NULL, "Playback" },
++	{ "BT_SCO_TX", NULL, "RX" },
++	{ "TX", NULL, "BT_SCO_RX" },
++};
+ };
+ 
+ static struct snd_soc_dai_driver bt_sco_dai[] = {
+-- 
+2.25.1
 

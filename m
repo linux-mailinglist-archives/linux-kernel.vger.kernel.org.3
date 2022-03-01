@@ -2,355 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EAF4C842B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0762D4C842E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiCAGeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:34:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S232678AbiCAGe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiCAGeJ (ORCPT
+        with ESMTP id S232663AbiCAGeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:34:09 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B096246;
-        Mon, 28 Feb 2022 22:33:28 -0800 (PST)
-X-UUID: b52c1b2a412a4aac830a5595c9cde0f7-20220301
-X-UUID: b52c1b2a412a4aac830a5595c9cde0f7-20220301
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 993912549; Tue, 01 Mar 2022 14:33:22 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 1 Mar 2022 14:33:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Mar
- 2022 14:33:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Mar 2022 14:33:20 +0800
-Message-ID: <c92342029f05748426df23d4d95ad178f7acc0f9.camel@mediatek.com>
-Subject: Re: [PATCH v4,2/5] dt-bindings: display: mediatek: add MT8186 SoC
- binding
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
-        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 1 Mar 2022 14:33:20 +0800
-In-Reply-To: <YhfaSqWInwgsu30x@robh.at.kernel.org>
-References: <20220222052803.3570-1-rex-bc.chen@mediatek.com>
-         <20220222052803.3570-3-rex-bc.chen@mediatek.com>
-         <YhfaSqWInwgsu30x@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 01:34:21 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144226FA32
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:33:40 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso1229645pju.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:33:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=3mPo8lvO91fSVL2zNMVudPsfj5UeWu8/OYFDNcv6JjI=;
+        b=EyPMwTGdSNloKDGKnCt8Rx2I35rLxgk25XazRMqOUdZAnlqtNAaW0nMyonJiVrtKmE
+         yP3lz59YCiJ8K1jROjN7oh95FFAscuHexJXRDsuSXRCPYUJO3PqAPkirtQx94qiQsqnY
+         PaSrbE1Ef+S/4DJ8DYi++i3W3+G5mD8JjK3gW/DaFx6VaepqdN9IPFSzmUj+XFZyV8Ce
+         YbG8WLEop0vY5p68XEc5rcCMF4toOedFJ73D2Cn0B8b2JIFOfd8lg7cG8YPaUlVPx5c+
+         Y9JrVKc4EytbyKW4xRpAOMB8NtJLaRlTWVnGoPY8k+jx9p6eCQyaJynwOg+jehwCnycx
+         yhog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=3mPo8lvO91fSVL2zNMVudPsfj5UeWu8/OYFDNcv6JjI=;
+        b=qQDP/ksf3mXJtI5BKaAfM689xearrtuzVFEVFbqz2fQTzXSY5SHaWRw84HzQ6zsFat
+         zktSjeBH3EAENgphmxGoQ28IjQ2ZRlKe41uj0g0FMQiclfqoWRu2UDz7E1AdB3t5XLsD
+         ZiSWw0Msvzt6gDm2qLO4bfcOKZcsS3x/GtjC+zb42sPHV9XpXoxrZF/HpzVJ7oAKnEpR
+         R7SgSOjw3a5zmjNYo6pyjW3rXM2OHzBafAXOtoOAz9aWDPXP9YGmdaEqZ9uWjr0TGLX0
+         a2Stdvh0mThViH6tAF8XsZimWx/aqy2HIXVebPy2mqykwnBoDqA4uOvcopCkAXjrVEW0
+         f/8w==
+X-Gm-Message-State: AOAM53195vQa74W5JSIjoFdC7M9onN15b60e5JeZYXiTJ8Nh6QnKFL8K
+        56OncUC2YHGmbuR8oqTZIaOt4IBdCDSktwD7RXY=
+X-Google-Smtp-Source: ABdhPJxdw4f+rvERiG34ZF0VdlqFmBtf/joQpRNDllZHRbpWuzAwzWwF9v2uTYwiaAQTf/T2yM4txg==
+X-Received: by 2002:a17:902:b58d:b0:14d:3d38:2690 with SMTP id a13-20020a170902b58d00b0014d3d382690mr23671504pls.78.1646116419615;
+        Mon, 28 Feb 2022 22:33:39 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id s17-20020a17090a441100b001bc1b59fe1asm1087916pjg.38.2022.02.28.22.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 22:33:39 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Suman Anna <s-anna@ti.com>, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] iommu/omap: Fix missing put_device() call in omap_iommu_probe_device
+Date:   Tue,  1 Mar 2022 06:33:25 +0000
+Message-Id: <20220301063326.18120-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
+References: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rob,
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling path and
+the regular path.
 
-Thanks for your review.
-I add comments below:
+Fixes: ede1c2e7d4dc ("iommu/omap: Store iommu_dev pointer in arch_data")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- move put_device() before of_node_put().
+- add put_device() in the regular path.
+---
+ drivers/iommu/omap-iommu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Thu, 2022-02-24 at 13:19 -0600, Rob Herring wrote:
-> On Tue, Feb 22, 2022 at 01:28:00PM +0800, Rex-BC Chen wrote:
-> > Add MT8186 SoC binding to AAL, CCORR, COLOR, DITHER, GAMMA, MUTEX,
-> > OVL, POSTMASK and RDMA.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml | 7
-> > +++++++
-> >  .../bindings/display/mediatek/mediatek,ccorr.yaml          | 5
-> > +++++
-> >  .../bindings/display/mediatek/mediatek,color.yaml          | 1 +
-> >  .../bindings/display/mediatek/mediatek,dither.yaml         | 1 +
-> >  .../bindings/display/mediatek/mediatek,gamma.yaml          | 1 +
-> >  .../bindings/display/mediatek/mediatek,mutex.yaml          | 2 ++
-> >  .../bindings/display/mediatek/mediatek,ovl-2l.yaml         | 5
-> > +++++
-> >  .../devicetree/bindings/display/mediatek/mediatek,ovl.yaml | 5
-> > +++++
-> >  .../bindings/display/mediatek/mediatek,postmask.yaml       | 5
-> > +++++
-> >  .../bindings/display/mediatek/mediatek,rdma.yaml           | 1 +
-> >  10 files changed, 33 insertions(+)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
-> > aml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
-> > aml
-> > index 225f9dd726d2..3a5416937293 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
-> > aml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
-> > aml
-> > @@ -23,6 +23,8 @@ properties:
-> >      oneOf:
-> >        - items:
-> >            - const: mediatek,mt8173-disp-aal
-> > +      - items:
-> > +          - const: mediatek,mt8183-disp-aal
-> 
-> This patch is for 8186...
-
-I will split it to another commit in next version.
-
-> 
-> >        - items:
-> >            - enum:
-> >                - mediatek,mt2712-disp-aal
-> > @@ -31,6 +33,11 @@ properties:
-> >                - mediatek,mt8195-disp-aal
-> >            - enum:
-> >                - mediatek,mt8173-disp-aal
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8186-disp-aal
-> > +          - enum:
-> > +              - mediatek,mt8183-disp-aal
-> 
-> There won't be more than 1 fallback, so use const rather than enum.
-> 
-
-I will modify it in next version.
-
-> >  
-> >    reg:
-> >      maxItems: 1
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
-> > .yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
-> > .yaml
-> > index 6894b6999412..8ac87b5896ac 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
-> > .yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
-> > .yaml
-> > @@ -30,6 +30,11 @@ properties:
-> >                - mediatek,mt8195-disp-ccorr
-> >            - enum:
-> >                - mediatek,mt8192-disp-ccorr
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8186-disp-ccorr
-> > +          - enum:
-> > +              - mediatek,mt8183-disp-ccorr
-> 
-> Same here.
-
-I will modify it in next version.
-
-> 
-> >  
-> >    reg:
-> >      maxItems: 1
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,color
-> > .yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,color
-> > .yaml
-> > index bc83155b3b4c..d0a4b9eb71fd 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,color
-> > .yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,color
-> > .yaml
-> > @@ -37,6 +37,7 @@ properties:
-> >        - items:
-> >            - enum:
-> >                - mediatek,mt8183-disp-color
-> > +              - mediatek,mt8186-disp-color
-> >                - mediatek,mt8192-disp-color
-> >                - mediatek,mt8195-disp-color
-> >            - enum:
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
-> > r.yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
-> > r.yaml
-> > index 9d89297f5f1d..9a08514ed909 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
-> > r.yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
-> > r.yaml
-> > @@ -26,6 +26,7 @@ properties:
-> >            - const: mediatek,mt8183-disp-dither
-> >        - items:
-> >            - enum:
-> > +              - mediatek,mt8186-disp-dither
-> >                - mediatek,mt8192-disp-dither
-> >                - mediatek,mt8195-disp-dither
-> >            - enum:
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
-> > .yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
-> > .yaml
-> > index 247baad147b3..6d96f6736d91 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
-> > .yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
-> > .yaml
-> > @@ -27,6 +27,7 @@ properties:
-> >            - const: mediatek,mt8183-disp-gamma
-> >        - items:
-> >            - enum:
-> > +              - mediatek,mt8186-disp-gamma
-> >                - mediatek,mt8192-disp-gamma
-> >                - mediatek,mt8195-disp-gamma
-> >            - enum:
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
-> > .yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
-> > .yaml
-> > index 6eca525eced0..55391b5c08c4 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
-> > .yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
-> > .yaml
-> > @@ -34,6 +34,8 @@ properties:
-> >            - const: mediatek,mt8173-disp-mutex
-> >        - items:
-> >            - const: mediatek,mt8183-disp-mutex
-> > +      - items:
-> > +          - const: mediatek,mt8186-disp-mutex
-> >        - items:
-> >            - const: mediatek,mt8192-disp-mutex
-> 
-> All these single entry cases can be a single enum.
-> 
-
-I will modify it in next version.
-
-> >        - items:
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> > 2l.yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> > 2l.yaml
-> > index 611a2dbdefa4..f7f89485a5ae 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> > 2l.yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> > 2l.yaml
-> > @@ -25,6 +25,11 @@ properties:
-> >            - const: mediatek,mt8183-disp-ovl-2l
-> >        - items:
-> >            - const: mediatek,mt8192-disp-ovl-2l
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8186-disp-ovl-2l
-> > +          - enum:
-> > +              - mediatek,mt8192-disp-ovl-2l
-> >  
-> >    reg:
-> >      maxItems: 1
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
-> > aml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
-> > aml
-> > index e71f79bc2dee..110e6b2747bc 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
-> > aml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
-> > aml
-> > @@ -40,6 +40,11 @@ properties:
-> >                - mediatek,mt8195-disp-ovl
-> >            - enum:
-> >                - mediatek,mt8183-disp-ovl
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8186-disp-ovl
-> > +          - enum:
-> > +              - mediatek,mt8192-disp-ovl
-> >  
-> >    reg:
-> >      maxItems: 1
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
-> > ask.yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
-> > ask.yaml
-> > index 6ac1da2e8871..22c333d09465 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
-> > ask.yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
-> > ask.yaml
-> > @@ -23,6 +23,11 @@ properties:
-> >      oneOf:
-> >        - items:
-> >            - const: mediatek,mt8192-disp-postmask
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8186-disp-postmask
-> > +          - enum:
-> > +              - mediatek,mt8192-disp-postmask
-> >  
-> >    reg:
-> >      maxItems: 1
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > index 8ef821641672..4f1c935cdf70 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > @@ -39,6 +39,7 @@ properties:
-> >                - mediatek,mt2701-disp-rdma
-> >        - items:
-> >            - enum:
-> > +              - mediatek,mt8186-disp-rdma
-> >                - mediatek,mt8192-disp-rdma
-> >            - enum:
-> >                - mediatek,mt8183-disp-rdma
-> > -- 
-> > 2.18.0
-> > 
-> > 
-
-BRs,
-Rex
+diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+index 91749654fd49..2222b30a0a00 100644
+--- a/drivers/iommu/omap-iommu.c
++++ b/drivers/iommu/omap-iommu.c
+@@ -1683,6 +1683,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
+ 
+ 		oiommu = platform_get_drvdata(pdev);
+ 		if (!oiommu) {
++			put_device(&pdev->dev);
+ 			of_node_put(np);
+ 			kfree(arch_data);
+ 			return ERR_PTR(-EINVAL);
+@@ -1691,6 +1692,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
+ 		tmp->iommu_dev = oiommu;
+ 		tmp->dev = &pdev->dev;
+ 
++		put_device(&pdev->dev);
+ 		of_node_put(np);
+ 	}
+ 
+-- 
+2.17.1
 

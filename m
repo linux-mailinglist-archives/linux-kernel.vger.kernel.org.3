@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A094C8B3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6F44C8B42
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbiCAMFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S234676AbiCAMIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiCAMFq (ORCPT
+        with ESMTP id S233206AbiCAMIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:05:46 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777CF24F21
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:05:05 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id g21so7681459pfj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 04:05:05 -0800 (PST)
+        Tue, 1 Mar 2022 07:08:17 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D892E1BE9D;
+        Tue,  1 Mar 2022 04:07:35 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so20136234wrg.11;
+        Tue, 01 Mar 2022 04:07:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
-        b=Tg0u1BcMkcrQ5oCWdVLlVtKu6n/dJivEtpc6Ue4+Jyw4ir2qtSN2EFSPlFVFd7SdRl
-         jnkov5ikRhpS6SAVd6dDCcp8eP0rCQgEVgNWB19egrPyeZoIq8yB4MU/P598SN0m6+S7
-         HHNv5f1LFKrUuhelYrMBcpMidG8yApaIVKlqToNQwBbiskBmpnciA0FOT0385xykJKsa
-         ODgz2rRztKrwiGQcEBg7/zW40GMYb/iNSfA6p4Ax1ukpOeddQocSA2vOe3SmFmvZm3Uj
-         WCwHAm+4lcPqqNk2ZRGysgMv4jScRP2J/2jnLLol/MbElYAZt5vXVWSNutcjTtN3NuyG
-         /xHg==
+        bh=hSCwK5xS8mlQDgYKMAx0VBG8XXlCG6EJdzqrXuBG+YQ=;
+        b=PpIqQKZ/2cNpIDY6gBqHhJnRr265H0PDVQynomcMHlTr8MsfRqVJqI2q7fFxPqx+jk
+         yD9E3CnSgSUgB6+WYe5d4PMZG/SZhYkwSFAV5ZDa81V+sMuo2PS4m130jA0ho6Cn163k
+         F87UvbKWCHi9DDRimZOlxMQopfOeMis2dq/2HLkqxgVJR2vCIUnL2tFk9D840vMpT2XN
+         yi7h/zb7UkrNeoGmxhGCdptDY7X452KHD6msiDrQ7e85MnA67pRcgpd3V2LtW6WDlhK5
+         zxlpPZ81ImFOlWyrh2WMVKGXfupAmMfgICFs9YVG6ZSpIk7gkA+yVFVMokP1P0GB4dat
+         YzyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
-        b=VzOg9ZIS9njxeYrmi3uYDwqM3UaCAash9fqauqi87k++boo+leDnI//WyJ25nPj0I/
-         zEqXCsEd/TYj6/FA4LVUZtdSgfqzI1MxDJ4Bt8P0Sod2Z044vTbLdAzYnTbhPuf8KkB5
-         TeFG2WlKl4zwZi40xVEl2+XMa/T8O1NVo2J8V6Bbq7G+tW2/3DwPRrRS/ZVKkx1QT5l2
-         UTp2BBe7XCIGzbExgstBGTmE6f9/jZGTEgeJKkszBzEEDRAhZ273V6kBlBEwjmAghge5
-         fcg/2O8oujZO/GeQoMlehGHl7ZTi79Okov6y0ZsZ/MDt4uxCfJwQXnsDkYUUPBerj88K
-         he2w==
-X-Gm-Message-State: AOAM533oqdPuK0z3gDJYhmuaEacOG3b0VKPc0/9coDRE56UndwgX/tmx
-        G5CszTEeYknr1Led99idAVKF+/0VJJCjpmHO43g=
-X-Google-Smtp-Source: ABdhPJzvsG8+SM4sh/25GWnzLzL15pKuPWAYKa2aP9gmBzBW6Y1AXgbzbreCO9U22ZeTCWIbXhy6lAY2X0AWt7Ghw68=
-X-Received: by 2002:a63:be0e:0:b0:363:e0be:613f with SMTP id
- l14-20020a63be0e000000b00363e0be613fmr21309057pgf.448.1646136304480; Tue, 01
- Mar 2022 04:05:04 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hSCwK5xS8mlQDgYKMAx0VBG8XXlCG6EJdzqrXuBG+YQ=;
+        b=2vnozjfBVkKY9BNCJw39bidc0BL8ogLlIuxZggYpvuK1RekxIRuk9ZqoXF/6l7hH+k
+         vIzXXcZqsUqkOMGvJTm7Dhp2xqBLR0WbhroumGvQRbQBFK8IefXcO9f0JcKgrUJZ7M0y
+         /8RLm7Gekf4iL70QuXl9SmPJDtn/yO4mi583V1soxhW84h3JbHsyrLjlpk3WV9gvVZ3A
+         HuHhjAhlhm8bPU6Fbg6BYHlsqCDUR5ekDJ5JDyyOHFb/PKoTZhVUh4fznlQwO/wZfxCq
+         vHwrcQFrM4RJyuC+McpHGZdRr0pllmT+Tf7bbj4WheqfGexNqAYw0BMmizCi6NHJ9w0y
+         DpLg==
+X-Gm-Message-State: AOAM531nDWp07cmp+Ou5NLf3vK4zvYxfO/eDx0afwzMS6sVfy5EDaIbQ
+        9apl6EFcfRRtGUdqgmCdSfs=
+X-Google-Smtp-Source: ABdhPJy5w8b76F7DObiS0Zj5X/X3oN+Cn8tf+9SnqcR5dCpBJywM51JSJ2UGavHd5lzX1XYQiGhoSQ==
+X-Received: by 2002:a05:6000:114b:b0:1ed:c1d5:95a8 with SMTP id d11-20020a056000114b00b001edc1d595a8mr18938705wrx.539.1646136454271;
+        Tue, 01 Mar 2022 04:07:34 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b001edc2966dd4sm13256718wrx.47.2022.03.01.04.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 04:07:33 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] ima: remove redundant initialization of pointer 'file'.
+Date:   Tue,  1 Mar 2022 12:07:32 +0000
+Message-Id: <20220301120732.670168-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Reply-To: zahirikeen@gmail.com
-Sender: sabu7439@gmail.com
-Received: by 2002:a17:90b:3749:0:0:0:0 with HTTP; Tue, 1 Mar 2022 04:05:03
- -0800 (PST)
-From:   Zahiri Keen <zahirikeen2@gmail.com>
-Date:   Tue, 1 Mar 2022 13:05:03 +0100
-X-Google-Sender-Auth: HHNN5At7GSe_XTKAVQanmHrMpcE
-Message-ID: <CAOJFtj1XwynksDFy-yXdjp1tg83AfaQfNX8WdJfAij7DBjLd4w@mail.gmail.com>
-Subject: Greetings to you.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day,
+The pointer 'file' is being initialized with a value that is never read,
+it is being re-assigned the same value later on closer to where it is
+being first used. The initialization is redundant and can be removed.
 
-I know this email might come to you as a surprise because is coming
-from someone you haven=E2=80=99t met with before.
+Cleans up clang scan build warning:
+security/integrity/ima/ima_main.c:434:15: warning: Value stored to 'file'
+during its initialization is never read [deadcode.DeadStores]
 
-I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
-a deal relating to the funds which are in my position I shall furnish
-you with more detail once your response.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ security/integrity/ima/ima_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Mr.Zahiri
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index c6412dec3810..41b91a0bc8dc 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -431,7 +431,7 @@ int ima_file_mmap(struct file *file, unsigned long prot)
+ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
+ {
+ 	struct ima_template_desc *template = NULL;
+-	struct file *file = vma->vm_file;
++	struct file *file;
+ 	char filename[NAME_MAX];
+ 	char *pathbuf = NULL;
+ 	const char *pathname = NULL;
+-- 
+2.34.1
+

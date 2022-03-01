@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF634C8677
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB3A4C867A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbiCAI1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S233381AbiCAI1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiCAI1h (ORCPT
+        with ESMTP id S233397AbiCAI1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:27:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE477A998;
-        Tue,  1 Mar 2022 00:26:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E87A0B817D0;
-        Tue,  1 Mar 2022 08:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F136C340EE;
-        Tue,  1 Mar 2022 08:26:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646123212;
-        bh=TwhJPmV9y9c3eqT3zE3wD0HQcup9gYh9eXtwtOtu4EQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w7cJw0GLrgvMVletWXAGP6NYKkLVc9SJg4Anj/PRy87gWz9cM9TPHo2vyESw4fNin
-         WAUrVotZQVMP0A/c4VFlWPbg10DELaJEYtCFptAvCdTTi0FzoKnV9aqag/LwB+daVd
-         Ag/8qLqQqiBEjuXASy363BhMQb7wiyxSd3Gb/kRI=
-Date:   Tue, 1 Mar 2022 09:26:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        x86@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
-Message-ID: <Yh3YyU2VVK/iaLcA@kroah.com>
-References: <20220301073223.98236-1-ammarfaizi2@gnuweeb.org>
- <20220301073223.98236-2-ammarfaizi2@gnuweeb.org>
+        Tue, 1 Mar 2022 03:27:46 -0500
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6219888C3;
+        Tue,  1 Mar 2022 00:27:05 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id j3so15729129vsi.7;
+        Tue, 01 Mar 2022 00:27:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zwB4M0FfzvPist4ny08Y1gyEoTHezds+UwIqZ00x3vo=;
+        b=X+8hIQQ7mtKrv/kxqlOJc+vY7tgGiyy8vuu7ar8Lw4BBVMhYcrUFNBYzEBrpWNwmer
+         B0ohx703bZADeyxhR26hfzTQ5Myz/s0yVp6Ww9WngQLOsv3dZiHAzhOqkI43sPeL0oJj
+         Ut5fcBL6RzWsxoYrBKxiRzTixLjZnr0aTT/cEw3vUGYFkPk8fJYpfLwRO7lNyrpEXorh
+         OG4ILatr6UC711g86LwiduyDDb+cZSqPW/ao15I9riTDV934CJpusPCG75lw5/V2N4kX
+         IsK2x/CLXQPxmoYMWb9OZ2SbjL26d2G+1rUcF9OwMDoAk20dUR2Ai+RkCza/NHDvhBh9
+         g0ZQ==
+X-Gm-Message-State: AOAM530cSGZdDq8xsa0RAclYPAstOduhiQX5tU/cHATlnK5N0kKcAywa
+        X7uvJCOE9HzKI1v4MIfFF/ase8S7yX+XmA==
+X-Google-Smtp-Source: ABdhPJz7NDPZ1jf/AZqOdefwJ+fMpJuZTLPpDDplHmDLCPx9MN943y9LSA1/okLg59nKNzvxYIRDtQ==
+X-Received: by 2002:a67:f645:0:b0:31b:916e:8d92 with SMTP id u5-20020a67f645000000b0031b916e8d92mr10314447vso.72.1646123224732;
+        Tue, 01 Mar 2022 00:27:04 -0800 (PST)
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
+        by smtp.gmail.com with ESMTPSA id 127-20020a1f0085000000b0032d19f4946esm2026317vka.28.2022.03.01.00.27.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 00:27:04 -0800 (PST)
+Received: by mail-vs1-f42.google.com with SMTP id y26so15712887vsq.8;
+        Tue, 01 Mar 2022 00:27:03 -0800 (PST)
+X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id
+ d19-20020a67e113000000b0030e303dd1d6mr8950618vsl.38.1646123223733; Tue, 01
+ Mar 2022 00:27:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301073223.98236-2-ammarfaizi2@gnuweeb.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220227230302.30388-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227230302.30388-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Mar 2022 09:26:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWSbPrrp6WLzAgW=jt8sDrhYxHorhxzMtEq3rdnMYg-WA@mail.gmail.com>
+Message-ID: <CAMuHMdWSbPrrp6WLzAgW=jt8sDrhYxHorhxzMtEq3rdnMYg-WA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: reset: renesas,rzg2l-usbphy-ctrl: Document
+ RZ/V2L USBPHY Control bindings
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 02:32:22PM +0700, Ammar Faizi wrote:
-> The asm constraint does not reflect that the asm statement can modify
-> the value of @loops. But the asm statement in delay_loop() does change
-> the @loops.
-> 
-> If by any chance the compiler inlines this function, it may clobber
-> random stuff (e.g. local variable, important temporary value in reg,
-> etc.).
-> 
-> Fortunately, delay_loop() is only called indirectly (so it can't
-> inline), and then the register it clobbers is %rax (which is by the
-> nature of the calling convention, it's a caller saved register), so it
-> didn't yield any bug.
-> 
-> ^ That shouldn't be an excuse for using the wrong constraint anyway.
-> 
-> This changes "a" (as an input) to "+a" (as an input and output).
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Fixes: e01b70ef3eb3080fecc35e15f68cd274c0a48163 ("x86: fix bug in arch/i386/lib/delay.c file, delay_loop function")
+On Mon, Feb 28, 2022 at 12:03 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add device tree binding document for RZ/V2L USBPHY Control Device.
+> RZ/V2L USBPHY Control Device is identical to one found on the RZ/G2L SoC.
+> No driver changes are required as generic compatible string
+> "renesas,rzg2l-usbphy-ctrl" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-You only need 12 characters here :)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
+Gr{oetje,eeting}s,
 
-Why is this one not tagged for stable?
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

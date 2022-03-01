@@ -2,75 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF614C7F76
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8404C7F79
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiCAAoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 19:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
+        id S231886AbiCAAoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiCAAnz (ORCPT
+        with ESMTP id S231851AbiCAAoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 19:43:55 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C8FEA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:43:15 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id h15so19926656edv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:43:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0MAbTN1Y6pcTXHq3VvIxavRgKJUC69UdeyGhzHOmlU=;
-        b=V9ynyBmQCAeq2ATQEZeYFbKM5pp36qFZfK7wlDqGJnvmcQ2zlgHCNB1pbFAwXK2bID
-         1W+0UEIJTPQ4nP68mNKAGE/NRcKBTR4Kr1uaukOaaHs8SI8ICQxPO+CCjuFUqeByvCag
-         RvUKcGarRWpZ7wMt7ruxSFV77l7mZs9bGgtXHzBZ7U5qvF9bxpenL2pDl0kBM+C90GXg
-         Pqh634ex+khgm5kNDCiihBI5WwEuFEdxh5aqsSNUgNnDPgJAT/dLdqvJyhsZxw8boJij
-         mPt0pX5EZ2FLjl0D7KUiWMM3oHclrU3RV624u6OnLUyLajb6SQnyo14DYqs2xSLsuGFF
-         CU6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0MAbTN1Y6pcTXHq3VvIxavRgKJUC69UdeyGhzHOmlU=;
-        b=yin/VilbeXB6F5jxoA0XuKM8Ly15+xard1TlBInfMua+phC/3fNImtskt2aM2Sz1s9
-         8dWKgXAYOW8r3RYa0W5x2O+f7iM6ZXdGSaunL66ORQc+TEubGjY1V5wRJQTfUEMSSJDX
-         SuSNPbYbVk3Ebxo5IxZRiaVUxqKXhgQ3JmMyFiIzx5AY0woAIbzj4pr7vbOv+ybU5jJ2
-         bE1EWecbdUNPRZ5hw4Y95CWf9oIXgYmVScOpcFxR0Rgt+STstS2iNHE2MDd3ZIr9Ni0y
-         ZyMN9C8fFqIu6OfNB+GcaDpIGOfMwfWwmobLv4Imvn3d/Wkp5bDhOxqkLAJa3kA7LnV1
-         g7Cw==
-X-Gm-Message-State: AOAM533Rhmka4KljQngdB96giKmYyuu+sdNjVfkWQS90s1mkCwge1Cyr
-        NPAHIrAi1j+Eg/HO08ScnBJT3rqaLsTNUxmhXQkSag==
-X-Google-Smtp-Source: ABdhPJxcPItZ/GtHpnZLpmkWclj4NyLxqdPa5npyeb/mCni2P97zG/EgdGK67M4cT0SBzBuAgcf2MG0k495afoQeJQI=
-X-Received: by 2002:a05:6402:518b:b0:412:80a3:fb6e with SMTP id
- q11-20020a056402518b00b0041280a3fb6emr22909696edd.84.1646095394168; Mon, 28
- Feb 2022 16:43:14 -0800 (PST)
+        Mon, 28 Feb 2022 19:44:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D31AD8C;
+        Mon, 28 Feb 2022 16:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=VRtotTgRjt8wUewVfxAnnsW/LkqttFUYABF7jPzSKmM=; b=UaEbdPQ//Q6peho6+qf+TIsEPC
+        lOypGHi4VgTUdDgo7t4MZDqp4xjdTX8F8B9CNJ5wukDUTmL3X8UvDu159XkZE83rIFnP828FdzM3w
+        rZgvHFV2mmZmtLvWNWxENS4RIXBU926w1p95B9ilgn/mgYp1WU1s9Db4fWXZ/JrdRw6up/ruNc9IU
+        UJV6EqXhM8SUcEM3Dy5DOOIzPMfPnQ53zGKapqcIf+OnychSawAT0lvkOxttBxyN1dGRfzEnTufXx
+        R60vjjf5dmZMRmC3wckSqLUcgHppTqrVZXS7fdKidrZoZSWEzUtOFYfcB9f+qsXu2iR2Vh7rvwPOB
+        mJAqhAbw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOqbp-00EWOO-1a; Tue, 01 Mar 2022 00:43:21 +0000
+Date:   Mon, 28 Feb 2022 16:43:21 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the modules tree
+Message-ID: <Yh1sKVz4g+X0xge0@bombadil.infradead.org>
+References: <20220301113333.21d6f0c6@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-22-seanjc@google.com>
-In-Reply-To: <20220226001546.360188-22-seanjc@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 28 Feb 2022 16:43:03 -0800
-Message-ID: <CANgfPd-pRRoAD3=eWgFOVmaHJnpnbUhwT84p4oJp1NovhxUCow@mail.gmail.com>
-Subject: Re: [PATCH v3 21/28] KVM: x86/mmu: Zap roots in two passes to avoid
- inducing RCU stalls
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220301113333.21d6f0c6@canb.auug.org.au>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,150 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> When zapping a TDP MMU root, perform the zap in two passes to avoid
-> zapping an entire top-level SPTE while holding RCU, which can induce RCU
-> stalls.  In the first pass, zap SPTEs at PG_LEVEL_1G, and then
-> zap top-level entries in the second pass.
->
-> With 4-level paging, zapping a PGD that is fully populated with 4kb leaf
-> SPTEs take up to ~7 or so seconds (time varies based on kernel config,
-> number of (v)CPUs, etc...).  With 5-level paging, that time can balloon
-> well into hundreds of seconds.
->
-> Before remote TLB flushes were omitted, the problem was even worse as
-> waiting for all active vCPUs to respond to the IPI introduced significant
-> overhead for VMs with large numbers of vCPUs.
->
-> By zapping 1gb SPTEs (both shadow pages and hugepages) in the first pass,
-> the amount of work that is done without dropping RCU protection is
-> strictly bounded, with the worst case latency for a single operation
-> being less than 100ms.
->
-> Zapping at 1gb in the first pass is not arbitrary.  First and foremost,
-> KVM relies on being able to zap 1gb shadow pages in a single shot when
-> when repacing a shadow page with a hugepage.  Zapping a 1gb shadow page
-> that is fully populated with 4kb dirty SPTEs also triggers the worst case
-> latency due writing back the struct page accessed/dirty bits for each 4kb
-> page, i.e. the two-pass approach is guaranteed to work so long as KVM can
-> cleany zap a 1gb shadow page.
->
->   rcu: INFO: rcu_sched self-detected stall on CPU
->   rcu:     52-....: (20999 ticks this GP) idle=7be/1/0x4000000000000000
->                                           softirq=15759/15759 fqs=5058
->    (t=21016 jiffies g=66453 q=238577)
->   NMI backtrace for cpu 52
->   Call Trace:
->    ...
->    mark_page_accessed+0x266/0x2f0
->    kvm_set_pfn_accessed+0x31/0x40
->    handle_removed_tdp_mmu_page+0x259/0x2e0
->    __handle_changed_spte+0x223/0x2c0
->    handle_removed_tdp_mmu_page+0x1c1/0x2e0
->    __handle_changed_spte+0x223/0x2c0
->    handle_removed_tdp_mmu_page+0x1c1/0x2e0
->    __handle_changed_spte+0x223/0x2c0
->    zap_gfn_range+0x141/0x3b0
->    kvm_tdp_mmu_zap_invalidated_roots+0xc8/0x130
->    kvm_mmu_zap_all_fast+0x121/0x190
->    kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
->    kvm_page_track_flush_slot+0x5c/0x80
->    kvm_arch_flush_shadow_memslot+0xe/0x10
->    kvm_set_memslot+0x172/0x4e0
->    __kvm_set_memory_region+0x337/0x590
->    kvm_vm_ioctl+0x49c/0xf80
->
-> Reported-by: David Matlack <dmatlack@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: Mingwei Zhang <mizhang@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Tue, Mar 01, 2022 at 11:33:33AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> In commit
+>=20
+>   f131a1296ecf ("module: Make internal.h and decompress.c more compliant")
+>=20
+> Fixes tag
+>=20
+>   Fixes: f314dfea16a ("modsign: log module name in the event of an error")
+>=20
+> has these problem(s):
+>=20
+>   - SHA1 should be at least 12 digits long
+>     This can be fixed for the future by setting core.abbrev to 12 (or
+>     more) or (for git v2.11 or later) just making sure it is not set
+>     (or set to "auto").
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+This is not that critical but I've decided to reset my tree again back
+to Linus' tree as I jumped the gun in mergig this to modulex-next as it
+has not been run time tested yet. So I've dumped this on modules-testing, a=
+nd
+once we get more testing results I'll push this to modules-next.
 
-Nice. This is very well explained in the comments and commit
-description. Thanks for fixing this.
+I can fix the commit log to have 12 digits on the SHA1 manually,
+provided no other compile or run time issues are found.
 
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 51 +++++++++++++++++++++++++-------------
->  1 file changed, 34 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index b838cfa984ad..ec28a88c6376 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -802,14 +802,36 @@ static inline gfn_t tdp_mmu_max_gfn_host(void)
->         return 1ULL << (shadow_phys_bits - PAGE_SHIFT);
->  }
->
-> -static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> -                            bool shared)
-> +static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> +                              bool shared, int zap_level)
->  {
->         struct tdp_iter iter;
->
->         gfn_t end = tdp_mmu_max_gfn_host();
->         gfn_t start = 0;
->
-> +       for_each_tdp_pte_min_level(iter, root, zap_level, start, end) {
-> +retry:
-> +               if (tdp_mmu_iter_cond_resched(kvm, &iter, false, shared))
-> +                       continue;
-> +
-> +               if (!is_shadow_present_pte(iter.old_spte))
-> +                       continue;
-> +
-> +               if (iter.level > zap_level)
-> +                       continue;
-> +
-> +               if (!shared)
-> +                       tdp_mmu_set_spte(kvm, &iter, 0);
-> +               else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
-> +                       goto retry;
-> +       }
-> +}
-> +
-> +static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> +                            bool shared)
-> +{
-> +
->         /*
->          * The root must have an elevated refcount so that it's reachable via
->          * mmu_notifier callbacks, which allows this path to yield and drop
-> @@ -827,22 +849,17 @@ static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
->         rcu_read_lock();
->
->         /*
-> -        * No need to try to step down in the iterator when zapping an entire
-> -        * root, zapping an upper-level SPTE will recurse on its children.
-> +        * To avoid RCU stalls due to recursively removing huge swaths of SPs,
-> +        * split the zap into two passes.  On the first pass, zap at the 1gb
-> +        * level, and then zap top-level SPs on the second pass.  "1gb" is not
-> +        * arbitrary, as KVM must be able to zap a 1gb shadow page without
-> +        * inducing a stall to allow in-place replacement with a 1gb hugepage.
-> +        *
-> +        * Because zapping a SP recurses on its children, stepping down to
-> +        * PG_LEVEL_4K in the iterator itself is unnecessary.
->          */
-> -       for_each_tdp_pte_min_level(iter, root, root->role.level, start, end) {
-> -retry:
-> -               if (tdp_mmu_iter_cond_resched(kvm, &iter, false, shared))
-> -                       continue;
-> -
-> -               if (!is_shadow_present_pte(iter.old_spte))
-> -                       continue;
-> -
-> -               if (!shared)
-> -                       tdp_mmu_set_spte(kvm, &iter, 0);
-> -               else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
-> -                       goto retry;
-> -       }
-> +       __tdp_mmu_zap_root(kvm, root, shared, PG_LEVEL_1G);
-> +       __tdp_mmu_zap_root(kvm, root, shared, root->role.level);
->
->         rcu_read_unlock();
->  }
-> --
-> 2.35.1.574.g5d30c73bfb-goog
->
+  Luis

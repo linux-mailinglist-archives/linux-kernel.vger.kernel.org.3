@@ -2,203 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE744C8C9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08B14C8C9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiCAN2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S235031AbiCAN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbiCAN21 (ORCPT
+        with ESMTP id S233739AbiCAN3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:28:27 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D84920F69
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:27:44 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id w4so12517790ilj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 05:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0rqEHtyUvKInY3eDADJFtpu+gdfZq4axYpoJEFqNG8M=;
-        b=I2qodJt4VEaNZJyZteahkXLrk3gcBP6spDM9mba7O5eU1RB0noMF3SaBN+E8vfdw3Y
-         GW1Qja0562jHy97CnNHFiAvEnhDIzFZuk2nVuHxePbR8HX9rviCDiIna9neO0UiGoLDn
-         jsXu+RAKBdy7qxqlxo03hClTY9xe+rR+zNfDg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0rqEHtyUvKInY3eDADJFtpu+gdfZq4axYpoJEFqNG8M=;
-        b=isrDNeNfp1dgTvRnOdIG8RwLbfu7tZUcFfRQt9YhmNRo9TonQCB+3IqPLiTkBqSSB0
-         aiHCn3AEHuLOBmQoQpOFgWFk8XrLd6i+m3iNQHKR4JYsnDorDPlrbLdCYE9add94ZTeH
-         FNx9bknFMFW2WHuD7kBbk1zGBFdz1ObMuVqP7cycUxfu8xv/c0/GQuIPBUFMg7vcGqrq
-         7ZnAex4wA3bygpi16Ws1CUZlFiOljOPDpRFoosdu8NeoPTxd54bZInQ+/jfLt2D69fVj
-         uFo+Om5leNaBbHZbZf1WajwTJ8/c2A/rV7w46DoO5utqwk6fMwqNHkvoDgBF1YGkamkm
-         6Oqg==
-X-Gm-Message-State: AOAM532rVdPAOwsUGA+7eKHpem4Bx99nd3sPxtZqHHJYHe2EsfNDKuA2
-        /dgxjP9Rb6y5x2wJ1K00NmhivMUtFcL7coA8HL+lMQ==
-X-Google-Smtp-Source: ABdhPJwFD3IYwN4qrYy++4yIV02k4VVunIMIlONHamgVoi7ny6ji/ttTCSgiD81N18MIcwz3ac7fQNZ2oqyazBRiwXg=
-X-Received: by 2002:a92:ca4a:0:b0:2ba:878e:fd12 with SMTP id
- q10-20020a92ca4a000000b002ba878efd12mr22464625ilo.139.1646141263901; Tue, 01
- Mar 2022 05:27:43 -0800 (PST)
+        Tue, 1 Mar 2022 08:29:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7488F8A6C2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:28:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3332FB818F7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5384C340EE;
+        Tue,  1 Mar 2022 13:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646141305;
+        bh=BTT0XbgCMW/Y/EC0V0fvpkq3sfhwmki/mQaIJqJBGbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gbpcdKoHPsK+hV6dgNtnijrTO0eIyDNHaCNSDz5N/sVrddqaIT/iIXLCh35b78cBj
+         pQ3okINhaCg5VXvuanIH38RK7URXi4YQY/SsYiM2p73cdI+rlywEIjMbf8xe+cHW0E
+         yZsdgthlywjSAbr7I6Dg+aR4a9enNY6RgBaHfI8fz/L+6ob9kv7ZM91qrGPUJyov9R
+         T+V39jCIMj8J5iinPWImdzXhatuDhAj4or8jZ16hnfxReiSXOKclv8yqwf2YfI1y5e
+         AsEi2QNOX8AmGx+qxUxX2c/O7+Gh9yO6MMpAerCs+nWeQIxtwdaMqdOsnDEeVwxUGT
+         Om+cYqYDelTaw==
+Date:   Tue, 1 Mar 2022 13:28:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Zhen Ni <nizhen@uniontech.com>
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Asoc: au1x: Use devm_snd_soc_register_component()
+Message-ID: <Yh4fdXOUKNeV7Mi5@sirena.org.uk>
+References: <20220301092322.5523-1-nizhen@uniontech.com>
 MIME-Version: 1.0
-References: <164549971112.9187.16871723439770288255.stgit@noble.brown> <164549983737.9187.2627117501000365074.stgit@noble.brown>
-In-Reply-To: <164549983737.9187.2627117501000365074.stgit@noble.brown>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 1 Mar 2022 14:27:33 +0100
-Message-ID: <CAJfpegsGOFD46KM8pxFAemokv9OOsCSHk=ag6jZZ=VscijMXZQ@mail.gmail.com>
-Subject: Re: [PATCH 04/11] fuse: remove reliance on bdi congestion
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-nilfs@vger.kernel.org,
-        Linux NFS list <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Ext4 <linux-ext4@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zr9XoaaziLUuphUQ"
+Content-Disposition: inline
+In-Reply-To: <20220301092322.5523-1-nizhen@uniontech.com>
+X-Cookie: You have a message from the operator.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 at 04:18, NeilBrown <neilb@suse.de> wrote:
->
-> The bdi congestion tracking in not widely used and will be removed.
->
-> Fuse is one of a small number of filesystems that uses it, setting both
-> the sync (read) and async (write) congestion flags at what it determines
-> are appropriate times.
->
-> The only remaining effect of the sync flag is to cause read-ahead to be
-> skipped.
-> The only remaining effect of the async flag is to cause (some)
-> WB_SYNC_NONE writes to be skipped.
->
-> So instead of setting the flags, change:
->  - .readahead to stop when it has submitted all non-async pages
->     for read.
->  - .writepages to do nothing if WB_SYNC_NONE and the flag would be set
->  - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
->     and the flag would be set.
->
-> The writepages change causes a behavioural change in that pageout() can
-> now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
-> be called on the page which (I think) will further delay the next attempt
-> at writeout.  This might be a good thing.
->
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  fs/fuse/control.c |   17 -----------------
->  fs/fuse/dev.c     |    8 --------
->  fs/fuse/file.c    |   17 +++++++++++++++++
->  3 files changed, 17 insertions(+), 25 deletions(-)
->
-> diff --git a/fs/fuse/control.c b/fs/fuse/control.c
-> index 000d2e5627e9..7cede9a3bc96 100644
-> --- a/fs/fuse/control.c
-> +++ b/fs/fuse/control.c
-> @@ -164,7 +164,6 @@ static ssize_t fuse_conn_congestion_threshold_write(struct file *file,
->  {
->         unsigned val;
->         struct fuse_conn *fc;
-> -       struct fuse_mount *fm;
->         ssize_t ret;
->
->         ret = fuse_conn_limit_write(file, buf, count, ppos, &val,
-> @@ -178,22 +177,6 @@ static ssize_t fuse_conn_congestion_threshold_write(struct file *file,
->         down_read(&fc->killsb);
->         spin_lock(&fc->bg_lock);
->         fc->congestion_threshold = val;
-> -
-> -       /*
-> -        * Get any fuse_mount belonging to this fuse_conn; s_bdi is
-> -        * shared between all of them
-> -        */
-> -
-> -       if (!list_empty(&fc->mounts)) {
-> -               fm = list_first_entry(&fc->mounts, struct fuse_mount, fc_entry);
-> -               if (fc->num_background < fc->congestion_threshold) {
-> -                       clear_bdi_congested(fm->sb->s_bdi, BLK_RW_SYNC);
-> -                       clear_bdi_congested(fm->sb->s_bdi, BLK_RW_ASYNC);
-> -               } else {
-> -                       set_bdi_congested(fm->sb->s_bdi, BLK_RW_SYNC);
-> -                       set_bdi_congested(fm->sb->s_bdi, BLK_RW_ASYNC);
-> -               }
-> -       }
->         spin_unlock(&fc->bg_lock);
->         up_read(&fc->killsb);
->         fuse_conn_put(fc);
-> diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> index cd54a529460d..e1b4a846c90d 100644
-> --- a/fs/fuse/dev.c
-> +++ b/fs/fuse/dev.c
-> @@ -315,10 +315,6 @@ void fuse_request_end(struct fuse_req *req)
->                                 wake_up(&fc->blocked_waitq);
->                 }
->
-> -               if (fc->num_background == fc->congestion_threshold && fm->sb) {
-> -                       clear_bdi_congested(fm->sb->s_bdi, BLK_RW_SYNC);
-> -                       clear_bdi_congested(fm->sb->s_bdi, BLK_RW_ASYNC);
-> -               }
->                 fc->num_background--;
->                 fc->active_background--;
->                 flush_bg_queue(fc);
-> @@ -540,10 +536,6 @@ static bool fuse_request_queue_background(struct fuse_req *req)
->                 fc->num_background++;
->                 if (fc->num_background == fc->max_background)
->                         fc->blocked = 1;
-> -               if (fc->num_background == fc->congestion_threshold && fm->sb) {
-> -                       set_bdi_congested(fm->sb->s_bdi, BLK_RW_SYNC);
-> -                       set_bdi_congested(fm->sb->s_bdi, BLK_RW_ASYNC);
-> -               }
->                 list_add_tail(&req->list, &fc->bg_queue);
->                 flush_bg_queue(fc);
->                 queued = true;
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index 829094451774..94747bac3489 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -966,6 +966,14 @@ static void fuse_readahead(struct readahead_control *rac)
->                 struct fuse_io_args *ia;
->                 struct fuse_args_pages *ap;
->
-> +               if (fc->num_background >= fc->congestion_threshold &&
-> +                   rac->ra->async_size >= readahead_count(rac))
-> +                       /*
-> +                        * Congested and only async pages left, so skip the
-> +                        * rest.
-> +                        */
-> +                       break;
 
-Ah, you are taking care of it here...
+--zr9XoaaziLUuphUQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regarding the async part: a potential (corner?) case is if task A is
-reading region X and triggering readahead for region Y and at the same
-time task B is reading region Y.  In the congestion case it can happen
-that non-uptodate pages in Y are truncated off the pagecache while B
-is waiting for them to become uptodate.
+On Tue, Mar 01, 2022 at 05:23:22PM +0800, Zhen Ni wrote:
 
-This shouldn't be too hard to trigger, just need two sequential
-readers of the same file, where one is just ahead of the other.  I'll
-try to do a test program for this case specifically.
+> +++ b/sound/soc/au1x/psc-ac97.c
+> @@ -411,7 +411,7 @@ static int au1xpsc_ac97_drvprobe(struct platform_devi=
+ce *pdev)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	ret =3D snd_soc_register_component(&pdev->dev, &au1xpsc_ac97_component,
+> +	ret =3D devm_snd_soc_register_component(&pdev->dev, &au1xpsc_ac97_compo=
+nent,
+>  					 &wd->dai_drv, 1);
+>  	if (ret)
+>  		return ret;
+> --=20
 
-Thanks,
-Miklos
+This introduces a double free since there is a remove() function which
+calls snd_soc_unregister_component().
+
+--zr9XoaaziLUuphUQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIeH3QACgkQJNaLcl1U
+h9AlGQf8DucapLDhz1pD0o0kOT1xiZ6hy8KKO8CpBrPAdGBfrXe91VdcA/CVeXFY
+kRnW/mOLksTrt/cpimgUHgU5zO+Uld3crP618bQE+xjdDkeL+qrLm91u5I9GzkDp
+GwlJ8yqTwabMtnnixq9JfwI4kSvaOxasS7Egd2jOqxmNmvrj+8xfi/L+nKTK3Ry0
+YJrAtLXMnqX3c+qudrlRQ3VEwVMN9S7yM5Ykflyq7UBstVCmdQRbiN6nFtUK76+Q
+ANDZL7D/oZJbvMv/E7sDk8uMSMeK4th+txIJAahQZkTiTJFeBTIGzcFjxZUnCB6H
+OxV+fMyBHv920/AZQV5JbPdcw+Sr6w==
+=4xOp
+-----END PGP SIGNATURE-----
+
+--zr9XoaaziLUuphUQ--

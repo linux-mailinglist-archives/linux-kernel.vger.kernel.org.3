@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F934C942A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EB74C942C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiCATVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S234367AbiCATXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234254AbiCATVj (ORCPT
+        with ESMTP id S229980AbiCATXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:21:39 -0500
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A19F52E20;
-        Tue,  1 Mar 2022 11:20:57 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d07ae0b1c4so155875677b3.11;
-        Tue, 01 Mar 2022 11:20:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uSEjLnvfrlzDKBKyYr5gFF+7i9AJoEANYsRlQjCZNV4=;
-        b=Mj/yyNh84U/+3GOCDp9QMKiGkajAiSWKCFQzRPa+0vS6FA9hlBxt7bgv2ofa4rsiRK
-         Yyju1CAE96lpqzYnkUTdeoH98TVBttxxcUh7sOK2uLcZmY+pniP+gz2EcDDmNXqQE+/u
-         D4OmxJF/cEqzp5PbSFZdjFOI3y9odWR0G0j1hmba767oC0Ous+jSOIsPLyFg6q32CzZ6
-         5VseR2CCc4fMfo1ph3Mio7397BmLdIHEBX4vnhL8jgcHhTp7OrXVRXrVq45t3972s9Ok
-         xEKb49mHndpn2JLuIaMHbKUFcHXXICr5pRezx13PZFocMHyJfdK5IqnLvlo5gI5/Tt7o
-         qf6Q==
-X-Gm-Message-State: AOAM531BpHRkOIH1IAKHY1mk3kMqdvFpwJLbwhn/H+WlliyhpwqCeixy
-        zXT2oojRyid5gRNShcQrqY8XmVwpCY7dNT342kU=
-X-Google-Smtp-Source: ABdhPJyLmWbtSKgcXsl7hWwlL/svnCzsLyibcCbPx1KfUAIfiII01B0kuaTaybiNrmiNE6X9odkY/nOYCEA2lgVnEWk=
-X-Received: by 2002:a0d:e8d2:0:b0:2d6:1743:4023 with SMTP id
- r201-20020a0de8d2000000b002d617434023mr26860712ywe.7.1646162456365; Tue, 01
- Mar 2022 11:20:56 -0800 (PST)
+        Tue, 1 Mar 2022 14:23:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BC3140CC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=V7cO4Vt0cqwoaFpMPaL/vt8fgnm5Csm52tiUXCCqF1k=; b=pQo8E+ASPNjC9fWdI74CITZ4X5
+        z8Ucp18NfeCkRJlhdwusTjtRF89LYP6qjuUYOzOAL/jS73Hr2BVkVirE8kKU9Deek9ExozWp7FQS8
+        TqzaZfdaJjzsfH5OPpthFaANK4qHhX8fkfJIq1UlzONXJEIrQmslkqqxACkNMg2Xp49If1BH9x303
+        XJgX8c0jID0aZDzCbT2J+Qz/wHmwwzxS164ajmAE4UIw6MCTF01cem8ZaAHI/12ujnu/HRvZ3ZvjZ
+        p2BsPERIsgFVC7i0tCNb1fws6bgVpkKKvuYUN05HBIyyHnorpeM43E03otmCyKD1A4u6sGDXLDMw7
+        MbUZ1MXg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP858-009s4B-JU; Tue, 01 Mar 2022 19:22:46 +0000
+Date:   Tue, 1 Mar 2022 19:22:46 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Maninder Singh <maninder1.s@samsung.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vaneet Narang <v.narang@samsung.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [hnaz-mm:master 272/379] lib/vsprintf.c:991:13: warning:
+ variable 'modbuildid' set but not used
+Message-ID: <Yh5yhoW+y9qcn1RM@casper.infradead.org>
+References: <202203012040.uFWGm3My-lkp@intel.com>
+ <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
 MIME-Version: 1.0
-References: <20220214101450.356047-1-ray.huang@amd.com>
-In-Reply-To: <20220214101450.356047-1-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 20:20:45 +0100
-Message-ID: <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] x86/acpi/cppc: Minor clean up for x86 CPPC implementation
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:51 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> Hi all,
->
-> While we were fixing the legacy issue below, we found the dependencies
-> between smpboot and CPPC were not very good. But due to urgent fix for
-> 5.17-rc1, I didn't have much time to provide a complete solution.
->
-> https://lore.kernel.org/lkml/YdeWDDCwBQAYnlKb@amd.com/
->
-> In these series, I expand the scope of acpi/cppc_msr to acpi/cppc to cover
-> the all the CPPC helper functions for x86 ACPI. And then clean up the
-> smpboot and move CPPC related functions into the acpi/cppc.c. This design
-> is more straightforward and more clear to handle the CPPC in x86 and
-> resolve dependency issues between CPPC and smpboot.c.
->
-> Thanks,
-> Ray
->
-> Huang Rui (4):
->   x86/acpi: Expand the CPPC MSR file to cover the whole CPPC
->     implementation
->   x86, sched: Move AMD maximum frequency ratio setting function into x86
->     CPPC
->   x86, sched: Expose init_freq_invariance to topology header
->   x86/acpi: Move init_freq_invariance_cppc into x86 CPPC
->
->  arch/x86/include/asm/topology.h |  13 +++-
->  arch/x86/kernel/acpi/Makefile   |   2 +-
->  arch/x86/kernel/acpi/cppc.c     | 103 ++++++++++++++++++++++++++++++++
->  arch/x86/kernel/acpi/cppc_msr.c |  49 ---------------
->  arch/x86/kernel/smpboot.c       |  72 +---------------------
->  5 files changed, 118 insertions(+), 121 deletions(-)
->  create mode 100644 arch/x86/kernel/acpi/cppc.c
->  delete mode 100644 arch/x86/kernel/acpi/cppc_msr.c
->
-> --
+On Tue, Mar 01, 2022 at 10:24:48AM -0800, Andrew Morton wrote:
+> >    lib/vsprintf.c: In function 'va_format':
+> >    lib/vsprintf.c:1759:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> >     1759 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+> >          |         ^~~
+> 
+> I wonder what this means.
 
-This series makes sense to me and I'm inclined to take it if there are
-no objections, so if there are any, please let me know.
+It means the compiler thinks we might want to add:
+
+__attribute__((format(gnu_printf, x, y))) to the function declaration so it
+can type-check the arguments.
+
+'format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)'
+     The 'format' attribute specifies that a function takes 'printf',
+     'scanf', 'strftime' or 'strfmon' style arguments that should be
+     type-checked against a format string.  For example, the
+     declaration:
+
+          extern int
+          my_printf (void *my_object, const char *my_format, ...)
+                __attribute__ ((format (printf, 2, 3)));
+
+     causes the compiler to check the arguments in calls to 'my_printf'
+     for consistency with the 'printf' style format string argument
+     'my_format'.
+
+
+I haven't looked into this at all and have no idea if we should.

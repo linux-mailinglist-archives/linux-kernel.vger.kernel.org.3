@@ -2,151 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4ED44C8452
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D2C4C8453
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiCAGsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S232708AbiCAGsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiCAGsi (ORCPT
+        with ESMTP id S232701AbiCAGss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:48:38 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6E47AEC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646117278; x=1677653278;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=GgVNOL7Ku3TgRlMR3ALd7PpCE1otCvbcR+kwYCWgXls=;
-  b=gIahs9zxk3g8zYkQA/ndUfkNJRy9JgzTUCI1nGLXNL8F4ilY7nlM1iE5
-   zw7ulhdzBuZQSVz517/jAEygzTQsSC88AiEHOdolmVpijQiI/SvU/dwCj
-   q4vle58vjxQYQN6f7iCWjqNbThqJSfMlWFbV3PskdxvrzsFpt6ehhgod7
-   EAGapkDuEB3zkp95m6CqDwvA3UiVeiw7SkJk/xVt7K4asRgxidG1QDvme
-   v9WGgGRwq/BvKtneARCiAafO9nxlPs7aNkQLFqP276ApJj6CQFPr2TEON
-   QES3+jxOU4ASDqVew5OT+p5BQzoGrmWIQAraE8ZBKqNSIbjROPuQNo1TF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="233688516"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="233688516"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 22:47:57 -0800
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="575598003"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 22:47:53 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Michal Hocko" <mhocko@suse.com>, Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH -V13 2/3] NUMA balancing: optimize page placement for
- memory tiering system
-References: <20220221084529.1052339-1-ying.huang@intel.com>
-        <20220221084529.1052339-3-ying.huang@intel.com>
-        <4652446e-2089-a3c4-fbdb-321322887392@huawei.com>
-Date:   Tue, 01 Mar 2022 14:47:50 +0800
-In-Reply-To: <4652446e-2089-a3c4-fbdb-321322887392@huawei.com> (Miaohe Lin's
-        message of "Tue, 1 Mar 2022 14:28:13 +0800")
-Message-ID: <874k4i2mp5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 1 Mar 2022 01:48:48 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8830B50E29
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646117285; x=1677653285;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gGq98DPhvXiYNuMD69nm/wiwfQmDcTai422+Q4afq7Q=;
+  b=IVq3T/6mtDYJb3rJCR02yxO+C55NDRQO+lpYlAswzjKpN0ZMW6SauAau
+   CrLNbYGXtP34WfmuVXtSYizI4TfKb3/B6DDpqhytFRoi1kTrwBFomfF/Z
+   dYmUVXWd9gTogFDCGYwQ+IIUotPgAzkPWHtOmvf2G8RiZATaJjgfOvXrt
+   yFSLAosJZLeBUHbudl32lDdmGLRj+dQXQTjJx8bDSDpgPnFmxax1evtYb
+   Oq+jURY3FK+HYS3WylmdyexCVydY/vbGCGcQbd2RL2furdF8Kn9b3DQh0
+   mzmGjBB1pNhrbPQdd79lS6blNMZ4kXAlCVPMiTCZqyYOohsIkG7mH6B/c
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,145,1643698800"; 
+   d="scan'208";a="87343387"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Feb 2022 23:48:04 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 28 Feb 2022 23:48:03 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 28 Feb 2022 23:48:01 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <michael@walle.cc>, <p.yadav@ti.com>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <nicolas.ferre@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH v2] mtd: spi-nor: Move XMC to manufacturer ID collisions driver
+Date:   Tue, 1 Mar 2022 08:47:58 +0200
+Message-ID: <20220301064758.294943-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <fead645197b0cb6534c04a665938a8d5@walle.cc>
+References: <fead645197b0cb6534c04a665938a8d5@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+XMC manufacturer ID is defined in bank 10 of JEP106 standard. The XMC
+flashes that are currently supported do not define the continuation codes
+and will collide with flashes using the same manufacturer IDs,
+STMicroelectronics being an example (defined in bank one without
+continuation codes). Move XMC to manufacturer ID collisions driver as it
+doesn't respect the JEP106 standard and collides with other manufacturers.
 
-> On 2022/2/21 16:45, Huang Ying wrote:
->> With the advent of various new memory types, some machines will have
->> multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
->> memory subsystem of these machines can be called memory tiering
->> system, because the performance of the different types of memory are
->> usually different.
->> 
->> In such system, because of the memory accessing pattern changing etc,
->> some pages in the slow memory may become hot globally.  So in this
->> patch, the NUMA balancing mechanism is enhanced to optimize the page
->> placement among the different memory types according to hot/cold
->> dynamically.
->> 
->> In a typical memory tiering system, there are CPUs, fast memory and
->> slow memory in each physical NUMA node.  The CPUs and the fast memory
->> will be put in one logical node (called fast memory node), while the
->> slow memory will be put in another (faked) logical node (called slow
->> memory node).  That is, the fast memory is regarded as local while the
->> slow memory is regarded as remote.  So it's possible for the recently
->> accessed pages in the slow memory node to be promoted to the fast
->> memory node via the existing NUMA balancing mechanism.
->> 
->> The original NUMA balancing mechanism will stop to migrate pages if
->> the free memory of the target node becomes below the high watermark.
->> This is a reasonable policy if there's only one memory type.  But this
->> makes the original NUMA balancing mechanism almost do not work to
->> optimize page placement among different memory types.  Details are as
->> follows.
->> 
->> It's the common cases that the working-set size of the workload is
->> larger than the size of the fast memory nodes.  Otherwise, it's
->> unnecessary to use the slow memory at all.  So, there are almost
->> always no enough free pages in the fast memory nodes, so that the
->> globally hot pages in the slow memory node cannot be promoted to the
->> fast memory node.  To solve the issue, we have 2 choices as follows,
->> 
->> a. Ignore the free pages watermark checking when promoting hot pages
->>    from the slow memory node to the fast memory node.  This will
->>    create some memory pressure in the fast memory node, thus trigger
->>    the memory reclaiming.  So that, the cold pages in the fast memory
->>    node will be demoted to the slow memory node.
->> 
->> b. Make kswapd of the fast memory node to reclaim pages until the free
->>    pages are a little more than the high watermark (named as promo
->>    watermark).  Then, if the free pages of the fast memory node reaches
->>    high watermark, and some hot pages need to be promoted, kswapd of the
->>    fast memory node will be waken up to demote more cold pages in the
->>    fast memory node to the slow memory node.  This will free some extra
->>    space in the fast memory node, so the hot pages in the slow memory
->>    node can be promoted to the fast memory node.
->> 
->> The choice "a" may create high memory pressure in the fast memory
->> node.  If the memory pressure of the workload is high, the memory
->> pressure may become so high that the memory allocation latency of the
->> workload is influenced, e.g. the direct reclaiming may be triggered.
->> 
->> The choice "b" works much better at this aspect.  If the memory
->> pressure of the workload is high, the hot pages promotion will stop
->> earlier because its allocation watermark is higher than that of the
->
-> Many thanks for your path. The patch looks good to me but I have a question.
-> WMARK_PROMO is only used inside pgdat_balanced when NUMA_BALANCING_MEMORY_TIERING
-> is set. So its allocation watermark seems to be as same as the normal memory
-> allocation. How should I understand the above sentence? Am I miss something?
+Suggested-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+v2:
+- drop xmc from makefile
+- order flash_info entries in alphabetical order in manuf-id-collisions
+driver
 
-Before allocating pages for promotion, the watermark of the fast node
-will be checked (please refer to migrate_balanced_pgdat()).  If the
-watermark is going to be lower than the high watermark, promotion will
-abort.
+ drivers/mtd/spi-nor/Makefile              |  1 -
+ drivers/mtd/spi-nor/core.c                |  1 -
+ drivers/mtd/spi-nor/core.h                |  1 -
+ drivers/mtd/spi-nor/manuf-id-collisions.c |  8 ++++++++
+ drivers/mtd/spi-nor/xmc.c                 | 25 -----------------------
+ 5 files changed, 8 insertions(+), 28 deletions(-)
+ delete mode 100644 drivers/mtd/spi-nor/xmc.c
 
-Best Regards,
-Huang, Ying
+diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
+index 48763d10daad..3f2b431f9851 100644
+--- a/drivers/mtd/spi-nor/Makefile
++++ b/drivers/mtd/spi-nor/Makefile
+@@ -17,7 +17,6 @@ spi-nor-objs			+= spansion.o
+ spi-nor-objs			+= sst.o
+ spi-nor-objs			+= winbond.o
+ spi-nor-objs			+= xilinx.o
+-spi-nor-objs			+= xmc.o
+ obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
+ 
+ obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 80d6ce41122a..e2b388d12c6c 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1627,7 +1627,6 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
+ 	&spi_nor_sst,
+ 	&spi_nor_winbond,
+ 	&spi_nor_xilinx,
+-	&spi_nor_xmc,
+ };
+ 
+ static const struct flash_info *
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index f727e632c0ee..db042c40853f 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -517,7 +517,6 @@ extern const struct spi_nor_manufacturer spi_nor_spansion;
+ extern const struct spi_nor_manufacturer spi_nor_sst;
+ extern const struct spi_nor_manufacturer spi_nor_winbond;
+ extern const struct spi_nor_manufacturer spi_nor_xilinx;
+-extern const struct spi_nor_manufacturer spi_nor_xmc;
+ 
+ extern const struct attribute_group *spi_nor_sysfs_groups[];
+ 
+diff --git a/drivers/mtd/spi-nor/manuf-id-collisions.c b/drivers/mtd/spi-nor/manuf-id-collisions.c
+index 0447e245f4b1..bcb80b779534 100644
+--- a/drivers/mtd/spi-nor/manuf-id-collisions.c
++++ b/drivers/mtd/spi-nor/manuf-id-collisions.c
+@@ -34,6 +34,14 @@ static const struct flash_info id_collision_parts[] = {
+ 			      SPI_NOR_QUAD_READ)
+ 		.fixups = &boya_nor_fixups },
+ 
++	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
++	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			      SPI_NOR_QUAD_READ) },
++	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			      SPI_NOR_QUAD_READ) },
++
+ 	/* XTX (XTX Technology Limited) */
+ 	{ "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256)
+ 		PARSE_SFDP
+diff --git a/drivers/mtd/spi-nor/xmc.c b/drivers/mtd/spi-nor/xmc.c
+deleted file mode 100644
+index 051411e86339..000000000000
+--- a/drivers/mtd/spi-nor/xmc.c
++++ /dev/null
+@@ -1,25 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (C) 2005, Intec Automation Inc.
+- * Copyright (C) 2014, Freescale Semiconductor, Inc.
+- */
+-
+-#include <linux/mtd/spi-nor.h>
+-
+-#include "core.h"
+-
+-static const struct flash_info xmc_nor_parts[] = {
+-	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
+-	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
+-		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+-			      SPI_NOR_QUAD_READ) },
+-	{ "XM25QH128A", INFO(0x207018, 0, 64 * 1024, 256)
+-		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+-			      SPI_NOR_QUAD_READ) },
+-};
+-
+-const struct spi_nor_manufacturer spi_nor_xmc = {
+-	.name = "xmc",
+-	.parts = xmc_nor_parts,
+-	.nparts = ARRAY_SIZE(xmc_nor_parts),
+-};
+-- 
+2.25.1
+

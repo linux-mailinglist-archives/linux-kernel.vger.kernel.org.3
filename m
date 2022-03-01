@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B535D4C8544
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C204C8549
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbiCAHdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S233045AbiCAHe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiCAHdf (ORCPT
+        with ESMTP id S233028AbiCAHe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:33:35 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806F14C40E;
-        Mon, 28 Feb 2022 23:32:53 -0800 (PST)
-Received: from integral2.. (unknown [182.2.70.248])
-        by gnuweeb.org (Postfix) with ESMTPSA id BE7957EDA5;
-        Tue,  1 Mar 2022 07:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646119973;
-        bh=oduq7UbWH4yY7hi8T5IT1C8abw9Vor905WGb4sLdUnQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuQM62qUDVA2m/+mUsRMZHMmvcAMkmpvLd5vOfYrpZsLksh8+RaR56PcmIe+IrJ5J
-         nlIqk9J2ieitqjQH1AcDqmwgK8fQa6UzcWqaft7XnMcWMyv5ELBJGg55azeSoQDPXo
-         ybiax+nczykFg6kf/JVUgLmmlE3/s/7qZ5gNkIH4ZFk5KQ1/H+KkvWqK0PwwrklR4s
-         7ti4/gEcUsTb2Ufq2ZII9IaszkR3moOQSkfpKtExzcH8eoGohjPXNrE34J3P1dmP8p
-         zlu1rJ9ohJdBPIZMWzqcnWI7DLHznKio6araFk1kzg1kAUYjdOASDIvIb0MSQz+53/
-         RnCenhzpj/B9A==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        x86@kernel.org, stable@vger.kernel.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH v2 2/2] x86/mce/amd: Fix memory leak when `threshold_create_bank()` fails
-Date:   Tue,  1 Mar 2022 14:32:23 +0700
-Message-Id: <20220301073223.98236-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220301073223.98236-1-ammarfaizi2@gnuweeb.org>
-References: <20220301073223.98236-1-ammarfaizi2@gnuweeb.org>
+        Tue, 1 Mar 2022 02:34:27 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC27DE09;
+        Mon, 28 Feb 2022 23:33:46 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so18930796wrg.11;
+        Mon, 28 Feb 2022 23:33:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=y9Y2mj3S2zRil16X7prWFdXExNWoZA9j+0fmL9SEGfk=;
+        b=piokGCAo03HjCBwtitKDBXrEXbrLk/rrVMQIFRnZt3WzgBF1dmLNklb67ET7JolGIp
+         CAPeqhoD4eBdNKAu1aM5uz9v3tmM3x/xlc9RcYc+1/Q6HRFQ5kk5EPprI4XeiTswxrpQ
+         OIKyDsldGdaXVSwD7hl88EBdFRnW8jXKQlxroCCF019HEewzDCZJT1sPKCUv1YXcefop
+         trMYci8gKc+MFZrYzJGVMC/sTCHAwqGNO5t9VatHiz1S0SGa9om7Y9PeQoM0eGrUzDJb
+         bVeCJfnB5xbA3tRVpPat1eHjEN69vnMkCg/wExlpolE+tCevUdA3ti9J8u+vxcmabCwB
+         0H2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=y9Y2mj3S2zRil16X7prWFdXExNWoZA9j+0fmL9SEGfk=;
+        b=HtT+EtdDKJDVdz6PFG7rp85A+O/IkS2KPCyALnEeir549ua5wDKPUv1FQ1cAJQs1Zi
+         xsq8DG/QHMSZ2P1ydioEzZFJKokkX0TFuShr4PiH3TQfeqSkGLOpev95fsbf9r3rDBzF
+         NyuzTYEjp+cg91aofbkMfeFmaVoQ8fsj6IVL3kuk7flwe2ke+nLR/s+pxEEe1WpOTyok
+         Le4U+QPA1dtP+pFWwWMT7wHxNipedDwz/yBCr0XOiJo2PbSG2gT67bkqjmiUcbBpBToc
+         1S8rbdPv2F7N9b5722j5ftrdLD4CqAkJNyzIayQOEJ3GNlJtgwsmJAt6ax9cGrbMFIN9
+         3nlQ==
+X-Gm-Message-State: AOAM532DRka6vghRO+tiPnp2sLD+Hx/Cx4+IA6jqjUbVm4PNUK4+Sytn
+        Kezv9ljg8sl8XDT9w3/bJ6BF8/A2J5o=
+X-Google-Smtp-Source: ABdhPJxgj/kSS+3DxSfB2yPKsaS3KRax2OV/mkOk84u8T7Kqgh3qMzoP9E/1Kctww6Og0SFZfNXwGg==
+X-Received: by 2002:adf:9799:0:b0:1ea:8dcc:25e9 with SMTP id s25-20020adf9799000000b001ea8dcc25e9mr19011924wrb.248.1646120024846;
+        Mon, 28 Feb 2022 23:33:44 -0800 (PST)
+Received: from ?IPV6:2a01:c23:b88b:a500:3457:e529:abc5:d0e6? (dynamic-2a01-0c23-b88b-a500-3457-e529-abc5-d0e6.c23.pool.telefonica.de. [2a01:c23:b88b:a500:3457:e529:abc5:d0e6])
+        by smtp.googlemail.com with ESMTPSA id o15-20020a05600c4fcf00b00381614e5b60sm1726414wmq.34.2022.02.28.23.33.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 23:33:44 -0800 (PST)
+Message-ID: <ff76734b-fb2f-cc9d-cd05-5256efb6cde0@gmail.com>
+Date:   Tue, 1 Mar 2022 08:33:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] net: marvell: Use min() instead of doing it manually
+Content-Language: en-US
+To:     Haowen Bai <baihaowen88@gmail.com>,
+        sebastian.hesselbarth@gmail.com, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <1646115417-24639-1-git-send-email-baihaowen88@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,59 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@bp is a local variable, calling mce_threshold_remove_device() when
-threshold_create_bank() fails will not free the @bp. Note that
-mce_threshold_remove_device() frees the @bp only if it's already
-stored in the @threshold_banks per-CPU variable.
+On 01.03.2022 07:16, Haowen Bai wrote:
+> Fix following coccicheck warning:
+> drivers/net/ethernet/marvell/mv643xx_eth.c:1664:35-36: WARNING opportunity for min()
+> 
+> Signed-off-by: Haowen Bai <baihaowen88@gmail.com>
+> ---
+>  drivers/net/ethernet/marvell/mv643xx_eth.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+> index 143ca8b..1018b9e 100644
+> --- a/drivers/net/ethernet/marvell/mv643xx_eth.c
+> +++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+> @@ -1661,7 +1661,7 @@ mv643xx_eth_set_ringparam(struct net_device *dev, struct ethtool_ringparam *er,
+>  	if (er->rx_mini_pending || er->rx_jumbo_pending)
+>  		return -EINVAL;
+>  
+> -	mp->rx_ring_size = er->rx_pending < 4096 ? er->rx_pending : 4096;
+> +	mp->rx_ring_size = min(er->rx_pending, 4096);
 
-At that point, the @threshold_banks per-CPU variable is still NULL,
-so the mce_threshold_remove_device() will just be a no-op and the
-@bp is leaked.
+Did you test this? Supposedly it won't compile cleanly due to the
+min macro type checking (rx_pending is __u32, 4096 is int).
 
-Fix this by calling kfree() and early returning when we fail.
-
-This bug is introduced by commit 6458de97fc15530b544 ("x86/mce/amd:
-Straighten CPU hotplug path") [1].
-
-Link: https://lore.kernel.org/all/20200403161943.1458-6-bp@alien8.de [1]
-
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Fixes: 6458de97fc15530b54477c4e2b70af653e8ac3d9 ("x86/mce/amd: Straighten CPU hotplug path")
-Cc: stable@vger.kernel.org # v5.8+
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- arch/x86/kernel/cpu/mce/amd.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9f4b508886dd..75d019dfe8d6 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1350,15 +1350,14 @@ int mce_threshold_create_device(unsigned int cpu)
- 		if (!(this_cpu_read(bank_map) & (1 << bank)))
- 			continue;
- 		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			kfree(bp);
-+			return err;
-+		}
- 	}
- 	this_cpu_write(threshold_banks, bp);
- 
- 	if (thresholding_irq_en)
- 		mce_threshold_vector = amd_threshold_interrupt;
- 	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
- }
--- 
-2.32.0
+>  	mp->tx_ring_size = clamp_t(unsigned int, er->tx_pending,
+>  				   MV643XX_MAX_SKB_DESCS * 2, 4096);
+>  	if (mp->tx_ring_size != er->tx_pending)
 

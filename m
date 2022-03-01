@@ -2,92 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DC24C80D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B374C80CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 03:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiCACOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 21:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S231616AbiCACNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 21:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiCACO2 (ORCPT
+        with ESMTP id S230420AbiCACNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 21:14:28 -0500
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07C91220C4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:13:36 -0800 (PST)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26034:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Tue, 01 Mar 2022 10:12:05 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Tue, 1 Mar 2022 10:12:25 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.018; Tue, 1 Mar 2022 10:12:25 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Rob Herring <robh@kernel.org>
-Subject: RE: [PATCH v9 05/10] dt-bindings: clock: Add bindings for SP7021
- clock driver
-Thread-Topic: [PATCH v9 05/10] dt-bindings: clock: Add bindings for SP7021
- clock driver
-Thread-Index: AQHYJtROb4p9p9dJDEiPbzM3WmTlw6ygfv2AgAgL80D//6oxgIABn9iw
-Date:   Tue, 1 Mar 2022 02:12:25 +0000
-Message-ID: <9250c1b0918f49b1b2592027a7ac9a61@cqplus1.com>
-References: <cover.1645413746.git.qinjian@cqplus1.com>
- <2089471296584b527f1e08f51f5216d1e733741f.1645413746.git.qinjian@cqplus1.com>
- <498e89dd-c438-68dc-69b5-8de82045ffbd@canonical.com>
- <97cf98c598a04b77bb6de6e91fcdcc0b@cqplus1.com>
- <39ce4a12-ff56-e0cf-b0b2-2a3545a9cb7f@canonical.com>
-In-Reply-To: <39ce4a12-ff56-e0cf-b0b2-2a3545a9cb7f@canonical.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 28 Feb 2022 21:13:34 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A8F2BC7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:12:51 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 195so13186597pgc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 18:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VqwKZSmUCQfMvGMcajV4YWfTIzz3lVqIZVMkUskoDd0=;
+        b=L2RIdggPBz3kNS4Fh9HORTyRoN6vqkFQOJZikLYgVJtQGutU4yZx/SS1mYey8fHQjf
+         Q7RYQyga0OpDiVARh8K+/L/mw61bs6pI8sxDCuyUGbinePN8+J9ktmmDR+5I4HfCZLTc
+         4njttVqgCL3dm5iAWIbmhHV05thRj2dPa33d5kBYbToes7azrNyGnDAQ4nw1PhK09v2M
+         xN5fxPZ2XkF4IL1aYB9KZvPE3ZO4WhlRWAKalK76KyjdJBQfIxBUAW8jAFwcFShyGjBp
+         FWuVPf4fhQPIS9yGPM8YMOib6tYlcAJxgz6w3hO7DYe3IiStuboYpfC6FLNOsd7YwmJp
+         Oo8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VqwKZSmUCQfMvGMcajV4YWfTIzz3lVqIZVMkUskoDd0=;
+        b=3A8P6oGF+0Ha8wK1Cy+UUTnDCpcag5lfFRqi/qzJMs09Hf8Swo3EvVOfcxsm7aJazg
+         /+Igd6IXYCFbYDN1kYrCvEHRzxBqQOqTXIsbKe/+1/OIztxPDGnXlWbr4XNlLXOq/Uag
+         eZtydKZHJS+4VVcqlS0L+lrk4ODL5msKSlkbtNIedgTcSdVOZ21XsOgaV2tY8ctxrtDV
+         Q/IgcqttDisBbAmZJ8mE/CThJFxW3SWT0F7IPkNwUH8kjFC1NEkJCFbyp1EQ0sbRLQ4c
+         OPvzi1sIhuIMz0QUJZwVaL5D+skqXuL0JHTgHYxHis3HDlUB1Yt/BNoFzPYasoV7W/EA
+         2+Pg==
+X-Gm-Message-State: AOAM533zkEbK/OU2IDMspqC96HfUnCA/sb6XkEFgmcXXgG4KKNRfuJjM
+        HFNRO94n1+bPxdZn+bATR00=
+X-Google-Smtp-Source: ABdhPJxyCa36UIZKtFnjuddlsFNOGwSj5AlDJ2lllpJIIfwD3NMbWOqLhVwU8DTnhh27GWymwQuXnQ==
+X-Received: by 2002:a63:5110:0:b0:374:2312:1860 with SMTP id f16-20020a635110000000b0037423121860mr19736943pgb.146.1646100770710;
+        Mon, 28 Feb 2022 18:12:50 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id 17-20020a056a00071100b004f0f941d1e8sm14108030pfl.24.2022.02.28.18.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 18:12:50 -0800 (PST)
+Date:   Tue, 1 Mar 2022 02:12:43 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+Subject: Re: [PATCH] mm/slub: initialize stack depot in boot process
+Message-ID: <Yh2BGxI42Ga0Y8Lv@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <CANpmjNOOhuoU7T4UqHbzkRAvM+b-gvt+Qtx41va=9ixGgUSWaQ@mail.gmail.com>
+ <Yhzlw0GGBeuCALJp@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <Yhz4IQUQr7ln+G86@elver.google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yhz4IQUQr7ln+G86@elver.google.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+Pj4gK2V4YW1wbGVzOg0KPiA+Pj4gKyAgLSB8DQo+ID4+PiArICAgIGNsa2M6IGNsb2NrLWNv
-bnRyb2xsZXJAOWMwMDAwMDAgew0KPiA+Pj4gKyAgICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxz
-cDcwMjEtY2xrYyI7DQo+ID4+PiArICAgICAgI2Nsb2NrLWNlbGxzID0gPDE+Ow0KPiA+Pj4gKyAg
-ICAgIHJlZyA9IDwweDljMDAwMDAwIDB4MjgwPjsNCj4gPj4+ICsgICAgICBjbG9ja3MgPSA8JmV4
-dGNsaz4sIDwmY2xrYyBQTExfU1lTPjsNCj4gPj4NCj4gPj4gRXhjZXB0IHRoZSB3YXJuaW5nIHBv
-aW50ZWQgb3V0IGJ5IFJvYidzIGJvdCwgaXQgbG9va3MgbGlrZSB5b3UgZmVlZCB0aGlzDQo+ID4+
-IGNsb2NrLWNvbnRyb2xsZXIgd2l0aCBhIGNsb2NrIGZyb20gaXRzZWxmLiBJcyB0aGVyZSBhIHBv
-aW50IHRvIGV4cHJlc3MNCj4gPj4gaXQgaW4gRFRTIGF0IGFsbD8NCj4gPg0KPiA+IFllcywgcGxs
-c3lzIGlzIGFuIGludGVybmFsIGNsb2NrLCBidXQgaXQgYWxzbyBhcyBhIHBhcmVudCBjbG9jayBm
-b3Igc29tZSBvdGhlcg0KPiA+IGNsb2NrcyBpbiB0aGlzIGNsb2NrLWNvbnRyb2xsZXIuDQo+IA0K
-PiBXaGF0IGlzIHRoZSBwb2ludCB0byBleHByZXNzIGl0IGluIERUUz8gVXN1YWxseSBzdWNoIGlu
-dGVybmFsDQo+IHBhcmVudC1jaGlsZCByZWxhdGlvbiBpcyBkZXNjcmliZWQgaW4gdGhlIGRyaXZl
-ci4NCj4gDQo+IEFuZCBob3cgZG9lcyBpdCBldmVuIHdvcms/IEhvdyBjYW4geW91IGdldCBhIGNs
-b2NrIGZyb20gYSBkZXZpY2UgYmVmb3JlDQo+IHlvdSByZWdpc3RlcmVkIHRoYXQgZGV2aWNlPw0K
-DQpUaGFua3MgZm9yIHlvdXIgZXhwbGFuYXRpb24uDQpJJ2xsIHJlbW92ZSB0aGUgaW50ZXJuYWwg
-Y2xvY2sgcGFyZW50IGZvcm0gRFRTLg0K
+On Mon, Feb 28, 2022 at 05:28:17PM +0100, Marco Elver wrote:
+> On Mon, Feb 28, 2022 at 03:09PM +0000, Hyeonggon Yoo wrote:
+> > commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
+> > objects") initializes stack depot while creating cache if SLAB_STORE_USER
+> > flag is set.
+> > 
+> > This can make kernel crash because a cache can be created in various
+> > contexts. For example if user sets slub_debug=U, kernel crashes
+> > because create_boot_cache() calls stack_depot_init(), which tries to
+> > allocate hash table using memblock_alloc() if slab is not available.
+> > But memblock is also not available at that time.
+> > 
+> > This patch solves the problem by initializing stack depot early
+> > in boot process if SLAB_STORE_USER debug flag is set globally
+> > or the flag is set to at least one cache.
+> > 
+> > [ elver@google.com: initialize stack depot depending on slub_debug
+> >   parameter instead of allowing stack_depot_init() can be called
+> >   in kmem_cache_init() for simplicity. ]
+> > 
+> > Link: https://lkml.org/lkml/2022/2/28/238
+> 
+> This would be a better permalink:
+> https://lore.kernel.org/all/YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal/
+>
+
+Agreed.
+
+> > Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
+> 
+> This commit does not exist in -next.
+> 
+
+It did not land -next yet.
+
+> I assume you intend that "lib/stackdepot: Use page allocator if both
+> slab and memblock is unavailable" should be dropped now.
+>
+
+I did not intend that, but I agree the patch you mentioned
+should be dropped now.
+
+> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > ---
+> >  include/linux/slab.h |  1 +
+> >  init/main.c          |  1 +
+> >  mm/slab.c            |  4 ++++
+> >  mm/slob.c            |  4 ++++
+> >  mm/slub.c            | 28 +++++++++++++++++++++++++---
+> >  5 files changed, 35 insertions(+), 3 deletions(-)
+> [...]
+> >  
+> > +/* Initialize stack depot if needed */
+> > +void __init kmem_cache_init_early(void)
+> > +{
+> > +#ifdef CONFIG_STACKDEPOT
+> > +	slab_flags_t block_flags;
+> > +	char *next_block;
+> > +	char *slab_list;
+> > +
+> > +	if (slub_debug & SLAB_STORE_USER)
+> > +		goto init_stack_depot;
+> > +
+> > +	next_block = slub_debug_string;
+> > +	while (next_block) {
+> > +		next_block = parse_slub_debug_flags(next_block, &block_flags, &slab_list, false);
+> > +		if (block_flags & SLAB_STORE_USER)
+> > +			goto init_stack_depot;
+> > +	}
+> > +
+> > +	return;
+> > +
+> > +init_stack_depot:
+> > +	stack_depot_init();
+> > +#endif
+> > +}
+> 
+> You can simplify this function to avoid the goto:
+> 
+> 	/* Initialize stack depot if needed */
+> 	void __init kmem_cache_init_early(void)
+> 	{
+> 	#ifdef CONFIG_STACKDEPOT
+> 		slab_flags_t flags = slub_debug;
+> 		char *next_block = slub_debug_string;
+> 		char *slab_list;
+> 	
+> 		for (;;) {
+> 			if (flags & SLAB_STORE_USER) {
+> 				stack_depot_init();
+> 				break;
+> 			}
+> 			if (!next_block)
+> 				break;
+> 			next_block = parse_slub_debug_flags(next_block, &flags, &slab_list, false);
+> 		}
+> 	#endif
+> 	}
+> 
+> ^^ with this version, it'd also be much easier and less confusing to add
+> other initialization logic unrelated to stackdepot later after the loop
+> (should it ever be required).
+
+Thank you for nice suggestion, but I want to try it in
+setup_slub_debug() as Vlastimil said!
+
+Thanks.
+
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

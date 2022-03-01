@@ -2,93 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AD4C874C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1706F4C874E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiCAJEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S233527AbiCAJEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCAJEL (ORCPT
+        with ESMTP id S229491AbiCAJEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:04:11 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9FA7087E;
-        Tue,  1 Mar 2022 01:03:29 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id n14so19299128wrq.7;
-        Tue, 01 Mar 2022 01:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j0pKuZxEIbazMmfW3N+WzOik5yd4tjStLdtiIPiTMzQ=;
-        b=S8DJqyafrnRj+h01YCl2ziBZEgQ1qwa4M5+61CyatjSKtO77MNiJZI821BO2xmmNYn
-         i62bZZQSrlOTm6KQDcVAs9b7gQgZyI6mFFkhs8JJsNwkMcHU3kKjsyMocRYiPdr8ni5l
-         3dJZFUTH92Zv+Yow2Q7WliJxomeZ55+v0lV/fRHkmNewcy3x1TEwEJbwareg0uJh864Y
-         N6yehURW8TxkaByoHo5Ym+1Kqz0masUaC8TXhylN+tf91Nw4mMrVs3rJG/Ca7BTE0JJc
-         3715Wfyb8Jw/Dso8pfj54UrEKxA1bwMhwQ8FGMNoCam5RHkHZ8Ag8FJbkOEt5vZHhJxi
-         AQmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j0pKuZxEIbazMmfW3N+WzOik5yd4tjStLdtiIPiTMzQ=;
-        b=Tz34FZnfeOIJ/upD4faABvz4GEZen/kvwiGSNpVcrDqFTKgaluLsjhha/yzWz78CKZ
-         H52UCziNvKNbdbBB7gQBekH0t9oLsHgDwypmzmxhKuhS22BcjI1rplsRgQ4n2oT3KmGS
-         +9fE61IrNtrFXp+9a0vHBaU3CGbtwJA98eLtxMeHo23EBXDUdJAyBL8XXlxXmFlSTqIA
-         WeLaUQu7gnVzbr8JU7kagvhMclegoTPpCdvN86oJ+2san+bG03Fgqoja174bqAIT77k6
-         +5oYex0g1LMnx/tsBwLEzvuSkf+ooxkdF497CdTIefeEytQaS2brLr4eMxmHMsnee+IK
-         /l3w==
-X-Gm-Message-State: AOAM5323GR6wu2ipZ0Q5ty+ipGJZqlqnlM1BwMDZ7jUiZSrTYhpskk1Y
-        +2NWv95PDT5DUBYUO0qhfSBUuY770ao=
-X-Google-Smtp-Source: ABdhPJyNR/LUVGKW1fdHspoZJ48HACeageVG4R4teuxprsu6lMp2q8wG6Y2B1quKALE+0IlF3vCvpA==
-X-Received: by 2002:a05:6000:188f:b0:1eb:74ed:9223 with SMTP id a15-20020a056000188f00b001eb74ed9223mr18951534wri.222.1646125408147;
-        Tue, 01 Mar 2022 01:03:28 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1c7402000000b0038159076d30sm1870817wmc.22.2022.03.01.01.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 01:03:27 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] powercap/dtpm: Fix spelling mistake "initialze" -> "initialize"
-Date:   Tue,  1 Mar 2022 09:03:27 +0000
-Message-Id: <20220301090327.515454-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 1 Mar 2022 04:04:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588607ED99;
+        Tue,  1 Mar 2022 01:03:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16F3CB817F6;
+        Tue,  1 Mar 2022 09:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1186C340EE;
+        Tue,  1 Mar 2022 09:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646125429;
+        bh=1c14S9dVNVF1VyP3FFe0N65e9c5Jwxgr+ehoV6e9Nh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gD5dXXhUeEpUdK7hh/LestsugNYQB0olqAMDGA85MmxmdxSbaa8ZXOIKWM/2ZswUK
+         xLf/XlReSOYTALDhEGkCR0pV6xgf7JEhKLhbjM7EKbXIALSoDeXUPTnV6Kp5bcUCAj
+         Pz9UtyP8vv8NGM+AM6IM0VTUdqn2iSoDw9OYSpBi+B52N4oDlTHdYAzBvDS0b+mjKp
+         Xd+5CA9Tugg4uwvHbkVQGI4iS4yFkYZb2cRkbPGwSZ1HOdjxyr/WRRvMuKUwgWri48
+         TVoO6bSS5lESM/u0uNGB/qSpd/iWw67aaIm9iqO04J6Quh83P17qIcnpFKP9V2Z4I6
+         dzEq5egneiLXQ==
+Date:   Tue, 1 Mar 2022 17:03:45 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        trevor.wu@mediatek.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
+Subject: Re: [PATCH 2/2] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Message-ID: <Yh3hcQpLngg8Pnd4@google.com>
+References: <20220301072924.24814-1-jiaxin.yu@mediatek.com>
+ <20220301072924.24814-3-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301072924.24814-3-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a pr_info message. Fix it.
+On Tue, Mar 01, 2022 at 03:29:24PM +0800, Jiaxin Yu wrote:
+> From: Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/powercap/dtpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The environment didn't configure properly so that the header showed up.
+See [1].
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index ec931a06d90a..b2bcd6d1e242 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -596,7 +596,7 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
- 
- 		ret = dtpm_subsys[i]->init();
- 		if (ret)
--			pr_info("Failed to initialze '%s': %d",
-+			pr_info("Failed to initialize '%s': %d",
- 				dtpm_subsys[i]->name, ret);
- 	}
- 
--- 
-2.34.1
+[1]: https://git-scm.com/docs/git-send-email#Documentation/git-send-email.txt---fromltaddressgt
 
+> diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+[...]
+> +static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682s_card = {
+> +	.name = "mt8192_mt6359_rt1015p_rt5682s",
+> +	.owner = THIS_MODULE,
+> +	.dai_link = mt8192_mt6359_dai_links,
+> +	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
+> +	.controls = mt8192_mt6359_rt1015p_rt5682_controls,
+> +	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_controls),
+> +	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682_widgets,
+> +	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_widgets),
+> +	.dapm_routes = mt8192_mt6359_rt1015p_rt5682_routes,
+> +	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
+> +};
+
+Are the two cards only different from names
+(mt8192_mt6359_rt1015p_rt5682_card vs. mt8192_mt6359_rt1015p_rt5682s_card)?
+
+> @@ -1150,6 +1177,52 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+>  				dai_link->num_platforms =
+>  					ARRAY_SIZE(i2s3_rt1015p_platforms);
+>  			}
+> +		} else if (strcmp(dai_link->name, "I2S8") == 0) {
+> +			if (card == &mt8192_mt6359_rt1015_rt5682_card ||
+> +			    card == &mt8192_mt6359_rt1015p_rt5682_card) {
+> +				dai_link->cpus = i2s8_rt5682_cpus;
+> +				dai_link->num_cpus =
+> +					ARRAY_SIZE(i2s8_rt5682_cpus);
+> +				dai_link->codecs = i2s8_rt5682_codecs;
+> +				dai_link->num_codecs =
+> +					ARRAY_SIZE(i2s8_rt5682_codecs);
+> +				dai_link->platforms = i2s8_rt5682_platforms;
+> +				dai_link->num_platforms =
+> +					ARRAY_SIZE(i2s8_rt5682_platforms);
+> +			} else if (card == &mt8192_mt6359_rt1015p_rt5682s_card) {
+> +				dai_link->cpus = i2s8_rt5682s_cpus;
+> +				dai_link->num_cpus =
+> +					ARRAY_SIZE(i2s8_rt5682s_cpus);
+> +				dai_link->codecs = i2s8_rt5682s_codecs;
+> +				dai_link->num_codecs =
+> +					ARRAY_SIZE(i2s8_rt5682s_codecs);
+> +				dai_link->platforms = i2s8_rt5682s_platforms;
+> +				dai_link->num_platforms =
+> +					ARRAY_SIZE(i2s8_rt5682s_platforms);
+> +			}
+> +		} else if (strcmp(dai_link->name, "I2S9") == 0) {
+> +			if (card == &mt8192_mt6359_rt1015_rt5682_card ||
+> +			    card == &mt8192_mt6359_rt1015p_rt5682_card) {
+> +				dai_link->cpus = i2s9_rt5682_cpus;
+> +				dai_link->num_cpus =
+> +					ARRAY_SIZE(i2s9_rt5682_cpus);
+> +				dai_link->codecs = i2s9_rt5682_codecs;
+> +				dai_link->num_codecs =
+> +					ARRAY_SIZE(i2s9_rt5682_codecs);
+> +				dai_link->platforms = i2s9_rt5682_platforms;
+> +				dai_link->num_platforms =
+> +					ARRAY_SIZE(i2s9_rt5682_platforms);
+> +			} else if (card == &mt8192_mt6359_rt1015p_rt5682s_card) {
+> +				dai_link->cpus = i2s9_rt5682s_cpus;
+> +				dai_link->num_cpus =
+> +					ARRAY_SIZE(i2s9_rt5682s_cpus);
+> +				dai_link->codecs = i2s9_rt5682s_codecs;
+> +				dai_link->num_codecs =
+> +					ARRAY_SIZE(i2s9_rt5682s_codecs);
+> +				dai_link->platforms = i2s9_rt5682s_platforms;
+> +				dai_link->num_platforms =
+> +					ARRAY_SIZE(i2s9_rt5682s_platforms);
+> +			}
+
+After seeing the code, I am starting to wonder if the reuse is overkill.  If
+they (RT5682 vs. RT5682S) only have some minor differences, probably it could
+reuse more by:
+
+SND_SOC_DAILINK_DEFS(i2s8, ...
+SND_SOC_DAILINK_DEFS(i2s9, ...
+
+...
+
+if (card == &mt8192_mt6359_rt1015p_rt5682s_card) {
+        i2s8_codecs.name = RT5682S_DEV0_NAME;
+        i2s8_codecs.dai_name = RT5682S_CODEC_DAI;
+        ...
+}
+
+Or even uses of_device_is_compatible() if it would like to reuse the struct
+snd_soc_card.

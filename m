@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB484C8EF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 942FF4C8F07
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiCAPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S235794AbiCAP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiCAPZ0 (ORCPT
+        with ESMTP id S235782AbiCAP00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:25:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314678BE0C;
-        Tue,  1 Mar 2022 07:24:45 -0800 (PST)
-Date:   Tue, 01 Mar 2022 15:24:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646148283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgqIQu/w7rPa846Zp4oSmI/zW0SECYHzIYadGlqu5zk=;
-        b=d5IXsbOZoVt/BSJTQWDM38vvY91ni2GoMV8zbx+QgWkuIniAKffab0aVZ7048vSekwn+9C
-        07lEoObHXL0R9Cla5n+4xRnbcDAPIrCka/tFDKqWxgEmJaQK/y5rWZnJKpfsrS+hfuEjKu
-        rhInbOISCoxbu3zB1/qFcr6VSM+bejbgBw4RHTf7bcwk8102Im/J6hNhQgsHasMXlGj3u/
-        LQS+iLh/UofzC9fyqeCmxE8kbkYMSuGXxsgCRGlBNidt6V9zRtEXj3fRu+4zt93xgaKMcG
-        KQk4IB2f2VRApPR/q91wtU7OMUag7/0tll8hdo4+9JA3qY33fZ2bsLNSGN/s7Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646148283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgqIQu/w7rPa846Zp4oSmI/zW0SECYHzIYadGlqu5zk=;
-        b=kBGbKwr13l37fO2RCTUeTCVImqECI71rmuR/CRXRRa9KQpP6+16lAx/Glb4gVEOOAzd0R/
-        MLeMgOAN8xJI1jAA==
-From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/cpuacct: Fix charge percpu cpuusage
-Cc:     Minye Zhu <zhuminye@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220220051426.5274-1-zhouchengming@bytedance.com>
-References: <20220220051426.5274-1-zhouchengming@bytedance.com>
+        Tue, 1 Mar 2022 10:26:26 -0500
+Received: from v-zimmta03.u-bordeaux.fr (v-zimmta03.u-bordeaux.fr [147.210.215.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9661DA94DF;
+        Tue,  1 Mar 2022 07:25:23 -0800 (PST)
+Received: from v-zimmta03.u-bordeaux.fr (localhost [127.0.0.1])
+        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTP id C2B201800A82;
+        Tue,  1 Mar 2022 16:25:21 +0100 (CET)
+Received: from begin (nat-inria-interne-54-gw-02-bso.bordeaux.inria.fr [194.199.1.54])
+        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTPSA id 55C181800A92;
+        Tue,  1 Mar 2022 16:25:21 +0100 (CET)
+Received: from samy by begin with local (Exim 4.95)
+        (envelope-from <samuel.thibault@labri.fr>)
+        id 1nP4NN-00BrND-2C;
+        Tue, 01 Mar 2022 16:25:21 +0100
+Date:   Tue, 1 Mar 2022 16:25:21 +0100
+From:   Samuel Thibault <samuel.thibault@labri.fr>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     willemb@google.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+Subject: Re: [PATCH] SO_ZEROCOPY should rather return -ENOPROTOOPT
+Message-ID: <20220301152520.jdeusajoymkx34fp@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@labri.fr>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        willemb@google.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+References: <20220301144453.snstwdjy3kmpi4zf@begin>
+ <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
+ <20220301150028.romzjw2b4aczl7kf@begin>
+ <CA+FuTSeZw228fsDj+YoSpu5sLaXsp+uR+N+qHrzZ4e3yMWhPKw@mail.gmail.com>
+ <20220301152017.jkx7amcbfqkoojin@begin>
+ <CA+FuTSfVBVr_q6p+HcBL4NAX4z2BS0ZNaSfFF0yxO3QqeNX75Q@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <164614828279.16921.6828134750682486610.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTSfVBVr_q6p+HcBL4NAX4z2BS0ZNaSfFF0yxO3QqeNX75Q@mail.gmail.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-AV-Checked: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+Willem de Bruijn, le mar. 01 mars 2022 10:21:41 -0500, a ecrit:
+> On Tue, Mar 1, 2022 at 10:20 AM Samuel Thibault
+> <samuel.thibault@labri.fr> wrote:
+> >
+> > Willem de Bruijn, le mar. 01 mars 2022 10:14:18 -0500, a ecrit:
+> > > On Tue, Mar 1, 2022 at 10:00 AM Samuel Thibault
+> > > <samuel.thibault@labri.fr> wrote:
+> > > >
+> > > > Willem de Bruijn, le mar. 01 mars 2022 09:51:45 -0500, a ecrit:
+> > > > > On Tue, Mar 1, 2022 at 9:44 AM Samuel Thibault <samuel.thibault@labri.fr> wrote:
+> > > > > >
+> > > > > > ENOTSUPP is documented as "should never be seen by user programs", and
+> > > > > > is not exposed in <errno.h>, so applications cannot safely check against
+> > > > > > it. We should rather return the well-known -ENOPROTOOPT.
+> > > > > >
+> > > > > > Signed-off-by: Samuel Thibault <samuel.thibault@labri.fr>
+> > > > > >
+> > > > > > diff --git a/net/core/sock.c b/net/core/sock.c
+> > > > > > index 4ff806d71921..6e5b84194d56 100644
+> > > > > > --- a/net/core/sock.c
+> > > > > > +++ b/net/core/sock.c
+> > > > > > @@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+> > > > > >                         if (!(sk_is_tcp(sk) ||
+> > > > > >                               (sk->sk_type == SOCK_DGRAM &&
+> > > > > >                                sk->sk_protocol == IPPROTO_UDP)))
+> > > > > > -                               ret = -ENOTSUPP;
+> > > > > > +                               ret = -ENOPROTOOPT;
+> > > > > >                 } else if (sk->sk_family != PF_RDS) {
+> > > > > > -                       ret = -ENOTSUPP;
+> > > > > > +                       ret = -ENOPROTOOPT;
+> > > > > >                 }
+> > > > > >                 if (!ret) {
+> > > > > >                         if (val < 0 || val > 1)
+> > > > >
+> > > > > That should have been a public error code. Perhaps rather EOPNOTSUPP.
+> > > > >
+> > > > > The problem with a change now is that it will confuse existing
+> > > > > applications that check for -524 (ENOTSUPP).
+> > > >
+> > > > They were not supposed to hardcord -524...
+> > > >
+> > > > Actually, they already had to check against EOPNOTSUPP to support older
+> > > > kernels, so EOPNOTSUPP is not supposed to pose a problem.
+> > >
+> > > Which older kernels returned EOPNOTSUPP on SO_ZEROCOPY?
+> >
+> > Sorry, bad copy/paste, I meant ENOPROTOOPT.
+> 
+> Same point though, right? These are not legacy concerns, but specific
+> to applications written to SO_ZEROCOPY.
+> 
+> I expect that most will just ignore the exact error code and will work
+> with either.
 
-Commit-ID:     248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd
-Gitweb:        https://git.kernel.org/tip/248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd
-Author:        Chengming Zhou <zhouchengming@bytedance.com>
-AuthorDate:    Sun, 20 Feb 2022 13:14:24 +08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 01 Mar 2022 16:18:37 +01:00
+Well, in the code I just wrote, I ignored ENOPROTOOPT due to older
+kernels, and it's only when the code happened to be run against PF_LOCAL
+sockets that the ENOTSUPP question raised. My code has never been
+exposed to a EOPNOTSUPP error, so I would have never written a check
+against EOPNOTSUPP if you didn't mention it as a possibility.
 
-sched/cpuacct: Fix charge percpu cpuusage
-
-The cpuacct_account_field() is always called by the current task
-itself, so it's ok to use __this_cpu_add() to charge the tick time.
-
-But cpuacct_charge() maybe called by update_curr() in load_balance()
-on a random CPU, different from the CPU on which the task is running.
-So __this_cpu_add() will charge that cputime to a random incorrect CPU.
-
-Fixes: 73e6aafd9ea8 ("sched/cpuacct: Simplify the cpuacct code")
-Reported-by: Minye Zhu <zhuminye@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220220051426.5274-1-zhouchengming@bytedance.com
----
- kernel/sched/cpuacct.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-index 3d06c5e..3078005 100644
---- a/kernel/sched/cpuacct.c
-+++ b/kernel/sched/cpuacct.c
-@@ -334,12 +334,13 @@ static struct cftype files[] = {
-  */
- void cpuacct_charge(struct task_struct *tsk, u64 cputime)
- {
-+	unsigned int cpu = task_cpu(tsk);
- 	struct cpuacct *ca;
- 
- 	rcu_read_lock();
- 
- 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
--		__this_cpu_add(*ca->cpuusage, cputime);
-+		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
- 
- 	rcu_read_unlock();
- }
+Samuel

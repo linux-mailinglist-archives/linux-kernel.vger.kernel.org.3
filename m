@@ -2,291 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C4A4C7F21
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AAC4C7F2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiCAAXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 19:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S231772AbiCAA3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiCAAXm (ORCPT
+        with ESMTP id S231236AbiCAA3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 19:23:42 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DEE2A266;
-        Mon, 28 Feb 2022 16:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646094179; x=1677630179;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=XUmmuHjG8G/Dw4YcsSBZoSmwvfmIIN75R1y/yRMIssk=;
-  b=OdwjHFtAtp466VNc7gwPerSsgNihQ4xP9p+j4QKdTsfOjFsP4GVHinDg
-   vXWFJIE6q/ZCn6jwYR9rolDW7PpsGfh4jEtKXnh3KPJmXeraT1iYKaGrU
-   9uUDGCEuexyk3FlJFjCtgZJcgueqz4VP+waFMoXajSWC2xL1yQGAg6wV0
-   uyYZYqhqf3LcZxut/QW7jM1aZDhU770ygNvFnih8+n0jM0T81cAJjrsMN
-   oNgMpJ+IcOWMlXDvvbW3igVXutOauvKnBq+z/6TIV/KaGIU+zTlHSSIjP
-   ZblNG8wAlOj/+7QuPrzssR2w8mqKNIS0wJqDtTckT52aEFbcI69rwUBuG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277682743"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="277682743"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="510296877"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 16:22:59 -0800
-Date:   Mon, 28 Feb 2022 16:25:03 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Wu, Hao" <hao.wu@intel.com>
-cc:     Tom Rix <trix@redhat.com>,
-        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Grier, Aaron J" <aaron.j.grier@intel.com>
-Subject: RE: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
-In-Reply-To: <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2202281618480.103377@rhweight-WRK1>
-References: <20220214112619.219761-1-tianfei.zhang@intel.com> <20220214112619.219761-8-tianfei.zhang@intel.com> <ed8f4b5f-5c92-f555-ed2d-c5b8f38d5372@redhat.com> <BN9PR11MB5483BC7EE52A47CEAEFC58A0E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
- <3c9fce03-ef29-d80f-6639-0c237c28cf58@redhat.com> <alpine.DEB.2.22.394.2202210934570.117064@rhweight-WRK1> <e5580849-c137-fb61-0599-198c341bf688@redhat.com> <BN9PR11MB54835A454A34ECE13349B555E33B9@BN9PR11MB5483.namprd11.prod.outlook.com>
- <d6cf0f48-e90a-6441-6096-5b87122a0bb6@redhat.com> <alpine.DEB.2.22.394.2202240932380.634457@rhweight-WRK1> <DM6PR11MB38194BD59EBFE97F125A37B685019@DM6PR11MB3819.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 28 Feb 2022 19:29:14 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B95053B70
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 16:28:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D04B219A5;
+        Tue,  1 Mar 2022 00:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646094512; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ipnEaaVXGjuPjbjYUko5rS7uGNP4HYCYa0ctgBOY/t0=;
+        b=CI80451YJ3vFV81nQZrQtSXk3JDBcHNPYUgd/GcfK/Tc6m/F1WBK72vu6tVTbuis3mIMRg
+        osAcsfU18GgV0S81cgmIJXxocy7Kc1h7cqhwf/esP3R+A1WIo4v5wx5x8uT3vn+BQqAD46
+        xtnCKclHnfrCXUwlirNspZYryuHCiQ0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646094512;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ipnEaaVXGjuPjbjYUko5rS7uGNP4HYCYa0ctgBOY/t0=;
+        b=qePXbAq5X41KUF0JSLYLQgJjKxepd3IPmR+7c4WH8VqdqJDOORa2/MgJ8rvjHrrXrD2POT
+        Dh3O7dPB9KSH8HDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41A20139FF;
+        Tue,  1 Mar 2022 00:28:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iPFCD7BoHWIMPQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 01 Mar 2022 00:28:32 +0000
+Message-ID: <d1bf599d-d680-192c-e7b8-12af7f4f5430@suse.cz>
+Date:   Tue, 1 Mar 2022 01:28:31 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-604420537-1646094309=:103377"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] mm/slub: initialize stack depot in boot process
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, Marco Elver <elver@google.com>
+Cc:     David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Zqiang <qiang.zhang@windriver.com>
+References: <Yhzlw0GGBeuCALJp@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Yhzlw0GGBeuCALJp@ip-172-31-19-208.ap-northeast-1.compute.internal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 2/28/22 16:09, Hyeonggon Yoo wrote:
+> commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
+> objects") initializes stack depot while creating cache if SLAB_STORE_USER
+> flag is set.
+> 
+> This can make kernel crash because a cache can be created in various
+> contexts. For example if user sets slub_debug=U, kernel crashes
+> because create_boot_cache() calls stack_depot_init(), which tries to
+> allocate hash table using memblock_alloc() if slab is not available.
+> But memblock is also not available at that time.
+> 
+> This patch solves the problem by initializing stack depot early
+> in boot process if SLAB_STORE_USER debug flag is set globally
+> or the flag is set to at least one cache.
+> 
+> [ elver@google.com: initialize stack depot depending on slub_debug
+>   parameter instead of allowing stack_depot_init() can be called
+>   in kmem_cache_init() for simplicity. ]
+> 
+> Link: https://lkml.org/lkml/2022/2/28/238
+> Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
---8323328-604420537-1646094309=:103377
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+I think a much easier approach would be to do this checking in
+setup_slub_debug(). There we may either detect SLAB_STORE_USER in
+global_flags, or check the flags returned by parse_slub_debug_flags() in the
+while (str) cycle, in the 'else' case where slab_list is present. Both cases
+would just set some variable that stack_depot_early_init() (the
+!CONFIG_STACKDEPOT_ALWAYS_INIT version, or a newly consolidated one) would
+check. So that would be another way to request the stack_depot_init() at a
+well-defined point of boot, similar to CONFIG_STACKDEPOT_ALWAYS_INIT.
+Because setup_slub_debug() is called by __setup, which is processed from
+start_kernel() -> parse_args() before mm_init() -> stack_depot_early_init().
 
+> ---
+>  include/linux/slab.h |  1 +
+>  init/main.c          |  1 +
+>  mm/slab.c            |  4 ++++
+>  mm/slob.c            |  4 ++++
+>  mm/slub.c            | 28 +++++++++++++++++++++++++---
+>  5 files changed, 35 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 37bde99b74af..023f3f71ae35 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -139,6 +139,7 @@ struct mem_cgroup;
+>  /*
+>   * struct kmem_cache related prototypes
+>   */
+> +void __init kmem_cache_init_early(void);
+>  void __init kmem_cache_init(void);
+>  bool slab_is_available(void);
+>  
+> diff --git a/init/main.c b/init/main.c
+> index 65fa2e41a9c0..4fdb7975a085 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -835,6 +835,7 @@ static void __init mm_init(void)
+>  	kfence_alloc_pool();
+>  	report_meminit();
+>  	stack_depot_early_init();
+> +	kmem_cache_init_early();
+>  	mem_init();
+>  	mem_init_print_info();
+>  	kmem_cache_init();
+> diff --git a/mm/slab.c b/mm/slab.c
+> index ddf5737c63d9..80a6d01aab06 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1196,6 +1196,10 @@ static void __init set_up_node(struct kmem_cache *cachep, int index)
+>  	}
+>  }
+>  
+> +void __init kmem_cache_init_early(void)
+> +{
+> +}
+> +
+>  /*
+>   * Initialisation.  Called after the page allocator have been initialised and
+>   * before smp_init().
+> diff --git a/mm/slob.c b/mm/slob.c
+> index 60c5842215f1..00e323af8be4 100644
+> --- a/mm/slob.c
+> +++ b/mm/slob.c
+> @@ -715,6 +715,10 @@ struct kmem_cache kmem_cache_boot = {
+>  	.align = ARCH_KMALLOC_MINALIGN,
+>  };
+>  
+> +void __init kmem_cache_init_early(void)
+> +{
+> +}
+> +
+>  void __init kmem_cache_init(void)
+>  {
+>  	kmem_cache = &kmem_cache_boot;
+> diff --git a/mm/slub.c b/mm/slub.c
+> index a74afe59a403..40bcd18143b6 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -4221,9 +4221,6 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+>  	s->remote_node_defrag_ratio = 1000;
+>  #endif
+>  
+> -	if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
+> -		stack_depot_init();
+> -
+>  	/* Initialize the pre-computed randomized freelist if slab is up */
+>  	if (slab_state >= UP) {
+>  		if (init_cache_random_seq(s))
+> @@ -4810,6 +4807,31 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
+>  	return s;
+>  }
+>  
+> +/* Initialize stack depot if needed */
+> +void __init kmem_cache_init_early(void)
+> +{
+> +#ifdef CONFIG_STACKDEPOT
+> +	slab_flags_t block_flags;
+> +	char *next_block;
+> +	char *slab_list;
+> +
+> +	if (slub_debug & SLAB_STORE_USER)
+> +		goto init_stack_depot;
+> +
+> +	next_block = slub_debug_string;
+> +	while (next_block) {
+> +		next_block = parse_slub_debug_flags(next_block, &block_flags, &slab_list, false);
+> +		if (block_flags & SLAB_STORE_USER)
+> +			goto init_stack_depot;
+> +	}
+> +
+> +	return;
+> +
+> +init_stack_depot:
+> +	stack_depot_init();
+> +#endif
+> +}
+> +
+>  void __init kmem_cache_init(void)
+>  {
+>  	static __initdata struct kmem_cache boot_kmem_cache,
 
-
-On Mon, 28 Feb 2022, Wu, Hao wrote:
-
->>>
->>> On 2/21/22 7:11 PM, Zhang, Tianfei wrote:
->>>>
->>>>> -----Original Message-----
->>>>> From: Tom Rix <trix@redhat.com>
->>>>> Sent: Tuesday, February 22, 2022 2:10 AM
->>>>> To: matthew.gerlach@linux.intel.com
->>>>> Cc: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
->> <hao.wu@intel.com>;
->>>>> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
->>>>> linux-fpga@vger.kernel.org;
->>>>> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; corbet@lwn.net
->>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
->>>>>
->>>>>
->>>>> On 2/21/22 9:50 AM, matthew.gerlach@linux.intel.com wrote:
->>>>>>
->>>>>> On Fri, 18 Feb 2022, Tom Rix wrote:
->>>>>>
->>>>>>> On 2/18/22 1:03 AM, Zhang, Tianfei wrote:
->>>>>>>>> -----Original Message-----
->>>>>>>>> From: Tom Rix <trix@redhat.com>
->>>>>>>>> Sent: Wednesday, February 16, 2022 12:16 AM
->>>>>>>>> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao
->>>>>>>>> <hao.wu@intel.com>; mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>;
->>>>>>>>> linux-fpga@vger.kernel.org; linux-doc@vger.kernel.org;
->>>>>>>>> linux-kernel@vger.kernel.org
->>>>>>>>> Cc: corbet@lwn.net; Matthew Gerlach
->>>>>>>>> <matthew.gerlach@linux.intel.com>
->>>>>>>>> Subject: Re: [PATCH v1 7/7] fpga: dfl: pci: Add generic OFS PCI PID
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On 2/14/22 3:26 AM, Tianfei zhang wrote:
->>>>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>>>>>
->>>>>>>>>> Add the PCI product id for an Open FPGA Stack PCI card.
->>>>>>>>> Is there a URL to the card ?
->>>>>>>> This PCIe Device IDs have registered by Intel.
->>>>>>> A URL is useful to introduce the board, Is there one ?
->>>>>>>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>>>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>>>>>>>>> ---
->>>>>>>>>>     drivers/fpga/dfl-pci.c | 4 ++++
->>>>>>>>>>     1 file changed, 4 insertions(+)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c index
->>>>>>>>>> 83b604d6dbe6..cb2fbf3eb918 100644
->>>>>>>>>> --- a/drivers/fpga/dfl-pci.c
->>>>>>>>>> +++ b/drivers/fpga/dfl-pci.c
->>>>>>>>>> @@ -76,12 +76,14 @@ static void cci_pci_free_irq(struct pci_dev
->>>>>>>>>> *pcidev)
->>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005        0x0B2B
->>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5010    0x1000
->>>>>>>>>>     #define PCIE_DEVICE_ID_SILICOM_PAC_N5011    0x1001
->>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS        0xbcce
->>>>>>>>> INTEL_OFS is a generic name, pci id's map to specific cards
->>>>>>>>>
->>>>>>>>> Is there a more specific name for this card ?
->>>>>>>> I think using INTEL_OFS is better, because INTEL_OFS is the Generic
->>>>>>>> development platform can support multiple cards which using OFS
->>>>>>>> specification, like Intel PAC N6000 card.
->>>>>>> I would prefer something like PCIE_DEVICE_ID_INTEL_PAC_N6000
->> because
->>>>>>> it follows an existing pattern.  Make it easy on a developer, they
->>>>>>> will look at their board or box, see X and try to find something
->>>>>>> similar in the driver source.
->>>>>>>
->>>>>>> To use OSF_ * the name needs a suffix to differentiate it from future
->>>>>>> cards that will also use ofs.
->>>>>>>
->>>>>>> If this really is a generic id please explain in the doc patch how
->>>>>>> every future board with use this single id and how a driver could
->>>>>>> work around a hw problem in a specific board with a pci id covering
->>>>>>> multiple boards.
->>>>>>>
->>>>>>> Tom
->>>>>> Hi Tom,
->>>>>>
->>>>>> The intent is to have a generic device id that can be used with many
->>>>>> different boards.  Currently, we have FPGA implementations for 3
->>>>>> different boards using this generic id.  We may need a better name for
->>>>>> device id than OFS.  More precisely this generic device id means a PCI
->>>>>> function that is described by a Device Feature List (DFL).  How about
->>>>>> PCIE_DEVICE_ID_INTEL_DFL?
->>>>>>
->>>>>> With a DFL device id, the functionality of the PF/VF is determined by
->>>>>> the contents of the DFL.  Each Device Feature Header (DFH) in the DFL
->>>>>> has a revision field that can be used identify "broken" hw, or new
->>>>>> functionality added to a feature.  Additionally, since the DFL is
->>>>>> typically used in a FPGA, the broken hardware, can and should be fixed
->>>>>> in most cases.
->>>>> How is lspci supposed to work ?
->>>> There is an example for one card using IOFS and DFL.
->>>>
->>>> # lspci | grep acc
->>>> b1:00.0 Processing accelerators: Intel Corporation Device bcce (rev 01)
->>>> b1:00.1 Processing accelerators: Intel Corporation Device bcce
->>>> b1:00.2 Processing accelerators: Intel Corporation Device bcce
->>>> b1:00.3 Processing accelerators: Red Hat, Inc. Virtio network device
->>>> b1:00.4 Processing accelerators: Intel Corporation Device bcce
->>>>
->>>> Note: There 5 PFs in this card, it exports the management functions via
->>>> PF0(b1:00.0),
->>>> Other PFs like b1:00.1, b1:00.2, b1:00.4, are using for testing, which
->>>> depends on RTL designer
->>>> or project requirement. The PF3 instance a VirtIO net device for example,
->>>> will bind with virtio-net driver
->>>> presenting itself as a network interface to the OS.
->>
->> Hi Tom,
->>
->> These are very good questions, and the answers will be addressed in the
->> documentation associated with a v2 submission of this patch.
->>
->>>
->>> What I mean there is heterogeneous set of cards in one machine, how do you
->>> tell which card is which ?
->>
->> If the PCI PID/VID is generic, indicating only that there is one or more
->> DFL, then some other mechanism must be used to differentiate the cards.
->> One could use unique PCI sub-PID/sub-VIDs to differentiate specific
->> implementations.  One could also use some register in BAR space to help
->> identify the card, or one could use PCI Vital Product Data (VPD) to
->> provide detailed information about the running FPGA design on the card.
->
-> Ideally DFL has different scope than PCI. DFL is a higher layer concept than
-> PCI, as DFL can be applied to PCI device, platform device or even other devices.
-> If some PCI level quirks need to be applied before accessing BAR for one card,
-> then DFL may not be able to help at all. Use PCI level solution should be better,
-> and different VID/DID may be the easiest solution.
->
-> Hao
-
-Very good point Hao.  DFL is a higher layer than PCI.  So PCI level quirks 
-would need to be handled at the PCI level.  The VID/DID, optionally 
-in conjuction with the Subsytem Vendor ID and Substem ID, would be used to 
-determine how the quirks were applied.
-
-Matthew
-
-
->>
->>>
->>> Or in a datacenter where the machines are all remote and admin has to flash
->>> just the n6000's ?
->>
->> This problem exists with the N3000 cards.  Depending on the FPGA
->> configuration, the line side of the card could be very different (e.g.
->> 4x10Gb or 2x2x25Gb).  The network operator must make sure to update a
->> particular N3000 card with the correct FPGA image type.  In the case of
->> the N3000 there is a register exposed through sysfs containing the
->> "Bitstream ID" which contains the line side configuration of the FPGA.
->>
->>>
->>> How could she find just the n6000's with lspci ?
->>
->> If you only wanted to use lspci to determine the card, then
->> differentiating PCI sub-VID/sub-PID could be used or VPD could be used.
->>
->>>
->>> How would the driver know ?
->>
->> The dfl-pci driver is fairly generic in that it doesn't really care about
->> the PCI PID/VID because all it really does enumerate the DFLs.  It is the
->> individual dfl drivers that may need to know hw differences/bugs for that
->> component IP.
->>
->>>
->>> Tom
->>>
->>>>
->>>>> A dfl set can change with fw updates and in theory different boards could
->>>>> have
->>>>> the same set.
->>>>>
->>>>> Tom
->>>>>
->>>>>> Matthew
->>>>>>>>> Tom
->>>>>>>>>
->>>>>>>>>>     /* VF Device */
->>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_5_X        0xBCBF
->>>>>>>>>>     #define PCIE_DEVICE_ID_VF_INT_6_X        0xBCC1
->>>>>>>>>>     #define PCIE_DEVICE_ID_VF_DSC_1_X        0x09C5
->>>>>>>>>>     #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF    0x0B2C
->>>>>>>>>> +#define PCIE_DEVICE_ID_INTEL_OFS_VF        0xbccf
->>>>>>>>>>
->>>>>>>>>>     static struct pci_device_id cci_pcie_id_tbl[] = {
->>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->>>>>>>>>> PCIE_DEVICE_ID_PF_INT_5_X),},
->>>>>>>>> @@
->>>>>>>>>> -95,6 +97,8 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
->>>>>>>>>>         {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->>>>>>>>> PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
->>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
->>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
->>>>>>>>>> {PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK,
->>>>>>>>>> PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
->>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->> PCIE_DEVICE_ID_INTEL_OFS),},
->>>>>>>>>> +    {PCI_DEVICE(PCI_VENDOR_ID_INTEL,
->>>>>>>>> PCIE_DEVICE_ID_INTEL_OFS_VF),},
->>>>>>>>>>         {0,}
->>>>>>>>>>     };
->>>>>>>>>>     MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
->>>>>>>
->>>
->>>
->
---8323328-604420537-1646094309=:103377--

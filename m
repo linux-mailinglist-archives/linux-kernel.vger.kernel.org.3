@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD90A4C9039
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCCD4C9049
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbiCAQWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S234707AbiCAQ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234989AbiCAQW1 (ORCPT
+        with ESMTP id S229809AbiCAQ3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:22:27 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F771AD9E;
-        Tue,  1 Mar 2022 08:21:46 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id gb39so32562636ejc.1;
-        Tue, 01 Mar 2022 08:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jx8eZ/jgrSE5jtq/IeRwHlPFovNus3LfRlDhg1AW13A=;
-        b=en9t2M3R/YDinK1EfneMzgv5fnKSDbV2GexbGi8qUVmwTSDoEp15UHwZA/M2o65vTS
-         1amV/o9IYHjiDxmjxen42QPAkYKpPfbSgHnHpSavW1XfsTw58PopoiG6cKAbBHAUIh80
-         Z9vXf90FSFzOih7QWrwZWVuvpsy21CRZGjywUCXNukoL5p8tTEzXYMkVKhBYpK7eeQp1
-         iB71j6/AwNLOcWKUYtR2hDgFxCZC/LqpqjPme7lTy8Lh7Q6qlP0sr34zBSPk7aMnM/gD
-         TaZi52W9EXR5i0OekbRJVPsXfV+ELpeg9leOt1TkHdfXLGOy0pvBzQ4B3q69dCXgfx6T
-         Y+XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jx8eZ/jgrSE5jtq/IeRwHlPFovNus3LfRlDhg1AW13A=;
-        b=UH+lNVu3OhqkCZKYJwtLSSNPUdJX8WbISSLiMP2WuNKn+vyjB1H1yWRW7WdNw236Y5
-         VgR0nNOhBBAAY4Hp4lqjsaGbIeNsE0sCAu8Jfb+WXaUQdLNFWdzIOXf2nu80KjO6nA5L
-         stKJJODVhAX5kxQ2Fclxtvrs58HFZPmrzCS/A+Y/1K6v7lyBCMhgmq8CFSKvZjUKubE3
-         Ma8fDg9IET0qk6NC5ZcfTPw23NWRvbeFttvL1d6Vfe4XzKXZzJ6htI/4YEJW9RFVYiNJ
-         xvaO7wOv4n+EBrlktUJGs136gOV6GulOtKr/esZRUU5syuL/cBYiAn6B/V1/Wuv/qSPd
-         kqKg==
-X-Gm-Message-State: AOAM5302IOmnJ8do9msrMHVzFBf8EyuRpbvrWlNG8Z59iwNvPkcv1Wvn
-        2ufeijIs7J62HKhEbv8M5Qk=
-X-Google-Smtp-Source: ABdhPJxGtOTYdS7L0n3Cy3fp114D1jiHE3zZ+VjSMi5+/5L86y6D2puo9eWWttxwjz7E6uhYGujEWA==
-X-Received: by 2002:a17:906:3ac6:b0:6cb:6808:95f9 with SMTP id z6-20020a1709063ac600b006cb680895f9mr19934324ejd.375.1646151704776;
-        Tue, 01 Mar 2022 08:21:44 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id ey10-20020a1709070b8a00b006cee56b87b9sm5486818ejc.141.2022.03.01.08.21.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 08:21:44 -0800 (PST)
-Date:   Tue, 1 Mar 2022 18:21:42 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 00/10] net: bridge: Multiple Spanning Trees
-Message-ID: <20220301162142.2rv23g4cyd2yacbs@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
+        Tue, 1 Mar 2022 11:29:14 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3FAFDA;
+        Tue,  1 Mar 2022 08:28:32 -0800 (PST)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nP5MK-000DX3-8e; Tue, 01 Mar 2022 17:28:20 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nP5MJ-000JV6-UK; Tue, 01 Mar 2022 17:28:19 +0100
+Subject: Re: [PATCH] bpf: cgroup: remove WARN_ON at bpf_cgroup_link_release
+To:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220227134009.1298488-1-dzm91@hust.edu.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d4bed569-d448-8b59-0774-c036e4c9abe9@iogearbox.net>
+Date:   Tue, 1 Mar 2022 17:28:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301100321.951175-1-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220227134009.1298488-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26468/Tue Mar  1 10:31:38 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,13 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tobias,
-
-On Tue, Mar 01, 2022 at 11:03:11AM +0100, Tobias Waldekranz wrote:
-> A proposal for the corresponding iproute2 interface is available here:
+On 2/27/22 2:40 PM, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> https://github.com/wkz/iproute2/tree/mst
+> When syzkaller injects fault into memory allocation at
+> bpf_prog_array_alloc, the kernel encounters a memory failure and
+> returns non-zero, thus leading to one WARN_ON at
+> bpf_cgroup_link_release. The stack trace is as follows:
+> 
+>   __kmalloc+0x7e/0x3d0
+>   bpf_prog_array_alloc+0x4f/0x60
+>   compute_effective_progs+0x132/0x580
+>   ? __sanitizer_cov_trace_pc+0x1a/0x40
+>   update_effective_progs+0x5e/0x260
+>   __cgroup_bpf_detach+0x293/0x760
+>   bpf_cgroup_link_release+0xad/0x400
+>   bpf_link_free+0xca/0x190
+>   bpf_link_put+0x161/0x1b0
+>   bpf_link_release+0x33/0x40
+>   __fput+0x286/0x9f0
+> 
+> Fix this by removing the WARN_ON for __cgroup_bpf_detach.
+> 
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>   kernel/bpf/cgroup.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 514b4681a90a..fdbdcee6c9fa 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -896,8 +896,8 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+>   		return;
+>   	}
+>   
+> -	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> -				    cg_link->type));
+> +	__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> +				    cg_link->type);
 
-Please pardon my ignorance. Is there a user-mode STP protocol application
-that supports MSTP, and that you've tested these patches with?
-I'd like to give it a try.
+"Fixing" by removing WARN_ON is just papering over the issue which in this case as
+mentioned is allocation failure on detach/teardown when allocating and recomputing
+effective prog arrays..
+
+>   	cg = cg_link->cgroup;
+>   	cg_link->cgroup = NULL;
+> 
+

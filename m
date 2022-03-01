@@ -2,240 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E784C8721
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB2D4C8724
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiCAIwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S233477AbiCAIxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiCAIwp (ORCPT
+        with ESMTP id S229509AbiCAIxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:52:45 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEBF89CC6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:52:05 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id u16so13562994pfg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=X+CELJ7rEgmBMwuKX3QnxNunnNgyBQv4GScNFZ71SB0=;
-        b=KwqZjC+TAY7yWZaiJPe0/5cQbVUsJm4BVqQGXKKDx26ptfR4w5H4zNTfiTpyaFtkmB
-         +W5TytA2dylB07CeWLQuxbQWEPAGeLV89hEFLJ/MIamYquQ8KQO4III05jixVjhu545v
-         jkL0Ua1N11cP7USZt+IU/3AjYRNKUmNtbl/8jCbTTRQ3nMDP2CYgbaPTxfhBQMLb94UT
-         nfFyYee1BRqI/zDHFOrMZFP2d2oWxLhg89c0MP7tioNASOMIcpkiz9W298B0bRLKcr+W
-         SoHvrpjQuJshP4oRvo0+79s/eau8VJxniJaG8VdfzBRaCXgiCC1BSS7pQZShTczThqVD
-         lGug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=X+CELJ7rEgmBMwuKX3QnxNunnNgyBQv4GScNFZ71SB0=;
-        b=po5W9u9xo8IhwcVJPkbAv26SkXb/vbOZ22sSnLbAZmYPWF+HN8aPV6kqdDMh0qPVBG
-         BqC61cIPUQ6Ua6m30a024rawOxlPIbiMC8/h58vt5QME1WQITCI4y208g4Xhg5KvR9gX
-         0/TSSr8DDWScAxbyzzMyRc3u4Cl5hYhSv2mTJHltUYFrQBebY/n06ph2X995An2NLNNg
-         XamEdPfEwqr2ANWhVzJ6KY255dlZZNId3w68l0S4qa2I+39E505xtaOFxn5EDkM2QO1X
-         DXbXCNUM+EVk781Nw1YRtM28x3YGlmkItK/ryRpvCY4hBWvEeFB6P7CK+4yAF74sOh21
-         ZHjg==
-X-Gm-Message-State: AOAM532SG4ZRLW0kJKh0VpcclTX441HlG6K/q6o1Ld89zPXVddSp6c1x
-        gAL/0EJ5oQQkEJromy/SOX0=
-X-Google-Smtp-Source: ABdhPJz+fO4CUS/yMIGn/QrRS/NMKXCeSG9j218AJLbx2wIEG3bt8mJAh6hrbPF00rlmtIW3daVe0g==
-X-Received: by 2002:a62:7e06:0:b0:4e0:f0f8:9b86 with SMTP id z6-20020a627e06000000b004e0f0f89b86mr26732203pfc.26.1646124724549;
-        Tue, 01 Mar 2022 00:52:04 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id o3-20020a056a0015c300b004e17afd9af9sm16979963pfu.92.2022.03.01.00.51.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 00:52:04 -0800 (PST)
-Date:   Tue, 1 Mar 2022 08:51:56 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, kbuild-all@lists.01.org,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Zqiang <qiang.zhang@windriver.com>
-Subject: [PATCH v3] mm/slub: initialize stack depot in boot process
-Message-ID: <Yh3erDM9anwFXkD8@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Tue, 1 Mar 2022 03:53:49 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069254990A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646124787; x=1677660787;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c8/sIm6fc7U1kkTUXfw+1nD3JapE3ktEr9Pg6yxNBG4=;
+  b=Zt9Baau301n60jYtHPtq/vs2bEJFPvAyZESzcr9zlX5xy8HXRXsjovW0
+   RtzxNje/p4PW1MMQj3iWreiJ4+U1zTY48tQ1SIOuf9AXQ45GZeonKRNKF
+   Nthg9UjMh/7KlEiNi6C0mMyUX2RTt3uEerwRibCdU3EfX9xCQjgcQhXJP
+   injYzgafQ1L2kc3B9Ajec9jrtVRCUv5IdMZhGiKx6dAgupH8j6dBBF7vy
+   TiqvdhR6IK/DdfTzFc31J+V0SgFjKn08OBmXjOC3xRQPuL7WBVGGX083U
+   Q653YOJ0uFgyazpjnn/e2e3yuesvEab/HfsDd0cF80JwqnSGSWbxdf6m3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="313811736"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="313811736"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 00:53:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="575628442"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2022 00:53:06 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOyFl-0000CX-DG; Tue, 01 Mar 2022 08:53:05 +0000
+Date:   Tue, 1 Mar 2022 16:52:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [mcgrof:modules-testing 7/14] security/integrity/ima/ima_main.c:799:
+ undefined reference to `is_module_sig_enforced'
+Message-ID: <202203011657.jvIKXd3v-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203011512.U0o5cAx4-lkp@intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in
-objects") initializes stack depot in cache creation if SLAB_STORE_USER
-flag is set.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-testing
+head:   8ca5e1dab7c3e51c63f07cd86e004a4df9ac7e76
+commit: 6fbb12ccf3a340cf8bbd224e36106d1eccfcc54c [7/14] module: Move extra signature support out of core code
+config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220301/202203011657.jvIKXd3v-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=6fbb12ccf3a340cf8bbd224e36106d1eccfcc54c
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof modules-testing
+        git checkout 6fbb12ccf3a340cf8bbd224e36106d1eccfcc54c
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-This can make kernel crash because a cache can be crashed in various
-contexts. For example if user sets slub_debug=U, kernel crashes
-because create_boot_cache() calls stack_depot_init(), which tries to
-allocate hash table using memblock_alloc() if slab is not available.
-But memblock is also not available at that time.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This patch solves the problem by initializing stack depot early
-in boot process if SLAB_STORE_USER debug flag is set globally
-or the flag is set for at least one cache.
+All errors (new ones prefixed by >>):
 
-[ elver@google.com: initialize stack depot depending on slub_debug
-  parameter instead of allowing stack_depot_init() to be called
-  during kmem_cache_init() for simplicity. ]
+   ld: security/integrity/ima/ima_main.o: in function `ima_load_data':
+>> security/integrity/ima/ima_main.c:799: undefined reference to `is_module_sig_enforced'
 
-[ vbabka@suse.cz: parse slub_debug parameter in setup_slub_debug()
-  and initialize stack depot in stack_depot_early_init(). ]
 
-[ lkp@intel.com: Fix build error. ]
+vim +799 security/integrity/ima/ima_main.c
 
-Link: https://lore.kernel.org/all/YhyeaP8lrzKgKm5A@ip-172-31-19-208.ap-northeast-1.compute.internal/
-Fixes: ba10d4b46655 ("mm/slub: use stackdepot to save stack trace in objects")
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+5a9196d715607f Mimi Zohar          2014-07-22  759  
+16c267aac86b46 Mimi Zohar          2018-07-13  760  /**
+16c267aac86b46 Mimi Zohar          2018-07-13  761   * ima_load_data - appraise decision based on policy
+16c267aac86b46 Mimi Zohar          2018-07-13  762   * @id: kernel load data caller identifier
+b64fcae74b6d69 Kees Cook           2020-10-02  763   * @contents: whether the full contents will be available in a later
+b64fcae74b6d69 Kees Cook           2020-10-02  764   *	      call to ima_post_load_data().
+16c267aac86b46 Mimi Zohar          2018-07-13  765   *
+16c267aac86b46 Mimi Zohar          2018-07-13  766   * Callers of this LSM hook can not measure, appraise, or audit the
+16c267aac86b46 Mimi Zohar          2018-07-13  767   * data provided by userspace.  Enforce policy rules requring a file
+16c267aac86b46 Mimi Zohar          2018-07-13  768   * signature (eg. kexec'ed kernel image).
+16c267aac86b46 Mimi Zohar          2018-07-13  769   *
+16c267aac86b46 Mimi Zohar          2018-07-13  770   * For permission return 0, otherwise return -EACCES.
+16c267aac86b46 Mimi Zohar          2018-07-13  771   */
+b64fcae74b6d69 Kees Cook           2020-10-02  772  int ima_load_data(enum kernel_load_data_id id, bool contents)
+16c267aac86b46 Mimi Zohar          2018-07-13  773  {
+b5ca117365d960 Nayna Jain          2018-10-09  774  	bool ima_enforce, sig_enforce;
+c77b8cdf745d91 Mimi Zohar          2018-07-13  775  
+b5ca117365d960 Nayna Jain          2018-10-09  776  	ima_enforce =
+b5ca117365d960 Nayna Jain          2018-10-09  777  		(ima_appraise & IMA_APPRAISE_ENFORCE) == IMA_APPRAISE_ENFORCE;
+16c267aac86b46 Mimi Zohar          2018-07-13  778  
+16c267aac86b46 Mimi Zohar          2018-07-13  779  	switch (id) {
+16c267aac86b46 Mimi Zohar          2018-07-13  780  	case LOADING_KEXEC_IMAGE:
+99d5cadfde2b1a Jiri Bohac          2019-08-19  781  		if (IS_ENABLED(CONFIG_KEXEC_SIG)
+b5ca117365d960 Nayna Jain          2018-10-09  782  		    && arch_ima_get_secureboot()) {
+b5ca117365d960 Nayna Jain          2018-10-09  783  			pr_err("impossible to appraise a kernel image without a file descriptor; try using kexec_file_load syscall.\n");
+b5ca117365d960 Nayna Jain          2018-10-09  784  			return -EACCES;
+b5ca117365d960 Nayna Jain          2018-10-09  785  		}
+b5ca117365d960 Nayna Jain          2018-10-09  786  
+b5ca117365d960 Nayna Jain          2018-10-09  787  		if (ima_enforce && (ima_appraise & IMA_APPRAISE_KEXEC)) {
+16c267aac86b46 Mimi Zohar          2018-07-13  788  			pr_err("impossible to appraise a kernel image without a file descriptor; try using kexec_file_load syscall.\n");
+16c267aac86b46 Mimi Zohar          2018-07-13  789  			return -EACCES;	/* INTEGRITY_UNKNOWN */
+16c267aac86b46 Mimi Zohar          2018-07-13  790  		}
+fed2512a7ccc8f Mimi Zohar          2018-07-13  791  		break;
+fed2512a7ccc8f Mimi Zohar          2018-07-13  792  	case LOADING_FIRMWARE:
+4f2d99b06b7380 Kees Cook           2020-10-02  793  		if (ima_enforce && (ima_appraise & IMA_APPRAISE_FIRMWARE) && !contents) {
+fed2512a7ccc8f Mimi Zohar          2018-07-13  794  			pr_err("Prevent firmware sysfs fallback loading.\n");
+fed2512a7ccc8f Mimi Zohar          2018-07-13  795  			return -EACCES;	/* INTEGRITY_UNKNOWN */
+fed2512a7ccc8f Mimi Zohar          2018-07-13  796  		}
+c77b8cdf745d91 Mimi Zohar          2018-07-13  797  		break;
+c77b8cdf745d91 Mimi Zohar          2018-07-13  798  	case LOADING_MODULE:
+c77b8cdf745d91 Mimi Zohar          2018-07-13 @799  		sig_enforce = is_module_sig_enforced();
+c77b8cdf745d91 Mimi Zohar          2018-07-13  800  
+b5ca117365d960 Nayna Jain          2018-10-09  801  		if (ima_enforce && (!sig_enforce
+b5ca117365d960 Nayna Jain          2018-10-09  802  				    && (ima_appraise & IMA_APPRAISE_MODULES))) {
+c77b8cdf745d91 Mimi Zohar          2018-07-13  803  			pr_err("impossible to appraise a module without a file descriptor. sig_enforce kernel parameter might help\n");
+c77b8cdf745d91 Mimi Zohar          2018-07-13  804  			return -EACCES;	/* INTEGRITY_UNKNOWN */
+c77b8cdf745d91 Mimi Zohar          2018-07-13  805  		}
+28073eb09c5aa2 Gustavo A. R. Silva 2020-11-20  806  		break;
+16c267aac86b46 Mimi Zohar          2018-07-13  807  	default:
+16c267aac86b46 Mimi Zohar          2018-07-13  808  		break;
+16c267aac86b46 Mimi Zohar          2018-07-13  809  	}
+16c267aac86b46 Mimi Zohar          2018-07-13  810  	return 0;
+16c267aac86b46 Mimi Zohar          2018-07-13  811  }
+16c267aac86b46 Mimi Zohar          2018-07-13  812  
+
+:::::: The code at line 799 was first introduced by commit
+:::::: c77b8cdf745d91eca138e7bfa430dc6640b604a0 module: replace the existing LSM hook in init_module
+
+:::::: TO: Mimi Zohar <zohar@linux.vnet.ibm.com>
+:::::: CC: James Morris <james.morris@microsoft.com>
+
 ---
- include/linux/slab.h       |  1 +
- include/linux/stackdepot.h |  3 ++-
- mm/slab.c                  |  5 +++++
- mm/slob.c                  |  5 +++++
- mm/slub.c                  | 19 ++++++++++++++++---
- 5 files changed, 29 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 37bde99b74af..d2b0f8f9e5e6 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -762,6 +762,7 @@ extern void kvfree_sensitive(const void *addr, size_t len);
- 
- unsigned int kmem_cache_size(struct kmem_cache *s);
- void __init kmem_cache_init_late(void);
-+int __init slab_stack_depot_init(void);
- 
- #if defined(CONFIG_SMP) && defined(CONFIG_SLAB)
- int slab_prepare_cpu(unsigned int cpu);
-diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index 17f992fe6355..a813a2673c48 100644
---- a/include/linux/stackdepot.h
-+++ b/include/linux/stackdepot.h
-@@ -12,6 +12,7 @@
- #define _LINUX_STACKDEPOT_H
- 
- #include <linux/gfp.h>
-+#include <linux/slab.h>
- 
- typedef u32 depot_stack_handle_t;
- 
-@@ -32,7 +33,7 @@ int stack_depot_init(void);
- #ifdef CONFIG_STACKDEPOT_ALWAYS_INIT
- static inline int stack_depot_early_init(void)	{ return stack_depot_init(); }
- #else
--static inline int stack_depot_early_init(void)	{ return 0; }
-+static inline int stack_depot_early_init(void)	{ return slab_stack_depot_init(); }
- #endif
- 
- depot_stack_handle_t stack_depot_save(unsigned long *entries,
-diff --git a/mm/slab.c b/mm/slab.c
-index ddf5737c63d9..c7f929665fbe 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1196,6 +1196,11 @@ static void __init set_up_node(struct kmem_cache *cachep, int index)
- 	}
- }
- 
-+int __init slab_stack_depot_init(void)
-+{
-+	return 0;
-+}
-+
- /*
-  * Initialisation.  Called after the page allocator have been initialised and
-  * before smp_init().
-diff --git a/mm/slob.c b/mm/slob.c
-index 60c5842215f1..7597c219f061 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -725,3 +725,8 @@ void __init kmem_cache_init_late(void)
- {
- 	slab_state = FULL;
- }
-+
-+int __init slab_stack_depot_init(void)
-+{
-+	return 0;
-+}
-diff --git a/mm/slub.c b/mm/slub.c
-index a74afe59a403..8f130f917977 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -646,6 +646,16 @@ static slab_flags_t slub_debug;
- 
- static char *slub_debug_string;
- static int disable_higher_order_debug;
-+static bool __initdata init_stack_depot;
-+
-+int __init slab_stack_depot_init(void)
-+{
-+#ifdef CONFIG_STACKDEPOT
-+	if (init_stack_depot)
-+		stack_depot_init();
-+#endif
-+	return 0;
-+}
- 
- /*
-  * slub is about to manipulate internal object metadata.  This memory lies
-@@ -1531,6 +1541,8 @@ static int __init setup_slub_debug(char *str)
- 			global_slub_debug_changed = true;
- 		} else {
- 			slab_list_specified = true;
-+			if (flags & SLAB_STORE_USER)
-+				init_stack_depot = true;
- 		}
- 	}
- 
-@@ -1546,6 +1558,10 @@ static int __init setup_slub_debug(char *str)
- 			global_flags = slub_debug;
- 		slub_debug_string = saved_str;
- 	}
-+
-+	if (global_flags & SLAB_STORE_USER)
-+		init_stack_depot = true;
-+
- out:
- 	slub_debug = global_flags;
- 	if (slub_debug != 0 || slub_debug_string)
-@@ -4221,9 +4237,6 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
- 	s->remote_node_defrag_ratio = 1000;
- #endif
- 
--	if (s->flags & SLAB_STORE_USER && IS_ENABLED(CONFIG_STACKDEPOT))
--		stack_depot_init();
--
- 	/* Initialize the pre-computed randomized freelist if slab is up */
- 	if (slab_state >= UP) {
- 		if (init_cache_random_seq(s))
--- 
-2.33.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,93 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC0B4C883B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2D84C883F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiCAJlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S233965AbiCAJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbiCAJld (ORCPT
+        with ESMTP id S233957AbiCAJlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:41:33 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D0D583AA;
-        Tue,  1 Mar 2022 01:40:53 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id e6so12578391pgn.2;
-        Tue, 01 Mar 2022 01:40:53 -0800 (PST)
+        Tue, 1 Mar 2022 04:41:55 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9288BE12
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:41:13 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id c14so17768351ioa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:41:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vtImWDa9kuuW8w+jMwpHP6G21qHUIm0vC1VrYW1qZiQ=;
-        b=OgIDOSQC5sZVMIKPL+rg1AHhiu7+uLP1PIBAK4kGc11oC19N1pgRq0RJGG/ZWehK/5
-         POLJscXbx0Q9dCY2NZ1uCZY8Zi/Oe6zoJ4Gj3tXfSK1erE0mwFUiO7hCrE164GLI+QJJ
-         tBcEvcYNCMJbJbPMRModylAqKp1Bu0qh8AfeP1Js673B2/9dl0I8RsC9GteqTqEsV7H4
-         ZIyWgLZPdi6QKbSHfKAMmw6zb8cP2S2wF0kXaKj10m8MsUX/4czx93vdSFajdKISTD7I
-         zuyUNF+/ccBKfWZKft6kLsK7ijc6WGg27K4aDm4iQiVXkv4QFzYB3LoSzIxXbRggbDP3
-         0ciQ==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MU2HWPXy4mAk2gUeuMPfPjZpOmd7MfczuTjNa/BKYeM=;
+        b=J5tf+w9wJrpI84ECFWJeCND7fgEugL1Y44J/PeJZI5J8YWiyX+HtHV4sQLIs8Lv9MP
+         AiUX5b0cP+UUp70Ks5gg6JCXGhXNEB31VGMNwDkGqc4ab+pW5kH6WmTWwpL+CKmhYNqt
+         hYeXF8Y3fWhW9T+GCnaXz+kYm7c1vnceiDEm4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vtImWDa9kuuW8w+jMwpHP6G21qHUIm0vC1VrYW1qZiQ=;
-        b=x+FoVKCeq9yCsb/mPs/wwYpwyfy5+Bs8Qcp09Egut01ONITLIFyXA9NYoY7PLd+gjy
-         iQ5fbx/2U2hh1P0ObPmGw5zjDZ5FyQ+8gD5a1i0xAIRyGmcDpU5agReWhLF/bE8Jnl3j
-         FlV+8HlQa3puanYyqrdeXmHp+EPw2vZmZCH22pabDb4DleDQh3OvasZHoHvX+SBpPCJ6
-         NGP2k3aFVrdQTFiSbjwFH1g+Wg/BAl1/l1Ec7schbyAGaxfWq7d2qcMaYxg8RO9OYAfy
-         bcRvjbnsWyiE56Txhke2AG+jP+D7g/iXWBanzKab+jvSL8t/IBPMOGiubG/n8gir+R/I
-         EdvA==
-X-Gm-Message-State: AOAM530j0YOxOY8sFxFlzbYjUlG5SRx/AvmyzkBhILr3BmloRE4kuN+i
-        J7GMZkEYz370ANMHznOKPcY=
-X-Google-Smtp-Source: ABdhPJyORJORiFXCxLPwpvHuBrxOMH7lc2Ujrsfv28e0L1lov0HREnsG+/Lngp3naTuTtTIeObLzQA==
-X-Received: by 2002:a63:5004:0:b0:373:e921:c0ca with SMTP id e4-20020a635004000000b00373e921c0camr20836116pgb.154.1646127653136;
-        Tue, 01 Mar 2022 01:40:53 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-83.three.co.id. [180.214.232.83])
-        by smtp.gmail.com with ESMTPSA id lr11-20020a17090b4b8b00b001bc4098fa78sm1746704pjb.24.2022.03.01.01.40.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 01:40:52 -0800 (PST)
-Message-ID: <9792aadf-ce4e-3d39-8bf7-762a585814ba@gmail.com>
-Date:   Tue, 1 Mar 2022 16:40:47 +0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MU2HWPXy4mAk2gUeuMPfPjZpOmd7MfczuTjNa/BKYeM=;
+        b=eFeWnwE4wQzhdXGNraonyHxm6E10PBju5Yv8HJpdsajZqBqnMS4/oEZ6T+L5uSQNzV
+         RRWuUSLwelos0Lj+GDPvmjlrgVkDB2HxdeBVbXHK1bgHOOW8li+2tGVLRdDrX/3R1ShR
+         eiW2S8fFz/cK5t486IkpmTkmcTSvWa9hsQxH9rp9FeUIn7cD7wJ0JDOex+sHNlRaSirP
+         6r7RDZDh48bpg5PzVtRYwfIsS/T8E+1CZQjb6EbiV9r44C8DV5VQ5vbDUKNtTJ3cTWZM
+         9FpGmLTpj3cMCzGZZmzD/nWUxduGcDJhA6PNHuo0DVmWtGgRFG+BkbcLlWmEPw1JrzVv
+         pOLA==
+X-Gm-Message-State: AOAM533rMHWdvPkypl+MZO740/ztSur/sCDafv0+EiyOm9lPdH+MYpWn
+        7Pg8bqVmxDCQ4JgyAkq1Lqi8wx8UReQC/LI8v1q42w==
+X-Google-Smtp-Source: ABdhPJxj9kVmLDPb5TzfYODF4nrClsQQz+30NgAHek1PNbHF0Q1C9hdcWEyqYC4IdVu0LWbB+6deHxoZYu2hC0zKG8s=
+X-Received: by 2002:a02:95a2:0:b0:30f:61cc:346f with SMTP id
+ b31-20020a0295a2000000b0030f61cc346fmr20276611jai.273.1646127672760; Tue, 01
+ Mar 2022 01:41:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 5.16 000/164] 5.16.12-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220228172359.567256961@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220228172359.567256961@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227093434.2889464-1-jhubbard@nvidia.com> <20220227093434.2889464-7-jhubbard@nvidia.com>
+ <CAJfpegsDkpdCQiPmfKfX_b4-bkkj5N5vRhseifEH6woJ7r0S6A@mail.gmail.com> <f0b158dc-5b01-67aa-1f49-331bf1ff2bfd@nvidia.com>
+In-Reply-To: <f0b158dc-5b01-67aa-1f49-331bf1ff2bfd@nvidia.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 1 Mar 2022 10:41:01 +0100
+Message-ID: <CAJfpegvcX4n3Ac5ekNNKGRh-cDGjSjX3CuS7+SOWvfksii-UEw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] fuse: convert direct IO paths to use FOLL_PIN
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     jhubbard.send.patches@gmail.com, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/22 00.22, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.12 release.
-> There are 164 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+On Mon, 28 Feb 2022 at 22:16, John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> On 2/28/22 07:59, Miklos Szeredi wrote:
+> > On Sun, 27 Feb 2022 at 10:34, <jhubbard.send.patches@gmail.com> wrote:
+> >>
+> >> From: John Hubbard <jhubbard@nvidia.com>
+> >>
+> >> Convert the fuse filesystem to support the new iov_iter_get_pages()
+> >> behavior. That routine now invokes pin_user_pages_fast(), which means
+> >> that such pages must be released via unpin_user_page(), rather than via
+> >> put_page().
+> >>
+> >> This commit also removes any possibility of kernel pages being handled,
+> >> in the fuse_get_user_pages() call. Although this may seem like a steep
+> >> price to pay, Christoph Hellwig actually recommended it a few years ago
+> >> for nearly the same situation [1].
+> >
+> > This might work for O_DIRECT, but fuse has this mode of operation
+> > which turns normal "buffered" I/O into direct I/O.  And that in turn
+> > will break execve of such files.
+> >
+> > So AFAICS we need to keep kvec handing in some way.
+> >
+>
+> Thanks for bringing that up! Do you have any hints for me, to jump start
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+How about just leaving that special code in place?   It bypasses page
+refs and directly copies to the kernel buffer, so it should not have
+any affect on the user page code.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> a deeper look? And especially, sample programs that exercise this?
 
--- 
-An old man doll... just what I always wanted! - Clara
+Here's one:
+# uncomment as appropriate:
+#sudo dnf install fuse3-devel
+#sudo apt install libfuse3-dev
+
+cat <<EOF > fuse-dio-exec.c
+#define FUSE_USE_VERSION 31
+#include <fuse.h>
+#include <errno.h>
+#include <unistd.h>
+
+static const char *filename = "/bin/true";
+
+static int test_getattr(const char *path, struct stat *stbuf,
+             struct fuse_file_info *fi)
+{
+    return lstat(filename, stbuf) == -1 ? -errno : 0;
+}
+
+static int test_open(const char *path, struct fuse_file_info *fi)
+{
+    int res;
+
+    res = open(filename, fi->flags);
+    if (res == -1)
+        return -errno;
+
+    fi->fh = res;
+    fi->direct_io = 1;
+    return 0;
+}
+
+static int test_read(const char *path, char *buf, size_t size, off_t offset,
+              struct fuse_file_info *fi)
+{
+    int res = pread(fi->fh, buf, size, offset);
+    return res == -1 ? -errno : res;
+}
+
+static int test_release(const char *path, struct fuse_file_info *fi)
+{
+    close(fi->fh);
+    return 0;
+}
+
+static const struct fuse_operations test_oper = {
+    .getattr    = test_getattr,
+    .open        = test_open,
+    .release    = test_release,
+    .read        = test_read,
+};
+
+int main(int argc, char *argv[])
+{
+    return fuse_main(argc, argv, &test_oper, NULL);
+}
+EOF
+
+gcc -W fuse-dio-exec.c `pkg-config fuse3 --cflags --libs` -o fuse-dio-exec
+touch /tmp/true
+
+#run test:
+./fuse-dio-exec /tmp/true
+/tmp/true
+umount /tmp/true

@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726A54C8B7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EC04C8B7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiCAMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S234721AbiCAMYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiCAMYf (ORCPT
+        with ESMTP id S234707AbiCAMYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:24:35 -0500
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8581D887BA;
-        Tue,  1 Mar 2022 04:23:53 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.90,146,1643641200"; 
-   d="scan'208";a="111987476"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 01 Mar 2022 21:23:52 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 0C2DA400F7B5;
-        Tue,  1 Mar 2022 21:23:49 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: watchdog: renesas,wdt: Document RZ/V2L SoC
-Date:   Tue,  1 Mar 2022 12:23:32 +0000
-Message-Id: <20220301122332.14796-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 1 Mar 2022 07:24:52 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FE9887BA;
+        Tue,  1 Mar 2022 04:24:11 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id v4so13926826pjh.2;
+        Tue, 01 Mar 2022 04:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ssKwAQc6zCsSKhvQTz6MaBCU3uUmKpNHZ8vjrQi8cYo=;
+        b=K8E59u5M2G2R64caq5UMg3jGxjZn5qjDQQ1q//+zF89zpGJj7eoWg8cWoYqXMlB7mk
+         S0lBVKstWRNhwgSdxBSOtw6dezKo85nugkvHh8dBADRG5Y9RpMPYQtn4rIgGGnny9Fjp
+         qEChkBE8H3I783hmApK8eiZ6PS5fSbfdgX3imGdZm8lCTbsVjsugLOIwga76li9/v/47
+         RTpquztcpH7EN5hs7D2kZKxrrhHgoYbQt7ibqD2pGCFnu4vNOqPcUGJdcZOiPGNfLtTV
+         cHILjeW7p91mwSYNGCCgOUdutnZN0YH5c/1feL9CfVa96jLBYS4grYmDz3k6jrRluMxc
+         Ph4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ssKwAQc6zCsSKhvQTz6MaBCU3uUmKpNHZ8vjrQi8cYo=;
+        b=HtvEj3Ug5PUBd9sXZvnjl/2Uh4o7f11Lp2pTCc3xIFuOnj3jnPyfGW6wqcyXEsht2p
+         iqS1amiW1SUHmBiXPDIKtdiD9pJlmX1Y5NixHd9GaNEV0quo4x+ODoPlNdHW84qUm7XR
+         3hVmKQvFTxeLg2T4ck8catR18xcN9lmVhC4J0BkqXz1SnkCS45w3GZAh9Mg/5ex7+XmG
+         25T9Fvqbj9NmBbtov0nJxGW2DFaNXwSpW5LPezjvx6WT74DpNOtDi8prm1Mmy0uXcar4
+         jYzHgFPHf6x30rW/OMVNUNzd4Ll34HmwIwqMlE6/SvDkc+ZWnfdaOdmMwVQnCEeS0Rzu
+         DoSw==
+X-Gm-Message-State: AOAM530ZXDSycxwYC4GyU3BXFJif0dl/PVk/wVvTRRfEEllZ+xJmlKdD
+        m05qaA7z72eJedPKyZi0KyYrq28ZXis8fg==
+X-Google-Smtp-Source: ABdhPJzArZjzwX0DpT1f/kLNVz6q3wv7rT4JkcOCR9DKDjHmTzaRLOrLzfnnoBG5cMOORru0C+kisg==
+X-Received: by 2002:a17:903:3092:b0:14f:9c1c:45a4 with SMTP id u18-20020a170903309200b0014f9c1c45a4mr24899887plc.126.1646137440272;
+        Tue, 01 Mar 2022 04:24:00 -0800 (PST)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id nl12-20020a17090b384c00b001bc1bb5449bsm2312376pjb.2.2022.03.01.04.23.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 04:23:59 -0800 (PST)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     xiam0nd.tong@gmail.com
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
+        jannh@google.com, keescook@chromium.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        torvalds@linux-foundation.org
+Subject: Re: [PATCH 5/6] net/core: remove iterator use outside the loop
+Date:   Tue,  1 Mar 2022 20:23:53 +0800
+Message-Id: <20220301122353.6189-1-xiam0nd.tong@gmail.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220301075839.4156-6-xiam0nd.tong@gmail.com>
+References: <20220301075839.4156-6-xiam0nd.tong@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document RZ/V2L WDT bindings. RZ/V2L WDT is identical to one found
-on the RZ/G2L SoC. No driver changes are required as generic compatible
-string "renesas,rzg2l-wdt" will be used as a fallback.
+I'm sorry for have created the confusion. I made this patch to remove
+the use of iterator (in this patch is "skp", "p") outside
+the list_for_each_entry* loop, using the new *_inside macros instead
+which are introduced in PATCH 2/6, and to prove the effectiveness of
+the new macros.
 
-While at it, drop the comment "# RZ/G2L" for "renesas,rzg2l-wdt"
-compatible string as this will avoid changing the line for every new
-SoC addition.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v1->v2:
-* Included RB tags
-* Drop the comment "# RZ/G2L" for "renesas,rzg2l-wdt" compatible string
-  as suggested by Geert.
-
-v1:
-https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
----
- Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-index 91a98ccd4226..146ae20eacbb 100644
---- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-@@ -22,7 +22,8 @@ properties:
-       - items:
-           - enum:
-               - renesas,r9a07g044-wdt    # RZ/G2{L,LC}
--          - const: renesas,rzg2l-wdt     # RZ/G2L
-+              - renesas,r9a07g054-wdt    # RZ/V2L
-+          - const: renesas,rzg2l-wdt
- 
-       - items:
-           - enum:
--- 
-2.17.1
-
+Best regards,
+--
+Xiaomeng Tong

@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6A04C8B37
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A094C8B3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234659AbiCAMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S234666AbiCAMFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiCAMDH (ORCPT
+        with ESMTP id S233206AbiCAMFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:03:07 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF61177;
-        Tue,  1 Mar 2022 04:02:27 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so2002192pjw.5;
-        Tue, 01 Mar 2022 04:02:27 -0800 (PST)
+        Tue, 1 Mar 2022 07:05:46 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777CF24F21
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:05:05 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id g21so7681459pfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 04:05:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=eEwHxHUP77Rnt3Krvi9zolaYyiYlU8Dwhm1yGbdoRcI=;
-        b=f+xNslvVfega+6DFbO9VXrfSi5fZYSM+tbwkPxp+hAiqOxr9INLHnOBYw9mEZaW6jZ
-         ul7JhPUxbbDJoBNBKQSJ39/c6D/8AHYtsSgBaezMzqWiTOVx8Jg7+ScwmI0pjyoZ5pjY
-         Ao4WrCWKmqpsQH861MzUxctDJ/fIaE4iZrRez8JcHQWPRfPungkhZafecFq9ZCQMEkIf
-         7ehLXMySU+4WEepwC6oiS2EkIGPhpIY0KfslJukvl+0M9szSSOQ2PZ3wGTsx8jYlZRjQ
-         jvmsIkXXjjgXtXKcpU/paIslfBFJk6D9PCBFntzMcXmC/m3/0lEZCRuBLwgYXYf3sM0A
-         sL7g==
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=Tg0u1BcMkcrQ5oCWdVLlVtKu6n/dJivEtpc6Ue4+Jyw4ir2qtSN2EFSPlFVFd7SdRl
+         jnkov5ikRhpS6SAVd6dDCcp8eP0rCQgEVgNWB19egrPyeZoIq8yB4MU/P598SN0m6+S7
+         HHNv5f1LFKrUuhelYrMBcpMidG8yApaIVKlqToNQwBbiskBmpnciA0FOT0385xykJKsa
+         ODgz2rRztKrwiGQcEBg7/zW40GMYb/iNSfA6p4Ax1ukpOeddQocSA2vOe3SmFmvZm3Uj
+         WCwHAm+4lcPqqNk2ZRGysgMv4jScRP2J/2jnLLol/MbElYAZt5vXVWSNutcjTtN3NuyG
+         /xHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eEwHxHUP77Rnt3Krvi9zolaYyiYlU8Dwhm1yGbdoRcI=;
-        b=8JjeNNrUausDCcxsvh6li1hSGja929Z9bADu94KKJm1ocw9kbMiHEcte28p3K/nxAf
-         e/59EQ5sCVk4j6xOjvW0VjVyO2uQX+cTyMFdkO9AI04EBRahtf5dwao2B31522houlXD
-         OlADpE/sqc20FnVZr3yxeD4LvgK842Hr6I9zRkNVpYvA6dvoWYwswMkSLV8vFvARAZpT
-         jTb7EVVxWpTiA4iGpR3RHl6/uptcU2/qv0lwqzXEfwp38JmzD3zpBkKQDyDjpJnJbYY8
-         sudk4lNPbn3tQbcbPjAymfGiL9cc7CauZTvqymoG0GjQVy4/xG5syrn9+KxLqe65WVLu
-         ng+g==
-X-Gm-Message-State: AOAM532zOzoxJ9Kd2927lElTxfAiV9JADUdaAw5Eic314bnL0RRhi+MV
-        xb0e+jZezGEN6QRlfRIAHj6Q5CWp+0s6wZQyo6I=
-X-Google-Smtp-Source: ABdhPJwy4cAeNOciAltdNl1OefjQA/ex8Y3klkwQWzzWHJ+WX1XLPWUVj0wqkfev3lVcRWkdQDk7Jg==
-X-Received: by 2002:a17:902:bf07:b0:150:9b8a:a14f with SMTP id bi7-20020a170902bf0700b001509b8aa14fmr20431268plb.127.1646136146910;
-        Tue, 01 Mar 2022 04:02:26 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056a000b8a00b004de9129eb80sm17210294pfj.85.2022.03.01.04.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 04:02:26 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/i8259: Remove a dead store of irq in a conditional block
-Date:   Tue,  1 Mar 2022 20:02:17 +0800
-Message-Id: <20220301120217.38092-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=VzOg9ZIS9njxeYrmi3uYDwqM3UaCAash9fqauqi87k++boo+leDnI//WyJ25nPj0I/
+         zEqXCsEd/TYj6/FA4LVUZtdSgfqzI1MxDJ4Bt8P0Sod2Z044vTbLdAzYnTbhPuf8KkB5
+         TeFG2WlKl4zwZi40xVEl2+XMa/T8O1NVo2J8V6Bbq7G+tW2/3DwPRrRS/ZVKkx1QT5l2
+         UTp2BBe7XCIGzbExgstBGTmE6f9/jZGTEgeJKkszBzEEDRAhZ273V6kBlBEwjmAghge5
+         fcg/2O8oujZO/GeQoMlehGHl7ZTi79Okov6y0ZsZ/MDt4uxCfJwQXnsDkYUUPBerj88K
+         he2w==
+X-Gm-Message-State: AOAM533oqdPuK0z3gDJYhmuaEacOG3b0VKPc0/9coDRE56UndwgX/tmx
+        G5CszTEeYknr1Led99idAVKF+/0VJJCjpmHO43g=
+X-Google-Smtp-Source: ABdhPJzvsG8+SM4sh/25GWnzLzL15pKuPWAYKa2aP9gmBzBW6Y1AXgbzbreCO9U22ZeTCWIbXhy6lAY2X0AWt7Ghw68=
+X-Received: by 2002:a63:be0e:0:b0:363:e0be:613f with SMTP id
+ l14-20020a63be0e000000b00363e0be613fmr21309057pgf.448.1646136304480; Tue, 01
+ Mar 2022 04:05:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: zahirikeen@gmail.com
+Sender: sabu7439@gmail.com
+Received: by 2002:a17:90b:3749:0:0:0:0 with HTTP; Tue, 1 Mar 2022 04:05:03
+ -0800 (PST)
+From:   Zahiri Keen <zahirikeen2@gmail.com>
+Date:   Tue, 1 Mar 2022 13:05:03 +0100
+X-Google-Sender-Auth: HHNN5At7GSe_XTKAVQanmHrMpcE
+Message-ID: <CAOJFtj1XwynksDFy-yXdjp1tg83AfaQfNX8WdJfAij7DBjLd4w@mail.gmail.com>
+Subject: Greetings to you.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Good Day,
 
-The [clang-analyzer-deadcode.DeadStores] helper reports
-that the value stored to 'irq' is never read.
+I know this email might come to you as a surprise because is coming
+from someone you haven=E2=80=99t met with before.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-Note: not sure if "irq2 + 8" should be needed for "s->pics[0].irq_base + irq"
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
- arch/x86/kvm/i8259.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-index be99dc86293d..e1bb6218bb96 100644
---- a/arch/x86/kvm/i8259.c
-+++ b/arch/x86/kvm/i8259.c
-@@ -252,7 +252,6 @@ int kvm_pic_read_irq(struct kvm *kvm)
- 				 */
- 				irq2 = 7;
- 			intno = s->pics[1].irq_base + irq2;
--			irq = irq2 + 8;
- 		} else
- 			intno = s->pics[0].irq_base + irq;
- 	} else {
--- 
-2.35.1
-
+Regards,
+Mr.Zahiri

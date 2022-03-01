@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8557D4C8894
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990C64C8897
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiCAJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
+        id S233990AbiCAJ6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiCAJ4E (ORCPT
+        with ESMTP id S233176AbiCAJ6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:56:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D3B7C784;
-        Tue,  1 Mar 2022 01:55:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFC5EB81850;
-        Tue,  1 Mar 2022 09:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5F9C340EE;
-        Tue,  1 Mar 2022 09:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646128521;
-        bh=8YjTRp7NuUv65z90+NN5SmTpZZtNhw5jeBiXRggxlOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DQgKSnJwn0l0I3BAOltTsJBNcSxl6GThPSHqvZTrMtG6vLn7K0TWQp55sepHrgWYM
-         FaWeEUl39+Q3V6gV4f816/foCdaz52QegnFGvDy3OwX5vbWefq9SDBieVs3iR/tS3w
-         TdObEGBaWClFRA2pjr2oF4Kr56dDV/dyCXJg8KlOlFoBnEO1elGSkVEEiYzNac6+j0
-         JBGu5BTq0xUAgqidKRXGvyW0VOvAonuD2IxhL4FBHvdGNLRIpwdu0pOEDVPvF+UBO3
-         rw2sSBUHw1EYUvjbpxTG+bp2zvp3ZBjVesUryTsfizAZ7RgPnOq+7/jdbMy1ztLck6
-         AY3caNkCuWQJA==
-Date:   Tue, 1 Mar 2022 11:55:14 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-Message-ID: <Yh3tgr+g/6IElq0P@kernel.org>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+        Tue, 1 Mar 2022 04:58:33 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21D1DA67
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:57:52 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2db2add4516so105768977b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Qee/3ouJ9DM4ILqUhdVC3wPnlUxhQ79bmhKE0E3lC+E=;
+        b=kmm0zokZtwPnaJC25cBoWna+2xXHOg5cJOmIF5g7nM7SWhRyVmGu9QVjLtZASCmGMu
+         PTB//f5VTwuU+u2wba6qTm5tdm12g7VsktrC5t8+lZCv8mQAxp2FQRdgNR7UjvTClg0/
+         w0+8o2piKHXotEBLss8NEz+7SvbL9h6kE/95fiRFDaaWfHpJbACTBOt+cicR7s/4Q4jd
+         8uzVVz2i0c+e7Y5BfrcaT/My4XfUQr28JWnoiiGbRT2PfUxodEXIkHQQsw86991hdLBS
+         zdvtR3VdndofP5UBeib5BhDmYUxx5Ab/E/7Ya9C7lroFPYKWW24XpjmG6Z7LgohuBMbz
+         P27g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Qee/3ouJ9DM4ILqUhdVC3wPnlUxhQ79bmhKE0E3lC+E=;
+        b=hEommpdjPLng+MV8A6FNxhcW3dIsvzFU5piWYpOZ/syZOtzZgBAMV9LlpYytaRLbhz
+         Iuyw4fL8nxFEu6X2+kIO5SdwSrUbQCzOYGnK7CVlamvF1S6yaV44QlYePWo8Y67WyuAU
+         neq4SKOdbNJoWodkhDPkjQPs8NeseChXEFjIO9rCyuwTaQRW7Khqawc5oWTPRtBN9yTr
+         l03avfpyNeLgXDlRv5pi3YZqs49ZNxupaZzbWp6H1ziE0VMl/Nt+a7xjuFPRYCh8Tek6
+         Ap46owsx8L+G8jIs/WXWvqckd8DGmJug9X5KI7Q8Ht6mAQsl0tJbTM4uloG4Olr/1GqH
+         LXng==
+X-Gm-Message-State: AOAM531h4az0nHkzKe2HOCzEYlbOvsfQAEc9ZOK6GqH9wBcFlxoyPvYz
+        fXc1eO0YOXqC1G9t8Z3OyMKbdhQZ+7YJinhk61jv4w==
+X-Google-Smtp-Source: ABdhPJyrIJssRcdkYlbUMZS+1C716nMO9jZFhr4Nr3oJZzh/jhmwZdVZCrmm1B0x8jZcM+3+pNXODlucAQcEdFIkoO4=
+X-Received: by 2002:a81:642:0:b0:2d6:baf8:ee52 with SMTP id
+ 63-20020a810642000000b002d6baf8ee52mr23809916ywg.36.1646128671619; Tue, 01
+ Mar 2022 01:57:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220228172311.789892158@linuxfoundation.org>
+In-Reply-To: <20220228172311.789892158@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 1 Mar 2022 15:27:40 +0530
+Message-ID: <CA+G9fYtXWn-U=rojccfrb9jK=eK8d8-+Qrk7j-KGahefa5e+Pw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/80] 5.10.103-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,45 +71,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 28 Feb 2022 at 23:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.103 release.
+> There are 80 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.103-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
-> In the current code, the kernel command-line parameter mem= and memmap=
-> can not work well on MIPS, this patchset refactors the related code to
-> fix them.
-> 
-> For kdump on MIPS, if the users want to limit the memory region for the
-> capture kernel to avoid corrupting the memory image of the panic kernel,
-> use the parameter memmap=limit@base is the proper way, I will submit a
-> patch to use memmap=limit@base for kexec-tools after this patchset is
-> applied.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Sorry, apparently I misread the prevoius version.
-What's wrong with the current implementation of mem=limit@base for the
-kdump case?
- 
-> v4: Fix some build warnings reported by kernel test robot
-> 
-> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
->     commented by Mike Rapoport, thank you
-> 
-> v2: Add some new patches to support memmap=limit@base
-> 
-> Tiezhu Yang (4):
->   MIPS: Refactor early_parse_mem() to fix mem= parameter
->   memblock: Introduce memblock_mem_range_remove_map()
->   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
->   MIPS: Remove not used variable usermem
-> 
->  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
->  include/linux/memblock.h |  1 +
->  mm/memblock.c            |  9 +++++--
->  3 files changed, 40 insertions(+), 39 deletions(-)
-> 
-> -- 
-> 2.1.0
-> 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Sincerely yours,
-Mike.
+## Build
+* kernel: 5.10.103-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 3a000049e6a1d04d2e57cd3de7783075811d62e8
+* git describe: v5.10.102-81-g3a000049e6a1
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.102-81-g3a000049e6a1
+
+## Test Regressions (compared to v5.10.101-122-g6c935cea31db)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.101-122-g6c935cea31db)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.101-122-g6c935cea31db)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.101-122-g6c935cea31db)
+No metric fixes found.
+
+## Test result summary
+total: 97503, pass: 84163, fail: 521, skip: 12008, xfail: 811
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 39 passed, 2 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 24 total, 15 passed, 9 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

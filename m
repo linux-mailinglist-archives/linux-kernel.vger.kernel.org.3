@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3800D4C90FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452DB4C9107
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbiCAQ6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S236195AbiCARBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbiCAQ6c (ORCPT
+        with ESMTP id S236245AbiCARBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:58:32 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F424DF63;
-        Tue,  1 Mar 2022 08:57:50 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so2748693pjb.0;
-        Tue, 01 Mar 2022 08:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zo/7GfGlOnzofFvvg9nl2uRoZm9krz9UZhB43diZ0xQ=;
-        b=RNqA+/co2oe/6+gH0Z9qupty7/bWWmJnkIwk8N7n+UbysnG+ErCb3lADt8G0pVTK3U
-         aUYi8LzRI/WMW8YKctdfQAb9HQ3r841bhMzzT57HtSqb3V7pjcDrNyHlysvuZI4J7t6M
-         Z8rJNpG+H/lgc/3MBfbKhxOQCgD4O/vBczqOso2xjc1Z1GYcTI/YOUZzL6PaEbbuRNpQ
-         zzv1qF2/mDvo7zrcKiJSr1+p7XyEE3Q/qbSd52AvM58dDLvULCuEk1EBa1mlN5hPjlDK
-         vITfq18YvRdvc9rdJxzKosjdnYWLAPf4Cu8aBQ8d9e1K8ddOQzqwCnsO6h6ucHAZZsaV
-         vflw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zo/7GfGlOnzofFvvg9nl2uRoZm9krz9UZhB43diZ0xQ=;
-        b=rIVy0RmrLJyPiuunKwtzNp1NmqhWDjDc2A8W+HrB11MLB5lFIwXHz6ue0Vpro5bgTU
-         g1UQNd0ubtw6wwstmQR3iD+Jxyf37DHNuohgUoAnULizfm9nyDL3n3xUDLV8CNjL5X+f
-         Oh6lbDajDwzscjDPr+ygXbbgp8saIzlHWQX7dAMplN4yGzW7JRL/2fx/vYVPa1nIofxh
-         /P8vmR0R/15Els/n7IWvB7Elrie60ZKbLVQloYUtFv0MnGfUnPhRsgcbdli6SsUURUj5
-         7rKRbj3RagztUmbwhDaYSCkGthdPYfd5FcMvG84vn3+AW8seYdjuDQJfjO4S4UtGKrjF
-         w9HA==
-X-Gm-Message-State: AOAM5335KwkccFvT7HoiV62IIgw7VnA3KbR0razTLSQsHYOEV0b/WUM0
-        uEs847aN10qnlGZK0xHzP+g8/GTe/oVB4Yjb
-X-Google-Smtp-Source: ABdhPJyaTAyeGUQ7KahmWWxURRoepGSsTwC6E1Q1U1J+cTHYHX7a5lqwlr97c/hx8naBMGtBkz43Kw==
-X-Received: by 2002:a17:902:b289:b0:14f:ebc2:8b85 with SMTP id u9-20020a170902b28900b0014febc28b85mr25905806plr.39.1646153870098;
-        Tue, 01 Mar 2022 08:57:50 -0800 (PST)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id k17-20020a056a00169100b004f3c2ac6600sm17887468pfc.116.2022.03.01.08.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 08:57:49 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] libbpf: Add a check to ensure that page_cnt is non-zero
-Date:   Wed,  2 Mar 2022 00:57:37 +0800
-Message-Id: <20220301165737.672007-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 1 Mar 2022 12:01:05 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9588C11C04
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646154024; x=1677690024;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qFx2K2BkSCOgXk2XRt2r5V5uRFSKNupKTOGKHA8XF+M=;
+  b=Fv0nPVkep0GfzlPzpE6WEm8JvXiaqnin/d1/As2vdEvgW4JuCrF3NcLY
+   E9OUaBk/H3Lw6fwtjEZiH5ZUSF7o3rZJorQT5Xvq57X15L17eT2OuzFDS
+   OoiZmEo6QdINF4n0CNmTLyfK+I0rM/GslUxEwKBYQBZrMMjbNTU04bFsy
+   DX3tv2yteFAdgDeFaxlXer+Ed5uvyezmGgz8HAtxjc78ESc3PFciqsrhS
+   vINjSDwwZ/kfxs8fmj0XG/uEYWSpdu4DZ6wmwd6ZJmRsfZCauNOOmapDg
+   lHxLNqb5Y7f+c0xAJ7nl19uhsy6Fwf2f0iVT7+h3UsG3h1bAawFub5eaY
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="252915520"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="252915520"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:58:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="608868643"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Mar 2022 08:58:45 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP5pk-0000m5-RU; Tue, 01 Mar 2022 16:58:44 +0000
+Date:   Wed, 2 Mar 2022 00:58:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/30]
+ drivers/vfio/vfio.c:1800:10: error: implicit declaration of function
+ 'iommufd_vfio_set_iommu'
+Message-ID: <202203020051.lJg5pB22-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The page_cnt parameter is used to specify the number of memory pages
-allocated for each per-CPU buffer, it must be non-zero and a power of 2.
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   2bca5fa75dad57f41002a93861a950d35d55e568
+commit: f8fb748995b4e1156fd76a3860da5ea897536a3c [29/30] vfio: Fix kernel panic in vfio_ioctl_check_extension()
+config: hexagon-randconfig-r041-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020051.lJg5pB22-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/f8fb748995b4e1156fd76a3860da5ea897536a3c
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout f8fb748995b4e1156fd76a3860da5ea897536a3c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
 
-Currently, the __perf_buffer__new() function attempts to validate that
-the page_cnt is a power of 2 but forgets checking for the case where
-page_cnt is zero, we can fix it by replacing 'page_cnt & (page_cnt - 1)'
-with '!is_power_of_2(page_cnt)'.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thus we also don't need to add a check in perf_buffer__new_v0_6_0() to
-make sure that page_cnt is non-zero and the check for zero in
-perf_buffer__new_raw_v0_6_0() can also be removed.
+All errors (new ones prefixed by >>):
 
-The code is cleaner and more readable.
+   drivers/vfio/vfio.c:1088:44: error: too many arguments to function call, expected single argument 'iommufd', have 2 arguments
+                   vfio_group_unset_iommufd(group->iommufd, &group->device_list);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/iommufd.h:57:20: note: 'vfio_group_unset_iommufd' declared here
+   static inline void vfio_group_unset_iommufd(void *iommufd)
+                      ^
+   drivers/vfio/vfio.c:1166:26: error: too few arguments to function call, expected 3, have 2
+                                                   &group->device_list);
+                                                                      ^
+   include/linux/iommufd.h:51:19: note: 'vfio_group_set_iommufd' declared here
+   static inline int vfio_group_set_iommufd(int fd, struct iommu_group *group,
+                     ^
+>> drivers/vfio/vfio.c:1800:10: error: implicit declaration of function 'iommufd_vfio_set_iommu' [-Werror,-Wimplicit-function-declaration]
+                   return iommufd_vfio_set_iommu(group->iommufd, arg);
+                          ^
+   3 errors generated.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+
+vim +/iommufd_vfio_set_iommu +1800 drivers/vfio/vfio.c
+
+  1796	
+  1797	long vfio_external_check_extension(struct vfio_group *group, unsigned long arg)
+  1798	{
+  1799		if (group->iommufd)
+> 1800			return iommufd_vfio_set_iommu(group->iommufd, arg);
+  1801	
+  1802		return vfio_ioctl_check_extension(group->container, arg);
+  1803	}
+  1804	EXPORT_SYMBOL_GPL(vfio_external_check_extension);
+  1805	
+
 ---
- tools/lib/bpf/libbpf.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index be6480e260c4..4dd1d82cd5b9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -33,6 +33,7 @@
- #include <linux/filter.h>
- #include <linux/list.h>
- #include <linux/limits.h>
-+#include <linux/log2.h>
- #include <linux/perf_event.h>
- #include <linux/ring_buffer.h>
- #include <linux/version.h>
-@@ -10951,7 +10952,7 @@ struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
- {
- 	struct perf_buffer_params p = {};
- 
--	if (page_cnt == 0 || !attr)
-+	if (!attr)
- 		return libbpf_err_ptr(-EINVAL);
- 
- 	if (!OPTS_VALID(opts, perf_buffer_raw_opts))
-@@ -10992,7 +10993,7 @@ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
- 	__u32 map_info_len;
- 	int err, i, j, n;
- 
--	if (page_cnt & (page_cnt - 1)) {
-+	if (!is_power_of_2(page_cnt)) {
- 		pr_warn("page count should be power of two, but is %zu\n",
- 			page_cnt);
- 		return ERR_PTR(-EINVAL);
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

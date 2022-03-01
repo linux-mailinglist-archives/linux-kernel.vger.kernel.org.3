@@ -2,206 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434CA4C8EB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B784C8EB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbiCAPQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S235584AbiCAPP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbiCAPQU (ORCPT
+        with ESMTP id S232130AbiCAPP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:16:20 -0500
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA15692B2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:15:38 -0800 (PST)
-X-QQ-mid: bizesmtp88t1646147715twcfrl2f
-Received: from leo.localdomain (unknown [103.144.149.54])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 01 Mar 2022 23:15:12 +0800 (CST)
-X-QQ-SSF: 0140000000800040B000000A0000000
-X-QQ-FEAT: lCTDServp3q2HPFfw4iGLRGq1tHHetsng/rg5T71b8BxjrqVGV8SHpV6Z69IP
-        9MST2gC4gceBE8dZnDhlLZVwtNxZyHfM6qB1I71bs4HxLkZ7XEt9+9nvi+Fq0ynryAvkbeA
-        wPTsMDsbb5u16WUmFSparDMmkvz5SkVkHmy9RUUNSL2W3UV2/HBpRFBk/rZIwQiQExzmSc4
-        EnqgsUttY990k9mFiGjISDMjAhFOYOaXiOrGiHIf1aC4J0mn6PFRsMLDKHi4RnSgIrTyOcJ
-        TtO+8u2kx9uIrGuMkuStJXPtLPfueFLU4kbbanTPEVJx3Gu+HNybcBZyXmCp65lVDmvyFzh
-        Vgy8CqN1a0UXL8CAHvhmWnDewKh5BfAKrRglOE/
-X-QQ-GoodBg: 2
-From:   Jiajian Ye <yejiajian2018@email.szu.edu.cn>
-To:     akpm@linux-foundation.org
-Cc:     sfr@canb.auug.org.au, caoyixuan2019@email.szu.edu.cn,
-        hanshenghong2019@email.szu.edu.cn,
-        zhaochongxi2019@email.szu.edu.cn, weizhenliang@huawei.com,
-        zhangyinan2019@email.szu.edu.cn, linux-kernel@vger.kernel.org,
-        Jiajian Ye <yejiajian2018@email.szu.edu.cn>
-Subject: [PATCH 3/3] tools/vm/page_owner_sort.c: support sorting by tgid and update documentation
-Date:   Tue,  1 Mar 2022 23:14:38 +0800
-Message-Id: <20220301151438.166118-3-yejiajian2018@email.szu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220301151438.166118-1-yejiajian2018@email.szu.edu.cn>
-References: <20220301151438.166118-1-yejiajian2018@email.szu.edu.cn>
+        Tue, 1 Mar 2022 10:15:57 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0A242A25
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:15:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UoBxcPGC3UAO5MoKCwirDsxB9KccL9ZfKlxrg2nU4Rg=; b=C30FD7qT/eqfxIdgghplm/arpg
+        RuT7OMxztANsTbDvk6dTA8RY+S9lOhgTFUFRRYdPjPh3vAi454kjZttBJFjhWv5F8C0nbGQT7GSPf
+        wDK48E7rKz8Jqf/BfQYXA8fvZ7MK4eRkr1thTXUZkEFn67W+9yerWkN8qpEpQ5kGzOg+e1kvJ7BWr
+        AB+BdmTVKtOu0Nx9reHWWGpcyd/RH26j6l8L8MOmPlsSPsDzaKKxO0kc/O76lxqWRxUe04HoxagHD
+        Hkdkvoe8AgyvK85mXJNbO70fD4hmpYztzmKipIjc1gb+4w/9RzZwqkw1yMZ4oSvJgF+Ok+Ac4M7DX
+        lEjzXfyA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP4D8-009h2Q-1Q; Tue, 01 Mar 2022 15:14:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 82B1C30018E;
+        Tue,  1 Mar 2022 16:14:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 60C62302AEE61; Tue,  1 Mar 2022 16:14:42 +0100 (CET)
+Date:   Tue, 1 Mar 2022 16:14:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>,
+        "Milburn, Alyssa" <alyssa.milburn@intel.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+Subject: Re: [PATCH v2 18/39] x86/ibt: Add IBT feature, MSR and #CP handling
+Message-ID: <Yh44YsW8viBscBD0@hirez.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151323.069205370@infradead.org>
+ <eed8902f21ba9e5f93562432f6b5920137860a98.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eed8902f21ba9e5f93562432f6b5920137860a98.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the "page owner" information is read, the information sorted
-by TGID is expected.
+On Fri, Feb 25, 2022 at 07:59:15PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2022-02-24 at 15:51 +0100, Peter Zijlstra wrote:
+> > +__noendbr void cet_disable(void)
+> > +{
+> > +       if (cpu_feature_enabled(X86_FEATURE_IBT))
+> > +               wrmsrl(MSR_IA32_S_CET, 0);
+> > +}
+> > +
+> 
+> Did this actually work? 
 
-As a result, the following adjustments have been made:
+No idea,.. I don't generally have kexec clue.
 
-1. Add a new -P option to sort the information of blocks by TGID
-in ascending order.
+> There are actually two problems with kexecing
+> when CET is enabled. One is leaving the enforcement enabled when the
+> new kernel can't handle it. The other is that CR4.CET and CR0.WP are
+> tied together such that if you try to disable CR0.WP while CR4.CET is
+> still set, it will #GP. CR0.WP gets unset during kexec/boot in the new
+> kernel, so it blows up if you just disable IBT with the MSR and leave
+> the CR4 bit set.
+> 
+> I was under the impression that this had been tested in the userspace
+> series, but apparently not as I've just produced the CR0.WP issue. So
+> it needs to be fixed in that series too. Userspace doesn't really need
+> it pinned, so it should be easy.
 
-2. Adjust the order of member variables in block_list strust
-to avoid one 4 byte hole.
+So I see CR0 frobbing in identity_mapped and CR4 frobbing right after
+it. Is there a reason to first do CR0 and then CR4 or can we flip them?
+Otherwise we need to do CR4 twice.
 
-3. Add -P option explanation in the document.
+(Also, whoever wrote that function with _5_ identically named labels in
+it deserves something painful. Also, wth's up with that jmp 1f; 1:)
 
-Signed-off-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
----
- Documentation/vm/page_owner.rst |  1 +
- tools/vm/page_owner_sort.c      | 40 ++++++++++++++++++++++++++++++---
- 2 files changed, 38 insertions(+), 3 deletions(-)
+Something like so?
 
-diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-index 2ddb632d847b..941543a797fe 100644
---- a/Documentation/vm/page_owner.rst
-+++ b/Documentation/vm/page_owner.rst
-@@ -116,6 +116,7 @@ Usage
- 		-a		Sort by memory allocation time.
- 		-m		Sort by total memory.
- 		-p		Sort by pid.
-+		-P		Sort by tgid.
- 		-r		Sort by memory release time.
- 		-s		Sort by stack trace.
- 		-t		Sort by times (default).
-diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
-index 69fb6ca7c0b7..d166f2f900eb 100644
---- a/tools/vm/page_owner_sort.c
-+++ b/tools/vm/page_owner_sort.c
-@@ -25,16 +25,18 @@
- struct block_list {
- 	char *txt;
- 	char *stacktrace;
-+	__u64 ts_nsec;
-+	__u64 free_ts_nsec;
- 	int len;
- 	int num;
- 	int page_num;
- 	pid_t pid;
--	__u64 ts_nsec;
--	__u64 free_ts_nsec;
-+	pid_t tgid;
- };
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 399f075ccdc4..5b65f6ec5ee6 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -114,6 +114,14 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	/* store the start address on the stack */
+ 	pushq   %rdx
  
- static regex_t order_pattern;
- static regex_t pid_pattern;
-+static regex_t tgid_pattern;
- static regex_t ts_nsec_pattern;
- static regex_t free_ts_nsec_pattern;
- static struct block_list *list;
-@@ -91,6 +93,13 @@ static int compare_pid(const void *p1, const void *p2)
- 	return l1->pid - l2->pid;
- }
- 
-+static int compare_tgid(const void *p1, const void *p2)
-+{
-+	const struct block_list *l1 = p1, *l2 = p2;
++	/*
++	 * Clear X86_CR4_CET (if it was set) such that we can clear CR0_WP
++	 * below.
++	 */
++	movq	%cr4, %rax
++	andq	$~(X86_CR4_CET), %rax
++	movq	%rax, %cr4
 +
-+	return l1->tgid - l2->tgid;
-+}
-+
- static int compare_ts(const void *p1, const void *p2)
- {
- 	const struct block_list *l1 = p1, *l2 = p2;
-@@ -170,6 +179,24 @@ static pid_t get_pid(char *buf)
- 
- }
- 
-+static pid_t get_tgid(char *buf)
-+{
-+	pid_t tgid;
-+	char tgid_str[FIELD_BUFF] = {0};
-+	char *endptr;
-+
-+	search_pattern(&tgid_pattern, tgid_str, buf);
-+	errno = 0;
-+	tgid = strtol(tgid_str, &endptr, 10);
-+	if (errno != 0 || endptr == tgid_str || *endptr != '\0') {
-+		printf("wrong/invalid tgid in follow buf:\n%s\n", buf);
-+		return -1;
-+	}
-+
-+	return tgid;
-+
-+}
-+
- static __u64 get_ts_nsec(char *buf)
- {
- 	__u64 ts_nsec;
-@@ -231,6 +258,7 @@ static void add_list(char *buf, int len)
- 	list[list_size].txt[len] = 0;
- 	list[list_size].stacktrace = strchr(list[list_size].txt, '\n') ?: "";
- 	list[list_size].pid = get_pid(buf);
-+	list[list_size].tgid = get_tgid(buf);
- 	list[list_size].ts_nsec = get_ts_nsec(buf);
- 	list[list_size].free_ts_nsec = get_free_ts_nsec(buf);
- 	list_size++;
-@@ -249,6 +277,7 @@ static void usage(void)
- 		"-s	Sort by the stack trace.\n"
- 		"-t	Sort by times (default).\n"
- 		"-p	Sort by pid.\n"
-+		"-P	Sort by tgid.\n"
- 		"-a	Sort by memory allocate time.\n"
- 		"-r	Sort by memory release time.\n"
- 		"-c	Cull by comparing stacktrace instead of total block.\n"
-@@ -268,7 +297,7 @@ int main(int argc, char **argv)
- 	struct stat st;
- 	int opt;
- 
--	while ((opt = getopt(argc, argv, "acfmprst")) != -1)
-+	while ((opt = getopt(argc, argv, "acfmprstP")) != -1)
- 		switch (opt) {
- 		case 'a':
- 			cmp = compare_ts;
-@@ -294,6 +323,9 @@ int main(int argc, char **argv)
- 		case 't':
- 			cmp = compare_num;
- 			break;
-+		case 'P':
-+			cmp = compare_tgid;
-+			break;
- 		default:
- 			usage();
- 			exit(1);
-@@ -314,6 +346,7 @@ int main(int argc, char **argv)
- 
- 	check_regcomp(&order_pattern, "order\\s*([0-9]*),");
- 	check_regcomp(&pid_pattern, "pid\\s*([0-9]*),");
-+	check_regcomp(&tgid_pattern, "tgid\\s*([0-9]*) ");
- 	check_regcomp(&ts_nsec_pattern, "ts\\s*([0-9]*)\\s*ns,");
- 	check_regcomp(&free_ts_nsec_pattern, "free_ts\\s*([0-9]*)\\s*ns");
- 	fstat(fileno(fin), &st);
-@@ -373,6 +406,7 @@ int main(int argc, char **argv)
- 	}
- 	regfree(&order_pattern);
- 	regfree(&pid_pattern);
-+	regfree(&tgid_pattern);
- 	regfree(&ts_nsec_pattern);
- 	regfree(&free_ts_nsec_pattern);
- 	return 0;
--- 
-2.25.1
-
-
-
+ 	/*
+ 	 * Set cr0 to a known state:
+ 	 *  - Paging enabled

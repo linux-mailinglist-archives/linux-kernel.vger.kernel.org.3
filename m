@@ -2,160 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E594C997B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 00:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619D94C9995
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 00:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbiCAXsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 18:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S238718AbiCAX5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 18:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235135AbiCAXsa (ORCPT
+        with ESMTP id S237883AbiCAX44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 18:48:30 -0500
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC453669E;
-        Tue,  1 Mar 2022 15:47:47 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id i66so102204wma.5;
-        Tue, 01 Mar 2022 15:47:47 -0800 (PST)
+        Tue, 1 Mar 2022 18:56:56 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23E170875
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:56:13 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bu29so36016lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 15:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4H0hy1V+vsSL/J4iRHU98fs6Ghx9E/bawvPg5OjXQmQ=;
+        b=A1xSV6w+mnGI8KddmZFT+SVp47UhRqZlj7dZE7Ue1BgWjGw2+QCc51Zb6PIPvKiXuh
+         /TGd1P3o63R0kiFyLwVU+kzDBf6Kt9wFSZwwJYnrWAqavu9szp3nfmKm0Qe68N3l8Mdl
+         bWvesgtwBf4BWRSm4aUiCmj0pmAaHYwmzAjUs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qmLB0MmP9uqP6RXGIR5raG+mUMpoENIoAsqy7EycV20=;
-        b=ZipqvlJcROUMsZmurkm/of87fVRKk9ggzN9iBn+Y48P6VlcLTCuGrLXLgJOZE0iNSI
-         9UxcTysSENXy1p0C6pMzrUjFMKwiwAkavHAxiPFUHqVqbQsjWRisAPicMNNuKAk15OoS
-         Gy+GoXOz34eBrX6HwahE7m2zjR8i87y0cNUVhuwieAKXI/w+4WOEBpMoGDMGuc2n8c67
-         oGzxP63GumYKGBRl4fei4jvg1v0s13tShnsacNKeIRLud4Fsa6DQnIuL0BAm2sEHrdYd
-         C0DhHV1LTgysdgpbkJ0BKnZ2Qjj7YHzrmSbeYqTuIdMR/QuV5NDVXj4gD43x4Z62FytT
-         xKlg==
-X-Gm-Message-State: AOAM532CcJFsJAq1JQultHDRVBqrwyzB0a+vEZC86j3KMF8BxBMN4ac0
-        RKVpBxSf8vOMi2fLrFMm6LY=
-X-Google-Smtp-Source: ABdhPJyalSpZbyzReMK/ZICuWkJdF6/03nilqKrIX1kJ/PdO2vlSnQvser06uhFbphiD73VLZih6Dg==
-X-Received: by 2002:a1c:1905:0:b0:34f:477e:8850 with SMTP id 5-20020a1c1905000000b0034f477e8850mr18719625wmz.131.1646178466554;
-        Tue, 01 Mar 2022 15:47:46 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id f9-20020adffcc9000000b001e9e8163a46sm21199976wrs.54.2022.03.01.15.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 15:47:46 -0800 (PST)
-Date:   Tue, 1 Mar 2022 23:47:44 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3 05/30] drivers: hv: dxgkrnl: Opening of /dev/dxg
- device and dxgprocess creation
-Message-ID: <20220301234744.plggauzg4ka5p3tm@liuwe-devbox-debian-v2>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <419b863b2848b9e86382511a2f0f12cf91065578.1646163378.git.iourit@linux.microsoft.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4H0hy1V+vsSL/J4iRHU98fs6Ghx9E/bawvPg5OjXQmQ=;
+        b=tJrNk8Hzmg9KAn+zVnnJthBVMsR4r0wXjrhIX0CdTgg4EU1u/RXY8l2b8Rz7PT8ON9
+         ezwZv1M+VocvYKlArCENHPOk4wtyiQ5GrqBnBtpqnMlO/l2i4AUJBlKagnAd1oI5OppP
+         LmW4eJy46qF0ewYjmqHBGc+sRCk+iQcfMej0RRjWvLmzdtjHuremDcIbGQiP2X+NH1NK
+         3l7kDrwQIPsmlM90/v7KjAZ6aiCmf97Lk3K/f/yaYneuOPSUVON3SRJnnO0+A6p6TflS
+         a4pDgxGunfv0Z0u2GYjUaEz7FIYYbkbApwwCW1fbKUtKVpb2DF7WHKIGYG4KeFByv7lq
+         86Ng==
+X-Gm-Message-State: AOAM5331u9k+hbfErGIWzjyFhNwTxP7Mde45KD8T73AoPckmXwUA/76/
+        zyTB87Xx9827u4bfJpHu0xVItqVlqDhimVlSPfc=
+X-Google-Smtp-Source: ABdhPJzzEuqzJIWxMsWbPqpk7oyGJH+8PHaG5qzgHCOKCtLzu4+y6HvXrXCATWUWGa275Uuinmi/hA==
+X-Received: by 2002:a05:6512:718:b0:443:e589:ec02 with SMTP id b24-20020a056512071800b00443e589ec02mr16371157lfs.333.1646178971854;
+        Tue, 01 Mar 2022 15:56:11 -0800 (PST)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id v25-20020a2e4819000000b00245f3318b8csm2250988lja.31.2022.03.01.15.56.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 15:56:10 -0800 (PST)
+Received: by mail-lj1-f175.google.com with SMTP id y24so5034259ljh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 15:56:09 -0800 (PST)
+X-Received: by 2002:a05:6512:3042:b0:437:96f5:e68a with SMTP id
+ b2-20020a056512304200b0043796f5e68amr17643498lfb.449.1646178958685; Tue, 01
+ Mar 2022 15:55:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <419b863b2848b9e86382511a2f0f12cf91065578.1646163378.git.iourit@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+ <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org> <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+ <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
+ <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com> <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
+ <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+In-Reply-To: <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 1 Mar 2022 15:55:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+Message-ID: <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+To:     David Laight <David.Laight@aculab.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:45:52AM -0800, Iouri Tarassov wrote:
-> - Implement opening of the device (/dev/dxg) file object and creation of
-> dxgprocess objects.
-[...]
->  static int dxgk_open(struct inode *n, struct file *f)
->  {
-> -	return 0;
-> +	int ret = 0;
-> +	struct dxgprocess *process;
-> +
-> +	pr_debug("%s %p %d %d",
-> +		     __func__, f, current->pid, current->tgid);
-> +
-> +
-> +	/* Find/create a dxgprocess structure for this process */
-> +	process = dxgglobal_get_current_process();
-> +
-> +	if (process) {
-> +		f->private_data = process;
-> +	} else {
-> +		pr_debug("cannot create dxgprocess for open\n");
-> +		ret = -EBADF;
-> +	}
-> +
-> +	pr_debug("%s end %x", __func__, ret);
+On Tue, Mar 1, 2022 at 3:19 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> Having said that there are so few users of list_entry_is_head()
+> it is reasonable to generate two new names.
 
-I would normally remove pr_deubg's like this when submitting. It doesn't
-provide much information.
+Well, the problem is that the users of list_entry_is_head() may be few
+- but there are a number of _other_ ways to check "was that the HEAD
+pointer", and not all of them are necessarily correct.
 
-> +	return ret;
->  }
->  
-[...]
->  
-> +int dxgvmb_send_create_process(struct dxgprocess *process)
-> +{
-> +	int ret;
-> +	struct dxgkvmb_command_createprocess *command;
-> +	struct dxgkvmb_command_createprocess_return result = { 0 };
-> +	struct dxgvmbusmsg msg;
-> +	char s[WIN_MAX_PATH];
-> +	int i;
-> +
-> +	ret = init_message(&msg, NULL, process, sizeof(*command));
-> +	if (ret)
-> +		return ret;
-> +	command = (void *)msg.msg;
-> +
-> +	ret = dxgglobal_acquire_channel_lock();
-> +	if (ret < 0)
-> +		goto cleanup;
-> +
-> +	command_vm_to_host_init1(&command->hdr, DXGK_VMBCOMMAND_CREATEPROCESS);
-> +	command->process = process;
-> +	command->process_id = process->process->pid;
-> +	command->linux_process = 1;
-> +	s[0] = 0;
-> +	__get_task_comm(s, WIN_MAX_PATH, process->process);
-> +	for (i = 0; i < WIN_MAX_PATH; i++) {
-> +		command->process_name[i] = s[i];
-> +		if (s[i] == 0)
-> +			break;
-> +	}
+IOW, different places do different random tests for "did we walk the
+whole loop without breaking out". And many of them happen to work. In
+fact, in practice, pretty much *all* of them happen to work, and you
+have to have the right struct layout and really really bad luck to hit
+a case of "type confusion ended up causing the test to not work".
 
-What's wrong with doing
+And *THAT* is the problem here. It's not the "there are 25ish places
+that current use list_entry_is_head()".
 
-  __get_task_comm(command->process_name, WIN_MAX_PATH, process->process);
+It's the "there are ~480 places that use the type-confused HEAD entry
+that has been cast to the wrong type".
 
-here?
+And THAT is why I think we'd be better off with that bigger change
+that simply means that you can't use the iterator variable at all
+outside the loop, and try to make it something where the compiler can
+help catch mis-uses.
 
-That saves you many bytes on stack.
+Now, making the list_for_each_entry() thing force the iterator to NULL
+at the end of the loop does fix the problem. The issue I have with it
+is really just that you end up getting no warning at all from the
+compiler if you mix old-style and new-style semantics. Now, you *will*
+get an oops (if using a new-style iterator with an old-style check),
+but many of these things will be in odd driver code and may happen
+only for error cases.
 
-[...]
-> +static char *errorstr(int ret)
-> +{
-> +	return ret < 0 ? "err" : "";
-> +}
-> +
+And if you use a new-style check with an old-style iterator (ie some
+backport problem), you will probably end up getting random memory
+corruption, because you'll decide "it's not a HEAD entry", and then
+you'll actually *use* the HEAD that has the wrong type cast associated
+with it.
 
-This is not used in this patch.
+See what my worry is?
 
-[...]
-> diff --git a/drivers/hv/dxgkrnl/misc.h b/drivers/hv/dxgkrnl/misc.h
-> index 1ff0c0e28332..433b59d3eb23 100644
-> --- a/drivers/hv/dxgkrnl/misc.h
-> +++ b/drivers/hv/dxgkrnl/misc.h
-> @@ -31,7 +31,6 @@ extern const struct d3dkmthandle zerohandle;
->   * table_lock
->   * core_lock
->   * device_lock
-> - * process->process_mutex
+With the "don't use iterator outside the loop" approach, the exact
+same code works in both the old world order and the new world order,
+and you don't have the semantic confusion. And *if* you try to use the
+iterator outside the loop, you'll _mostly_ (*) get a compiler warning
+about it not being initialized.
 
-Why is this deleted?
+             Linus
 
-Thanks,
-Wei.
+(*) Unless somebody initializes the iterator pointer pointlessly.
+Which clearly does happen. Thus the "mostly". It's not perfect, and
+that's most definitely not nice - but it should at least hopefully
+make it that much harder to mess up.

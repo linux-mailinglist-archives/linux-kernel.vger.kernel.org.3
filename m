@@ -2,147 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBF94C90F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E824C90F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbiCAQzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:55:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S236028AbiCAQ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiCAQzQ (ORCPT
+        with ESMTP id S235211AbiCAQ45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:55:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE36321;
-        Tue,  1 Mar 2022 08:54:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ECEEB8184F;
-        Tue,  1 Mar 2022 16:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740C1C340EE;
-        Tue,  1 Mar 2022 16:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646153672;
-        bh=9NZHNm5f//UknLBQJi8aC7uw9czFahxKr+dcDCmFUCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DAkNpCOltDdkG4CouhQG0dgkdaSG+j0l1C23qUMaLCvWXveml1Bg7Um3AS0uTmR33
-         Z6yOKIMrLwUHhvy7GfU7WOAEAtARrMJKtdVhHwmHcp7horUQosHtlsFQg5gqUan1XR
-         d0UrTqoxcw3w/XKYLhEEWVhXQ7H8JYmTb7SDLzdNRBXWyJxPAlb+dnJgJnWL5npNeW
-         63xbWytUOsFzaJrkFx9qyR2Ew31u64F7qX9wHQeu3E2JtobC2y8ZxWIiMP3vYgRqh9
-         YRCHyXZxC8WdH460sGtTP9MnHQr6LhQQVgrUVnzWBfQKx4zeBp6yrIhS3qsDwpWV90
-         YFYdZxrdVrO4w==
-Date:   Tue, 1 Mar 2022 09:54:26 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
-Message-ID: <Yh5PwhYav2OOxnZV@dev-arch.archlinux-ax161>
-References: <20220301145233.3689119-1-arnd@kernel.org>
- <20220301145233.3689119-2-arnd@kernel.org>
+        Tue, 1 Mar 2022 11:56:57 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0AB62EA;
+        Tue,  1 Mar 2022 08:56:13 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id a23so32736856eju.3;
+        Tue, 01 Mar 2022 08:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=GDnZ8hNkIvcq50bCWCBGSUGNF9aGLbOlF2BISXEvTIc=;
+        b=XZHXrDVIuoc9YBQu969pl25pwdzYDhxDjORc66mDlrDLxp3p/E7LROWrLoiFlLJj+W
+         KOzYnunNATLurMoRb8PL0SM9JQcH8CP4gb63oZ2VGjuhqwXNt0ZxZMZCiWxbPA/vTiWV
+         hgNVZMi9xxZ9GHNW/BmuHMLBcUmarYuLSytvHPhvgHXuW4vYA48CnaO7dZBSpverGdTm
+         T+0CjLk9uGVoR0TQamqSQKjjDPZHdKxiopJydVu559lgSSC4Nv+NHu64xVEeqS6naHxG
+         Pa5hjsrsFoVH4FqA3jj1XG2hRHivAFy6MXohghx53w3fIyxzm4CTy8vkIy3/aXvLNXs+
+         JFmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=GDnZ8hNkIvcq50bCWCBGSUGNF9aGLbOlF2BISXEvTIc=;
+        b=GpdocEH5Li0JAlUTZnquzhrB7yopHsPYQC6lS/TZgO2PDpbNP9cNnd3JQ1XAKUjw22
+         lXQ6ymnS0emzExMqsbRftATRXePftdaKx1P+6+Jj/arkJ1lwtP6qeLfd2c/BDpZazBQX
+         2JsxoKjGmPNld7D/F7mZ6RiGaLI4MM5qRjIsZb3HD8mV/I/KhrwkrhSoWVEw8vBu8xuX
+         /p23NbQ5JXbRajHxDUQtUntW5aNMAI7BuKhBhzZEe9FxPelvczZdPeAlTgc6j9y4zB7A
+         tpiWzinhH/GzOW60IPI24QGtUbD0iuiAFmJ8LwJSzTqGtCrqfra5YI8ufBRuokzZxNyg
+         shwg==
+X-Gm-Message-State: AOAM532TVGS0WHzhhVFI1HKssvNTYy/CGt1SA1/oSqhLRQAUjUVLPm0K
+        5Cqc/+mUrjRgmbseWIvve3s=
+X-Google-Smtp-Source: ABdhPJzA4fcwHjzfdODfd5XwBOCEAq7WKV2kGsde3uQyxlrmsT+bMEhidcy2gAFaCIFJM0aaK8yIOQ==
+X-Received: by 2002:a17:906:7c42:b0:6d6:da70:dfa with SMTP id g2-20020a1709067c4200b006d6da700dfamr5198300ejp.3.1646153772393;
+        Tue, 01 Mar 2022 08:56:12 -0800 (PST)
+Received: from [192.168.1.103] ([129.205.124.14])
+        by smtp.gmail.com with ESMTPSA id ee21-20020a056402291500b00410d4261313sm7303840edb.24.2022.03.01.08.56.05
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Tue, 01 Mar 2022 08:56:08 -0800 (PST)
+Message-ID: <621e5028.1c69fb81.cf6a6.9235@mx.google.com>
+From:   Phillip Chippewa <katatimar552@gmail.com>
+X-Google-Original-From: Phillip Chippewa" <info@gmail.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220301145233.3689119-2-arnd@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Ahoj
+To:     Recipients <Phillip@vger.kernel.org>
+Date:   Tue, 01 Mar 2022 17:55:55 +0100
+Reply-To: chippewap887@gmail.com
+X-Antivirus: Avast (VPS 220301-2, 3/1/2022), Outbound message
+X-Antivirus-Status: Clean
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL,
+        SPF_HELO_NONE,SPF_PASS,TO_MALFORMED,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 03:52:32PM +0100, Arnd Bergmann wrote:
-> From: Mark Rutland <mark.rutland@arm.com>
-> 
-> In a subsequent patch we'll move the kernel from using `-std=gnu89` to
-> `-std=gnu11`, permitting the use of additional C11 features such as
-> for-loop initial declarations.
-> 
-> One contentious aspect of C99 is that it permits mixed declarations and
-> code, and for now at least, it seems preferable to enforce that
-> declarations must come first.
-> 
-> These warnings were already disabled in the kernel itself, but not
-> for KBUILD_USERCFLAGS or the compat VDSO on arch/arm64, which uses
-> a separate set of CFLAGS.
-> 
-> This patch fixes an existing violation in modpost.c, which is not
-> reported because of the missing flag in KBUILD_USERCFLAGS:
-> 
-> | scripts/mod/modpost.c: In function ‘match’:
-> | scripts/mod/modpost.c:837:3: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-> |   837 |   const char *endp = p + strlen(p) - 1;
-> |       |   ^~~~~
-> 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> [arnd: don't add a duplicate flag to the default set, update changelog]
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Ahoj,Som Phillip Chippewa, mal som to =C5=A1tastie, =C5=BEe som z turnaja v=
+yhral jackpot Powerball v hodnote 80 mili=C3=B3nov eurMichigan Lottery, Gra=
+tulujeme, v=C3=A1=C5=A1 e-mail z=C3=ADskal dar vo v=C3=BD=C5=A1ke 2 500 000=
+,00 EUR. Kontaktujte ma kv=C3=B4li reklam=C3=A1cii.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
-> ---
->  Makefile                          | 3 ++-
->  arch/arm64/kernel/vdso32/Makefile | 1 +
->  scripts/mod/modpost.c             | 4 +++-
->  3 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 94fa9a849a7a..37ef6a555dcd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -432,7 +432,8 @@ HOSTCXX	= g++
->  endif
->  
->  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> -			      -O2 -fomit-frame-pointer -std=gnu89
-> +			    -O2 -fomit-frame-pointer -std=gnu89 \
-> +			    -Wdeclaration-after-statement
->  export KBUILD_USERLDFLAGS :=
->  
->  KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index 9378ea055bf2..ed181bedbffc 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -68,6 +68,7 @@ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
->                 -fno-strict-aliasing -fno-common \
->                 -Werror-implicit-function-declaration \
->                 -Wno-format-security \
-> +               -Wdeclaration-after-statement \
->                 -std=gnu11
->  VDSO_CFLAGS  += -O2
->  # Some useful compiler-dependent flags from top-level Makefile
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 6bfa33217914..fe693304b120 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -833,8 +833,10 @@ static int match(const char *sym, const char * const pat[])
->  {
->  	const char *p;
->  	while (*pat) {
-> +		const char *endp;
-> +
->  		p = *pat++;
-> -		const char *endp = p + strlen(p) - 1;
-> +		endp = p + strlen(p) - 1;
->  
->  		/* "*foo*" */
->  		if (*p == '*' && *endp == '*') {
-> -- 
-> 2.29.2
-> 
-> 

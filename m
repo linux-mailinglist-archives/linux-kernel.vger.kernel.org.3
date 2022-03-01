@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82C4C8F6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD24A4C8F70
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235912AbiCAPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S235917AbiCAPvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbiCAPu1 (ORCPT
+        with ESMTP id S230374AbiCAPvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:50:27 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B348465F5
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:49:44 -0800 (PST)
+        Tue, 1 Mar 2022 10:51:00 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9252B1D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:50:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZdRx/1DXGgxAEKibLBKrBbS6gSz9WiPqg2uGs+P6fS4=; b=YkDlN4KfV4wMBwk/FyRAKFlvN0
-        yzKguLu7NTFntQ7M1Ssi9FS29Q9pTZnTJ7sshhQK3np0DKgzkWXp+OOe+ihAXwpNmxzHOfbenKqda
-        2pLI007bDEZ8ZlL6ltE+djUDDIPHU7Wb8Ey483ZItdbjTVg9rkpWCp0ruxu4MzloKbpIHtJabYWVe
-        j/bbIzM9B2Ty+w0Wuh7pLcPjKZHiOFA34MSTG5++o5QTin60ocXoezTocNU5defNVRJzl+XmK/eyJ
-        yjlUt9U7aq5OWDlFLSGe6V8mRtpp86ZMDeRRNnBVhCgFXVQbaWTBqwQ5CmI/Qu1ZpUQW+UbYbFm9p
-        CulDj8fw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57582)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nP4kw-0001TV-6q; Tue, 01 Mar 2022 15:49:42 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nP4kv-0007IW-KK; Tue, 01 Mar 2022 15:49:41 +0000
-Date:   Tue, 1 Mar 2022 15:49:41 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: boot flooded with unwind: Index not found
-Message-ID: <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
-References: <Yh5ASXVoWoMj7/Rr@Red>
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Qk4S7BOXRaMh0OMC5LegIqh9bUrHyssgynnaD0BtCZY=; b=CvML4zN3tzI1rj/6KC35cM5EXT
+        dfymMHDNX8oU71VsMB1M1qkJNp2Y+doMMyuLxtIm7at6Colg0tpgHyAhGp0tBX2EygjkrUr67tMES
+        iMUMNiEY0nHQZ5RBqbiKstEeisDejk35l9EhHlm6jRqqd6jOYWdoLuP+7ep5pEZqYNZvVJ3UOVNS+
+        urtFzIOciCFdNtGozo07F+0AJRua4da69Y9AZrPMZ/AiWBXOaDrAmEm81f9v8k6d8bdMG6WLfYHdo
+        nS9MXPKevOf/Mw3ap2Rs/AOxE/THN4FsQdluRyC21vxpZoRs0JOkUUOUPwMPVOGIZBEp99fPn5wBz
+        ZJfF9D+Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP4lN-00EIyG-Cb; Tue, 01 Mar 2022 15:50:09 +0000
+Message-ID: <1bd8ef12-3770-5075-6fe1-a3f0ceed1b39@infradead.org>
+Date:   Tue, 1 Mar 2022 07:50:02 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh5ASXVoWoMj7/Rr@Red>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] printk: fix return value of printk.devkmsg __setup
+ handler
+Content-Language: en-US
+To:     John Ogness <john.ogness@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20220228220556.23484-1-rdunlap@infradead.org>
+ <87sfs17rsu.fsf@jogness.linutronix.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87sfs17rsu.fsf@jogness.linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
-> Hello
-> 
-> I booted today linux-next (20220301) and my boot is flooded with:
-> [    0.000000] unwind: Index not found c0f0c440
-> [    0.000000] unwind: Index not found 00000000
-> [    0.000000] unwind: Index not found c0f0c440
-> [    0.000000] unwind: Index not found 00000000
-> 
-> This happen on a sun8i-a83t-bananapi-m3
 
-Have you enabled vmapped stacks?
+
+On 3/1/22 04:58, John Ogness wrote:
+> On 2022-02-28, Randy Dunlap <rdunlap@infradead.org> wrote:
+>> If an invalid option value is used with "printk.devkmsg=<value>",
+>> it is silently ignored.
+>> If a valid option value is used, it is honored but the wrong return
+>> value (0) is used, indicating that the command line option had an
+>> error and was not handled. This string is not added to init's
+>> environment strings due to init/main.c::unknown_bootoption()
+>> checking for a '.' in the boot option string and then considering
+>> that string to be an "Unused module parameter".
+>>
+>> Print a warning message if a bad option string is used.
+>> Always return 1 from the __setup handler to indicate that the command
+>> line option has been handled.
+>>
+>> Fixes: 750afe7babd1 ("printk: add kernel parameter to control writes to /dev/kmsg")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> 
+> Reviewed-by: John Ogness <john.ogness@linutronix.de>
+> 
+>> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> 
+> The message at this link is very helpful in explaining the state of
+> declaring kernel parameters. Hopefully someday someone will document
+> and/or comment this stuff.
+
+I have added some docs to include/linux/init.h.
+Andrew has it in his mmotm queue.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+~Randy

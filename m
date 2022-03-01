@@ -2,118 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B854C85C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57E14C85D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiCAIAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S233271AbiCAICL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbiCAIAN (ORCPT
+        with ESMTP id S233188AbiCAIB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:00:13 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E021C80202;
-        Mon, 28 Feb 2022 23:59:25 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id o26so13114111pgb.8;
-        Mon, 28 Feb 2022 23:59:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ekN4siAZvBFYd9yFklz7czO7Ig0JL/XxTSkd0vY2Yt8=;
-        b=Kz+4lJxpn6ZgNlG3qZPKUsrxvOx+u6q7ExG1ZalqIm2eoUgzkmKQ18EPS8Y2gJ91ws
-         ok2nLgOjheo5Q+JkSgWrbzHDQpQa5YOuFW3unn1k1/7oZ0HgwPOrZIe2pesso6MHMbRP
-         bZzU3Cz9/18EGeHCFtChKtNwLPgdwcTb5joSEyWFCDalPn4pWeVOSJaVpa2UJWelNXo7
-         nW275yP5KtdIIFFzENZdI2cq35OKDfDJ47rPXJa5QgRa8MoylJN0zGyv7syuj6ACJMJU
-         wP71gwseBBGoxOdHN/stX4Rz3Pzt08bTEZ5h4DDmVo+SpG06gBNUEOGFabRPha8U2EyC
-         LGvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ekN4siAZvBFYd9yFklz7czO7Ig0JL/XxTSkd0vY2Yt8=;
-        b=qjakPSBE9JzxrT/Wt7xgbpSFdVCq3DWqKHh+soM2CqqjwsN528xtqS1zVt/pzEY5ZF
-         zOUXDtLVBT/E662Ttourc/d+4QoJR51nZhJVtzFk4ov1szJbI323p+5muKpVrOPiZcq9
-         g1rA1vP17QapX2v32VMYx1wYGS/kEdMERMJaQ3WHoaCOxA+tWkTzwtEcnmKug/rrbYVw
-         kp282tBJ0YGxDKZYO2xX4WgP95EP6QpSTpTqYdPPSrNqbi3P2z711RS+olGyvbkieCkd
-         iU6YZOxzkNf6+kKmVhatTnugWQTWhfyfbwrr4aWuyQm6VUf1saibeXJTbwawLj4bjkSo
-         c+Zw==
-X-Gm-Message-State: AOAM532T6+jKK574QLvSFtJrCKFFe0pKNp/5Egha+31q2/6Nz5PaFJ8L
-        akv+8wMsq03fo9MiwF57kJtJMdgdZ2pylg==
-X-Google-Smtp-Source: ABdhPJwXvPb7Q40+8gxqteNpuZwp+PE+h/n6nJyCxWSbGjj0S4pZaxg41DZenCjeRXk3a7weBaal7A==
-X-Received: by 2002:a65:680a:0:b0:34d:efd6:7a5f with SMTP id l10-20020a65680a000000b0034defd67a5fmr20435429pgt.213.1646121565470;
-        Mon, 28 Feb 2022 23:59:25 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id o12-20020a17090aac0c00b001b9e5286c90sm1662745pjq.0.2022.02.28.23.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 23:59:25 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, jakobkoschel@gmail.com,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        keescook@chromium.org, jannh@google.com,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH 6/6] drivers/dma: remove iterator use outside the loop
-Date:   Tue,  1 Mar 2022 15:58:39 +0800
-Message-Id: <20220301075839.4156-7-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220301075839.4156-1-xiam0nd.tong@gmail.com>
-References: <20220301075839.4156-1-xiam0nd.tong@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 03:01:58 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A746F50E24;
+        Tue,  1 Mar 2022 00:01:17 -0800 (PST)
+X-UUID: df84e559f4474e938f5025a2e54a3e04-20220301
+X-UUID: df84e559f4474e938f5025a2e54a3e04-20220301
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2042174315; Tue, 01 Mar 2022 16:01:07 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 1 Mar 2022 16:01:06 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 16:01:06 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
+        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V5 0/6] add display support for MediaTek SoC MT8186
+Date:   Tue, 1 Mar 2022 16:00:59 +0800
+Message-ID: <20220301080105.31323-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Demonstrations for:
- - list_for_each_entry_from_inside
- - list_for_each_entry_safe_from_inside
+v5:
+1. Add binding patch of aal for MT8183.
+2. Revise enum to const.
+3. Change to use enum for mutex.
+4. Remove patches which are accepted by maintainers. (mmsys and mutex)
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/dma/iop-adma.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+v4:
+1. Remove binding of dsi and dpi.
+2. Revise aal binding.
+3. Fix indention in [4/5].
 
-diff --git a/drivers/dma/iop-adma.c b/drivers/dma/iop-adma.c
-index 310b899d5..2f326fb37 100644
---- a/drivers/dma/iop-adma.c
-+++ b/drivers/dma/iop-adma.c
-@@ -159,7 +159,6 @@ static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
- 
- 		/* all the members of a group are complete */
- 		if (slots_per_op != 0 && slot_cnt == 0) {
--			struct iop_adma_desc_slot *grp_iter, *_grp_iter;
- 			int end_of_chain = 0;
- 			pr_debug("\tgroup end\n");
- 
-@@ -167,9 +166,8 @@ static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
- 			if (grp_start->xor_check_result) {
- 				u32 zero_sum_result = 0;
- 				slot_cnt = grp_start->slot_cnt;
--				grp_iter = grp_start;
- 
--				list_for_each_entry_from(grp_iter,
-+				list_for_each_entry_from_inside(grp_iter, grp_start,
- 					&iop_chan->chain, chain_node) {
- 					zero_sum_result |=
- 					    iop_desc_get_zero_result(grp_iter);
-@@ -186,9 +184,8 @@ static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
- 
- 			/* clean up the group */
- 			slot_cnt = grp_start->slot_cnt;
--			grp_iter = grp_start;
--			list_for_each_entry_safe_from(grp_iter, _grp_iter,
--				&iop_chan->chain, chain_node) {
-+			list_for_each_entry_safe_from_inside(grp_iter, _grp_iter,
-+				grp_start, &iop_chan->chain, chain_node) {
- 				cookie = iop_adma_run_tx_complete_actions(
- 					grp_iter, iop_chan, cookie);
- 
+v3:
+1. Modify display binding based on mtk display binding patch. ([1])
+2. Remove patch: drm/mediatek: separate postmask component from mtk_disp_drv.c
+3. Remove compatible of 8186 ovl because we can re-use compatible of 8192 for 8186.
+4. Fix issue of space before tab on mutex patch.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/?h=mediatek-drm-next&id=4ed545e7d10049b5492afc184e61a67e478a2cfd
+
+v2:
+1. Add binding documentation for mmsys, mutex and mtk_display.
+2. Remove duplicated definition of postmask registers on mtk_drm_drv.
+3. Add disp_ovl support for MT8186.
+4. Add detailed commit messages.
+
+Rex-BC Chen (5):
+  dt-bindings: arm: mediatek: mmsys: add support for MT8186
+  dt-bindings: display: mediatek: add aal binding for MT8183
+  dt-bindings: display: mediatek: revise enum to const
+  dt-bindings: display: mediatek: change to use enum for mutex
+  dt-bindings: display: mediatek: add MT8186 SoC binding
+
+Yongqiang Niu (1):
+  drm/mediatek: add display support for MT8186
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |  1 +
+ .../display/mediatek/mediatek,aal.yaml        |  9 ++++-
+ .../display/mediatek/mediatek,ccorr.yaml      |  7 +++-
+ .../display/mediatek/mediatek,color.yaml      |  5 +--
+ .../display/mediatek/mediatek,dither.yaml     |  3 +-
+ .../display/mediatek/mediatek,gamma.yaml      |  3 +-
+ .../display/mediatek/mediatek,mutex.yaml      | 25 ++++++--------
+ .../display/mediatek/mediatek,ovl-2l.yaml     |  5 +++
+ .../display/mediatek/mediatek,ovl.yaml        |  9 +++--
+ .../display/mediatek/mediatek,postmask.yaml   |  5 +++
+ .../display/mediatek/mediatek,rdma.yaml       |  5 +--
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 33 +++++++++++++++++++
+ 12 files changed, 85 insertions(+), 25 deletions(-)
+
 -- 
-2.17.1
+2.18.0
 

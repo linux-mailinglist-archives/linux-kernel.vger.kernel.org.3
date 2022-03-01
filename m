@@ -2,191 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5224C939D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248E44C938E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbiCASzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S237067AbiCASuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236620AbiCASzn (ORCPT
+        with ESMTP id S229529AbiCASut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:55:43 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DE7606FD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:55:01 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qa43so6815181ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:55:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
-        b=ZEWbFFu3eWrZxUgaaScwD4ZJ//Z7mV4SGMyACB20WwCKEMFGKIBMMEXVkM4kZXdOyd
-         EokMKBVyAcoYChV/SvtOh5q5h0Yafm3wlsC3jCGOeoM0h4pn550KTbE+/sUn3z3m8p0V
-         ZL0gG9ZTrYCOlyUURTCDAGrluijISoqXbB1wA=
+        Tue, 1 Mar 2022 13:50:49 -0500
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEA3593A3;
+        Tue,  1 Mar 2022 10:50:07 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2d07ae0b1c4so154992177b3.11;
+        Tue, 01 Mar 2022 10:50:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
-        b=58eLvfzcsK3KRitwUUml6n6aZfOykshs5PrDf3aki9xn2147H4PyJGaoih64pdCE/m
-         5z+H+Tpv464UYfPwHMx2PYMVzWv7kUs1IL+tf4yBbegIYlrq+H+eCs9vTxpI6i3NpIZp
-         JjIsYqanWxukp3zaIc2J7Vx+0apSwwyrm6hVMzyJVNaxBzmGM41frVOl3jeTEv15ffxR
-         U7lsOrXPuBzkhzK8/C/IKHV4YDyYug+VjPeucw/foEwjTTSJL/6+Vrud8wRmaNJE8BZ4
-         k2hviq5fIypa6/TX+0ckckZQYQnfdlX8icmD9ZdBIuIAUwh9jCiDJ981C5GsnCQemKKN
-         oc+w==
-X-Gm-Message-State: AOAM532HTL4IHvt84MQA8dYUae8S2BGRdy1gKIY8gjY2yDWJrRdzoMJn
-        wVGdrccuoAAAm0kZxxboN5vNlgPP0Om0QpWnGh4=
-X-Google-Smtp-Source: ABdhPJxnOC3rqTydo5mjTmVLWDnJVRVy1MshWgVxKe0JwJb9zbXktaFeuS+thkHqblJuDuLnn7Gj0w==
-X-Received: by 2002:a17:907:2711:b0:6cf:350:81c3 with SMTP id w17-20020a170907271100b006cf035081c3mr20210146ejk.712.1646160899639;
-        Tue, 01 Mar 2022 10:54:59 -0800 (PST)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id pg27-20020a170907205b00b006d6e5102ca2sm894268ejb.97.2022.03.01.10.54.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 10:54:59 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id a8so33386318ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:54:59 -0800 (PST)
-X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
- s19-20020a056512203300b004433d490dacmr16440784lfs.52.1646160451271; Tue, 01
- Mar 2022 10:47:31 -0800 (PST)
+        bh=pFOUnJaNT7S8s2P0/5Z5ByV0p6iETlTm76+dPdZoFfw=;
+        b=mQOqndGQU1Ma2g78mo5qT2uGNSQpwU8dW3aJ/LxrfG94rjUsxR1a9nkhu36qHqbYk/
+         aVtfXqoIXCuk7haDWe3pzxLEA7s3orEBAieKubV+VQHuxRvF3ftv0Z5BrpALdp8XkvNa
+         CalSYW/sTSebq7VZo81VA9Z8oEycIA+goprRRvID3p8cHk+vDffhspzclIOOTyw+W3hG
+         tsazt7nUFVD4eaXW4vYBiYynGk6w6x7E90Pz0ontOkbPryP5lQfaeNAfvlcLX+hwMCux
+         ne8o+ti9KhJuUKWS7SFWdNBE3D/eMIfmGP75spaGkiyeTFQPuHhBLgHnTFiGL0siIs6O
+         Y6Bg==
+X-Gm-Message-State: AOAM530AczsDi6X2o9f/zabqX0IWdmABtDst11Ft7qlrlOyJZME43c9Z
+        RHstY1iysLhcB0N+krAcZFKHEhc9JXEWlo8jBAXfbgW2r9g=
+X-Google-Smtp-Source: ABdhPJwxPnRnXRB6L+ThKzPw8aNwSGoWS9x5ro88N83WCkCovOVcU1q8nE1LtPfWZ1N1OoJTy45NN3wcaVcNIDR5Rfg=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr13735653ywb.326.1646160606847; Tue, 01
+ Mar 2022 10:50:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org> <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
- <Yh1aMm3hFe/j9ZbI@casper.infradead.org> <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
- <202203011008.AA0B5A2D@keescook>
-In-Reply-To: <202203011008.AA0B5A2D@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 10:47:14 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
-Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
+References: <20220301173120.297105-1-Jason@zx2c4.com> <CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com>
+ <CAHmME9o4Vu_rPqWkPYgD79perwqgL-f8hh1j7dWZQczBZD1dww@mail.gmail.com>
+In-Reply-To: <CAHmME9o4Vu_rPqWkPYgD79perwqgL-f8hh1j7dWZQczBZD1dww@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 19:49:55 +0100
+Message-ID: <CAJZ5v0j+fCwdNHdQMZTzo0dvBh2KQHAb97dJq7XBZP=JY8yFQw@mail.gmail.com>
+Subject: Re: [PATCH] PM: notify of PM_POST_VMFORK events from vmgenid
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 10:14 AM Kees Cook <keescook@chromium.org> wrote:
+On Tue, Mar 1, 2022 at 7:19 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> The first big glitch with -Wshadow was with shadowed global variables.
-> GCC 4.8 fixed that, but it still yells about shadowed functions. What
-> _almost_ works is -Wshadow=local.
+> Hi Rafael,
+>
+> On Tue, Mar 1, 2022 at 6:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Mar 1, 2022 at 6:31 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >
+> > > There's an additional virtual power state that various crypto-oriented
+> > > drivers may benefit from being notified of, such as WireGuard: right
+> > > after a virtual machine has forked. In WireGuard's case, the PM notifier
+> > > there that clears keys pre-suspend will be adjusted to also clear them
+> > > post-vmfork. This trivial commit wires up the machinery for that change,
+> > > which builds on the recently added vmgenid driver in the random.git
+> > > tree.
+> >
+> > Well, what does power management have to do with WireGuard'?
+>
+> I guess a bit more background would be in order. If I post a v2 of
+> this, I'll include that there. But for now:
+>
+> WireGuard has ephemeral session keys. They're not supposed to exist
+> for longer than a few minutes for a crypto property called "forward
+> secrecy". In order to ensure this, WireGuard currently registers a PM
+> notifier that fires before suspend/hibernate, which memzeros the
+> various keys. That's all well and fine and works.
+>
+> There's now another power-ish event that WireGuard also cares about:
+> when a virtual machine has been forked. In this case, too, the
+> reaction is the same - memzero the various keys, only for a different
+> reason: rather than forward secrecy, the property we want here is that
+> a key+nonce tuple is never used on more than one plaintext.
+>
+> The argument of this patchset is that VM forking is kind of like a
+> power event, so why not re-use the same notifier for that.
 
-Heh. Yeah, I just have long memories of "-Wshadow was a disaster". You
-looked into the details.
+IMV the problem with this approach is that WireGuard is not the only
+user of PM (suspend/hibernate) notifiers and the other users of them
+will have no idea about what to do with PM_POST_VMFORK which from
+their perspective has nothing to do with suspend and/or hibernation.
 
-> Another way to try to catch misused shadow variables is
-> -Wunused-but-set-varible, but it, too, has tons of false positives.
+> However, if you disagree, I could move ahead with a separate notification
+> mechanism not involving the PM notifier.
 
-That on the face of it should be an easy warning to get technically
-right for a compiler.
-
-So I assume the "false positives" are simply because we end up having
-various variables that really don't end up being used - and
-"intentionally" so).
-
-Or rather, they might only be used under some config option - perhaps
-the use is even syntactically there and parsed, but the compiler
-notices that it's turned off under some
-
-        if (IS_ENABLED(..))
-
-option? Because yeah, we have a lot of those.
-
-I think that's a common theme with a lot of compiler warnings: on the
-face of it they sound "obviously sane" and nobody should ever write
-code like that.
-
-A conditional that is always true? Sounds idiotic, and sounds like a
-reasonable thing for a compiler to warn about, since why would you
-have a conditional in the first place for that?
-
-But then you realize that maybe the conditional is a build config
-option, and "always true" suddenly makes sense. Or it's a test for
-something that is always true on _that_architecture_ but not in some
-general sense (ie testing "sizeof()"). Or it's a purely syntactic
-conditional, like "do { } while (0)".
-
-It's why I'm often so down on a lot of the odd warnings that are
-hiding under W=1 and friends. They all may make sense in the trivial
-case ("That is insane") but then in the end they happen for sane code.
-
-And yeah, -Wshadow has had tons of history with macro nesting, and
-just being badly done in the first place (eg "strlen" can be a
-perfectly fine local variable).
-
-That said, maybe people could ask the gcc and clan people for a way to
-_mark_ the places where we expect to validly see shadowing. For
-example, that "local variable in a macro expression statement" thing
-is absolutely horrendous to fix with preprocessor tricks to try to
-make for unique identifiers.
-
-But I think it would be much more syntactically reasonable to add (for
-example) a "shadow" attribute to such a variable exactly to tell the
-compiler "yeah, yeah, I know this identifier could shadow an outer
-one" and turn it off that way.
-
-               Linus
+Yes, please.

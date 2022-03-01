@@ -2,151 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C40F4C96FF
+	by mail.lfdr.de (Postfix) with ESMTP id 876DE4C9700
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbiCAUcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S237490AbiCAUdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237536AbiCAUcr (ORCPT
+        with ESMTP id S238569AbiCAUdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:32:47 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9CF2DE8;
-        Tue,  1 Mar 2022 12:32:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id C4D051F44A12
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646166720;
-        bh=rZ+zdH3XV8cnIuP17vc0Q44PQylfiOCJrNa2j1++0eE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gx6vs5RfgGPCHgc9F0RwhKN9G6d9f1L/S+6hQqi2cUaS0sRPPvWbkGAgHQalDbHMp
-         zEoxSimyRWXawr28YTxKBy9+YlmaQlxzZQdP4a/8EXjxBcH2aRdEx1mJAgniiPNZ2L
-         1Zx1r0Qlr1LvwAvVYgOjmdFSngt9RWSGunfL0GRc5eYpV1eiRL2MHPJx0j5qR6gYnm
-         euNOpoSMTYBDo9rQdnlM266y0RRV9BT33MNSilVRQY3SFgqEM4419F/NO+rPtcapLE
-         NMiKW8t2IllrEGOZTvRB9WH7uV9y+THxgLDUrNvTCzoCwMfwIq7qH0WPG9xl6RU0Y6
-         SiZepdLlwfcLA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 2/2] arm64: dts: mediatek: Format mediatek,larbs as an array of phandles
-Date:   Tue,  1 Mar 2022 15:31:47 -0500
-Message-Id: <20220301203147.1143782-2-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220301203147.1143782-1-nfraprado@collabora.com>
-References: <20220301203147.1143782-1-nfraprado@collabora.com>
+        Tue, 1 Mar 2022 15:33:23 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907BF1AD82;
+        Tue,  1 Mar 2022 12:32:40 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id n14so22300758wrq.7;
+        Tue, 01 Mar 2022 12:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
+        b=gwPNVZYiRqm/ONMrZpXb5c/9raUwfFAFa5xWtypoXxpNWHjRwbdBrN7ce1jsSnUi5E
+         qu4tjsQE+/eFRINGfuAAC8fxvuigawD6NshWh2jJsNbNyD5ncd4CGkmQN7fiCcvHqNJv
+         hpt8YYho7cEwf6o+a4lgCnCb7BgzNWGqovXSt3wU93Kr5yG8/ajgaZ6H5Du/HTLG/mEF
+         VY+xszOpxm1UffGR4FrA3BcWhCSDC6tSNi9zV7kFRamiK9cNTlrMkhP+LqXD0yl/nv4E
+         h4ZZYlUUsYobbY33WFhIOejaEVjjSnXLyiXi29U2rgYN+KGhINIWsTc8QGkdYlRtEWuW
+         RZPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
+        b=M2xravbuQW0cnUBQnhz/aYdOgpm0H/62iv03JDukhyCpVlVsZteDyiXp8+mUU6SCtW
+         vjjh6aDOxOb0JmwxgyNeDRPkWcP9Mus8tsnENvmgaYg/u7kZtvZtZRJWbaKDunE9d1zH
+         JlBkh31v+TqUJrfS1J59vDnDoNFSpKb7MZ/09SQUbb6/QgHwH1+SRsfIsoQYfEo/Iyxa
+         o6W/fleGXk1dNTmRIWc4aUAOQPfmZ49Fe68OrFIKq1zcaw+7zgkVS5ZtDr/uPei4+Wye
+         /W4IwE+uuPJKE+dhvH5ht97okzmRyVmRzRGRNgj2LIe96daWbNlg5b615JqTvpmF+/sa
+         3IyQ==
+X-Gm-Message-State: AOAM530ZQyStTUG5qPuqp/nlnI/1hC6DAKIgMF/WNtr76jJwJ2kcLiZj
+        W3ARBmAUOHcbvyAHpyMnhUiAShWzxm8bVH9C/cST+vusmBgGrw==
+X-Google-Smtp-Source: ABdhPJyOyqrAmq0du9j8vJye29kK1c8pmM58hk4zrpISMGQfTykc6McfVWvFM94evxgpJmtoTmCcTROBwR2hlAwTSlk=
+X-Received: by 2002:adf:efc6:0:b0:1ed:f546:bd94 with SMTP id
+ i6-20020adfefc6000000b001edf546bd94mr19989617wrp.33.1646166758969; Tue, 01
+ Mar 2022 12:32:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220215163926.894-1-paweldembicki@gmail.com> <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
+In-Reply-To: <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
+From:   =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
+Date:   Tue, 1 Mar 2022 21:32:27 +0100
+Message-ID: <CAJN1KkygDrGPzJj4nobS-ZFSRqP+g9LQ49tbcLA8V7KvPhfYOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ARM: dts: kirkwood: Add Ctera C-200 V1 board
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Hao Fang <fanghao11@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
-updated the mediatek,larbs property in the mediatek,iommu.yaml
-dt-binding to make it clearer that the phandles passed to the property
-are independent, rather than subsequent arguments to the first phandle.
+wt., 1 mar 2022 o 00:43 Linus Walleij <linus.walleij@linaro.org> napisa=C5=
+=82(a):
+>
+> On Tue, Feb 15, 2022 at 5:40 PM Pawel Dembicki <paweldembicki@gmail.com> =
+wrote:
+>
+> > +&i2c0 {
+> > +       status =3D "okay";
+> > +
+> > +       rtc@30 {
+> > +               compatible =3D "s35390a";
+> > +               reg =3D <0x30>;
+> > +       };
+> > +
+> > +       lm63@4c {
+> > +               compatible =3D "national,lm63";
+> > +               reg =3D <0x4c>;
+> > +       };
+>
+> Think about adding chassis thermal zone for this sensor,
+>
+> I suppose you don't have any active control of cooling (fan)?
+> This often sits on GPIO...
+>
 
-Update the mediatek,larbs property in the arm64 Devicetrees to use the
-same formatting. This change doesn't impact any behavior: the compiled
-dtb is exactly the same. It does however fix the warnings generated by
-dtbs_check.
+Hi Linus,
+It has a fan controlled by the lm63: PWM controller. But the fan blows
+only on disks, board temperature won't change even when PWM =3D 100%.
+It should be controlled by hdd temperature.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> In that case just add a critical temperature so it can't burn
+> down the house.
+>
 
----
+Patch it's merged now, I will add critical temperatures in a separate patch=
+.
 
-Changes in v2:
-- Split arm and arm64 changes into separate commits
+> See:
+> arch/arm/boot/dts/gemini-dlink-dns-313.dts
+> node thermal-zones {} for an example of how to do this
+> quick and easy. You need CONFIG_THERMAL and
+> CONFIG_THERMAL_HWMON for this to work.
+>
+> Yours,
+> Linus Walleij
 
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 6 +++---
- arch/arm64/boot/dts/mediatek/mt8167.dtsi  | 2 +-
- arch/arm64/boot/dts/mediatek/mt8173.dtsi  | 4 ++--
- arch/arm64/boot/dts/mediatek/mt8183.dtsi  | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-index de16c0d80c30..973c9beade0c 100644
---- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-@@ -329,8 +329,8 @@ iommu0: iommu@10205000 {
- 		interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb0 &larb1 &larb2
--				  &larb3 &larb6>;
-+		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
-+				 <&larb3>, <&larb6>;
- 		#iommu-cells = <1>;
- 	};
- 
-@@ -346,7 +346,7 @@ iommu1: iommu@1020a000 {
- 		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_LOW>;
- 		clocks = <&infracfg CLK_INFRA_M4U>;
- 		clock-names = "bclk";
--		mediatek,larbs = <&larb4 &larb5 &larb7>;
-+		mediatek,larbs = <&larb4>, <&larb5>, <&larb7>;
- 		#iommu-cells = <1>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8167.dtsi b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-index 9029051624a6..54655f2feb04 100644
---- a/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
-@@ -174,7 +174,7 @@ larb2: larb@16010000 {
- 		iommu: m4u@10203000 {
- 			compatible = "mediatek,mt8167-m4u";
- 			reg = <0 0x10203000 0 0x1000>;
--			mediatek,larbs = <&larb0 &larb1 &larb2>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>;
- 			interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_LOW>;
- 			#iommu-cells = <1>;
- 		};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index 2b7d331a4588..042feaedda4a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -588,8 +588,8 @@ iommu: iommu@10205000 {
- 			interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_LOW>;
- 			clocks = <&infracfg CLK_INFRA_M4U>;
- 			clock-names = "bclk";
--			mediatek,larbs = <&larb0 &larb1 &larb2
--					  &larb3 &larb4 &larb5>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
-+					 <&larb3>, <&larb4>, <&larb5>;
- 			#iommu-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 00f2ddd245e1..523741150968 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -682,8 +682,8 @@ iommu: iommu@10205000 {
- 			compatible = "mediatek,mt8183-m4u";
- 			reg = <0 0x10205000 0 0x1000>;
- 			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_LOW>;
--			mediatek,larbs = <&larb0 &larb1 &larb2 &larb3
--					  &larb4 &larb5 &larb6>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>, <&larb3>,
-+					 <&larb4>, <&larb5>, <&larb6>;
- 			#iommu-cells = <1>;
- 		};
- 
--- 
-2.35.1
-
+Best Regards,
+Pawel Dembicki

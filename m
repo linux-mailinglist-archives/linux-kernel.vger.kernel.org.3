@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92014C8CFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1489E4C8CFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbiCANyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        id S235143AbiCANy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbiCANyW (ORCPT
+        with ESMTP id S234988AbiCANyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:54:22 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3AD457A4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:53:41 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id t13so14965433lfd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 05:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QpS3f8EZoX7R2KAuz/UX0/xqwonI23q4hXHZBWApjxE=;
-        b=YFJelA+ENY4EZJiP/YLHJkzoR5u7rW4E0VfzaZ8Q0qZfr9TB0HgZJOE/d1MySMcgPx
-         Jf+/ZYCNvUoklZvkkIO9N8lnHCWaTxSd8Q/pfuSrwkZ31qj3uG/pBlU9hdB+FzzO1Bqa
-         lmSYkKdaVatqRi/v1os1vNgdcFtMMHkJrbetMD5nmxughc6Duj/ZLysburORm04pujaU
-         KZ1c7AyHGaDdC2fiLVz2VW+6SuRKZ3aGBHWXCdBU4CixGrA1OgBDOh/0wyOh9VhPVWZH
-         Alx8GWnHSK7hg1IbTKx8yzgr5et49ZSuE6bwTPoZU9wBDc7ko43DeEneBxLzc4NHCR6U
-         DfSA==
+        Tue, 1 Mar 2022 08:54:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DA1749245
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646142821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4JsXxZXKDv01U5dexgfLVycNQs0qxk14GoYCt24oUx4=;
+        b=T28Rpcv/G1dSWgbt4p9ses2M07dvJovW/f0pQnLFt9+kp8ZKtqcMK8k+g4HWJ0hzWys7At
+        9C4SBvkjYSkxb92pv6GTPpYTwHppbXb+8r73lr70bRnh3h1K7Kf8mKGIsIbsLAsmubuNRX
+        MTFF0ZhuBUHNp3Egm4PT8g/c7RNEHh8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-44n_TOBZN_SIrwq7CxodWQ-1; Tue, 01 Mar 2022 08:53:40 -0500
+X-MC-Unique: 44n_TOBZN_SIrwq7CxodWQ-1
+Received: by mail-ed1-f70.google.com with SMTP id o5-20020a50c905000000b00410effbf65dso7810148edh.17
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 05:53:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QpS3f8EZoX7R2KAuz/UX0/xqwonI23q4hXHZBWApjxE=;
-        b=TFIa/d2LebIdJ+JDv8llwbTEyIb1vb0G/zzZsdVSkdAwuVhIDaR2VtnA9mQJtsw0JP
-         YyZ9bX9+ZVD69hbpBGmE8eoKgmfBMtr+AesnylS/SL4/QvtKgt+kd/yyvASqtAvJ5/ip
-         QqC4ujWUfv1DIEjFwepiPkNsBMYdijZedXSHmpU/ghoQQtHmequFnA/FjXksGjr3Jp3J
-         w1q+d1SvccydCXxgNlCG4sF7Xg7XAl+pcmESZZCWLCKxMi7g/76PfuZTbMRHTrOesXqU
-         X0TQxfoJVtwL9zgUMYraQT3fXr2eGsY6Z1kQIg1nbc/OAxIDzuMCPJBPtTYXb3Qjc6G/
-         BWaQ==
-X-Gm-Message-State: AOAM5315cpJKFYmBPK0oaR0Soumz9IU8wW4meKi/e3k1UbvjHTkyLNbj
-        baoZNvoVIKWA9UbKtViABdXMmAYWm3aicHY/k4LlzQ==
-X-Google-Smtp-Source: ABdhPJx0SoaiuulrB+NSo+UFoD6svkfCdOGBHeUCADEpXekaO/ti4K9CDSati5FTR+FCN4cJpmdhK9sgH1YngXvfez4=
-X-Received: by 2002:ac2:44c1:0:b0:444:18fc:8389 with SMTP id
- d1-20020ac244c1000000b0044418fc8389mr15500530lfm.167.1646142819499; Tue, 01
- Mar 2022 05:53:39 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4JsXxZXKDv01U5dexgfLVycNQs0qxk14GoYCt24oUx4=;
+        b=OCKjOBeWZhdJKvmAC9dVuWoxElCta67pDWMXZB17mcX7dGTmQGE+Tfv3XNz1lNKpPs
+         G/LGVfN8OCnb197mgcJcoB4RDFXGKtKX1Pw6Jjfj3FddrQ9+qcShINm25BXD3Hff6GsC
+         tTGxWmIGj3l+oJUeJD34UozedtiBhhImvpJI0XTY7035h+mTp1XFMTVbdoOPWJ29djf4
+         sg4kz9Q4+WXiTfrUQxM2IieMhuehRvJuQWSYmAqf58tlkF1ZRrtF3ZfvmeHE1Yt1kyY/
+         lGzwBBQ+qqLDxe4NHMaO3nij07x+o9E6RgbbbluWVH7aoxgMgoZZ5Pk/XM2Y+wj9qDsN
+         mrYw==
+X-Gm-Message-State: AOAM533c6tbJfnrz0aqlj44v6ofqyIh6aOEJnmRUVpYYBZAa1kBTGP09
+        mj9IeY5scdubO5RmRNk2N/wMidF0qDV3WbxRxBabneb4NeSl+tY4snpzzwrtDKlBQ6C8dJbamTU
+        OPC5BY7yPiRRuxONtWcmLAaQM
+X-Received: by 2002:a17:907:1b15:b0:6d7:13bd:dd62 with SMTP id mp21-20020a1709071b1500b006d713bddd62mr631336ejc.673.1646142818916;
+        Tue, 01 Mar 2022 05:53:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+7wwJDt0CZeqOsW2bZF2PxPiMWCe/whI0NQtaPVGhtQYydLl6dJs7AE0aMKqnDeiJeORgmw==
+X-Received: by 2002:a17:907:1b15:b0:6d7:13bd:dd62 with SMTP id mp21-20020a1709071b1500b006d713bddd62mr631324ejc.673.1646142818749;
+        Tue, 01 Mar 2022 05:53:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id ho12-20020a1709070e8c00b006ce3f158e87sm5329989ejc.2.2022.03.01.05.53.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 05:53:38 -0800 (PST)
+Message-ID: <e5c6c5ad-ea72-2653-7d4a-8d31f8154543@redhat.com>
+Date:   Tue, 1 Mar 2022 14:53:37 +0100
 MIME-Version: 1.0
-References: <20220227212330.22262-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227212330.22262-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Mar 2022 14:53:03 +0100
-Message-ID: <CAPDyKFpgG-P8Gtb+ww3YeO8jyjuNhKtjk=bePz=3qcf-37fsvA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: renesas,sdhi: Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220301201659.45ac94cd@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220301201659.45ac94cd@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 at 22:23, Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Document RZ/V2L SDHI bindings. RZ/V2L SDHI is almost identical to one
-> found on the R-Car Gen3. No driver changes are required as generic
-> compatible string "renesas,rcar-gen3-sdhi" will be used as a fallback.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Hi,
 
-Applied for next, thanks!
+On 3/1/22 10:16, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+> produced these warnings:
+> 
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Definition list ends without a blank line; unexpected unindent.
+> 
+> Introduced by commit
+> 
+>   2546c6000430 ("platform/x86: Add Intel Software Defined Silicon driver")
 
-Kind regards
-Uffe
+Thank you for the report.
 
-> ---
-> DTSi changes have been posted [0].
->
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220227203744.18355-2-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> ---
->  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> index 9ce6e06c19db..3b191fb89cf1 100644
-> --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> @@ -58,6 +58,7 @@ properties:
->                - renesas,sdhi-r8a77995  # R-Car D3
->                - renesas,sdhi-r8a779a0  # R-Car V3U
->                - renesas,sdhi-r9a07g044 # RZ/G2{L,LC}
-> +              - renesas,sdhi-r9a07g054 # RZ/V2L
->            - const: renesas,rcar-gen3-sdhi # R-Car Gen3 or RZ/G2
->
->    reg:
-> @@ -107,7 +108,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: renesas,sdhi-r9a07g044
-> +            enum:
-> +              - renesas,sdhi-r9a07g044
-> +              - renesas,sdhi-r9a07g054
->      then:
->        properties:
->          clocks:
-> --
-> 2.17.1
->
+So I just did:
+
+touch Documentation/ABI/testing/sysfs-driver-intel_sdsi
+make htmldocs &> log
+
+In a repo with drivers-x86/for-next checked out and checked the generated log files.
+But I'm not seeing these WARNINGs.
+
+Also 'find Documentation/output/ -name "*sdsi*"' does not output anything,
+is there anything special (maybe some extra utilities?) which I need to also enable
+building of htmldocs for the files in Documentation/ABI ?
+
+Regards,
+
+Hans
+

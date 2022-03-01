@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78CB4C821C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523914C821D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiCAETQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S232225AbiCAETY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiCAETO (ORCPT
+        with ESMTP id S232118AbiCAETX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:19:14 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6AACEB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:18:34 -0800 (PST)
+        Mon, 28 Feb 2022 23:19:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D52E0C1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:18:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Wvaf2rS4XOIPWWBrYZGKk5K6I6KgN+6dn1ljHlk2zPs=; b=SVQP0McGFuu5OufwsHA4flHsxD
-        0kXXn8LxZXj2d23U0sUGGTCIw+hfPbFi69d56eYCqYWXYSfBWrvimU/Y4TpsU8p6KF6YNYFS2bDLS
-        M8kdZBlZ0dLmUFi2U0pglwn3tx7klxSygvVfb1hKQSHXzx33n4PIrDgtDHe82jM9+TrXM3BthJgMe
-        HXS4YR4ztraAKWoGeXhX2RwKWqVjqgMb9H7gWacp5G5B7XdkCvFiN5APnvnz6CS7rLkGQ7FBso73U
-        kXvnIJ13uCimrYomvS5GdzD3kmQ9jKmefT5tgjhLDaOf3AmwY2XXCP+ItVAkIxg1ktCen3BydUwRw
-        +FhknsDA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOty2-00Eqwn-5p; Tue, 01 Mar 2022 04:18:30 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Feng Tang <feng.tang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver core: dd: fix return value of __setup handler
-Date:   Mon, 28 Feb 2022 20:18:29 -0800
-Message-Id: <20220301041829.15137-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kWYz8Vj6+e73fhwY2HejnGDpRm1xZpM7chYm13xZiRE=; b=Mj0eHI4ii7CLrujUOqvCZpyP/0
+        50SRuyQxPPqqWWCcpOI57nW9WFI0+TnRPYh9h5+l4RExlWtuO3W2axrsFhuLS+4bAFb0jk+FybZqw
+        oZC0B2tIj/EMc7smzUjQ6TQNmPYIZ0kCijjX+VZs3psXAgRB9SDprtoCDoYRL3SEN3snzzvgiyWCB
+        29ZGyoT5nkep3iz6jKKhFd1jf58Ij1Jos7KrBWGym5F04rilKPkatuKWYb+r5G5Sozzr6lV4SgjVL
+        VzOIz+4DU60lEcCjHzgWYho4RM6CSNyvCgcAqV500T7+Kq6SW09QaeIO1og49p8qjw3fAaYTJZKkf
+        s9tjnIxA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOty9-009E6R-Jl; Tue, 01 Mar 2022 04:18:37 +0000
+Date:   Tue, 1 Mar 2022 04:18:37 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH next] mm/thp: fix collapse_file()'s try_to_unmap(folio,)
+Message-ID: <Yh2enUcd2AMP4gq4@casper.infradead.org>
+References: <3f187b6c-e5e8-e66d-e0c0-7455ca6abb4c@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f187b6c-e5e8-e66d-e0c0-7455ca6abb4c@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -51,44 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When "driver_async_probe=nulltty" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-environment strings, polluting them.
+On Sat, Feb 26, 2022 at 06:22:47PM -0800, Hugh Dickins wrote:
+> The foliation of THP collapse_file()'s call to try_to_unmap() is
+> currently wrong, crashing on a test in rmap_walk() when xas_next()
+> delivered a value (after which page has been loaded independently).
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
-  driver_async_probe=nulltty", will be passed to user space.
+Argh.  I have a fear of this exact bug, and I must have missed checking
+for it this time.  I hate trying to keep two variables in sync, so my
+preferred fix for this is to remove it for this merge window:
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     driver_async_probe=nulltty
-
-Change the return value of the __setup function to 1 to indicate
-that the __setup option has been handled.
-
-Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
----
- drivers/base/dd.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20220228.orig/drivers/base/dd.c
-+++ linux-next-20220228/drivers/base/dd.c
-@@ -810,7 +810,7 @@ static int __init save_async_options(cha
- 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
++++ b/mm/khugepaged.c
+@@ -1699,8 +1699,7 @@ static void collapse_file(struct mm_struct *mm,
  
- 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
--	return 0;
-+	return 1;
- }
- __setup("driver_async_probe=", save_async_options);
+        xas_set(&xas, start);
+        for (index = start; index < end; index++) {
+-               struct folio *folio = xas_next(&xas);
+-               struct page *page = &folio->page;
++               struct page *page = xas_next(&xas);
  
+                VM_BUG_ON(index != xas.xa_index);
+                if (is_shmem) {
+@@ -1835,7 +1834,8 @@ static void collapse_file(struct mm_struct *mm,
+                }
+ 
+                if (page_mapped(page))
+-                       try_to_unmap(folio, TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
++                       try_to_unmap(page_folio(page),
++                                       TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
+ 
+                xas_lock_irq(&xas);
+                xas_set(&xas, index);
+
+(ie revert the first hunk).  I'll come back to khugepaged in the next
+merge window and convert this function properly.  It's going to take
+some surgery to shmem in order to use folios there first ...

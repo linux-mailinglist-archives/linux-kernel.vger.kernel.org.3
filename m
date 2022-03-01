@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A194C913D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA8E4C913B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236428AbiCARN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
+        id S236326AbiCARNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235479AbiCARNw (ORCPT
+        with ESMTP id S234377AbiCARNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:13:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1BAA4838D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646154789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPN5JwUatfJhVFBiHuO8MPmnVXIce6kUOc4BGm1YEvY=;
-        b=d3N22ec8rGS5gq3geyXf8fR+AIjJXtCK8JGU6hB8QvsUQN4QXAG/KuVMaJi465c++mQL0e
-        Or4j1P01mw+TIfpjZfyDwugKweT3PpsTSOWULZtqHkj9HyF7kPV4EGiyrDxZQXb7zSEaSj
-        vSr1abdHR7FWCjeFdqWuCmGto3jac0Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-22-wm-lAGIKMsiuE7i1ljBKFA-1; Tue, 01 Mar 2022 12:13:06 -0500
-X-MC-Unique: wm-lAGIKMsiuE7i1ljBKFA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8B18824FA7;
-        Tue,  1 Mar 2022 17:13:04 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 59C7E2ED78;
-        Tue,  1 Mar 2022 17:13:01 +0000 (UTC)
-Message-ID: <2fddbfd6b6e68f3f8e972536c27a87ffadbe1911.camel@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Date:   Tue, 01 Mar 2022 19:13:00 +0200
-In-Reply-To: <Yh5KTtLhRyfmx/ZF@google.com>
-References: <20220301135526.136554-1-mlevitsk@redhat.com>
-         <20220301135526.136554-2-mlevitsk@redhat.com> <Yh5KTtLhRyfmx/ZF@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 1 Mar 2022 12:13:47 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ECD3B007;
+        Tue,  1 Mar 2022 09:13:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646154785; x=1677690785;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=k6CREB0TD0/8UF4IksukPBWP48bQZt3imPBwgI28Sps=;
+  b=mz5abiRslc3BzkZyBHTbPrhwGGb8lwlczq3bnOAE6S7xGmdJjXcqRhfg
+   xIRThIlKAMAP79r1V4AiWIZ2cfeCu10G51CMCaUp2umSN+K15VBbjigud
+   +oLRWhltDXib+guWJQqdPiXis2fcL62SzyvfPrXs/Wo4/zcslTcBfnnzk
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Mar 2022 09:13:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:13:04 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 1 Mar 2022 09:13:04 -0800
+Received: from [10.111.181.139] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 1 Mar 2022
+ 09:13:04 -0800
+Message-ID: <4c3c55ac-1dda-410a-7125-ca0e2acee44d@quicinc.com>
+Date:   Tue, 1 Mar 2022 09:13:03 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 03/10] staging: wfx: format comments on 100 columns
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Jerome Pouiller <Jerome.Pouiller@silabs.com>,
+        <linux-wireless@vger.kernel.org>, Kalle Valo <kvalo@kernel.org>
+CC:     <devel@driverdev.osuosl.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220225112405.355599-1-Jerome.Pouiller@silabs.com>
+ <20220225112405.355599-4-Jerome.Pouiller@silabs.com>
+ <fe3c21a9c0178a2f0fcea698b8e6405a99747dea.camel@perches.com>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <fe3c21a9c0178a2f0fcea698b8e6405a99747dea.camel@perches.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 16:31 +0000, Sean Christopherson wrote:
-> On Tue, Mar 01, 2022, Maxim Levitsky wrote:
-> > Use a dummy unused vmexit reason to mark the 'VM exit' that is happening
-> > when kvm exits to handle SMM, which is not a real VM exit.
+On 2/28/2022 5:12 PM, Joe Perches wrote:
+> On Fri, 2022-02-25 at 12:23 +0100, Jerome Pouiller wrote:
+>> From: Jérôme Pouiller <jerome.pouiller@silabs.com>
+>>
+>> A few comments were not yet formatted on 100 columns.
 > 
-> Why not use "62h VMEXIT_SMI"?
-
-Because VMEXIT_SMI is real vmexit which happens when L1 intercepts #SMI
-And here nested_svm_vmexit is abused to just exit guest mode without vmexit.
-
+> IMO, none of these changes are necessary or good changes.
 > 
-> > This makes it a bit easier to read the KVM trace, and avoids
-> > other potential problems.
+> 80 columns is preferred.
 > 
-> What other potential problems?
+> Really comments should most always use 80 columns, and
+> only occasionally should code be more than 80 columns
+> and almost never should code be more than 100 columns.
 
-The fact that we have a stale VM exit reason in vmcb without this
-patch which can be in theory consumed somewhere down the road.
-
-This stale vm exit reason also appears in the tracs which is
-very misleading.
-
-Best regards,
-	Maxim Levitsky
-
-> 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/svm/svm.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 7038c76fa8410..c08fd7f4f3414 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -4218,7 +4218,7 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
-> >  	svm->vmcb->save.rsp = vcpu->arch.regs[VCPU_REGS_RSP];
-> >  	svm->vmcb->save.rip = vcpu->arch.regs[VCPU_REGS_RIP];
-> >  
-> > -	ret = nested_svm_vmexit(svm);
-> > +	ret = nested_svm_simple_vmexit(svm, SVM_EXIT_SW);
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -- 
-> > 2.26.3
-> > 
-
-
+That was my reaction as well. Just because we've relaxed rules so that 
+we *can* exceed 80 columns, it doesn't mean we *should*, and definitely 
+doesn't mean we should *strive* to do so.

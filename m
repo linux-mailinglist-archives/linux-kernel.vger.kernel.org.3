@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CDE4C9137
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A194C913D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbiCARMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S236428AbiCARN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiCARMm (ORCPT
+        with ESMTP id S235479AbiCARNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:12:42 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48B019282;
-        Tue,  1 Mar 2022 09:11:56 -0800 (PST)
-X-UUID: 324a8ac07c6e4322b7abfc1e2e63fe3b-20220302
-X-UUID: 324a8ac07c6e4322b7abfc1e2e63fe3b-20220302
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 953268586; Wed, 02 Mar 2022 01:11:48 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 2 Mar 2022 01:11:46 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 2 Mar
- 2022 01:11:41 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 2 Mar 2022 01:11:40 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>
-CC:     <perex@perex.cz>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH] ASoC: bt-sco: fix bt-sco-pcm-wb dai widget don't connect to the endpoint
-Date:   Wed, 2 Mar 2022 01:11:37 +0800
-Message-ID: <20220301171137.27442-1-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 12:13:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1BAA4838D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646154789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPN5JwUatfJhVFBiHuO8MPmnVXIce6kUOc4BGm1YEvY=;
+        b=d3N22ec8rGS5gq3geyXf8fR+AIjJXtCK8JGU6hB8QvsUQN4QXAG/KuVMaJi465c++mQL0e
+        Or4j1P01mw+TIfpjZfyDwugKweT3PpsTSOWULZtqHkj9HyF7kPV4EGiyrDxZQXb7zSEaSj
+        vSr1abdHR7FWCjeFdqWuCmGto3jac0Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-wm-lAGIKMsiuE7i1ljBKFA-1; Tue, 01 Mar 2022 12:13:06 -0500
+X-MC-Unique: wm-lAGIKMsiuE7i1ljBKFA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8B18824FA7;
+        Tue,  1 Mar 2022 17:13:04 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 59C7E2ED78;
+        Tue,  1 Mar 2022 17:13:01 +0000 (UTC)
+Message-ID: <2fddbfd6b6e68f3f8e972536c27a87ffadbe1911.camel@redhat.com>
+Subject: Re: [PATCH 1/4] KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Date:   Tue, 01 Mar 2022 19:13:00 +0200
+In-Reply-To: <Yh5KTtLhRyfmx/ZF@google.com>
+References: <20220301135526.136554-1-mlevitsk@redhat.com>
+         <20220301135526.136554-2-mlevitsk@redhat.com> <Yh5KTtLhRyfmx/ZF@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fix the second dai driver's dai widget can't connect to the
-endpoint. Because "bt-sco-pcm" and "bt-sco-pcm-wb" dai driver have the
-same stream_name, so it will cause they have the same widget name.
-Therefor it will just create only one route when do snd_soc_dapm_add_route
-that only find the widget through the widget name.
+On Tue, 2022-03-01 at 16:31 +0000, Sean Christopherson wrote:
+> On Tue, Mar 01, 2022, Maxim Levitsky wrote:
+> > Use a dummy unused vmexit reason to mark the 'VM exit' that is happening
+> > when kvm exits to handle SMM, which is not a real VM exit.
+> 
+> Why not use "62h VMEXIT_SMI"?
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
----
+Because VMEXIT_SMI is real vmexit which happens when L1 intercepts #SMI
+And here nested_svm_vmexit is abused to just exit guest mode without vmexit.
 
-Hi maintainter,
+> 
+> > This makes it a bit easier to read the KVM trace, and avoids
+> > other potential problems.
+> 
+> What other potential problems?
 
-   Need your comments. The patch is the one that I think it makes the
-   mose sense. Maybe we can define the new stream_name for
-   "bt-sco-pcm-wb" and add the new route.
+The fact that we have a stale VM exit reason in vmcb without this
+patch which can be in theory consumed somewhere down the road.
 
- sound/soc/codecs/bt-sco.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+This stale vm exit reason also appears in the tracs which is
+very misleading.
 
-diff --git a/sound/soc/codecs/bt-sco.c b/sound/soc/codecs/bt-sco.c
-index 4d286844e3c8..578f9df2a25e 100644
---- a/sound/soc/codecs/bt-sco.c
-+++ b/sound/soc/codecs/bt-sco.c
-@@ -13,11 +13,16 @@
- static const struct snd_soc_dapm_widget bt_sco_widgets[] = {
- 	SND_SOC_DAPM_INPUT("RX"),
- 	SND_SOC_DAPM_OUTPUT("TX"),
-+	SND_SOC_DAPM_AIF_IN("BT_SCO_RX", "Playback", 0,
-+			    SND_SOC_NOPM, 0, 0),
-+	SND_SOC_DAPM_AIF_OUT("BT_SCO_TX", "Capture", 0,
-+			     SND_SOC_NOPM, 0, 0),
- };
- 
- static const struct snd_soc_dapm_route bt_sco_routes[] = {
--	{ "Capture", NULL, "RX" },
--	{ "TX", NULL, "Playback" },
-+	{ "BT_SCO_TX", NULL, "RX" },
-+	{ "TX", NULL, "BT_SCO_RX" },
-+};
- };
- 
- static struct snd_soc_dai_driver bt_sco_dai[] = {
--- 
-2.25.1
+Best regards,
+	Maxim Levitsky
+
+> 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/svm/svm.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index 7038c76fa8410..c08fd7f4f3414 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -4218,7 +4218,7 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+> >  	svm->vmcb->save.rsp = vcpu->arch.regs[VCPU_REGS_RSP];
+> >  	svm->vmcb->save.rip = vcpu->arch.regs[VCPU_REGS_RIP];
+> >  
+> > -	ret = nested_svm_vmexit(svm);
+> > +	ret = nested_svm_simple_vmexit(svm, SVM_EXIT_SW);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -- 
+> > 2.26.3
+> > 
+
 

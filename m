@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355CF4C8C17
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8164C8C19
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiCAM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S234890AbiCANAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiCAM7Y (ORCPT
+        with ESMTP id S231299AbiCANAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:59:24 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17C01EACF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:58:43 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646139522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iJ7r/RygoFcdcvKuLBfkNBw/GzSsqEbxSHChl9KJjpc=;
-        b=Rn/oBB6JoXJ440HePA4KoE7SHyv9x3/0QwXplchDUyIPvLGR0wyOHY0KC4JGrEFXQarxmO
-        7cB5PmhuTxi7gmcwKQc4QKY1Y9MOsZGGfogoVS62Fi16v248ShkFUTWpB/EAm+67DROtwS
-        khNZu3VIB4tcNYDI/V6DbtxRafiVfAi+HEPqSVmCt0l/Wlwo687urb6Stm5YbgCWc0ncsn
-        SQx835d77Uk3foWzXS6gbSoRSUR2Hkgau9zKUJtm9SeRhBoEKjHs9L0hQxxrroQ+dFg2hM
-        jSlZRDb8TM7aT+rG1wXhnSzh9EAySxgpX2obVeDtmPSAD1ymZUwqo4GJF5nq8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646139522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iJ7r/RygoFcdcvKuLBfkNBw/GzSsqEbxSHChl9KJjpc=;
-        b=hkLRwiQ9m7dg/zWDnINxgKSwU0jz3bacT2AsWanzJVIch0Ut+uWwnWyu3GqyHEn6CBaJw3
-        rFi4WoR2fESEheBw==
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Borislav Petkov <bp@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] printk: fix return value of printk.devkmsg __setup handler
-In-Reply-To: <20220228220556.23484-1-rdunlap@infradead.org>
-References: <20220228220556.23484-1-rdunlap@infradead.org>
-Date:   Tue, 01 Mar 2022 14:04:41 +0106
-Message-ID: <87sfs17rsu.fsf@jogness.linutronix.de>
+        Tue, 1 Mar 2022 08:00:01 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F414A3F3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:59:20 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id o23so14326745pgk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 04:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=nuu3cVVJjajd7dp7VsroPAi7NZsR7bwDCDyyjbpRDDujUD45s9McptaCOOXoXmneOy
+         zxJuahcoTO4drggn9XJcwzdzajMa+fdXw350MDNp6zxREw2Gep9TLUbSXsJ6IS7b6fsf
+         FI0lXYNxy7SJzzoSf6jwmyNImco8IC5pHtjEiVlWfWeKVYAIPinUe6GksyW6ulKx4XIn
+         AqMY6RblJl0ewm+R2OORH+kelTRfIMXF5lQglQZftDw403f17lw3aCqf2olgaSvzUmE7
+         BpdYq4uNmdY7eHl5CQbdtm85vIXoRo7SrgJVAa4EkC4hV2DziPAAuDy16fEDb8RZsJ2R
+         75DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=L/UU/KRWcx75D/UhTRFTTfwqJqaVdY1bDSXBHf8HnUW1gAivoVKHtJbtDo5DWpCzGB
+         YYQxe5nkwraHlqsIT1i2UGsBW6Cq768LtLheChLR8acKfrBeOVgzFeqFsU5pFIl76CuN
+         Phf9reR+Ayio/ety9ZW5Mf816pZVSSVaQXsLCrtOOK8vNf55amu0Zem1GciLJOrOw2+K
+         n4w7KK5CPtddxgcG5UfZpqeEbu8C1wVc0KF6in9mBY+ex29AnAPpQievAchW4nMXlpMc
+         1+wNYKVAa/oa6wEuvnP7iiXfHVqoQLE5JtJyjxAE7OiEchALXj1WxxLVe/0uGB5CcJCT
+         BpjQ==
+X-Gm-Message-State: AOAM531DM1YgV7/MjL6vhgFmcoFYNB795nxN7jhSrvMgXBEIU/OJDyRT
+        dW23WDsKZ70zu5+0hMNO5BoaX4IFXGNW9cdXE84q+g==
+X-Google-Smtp-Source: ABdhPJz5o1X8z2TsaSIkdJIabo/YlIe+WW8U2EEB3DJBD30mngq8YsXa53vGa9HF0FikZSi9S5b2T/g00LPwwDKYwhE=
+X-Received: by 2002:a05:6a00:889:b0:4e0:dcc3:5e06 with SMTP id
+ q9-20020a056a00088900b004e0dcc35e06mr27183989pfj.29.1646139559900; Tue, 01
+ Mar 2022 04:59:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220228081421.1504213-1-hsinyi@chromium.org> <CAG3jFysyV8QHO4zEdUYLxt9eBnGsHWrXdWbicmufUPnTB-oRLA@mail.gmail.com>
+In-Reply-To: <CAG3jFysyV8QHO4zEdUYLxt9eBnGsHWrXdWbicmufUPnTB-oRLA@mail.gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 1 Mar 2022 13:59:08 +0100
+Message-ID: <CAG3jFytamPBHyBBFz7Z6Utfhe4tPh-jfH4hOVLK6GuJxacMmug@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: it6505: Fix the read buffer array bound
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     David Airlie <airlied@linux.ie>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-28, Randy Dunlap <rdunlap@infradead.org> wrote:
-> If an invalid option value is used with "printk.devkmsg=<value>",
-> it is silently ignored.
-> If a valid option value is used, it is honored but the wrong return
-> value (0) is used, indicating that the command line option had an
-> error and was not handled. This string is not added to init's
-> environment strings due to init/main.c::unknown_bootoption()
-> checking for a '.' in the boot option string and then considering
-> that string to be an "Unused module parameter".
->
-> Print a warning message if a bad option string is used.
-> Always return 1 from the __setup handler to indicate that the command
-> line option has been handled.
->
-> Fixes: 750afe7babd1 ("printk: add kernel parameter to control writes to /dev/kmsg")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-
-Reviewed-by: John Ogness <john.ogness@linutronix.de>
-
-> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-
-The message at this link is very helpful in explaining the state of
-declaring kernel parameters. Hopefully someday someone will document
-and/or comment this stuff.
-
-John Ogness
+Applied to drm-misc-next.

@@ -2,437 +2,833 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87554C9812
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7200E4C9818
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237921AbiCAV76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S238622AbiCAWCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiCAV75 (ORCPT
+        with ESMTP id S235082AbiCAWCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:59:57 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85650B1C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:59:14 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id g20so23846618edw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:59:14 -0800 (PST)
+        Tue, 1 Mar 2022 17:02:44 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8730A50E00
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:01:58 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id bm39so14154172qkb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 14:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F2U/oGDLGXCvl7zfChco0Uz9wH9wYJvuw5/B6215wuo=;
-        b=cW72JqGNra8LYMyOFtLSEGHXTZ/T7/tw2gxuIztP8NrfPg/C2g4r2OWGhiCF+fGx6y
-         WAaPsX8SHbaWVFT4qoXGnuPifoqCGsmxO6nW/L1b5DUU+w0uvGlKMXrqe6wV+E8dRCtD
-         lyoFhWvNDmG7USbPq3szbQ2LWG3HK949l6N4V7x5LBV5fkXnB7osrMbn0EgASACsmTbk
-         c+v2eWjW3KVsGPPD7A+o3Hiox/fzG5uxH7CSX7AhfmrBczKuBpXn/IzZeC9JgntAim3M
-         dR22kOKzD97vsGbjzqNyMcQFT45ft0JMJMqFJidQ0Qt6AAa+/pJMKSR+lL4rxcu+RaBV
-         9Aow==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=JNpyivHYhI+EJDcQJR+Lfpvsipqnns4Hmi9GPUVaU3w=;
+        b=VRyWpjxzfvzyE4z5+ucXvCqKyvSa2kaRSvp72xi4DA1nsfUdXyg4poRbnucGXc/CtV
+         COO2kJ1xhuDAD/Mp02Dm/VmtDywk6nglJ+0Ue5OaLxQjtaI2bdk0uWoyWPxP6XgeyOWb
+         VywU1x0L310aIx8ByWvP7YH/EggggQYldhbomk+ZCj76sCJYiE+yNzM3Z5QRazjqtJ3W
+         mpGE8cnKg5xDbYlDbdaOxPSwBJAwYx2xK5g47fxqa4KJhw9Flhxr9Ow8cB7UDxv00zV3
+         lcIfBumwoIU2+husgljkxobnXu7Exmsad/cZbc+H5y0Oel9lz+xAz6NNWK2+AJO5+8YY
+         hzDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F2U/oGDLGXCvl7zfChco0Uz9wH9wYJvuw5/B6215wuo=;
-        b=tpPyzjfU3D5vPySloYtX70w2x5Q9pVslAdZh0OGJB9X/nZ0DSo9H7W2/aBWVu5qmkd
-         r44X6aAfHflEf4rf39FPQMZw+D08WILbeOPihgJAv25Qpx2RkrqgcnROX8ePxCS3VseD
-         uVfTrSAiDw3QJ1siS5C3HikiqXC1Ft4sTQK17y5zYwQihW30NFega2b6xMmyGyhixoIS
-         jguQbSLGvJcwzIlSi+vLvESZzi6cRFNBhkkfDUVMfRztsgieNn1lqt5myWKKRV4fyZf8
-         Qng+1dwonDf3mDZZ2o6L02K0MBG8wVzcKp3mkxzhAQMe48ljHX/bpp9Bv+ffsaH6C/Rt
-         gYow==
-X-Gm-Message-State: AOAM530xeViFYLA/BX2RefyLg/37uxC9AmKjLt3rbRnjTBXNABKjFKNQ
-        DZE6iz4iJUhzqpZroNTNhRzbHLojDnNiNiZf3qyMygN9qzKt9g==
-X-Google-Smtp-Source: ABdhPJwcp4n+raVU9QPnCXlWeLtDMV1p1qwTECcnjxs5ec4DSSpNKWZu42ADS7BZtGt5uKL3DNtP7KM5Yqlz4difR24=
-X-Received: by 2002:a50:ec95:0:b0:413:4d34:642d with SMTP id
- e21-20020a50ec95000000b004134d34642dmr27137083edr.3.1646171952915; Tue, 01
- Mar 2022 13:59:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220301085329.3210428-1-ying.huang@intel.com> <20220301085329.3210428-3-ying.huang@intel.com>
-In-Reply-To: <20220301085329.3210428-3-ying.huang@intel.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 1 Mar 2022 13:58:58 -0800
-Message-ID: <CAHbLzkrK0WsSq7=bE=Mn21BEgcWVmN0msc1cncyVrL7tSthyXg@mail.gmail.com>
-Subject: Re: [PATCH -V14 2/3] NUMA balancing: optimize page placement for
- memory tiering system
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Zi Yan <ziy@nvidia.com>, Wei Xu <weixugc@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
-        Randy Dunlap <rdunlap@infradead.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=JNpyivHYhI+EJDcQJR+Lfpvsipqnns4Hmi9GPUVaU3w=;
+        b=rAp3fm1gv1MsQDOE9UL749ZUWvip1FC6c7S206S5aZQNbE0UIFtckKGeQcr3kaaGSA
+         bcCEgiJLgopa5Q38vpJ7twl9sVfdLFMgvLr0iwMN2JkIfr9m5eKOTL0T1O4le4buYHM5
+         mX40x+xq1eFirb5k+qQm/QNWS8SKwWFEj2sYRTcPY5v2BSp8kpJWGsqSFPluWEDprRr4
+         yvKLluwmX9xxlXsZEK+1u+LHxzDyRvEXN9gODuwVIfMydQhxaBoQaazH7Mp28u7u2fQq
+         89VsGGsd5lYzfqe9fYpx7cQ+cy9rS8ZDux4YUEgQ1U7fJBQgn5dWw6fmYV8E3UFPOZEY
+         pZXA==
+X-Gm-Message-State: AOAM5324dd1IhOKGENHwrkCWSV1fCpTrKnZhO1cnGPuAKvMx2d5NvIUr
+        oB3y5MRskADGjmHnPJmhqn4XIQ==
+X-Google-Smtp-Source: ABdhPJysK0HHuJaNDiKRGZaz3vK1KPOPzgLSvzIT6KvkFFO5QdtF9fSTo2IRjbO5f9MFHUNzVoA66A==
+X-Received: by 2002:a05:620a:4729:b0:663:407f:1fce with SMTP id bs41-20020a05620a472900b00663407f1fcemr2349253qkb.616.1646172117208;
+        Tue, 01 Mar 2022 14:01:57 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id e9-20020ac85989000000b002de2bfc8f94sm9752846qte.88.2022.03.01.14.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 14:01:56 -0800 (PST)
+Message-ID: <935da896e67f476f34bb81661d1c0866774dbdb4.camel@ndufresne.ca>
+Subject: Re: [PATCH v7, 13/15] media: mtk-vcodec: support stateless H.264
+ decoding for mt8192
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Tue, 01 Mar 2022 17:01:54 -0500
+In-Reply-To: <20220223034008.15781-14-yunfei.dong@mediatek.com>
+References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
+         <20220223034008.15781-14-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 12:54 AM Huang Ying <ying.huang@intel.com> wrote:
->
-> With the advent of various new memory types, some machines will have
-> multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
-> memory subsystem of these machines can be called memory tiering
-> system, because the performance of the different types of memory are
-> usually different.
->
-> In such system, because of the memory accessing pattern changing etc,
-> some pages in the slow memory may become hot globally.  So in this
-> patch, the NUMA balancing mechanism is enhanced to optimize the page
-> placement among the different memory types according to hot/cold
-> dynamically.
->
-> In a typical memory tiering system, there are CPUs, fast memory and
-> slow memory in each physical NUMA node.  The CPUs and the fast memory
-> will be put in one logical node (called fast memory node), while the
-> slow memory will be put in another (faked) logical node (called slow
-> memory node).  That is, the fast memory is regarded as local while the
-> slow memory is regarded as remote.  So it's possible for the recently
-> accessed pages in the slow memory node to be promoted to the fast
-> memory node via the existing NUMA balancing mechanism.
->
-> The original NUMA balancing mechanism will stop to migrate pages if
-> the free memory of the target node becomes below the high watermark.
-> This is a reasonable policy if there's only one memory type.  But this
-> makes the original NUMA balancing mechanism almost do not work to
-> optimize page placement among different memory types.  Details are as
-> follows.
->
-> It's the common cases that the working-set size of the workload is
-> larger than the size of the fast memory nodes.  Otherwise, it's
-> unnecessary to use the slow memory at all.  So, there are almost
-> always no enough free pages in the fast memory nodes, so that the
-> globally hot pages in the slow memory node cannot be promoted to the
-> fast memory node.  To solve the issue, we have 2 choices as follows,
->
-> a. Ignore the free pages watermark checking when promoting hot pages
->    from the slow memory node to the fast memory node.  This will
->    create some memory pressure in the fast memory node, thus trigger
->    the memory reclaiming.  So that, the cold pages in the fast memory
->    node will be demoted to the slow memory node.
->
-> b. Define a new watermark called wmark_promo which is higher than
->    wmark_high, and have kswapd reclaiming pages until free pages reach
->    such watermark.  The scenario is as follows: when we want to promote
->    hot-pages from a slow memory to a fast memory, but fast memory's free
->    pages would go lower than high watermark with such promotion, we wake
->    up kswapd with wmark_promo watermark in order to demote cold pages and
->    free us up some space.  So, next time we want to promote hot-pages we
->    might have a chance of doing so.
->
-> The choice "a" may create high memory pressure in the fast memory
-> node.  If the memory pressure of the workload is high, the memory
-> pressure may become so high that the memory allocation latency of the
-> workload is influenced, e.g. the direct reclaiming may be triggered.
->
-> The choice "b" works much better at this aspect.  If the memory
-> pressure of the workload is high, the hot pages promotion will stop
-> earlier because its allocation watermark is higher than that of the
-> normal memory allocation.  So in this patch, choice "b" is
-> implemented.  A new zone watermark (WMARK_PROMO) is added.  Which is
-> larger than the high watermark and can be controlled via
-> watermark_scale_factor.
->
-> In addition to the original page placement optimization among sockets,
-> the NUMA balancing mechanism is extended to be used to optimize page
-> placement according to hot/cold among different memory types.  So the
-> sysctl user space interface (numa_balancing) is extended in a backward
-> compatible way as follow, so that the users can enable/disable these
-> functionality individually.
->
-> The sysctl is converted from a Boolean value to a bits field.  The
-> definition of the flags is,
->
-> - 0: NUMA_BALANCING_DISABLED
-> - 1: NUMA_BALANCING_NORMAL
-> - 2: NUMA_BALANCING_MEMORY_TIERING
->
-> We have tested the patch with the pmbench memory accessing benchmark
-> with the 80:20 read/write ratio and the Gauss access address
-> distribution on a 2 socket Intel server with Optane DC Persistent
-> Memory Model.  The test results shows that the pmbench score can
-> improve up to 95.9%.
->
-> Thanks Andrew Morton to help fix the document format error.
->
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Wei Xu <weixugc@google.com>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
+Le mercredi 23 février 2022 à 11:40 +0800, Yunfei Dong a écrit :
+> Adds h264 lat and core architecture driver for mt8192,
+> and the decode mode is frame based for stateless decoder.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
->  Documentation/admin-guide/sysctl/kernel.rst | 29 ++++++++++++++-------
->  include/linux/mmzone.h                      |  1 +
->  include/linux/sched/sysctl.h                | 10 +++++++
->  kernel/sched/core.c                         | 21 ++++++++++++---
->  kernel/sysctl.c                             |  2 +-
->  mm/migrate.c                                | 16 ++++++++++--
->  mm/page_alloc.c                             |  3 ++-
->  mm/vmscan.c                                 |  6 ++++-
->  8 files changed, 70 insertions(+), 18 deletions(-)
->
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index d359bcfadd39..fdfd2b684822 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -595,16 +595,23 @@ Documentation/admin-guide/kernel-parameters.rst).
->  numa_balancing
->  ==============
->
-> -Enables/disables automatic page fault based NUMA memory
-> -balancing. Memory is moved automatically to nodes
-> -that access it often.
-> +Enables/disables and configures automatic page fault based NUMA memory
-> +balancing.  Memory is moved automatically to nodes that access it often.
-> +The value to set can be the result of ORing the following:
->
-> -Enables/disables automatic NUMA memory balancing. On NUMA machines, there
-> -is a performance penalty if remote memory is accessed by a CPU. When this
-> -feature is enabled the kernel samples what task thread is accessing memory
-> -by periodically unmapping pages and later trapping a page fault. At the
-> -time of the page fault, it is determined if the data being accessed should
-> -be migrated to a local memory node.
-> += =================================
-> +0 NUMA_BALANCING_DISABLED
-> +1 NUMA_BALANCING_NORMAL
-> +2 NUMA_BALANCING_MEMORY_TIERING
-> += =================================
+>  drivers/media/platform/mtk-vcodec/Makefile    |   1 +
+>  .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  | 621 ++++++++++++++++++
+>  .../media/platform/mtk-vcodec/vdec_drv_if.c   |   8 +-
+>  .../media/platform/mtk-vcodec/vdec_drv_if.h   |   1 +
+>  include/linux/remoteproc/mtk_scp.h            |   2 +
+>  5 files changed, 632 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/Makefile b/drivers/media/platform/mtk-vcodec/Makefile
+> index 3f41d748eee5..22edb1c86598 100644
+> --- a/drivers/media/platform/mtk-vcodec/Makefile
+> +++ b/drivers/media/platform/mtk-vcodec/Makefile
+> @@ -10,6 +10,7 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
+>  		vdec/vdec_vp9_if.o \
+>  		vdec/vdec_h264_req_if.o \
+>  		vdec/vdec_h264_req_common.o \
+> +		vdec/vdec_h264_req_multi_if.o \
+>  		mtk_vcodec_dec_drv.o \
+>  		vdec_drv_if.o \
+>  		vdec_vpu_if.o \
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
+> new file mode 100644
+> index 000000000000..82a279f327c4
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
+> @@ -0,0 +1,621 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 MediaTek Inc.
+> + * Author: Yunfei Dong <yunfei.dong@mediatek.com>
+> + */
 > +
-> +Or NUMA_BALANCING_NORMAL to optimize page placement among different
-> +NUMA nodes to reduce remote accessing.  On NUMA machines, there is a
-> +performance penalty if remote memory is accessed by a CPU. When this
-> +feature is enabled the kernel samples what task thread is accessing
-> +memory by periodically unmapping pages and later trapping a page
-> +fault. At the time of the page fault, it is determined if the data
-> +being accessed should be migrated to a local memory node.
->
->  The unmapping of pages and trapping faults incur additional overhead that
->  ideally is offset by improved memory locality but there is no universal
-> @@ -615,6 +622,10 @@ faults may be controlled by the `numa_balancing_scan_period_min_ms,
->  numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
->  numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
->
-> +Or NUMA_BALANCING_MEMORY_TIERING to optimize page placement among
-> +different types of memory (represented as different NUMA nodes) to
-> +place the hot pages in the fast memory.  This is implemented based on
-> +unmapping and page fault too.
->
->  numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms, numa_balancing_scan_size_mb
->  ===============================================================================================================================
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 44bd054ca12b..06bc55db19bf 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -342,6 +342,7 @@ enum zone_watermarks {
->         WMARK_MIN,
->         WMARK_LOW,
->         WMARK_HIGH,
-> +       WMARK_PROMO,
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <media/v4l2-h264.h>
+> +#include <media/v4l2-mem2mem.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +
+> +#include "../mtk_vcodec_util.h"
+> +#include "../mtk_vcodec_dec.h"
+> +#include "../mtk_vcodec_intr.h"
+> +#include "../vdec_drv_base.h"
+> +#include "../vdec_drv_if.h"
+> +#include "../vdec_vpu_if.h"
+> +#include "vdec_h264_req_common.h"
+> +
+> +/**
+> + * enum vdec_h264_core_dec_err_type  - core decode error type
 
-TBH I'm not a fan of another water mark since we already have quite a
-few water marks (regular water mark, water mark boost, water mark
-promo). But it is not a big deal and gated problem for now since it is
-not user visible. We definitely could try to consolidate some of them
-later.
+Similar to my comment on other patch, I notice that a empty line is added here
+in other doc comments. To be applied everywhere of course.
 
-The patch looks fine to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+> + * @TRANS_BUFFER_FULL : trans buffer is full
+> + * @SLICE_HEADER_FULL : slice header buffer is full
+> + */
+> +enum vdec_h264_core_dec_err_type {
+> +	TRANS_BUFFER_FULL = 1,
+> +	SLICE_HEADER_FULL,
+> +};
+> +
+> +/**
+> + * struct vdec_h264_slice_lat_dec_param  - parameters for decode current frame
+> + * @sps : h264 sps syntax parameters
+> + * @pps : h264 pps syntax parameters
+> + * @slice_header: h264 slice header syntax parameters
+> + * @scaling_matrix : h264 scaling list parameters
+> + * @decode_params : decoder parameters of each frame used for hardware decode
+> + * @h264_dpb_info : dpb reference list
+> + */
+> +struct vdec_h264_slice_lat_dec_param {
+> +	struct mtk_h264_sps_param sps;
+> +	struct mtk_h264_pps_param pps;
+> +	struct mtk_h264_slice_hd_param slice_header;
+> +	struct slice_api_h264_scaling_matrix scaling_matrix;
+> +	struct slice_api_h264_decode_param decode_params;
+> +	struct mtk_h264_dpb_info h264_dpb_info[V4L2_H264_NUM_DPB_ENTRIES];
+> +};
+> +
+> +/**
+> + * struct vdec_h264_slice_info - decode information
+> + * @nal_info    : nal info of current picture
+> + * @timeout     : Decode timeout: 1 timeout, 0 no timeount
+> + * @bs_buf_size : bitstream size
+> + * @bs_buf_addr : bitstream buffer dma address
+> + * @y_fb_dma    : Y frame buffer dma address
+> + * @c_fb_dma    : C frame buffer dma address
+> + * @vdec_fb_va  : VDEC frame buffer struct virtual address
+> + * @crc         : Used to check whether hardware's status is right
+> + */
+> +struct vdec_h264_slice_info {
+> +	u16 nal_info;
+> +	u16 timeout;
+> +	u32 bs_buf_size;
+> +	u64 bs_buf_addr;
+> +	u64 y_fb_dma;
+> +	u64 c_fb_dma;
+> +	u64 vdec_fb_va;
+> +	u32 crc[8];
+> +};
+> +
+> +/**
+> + * struct vdec_h264_slice_vsi - shared memory for decode information exchange
+> + *        between VPU and Host. The memory is allocated by VPU then mapping to
+> + *        Host in vdec_h264_slice_init() and freed in vdec_h264_slice_deinit()
+> + *        by VPU. AP-W/R : AP is writer/reader on this item. VPU-W/R: VPU is
+> + *        write/reader on this item.
 
->         NR_WMARK
->  };
->
-> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-> index c19dd5a2c05c..b5eec8854c5a 100644
-> --- a/include/linux/sched/sysctl.h
-> +++ b/include/linux/sched/sysctl.h
-> @@ -23,6 +23,16 @@ enum sched_tunable_scaling {
->         SCHED_TUNABLESCALING_END,
->  };
->
-> +#define NUMA_BALANCING_DISABLED                0x0
-> +#define NUMA_BALANCING_NORMAL          0x1
-> +#define NUMA_BALANCING_MEMORY_TIERING  0x2
+Long description goes below the member list.
+
+> + * @wdma_err_addr       : wdma error dma address
+> + * @wdma_start_addr     : wdma start dma address
+> + * @wdma_end_addr       : wdma end dma address
+> + * @slice_bc_start_addr : slice bc start dma address
+> + * @slice_bc_end_addr   : slice bc end dma address
+> + * @row_info_start_addr : row info start dma address
+> + * @row_info_end_addr   : row info end dma address
+> + * @trans_start         : trans start dma address
+> + * @trans_end           : trans end dma address
+> + * @wdma_end_addr_offset: wdma end address offset
+> + *
+> + * @mv_buf_dma          : HW working motion vector buffer
+> + *                        dma address (AP-W, VPU-R)
+> + * @dec                 : decode information (AP-R, VPU-W)
+> + * @h264_slice_params   : decode parameters for hw used
+
+Please use consistent style, in general : has no space in other doc comment I
+see. Please apply across the code.
+
+> + */
+> +struct vdec_h264_slice_vsi {
+> +	/* LAT dec addr */
+> +	u64 wdma_err_addr;
+> +	u64 wdma_start_addr;
+> +	u64 wdma_end_addr;
+> +	u64 slice_bc_start_addr;
+> +	u64 slice_bc_end_addr;
+> +	u64 row_info_start_addr;
+> +	u64 row_info_end_addr;
+> +	u64 trans_start;
+> +	u64 trans_end;
+> +	u64 wdma_end_addr_offset;
 > +
-> +#ifdef CONFIG_NUMA_BALANCING
-> +extern int sysctl_numa_balancing_mode;
-> +#else
-> +#define sysctl_numa_balancing_mode     0
-> +#endif
+> +	u64 mv_buf_dma[H264_MAX_MV_NUM];
+> +	struct vdec_h264_slice_info dec;
+> +	struct vdec_h264_slice_lat_dec_param h264_slice_params;
+> +};
 > +
->  /*
->   *  control realtime throttling:
->   *
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index fcf0c180617c..c25348e9ae3a 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4280,7 +4280,9 @@ DEFINE_STATIC_KEY_FALSE(sched_numa_balancing);
->
->  #ifdef CONFIG_NUMA_BALANCING
->
-> -void set_numabalancing_state(bool enabled)
-> +int sysctl_numa_balancing_mode;
+> +/**
+> + * struct vdec_h264_slice_share_info - shared information used to exchange
+> + *                                     message between lat and core
+> + * @sps	              : sequence header information from user space
+> + * @dec_params        : decoder params from user space
+> + * @h264_slice_params : decoder params used for hardware
+> + * @trans_start       : trans start dma address
+> + * @trans_end         : trans end dma address
+> + * @nal_info          : nal info of current picture
+> + */
+> +struct vdec_h264_slice_share_info {
+> +	struct v4l2_ctrl_h264_sps sps;
+> +	struct v4l2_ctrl_h264_decode_params dec_params;
+> +	struct vdec_h264_slice_lat_dec_param h264_slice_params;
+> +	u64 trans_start;
+> +	u64 trans_end;
+> +	u16 nal_info;
+> +};
 > +
-> +static void __set_numabalancing_state(bool enabled)
->  {
->         if (enabled)
->                 static_branch_enable(&sched_numa_balancing);
-> @@ -4288,13 +4290,22 @@ void set_numabalancing_state(bool enabled)
->                 static_branch_disable(&sched_numa_balancing);
->  }
->
-> +void set_numabalancing_state(bool enabled)
+> +/**
+> + * struct vdec_h264_slice_inst - h264 decoder instance
+> + * @slice_dec_num        : how many picture be decoded
+> + * @ctx                 : point to mtk_vcodec_ctx
+> + * @pred_buf            : HW working predication buffer
+> + * @mv_buf              : HW working motion vector buffer
+> + * @vpu                 : VPU instance
+> + * @vsi                 : vsi used for lat
+> + * @vsi_core            : vsi used for core
+> + *
+> + * @resolution_changed  : resolution changed
+> + * @realloc_mv_buf      : reallocate mv buffer
+> + * @cap_num_planes      : number of capture queue plane
+> + *
+> + * @dpb : decoded picture buffer used to store reference buffer information
+> + */
+> +struct vdec_h264_slice_inst {
+> +	unsigned int slice_dec_num;
+> +	struct mtk_vcodec_ctx *ctx;
+> +	struct mtk_vcodec_mem pred_buf;
+> +	struct mtk_vcodec_mem mv_buf[H264_MAX_MV_NUM];
+> +	struct vdec_vpu_inst vpu;
+> +	struct vdec_h264_slice_vsi *vsi;
+> +	struct vdec_h264_slice_vsi *vsi_core;
+> +
+> +	unsigned int resolution_changed;
+> +	unsigned int realloc_mv_buf;
+> +	unsigned int cap_num_planes;
+> +
+> +	struct v4l2_h264_dpb_entry dpb[16];
+> +};
+> +
+> +static int vdec_h264_slice_fill_decode_parameters(struct vdec_h264_slice_inst *inst,
+> +						  struct vdec_h264_slice_share_info *share_info)
 > +{
-> +       if (enabled)
-> +               sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
-> +       else
-> +               sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
-> +       __set_numabalancing_state(enabled);
+> +	struct vdec_h264_slice_lat_dec_param *slice_param = &inst->vsi->h264_slice_params;
+> +	const struct v4l2_ctrl_h264_decode_params *dec_params;
+> +	const struct v4l2_ctrl_h264_scaling_matrix *src_matrix;
+> +	const struct v4l2_ctrl_h264_sps *sps;
+> +	const struct v4l2_ctrl_h264_pps *pps;
+> +
+> +	dec_params =
+> +		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_DECODE_PARAMS);
+> +	if (IS_ERR(dec_params))
+> +		return PTR_ERR(dec_params);
+> +
+> +	src_matrix =
+> +		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SCALING_MATRIX);
+> +	if (IS_ERR(src_matrix))
+> +		return PTR_ERR(src_matrix);
+> +
+> +	sps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SPS);
+> +	if (IS_ERR(sps))
+> +		return PTR_ERR(sps);
+> +
+> +	pps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_PPS);
+> +	if (IS_ERR(pps))
+> +		return PTR_ERR(pps);
+> +
+> +	if (dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) {
+> +		mtk_vcodec_err(inst, "h264 no support field bitstream.");
+Perhaps rephrase to:
+
+"No support for H.264 field decoding."
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	mtk_vdec_h264_copy_sps_params(&slice_param->sps, sps);
+> +	mtk_vdec_h264_copy_pps_params(&slice_param->pps, pps);
+> +	mtk_vdec_h264_copy_scaling_matrix(&slice_param->scaling_matrix, src_matrix);
+> +
+> +	memcpy(&share_info->sps, sps, sizeof(*sps));
+> +	memcpy(&share_info->dec_params, dec_params, sizeof(*dec_params));
+> +
+> +	return 0;
 > +}
 > +
->  #ifdef CONFIG_PROC_SYSCTL
->  int sysctl_numa_balancing(struct ctl_table *table, int write,
->                           void *buffer, size_t *lenp, loff_t *ppos)
->  {
->         struct ctl_table t;
->         int err;
-> -       int state = static_branch_likely(&sched_numa_balancing);
-> +       int state = sysctl_numa_balancing_mode;
->
->         if (write && !capable(CAP_SYS_ADMIN))
->                 return -EPERM;
-> @@ -4304,8 +4315,10 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
->         err = proc_dointvec_minmax(&t, write, buffer, lenp, ppos);
->         if (err < 0)
->                 return err;
-> -       if (write)
-> -               set_numabalancing_state(state);
-> +       if (write) {
-> +               sysctl_numa_balancing_mode = state;
-> +               __set_numabalancing_state(state);
-> +       }
->         return err;
->  }
->  #endif
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 5ae443b2882e..c90a564af720 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -1689,7 +1689,7 @@ static struct ctl_table kern_table[] = {
->                 .mode           = 0644,
->                 .proc_handler   = sysctl_numa_balancing,
->                 .extra1         = SYSCTL_ZERO,
-> -               .extra2         = SYSCTL_ONE,
-> +               .extra2         = SYSCTL_FOUR,
->         },
->  #endif /* CONFIG_NUMA_BALANCING */
->         {
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index cdeaf01e601a..08ca9b9b142e 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -51,6 +51,7 @@
->  #include <linux/oom.h>
->  #include <linux/memory.h>
->  #include <linux/random.h>
-> +#include <linux/sched/sysctl.h>
->
->  #include <asm/tlbflush.h>
->
-> @@ -2034,16 +2035,27 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
->  {
->         int page_lru;
->         int nr_pages = thp_nr_pages(page);
-> +       int order = compound_order(page);
->
-> -       VM_BUG_ON_PAGE(compound_order(page) && !PageTransHuge(page), page);
-> +       VM_BUG_ON_PAGE(order && !PageTransHuge(page), page);
->
->         /* Do not migrate THP mapped by multiple processes */
->         if (PageTransHuge(page) && total_mapcount(page) > 1)
->                 return 0;
->
->         /* Avoid migrating to a node that is nearly full */
-> -       if (!migrate_balanced_pgdat(pgdat, nr_pages))
-> +       if (!migrate_balanced_pgdat(pgdat, nr_pages)) {
-> +               int z;
+> +static void vdec_h264_slice_fill_decode_reflist(struct vdec_h264_slice_inst *inst,
+> +						struct vdec_h264_slice_lat_dec_param *slice_param,
+> +						struct vdec_h264_slice_share_info *share_info)
+> +{
+> +	struct v4l2_ctrl_h264_decode_params *dec_params = &share_info->dec_params;
+> +	struct v4l2_ctrl_h264_sps *sps = &share_info->sps;
+> +	struct v4l2_h264_reflist_builder reflist_builder;
+> +	u8 *p0_reflist = slice_param->decode_params.ref_pic_list_p0;
+> +	u8 *b0_reflist = slice_param->decode_params.ref_pic_list_b0;
+> +	u8 *b1_reflist = slice_param->decode_params.ref_pic_list_b1;
 > +
-> +               if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
-> +                       return 0;
-> +               for (z = pgdat->nr_zones - 1; z >= 0; z--) {
-> +                       if (populated_zone(pgdat->node_zones + z))
-> +                               break;
-> +               }
-> +               wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
->                 return 0;
-> +       }
->
->         if (isolate_lru_page(page))
->                 return 0;
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3589febc6d31..295b8f1fc31d 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -8474,7 +8474,8 @@ static void __setup_per_zone_wmarks(void)
->
->                 zone->watermark_boost = 0;
->                 zone->_watermark[WMARK_LOW]  = min_wmark_pages(zone) + tmp;
-> -               zone->_watermark[WMARK_HIGH] = min_wmark_pages(zone) + tmp * 2;
-> +               zone->_watermark[WMARK_HIGH] = low_wmark_pages(zone) + tmp;
-> +               zone->_watermark[WMARK_PROMO] = high_wmark_pages(zone) + tmp;
->
->                 spin_unlock_irqrestore(&zone->lock, flags);
->         }
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 6dd8f455bb82..199b8aadbdd6 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -56,6 +56,7 @@
->
->  #include <linux/swapops.h>
->  #include <linux/balloon_compaction.h>
-> +#include <linux/sched/sysctl.h>
->
->  #include "internal.h"
->
-> @@ -3988,7 +3989,10 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
->                 if (!managed_zone(zone))
->                         continue;
->
-> -               mark = high_wmark_pages(zone);
-> +               if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
-> +                       mark = wmark_pages(zone, WMARK_PROMO);
-> +               else
-> +                       mark = high_wmark_pages(zone);
->                 if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
->                         return true;
->         }
-> --
-> 2.30.2
->
+> +	mtk_vdec_h264_update_dpb(dec_params, inst->dpb);
+> +
+> +	mtk_vdec_h264_copy_decode_params(&slice_param->decode_params, dec_params,
+> +					 inst->dpb);
+> +	mtk_vdec_h264_fill_dpb_info(inst->ctx, &slice_param->decode_params,
+> +				    slice_param->h264_dpb_info);
+> +
+> +	mtk_v4l2_debug(3, "cur poc = %d\n", dec_params->bottom_field_order_cnt);
+> +	/* Build the reference lists */
+> +	v4l2_h264_init_reflist_builder(&reflist_builder, dec_params, sps,
+> +				       inst->dpb);
+> +	v4l2_h264_build_p_ref_list(&reflist_builder, p0_reflist);
+> +	v4l2_h264_build_b_ref_lists(&reflist_builder, b0_reflist, b1_reflist);
+> +
+> +	/* Adapt the built lists to the firmware's expectations */
+> +	mtk_vdec_h264_fixup_ref_list(p0_reflist, reflist_builder.num_valid);
+> +	mtk_vdec_h264_fixup_ref_list(b0_reflist, reflist_builder.num_valid);
+> +	mtk_vdec_h264_fixup_ref_list(b1_reflist, reflist_builder.num_valid);
+> +}
+> +
+> +static int vdec_h264_slice_alloc_mv_buf(struct vdec_h264_slice_inst *inst,
+> +					struct vdec_pic_info *pic)
+> +{
+> +	unsigned int buf_sz = mtk_vdec_h264_get_mv_buf_size(pic->buf_w, pic->buf_h);
+> +	struct mtk_vcodec_mem *mem;
+> +	int i, err;
+> +
+> +	mtk_v4l2_debug(3, "size = 0x%x", buf_sz);
+> +	for (i = 0; i < H264_MAX_MV_NUM; i++) {
+> +		mem = &inst->mv_buf[i];
+
+nit: Perhaps you could skip (or clear) if mem->size == buf_sz ?
+
+> +		if (mem->va)
+> +			mtk_vcodec_mem_free(inst->ctx, mem);
+> +		mem->size = buf_sz;
+> +		err = mtk_vcodec_mem_alloc(inst->ctx, mem);
+> +		if (err) {
+> +			mtk_vcodec_err(inst, "failed to allocate mv buf");
+> +			return err;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void vdec_h264_slice_free_mv_buf(struct vdec_h264_slice_inst *inst)
+> +{
+> +	int i;
+> +	struct mtk_vcodec_mem *mem;
+> +
+> +	for (i = 0; i < H264_MAX_MV_NUM; i++) {
+> +		mem = &inst->mv_buf[i];
+> +		if (mem->va)
+> +			mtk_vcodec_mem_free(inst->ctx, mem);
+> +	}
+> +}
+> +
+> +static void vdec_h264_slice_get_pic_info(struct vdec_h264_slice_inst *inst)
+> +{
+> +	struct mtk_vcodec_ctx *ctx = inst->ctx;
+> +	unsigned int data[3];
+
+nit: use u32 for clarity ?
+
+> +
+> +	data[0] = ctx->picinfo.pic_w;
+> +	data[1] = ctx->picinfo.pic_h;
+> +	data[2] = ctx->capture_fourcc;
+> +	vpu_dec_get_param(&inst->vpu, data, 3, GET_PARAM_PIC_INFO);
+> +
+> +	ctx->picinfo.buf_w = ALIGN(ctx->picinfo.pic_w, 64);
+> +	ctx->picinfo.buf_h = ALIGN(ctx->picinfo.pic_h, 64);
+
+I notice that this is hard coded alignment in many places, should at least have
+a constant somewhere.
+
+> +	ctx->picinfo.fb_sz[0] = inst->vpu.fb_sz[0];
+> +	ctx->picinfo.fb_sz[1] = inst->vpu.fb_sz[1];
+> +	inst->cap_num_planes =
+> +		ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes;
+> +
+> +	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+> +			 ctx->picinfo.pic_w, ctx->picinfo.pic_h,
+> +			 ctx->picinfo.buf_w, ctx->picinfo.buf_h);
+> +	mtk_vcodec_debug(inst, "Y/C(%d, %d)", ctx->picinfo.fb_sz[0],
+> +			 ctx->picinfo.fb_sz[1]);
+> +
+> +	if (ctx->last_decoded_picinfo.pic_w != ctx->picinfo.pic_w ||
+> +	    ctx->last_decoded_picinfo.pic_h != ctx->picinfo.pic_h) {
+> +		inst->resolution_changed = true;
+> +		if (ctx->last_decoded_picinfo.buf_w != ctx->picinfo.buf_w ||
+> +		    ctx->last_decoded_picinfo.buf_h != ctx->picinfo.buf_h)
+> +			inst->realloc_mv_buf = true;
+> +
+> +		mtk_v4l2_debug(1, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
+> +			       inst->resolution_changed,
+> +			       inst->realloc_mv_buf,
+> +			       ctx->last_decoded_picinfo.pic_w,
+> +			       ctx->last_decoded_picinfo.pic_h,
+> +			       ctx->picinfo.pic_w, ctx->picinfo.pic_h);
+> +	}
+> +}
+> +
+> +static void vdec_h264_slice_get_crop_info(struct vdec_h264_slice_inst *inst,
+> +					  struct v4l2_rect *cr)
+> +{
+> +	cr->left = 0;
+> +	cr->top = 0;
+> +	cr->width = inst->ctx->picinfo.pic_w;
+> +	cr->height = inst->ctx->picinfo.pic_h;
+> +
+> +	mtk_vcodec_debug(inst, "l=%d, t=%d, w=%d, h=%d",
+> +			 cr->left, cr->top, cr->width, cr->height);
+> +}
+> +
+> +static int vdec_h264_slice_init(struct mtk_vcodec_ctx *ctx)
+> +{
+> +	struct vdec_h264_slice_inst *inst;
+> +	int err, vsi_size;
+> +
+> +	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
+> +	if (!inst)
+> +		return -ENOMEM;
+> +
+> +	inst->ctx = ctx;
+> +
+> +	inst->vpu.id = SCP_IPI_VDEC_LAT;
+> +	inst->vpu.core_id = SCP_IPI_VDEC_CORE;
+> +	inst->vpu.ctx = ctx;
+> +	inst->vpu.codec_type = ctx->current_codec;
+> +	inst->vpu.capture_type = ctx->capture_fourcc;
+> +
+> +	err = vpu_dec_init(&inst->vpu);
+> +	if (err) {
+> +		mtk_vcodec_err(inst, "vdec_h264 init err=%d", err);
+> +		goto error_free_inst;
+> +	}
+> +
+> +	vsi_size = round_up(sizeof(struct vdec_h264_slice_vsi), 64);
+> +	inst->vsi = inst->vpu.vsi;
+> +	inst->vsi_core =
+> +		(struct vdec_h264_slice_vsi *)(((char *)inst->vpu.vsi) + vsi_size);
+> +	inst->resolution_changed = true;
+> +	inst->realloc_mv_buf = true;
+> +
+> +	mtk_vcodec_debug(inst, "lat struct size = %d,%d,%d,%d vsi: %d\n",
+> +			 (int)sizeof(struct mtk_h264_sps_param),
+> +			 (int)sizeof(struct mtk_h264_pps_param),
+> +			 (int)sizeof(struct vdec_h264_slice_lat_dec_param),
+> +			 (int)sizeof(struct mtk_h264_dpb_info),
+> +			 vsi_size);
+> +	mtk_vcodec_debug(inst, "lat H264 instance >> %p, codec_type = 0x%x",
+> +			 inst, inst->vpu.codec_type);
+> +
+> +	ctx->drv_handle = inst;
+> +	return 0;
+> +
+> +error_free_inst:
+> +	kfree(inst);
+> +	return err;
+> +}
+> +
+> +static void vdec_h264_slice_deinit(void *h_vdec)
+> +{
+> +	struct vdec_h264_slice_inst *inst = h_vdec;
+> +
+> +	mtk_vcodec_debug_enter(inst);
+> +
+> +	vpu_dec_deinit(&inst->vpu);
+> +	vdec_h264_slice_free_mv_buf(inst);
+> +	vdec_msg_queue_deinit(&inst->ctx->msg_queue, inst->ctx);
+> +
+> +	kfree(inst);
+> +}
+> +
+> +static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
+> +{
+> +	struct vdec_fb *fb;
+> +	u64 vdec_fb_va;
+> +	u64 y_fb_dma, c_fb_dma;
+> +	int err, timeout, i;
+> +	struct mtk_vcodec_ctx *ctx = lat_buf->ctx;
+> +	struct vdec_h264_slice_inst *inst = ctx->drv_handle;
+> +	struct vb2_v4l2_buffer *vb2_v4l2;
+> +	struct vdec_h264_slice_share_info *share_info = lat_buf->private_data;
+> +	struct mtk_vcodec_mem *mem;
+> +	struct vdec_vpu_inst *vpu = &inst->vpu;
+> +
+> +	mtk_vcodec_debug(inst, "[h264-core] vdec_h264 core decode");
+> +	memcpy_toio(&inst->vsi_core->h264_slice_params, &share_info->h264_slice_params,
+> +		    sizeof(share_info->h264_slice_params));
+> +
+> +	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
+> +	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
+> +	vdec_fb_va = (unsigned long)fb;
+> +
+> +	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 1)
+> +		c_fb_dma =
+> +			y_fb_dma + inst->ctx->picinfo.buf_w * inst->ctx->picinfo.buf_h;
+
+Should use the stride (bytesperline) instead, this will allow un-hardcoding the
+width alignment. And normally, the alignnement should also be found/set in the
+fmt, so you could maybe use that only ?
+
+Though, I'm not sure I understand why single plane is supported here. MM21 seems
+to be defined with 2 planes and there is no other formats.
+
+
+> +	else
+> +		c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
+> +
+> +	mtk_vcodec_debug(inst, "[h264-core] y/c addr = 0x%llx 0x%llx", y_fb_dma,
+> +			 c_fb_dma);
+> +
+> +	inst->vsi_core->dec.y_fb_dma = y_fb_dma;
+> +	inst->vsi_core->dec.c_fb_dma = c_fb_dma;
+> +	inst->vsi_core->dec.vdec_fb_va = vdec_fb_va;
+> +	inst->vsi_core->dec.nal_info = share_info->nal_info;
+> +	inst->vsi_core->wdma_start_addr =
+> +		lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
+> +	inst->vsi_core->wdma_end_addr =
+> +		lat_buf->ctx->msg_queue.wdma_addr.dma_addr +
+> +		lat_buf->ctx->msg_queue.wdma_addr.size;
+> +	inst->vsi_core->wdma_err_addr = lat_buf->wdma_err_addr.dma_addr;
+> +	inst->vsi_core->slice_bc_start_addr = lat_buf->slice_bc_addr.dma_addr;
+> +	inst->vsi_core->slice_bc_end_addr = lat_buf->slice_bc_addr.dma_addr +
+> +		lat_buf->slice_bc_addr.size;
+> +	inst->vsi_core->trans_start = share_info->trans_start;
+> +	inst->vsi_core->trans_end = share_info->trans_end;
+> +	for (i = 0; i < H264_MAX_MV_NUM; i++) {
+> +		mem = &inst->mv_buf[i];
+> +		inst->vsi_core->mv_buf_dma[i] = mem->dma_addr;
+> +	}
+> +
+> +	vb2_v4l2 = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
+> +	vb2_v4l2->vb2_buf.timestamp = lat_buf->ts_info.vb2_buf.timestamp;
+> +	vb2_v4l2->timecode = lat_buf->ts_info.timecode;
+> +	vb2_v4l2->field = lat_buf->ts_info.field;
+> +	vb2_v4l2->flags = lat_buf->ts_info.flags;
+
+Not quite, not all src buffer flags needs to be copied. Please use
+v4l2_m2m_buf_copy_metadata() instead.
+
+> +	vb2_v4l2->vb2_buf.copied_timestamp =
+> +		lat_buf->ts_info.vb2_buf.copied_timestamp;
+> +
+> +	vdec_h264_slice_fill_decode_reflist(inst, &inst->vsi_core->h264_slice_params,
+> +					    share_info);
+> +
+> +	err = vpu_dec_core(vpu);
+> +	if (err) {
+> +		mtk_vcodec_err(inst, "core decode err=%d", err);
+> +		goto vdec_dec_end;
+> +	}
+> +
+> +	/* wait decoder done interrupt */
+> +	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
+> +					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
+> +	if (timeout)
+> +		mtk_vcodec_err(inst, "core decode timeout: pic_%d",
+> +			       ctx->decoded_frame_cnt);
+> +	inst->vsi_core->dec.timeout = !!timeout;
+> +
+> +	vpu_dec_core_end(vpu);
+> +	mtk_vcodec_debug(inst, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
+> +			 ctx->decoded_frame_cnt,
+> +			 inst->vsi_core->dec.crc[0], inst->vsi_core->dec.crc[1],
+> +			 inst->vsi_core->dec.crc[2], inst->vsi_core->dec.crc[3],
+> +			 inst->vsi_core->dec.crc[4], inst->vsi_core->dec.crc[5],
+> +			 inst->vsi_core->dec.crc[6], inst->vsi_core->dec.crc[7]);
+> +
+> +vdec_dec_end:
+> +	vdec_msg_queue_update_ube_rptr(&lat_buf->ctx->msg_queue,
+> +				       share_info->trans_end);
+> +	ctx->dev->vdec_pdata->cap_to_disp(ctx, fb, !!err);
+> +	mtk_vcodec_debug(inst, "core decode done err=%d", err);
+> +	ctx->decoded_frame_cnt++;
+> +	return 0;
+> +}
+> +
+> +static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+> +				  struct vdec_fb *fb, bool *res_chg)
+> +{
+> +	struct vdec_h264_slice_inst *inst = h_vdec;
+> +	struct vdec_vpu_inst *vpu = &inst->vpu;
+> +	struct mtk_video_dec_buf *src_buf_info;
+> +	int nal_start_idx, err, timeout = 0, i;
+> +	unsigned int data[2];
+> +	struct vdec_lat_buf *lat_buf;
+> +	struct vdec_h264_slice_share_info *share_info;
+> +	unsigned char *buf;
+> +	struct mtk_vcodec_mem *mem;
+> +
+> +	if (vdec_msg_queue_init(&inst->ctx->msg_queue, inst->ctx,
+> +				vdec_h264_slice_core_decode,
+> +				sizeof(*share_info)))
+> +		return -ENOMEM;
+> +
+> +	/* bs NULL means flush decoder */
+> +	if (!bs) {
+> +		vdec_msg_queue_wait_lat_buf_full(&inst->ctx->msg_queue);
+> +		return vpu_dec_reset(vpu);
+> +	}
+> +
+> +	lat_buf = vdec_msg_queue_dqbuf(&inst->ctx->msg_queue.lat_ctx);
+> +	if (!lat_buf) {
+> +		mtk_vcodec_err(inst, "failed to get lat buffer");
+> +		return -EINVAL;
+> +	}
+> +	share_info = lat_buf->private_data;
+> +	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
+> +
+> +	buf = (unsigned char *)bs->va;
+> +	nal_start_idx = mtk_vdec_h264_find_start_code(buf, bs->size);
+> +	if (nal_start_idx < 0) {
+> +		err = -EINVAL;
+> +		goto err_free_fb_out;
+> +	}
+> +
+> +	inst->vsi->dec.nal_info = buf[nal_start_idx];
+> +	inst->vsi->dec.bs_buf_addr = (u64)bs->dma_addr;
+> +	inst->vsi->dec.bs_buf_size = bs->size;
+> +
+> +	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
+> +				   &lat_buf->ts_info, true);
+> +
+> +	err = vdec_h264_slice_fill_decode_parameters(inst, share_info);
+> +	if (err)
+> +		goto err_free_fb_out;
+> +
+> +	*res_chg = inst->resolution_changed;
+> +	if (inst->resolution_changed) {
+> +		mtk_vcodec_debug(inst, "- resolution changed -");
+> +		if (inst->realloc_mv_buf) {
+> +			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
+> +			inst->realloc_mv_buf = false;
+> +			if (err)
+> +				goto err_free_fb_out;
+> +		}
+> +		inst->resolution_changed = false;
+> +	}
+> +	for (i = 0; i < H264_MAX_MV_NUM; i++) {
+> +		mem = &inst->mv_buf[i];
+> +		inst->vsi->mv_buf_dma[i] = mem->dma_addr;
+> +	}
+> +	inst->vsi->wdma_start_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
+> +	inst->vsi->wdma_end_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr +
+> +		lat_buf->ctx->msg_queue.wdma_addr.size;
+> +	inst->vsi->wdma_err_addr = lat_buf->wdma_err_addr.dma_addr;
+> +	inst->vsi->slice_bc_start_addr = lat_buf->slice_bc_addr.dma_addr;
+> +	inst->vsi->slice_bc_end_addr = lat_buf->slice_bc_addr.dma_addr +
+> +		lat_buf->slice_bc_addr.size;
+> +
+> +	inst->vsi->trans_end = inst->ctx->msg_queue.wdma_rptr_addr;
+> +	inst->vsi->trans_start = inst->ctx->msg_queue.wdma_wptr_addr;
+> +	mtk_vcodec_debug(inst, "lat:trans(0x%llx 0x%llx)err:0x%llx",
+> +			 inst->vsi->wdma_start_addr,
+> +			 inst->vsi->wdma_end_addr,
+> +			 inst->vsi->wdma_err_addr);
+> +
+> +	mtk_vcodec_debug(inst, "slice(0x%llx 0x%llx) rprt((0x%llx 0x%llx))",
+> +			 inst->vsi->slice_bc_start_addr,
+> +			 inst->vsi->slice_bc_end_addr,
+> +			 inst->vsi->trans_start,
+> +			 inst->vsi->trans_end);
+> +	err = vpu_dec_start(vpu, data, 2);
+> +	if (err) {
+> +		mtk_vcodec_debug(inst, "lat decode err: %d", err);
+> +		goto err_free_fb_out;
+> +	}
+> +
+> +	/* wait decoder done interrupt */
+> +	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
+> +					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
+> +	inst->vsi->dec.timeout = !!timeout;
+> +
+> +	err = vpu_dec_end(vpu);
+> +	if (err == SLICE_HEADER_FULL || timeout || err == TRANS_BUFFER_FULL) {
+> +		err = -EINVAL;
+> +		goto err_free_fb_out;
+> +	}
+> +
+> +	share_info->trans_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
+> +		inst->vsi->wdma_end_addr_offset;
+> +	share_info->trans_start = inst->ctx->msg_queue.wdma_wptr_addr;
+> +	share_info->nal_info = inst->vsi->dec.nal_info;
+> +	vdec_msg_queue_update_ube_wptr(&lat_buf->ctx->msg_queue,
+> +				       share_info->trans_end);
+> +
+> +	memcpy_fromio(&share_info->h264_slice_params, &inst->vsi->h264_slice_params,
+> +		      sizeof(share_info->h264_slice_params));
+> +	vdec_msg_queue_qbuf(&inst->ctx->dev->msg_queue_core_ctx, lat_buf);
+> +
+> +	inst->slice_dec_num++;
+> +	return 0;
+> +
+> +err_free_fb_out:
+> +	mtk_vcodec_err(inst, "slice dec number: %d err: %d", inst->slice_dec_num, err);
+> +	return err;
+> +}
+> +
+> +static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
+> +				     void *out)
+> +{
+> +	struct vdec_h264_slice_inst *inst = h_vdec;
+> +
+> +	switch (type) {
+> +	case GET_PARAM_PIC_INFO:
+> +		vdec_h264_slice_get_pic_info(inst);
+> +		break;
+> +	case GET_PARAM_DPB_SIZE:
+> +		*(unsigned int *)out = 6;
+> +		break;
+> +	case GET_PARAM_CROP_INFO:
+> +		vdec_h264_slice_get_crop_info(inst, out);
+> +		break;
+> +	default:
+> +		mtk_vcodec_err(inst, "invalid get parameter type=%d", type);
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +const struct vdec_common_if vdec_h264_slice_lat_if = {
+> +	.init		= vdec_h264_slice_init,
+> +	.decode		= vdec_h264_slice_decode,
+> +	.get_param	= vdec_h264_slice_get_param,
+> +	.deinit		= vdec_h264_slice_deinit,
+> +};
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+> index c93dd0ea3537..c17a7815e1bb 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+> @@ -20,7 +20,13 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+>  
+>  	switch (fourcc) {
+>  	case V4L2_PIX_FMT_H264_SLICE:
+> -		ctx->dec_if = &vdec_h264_slice_if;
+> +		if (ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE) {
+> +			ctx->dec_if = &vdec_h264_slice_if;
+> +			ctx->hw_id = MTK_VDEC_CORE;
+> +		} else {
+> +			ctx->dec_if = &vdec_h264_slice_lat_if;
+> +			ctx->hw_id = MTK_VDEC_LAT0;
+> +		}
+>  		break;
+>  	case V4L2_PIX_FMT_H264:
+>  		ctx->dec_if = &vdec_h264_if;
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.h b/drivers/media/platform/mtk-vcodec/vdec_drv_if.h
+> index d467e8af4a84..6ce848e74167 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.h
+> +++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.h
+> @@ -56,6 +56,7 @@ struct vdec_fb_node {
+>  
+>  extern const struct vdec_common_if vdec_h264_if;
+>  extern const struct vdec_common_if vdec_h264_slice_if;
+> +extern const struct vdec_common_if vdec_h264_slice_lat_if;
+>  extern const struct vdec_common_if vdec_vp8_if;
+>  extern const struct vdec_common_if vdec_vp9_if;
+>  
+> diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
+> index b47416f7aeb8..7c2b7cc9fe6c 100644
+> --- a/include/linux/remoteproc/mtk_scp.h
+> +++ b/include/linux/remoteproc/mtk_scp.h
+> @@ -41,6 +41,8 @@ enum scp_ipi_id {
+>  	SCP_IPI_ISP_FRAME,
+>  	SCP_IPI_FD_CMD,
+>  	SCP_IPI_CROS_HOST_CMD,
+> +	SCP_IPI_VDEC_LAT,
+> +	SCP_IPI_VDEC_CORE,
+>  	SCP_IPI_NS_SERVICE = 0xFF,
+>  	SCP_IPI_MAX = 0x100,
+>  };
+

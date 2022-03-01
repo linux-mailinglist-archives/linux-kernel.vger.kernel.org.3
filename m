@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA5A4C92F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE8E4C92F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235929AbiCASZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S236807AbiCASZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiCASZM (ORCPT
+        with ESMTP id S229944AbiCASZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:25:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D7C55BCF;
-        Tue,  1 Mar 2022 10:24:31 -0800 (PST)
+        Tue, 1 Mar 2022 13:25:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8619A6514D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:24:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 245A561480;
-        Tue,  1 Mar 2022 18:24:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D86A2C340F2;
-        Tue,  1 Mar 2022 18:24:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cPsu+Pfp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646159066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UhSvaSxnuwVg8z+lYMrcVY0V6HOk087dwrWAJX+wvNg=;
-        b=cPsu+PfpQ1E+NfY2QM+mqL0MsGFB6uJQhrXq/ZPOpHqQ46Hg0jj++Y00wshljoHRmFIYXF
-        sqrIz3aaStaOBaArIsWgtnsz0z2qiM7Ia9Q+X4rzhx+BpZAoD3c//ILGPSnO780HScVlDv
-        ioajV2t4PXvamB22Q/Mq+I0CvJu0Avc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a7160bf9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 1 Mar 2022 18:24:26 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2d07ae0b1c4so154233807b3.11;
-        Tue, 01 Mar 2022 10:24:24 -0800 (PST)
-X-Gm-Message-State: AOAM530P0T9Bnw/rb6P2yIpZN5irUswLb5pofA2zR3FIiqoj6EjfoYca
-        TdnrBdNln/YiA6yosWBXTs8efjwmEFep3RU5xb8=
-X-Google-Smtp-Source: ABdhPJzIw8Ot6KvcnZ9E6xhmQNl/dygRLAw2fnVFuv34JvBJjjinbct/exl35nFBlEkP8cMk/Ry82yLphyC5sa7l+Vc=
-X-Received: by 2002:a81:1143:0:b0:2db:ccb4:b0a1 with SMTP id
- 64-20020a811143000000b002dbccb4b0a1mr6755248ywr.499.1646159062762; Tue, 01
- Mar 2022 10:24:22 -0800 (PST)
-MIME-Version: 1.0
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <Yh5fbe71BTT6xc8h@kroah.com>
-In-Reply-To: <Yh5fbe71BTT6xc8h@kroah.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 1 Mar 2022 19:24:11 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oGcp7HNLeieptMKztgg7Fq4MnOuAEsiFJxsLbmjSuFCw@mail.gmail.com>
-Message-ID: <CAHmME9oGcp7HNLeieptMKztgg7Fq4MnOuAEsiFJxsLbmjSuFCw@mail.gmail.com>
-Subject: Re: propagating vmgenid outward and upward
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C851B81BE7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 18:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C5EC340EE;
+        Tue,  1 Mar 2022 18:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1646159089;
+        bh=n/9fph0OsL5mWwjCtTZsQ6kPOtBrGnou15HhkeitYVk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ckVbb9w9WVZ2MiNi83aQBsFy2DyavnCa3DU4epjPmJZLSesO9NcNtK0X2w3tzoYTJ
+         tCR85yHgMG3gM9aa+i2rVjje5otvlJ7vcxullMf3u/yR9ZYY2M2bR2iQ642V77Uv/z
+         i8/gEtbOvxOR7dJl9RgOQK/V0KNdJeHobxCkdenw=
+Date:   Tue, 1 Mar 2022 10:24:48 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Maninder Singh <maninder1.s@samsung.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Vaneet Narang <v.narang@samsung.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [hnaz-mm:master 272/379] lib/vsprintf.c:991:13: warning:
+ variable 'modbuildid' set but not used
+Message-Id: <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
+In-Reply-To: <202203012040.uFWGm3My-lkp@intel.com>
+References: <202203012040.uFWGm3My-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, 1 Mar 2022 20:11:04 +0800 kernel test robot <lkp@intel.com> wrote:
 
-On Tue, Mar 1, 2022 at 7:01 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> A notifier block like this makes sense, but why tie onto the PM_ stuff?
-> This isn't power management issues, it's a system-wide change that I am
-> sure others will want to know about that doesn't reflect any power
-> changes.
->
-> As much as I hate adding new notifiers in the kernel, that might be all
-> you need here.
+> tree:   https://github.com/hnaz/linux-mm master
+> head:   a46912c14343fd3269cc133494988af90b377d9f
+> commit: b314f622e664eb263ea03ef7f4580e37146f123f [272/379] kallsyms: enhance %pS/s/b printing when KALLSYSMS is disabled
+> config: arm-eseries_pxa_defconfig (https://download.01.org/0day-ci/archive/20220301/202203012040.uFWGm3My-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/hnaz/linux-mm/commit/b314f622e664eb263ea03ef7f4580e37146f123f
+>         git remote add hnaz-mm https://github.com/hnaz/linux-mm
+>         git fetch --no-tags hnaz-mm master
+>         git checkout b314f622e664eb263ea03ef7f4580e37146f123f
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    lib/vsprintf.c: In function 'sprint_module_info':
+> >> lib/vsprintf.c:991:13: warning: variable 'modbuildid' set but not used [-Wunused-but-set-variable]
+>      991 |         int modbuildid = 0;
+>          |             ^~~~~~~~~~
 
-You might indeed be right. I guess I was thinking that "resuming from
-suspend" and "resuming from a VM fork" are kind of the same thing.
-There _is_ a certain kind of similarity between the two. I was hoping
-if the similarity was a strong enough one, maybe it'd make sense to do
-them together rather than adding another notifier. But I suppose you
-disagree, and it sounds like Rafael might too --
-<https://lore.kernel.org/lkml/CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com/>.
-Code-wise for me with WireGuard it's of course appealing to treat them
-the same, since it's like a one line change, but if I need to add a
-new notifier call there, it's not the end of the world.
+Do we care about this?  [-Wunused-but-set-variable isn't normally set. 
+Under what circumstances does it get set in your setup?
 
-Jason
+I did this:
+
+--- a/lib/vsprintf.c~kallsyms-enhance-%ps-s-b-printing-when-kallsysms-is-disabled-fix
++++ a/lib/vsprintf.c
+@@ -988,7 +988,7 @@ static int sprint_module_info(char *buf,
+ 	unsigned long base;
+ 	int ret = 0;
+ 	const char *modname;
+-	int modbuildid = 0;
++	int modbuildid __maybe_unused = 0;
+ 	int len;
+ #if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+ 	const unsigned char *buildid = NULL;
+_
+
+
+>    lib/vsprintf.c: In function 'va_format':
+>    lib/vsprintf.c:1759:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+>     1759 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+>          |         ^~~
+
+I wonder what this means.

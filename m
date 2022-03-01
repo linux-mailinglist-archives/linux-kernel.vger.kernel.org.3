@@ -2,146 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C099D4C923F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E984C9240
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236638AbiCAR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S236705AbiCAR4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234598AbiCAR4A (ORCPT
+        with ESMTP id S236707AbiCAR4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:56:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B67D146650
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646157317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C1YIiZLEwfCWZucVBeA6r7mIGJsSg3Tucbm5qI7Xnyg=;
-        b=TXdysaZBLB5MSiRk/TZIkzn66wsEbWeoLpkWF55BoF61B5gKq4aV7wsTsVg2fV7D+9lsMP
-        4NmUKt3jiTzScEfce8oWxFKCKtjmJUFKSyrtNKMS9f+RiuhqWBTYJ1NvTzrdg9sRYhysiZ
-        neeou/iO1lA3qXLMBzSi3LdEtqvCdqQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-zW5D4xEIML6OloRcLwMUEw-1; Tue, 01 Mar 2022 12:55:16 -0500
-X-MC-Unique: zW5D4xEIML6OloRcLwMUEw-1
-Received: by mail-wr1-f71.google.com with SMTP id v17-20020adfa1d1000000b001ed9d151569so3574428wrv.21
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:55:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C1YIiZLEwfCWZucVBeA6r7mIGJsSg3Tucbm5qI7Xnyg=;
-        b=SbvIFBcgLARHS6pD1l5nNsZAsYZaHrZGMmFOjIRIo0ab/2+gLUFhRT8GvAotmQzgXs
-         sJ+sAyf5OQup9x7P5OqBrKK1dCyYPXEmqFHP+6ZFwbVL3L50rmToRarkQktQzOdJuIiY
-         xzYt6gXddjIHhCaZW4s4GWXSOF43PfQYkmGm2pPTBoW7qVnarUN2GaVYCdc8D/BfyUgw
-         rqT0GoNcwFkSTYQI9eJscRNPSErDStdvSKKzjhGqSvLQRCPKl+M7olMVqGFg5/D1aITh
-         1Y4ooeX45rotIo00i9AZ0qwv2ZxavUbAKkrmediF5VQ04fWeA1fuIUUjZV5w347/taWh
-         l4og==
-X-Gm-Message-State: AOAM531K5x8S5maCp7lZ+HWHvgLGlAX/ORD87MXVsKGr1W3HezOXgIPO
-        xse6D6me2+w/Qjk5wRz/lXc0mcKluv2N/5qfDoVUReO9K+xC9wjO9RHHEo938hOymsKUtgQq7gJ
-        /bm/sToO6J5h2+os/4gycRyVr
-X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr15308387wrp.183.1646157315556;
-        Tue, 01 Mar 2022 09:55:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwRd6t6YiBjKSS8HtAllf0a/R/xRzLfl/+eN2+xfWBBjB3U07ISLYFsNd+mEn9N0S/owUGCjA==
-X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr15308374wrp.183.1646157315215;
-        Tue, 01 Mar 2022 09:55:15 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id v12-20020a5d4a4c000000b001e68ba61747sm14329725wrs.16.2022.03.01.09.55.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 09:55:14 -0800 (PST)
-Message-ID: <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
-Date:   Tue, 1 Mar 2022 18:55:13 +0100
+        Tue, 1 Mar 2022 12:56:10 -0500
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3A45DA76
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:55:27 -0800 (PST)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 689B5C5B2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:55:27 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id P6idnPhzt22u3P6idnMza1; Tue, 01 Mar 2022 11:55:27 -0600
+X-Authority-Reason: nr=8
+Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:40038 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nP6ic-003Ftl-OS; Tue, 01 Mar 2022 11:55:26 -0600
+Message-ID: <69e92bc6-0917-17e9-1b61-d884d30ba42c@kernel.org>
+Date:   Tue, 1 Mar 2022 18:55:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
- shadow page is zapped
+Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220225182248.3812651-1-seanjc@google.com>
- <20220225182248.3812651-5-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220225182248.3812651-5-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, rostedt@goodmis.org,
+        paulmck@kernel.org
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, mtosatti@redhat.com
+References: <20220228141423.259691-1-nsaenzju@redhat.com>
+ <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
+ <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 95.232.30.176
+X-Source-L: No
+X-Exim-ID: 1nP6ic-003Ftl-OS
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:40038
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 14
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 19:22, Sean Christopherson wrote:
-> @@ -5656,7 +5707,7 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
->   	 * Note: we need to do this under the protection of mmu_lock,
->   	 * otherwise, vcpu would purge shadow page but miss tlb flush.
->   	 */
-> -	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
-> +	kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
->   
+On 3/1/22 11:52, Nicolas Saenz Julienne wrote:
+> On Mon, 2022-02-28 at 21:00 +0100, Daniel Bristot de Oliveira wrote:
+>> On 2/28/22 15:14, Nicolas Saenz Julienne wrote:
+>>> At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
+>>> kernel might have the side effect of extending grace periods too much.
+>>> This will eventually entice RCU to schedule a task on the isolated CPU
+>>> to end the overly extended grace period, adding unwarranted noise to the
+>>> CPU being traced in the process.
+>>>
+>>> So, check if we're the only ones running on this isolated CPU and that
+>>> we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
+>>> between measurements.
+>>>
+>>> Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
+>>> loop's cond_resched() will go though a quiescent state for them.
+>>>
+>>> Note that this same exact problem is what extended quiescent states were
+>>> created for. But adapting them to this specific use-case isn't trivial
+>>> as it'll imply reworking entry/exit and dynticks/context tracking code.
+>>>
+>>> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+>>> ---
+>>>  kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
+>>>  1 file changed, 19 insertions(+)
+>>>
+>>> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+>>> index 870a08da5b48..4928358f6e88 100644
+>>> --- a/kernel/trace/trace_osnoise.c
+>>> +++ b/kernel/trace/trace_osnoise.c
+>>> @@ -21,7 +21,9 @@
+>>>  #include <linux/uaccess.h>
+>>>  #include <linux/cpumask.h>
+>>>  #include <linux/delay.h>
+>>> +#include <linux/tick.h>
+>>>  #include <linux/sched/clock.h>
+>>> +#include <linux/sched/isolation.h>
+>>>  #include <uapi/linux/sched/types.h>
+>>>  #include <linux/sched.h>
+>>>  #include "trace.h"
+>>> @@ -1295,6 +1297,7 @@ static int run_osnoise(void)
+>>>  	struct osnoise_sample s;
+>>>  	unsigned int threshold;
+>>>  	u64 runtime, stop_in;
+>>> +	unsigned long flags;
+>>>  	u64 sum_noise = 0;
+>>>  	int hw_count = 0;
+>>>  	int ret = -1;
+>>> @@ -1386,6 +1389,22 @@ static int run_osnoise(void)
+>>>  					osnoise_stop_tracing();
+>>>  		}
+>>>  
+>>> +		/*
+>>> +		 * Check if we're the only ones running on this nohz_full CPU
+>>> +		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
+>>> +		 * QS since there is no way for RCU to know we're not making
+>>> +		 * use of it.
+>>> +		 *
+>>> +		 * Otherwise it'll be done through cond_resched().
+>>> +		 */
+>>> +		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
+>>> +		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
+>>
+>> Does this restrict to only isolcpus cpus?
+> 
+> nohz_full CPUs actually, IIUC HK_FLAG_MISC isn't set if isolcpus is used, which
+> is deprecated anyway.
 
-I was going to squash in this:
+Perfecto!
 
-  	 * invalidating TDP MMU roots must be done while holding mmu_lock for
--	 * write and in the same critical section as making the reload request,
-+	 * write and in the same critical section as making the free request,
-  	 * e.g. before kvm_zap_obsolete_pages() could drop mmu_lock and yield.
+> 
+>> what if this CPU was isolated via other methods?
+> 
+> osnoise with an uncontested FIFO priority for example?
 
-But then I realized that this needs better comments and that my knowledge of
-this has serious holes.  Regarding this comment, this is my proposal:
+No, I was mentioning something like tuna/tasket/systemd/cgroup, anything other
+than isolcpus... as it is doing (I miss interpreted the HK_FLAG_MISC).
 
-         /*
-          * Invalidated TDP MMU roots are zapped within MMU read_lock to be
-          * able to walk the list of roots, but with the expectation of no
-          * concurrent change to the pages themselves.  There cannot be
-          * any yield between kvm_tdp_mmu_invalidate_all_roots and the free
-          * request, otherwise somebody could grab a reference to the root
-	 * and break that assumption.
-          */
-         if (is_tdp_mmu_enabled(kvm))
-                 kvm_tdp_mmu_invalidate_all_roots(kvm);
+I do not agree on using busy-loop with FIFO.
 
-However, for the second comment (the one in the context above), there's much
-more.  From easier to harder:
+I believe in that case
+> RCU will start throwing "rcu_preempt detected stalls" style warnings. As it
+> won't be able to preempt the osnoise CPU to force the grace period ending.
+> 
+> I see your point though, this would also help in that situation. We could maybe
+> relax the entry barrier to rcu_momentary_dyntick_idle(). I think it's safe to
+> call it regardless of nohz_full/tick state for most cases, I just wanted to
+> avoid the overhead. The only thing that worries me is PREEMPT_RT and its
+> rt_spinlocks, which can be preempted.
 
-1) I'm basically clueless about the TLB flush "note" above.
+no, that was not my point.
 
-2) It's not clear to me what needs to use for_each_tdp_mmu_root; for
-example, why would anything but the MMU notifiers use for_each_tdp_mmu_root?
-It is used in kvm_tdp_mmu_write_protect_gfn, kvm_tdp_mmu_try_split_huge_pages
-and kvm_tdp_mmu_clear_dirty_pt_masked.
+> 
+>>> +		    tick_nohz_tick_stopped()) {
+>>> +			local_irq_save(flags);
+>>
+>> This code is always with interrupts enabled, so local_irq_disable()/enable()
+>> should be enough (and faster).
+> 
+> Noted.
+> 
+>>> +			rcu_momentary_dyntick_idle();
+>>> +			local_irq_restore(flags);
+>>> +		}
+>>
+>> Question, if we set this once, we could avoid setting it on every loop unless we
+>> have a preemption from another thread, right?
+> 
+> This tells RCU the CPU went through a quiescent state, which removes it from
+> the current grace period accounting. It's different from an extended quiescent
+> state, which fully disables the CPU from RCU's perspective.
 
-3) Does it make sense that yielding users of for_each_tdp_mmu_root must
-either look at valid roots only, or take MMU lock for write?  If so, can
-this be enforced in tdp_mmu_next_root?
+Got it!
 
-4) If the previous point is correct, _who_ could grab a reference and
-not release it before kvm_tdp_mmu_zap_invalidated_roots runs?  That is,
-is "somebody could grab a reference" an accurate explanation in the first
-comment above?
+> We don't need to do it on every iteration, but as Paul explained in the mail
+> thread it has to happen at least every ~20-30ms.
 
-Thanks,
+I see, as long as it costs < 1 us, I am ok. If it gets > 1us in a reasonably
+fast machine, we start see HW noise where it does not exist, and that would
+reduce the resolution of osnoise. AFAICS, it is not causing that problem, but we
+need to make it as lightweight as possible.
 
-Paolo
+-- Daniel
+
+> Thanks!
+> 
 

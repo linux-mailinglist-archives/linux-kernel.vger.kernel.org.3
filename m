@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA8E4C913B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA8C4C9143
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiCARNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S236343AbiCARPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbiCARNr (ORCPT
+        with ESMTP id S234538AbiCARPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:13:47 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ECD3B007;
-        Tue,  1 Mar 2022 09:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646154785; x=1677690785;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=k6CREB0TD0/8UF4IksukPBWP48bQZt3imPBwgI28Sps=;
-  b=mz5abiRslc3BzkZyBHTbPrhwGGb8lwlczq3bnOAE6S7xGmdJjXcqRhfg
-   xIRThIlKAMAP79r1V4AiWIZ2cfeCu10G51CMCaUp2umSN+K15VBbjigud
-   +oLRWhltDXib+guWJQqdPiXis2fcL62SzyvfPrXs/Wo4/zcslTcBfnnzk
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Mar 2022 09:13:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:13:04 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 1 Mar 2022 09:13:04 -0800
-Received: from [10.111.181.139] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 1 Mar 2022
- 09:13:04 -0800
-Message-ID: <4c3c55ac-1dda-410a-7125-ca0e2acee44d@quicinc.com>
-Date:   Tue, 1 Mar 2022 09:13:03 -0800
+        Tue, 1 Mar 2022 12:15:34 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DF21ADAB;
+        Tue,  1 Mar 2022 09:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646154892; x=1677690892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xfA3Q2rNoGikcOpleBBhk8TcVgjijI+nX7d6AMT5f50=;
+  b=jyJl5hVibsqZxkkVWbDzPzDH/dOfeRAo5euiKg1bdYMWcZc7dcBfl+Pl
+   N0srpjWCPTvPITzojJFPoxOpQDrA2gf4Ajx/7GJ2xRyHs1rQqozoQO8qQ
+   +NM2pqcJRkD313U5j1lwXpCWgZkAc66EZJsUiS+Dch46zWcYgvGvwfDWO
+   E7Oe89XY3K6K1OdLGFDlSUJ34ARVbg9DDMtuyDBpinIbWGbiB8gNOsbOy
+   q1QziYvLQ8EhLl0IGthh7UCiAPfNZSY48TRelkAxzDXLfVYfoiO6harc5
+   MvqCM6BFakXYN8OvkvCWW3MtN+RjIBrdKO+OMTbY7VRXNGKhta7E1JZmv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253113949"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="253113949"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:14:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="550809589"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
+  by orsmga008.jf.intel.com with SMTP; 01 Mar 2022 09:14:46 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 01 Mar 2022 19:14:46 +0200
+Date:   Tue, 1 Mar 2022 19:14:46 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2] drm/i915: make a handful of read-only arrays static
+ const
+Message-ID: <Yh5UhnaGMFFM1Nxs@intel.com>
+References: <20220223120923.239867-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 03/10] staging: wfx: format comments on 100 columns
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        Jerome Pouiller <Jerome.Pouiller@silabs.com>,
-        <linux-wireless@vger.kernel.org>, Kalle Valo <kvalo@kernel.org>
-CC:     <devel@driverdev.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220225112405.355599-1-Jerome.Pouiller@silabs.com>
- <20220225112405.355599-4-Jerome.Pouiller@silabs.com>
- <fe3c21a9c0178a2f0fcea698b8e6405a99747dea.camel@perches.com>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <fe3c21a9c0178a2f0fcea698b8e6405a99747dea.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220223120923.239867-1-colin.i.king@gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/2022 5:12 PM, Joe Perches wrote:
-> On Fri, 2022-02-25 at 12:23 +0100, Jerome Pouiller wrote:
->> From: J√©r√¥me Pouiller <jerome.pouiller@silabs.com>
->>
->> A few comments were not yet formatted on 100 columns.
+On Wed, Feb 23, 2022 at 12:09:23PM +0000, Colin Ian King wrote:
+> Don't populate the read-only arrays on the stack but instead make
+> them static const and signed 8 bit ints. Also makes the object code a
+> little smaller.  Reformat the statements to clear up checkpatch warning.
 > 
-> IMO, none of these changes are necessary or good changes.
-> 
-> 80 columns is preferred.
-> 
-> Really comments should most always use 80 columns, and
-> only occasionally should code be more than 80 columns
-> and almost never should code be more than 100 columns.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-That was my reaction as well. Just because we've relaxed rules so that 
-we *can* exceed 80 columns, it doesn't mean we *should*, and definitely 
-doesn't mean we should *strive* to do so.
+Thanks. Pushed to drm-intel-next.
+
+> ---
+> 
+> V2: Make arrays signed 8 bit integers as requested by Ville Syrj‰l‰
+> 
+> ---
+>  drivers/gpu/drm/i915/display/intel_vdsc.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/display/intel_vdsc.c b/drivers/gpu/drm/i915/display/intel_vdsc.c
+> index 3faea903b9ae..d49f66237ec3 100644
+> --- a/drivers/gpu/drm/i915/display/intel_vdsc.c
+> +++ b/drivers/gpu/drm/i915/display/intel_vdsc.c
+> @@ -378,10 +378,18 @@ calculate_rc_params(struct rc_parameters *rc,
+>  {
+>  	int bpc = vdsc_cfg->bits_per_component;
+>  	int bpp = vdsc_cfg->bits_per_pixel >> 4;
+> -	int ofs_und6[] = { 0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12 };
+> -	int ofs_und8[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
+> -	int ofs_und12[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
+> -	int ofs_und15[] = { 10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12 };
+> +	static const s8 ofs_und6[] = {
+> +		0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
+> +	};
+> +	static const s8 ofs_und8[] = {
+> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
+> +	};
+> +	static const s8 ofs_und12[] = {
+> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
+> +	};
+> +	static const s8 ofs_und15[] = {
+> +		10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12
+> +	};
+>  	int qp_bpc_modifier = (bpc - 8) * 2;
+>  	u32 res, buf_i, bpp_i;
+>  
+> -- 
+> 2.34.1
+
+-- 
+Ville Syrj‰l‰
+Intel

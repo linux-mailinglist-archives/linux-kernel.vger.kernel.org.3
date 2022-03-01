@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D67C4C82A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21974C82A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiCAEsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S232319AbiCAEtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCAEsW (ORCPT
+        with ESMTP id S229588AbiCAEtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:48:22 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4D012FE8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=ppwzFXj+7J
-        +K1wSH/RgnQeHvxCuLOmmZ/u/ya/sUCTs=; b=bABrMRZ8+Phni4YOPA+qDurRTr
-        0bTUc+ZBAoalLXeC5dtdwlQRAtGHhrhES+iR7/V16bmR030oFSkZuyYwKCxag9VF
-        FJSspEmdzWgEoBYrw6WbcpEJSvqfc3mSnxVxOLf7IoL/GFk4cWGL8SkwM0KGodvg
-        MfPyB5pZQ6RCbzLzk=
-Received: from localhost.localdomain (unknown [10.222.220.36])
-        by app1 (Coremail) with SMTP id XAUFCgA34rk4pR1iQ0koCQ--.25183S4;
-        Tue, 01 Mar 2022 12:46:54 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH v2] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
-Date:   Tue,  1 Mar 2022 12:45:56 +0800
-Message-Id: <20220301044556.36162-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 23:49:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE277AE6D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:48:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7689E60F51
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 04:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C46C340EE;
+        Tue,  1 Mar 2022 04:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646110118;
+        bh=paui+Ittn0LWcLTmlDXTKDSrlxTU8A/9cmtrcLOsvzU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LXYTyLwc25eF6AdbUiffVQvDz6miyIC6hMPhasrrhgQkc1l4602fIdRrSXAsv0M2v
+         5PEnWXXbqz44rV4Hgei9tshIIu3WnaKBf+5h3lpjRksvEjja95iqiNgsK5yjPJ8Fsc
+         2TNvXL4hJ+ovSmJuPBdIO3Zh3EYhk/n8w0unUslnRNtLOLjj/VqB6W4l3QF0exYgO4
+         xKT0aUtqpLEY1om7gz8UO8fS62x9bpHDTV6P/MvPCHPCPm8KDTtX7fVFZ1Z3RQTKNv
+         D41ib8FQ8ijYamgAERS2+TiT9JAO2tnHU0ZHhIBvbHWNgxq4eJPnd4sh/CUjA8XayD
+         nYBjJzaJR9/tg==
+Date:   Mon, 28 Feb 2022 20:48:37 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: avoid sb_start_intwrite during
+ eviction
+Message-ID: <Yh2lpb3c5X9aPJ+r@google.com>
+References: <20220215220039.1477906-1-jaegeuk@kernel.org>
+ <09683b83-b6c0-fe05-0dae-b93cab2f4b63@kernel.org>
+ <YhkpjWZ3NO5ihvH5@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XAUFCgA34rk4pR1iQ0koCQ--.25183S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZF4DGrW7uF4rZw47urg_yoW8trykpF
-        WUtay3ZFWUtFs3ZF12kayxuF1rZ3WkJFyUG39Fqa4xZ3ZxX34jkw1Yqry0qFy8CFyfuF1U
-        ZF42q3WUCF1UCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMx
-        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-        wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-        vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-        0xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOrcfUUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg0LEFKp2j3PtgABsw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhkpjWZ3NO5ihvH5@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference counting issue happens in several error handling paths
-on a refcounted object "nc->dmac". In these paths, the function simply
-returns the error code, forgetting to balance the reference count of
-"nc->dmac", increased earlier by dma_request_channel(), which may
-cause refcount leaks.
+1. waiting for f2fs_evict_inode
+[ 5560.043945]  __wait_on_freeing_inode+0xac/0xf0
+[ 5560.045540]  ? var_wake_function+0x30/0x30
+[ 5560.047036]  find_inode_fast+0x6d/0xc0
+[ 5560.048473]  iget_locked+0x79/0x230
+[ 5560.049933]  f2fs_iget+0x27/0x1200 [f2fs]
+[ 5560.051496]  f2fs_lookup+0x18c/0x3e0 [f2fs]
+[ 5560.053069]  __lookup_slow+0x84/0x150
+[ 5560.054503]  walk_component+0x141/0x1b0
+[ 5560.055938]  link_path_walk.part.0+0x23b/0x360
+[ 5560.057541]  ? end_bio_bh_io_sync+0x37/0x50
+[ 5560.059086]  path_parentat+0x3c/0x90
+[ 5560.060492]  filename_parentat+0xd7/0x1e0
+[ 5560.062002]  ? blk_mq_free_request+0x127/0x150
+[ 5560.063576]  do_renameat2+0xc1/0x5b0
+ --> sb_start_write(m->mnt_sb); ->  __sb_start_write(sb, SB_FREEZE_WRITE);
 
-Fix it by decrementing the refcount of specific object in those error
-paths.
+[ 5560.064999]  ? __check_object_size+0x13f/0x150
+[ 5560.066559]  ? strncpy_from_user+0x44/0x150
+[ 5560.068038]  ? getname_flags.part.0+0x4c/0x1b0
+[ 5560.069617]  __x64_sys_renameat2+0x51/0x60
 
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+2. waiting for sb_start_intwrite -> __sb_start_write(sb, SB_FREEZE_FS);
+
+[ 5560.152447]  percpu_rwsem_wait+0xaf/0x160
+[ 5560.154000]  ? percpu_down_write+0xd0/0xd0
+[ 5560.155498]  __percpu_down_read+0x4e/0x60
+[ 5560.157000]  f2fs_evict_inode+0x5a3/0x610 [f2fs]
+[ 5560.158648]  ? var_wake_function+0x30/0x30
+[ 5560.160341]  evict+0xd2/0x180
+[ 5560.161728]  prune_icache_sb+0x81/0xb0
+ --> inode_lru_isolate() -> inode->i_state |= I_FREEING;
+
+[ 5560.163179]  super_cache_scan+0x169/0x1f0
+[ 5560.164675]  do_shrink_slab+0x145/0x2b0
+[ 5560.166121]  shrink_slab+0x186/0x2d0
+[ 5560.167481]  drop_slab_node+0x4a/0x90
+[ 5560.168876]  drop_slab+0x3e/0x80
+[ 5560.170178]  drop_caches_sysctl_handler+0x75/0x90
+[ 5560.171761]  proc_sys_call_handler+0x149/0x280
+[ 5560.173328]  proc_sys_write+0x13/0x20
+[ 5560.174667]  new_sync_write+0x117/0x1b0
+[ 5560.176120]  vfs_write+0x1d5/0x270
+[ 5560.177409]  ksys_write+0x67/0xe0
+
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
-V1 -> V2: Rewrited the error handling block
----
- drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ Note, I found this call stack.
 
-diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
-index f3276ee9e4fe..0efeb5d77be0 100644
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	nc->mck = of_clk_get(dev->parent->of_node, 0);
- 	if (IS_ERR(nc->mck)) {
- 		dev_err(dev, "Failed to retrieve MCK clk\n");
--		return PTR_ERR(nc->mck);
-+		ret = PTR_ERR(nc->mck);
-+		goto out_release_dma;
+ fs/f2fs/inode.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index ab8e0c06c78c..882db4bd917b 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -778,7 +778,6 @@ void f2fs_evict_inode(struct inode *inode)
+ 	f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
+ 	f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
+ 
+-	sb_start_intwrite(inode->i_sb);
+ 	set_inode_flag(inode, FI_NO_ALLOC);
+ 	i_size_write(inode, 0);
+ retry:
+@@ -809,7 +808,6 @@ void f2fs_evict_inode(struct inode *inode)
+ 		if (dquot_initialize_needed(inode))
+ 			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
  	}
+-	sb_end_intwrite(inode->i_sb);
+ no_delete:
+ 	dquot_drop(inode);
  
- 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
- 	if (!np) {
- 		dev_err(dev, "Missing or invalid atmel,smc property\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_release_dma;
- 	}
- 
- 	nc->smc = syscon_node_to_regmap(np);
-@@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	if (IS_ERR(nc->smc)) {
- 		ret = PTR_ERR(nc->smc);
- 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
--		return ret;
-+		goto out_release_dma;
- 	}
- 
- 	return 0;
-+
-+out_release_dma:
-+	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
-+		if (nc->dmac) {
-+			dma_release_channel(nc->dmac);
-+			nc->dmac = NULL;
-+		}
-+	}
-+
-+	return ret;
- }
- 
- static int
 -- 
-2.25.1
+2.35.1.574.g5d30c73bfb-goog
 

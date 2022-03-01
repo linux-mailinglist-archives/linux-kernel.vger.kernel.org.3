@@ -2,33 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CBB4C8CEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934C24C8CEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbiCANsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S235101AbiCANsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiCANsC (ORCPT
+        with ESMTP id S235094AbiCANsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:48:02 -0500
+        Tue, 1 Mar 2022 08:48:07 -0500
 Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE29F39B;
-        Tue,  1 Mar 2022 05:47:20 -0800 (PST)
-Received: from [45.44.224.220] (port=56376 helo=localhost)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8C06350;
+        Tue,  1 Mar 2022 05:47:26 -0800 (PST)
+Received: from [45.44.224.220] (port=56378 helo=localhost)
         by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <olivier@trillion01.com>)
-        id 1nP2qV-0002GI-4T; Tue, 01 Mar 2022 08:47:19 -0500
-Date:   Tue, 01 Mar 2022 08:47:18 -0500
-Message-Id: <cover.1646142288.git.olivier@trillion01.com>
+        id 1nP2qa-0002Gr-Rf; Tue, 01 Mar 2022 08:47:24 -0500
+Date:   Tue, 01 Mar 2022 08:47:24 -0500
+Message-Id: <84513f7cc1b1fb31d8f4cb910aee033391d036b4.1646142288.git.olivier@trillion01.com>
+In-Reply-To: <cover.1646142288.git.olivier@trillion01.com>
+References: <cover.1646142288.git.olivier@trillion01.com>
 From:   Olivier Langlois <olivier@trillion01.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 Cc:     Hao Xu <haoxu@linux.alibaba.com>,
         io-uring <io-uring@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 0/2] io_uring: Add support for napi_busy_poll
+Subject: [PATCH v4 1/2] io_uring: minor io_cqring_wait() optimization
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -48,59 +50,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sqpoll thread can be used for performing the napi busy poll in a
-similar way that it does io polling for file systems supporting direct
-access bypassing the page cache.
+Move up the block manipulating the sig variable to execute code
+that may encounter an error and exit first before continuing
+exectuing the rest of the function and avoid useless computations
 
-The other way that io_uring can be used for napi busy poll is by
-calling io_uring_enter() to get events.
+Signed-off-by: Olivier Langlois <olivier@trillion01.com>
+---
+ fs/io_uring.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-If the user specify a timeout value, it is distributed between polling
-and sleeping by using the systemwide setting
-/proc/sys/net/core/busy_poll.
-
-The changes have been tested with this program:
-https://github.com/lano1106/io_uring_udp_ping
-
-and the result is:
-Without sqpoll:
-NAPI busy loop disabled:
-rtt min/avg/max/mdev = 40.631/42.050/58.667/1.547 us
-NAPI busy loop enabled:
-rtt min/avg/max/mdev = 30.619/31.753/61.433/1.456 us
-
-With sqpoll:
-NAPI busy loop disabled:
-rtt min/avg/max/mdev = 42.087/44.438/59.508/1.533 us
-NAPI busy loop enabled:
-rtt min/avg/max/mdev = 35.779/37.347/52.201/0.924 us
-
-v2:
- * Evaluate list_empty(&ctx->napi_list) outside io_napi_busy_loop() to keep
-   __io_sq_thread() execution as fast as possible
- * In io_cqring_wait(), move up the sig block to avoid needless computation
-   if the block exits the function
- * In io_cqring_wait(), protect ctx->napi_list from race condition by
-   splicing it into a local list
- * In io_cqring_wait(), allow busy polling when uts is missing
- * Fix kernel test robot issues
-v3:
- * Fix do_div() type mismatch warning
- * Reduce uring_lock contention by creating a spinlock for protecting
-   napi_list
- * Support correctly MULTISHOT poll requests
-v4:
- * Put back benchmark result in commit text
-
-Olivier Langlois (2):
-  io_uring: minor io_cqring_wait() optimization
-  io_uring: Add support for napi_busy_poll
-
- fs/io_uring.c | 246 ++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 237 insertions(+), 9 deletions(-)
-
-
-base-commit: 719fce7539cd3e186598e2aed36325fe892150cf
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 4715980e9015..f7b8df79a02b 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -7732,14 +7732,6 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 			break;
+ 	} while (1);
+ 
+-	if (uts) {
+-		struct timespec64 ts;
+-
+-		if (get_timespec64(&ts, uts))
+-			return -EFAULT;
+-		timeout = ktime_add_ns(timespec64_to_ktime(ts), ktime_get_ns());
+-	}
+-
+ 	if (sig) {
+ #ifdef CONFIG_COMPAT
+ 		if (in_compat_syscall())
+@@ -7753,6 +7745,14 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 			return ret;
+ 	}
+ 
++	if (uts) {
++		struct timespec64 ts;
++
++		if (get_timespec64(&ts, uts))
++			return -EFAULT;
++		timeout = ktime_add_ns(timespec64_to_ktime(ts), ktime_get_ns());
++	}
++
+ 	init_waitqueue_func_entry(&iowq.wq, io_wake_function);
+ 	iowq.wq.private = current;
+ 	INIT_LIST_HEAD(&iowq.wq.entry);
 -- 
 2.35.1
 

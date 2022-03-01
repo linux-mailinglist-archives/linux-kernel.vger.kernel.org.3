@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06424C869A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373AF4C868C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbiCAIfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S233245AbiCAIeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiCAIfq (ORCPT
+        with ESMTP id S229906AbiCAIeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:35:46 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE0865833
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:35:05 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id s24so20979028edr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version:content-transfer-encoding;
-        bh=581d5D6KA6uGeEFhWJuvM1NIBuXYywCqvyH8LTd14IA=;
-        b=btbiwNi69t//ZAp+SKv0Q4ykiUFt5Vcee8OG/aZUV/3/mEL6qCooFVbyDvhieBabec
-         CkXz6UGXrke98ZVvQ72UuAMxZwsIfwh+3g3tK2X0k1zbFdUDs/+/OK1fCTFFQOT7UHWN
-         z0SGermy1OptrYhdNwG2SjAF8Iy2D/bC8aVmKXNdBID/wURfxVbVE+QyMV5xd5+hVU2P
-         7UAkphywTA2sXS8jB/ps9Kcir4h64rEe4PhvIq8Fufb+E0teJ0kR087Xzr14Qd4KJ0DF
-         Qzm9enrRJsGu4gGmyGHjbsCTvR55t8XjpjYC+HsSfTFdAdWWiDXozOXw2e3X48KoaVr6
-         04YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version:content-transfer-encoding;
-        bh=581d5D6KA6uGeEFhWJuvM1NIBuXYywCqvyH8LTd14IA=;
-        b=O/JTurZHNV+v7OsXUCfoDskCzA6gAnBuLrYD0gjfAhLW7uZj5rRp5sSeehEbS8g+u0
-         ICFYm9eIlJHOGBygRnmEKOywPrYLSDrqQPMtvwPzHQHcId4ORfrZu3SG++HlyDE1tlBu
-         3JwJtcHGePvr4UCBDGGMgWBxBcLcUtjHGHA2xmRgE3oZl6agZfWwc9BEoEV6YxcHUSZx
-         xpeqHgjTalaklT2MvKu31siDhCi2FK3zlF2rBMBvFMBti515bEbbOvOp5A9fUl+A8ZLO
-         pAB6SME/RuiJLSBkkZ8OfzOs2S5qvTLd4coAhveIMhwv9vlVQEBBuS4Lc4c1W0F8EIDq
-         dNVQ==
-X-Gm-Message-State: AOAM532zC0AM9d7sfvPQ8aJ6uEdQQaCQKDNE1DR/2XxANPDgIj3gLjtw
-        V/HWBTjEQ3rbrYiRpHZIFqcfJg==
-X-Google-Smtp-Source: ABdhPJwubftsKZHHyeS1ZbNkCnU+nk1j6sKjNZ5wyeunS3woMMkfozT4OFVs7GF4Plw+VBgaQ0e1+g==
-X-Received: by 2002:aa7:cb96:0:b0:413:8d05:ebc with SMTP id r22-20020aa7cb96000000b004138d050ebcmr14581306edt.81.1646123704506;
-        Tue, 01 Mar 2022 00:35:04 -0800 (PST)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709060f5400b006d6d54b9203sm1065010ejj.38.2022.03.01.00.35.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 00:35:04 -0800 (PST)
-References: <20220228135530.6918-1-yu.tu@amlogic.com>
- <29b34655-f820-39c9-4363-878481cd3f63@baylibre.com>
- <Yh087tJhakKHs88e@kroah.com>
- <8747c5c6-a129-3a26-8ebb-9e21a18236ec@baylibre.com>
- <96dc5932-7a4c-4f92-b33b-bfd7fc4477e8@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH V3] tty: serial: meson: Fix the compile link error
- reported by kernel test robot
-Date:   Tue, 01 Mar 2022 09:33:15 +0100
-In-reply-to: <96dc5932-7a4c-4f92-b33b-bfd7fc4477e8@amlogic.com>
-Message-ID: <1jmtiavznx.fsf@starbuckisacylon.baylibre.com>
+        Tue, 1 Mar 2022 03:34:17 -0500
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9425526563;
+        Tue,  1 Mar 2022 00:33:32 -0800 (PST)
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id D87BCC3F3EED;
+        Tue,  1 Mar 2022 09:33:29 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl D87BCC3F3EED
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1646123610; bh=Yn6AMwzcGivxG7Dr5hi4SZZsXegUo67bapb/bDHeORQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cE+kuV+ABmyQhePYpefvkHpL8GCIH6KWo3YMmLQxeDTw21E/LDf8g5/2s7G+grzR6
+         QkKoafqtUv1Gytn7t4DsJylscR3JmEpKQSpEEC8qBLbJX2zp8B+YhuHjLw91KuOjw+
+         bBUdYhb2tphJftXcaivyBa/sArD6YbkF+aeCDR4M=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo@jmondi.org>, Joe Perches <joe@perches.com>
+Subject: [PATCH v8 0/2] On Semi AR0521 sensor driver
+Sender: khalasa@piap.pl
+Date:   Tue, 01 Mar 2022 09:33:29 +0100
+Message-ID: <m3pmn66pie.fsf@t19.piap.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Rob, Mauro, media subsystem reviewers,
 
-On Tue 01 Mar 2022 at 15:47, Yu Tu <yu.tu@amlogic.com> wrote:
+This is the 8th version of my On Semi AR0521 sensor driver.
+Is there anything here that should be changed in order to get it merged?
+Perhaps it should be added to the staging area instead?
 
-> Hi Neil,
->
-> On 2022/3/1 15:23, Neil Armstrong wrote:
->> [ EXTERNAL EMAIL ]
->> Hi Greg,
->> Le 28/02/2022 =C3=A0 22:21, Greg Kroah-Hartman a =C3=A9crit=C2=A0:
->>> On Mon, Feb 28, 2022 at 03:13:48PM +0100, Neil Armstrong wrote:
->>>> Hi,
->>>>
->>>> On 28/02/2022 14:55, Yu Tu wrote:
->>>>> Describes the calculation of the UART baud rate clock using a clock
->>>>> frame. Forgot to add in Kconfig kernel test Robot compilation error
->>>>> due to COMMON_CLK dependency.
->>>>>
->>>>> Fixes: ("tty: serial:meson: Describes the calculation of the UART baud
->>>>> rate clock using a clock frame=E2=80=9C)
->>>>
->>>> As I already replied on V2 of this patch, you're invited to apply these
->>>> fixes directly
->>>> on the next version of your "Use CCF to describe the UART baud rate
->>>> clock" patchset
->>>> and not as a separate patch.
->>>
->>> No, this is broken in linux-next now as the path listed here is in my
->>> tree right now.
->> Oh, I wasn't aware you took this patchset.
->>=20
->>>
->>> I need a fix for it, or I can revert the original.
->> Please revert the whole patchset, it's not ready yet, neither fully=20
->> reviewed ands buggy
->> on old SoCs.
-> I have tested that there is no problem with G12A and S4 boards. Can I mer=
-ge
-> them first and fix them later if there is any problem?
 
-That's called a regression. That is not how we do things in mainline
-There is still a lot of people using GXL boards. Those are still sold even.
+The documentation patch (1/2) hasn't been changed from v4:
 
->> Thanks,
->> Neil
->>=20
->>>
->>> thanks,
->>>
->>> greg k-h
->>=20
+ onnn,ar0521.yaml |  112
+ 1 file changed, 112 insertions(+)
 
+The actual driver (2/2) stats:
+ MAINTAINERS                |    7
+ drivers/media/i2c/Kconfig  |   13
+ drivers/media/i2c/Makefile |    1
+ drivers/media/i2c/ar0521.c | 1059
+ 4 files changed, 1080 insertions
+
+v8:
+- dropped the remaining debugs
+- added pm_runtime_idle() call
+- a couple of cosmetic changes
+
+v7:
+- removed AR0521_NUM_SUPPLIES macro: ARRAY_SIZE(ar0521_supply_names)
+  is now used directly.
+
+- fixed ar0521_power_off() return type, reported-by: kernel test robot
+  <lkp@intel.com> (apparently can't add this tag for the whole patch).
+
+- moved pm_runtime_get_if_in_use()/pm_runtime_put() up the stack.
+  The old way was causing problems when used in sensor power_on(),
+  before initial pm_runtime setup.
+
+- clearer REGS() macro
+
+v6:
+- I reformatted the code to fit in 80 columns. Nobody should be asked to
+  make his code worse (and the 80-column version IS worse), and multiple
+  high-profile Linux developers (including the top one) appear to share
+  my opinion, but nevertheless - if it's something that will make it go
+  in, I won't care.
+
+- Basically the same applies to the // comments.
+
+- I have removed the "interval" support (frames per second).
+  Unfortunately this cripples the driver further a bit - the userspace
+  will not be able to set precise frame timings needed for broadcast
+  quality video. I will have to keep a private patch for that.
+  Another effect of this change is that the pixel clock is now fixed at
+  184 MHz, which by default produces ca. 30 FPS at 2560x1920. This may
+  be problematic on systems with less than 4 MIPI lanes, and/or on ones
+  which can't support higher frequency MIPI bus (the previous version
+  used a calculated clock). Perhaps it will be possible to fix this
+  issue in the future, with a couple of core V4L2 changes.
+
+- the driver now provides the .pre_streamon() for setting LP-11 state on
+  MIPI data and clock lanes. This is compatible with i.MX6 receiver.
+
+- s_power() converted to SET_RUNTIME_PM_OPS().
+
+- the "initial" I2C registers have been all converted to a table of
+  multi-register files, to minimize time spent on I2C bus.
+
+And a lot of smaller changes suggested by Laurent, Sakari, Jacopo, Joe
+and possibly others.
+
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa

@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6DC4C83B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C759B4C83C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbiCAGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S232187AbiCAGPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiCAGGZ (ORCPT
+        with ESMTP id S230147AbiCAGPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:06:25 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D5162120;
-        Mon, 28 Feb 2022 22:05:45 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 195so13572989pgc.6;
-        Mon, 28 Feb 2022 22:05:45 -0800 (PST)
+        Tue, 1 Mar 2022 01:15:17 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D96049938;
+        Mon, 28 Feb 2022 22:14:33 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so1313901pjw.5;
+        Mon, 28 Feb 2022 22:14:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUjj6TEe+83dCjS8RX0jAf7rSkzSpvGOk1hJbgvtBtY=;
-        b=DxYpK0jV+QEPd20yIaRaBcP5pT5xy0FoABCkWe/WDEq9qlcMIEEXZ4iXcH8x6a/Id2
-         jTfA4jsZbhVee4h+e8jUxmnWz+ym+UxXVqf9Yj+jyvwuIw4bMZKBh++iMgugY7fYOYMl
-         iwSqicVK/G4VW5MPP+qDa1NQKl90Ma48qf+2C+U4DdOyd2eKNmQIuqv7o/2YTt2IJJHz
-         f44wFrtst1fNuaoRayEdYpugwSlizSOGojTgzvynk5FxlI/bA5WOpUG4EaygL//GwthA
-         Oeur+PFX4AWmZPyYbwYyc34SRsvWLnqwE4/NqhV6zeSxgH5Zazl8wkBI6isQfjfeucoR
-         mc2A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=PH1beb/z1ahch6wzT25gnsAtYDGOM8+pvUYjPY/TxPU=;
+        b=Ji/Kr0+XMyq6YybkY8r0kkCbklCqbzx1HBoKKROO/QrZrd7ON1mXhg6qDBAQsQdJVG
+         q6lHVxQbolqcqib660su51YX7c+aWaoeAoTVAZ/5O4TtX77BthmawBqf5aii29Vqz4aP
+         p0zGYw/mom4KUjW+mf/EURQtLSTX90Lv5WYHhScL8Bg7LfM2KTfexOA8AGDa78WB9A9U
+         RYixcx3Li+fFJyvHKSuKhTyixNi2uLVfgPP97qblBlm+VaT0+DTnEK25ySp10MFPN5Ji
+         66sv0Nkyxwu+c2z3BaGBNSh6ijats42Zw244fUhe60kRag0SyBBFN1Xr83hcGJWVXuQg
+         H+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUjj6TEe+83dCjS8RX0jAf7rSkzSpvGOk1hJbgvtBtY=;
-        b=7cb1OIA2RSpdbTCPCecaPFzInXajZnsqJkEz/W6j2KuAvH6N/syTmkzNO7EVjTNd3T
-         po3TBrM9AMcJ5EybApqIps53gc99J/A7BVhehyPpaucNVeOQgjKy5Nnwigf7Nu3Mmk/M
-         TG+LQB93N7Xgx4Ns8NIIjVwtZCEnAX+meQ7eNtiw6Pls83BEqKVhteljR/LOTcackATX
-         hkzG5O8lLMmGs9yjflGjLdrV+dMquPgD6NQJEuQcJRckESwzYnOCSlFJNYqnTabrtzVR
-         V8sdnPgnX8QD0sTEVlFSdwYAvt33yIAgYDVhOTH9QGp+Neb8ya10ZKgXsy+elixkFaCP
-         GltA==
-X-Gm-Message-State: AOAM533wNAjpw8cQU5YBE3VuveqcAyUN4J+mbYDnerlI91cPd7zzy8g9
-        AR29fTjOKXAScaCnrUxwKMI=
-X-Google-Smtp-Source: ABdhPJzoM5r6A72aCOV8FF/+Op4ZDplQaiVIBtr2PnIg7IFjdp32qTPOMs+QHihMavXo6ljYJ/wkmw==
-X-Received: by 2002:a63:921a:0:b0:373:df77:ee5d with SMTP id o26-20020a63921a000000b00373df77ee5dmr20027488pgd.90.1646114744736;
-        Mon, 28 Feb 2022 22:05:44 -0800 (PST)
-Received: from localhost.localdomain ([2405:201:9005:88cd:3423:e74e:cf1d:8494])
-        by smtp.gmail.com with ESMTPSA id q14-20020a056a00150e00b004f1252a21casm15567872pfu.161.2022.02.28.22.05.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=PH1beb/z1ahch6wzT25gnsAtYDGOM8+pvUYjPY/TxPU=;
+        b=FNAL6gSklrait14PPSbBzhrYnuJoTyRPf6hqrpImIQpTt9jPGTafucfjzsziAhXwrO
+         qlLI+ZLfaVLWBRudBm/3tx5vzqC/IM/dYT4S23NXoAnMqW37bybIOmQu80nG2CvjZlDm
+         Me3AhY5b5GDVCtqwMllc74bQeNNd1RV2Z03aNx0+QvhE2RnpJ8KZm8TtajLmk8u3uvRK
+         R4ZCjOrJppQVm20CXkvA/V93ftqerodYGqFRwotUmKIinxAP/eNT+jl0PunSSlyRcXpa
+         64/cc64AYS7OCPYKxOkYPw7VFa/BeeDrOKASCrQ6WmJNz4mqMDBQXtagORrGQP/tCGCq
+         5IKQ==
+X-Gm-Message-State: AOAM532ApJxUxW/8r40Ly8wlwEVg6vNKbQLuDuZCIsJ2kL+Xfp5E3XpW
+        4JF7R6OauKiV0KMO9f570sh5h51Vc5jlwSYykv8=
+X-Google-Smtp-Source: ABdhPJwe2XwQj1/qqfwMVxlcczTF/DleUEyrIFi+5vVHSL0lyezr9cUT5DUPoXDMwseKl3j1rudLKw==
+X-Received: by 2002:a17:903:2285:b0:151:4b38:298e with SMTP id b5-20020a170903228500b001514b38298emr14222632plh.36.1646115273033;
+        Mon, 28 Feb 2022 22:14:33 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id bo10-20020a17090b090a00b001bc8405bd55sm1024741pjb.30.2022.02.28.22.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 22:05:44 -0800 (PST)
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-To:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] media: camss: Replace hard coded value with parameter
-Date:   Tue,  1 Mar 2022 11:35:30 +0530
-Message-Id: <20220301060530.5870-1-jrdr.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 22:14:32 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] slimbus: qcom:  Fix IRQ check in qcom_slim_probe
+Date:   Tue,  1 Mar 2022 06:14:21 +0000
+Message-Id: <20220301061421.14366-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <239c3b32-6754-02ba-6bfd-7f05fa2adfed@linux.intel.com>
+References: <239c3b32-6754-02ba-6bfd-7f05fa2adfed@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+platform_get_irq() returns non-zero IRQ number on success,
+negative error number on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Kernel test robot reported below warning ->
-drivers/media/platform/qcom/camss/camss-csid-gen2.c:407:3:
-warning: Value stored to 'val' is never read
-[clang-analyzer-deadcode.DeadStores]
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
 
-Replace hard coded value with val.
+Fix the check of return value to catch errors correctly.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/media/platform/qcom/camss/camss-csid-gen2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+changes in v2:
+- use more precise expression in commit message.
+---
+ drivers/slimbus/qcom-ctrl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-index abbfbf448893..2031bde13a93 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-@@ -405,7 +405,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
+diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+index f04b961b96cd..ec58091fc948 100644
+--- a/drivers/slimbus/qcom-ctrl.c
++++ b/drivers/slimbus/qcom-ctrl.c
+@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
+ 	}
  
- 		val = 0;
--		writel_relaxed(0, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
+ 	ctrl->irq = platform_get_irq(pdev, 0);
+-	if (!ctrl->irq) {
++	if (ctrl->irq < 0) {
+ 		dev_err(&pdev->dev, "no slimbus IRQ\n");
+-		return -ENODEV;
++		return ctrl->irq;
+ 	}
  
- 		val = 1;
- 		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
+ 	sctrl = &ctrl->ctrl;
 -- 
-2.25.1
+2.17.1
 

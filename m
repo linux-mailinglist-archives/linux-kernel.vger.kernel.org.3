@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0762D4C842E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A283D4C842F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 07:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiCAGe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 01:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S232663AbiCAGep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 01:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiCAGeV (ORCPT
+        with ESMTP id S232692AbiCAGei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 01:34:21 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144226FA32
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:33:40 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id h17-20020a17090acf1100b001bc68ecce4aso1229645pju.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:33:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3mPo8lvO91fSVL2zNMVudPsfj5UeWu8/OYFDNcv6JjI=;
-        b=EyPMwTGdSNloKDGKnCt8Rx2I35rLxgk25XazRMqOUdZAnlqtNAaW0nMyonJiVrtKmE
-         yP3lz59YCiJ8K1jROjN7oh95FFAscuHexJXRDsuSXRCPYUJO3PqAPkirtQx94qiQsqnY
-         PaSrbE1Ef+S/4DJ8DYi++i3W3+G5mD8JjK3gW/DaFx6VaepqdN9IPFSzmUj+XFZyV8Ce
-         YbG8WLEop0vY5p68XEc5rcCMF4toOedFJ73D2Cn0B8b2JIFOfd8lg7cG8YPaUlVPx5c+
-         Y9JrVKc4EytbyKW4xRpAOMB8NtJLaRlTWVnGoPY8k+jx9p6eCQyaJynwOg+jehwCnycx
-         yhog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=3mPo8lvO91fSVL2zNMVudPsfj5UeWu8/OYFDNcv6JjI=;
-        b=qQDP/ksf3mXJtI5BKaAfM689xearrtuzVFEVFbqz2fQTzXSY5SHaWRw84HzQ6zsFat
-         zktSjeBH3EAENgphmxGoQ28IjQ2ZRlKe41uj0g0FMQiclfqoWRu2UDz7E1AdB3t5XLsD
-         ZiSWw0Msvzt6gDm2qLO4bfcOKZcsS3x/GtjC+zb42sPHV9XpXoxrZF/HpzVJ7oAKnEpR
-         R7SgSOjw3a5zmjNYo6pyjW3rXM2OHzBafAXOtoOAz9aWDPXP9YGmdaEqZ9uWjr0TGLX0
-         a2Stdvh0mThViH6tAF8XsZimWx/aqy2HIXVebPy2mqykwnBoDqA4uOvcopCkAXjrVEW0
-         f/8w==
-X-Gm-Message-State: AOAM53195vQa74W5JSIjoFdC7M9onN15b60e5JeZYXiTJ8Nh6QnKFL8K
-        56OncUC2YHGmbuR8oqTZIaOt4IBdCDSktwD7RXY=
-X-Google-Smtp-Source: ABdhPJxdw4f+rvERiG34ZF0VdlqFmBtf/joQpRNDllZHRbpWuzAwzWwF9v2uTYwiaAQTf/T2yM4txg==
-X-Received: by 2002:a17:902:b58d:b0:14d:3d38:2690 with SMTP id a13-20020a170902b58d00b0014d3d382690mr23671504pls.78.1646116419615;
-        Mon, 28 Feb 2022 22:33:39 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id s17-20020a17090a441100b001bc1b59fe1asm1087916pjg.38.2022.02.28.22.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 22:33:39 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Suman Anna <s-anna@ti.com>, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] iommu/omap: Fix missing put_device() call in omap_iommu_probe_device
-Date:   Tue,  1 Mar 2022 06:33:25 +0000
-Message-Id: <20220301063326.18120-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
-References: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 01:34:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1989B70F4C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 22:33:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D1ACC219A1;
+        Tue,  1 Mar 2022 06:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646116434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wMtsDk3b0hX8joqj3KjxPGJRR7Yf0hzE7vshS8yyLBI=;
+        b=EuQ+dNUmzLWLQ2+RoKuacyeTxk2x3l6+1b1bu6dikA3T1PN3x8RsqQWB6BittnB3bfiJEI
+        v4WZzzEz0KpxToE0u0SnVTlSAlA+vtxgKhAmjUH4ERaSZnStXflBL3N3gTT0oxCXvRySLU
+        XaHYpbCw8WbpCGRYIyTL9SP3jm5d5tc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646116434;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wMtsDk3b0hX8joqj3KjxPGJRR7Yf0hzE7vshS8yyLBI=;
+        b=TwpNU8F9Btq6zmvCfvsQyXENKFfUzvpq8xt418IIijwb9S0HPu89otXrXnEU/u8dp5FY+J
+        2pEzgU1r9JTSdTCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3D14139EF;
+        Tue,  1 Mar 2022 06:33:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8uWmMlG+HWJ6GAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 01 Mar 2022 06:33:53 +0000
+Date:   Tue, 1 Mar 2022 07:33:52 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
+Subject: Re: [PATCH -V13 3/3] memory tiering: skip to scan fast memory
+Message-ID: <Yh2+UI0RoVea1YPf@localhost.localdomain>
+References: <20220221084529.1052339-1-ying.huang@intel.com>
+ <20220221084529.1052339-4-ying.huang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221084529.1052339-4-ying.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path and
-the regular path.
+On Mon, Feb 21, 2022 at 04:45:29PM +0800, Huang Ying wrote:
+> If the NUMA balancing isn't used to optimize the page placement among
+> sockets but only among memory types, the hot pages in the fast memory
+> node couldn't be migrated (promoted) to anywhere.  So it's unnecessary
+> to scan the pages in the fast memory node via changing their PTE/PMD
+> mapping to be PROT_NONE.  So that the page faults could be avoided
+> too.
+> 
+> In the test, if only the memory tiering NUMA balancing mode is enabled, the
+> number of the NUMA balancing hint faults for the DRAM node is reduced to
+> almost 0 with the patch.  While the benchmark score doesn't change
+> visibly.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Rik van Riel <riel@surriel.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mm@kvack.org
 
-Fixes: ede1c2e7d4dc ("iommu/omap: Store iommu_dev pointer in arch_data")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- move put_device() before of_node_put().
-- add put_device() in the regular path.
----
- drivers/iommu/omap-iommu.c | 2 ++
- 1 file changed, 2 insertions(+)
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-index 91749654fd49..2222b30a0a00 100644
---- a/drivers/iommu/omap-iommu.c
-+++ b/drivers/iommu/omap-iommu.c
-@@ -1683,6 +1683,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
- 
- 		oiommu = platform_get_drvdata(pdev);
- 		if (!oiommu) {
-+			put_device(&pdev->dev);
- 			of_node_put(np);
- 			kfree(arch_data);
- 			return ERR_PTR(-EINVAL);
-@@ -1691,6 +1692,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
- 		tmp->iommu_dev = oiommu;
- 		tmp->dev = &pdev->dev;
- 
-+		put_device(&pdev->dev);
- 		of_node_put(np);
- 	}
- 
 -- 
-2.17.1
-
+Oscar Salvador
+SUSE Labs

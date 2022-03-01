@@ -2,156 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91C4C899D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E774C89A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiCAKry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S234375AbiCAKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbiCAKrt (ORCPT
+        with ESMTP id S231644AbiCAKst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:47:49 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC6590FD4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:47:08 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-9-k5QvRFb1PI-8v6nfzAE3Tg-1; Tue, 01 Mar 2022 10:47:05 +0000
-X-MC-Unique: k5QvRFb1PI-8v6nfzAE3Tg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 10:47:04 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Mar 2022 10:47:04 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        'Segher Boessenkool' <segher@kernel.crashing.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] net: Remove branch in csum_shift()
-Thread-Topic: [PATCH] net: Remove branch in csum_shift()
-Thread-Index: AQHYHyQqmTo4K/pb5UWdDmTfE7rfRayQxWFwgABxD4CAAIxicIAYqtUAgAAE/lA=
-Date:   Tue, 1 Mar 2022 10:47:04 +0000
-Message-ID: <9cdb4a5243d342efb562bc61d0c1bfcb@AcuMS.aculab.com>
-References: <efeeb0b9979b0377cd313311ad29cf0ac060ae4b.1644569106.git.christophe.leroy@csgroup.eu>
- <7f16910a8f63475dae012ef5135f41d1@AcuMS.aculab.com>
- <20220213091619.GY614@gate.crashing.org>
- <476aa649389345db92f86e9103a848be@AcuMS.aculab.com>
- <de560db6-d29a-8565-857b-b42ae35f80f8@csgroup.eu>
-In-Reply-To: <de560db6-d29a-8565-857b-b42ae35f80f8@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+        Tue, 1 Mar 2022 05:48:49 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0870017055;
+        Tue,  1 Mar 2022 02:48:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mptmojddBjrLY4EooL86t8lu89BknBNHmNoL9/gBM6a26U+KKw9bQciU5nFRCNZEmMyQOEewDY4lp06bYqgP+RGPwgtY1u1fN4eE/lQyh0fIzPcS4dt/vbtuu+RthUZYGc9nzgOfwifGCl1vkSMXpCyVqccu+8KcUZWOgPIKOLfa+iYUgXTkQY6k0Z8sVquUjkFvpuFz7LeaXG0jJuP8susMS9ol8Bpn/hDBqI+uJfA75TggcftyTGz4jOWkB2T0gHb4wa7RfgmpET1JcvLVKY5oOMN9GY6q0IREWt3SZh8jJ09kmdFl5tKNmnVCPs2zZvvILWiABBZ4offbIW5Fwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GmA8K7fRWYmaDHfsbiIQXijLE/riZgq1FqHOBEYWyMQ=;
+ b=Lnzn+rr2ukEZj5S/EPEkVy7m8YGHsTaCP4cmBoSpaKcnxm+tE/KX6MRNy1AntpGHIBjaDPYvnOEHjXFP+AByTPxCI+KBUDv7afgkKX09wBQz+05fSxyvovmEI8fvD4yTiQppC8kFlxA3ykpm1ruStG4fgos1RtBNuyAS+yidTupbZDQiKNSwgQDo1OOL37/O7hTPTM3bxtnezUIkiBbLAOVfTYiVsLBmSl9LnJ0HxdoGOydCwaFEEDij6aIX4GKjuyMRZhf33LbxaM09F8NZ0z7CPArfYoMuFIOi0SqDzfqsQE2uiPhwHR3E4W73EW9mAFVJbe6aknEAGQmk1soi9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GmA8K7fRWYmaDHfsbiIQXijLE/riZgq1FqHOBEYWyMQ=;
+ b=wlvd2DCO9glPDMq0SGnWwEdD3v5ff2TmHM7x3pZbcPRRlMJHF5rubTXK820W3p0Z1gAQrSVms/3oJ6JMhSZBgUxH6yiOo6vP3+h2x0VtsCuSH9jBIqFi6bgYTHURiuISysvseMXAtxiCvKr+cc/sQPWc0wWoLNAzIYymIiE7A/s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ BL0PR12MB4994.namprd12.prod.outlook.com (2603:10b6:208:1ca::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13; Tue, 1 Mar
+ 2022 10:48:05 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::6807:3c6c:a619:3527]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::6807:3c6c:a619:3527%5]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 10:48:05 +0000
+Message-ID: <c17e954b-0f62-e0ad-77f0-1429dcc94f6d@amd.com>
+Date:   Tue, 1 Mar 2022 17:47:52 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH 05/13] KVM: SVM: Update max number of vCPUs supported
+ for x2AVIC mode
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+ <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
+ <9143d9d24d1b169668062a18a5f49bb8cf8e877b.camel@redhat.com>
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+In-Reply-To: <9143d9d24d1b169668062a18a5f49bb8cf8e877b.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR0401CA0024.apcprd04.prod.outlook.com
+ (2603:1096:3:1::34) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7f891b75-b069-43bd-6f80-08d9fb70f744
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4994:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB499422A8BE663107D32EB7E5F3029@BL0PR12MB4994.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jeEU1xqCI2aw5lHRxmKdtVl/j/bjinG2dekSnkHYgXFg9HJiPv8YvCZyfhZ4++8xWHWRyjc3/Gf4Kf74nS/y0dQWGg+sbPNwqRFtcIs2DyswTlaetqjhTbVXAoUKqJ0vvkZJ+tHJT9C1TobxbBomEMCNrV8N3z0DDHibuRYspYh6gH+40zzw1pYnLARTWFR3kd8Pn/cdI4ov0T0CDcckHA33JsI+5DWKSChExhl5ipBupC0CHgrrRTEq203oL1/LptynzswUH+CS2Z9+us1c7ac7QQFBUQpT7qAjnJ2GHrhnj6jvCz/JfyjepD2seX+kB37U+f6n9t4DrpHp40TwNWTML4vUJPaCCN+iPjdgvPFXUvshK4oETcVbYpcnLOOGjtEjv2qrRsUi2vCakfUqFKeDgkpmK6AeLeYdAxjRa5ETlbUwmPNx5GRYBk8CF5bfiRkgs4wxQo0Eyv3p0gQGM7xz4DJZGeifmKFjwftwo/MYZPJ3Vil2sj/6HaSvMRO4kjgH4b5ls0xCIrKwSk7NSlG1hRy3uR2hC+Od56EV9QLfBn8nM8iE7Vy6xdq5X6bIv6uBNBCnLSpWwaJh9/QhWss0oQ95D4pMtZAArBD1LnkxtcnMkjGMInYcbus187lucvhgUEKTiPEsHuRiXT1J7n0yZEUfnAZHxEcuhQ1dO2fyQ6JSf01cojmw9cQdqbwoCtKgI2+XYZW2AiMPHjOoy6XWD8p05f9rUY35YhNa1p9D7CKgxp8Nsj7cVMi8sbBm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(6506007)(5660300002)(6512007)(15650500001)(53546011)(2906002)(186003)(83380400001)(2616005)(26005)(316002)(8936002)(6486002)(4326008)(8676002)(31686004)(66476007)(66556008)(36756003)(508600001)(66946007)(6666004)(44832011)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGE3R1hmVlZoOUZ4U0ZVUzlOYU5jc2pzQk9uVmh5ZForenU1bXNXRDhNc0hu?=
+ =?utf-8?B?T00xKzlJZkFxd3FPT0h0RnBDT1dJZFF0UGU2aWtYNUliajVuTTloL3lmYU9Z?=
+ =?utf-8?B?V2dSRGxyTWEwQ25CdjZUa0tTbkJtSFB3VTdsNndGcXVaaTdNMFVnYTBVYVhz?=
+ =?utf-8?B?MStBYndaWnVBUWl6ZXNvVWtEcGRSK0VvY1dIOFovZWxmMzBUZzJVOVpDTHBh?=
+ =?utf-8?B?b1BuK0szMkpDczhCNGRtTW5hcHJiM2ZTR2dPZVdvdXBQRUZudGQrSzNhbTM5?=
+ =?utf-8?B?WGV5eGovdkttKy9PZGZDaGcrYXlhcEFQZDQ4ZS9qSmdSSUlyYnFWd1VINEV4?=
+ =?utf-8?B?RlhuUnJZWDdZWkd4dTRZcWxDcUlnc09ha2dYZHQwTTh2RmN1NFpOS09MbFk1?=
+ =?utf-8?B?L0doRTNZRTRXTGdYT2pFTlU2TlVWc0hDTnF2VnJEUFB1Q1hWRmFFbUxUeGNJ?=
+ =?utf-8?B?SjNDeXg3Vmc0QkJKRDNUY3ZFaXFhMXhTR2VpcDFRRERXOXA2TThTcytyYkd4?=
+ =?utf-8?B?YlQwNUcvVUdWWnFvOVJRa0kzdmJxbXMvWndRMTZZZjEvYWRmYW53aHdoS2kz?=
+ =?utf-8?B?ZnI1Q2hqSW03amljckZ1c0U4TE9ONGk2dFpwU1RnY2Nlc05iYUZuQVoxbmcr?=
+ =?utf-8?B?RkhYQ2djS3N5WHN5TTdHNlY1eHdkSXRIaHdqSVVRWjFBc1lSdjNTWUpreVAw?=
+ =?utf-8?B?YjhvY3dZR2QxRG12d0haVkkzWm5aYmUxcTFsZlppcGlnUEt6My9wb1djemJX?=
+ =?utf-8?B?MUVzNjZsZ2N5TDRWVHJDT21rdUVBWE91WElzUkNLaHVQRVlFak5VRTZuTnE2?=
+ =?utf-8?B?cUVMYmJrYmppejN6bXZvS04waU82cU9GcnBCaW1GVlJWVEZwUHdjek42ZEZq?=
+ =?utf-8?B?dGpwN1NWWVBIWS9hcWNneTFJeVhZWWoxR3J6ZEZrYmFCalJnUUtpZjBCbDBJ?=
+ =?utf-8?B?d1hXZDZvTU5YZDlpVjQwL2wvUGFmUGdoSnJ5WXc5eGc0dGFqTEwveDkrM04x?=
+ =?utf-8?B?OXRxS2xiUFNyL2srNEFKYXlvenhrTmV2YVV2dGQ0dDdiUlVka2gzalcwRnI2?=
+ =?utf-8?B?aElML0t6Rk5uc0IvRENvbWYzL3JHU2d5ZWJlaklaSVI0QVc1QkNOQW45ZThq?=
+ =?utf-8?B?SUhPWVJiUDFuaUFQcDRlMGExRG5JbGVzYkRPWXJjZExzUlkzZXJSSm5OL3g4?=
+ =?utf-8?B?R1dGYkNNM3RIQWl5eGd3OWoyZFNDa1k3ZUFtTUN6WlQ3MUtIcWFBQTR2aGla?=
+ =?utf-8?B?WVluNGIvT2NUdU9idWVxcUpHdDRxelB2WkM3U0EyMVRBR3R1TXFIS1hrYllR?=
+ =?utf-8?B?UWYwc1N5VlJpM1dJWnE0V1JrOEtpb01kKzF1VWV0WFBHZFhDTWVtWW41RkFD?=
+ =?utf-8?B?azlsYk83bU5YU3ZZWkpkRHk5QkF0akk1bkFQblArV1p2N292SGFSaUx6Z1Jz?=
+ =?utf-8?B?Rmd6dUxZWUtPd3IvWXNocjFaNzFMVDdSNWh4eXNFYXpFaTJBcW9CbkpIZ2Nq?=
+ =?utf-8?B?L2ZoT1cvZzB1ZFNzUUpldjFIcUlicVVZa1czMERvNk9jSnZIYndQMEpsUWRq?=
+ =?utf-8?B?dC9NSDBpMitBZ25Ja2c3YVQ1cTErOGpSNEVmUFdRWXVWeDdVYmxKbTJPcTFQ?=
+ =?utf-8?B?TVZOcC9IRDBpOWdUQTZQZjNLU3hDcnd5TTJ5TGlZcnBqQkllRzNadFBud3la?=
+ =?utf-8?B?ODl4Si9ZOXJlY3gzTzY5a3g4NGN3cmQ3SkloRHQreXlvVThsVGJMV1B1Z3lT?=
+ =?utf-8?B?RUVZTG5rNXB0eU8xQXUzbmdySWN3VXdCeEJkQUtCdEtCcHVKZWJHNWdyMGQw?=
+ =?utf-8?B?MjNUTm5RdmdiVVlzTjBFa3VuQzJWaTFSNjl4bkpqTDlkTDRSSk4rZEZhUWpm?=
+ =?utf-8?B?WDZpZkxtU2pGNWxzMjMxcVowMXA5bDVzSmhFQm90N1ZxbTYxOUJEVHA3TXFn?=
+ =?utf-8?B?aHA0YlkzUjROUEp0SVNqckNDRFJUNndmN3pHR29GVFBzSTdDZ010WjFpZGp2?=
+ =?utf-8?B?V25FYzBvRmx2N2R2cUpMQVFvUkFzQmh5bndxOGlFSndXVTJIUEZrUGdRQkpQ?=
+ =?utf-8?B?Sjd1WWtibzZZbHk1S0VrUjhudGcrRVZmOFY3NHU2bjhYTW1ndFRyMjBnNFlx?=
+ =?utf-8?B?WEZoaEIveVJvaWhKK3RUOFJOQXBlUlVnbUNNN1kxekZUemcyZXB3Y0RDUmw5?=
+ =?utf-8?Q?ZcOBmLytckKH8OFjg/WyPKI=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f891b75-b069-43bd-6f80-08d9fb70f744
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 10:48:05.5657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0mZF24R/qBQbEyauR0AbFs41SzrMWgliyvvcmKoBBPGgQj5FZ7js40/FogLykrXgTTQfbPZY/ytL2rxkrFY7AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4994
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwMSBNYXJjaCAyMDIyIDEwOjIwDQo+IA0K
-PiBMZSAxMy8wMi8yMDIyIMOgIDE4OjQ3LCBEYXZpZCBMYWlnaHQgYSDDqWNyaXTCoDoNCj4gPiBG
-cm9tOiBTZWdoZXIgQm9lc3Nlbmtvb2wNCj4gPj4gU2VudDogMTMgRmVicnVhcnkgMjAyMiAwOTox
-Ng0KPiA+IC4uLi4NCj4gPj4NCj4gPj4+IFdoYXQgaGFwcGVucyBvbiB4ODYtNjQ/DQo+ID4+Pg0K
-PiA+Pj4gVHJ5aW5nIHRvIGRvIHRoZSBzYW1lIGluIHRoZSB4ODYgaXBjc3VtIGNvZGUgdGVuZGVk
-IHRvIG1ha2UgdGhlIGNvZGUgd29yc2UuDQo+ID4+PiAoQWx0aG91Z2ggdGhhdCB0ZXN0IGlzIGZv
-ciBhbiBvZGQgbGVuZ3RoIGZyYWdtZW50IGFuZCBjYW4ganVzdCBiZSByZW1vdmVkLikNCj4gPj4N
-Cj4gPj4gSW4gYW4gaWRlYWwgd29ybGQgdGhlIGNvbXBpbGVyIGNvdWxkIGNob29zZSB0aGUgb3B0
-aW1hbCBjb2RlIHNlcXVlbmNlcw0KPiA+PiBldmVyeXdoZXJlLiAgQnV0IHRoYXQgd29uJ3QgZXZl
-ciBoYXBwZW4sIHRoZSBzZWFyY2ggc3BhY2UgaXMgd2F5IHRvbw0KPiA+PiBiaWcuICBTbyBjb21w
-aWxlcnMganVzdCB1c2UgaGV1cmlzdGljcywgbm90IGV4aGF1c3RpdmUgc2VhcmNoIGxpa2UNCj4g
-Pj4gc3VwZXJvcHQgZG9lcy4gIFRoZXJlIGlzIGEgbWlkZGxlIHdheSBvZiBjb3Vyc2UsIHNvbWV0
-aGluZyB3aXRoIGRpcmVjdGVkDQo+ID4+IHNlYXJjaGVzLCBhbmQgbWF5YmUgaW4gYSBmZXcgZGVj
-YWRlcyBzeXN0ZW1zIHdpbGwgYmUgZmFzdCBlbm91Z2guICBVbnRpbA0KPiA+PiB0aGVuIHdlIHdp
-bGwgdmVyeSBvZnRlbiBzZWUgY29kZSB0aGF0IGlzIDEwJSBzbG93ZXIgYW5kIDMwJSBiaWdnZXIg
-dGhhbg0KPiA+PiBuZWNlc3NhcnkuICBBIHNpbmdsZSBpbnNuIG1vcmUgdGhhbiBuZWVkZWQgaXNu
-J3Qgc28gYmFkIDotKQ0KPiA+DQo+ID4gQnV0IGl0IGNhbiBiZSBhIGxvdCBtb3JlIHRoYW4gdGhh
-dC4NCj4gPg0KPiA+PiBNYWtpbmcgdGhpbmdzIGJyYW5jaC1mcmVlIGlzIHZlcnkgbXVjaCB3b3J0
-aCBpdCBoZXJlIHRob3VnaCENCj4gPg0KPiA+IEkgdHJpZWQgdG8gZmluZCBvdXQgd2hlcmUgJ2hl
-cmUnIGlzLg0KPiA+DQo+ID4gSSBjYW4ndCBnZXQgZ29kYm9sdCB0byBnZW5lcmF0ZSBhbnl0aGlu
-ZyBsaWtlIHRoYXQgb2JqZWN0IGNvZGUNCj4gPiBmb3IgYSBjYWxsIHRvIGNzdW1fc2hpZnQoKS4N
-Cj4gPg0KPiA+IEkgY2FuJ3QgYWN0dWFsbHkgZ2V0IGl0IHRvIGlzc3VlIGEgcm90YXRlICh4ODYg
-b2YgcHBjKS4NCj4gPg0KPiA+IEkgdGhpbmsgaXQgaXMgb25seSBhIHNpbmdsZSBpbnN0cnVjdGlv
-biBiZWNhdXNlIHRoZSBjb21waWxlcg0KPiA+IGhhcyBzYXZlZCAnb2Zmc2V0ICYgMScgbXVjaCBl
-YXJsaWVyIGluc3RlYWQgb2YgZG9pbmcgdGVzdGluZw0KPiA+ICdvZmZzZXQgJiAxJyBqdXN0IHBy
-aW9yIHRvIHRoZSBjb25kaXRpb25hbC4NCj4gPiBJdCBjZXJ0YWlubHkgaGFzIGEgbmFzdHkgaGFi
-aXQgb2YgZG9pbmcgdGhhdCBwZXNzaW1pc2F0aW9uLg0KPiA+DQo+ID4gU28gd2hpbGUgaXQgaGVs
-cHMgYSBzcGVjaWZpYyBjYWxsIHNpdGUgaXQgbWF5IGJlIG11Y2gNCj4gPiB3b3JzZSBpbiBnZW5l
-cmFsLg0KPiA+DQo+IA0KPiBUaGUgbWFpbiB1c2VyIG9mIGNzdW1fc2hpZnQoKSBpcyBjc3VtX2Fu
-ZF9jb3B5X3RvX2l0ZXIoKS4NCj4gDQo+IFlvdSBjbGVhcmx5IHNlZSB0aGUgZGlmZmVyZW5jZSBp
-biBvbmUgb2YgdGhlIGluc3RhbmNlcyBiZWxvdyBleHRyYWN0ZWQNCj4gZnJvbSBvdXRwdXQgb2Yg
-b2JqZHVtcCAtUyBsaWIvaW92X2l0ZXIubzoNCj4gDQo+IA0KPiBXaXRob3V0IHRoZSBwYXRjaDoN
-Cj4gDQo+IAlzdW0gPSBjc3VtX3NoaWZ0KGNzc3RhdGUtPmNzdW0sIGNzc3RhdGUtPm9mZik7DQo+
-ICAgICAgMjFhODoJOTIgZTEgMDAgNGMgCXN0dyAgICAgcjIzLDc2KHIxKQ0KPiAgICAgIDIxYWM6
-CTdjIDc3IDFiIDc4IAltciAgICAgIHIyMyxyMw0KPiAgICAgIDIxYjA6CTkzIDAxIDAwIDUwIAlz
-dHcgICAgIHIyNCw4MChyMSkNCj4gICAgICAyMWI0Ogk3YyBiOCAyYiA3OCAJbXIgICAgICByMjQs
-cjUNCj4gICAgICAyMWI4Ogk5MyA2MSAwMCA1YyAJc3R3ICAgICByMjcsOTIocjEpDQo+ICAgICAg
-MjFiYzoJN2MgZGIgMzMgNzggCW1yICAgICAgcjI3LHI2DQo+ICAgICAgMjFjMDoJOTMgODEgMDAg
-NjAgCXN0dyAgICAgcjI4LDk2KHIxKQ0KPiAgICAgIDIxYzQ6CTgxIDA1IDAwIDA0IAlsd3ogICAg
-IHI4LDQocjUpDQo+ICAgICAgMjFjODoJODMgODUgMDAgMDAgCWx3eiAgICAgcjI4LDAocjUpDQo+
-IH0NCj4gDQo+IHN0YXRpYyBfX2Fsd2F5c19pbmxpbmUgX193c3VtIGNzdW1fc2hpZnQoX193c3Vt
-IHN1bSwgaW50IG9mZnNldCkNCj4gew0KPiAJLyogcm90YXRlIHN1bSB0byBhbGlnbiBpdCB3aXRo
-IGEgMTZiIGJvdW5kYXJ5ICovDQo+IAlpZiAob2Zmc2V0ICYgMSkNCj4gICAgICAyMWNjOgk3MSAw
-OSAwMCAwMSAJYW5kaS4gICByOSxyOCwxCQk8PT0gdGVzdCBvZGRpdHkNCj4gICAgICAyMWQwOgk0
-MSBhMiAwMCAwOCAJYmVxICAgICAyMWQ4CQk8PT0gYnJhbmNoDQo+ICAgKiBAd29yZDogdmFsdWUg
-dG8gcm90YXRlDQo+ICAgKiBAc2hpZnQ6IGJpdHMgdG8gcm9sbA0KPiAgICovDQo+IHN0YXRpYyBp
-bmxpbmUgX191MzIgcm9yMzIoX191MzIgd29yZCwgdW5zaWduZWQgaW50IHNoaWZ0KQ0KPiB7DQo+
-IAlyZXR1cm4gKHdvcmQgPj4gKHNoaWZ0ICYgMzEpKSB8ICh3b3JkIDw8ICgoLXNoaWZ0KSAmIDMx
-KSk7DQo+ICAgICAgMjFkNDoJNTcgOWMgYzAgM2UgCXJvdGx3aSAgcjI4LHIyOCwyNAk8PT0gcm90
-YXRlDQo+ICAgICAgMjFkODoJMmIgOGEgMDAgMDMgCWNtcGx3aSAgY3I3LHIxMCwzDQo+ICAgICAg
-MjFkYzoJNDEgOWUgMDEgZWMgCWJlcSAgICAgY3I3LDIzYzggPGNzdW1fYW5kX2NvcHlfdG9faXRl
-cisweDIzND4NCj4gDQo+IA0KPiANCj4gDQo+IFdpdGggdGhlIHBhdGNoOg0KPiANCj4gCXN1bSA9
-IGNzdW1fc2hpZnQoY3NzdGF0ZS0+Y3N1bSwgY3NzdGF0ZS0+b2ZmKTsNCj4gICAgICAyMWE4Ogk5
-MiBjMSAwMCA0OCAJc3R3ICAgICByMjIsNzIocjEpDQo+IAlpZiAodW5saWtlbHkoaW92X2l0ZXJf
-aXNfcGlwZShpKSkpDQo+ICAgICAgMjFhYzoJMjggMDggMDAgMDMgCWNtcGx3aSAgcjgsMw0KPiAg
-ICAgIDIxYjA6CTkyIGUxIDAwIDRjIAlzdHcgICAgIHIyMyw3NihyMSkNCj4gICAgICAyMWI0Ogk3
-YyA3NiAxYiA3OCAJbXIgICAgICByMjIscjMNCj4gICAgICAyMWI4Ogk5MyA0MSAwMCA1OCAJc3R3
-ICAgICByMjYsODgocjEpDQo+ICAgICAgMjFiYzoJN2MgYjcgMmIgNzggCW1yICAgICAgcjIzLHI1
-DQo+ICAgICAgMjFjMDoJOTMgODEgMDAgNjAgCXN0dyAgICAgcjI4LDk2KHIxKQ0KPiAgICAgIDIx
-YzQ6CTdjIGRhIDMzIDc4IAltciAgICAgIHIyNixyNg0KPiAJc3VtID0gY3N1bV9zaGlmdChjc3N0
-YXRlLT5jc3VtLCBjc3N0YXRlLT5vZmYpOw0KPiAgICAgIDIxYzg6CTgwIGU1IDAwIDA0IAlsd3og
-ICAgIHI3LDQocjUpDQo+ICAgKiBAd29yZDogdmFsdWUgdG8gcm90YXRlDQo+ICAgKiBAc2hpZnQ6
-IGJpdHMgdG8gcm9sbA0KPiAgICovDQo+IHN0YXRpYyBpbmxpbmUgX191MzIgcm9sMzIoX191MzIg
-d29yZCwgdW5zaWduZWQgaW50IHNoaWZ0KQ0KPiB7DQo+IAlyZXR1cm4gKHdvcmQgPDwgKHNoaWZ0
-ICYgMzEpKSB8ICh3b3JkID4+ICgoLXNoaWZ0KSAmIDMxKSk7DQo+ICAgICAgMjFjYzoJODEgMjUg
-MDAgMDAgCWx3eiAgICAgcjksMChyNSkNCj4gfQ0KPiANCj4gc3RhdGljIF9fYWx3YXlzX2lubGlu
-ZSBfX3dzdW0gY3N1bV9zaGlmdChfX3dzdW0gc3VtLCBpbnQgb2Zmc2V0KQ0KPiB7DQo+IAkvKiBy
-b3RhdGUgc3VtIHRvIGFsaWduIGl0IHdpdGggYSAxNmIgYm91bmRhcnkgKi8NCj4gCXJldHVybiAo
-X19mb3JjZSBfX3dzdW0pcm9sMzIoKF9fZm9yY2UgdTMyKXN1bSwgKG9mZnNldCAmIDEpIDw8IDMp
-Ow0KPiAgICAgIDIxZDA6CTU0IGVhIDFmIDM4IAlybHdpbm0gIHIxMCxyNywzLDI4LDI4DQoNClJp
-Z2h0LCB0aGlzIGFsbCBkZXBlbmRzIG9uIHRoZSBybHdpbm0gaW5zdHJ1Y3Rpb24uDQpJIGhhZCB0
-byBsb29rIGl0IHVwLCB0aGF0IG9uZSBzaGlmdHMgcjcgKGNvdW50KSBsZWZ0IDMgYml0cw0KYW5k
-IHRoZW4gbWFza3MgaXQgd2l0aCBhbGwgdGhlIGJpdHMgZnJvbSAyOCB0byAyOCAoaW4gc29tZSBj
-b3VudGluZyBzY2hlbWUpLg0KDQpUcnkgdGhlIHNhbWUgY29kZSBvbiB4ODYuDQpUaGUgbWFzayBh
-bmQgc2hpZnQgaGF2ZSB0byBiZSBzZXBhcmF0ZSBpbnN0cnVjdGlvbnMgYW5kIGl0IHByb2JhYmx5
-DQpuZWVkcyBhIHJlZ2lzdGVyIG1vdmUgKHdoaWNoIG1pZ2h0IGJlIGEgcmVuYW1lIGFuZCBmcmVl
-KS4NCldoZXJlYXMgdGhlIGN1cnJlbnQgY29kZSBnZW5lcmF0ZXMgYSBjb25kaXRpb25hbCBtb3Zl
-Lg0KKEF0IGxlYXN0LCB0aGUgb25seSByb3RhdGVzIGluIHRoYXQgZnVuY3Rpb24gYXJlIGZvbGxv
-d2VkIGJ5IGEgY21vdm5lLikNCg0KU28geDg2IGlzIGFsbW9zdCBjZXJ0YWlubHkgYmV0dGVyIHdp
-dGggdGhlIGN1cnJlbnQgY29kZS4NCk5vIGlkZWEgYWJvdXQgYXJtIG9yIGFueXRoaW5nIGVsc2Ug
-cGVvcGxlIG1pZ2h0IGNhcmUgYWJvdXQuDQoNCkFsbCB0aGUgd29ybGQgaXNuJ3QgcHBjLg0KDQoJ
-RGF2aWQNCg0KPiAgICAgIDIxZDQ6CTVkIDNjIDUwIDNlIAlyb3RsdyAgIHIyOCxyOSxyMTAJPD09
-IHJvdGF0ZQ0KPiAJaWYgKHVubGlrZWx5KGlvdl9pdGVyX2lzX3BpcGUoaSkpKQ0KPiAgICAgIDIx
-ZDg6CTQxIDgyIDAxIGUwIAliZXEgICAgIDIzYjggPGNzdW1fYW5kX2NvcHlfdG9faXRlcisweDIy
-ND4NCj4gDQo+IA0KPiBDaHJpc3RvcGhlDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
-ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
-UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hi Maxim,
+
+On 2/25/22 12:18 AM, Maxim Levitsky wrote:
+> On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+>> xAVIC and x2AVIC modes can support diffferent number of vcpus.
+>> Update existing logics to support each mode accordingly.
+>>
+>> Also, modify the maximum physical APIC ID for AVIC to 255 to reflect
+>> the actual value supported by the architecture.
+>>
+>> Signed-off-by: Suravee Suthikulpanit<suravee.suthikulpanit@amd.com>
+>> ---
+>>   arch/x86/include/asm/svm.h | 12 +++++++++---
+>>   arch/x86/kvm/svm/avic.c    |  8 +++++---
+>>   2 files changed, 14 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+>> index 7a7a2297165b..681a348a9365 100644
+>> --- a/arch/x86/include/asm/svm.h
+>> +++ b/arch/x86/include/asm/svm.h
+>> @@ -250,10 +250,16 @@ enum avic_ipi_failure_cause {
+>>   
+>>   
+>>   /*
+>> - * 0xff is broadcast, so the max index allowed for physical APIC ID
+>> - * table is 0xfe.  APIC IDs above 0xff are reserved.
+>> + * For AVIC, the max index allowed for physical APIC ID
+>> + * table is 0xff (255).
+>>    */
+>> -#define AVIC_MAX_PHYSICAL_ID_COUNT	0xff
+>> +#define AVIC_MAX_PHYSICAL_ID		0XFFULL
+>> +
+>> +/*
+>> + * For x2AVIC, the max index allowed for physical APIC ID
+>> + * table is 0x1ff (511).
+>> + */
+>> +#define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
+> Yep, physid page can't hold more entries...
+> 
+> This brings the inventible question of what to do when a VM has more
+> that 512 vCPUs...
+> 
+> With AVIC, since it is xapic, it would be easy - xapic supports up to
+> 254 CPUs.
+
+Actually, 255 vCPUs.
+
+> But with x2apic, there is no such restriction on max 512 CPUs,
+> thus it is legal to create a VM with x2apic and more that 512 CPUs,
+> and x2AVIC won't work well in this case.
+> 
+> I guess AVIC_IPI_FAILURE_INVALID_TARGET, has to be extened to support those
+> cases, even with loss of performance, or we need to inhibit x2AVIC.
+
+In case of x2APIC-enabled guest w/ vCPU exceeding the max APIC ID (512) limit,
+the ioctl operation for KVM_CREATE_VCPU will fail. For QEMU, this would
+exit with error code. Would this be sufficient?
+
+Regards,
+Suravee
+
+
 

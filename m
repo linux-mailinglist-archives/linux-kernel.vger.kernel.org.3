@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA5A4C8909
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7F74C8908
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiCAKM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S234198AbiCAKMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbiCAKMT (ORCPT
+        with ESMTP id S233723AbiCAKMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:12:19 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0FD723D9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:11:38 -0800 (PST)
-Date:   Tue, 01 Mar 2022 10:11:36 -0000
+        Tue, 1 Mar 2022 05:12:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70AD8CD9F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:11:39 -0800 (PST)
+Date:   Tue, 01 Mar 2022 10:11:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646129497;
+        s=2020; t=1646129498;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3qeGJX0SIhs4mI90650UsQtcYjPLhiqoCG3lN7p4yBo=;
-        b=IozzukERP/AcvXUVMUriqBbAzSS04JvhSQxYa/BAHHMppU4DNVD8oLEN6v0t3heVo+dKa3
-        FgC3nIZIq56EGuB/IxZc/wcgj4v2HT6Q4q+W3520UOk9hTo584aMlzvht2TlXUizNVInI1
-        YJQhsuBEOK1SAClKR3Fzhkdx8y05rhXPeGziiQf7cPDea4VFnbfF4eimVPkjIJN4Eau4Fi
-        kuGZCqqKg1UiIPmt13Jh75iN4HCrrgyTWhrSP/HQ2/HCj83Ypo4VKZ5QnpDpj/vblNFRnT
-        QtsYuCT2aY5+S7EjE3RMr55m2htknGOwvNlg9Z+QXdBU8/8VGa/2h4xRAXMlQA==
+        bh=pRangvu5RLboKHIye5cT1C5tqZ2xo+0UuANkfhLKFwM=;
+        b=2fHRgp6m6wGnmscqaCzEIkJ+rACQuCvm86dKXUAj++M6y/C7iYmsGg5RDOHk5hyxii7wwv
+        hWE7d/Ge64Iq5mdWLb/5WEuAUHGm2yxhR+QZN2oj9Fl7kkB3U8/xiJHo8YgBshYZkQWQRL
+        WdxIW6pV/mn7jud5hwgNpLPupjTEFzdydNFG5qpQeKYK3MjcrrU9RFiRppFgZvPgfjZkeG
+        a1jnO4YrYQPhCkPPyG6zrXUfeCkh2wpYxXpP0dILDgnENtfPzlxs3LM9PB7hsb3zaCfe4z
+        Kk75/lRYFJ9V4ib/uqFMEGSjiFSpUMVaRGACTSlgVsKlDgHRRKAxaVOFjDh5Sw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646129497;
+        s=2020e; t=1646129498;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3qeGJX0SIhs4mI90650UsQtcYjPLhiqoCG3lN7p4yBo=;
-        b=sWOvcGRjtoqAVGm7qtYJXePTx+tjawu0sLqtURhprLcliUVbCut50zOpdMs7yEu7mnAKkH
-        SFo2wkHx8hA+mxDw==
+        bh=pRangvu5RLboKHIye5cT1C5tqZ2xo+0UuANkfhLKFwM=;
+        b=v9+IJJL0gX4hgGYHet6llSxYdlzaYXtzbZiI1Srq1uZAdlcgH3QZZaX+oaKmVkxRdA3tSO
+        yZZ02JseGEDExrBA==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/qcom-pdc: Kill non-wakeup irqdomain
-Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220224101226.88373-3-maz@kernel.org>
-References: <20220224101226.88373-3-maz@kernel.org>
+Subject: [irqchip: irq/irqchip-next] irqchip/qcom-pdc: Kill PDC_NO_PARENT_IRQ
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>, tglx@linutronix.de
+In-Reply-To: <20220224101226.88373-2-maz@kernel.org>
+References: <20220224101226.88373-2-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164612949655.16921.380901203198635513.tip-bot2@tip-bot2>
+Message-ID: <164612949730.16921.4244489669028892146.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,161 +66,134 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     4dc70713dc24dceeea7f106828674744a6294860
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/4dc70713dc24dceeea7f106828674744a6294860
+Commit-ID:     8d4c998919320206f8832dc413e23fdd27ef2274
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8d4c998919320206f8832dc413e23fdd27ef2274
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Thu, 24 Feb 2022 10:12:23 
+AuthorDate:    Thu, 24 Feb 2022 10:12:22 
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Tue, 01 Mar 2022 10:06:24 
 
-irqchip/qcom-pdc: Kill non-wakeup irqdomain
+irqchip/qcom-pdc: Kill PDC_NO_PARENT_IRQ
 
-A careful look at the way the PDC driver works shows that:
+PDC_NO_PARENT_IRQ is pretty pointless, as all it indicates is
+that the PDC terminates the interrupt hierarchy. Which is
+exactly the same as not having a mapping in the GIC space.
+This is also bad practice to treat the absence of a hwirq
+as a hwirq itself.
 
-- all interrupts are in the same space
-- all interrupts are treated the same
-
-And yet the driver creates two domains based on whether
-the interrupt gets mapped directly or from the pinctrl code,
-which is obviously a waste of resources.
-
-Kill the non-wakeup domain and unify all the interrupt handling.
+Just explicitly use the region mapping pointer, and drop
+the definition.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220224101226.88373-3-maz@kernel.org
+Reviewed-by: Maulik Shah <quic_mkshah@quicinc.com>
+Link: https://lore.kernel.org/r/20220224101226.88373-2-maz@kernel.org
 ---
- drivers/irqchip/qcom-pdc.c | 84 ++++---------------------------------
- 1 file changed, 10 insertions(+), 74 deletions(-)
+ drivers/irqchip/qcom-pdc.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
-index 3b214c4..5be5314 100644
+index 173e652..3b214c4 100644
 --- a/drivers/irqchip/qcom-pdc.c
 +++ b/drivers/irqchip/qcom-pdc.c
-@@ -21,7 +21,6 @@
- #include <linux/slab.h>
- #include <linux/types.h>
+@@ -30,14 +30,14 @@
+ #define IRQ_ENABLE_BANK		0x10
+ #define IRQ_i_CFG		0x110
  
--#define PDC_MAX_IRQS		168
- #define PDC_MAX_GPIO_IRQS	256
+-#define PDC_NO_PARENT_IRQ	~0UL
+-
+ struct pdc_pin_region {
+ 	u32 pin_base;
+ 	u32 parent_base;
+ 	u32 cnt;
+ };
  
- #define CLEAR_INTR(reg, intr)	(reg & ~(1 << intr))
-@@ -228,51 +227,6 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
++#define pin_to_hwirq(r, p)	((r)->parent_base + (p) - (r)->pin_base)
++
+ static DEFINE_RAW_SPINLOCK(pdc_lock);
+ static void __iomem *pdc_base;
+ static struct pdc_pin_region *pdc_region;
+@@ -186,19 +186,17 @@ static struct irq_chip qcom_pdc_gic_chip = {
+ 	.irq_set_affinity	= irq_chip_set_affinity_parent,
+ };
+ 
+-static irq_hw_number_t get_parent_hwirq(int pin)
++static struct pdc_pin_region *get_pin_region(int pin)
+ {
+ 	int i;
+-	struct pdc_pin_region *region;
+ 
+ 	for (i = 0; i < pdc_region_cnt; i++) {
+-		region = &pdc_region[i];
+-		if (pin >= region->pin_base &&
+-		    pin < region->pin_base + region->cnt)
+-			return (region->parent_base + pin - region->pin_base);
++		if (pin >= pdc_region[i].pin_base &&
++		    pin < pdc_region[i].pin_base + pdc_region[i].cnt)
++			return &pdc_region[i];
+ 	}
+ 
+-	return PDC_NO_PARENT_IRQ;
++	return NULL;
+ }
+ 
+ static int qcom_pdc_translate(struct irq_domain *d, struct irq_fwspec *fwspec,
+@@ -221,7 +219,8 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
+ {
+ 	struct irq_fwspec *fwspec = data;
+ 	struct irq_fwspec parent_fwspec;
+-	irq_hw_number_t hwirq, parent_hwirq;
++	struct pdc_pin_region *region;
++	irq_hw_number_t hwirq;
+ 	unsigned int type;
+ 	int ret;
+ 
+@@ -234,8 +233,8 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
  	if (ret)
  		return ret;
  
--	ret  = irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
--					     &qcom_pdc_gic_chip, NULL);
--	if (ret)
--		return ret;
--
--	region = get_pin_region(hwirq);
--	if (!region)
--		return irq_domain_disconnect_hierarchy(domain->parent, virq);
--
--	if (type & IRQ_TYPE_EDGE_BOTH)
--		type = IRQ_TYPE_EDGE_RISING;
--
--	if (type & IRQ_TYPE_LEVEL_MASK)
--		type = IRQ_TYPE_LEVEL_HIGH;
--
--	parent_fwspec.fwnode      = domain->parent->fwnode;
--	parent_fwspec.param_count = 3;
--	parent_fwspec.param[0]    = 0;
--	parent_fwspec.param[1]    = pin_to_hwirq(region, hwirq);
--	parent_fwspec.param[2]    = type;
--
--	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
--					    &parent_fwspec);
--}
--
--static const struct irq_domain_ops qcom_pdc_ops = {
--	.translate	= qcom_pdc_translate,
--	.alloc		= qcom_pdc_alloc,
--	.free		= irq_domain_free_irqs_common,
--};
--
--static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
--			       unsigned int nr_irqs, void *data)
--{
--	struct irq_fwspec *fwspec = data;
--	struct irq_fwspec parent_fwspec;
--	struct pdc_pin_region *region;
--	irq_hw_number_t hwirq;
--	unsigned int type;
--	int ret;
--
--	ret = qcom_pdc_translate(domain, fwspec, &hwirq, &type);
--	if (ret)
--		return ret;
--
- 	if (hwirq == GPIO_NO_WAKE_IRQ)
- 		return irq_domain_disconnect_hierarchy(domain, virq);
+-	parent_hwirq = get_parent_hwirq(hwirq);
+-	if (parent_hwirq == PDC_NO_PARENT_IRQ)
++	region = get_pin_region(hwirq);
++	if (!region)
+ 		return irq_domain_disconnect_hierarchy(domain->parent, virq);
  
-@@ -301,16 +255,9 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
- 					    &parent_fwspec);
- }
+ 	if (type & IRQ_TYPE_EDGE_BOTH)
+@@ -247,7 +246,7 @@ static int qcom_pdc_alloc(struct irq_domain *domain, unsigned int virq,
+ 	parent_fwspec.fwnode      = domain->parent->fwnode;
+ 	parent_fwspec.param_count = 3;
+ 	parent_fwspec.param[0]    = 0;
+-	parent_fwspec.param[1]    = parent_hwirq;
++	parent_fwspec.param[1]    = pin_to_hwirq(region, hwirq);
+ 	parent_fwspec.param[2]    = type;
  
--static int qcom_pdc_gpio_domain_select(struct irq_domain *d,
--				       struct irq_fwspec *fwspec,
--				       enum irq_domain_bus_token bus_token)
--{
--	return bus_token == DOMAIN_BUS_WAKEUP;
--}
--
--static const struct irq_domain_ops qcom_pdc_gpio_ops = {
--	.select		= qcom_pdc_gpio_domain_select,
--	.alloc		= qcom_pdc_gpio_alloc,
-+static const struct irq_domain_ops qcom_pdc_ops = {
-+	.translate	= qcom_pdc_translate,
-+	.alloc		= qcom_pdc_alloc,
- 	.free		= irq_domain_free_irqs_common,
- };
- 
-@@ -361,7 +308,7 @@ static int pdc_setup_pin_mapping(struct device_node *np)
- 
- static int qcom_pdc_init(struct device_node *node, struct device_node *parent)
+ 	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
+@@ -265,7 +264,8 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
  {
--	struct irq_domain *parent_domain, *pdc_domain, *pdc_gpio_domain;
-+	struct irq_domain *parent_domain, *pdc_domain;
+ 	struct irq_fwspec *fwspec = data;
+ 	struct irq_fwspec parent_fwspec;
+-	irq_hw_number_t hwirq, parent_hwirq;
++	struct pdc_pin_region *region;
++	irq_hw_number_t hwirq;
+ 	unsigned int type;
  	int ret;
  
- 	pdc_base = of_iomap(node, 0);
-@@ -383,32 +330,21 @@ static int qcom_pdc_init(struct device_node *node, struct device_node *parent)
- 		goto fail;
- 	}
+@@ -281,8 +281,8 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
+ 	if (ret)
+ 		return ret;
  
--	pdc_domain = irq_domain_create_hierarchy(parent_domain, 0, PDC_MAX_IRQS,
--						 of_fwnode_handle(node),
--						 &qcom_pdc_ops, NULL);
--	if (!pdc_domain) {
--		pr_err("%pOF: GIC domain add failed\n", node);
--		ret = -ENOMEM;
--		goto fail;
--	}
--
--	pdc_gpio_domain = irq_domain_create_hierarchy(parent_domain,
-+	pdc_domain = irq_domain_create_hierarchy(parent_domain,
- 					IRQ_DOMAIN_FLAG_QCOM_PDC_WAKEUP,
- 					PDC_MAX_GPIO_IRQS,
- 					of_fwnode_handle(node),
--					&qcom_pdc_gpio_ops, NULL);
--	if (!pdc_gpio_domain) {
--		pr_err("%pOF: PDC domain add failed for GPIO domain\n", node);
-+					&qcom_pdc_ops, NULL);
-+	if (!pdc_domain) {
-+		pr_err("%pOF: PDC domain add failed\n", node);
- 		ret = -ENOMEM;
--		goto remove;
-+		goto fail;
- 	}
+-	parent_hwirq = get_parent_hwirq(hwirq);
+-	if (parent_hwirq == PDC_NO_PARENT_IRQ)
++	region = get_pin_region(hwirq);
++	if (!region)
+ 		return irq_domain_disconnect_hierarchy(domain->parent, virq);
  
--	irq_domain_update_bus_token(pdc_gpio_domain, DOMAIN_BUS_WAKEUP);
-+	irq_domain_update_bus_token(pdc_domain, DOMAIN_BUS_WAKEUP);
+ 	if (type & IRQ_TYPE_EDGE_BOTH)
+@@ -294,7 +294,7 @@ static int qcom_pdc_gpio_alloc(struct irq_domain *domain, unsigned int virq,
+ 	parent_fwspec.fwnode      = domain->parent->fwnode;
+ 	parent_fwspec.param_count = 3;
+ 	parent_fwspec.param[0]    = 0;
+-	parent_fwspec.param[1]    = parent_hwirq;
++	parent_fwspec.param[1]    = pin_to_hwirq(region, hwirq);
+ 	parent_fwspec.param[2]    = type;
  
- 	return 0;
- 
--remove:
--	irq_domain_remove(pdc_domain);
- fail:
- 	kfree(pdc_region);
- 	iounmap(pdc_base);
+ 	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,

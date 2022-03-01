@@ -2,185 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CD44C89AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98164C8A0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiCAKx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S234176AbiCAK4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiCAKxY (ORCPT
+        with ESMTP id S230382AbiCAK4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:53:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1721817061
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:52:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646131963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4B4atLkDITMoub+rHSsBV+3F1nWD6FbRljQkexCK2/s=;
-        b=RSa+V1hvMpOXqwjrattZE6zCO8uU1bH6kopB+caofR0j5EVES9igjsKUGokd8pvkF/cX3I
-        7qoqwWIvskGgq2URGsQ3LYXOHErN/e2ftFQNGE0SU1fTQf/whhnT/LszSbYh7hyuCVe0yZ
-        EC/tdsOMI4E9Xs2ltcuBY+RGX30zHjo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-XKWNAxuZN5CakOyqXT0WkQ-1; Tue, 01 Mar 2022 05:52:42 -0500
-X-MC-Unique: XKWNAxuZN5CakOyqXT0WkQ-1
-Received: by mail-wm1-f72.google.com with SMTP id ay7-20020a05600c1e0700b003813d7a7d03so1035754wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:52:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=4B4atLkDITMoub+rHSsBV+3F1nWD6FbRljQkexCK2/s=;
-        b=hgrKqj4oNJgHIfsQq5IHxs6kqho5VRRR2h1sknalmrlaaVBY0BJdlNgmZDfLkOLa9k
-         JBxECgJhwqUVg65GZvOM2cQsB/p6Rxc0WRTY5c0Q3NKudjFfbxOySeeYtIdM2eRHMhAO
-         96ePPlgIs7lI1cFyFrSoDlZ/qG/OzYQp0j1Co1RkUZoGW8GBDuOUWKPSLCc/aYnKscwr
-         UQU4puy/HJTNsfTW1to6GH0POLMFahHZfjDAU9woIOwSLVbZnX0W6OhXecreQ3+chkDa
-         Ie8wN6pG4YbV9DE4e0O83dnyixkdfD/5k/fn2e4KsU7WfrBbO3VieRe15LT1sj/IfcrZ
-         psFw==
-X-Gm-Message-State: AOAM532RZWVGVfLUm3OEo4s0QTw9EoheJgQ5RPNxC6EbNQxG4MZ1m/2L
-        TIiSlOubXOheDlNfKo1AgIDJ5/UcHTKZAZEOVvafEqdeE2ARPFuZilevIRL3uhCBzyo4TcvknWQ
-        NbEOEayCptePIafUbkrzz1CWq
-X-Received: by 2002:a05:600c:154b:b0:381:8148:64d with SMTP id f11-20020a05600c154b00b003818148064dmr3423712wmg.98.1646131960950;
-        Tue, 01 Mar 2022 02:52:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKX4vaY/hTWQjHshhYhaGbJBz9CeZyOjB0CrVVscgUibX1V0+GjJh9k+/nu5TSLOeRT5X6WQ==
-X-Received: by 2002:a05:600c:154b:b0:381:8148:64d with SMTP id f11-20020a05600c154b00b003818148064dmr3423698wmg.98.1646131960696;
-        Tue, 01 Mar 2022 02:52:40 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8? ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm2067953wmh.31.2022.03.01.02.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 02:52:40 -0800 (PST)
-Message-ID: <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        rostedt@goodmis.org, paulmck@kernel.org
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, mtosatti@redhat.com
-Date:   Tue, 01 Mar 2022 11:52:38 +0100
-In-Reply-To: <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
-         <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 1 Mar 2022 05:56:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 548C06582F;
+        Tue,  1 Mar 2022 02:55:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8396ED1;
+        Tue,  1 Mar 2022 02:55:27 -0800 (PST)
+Received: from [10.57.71.121] (unknown [10.57.71.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B2333F73D;
+        Tue,  1 Mar 2022 02:55:24 -0800 (PST)
+Subject: Re: [PATCH 2/2] perf arm-spe: Parse more SPE fields and store source
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Ali Saidi <alisaidi@amazon.com>, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        benh@kernel.crashing.org, james.clark@arm.com,
+        john.garry@huawei.com, jolsa@redhat.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+References: <b1b3697d-4a0a-d041-5cbd-e08fec9e658c@arm.com>
+ <20220128210245.4628-1-alisaidi@amazon.com>
+ <7eca7a1d-a5a2-2aab-b3cf-5d83cb8ccf4f@arm.com>
+ <20220212041927.GA763461@leoy-ThinkPad-X240s>
+ <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
+ <20220227132019.GA107053@leoy-ThinkPad-X240s>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <923cb8b4-f854-e7bb-9bb3-e5b871f64d5d@arm.com>
+Date:   Tue, 1 Mar 2022 10:54:33 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220227132019.GA107053@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-28 at 21:00 +0100, Daniel Bristot de Oliveira wrote:
-> On 2/28/22 15:14, Nicolas Saenz Julienne wrote:
-> > At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-> > kernel might have the side effect of extending grace periods too much.
-> > This will eventually entice RCU to schedule a task on the isolated CPU
-> > to end the overly extended grace period, adding unwarranted noise to the
-> > CPU being traced in the process.
-> > 
-> > So, check if we're the only ones running on this isolated CPU and that
-> > we're on a PREEMPT_RCU setup. If so, let's force quiescent states in
-> > between measurements.
-> > 
-> > Non-PREEMPT_RCU setups don't need to worry about this as osnoise main
-> > loop's cond_resched() will go though a quiescent state for them.
-> > 
-> > Note that this same exact problem is what extended quiescent states were
-> > created for. But adapting them to this specific use-case isn't trivial
-> > as it'll imply reworking entry/exit and dynticks/context tracking code.
-> > 
-> > Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> > ---
-> >  kernel/trace/trace_osnoise.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> > 
-> > diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> > index 870a08da5b48..4928358f6e88 100644
-> > --- a/kernel/trace/trace_osnoise.c
-> > +++ b/kernel/trace/trace_osnoise.c
-> > @@ -21,7 +21,9 @@
-> >  #include <linux/uaccess.h>
-> >  #include <linux/cpumask.h>
-> >  #include <linux/delay.h>
-> > +#include <linux/tick.h>
-> >  #include <linux/sched/clock.h>
-> > +#include <linux/sched/isolation.h>
-> >  #include <uapi/linux/sched/types.h>
-> >  #include <linux/sched.h>
-> >  #include "trace.h"
-> > @@ -1295,6 +1297,7 @@ static int run_osnoise(void)
-> >  	struct osnoise_sample s;
-> >  	unsigned int threshold;
-> >  	u64 runtime, stop_in;
-> > +	unsigned long flags;
-> >  	u64 sum_noise = 0;
-> >  	int hw_count = 0;
-> >  	int ret = -1;
-> > @@ -1386,6 +1389,22 @@ static int run_osnoise(void)
-> >  					osnoise_stop_tracing();
-> >  		}
-> >  
-> > +		/*
-> > +		 * Check if we're the only ones running on this nohz_full CPU
-> > +		 * and that we're on a PREEMPT_RCU setup. If so, let's fake a
-> > +		 * QS since there is no way for RCU to know we're not making
-> > +		 * use of it.
-> > +		 *
-> > +		 * Otherwise it'll be done through cond_resched().
-> > +		 */
-> > +		if (IS_ENABLED(CONFIG_PREEMPT_RCU) &&
-> > +		    !housekeeping_cpu(raw_smp_processor_id(), HK_FLAG_MISC) &&
-> 
-> Does this restrict to only isolcpus cpus?
+Hi Leo,
 
-nohz_full CPUs actually, IIUC HK_FLAG_MISC isn't set if isolcpus is used, which
-is deprecated anyway.
+Thanks for taking the time, and sorry for the late reply
 
-> what if this CPU was isolated via other methods?
+On 27/02/2022 13:20, Leo Yan wrote:
+> On Mon, Feb 21, 2022 at 08:41:43PM +0000, German Gomez wrote:
+>
+> [...]
+>
+>> Some comments:
+>>
+>> # ARM_SPE_OP_ATOMIC
+>>
+>> This might be a hack, but can we not represent it as both LD&SR as the
+>> atomic op would combine both?
+>>
+>> data_src.mem_op = PERF_MEM_OP_LOAD | PERF_MEM_OP_STORE;
+> BTH, I don't understand well for this question, but let me explain a
+> bit:
+>
+> We cannot use 'LOAD | STORE' to present the atomic operation.  Please
+> see Armv8 ARM section D10.2.7 Operation Type packet, it would give out
+> more details.  Atomic operation is an extra attribution for a load or
+> store operations, it could be an atomic load or store, or
+> load-acquire/store-release instructions, or
+> load-exclusive/store-exclusive instructions.
 
-osnoise with an uncontested FIFO priority for example? I believe in that case
-RCU will start throwing "rcu_preempt detected stalls" style warnings. As it
-won't be able to preempt the osnoise CPU to force the grace period ending.
+I will check, thanks.
 
-I see your point though, this would also help in that situation. We could maybe
-relax the entry barrier to rcu_momentary_dyntick_idle(). I think it's safe to
-call it regardless of nohz_full/tick state for most cases, I just wanted to
-avoid the overhead. The only thing that worries me is PREEMPT_RT and its
-rt_spinlocks, which can be preempted.
+My thinking was that atomics perform some load-modify-store operation
+hence why I suggested combining LOAD&STORE flags. But I admit didn't try
+running the instructions myself so I didn't check the actual records.
 
-> > +		    tick_nohz_tick_stopped()) {
-> > +			local_irq_save(flags);
-> 
-> This code is always with interrupts enabled, so local_irq_disable()/enable()
-> should be enough (and faster).
+> [...]
+>
+>> # ARM_SPE_OP_SVE_SG
+>>
+>> (I'm sorry if this is too far out of scope of the original patch. Let
+>> me know if you would prefer to discuss it on a separate channel)
+>>
+>> On a separate note, I'm also looking at incorporating some of the SVE
+>> bits in the perf samples.
+>>
+>> For this, do you think it makes sense to have two mem_* categories in
+>> perf_mem_data_src:
+>>
+>> mem_vector (2 bits)
+>> - simd
+>> - other (SVE in arm64)
+> I think we can define below vector types:
+>
+> PERF_MEM_VECTOR_SIMD
+> PERF_MEM_VECTOR_SVE
+>
+> The tricky thing is "other"... Based on the description for "Operation
+> Type packet payload (Other)" in the Armv8 Arm, I think we even need to
+> add an extra operation type PERF_MEM_OP_OTHER and assign it to
+> data_src.mem_op field.
+>
+>> mem_src (1 bit)
+>> - sparse (scatter/gather loads/stores in SVE, as well as simd)
+> How about the naming "mem_attr" for new field and define two
+> attributions:
+>
+> PERF_MEM_ATTR_SPARSE  -> Gather/Scatter operation
+> PERF_MEM_ATTR_PRED    -> Predicated operation
+>
+> Just remind, we cannot only approve within Arm related developers,
+> it's good to seek more wider review from other Arch developers when
+> you send new patch set.
 
-Noted.
+Agree. On second thought, the mention of sve seems very arch-specific
+for this...
 
-> > +			rcu_momentary_dyntick_idle();
-> > +			local_irq_restore(flags);
-> > +		}
-> 
-> Question, if we set this once, we could avoid setting it on every loop unless we
-> have a preemption from another thread, right?
+Recently the idea of adding arch-specific flags to the branch entries
+was mentioned in [1]. Perhaps we could suggest something similar for
+this. Or leave simd/sve as a perf-tool-only feature for now.
 
-This tells RCU the CPU went through a quiescent state, which removes it from
-the current grace period accounting. It's different from an extended quiescent
-state, which fully disables the CPU from RCU's perspective.
+[1] https://lore.kernel.org/all/Ygv4cmO%2Fzb3qO48q@robh.at.kernel.org/
 
-We don't need to do it on every iteration, but as Paul explained in the mail
-thread it has to happen at least every ~20-30ms.
-
-Thanks!
-
--- 
-Nicolás Sáenz
-
+>
+> Thanks,
+> Leo

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B014C8F3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007564C8F47
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiCAPjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        id S235847AbiCAPkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiCAPjo (ORCPT
+        with ESMTP id S230153AbiCAPkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:39:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF492A9E24
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:39:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646149143; x=1677685143;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9B/nSIhnKpaShmw0MZ4KZdnrjCBOGcE0PdYVSUSa3e4=;
-  b=W3pA5syJg6ZytglhDpIQUB0z0g0vg1Rmxgx9BPoNOb9IkP8/xbEfGUaP
-   N2K8m45Dqo53K4PqVQqzmKG5Q2EsFTOFfrGlzi2hGP18ze8At2mz8oJM5
-   3gOLE3eJcL8bcONiex+s5BSq71vKjTQSOYKCxyjzp4o/s0MyJgzhVQhOk
-   s4fjWXrVL3RapaLMAg78q+uHdrbQB8TToZMHY4RzaAg/f8LJ5mWQ7WXw/
-   Eu2JW9gR79fif9Rj1iidwUgoMcjdjQJ2X8OtL/g/hYgokg3oeQgakbjVg
-   DJmbBpbyFS4B5RW4WkLEkYNyA7kTXy/TUs+oDnrhU1KqElAZ44fAT5P2m
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252889562"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="252889562"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:39:03 -0800
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="630050458"
-Received: from bklinvil-mobl.amr.corp.intel.com (HELO localhost) ([10.212.48.220])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 07:39:02 -0800
-Date:   Tue, 1 Mar 2022 07:39:02 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 30/44] mm/pkeys: Test setting a PKS key in a custom
- fault callback
-Message-ID: <Yh4+Fjs2yhbWux9C@iweiny-desk3>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-31-ira.weiny@intel.com>
- <20abc6a0b79e4fe9f60b16a1f3371f0676e77b82.camel@intel.com>
+        Tue, 1 Mar 2022 10:40:39 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3120AA005;
+        Tue,  1 Mar 2022 07:39:56 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EED5AE0004;
+        Tue,  1 Mar 2022 15:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646149194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CJF9kAqLBTCdNu/B3TIrFaAsnuyFBGYGgqC92Y3NAM0=;
+        b=Y05qjqbzZSgUzSFtyXv108CqpvaVY1qm/a531dKA6A0FhzHSqxjBh5DbS86a6x9vC2Y2/x
+        Aq+0wKYGdpdWgjgajh60qb2icanAjKm3qxzsDzDlIYvdJL4tqa9VwW4/Ok++BQzRdZWtxt
+        sfzzvxOfHYX6cI59Eg1YzfxwuXLoIyZL455fKdibhspODeOczs30oxUrqHRpeHqa5eAHGe
+        MtxQsPeTUBbH2xQfOl8WwGt4rNnXf08yeJkexzw4aTswiCfPp10RFz8fCt9KMPMM5BYQkG
+        e/xTvUR889osw0kQ42PhukS0IY8c7iEVxx0Pdjh3bT2qpN1t0gCz9Hm3eskFhQ==
+Date:   Tue, 1 Mar 2022 16:39:51 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 21/66] media: sun6i-csi: Always set exclusive module
+ clock rate
+Message-ID: <Yh4+R+a2cFSKw/M5@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-22-paul.kocialkowski@bootlin.com>
+ <YgqDxWwUeVQu+05O@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dPa+vTgjzzFmrD6g"
 Content-Disposition: inline
-In-Reply-To: <20abc6a0b79e4fe9f60b16a1f3371f0676e77b82.camel@intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <YgqDxWwUeVQu+05O@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +68,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:55:47PM -0800, Edgecombe, Rick P wrote:
-> On Thu, 2022-01-27 at 09:54 -0800, ira.weiny@intel.com wrote:
-> > Add a test which does this.
-> >
-> >         $ echo 5 > /sys/kernel/debug/x86/run_pks
-> >         $ cat /sys/kernel/debug/x86/run_pks
-> >         PASS
-> 
-> Hmm, when I run this on qemu TCG, I get:
-> 
-> root@(none):/# echo 5 > /sys/kernel/debug/x86/run_pks
-> [   29.438159] pks_test: Failed to see the callback
-> root@(none):/# cat /sys/kernel/debug/x86/run_pks
-> FAIL
-> 
-> I think it's a problem with the test though. The generated code is not
-> expecting fault_callback_ctx.callback_seen to get changed in the
-> exception. The following fixed it for me:
-> 
-> diff --git a/lib/pks/pks_test.c b/lib/pks/pks_test.c
-> index 1528df0bb283..d979d2afe921 100644
-> --- a/lib/pks/pks_test.c
-> +++ b/lib/pks/pks_test.c
-> @@ -570,6 +570,7 @@ static bool run_fault_clear_test(void)
->         /* fault */
->         memcpy(test_page, ctx->data, 8);
-> 
-> +       barrier();
->         if (!fault_callback_ctx.callback_seen) {
->                 pr_err("Failed to see the callback\n");
->                 rc = false;
-> 
-> But, I wonder if volatile is also needed on the read to be fully
-> correct. I usually have to consult the docs when I deal with that
-> stuff...
 
-I was not able to reproduce this.  However, I've done a lot of reading and I
-think you are correct that the barrier is needed.  I thought WRITE_ONCE was
-sufficient and I had used it in other calls but I missed it here.
+--dPa+vTgjzzFmrD6g
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As part of the test rework I've added a call to barrier() for all the tests.
-In addition I've simplified, and hopefully clarified, which variables are
-being shared with the fault handler.
+Hi Sakari,
 
-Thanks for the testing and review!
-Ira
+On Mon 14 Feb 22, 18:31, Sakari Ailus wrote:
+> Hi Paul,
+>=20
+> Thanks for the patchbomb.
+
+I'll split it in the next revision.
+=20
+> On Sat, Feb 05, 2022 at 07:53:44PM +0100, Paul Kocialkowski wrote:
+> > In some situations the default rate of the module clock is not the
+> > required one for operation (for example when reconfiguring the clock
+> > tree to use a different parent). As a result, always set the correct
+> > rate for the clock (and take care of cleanup).
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 54 ++++++++++++++-----
+> >  1 file changed, 41 insertions(+), 13 deletions(-)
+> >=20
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drive=
+rs/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > index 8155e9560164..2355088fdc37 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > @@ -856,28 +849,53 @@ static int sun6i_csi_resources_setup(struct sun6i=
+_csi_device *csi_dev,
+> >  		return PTR_ERR(csi_dev->clk_ram);
+> >  	}
+> > =20
+> > +	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+> > +		clk_mod_rate =3D 300000000;
+> > +	else
+> > +		clk_mod_rate =3D 297000000;
+>=20
+> This would be nice to put in OF match data.
+>=20
+> Of course the driver did this already before the patch. The approach still
+> scales badly.
+
+Agreed, that could be another follow-up patch in the sun6i-csi rework serie=
+s.
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--dPa+vTgjzzFmrD6g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIePkcACgkQ3cLmz3+f
+v9FlRQgAk+JPQei0UznXbFdxf9qgDlmo3OhqPLByuYqEJBTZxk6eozFrNB7Z96WV
+XxR9/+oKrTXORQ9M4M/p1Taz95Bi/+yKrAHmNKXVFxN8YpZ+7ESTGPEXIqa7qqmb
+L48LCTlrsqmJYG+FxZZBXlQ3hFyOttRd5mIeM6Ch3ZefGXQmPncLih6RT28jI9+a
+qEhe64aNwMmsFyFltOLjDozCovN6THI6KCrejtL7+82OgquuQQEWh6nyxEDBmD67
+UwGx82FwXVsjh+Krg1rYVcUKeWLcUcZIIBvF9io1fO/dlITJRUYbQeXGJNRAURbd
+pByuB20nu4MZjDqILDfwnExEaV0Ncw==
+=NP6t
+-----END PGP SIGNATURE-----
+
+--dPa+vTgjzzFmrD6g--

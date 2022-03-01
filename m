@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8404C7F79
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27614C7F7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 01:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbiCAAoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 19:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        id S231586AbiCAAph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 19:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiCAAoE (ORCPT
+        with ESMTP id S229717AbiCAApf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 19:44:04 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D31AD8C;
-        Mon, 28 Feb 2022 16:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=VRtotTgRjt8wUewVfxAnnsW/LkqttFUYABF7jPzSKmM=; b=UaEbdPQ//Q6peho6+qf+TIsEPC
-        lOypGHi4VgTUdDgo7t4MZDqp4xjdTX8F8B9CNJ5wukDUTmL3X8UvDu159XkZE83rIFnP828FdzM3w
-        rZgvHFV2mmZmtLvWNWxENS4RIXBU926w1p95B9ilgn/mgYp1WU1s9Db4fWXZ/JrdRw6up/ruNc9IU
-        UJV6EqXhM8SUcEM3Dy5DOOIzPMfPnQ53zGKapqcIf+OnychSawAT0lvkOxttBxyN1dGRfzEnTufXx
-        R60vjjf5dmZMRmC3wckSqLUcgHppTqrVZXS7fdKidrZoZSWEzUtOFYfcB9f+qsXu2iR2Vh7rvwPOB
-        mJAqhAbw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOqbp-00EWOO-1a; Tue, 01 Mar 2022 00:43:21 +0000
-Date:   Mon, 28 Feb 2022 16:43:21 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the modules tree
-Message-ID: <Yh1sKVz4g+X0xge0@bombadil.infradead.org>
-References: <20220301113333.21d6f0c6@canb.auug.org.au>
+        Mon, 28 Feb 2022 19:45:35 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2330FE6;
+        Mon, 28 Feb 2022 16:44:55 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id w63so24035339ybe.10;
+        Mon, 28 Feb 2022 16:44:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Nf/egCx0Q4I70uptkgfjEanQfEaR61lPRDpLPBXJeg=;
+        b=M+GwEY56nFU9oLTxjb+5lEoD3/IkffH/Jqm+d2voDBhw0M2ZssZlz68XVTNiqKyZex
+         2VYv/3KS0AQxzBjYeFCfmGuNnryR//ge5e5Xzm15Z8mqNUp9KLUmbhXKpD0W1YE64Uaa
+         IXn7ED/d8T57Da2dbfaXSdp54mQuJ2ItYjUdGIrH5tPeWIgO8fNoJ8fTosV3Gt1AzSS3
+         dyLNdP/Ree1IpO9xk4qOB31rUq8Uudb14yBkgUz4WKmb33H3RDnQD9+2QL9BSy62y8Wj
+         Dykqh/rhsuUV/UiD50AK1Bvrt55DvegldSmB0GzIImVTOuiw+BZboMZn95y5UAoMewJR
+         8EOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Nf/egCx0Q4I70uptkgfjEanQfEaR61lPRDpLPBXJeg=;
+        b=VUreuHBzKsqw3BAw0IpLFshNwj0+RBTrJAmvUD7eDFi1jdscwQsopmjoYkQm60N1FU
+         68xobvmoscpGzCjTl/cOCjX5vZmwbarTwtsHEi0W96lGaxdQLt5iGzSP1kW3xeN/tS3m
+         QaS6TEqJN81cXZYSgGYDU/A7/3t1pepGzaeW/EWEOUErAQXBbTIrLuNRhHxkgh478z2w
+         Saipwpm9ZNWZO+XU/R4NnR7kXD1HuMB6blkNuxDEEDSgkoL6wqvzlbaaJC37s2IndV8U
+         udQeNHSUMMjL4WfEWJ6D75E+PssJIFhACABS4LobNwLH93CkEvN9mzIRRSASKPmQB1qG
+         3sKQ==
+X-Gm-Message-State: AOAM532L8pvyv7SA+gFg1D+sOEfaYF6aTgu8RcmaIIXN3yQD1QNmTTC7
+        UEtXWeoF9tLLU3kfMMDYIUj06LXK94sPl+5pzGs=
+X-Google-Smtp-Source: ABdhPJwsZJOjFD+cAucEDnn2/44FhTiZJamnT2r0djxxGeEJQ+yLbZW1dmeCwnmdpyrs9rjHJusatuYijDxFVPCWY3I=
+X-Received: by 2002:a25:f80c:0:b0:624:40aa:44ab with SMTP id
+ u12-20020a25f80c000000b0062440aa44abmr21715244ybd.51.1646095495077; Mon, 28
+ Feb 2022 16:44:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220301113333.21d6f0c6@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220228233057.1140817-1-pgwipeout@gmail.com> <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
+In-Reply-To: <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 28 Feb 2022 19:44:43 -0500
+Message-ID: <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
+Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,31 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:33:33AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> In commit
->=20
->   f131a1296ecf ("module: Make internal.h and decompress.c more compliant")
->=20
-> Fixes tag
->=20
->   Fixes: f314dfea16a ("modsign: log module name in the event of an error")
->=20
-> has these problem(s):
->=20
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+On Mon, Feb 28, 2022 at 7:14 PM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Mon, Feb 28, 2022 at 06:30:57PM -0500, Peter Geis wrote:
+> > The sentinel compatible entry whitespace causes automatic module loading
+> > to fail with certain userspace utilities. Fix this by removing the
+> > whitespace and sentinel comment, which is unnecessary.
+>
+> Umm. How does it fail?
 
-This is not that critical but I've decided to reset my tree again back
-to Linus' tree as I jumped the gun in mergig this to modulex-next as it
-has not been run time tested yet. So I've dumped this on modules-testing, a=
-nd
-once we get more testing results I'll push this to modules-next.
+It simply does not auto load the module by device id match.
+Manually loading the module after the fact works fine.
 
-I can fix the commit log to have 12 digits on the SHA1 manually,
-provided no other compile or run time issues are found.
+>
+> >  static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
+> >       { PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
+> > -     { /* sentinal */ }
+> > +     {}
+>
+> These two should be 100% identical in terms of the object code produced,
+> and thus should have no bearing on the ability for the module to be
+> loaded.
+>
+> Have you investigated the differences in the produced object code?
 
-  Luis
+Yes, you are correct, I just compared the produced files and they are identical.
+This patch can get dropped then.
+I'm curious now why it seemed to make a difference.
+
+I am not familiar enough with how the various userspace elements
+decide to match the modules to determine exactly why this is failing.
+It seems to be hit or miss if userspace decides to auto load this, for
+instance Ubuntu 20.04 was happy to load my kernel module built with
+the arm64 official toolchain, but Manjaro will not load their self
+built kernel module.
+I originally suspected it was due to the manufacturer id being all zeros.
+Unless there's some weird compiler optimization that I'm not seeing in
+my configuration.
+
+Any ideas would be appreciated.
+Thanks!
+
+> If not, please do so, and describe what they were. Thanks.
+>
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

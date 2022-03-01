@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E804C8D0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9A94C8D0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiCAN4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S235185AbiCAN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbiCAN43 (ORCPT
+        with ESMTP id S235176AbiCAN4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:56:29 -0500
+        Tue, 1 Mar 2022 08:56:32 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8A549F6F0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:55:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 893589F6E1
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:55:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646142946;
+        s=mimecast20190719; t=1646142949;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OiMjjIHHeTM/gQ1C4O+yjUIrBcfp/Osrq5pxcQPrA3c=;
-        b=AAcQ2G2G/iZrs/YZapnCuxjenxp55uA/TV+ZIZB6d93da9B3GirELjAfy6G9bdR4U2pQPv
-        lq3t5mGX5zEuUgaWlbh3Nj2o4IJ7faxeAriUQb+eVcyIwaWpt8gHvbp6cKzUrGtpINK/uB
-        8f1RoGmLMrm+WEsifiHN81S9YKwiLgA=
+        bh=gSFeH1i77V/KkgawIUDjeRhR+3rBrHanlQxBcU1qMVM=;
+        b=G5VMHrxqUDkIcxGLJZVuuccQI8SWMf0P9PnEa72SbAu+okvQ1nUqY2mFKOh/mxjRB5vKvx
+        W0Q+QOiRjpUdCqGuAd1IURN2zAeS5QxAqwqlybMcmbraGRCKnAy8qOENUbYQgniuZChuQZ
+        wQfOdFQ4ZAR4//dy3qvq7QpGQo/RmVo=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-njn-BBIVOmy3rjb8sccEhA-1; Tue, 01 Mar 2022 08:55:44 -0500
-X-MC-Unique: njn-BBIVOmy3rjb8sccEhA-1
+ us-mta-225-JLkAO0TqMSyP51vTULynBA-1; Tue, 01 Mar 2022 08:55:48 -0500
+X-MC-Unique: JLkAO0TqMSyP51vTULynBA-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F5BA180473E;
-        Tue,  1 Mar 2022 13:55:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39B8C800422;
+        Tue,  1 Mar 2022 13:55:46 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E1811057FD2;
-        Tue,  1 Mar 2022 13:55:38 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98BF41057F7C;
+        Tue,  1 Mar 2022 13:55:42 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Jim Mattson <jmattson@google.com>,
@@ -51,9 +51,9 @@ Cc:     Jim Mattson <jmattson@google.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Borislav Petkov <bp@alien8.de>, x86@kernel.org,
         Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH 1/4] KVM: x86: mark synthetic SMM vmexit as SVM_EXIT_SW
-Date:   Tue,  1 Mar 2022 15:55:23 +0200
-Message-Id: <20220301135526.136554-2-mlevitsk@redhat.com>
+Subject: [PATCH 2/4] KVM: x86: SVM: disable preemption in avic_refresh_apicv_exec_ctrl
+Date:   Tue,  1 Mar 2022 15:55:24 +0200
+Message-Id: <20220301135526.136554-3-mlevitsk@redhat.com>
 In-Reply-To: <20220301135526.136554-1-mlevitsk@redhat.com>
 References: <20220301135526.136554-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -69,30 +69,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a dummy unused vmexit reason to mark the 'VM exit' that is happening
-when kvm exits to handle SMM, which is not a real VM exit.
+avic_refresh_apicv_exec_ctrl is called from vcpu_enter_guest,
+without preemption disabled, however avic_vcpu_load, and
+avic_vcpu_put expect preemption to be disabled.
 
-This makes it a bit easier to read the KVM trace, and avoids
-other potential problems.
+This issue was found by lockdep.
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/svm/svm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/svm/avic.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7038c76fa8410..c08fd7f4f3414 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4218,7 +4218,7 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
- 	svm->vmcb->save.rsp = vcpu->arch.regs[VCPU_REGS_RSP];
- 	svm->vmcb->save.rip = vcpu->arch.regs[VCPU_REGS_RIP];
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index aea0b13773fd3..e23159f3a62ba 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -640,12 +640,16 @@ void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+ 	}
+ 	vmcb_mark_dirty(vmcb, VMCB_AVIC);
  
--	ret = nested_svm_vmexit(svm);
-+	ret = nested_svm_simple_vmexit(svm, SVM_EXIT_SW);
- 	if (ret)
- 		return ret;
++	preempt_disable();
++
+ 	if (activated)
+ 		avic_vcpu_load(vcpu, vcpu->cpu);
+ 	else
+ 		avic_vcpu_put(vcpu);
  
+ 	avic_set_pi_irte_mode(vcpu, activated);
++
++	preempt_enable();
+ }
+ 
+ static void svm_ir_list_del(struct vcpu_svm *svm, struct amd_iommu_pi_data *pi)
 -- 
 2.26.3
 

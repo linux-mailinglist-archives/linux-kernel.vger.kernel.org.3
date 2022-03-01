@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCCD4C9049
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8CB4C904F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbiCAQ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S236011AbiCAQ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiCAQ3O (ORCPT
+        with ESMTP id S229809AbiCAQ3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:29:14 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3FAFDA;
-        Tue,  1 Mar 2022 08:28:32 -0800 (PST)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nP5MK-000DX3-8e; Tue, 01 Mar 2022 17:28:20 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nP5MJ-000JV6-UK; Tue, 01 Mar 2022 17:28:19 +0100
-Subject: Re: [PATCH] bpf: cgroup: remove WARN_ON at bpf_cgroup_link_release
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220227134009.1298488-1-dzm91@hust.edu.cn>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d4bed569-d448-8b59-0774-c036e4c9abe9@iogearbox.net>
-Date:   Tue, 1 Mar 2022 17:28:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 1 Mar 2022 11:29:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7915BBB4;
+        Tue,  1 Mar 2022 08:29:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3712B819EB;
+        Tue,  1 Mar 2022 16:28:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C10FC340EE;
+        Tue,  1 Mar 2022 16:28:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="D7UrjJ4m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646152134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=azUn2ki7Mj00I4cZyGYyVEVMYgwAwBTMCuqvy/VXMbE=;
+        b=D7UrjJ4maBEi4nEme98+YCPJVmJo8lVsaJoNewrcfQObk6P6YpRz+3CgWVQ+gGINDw/ivF
+        ES5me9CToU/6hwtUO3skAMWGsSGQWTzhLNI/0Mc6pEtAN2qew//z0nGtg2BwltGPhDDtcM
+        V4zLgBtAlAw4iOeKha7WaVAvWwGJTkA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6fec32bc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 16:28:53 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 17:28:48 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Laszlo Ersek <lersek@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-hyperv@vger.kernel.org,
+        linux-crypto@vger.kernel.org, graf@amazon.com,
+        mikelley@microsoft.com, gregkh@linuxfoundation.org,
+        adrian@parity.io, berrange@redhat.com, linux@dominikbrodowski.net,
+        jannh@google.com, mst@redhat.com, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
+        colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh5JwK6toc/zBNL7@zx2c4.com>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220227134009.1298488-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26468/Tue Mar  1 10:31:38 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 2:40 PM, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> When syzkaller injects fault into memory allocation at
-> bpf_prog_array_alloc, the kernel encounters a memory failure and
-> returns non-zero, thus leading to one WARN_ON at
-> bpf_cgroup_link_release. The stack trace is as follows:
-> 
->   __kmalloc+0x7e/0x3d0
->   bpf_prog_array_alloc+0x4f/0x60
->   compute_effective_progs+0x132/0x580
->   ? __sanitizer_cov_trace_pc+0x1a/0x40
->   update_effective_progs+0x5e/0x260
->   __cgroup_bpf_detach+0x293/0x760
->   bpf_cgroup_link_release+0xad/0x400
->   bpf_link_free+0xca/0x190
->   bpf_link_put+0x161/0x1b0
->   bpf_link_release+0x33/0x40
->   __fput+0x286/0x9f0
-> 
-> Fix this by removing the WARN_ON for __cgroup_bpf_detach.
-> 
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->   kernel/bpf/cgroup.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 514b4681a90a..fdbdcee6c9fa 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -896,8 +896,8 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
->   		return;
->   	}
->   
-> -	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
-> -				    cg_link->type));
-> +	__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
-> +				    cg_link->type);
+Hi Laszlo,
 
-"Fixing" by removing WARN_ON is just papering over the issue which in this case as
-mentioned is allocation failure on detach/teardown when allocating and recomputing
-effective prog arrays..
-
->   	cg = cg_link->cgroup;
->   	cg_link->cgroup = NULL;
+On Tue, Mar 01, 2022 at 05:15:21PM +0100, Laszlo Ersek wrote:
+> > If we had a "pull" model, rather than just expose a 16-byte unique
+> > identifier, the vmgenid virtual hardware would _also_ expose a
+> > word-sized generation counter, which would be incremented every time the
+> > unique ID changed. Then, every time we would touch the RNG, we'd simply
+> > do an inexpensive check of this memremap()'d integer, and reinitialize
+> > with the unique ID if the integer changed.
 > 
+> Does the vmgenid spec (as-is) preclude the use of the 16-byte identifier
+> like this?
+> 
+> After all, once you locate the identifier via the ADDR object, you could
+> perhaps consult it every time you were about to touch the RNG.
 
+No, you could in fact do this, and there'd be nothing wrong with that
+from a spec perspective. You could even vDSO it all the way through
+onward to userspace. However, doing a 16-byte atomic memcmp on
+each-and-every packet is really a non-starter. For that kind of "check
+it in the hot path" thing to be viable, you really want it to be a
+counter that is word-sized. The "pull"-model involves pulling on every
+single packet in order to be better than the "push"-model. Anyway, even
+with a word-sized counter, it's unclear whether the costs of checking on
+every packet would be worth it to everyone, but at least it's more
+tenable than a 16-byte whammy.
+
+Jason

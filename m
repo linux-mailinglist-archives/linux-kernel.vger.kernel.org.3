@@ -2,173 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78194C91DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F124C91FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbiCARjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S236722AbiCARlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbiCARjm (ORCPT
+        with ESMTP id S236645AbiCARkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:39:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED241AF0F;
-        Tue,  1 Mar 2022 09:39:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B0E5B81BE8;
-        Tue,  1 Mar 2022 17:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF433C340EE;
-        Tue,  1 Mar 2022 17:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646156338;
-        bh=ReB1AHIDSVDCmRMjQGBl11DT4sgFf0L/LuSK3Y+v9w8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dDgu84yJwqG2+6gzd9hDjEKwYgEr308ungqc4SZb3ZnxQqf3kh/fMbAKKcm1y5lkl
-         el1IlJzIVvIVMLZzUqbJO9B0F8GQXXb3IV/fW6Cs1Vqui1g1o3NGTUwBE6P7bsZFbP
-         gS5SewkmDb6rRF7tWbpAFHPC2J5vH2IC6tRxSQ7o0M+dohCgxo+6mFld8tRU0Bh1Vs
-         Lhewoo+Xq9EeNYra03QUScexi9RDVBf8cIgbhdqvXzwdOXr7mu1bLi9PHHVjaB5XC3
-         PqfhHnO1cBWA05UsJ7ysn8CLtxvtvaBIU2jK3qBta8sz56DChnNV8d0SmJmt4vs+Yk
-         rrArPmfOE4Ejw==
-Date:   Tue, 1 Mar 2022 11:38:56 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Surendrakumar Upadhyay, TejaskumarX" 
-        <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        "Meena, Mahesh" <mahesh.meena@intel.com>,
-        linux-pci@vger.kernel.org, Krzysztof Wilczynski <kw@linux.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH] PCI: vmd: Prevent recursive locking on interrupt
- allocation
-Message-ID: <20220301173856.GA633200@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh5W9WHNH2FNu4hG@e123427-lin.cambridge.arm.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 12:40:51 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6F436B41
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:39:55 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id z15so14901718pfe.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W4+GVkOQautzlTAwXMD1MQXzOa874amFJWoTUzo/RMw=;
+        b=Qp4DFDQQ2fuMeWYZio5rlXtJndl0RtNg7Msq0QSGvjdLXMry4Zw3nqbZlLCABBpaee
+         gNi2KbNAKiZQbuJ1CrWxJ/IXAruP+iJN/raBUYE+Hc2+j85+g2JHdnXrv8jdto+hQLhZ
+         j71iC550AXG7YGg6/AHAgVtihOL4Fx6/aS3wlw6OMngYnnc6seeaIYIvn5XgRypjmnaE
+         wMq6QQvnrxulrG+PLrYB4ywRCQZfQUGDBZ2gGC8Oq/XL3d/rqlgCvr9nj1L4lszOCznO
+         ZvjCw4Pwwga9MHNMem2E/AVjaUvYsETqKpZ4s9vBsn3k/EGz66esUQJRBZBvF8uW9aTY
+         gPjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=W4+GVkOQautzlTAwXMD1MQXzOa874amFJWoTUzo/RMw=;
+        b=jOzT+qvzQzR6HiLM/zBSyrtoPv/ZmyoHOWvLxZGv9jQHFEp+uGogVQGMSqU7DtsVdr
+         re1pU+UdowjjNOHmKa5Mj1/98XBAGJvO0gcStIrDcxB3dQdCY2AnuW8/VeSuHKqS4wK1
+         4fh3e4eU+GdHCtHoYlwalSojVrv22fAg9yCZDIkPF8NkvALkNK+wP35mYh2gcZ8gMoBv
+         YUbHRbjDZZkgPs1sleNFqOQUr4bNKEFx1mOqrXcDNJs2v6RgXHK2LczRCggdl7tRLaX1
+         Mv6nB0aNG5zGg0PCw7xCh1SkuRzkfM/d7gSk80mzs1rSi34G9i3yxr3QMsSBbqAsD1xu
+         Ln3Q==
+X-Gm-Message-State: AOAM53073FxClUGWO4q+9MHEl06A6NRpBksetk0jiHOJmM7RiSAspwCS
+        6I+wNpnDJRN1kwgBQ4VxsA4n+g==
+X-Google-Smtp-Source: ABdhPJw4ujAgqleyGeJ9YEOI/fZ+Fzu5tSZFA6mqHP6VhHTwO9GktsrbgUZsqC5FVgxtQRqEAfkVnw==
+X-Received: by 2002:a63:d1e:0:b0:372:c1cd:9e16 with SMTP id c30-20020a630d1e000000b00372c1cd9e16mr22534900pgl.421.1646156394767;
+        Tue, 01 Mar 2022 09:39:54 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id p128-20020a622986000000b004e1366dd88esm16677413pfp.160.2022.03.01.09.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 09:39:54 -0800 (PST)
+Date:   Tue, 01 Mar 2022 09:39:54 -0800 (PST)
+X-Google-Original-Date: Tue, 01 Mar 2022 09:39:36 PST (-0800)
+Subject:     Re: [PATCH -fixes v3 0/6] Fixes KASAN and other along the way
+In-Reply-To: <CAG_fn=WTJF24TH6ENGD-3S0B_AV4=-39=2ry-uDguZ8Q7f=z=Q@mail.gmail.com>
+CC:     alexandre.ghiti@canonical.com, elver@google.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, ryabinin.a.a@gmail.com,
+        andreyknvl@gmail.com, dvyukov@google.com, nogikh@google.com,
+        nickhu@andestech.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     glider@google.com
+Message-ID: <mhng-ffd5d5c5-9894-4dec-b332-5176d508bcf9@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 05:25:09PM +0000, Lorenzo Pieralisi wrote:
-> On Sun, Feb 13, 2022 at 02:54:05PM +0100, Thomas Gleixner wrote:
-> > Tejas reported the following recursive locking issue:
-> > 
-> >  swapper/0/1 is trying to acquire lock:
-> >  ffff8881074fd0a0 (&md->mutex){+.+.}-{3:3}, at: msi_get_virq+0x30/0xc0
-> >  
-> >  but task is already holding lock:
-> >  ffff8881017cd6a0 (&md->mutex){+.+.}-{3:3}, at: __pci_enable_msi_range+0xf2/0x290
-> >  
-> >  stack backtrace:
-> >   __mutex_lock+0x9d/0x920
-> >   msi_get_virq+0x30/0xc0
-> >   pci_irq_vector+0x26/0x30
-> >   vmd_msi_init+0xcc/0x210
-> >   msi_domain_alloc+0xbf/0x150
-> >   msi_domain_alloc_irqs_descs_locked+0x3e/0xb0
-> >   __pci_enable_msi_range+0x155/0x290
-> >   pci_alloc_irq_vectors_affinity+0xba/0x100
-> >   pcie_port_device_register+0x307/0x550
-> >   pcie_portdrv_probe+0x3c/0xd0
-> >   pci_device_probe+0x95/0x110
-> > 
-> > This is caused by the VMD MSI code which does a lookup of the Linux
-> > interrupt number for an VMD managed MSI[X] vector. The lookup function
-> > tries to acquire the already held mutex.
-> > 
-> > Avoid that by caching the Linux interrupt number at initialization time
-> > instead of looking it up over and over.
-> > 
-> > Fixes: 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
-> > Reported-by: "Surendrakumar Upadhyay, TejaskumarX" <tejaskumarx.surendrakumar.upadhyay@intel.com>
-> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> 
-> Bjorn, this is a fix for a patch we merged in the last cycle,
-> if possible we should be sending it before v5.17 is released,
-> please.
+On Fri, 25 Feb 2022 07:00:23 PST (-0800), glider@google.com wrote:
+> On Fri, Feb 25, 2022 at 3:47 PM Alexandre Ghiti <
+> alexandre.ghiti@canonical.com> wrote:
+>
+>> On Fri, Feb 25, 2022 at 3:31 PM Alexander Potapenko <glider@google.com>
+>> wrote:
+>> >
+>> >
+>> >
+>> > On Fri, Feb 25, 2022 at 3:15 PM Alexandre Ghiti <
+>> alexandre.ghiti@canonical.com> wrote:
+>> >>
+>> >> On Fri, Feb 25, 2022 at 3:10 PM Alexander Potapenko <glider@google.com>
+>> wrote:
+>> >> >
+>> >> >
+>> >> >
+>> >> > On Fri, Feb 25, 2022 at 3:04 PM Alexandre Ghiti <
+>> alexandre.ghiti@canonical.com> wrote:
+>> >> >>
+>> >> >> On Fri, Feb 25, 2022 at 2:06 PM Marco Elver <elver@google.com>
+>> wrote:
+>> >> >> >
+>> >> >> > On Fri, 25 Feb 2022 at 13:40, Alexandre Ghiti
+>> >> >> > <alexandre.ghiti@canonical.com> wrote:
+>> >> >> > >
+>> >> >> > > As reported by Aleksandr, syzbot riscv is broken since commit
+>> >> >> > > 54c5639d8f50 ("riscv: Fix asan-stack clang build"). This commit
+>> actually
+>> >> >> > > breaks KASAN_INLINE which is not fixed in this series, that will
+>> come later
+>> >> >> > > when found.
+>> >> >> > >
+>> >> >> > > Nevertheless, this series fixes small things that made the syzbot
+>> >> >> > > configuration + KASAN_OUTLINE fail to boot.
+>> >> >> > >
+>> >> >> > > Note that even though the config at [1] boots fine with this
+>> series, I
+>> >> >> > > was not able to boot the small config at [2] which fails because
+>> >> >> > > kasan_poison receives a really weird address 0x4075706301000000
+>> (maybe a
+>> >> >> > > kasan person could provide some hint about what happens below in
+>> >> >> > > do_ctors -> __asan_register_globals):
+>> >> >> >
+>> >> >> > asan_register_globals is responsible for poisoning redzones around
+>> >> >> > globals. As hinted by 'do_ctors', it calls constructors, and in
+>> this
+>> >> >> > case a compiler-generated constructor that calls
+>> >> >> > __asan_register_globals with metadata generated by the compiler.
+>> That
+>> >> >> > metadata contains information about global variables. Note, these
+>> >> >> > constructors are called on initial boot, but also every time a
+>> kernel
+>> >> >> > module (that has globals) is loaded.
+>> >> >> >
+>> >> >> > It may also be a toolchain issue, but it's hard to say. If you're
+>> >> >> > using GCC to test, try Clang (11 or later), and vice-versa.
+>> >> >>
+>> >> >> I tried 3 different gcc toolchains already, but that did not fix the
+>> >> >> issue. The only thing that worked was setting asan-globals=0 in
+>> >> >> scripts/Makefile.kasan, but ok, that's not a fix.
+>> >> >> I tried to bisect this issue but our kasan implementation has been
+>> >> >> broken quite a few times, so it failed.
+>> >> >>
+>> >> >> I keep digging!
+>> >> >>
+>> >> >
+>> >> > The problem does not reproduce for me with GCC 11.2.0: kernels built
+>> with both [1] and [2] are bootable.
+>> >>
+>> >> Do you mean you reach userspace? Because my image boots too, and fails
+>> >> at some point:
+>> >>
+>> >> [    0.000150] sched_clock: 64 bits at 10MHz, resolution 100ns, wraps
+>> >> every 4398046511100ns
+>> >> [    0.015847] Console: colour dummy device 80x25
+>> >> [    0.016899] printk: console [tty0] enabled
+>> >> [    0.020326] printk: bootconsole [ns16550a0] disabled
+>> >>
+>> >
+>> > In my case, QEMU successfully boots to the login prompt.
+>> > I am running QEMU 6.2.0 (Debian 1:6.2+dfsg-2) and an image Aleksandr
+>> shared with me (guess it was built according to this instruction:
+>> https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_riscv64-kernel.md
+>> )
+>> >
+>>
+>> Nice thanks guys! I always use the latest opensbi and not the one that
+>> is embedded in qemu, which is the only difference between your command
+>> line (which works) and mine (which does not work). So the issue is
+>> probably there, I really need to investigate that now.
+>>
+>> Great to hear that!
+>
+>
+>> That means I only need to fix KASAN_INLINE and we're good.
+>>
+>> I imagine Palmer can add your Tested-by on the series then?
+>>
+> Sure :)
 
-Agreed.  I think Thomas merged 82ff8e6b78fc, and it looks like he's
-just merged this fix to irq/urgent of tip, so I think this should be
-already taken care of:
+Do you mind actually posting that (i, the Tested-by tag)?  It's less 
+likely to get lost that way.  I intend on taking this into fixes ASAP, 
+my builds have blown up for some reason (I got bounced between machines, 
+so I'm blaming that) so I need to fix that first.
 
-  https://lore.kernel.org/r/164542867635.16921.13795049956787158926.tip-bot2@tip-bot2
-
-> >  drivers/pci/controller/vmd.c |   14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > 
-> > --- a/drivers/pci/controller/vmd.c
-> > +++ b/drivers/pci/controller/vmd.c
-> > @@ -99,11 +99,13 @@ struct vmd_irq {
-> >   * @srcu:	SRCU struct for local synchronization.
-> >   * @count:	number of child IRQs assigned to this vector; used to track
-> >   *		sharing.
-> > + * @virq:	The underlying VMD Linux interrupt number
-> >   */
-> >  struct vmd_irq_list {
-> >  	struct list_head	irq_list;
-> >  	struct srcu_struct	srcu;
-> >  	unsigned int		count;
-> > +	unsigned int		virq;
-> >  };
-> >  
-> >  struct vmd_dev {
-> > @@ -253,7 +255,6 @@ static int vmd_msi_init(struct irq_domai
-> >  	struct msi_desc *desc = arg->desc;
-> >  	struct vmd_dev *vmd = vmd_from_bus(msi_desc_to_pci_dev(desc)->bus);
-> >  	struct vmd_irq *vmdirq = kzalloc(sizeof(*vmdirq), GFP_KERNEL);
-> > -	unsigned int index, vector;
-> >  
-> >  	if (!vmdirq)
-> >  		return -ENOMEM;
-> > @@ -261,10 +262,8 @@ static int vmd_msi_init(struct irq_domai
-> >  	INIT_LIST_HEAD(&vmdirq->node);
-> >  	vmdirq->irq = vmd_next_irq(vmd, desc);
-> >  	vmdirq->virq = virq;
-> > -	index = index_from_irqs(vmd, vmdirq->irq);
-> > -	vector = pci_irq_vector(vmd->dev, index);
-> >  
-> > -	irq_domain_set_info(domain, virq, vector, info->chip, vmdirq,
-> > +	irq_domain_set_info(domain, virq, vmdirq->irq->virq, info->chip, vmdirq,
-> >  			    handle_untracked_irq, vmd, NULL);
-> >  	return 0;
-> >  }
-> > @@ -685,7 +684,8 @@ static int vmd_alloc_irqs(struct vmd_dev
-> >  			return err;
-> >  
-> >  		INIT_LIST_HEAD(&vmd->irqs[i].irq_list);
-> > -		err = devm_request_irq(&dev->dev, pci_irq_vector(dev, i),
-> > +		vmd->irqs[i].virq = pci_irq_vector(dev, i);
-> > +		err = devm_request_irq(&dev->dev, vmd->irqs[i].virq,
-> >  				       vmd_irq, IRQF_NO_THREAD,
-> >  				       vmd->name, &vmd->irqs[i]);
-> >  		if (err)
-> > @@ -969,7 +969,7 @@ static int vmd_suspend(struct device *de
-> >  	int i;
-> >  
-> >  	for (i = 0; i < vmd->msix_count; i++)
-> > -		devm_free_irq(dev, pci_irq_vector(pdev, i), &vmd->irqs[i]);
-> > +		devm_free_irq(dev, vmd->irqs[i].virq, &vmd->irqs[i]);
-> >  
-> >  	return 0;
-> >  }
-> > @@ -981,7 +981,7 @@ static int vmd_resume(struct device *dev
-> >  	int err, i;
-> >  
-> >  	for (i = 0; i < vmd->msix_count; i++) {
-> > -		err = devm_request_irq(dev, pci_irq_vector(pdev, i),
-> > +		err = devm_request_irq(dev, vmd->irqs[i].virq,
-> >  				       vmd_irq, IRQF_NO_THREAD,
-> >  				       vmd->name, &vmd->irqs[i]);
-> >  		if (err)
+>
+>>
+>> Thanks again!
+>>
+>> Alex
+>>
+>> >>
+>> >> It traps here.
+>> >>
+>> >> > FWIW here is how I run them:
+>> >> >
+>> >> > qemu-system-riscv64 -m 2048 -smp 1 -nographic -no-reboot \
+>> >> >   -device virtio-rng-pci -machine virt -device \
+>> >> >   virtio-net-pci,netdev=net0 -netdev \
+>> >> >   user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:12529-:22 -device \
+>> >> >   virtio-blk-device,drive=hd0 -drive \
+>> >> >   file=${IMAGE},if=none,format=raw,id=hd0 -snapshot \
+>> >> >   -kernel ${KERNEL_SRC_DIR}/arch/riscv/boot/Image -append
+>> "root=/dev/vda
+>> >> >   console=ttyS0 earlyprintk=serial"
+>> >> >
+>> >> >
+>> >> >>
+>> >> >> Thanks for the tips,
+>> >> >>
+>> >> >> Alex
+>> >> >
+>> >> >
+>> >> >
+>> >> > --
+>> >> > Alexander Potapenko
+>> >> > Software Engineer
+>> >> >
+>> >> > Google Germany GmbH
+>> >> > Erika-Mann-Straße, 33
+>> >> > 80636 München
+>> >> >
+>> >> > Geschäftsführer: Paul Manicle, Liana Sebastian
+>> >> > Registergericht und -nummer: Hamburg, HRB 86891
+>> >> > Sitz der Gesellschaft: Hamburg
+>> >> >
+>> >> > Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise
+>> erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+>> weiter, löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte
+>> wissen, dass die E-Mail an die falsche Person gesendet wurde.
+>> >> >
+>> >> >
+>> >> >
+>> >> > This e-mail is confidential. If you received this communication by
+>> mistake, please don't forward it to anyone else, please erase all copies
+>> and attachments, and please let me know that it has gone to the wrong
+>> person.
+>> >>
+>> >> --
+>> >> You received this message because you are subscribed to the Google
+>> Groups "kasan-dev" group.
+>> >> To unsubscribe from this group and stop receiving emails from it, send
+>> an email to kasan-dev+unsubscribe@googlegroups.com.
+>> >> To view this discussion on the web visit
+>> https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCsQPVYSV7CdhKnvjujXkMXuRQd%3DVPok1awb20xifYmidw%40mail.gmail.com
+>> .
+>> >
+>> >
+>> >
+>> > --
+>> > Alexander Potapenko
+>> > Software Engineer
+>> >
+>> > Google Germany GmbH
+>> > Erika-Mann-Straße, 33
+>> > 80636 München
+>> >
+>> > Geschäftsführer: Paul Manicle, Liana Sebastian
+>> > Registergericht und -nummer: Hamburg, HRB 86891
+>> > Sitz der Gesellschaft: Hamburg
+>> >
+>> > Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise erhalten
+>> haben sollten, leiten Sie diese bitte nicht an jemand anderes weiter,
+>> löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte wissen,
+>> dass die E-Mail an die falsche Person gesendet wurde.
+>> >
+>> >
+>> >
+>> > This e-mail is confidential. If you received this communication by
+>> mistake, please don't forward it to anyone else, please erase all copies
+>> and attachments, and please let me know that it has gone to the wrong
+>> person.
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups
+>> "kasan-dev" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an
+>> email to kasan-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit
+>> https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCuJw8N0dUmQNdFqDM96bzKqPDjRe4FUnOCbjhJtO0R8Hg%40mail.gmail.com
+>> .
+>>
+>
+>
+> -- 
+> Alexander Potapenko
+> Software Engineer
+>
+> Google Germany GmbH
+> Erika-Mann-Straße, 33
+> 80636 München
+>
+> Geschäftsführer: Paul Manicle, Liana Sebastian
+> Registergericht und -nummer: Hamburg, HRB 86891
+> Sitz der Gesellschaft: Hamburg
+>
+> Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise erhalten
+> haben sollten, leiten Sie diese bitte nicht an jemand anderes weiter,
+> löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte wissen,
+> dass die E-Mail an die falsche Person gesendet wurde.
+>
+>
+>
+> This e-mail is confidential. If you received this communication by mistake,
+> please don't forward it to anyone else, please erase all copies and
+> attachments, and please let me know that it has gone to the wrong person.

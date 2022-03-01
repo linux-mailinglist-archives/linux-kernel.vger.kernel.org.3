@@ -2,348 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82974C88E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD5F4C88ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiCAKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S232343AbiCAKGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbiCAKEl (ORCPT
+        with ESMTP id S234240AbiCAKG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:04:41 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C957C8CDB8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:03:58 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id j15so25921799lfe.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 02:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=jqsbZZHdMda2x9oc6NoF+wlcHcbYportSlPaVmfdhdw=;
-        b=HKk0hQezxCK92/j7bOgiYTr1ECclfO1RYVPOgm46iOd8IVv5YZuP1DX0qbTwEjSY5T
-         I17GcmYYNnBdIVrkuyZQH7hT6jUZ6giAsrpQ5NwG3UhUdCXT1Vcsh70SiqjjMuCTZFZJ
-         +avKxmLzhlgl19XI+uwyDb04MO7YB53WviZKZrrpXc0teudQ7xYobGV+Ur2m9T8yL/DT
-         vBcnDdltpcRrxFcAdI7ehZTchPIYwmmAWvCl3rxMVGhhxst2FYtMv9tf18Ag0i9Z9qkg
-         CO+q9T8HuUYPDmlDPjVnKPbaIJEsSNyK/sUWd5GCVhVonZ/1fjwyqopw8e1xKDBuOrnx
-         y3TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=jqsbZZHdMda2x9oc6NoF+wlcHcbYportSlPaVmfdhdw=;
-        b=g5womRt01qTuoMKhxlbSfDOk5hur2+iTUbqByNQCGXGhu0NfYEHL9drYANnqrhYI5D
-         S3VumWFK1flPt/mKJBEoW/NrYTP8C5FIJD7fapzZWsMlu7SUeN36QXUpjhvD4Qq6Pg91
-         xu7nhU1Y1mddgraVcjdSeGSXEmgBZ7BG2SdnimA0qmKIQXbNiRRNEhqjBeoZ3xhu55RL
-         gHN79Dt2dzUlG3dR1nyE0a0ercB6C14rp0MaKq9a0NhaRrtRIvAx6yGm1W7oURs8wjLr
-         pPwLxI+EFWTs6tPb6fcoMam4rQYoJrWqMo4Fhl43uuOLMwD1rfyRmZL8UAFibVUKQliA
-         I66A==
-X-Gm-Message-State: AOAM533+QUHtCCds9OFCSXwO7h7X2CNHUgaKAPd8R8fynWFJ6RQiVsAw
-        5s2kSecTFbkHTTP8yUFEMuiNVA==
-X-Google-Smtp-Source: ABdhPJzyTHyE7Ya2J9YjwlEf5uGw6oVRODcnx+gLqTw8XPZn4iWGc0QoLBGe3pNm1B66bq8IOMwHHw==
-X-Received: by 2002:a05:6512:114c:b0:434:b7a7:1fdc with SMTP id m12-20020a056512114c00b00434b7a71fdcmr15109807lfg.608.1646129037075;
-        Tue, 01 Mar 2022 02:03:57 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id s27-20020a05651c049b00b002460fd4252asm1826822ljc.100.2022.03.01.02.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 02:03:56 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: [PATCH v2 net-next 10/10] net: dsa: mv88e6xxx: MST Offloading
-Date:   Tue,  1 Mar 2022 11:03:21 +0100
-Message-Id: <20220301100321.951175-11-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220301100321.951175-1-tobias@waldekranz.com>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
+        Tue, 1 Mar 2022 05:06:28 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7978D6AA;
+        Tue,  1 Mar 2022 02:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646129120; x=1677665120;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OqRnVMfE9sumNiyhj1Qk7+SncksPrSyR31RaHEHrlOY=;
+  b=EupCCXi7Kx1VcAyY1BWANLcZfkh2IRY6XU0AWcrcfdIbfFZIenjVynvZ
+   9h+yvDLkb/cIe9zXgrc9yTyWayqJoIxA2bRck7zYiNd0k/t+v8kuVc3qH
+   fdZx5/5RoEtqnnt8OLerB3PltOOLi6SrDsvhEV3jlkRJn+yJ202HAZEK6
+   pDdnr8TNp720gMFTVCfB6Y1IuznOVl+QSq3H3IWdffUDGPcS3aTrYpcrS
+   o4Z8PD2D1TC84A/29PewXXnI1Ixn7ERgfBU+L3deDssYr8ohLTXDQF/ZP
+   aOa36dkt7cp/VcK0VZ9VFLgbi2pwdZONuuC1g+0gsAGok2tn9r8R5kcxR
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="233073225"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="233073225"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 02:05:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="685669736"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Mar 2022 02:05:18 -0800
+Message-ID: <4b35e465-626a-7218-ed9a-4e5cf28c1ccc@intel.com>
+Date:   Tue, 1 Mar 2022 12:05:17 +0200
 MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Ben Chuang <benchuanggli@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
+        SeanHY.Chen@genesyslogic.com.tw,
+        Kevin Chang <kevin.chang@lcfuturecenter.com>
+References: <20220225125553.1185108-1-benchuanggli@gmail.com>
+ <20220225125553.1185108-2-benchuanggli@gmail.com>
+ <CAPDyKFq5MdGWefVW6Uwe74Ef5giW+68qRS2hmXNmHLqpfqav8A@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAPDyKFq5MdGWefVW6Uwe74Ef5giW+68qRS2hmXNmHLqpfqav8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate a SID in the STU for each MSTID in use by a bridge and handle
-the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
+On 28/02/2022 19:03, Ulf Hansson wrote:
+> On Fri, 25 Feb 2022 at 13:56, Ben Chuang <benchuanggli@gmail.com> wrote:
+>>
+>> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+>>
+>> Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
+>> gated of upstream port can be enabled.
+>>
+>> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+>> Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
+>> ---
+>>  drivers/mmc/host/sdhci-pci-gli.c | 54 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 54 insertions(+)
+>>
+>> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+>> index 97035d77c18c..cf99b6af792d 100644
+>> --- a/drivers/mmc/host/sdhci-pci-gli.c
+>> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+>> @@ -873,6 +873,55 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+>>         pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
+>>  }
+>>
+>> +#ifdef CONFIG_PM
+>> +static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
+>> +{
+>> +       struct sdhci_pci_slot *slot = chip->slots[0];
+>> +       struct sdhci_host *host = slot->host;
+>> +       u16 clock;
+>> +
+>> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+>> +       clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
+>> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
+>> +{
+>> +       struct sdhci_pci_slot *slot = chip->slots[0];
+>> +       struct sdhci_host *host = slot->host;
+>> +       ktime_t timeout;
+>> +       u16 clock;
+>> +
+>> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+>> +
+>> +       clock |= SDHCI_CLOCK_PLL_EN;
+>> +       clock &= ~SDHCI_CLOCK_INT_STABLE;
+>> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+>> +
+>> +       timeout = ktime_add_ms(ktime_get(), 150);
+>> +       while (1) {
+>> +               bool timedout = ktime_after(ktime_get(), timeout);
+>> +
+>> +               clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+>> +               if (clock & SDHCI_CLOCK_INT_STABLE)
+>> +                       break;
+>> +               if (timedout) {
+>> +                       pr_err("%s: PLL clock never stabilised.\n",
+>> +                              mmc_hostname(host->mmc));
+>> +                       sdhci_dumpregs(host);
+>> +                       break;
+>> +               }
+>> +               udelay(10);
+>> +       }
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 178 +++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  13 +++
- 2 files changed, 191 insertions(+)
+Could use something like read_poll_timeout() here e.g.
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index c14a62aa6a6c..4fb4ec1dff79 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1818,6 +1818,137 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
- 	return mv88e6xxx_stu_loadpurge(chip, &stu);
- }
- 
-+static int mv88e6xxx_sid_new(struct mv88e6xxx_chip *chip, u8 *sid)
-+{
-+	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
-+	struct mv88e6xxx_mst *mst;
-+
-+	set_bit(0, busy);
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		set_bit(mst->stu.sid, busy);
-+	}
-+
-+	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
-+
-+	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
-+}
-+
-+static int mv88e6xxx_sid_put(struct mv88e6xxx_chip *chip, u8 sid)
-+{
-+	struct mv88e6xxx_mst *mst, *tmp;
-+	int err = 0;
-+
-+	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
-+		if (mst->stu.sid == sid) {
-+			if (refcount_dec_and_test(&mst->refcnt)) {
-+				mst->stu.valid = false;
-+				err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+				list_del(&mst->node);
-+				kfree(mst);
-+			}
-+
-+			return err;
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, struct net_device *br,
-+			     u16 msti, u8 *sid)
-+{
-+	struct mv88e6xxx_mst *mst;
-+	int err, i;
-+
-+	if (!br)
-+		return 0;
-+
-+	if (!mv88e6xxx_has_stu(chip))
-+		return -EOPNOTSUPP;
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		if (mst->br == br && mst->msti == msti) {
-+			refcount_inc(&mst->refcnt);
-+			*sid = mst->stu.sid;
-+			return 0;
-+		}
-+	}
-+
-+	err = mv88e6xxx_sid_new(chip, sid);
-+	if (err)
-+		return err;
-+
-+	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
-+	if (!mst)
-+		return -ENOMEM;
-+
-+	INIT_LIST_HEAD(&mst->node);
-+	refcount_set(&mst->refcnt, 1);
-+	mst->br = br;
-+	mst->msti = msti;
-+	mst->stu.valid = true;
-+	mst->stu.sid = *sid;
-+
-+	/* The bridge starts out all ports in the disabled state. But
-+	 * a STU state of disabled means to go by the port-global
-+	 * state. So we set all user port's initial state to blocking,
-+	 * to match the bridge's behavior.
-+	 */
-+	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
-+		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
-+			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
-+			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
-+
-+	list_add_tail(&mst->node, &chip->msts);
-+	return mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+}
-+
-+static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
-+					const struct switchdev_mst_state *st)
-+{
-+	struct dsa_port *dp = dsa_to_port(ds, port);
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_mst *mst;
-+	u8 state;
-+	int err;
-+
-+	if (!mv88e6xxx_has_stu(chip))
-+		return -EOPNOTSUPP;
-+
-+	switch (st->state) {
-+	case BR_STATE_DISABLED:
-+	case BR_STATE_BLOCKING:
-+	case BR_STATE_LISTENING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
-+		break;
-+	case BR_STATE_LEARNING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
-+		break;
-+	case BR_STATE_FORWARDING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		if (mst->br == dsa_port_bridge_dev_get(dp) &&
-+		    mst->msti == st->msti) {
-+			if (mst->stu.state[port] == state)
-+				return 0;
-+
-+			mst->stu.state[port] = state;
-+			mv88e6xxx_reg_lock(chip);
-+			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+			mv88e6xxx_reg_unlock(chip);
-+			return err;
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
- static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
- 					u16 vid)
- {
-@@ -2437,6 +2568,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
- 	if (err)
- 		return err;
- 
-+	if (!vlan.valid && vlan.sid) {
-+		err = mv88e6xxx_sid_put(chip, vlan.sid);
-+		if (err)
-+			return err;
-+	}
-+
- 	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
- }
- 
-@@ -2482,6 +2619,44 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
- 	return err;
- }
- 
-+static int mv88e6xxx_vlan_msti_set(struct dsa_switch *ds,
-+				   const struct switchdev_attr *attr)
-+{
-+	const struct switchdev_vlan_attr *vattr = &attr->u.vlan_attr;
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_vtu_entry vlan;
-+	u8 new_sid;
-+	int err;
-+
-+	mv88e6xxx_reg_lock(chip);
-+
-+	err = mv88e6xxx_vtu_get(chip, vattr->vid, &vlan);
-+	if (err)
-+		goto unlock;
-+
-+	if (!vlan.valid) {
-+		err = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	err = mv88e6xxx_sid_get(chip, attr->orig_dev, vattr->msti, &new_sid);
-+	if (err)
-+		goto unlock;
-+
-+	if (vlan.sid) {
-+		err = mv88e6xxx_sid_put(chip, vlan.sid);
-+		if (err)
-+			goto unlock;
-+	}
-+
-+	vlan.sid = new_sid;
-+	err = mv88e6xxx_vtu_loadpurge(chip, &vlan);
-+
-+unlock:
-+	mv88e6xxx_reg_unlock(chip);
-+	return err;
-+}
-+
- static int mv88e6xxx_port_fdb_add(struct dsa_switch *ds, int port,
- 				  const unsigned char *addr, u16 vid,
- 				  struct dsa_db db)
-@@ -6008,6 +6183,7 @@ static struct mv88e6xxx_chip *mv88e6xxx_alloc_chip(struct device *dev)
- 	mutex_init(&chip->reg_lock);
- 	INIT_LIST_HEAD(&chip->mdios);
- 	idr_init(&chip->policies);
-+	INIT_LIST_HEAD(&chip->msts);
- 
- 	return chip;
- }
-@@ -6540,10 +6716,12 @@ static const struct dsa_switch_ops mv88e6xxx_switch_ops = {
- 	.port_pre_bridge_flags	= mv88e6xxx_port_pre_bridge_flags,
- 	.port_bridge_flags	= mv88e6xxx_port_bridge_flags,
- 	.port_stp_state_set	= mv88e6xxx_port_stp_state_set,
-+	.port_mst_state_set	= mv88e6xxx_port_mst_state_set,
- 	.port_fast_age		= mv88e6xxx_port_fast_age,
- 	.port_vlan_filtering	= mv88e6xxx_port_vlan_filtering,
- 	.port_vlan_add		= mv88e6xxx_port_vlan_add,
- 	.port_vlan_del		= mv88e6xxx_port_vlan_del,
-+	.vlan_msti_set		= mv88e6xxx_vlan_msti_set,
- 	.port_fdb_add           = mv88e6xxx_port_fdb_add,
- 	.port_fdb_del           = mv88e6xxx_port_fdb_del,
- 	.port_fdb_dump          = mv88e6xxx_port_fdb_dump,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 6d4daa24d3e5..6a0b66354e1d 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -297,6 +297,16 @@ struct mv88e6xxx_region_priv {
- 	enum mv88e6xxx_region_id id;
- };
- 
-+struct mv88e6xxx_mst {
-+	struct list_head node;
-+
-+	refcount_t refcnt;
-+	struct net_device *br;
-+	u16 msti;
-+
-+	struct mv88e6xxx_stu_entry stu;
-+};
-+
- struct mv88e6xxx_chip {
- 	const struct mv88e6xxx_info *info;
- 
-@@ -397,6 +407,9 @@ struct mv88e6xxx_chip {
- 
- 	/* devlink regions */
- 	struct devlink_region *regions[_MV88E6XXX_REGION_MAX];
-+
-+	/* Bridge MST to SID mappings */
-+	struct list_head msts;
- };
- 
- struct mv88e6xxx_bus_ops {
--- 
-2.25.1
+	if (read_poll_timeout(sdhci_readw, clk, (clk & SDHCI_CLOCK_INT_STABLE),
+			      1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
+		pr_err("%s: PLL clock never stabilised.\n",
+		       mmc_hostname(host->mmc));
+		sdhci_dumpregs(host);
+	}
+
+
+>> +       clock |= SDHCI_CLOCK_CARD_EN;
+>> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+>> +
+>> +       return 0;
+>> +}
+> 
+> Both functions above look very similar to what sdhci_set_clock() does.
+> Can you use that, rather than open coding the above?
+> 
+> Other than that, I would appreciate it if Adrian could have a look at
+> this too. For example, I wonder if perhaps
+> sdhci_runtime_suspend|resume_host() should be called in these paths
+> too.
+
+Assuming the host controller does not lose state information, it should be fine.
+
+> 
+>> +#endif
+>> +
+>>  static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+>>  {
+>>         struct pci_dev *pdev = slot->chip->pdev;
+>> @@ -982,6 +1031,11 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
+>>  #ifdef CONFIG_PM_SLEEP
+>>         .resume         = sdhci_cqhci_gli_resume,
+>>         .suspend        = sdhci_cqhci_gli_suspend,
+>> +#endif
+>> +#ifdef CONFIG_PM
+>> +       .runtime_suspend = gl9763e_runtime_suspend,
+>> +       .runtime_resume  = gl9763e_runtime_resume,
+>> +       .allow_runtime_pm = true,
+>>  #endif
+>>         .add_host       = gl9763e_add_host,
+>>  };
+>> --
+>> 2.35.1
+>>
+> 
+> Kind regards
+> Uffe
 

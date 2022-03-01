@@ -2,92 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578704C937C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFFD4C937B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbiCASqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S237214AbiCASqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237100AbiCASqb (ORCPT
+        with ESMTP id S237205AbiCASpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:46:31 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7FB6C93B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:45:00 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso2668699pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=A7uGWoF4BIX4G7uGlBaz7mIppQlmmmgZ3uVpE0YdxbE=;
-        b=Rnkv/AJd+5iy30mZzep7QXo8K/F/3SaVyLdc8rbCGNMsgsFv5IBT1c+gvLBRE6ku+w
-         UwW2B20QOyzUAV/WYlAr69F6Ds/mAVIdJyKKpuGlLqQmrX0kscnL0Ee1JYzrWtxMXuxC
-         HuFImbbTD3Ptoddk79DLRbZ5xEvhH6hzEqxwA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A7uGWoF4BIX4G7uGlBaz7mIppQlmmmgZ3uVpE0YdxbE=;
-        b=yTvaE3VIZDbjQwUSqaU3P05qQSsfYH779KzFBCshKOf6fbx3ne278Dus96ZfNQ46y7
-         u5hWwZNo3hrYkjPDUvZo2fR7UeGwUyCGsLTxef5NypAazvkxL/8pFschYj9a/wrQacpR
-         qAY6z7zzQ7VC8Y+D6h6CQlfYtSlNAy+23PBjmVdb1ITJmcxtF5B54PGfEtalDRHjvF0u
-         99FJPwUpQv2crnfl14hlqs2VayV0IvgCaZSiWCserLsgk8diIaxMtWVUV6+d67iEj2ci
-         tbBWiwegsh86JfXkJMTFhu47IuTBcVwvD/K6+A5LFFNJnd3U6v8IsCpha18jY3yoHVZo
-         e+9g==
-X-Gm-Message-State: AOAM530UwrrhVXq16A/bCjovRTBjCDS998VRZHMWjOYQJS3123GkRk/E
-        tv+I2u7ABNb9Yo0HHxjOTij83Sw0k7BybA==
-X-Google-Smtp-Source: ABdhPJwvOdWv01gPbRHR1OBf3NvUx40QddL/RHLUdjcrmlX0gFA3xiuZ8QxXRNylsIMqUzXgvA7RiA==
-X-Received: by 2002:a17:903:1206:b0:151:7d67:2924 with SMTP id l6-20020a170903120600b001517d672924mr5587186plh.45.1646160299905;
-        Tue, 01 Mar 2022 10:44:59 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q7-20020a056a0002a700b004f357e3e42fsm17323387pfs.36.2022.03.01.10.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 10:44:59 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Anton Vorontsov <anton@enomsg.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Colin Cross <ccross@android.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Kees Cook <keescook@chromium.org>, kernel@axis.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore: Add prefix to ECC messages
-Date:   Tue,  1 Mar 2022 10:44:35 -0800
-Message-Id: <164616027128.2800203.5940158670244885252.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220301144932.89549-1-vincent.whitchurch@axis.com>
-References: <20220301144932.89549-1-vincent.whitchurch@axis.com>
+        Tue, 1 Mar 2022 13:45:52 -0500
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AECB6A06F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:44:43 -0800 (PST)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id B25D211B400
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:44:42 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id P7UIn3tVVHnotP7UInejSJ; Tue, 01 Mar 2022 12:44:42 -0600
+X-Authority-Reason: nr=8
+Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:40042 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nP7UI-004D9R-1S; Tue, 01 Mar 2022 12:44:42 -0600
+Message-ID: <c3cf7c0c-27fe-4dfa-4249-a7e1747237a5@kernel.org>
+Date:   Tue, 1 Mar 2022 19:44:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
+Content-Language: en-US
+To:     paulmck@kernel.org, Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, mtosatti@redhat.com
+References: <20220228141423.259691-1-nsaenzju@redhat.com>
+ <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
+ <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
+ <69e92bc6-0917-17e9-1b61-d884d30ba42c@kernel.org>
+ <20220301180509.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220301180509.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 95.232.30.176
+X-Source-L: No
+X-Exim-ID: 1nP7UI-004D9R-1S
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:40042
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 2
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Mar 2022 15:49:32 +0100, Vincent Whitchurch wrote:
-> The "No errors detected" message from the ECC code is shown at the end
-> of the pstore log and can be confusing or misleading, especially since
-> it usually appears just after a kernel crash log which normally means
-> quite the opposite of "no errors".  Prefix the message to clarify that
-> this message is only about ECC-detected errors.
+On 3/1/22 19:05, Paul E. McKenney wrote:
+>> I see, as long as it costs < 1 us, I am ok. If it gets > 1us in a reasonably
+>> fast machine, we start see HW noise where it does not exist, and that would
+>> reduce the resolution of osnoise. AFAICS, it is not causing that problem, but we
+>> need to make it as lightweight as possible.
+> In the common case, it is atomically incrementing a local per-CPU counter
+> and doing a store.  This should be quite cheap.
 > 
-> 
-> [...]
+> The uncommon case is when the osnoise process was preempted or otherwise
+> interfered with during a recent RCU read-side critical section and
+> preemption was disabled around that critical section's outermost
+> rcu_read_unlock().  This can be quite expensive.  But I would expect
+> you to just not do this.  ;-)
 
-Excellent point. :)
+Getting the expensive call after a preemption is not a problem, it is a side
+effect of the most costly preemption.
 
-Applied to for-next/pstore, thanks!
+It this case, we should "ping rcu" before reading the time to account the
+overhead for the previous preemption which caused it.
 
-[1/1] pstore: Add prefix to ECC messages
-      https://git.kernel.org/kees/c/023bbde3db41
+like (using the current code as example):
 
--- 
-Kees Cook
+------------------------- %< -------------------------------
+static u64
+set_int_safe_time(struct osnoise_variables *osn_var, u64 *time)
+{
+        u64 int_counter;
+
+        do {
+                int_counter = local_read(&osn_var->int_counter);
+
+		------------> HERE <-------------------------------------
+
+                /* synchronize with interrupts */
+                barrier();
+
+                *time = time_get();
+
+                /* synchronize with interrupts */
+                barrier();
+        } while (int_counter != local_read(&osn_var->int_counter));
+
+        return int_counter;
+}
+------------------------- >% -------------------------------
+
+In this way anything that happens before this *time is accounted before it is
+get. If anything happens while this loop is running, it will run again, so it is
+safe to point to the previous case.
+
+We would have to make a copy of this function, and only use the copy for the
+run_osnoise() case. A good name would be something in the lines of
+set_int_safe_time_rcu().
+
+(Unless the expensive is < than 1us.)
+
+-- Daniel
 

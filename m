@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA57E4C8888
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A982F4C888E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbiCAJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S233986AbiCAJyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiCAJvP (ORCPT
+        with ESMTP id S231785AbiCAJyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:51:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3419D434BD;
-        Tue,  1 Mar 2022 01:50:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEB66B817D0;
-        Tue,  1 Mar 2022 09:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F51C340EE;
-        Tue,  1 Mar 2022 09:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646128232;
-        bh=lOOsSw7Tk3bXo6gVmqcvsCoSXzM9PQBSIvg1gEmMSoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPEdBVePmBJHXmE+N8egu9mj/nL23kiZe+v7tqCnT+vpjUQuOgSHSpPF/1dMX0+tc
-         wT78dPr/klG9dHslrMfoZuMis72pLmhRlJWPQUafPHXwx3bWlZik4L20i5uerbJwFF
-         N4ndm2yNIyjwlcgmNTI3QChvL1naCwiyef7bvnHyMuRsGVUZ+rS0WEWRV6N5R7jndO
-         qRkBKvluUFRJ9e7KSI8vNymdWp1fgmrfp2ceNtJ0ZFUVqpoT/5j24jO/XV9CrmqXDM
-         +C0B2C8TcbEldyOWYSlAXRhMK9y+Ob7VzG5v04FlQgu6Rr6x4B7NppCDVR6MsscTaV
-         WnBc0wHZmeXlw==
-Received: by pali.im (Postfix)
-        id B2C6AC77; Tue,  1 Mar 2022 10:50:29 +0100 (CET)
-Date:   Tue, 1 Mar 2022 10:50:29 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
- Set_Slot_Power_Limit message
-Message-ID: <20220301095029.sihzfk2vextf7gpz@pali>
-References: <20220225125407.wglplhyisgges3zk@pali>
- <20220225170225.GA363593@bhelgaas>
+        Tue, 1 Mar 2022 04:54:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD60A7C16B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646128408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o4oRUxyIudwvhVVrS54YaQp6VJMJXHr3tnh94n7twRo=;
+        b=N3Yk1BbWQfpO1ZOECgCEmlMln8g/GnbwEbn8bdXmWNuHZ9Efh2Yk7cwE81HrkGw64aSRlL
+        xkxLcujnoHFP9UQAknXJu+gc1cIpAOjxB5G9qkoG1+ZJHKdTL+HypTNQ/YvV11du0NxhX1
+        q6bIfblef6+4gil9E6UoxKxnKXJVHAM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-9jZeg2SlPGaWx7tHWifn2w-1; Tue, 01 Mar 2022 04:53:27 -0500
+X-MC-Unique: 9jZeg2SlPGaWx7tHWifn2w-1
+Received: by mail-wm1-f71.google.com with SMTP id f189-20020a1c38c6000000b0037d1bee4847so737943wma.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 01:53:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=o4oRUxyIudwvhVVrS54YaQp6VJMJXHr3tnh94n7twRo=;
+        b=CBiCu3RB71nQUAJgbqYZjuXJ8DhKcPibZRn8rfrYSTUc2sW+RO/K0iYrwvs/AhlGzo
+         YbuiwK/mb+2mt6IRqk4nzPshZDuD+l5lHC1ai9qGWYuBty9KUIq+a0oTShaxlJNNMTWO
+         e+DRYvhyW6y/HFg/hSxkUxJghRhnNq7vJPnkhZheZMcJjIOkLhTKKPJeW9Smt9k760F2
+         yWiFUpmfa3Ujl+eHyoRHCAiEb4s6dH8Unok1r9grkzgNe4InMUazjYaTk7xWB6NV7F+w
+         PdQnuu17ATBfbSWi7FxJWyfEy5q9gZLHXt/YAY4xdHk4XeQLGz27RI94mUZsnDgRemHj
+         r2WA==
+X-Gm-Message-State: AOAM531jxp4u7yzpy2jvqLhaBb2vFTpJOnoLsbr7I+GASly6sn+F0hEU
+        ipvom7QWFFb+npL9VeP4eh6gHJY75gk1gM56hRfej7ASwdyHjWsLm2xXmebHBzH+o8bqS3FvTnk
+        HfLclpEgkx1x583MnE3dm5314
+X-Received: by 2002:adf:eb11:0:b0:1ef:ca9b:7bd9 with SMTP id s17-20020adfeb11000000b001efca9b7bd9mr7128684wrn.125.1646128406486;
+        Tue, 01 Mar 2022 01:53:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzi4JCao71n6SvZQPj7T+De0HoitkMQverTg8yxnxgSWl7qGbndd3ReprpyccF7QVyCtMYWvA==
+X-Received: by 2002:adf:eb11:0:b0:1ef:ca9b:7bd9 with SMTP id s17-20020adfeb11000000b001efca9b7bd9mr7128677wrn.125.1646128406274;
+        Tue, 01 Mar 2022 01:53:26 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm2821572wmq.35.2022.03.01.01.53.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 01:53:25 -0800 (PST)
+Message-ID: <4307e915-ac24-58bc-23ad-7e94e2b37170@redhat.com>
+Date:   Tue, 1 Mar 2022 10:53:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220225170225.GA363593@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFC] mm/memory-failure.c: fix memory failure race with
+ memory offline
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        naoya.horiguchi@nec.com, osalvador@suse.de
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220226094034.23938-1-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220226094034.23938-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 25 February 2022 11:02:25 Bjorn Helgaas wrote:
-> On Fri, Feb 25, 2022 at 01:54:07PM +0100, Pali Rohár wrote:
-> > On Thursday 24 February 2022 15:28:11 Bjorn Helgaas wrote:
-> > > On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
-> > > > This PCIe message is sent automatically by mvebu HW when link changes
-> > > > status from down to up.
->  
-> > > PCIe r6.0, sec 2.2.8.5 and 7.5.3.9, also say Set_Slot_Power_Limit must
-> > > be sent on a config write to Slot Capabilities.  I don't really
-> > > understand that, since AFAICS, everything in that register is
-> > > read-only.  But there must be some use case for forcing a message.
-> > 
-> > I understood it in this way: Capabilities register is read-only hw-init
-> > and so firmware / driver can write initialization values into this
-> > register. And when firmware / driver is doing this write then Root port
-> > should send that Set_Slot_Power_Limit message.
+On 26.02.22 10:40, Miaohe Lin wrote:
+> There is a theoretical race window between memory failure and memory
+> offline. Think about the below scene:
 > 
-> Sec 7.5.3.9 describes the behavior of Slot Capabilities in config
-> space, where it must be read-only.  Firmware (or the mvebu driver)
-> must use a different mechanism to initialize the values.
-> 
-> FWIW, I found this implementation note in PCIe r6.0, sec 6.9 that
-> explains why config writes to this read-only register would be useful:
-> 
->   IMPLEMENTATION NOTE: AUTO SLOT POWER LIMIT DISABLE
-> 
->   In some environments host software may wish to directly manage the
->   transmission of a Set_Slot_Power_Limit message by performing a
->   Configuration Write to the Slot Capabilities register rather than
->   have the transmission automatically occur when the Link transitions
->   from a non-DL_Up to a DL_Up status. This allows host software to
->   limit power supply surge current by staggering the transition of
->   Endpoints to a higher power state following a Link Down or when
->   multiple Endpoints are simultaneously hot-added due to cable or
->   adapter insertion.
-> 
-> Bjorn
+>   CPU A					  CPU B
+> memory_failure				offline_pages
+>   mutex_lock(&mf_mutex);
+>   TestSetPageHWPoison(p)
+> 					  start_isolate_page_range
+> 					    has_unmovable_pages
+> 					      --PageHWPoison is movable
+> 					  do {
+> 					    scan_movable_pages
+> 					    do_migrate_range
+> 					      --PageHWPoison isn't migrated
+> 					  }
+> 					  test_pages_isolated
+> 					    --PageHWPoison is isolated
+> 					remove_memory
+>   access page... bang
+>   ...
 
-Hm... I did not understand from this description what should happen when
-write operation is performed to the slot capabilities register. It is
-allowed to change content of this register?
+I think the motivation for the offlining code was to not block memory
+hotunplug (especially on ZONE_MOVABLE) just because there is a
+HWpoisoned page. But how often does that happen?
 
-Or better question, what should write hook in pci-mvebu.c driver for
-slot capabilities do?
+It's all semi-broken either way. Assume you just offlined a memory block
+with a hwpoisoned page. The memmap is stale and the information about
+hwpoison is lost. You can happily re-online that memory block and use
+*all* memory, including previously hwpoisoned memory. Note that this
+used to be different in the past, when the memmap was initialized when
+adding memory, not when onlining that memory.
+
+
+IMHO, we should stop special casing hwpoison. Either fail offlining
+completely if we stumble over a hwpoisoned page, or allow offlining only
+if the refcount==0 -- just as any other page.
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

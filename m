@@ -2,99 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E264C8169
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075724C8180
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbiCADES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S232086AbiCADEl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 28 Feb 2022 22:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiCADEP (ORCPT
+        with ESMTP id S232067AbiCADEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:04:15 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E36340
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:03:35 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so904832pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Ied1UTlwqdumSyFQ5GJiRBNsKqqAvuy3dy3lFXCbEHM=;
-        b=cPRe/VY/fXxz4d+wzUsjqX+MuMmWLzIQZch8kPj5MiByAblJOcmrhnCWYPUPOVijuh
-         h1lgQo21SyMQcmGnnsgtt7DvZ84cXfehFZf+nnsvaffmU6tVUbMbEo34vmQKnZjzmy4Y
-         I7WiJtifBDtZSUz1yIBlB+85/N3nHi0PMU48bAsZBg4ZpMPLBfPXLL52PZJeCcDsuZWs
-         NjtjOtd8/IjiVPf1LnaLfNvZlkKiyDAlhLq4LM0TwSq6+7QbGClNEPVKMyq26aCwTX7g
-         pcL3rmvloXL0I1LmLxvhvxXmOIyA7OYcIrerNbm/+3W8H5TITfWgg0Wk6fxfzy2LVmo3
-         hlcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Ied1UTlwqdumSyFQ5GJiRBNsKqqAvuy3dy3lFXCbEHM=;
-        b=zY44m6X7ADoc960e8EZ21iCMbvP64CPfti5J7auMjx4cbAZmiHLrFUfAFbKo26XoKV
-         w2Tvnn3qkOmkWW/edNnZ6VyeEv3pEjcPkFKpRmu+oCJ2C19G7S+zWHzr/nWdV8xAQo46
-         1lJKq/UJSuw6y/PCPRgQOJRH3lEa5WncNns0oIlaI57T8rm2a/apkXr7iRYNtess/Hku
-         TxQPM5OgPRLejI8MuD9DG8yWUhqNAPCEe40oSGf4ARaNGIL+NAzElsewSUK18gJvlgAF
-         gdq5AESFc0RtreEgUigLgYv0hk5Aj8dtKHPAVbH6HgeKI8xyBVtV6XK3+77UcusGMlI/
-         fNBA==
-X-Gm-Message-State: AOAM5310Bdo+3iFAvz9bhqf08Gz+I2cy+PIV79lMAzTtOF2Ln0LJKB3k
-        fjnp/eeu9kaNS89HrD9dATA=
-X-Google-Smtp-Source: ABdhPJxOfz02CgHQFRf6Uuf4DvZywXM4YNQdW/qq3sZA69Q5ooNs/0W3K4OICWrSNsSRumeVrGZMbA==
-X-Received: by 2002:a17:902:b202:b0:151:4f64:e516 with SMTP id t2-20020a170902b20200b001514f64e516mr13172147plr.16.1646103815064;
-        Mon, 28 Feb 2022 19:03:35 -0800 (PST)
-Received: from meizu.meizu.com ([137.59.103.163])
-        by smtp.gmail.com with ESMTPSA id t38-20020a056a0013a600b004e1a0c14000sm15595983pfg.209.2022.02.28.19.03.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Feb 2022 19:03:34 -0800 (PST)
-From:   Haowen Bai <baihaowen88@gmail.com>
-To:     shengjiu.wang@gmail.com, nicoleotsuka@gmail.com,
-        Xiubo.Lee@gmail.com
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Haowen Bai <baihaowen88@gmail.com>
-Subject: [PATCH] ASoC: imx-pcm-rpmsg: Directly return 0 instead of using local ret variable
-Date:   Tue,  1 Mar 2022 11:03:30 +0800
-Message-Id: <1646103810-21724-1-git-send-email-baihaowen88@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Feb 2022 22:04:38 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D472F5BD20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:03:56 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-267-9MSeLLg1PRGi9Q5Mk98pjw-1; Tue, 01 Mar 2022 03:03:54 +0000
+X-MC-Unique: 9MSeLLg1PRGi9Q5Mk98pjw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 1 Mar 2022 03:03:52 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 1 Mar 2022 03:03:52 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+        "Jakob Koschel" <jakobkoschel@gmail.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Arnd Bergman" <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux F2FS Dev Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Index: AQHYLOAn+DU/OogLf0+tiSFmjztyUKyp1n9A
+Date:   Tue, 1 Mar 2022 03:03:52 +0000
+Message-ID: <198022f201814cdc9384ef083741185e@AcuMS.aculab.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <Yh0tl3Lni4weIMkl@casper.infradead.org>
+In-Reply-To: <Yh0tl3Lni4weIMkl@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fixes coccinelle warning:
-sound/soc/fsl/imx-pcm-rpmsg.c:285:5-8: Unneeded variable: "ret". Return "0" on line 308
+From: Matthew Wilcox
+> Sent: 28 February 2022 20:16
+> 
+> On Mon, Feb 28, 2022 at 12:10:24PM -0800, Linus Torvalds wrote:
+> > We can do
+> >
+> >         typeof(pos) pos
+> >
+> > in the 'for ()' loop, and never use __iter at all.
+> >
+> > That means that inside the for-loop, we use a _different_ 'pos' than outside.
+> 
+> Then we can never use -Wshadow ;-(  I'd love to be able to turn it on;
+> it catches real bugs.
+> 
+> > +#define list_for_each_entry(pos, head, member)					\
+> > +	for (typeof(pos) pos = list_first_entry(head, typeof(*pos), member);	\
+> > +	     !list_entry_is_head(pos, head, member);	\
+> >  	     pos = list_next_entry(pos, member))
 
-Signed-off-by: Haowen Bai <baihaowen88@gmail.com>
----
- sound/soc/fsl/imx-pcm-rpmsg.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Actually can't you use 'pos' to temporarily hold the address of 'member'.
+Something like:
+	for (pos = (void *)head; \
+		pos ? ((pos = (void *)pos - offsetof(member)), 1) : 0; \
+		pos = (void *)pos->next)
+So that 'pos' is NULL if the loop terminates.
+No pointers outside structures are generated.
+Probably need to kill list_entry_is_head() - or it just checks for NULL.
 
-diff --git a/sound/soc/fsl/imx-pcm-rpmsg.c b/sound/soc/fsl/imx-pcm-rpmsg.c
-index 3504904..afea28a 100644
---- a/sound/soc/fsl/imx-pcm-rpmsg.c
-+++ b/sound/soc/fsl/imx-pcm-rpmsg.c
-@@ -282,7 +282,6 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
- 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
- 	struct rpmsg_msg *msg;
--	int ret = 0;
- 
- 	/* Flush work in workqueue to make TX_CLOSE is the last message */
- 	flush_workqueue(info->rpmsg_wq);
-@@ -305,7 +304,7 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
- 		dev_warn(rtd->dev, "Msg is dropped!, number is %d\n",
- 			 info->msg_drop_count[substream->stream]);
- 
--	return ret;
-+	return 0;
- }
- 
- static int imx_rpmsg_pcm_prepare(struct snd_soc_component *component,
--- 
-2.7.4
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

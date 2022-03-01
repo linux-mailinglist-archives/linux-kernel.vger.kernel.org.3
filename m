@@ -2,248 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2714C914C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103E34C9150
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236390AbiCARSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S236488AbiCARSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiCARSW (ORCPT
+        with ESMTP id S236437AbiCARSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:18:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA8E124BC7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:17:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8305E1042;
-        Tue,  1 Mar 2022 09:17:40 -0800 (PST)
-Received: from e125579.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B6FB43F73D;
-        Tue,  1 Mar 2022 09:17:38 -0800 (PST)
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/fair: Refactor cpu_util_without()
-Date:   Tue,  1 Mar 2022 18:17:27 +0100
-Message-Id: <20220301171727.812157-1-dietmar.eggemann@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 12:18:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F02432064
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646155063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
+        b=LI4N+48OsQHomdrVNAKBoKHpxQ6dNDSuA78AkSTP8QwHedAMzOhXdyeS00T/50xPBloNcX
+        HyYjg43K8VRh4r+JyuxAviDrja0RJCHUk4UcI0KVDuCNvzSxRJ/1DGV+J+I8LrSnvlhYyp
+        daAzQ33kuecB+0qpuNjelobBFi8Eotc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-X8IATDp0MNC0K_9Lf6I8eA-1; Tue, 01 Mar 2022 12:17:41 -0500
+X-MC-Unique: X8IATDp0MNC0K_9Lf6I8eA-1
+Received: by mail-wr1-f70.google.com with SMTP id f14-20020adfc98e000000b001e8593b40b0so3536659wrh.14
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:17:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
+        b=MEXKQ6sbnHu2ttO1IWsUD/7G7020VNFmpnIxTnHBBMPVIeKXGIosfHlZO65fXFe4VF
+         AeDLjvGxQeLR3cQ5uKQv2yUASHNu8Pc1/4GYAF0brYzdx+1x0jZawTrzFnwa0lc+V4UF
+         AnGZagflx+KWmQiWb33dJSJFOyBr50Gcko5vRTzayZoh6e4NbkcE8jXJqn7Go/NEJCEf
+         y1xoQRlvtmvAROkRlXzONad6YYAWYxKF3fAm1bnOszjfcHHmA0aeOYYJxx5+ENhRhOuX
+         LMPb3Hykh2zi2uNHjJY9WcXqAo1K2+Q+hHWmOUVsyOoC/uFX9iB0a384orGRRfIkCNdW
+         SNbw==
+X-Gm-Message-State: AOAM531fvAHLl5VmY142/3z2cgd/yAPRgPxakruJazp6u0JYWjC1iRg+
+        4E/ok5d1AadfU/aJxJ9G0Ue5v9RNagyCFBr8SChyBWR03G9fVU4vybs+tI0lGSCmYOhuhXMcxu+
+        iRyzj0JftKNRcbRd6C0aqADOV
+X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534536wrv.56.1646155059890;
+        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzm0/sILq9s5oSrG8KTBgACJNRqT1mtZa0IVWQDeU62j8WMqO9Pb3os150cIhmIfKb7xYMP0Q==
+X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534511wrv.56.1646155059630;
+        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
+Received: from redhat.com ([2.53.2.184])
+        by smtp.gmail.com with ESMTPSA id w26-20020a7bc11a000000b0037bf8fa8c02sm2970118wmi.13.2022.03.01.09.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 09:17:38 -0800 (PST)
+Date:   Tue, 1 Mar 2022 12:17:33 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-hyperv@vger.kernel.org, linux-crypto@vger.kernel.org,
+        graf@amazon.com, mikelley@microsoft.com,
+        gregkh@linuxfoundation.org, adrian@parity.io, berrange@redhat.com,
+        linux@dominikbrodowski.net, jannh@google.com, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
+        colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220301121419-mutt-send-email-mst@kernel.org>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh5JwK6toc/zBNL7@zx2c4.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Except the 'task has no contribution or is new' condition at the
-beginning of cpu_util_without(), a cpu_util_next(..., dst_cpu = -1)
-call can replace the rest of this function.
+On Tue, Mar 01, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> Hi Laszlo,
+> 
+> On Tue, Mar 01, 2022 at 05:15:21PM +0100, Laszlo Ersek wrote:
+> > > If we had a "pull" model, rather than just expose a 16-byte unique
+> > > identifier, the vmgenid virtual hardware would _also_ expose a
+> > > word-sized generation counter, which would be incremented every time the
+> > > unique ID changed. Then, every time we would touch the RNG, we'd simply
+> > > do an inexpensive check of this memremap()'d integer, and reinitialize
+> > > with the unique ID if the integer changed.
+> > 
+> > Does the vmgenid spec (as-is) preclude the use of the 16-byte identifier
+> > like this?
+> > 
+> > After all, once you locate the identifier via the ADDR object, you could
+> > perhaps consult it every time you were about to touch the RNG.
+> 
+> No, you could in fact do this, and there'd be nothing wrong with that
+> from a spec perspective. You could even vDSO it all the way through
+> onward to userspace. However, doing a 16-byte atomic memcmp on
+> each-and-every packet is really a non-starter. For that kind of "check
+> it in the hot path" thing to be viable, you really want it to be a
+> counter that is word-sized. The "pull"-model involves pulling on every
+> single packet in order to be better than the "push"-model. Anyway, even
+> with a word-sized counter, it's unclear whether the costs of checking on
+> every packet would be worth it to everyone, but at least it's more
+> tenable than a 16-byte whammy.
+> 
+> Jason
 
-The UTIL_EST specific check for a race between select_task_rq_fair()
-and detach_task() in case of an enqueued or running WF_EXEC task has
-to be moved to cpu_util_next().
-This was initially introduced by commit c469933e7721
-("sched/fair: Fix cpu_util_wake() for 'execl' type workloads").
-UnixBench's `execl` throughput tests were run on the dual socket 40
-CPUs Intel E5-2690 v2 machine to make sure the regression doesn't
-occur again.
+Hmm okay, so it's a performance optimization... some batching then? Do
+you really need to worry about every packet? Every 64 packets not
+enough?  Packets are after all queued at NICs etc, and VM fork can
+happen after they leave wireguard ...
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
----
-
-There is still a lot of CPU utilization related code. cpu_util_without()
-and cpu_util_next() are very similar. In fact the former can be
-refactored to use a call to the latter to be able to remove some
-redundancy.
-
- kernel/sched/fair.c | 143 ++++++++++++++++++--------------------------
- 1 file changed, 59 insertions(+), 84 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 16874e112fe6..c084c2e29e40 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6511,6 +6511,64 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	return target;
- }
- 
-+/*
-+ * Predicts what cpu_util(@cpu) would return if @p was migrated (and enqueued)
-+ * to @dst_cpu.
-+ */
-+static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
-+{
-+	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
-+	unsigned long util_est, util = READ_ONCE(cfs_rq->avg.util_avg);
-+
-+	/*
-+	 * If @p migrates from @cpu to another, remove its contribution. Or,
-+	 * if @p migrates from another CPU to @cpu, add its contribution. In
-+	 * the other cases, @cpu is not impacted by the migration, so the
-+	 * util_avg should already be correct.
-+	 */
-+	if (task_cpu(p) == cpu && dst_cpu != cpu)
-+		lsub_positive(&util, task_util(p));
-+	else if (task_cpu(p) != cpu && dst_cpu == cpu)
-+		util += task_util(p);
-+
-+	if (sched_feat(UTIL_EST)) {
-+		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
-+
-+		/*
-+		 * During wake-up, the task isn't enqueued yet and doesn't
-+		 * appear in the cfs_rq->avg.util_est.enqueued of any rq,
-+		 * so just add it (if needed) to "simulate" what will be
-+		 * cpu_util after the task has been enqueued.
-+		 */
-+		if (dst_cpu == cpu)
-+			util_est += _task_util_est(p);
-+
-+		/*
-+		 * Despite the following checks we still have a small window
-+		 * for a possible race, when an execl's select_task_rq_fair()
-+		 * races with LB's detach_task():
-+		 *
-+		 *   detach_task()
-+		 *     p->on_rq = TASK_ON_RQ_MIGRATING;
-+		 *     ---------------------------------- A
-+		 *     deactivate_task()                   \
-+		 *       dequeue_task()                     + RaceTime
-+		 *         util_est_dequeue()              /
-+		 *     ---------------------------------- B
-+		 *
-+		 * The additional check on "current == p" it's required to
-+		 * properly fix the execl regression and it helps in further
-+		 * reducing the chances for the above race.
-+		 */
-+		if (unlikely(task_on_rq_queued(p) || current == p))
-+			lsub_positive(&util_est, _task_util_est(p));
-+
-+		util = max(util, util_est);
-+	}
-+
-+	return min(util, capacity_orig_of(cpu));
-+}
-+
- /*
-  * cpu_util_without: compute cpu utilization without any contributions from *p
-  * @cpu: the CPU which utilization is requested
-@@ -6526,19 +6584,10 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-  */
- static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- {
--	struct cfs_rq *cfs_rq;
--	unsigned int util;
--
- 	/* Task has no contribution or is new */
- 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
- 		return cpu_util_cfs(cpu);
- 
--	cfs_rq = &cpu_rq(cpu)->cfs;
--	util = READ_ONCE(cfs_rq->avg.util_avg);
--
--	/* Discount task's util from CPU's util */
--	lsub_positive(&util, task_util(p));
--
- 	/*
- 	 * Covered cases:
- 	 *
-@@ -6560,82 +6609,8 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- 	 *    estimation of the spare capacity on that CPU, by just
- 	 *    considering the expected utilization of tasks already
- 	 *    runnable on that CPU.
--	 *
--	 * Cases a) and b) are covered by the above code, while case c) is
--	 * covered by the following code when estimated utilization is
--	 * enabled.
- 	 */
--	if (sched_feat(UTIL_EST)) {
--		unsigned int estimated =
--			READ_ONCE(cfs_rq->avg.util_est.enqueued);
--
--		/*
--		 * Despite the following checks we still have a small window
--		 * for a possible race, when an execl's select_task_rq_fair()
--		 * races with LB's detach_task():
--		 *
--		 *   detach_task()
--		 *     p->on_rq = TASK_ON_RQ_MIGRATING;
--		 *     ---------------------------------- A
--		 *     deactivate_task()                   \
--		 *       dequeue_task()                     + RaceTime
--		 *         util_est_dequeue()              /
--		 *     ---------------------------------- B
--		 *
--		 * The additional check on "current == p" it's required to
--		 * properly fix the execl regression and it helps in further
--		 * reducing the chances for the above race.
--		 */
--		if (unlikely(task_on_rq_queued(p) || current == p))
--			lsub_positive(&estimated, _task_util_est(p));
--
--		util = max(util, estimated);
--	}
--
--	/*
--	 * Utilization (estimated) can exceed the CPU capacity, thus let's
--	 * clamp to the maximum CPU capacity to ensure consistency with
--	 * cpu_util.
--	 */
--	return min_t(unsigned long, util, capacity_orig_of(cpu));
--}
--
--/*
-- * Predicts what cpu_util(@cpu) would return if @p was migrated (and enqueued)
-- * to @dst_cpu.
-- */
--static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
--{
--	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
--	unsigned long util_est, util = READ_ONCE(cfs_rq->avg.util_avg);
--
--	/*
--	 * If @p migrates from @cpu to another, remove its contribution. Or,
--	 * if @p migrates from another CPU to @cpu, add its contribution. In
--	 * the other cases, @cpu is not impacted by the migration, so the
--	 * util_avg should already be correct.
--	 */
--	if (task_cpu(p) == cpu && dst_cpu != cpu)
--		lsub_positive(&util, task_util(p));
--	else if (task_cpu(p) != cpu && dst_cpu == cpu)
--		util += task_util(p);
--
--	if (sched_feat(UTIL_EST)) {
--		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
--
--		/*
--		 * During wake-up, the task isn't enqueued yet and doesn't
--		 * appear in the cfs_rq->avg.util_est.enqueued of any rq,
--		 * so just add it (if needed) to "simulate" what will be
--		 * cpu_util after the task has been enqueued.
--		 */
--		if (dst_cpu == cpu)
--			util_est += _task_util_est(p);
--
--		util = max(util, util_est);
--	}
--
--	return min(util, capacity_orig_of(cpu));
-+	return cpu_util_next(cpu, p, -1);
- }
- 
- /*
 -- 
-2.25.1
+MST
 

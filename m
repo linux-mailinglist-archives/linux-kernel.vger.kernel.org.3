@@ -2,140 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F2E4C9113
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BA74C9114
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiCARDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S236030AbiCARFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234463AbiCARDs (ORCPT
+        with ESMTP id S235637AbiCARFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:03:48 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80081.outbound.protection.outlook.com [40.107.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC59965D6;
-        Tue,  1 Mar 2022 09:03:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=InLDce9oZF9A9B6J6ZJJv3opYf26ncbUiNwxL+8LzVZbD8vuRRXgkGIdGi96UkiZkus0vTA1nBwqeQ4DDOtUUlROvRRQZED/28QFnGXVW80aRp9DmvuBkfV19ZeQSFLNC61KEcan2BXJak917fMnPJBJObkYrm7Zh1FexzHH99Bfi4Us9nEgy8VfhoYbyp8yXtsi+QTGdcYBA2WPvZaypS6gx9Y6yo4D5P0xTjhwPNeunU4pitGNLjTneaVMBq11LRq60WU71EeglZYpDnf66ck3TdUWMU9FBmYYbS71y3H0DEYalQeesap5JZCpP/Oq+tikK8iD5uhY8vRvZwHwJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bC5gAeNdAPgDPdBXuN3McBcHll4DZ8fgk4B9Gg+41to=;
- b=iRd33HhV5gMhzFX0hljoEYg+OZ9cgJ6F3ykRYwEdif+xz+roMVIGG9PJOJco+9ZBmCjZ6G9c/C7zXKiDFIKGvWgw/YKAO36AmArtL3ccZKL5Sj1Zl2l85YurduAp6sT/C+KzCB5Ficx5AQ7XVuB2yjHH2GWVo2pLf70zSILvoxGC/Wn6g0ZYd+X587q/SvuiRkF5El4V4W21m3dYY+6m//QbhQLyPZOcoqlRQBkF+HoCiIcNOx1db0menokFCuoQhPiJg/mxD9t0+KTg8ZesNK2VxJaxE9jbxbhiK8EdJXObDYAT9UR2QtVMZCKPpHpztqVPEthWjt3D/LK9ZoS/bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bC5gAeNdAPgDPdBXuN3McBcHll4DZ8fgk4B9Gg+41to=;
- b=UXBRJaLh5QeXkiBowkFoXA9YV0JHyMr40OvB1N7Bf9QopccsPVu04hX+NhrlfFK8EOMi7VpkP0VBnhvkGBkrtl0kMhfGD14ZwpPxZndfxJSDxGH+QV8vfuOO4Empb21rPmpS7K9Fi3Hy3vWieSIjpnWk9NUzAmauvZtM7vDuPwA=
-Received: from AM9PR04MB8555.eurprd04.prod.outlook.com (2603:10a6:20b:436::16)
- by AS4PR04MB9507.eurprd04.prod.outlook.com (2603:10a6:20b:4ca::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Tue, 1 Mar
- 2022 17:03:00 +0000
-Received: from AM9PR04MB8555.eurprd04.prod.outlook.com
- ([fe80::c58c:4cac:5bf9:5579]) by AM9PR04MB8555.eurprd04.prod.outlook.com
- ([fe80::c58c:4cac:5bf9:5579%8]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 17:03:00 +0000
-From:   Ioana Ciornei <ioana.ciornei@nxp.com>
-To:     Yeqi Fu <fufuyqqqqqq@gmail.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: Re: [PATCH v1] dpaa2-switch: fix memory leak of
- dpaa2_switch_acl_entry_add
-Thread-Topic: [PATCH v1] dpaa2-switch: fix memory leak of
- dpaa2_switch_acl_entry_add
-Thread-Index: AQHYLXbrpNoj7tadT06hGmO+VilhEKyqwXqA
-Date:   Tue, 1 Mar 2022 17:03:00 +0000
-Message-ID: <20220301170259.zvcriwpmz2j73gyi@skbuf>
-References: <a87a691a-62c2-5b42-3be8-ee1161281ad8@suse.de>
- <20220301141544.13411-1-fufuyqqqqqq@gmail.com>
-In-Reply-To: <20220301141544.13411-1-fufuyqqqqqq@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c7296c38-f0bc-4f83-3fd0-08d9fba5573f
-x-ms-traffictypediagnostic: AS4PR04MB9507:EE_
-x-microsoft-antispam-prvs: <AS4PR04MB9507ADE72E2ADE09AF4DAFD1E0029@AS4PR04MB9507.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: prnUFlxBvBhRl/JEJgoPCbaIVUN0DEiNUrASKmV7fWRiklJJPlkh0DOq9Zc8MgwPapMP0bELT30P2anOJOmX0wmPk5DPeXB2vsfT9JPbukQGBfAkRoNcLCJs+VowwOSmmczcDeDkLtFTGqmFuJ7P2L/R/EpTsTQ4W39oBwKq5dcr+Q11m7Nj62/aAhGSDXW0JQ49oxcTfL2rfZMLQyWzfNFK+Dyyw1CXQDM4ELp599ESDY7FvgIW5pzuARDLeqLQuh4OWFQuZVwx5Wj+Q89iVSBxsSCI1CWAYH9RV65j89e5bVefpjPSquEZ4din7NlUkE9J2MY+24eBPghZ/lk2zB90Hyq+JVXJ6t0wTt+CRWGt5Z9O+DrfSa0O+5eZXeGnAsd9KdJYsv6mQKT89OP7X1IzBLXGaNsXw2P/2zxRtuT/JfLBFzGM3lITgidH48wqZo5ZMPOnBXkGF8ezOLFIj4sC8Ak2XWMzstJc+lHobKkA/FHnbvrqcIEbouphR7eOVsZ1cr9fe7fI/tpc7XvPslJz3hqoBmDebyALw1pMoE2OFLqHVAG+tibNDV3bye7ilBeGh5wnJUEg9akcwngvF1gubq/fimyPBmQfphjz79EBOU+dp1RoLiLHybaMNGQvyhbIWLF3dAjk8utwoNQlt+SeZMTaxasDWoWHOIDEzuysK+TPqK/lz+pLBgFtoYadtz6tQ6hBJtpbl4IwlgXuNw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8555.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(66446008)(66946007)(8936002)(71200400001)(4744005)(64756008)(6506007)(9686003)(66556008)(66476007)(6512007)(76116006)(91956017)(5660300002)(86362001)(1076003)(4326008)(122000001)(44832011)(8676002)(186003)(26005)(498600001)(6486002)(33716001)(2906002)(38100700002)(54906003)(38070700005)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wNKzhRrQwzBHRzV7CWLkX7b5FTo7BodIMbUN+8DKzMvwOn/qacQXE8qfZM/w?=
- =?us-ascii?Q?4mPlb+79KtRQDWbN8O5BOwyS2IVBSTpQ3+1971pk7g+D2CD/6PKgu29eksve?=
- =?us-ascii?Q?AZeprDzfYfFBmdiUKK3ae7YbCqbf3zvkhXtuZqviOVdfsOsvtqrVqYw05agg?=
- =?us-ascii?Q?jZDOCD24dhx7d+1AKukx1DsobnXKpMQTUsUkzwBoOC56EiafPipnu0/mLsN6?=
- =?us-ascii?Q?d3i3sy+UB9xj0KYnFAXkJbyMKTAOSdZickDcN/MscVSZ9+Xr9pB7WLEzkjiK?=
- =?us-ascii?Q?00NGVE/v62GNfMuJ9dWdLJr7qcLhvNhZoljKWWauiKed4DP9GbYk3dezYUN9?=
- =?us-ascii?Q?j3CaS6pofJu6wbkZp1EeX2XLeBddM2MJ/B+nxfxDiKb+Y96KTRzb1shcz9Jd?=
- =?us-ascii?Q?vVBrWBwYKvglafqwH3KVYIaOdpkDc7bQQQygVFtYiwxcgl/Mp6cb87A47tgD?=
- =?us-ascii?Q?vaQ0wlrYJPrw7pBUm3VyTgdkNd2KKWIth1lF9Nf8ZAFGh0YKLo6l+IeGGp+J?=
- =?us-ascii?Q?wjpoYF2TLKJQWOrMnnFNWJQyzhL48TNDZzN9/BXwBan5sRZjdi1fQOT1swpZ?=
- =?us-ascii?Q?Iic/dysX50qcfSwcOGzeX95Uswa22h6T+CHQUuU/H6FN3gwnbjHU2ONE6LAp?=
- =?us-ascii?Q?S8TcGURy5WIMGGdJWS+tkIgbk4neoHWPmscJLXFoWyulFiupvw6uwGJhQGGq?=
- =?us-ascii?Q?5C4LI2vMMEJiIg5IhEZw2Afk1XQs7mVf5eEggs9kEPEyqnkfo75d7TP9fOTv?=
- =?us-ascii?Q?7iyKlYXMKylcY0JUDn5Ih3PPL6bQ5gZWRzXdv2/m/98XhIXy5YxkD3VLPaGe?=
- =?us-ascii?Q?wVoxTFS06NCHl4wxuVbcp4Cm7Sil2K0FWu4nE15MVOfNlVLIKw/S8HMifpcg?=
- =?us-ascii?Q?4lVBMjRlkwl9x0zkcqU/kXUSXE3TybPJe6KyFSaApZKWg8aWtJ96bmbOnucM?=
- =?us-ascii?Q?+Tuk30v06ZquxdvLjpg4UUHD//Qtfe5RC0odPSj3DNFkPeIXDycU3/OWkmut?=
- =?us-ascii?Q?9QAguSDmolwboZl0o3Bm5+hwtaqDJnRH1K+SxLOBVn58IzI2XK4Z+I8mLE7l?=
- =?us-ascii?Q?bXoZV1t37yV8H1CD2aYttSYbutfE3nqNoEP64s2FwETG6hs/h0iQVvttbJG0?=
- =?us-ascii?Q?pmyU0Q65Q9uUcG24k+d3qtrF7ADEj6EhJhlBbEC5aq4Uj1L4+I1ZwbzXRK/J?=
- =?us-ascii?Q?pgLsuvbuAiG93ksquCmyhOEYHfvpqdcq4LMg3nZJKl58knEQWY3fuPxMI4LN?=
- =?us-ascii?Q?Cv8FvdB+M+vF/IOtGmkJw/JfROhxyZW2zqYVnO+p9PEkHuENjb2nf7kXYamD?=
- =?us-ascii?Q?OYdSjhF95laLQt/SnsXkKt98YThPLT3FfaZCyvEzdrS/vXIH4kJbO5NPtQkk?=
- =?us-ascii?Q?ZDFmMdOfzoGDCpH2c7PYrzmWxnOqo6ounePj7l98UohFbEosM5feJkOpCH3Y?=
- =?us-ascii?Q?Rqtgb1FAv2O+txnIhoPBngtORv0N/+ZT3p1GTaCDmfcxubiVxpnLaqUqYmVz?=
- =?us-ascii?Q?xndAFnTZ8OYur+WwcVo1WStlm+jRXW6Lxo3G+M4hplKFzS/V2FSelOve4Gm0?=
- =?us-ascii?Q?uxZVtrv2I1znDPCaLIwwS4u9Sa6fyyrzeMy30MtbVuB7pkyJ8aCoBIZomjZT?=
- =?us-ascii?Q?zO3XSTfedE2wbvZmchJm4mY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5B40B3B38ADC14488D46113D484578FB@eurprd04.prod.outlook.com>
+        Tue, 1 Mar 2022 12:05:13 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37A417A86
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:04:31 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221GILNI032419;
+        Tue, 1 Mar 2022 17:04:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=v/Z8iSvZNKJIfyy/RBRSF3m59VBrSRPLXV/8fS9VPZY=;
+ b=AZJuiGWnDuUC2z7Kb7SUtrvSzXinDGdpAy1m4LPar2pKa9Dr24daHHDsg9NjrJGfzaHm
+ GPJsV9bQGAIi2gLIzverliXxdHYDiss8uW4+W8ag5JBdjV4pz34UM2XiC60z9ll5YgJV
+ dIS7o3SuYZ+hg01U6eUt2DRCIeNWgs+xSa6ORH1EmfP0YGJhuFH5hpv4VjP2DkVePvAd
+ oriE5phneH7oTzLBoaCzgAi3m0TQig2O9ArKt2VoI0o6Kb6hAn+K9f89w5Zx/TUKF+W4
+ E3bnzLesBuB1yanFWHUDi0BYBMMFTRB4SNEgyp/BWBs+I9cKJBBV+nKUI9xmggWiAEHh ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ehpm89rs9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 17:03:59 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221GISnl000646;
+        Tue, 1 Mar 2022 17:03:59 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ehpm89rr4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 17:03:59 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221H3lBS015413;
+        Tue, 1 Mar 2022 17:03:57 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3efbu9b6vg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 17:03:57 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221Gr1l746072308
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 16:53:01 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C986D11C058;
+        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CABA11C050;
+        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
+Received: from localhost (unknown [9.43.110.204])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Mar 2022 17:03:54 +0000 (GMT)
+Date:   Tue, 01 Mar 2022 22:33:52 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, ndesaulniers@google.com,
+        rostedt@goodmis.org, samitolvanen@google.com, x86@kernel.org
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.892372059@infradead.org>
+        <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+        <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1646153789.geynpzwbid.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hSaf28dtkpqCPMAz-BXMHBVMHSVq3rzO
+X-Proofpoint-GUID: z-RcKJuXdoxf9LRt2EKAbxB3uRZk35GH
 Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8555.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7296c38-f0bc-4f83-3fd0-08d9fba5573f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2022 17:03:00.0480
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZwLLeDliIcCTbYeIwAnctfVWh9BfBwnGQLWsxWzgq4Xp90vAxZrno/k1JjTaL7oeiOmnX+QnZkwtsyrd7XzFfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9507
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 mlxlogscore=777 phishscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203010089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 10:15:44PM +0800, Yeqi Fu wrote:
-> The error handling branch did not properly free the memory of cmd_buf
-> before return, which would cause memory leak. So fix this by adding
-> kfree to the error handling branch.
+Hi Peter,
+
+Peter Zijlstra wrote:
+> On Mon, Feb 28, 2022 at 03:07:05PM +0900, Masami Hiramatsu wrote:
+>> Hi Peter,
+>>=20
+>> So, instead of this change, can you try below?
+>> This introduce the arch_adjust_kprobe_addr() and use it in the kprobe_ad=
+dr()
+>> so that it can handle the case that user passed the probe address in=20
+>> _text+OFFSET format.
 >=20
-> Fixes: 1110318d83e8 ("dpaa2-switch: add tc flower hardware offload on ing=
-ress traffic")
-> Signed-off-by: Yeqi Fu <fufuyqqqqqq@gmail.com>
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+> It works a little... at the very least it still needs
+> arch_kprobe_on_func_entry() allowing offset 4.
+>=20
+> But looking at this, we've got:
+>=20
+> kprobe_on_func_entry(addr, sym, offset)
+>   _kprobe_addr(addr, sym, offset)
+>     if (sym)
+>       addr =3D kprobe_lookup_name()
+>            =3D kallsyms_lookup_name()
+>     arch_adjust_kprobe_addr(addr+offset)
+>       skip_endbr()
+>         kallsyms_loopup_size_offset(addr, ...)
+>   kallsyms_lookup_size_offset(addr, NULL, &offset)
+>   arch_kprobe_on_func_entry(offset)
+>=20
+> Which is _3_ kallsyms lookups and 3 weak/arch hooks.
+>=20
+> Surely we can make this a little more streamlined? The below seems to
+> work.
+>=20
+> I think with a little care and testing it should be possible to fold all
+> the magic of PowerPC's kprobe_lookup_name() into this one hook as well,
+> meaning we can get rid of kprobe_lookup_name() entirely.  Naveen?
 
-Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+This is timely. I've been looking at addressing a similar set of issues=20
+on powerpc:
+http://lkml.kernel.org/r/cover.1645096227.git.naveen.n.rao@linux.vnet.ibm.c=
+om
 
-Just as a note, this should have been [PATCH v2] and not v1.
+>=20
+> This then gets us down to a 1 kallsyms call and 1 arch hook. Hmm?
 
-Ioana=
+I was going to propose making _kprobe_addr() into a weak function in=20
+place of kprobe_lookup_name() in response to Masami in the other thread,=20
+but this is looking better.
+
+>=20
+> ---
+>  arch/powerpc/kernel/kprobes.c  |   34 +++++++++++++++---------
+>  arch/x86/kernel/kprobes/core.c |   17 ++++++++++++
+>  include/linux/kprobes.h        |    3 +-
+>  kernel/kprobes.c               |   56 ++++++++++++++++++++++++++++++++++=
+-------
+>  4 files changed, 87 insertions(+), 23 deletions(-)
+
+I will take a closer look at this tomorrow and revert.
+
+
+Thanks,
+- Naveen
+

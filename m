@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A2D4C9237
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8494C9239
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbiCARyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        id S236699AbiCARzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiCARyL (ORCPT
+        with ESMTP id S231542AbiCARzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:54:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73E9E29B;
-        Tue,  1 Mar 2022 09:53:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6F7A1042;
-        Tue,  1 Mar 2022 09:53:27 -0800 (PST)
-Received: from [10.57.20.71] (unknown [10.57.20.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 92F3B3F73D;
-        Tue,  1 Mar 2022 09:53:25 -0800 (PST)
-Message-ID: <79fa792f-adb4-8c98-507d-55dc2a6273ea@arm.com>
-Date:   Tue, 1 Mar 2022 17:53:23 +0000
+        Tue, 1 Mar 2022 12:55:04 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D7832ED0;
+        Tue,  1 Mar 2022 09:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646157262; x=1677693262;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=UWQCpVl9cqkY19Vah5HEIK0fbarDiE8S3ggwC/mbwts=;
+  b=EgCJoAv1c6HpK/AHFAMleFbGQGHoJJyFkLf0BoqUs9KB1QKpyOugPIvn
+   APoZ7l++iXYkx9uEcsyWgR6IHgBCJVISQtmM2NLIe+wrAiwWmKj6mLdIc
+   YUa/646y3rJcLd0M2kN+Yey8DqLTUNKhBzN67K8AA58F7wV3slQT3Zxw0
+   /oGbVkH2fU0fwuIBkourucz1b796JNQCAkr9+ovCZeQ2FxnSUGxvFT0q+
+   BxEiO+s5PeCFzjSupI3Gp5MLq2NjS3TDzisTOmwlqCKrEcDwK8TsWANZC
+   sXgQweKXrFsJHoZq4trqC+MBUowo8+klB+jJBKYrHoMG823NnMDkg95Xp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="277865996"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="277865996"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:54:21 -0800
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="550828073"
+Received: from fpadash-mobl.amr.corp.intel.com (HELO [10.251.24.56]) ([10.251.24.56])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:54:20 -0800
+Message-ID: <3a083b4d-9645-dec6-8cdc-481429dd0a1f@intel.com>
+Date:   Tue, 1 Mar 2022 09:54:14 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced
- EM registration
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
-        mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220301093524.8870-4-lukasz.luba@arm.com>
- <202203020012.g7rYUP7M-lkp@intel.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <202203020012.g7rYUP7M-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jarkko Sakkinen <jarkko@kernel.org>, linux-sgx@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>, stable@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+References: <20220301125836.3430-1-jarkko@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v5] x86/sgx: Free backing memory after faulting the
+ enclave page
+In-Reply-To: <20220301125836.3430-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/1/22 04:58, Jarkko Sakkinen wrote:
+> @@ -32,14 +58,16 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+>  	else
+>  		page_index = PFN_DOWN(encl->size);
+>  
+> +	page_pcmd_off = sgx_encl_get_backing_page_pcmd_offset(encl, page_index);
+> +
+>  	ret = sgx_encl_lookup_backing(encl, page_index, &b);
+>  	if (ret)
+>  		return ret;
 
+What tree is this against?  It looks like it might be on top of
+Kristen's overcommit series.
 
-On 3/1/22 16:58, kernel test robot wrote:
-> Hi Lukasz,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on linux/master rafael-pm/linux-next linus/master v5.17-rc6 next-20220301]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> config: arc-randconfig-r014-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020012.g7rYUP7M-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/0day-ci/linux/commit/e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
->          git checkout e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     drivers/opp/of.c: In function 'dev_pm_opp_of_register_em':
->>> drivers/opp/of.c:1572:22: error: 'struct em_data_callback' has no member named 'active_power'
->      1572 |                 em_cb.active_power = _get_dt_power;
->           |                      ^
-> 
-
-Indeed, this structure is an empty definition for !EM kernels.
-Let me create a fix for that.
+It would be best if you could test this on top of tip/sgx.  Kristen
+changed code in this area as well.

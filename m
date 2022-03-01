@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E154E4C8332
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 06:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D7C4C835C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 06:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiCAFf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 00:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S232492AbiCAFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 00:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiCAFfx (ORCPT
+        with ESMTP id S232468AbiCAFib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 00:35:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F2970F48;
-        Mon, 28 Feb 2022 21:35:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30C3A61030;
-        Tue,  1 Mar 2022 05:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C4AC340EE;
-        Tue,  1 Mar 2022 05:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646112911;
-        bh=yulE+IPxlxYpmFDBcItH84VTpVmoVAp0vgR2CalT8kg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IQD7RnFkDQQL95isKBUCzdpglKb0EPoZWgJ5GdfK615LtXWMBtGWte16tgVW6xvfu
-         waqMQe6yTk3QCbkfLUHhzMJvzGYIiAXdozqBKboqXRlP8CC2rsfCcqNl9TdHPdcYdB
-         ioVYeAb5LnbdsEvBVepDl0n7MAr9ogEfopbHxSocbX9ejgymlGVLj/8eBuGnX/u5pJ
-         ad5isNMNwTewzqRltc3UZrgS2v25Nd44aDg4Rqrz5nuGsTIBAheWOjMSk0BKvcoPLb
-         VlR9VRjsTRuGFhiB2Y3ICl+ri9FSiO4AwNpsBIMpMSg/qtGhYqyT6TXum/lFsZkp5/
-         QlnI/2U0YbspQ==
-Date:   Mon, 28 Feb 2022 21:35:09 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, bjorn.andersson@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, lkp@intel.com,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: ipa: add an interconnect dependency
-Message-ID: <20220228213509.64434f4b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220226195747.231133-1-elder@linaro.org>
-References: <20220226195747.231133-1-elder@linaro.org>
+        Tue, 1 Mar 2022 00:38:31 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BF441F91;
+        Mon, 28 Feb 2022 21:37:47 -0800 (PST)
+X-UUID: e1987f8a3a934cd3aecc0c7d20582f6d-20220301
+X-UUID: e1987f8a3a934cd3aecc0c7d20582f6d-20220301
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 756417158; Tue, 01 Mar 2022 13:37:36 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 1 Mar 2022 13:37:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 13:37:34 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>
+CC:     <runyang.chen@mediatek.com>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V2 0/3] Add watchdog support for MT8186 SoC
+Date:   Tue, 1 Mar 2022 13:37:30 +0800
+Message-ID: <20220301053733.24755-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,33 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Feb 2022 13:57:47 -0600 Alex Elder wrote:
-> In order to function, the IPA driver very clearly requires the
-> interconnect framework to be enabled in the kernel configuration.
-> State that dependency in the Kconfig file.
-> 
-> This became a problem when CONFIG_COMPILE_TEST support was added.
-> Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 38a4066f593c5 ("net: ipa: support COMPILE_TEST")
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
->  drivers/net/ipa/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ipa/Kconfig b/drivers/net/ipa/Kconfig
-> index d037682fb7adb..3e0da1e764718 100644
-> --- a/drivers/net/ipa/Kconfig
-> +++ b/drivers/net/ipa/Kconfig
-> @@ -2,6 +2,7 @@ config QCOM_IPA
->  	tristate "Qualcomm IPA support"
->  	depends on NET && QCOM_SMEM
->  	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on INTERCONNECT
->  	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
->  	select QCOM_MDT_LOADER if ARCH_QCOM
->  	select QCOM_SCM
+v2:
+1. Squash [1] into [2] in v1.
+2. Add tags of acked-by and reviewed-by.
 
-Looks like this patch was based on a tree without the QCOM_AOSS_QMP
-dependency patch, please rebase and repost.
+[1]: [3/4] dt-bindings: reset: mt8186: add DSI reset bit for MMSYS
+[2]: [2/4] dt-bindings: reset: mt8186: add toprgu reset-controller header file
+
+v1:
+1. Add mt8186-resets.h to define definition of reset bits.
+2. Add wdt compatible for MT8186.
+
+Rex-BC Chen (1):
+  dt-bindings: watchdog: Add compatible for MediaTek MT8186
+
+Runyang Chen (2):
+  dt-bindings: reset: mt8186: add reset-controller header file
+  watchdog: mediatek: mt8186: add wdt support
+
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  |  1 +
+ drivers/watchdog/mtk_wdt.c                    |  6 ++++
+ include/dt-bindings/reset/mt8186-resets.h     | 36 +++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 include/dt-bindings/reset/mt8186-resets.h
+
+-- 
+2.18.0
+

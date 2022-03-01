@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C094C96DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A5C4C96EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238431AbiCAU1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S238570AbiCAU2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbiCAUYf (ORCPT
+        with ESMTP id S239257AbiCAUYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:24:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1956540938
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:22:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646166137;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UnhjscoVXwV58qxo7/KqdtLFU4F0yTvnAGVTxy5/ZzA=;
-        b=XFSPj90LsCqMl1F+OjWK36l9np/y8CsP2sPJulr9b5iQWRvSSUqQneG8a49p1TyLorYs0j
-        t8zz+YXD7d6TgcGeVP3AXoazS2QCI9FdrF0IW5AUsdsthd0wOtuerKe2KeD/sqxYALEAt7
-        DvEsPGk0WA/QGrxFDke8buPSZ6WXlAA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-oiAd0L95NbmGjt5-nGBZ-Q-1; Tue, 01 Mar 2022 15:22:16 -0500
-X-MC-Unique: oiAd0L95NbmGjt5-nGBZ-Q-1
-Received: by mail-wm1-f70.google.com with SMTP id r206-20020a1c44d7000000b00380e36c6d34so1170723wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 12:22:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UnhjscoVXwV58qxo7/KqdtLFU4F0yTvnAGVTxy5/ZzA=;
-        b=4OvQI5rTm5ARdJ3dVB2N/t1QuqgE9A6ApCzIsU2UhnB8glBaCoiAGtac9ILAsTjjgs
-         7nFjPpHYBcCm9dw8zNqjYtYLsjZvCamcKxv2zkM3q+RpousdAQ0JdYK5riBmxztyLiRU
-         mWMUj9yvvpSSErkwAmfXwb0TkaOUaRtRs000L701d1MhMZX7sf6tvTVmaxICC28viDA/
-         Hb7yWbaXw2Sk25nekw8ekSRa7oY/DGEo7hIXv2Lv8qDSZqv0DRgqrdF8BaOn/zY4npQj
-         vEs5RW+7tT5imqw3kFaYpRyMhLmUhHBaRSdIPNYp35KMTDwiqmCaOVn/codrvVGRxHHw
-         QXDw==
-X-Gm-Message-State: AOAM532rnrK8bfsQBN+KEASTbsm6s82+MESaDbeMMqWKas4XcJjYdxY6
-        8Y1J2GiKTQNKZOPUfmA7T7IkRfM6X04CEODpu2ZwAe9CW0Jej9gds27MGf02p/yCD6lGk3pultb
-        B78wHGCISKRT6owRVR6Q5pmsW
-X-Received: by 2002:adf:a319:0:b0:1ef:7cc6:d03 with SMTP id c25-20020adfa319000000b001ef7cc60d03mr14982536wrb.411.1646166135156;
-        Tue, 01 Mar 2022 12:22:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzbaYo2qIYbuusP+S+lSiz716HfdkjaywKNxchsiuC/GXAlgD5Aek/kWgwRhiNQmTC7xvzYSw==
-X-Received: by 2002:adf:a319:0:b0:1ef:7cc6:d03 with SMTP id c25-20020adfa319000000b001ef7cc60d03mr14982524wrb.411.1646166134945;
-        Tue, 01 Mar 2022 12:22:14 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id u6-20020a05600c19c600b0034f5032b042sm3663786wmq.46.2022.03.01.12.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:22:14 -0800 (PST)
-Message-ID: <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
-Date:   Tue, 1 Mar 2022 21:22:10 +0100
+        Tue, 1 Mar 2022 15:24:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC56F427F1;
+        Tue,  1 Mar 2022 12:22:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8848360AE2;
+        Tue,  1 Mar 2022 20:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62451C340EE;
+        Tue,  1 Mar 2022 20:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646166166;
+        bh=ykPzFqII9JhxFvpT1iK7FFBwhs+Pt/E9JaOCth/cxsk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hDKQUifiMXi1lBSXdMYyl2xM6gMpWd24Ii0/Zpa2d95G7tg3MEEq4xRvrV9auSUx4
+         FY3q7IUJAskD80qL4yZkwmTClwusTXHbx6esL/8PBm8NlOniWV7JuVca+LFBGnh7oU
+         4trwIFRVcM7qiI96DfvRVpANC786qzgMkhREVl8gfLd6xdnjHjmy8RpzobQUfTkV1x
+         pKc9gw1hSHYDFvqpAOhM6ix3TqmMVWfCfmF6V0Gs6xt6TyZSrhNfe7RQ6g/VVrzN0G
+         h8ccAUHZv9yiIJJvzntQtti0R7sRp8Grfp+x62WUt2j2HL1+rVR4lzuleYRLjEOZKa
+         NKmhy8tNCQSqg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, gthelen@google.com,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 6/6] selftests/memfd: clean up mapping in mfd_fail_write
+Date:   Tue,  1 Mar 2022 15:22:10 -0500
+Message-Id: <20220301202212.19419-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220301202212.19419-1-sashal@kernel.org>
+References: <20220301202212.19419-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Leonardo Bras <leobras@redhat.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, chang.seok.bae@intel.com, luto@kernel.org,
-        kvm@vger.kernel.org
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220301201344.18191-7-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 21:13, Sasha Levin wrote:
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index d28829403ed08..6ac01f9828530 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -1563,7 +1563,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
->   		fpregs_restore_userregs();
->   
->   	newfps->xfeatures = curfps->xfeatures | xfeatures;
-> -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
-> +
-> +	if (!guest_fpu)
-> +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
-> +
->   	newfps->xfd = curfps->xfd & ~xfeatures;
->   
->   	curfps = fpu_install_fpstate(fpu, newfps);
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index bf18679757c70..875dce4aa2d28 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -276,6 +276,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   	vcpu->arch.guest_supported_xcr0 =
->   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
->   
-> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
-> +
->   	kvm_update_pv_runtime(vcpu);
->   
->   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-Leonardo, was this also buggy in 5.16?  (I should have asked for a Fixes 
-tag...).
+[ Upstream commit fda153c89af344d21df281009a9d046cf587ea0f ]
 
-Paolo
+Running the memfd script ./run_hugetlbfs_test.sh will often end in error
+as follows:
+
+    memfd-hugetlb: CREATE
+    memfd-hugetlb: BASIC
+    memfd-hugetlb: SEAL-WRITE
+    memfd-hugetlb: SEAL-FUTURE-WRITE
+    memfd-hugetlb: SEAL-SHRINK
+    fallocate(ALLOC) failed: No space left on device
+    ./run_hugetlbfs_test.sh: line 60: 166855 Aborted                 (core dumped) ./memfd_test hugetlbfs
+    opening: ./mnt/memfd
+    fuse: DONE
+
+If no hugetlb pages have been preallocated, run_hugetlbfs_test.sh will
+allocate 'just enough' pages to run the test.  In the SEAL-FUTURE-WRITE
+test the mfd_fail_write routine maps the file, but does not unmap.  As a
+result, two hugetlb pages remain reserved for the mapping.  When the
+fallocate call in the SEAL-SHRINK test attempts allocate all hugetlb
+pages, it is short by the two reserved pages.
+
+Fix by making sure to unmap in mfd_fail_write.
+
+Link: https://lkml.kernel.org/r/20220219004340.56478-1-mike.kravetz@oracle.com
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/memfd/memfd_test.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 26546892cd545..faab09215c88b 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -373,6 +373,7 @@ static void mfd_fail_write(int fd)
+ 			printf("mmap()+mprotect() didn't fail as expected\n");
+ 			abort();
+ 		}
++		munmap(p, mfd_def_size);
+ 	}
+ 
+ 	/* verify PUNCH_HOLE fails */
+-- 
+2.34.1
 

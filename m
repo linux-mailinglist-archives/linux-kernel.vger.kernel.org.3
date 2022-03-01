@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F444C9296
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F315E4C9298
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiCASKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S236842AbiCASLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbiCASKD (ORCPT
+        with ESMTP id S236793AbiCASLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:10:03 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D4A45501
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:09:21 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id n135-20020a628f8d000000b004e16d5bdcdbso10216638pfd.20
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=c0dbKsIdJk+qHikmULBiKTfiJVqKnwC4QHGDZyjez5c=;
-        b=c0CY58qwtC+TXIekm9RwFv9mu85r2tPUGknQ7lP4mK62Dv4iMMRx2WwvSmym01I/rt
-         x4a6ZJclsNaz5N4C9aAN1fTg3nik/jMjRCN73yPx/fcUzal7hJfreK83kZc1NY0MZB8d
-         EVJ5QjIoD9KxKwfsA+8JKkej0did5a3WXbLWwN8dsYyndAwDQx6OXWDTJHo5LnA6Vgxu
-         IQjaqRQeuuKMxfjT0X9hu5QyWkWFwifmszCxuDSnaYBgYLDf8fhU2Ip32/r41UnVH3Su
-         cAjn4su1Pwdt+j2mgeQqJOJ/z9T8D8s/rO0Ku6ZgWJjzH3C60V6N8sBqCdpXtVzALVJh
-         JN5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=c0dbKsIdJk+qHikmULBiKTfiJVqKnwC4QHGDZyjez5c=;
-        b=lmPa8hpl/i5dtx9TUo+XfyotH37LUUDJlkpCvDXOWyfSJQEMpghA7eo/i1KKTFiAps
-         fajrnd8/kyGCrG/iZ9IYFNhs65TfUYDBkTa3bkNuY++C+cULAlkpEpZL8LcY9hhaor6i
-         tco/+m7p2QXwPPnozQZjFI5BZJPlQfpvIaCaelvvFHD/gxh/L1dRa/LKnzIRXW0m9GTu
-         7Ql3DA+AsWFkhhbzMhTlEamjaAiltruFl7NpZNIJeGINkB4HENS0KQ286EsJtvzkjGQW
-         yjAJJQoIz9frjzopECVq/KKpDZ5xnbAz79z4bCaAPXXeaEKpOW4Bp/DSJMdpiOLdrCre
-         xSqw==
-X-Gm-Message-State: AOAM531BoC93tcjleD5r64j387KB0C+l4/ZOI6ifApdwGjRIShqOFmI7
-        EsACmh0IJtv+lURB6rbehjfyy8zoVcAirg==
-X-Google-Smtp-Source: ABdhPJz3IEoUnP+YY4bGnTx41NXJkSuyhuQFFA6sFxSnDvKBjPMaNwdb8qpS6y54oVGPkAvATMxVOHwB6qwIAA==
-X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:6e75:6cb3:9d81:deae])
- (user=shakeelb job=sendgmr) by 2002:a17:902:860a:b0:14b:341e:5ffb with SMTP
- id f10-20020a170902860a00b0014b341e5ffbmr26428871plo.6.1646158160480; Tue, 01
- Mar 2022 10:09:20 -0800 (PST)
-Date:   Tue, 1 Mar 2022 10:09:17 -0800
-In-Reply-To: <YhzeCkXEvga7+o/A@bombadil.infradead.org>
-Message-Id: <20220301180917.tkibx7zpcz2faoxy@google.com>
-Mime-Version: 1.0
-References: <a5e09e93-106d-0527-5b1e-48dbf3b48b4e@virtuozzo.com> <YhzeCkXEvga7+o/A@bombadil.infradead.org>
-Subject: Re: [PATCH RFC] net: memcg accounting for veth devices
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Vasily Averin <vvs@virtuozzo.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Vlastimil Babka <vbabka@suse.cz>, NeilBrown <neilb@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Linux MM <linux-mm@kvack.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel@openvz.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 13:11:12 -0500
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C963F311
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:10:27 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id P6x3nfbWfEafMP6x3nCIOI; Tue, 01 Mar 2022 19:10:25 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 01 Mar 2022 19:10:25 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <1d24bd65-e278-5562-a097-39a68470a1d4@wanadoo.fr>
+Date:   Tue, 1 Mar 2022 19:10:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] nvmem: check for allocation failure
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20220301081127.GC17375@kili>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220301081127.GC17375@kili>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 06:36:58AM -0800, Luis Chamberlain wrote:
-> On Mon, Feb 28, 2022 at 10:17:16AM +0300, Vasily Averin wrote:
-> > Following one-liner running inside memcg-limited container consumes
-> > huge number of host memory and can trigger global OOM.
-> >
-> > for i in `seq 1 xxx` ; do ip l a v$i type veth peer name vp$i ; done
-> >
-> > Patch accounts most part of these allocations and can protect host.
-> > ---[cut]---
-> > It is not polished, and perhaps should be splitted.
-> > obviously it affects other kind of netdevices too.
-> > Unfortunately I'm not sure that I will have enough time to handle it  
-> properly
-> > and decided to publish current patch version as is.
-> > OpenVz workaround it by using per-container limit for number of
-> > available netdevices, but upstream does not have any kind of
-> > per-container configuration.
-> > ------
+Le 01/03/2022 à 09:11, Dan Carpenter a écrit :
+> Check for if the kcalloc() fails.
+> 
+> Fixes: 299dc152721f ("nvmem: brcm_nvram: parse NVRAM content into NVMEM cells")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>   drivers/nvmem/brcm_nvram.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+> index 439f00b9eef6..c80af8a31eba 100644
+> --- a/drivers/nvmem/brcm_nvram.c
+> +++ b/drivers/nvmem/brcm_nvram.c
+> @@ -95,6 +95,8 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
+>   	len = le32_to_cpu(header.len);
+>   
+>   	data = kcalloc(1, len, GFP_KERNEL);
 
-> Should this just be a new ucount limit on kernel/ucount.c and have veth
-> use something like inc_ucount(current_user_ns(), current_euid(),  
-> UCOUNT_VETH)?
+Hi,
 
-> This might be abusing ucounts though, not sure, Eric?
+just for my understanding, why
+   - kcalloc(1, len) and not kzalloc(len)?
+   - kcalloc and not kmalloc_array, since data is fully filled just the 
+line below by memcpy_fromio()?
 
+CJ
 
-For admins of systems running multiple workloads, there is no easy way
-to set such limits for each workload. Some may genuinely need more veth
-than others. From admin's perspective it is preferred to have minimal
-knobs to set and if these objects are charged to memcg then the memcg
-limits would limit them. There was similar situation for inotify
-instances where fs sysctl inotify/max_user_instances already limits the
-inotify instances but we memcg charged them to not worry about setting
-such limits. See ac7b79fd190b ("inotify, memcg: account inotify
-instances to kmemcg").
+> +	if (!data)
+> +		return -ENOMEM;
+>   	memcpy_fromio(data, priv->base, len);
+>   	data[len - 1] = '\0';
+>   
+

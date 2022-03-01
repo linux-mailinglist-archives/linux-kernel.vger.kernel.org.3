@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473084C8212
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C024C821A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiCAEQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        id S232209AbiCAESB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiCAEQn (ORCPT
+        with ESMTP id S232249AbiCAER4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:16:43 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1902F026
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:16:03 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id bx9-20020a17090af48900b001bc64ee7d3cso1113646pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:16:03 -0800 (PST)
+        Mon, 28 Feb 2022 23:17:56 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1BC473A9;
+        Mon, 28 Feb 2022 20:17:15 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id e5so15214432vsg.12;
+        Mon, 28 Feb 2022 20:17:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KhWC54mH+BIWxrEus55KBPvsAOUPn79ymjvbcax9p8k=;
-        b=W/+o+gzPs0IucCzQpXe/hW7oHCroBWchswx4x+IW1T8ikPLDEevOIe12bLh3Zr+8e+
-         uiyAUzIziIqljsw8DZHFoOZRgUr7l0phA2WiuuLZvJ4liy0CSByqY3vGStiUALNWwd8j
-         8IrbdA4CkPgDrHESTOhcDW+OAsnwnH+pzzaCJH3tbdSt5c7wFTU1IFPZln6BJ8023MMj
-         oihelxVUqWgZ3H65KUlCyVS39o9AFr/9Y7zr+6kJVlfIxQYwvCl5k2CY2oDOEBADqEkh
-         jg7DfMSf5n5AdzPcTiVIEKfNxb5cTyiEOT9aVPstpGQkorKzjI00cw0dmJFnQdbgcPWe
-         MAhg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XX+IWGQPoFeh97VSAKm6031fD11VKSEYMPq0/2cLTeY=;
+        b=JFOATMfyEe+q2YvZrNExXmlIiIjnIwcxdvHk/WzuC0p/XbwABgHaZFREv0E2vYcOCh
+         44pY9ThY1M5Y7nwfcQWLFmDp6IMbLLs3M/oeUuISm7mV189rZoSNx2aws5ZDt5Cgr7+K
+         t/QIzoA5kzWRBKBOhtDlw5oKY4auHKRoUizfIFNWNqPsTLw4LI0UI2WeuiEvOmD8Ka5J
+         dkuGJ2gRwfEwNpgli04YlIxiKa6c9U+NnrXu2mnyW0pKYXc3r1XFqU7bmXJGn6MvEILs
+         WLNyII5lJ6h4OQg2CsqcsBMIO0N1d+mzet+gJwMUbuvzxfU4CYZO025TqeAxzilU4b/e
+         LDyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KhWC54mH+BIWxrEus55KBPvsAOUPn79ymjvbcax9p8k=;
-        b=BAW0HNXWnsSPNZ/Kgn27r8goLX1jdLpBfpX0ncD1LiRKE/ItiN7O/CR2EkzGkezgGg
-         TCs1Im51B8sio0KEVZTPQPJKoxfzudrkUBUb7S8v2QrSJl4TvIgzZ3IToZnfoJWfXWOJ
-         TdP2sqqLGIK4OjzWTlYxHsBp7FbV6nG+OJGxcobk43iFl76RWm3+WIJci2RyRWmAqXSj
-         h9X0kRuBVx1X+VIUzIvz+B2ZueT/rw5qTj5g0f7Kfx5bn9OfPC9OnSyxX8lKL4gOGwfN
-         hbdFUqbgcCvmNFtYJ7yVAK9fNS/CICyvxLsF2kTNpSew2chAxdFCJril2UqcJo8PDeBp
-         LCaw==
-X-Gm-Message-State: AOAM533FAlthL9+pMV/lgHThog0wXV/37iz8x5G/fPzer7qVOvwu4AGR
-        WPJNiqpLuC5qlmZPypYD7KLwjw==
-X-Google-Smtp-Source: ABdhPJx+KDbaCtnr5/iSs/iENqUtZNEYQYW6xikSgRQFLKJekESfaH4ej9ewUCPL03855qHDRMiBwA==
-X-Received: by 2002:a17:90b:3d02:b0:1bc:85fa:e24 with SMTP id pt2-20020a17090b3d0200b001bc85fa0e24mr19926186pjb.239.1646108163083;
-        Mon, 28 Feb 2022 20:16:03 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id f13-20020a056a001acd00b004f0f9a967basm15588688pfv.100.2022.02.28.20.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 20:16:02 -0800 (PST)
-Date:   Tue, 1 Mar 2022 12:15:56 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org, robh+dt@kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v2 2/8] dt-bindings: phy: qcom,qmp: Describe
- 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
-Message-ID: <20220301041556.GJ269879@dragon>
-References: <20220228123019.382037-1-bhupesh.sharma@linaro.org>
- <20220228123019.382037-3-bhupesh.sharma@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XX+IWGQPoFeh97VSAKm6031fD11VKSEYMPq0/2cLTeY=;
+        b=7VQxrg83EMfy5ULK7+5mPBvOVztxegDnAH3wlZrH2xpVijd1bcFdGHFb3gdoLUHuzD
+         4XNEcAMCoKAzo/PsBrigIrLBUGAEBRgdBfWeXA5w/ua3fwxJ4wzZXGSjlPvsslVdGL5U
+         jLCw8SEpIZ4XpjM0px/wn7GNw1aQzTRlq/c2k1OgK5WjSj78y9X4j7dm+QPiLwMhIPNm
+         gmgoHjw+R34EoD0ICqOM0dYwB4rDCZcSY2PtG05yVUCRDpJ/QFETqZmBjMqo5ba+qFdZ
+         Ml7qxQmZqpuJuEPuUnaa68/afn8zkAbD2PKQyn0Vw0jvO2w3oeVG/5j9arwnUkiFKv02
+         j41A==
+X-Gm-Message-State: AOAM533yHptaWTlztSmqDBxb/EhE+hzdWJdUmvtML5KOnQRFV+E+Nk5h
+        IH2w8CP+q1/r4+Sa6QypK0eKCzfEbfJeagOPRqrG2ecZ3S/Q+w==
+X-Google-Smtp-Source: ABdhPJwsPqTLqByAywbPvHbUlZ0RmBQQuT3nqAGrXPiTyDCpCNQ4pE+4K+lDpxX3ZVso8ruv7YjBCeaONpdv8zk6tdU=
+X-Received: by 2002:a67:c10e:0:b0:31b:7197:5751 with SMTP id
+ d14-20020a67c10e000000b0031b71975751mr9775554vsj.43.1646108235078; Mon, 28
+ Feb 2022 20:17:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228123019.382037-3-bhupesh.sharma@linaro.org>
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
+ <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
+ <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
+ <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
+ <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
+ <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
+ <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com> <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+In-Reply-To: <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Tue, 1 Mar 2022 12:17:03 +0800
+Message-ID: <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 06:00:13PM +0530, Bhupesh Sharma wrote:
-> Since a few boards based on QCoM qmp phy use the
-> 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties to
-> describe the ufs phy nodes, add them to the dt-bindings doc as well.
+Hi, Ard & Arnd,
 
-Does qmp-phy driver actually use them?
+On Mon, Feb 28, 2022 at 7:35 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > On Mon, Feb 28, 2022 at 4:52 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > On Mon, 28 Feb 2022 at 09:38, Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > >
+> > > > > > RISC-V is a useful reference for the changes needed - this is the most
+> > > > > > recent addition to the EFI stub, and avoids some legacy stuff that new
+> > > > > > architectures have no need for.
+> > > > > We still want to support the raw elf kernel (RISC-V also does),
+> > > > > because LoongArch also has MCU and SoC and we want to support FDT (I
+> > > > > think this is reasonable, because RISC-V also supports raw elf).
+> > > > >
+> > > >
+> > > > That is fine. So perhaps the best course of action is to omit the
+> > > > UEFI/ACPI parts entirely for now, and focus on the DT/embedded use
+> > > > case. Once all the spec pieces are in place, the UEFI + ACPI changes
+> > > > can be presented as a single coherent set.
+> > > It seems that I made you confusing. :)
+> > > There are big CPUs and small CPUs (MCU and SoC), big CPUs use
+> > > UEFI+ACPI, while small CPUs use FDT.
+> > > At present, the only matured LoongArch CPU is Loongson-3A5000 (big
+> > > CPU) which uses UEFI+ACPI.
+> > > We want to support raw elf because it can run on both ACPI firmware
+> > > and FDT firmware, but at present we only have ACPI firmware.
+> >
+> > Can't you just use the UEFI protocol for kernel entry regardless
+> > of the bootloader? It seems odd to use a different protocol for loading
+> > grub and the kernel, especially if that means you end up having to
+> > support both protocols inside of u-boot and grub, in order to chain-load
+> > a uefi application like grub.
+> >
+>
+> I think this would make sense. Now that the EFI stub has generic
+> support for loading the initrd via a UEFI specific protocol (of which
+> u-boot already carries an implementation), booting via UEFI only would
+> mean that no Linux boot protocol would need to be defined outside of
+> the kernel at all (i.e., where to load the kernel, where to put the
+> command line, where to put the initrd, other arch specific rules etc
+> etc) UEFI already supports both ACPI and DT boot
 
-Shawn
+After one night thinking, I agree with Ard that we can use RISCV-style
+fdt to support the raw elf kernel at present, and add efistub support
+after new UEFI SPEC released.
 
-> 
-> This fixes the following '$ make dtbs_check' warning(s):
-> 
-> sm8350-microsoft-surface-duo2.dt.yaml: phy@1d87000:
->   'vdda-max-microamp', 'vdda-pll-max-microamp' do not match any of
->    the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
-> 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> index 48cd6b6171a1..70e7cd75e173 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> @@ -87,6 +87,14 @@ properties:
->      minItems: 1
->      maxItems: 3
->  
-> +  vdda-max-microamp:
-> +    description:
-> +      Specifies max. load that can be drawn from phy supply.
-> +
-> +  vdda-pll-max-microamp:
-> +    description:
-> +      Specifies max. load that can be drawn from pll supply.
-> +
->    vdda-phy-supply:
->      description:
->        Phandle to a regulator supply to PHY core block.
-> -- 
-> 2.35.1
-> 
+If I'm right, it seems that RISC-V passes a0 (hartid) and a1 (fdt
+pointer, which contains cmdline, initrd, etc.) to the raw elf kernel.
+And in my opinion, the main drawback of current LoongArch method
+(a0=argc a1=argv a2=bootparamsinterface pointer) is it uses a
+non-standard method to pass kernel args and initrd. So, can the below
+new solution be acceptable?
+
+a0=bootparamsinterface pointer (the same as a2 in current method)
+a1=fdt pointer (contains cmdline, initrd, etc., like RISC-V, I think
+this is the standard method)
+
+Huacai

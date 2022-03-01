@@ -2,241 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F5B4C825A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AB24C829A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 05:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiCAEds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 23:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S231730AbiCAElA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 23:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiCAEdq (ORCPT
+        with ESMTP id S229786AbiCAEk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 23:33:46 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75C511163
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:33:05 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso21269317ooi.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 20:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6QQirKoBxA3waZTDyyi8R+19KdlWoOrpMiX3jBJYje8=;
-        b=kHrFsJy4yhHwXaU5iabvm5UrkDb+TTttX83GxsAMHzpmxLfPabse0QQtzXF12Nekvs
-         YRBa5RP12b/eHmPL4kgNx13+ohF32Wlyw5J2u3yPhB7ywD43ehqWKXq7/oL7sUlcsKmr
-         dlmtDcE9FZ2K7+c/yf8Ca9Dc2AElW8/ThR6nHJZAdcGtT6dtoKH+oMdldoHC+wPIydjv
-         6McChcnvAmMBF7xJ8mYF42/ySU88QfQbq2SxyjvL8jH7xGULmwuL3ayhbug2xRAPYeqE
-         LqnGqAFOY4+iRpVy7m0DdCcZugCI0CwxXRy6/WPuet85Rgil1+cNOfUY9cOdX1JS5G89
-         bxTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6QQirKoBxA3waZTDyyi8R+19KdlWoOrpMiX3jBJYje8=;
-        b=P6TWEMUoHwz4g3qBRkswjQiuNhLkndgdp7D6iT50xoSBXGSPZ2cGL2gJx0ruPBfV7Q
-         QXJZEJkHDFQoMpUGpurLVmzTzCDxm62pF9RDOx3Sh7rtPAj5ni6LTyABGsudQXmstnF7
-         /ljpnuCEBl+1VgDOfqkgxx73N55CVySuQZS6FANx5Mf2uaoEN5noXVBXQcj5k/9JRlMp
-         Rfas1nOF8BdUBdjHq1XLUfn0ClMvwY27FIv68Y7I1StMs72fbVO8R6vvvq3Qjs3mpKYu
-         qk1oO33AuJ5h8OvC08CeFmcALYGD3AHTrEAUTuKfXCtR4di21Yn9P0TwJLwYMdzEWrbh
-         UHTw==
-X-Gm-Message-State: AOAM5333i2tw6peDj0pUFlJ0Il7SzwRRynldMHB7ntzTKUmE5+8bY5QK
-        taiP/nRrVMw0LhlZuJTZdA4k/PXzbFCXsTcI/8Zz/Q==
-X-Google-Smtp-Source: ABdhPJzyrFP6vl+ipBjDaXrdIhaRiK+aLdhja7NBukIS+Y/P4s27QCI8mfKPzP7zHTqa9xfLBva0LKv8ZxkJA76WWV8=
-X-Received: by 2002:a05:6871:1d6:b0:d6:ccb6:94e6 with SMTP id
- q22-20020a05687101d600b000d6ccb694e6mr10356262oad.68.1646109184845; Mon, 28
- Feb 2022 20:33:04 -0800 (PST)
+        Mon, 28 Feb 2022 23:40:58 -0500
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3576BDFA;
+        Mon, 28 Feb 2022 20:40:15 -0800 (PST)
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2214dnit019095;
+        Tue, 1 Mar 2022 04:39:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=subject : to : cc
+ : references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=PPS06212021;
+ bh=VvIud66fTQxrLqigve3Jp3MaWXbDm3NipIdem9r6ne8=;
+ b=nyDYH56wRMa/cs6gpw2FgaJJsoh+dwcciJ+ATDtxitBfWLcErQ5LJHT4o4sKnP6g3SeW
+ NpKOGypzSbhAs3d/5VDz4VLmVEt/ME3UeLzZtJ63q4jK2PTV0srtSyV8CrM9aaJlmcih
+ f4a+VzQI79/DaJyBAe/zKbrKcy4JHoeZsHpjILmS55OKjPpCtphVZEHq1EHfp1zBCu7k
+ pJPCuOaIZswsJiAeXtP6VMZp+5BiBj7Zgwh0PaDYfYmI2Xa0RCK1EZo/8Q23G3ujsgF5
+ 6FUzsDh1JueywhNYwIz3pywpbBJZrwl4G/wV3cijBjUj0ExT61cKCzEerATkj+hOS8WA pA== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3eh0yj8hv0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 04:39:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GMjrPnkCr4FmAd4JK9vz4hmlHdzzoYvrP5s2xLnoJTfp8L3UCdAWxfwRRTBcvr8EfS38ePR8vrgdXl+XSteoNKZNa+miXZUcj6kFnxPSkltxknhT9lTZnu4VPY6ALyGaZc64oLTo8bicuX9IwVKD6QLblO99rS/mcIsw0SFfur3DjRi1EQ3jSCuC+cyIfTid+UPTSWefoUliaJ29mtxgqWIf90ulVt1nEuDni6qA+AFyyCxBKZczp6bWiawsdW5foaBj5yIUniMDLJVF4V+VIskTVYyeWHfC4vXj4xtbN8gY6rW1SyNg4nB45veZpwFTwUPYNXhqEYA3a8fPHvLfLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VvIud66fTQxrLqigve3Jp3MaWXbDm3NipIdem9r6ne8=;
+ b=E/GDSOUpa/hnN5K6kNtdqQPSEvZEB0bQgW55p0Bwdo7iNN8TvjJror3sTrX3CKLICrxRAvVU+S43C0y5aqTUBzevQPaiQBXLe808iuStxsNRYosl4iz8J1uSwP8NvOhNjtRa9cwS9Vzomfj00/7RX9+E0kOEU+I4L+19NXqqlZVbBrmLOKYb9j1fomJ5+kuwzdrXDvC9pFdGdc+JMQNJ+KwaRB9Jpm+7WLayneOKJGjeim/e57pnufL5r7ZfhmpM0axaKwFX0DHQsWQbmV+CcUclsYyUfAXOeb6rgvdL6sTlSdlHEpCfaYBtFKm21Y4k3iGTx3uECmJNBaXnRGxMew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from SN6PR11MB3008.namprd11.prod.outlook.com (2603:10b6:805:cf::18)
+ by BN9PR11MB5433.namprd11.prod.outlook.com (2603:10b6:408:11e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Tue, 1 Mar
+ 2022 04:39:46 +0000
+Received: from SN6PR11MB3008.namprd11.prod.outlook.com
+ ([fe80::d8f7:376f:d7ee:cfb3]) by SN6PR11MB3008.namprd11.prod.outlook.com
+ ([fe80::d8f7:376f:d7ee:cfb3%5]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
+ 04:39:46 +0000
+Subject: Re: [PATCH] proc: fix documentation and description of mmap
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, corbet@lwn.net,
+        tiberiu.georgescu@nutanix.com, florian.schmidt@nutanix.com,
+        ivan.teterevkov@nutanix.com, sj@kernel.org, shy828301@gmail.com,
+        david@redhat.com, axelrasmussen@google.com, linmiaohe@huawei.com,
+        aarcange@redhat.com, ccross@google.com, apopple@nvidia.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20220301032115.384277-1-yun.zhou@windriver.com>
+ <Yh2aKofkcWsLswQm@xz-m1.local>
+From:   Yun Zhou <yun.zhou@windriver.com>
+Message-ID: <4b23a6c4-4b69-019f-7885-d4c9f61e9503@windriver.com>
+Date:   Tue, 1 Mar 2022 12:39:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <Yh2aKofkcWsLswQm@xz-m1.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0068.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::13) To SN6PR11MB3008.namprd11.prod.outlook.com
+ (2603:10b6:805:cf::18)
 MIME-Version: 1.0
-References: <20220223062412.22334-1-chenyi.qiang@intel.com>
- <CALMp9eT50LjXYSwfWENjmfg=XxT4Bx3RzOYubKty8kr_APXCEw@mail.gmail.com>
- <88eb9a9a-fbe3-8e2c-02bd-4bdfc855b67f@intel.com> <6a839b88-392d-886d-836d-ca04cf700dce@intel.com>
- <7859e03f-10fa-dbc2-ed3c-5c09e62f9016@redhat.com> <bcc83b3d-31fe-949a-6bbf-4615bb982f0c@intel.com>
- <CALMp9eT1NRudtVqPuHU8Y8LpFYWZsAB_MnE2BAbg5NY0jR823w@mail.gmail.com>
- <CALMp9eS6cBDuax8O=woSdkNH2e2Y2EodE-7EfUTFfzBvCWCmcg@mail.gmail.com>
- <71736b9d-9ed4-ea02-e702-74cae0340d66@intel.com> <CALMp9eRwKHa0zdUFtSEBVCwV=MHJ-FmvW1uERxCt+_+Zz4z8fg@mail.gmail.com>
- <4b2ddc09-f68d-1cc3-3d10-f7651d811fc3@intel.com> <CALMp9eQj4Xr9VAdHw4BfPEskQYptEYYHRrpmFfVU1TCQJmHwug@mail.gmail.com>
- <1cca344e-1c2d-8ebf-87ae-d9298a73306a@intel.com>
-In-Reply-To: <1cca344e-1c2d-8ebf-87ae-d9298a73306a@intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 28 Feb 2022 20:32:53 -0800
-Message-ID: <CALMp9eR_gPSAkSHtgOjAqJDEXF-=8aaoV0nXP3GmZ_J9sTBJFg@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: VMX: Enable Notify VM exit
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cac60cb5-fd86-447b-a144-08d9fb3d82d7
+X-MS-TrafficTypeDiagnostic: BN9PR11MB5433:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR11MB5433D52BAAAFEEB907693A7A9F029@BN9PR11MB5433.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kg6BYhQNMveRC4aRM0/Iz5p5O7L7A56RngDDykRMS48rW5LKH52fqYuadHPGghr8OXlkgaNn5fxLL4z4Wz9HWXfUQ6s5zQI23wnyrsTYVykee9KoGsSP6lew16y//lXtFHDOx0ZACRkK8TOsYDq7Sz/5Hl8MNBaIZ1jad+ackQb0dqjEfBC7q9tn/ULA7EKH8eGeVK9M04q5M/tkX0NIqph/qAlWLOxvd4NrtBlB/Bv/20cPv/Yo7TQs8gCuUFwosD1CJ2HC0AZmdTvmASgBAvPvBz21AEJgWcgEwvATztsPxxIcbg2GUKvEk+Bx30x4uKIegYosY+LHKZoyKVbC6wxXZ1XyvnWUtbUoW5nEbvp4QFSUDluC7fFKJMFAUKTI+VuoGse4X6/FDxK+zLgXxaHO8TROsuc2Ueks0lel2ejef8gWFqVmr9l9o4rPBr9OHI+f3qAA+QlAKaS7rlfeEBE2Kz1LasuZLp0QzTTRBe/2xcOSC7Btel7ClbTBB8H4k415mBcVw+tzK9JXgTrKg1B2natjf5mt+YnIO6p3eKvjDxqsItYbrqOvyL4XDDPPJFTbOZXCO4qk/+FVk310H24XHqyAmzD7bcuCqLBpE5MCesTOdJfeEPYFNsTvozdTfV2MczHH10cz5yyqdsLasf+7wL7AkKaUqN4QShPyg6wrlaRAgdLl2OfTMwt72mvBzk/Zas9HYpRKoGs5k2W4mJpKGOLjdPpTxLAZjUV2O6vQppNyyF+Z3Htvkkr7dJ8MMCdoFbF9hlzHGZhx2UZLiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3008.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(8676002)(66946007)(66556008)(83380400001)(4744005)(44832011)(508600001)(6486002)(53546011)(52116002)(86362001)(2616005)(66476007)(2906002)(6512007)(8936002)(6506007)(4326008)(5660300002)(6666004)(38350700002)(38100700002)(26005)(186003)(6916009)(31686004)(36756003)(316002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGp3YjlYNmxja1lDRWJib0hSVTJWWGxWUEFraGhkYVRWNGhGRm1RanAwV0VE?=
+ =?utf-8?B?ZXBteGx6dGNNWUp2bG1GNTJ4V0dLYUtBSjh5NTZOR01sZTVLUlZnUnVjalVT?=
+ =?utf-8?B?OFc1Y2thVWdlYXpURnh6MDBoL1JIT094bHY1MTRuMkt1OG1EOG94REgzeFRI?=
+ =?utf-8?B?ZWlob0Z6aUFiMzdnajhodkRuM2U2MmF1L1BYRXh3MUx3TlRMc3RCMkt6VWdS?=
+ =?utf-8?B?V1pyNkhsV2tVYlZ1ZDhkQWFKd0tWU0pmZU1ycGZKU05pcGl2T3FKUFZhbFc3?=
+ =?utf-8?B?RythVVNHWVRxQzAvc0lQYTUveVAxZlJyYnBXRmVPMVZMZlcyUHFROElXbGo3?=
+ =?utf-8?B?MkJGTUx3M01BU0lOTm5iNVJuTzNzcUNkZG5URFZaOUZWUVhKMEFvL3RFM1Iz?=
+ =?utf-8?B?V05Makt2OWVRaWRhNVV5bG1WSzJIclhMZDhROWxvZytCc0toak9jZkNGSHBM?=
+ =?utf-8?B?TndJL3VpQU5BVERyallncjQ2YUpwVEIyNkZaVkU5YjVlV0c0czJlQU91OFZq?=
+ =?utf-8?B?OXFqL3VCN09JQXpUTTI5TGdpNGJneXJIOEhNZllzMEVrcG5MVkpyTGxIenM2?=
+ =?utf-8?B?WW5NMkNSdWFHQnhPdi95NVp4MDZDbUswZlprekRXenUwcXJEaC9YSEV2WnFk?=
+ =?utf-8?B?RGdXSW1raGQ3SjFDVWhvVWJuYjRTUnY0eWswQUl0dlJNcDBmaEwzV1N2eWVQ?=
+ =?utf-8?B?b0xNSTBwOFRPd2NvbWFrSWh2TDM0aVJTTVFEVnh5d21oL3lHcVR1aWNqR1Ri?=
+ =?utf-8?B?M0V0V0RNK24yVm91RHYweTFTb2dnSnBDaEVzQ1V4b3FEQi94U1dNcDAzc0V5?=
+ =?utf-8?B?VWdVaWZWVjVNc2NlT2x1eUxjTzROSjk4dW1qVnlxakJ6c1VRUjVvSnpqTFZX?=
+ =?utf-8?B?dVd0S1JCc05EU3BTUTlQcDN1azF5NGwrS2ZYNXJza1ppeGJEbkFCWkhLUDNx?=
+ =?utf-8?B?ODl5UGV0cWI1a0RMNldXaVkzZTkyQWV0WEdXSjFRVkJoTm9IUERMbUg1VElm?=
+ =?utf-8?B?SGtjMnVFTWdyZ3VTUTVJN2NmMDJxSnhkUFRKWTVKSVdjUnpLSml1d09WMTBq?=
+ =?utf-8?B?R3BFMnBScm1FWHZ4NFV0M3l4L1pTZWRodEwxSVA0QW1zYlUvSTBHWi92SjY0?=
+ =?utf-8?B?NVU2YTgyV1lHcTJTc1p5cVJuQ0w1eGdwMnRySUtpYU0yM2pYeUhFV3lTblRV?=
+ =?utf-8?B?cCsrZDNaOVlFblVhOHRyWWdBQ3lJSVExUTAwM05SdEZ0Y2s0QzJRV1JHdDhm?=
+ =?utf-8?B?eVVqdUpiRG0rS0lhajlTaGVLMXhYcVBJZTZZUy9WQmF4aXljUGRha01sVXpl?=
+ =?utf-8?B?bWVJSnVkd09hTWhReGZ3S0dKZXN1emVuOUtxMWJWQkVGa3NDUnJCUm1ZKyt2?=
+ =?utf-8?B?ZXZmN3AvZFJVSkFaREpXUmxFVzBUVDh3dWZ1bUVKbmRxYXlKTklLcnZJS3pk?=
+ =?utf-8?B?dm1rZkphU1h5Tm9oeUw4d0VuRkhGOGNoRExBV01hYmc3Z1JNcWFYbHB2cGZa?=
+ =?utf-8?B?YnNaUEk0UWRseHVPQjNMZThDd0YxOFg2bXRRR1ZyY1pKNXRNQUtHaVFIbGY2?=
+ =?utf-8?B?c21kL0RTN09FQ0NnUXdCQnE5UG9wNmthU2VGajhuLzBIMWxGZnJ2V1N1eXFZ?=
+ =?utf-8?B?MitZcGtnWjVkdUsxN1hQVkRMNWR3T3d1SHh0UmQ0Q2xuNDVBaDhtd3ExR2px?=
+ =?utf-8?B?N2UzZDR6dzg5M21nODlla1JBc3FaMktFeWFOR0p6cXlQejE3V2kyU0JZTm84?=
+ =?utf-8?B?NnAzYmRvVUU0bmJiaVJOTjZZRzN1R01JUnB4cWJHYlZONW5MSjE4QlZaditX?=
+ =?utf-8?B?RHpvclVDY2FkSmtETWZycFo1RU1ibnl2djY1QW5UVWpZaEdGMktpQ3owSDlw?=
+ =?utf-8?B?NHhpV3ZyRWxCcmZjV3g2eUJnOWhOSUNiNW1XeWR4L2k4dkVoLzhHWnlhcWho?=
+ =?utf-8?B?YkxKODI2dC9vYzBWMUloSjg4K205TTE0TkFub3dwN2pWclZObDNKZnM4VGtS?=
+ =?utf-8?B?UE1jVjFCTktvbUM2S2xFTmJLcWlBZFJQWnVOYUQ1M2RBT2oxQVlNRFh1S0Rh?=
+ =?utf-8?B?Mm8wRkh5N2lza0JpclBJRUdrbEY2RWQ5SzNCKzJoZnh3VzFyUEkzSGkwRGFC?=
+ =?utf-8?B?MUN0SEh6a29QSElQbXRpbFd5T2hma0RaeHBrcFFJL1UwSDVIcGVodkVsTTZ2?=
+ =?utf-8?Q?cbF3VuYm5GOANcG+sUWfMOk=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cac60cb5-fd86-447b-a144-08d9fb3d82d7
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3008.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 04:39:46.2163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d4kWiGBPtbYtH0gpHZYVfkpZcaLvv1j/1nviDazeXrhXgcLQJXQcNI9P8usI+UeH+gcmTAlj0Uu02jAoU5AZXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5433
+X-Proofpoint-GUID: lygOOWBQBc661TMI8uWeTptFx3RJxo02
+X-Proofpoint-ORIG-GUID: lygOOWBQBc661TMI8uWeTptFx3RJxo02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-28_10,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=764 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203010020
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 5:41 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
->
-> On 2/28/2022 10:30 PM, Jim Mattson wrote:
-> > On Sun, Feb 27, 2022 at 11:10 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>
-> >> On 2/26/2022 10:24 PM, Jim Mattson wrote:
-> >>> On Fri, Feb 25, 2022 at 10:24 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>>>
-> >>>> On 2/26/2022 12:53 PM, Jim Mattson wrote:
-> >>>>> On Fri, Feb 25, 2022 at 8:25 PM Jim Mattson <jmattson@google.com> wrote:
-> >>>>>>
-> >>>>>> On Fri, Feb 25, 2022 at 8:07 PM Xiaoyao Li <xiaoyao.li@intel.com> wrote:
-> >>>>>>>
-> >>>>>>> On 2/25/2022 11:13 PM, Paolo Bonzini wrote:
-> >>>>>>>> On 2/25/22 16:12, Xiaoyao Li wrote:
-> >>>>>>>>>>>>
-> >>>>>>>>>>>
-> >>>>>>>>>>> I don't like the idea of making things up without notifying userspace
-> >>>>>>>>>>> that this is fictional. How is my customer running nested VMs supposed
-> >>>>>>>>>>> to know that L2 didn't actually shutdown, but L0 killed it because the
-> >>>>>>>>>>> notify window was exceeded? If this information isn't reported to
-> >>>>>>>>>>> userspace, I have no way of getting the information to the customer.
-> >>>>>>>>>>
-> >>>>>>>>>> Then, maybe a dedicated software define VM exit for it instead of
-> >>>>>>>>>> reusing triple fault?
-> >>>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> Second thought, we can even just return Notify VM exit to L1 to tell
-> >>>>>>>>> L2 causes Notify VM exit, even thought Notify VM exit is not exposed
-> >>>>>>>>> to L1.
-> >>>>>>>>
-> >>>>>>>> That might cause NULL pointer dereferences or other nasty occurrences.
-> >>>>>>>
-> >>>>>>> IMO, a well written VMM (in L1) should handle it correctly.
-> >>>>>>>
-> >>>>>>> L0 KVM reports no Notify VM Exit support to L1, so L1 runs without
-> >>>>>>> setting Notify VM exit. If a L2 causes notify_vm_exit with
-> >>>>>>> invalid_vm_context, L0 just reflects it to L1. In L1's view, there is no
-> >>>>>>> support of Notify VM Exit from VMX MSR capability. Following L1 handler
-> >>>>>>> is possible:
-> >>>>>>>
-> >>>>>>> a)      if (notify_vm_exit available & notify_vm_exit enabled) {
-> >>>>>>>                    handle in b)
-> >>>>>>>            } else {
-> >>>>>>>                    report unexpected vm exit reason to userspace;
-> >>>>>>>            }
-> >>>>>>>
-> >>>>>>> b)      similar handler like we implement in KVM:
-> >>>>>>>            if (!vm_context_invalid)
-> >>>>>>>                    re-enter guest;
-> >>>>>>>            else
-> >>>>>>>                    report to userspace;
-> >>>>>>>
-> >>>>>>> c)      no Notify VM Exit related code (e.g. old KVM), it's treated as
-> >>>>>>> unsupported exit reason
-> >>>>>>>
-> >>>>>>> As long as it belongs to any case above, I think L1 can handle it
-> >>>>>>> correctly. Any nasty occurrence should be caused by incorrect handler in
-> >>>>>>> L1 VMM, in my opinion.
-> >>>>>>
-> >>>>>> Please test some common hypervisors (e.g. ESXi and Hyper-V).
-> >>>>>
-> >>>>> I took a look at KVM in Linux v4.9 (one of our more popular guests),
-> >>>>> and it will not handle this case well:
-> >>>>>
-> >>>>>            if (exit_reason < kvm_vmx_max_exit_handlers
-> >>>>>                && kvm_vmx_exit_handlers[exit_reason])
-> >>>>>                    return kvm_vmx_exit_handlers[exit_reason](vcpu);
-> >>>>>            else {
-> >>>>>                    WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_reason);
-> >>>>>                    kvm_queue_exception(vcpu, UD_VECTOR);
-> >>>>>                    return 1;
-> >>>>>            }
-> >>>>>
-> >>>>> At least there's an L1 kernel log message for the first unexpected
-> >>>>> NOTIFY VM-exit, but after that, there is silence. Just a completely
-> >>>>> inexplicable #UD in L2, assuming that L2 is resumable at this point.
-> >>>>
-> >>>> At least there is a message to tell L1 a notify VM exit is triggered in
-> >>>> L2. Yes, the inexplicable #UD won't be hit unless L2 triggers Notify VM
-> >>>> exit with invalid_context, which is malicious to L0 and L1.
-> >>>
-> >>> There is only an L1 kernel log message *the first time*. That's not
-> >>> good enough. And this is just one of the myriad of possible L1
-> >>> hypervisors.
-> >>>
-> >>>> If we use triple_fault (i.e., shutdown), then no info to tell L1 that
-> >>>> it's caused by Notify VM exit with invalid context. Triple fault needs
-> >>>> to be extended and L1 kernel needs to be enlightened. It doesn't help
-> >>>> old guest kernel.
-> >>>>
-> >>>> If we use Machine Check, it's somewhat same inexplicable to L2 unless
-> >>>> it's enlightened. But it doesn't help old guest kernel.
-> >>>>
-> >>>> Anyway, for Notify VM exit with invalid context from L2, I don't see a
-> >>>> good solution to tell L1 VMM it's a "Notify VM exit with invalid context
-> >>>> from L2" and keep all kinds of L1 VMM happy, especially for those with
-> >>>> old kernel versions.
-> >>>
-> >>> I agree that there is no way to make every conceivable L1 happy.
-> >>> That's why the information needs to be surfaced to the L0 userspace. I
-> >>> contend that any time L0 kvm violates the architectural specification
-> >>> in its emulation of L1 or L2, the L0 userspace *must* be informed.
-> >>
-> >> We can make the design to exit to userspace on notify vm exit
-> >> unconditionally with exit_qualification passed, then userspace can take
-> >> the same action like what this patch does in KVM that
-> >>
-> >>    - re-enter guest when context_invalid is false;
-> >>    - stop running the guest if context_invalid is true; (userspace can
-> >> definitely re-enter the guest in this case, but it needs to take the
-> >> fall on this)
-> >>
-> >> Then, for nested case, L0 needs to enable it transparently for L2 if
-> >> this feature is enabled for L1 guest (the reason as we all agreed that
-> >> cannot allow L1 to escape just by creating a L2). Then what should KVM
-> >> do when notify vm exit from L2?
-> >>
-> >>    - Exit to L0 userspace on L2's notify vm exit. L0 userspace takes the
-> >> same action:
-> >>          - re-enter if context-invalid is false;
-> >>          - kill L1 if context-invalid is true; (I don't know if there is any
-> >> interface for L0 userspace to kill L2). Then it opens the potential door
-> >> for malicious user to kill L1 by creating a L2 to trigger fatal notify
-> >> vm exit. If you guys accept it, we can implement in this way.
-> >>
-> >>
-> >> in conclusion, we have below solution:
-> >>
-> >> 1. Take this patch as is. The drawback is L1 VMM receives a triple_fault
-> >> from L2 when L2 triggers notify vm exit with invalid context. Neither of
-> >> L1 VMM, L1 userspace, nor L2 kernel know it's caused due to notify vm
-> >> exit. There is only kernel log in L0, which seems not accessible for L1
-> >> user or L2 guest.
-> >
-> > You are correct on that last point, and I feel that I cannot stress it
-> > enough. In a typical environment, the L0 kernel log is only available
-> > to the administrator of the L0 host.
-> >
-> >> 2. a) Inject notify vm exit back to L1 if L2 triggers notify vm exit
-> >> with invalid context. The drawback is, old L1 hypervisor is not
-> >> enlightened of it and maybe misbehave on it.
-> >>
-> >>      b) Inject a synthesized SHUTDOWN exit to L1, with additional info to
-> >> tell it's caused by fatal notify vm exit from L2. It has the same
-> >> drawback that old hypervisor has no idea of it and maybe misbehave on it.
-> >>
-> >> 3. Exit to L0 usersapce unconditionally no matter it's caused from L1 or
-> >> L2. Then it may open the door for L1 user to kill L1.
-> >>
-> >> Do you have any better solution other than above? If no, we need to pick> >> one from above though it cannot make everyone happy.
-> >
-> > Yes, I believe I have a better solution. We obviously need an API for
-> > userspace to synthesize a SHUTDOWN event for a vCPU.
->
-> Can you elaborate on it? Do you mean userspace to inject a synthesized
-> SHUTDOWN to guest? If so, I have no idea how it will work.
 
-It can probably be implemented as an extension of KVM_SET_VCPU_EVENTS
-that invokes kvm_make_request(KVM_REQ_TRIPLE_FAULT).
+
+On 3/1/22 11:59 AM, Peter Xu wrote:
+> [Please note: This e-mail is from an EXTERNAL e-mail address]
+> 
+> On Tue, Mar 01, 2022 at 11:21:15AM +0800, Yun Zhou wrote:
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 78125ef20255..75511f78075f 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1596,7 +1596,8 @@ static const struct mm_walk_ops pagemap_ops = {
+>>    * Bits 5-54  swap offset if swapped
+>>    * Bit  55    pte is soft-dirty (see Documentation/admin-guide/mm/soft-dirty.rst)
+>>    * Bit  56    page exclusively mapped
+>> - * Bits 57-60 zero
+>> + * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
+>                                                  ^^^^^^^^^^^^^^^^^ remove these?
+Sorry for my mistake, I will follow your suggestion and send patch v2.
+
+Thanks,
+Yun

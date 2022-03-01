@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361544C90E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1914C90EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbiCAQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S234133AbiCAQxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiCAQxN (ORCPT
+        with ESMTP id S235367AbiCAQxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:53:13 -0500
-Received: from p3plsmtpa08-06.prod.phx3.secureserver.net (p3plsmtpa08-06.prod.phx3.secureserver.net [173.201.193.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D023B41
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:52:32 -0800 (PST)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id P5jinZajW7hrhP5jjnpw7C; Tue, 01 Mar 2022 09:52:31 -0700
-X-CMAE-Analysis: v=2.4 cv=EqsXEQQA c=1 sm=1 tr=0 ts=621e4f4f
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=20KFwNOVAAAA:8 a=uMNopYx9kklUAK_Ie8EA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Tue, 1 Mar 2022 16:52:29 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     pmladek@suse.com
-Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, cl@linux.com,
-        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org
-Subject: Re: [PATCH v9 10/14] module: kallsyms: Fix suspicious rcu usage
-Message-ID: <20220301165229.5pwxyhxonbw5za3i@ava.usersys.com>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-11-atomlin@redhat.com>
+        Tue, 1 Mar 2022 11:53:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BB4427F6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 08:52:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F9FC60F38
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 16:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10C1C340EE
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 16:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646153564;
+        bh=1tHh3nhKSXOYQ2q6r97FYV9g+H4AjRshQvzrxNnBogU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Cmp64ulMygyV7CSU7d9NYmlRmC9dojzyFswq/07cTz61xgeDfpELD18roHgEyMwBb
+         ltI5yP9WSu2jheQeLbUUHqyXA80rbAuUFlqhW+IAm+xmq7fLbKhmGYc9QNMf5UNb0l
+         yc4wUBXLi0TIIqDqiOkhzrpvhl6tgUVG3pO8S/JwWKVY8vCi+oOY6aC8uuRLcnIsKs
+         Z9E5PRKT3E9HSOxHhr1PozX6DfBUufEpru+K4FsUgXWU4EZUubAn2H2b/eFY+UHGFA
+         /7RcSOYg/RjtcPpTIpi/MKCc1cBdGqNOZltmBaIvG68c+9yr31iITO3qLlRjIc31zd
+         F4wx+Puk1b8AQ==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dbd97f9bfcso33422077b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 08:52:44 -0800 (PST)
+X-Gm-Message-State: AOAM530Eao6VutGc2ycJYD3tAJM0hYRYt9pbDlFXEuwZqB98hEPx0uMe
+        HRJBBsuEkXg9EPcvOwcfwmDmR+gPwkYFSCaD1Zo=
+X-Google-Smtp-Source: ABdhPJzk6Aq8yFjG8B63lv/pFfFQ4h/4giGtECsDrMe93FHunWY83IBQwfMx/4FmeaN2Ye/lWGUtZwVw4qjKYgpQuXc=
+X-Received: by 2002:a0d:dfd5:0:b0:2cf:924b:105d with SMTP id
+ i204-20020a0ddfd5000000b002cf924b105dmr26967912ywe.342.1646153563719; Tue, 01
+ Mar 2022 08:52:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220228234322.2073104-11-atomlin@redhat.com>
-X-CMAE-Envelope: MS4xfINBdR/q/bcqzriP3IEMbFhi47PsAzTEpGuiTlKK9J3Tu1GOW2hMFU5HeFL6BP0gCS9Ex8GN8S3w1AJ8L1P2s4Zrgy92386sFKRfhJD/bgMWsZfnpPW/
- cOYrDcTuhKpzORxfXNoJUGTy386F7nhO76AFns/9dTo+AShVlsbhd0GmhLOVM9YX55mxgq7+oQZ+mKEhd9N7jKlJ6HHuyNuXNZQpk/hlKfBBJdizJVjToV6z
- SWYppYAiRwTbykNK2073+dJVKMt05vQTOBiguGuebeWOcn0ctbjLZJsev/CmmsuRqhfxinGJZTyQmazFRhMYYKuwNJn9TSK/k/mIaQ7eiPM7t9x0QpupHp0V
- pTwAGN+jZ7ohsIkS6Jmw1T4J3jEqDZOnZYy9bVjM2xxFyvLNUDeCkcvqwdVUjCDEPlHRQ0cL5yNYaTz9/gLUbPwVsacLi1NDscT8ECFEh349CnfiE+TKfRcd
- F+2uwrh8+Bg8Op2W9Ibion+0/nMBTw4atbuBVomw3pEvCZIsK0x54ZxUn8Eh6R3VKH9KmboZ8F5a34hO4OiTQTWZX0ElqST9SWcKcDjasFIx/zP5W63rrVap
- QXLQjRtM1mG6xRGWy+0+UgOf0bxgk6/ZLGtIobTSu5Z++0XO14FCbVuJA+Tphv7Lq3/jxlKHKkcbvAPnUf8Ma/+t
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <Yh5ASXVoWoMj7/Rr@Red> <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk> <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 1 Mar 2022 17:52:30 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+Message-ID: <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+Subject: Re: boot flooded with unwind: Index not found
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-28 23:43 +0000, Aaron Tomlin wrote:
-> No functional change.
-> 
-> The purpose of this patch is to address the various Sparse warnings
-> due to the incorrect dereference/or access of an __rcu pointer.
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  kernel/module/kallsyms.c | 34 ++++++++++++++++++++++------------
->  1 file changed, 22 insertions(+), 12 deletions(-)
+On Tue, 1 Mar 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 1 Mar 2022 at 16:52, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
+> > > Hello
+> > >
+> > > I booted today linux-next (20220301) and my boot is flooded with:
+> > > [    0.000000] unwind: Index not found c0f0c440
+> > > [    0.000000] unwind: Index not found 00000000
+> > > [    0.000000] unwind: Index not found c0f0c440
+> > > [    0.000000] unwind: Index not found 00000000
+> > >
+> > > This happen on a sun8i-a83t-bananapi-m3
+> >
+> > Have you enabled vmapped stacks?
+> >
+>
+> This is probably related to
+>
+> 538b9265c063 ARM: unwind: track location of LR value in stack frame
+>
+> which removes a kernel_text_address() check on frame->pc as it is
+> essentially redundant, given that we won't find unwind data otherwise.
+> Unfortunately, I failed to realise that the other check carries a
+> pr_warn(), which may apparently fire spuriously in some cases.
+>
+> The 0x0 value can easily be filtered out, but i would be interesting
+> where the other value originates from. We might be able to solve this
+> with a simple .nounwind directive in a asm routine somewhere.
+>
+> I'll prepare a patch that disregards the 0x0 value - could you check
+> in the mean time what the address 0xcf0c440 coincides with in your
+> build?
 
-Petr,
+Something like the below should restore the previous behavior, while
+taking the kernel_text_address() check out of the hot path.
 
-Any concerns?
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -400,7 +400,8 @@ int unwind_frame(struct stackframe *frame)
 
-Unfortunately, I didn't make enough time to test.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
+        idx = unwind_find_idx(frame->pc);
+        if (!idx) {
+-               pr_warn("unwind: Index not found %08lx\n", frame->pc);
++               if (frame->pc && kernel_text_address(frame->pc))
++                       pr_warn("unwind: Index not found %08lx\n", frame->pc);
+                return -URC_FAILURE;
+        }

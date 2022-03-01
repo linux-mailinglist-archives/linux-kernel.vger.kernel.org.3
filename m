@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29174C81C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C74D4C81CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 04:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiCADy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 22:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S232172AbiCAD4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 22:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiCADyX (ORCPT
+        with ESMTP id S229719AbiCAD4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 22:54:23 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1499333E84;
-        Mon, 28 Feb 2022 19:53:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V5ryTkb_1646106819;
-Received: from 30.225.24.181(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V5ryTkb_1646106819)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 01 Mar 2022 11:53:40 +0800
-Message-ID: <dc861c95-3150-03c7-4ecb-d86c53f7d8b3@linux.alibaba.com>
-Date:   Tue, 1 Mar 2022 11:53:39 +0800
+        Mon, 28 Feb 2022 22:56:01 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6953BA6E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:55:21 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id bd1so12409823plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 19:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=15kO8bfahYJFiPLc1vZ8MJvVn1yYn8uPD0/+xIeiCzc=;
+        b=EilyBazjY/CYJQ2FvktcGrpjYVDdZSwf5yyYmaY2goT1gbFkaye+c/ckNkZ1Ll8blJ
+         Qr/rn5vksZA7AEnaBQFwQYJ18o+zYovqOqyhI6bNQoPdojEebEUPpLl3Ge4IUxL3ZVaf
+         b7XjY+WneeUPE6Y3qY/mjHPmWQ+6/3Vs5p6Sc7IOcxBXxqS2CvuUweE69Fj2voyDSG23
+         Zz1TNbiS3kDJA9NKKYrG8oAjeQj4EfLjaIsDIfj5WeeY60lz+M6TkMgj9xtpgufbSMk4
+         NNsw8u3iKQOC9qva2Gsn3n2Ztopd/HR/UVTasU3n49dl7GAZZmvBamIvfylHv/pEzB57
+         qqAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=15kO8bfahYJFiPLc1vZ8MJvVn1yYn8uPD0/+xIeiCzc=;
+        b=FEZZ7VUdKVObLC5utvBmpggMHPcI7vViPppgbNfvxKzLzVCj2CW3qWSRbbJZ/qO7tb
+         KYp2KJ5S+yjYTtO6yx9vldBzYbZqAImiN6/UA9mammcghvKGqISVxPJqKIkY3R0V0F9R
+         fuKwi4SLT7HB87Saa2Jt/VBz2Pdfs+zpS5hRIMjOmCWcouGeuTjBQfwxFUeQ3W6Z9AIa
+         JAQSmoCtXHuFmC1ZOCSsF+pSfvjx5BLstWzXYcpu6nlHlwWNQSwJWlQqHlptGcWy4NzT
+         6usvrxcLB02/0fXpZaWZcYtRXW4F1shBi54d1wxDj0xjtWWk+/qlNz+t9FCq9nJThYI3
+         GPOw==
+X-Gm-Message-State: AOAM531mQUXgSUZCB4hKBAT1Bw0W0eyTOewTrZ3ocHu7tUSPtE9gJEQL
+        wjjhEtyxczLh2ai2DXxJ1Z/hUA==
+X-Google-Smtp-Source: ABdhPJxuiB7k3oJfg/cJ8oTZlkYgj+RGZQnKNSV1zCmzNyKWhT6YBLHZprxiz8RDQXnXGJu5GNMQAQ==
+X-Received: by 2002:a17:902:9a02:b0:14f:2d93:92f4 with SMTP id v2-20020a1709029a0200b0014f2d9392f4mr24778661plp.160.1646106921016;
+        Mon, 28 Feb 2022 19:55:21 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id h12-20020a056a00218c00b004c3a2450acasm16045071pfi.147.2022.02.28.19.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 19:55:20 -0800 (PST)
+Date:   Tue, 1 Mar 2022 11:55:14 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, vkoul@kernel.org,
+        linux-phy@lists.infradead.org, robh+dt@kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v2 1/8] dt-bindings: phy: qcom,qmp: Mark '#clock-cells'
+ as a 'optional' property
+Message-ID: <20220301035514.GE269879@dragon>
+References: <20220228123019.382037-1-bhupesh.sharma@linaro.org>
+ <20220228123019.382037-2-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
- <aee0e905-7af4-332c-57bc-ece0bca63ce2@linux.alibaba.com>
- <f84f59e3edd9b4973ea2013b2893d4394a7bdb61.camel@trillion01.com>
- <2cedc9f21a1c89aa9fe1fa4dffc2ebeabeb761f5.camel@trillion01.com>
- <9954b806-c4a0-2448-1eac-c8fc5cf2ca2c@linux.alibaba.com>
- <1b6439ba29a3725ed041bfb8040c6b667cc4898a.camel@trillion01.com>
-From:   Hao Xu <haoxu@linux.alibaba.com>
-In-Reply-To: <1b6439ba29a3725ed041bfb8040c6b667cc4898a.camel@trillion01.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228123019.382037-2-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/3/1 上午5:20, Olivier Langlois 写道:
-> On Tue, 2022-03-01 at 02:34 +0800, Hao Xu wrote:
->>
->> On 2/25/22 23:32, Olivier Langlois wrote:
->>> On Fri, 2022-02-25 at 00:32 -0500, Olivier Langlois wrote:
->>>>>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>>>>> +static void io_adjust_busy_loop_timeout(struct timespec64
->>>>>> *ts,
->>>>>> +                                       struct io_wait_queue
->>>>>> *iowq)
->>>>>> +{
->>>>>> +       unsigned busy_poll_to =
->>>>>> READ_ONCE(sysctl_net_busy_poll);
->>>>>> +       struct timespec64 pollto = ns_to_timespec64(1000 *
->>>>>> (s64)busy_poll_to);
->>>>>> +
->>>>>> +       if (timespec64_compare(ts, &pollto) > 0) {
->>>>>> +               *ts = timespec64_sub(*ts, pollto);
->>>>>> +               iowq->busy_poll_to = busy_poll_to;
->>>>>> +       } else {
->>>>>> +               iowq->busy_poll_to = timespec64_to_ns(ts) /
->>>>>> 1000;
->>>>> How about timespec64_tons(ts) >> 10, since we don't need
->>>>> accurate
->>>>> number.
->>>> Fantastic suggestion! The kernel test robot did also detect an
->>>> issue
->>>> with that statement. I did discover do_div() in the meantime but
->>>> what
->>>> you suggest is better, IMHO...
->>> After having seen Jens patch (io_uring: don't convert to jiffies
->>> for
->>> waiting on timeouts), I think that I'll stick with do_div().
->>>
->>> I have a hard time considering removing timing accuracy when effort
->>> is
->>> made to make the same function more accurate...
->>
->>
->> I think they are different things. Jens' patch is to resolve the
->> problem
->>
->> that jiffies possibly can not stand for time < 1ms (when HZ is 1000).
->>
->> For example, a user assigns 10us, turn out to be 1ms, it's big
->> difference.
->>
->> But divided by 1000 or 1024 is not that quite different in this case.
->>
->>>
-> idk... For every 100uSec slice, dividing by 1024 will introduce a
-> ~2.4uSec error. I didn't dig enough the question to figure out if the
-> error was smaller than the used clock accuracy.
-> 
-> but even if the error is small, why letting it slip in when 100%
-> accurate value is possible?
-> 
-> Beside, making the painfully picky do_div() macro for some platforms
-> happy, I fail to understand the problem with doing a division to get an
-> accurate value.
-> 
-> let me reverse the question. Even if the bit shifting is a bit faster
-> than doing the division, would the code be called often enough to make
-> a significant difference?
-It's just my personal preference: when a faster way is acceptable, I 
-just choose that one. For this one, do_div() should be ok since that
-code is not hot in most case. But all depends to your test results.
+On Mon, Feb 28, 2022 at 06:00:12PM +0530, Bhupesh Sharma wrote:
+> Since '#clock-cells' is not a required property for qmp-phy(s)
+> (atleast in the '/' node, but is used in 'phy@' subnode),
+> so mark it as an optional property instead.
 
-Regards,
-Hao
+My understanding is that '#clock-cells' shouldn't be a property of qmp-phy
+node itself at all (not even optional), but a required property of 'phy'
+subnode.
 
+> 
+> This fixes the following 'make dtbs_check' warning(s):
+> 
+> sm8350-microsoft-surface-duo2.dt.yaml: phy@1d87000:
+>   '#clock-cells' is a required property
+> 
+> Also, make the dt-bindings confirm to changes
+> already made via commit 82d61e19fccb ("arm64: dts: qcom: msm8996:
+>  Move '#clock-cells' to QMP PHY child node"), by moving
+> '#clock-cells' property from the '/' node to the 'phy@' subnode.
+> 
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index e417cd667997..48cd6b6171a1 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -63,9 +63,6 @@ properties:
+>        - description: Address and length of PHY's common serdes block.
+>        - description: Address and length of PHY's DP_COM control block.
+>  
+> -  "#clock-cells":
+> -    enum: [ 1, 2 ]
+> -
+>    "#address-cells":
+>      enum: [ 1, 2 ]
+>  
+> @@ -109,11 +106,13 @@ patternProperties:
+>      description:
+>        Each device node of QMP phy is required to have as many child nodes as
+>        the number of lanes the PHY has.
+> +    properties:
+> +      "#clock-cells":
+> +        enum: [ 0, 1, 2 ]
+
+I'm not sure how to specify this is a required property for the child
+node.  Or is this already the case, @Rob?
+
+>  
+>  required:
+>    - compatible
+>    - reg
+> -  - "#clock-cells"
+>    - "#address-cells"
+>    - "#size-cells"
+>    - ranges
+> @@ -461,7 +460,6 @@ examples:
+>      usb_2_qmpphy: phy-wrapper@88eb000 {
+>          compatible = "qcom,sdm845-qmp-usb3-uni-phy";
+>          reg = <0x088eb000 0x18c>;
+> -        #clock-cells = <1>;
+
+These two changes look good to me.
+
+Shawn
+
+>          #address-cells = <1>;
+>          #size-cells = <1>;
+>          ranges = <0x0 0x088eb000 0x2000>;
+> -- 
+> 2.35.1
+> 

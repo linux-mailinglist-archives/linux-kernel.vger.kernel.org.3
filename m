@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791D94C943A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3268C4C943C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiCAT1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
+        id S235074AbiCATaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235057AbiCAT1v (ORCPT
+        with ESMTP id S235057AbiCATaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:27:51 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C287069CFA;
-        Tue,  1 Mar 2022 11:27:09 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3143766pjb.0;
-        Tue, 01 Mar 2022 11:27:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sjfszq0s6rA1DoiuWgRAAaEXXX3ctOb/kx6v17T7+bs=;
-        b=BUf/UxXV9ZTYi6bHIcNSeiVmUkwhpOMtCQdiWC+ay4Z9S5wpiOYuCXCIxzehzgVk+o
-         W1Tz6uC//wm7JDPdHnohPUL8ayfoRdAEJXWOuhp93F6AdjS5zhsdIRdXcMl7LoOxgL5S
-         cQ30ZduAtMTvuIT0IWAMAwvVyturUwj7e81GnYaWkgLwpGQx/29YuWDIvgD88vu2/cB6
-         lIW0y9fMxEHGPAxzIoTAq6cd1acGDgmWfhBtF0rb1zYTJ9wsVCsqlUD6L5WIt+Ny+URQ
-         qK/qz8orT5hZdWRoZ/8JDnt+u1fh9VpSE+nS2ipRNMJp4cJoUQCsCZ7QfPYtwzh2NcxW
-         Yddw==
+        Tue, 1 Mar 2022 14:30:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E7A43EE3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646162961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=b+msLQunHEcmiuuu7B6KPaPcoKHsejBtZdFml9n1AXs=;
+        b=OVKvkIRDPw3LHKGovHjAzOnRksEoKBhk4PIFnl0m1Th2tbnZ7UcSt50/MyKuThZWjeixBC
+        GVBHKgJFGTNejWh0kR5BS3kAEZpyf0p21TAWuN3h5clJt+toeDEzOf+32LNv2wYlpoYTjr
+        vX3SvzdHTk0cOtw6+uCIVMuF1MKSRx4=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-wbCBHDenPcOyA80RKxrvBQ-1; Tue, 01 Mar 2022 14:29:20 -0500
+X-MC-Unique: wbCBHDenPcOyA80RKxrvBQ-1
+Received: by mail-ot1-f72.google.com with SMTP id g24-20020a9d6a18000000b005af04eaa543so11896691otn.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:29:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sjfszq0s6rA1DoiuWgRAAaEXXX3ctOb/kx6v17T7+bs=;
-        b=5mJ9AYED6j+w2OH8ffop1Ob7J8Mp1YCNk+fqKEPXibEWIGxUcKXEm9zwHxQVI26kDE
-         FKvKjEL5/ji+nHsuWEmhl2aZoO5jhizCAU+k45ZOBifIupq9ZRU3V69DTIHCxoVmlsBW
-         dwQeD2jBgORBejHQV/ZTW6jh2hiftr52WTdYiFQGgQr/zZZ01GUA4dgqmxK0ztuSuYwv
-         k8W2arnbeJS1+GtVrwRmM2vQJozCcwS+WkkSt8XKN1kBoDjaVBcROvyM+2/lgeGlvwpM
-         bZUHVu6GLqQaZOXOqqMwZfqN2AWUKvf/oSrPAwqZvbJvCfc07xpH/dju+w45t4euSVye
-         JPuQ==
-X-Gm-Message-State: AOAM531CjYnwsB4GLqq7u6i4F+EuMOF+50gfTH8Z2F2cMt+ZKgQ3lPOM
-        Pd7UFHD+5A6VLB2qO2EzVxPv9BDet04lNA==
-X-Google-Smtp-Source: ABdhPJzLhA38IVBgeS0jS6fmXrfvYXbSfkWLFcH+ksuu9OxckKZQpge4EPfXA8PI1btrQvPsQzH6hA==
-X-Received: by 2002:a17:90b:4001:b0:1bc:68ec:ce48 with SMTP id ie1-20020a17090b400100b001bc68ecce48mr23182579pjb.133.1646162828937;
-        Tue, 01 Mar 2022 11:27:08 -0800 (PST)
-Received: from kitty ([12.231.191.170])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056a00158900b004de90b164d0sm19309394pfk.9.2022.03.01.11.27.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b+msLQunHEcmiuuu7B6KPaPcoKHsejBtZdFml9n1AXs=;
+        b=PxcCPNwksEvzXhgEyzNsD7toQcvS58nm4nvmAcAbhug0IQuEwxQKkakk64KKk8x9Ev
+         4PE+cciKPpjCcT2fRtohzD30mI/vQfyUYgWu7qmWoc6tDbyJy4Do8JnP9eCn2+TFRMi4
+         yADVsEEBbxNVJnwUX8FWEb+SLGO6QEdyqIXWaYAIZNjTZJyRspv7Vnkpn9dfUYrJHdhJ
+         ionUP7W/8OmOTdVwnC7dR5w6G9rX+nWlKxDuDh84Ur9jZCmBlq9Mm4w+BgNZzuuaV596
+         BgU3xeQ7MJT07cPP4L9OaTDW2jjgFub6GbcyCGzXrHiHJNGAibwDLwIReTYsJVNTEuYP
+         2mVA==
+X-Gm-Message-State: AOAM533HGeTjQPHY7VqqC6Rs7yTzyiYpqp78XjR7izUFg+AoYV91uiNB
+        Jbya1rTCken4NT1E2FncwopXF0rztuwlmhwCn0ab7pI2LOsI+sTMX9524gl1dRWwuekiv5+rDLC
+        ThNXbRsXWWMDncU6WOtAkUiho
+X-Received: by 2002:a05:6870:87c4:b0:bc:4b13:b0c0 with SMTP id s4-20020a05687087c400b000bc4b13b0c0mr5039313oam.136.1646162959407;
+        Tue, 01 Mar 2022 11:29:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpLY9TTBQgKSPEKTWZlSp5xirp8uo7AKtiTGqXvhErF6hETfzSvsXuEhplLz2OX8xyyVD/vQ==
+X-Received: by 2002:a05:6870:87c4:b0:bc:4b13:b0c0 with SMTP id s4-20020a05687087c400b000bc4b13b0c0mr5039301oam.136.1646162959171;
+        Tue, 01 Mar 2022 11:29:19 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id t7-20020a9d5907000000b005afa4058a4csm7019270oth.1.2022.03.01.11.29.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 11:27:08 -0800 (PST)
-From:   10maurycy10@gmail.com
-X-Google-Original-From: mz@kitty
-Date:   Tue, 1 Mar 2022 11:27:16 -0800
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: Re: Re: [PATCH RFC v0] random: block in /dev/urandom
-Message-ID: <Yh5zA1T9GRBFi5H9@kitty>
-References: <20220211210757.612595-1-Jason@zx2c4.com>
- <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
+        Tue, 01 Mar 2022 11:29:18 -0800 (PST)
+From:   trix@redhat.com
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        corbet@lwn.net, bhelgaas@google.com
+Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] vgaarbiter: fix vgaarbiter doc build break
+Date:   Tue,  1 Mar 2022 11:29:09 -0800
+Message-Id: <20220301192909.294900-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,84 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 06:05:54PM -0500, Joshua Kinard wrote:
-> On 2/11/2022 16:07, Jason A. Donenfeld wrote:
-> > This is very much an RFC patch, or maybe even an RFG -- request for
-> > grumbles. This topic has come up a million times, and usually doesn't go
-> > anywhere. This time I thought I'd bring it up with a slightly narrower
-> > focus. Before you read further, realize that I do not intend to merge
-> > this without there being an appropriate amount of consensus for it and
-> > discussion about it.
-> > 
-> > Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
-> > rather than passively wait for it"), the RNG does a haveged-style jitter
-> > dance around the scheduler, in order to produce entropy (and credit it)
-> > for the case when we're stuck in wait_for_random_bytes(). How ever you
-> > feel about the Linus Jitter Dance is beside the point: it's been there
-> > for three years and usually gets the RNG initialized in a second or so.
-> >
+From: Tom Rix <trix@redhat.com>
 
-What about the case where a small amount of entropy is avalable?
+make htmldocs fails with
+Error: Cannot open file ./drivers/gpu/vga/vgaarb.c
 
-> > 
-> > As a matter of fact, this is what happens currently when people use
-> > getrandom(2).
-> > 
-> > So, given that the kernel has grown this mechanism for seeding itself
-> > from nothing, and that this procedure happens pretty fast, maybe there's
-> > no point any longer in having /dev/urandom give insecure bytes. In the
-> > past we didn't want the boot process to deadlock, which was
-> > understandable. But now, in the worst case, a second goes by, and the
-> > problem is resolved. It seems like maybe we're finally at a point when
-> > we can get rid of the infamous "urandom read hole".
-> >
+The location of the file changed
+drivers/gpu/vga/vgaarb.c -> drivers/pci/vgaarb.c
+So update the docs with the new location.
 
-Why not keep the distinction between /dev/random and /dev/urandom when a
-good entropy source is not avalable?
+Fixes: d6e1898bfa5b ("PCI/VGA: Move vgaarb to drivers/pci")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ Documentation/gpu/vgaarbiter.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > 
-> > Maybe. And this is why this is a request for grumbles patch: the Linus
-> > Jitter Dance relies on random_get_entropy() returning a cycle counter
-> > value. The first lines of try_to_generate_entropy() are:
-> > 
-> > 	stack.now = random_get_entropy();
-> > 	/* Slow counter - or none. Don't even bother */
-> > 	if (stack.now == random_get_entropy())
-> > 		return;
-> > 
-> > So it would appear that what seemed initially like a panacea does not in
-> > fact work everywhere. Where doesn't it work?
-> > 
-> > On every platform, random_get_entropy() is connected to get_cycles(),
-> > except for three: m68k, MIPS, and RISC-V.
-> > 
-> 
-> [snip]
-> 
-> > 
-> > I think what this adds up to is that this change would positively affect
-> > everybody, except for _possibly_ negatively affecting poorly configured
-> > non-Amiga m68k systems and the MIPS R6000 and R6000A. Does that analysis
-> > seem correct to folks reading, or did I miss something?
-> > 
-> > Are there other cases where the cycle counter does exist but is simply
-> > too slow? Perhaps some computer historians can chime in here.
-> > 
-> > [snip]
+diff --git a/Documentation/gpu/vgaarbiter.rst b/Documentation/gpu/vgaarbiter.rst
+index 339ed5fecd2e4..bde3c0afb0590 100644
+--- a/Documentation/gpu/vgaarbiter.rst
++++ b/Documentation/gpu/vgaarbiter.rst
+@@ -100,7 +100,7 @@ In-kernel interface
+ .. kernel-doc:: include/linux/vgaarb.h
+    :internal:
+ 
+-.. kernel-doc:: drivers/gpu/vga/vgaarb.c
++.. kernel-doc:: drivers/pci/vgaarb.c
+    :export:
+ 
+ libpciaccess
+-- 
+2.26.3
 
-
-This should realy be a config flag. (URANDOM_SECURE_RANDOM?).
-
-> 
-> 
-> -- 
-> Joshua Kinard
-> Gentoo/MIPS
-> kumba@gentoo.org
-> rsa6144/5C63F4E3F5C6C943 2015-04-27
-> 177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-> 
-> "The past tempts us, the present confuses us, the future frightens us.  And
-> our lives slip away, moment by moment, lost in that vast, terrible in-between."
-> 
-> --Emperor Turhan, Centauri Republic

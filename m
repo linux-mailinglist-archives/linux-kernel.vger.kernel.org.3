@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4B94C87ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A342B4C87F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbiCAJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S233843AbiCAJd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbiCAJdM (ORCPT
+        with ESMTP id S233816AbiCAJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:33:12 -0500
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4B0C3F;
-        Tue,  1 Mar 2022 01:32:30 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id g20so15877517vsb.9;
-        Tue, 01 Mar 2022 01:32:30 -0800 (PST)
+        Tue, 1 Mar 2022 04:33:25 -0500
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD48F1090;
+        Tue,  1 Mar 2022 01:32:33 -0800 (PST)
+Received: by mail-vk1-f181.google.com with SMTP id k9so6542993vki.4;
+        Tue, 01 Mar 2022 01:32:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GU1fZUmKr8lPWItqxtWN/jbkF8NRwiskScmL2wp5+Tk=;
-        b=DxnBXz7gDZjuxkq1JgwTKDXkVOAkoC9J9FKVvn1awhRABB76Lsr96K0AScFW9R9Ti7
-         3tfNpJuBMXvSIzNFXDjXX1NGkVS2M3gAwJecZXMtbHXSmCcHFBHHd3Adl6xjDDN3jHQH
-         LkQNRAKVX9nd1Jx7PkQCydzaM0SBxsuadsBtl5Go+Y/TBcracQ2UFh3TrB05oMJyQhS6
-         VXsKf7dYj407PHikImwF1Yq5FHBu4ZwF5FwYykUGDX/hYgor+wkZkYZEW23sL9TQ6w3R
-         VvbdfCtOYa6C//EadrtkzCNO9mmJLcDM59vaMjFT9xWVIJXVYjeH/I9MsnAbaNGq6nXE
-         8UIw==
-X-Gm-Message-State: AOAM5321ixna3tM9P29gDA5VulnVlKoZcIjZ61dlHhghx6nSHHgf4L99
-        uxlDMYidEP4wdolDgagX0OzBb5+M5CpQjQ==
-X-Google-Smtp-Source: ABdhPJzJbU/20eXlOs6aDHFJcH5WJRWyTdmUYCYT/LqVEEqEy05tStWfXp+zSFoZ2VCJNKNrtfaLMA==
-X-Received: by 2002:a67:f852:0:b0:314:a25f:c5f with SMTP id b18-20020a67f852000000b00314a25f0c5fmr9121331vsp.73.1646127149809;
-        Tue, 01 Mar 2022 01:32:29 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id bi18-20020a05610234f200b0031b441be417sm1701197vsb.15.2022.03.01.01.32.29
+        bh=JewjBvTz72R+8K96y3pWlhGhOTqqPKm2D0L3LCWGapc=;
+        b=cXj2I73JyzcboCghrBrdaePwE/SwuQoWc+ryOofBe/N0BcDDQ2HROZ0/qLw8tlVjX3
+         jGo0OGgLVBUFe6t2c0R/dokXD7HaFhnc5/TJ9iJpFrDYFYkZE1+0u5A0vvDpL2xp4ilM
+         TqazDjwiVfYaVHltVI1KGWXuJemjC4wCPr0TuBIrgTQQOn8VgAUZ7cwxZl+UhFt/Tv7E
+         JpM6LBgsMRwvGkyOOvpsbXZyX3eP9BpzF257yjK0brM7Vwvhs1KK3rtewGwTMQ5SUe9R
+         ielv8YDHi9s3vBBGoiU7ONOB3pkg2ScWekB/jWsdsfXEYwGEz39Nf95ZU2UiBKdSTSEO
+         Co+g==
+X-Gm-Message-State: AOAM530FwLEq+ERynRvGkX53uogGBfoiUJ4pZj+iByHyK7xQLPLAAdEH
+        g3picnXJS+ks1ZSUJgkBYlqMNJRQWGRwOA==
+X-Google-Smtp-Source: ABdhPJzEEteiw+8b2xBdTr45TSwjVYghMnR6qU2K2ZMJ+SknnFp3IY0ZKrQqoJ4nW0BvowRoeAftlg==
+X-Received: by 2002:a1f:348a:0:b0:32d:34f:7941 with SMTP id b132-20020a1f348a000000b0032d034f7941mr9607573vka.13.1646127152627;
+        Tue, 01 Mar 2022 01:32:32 -0800 (PST)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id 4-20020a1f1604000000b00330d7b11691sm2083692vkw.51.2022.03.01.01.32.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 01:32:29 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id w128so6555972vkd.3;
-        Tue, 01 Mar 2022 01:32:29 -0800 (PST)
-X-Received: by 2002:a1f:6087:0:b0:328:e94a:54b3 with SMTP id
- u129-20020a1f6087000000b00328e94a54b3mr9766325vkb.20.1646127148863; Tue, 01
- Mar 2022 01:32:28 -0800 (PST)
+        Tue, 01 Mar 2022 01:32:32 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id i27so15842686vsr.10;
+        Tue, 01 Mar 2022 01:32:32 -0800 (PST)
+X-Received: by 2002:a67:b00e:0:b0:30d:dc98:6024 with SMTP id
+ z14-20020a67b00e000000b0030ddc986024mr10340330vse.57.1646127152232; Tue, 01
+ Mar 2022 01:32:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220227203744.18355-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227203744.18355-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220227203744.18355-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227203744.18355-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 1 Mar 2022 10:32:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUYRbXBceZ9atq1csi0xWx3uODOT=_Pn5NT5r93RCjRTA@mail.gmail.com>
-Message-ID: <CAMuHMdUYRbXBceZ9atq1csi0xWx3uODOT=_Pn5NT5r93RCjRTA@mail.gmail.com>
-Subject: Re: [PATCH 03/12] arm64: dts: renesas: r9a07g054: Fillup the CANFD
- stub node
+Date:   Tue, 1 Mar 2022 10:32:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW2ckTAttC4Wx8Uo=Q6FAAktK-40usfGMgNS9x5jtEeyg@mail.gmail.com>
+Message-ID: <CAMuHMdW2ckTAttC4Wx8Uo=Q6FAAktK-40usfGMgNS9x5jtEeyg@mail.gmail.com>
+Subject: Re: [PATCH 02/12] arm64: dts: renesas: r9a07g054l2-smarc: Drop
+ deleting gpio-hog pins related to SDHI
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -74,7 +74,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Feb 27, 2022 at 9:38 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Fillup the CANFD stub node in RZ/V2L (R9A07G054) SoC DTSI.
+> Drop deleting gpio-hog pins related to SDHI0/1 so that SDHI functionality
+> gets enabled on Renesas RZ/V2L SMARC EVK.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>

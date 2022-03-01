@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CC84C93AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB344C93AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237205AbiCAS7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S237181AbiCAS7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbiCAS7L (ORCPT
+        with ESMTP id S237160AbiCAS7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:59:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAD8410D1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646161107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kFGZgdXGLGnwvZ+1z11nI3m8EaJ5DlrV2FeYU+AyTr8=;
-        b=GQFCwH2TKH/g3WabtuAGVHx1YgcYLBdqwEqUKUJO0Du3cJd/3eZ48aHqnBI6gYqyTuZOqE
-        tVIzw75Z+M1GjdmBkUO66fm3EOM8jq6wFn0/hmbO0AoPcjSV81eFxew9EnOs+e0HUJu5n7
-        bvWKkrL8YenLViXMTC2bn/QAcqMz5KA=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-YYwmTz9rM8-C8yNqKSyWpQ-1; Tue, 01 Mar 2022 13:58:26 -0500
-X-MC-Unique: YYwmTz9rM8-C8yNqKSyWpQ-1
-Received: by mail-ed1-f71.google.com with SMTP id j9-20020a056402238900b004128085d906so8224813eda.19
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:58:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kFGZgdXGLGnwvZ+1z11nI3m8EaJ5DlrV2FeYU+AyTr8=;
-        b=d/7RL0GF5xE0aFe0zbtzcXuW+CdaKhL1aeUoa3YGN161htrahaj+c+1GmwSbGrPxP4
-         NKyEfXnQWGjS1FnJieTL6EksdZOgERMXQGkwbVwsgfNubW/8mH/gMdPFBvl/B8gSu/tL
-         9OzJDBQgIkBZ0xT6nZXhg4EHHXN/YSAAT3Ca2eyBQZaVaE1IsckrFP+DWalAAqAoNzDR
-         6YbAVL02lV/Hvx//COSuIcWcUii33F2HJCkidsbdcm7OcejP0WIShuhrHzjuO8rcPkMn
-         3C++RezfWlqGYwAPNurah+8dNcftfvQjuGUTk4sFOZYerF1CGt0VD0S342ncJ+3qbfCA
-         0TuQ==
-X-Gm-Message-State: AOAM5326R2LcXdnOdBVg2ZYLNs/gcgr/o0vKE0DayPMFbGLk8Ga0WKtw
-        n657/L3FZGRUw3jT0P352REK2WlCmYTtwus3XhrRfCkt3GtZq8wczIHKyrM0d3EIo5jG6hVveh2
-        LmjZ0ZA7IBfm+dRYsd1GDTeNs
-X-Received: by 2002:a17:906:6547:b0:6bd:e2ad:8c82 with SMTP id u7-20020a170906654700b006bde2ad8c82mr20029225ejn.693.1646161104901;
-        Tue, 01 Mar 2022 10:58:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxoxm0y9DtCYhMH0XDokdx9OLF6FczI4F7yXrDG+1LbabKaLiDeGT+H7vClwVfb8jEpkf/C6Q==
-X-Received: by 2002:a17:906:6547:b0:6bd:e2ad:8c82 with SMTP id u7-20020a170906654700b006bde2ad8c82mr20029210ejn.693.1646161104720;
-        Tue, 01 Mar 2022 10:58:24 -0800 (PST)
-Received: from [10.0.0.45] (host-95-232-30-176.retail.telecomitalia.it. [95.232.30.176])
-        by smtp.gmail.com with ESMTPSA id k19-20020a1709062a5300b006c75a94c587sm5581585eje.65.2022.03.01.10.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 10:58:24 -0800 (PST)
-Message-ID: <b823e468-3c98-44d8-ccf6-8a9ddc769fb5@redhat.com>
-Date:   Tue, 1 Mar 2022 19:58:23 +0100
+        Tue, 1 Mar 2022 13:59:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70196FC4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:58:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C96A61548
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 18:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CE3C340EE;
+        Tue,  1 Mar 2022 18:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646161103;
+        bh=2/nZgk/9IpyftnMuUy57Y4SE+vy+TOgblD9YKfS1pT4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qlJOMjJVIpRICBycDW/tW+DNUiiSoODQHiAgAAxn+dOnml97PlXpm62oH12MSw7lL
+         qj2FiUrL/zFk3YbUwNEOMx1/lyIBGU1DbqhNnvHli2QSoCPTpjY/JgyIuUgnOqDTnX
+         QpqJcLdOXq5ijeGPFynnBOiOp2AWPxXTjdwpomYTJHMRGJQLj+NyKcBYatjBUE4bCX
+         D42G7iuaax8UqaT0g3tNWx65MHmW8qsKdiSh+QxaSwbd+XmPJL2Mxx7QRWqZGPlUL2
+         TYODUx+qgPPOhRwIIC3xZg7Yd5/KSjz5yLnf2QRgeQ66u8JGENPj8JnzocEaSyLjfa
+         1+DCrtx+Rc9Kw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 09CE25C0440; Tue,  1 Mar 2022 10:58:23 -0800 (PST)
+Date:   Tue, 1 Mar 2022 10:58:23 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, rostedt@goodmis.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, mtosatti@redhat.com
+Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
+Message-ID: <20220301185823.GS4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220228141423.259691-1-nsaenzju@redhat.com>
+ <137d3573-051f-5374-70d6-cc99b44d00da@kernel.org>
+ <b604526d3186f6cd3da189abb70bd1ad9a6105c5.camel@redhat.com>
+ <69e92bc6-0917-17e9-1b61-d884d30ba42c@kernel.org>
+ <20220301180509.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+ <c3cf7c0c-27fe-4dfa-4249-a7e1747237a5@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] tracing: Avoid isolated CPUs when queueing
- fsnotify irqwork
-Content-Language: en-US
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, mingo@redhat.com,
-        peterz@infradead.org, frederic@kernel.org, rostedt@goodmis.org
-Cc:     tglx@linutronix.de, mtosatti@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20220301113053.141514-1-nsaenzju@redhat.com>
- <20220301113053.141514-2-nsaenzju@redhat.com>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <20220301113053.141514-2-nsaenzju@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3cf7c0c-27fe-4dfa-4249-a7e1747237a5@kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,16 +62,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 12:30, Nicolas Saenz Julienne wrote:
-> There isn't any need for this irq_work to be run locally, so avoid doing
-> so when the CPU is isolated.
+On Tue, Mar 01, 2022 at 07:44:38PM +0100, Daniel Bristot de Oliveira wrote:
+> On 3/1/22 19:05, Paul E. McKenney wrote:
+> >> I see, as long as it costs < 1 us, I am ok. If it gets > 1us in a reasonably
+> >> fast machine, we start see HW noise where it does not exist, and that would
+> >> reduce the resolution of osnoise. AFAICS, it is not causing that problem, but we
+> >> need to make it as lightweight as possible.
+> > In the common case, it is atomically incrementing a local per-CPU counter
+> > and doing a store.  This should be quite cheap.
+> > 
+> > The uncommon case is when the osnoise process was preempted or otherwise
+> > interfered with during a recent RCU read-side critical section and
+> > preemption was disabled around that critical section's outermost
+> > rcu_read_unlock().  This can be quite expensive.  But I would expect
+> > you to just not do this.  ;-)
 > 
-> Note that this is especially bad as queueing it into a local isolated
-> CPU might add noise to what was meant to be traced in the first place.
+> Getting the expensive call after a preemption is not a problem, it is a side
+> effect of the most costly preemption.
 > 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> It this case, we should "ping rcu" before reading the time to account the
+> overhead for the previous preemption which caused it.
+> 
+> like (using the current code as example):
+> 
+> ------------------------- %< -------------------------------
+> static u64
+> set_int_safe_time(struct osnoise_variables *osn_var, u64 *time)
+> {
+>         u64 int_counter;
+> 
+>         do {
+>                 int_counter = local_read(&osn_var->int_counter);
+> 
+> 		------------> HERE <-------------------------------------
+> 
+>                 /* synchronize with interrupts */
+>                 barrier();
+> 
+>                 *time = time_get();
+> 
+>                 /* synchronize with interrupts */
+>                 barrier();
+>         } while (int_counter != local_read(&osn_var->int_counter));
+> 
+>         return int_counter;
+> }
+> ------------------------- >% -------------------------------
+> 
+> In this way anything that happens before this *time is accounted before it is
+> get. If anything happens while this loop is running, it will run again, so it is
+> safe to point to the previous case.
+> 
+> We would have to make a copy of this function, and only use the copy for the
+> run_osnoise() case. A good name would be something in the lines of
+> set_int_safe_time_rcu().
+> 
+> (Unless the expensive is < than 1us.)
 
-Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+The outermost rcu_read_unlock() could involve a call into the scheduler
+to do an RCU priority deboost, which I would imagine could be a bit
+expensive.  But I would expect you to configure the test in such a way
+that there was no need for RCU priority boosting.  For example, by making
+sure that the osnoise process's RCU readers were never preempted.
 
--- Daniel
+Just out of curiosity, why is this running in the kernel rather than in
+userspace?  To focus only on kernel-centric noise sources?  Or are there
+people implementing real-time applications within the kernel?
 
+							Thanx, Paul

@@ -2,43 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5584C9857
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8304C986D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 23:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237125AbiCAWZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 17:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S238364AbiCAWjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 17:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbiCAWZ1 (ORCPT
+        with ESMTP id S233241AbiCAWjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 17:25:27 -0500
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DF960CC9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 14:24:44 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DDF663F73D;
-        Tue,  1 Mar 2022 23:24:41 +0100 (CET)
-Date:   Tue, 1 Mar 2022 23:24:40 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: Drop bogus interrupt flags cell on
- MDSS nodes
-Message-ID: <20220301222440.pn3uxnoata4jaq4z@SoMainline.org>
-References: <20220301210531.1855709-1-robh@kernel.org>
+        Tue, 1 Mar 2022 17:39:16 -0500
+X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 14:38:32 PST
+Received: from fox.pavlix.cz (fox.pavlix.cz [185.8.165.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB0036A033;
+        Tue,  1 Mar 2022 14:38:30 -0800 (PST)
+Received: from [172.16.63.206] (37-48-0-234.nat.epc.tmcz.cz [37.48.0.234])
+        by fox.pavlix.cz (Postfix) with ESMTPSA id 8219111111E;
+        Tue,  1 Mar 2022 23:30:47 +0100 (CET)
+Message-ID: <f7fc9c30-0514-0bfb-ee98-f3944d752d7f@simerda.eu>
+Date:   Tue, 1 Mar 2022 23:30:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301210531.1855709-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 net-next 00/10] net: bridge: Multiple Spanning Trees
+Content-Language: en-US
+To:     Tobias Waldekranz <tobias@waldekranz.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org, navolnenoze@simerda.eu
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301162142.2rv23g4cyd2yacbs@skbuf> <87fso1nzdt.fsf@waldekranz.com>
+From:   =?UTF-8?Q?Pavel_=c5=a0imerda?= <code@simerda.eu>
+In-Reply-To: <87fso1nzdt.fsf@waldekranz.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,67 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-On 2022-03-01 15:05:31, Rob Herring wrote:
-> The MDSS interrupt provider is a single cell, so specifying interrupt flags
-> on the consumers is incorrect.
 
-There seem to be many more violators of `#interrupt-cells = <1>;`, at
-least on -next e6ada6df471f.  It seems those are not intentionally
-omitted in this patch?  Searching for `interrupt-parent = <&mdss>;`
-globally and evaluating `interrupts =` right next to it yields:
-
-- Two more hits in both sdm845.dtsi and sm8250.dtsi;
-- qcom-msm8974.dtsi;
-- msm8996.dtsi;
-- sdm630.dtsi;
-- sdm660.dtsi.
-
-And for the docs patch:
-- mdp5.txt;
-- And the recently added dpu-qcm2290.yaml, whose CI failure might have
-  exactly lead to this patch?
-
-Would you mind cleaning these up in a v2, or otherwise explain and
-forgive my ignorance for not seeing why these were not changed?
-
-Thanks!
-
-- Marijn
-
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On 01/03/2022 22:20, Tobias Waldekranz wrote:
+> On Tue, Mar 01, 2022 at 18:21, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> Hi Tobias,
+>>
+>> On Tue, Mar 01, 2022 at 11:03:11AM +0100, Tobias Waldekranz wrote:
+>>> A proposal for the corresponding iproute2 interface is available here:
+>>>
+>>> https://github.com/wkz/iproute2/tree/mst
+>>
+>> Please pardon my ignorance. Is there a user-mode STP protocol application
+>> that supports MSTP, and that you've tested these patches with?
+>> I'd like to give it a try.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 41f4e46e1f85..a6bf04780667 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -4281,7 +4281,7 @@ mdss_mdp: mdp@ae01000 {
->  				power-domains = <&rpmhpd SDM845_CX>;
->  
->  				interrupt-parent = <&mdss>;
-> -				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-> +				interrupts = <0>;
->  
->  				ports {
->  					#address-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index fdaf303ba047..e732e3370c75 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -3200,7 +3200,7 @@ mdss_mdp: mdp@ae01000 {
->  				power-domains = <&rpmhpd SM8250_MMCX>;
->  
->  				interrupt-parent = <&mdss>;
-> -				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-> +				interrupts = <0>;
->  
->  				ports {
->  					#address-cells = <1>;
-> -- 
-> 2.32.0
+> I see that Stephen has already pointed you to mstpd in a sibling
+> message.
 > 
+> It is important to note though, that AFAIK mstpd does not actually
+> support MSTP on a vanilla Linux system. The protocol implementation is
+> in place, and they have a plugin architecture that makes it easy for people
+> to hook it up to various userspace SDKs and whatnot, but you can't use
+> it with a regular bridge.
+> 
+> A colleague of mine has been successfully running a modified version of
+> mstpd which was tailored for v1 of this series (RFC). But I do not
+> believe he has had the time to rework it for v2. That should mostly be a
+> matter of removing code though, as v2 allows you to manage the MSTIs
+> directly, rather than having to translate it to an associated VLAN.
+
+Hello,
+
+we experimented with mstpd with pretty reasonable kernel modifications. Vanilla kernel wasn't capable of transferring the correct mapping from mstpd to the hardware due to lack of vlan2msti mapping and per-msti port state (rather than just per-vlan port state).
+
+https://github.com/mstpd/mstpd/pull/112
+
+I didn't pursue this for a while, though.
+
+Regards,
+Pavel

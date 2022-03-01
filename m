@@ -2,146 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EAB4C953F
+	by mail.lfdr.de (Postfix) with ESMTP id 51CB24C9540
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237543AbiCAT5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S237609AbiCAT5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237251AbiCAT4i (ORCPT
+        with ESMTP id S237568AbiCAT5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:56:38 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26EC6CA59;
-        Tue,  1 Mar 2022 11:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646164557; x=1677700557;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=Fl34ROTLcd+eMllC9hzRVku13lC3x4b2npFrIe2SmFc=;
-  b=dP3MGgq4pFzAEn5dJbLWWQmKXi4RCFGcDybzALGcz0OLyo2xBhVP08zI
-   Xn6OTFKcjx9aWsdhMzztqnaXfL7y6CQfpJPnSfig20gJK6AoH7oMunKrV
-   Bl2ZldRkmPJ3QuLLGSsX+SJ5QC9H+ZQBiG3XFxF4qSQ42ZZ06bdgLJkmQ
-   Ib0F9gbvEJcY0jS7e/zL2kBD8tNd3Q6QgSge9Cy/7zHBkqJyY0xjcy8r0
-   KZyQuosQYn40gLr/rJeLFgcAlmtYHqNbkVPD71ppGsd/1pNeMrQZyp4VZ
-   SlYoju/DY2cBeR4Oy2i4CPEMTHDWDVBfHrLtQA/tSPxlVF6jQGte0uuUr
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="233194906"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="233194906"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 11:55:54 -0800
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="630133183"
-Received: from coffy.sc.intel.com ([10.3.79.166])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 11:55:54 -0800
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: [RFC 10/10] trace: platform/x86/intel/ifs: Add trace point to track Intel IFS operations
-Date:   Tue,  1 Mar 2022 11:54:57 -0800
-Message-Id: <20220301195457.21152-11-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220301195457.21152-1-jithu.joseph@intel.com>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Mar 2022 14:57:18 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5887460F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 11:56:19 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id i11so28753479lfu.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 11:56:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xMi6jfjPmOmbZli1oBeEnCLh26RC8er1sFN7ImcKi+o=;
+        b=hquZMrM0xczMD9ZZ2fmNHpKRRvIiE7LGxeRQJjMZze98rNEK5Ra0HRlOcHxK1KVi4e
+         FQBN2HtdkQyg3o4uLsn9EldD2THulu/j3z0J4c66DGvW7dy1eAyfhY+zPXLMelBK2NVs
+         vFTKlgnUUtURZxAVCwYSSRSsE1DD1TOPa1gDQr3nPyXjuZyynXejfYtMrPNZv4qIlUpD
+         asXGdBdEC/EqRmjLSKU9coJTyUmLsswdnWGR9v05EWG09syjtZNPsGSHcVR0+xDYzlUn
+         xQ2tt273NyMVjhC6JJKYVK3HJjm31oXEOGz7C5tWg61kUtCoX5BnnE6UEYkhMFnA1EZr
+         /tdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xMi6jfjPmOmbZli1oBeEnCLh26RC8er1sFN7ImcKi+o=;
+        b=mSzNAaRGtQx3n1AHWsyP5HbcnnzYxKsJfUSXPx/jgeX9KTsjeCxCWwzth1VVyYOjHJ
+         iK4pbYhOtRXvMuA976Nf2BaPU2cInmUDvEjU1J6qdvBB9KwRYXFQzxBSrB+yXBazchnP
+         BedezbU06/7AHuqcqJUx8ekf0SYRQMCgTyerayG6TBi0qk1gFlidaIyPpDO7p2XXJpEj
+         i3trbsiIHrIPJS6GE6rhdoW7c6zflelr9lcC5gG1ZU1jjwRfy5TMuYcdw1++NR5Ba1ZW
+         TCNJI9HvxoP7Qoukojn/Q3b/m4FnBlcP/3ZKVjvrUUV8cbZDjRpwTIxOW6SBrzRy8+Ao
+         De1Q==
+X-Gm-Message-State: AOAM532Ry4CJA3YuFX3W2ZfoCwmBCbgZZbRiviBHOn/srX+SRClLvXvY
+        Tk9cESTxtz2PjI2tXU8FpdyhGqa1LxgQfMZTEausTA==
+X-Google-Smtp-Source: ABdhPJxHJ28ixWzc8Cw9z63iY2V3Qs825Z5wYOByAiHrKjX3T4RD+ppSjBBfmC8N5GLCMcFfzTk1/mPc6px+kJRbpbg=
+X-Received: by 2002:a19:2d11:0:b0:445:65c7:5f1e with SMTP id
+ k17-20020a192d11000000b0044565c75f1emr16420364lfj.184.1646164576477; Tue, 01
+ Mar 2022 11:56:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
+In-Reply-To: <20220301145233.3689119-3-arnd@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 1 Mar 2022 11:56:05 -0800
+Message-ID: <CAKwvOdnABhWN9-o0J0cN2epDJby=JX5BNGr6U_w4WiFZ7qbwig@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+On Tue, Mar 1, 2022 at 6:52 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> As we change the C language standard for the kernel from gnu89 to
+> gnu11, it makes sense to also update the version for user space
+> compilation.
+>
+> Some users have older native compilers than what they use for
+> kernel builds, so I considered using gnu99 as the default version
+> for wider compatibility with gcc-4.6 and earlier.
+>
+> However, testing with older compilers showed that we already require
+> HOSTCC version 5.1 as well because a lot of host tools include
+> linux/compiler.h that uses __has_attribute():
+>
+>   CC      tools/objtool/exec-cmd.o
+> In file included from tools/include/linux/compiler_types.h:36:0,
+>                  from tools/include/linux/compiler.h:5,
+>                  from exec-cmd.c:2:
+> tools/include/linux/compiler-gcc.h:19:5: error: "__has_attribute" is not defined [-Werror=undef]
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Add tracing support which may be useful for debugging systems that fail to complete
-In Field Scan tests.
+Thanks for the patches!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/platform/x86/intel/ifs/core.c |  5 ++++
- include/trace/events/ifs.h            | 38 +++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 include/trace/events/ifs.h
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 37ef6a555dcd..7c9be7f1ccd4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -432,7 +432,7 @@ HOSTCXX     = g++
+>  endif
+>
+>  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+> -                           -O2 -fomit-frame-pointer -std=gnu89 \
+> +                           -O2 -fomit-frame-pointer -std=gnu11 \
+>                             -Wdeclaration-after-statement
+>  export KBUILD_USERLDFLAGS :=
+>
+> --
+> 2.29.2
+>
 
-diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-index c9ca385082e9..dec2a72eb95a 100644
---- a/drivers/platform/x86/intel/ifs/core.c
-+++ b/drivers/platform/x86/intel/ifs/core.c
-@@ -13,6 +13,9 @@
- 
- #include "ifs.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/ifs.h>
-+
- static enum cpuhp_state cpuhp_scan_state;
- struct ifs_params ifs_params;
- int cpu_sibl_ct;
-@@ -217,6 +220,8 @@ static int scan_test_worker(void *info)
- 
- 			rdmsrl(MSR_SCAN_STATUS, status.data);
- 
-+			trace_ifs_status(activate, status);
-+
- 			/* Some cases can be retried, give up for others */
- 			if (!can_restart(status))
- 				break;
-diff --git a/include/trace/events/ifs.h b/include/trace/events/ifs.h
-new file mode 100644
-index 000000000000..3c6ef33c7b3b
---- /dev/null
-+++ b/include/trace/events/ifs.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM ifs
-+
-+#if !defined(_TRACE_IFS_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_IFS_H
-+
-+#include <linux/ktime.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(ifs_status,
-+
-+	TP_PROTO(union ifs_scan activate, union ifs_status status),
-+
-+	TP_ARGS(activate, status),
-+
-+	TP_STRUCT__entry(
-+		__field(	u8,	start	)
-+		__field(	u8,	stop	)
-+		__field(	u64,	status	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->start	= activate.start;
-+		__entry->stop	= activate.stop;
-+		__entry->status	= status.data;
-+	),
-+
-+	TP_printk("start: %.2x, stop: %.2x, status: %llx",
-+		__entry->start,
-+		__entry->stop,
-+		__entry->status)
-+);
-+
-+#endif /* _TRACE_IFS_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+
 -- 
-2.17.1
-
+Thanks,
+~Nick Desaulniers

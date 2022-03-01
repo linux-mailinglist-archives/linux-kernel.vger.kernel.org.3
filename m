@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9504C8B51
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB94C8B55
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 13:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234680AbiCAMPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 07:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S234692AbiCAMRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 07:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiCAMPX (ORCPT
+        with ESMTP id S232868AbiCAMR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 07:15:23 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780E0289B9;
-        Tue,  1 Mar 2022 04:14:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2F84921997;
-        Tue,  1 Mar 2022 12:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646136881; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jGsG5VqKCHUuIY8SnzAR6fRSr7cXp3NkUg17MAp4SVw=;
-        b=2ROwDEwRpb08+/b9EEXsm/XHFq3Z5IVfmKml7MKYx4zzVilhbZTwYvOo5duUVaYhrF+iJ2
-        t3oBunF76JBRz++W2KquDkxo2OljGO2dt1mmQcD2HChGS9YspCqPH81XOfMUtBKLlEVhDE
-        qBAU7iivYIljxrjktooL/59jCBrBPPk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646136881;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jGsG5VqKCHUuIY8SnzAR6fRSr7cXp3NkUg17MAp4SVw=;
-        b=goXAgbaCkiSzxcdqs5wNKrSw4/CDjs3leAG8PcptQbeW9vDf7uoMNnwYVCRgiEaIVUs7Yz
-        1C9D1ay6H0w/wEAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4CAD13B56;
-        Tue,  1 Mar 2022 12:14:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id H/TyJzAOHmLsKwAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Tue, 01 Mar 2022 12:14:40 +0000
-Message-ID: <a87a691a-62c2-5b42-3be8-ee1161281ad8@suse.de>
-Date:   Tue, 1 Mar 2022 15:14:16 +0300
+        Tue, 1 Mar 2022 07:17:28 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467982C137;
+        Tue,  1 Mar 2022 04:16:47 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so1264082wms.4;
+        Tue, 01 Mar 2022 04:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ntCFAlEG4RaBUbthb67COp2chYLeXJlzz0H3UgSJ+AM=;
+        b=KcYzYyDqMO1QxjulQ3f7+DlAxeuh4ROCXjWrlw1dhlzpEsk2FlP+AQkW2NmZFH2I+B
+         5Gg606bim3Z5sC2PnglpawRbDNvOQXcZjT9mCp59aNR+1HIQzE6iw/vm9ArjB4HhFvlt
+         JPebVG09sopBNZvWG8fnRZqFSeMNaTFdV22XiyzeCTiVWDfuof03iQCdi32R69wzc61j
+         ur0ApquHv84sLX9BkaLWCrm/5yZq/kEZJfpItx9NIOZIxO4+VyWkwASdLTmE3oZ0GJGe
+         CnTvw3k0ZY0vMLM9TdjDplbKhn9LkJ+sZgzkKYgQ4/LxyybfWXaTdcyr7D1CAytYNKz0
+         xQwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ntCFAlEG4RaBUbthb67COp2chYLeXJlzz0H3UgSJ+AM=;
+        b=PqobGM5WVHeo0iWrCMd5Oua9wrGr0MRItVpu3I7unBU6lVoJG9IS8P2zoH9UrZK6CQ
+         gkm1aNecxPX2k13d2jCGj3xhU7mQdLi5HVjH10Mq/gs2GctOxghAYaV7wjVp1VXQBt/L
+         zw+p8UT3CyCVoWSK8/WjSyBzyuJ0P58YxD7nEI4LJzq8EtkfgkO4ZrrPDHfBLY7anVJ+
+         oYzMSVVc3o7cnWNrnNnvRz15QkJnI7Ct0szSJXDdKXANw2YYbUgT1ujV928+ln/X3LDs
+         sXjpKYGkc9FIM0BG5nVb5pwRtXNvcEA6s+fjqn8Fp0Y6rmctZGuuCSVKyWtWZlsgF+7u
+         wkAw==
+X-Gm-Message-State: AOAM532/pbtBwmAKkX0BFCBTE0vRCn/T1SG3SlyYHP+1wsvfhaX6hv4X
+        6HQVwUYwLh9wMdr83bsIonY=
+X-Google-Smtp-Source: ABdhPJyB2mh3Tl8wcItdVynl95uixjQ5gSbloQJscKVVCDQHi1TWabcRSPzxJFa4VifIWuIbrMF/yw==
+X-Received: by 2002:a05:600c:3d13:b0:37b:b8e5:ed80 with SMTP id bh19-20020a05600c3d1300b0037bb8e5ed80mr16672940wmb.183.1646137005817;
+        Tue, 01 Mar 2022 04:16:45 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g6-20020a05600c4ec600b0037bf934bca3sm2929921wmq.17.2022.03.01.04.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 04:16:45 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] ext4: remove redundant assignment to variable split_flag1
+Date:   Tue,  1 Mar 2022 12:16:44 +0000
+Message-Id: <20220301121644.997833-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] dpaa2 ethernet switch driver: Fix memory leak in
- dpaa2_switch_acl_entry_add()
-Content-Language: ru
-To:     Q1IQ <fufuyqqqqqq@gmail.com>, ioana.ciornei@nxp.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lyz_cs@pku.edu.cn
-References: <20220301093444.66863-1-fufuyqqqqqq@gmail.com>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20220301093444.66863-1-fufuyqqqqqq@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Variable split_flag1 is being assigned a value that is never read,
+it is being re-assigned a new value in the following code block.
+The assignment is redundant and can be removed.
 
+Cleans up clang scan build warning:
+fs/ext4/extents.c:3371:2: warning: Value stored to 'split_flag1' is
+never read [deadcode.DeadStores]
 
-3/1/22 12:34, Q1IQ пишет:
-> [why]
-> The error handling branch did not properly free the memory of cmd_buf
-> before return, which would cause memory leak.
-> 
-> [how]
-> Fix this by adding kfree to the error handling branch.
-> 
-> Signed-off-by: Q1IQ <fufuyqqqqqq@gmail.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ext4/extents.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-You should use your real name and please add Fixes tag
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index c0f3f83e0c1b..0d98cf402282 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -3368,7 +3368,6 @@ static int ext4_split_extent(handle_t *handle,
+ 		return -EFSCORRUPTED;
+ 	}
+ 	unwritten = ext4_ext_is_unwritten(ex);
+-	split_flag1 = 0;
+ 
+ 	if (map->m_lblk >= ee_block) {
+ 		split_flag1 = split_flag & EXT4_EXT_DATA_VALID2;
+-- 
+2.34.1
 
-> ---
->   drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c
-> index cacd454ac696..4d07aee07f4c 100644
-> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c
-> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c
-> @@ -132,6 +132,7 @@ int dpaa2_switch_acl_entry_add(struct dpaa2_switch_filter_block *filter_block,
->   						 DMA_TO_DEVICE);
->   	if (unlikely(dma_mapping_error(dev, acl_entry_cfg->key_iova))) {
->   		dev_err(dev, "DMA mapping failed\n");
-> +		kfree(cmd_buff);
->   		return -EFAULT;
->   	}
->   
-> @@ -142,6 +143,7 @@ int dpaa2_switch_acl_entry_add(struct dpaa2_switch_filter_block *filter_block,
->   			 DMA_TO_DEVICE);
->   	if (err) {
->   		dev_err(dev, "dpsw_acl_add_entry() failed %d\n", err);
-> +		kfree(cmd_buff);
->   		return err;
->   	}
->   

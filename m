@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7111A4C8011
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35384C801C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiCABGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:06:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S230143AbiCABKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiCABGU (ORCPT
+        with ESMTP id S230119AbiCABKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:06:20 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D742B34676
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646096740; x=1677632740;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FvpWjlfLHt8/9E7G16301nJTJ1h1zdRaqHADvP/+GEQ=;
-  b=ejcpAvKqI7ztm+Kt9Vnf7V+ht4zbSu351472ContY0yYbhDmEMrFiSLR
-   zRBoY10HzKN4mdLJ+6wvocxyWS0nSEi6AneNmfJlWnV/YOKGeYANXHwo2
-   Q6k4bxk4pKq3dXjptW0unggB1uq2RSWQWqsrblMcw/xYElNZ4ASHIhdPA
-   E08F+xE9zO+/KUY5DW6GPvQxsxxnz0tveEmXt5tCW2v3GZwv0qn+c3sdX
-   Sgq+ICh8EiijXKsp9bP1JJypJsY+Qmn+FxlQWawsY6Ljhwt/A7Nl6yMLf
-   za+SktOR1MQhGOPYwqlJncemq9/m4eYzvqcn33Lvrx0+QzUZcmLc6QIKB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232996935"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="232996935"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 17:05:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="641084023"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 17:05:39 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOqxO-0007xd-9y; Tue, 01 Mar 2022 01:05:38 +0000
-Date:   Tue, 1 Mar 2022 09:05:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [amir73il:sb_iostats 4/8] include/linux/fs.h:3648:15: error:
- implicit declaration of function 'percpu_counters_init'; did you mean
- 'percpu_counter_init'?
-Message-ID: <202203010903.oFHcgc04-lkp@intel.com>
+        Mon, 28 Feb 2022 20:10:02 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1481F2AF8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:09:22 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id bq11so20006327edb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XQU+v0ncJKQsq8KVJD+e40cIco7m2GBd4rHARca/WR4=;
+        b=0jmzKwCWF4tyUOMYPO79E8fZ5IPNMaa8ViRAkdhJVQ+rpvYnB807H9RFMUbcIp7BZU
+         gZHQ1rDBx3PK62BLmbBlNNAT3jyzYaL4Q2y1jktn63TwPT5ab7vdpiN4MQeP1MOCyfW/
+         1hrpDZVGloDoRW/S3YgB7ZGNi+EX7JpeqF+27/Xd6NI08vCg4fnWr5/UMmQ3YP+rWN2q
+         yIGHsrbeKMCBBBgIhh1S5ZwIKqOb+wr4/4iLEbQ7SulNvHeNpE2lVCx7J+vfXvAVBYuU
+         4/QobemQ3yboRwLVKSLl98uQ/+1XfxEHp6My70akJWohmiB80lkECn8ozqFNVuNZKksq
+         Vmzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XQU+v0ncJKQsq8KVJD+e40cIco7m2GBd4rHARca/WR4=;
+        b=6RuADMGBir72F78G4SnKdURaBNCmLZzV/0dQU4eMivvtwJC10Ml87EO9i6gVPdGLjm
+         dULrRGIplS7CV3lANjdLTjcMDgai0WMfn5g26odz+ycIGu4/MvvRMxWiWDrM9S2kpFT6
+         1ocyILCsuL7qX35D/R9YJ66MMx6P/u/AqxHkqQy4YavZ7esGf9GfOPs2e47KN1U1R2KF
+         WbSr2noRRBwvI/ZUNdt/JHVA5b+8sAMe5pgQHKLqP5VO8rGKKN8IVY0UgdcqOe9T4jkn
+         TTqvb/c6PqQAHbLMgrFzwTs6k1X2+n0C6DCtqUCzxLLPu/KcqxXGt7/W4fdo2V9DEqIu
+         eCbQ==
+X-Gm-Message-State: AOAM533eVkrrwfGfgMZuiIt5BsI1nDHITY5Qmg2dXEPNyD63V4u1dPo4
+        ZYhNOiTBr7Dmx86yYhVmM03JHwtOfnMws4v2HLQ0
+X-Google-Smtp-Source: ABdhPJyMYQib71KmGDawe2Sa6f6s4SJDfyMQRJedtkVd+Ib0jlueXrtB/26onK1/CMnUCdwxIX5WHVCU4U1exe/oGNQ=
+X-Received: by 2002:a05:6402:1e8e:b0:412:cfd8:4d12 with SMTP id
+ f14-20020a0564021e8e00b00412cfd84d12mr21942842edf.343.1646096960582; Mon, 28
+ Feb 2022 17:09:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211117015806.2192263-1-dvander@google.com> <CAOQ4uxjjapFeOAFGLmsXObdgFVYLfNer-rnnee1RR+joxK3xYg@mail.gmail.com>
+ <Yao51m9EXszPsxNN@redhat.com> <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
+ <YapjNRrjpDu2a5qQ@redhat.com>
+In-Reply-To: <YapjNRrjpDu2a5qQ@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 28 Feb 2022 20:09:09 -0500
+Message-ID: <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
+Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr fix
+To:     Vivek Goyal <vgoyal@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        David Anderson <dvander@google.com>
+Cc:     Mark Salyzyn <salyzyn@android.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
+        paulmoore@microsoft.com, Luca.Boccassi@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/amir73il/linux sb_iostats
-head:   ecfdb413f2105083296e9cb45290eb1f01b0ef5c
-commit: 8b022d3080d57a2a42917c1b36d7b4c27a4fac4e [4/8] fs: add iostats counters to struct super_block
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220301/202203010903.oFHcgc04-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/amir73il/linux/commit/8b022d3080d57a2a42917c1b36d7b4c27a4fac4e
-        git remote add amir73il https://github.com/amir73il/linux
-        git fetch --no-tags amir73il sb_iostats
-        git checkout 8b022d3080d57a2a42917c1b36d7b4c27a4fac4e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa prepare
+I wanted to try and bring this thread back from the dead (?) as I
+believe the use-case is still valid and worth supporting.  Some more
+brief comments below ...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Dec 3, 2021 at 1:34 PM Vivek Goyal <vgoyal@redhat.com> wrote:
+> I am not sure. In the early version of patches I think argument was
+> that do not switch to mounter's creds and use caller's creds on
+> underlying filesystem as well. And each caller will be privileged
+> enough to be able to perform the operation.
 
-All errors (new ones prefixed by >>):
+The basic idea is that we can now build Linux systems with enough
+access control granularity such that a given process can have the
+necessary privileges to mount a filesystem, but not necessarily access
+all of the data on the filesystem, while other processes, with
+different access rights, are allowed to read and write data on the
+mounted filesystem.  Granted, this is a bit different from how things
+are usually done, but in my opinion it's a valid and interesting use
+case in that it allows us to remove unneeded access rights from
+historically very privileged system startup services/scripts: the
+service that runs to mount my homedir shouldn't be allowed to access
+my files just to mount the directory.
 
-   In file included from include/linux/huge_mm.h:8,
-                    from include/linux/mm.h:697,
-                    from include/linux/pid_namespace.h:7,
-                    from include/linux/ptrace.h:10,
-                    from arch/xtensa/kernel/asm-offsets.c:21:
-   include/linux/fs.h: In function 'sb_iostats_init':
->> include/linux/fs.h:3648:15: error: implicit declaration of function 'percpu_counters_init'; did you mean 'percpu_counter_init'? [-Werror=implicit-function-declaration]
-    3648 |         err = percpu_counters_init(sb->s_iostats.counter,
-         |               ^~~~~~~~~~~~~~~~~~~~
-         |               percpu_counter_init
-   include/linux/fs.h: In function 'sb_iostats_destroy':
->> include/linux/fs.h:3666:17: error: implicit declaration of function 'percpu_counters_destroy'; did you mean 'percpu_counter_destroy'? [-Werror=implicit-function-declaration]
-    3666 |                 percpu_counters_destroy(sb->s_iostats.counter,
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~
-         |                 percpu_counter_destroy
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:121: arch/xtensa/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Unfortunately, this idea falls apart when we attempt to use overlayfs
+due to the clever/usual way it caches the mounting processes
+credentials and uses that in place of the current process' credentials
+when accessing certain parts of the underlying filesystems.  The
+current overlayfs implementation assumes that the mounter will always
+be more privileged than the processes accessing the filesystem, it
+would be nice if we could build a mechanism that didn't have this
+assumption baked into the implementation.
 
+This patchset may not have been The Answer, but surely there is
+something we can do to support this use-case.
 
-vim +3648 include/linux/fs.h
+> Our take was that how is this model better because in current model
+> only mounter needs to be privileged while in this new model each
+> caller will have to be privileged. But Android guys seemed to be ok
+> with that. So has this assumption changed since early days. If callers
+> are privileged, then vfs_getxattr() on underlying filesystem for
+> overaly internal xattrs should succeed and there is no need for this
+> change.
+>
+> I suspect patches have evolved since then and callers are not as
+> privileged as we expect them to and that's why we are bypassing this
+> check on all overlayfs internal trusted xattrs? This definitely requires
+> much close scrutiny. My initial reaction is that this sounds very scary.
+>
+> In general I would think overlayfs should not bypass the check on
+> underlying fs. Either checks should be done in mounter's context or
+> caller's context (depending on override_creds=on/off).
+>
+> Thanks
+> Vivek
 
-  3641	
-  3642	#ifdef CONFIG_FS_IOSTATS
-  3643	/* Initialize per-sb I/O stats */
-  3644	static inline int sb_iostats_init(struct super_block *sb)
-  3645	{
-  3646		int err;
-  3647	
-> 3648		err = percpu_counters_init(sb->s_iostats.counter,
-  3649					   SB_IOSTATS_COUNTERS_NUM, 0, GFP_KERNEL);
-  3650		if (!err) {
-  3651			sb->s_iflags |= SB_I_IOSTATS;
-  3652			sb->s_iostats.start_time = ktime_get_seconds();
-  3653		}
-  3654	
-  3655		return err;
-  3656	}
-  3657	
-  3658	static inline bool sb_has_iostats(struct super_block *sb)
-  3659	{
-  3660		return (sb->s_iflags & SB_I_IOSTATS);
-  3661	}
-  3662	
-  3663	static inline void sb_iostats_destroy(struct super_block *sb)
-  3664	{
-  3665		if (sb_has_iostats(sb))
-> 3666			percpu_counters_destroy(sb->s_iostats.counter,
-  3667						SB_IOSTATS_COUNTERS_NUM);
-  3668	}
-  3669	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+paul-moore.com

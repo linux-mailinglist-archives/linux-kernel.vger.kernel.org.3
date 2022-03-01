@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E484C922F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4494F4C9232
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbiCARtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S236671AbiCARws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiCARtv (ORCPT
+        with ESMTP id S231362AbiCARwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:49:51 -0500
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1135DED;
-        Tue,  1 Mar 2022 09:49:09 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id e186so4611847ybc.7;
-        Tue, 01 Mar 2022 09:49:09 -0800 (PST)
+        Tue, 1 Mar 2022 12:52:47 -0500
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29210FF1;
+        Tue,  1 Mar 2022 09:52:05 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id u3so28756038ybh.5;
+        Tue, 01 Mar 2022 09:52:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+Qdj2RGHYXCCm3iO7RYKkfSFjuAWoF/QNWHXobLMf/4=;
-        b=5iEheSV3tO9iOzeEKtR1pGW9leq9gjfCXiEOOrHPT0tLDVfc5Xi7VxZFkbdvbUpXkV
-         qt4SLbNrN14MI/ybAwDpH8WwerrSOU5g1W+dCKNbsI3XrdSpUf9e8pozj1Keqhv9ZK+Q
-         7SkGrBooEfPor90aYilEOMdRKNI6TE1fmBeYk9ydQBy4GpZSlp8IH/EZf5bRs0xJX5OQ
-         d62LoSKiUlba/YotV2TxYluiYGDRUyGT8OfJolj0QyHr9OSOOg3E/98THzPIfOnoByfj
-         MTTtcSDXIEcakgKHh3mL7S5jGwGLuADanrIMX2jzD0VAZQewqnP0/9jX9cqMtOAKmRH7
-         5pgQ==
-X-Gm-Message-State: AOAM533NHY7J2AMeJXmBS7tSIm/3nNC1muZXM+vMBo/UBnlUEU4l4jj6
-        v3wc/ATo52PZ62dvmi/GzdvT+OjMUqb2ZGaJ+riIQiNc
-X-Google-Smtp-Source: ABdhPJzIaXGFBj3wh2v3lfyOJ7M92r8dcA3h5SEf9hhVfShXbXNQPRZcL4YBYV8eRNq2jH9/Jo2Atem76v4xyYAi8O0=
-X-Received: by 2002:a25:3f47:0:b0:628:7571:b07d with SMTP id
- m68-20020a253f47000000b006287571b07dmr4721090yba.622.1646156949088; Tue, 01
- Mar 2022 09:49:09 -0800 (PST)
+        bh=35y70918qwBmXToXnIlfMJ+QtDpOKlYytNslF63tLek=;
+        b=tUmv2TORQghAzhlhQNYo8KLFpmAIlug1u6HGmbK7p8+Rsv00GkDaNzrWe6blLVRPoA
+         /Rv0+xGJl67XJ+j1KcJSRA4rwu9kkh9dlj2dh+jtdxnTmpuzolTpHu/uEuBx4uN56oPW
+         576F6/PzeyaDITJfi/f+72cG1PLRy+PMoru4XILaKYLKpow732UclyfRTELVZdI0zCDG
+         9iZQKkgIFlJ7rfBvmy9THhDAHuJFRxRzAU2+SKd6iHIslJO1QWOv429spunXFUGTQGPi
+         oCowzEqOgFczR3BXNO2jom+SfFBK1uqUvU3GrC4qc36F+WJZtCdOakX8C4GQBl7T1Z6e
+         y8wg==
+X-Gm-Message-State: AOAM5307YnRMjtjwotJBSIqG4wgB8oYHCfcxhb7DaFRYsPSA2EHykMAW
+        ffWgHBjtwJA3yZ69i2GyO4r2JDqNAndaGSflYOU=
+X-Google-Smtp-Source: ABdhPJwv7AFIWqHBfBLq39zM/tZSi4P5b9S8dgIgqDdTxwpg6EUYOKmCzvTZnlclki3/Ate2AJPe9j+vAM1hdvdQuqs=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr23181765ybe.365.1646157125190; Tue, 01
+ Mar 2022 09:52:05 -0800 (PST)
 MIME-Version: 1.0
-References: <ae1801b4-9c1f-b0eb-f3c6-dd888b689efe@linuxfoundation.org>
-In-Reply-To: <ae1801b4-9c1f-b0eb-f3c6-dd888b689efe@linuxfoundation.org>
+References: <20220228220532.8531-1-rdunlap@infradead.org>
+In-Reply-To: <20220228220532.8531-1-rdunlap@infradead.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 18:48:58 +0100
-Message-ID: <CAJZ5v0j5A8adEmY7Qk44uDqQoJwq4VY6v0he8mw2VU39-wAPtg@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 5.18-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Date:   Tue, 1 Mar 2022 18:51:54 +0100
+Message-ID: <CAJZ5v0gW4O8pTgCPPh7TSdc0YZqz2NbqPWPVH4G5ijEr-YUVcA@mail.gmail.com>
+Subject: Re: [PATCH] PM/hibernate: fix __setup handler error handling
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Fabian Frederick <fabf@skynet.be>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Len Brown <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,66 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 9:45 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Mon, Feb 28, 2022 at 11:05 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> Hi Rafael,
+> If an invalid value is used in "resumedelay=<seconds>", it is
+> silently ignored. Add a warning message and then let the __setup
+> handler return 1 to indicate that the kernel command line option
+> has been handled.
 >
-> Please pull the following cpupower update for Linux 5.18-rc1
+> Fixes: 317cf7e5e85e3 ("PM / hibernate: convert simple_strtoul to kstrtoul")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: Fabian Frederick <fabf@skynet.be>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Len Brown <len.brown@intel.com>
+> ---
+>  kernel/power/hibernate.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> This cpupower update for Linux 5.18-rc1 adds AMD P-State Support to
-> cpupower tool. AMD P-State kernel support went into 5.17-rc1.
+> --- linux-next-20220228.orig/kernel/power/hibernate.c
+> +++ linux-next-20220228/kernel/power/hibernate.c
+> @@ -1329,7 +1329,7 @@ static int __init resumedelay_setup(char
+>         int rc = kstrtouint(str, 0, &resume_delay);
 >
-> diff is attached.
->
-> thanks,
-> -- Shuah
->
-> ----------------------------------------------------------------
-> The following changes since commit 101025ff8e47d3c938ad2ae646a1794b9a8aa730:
->
->    tools/power/cpupower/{ToDo => TODO}: Rename the todo file (2022-01-24 09:07:11 -0700)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-5.18-rc1
->
-> for you to fetch changes up to 8382dce5e4835c045f33b8958a5f559d212cdd11:
->
->    cpupower: Add "perf" option to print AMD P-State information (2022-02-23 17:46:21 -0700)
->
-> ----------------------------------------------------------------
-> linux-cpupower-5.18-rc1
->
-> This cpupower update for Linux 5.18-rc1 adds AMD P-State Support to
-> cpupower tool. AMD P-State kernel support went into 5.17-rc1.
->
-> ----------------------------------------------------------------
-> Huang Rui (10):
->        cpupower: Add AMD P-State capability flag
->        cpupower: Add the function to check AMD P-State enabled
->        cpupower: Initial AMD P-State capability
->        cpupower: Add the function to get the sysfs value from specific table
->        cpupower: Introduce ACPI CPPC library
->        cpupower: Add AMD P-State sysfs definition and access helper
->        cpupower: Enable boost state support for AMD P-State module
->        cpupower: Move print_speed function into misc helper
->        cpupower: Add function to print AMD P-State performance capabilities
->        cpupower: Add "perf" option to print AMD P-State information
->
->   tools/power/cpupower/Makefile                      |  6 +-
->   tools/power/cpupower/lib/acpi_cppc.c               | 59 +++++++++++++++
->   tools/power/cpupower/lib/acpi_cppc.h               | 21 ++++++
->   tools/power/cpupower/lib/cpufreq.c                 | 23 ++++--
->   tools/power/cpupower/lib/cpufreq.h                 | 12 +++
->   tools/power/cpupower/man/cpupower-frequency-info.1 |  3 +
->   tools/power/cpupower/utils/cpufreq-info.c          | 87 +++++++++-------------
->   tools/power/cpupower/utils/helpers/amd.c           | 77 +++++++++++++++++++
->   tools/power/cpupower/utils/helpers/cpuid.c         | 13 ++++
->   tools/power/cpupower/utils/helpers/helpers.h       | 22 ++++++
->   tools/power/cpupower/utils/helpers/misc.c          | 60 +++++++++++++++
->   11 files changed, 321 insertions(+), 62 deletions(-)
->   create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
->   create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
-> ----------------------------------------------------------------
+>         if (rc)
+> -               return rc;
+> +               pr_warn("resumedelay: bad option string '%s'\n", str);
+>         return 1;
+>  }
 
-Pulled, thanks!
+Applied as 5.18 material, thanks!

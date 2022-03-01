@@ -2,71 +2,512 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B474C8E99
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C4E4C8E9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 16:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiCAPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 10:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S235563AbiCAPKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 10:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiCAPIt (ORCPT
+        with ESMTP id S234307AbiCAPKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:08:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3A425C35F
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646147286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=GJBNkRO9XUqj+VRCxw0Fs8Dgd3aPkD5MJVI2YT6rKqkZi4cUrGelKV2bqG/m2c+s1Jxx92
-        YJcmDGoekNGzDVC4D6y5QpJ6sXZa7WTmRrjC6U0HQOUNOnPiw3hizFoFrVDktSIHseuVzn
-        U2VyQv0/qqj+R/VJD7IY+tlAX3+yTTE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-55-FL4-3m-XPqqTlSjY-C5W_g-1; Tue, 01 Mar 2022 10:08:03 -0500
-X-MC-Unique: FL4-3m-XPqqTlSjY-C5W_g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 1 Mar 2022 10:10:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0B38F9A3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:10:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E12D0180FD75;
-        Tue,  1 Mar 2022 15:08:01 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D112866C4;
-        Tue,  1 Mar 2022 15:08:00 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alper Gun <alpergun@google.com>,
-        Peter Gonda <pgonda@google.com>
-Subject: Re: [PATCH] KVM: SVM: Exit to userspace on ENOMEM/EFAULT GHCB errors
-Date:   Tue,  1 Mar 2022 10:07:59 -0500
-Message-Id: <20220301150759.171595-1-pbonzini@redhat.com>
-In-Reply-To: <20220225205209.3881130-1-seanjc@google.com>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0199FB81988
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 15:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50388C340EE;
+        Tue,  1 Mar 2022 15:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646147406;
+        bh=bpu61ABt95O2gnw28BMpgjSG83+EJagd6MbHvG2efSI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tZoyKYz6lZKw9jWlxx44N/WeMGNitH44mtitUNvAMFDruZqqfLX0m8ynRH5brfA4U
+         cELI9P6PQL5cO6KV4qYCMw4NrT/wpFnr79xElYfTfSxw0fdQWCkQo5O62bxPa7/pdX
+         Qd3QoTzH2PeDAOBQFlDKIq9IrOhOl0ARAWV56oopVs0qNXRf0g30CfYODylBTsp65C
+         asNr69BXGLc3ZNGItdkrdO60ySPawqASDoyxRR68JRRAy2Er4S82+d/A7s6wc2edd8
+         k3o4cgTrszElwJ+dQQ5WKm+qRK8Q+ixEs+ls0+7Rk4Yy1k3v+LE/QcmnTuBFWatjlG
+         MHT87EHpGSokg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nP48Z-00BRDv-KS; Tue, 01 Mar 2022 15:10:03 +0000
+Date:   Tue, 01 Mar 2022 15:10:03 +0000
+Message-ID: <87bkyp3e0k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linu Cherian <lcherian@marvell.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuc.decode@gmail.com" <linuc.decode@gmail.com>
+Subject: Re: [EXT] Re: [PATCH] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+In-Reply-To: <PH0PR18MB50022049AE4CF3203E0318BBCE029@PH0PR18MB5002.namprd18.prod.outlook.com>
+References: <20220226123332.29988-1-lcherian@marvell.com>
+        <871qzp7n4r.wl-maz@kernel.org>
+        <PH0PR18MB50022049AE4CF3203E0318BBCE029@PH0PR18MB5002.namprd18.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lcherian@marvell.com, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuc.decode@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+Linu,
 
-Paolo
+On Tue, 01 Mar 2022 07:13:21 +0000,
+Linu Cherian <lcherian@marvell.com> wrote:
+> 
+> Hi Marc,
+> 
+> > -----Original Message-----
+> > From: Marc Zyngier <maz@kernel.org>
+> > Sent: Saturday, February 26, 2022 7:20 PM
+> > To: Linu Cherian <lcherian@marvell.com>
+> > Cc: tglx@linutronix.de; catalin.marinas@arm.com; will@kernel.org; linux-
+> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > linuc.decode@gmail.com
+> > Subject: [EXT] Re: [PATCH] irqchip/gic-v3: Workaround Marvell erratum
+> > 38545 when reading IAR
+> > 
+> > External Email
+> > 
+> > ----------------------------------------------------------------------
+> > On Sat, 26 Feb 2022 12:33:32 +0000,
+> > Linu Cherian <lcherian@marvell.com> wrote:
+> > >
+> > > When a IAR register read races with a GIC interrupt RELEASE event,
+> > > GIC-CPU interface could wrongly return a valid INTID to the CPU for an
+> > > interrupt that is already released(non activated) instead of 0x3ff.
+> > >
+> > > As a side effect, an interrupt handler could run twice, once with
+> > > interrupt priority and then with idle priority.
+> > >
+> > > As a workaround, gic_read_iar is updated so that it will return a
+> > > valid interrupt ID only if there is a change in the active priority
+> > > list after the IAR read on all the affected Silicons.
+> > >
+> > > Along with this, Thunderx erratum 23154 is reworked to use GIC IIDR
+> > > based quirk management for the sake of consistency and also because
+> > > there is workaround overlap on some silicon variants.
+> > >
+> > > Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> > > ---
+> > >  Documentation/arm64/silicon-errata.rst |  4 +-
+> > >  arch/arm64/Kconfig                     | 10 -----
+> > >  arch/arm64/include/asm/arch_gicv3.h    | 24 +++++++++--
+> > >  arch/arm64/kernel/cpu_errata.c         |  8 ----
+> > >  arch/arm64/tools/cpucaps               |  1 -
+> > >  drivers/irqchip/irq-gic-v3.c           | 56 +++++++++++++++++++++++++-
+> > >  6 files changed, 77 insertions(+), 26 deletions(-)
+> > >
+> > > diff --git a/Documentation/arm64/silicon-errata.rst
+> > > b/Documentation/arm64/silicon-errata.rst
+> > > index ea281dd75517..f602faf4bf82 100644
+> > > --- a/Documentation/arm64/silicon-errata.rst
+> > > +++ b/Documentation/arm64/silicon-errata.rst
+> > > @@ -136,10 +136,12 @@ stable kernels.
+> > >  +----------------+-----------------+-----------------+-----------------------------+
+> > >  | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144
+> > |
+> > >
+> > > +----------------+-----------------+-----------------+----------------
+> > > -------------+
+> > > -| Cavium         | ThunderX GICv3  | #23154          |
+> > CAVIUM_ERRATUM_23154        |
+> > > +| Cavium         | ThunderX GICv3  | #23154          | N/A                         |
+> > >  +----------------+-----------------+-----------------+-----------------------------+
+> > >  | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
+> > >
+> > > +----------------+-----------------+-----------------+----------------
+> > > -------------+
+> > > +| Cavium         | ThunderX GICv3  | #38545          | N/A                         |
+> > 
+> > Cavium? Or Marvell? I can understand the identity crisis, but you should pick
+> > your poison. It also seem to affect the new TX2 rather than (or in addition to)
+> > the ancient TX.
+> 
+> It doesn't applies to Tx2(ThunderX2) and it affects OcteonTx2, OcteonTx
+> and ThunderX.
+> 
+> In the V2 will rename this as OcteonTx2 to avoid confusion with ThunderX2.
+> 
+> 
+> > 
+> > > ++----------------+-----------------+-----------------+-----------------------------+
+> > >  | Cavium         | ThunderX Core   | #27456          |
+> > CAVIUM_ERRATUM_27456        |
+> > >  +----------------+-----------------+-----------------+-----------------------------+
+> > >  | Cavium         | ThunderX Core   | #30115          |
+> > CAVIUM_ERRATUM_30115        |
+> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig index
+> > > 09b885cc4db5..889cb56bf5ec 100644
+> > > --- a/arch/arm64/Kconfig
+> > > +++ b/arch/arm64/Kconfig
+> > > @@ -890,16 +890,6 @@ config CAVIUM_ERRATUM_23144
+> > >
+> > >  	  If unsure, say Y.
+> > >
+> > > -config CAVIUM_ERRATUM_23154
+> > > -	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
+> > > -	default y
+> > > -	help
+> > > -	  The gicv3 of ThunderX requires a modified version for
+> > > -	  reading the IAR status to ensure data synchronization
+> > > -	  (access to icc_iar1_el1 is not sync'ed before and after).
+> > > -
+> > > -	  If unsure, say Y.
+> > > -
+> > 
+> > This is starting really badly. Why make this config option disappear?
+> > 
+> > This is both useful for documentation (in the absence of a public errata
+> > document from the silicon vendor, I *really* want to know what I am affected
+> > by) and for people who do not want their kernels to be encumbered by
+> > support for broken HW.
+> > 
+> > I actually want to see a description of the *new* errata in Kconfig, warts and
+> > all.
+> 
+> 
+> Ack. Will revert this.
+> 
+> Let me clarify the reason why it was removed. 
+> IIUC, there are two ways in which errata is managed in the GIC driver.
+> 1. GICD_IIDR based quirk management
+> 2. CPU MIDR based quirk management
+> 
+> Somehow I overlooked the virtualization scenario and missed the point that, 
+> GICD_IIDR doesn't reflect the actual Silicon implementer in a guest unlike CPU MIDR and 
+> hence wrongly assumed that the errata will take effect in both host and guest.
+>  
+> Opted for the IIDR method(option #1), since it was contained within the GIC driver.
+> Will change this to option #2 .
+> 
+> > 
+> > >  config CAVIUM_ERRATUM_27456
+> > >  	bool "Cavium erratum 27456: Broadcast TLBI instructions may cause
+> > icache corruption"
+> > >  	default y
+> > > diff --git a/arch/arm64/include/asm/arch_gicv3.h
+> > > b/arch/arm64/include/asm/arch_gicv3.h
+> > > index 4ad22c3135db..bc98a60a4bcb 100644
+> > > --- a/arch/arm64/include/asm/arch_gicv3.h
+> > > +++ b/arch/arm64/include/asm/arch_gicv3.h
+> > > @@ -47,21 +47,37 @@ static inline u64 gic_read_iar_common(void)
+> > >  	return irqstat;
+> > >  }
+> > >
+> > > -/*
+> > > +/* Marvell Erratum 38545
+> > > + *
+> > > + * When a IAR register read races with a GIC interrupt RELEASE event,
+> > > + * GIC-CPU interface could wrongly return a valid INTID to the CPU
+> > > + * for an interrupt that is already released(non activated) instead of 0x3ff.
+> > > + *
+> > > + * To workaround this, return a valid interrupt ID only if there is a
+> > > +change
+> > > + * in the active priority list after the IAR read.
+> > > + *
+> > >   * Cavium ThunderX erratum 23154
+> > >   *
+> > >   * The gicv3 of ThunderX requires a modified version for reading the
+> > >   * IAR status to ensure data synchronization (access to icc_iar1_el1
+> > >   * is not sync'ed before and after).
+> > > + *
+> > > + * Have merged both the workarounds into a common function since,
+> > > + * 1. On Thunderx 88xx 1.x both erratas are applicable.
+> > 
+> > This is new. Are you saying that TX is also affected by this new bug?
+> > Experience doesn't seem to support this statement, but I am prepared to
+> > believe that this thing is even more broken than I thought.
+> > 
+> 
+> Yes. Thunderx is affected by this new bug as well but got identified
+> only while testing on a OcteonTx2 hardware. HW team has confirmed
+> that it applies to the older ThudnderX and OcteonTx Silicons as
+> well.
 
+Oh great. Copy paste strikes back... :-/
 
+> 
+> 
+> > Also, what is the story for virtualisation? Does the ICV interface
+> > suffer from the same bug? I can't see why not (23154 definitely
+> > affects virtualisation).
+> > 
+> 
+> Yes. It affects virtualization as well and the errata is applicable
+> to ICV interface.
+
+/me picks a spare TX SoC from the bin and frames it.
+
+> 
+> 
+> > > + * 2. Having extra nops doesn't add any side effects for Silicons where
+> > > + *    erratum 23154 is not applicable.
+> > >   */
+> > > -static inline u64 gic_read_iar_cavium_thunderx(void)
+> > > +static inline u64 gic_read_iar_marvell_38545_23154(void)
+> > >  {
+> > > -	u64 irqstat;
+> > > +	u64 irqstat, apr;
+> > >
+> > > +	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
+> > >  	nops(8);
+> > >  	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
+> > >  	nops(4);
+> > > -	mb();
+> > > +	dsb(sy);
+> > 
+> > mb() *is* a dsb(sy). Why the change?
+> 
+> Agree the change is redundant.
+> 
+> > 
+> > > +	if (unlikely(apr == read_sysreg_s(SYS_ICC_AP1R0_EL1)))
+> > > +		return 0x3ff;
+> > 
+> > So you are adding extra overhead to all TX platforms that did not
+> > require it.  Why is that an acceptable outcome? If all platforms
+> > affected by 23154 are also affected by 38545, why are they treated
+> > independently with separate flags?
+> > 
+> 
+> Basically we need two IAR workaround functions,
+> 
+> #1 That takes care of both both 38545 and 23154 (For example
+> #ThunderX 88xx 1.x)
+> 
+> #2. That cares of only 38545 
+> 
+> Since the only difference between the two is  12 NOPs, tried to use a
+> a common function for both the workaround to avoid code duplication.
+> 
+> Yeah. Agree that separate flags were really not required.
+> 
+> Will keep #1 and #2 as separate functions if that is preferred.
+
+Maybe not. Given that hardly anyone has access to OTX2, and that there
+is a gazillion of TX in the wild, the single function looks like the
+right thing to do, with a single static key for both of them.
+
+You can simply extend the current 23154 workaround to also take care
+of 38545 (documenting it whilst you're at it), and the patch should be
+10 lines at most.
+
+> 
+> 
+> > >
+> > >  	return irqstat;
+> > >  }
+> > > diff --git a/arch/arm64/kernel/cpu_errata.c
+> > > b/arch/arm64/kernel/cpu_errata.c index b217941713a8..79beb800ee79
+> > > 100644
+> > > --- a/arch/arm64/kernel/cpu_errata.c
+> > > +++ b/arch/arm64/kernel/cpu_errata.c
+> > > @@ -423,14 +423,6 @@ const struct arm64_cpu_capabilities
+> > arm64_errata[] = {
+> > >  		ERRATA_MIDR_RANGE_LIST(erratum_845719_list),
+> > >  	},
+> > >  #endif
+> > > -#ifdef CONFIG_CAVIUM_ERRATUM_23154
+> > > -	{
+> > > -	/* Cavium ThunderX, pass 1.x */
+> > > -		.desc = "Cavium erratum 23154",
+> > > -		.capability = ARM64_WORKAROUND_CAVIUM_23154,
+> > > -		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
+
+Expand this to an MIDR list instead of a single range in order to
+handle OTX2 as well.
+
+> > > -	},
+> > > -#endif
+> > 
+> > NAK. See below.
+> > 
+> > >  #ifdef CONFIG_CAVIUM_ERRATUM_27456
+> > >  	{
+> > >  		.desc = "Cavium erratum 27456",
+> > > diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps index
+> > > 9c65b1e25a96..3f751fe4fec4 100644
+> > > --- a/arch/arm64/tools/cpucaps
+> > > +++ b/arch/arm64/tools/cpucaps
+> > > @@ -62,7 +62,6 @@ WORKAROUND_2077057
+> > >  WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+> > >  WORKAROUND_TSB_FLUSH_FAILURE
+> > >  WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+> > > -WORKAROUND_CAVIUM_23154
+> > >  WORKAROUND_CAVIUM_27456
+> > >  WORKAROUND_CAVIUM_30115
+> > >  WORKAROUND_CAVIUM_TX2_219_PRFM
+> > > diff --git a/drivers/irqchip/irq-gic-v3.c
+> > > b/drivers/irqchip/irq-gic-v3.c index 5e935d97207d..a3b58bf4fce4 100644
+> > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > @@ -35,6 +35,8 @@
+> > >
+> > >  #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+> > >  #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
+> > > +#define FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154	(1ULL << 2)
+> > > +#define FLAGS_WORKAROUND_MARVELL_ERRATUM_38545	(1ULL
+> > << 3)
+> > >
+> > >  #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+> > >
+> > > @@ -60,6 +62,7 @@ struct gic_chip_data {
+> > >
+> > >  static struct gic_chip_data gic_data __read_mostly;  static
+> > > DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
+> > > +static DEFINE_STATIC_KEY_FALSE(gic_iar_quirk);
+> > >
+> > >  #define GIC_ID_NR	(1U <<
+> > GICD_TYPER_ID_BITS(gic_data.rdists.gicd_typer))
+> > >  #define GIC_LINE_NR
+> > 	min(GICD_TYPER_SPIS(gic_data.rdists.gicd_typer), 1020U)
+> > > @@ -235,10 +238,19 @@ static void gic_redist_wait_for_rwp(void)
+> > >
+> > >  #ifdef CONFIG_ARM64
+> > >
+> > > +static u64 __maybe_unused gic_read_iar_fixup(void) {
+> > > +	if (gic_data.flags &
+> > FLAGS_WORKAROUND_MARVELL_ERRATUM_38545 ||
+> > > +		gic_data.flags &
+> > FLAGS_WORKAROUND_CAVIUM_ERRATUM_23154)
+> > > +		return gic_read_iar_marvell_38545_23154();
+> > > +	else /* Not possible */
+> > > +		return ICC_IAR1_EL1_SPURIOUS;
+> > 
+> > Not possible? What does that even mean? And what is the point of gating
+> > things with a static key if you have to check again with an extra load?
+> > 
+> 
+> Please see below.
+> 
+> > > +}
+> > > +
+> > >  static u64 __maybe_unused gic_read_iar(void)  {
+> > > -	if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM_23154))
+> > > -		return gic_read_iar_cavium_thunderx();
+> > > +	if (static_branch_unlikely(&gic_iar_quirk))
+> > > +		return gic_read_iar_fixup();
+> > 
+> > You are trading a static key for another one describing... the same thing. What
+> > is the point?
+> 
+> The real intention was to avoid an additional if check getting
+> introduced like below for Silicon not affected by both of these
+> errata.
+> 
+> If (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM23154))
+> 	return gic_read_iar_38545_23154(); /* Both workaround applicable */
+> else if (cpus_have_const_cap(ARM64_WORKAROUND_CAVIUM38545))
+>               return gic_read_iar_38545();  /* Only 38545 applicable */
+> 
+> So tried to use a static key, gic_iar_quirk instead.
+
+Nah, just key it against ARM64_WORKAROUND_CAVIUM_23154. As you pointed
+out, NOPs are cheap. That will be  an incentive for someone to debug
+this HW.
+
+To sum it up, stash the actual workaround in the existing function,
+and the rest as below (obviously it doesn't compile).
+
+Thanks,
+
+	M.
+
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index ea281dd75517..466cb9e89047 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -136,7 +136,7 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144        |
+ +----------------+-----------------+-----------------+-----------------------------+
+-| Cavium         | ThunderX GICv3  | #23154          | CAVIUM_ERRATUM_23154        |
++| Cavium         | ThunderX GICv3  | #23154,38545    | CAVIUM_ERRATUM_23154        |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
+ +----------------+-----------------+-----------------+-----------------------------+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index cbcd42decb2a..049ca0cc0525 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -890,12 +890,17 @@ config CAVIUM_ERRATUM_23144
+ 	  If unsure, say Y.
+ 
+ config CAVIUM_ERRATUM_23154
+-	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
++	bool "Cavium errata 23154 and 38545: GICv3 lacks HW synchronisation"
+ 	default y
+ 	help
+-	  The gicv3 of ThunderX requires a modified version for
++	  The ThunderX GICv3 implementation requires a modified version for
+ 	  reading the IAR status to ensure data synchronization
+-	  (access to icc_iar1_el1 is not sync'ed before and after).
++	  (access to icc_iar1_el1 is not sync'ed before and after, erratum
++	  23154).
++
++	  It also suffers from erratum 38545 (also present on Marvell's
++	  OcteonTX2), resulting in deactivated interrupts being spuriously
++	  presented to the CPU interface.
+ 
+ 	  If unsure, say Y.
+ 
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index b217941713a8..553a72b517af 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -214,6 +214,16 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
+ };
+ #endif
+ 
++#ifdef CONFIG_CAVIUM_ERRATUM_23154
++const struct midr_range cavium_erratum_23154_cpus[] = {
++	/* Cavium ThunderX, pass 1.x */
++	MIDR_RANGE(MIDR_THUNDERX, 0, 0, 0, 1),
++	/* OcteonTX2 */
++	MIDR_ALL_VERSIONS(MIDR_MRVL_OCTEONTX2),
++	{},
++};
++#endif
++
+ #ifdef CONFIG_CAVIUM_ERRATUM_27456
+ const struct midr_range cavium_erratum_27456_cpus[] = {
+ 	/* Cavium ThunderX, T88 pass 1.x - 2.1 */
+@@ -425,10 +435,9 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ #endif
+ #ifdef CONFIG_CAVIUM_ERRATUM_23154
+ 	{
+-	/* Cavium ThunderX, pass 1.x */
+-		.desc = "Cavium erratum 23154",
++		.desc = "Cavium errata 23154 and 38545",
+ 		.capability = ARM64_WORKAROUND_CAVIUM_23154,
+-		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
++		ERRATA_MIDR_RANGE_LIST(cavium_erratum_23154_cpus),
+ 	},
+ #endif
+ #ifdef CONFIG_CAVIUM_ERRATUM_27456
+
+-- 
+Without deviation from the norm, progress is not possible.

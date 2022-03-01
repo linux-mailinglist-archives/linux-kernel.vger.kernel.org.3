@@ -2,124 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCF84C8F9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C694C8F9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 17:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235957AbiCAQCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 11:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S235962AbiCAQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 11:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbiCAQCs (ORCPT
+        with ESMTP id S231601AbiCAQDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:02:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04A6A145F;
-        Tue,  1 Mar 2022 08:02:07 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221G0rsD008364;
-        Tue, 1 Mar 2022 16:01:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5bY54GIfqV2Jrj+zob+Kzfp/785R923S9y5UdokMSTY=;
- b=cTEjWFiDoDzgklnz8XmCDBVZZf/EOFyYKgfKWFVqfwcKr/T2QDXQFlsGiZt4OWQAdMGq
- 4adsleM18NBEfaEqHRN9Bu2TiHQi5YqOMn1patOrp6CI1m9QLvFatoDeXXAHnVZPKWuN
- 2L/4TUqPCjstjNtIA3M7DYAqxnj3hHVn7Vdzm5R0gE/DjuCbMqv3e1gZMp/EwNbcWDDa
- C3w69dyAlov+VJ+AbcHXTaFxawtdMD4YDgnIaXMAZXvuRD8VSbRZT26N2yA5pph2osAg
- NT8AvoDYJxYcKFUfwe9e7/YTOHs8NqCNp3i3RxhPQ6RHwx8j2Z9FVUnvuiiANKuSB/AG OA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpbn8haj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 16:01:38 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 221G1b7O011765;
-        Tue, 1 Mar 2022 16:01:38 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehpbn8h8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 16:01:37 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221Fw2Vs007708;
-        Tue, 1 Mar 2022 16:01:34 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 3efbu9b25b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Mar 2022 16:01:34 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221G1QKg43450802
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Mar 2022 16:01:26 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 346CE4C050;
-        Tue,  1 Mar 2022 16:01:26 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DE1C4C044;
-        Tue,  1 Mar 2022 16:01:24 +0000 (GMT)
-Received: from [9.145.23.254] (unknown [9.145.23.254])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  1 Mar 2022 16:01:24 +0000 (GMT)
-Message-ID: <b2295eba-722a-67e2-baae-20dac9d72625@linux.ibm.com>
-Date:   Tue, 1 Mar 2022 17:01:24 +0100
+        Tue, 1 Mar 2022 11:03:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A27F349917;
+        Tue,  1 Mar 2022 08:03:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66BB31042;
+        Tue,  1 Mar 2022 08:03:06 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26E0B3F70D;
+        Tue,  1 Mar 2022 08:03:05 -0800 (PST)
+Message-ID: <f9768ddd-26c4-9b23-8c48-9de4123a75e6@arm.com>
+Date:   Tue, 1 Mar 2022 16:03:00 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3 06/11] s390: cio: Use driver_set_override() instead of
- open-coding
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
- <20220227135214.145599-7-krzysztof.kozlowski@canonical.com>
-From:   Vineeth Vijayan <vneethv@linux.ibm.com>
-In-Reply-To: <20220227135214.145599-7-krzysztof.kozlowski@canonical.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: avoid logspam when cd-broken
+Content-Language: en-GB
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-mmc@vger.kernel.org,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220228223642.1136229-1-pgwipeout@gmail.com>
+ <c12e74b7-0bef-ac7a-20c1-2a17ddd050dd@arm.com>
+ <CAMdYzYq0A4FitRGe49fxvjbwLUCi_KGwCtfz7pmayt_dK=r32w@mail.gmail.com>
+ <54b24f3d-3762-abbd-5ac4-dc5728f2fe4e@arm.com>
+ <CAMdYzYp=Po08pap9w5s8PV0mKfFZSPSOhM1U1AUdrRkYV-FRZQ@mail.gmail.com>
+ <CAMdYzYoF6eO3mBZD=PtOPL3atdA3kH4UzV++6wB0pirW-7h_9A@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAMdYzYoF6eO3mBZD=PtOPL3atdA3kH4UzV++6wB0pirW-7h_9A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VwR9OiefAhT359vuW89HdrkWzjVzSJvV
-X-Proofpoint-GUID: 77Yd1MtoDGNnH1_0a7MDCf3mUHkKdN3G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- mlxlogscore=999 impostorscore=0 lowpriorityscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203010085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,81 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-03-01 14:49, Peter Geis wrote:
+> On Tue, Mar 1, 2022 at 7:46 AM Peter Geis <pgwipeout@gmail.com> wrote:
+>>
+>> On Tue, Mar 1, 2022 at 7:38 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>
+>>> On 2022-03-01 11:49, Peter Geis wrote:
+>>>> On Tue, Mar 1, 2022 at 6:23 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>>>
+>>>>> On 2022-02-28 22:36, Peter Geis wrote:
+>>>>>> The dw_mmc-rockchip driver drops a large amound of logspam constantly
+>>>>>> when the cd-broken flag is enabled.
+>>>>>> Set the warning to be debug ratelimited in this case.
+>>>>>
+>>>>> Isn't this just papering over some fundamental problem with the clock?
+>>>>> If it's failing to set the expected rate for communicating with a card,
+>>>>> then presumably that's an issue for correct operation in general? The
+>>>>> fact that polling for a card makes a lot more of that communication
+>>>>> happen seems unrelated :/
+>>>>
+>>>> Good Morning,
+>>>>
+>>>> This only happens when a card is not inserted, so communication cannot happen.
+>>>
+>>> Well, I suppose there's a philosophical question in there about whether
+>>> shouting into the void counts as "communication", but AFAIR what the
+>>> polling function does is power up the controller, send a command, and
+>>> see if it gets a response.
+>>>
+>>> If the clock can't be set to the proper rate for low-speed discovery,
+>>> some or all cards may not be detected properly. Conversely if it is
+>>> already at a slow enough rate for discovery but can't be set higher once
+>>> a proper communication mode has been established, data transfer
+>>> performance will be terrible. Either way, it is not OK in general for
+>>> clk_set_rate() to fail, hence the warning. You have a clock driver problem.
+>>
+>> Alright, I'll look into this.
+>> It seems only extremely low clock speeds fail and I know rockchip
+>> chips have a hard time with extremely low clock rates.
+>> I'll trace out where the failure is happening.
+> 
+> Okay, I hope you can provide me a direction to go from here, because
+> it looks like it's doing exactly what it should do in this situation.
+> mmc core is requesting a rate (200k/100k).
+> clk core tries to find a parent to provide a clock that low and fails,
+> because the lowest possible parent is 750k.
+> clk_sdmmc(x) is listed as no-div, so it can't go any lower.
+> 
+> It seems to me that this error is sane, because other results of
+> einval you want to catch.
+> But einval in this case is fine, because
+> The thing that strikes me weird is currently clk_core thinks the
+> lowest possible freq here is 0, when in actuality it should be 750k,
+> am I correct here?
+> The mmc controller has an internal divider, so if my line of thinking
+> is correct here we should be more flexible here and request a rate
+> that's acceptable rather than just failing if it doesn't work.
+> But that's based on my limited understanding of how mmc core is
+> requesting this and what it expects in return.
 
-On 2/27/22 14:52, Krzysztof Kozlowski wrote:
-> Use a helper for seting driver_override to reduce amount of duplicated
-> code. Make the driver_override field const char, because it is not
-> modified by the core and it matches other subsystems.
-s/seting/setting/
+The downstream solution appears to be just to clamp the rate for 
+detection[1][2]. Not sure whether it's feasible to try to be cleverer 
+with the local divider to settle on a more in-spec rate for the final 
+output :/
 
-Also could you please change the title to start with "s390/cio:"
-instead of "s390 : cio"
+Robin.
 
-Otherwise,
-
-Acked-by: Vineeth Vijayan <vneethv@linux.ibm.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->   drivers/s390/cio/cio.h |  7 ++++++-
->   drivers/s390/cio/css.c | 28 ++++------------------------
->   2 files changed, 10 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/s390/cio/cio.h b/drivers/s390/cio/cio.h
-> index 1cb9daf9c645..e110c10613e8 100644
-> --- a/drivers/s390/cio/cio.h
-> +++ b/drivers/s390/cio/cio.h
-> @@ -103,7 +103,12 @@ struct subchannel {
->   	struct work_struct todo_work;
->   	struct schib_config config;
->   	u64 dma_mask;
-> -	char *driver_override; /* Driver name to force a match */
-> +	/*
-> +	 * Driver name to force a match.
-> +	 * Do not set directly, because core frees it.
-> +	 * Use driver_set_override() to set or clear it.
-> +	 */
-As Bjorn Helgaas mentioned, please wrap this comment.
-> +	const char *driver_override;
->   } __attribute__ ((aligned(8)));
->   
->   DECLARE_PER_CPU_ALIGNED(struct irb, cio_irb);
-> diff --git a/drivers/s390/cio/css.c b/drivers/s390/cio/css.c
-> index fa8293335077..913b6ddd040b 100644
-> --- a/drivers/s390/cio/css.c
-> +++ b/drivers/s390/cio/css.c
-> @@ -338,31 +338,11 @@ static ssize_t driver_override_store(struct device *dev,
->   				     const char *buf, size_t count)
->   {
->   	struct subchannel *sch = to_subchannel(dev);
-> -	char *driver_override, *old, *cp;
-> -
-> -	/* We need to keep extra room for a newline */
-> -	if (count >= (PAGE_SIZE - 1))
-> -		return -EINVAL;
-> -
-> -	driver_override = kstrndup(buf, count, GFP_KERNEL);
-> -	if (!driver_override)
-> -		return -ENOMEM;
-> -
-> -	cp = strchr(driver_override, '\n');
-> -	if (cp)
-> -		*cp = '\0';
-> -
-> -	device_lock(dev);
-> -	old = sch->driver_override;
-> -	if (strlen(driver_override)) {
-> -		sch->driver_override = driver_override;
-> -	} else {
-> -		kfree(driver_override);
-> -		sch->driver_override = NULL;
-> -	}
-> -	device_unlock(dev);
-> +	int ret;
->   
-> -	kfree(old);
-> +	ret = driver_set_override(dev, &sch->driver_override, buf, count);
-> +	if (ret)
-> +		return ret;
->   
->   	return count;
->   }
+[1] 
+https://github.com/JeffyCN/mirrors/commit/d80d5062b22f9c4a559401bdb7b2727c4ced36c0
+[2] 
+https://github.com/JeffyCN/mirrors/commit/3f26edfb2392df25efc361ad0a9f41d0917e40ee

@@ -2,142 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AD84C8C27
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1587E4C8C2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 14:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbiCANBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 08:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S234904AbiCANBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 08:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234885AbiCANBR (ORCPT
+        with ESMTP id S234932AbiCANBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 08:01:17 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9369A4E1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 05:00:35 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id k7so5472268ilo.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 05:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QG2k2eItwE4VAk3PGGex6QHZy3T0xaD3lTCoY/HpYco=;
-        b=ZQjeLrdHbWEck4K6RpeBY4QI1uE5CcoVwO5sZTKvbH0jCtE/epL+AV1J2T6nTvQB7B
-         /yPS0KVOUZAhUGfHU54H1jmlgYJUgdfLLmM3xmB3rY9RzzFoWNFI2Zci83Jzu2Okp0E4
-         AJRAtv/WKjpa/XnIsui/qXUZ2c4GyPza8OAZk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QG2k2eItwE4VAk3PGGex6QHZy3T0xaD3lTCoY/HpYco=;
-        b=FniglYWxj2lqfIZ8/1TR7WKujTVD6zvs/vJqKN3jj56/SXPwIBStm3kccWa7Dg6kE3
-         j4pFLDJ+a7DMaKJ5aVrohccG9qxOepgFy01Et6c1QIw7EZVImnMJVHrVrdtf3plWcEoV
-         vxl4vQw96qc5sbDtW3x9QngI8NxWP6t8XuGLbNqyLA1KWS7DHGqF/UbeALM6RIEMyQEn
-         2k8svTHJdKt1I4Gi02GsbRMDKdNYFg6K1umqiWsSaTKvD6ZsZtBqx0c0CnKuZ1/G01LY
-         VWolCScJGbr5ZshhXDx13KAkKTXGSggn/i8wwBPIk9fCjRY0DK76ZRMXXfDwfmzzBxs5
-         oveQ==
-X-Gm-Message-State: AOAM5326/lWc+QhJ/YefADhGarY2MBf+lrUKuFA1XDCyx/Fhm5HQfxSD
-        82nKjVvReH3IXYsQYbmDjP7GhpsteIf4E068osVCTg==
-X-Google-Smtp-Source: ABdhPJygTkLKJoxpKoMnQComCB9wJUKiAgXMWJlY4Oqe0COwyi0CYb7/OKDFQvAmbtgocYjrHTjH3LgZXlKpwAjqw/Q=
-X-Received: by 2002:a92:cf12:0:b0:2be:3a27:67c7 with SMTP id
- c18-20020a92cf12000000b002be3a2767c7mr23363367ilo.187.1646139635155; Tue, 01
- Mar 2022 05:00:35 -0800 (PST)
+        Tue, 1 Mar 2022 08:01:38 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65CF9ADA1;
+        Tue,  1 Mar 2022 05:00:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=M542kUDYwYiNo5piJUcRV3k6x93s5dP3ia7BcMUvork=; b=M1Mzb
+        6+gUV25q8y5q9JN07VrgezVwW6vCHpnisrPaZpnl+tM6m6HILbmxTMZDd1+mgZ4yt8SSSNsfaGA2V
+        3AepluzHpoN4AEEdyFCSp6k3gemCgESJT8COZqL7Hby/MrWx7zDtQDB1uNE2k1iA/8cGZJ6pW4a0v
+        oirP+StqBTdtuqt1W/Z1HClzRmc9d+Pc2rP1eTWQQ30cnBLAjZeVsQpsGissorGUfAiDn6V4oKg5H
+        QGASjXN4Dynv1+eOH1ihM6ATCUIW8Go9RkhysUTg76ImfTsDkkkUc6TAMyqyOR5KTKhoUA6MSiHpJ
+        qmItrP0ATa0upTuWCke0vlt2zXzvA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1nP27M-0007wi-D0; Tue, 01 Mar 2022 13:00:40 +0000
+Date:   Tue, 1 Mar 2022 13:00:39 +0000
+From:   John Keeping <john@metanate.com>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 00/16] crypto: rockchip: permit to pass self-tests
+Message-ID: <Yh4Y99KCi+1lbrve@donbot>
+References: <20220228194037.1600509-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-References: <164549971112.9187.16871723439770288255.stgit@noble.brown> <164549983736.9187.16755913785880819183.stgit@noble.brown>
-In-Reply-To: <164549983736.9187.16755913785880819183.stgit@noble.brown>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 1 Mar 2022 14:00:24 +0100
-Message-ID: <CAJfpegs=DhCO62EFV0Q_i2fmqJnziJy1t4itP9deS=FuWEA=TQ@mail.gmail.com>
-Subject: Re: [PATCH 03/11] MM: improve cleanup when ->readpages doesn't
- process all pages.
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-nilfs@vger.kernel.org,
-        Linux NFS list <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Ext4 <linux-ext4@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228194037.1600509-1-clabbe@baylibre.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 at 04:18, NeilBrown <neilb@suse.de> wrote:
->
-> If ->readpages doesn't process all the pages, then it is best to act as
-> though they weren't requested so that a subsequent readahead can try
-> again.
-> So:
->   - remove any 'ahead' pages from the page cache so they can be loaded
->     with ->readahead() rather then multiple ->read()s
->   - update the file_ra_state to reflect the reads that were actually
->     submitted.
->
-> This allows ->readpages() to abort early due e.g.  to congestion, which
-> will then allow us to remove the inode_read_congested() test from
-> page_Cache_async_ra().
->
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  mm/readahead.c |   19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/readahead.c b/mm/readahead.c
-> index 73b2bc5302e0..8a97bd408cf6 100644
-> --- a/mm/readahead.c
-> +++ b/mm/readahead.c
-> @@ -104,7 +104,13 @@
->   * for necessary resources (e.g.  memory or indexing information) to
->   * become available.  Pages in the final ``async_size`` may be
->   * considered less urgent and failure to read them is more acceptable.
-> - * They will eventually be read individually using ->readpage().
-> + * In this case it is best to use delete_from_page_cache() to remove the
-> + * pages from the page cache as is automatically done for pages that
-> + * were not fetched with readahead_page().  This will allow a
-> + * subsequent synchronous read ahead request to try them again.  If they
-> + * are left in the page cache, then they will be read individually using
-> + * ->readpage().
-> + *
->   */
->
->  #include <linux/kernel.h>
-> @@ -226,8 +232,17 @@ static void read_pages(struct readahead_control *rac, struct list_head *pages,
->
->         if (aops->readahead) {
->                 aops->readahead(rac);
-> -               /* Clean up the remaining pages */
-> +               /*
-> +                * Clean up the remaining pages.  The sizes in ->ra
-> +                * maybe be used to size next read-ahead, so make sure
-> +                * they accurately reflect what happened.
-> +                */
->                 while ((page = readahead_page(rac))) {
-> +                       rac->ra->size -= 1;
-> +                       if (rac->ra->async_size > 0) {
-> +                               rac->ra->async_size -= 1;
-> +                               delete_from_page_cache(page);
-> +                       }
+On Mon, Feb 28, 2022 at 07:40:21PM +0000, Corentin Labbe wrote:
+> The rockchip crypto driver is broken and do not pass self-tests.
+> This serie's goal is to permit to become usable and pass self-tests.
+> 
+> This whole serie is tested on a rk3328-rock64 with selftests (with
+> CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
 
-Does the  above imply that filesystem should submit at least ra->size
-pages, regardless of congestion?
+I previously noticed this breakage on rk3288 but never got time to
+investigate (disabling the driver was quicker).
 
-Thanks,
-Miklos
+This series fixes everything on rk3288 as well, thanks!
+
+I hit the same warnings as the kernel test robot as well as a missing
+new kconfig dependency (see separate reply to patch 10), but this is
+
+Tested-by: John Keeping <john@metanate.com>
+
+
+Regards,
+John

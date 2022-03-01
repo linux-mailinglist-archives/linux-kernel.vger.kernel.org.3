@@ -2,98 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A824C924F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B404C9251
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 18:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbiCAR56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 12:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S236516AbiCAR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 12:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236724AbiCAR5s (ORCPT
+        with ESMTP id S236724AbiCAR57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 12:57:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CFC41F8A;
-        Tue,  1 Mar 2022 09:57:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6E71A1F39D;
-        Tue,  1 Mar 2022 17:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646157425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=buWeJHt6GiyDyp6c2t6RjOy396An8wRLpBnyIHHufHY=;
-        b=Qa/tlCjNWZWBuQe2pEOePHVesePkJsxgpGAcf+RKInChvZEOpBSOv16KjCk6wN3eB9rRmD
-        GZyyOTwaEbMN0GGXw2Xmw8uaT/U5BevMNkAopM6bozcI14rCPFaheJSxDUirS59knYxmsK
-        6sub2e238Ivp/5yAAgjARKA1omAM1WM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3EA0313B89;
-        Tue,  1 Mar 2022 17:57:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ks7BDXFeHmJXRwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 01 Mar 2022 17:57:05 +0000
-Date:   Tue, 1 Mar 2022 18:57:03 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] memcg: async flush memcg stats from perf sensitive
- codepaths
-Message-ID: <20220301175703.GA10867@blackbody.suse.cz>
-References: <20220226002412.113819-1-shakeelb@google.com>
- <Yh3h33W45+YaMo92@dhcp22.suse.cz>
- <CALvZod7aF9xRc+XvY7GPN7OnDyPitt1H6Q4yrwzAXTFzv1LzWQ@mail.gmail.com>
+        Tue, 1 Mar 2022 12:57:59 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E1D5D1BA
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 09:57:18 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so33078240ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 09:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c3WCe6YPhsNPb86+PhZQBxqhegDCQ92RBMVqRrYASCk=;
+        b=e2WGmHy/xxXYHLCJ/oIMEfHRKsLuoZmGMOs1Ijld4Omd1nthuwT3jT9VSQHp94ZqE5
+         YYdiVN142wywas8WXfbTI/aVNuxt4PblNsrFWjm8kt1KKsII61eSE9NKbHbHC/lupsBV
+         RRS39ecuzrYw7DqRaSUgg/oEBYArzbmaXpSu2Osst+YIOQ8KQ09/R+PH5/V9gBZs/Cod
+         FHipZPJzT+0FJqZTXBqmL8BrzmQzu6nHdsFf9/aj73CnfQ+z03pQ/Doxkf3mNkPFUUTr
+         meT7LcAzSbG3i4ifUxrJ1px1ImToMCw446+fev+auqQ7/eo/cgTprGefShtgF2q0lAHu
+         SCWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c3WCe6YPhsNPb86+PhZQBxqhegDCQ92RBMVqRrYASCk=;
+        b=OvLaW7qzW0VkxRV+9+OkX7kCKks3Wt8yGxtywUFhuzj/Hnl164q1yw5ZgwWxOIIPEr
+         IFcOMO3Qrbzyd8n2O0f01+7W5JNi1sEs5F/Ub1XRkoFZNe77KXUNiH/u5nS4S/kvM90t
+         lLTdlkiNl4elL8q5VPDT3kJddC3sprMLvJR5LenzGCaOj2KOPcNSaYA2gqpk/FiHLSZJ
+         QkuS4u8W/WqfmJ0rrTRkpt6yXmmWSh7kmIHiBvu7zgNVjzAje4I+CrO7aqa2HSae8nh2
+         3uvXCZpDPE0GRsi1bQWo5KabE8E43IgKx1oTd57loAB8rOQTyx2cTMuHOueDeO/Wga7d
+         8Bog==
+X-Gm-Message-State: AOAM530QmFZkAHYz9BncKFn89dh57Y6ezIgypPkRgzN9WK6ij4UG0AX4
+        72VjkYamOmivI1CFewW2uKN2pmrxKZYnSgL60xeBeA==
+X-Google-Smtp-Source: ABdhPJx6NiC03eLaiOd1JPH1zj5W1HAY6SVMujo6GDIuCDgujZ1ZYbC3sF1PQDRMmwWIwyavFsgMIhHwPDZoiNS+Ugg=
+X-Received: by 2002:a17:906:459:b0:6cd:2d6d:2f4c with SMTP id
+ e25-20020a170906045900b006cd2d6d2f4cmr19302374eja.687.1646157436628; Tue, 01
+ Mar 2022 09:57:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod7aF9xRc+XvY7GPN7OnDyPitt1H6Q4yrwzAXTFzv1LzWQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-23-seanjc@google.com>
+In-Reply-To: <20220226001546.360188-23-seanjc@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 1 Mar 2022 09:57:05 -0800
+Message-ID: <CANgfPd_JXJOYhMGKTHfZM0f1x_KpOzJi8fKVv9awLbbpoHdOMw@mail.gmail.com>
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous worker
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Making decisions based on up to 2 s old information.
+On Fri, Feb 25, 2022 at 4:16 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Zap defunct roots, a.k.a. roots that have been invalidated after their
+> last reference was initially dropped, asynchronously via the system work
+> queue instead of forcing the work upon the unfortunate task that happened
+> to drop the last reference.
+>
+> If a vCPU task drops the last reference, the vCPU is effectively blocked
+> by the host for the entire duration of the zap.  If the root being zapped
+> happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
+> being active, the zap can take several hundred seconds.  Unsurprisingly,
+> most guests are unhappy if a vCPU disappears for hundreds of seconds.
+>
+> E.g. running a synthetic selftest that triggers a vCPU root zap with
+> ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
+> Offloading the zap to a worker drops the block time to <100ms.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-On Tue, Mar 01, 2022 at 09:21:12AM -0800, Shakeel Butt <shakeelb@google.com> wrote:
-> Without flushing the worst that can happen in the refault path is
-> false (or missed) activations of the refaulted page.
+Reviewed-by: Ben Gardon <bgardon@google.com>
 
-Yeah, this may under- or overestimate workingset size (when it's
-changing), the result is likely only less efficient reclaim.
+> ---
+>  arch/x86/kvm/mmu/mmu_internal.h |  8 +++-
+>  arch/x86/kvm/mmu/tdp_mmu.c      | 65 ++++++++++++++++++++++++++++-----
+>  2 files changed, 63 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index be063b6c91b7..1bff453f7cbe 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -65,7 +65,13 @@ struct kvm_mmu_page {
+>                 struct kvm_rmap_head parent_ptes; /* rmap pointers to parent sptes */
+>                 tdp_ptep_t ptep;
+>         };
+> -       DECLARE_BITMAP(unsync_child_bitmap, 512);
+> +       union {
+> +               DECLARE_BITMAP(unsync_child_bitmap, 512);
+> +               struct {
+> +                       struct work_struct tdp_mmu_async_work;
+> +                       void *tdp_mmu_async_data;
+> +               };
+> +       };
 
-> For reclaim code, some heuristics (like deactivating active LRU or
-> cache-trim) may act on old information.
+At some point (probably not in this series since it's so long already)
+it would be good to organize kvm_mmu_page. It looks like we've got
+quite a few anonymous unions in there for TDP / Shadow MMU fields.
 
-Here, I'd be more careful whether such a delay cannot introduce some
-unstable behavior (permanent oscillation in the worst case).
-
-> Now, coming to your question, yes, we can remove the flushing from
-> these performance critical codepaths as the stats at most will be 2
-> second old due to periodic flush. 
-
-Another aspect is that people will notice and report such a narrowly
-located performance regression more easily than reduced/less predictable
-reclaim behavior. (IMO the former is better, OTOH, it can also be
-interpreted that noone notices (is able to notice).)
-
-Michal
+>
+>         struct list_head lpage_disallowed_link;
+>  #ifdef CONFIG_X86_32
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index ec28a88c6376..4151e61245a7 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -81,6 +81,38 @@ static void tdp_mmu_free_sp_rcu_callback(struct rcu_head *head)
+>  static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>                              bool shared);
+>
+> +static void tdp_mmu_zap_root_async(struct work_struct *work)
+> +{
+> +       struct kvm_mmu_page *root = container_of(work, struct kvm_mmu_page,
+> +                                                tdp_mmu_async_work);
+> +       struct kvm *kvm = root->tdp_mmu_async_data;
+> +
+> +       read_lock(&kvm->mmu_lock);
+> +
+> +       /*
+> +        * A TLB flush is not necessary as KVM performs a local TLB flush when
+> +        * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> +        * to a different pCPU.  Note, the local TLB flush on reuse also
+> +        * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> +        * intermediate paging structures, that may be zapped, as such entries
+> +        * are associated with the ASID on both VMX and SVM.
+> +        */
+> +       tdp_mmu_zap_root(kvm, root, true);
+> +
+> +       /*
+> +        * Drop the refcount using kvm_tdp_mmu_put_root() to test its logic for
+> +        * avoiding an infinite loop.  By design, the root is reachable while
+> +        * it's being asynchronously zapped, thus a different task can put its
+> +        * last reference, i.e. flowing through kvm_tdp_mmu_put_root() for an
+> +        * asynchronously zapped root is unavoidable.
+> +        */
+> +       kvm_tdp_mmu_put_root(kvm, root, true);
+> +
+> +       read_unlock(&kvm->mmu_lock);
+> +
+> +       kvm_put_kvm(kvm);
+> +}
+> +
+>  void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>                           bool shared)
+>  {
+> @@ -142,15 +174,26 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>         refcount_set(&root->tdp_mmu_root_count, 1);
+>
+>         /*
+> -        * Zap the root, then put the refcount "acquired" above.   Recursively
+> -        * call kvm_tdp_mmu_put_root() to test the above logic for avoiding an
+> -        * infinite loop by freeing invalid roots.  By design, the root is
+> -        * reachable while it's being zapped, thus a different task can put its
+> -        * last reference, i.e. flowing through kvm_tdp_mmu_put_root() for a
+> -        * defunct root is unavoidable.
+> +        * Attempt to acquire a reference to KVM itself.  If KVM is alive, then
+> +        * zap the root asynchronously in a worker, otherwise it must be zapped
+> +        * directly here.  Wait to do this check until after the refcount is
+> +        * reset so that tdp_mmu_zap_root() can safely yield.
+> +        *
+> +        * In both flows, zap the root, then put the refcount "acquired" above.
+> +        * When putting the reference, use kvm_tdp_mmu_put_root() to test the
+> +        * above logic for avoiding an infinite loop by freeing invalid roots.
+> +        * By design, the root is reachable while it's being zapped, thus a
+> +        * different task can put its last reference, i.e. flowing through
+> +        * kvm_tdp_mmu_put_root() for a defunct root is unavoidable.
+>          */
+> -       tdp_mmu_zap_root(kvm, root, shared);
+> -       kvm_tdp_mmu_put_root(kvm, root, shared);
+> +       if (kvm_get_kvm_safe(kvm)) {
+> +               root->tdp_mmu_async_data = kvm;
+> +               INIT_WORK(&root->tdp_mmu_async_work, tdp_mmu_zap_root_async);
+> +               schedule_work(&root->tdp_mmu_async_work);
+> +       } else {
+> +               tdp_mmu_zap_root(kvm, root, shared);
+> +               kvm_tdp_mmu_put_root(kvm, root, shared);
+> +       }
+>  }
+>
+>  enum tdp_mmu_roots_iter_type {
+> @@ -954,7 +997,11 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
+>
+>         /*
+>          * Zap all roots, including invalid roots, as all SPTEs must be dropped
+> -        * before returning to the caller.
+> +        * before returning to the caller.  Zap directly even if the root is
+> +        * also being zapped by a worker.  Walking zapped top-level SPTEs isn't
+> +        * all that expensive and mmu_lock is already held, which means the
+> +        * worker has yielded, i.e. flushing the work instead of zapping here
+> +        * isn't guaranteed to be any faster.
+>          *
+>          * A TLB flush is unnecessary, KVM zaps everything if and only the VM
+>          * is being destroyed or the userspace VMM has exited.  In both cases,
+> --
+> 2.35.1.574.g5d30c73bfb-goog
+>

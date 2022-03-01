@@ -2,183 +2,406 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F5F4C978D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5064C9791
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 22:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiCAVIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 16:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S238511AbiCAVJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 16:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiCAVIu (ORCPT
+        with ESMTP id S238302AbiCAVJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 16:08:50 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2068.outbound.protection.outlook.com [40.107.237.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCFE1D315;
-        Tue,  1 Mar 2022 13:08:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R9w7dedJNv48Q65J2trYmh8B+zLT4fICLb3kY0C/sbbGrItMcv9cFNqLfDoTC4oSHYde4KlU6lJx7WghiT4rmvbmEq8rTbt2ciyiLryfh8T8knxXielsuEU91bMa5aGdvNBpQ/d9ZI/YxeRaxqDIxhqrgOqMqlL+TajYslZ2EavtNonus0Z6EidXSapiTuWhW9l5/9sP8u1cp0oayLcOMJkK0EzMZsc7+HfMTRIYR0nQpx6z4TwQrzaBGYwT2ZWHvREufFDQfxDa45LsicoIVlnvp2GsSk3JJN1V02zuUJvuY8q6IFipLdP3l7z8z3SZqUMGX1JB478l6bWSdzCwhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0zHZTxQ5SrLb7GZ2Gp8PEj3WRGyfCT0SBPDGQeMBbs0=;
- b=kt+boPuZDjeiTdvjKzeik5c+uvxiJDFzTvDKJcKiwgVtt2SA6VaEopHTj99AMg6z1V2SOjjCVzfWXilf9AxZJCxEh1FbvvKqoF9vaYrMKtgDRzEN8uNBgWxqW2wzKuUuLqmbcxGHaprhzYWWnrIc3POEXeviCbC2AGL1O7Z2hoDYSi+1wf5bEsKGuLB6ks16aYKR/ICuyHsjEN1cGCJtHw+CD6ORNP16YaTRnfQpeFS2rmFEDZg3bMps7tNb+2FKiTPX/gMcZbsQuTU1HdpZtR4qMUr5OzaDEtw4ypAkwtjXODX06X2IyogDU3Jh6Leq7cfwkKLNQFgFZsVCb29gSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0zHZTxQ5SrLb7GZ2Gp8PEj3WRGyfCT0SBPDGQeMBbs0=;
- b=g12E3Z9Yh3U01imqe05VBV4fgRcxABSA4zKKAJKQalfXgL01WYL6U3LcK9Z85D2R9dX6UVz8RPxIpgacvYPfn33ltiLI5WQ0lxWBSACcdv3WJeSi/G4pJz4Qc9zzspNEEIh8VJplfyRrJhf1ScO7ljJyGIZ5g+vbhv0M6klmBjI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MWHPR12MB1471.namprd12.prod.outlook.com (2603:10b6:301:e::20)
- by BN8PR12MB3361.namprd12.prod.outlook.com (2603:10b6:408:67::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Tue, 1 Mar
- 2022 21:08:00 +0000
-Received: from MWHPR12MB1471.namprd12.prod.outlook.com
- ([fe80::146a:ebef:a503:c2bd]) by MWHPR12MB1471.namprd12.prod.outlook.com
- ([fe80::146a:ebef:a503:c2bd%8]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 21:08:00 +0000
-Date:   Tue, 1 Mar 2022 15:07:56 -0600
-From:   John Allen <john.allen@amd.com>
-To:     =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH] ccp: ccp_dmaengine_unregister release dma channels
-Message-ID: <Yh6LLFAf+f48BBFa@dell9853host>
-References: <20220228031545.11639-1-davispuh@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228031545.11639-1-davispuh@gmail.com>
-X-ClientProxiedBy: BL1PR13CA0421.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::6) To MWHPR12MB1471.namprd12.prod.outlook.com
- (2603:10b6:301:e::20)
+        Tue, 1 Mar 2022 16:09:52 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327913CFC9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 13:09:10 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso2171118wmr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 13:09:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q7Y19T6kqVKlmCsFK19klmbBsXUrrRUzH3Vo+RXLMBs=;
+        b=a2055N/5i0oyU7Th34WOXZthtYNB71AEZvtVhc5wFxZeB82kjs75sjdHgHDgbNQyd3
+         Wn6E/oF5KxqUDFHjM/y4AnbTzoKY8dtRTnlPLSar9+rEoAn0ozMyZN3gOMyoFCk7RDbS
+         sIGuhOgaz39n7D5D92uuMMcxzL6B3CR4ZOoQmPUEjJNxqldHNdLbaq1F254sJilJyVjK
+         sOIh8CsGiqdhxd57BArBvkP5vr6EnGPoa09IgZEZlL+Vn6X9a4S0AEFk0118cw2nuqyY
+         AyVyDWptEpQvG2BxbxRysX1j2VDnslXopBZW/6afDQUt90knuHlQe9xetDSkJHF5M8Yl
+         E3uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q7Y19T6kqVKlmCsFK19klmbBsXUrrRUzH3Vo+RXLMBs=;
+        b=Dny50iBFtiv3Db3txLo3lBoH3+ruaBUtHzmyVazVagFSh1OOIWwRIrBYNY08VpRNpf
+         MQ7HEujHVGJU/CwyM3jUsFqghCz7uQ5Lu7QQFl6A1+hEscCj/x19S9cQO9ba5fy2EDnK
+         0YO4Thn4Mwtvssr8XNRql2LtbnISZvYWuN2T+Bh0tKsp/92wygT+ePjkssxEORNZWuxG
+         kz/RZipeW/lmhXXIr+7b9462VNQGVcOj6FI7ffTLCjwbuBqdgiFnQqck7xeodIW9i8cG
+         O/kMoMhRPWjPWIpvSZPVxWlBGbrtJVj5lReJ10GKHsLfm56xZKyPK0AGk3U5aFZO4K0x
+         dAIQ==
+X-Gm-Message-State: AOAM5309AMmwA0szirsmDNd+1Cbcd0dapiTtB5y6ZRgzNrUSCJeB4Osx
+        5NFB3DGgVKhKhLj08HuVkTNCkQ==
+X-Google-Smtp-Source: ABdhPJzSp5/OV58qAogxWcaYN63Y/gqG9Jc8nP9kYzlWwbjIj+RAZPawZvkl3qNeQrzBZQmnW8d0Xg==
+X-Received: by 2002:a05:600c:2250:b0:383:bab2:9df5 with SMTP id a16-20020a05600c225000b00383bab29df5mr91265wmm.162.1646168948580;
+        Tue, 01 Mar 2022 13:09:08 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55? ([2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55])
+        by smtp.googlemail.com with ESMTPSA id s17-20020adfdb11000000b001f02d5fea43sm286571wri.98.2022.03.01.13.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 13:09:08 -0800 (PST)
+Message-ID: <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
+Date:   Tue, 1 Mar 2022 22:09:06 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 60e8bb29-c400-4451-f820-08d9fbc79131
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3361:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB33612D237ADB5207E1487D1D9A029@BN8PR12MB3361.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wEHFOzW6bbpnXVBQBAHF51RYgzZ/bwD05J5Y+SjmYjMMbe5Rl5Kuiq/3IGJJNDE70edJVQ8UWjTSxlqN0TUaQvW2789Mx6AtiyarIzDsBL2qfyfWD3iqQsLPGVLVM/H6FpdyqzGmHrcJhrNsq4YYbikrxua//eUFeRTLbDNlZOMMP7qyoSyOKe3o07ad6729Xij83DMLfvHmJED0WKXnVAe0EizpWfGOfqo5iikpa+varJAOl3iQ8Jd2lUnfVl8Yux/oOVZIXfSLWn5FCXaudkZjgkMNugE+HGos7UePTDE9Xc31Lq3/M0MYEm/8lYlWi5y318IhUchKLD0aKcb1BcW+X93aF43S9fUeUthL1LaBFbVSXFLYI2UN6h/GiVlf9c0xA4qU8DZkt8Go2abwkYywl04oO8a+cUm1eQd8Qejds9mLA5O3OaWQxaE4BP5yCmekSl955G878DeViRMArZTXcTl+rbkvuhFxQm5WbbAouQtTZvxq4Ld+xl5SJAmDT4LxGfdSZKS8VR7yaK1PyYcRc5LrVgzS7q20gUur/QVg6t0BUFZOeQaSfOzldcZsB25XuFnhBVLwS6slhe1JWDUil7CbcJu8c6bp0R5D6tE88Sz5NV/XK31UlVwPkRkCVa84m/KDCqluZc2NeVDP+NjRt81ct0L/83E8a97kD5/mBj9tsR1eHzM2vSBaMugqS8sxkuJ4HYvleidYbRpIjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1471.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(4326008)(8676002)(66556008)(66476007)(66574015)(66946007)(86362001)(9686003)(6506007)(6512007)(6486002)(508600001)(6666004)(186003)(26005)(33716001)(6916009)(316002)(38100700002)(2906002)(5660300002)(44832011)(8936002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UXhoTnNoaDdESlcybDEvbjBOT0ttdllXaXNtWlV6cWJMdkhIQkt0Zng0a1RD?=
- =?utf-8?B?Um8yWjVzWFVQdmY3czNFdU5GV3JLOEkwUmh2VXRzU0dJbnlTSUp3NldLWXEy?=
- =?utf-8?B?SThSdFRvSU1wY1dBVWV0cWNGN2JUUG1mMmpDL0g5UWlBVWpWMXZTajR1ZnpG?=
- =?utf-8?B?SE5BN2t0VVcrUHBuMVVHbFNJVGg0cG5qc0E5ZFFpaU5iZ1E4aStMWDZVVDh2?=
- =?utf-8?B?allnOFZ6M25ZRHQ1VUhxRnlhdzVoQTFDQ2VFVVViSVhtY3JVVU5jSGN1c0cw?=
- =?utf-8?B?U3h2REllcGo3dXJEZExIUTVuU05ZUWx5ejl0bWRVeUF5MFY0RGpnamIraEhx?=
- =?utf-8?B?bi9IbC9UZjdtVnViTS9zZ0Fva0xMQThHZDcrbEpIVVZjaEJINlZBV1VlVEt4?=
- =?utf-8?B?aHlsSjBCdnh4VXNjd3NoY0tSMUJDYnp1MzdBb01zbTJqWWVESFVNTjVoZVBl?=
- =?utf-8?B?U3lqQmZ6V1RJa2xRcUNXNkZTQlVia2cwb1JNN29hd09EVWRaSlBoWHN6aEw1?=
- =?utf-8?B?c3J0dm16TGZlRVY3QVNvaExBTlk0eFdSY2lUZ1hITTB3UEYrYVMzS2JvMHcy?=
- =?utf-8?B?cUJQYUNoMkY5akd2YktRMzJzTTJyR0dGQkVTTHgzTWVMMjUxWGN3UU1IV1F2?=
- =?utf-8?B?Ym0wY0I3YUlLUnVsM3EvcFZmRG1EMnZYSUZiYlZrOHV6N3dhV2hPWmdHZEJZ?=
- =?utf-8?B?Lzg2V2tKT0xJb3dGbUpjWkY0c1ZSWk4rd250U2NyaWE1eDNneVA3SUYrQ1Fm?=
- =?utf-8?B?bFEvWVRTRFhXOHpEbDlWamxwUjdZNEs4Y2N0K0VNT21VVTZYbWU4TjErRThv?=
- =?utf-8?B?eXZYSjJWRUtNL3pOUmxQSFE3QnNiMWhrbGt4QWFjd0NMQWdnKzNUMWdoMTBa?=
- =?utf-8?B?OVdtV1VyRUcyWHpoZE01d3RBMDZ0Q3QvR0dmUERqblNLMjJXem9kM0d0aGti?=
- =?utf-8?B?MjBDQlhFc3l1TzNkSHY5RitJSi9nTzhLWnNJYVVZQ2syZmlHREkzVTNTUlJN?=
- =?utf-8?B?N0VreHk4Sk82MWxJbDdBSC9rZHVCemVzVWlPc2hQa0hnWHNtUEFxNzBQbjYz?=
- =?utf-8?B?Yk5hbUwza3lMdU5zcE1VdXZwd1EyWjZZOVJRMmtiaEw3MmROT21aejB1R3Ny?=
- =?utf-8?B?eGN0UUE2S2tUaHZTN3l4QjY3TEdiL0MvZjZwTHhOKzdmUlB4QzQrR3NkNUQ4?=
- =?utf-8?B?MkNmNVNpQ1ZWeXcrVCszTkFxMERHeFJ4ZC9BMkpJQVd2SUo2b0dkdnRXZE1B?=
- =?utf-8?B?WmZET0tOMmh4RlZ6WVNNd2NDbm50Smk1N2VQYmRka3FxMmdKUDNaWmNpVCtT?=
- =?utf-8?B?WGpmTDFwWTdiSVdyaVlFdHZNSXdtNTJQU2preVpDcStzRnkwQ1c1SDFzWUxN?=
- =?utf-8?B?eU9WdjM5eGxzaWI5em5FK0JVVU1QNkhRWlRoOFlNUG0rbjZ0b0htWklRaHlC?=
- =?utf-8?B?a1RPV2NqNmxVNVpIUGJGU3BlNWZJblk3M2ljdE9rd2I5UjYxYTJCZ1hockpV?=
- =?utf-8?B?QTBpUGtMSW1ObVUwc1Z4YlBhOU5UbExUdWZsNXFrekZZcXVnZ3cvazBUOTVn?=
- =?utf-8?B?RUZKR3pFb0k1djhtTzNyZEsrdDBFQlBWRm1DTmt2N0xuSDRvamE0aEkzSnAw?=
- =?utf-8?B?RE9MYXdUaytTQnlyUFZQYnJpbG5JYWdya25xc2x4VXhtd1IvdWhPNjU4K21K?=
- =?utf-8?B?K3gzSFkxb1U0QWxlZzNWemdUWlZnM0lKTmpFdklMMU85bGxEbnJoUVl6M3hN?=
- =?utf-8?B?U1FMK1FISHpndWYvNWF5bjIvSExOYm44VkZUdWpadUdjYysrOEpIWUhXaEpu?=
- =?utf-8?B?WUVVZ05CTDBPZ25mQmxiL1FWa3duMnZoazZvT2tocWxsUTNyV3d2bXhhNVpU?=
- =?utf-8?B?Ukd2c29pczExM0FhR1lNMDJSZm5HYklITFY4VWY4bXJudDlrNUkvTERObWd5?=
- =?utf-8?B?T0M2dXBKQ0QyWmxVL1QvQ0dHUXYyTkRBVUtRSU1vN01lQ2dkZnE4dFJVbUxx?=
- =?utf-8?B?YkJhTldHTjNIQmVzeE5IT1ZXdlVQeS9PSmQ1TUdsWkpadlFMYzJQQzJFOUJh?=
- =?utf-8?B?Z0hCL1VraDYxODQ2aUl4Z0V5VlBmVCtPdUl5UDhDRWRMa3hTcWF0aU5keU9u?=
- =?utf-8?B?WDdBdi8yMkwyY2pBOFE4Q0p2NDVlOUtabWtuSlNDbFlKT1RYTDEraWhjRnRP?=
- =?utf-8?Q?zDukMJ80noLikqaGKfR/4nI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60e8bb29-c400-4451-f820-08d9fbc79131
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR12MB1471.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2022 21:08:00.5014
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V5+0BPkIwsjg5hAkFmViivDEtIWoyLgWZgfldXPNlxxZD3JSjgf7gyLmtYlOTEw945nVTu3tAo79CojCj3HjZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3361
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
+Content-Language: en-US
+To:     shruthi.sanil@intel.com, tglx@linutronix.de, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, mgross@linux.intel.com,
+        srikanth.thokala@intel.com, lakshmi.bai.raja.subramanian@intel.com,
+        mallikarjunappa.sangannavar@intel.com
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-3-shruthi.sanil@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220222095654.9097-3-shruthi.sanil@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 05:15:45AM +0200, Dāvis Mosāns wrote:
-> ccp_dmaengine_register adds dma_chan->device_node to dma_dev->channels list
-> but ccp_dmaengine_unregister didn't remove them.
-> That can cause crashes in various dmaengine methods that tries to use dma_dev->channels
+On 22/02/2022 10:56, shruthi.sanil@intel.com wrote:
+> From: Shruthi Sanil <shruthi.sanil@intel.com>
 > 
-> Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
-
-Acked-by: John Allen <john.allen@amd.com>
-
+> The Intel Keem Bay timer driver supports clocksource and clockevent
+> features for the timer IP used in Intel Keem Bay SoC.
+> The timer block supports 1 free running counter and 8 timers.
+> The free running counter can be used as a clocksource and
+> the timers can be used as clockevent. Each timer is capable of
+> generating individual interrupt.
+> Both the features are enabled through the timer general config register.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Shruthi Sanil <shruthi.sanil@intel.com>
 > ---
->  drivers/crypto/ccp/ccp-dmaengine.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>   MAINTAINERS                         |   6 +
+>   drivers/clocksource/Kconfig         |  11 ++
+>   drivers/clocksource/Makefile        |   1 +
+>   drivers/clocksource/timer-keembay.c | 230 ++++++++++++++++++++++++++++
+>   4 files changed, 248 insertions(+)
+>   create mode 100644 drivers/clocksource/timer-keembay.c
 > 
-> diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-> index d718db224be42..7d4b4ad1db1f3 100644
-> --- a/drivers/crypto/ccp/ccp-dmaengine.c
-> +++ b/drivers/crypto/ccp/ccp-dmaengine.c
-> @@ -632,6 +632,20 @@ static int ccp_terminate_all(struct dma_chan *dma_chan)
->  	return 0;
->  }
->  
-> +static void ccp_dma_release(struct ccp_device *ccp)
-> +{
-> +	struct ccp_dma_chan *chan;
-> +	struct dma_chan *dma_chan;
-> +	unsigned int i;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 777cd6fa2b3d..73c0029dcdf7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9796,6 +9796,12 @@ F:	drivers/crypto/keembay/keembay-ocs-hcu-core.c
+>   F:	drivers/crypto/keembay/ocs-hcu.c
+>   F:	drivers/crypto/keembay/ocs-hcu.h
+>   
+> +INTEL KEEM BAY TIMER DRIVER
+> +M:	Shruthi Sanil <shruthi.sanil@intel.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
+> +F:	drivers/clocksource/timer-keembay.c
 > +
-> +	for (i = 0; i < ccp->cmd_q_count; i++) {
-> +		chan = ccp->ccp_dma_chan + i;
-> +		dma_chan = &chan->dma_chan;
-> +		tasklet_kill(&chan->cleanup_tasklet);
-> +		list_del_rcu(&dma_chan->device_node);
-> +	}
+>   INTEL THUNDER BAY EMMC PHY DRIVER
+>   M:	Nandhini Srikandan <nandhini.srikandan@intel.com>
+>   M:	Rashmi A <rashmi.a@intel.com>
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index cfb8ea0df3b1..65b6cf916e5a 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -721,4 +721,15 @@ config MICROCHIP_PIT64B
+>   	  modes and high resolution. It is used as a clocksource
+>   	  and a clockevent.
+>   
+> +config KEEMBAY_TIMER
+> +	bool "Intel Keem Bay timer"
+> +	depends on ARCH_KEEMBAY || COMPILE_TEST
+> +	select TIMER_OF
+> +	help
+> +	  This option enables the support for the Intel Keem Bay
+> +	  general purpose timer and free running counter driver.
+> +	  Each timer can generate an individual interrupt and
+> +	  supports oneshot and periodic modes.
+> +	  The 64-bit counter can be used as a clock source.
+> +
+>   endmenu
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> index fa5f624eadb6..dff6458ef9e5 100644
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
+>   obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
+>   obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+>   obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+> +obj-$(CONFIG_KEEMBAY_TIMER)		+= timer-keembay.o
+> diff --git a/drivers/clocksource/timer-keembay.c b/drivers/clocksource/timer-keembay.c
+> new file mode 100644
+> index 000000000000..230609c06a26
+> --- /dev/null
+> +++ b/drivers/clocksource/timer-keembay.c
+> @@ -0,0 +1,230 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Intel Keem Bay Timer driver
+> + *
+> + * Copyright (C) 2020 Intel Corporation
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/sizes.h>
+> +#include <linux/slab.h>
+> +#include <linux/regmap.h>
+> +
+> +#include "timer-of.h"
+> +
+> +/* Timer register offset */
+> +#define TIM_CNT_VAL_OFFSET		0x0
+> +#define TIM_RELOAD_VAL_OFFSET		0x4
+> +#define TIM_CONFIG_OFFSET		0x8
+> +
+> +/* Bit fields of timer general config register */
+> +#define TIM_CONFIG_PRESCALER_ENABLE	BIT(2)
+> +#define TIM_CONFIG_COUNTER_ENABLE	BIT(0)
+> +
+> +/* Bit fields of timer config register */
+> +#define TIM_CONFIG_INTERRUPT_PENDING	BIT(4)
+> +#define TIM_CONFIG_INTERRUPT_ENABLE	BIT(2)
+> +#define TIM_CONFIG_RESTART		BIT(1)
+> +#define TIM_CONFIG_ENABLE		BIT(0)
+> +
+> +#define TIM_GEN_MASK			GENMASK(31, 12)
+> +#define TIM_RATING			200
+> +#define TIM_CLKSRC_MASK_BITS		64
+> +
+> +#define TIMER_NAME_SIZE			25
+> +
+> +static inline void keembay_timer_enable(void __iomem *base, u32 flags)
+> +{
+> +	writel(TIM_CONFIG_ENABLE | flags, base + TIM_CONFIG_OFFSET);
 > +}
 > +
->  int ccp_dmaengine_register(struct ccp_device *ccp)
->  {
->  	struct ccp_dma_chan *chan;
-> @@ -736,6 +750,7 @@ int ccp_dmaengine_register(struct ccp_device *ccp)
->  	return 0;
->  
->  err_reg:
-> +	ccp_dma_release(ccp);
->  	kmem_cache_destroy(ccp->dma_desc_cache);
->  
->  err_cache:
-> @@ -752,6 +767,7 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
->  		return;
->  
->  	dma_async_device_unregister(dma_dev);
-> +	ccp_dma_release(ccp);
->  
->  	kmem_cache_destroy(ccp->dma_desc_cache);
->  	kmem_cache_destroy(ccp->dma_cmd_cache);
-> -- 
-> 2.35.1
-> 
+> +static inline void keembay_timer_disable(void __iomem *base)
+> +{
+> +	writel(0x0, base + TIM_CONFIG_OFFSET);
+> +}
+> +
+> +static inline void keembay_timer_update_counter(void __iomem *base, u32 val)
+> +{
+> +	writel(val, base + TIM_CNT_VAL_OFFSET);
+> +	writel(val, base + TIM_RELOAD_VAL_OFFSET);
+> +}
+> +
+> +static inline void keembay_timer_clear_pending_int(void __iomem *base)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(base + TIM_CONFIG_OFFSET);
+> +	val &= ~TIM_CONFIG_INTERRUPT_PENDING;
+> +	writel(val, base + TIM_CONFIG_OFFSET);
+> +}
+> +
+> +static int keembay_timer_set_next_event(unsigned long evt, struct clock_event_device *ce)
+> +{
+> +	u32 flags = TIM_CONFIG_INTERRUPT_ENABLE;
+> +	struct timer_of *to = to_timer_of(ce);
+> +	void __iomem *tim_base = timer_of_base(to);
+> +
+> +	keembay_timer_disable(tim_base);
+> +	keembay_timer_update_counter(tim_base, evt);
+> +	keembay_timer_enable(tim_base, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_timer_periodic(struct clock_event_device *ce)
+> +{
+> +	u32 flags = TIM_CONFIG_INTERRUPT_ENABLE | TIM_CONFIG_RESTART;
+> +	struct timer_of *to = to_timer_of(ce);
+> +	void __iomem *tim_base = timer_of_base(to);
+> +
+> +	keembay_timer_disable(tim_base);
+> +	keembay_timer_update_counter(tim_base, timer_of_period(to));
+> +	keembay_timer_enable(tim_base, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_timer_shutdown(struct clock_event_device *ce)
+> +{
+> +	struct timer_of *to = to_timer_of(ce);
+> +
+> +	keembay_timer_disable(timer_of_base(to));
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t keembay_timer_isr(int irq, void *dev_id)
+> +{
+> +	struct clock_event_device *evt = dev_id;
+> +	struct timer_of *to = to_timer_of(evt);
+> +	void __iomem *tim_base = timer_of_base(to);
+> +	u32 val;
+> +
+> +	val = readl(tim_base + TIM_CONFIG_OFFSET);
+> +
+> +	if (val & TIM_CONFIG_RESTART) {
+> +		/* Clear interrupt for periodic timer*/
+
+nit: comment format is:
+
+/*
+  * my comment
+  */
+
+One line comment format is usually for the network subsystem
+
+> +		keembay_timer_clear_pending_int(tim_base);
+> +	} else {
+> +		/* Disable the timer for one shot timer */
+
+comment format
+
+> +		keembay_timer_disable(tim_base);
+> +	}
+> +
+> +	evt->event_handler(evt);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int __init keembay_clockevent_init(struct device_node *np)
+> +{
+> +	struct timer_of *keembay_ce_to;
+> +	struct regmap *regmap;
+> +	int ret;
+> +	u32 val;
+> +
+> +	regmap = device_node_to_regmap(np->parent);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = regmap_read(regmap, TIM_CONFIG_OFFSET, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Prescaler bit must be enabled for the timer to function */
+
+comment format
+
+> +	if (!(val & TIM_CONFIG_PRESCALER_ENABLE)) {
+> +		pr_err("%pOF: Prescaler is not enabled\n", np);
+> +		ret = -ENODEV;
+> +	}
+
+Why bail out instead of enabling the prescalar ?
+
+> +	keembay_ce_to = kzalloc(sizeof(*keembay_ce_to), GFP_KERNEL);
+> +	if (!keembay_ce_to)
+> +		ret = -ENOMEM;
+
+As your convenience but I suggest global static variable initialization, 
+that will simplify the init function regarding the error path.
+
+> +	keembay_ce_to->flags = TIMER_OF_IRQ | TIMER_OF_BASE | TIMER_OF_CLOCK;
+> +	keembay_ce_to->clkevt.name = "keembay_timer";
+> +	keembay_ce_to->clkevt.cpumask = cpu_possible_mask;
+> +	keembay_ce_to->clkevt.features = CLOCK_EVT_FEAT_PERIODIC |
+> +					 CLOCK_EVT_FEAT_ONESHOT  |
+> +					 CLOCK_EVT_FEAT_DYNIRQ;
+> +	keembay_ce_to->clkevt.rating = TIM_RATING;
+> +	keembay_ce_to->clkevt.set_next_event = keembay_timer_set_next_event;
+> +	keembay_ce_to->clkevt.set_state_periodic = keembay_timer_periodic;
+> +	keembay_ce_to->clkevt.set_state_shutdown = keembay_timer_shutdown;
+> +	keembay_ce_to->of_irq.handler = keembay_timer_isr;
+> +	keembay_ce_to->of_irq.flags = IRQF_TIMER;
+> +
+> +	ret = timer_of_init(np, keembay_ce_to);
+> +	if (ret)
+> +		goto err_keembay_ce_to_free;
+> +
+> +	ret = regmap_read(regmap, TIM_RELOAD_VAL_OFFSET, &val);
+> +	if (ret)
+> +		goto err_keembay_ce_to_free;
+> +
+> +	keembay_ce_to->of_clk.rate = keembay_ce_to->of_clk.rate / (val + 1);
+> +
+> +	clockevents_config_and_register(&keembay_ce_to->clkevt,
+> +					timer_of_rate(keembay_ce_to),
+> +					1,
+> +					U32_MAX);
+> +
+> +	return 0;
+> +
+> +err_keembay_ce_to_free:
+> +	kfree(keembay_ce_to);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct timer_of keembay_cs_to = {
+> +	.flags	= TIMER_OF_BASE | TIMER_OF_CLOCK,
+> +};
+> +
+> +static u64 notrace keembay_clocksource_read(struct clocksource *cs)
+> +{
+> +	return lo_hi_readq(timer_of_base(&keembay_cs_to));
+> +}
+> +
+> +static struct clocksource keembay_counter = {
+> +	.name	= "keembay_sys_counter",
+> +	.rating	= TIM_RATING,
+> +	.read	= keembay_clocksource_read,
+> +	.mask	= CLOCKSOURCE_MASK(TIM_CLKSRC_MASK_BITS),
+> +	.flags	= CLOCK_SOURCE_IS_CONTINUOUS |
+> +		  CLOCK_SOURCE_SUSPEND_NONSTOP,
+> +};
+> +
+> +static int __init keembay_clocksource_init(struct device_node *np)
+> +{
+> +	struct regmap *regmap;
+> +	u32 val;
+> +	int ret;
+> +
+> +	regmap = device_node_to_regmap(np->parent);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = regmap_read(regmap, TIM_CONFIG_OFFSET, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Free Running Counter bit must be enabled for counter to function */
+
+comment format
+
+> +	if (!(val & TIM_CONFIG_COUNTER_ENABLE)) {
+> +		pr_err("%pOF: free running counter is not enabled\n", np);
+> +		return -ENODEV;
+> +	}
+
+Same comment as above. Why not enable the counter ?
+
+Other than that, the driver is having a good shape
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

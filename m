@@ -2,110 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C60F4C8718
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC024C8719
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiCAIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S233603AbiCAIv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233587AbiCAIvN (ORCPT
+        with ESMTP id S233585AbiCAIv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:51:13 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7E589305;
-        Tue,  1 Mar 2022 00:50:32 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bk29so1960758wrb.4;
-        Tue, 01 Mar 2022 00:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oD6gFetTiTBneW7pHAfdFCO02Wc1Qh+YwGAvSeqNhkA=;
-        b=O1Al/ityd/j4DM8wDxgNp7nZUpj9pXSlJwbBGevPpfQyeOON0PTJXEd0k2wmTUlRie
-         uZqWfhY0fbVTps0FePeqG1CSjnSD1QOBgLHw90pehhEcmFC4zcfJ9kFegQCCEIwGmeIh
-         03+LcSwxUUrjrBo6Mw8je/5/F3DIfrwmRnQ8MiyD4+CW1vEFEiyxZNFJ7VSBQQUDcDY1
-         M3XnIvPyuEO7lNZ0jVWxQB8uO+R4l+aW1+Dg5DpIXebNFpQWFhkY1MPy0iKTqSvZ/YXa
-         SYWxObUzHMqwUjYVYdHS4E3zduVYBZ1RDR9PFzQ9n8IgNCdawuWTYmjUVT04X69Jlrv+
-         Z3Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oD6gFetTiTBneW7pHAfdFCO02Wc1Qh+YwGAvSeqNhkA=;
-        b=1l7o/w6vUSFiDL2uz7+ZSnW/8MpnzmB6D+kMWclo50K/AQrmRDObW1EltasdAlnc2S
-         l+ad6VXbv5W2W4pBqVhCnrdZ75xyvWLsUhAZKPO2P6WG5VKFtP2R3swcg0FI2JpxFE+5
-         VLJiRpjWb52m9nIol0UZ2dNGlylMaLFz+kHI4XuW1gVJLFfbrM4Ny8i7+NR4xm+ZzHEL
-         jsO7grnyxichSs1wQNO9SxSA2H25EyZWX3G0pwLke+8aSydXjzJEMgEwrSnPWKOMKa5H
-         yU7mTTVbWCH3bQSyevwj5T7ZF/TBhslNI735nKcjCA6ht/TAHj0AkdjVFzIOxE90KFn8
-         Xy7A==
-X-Gm-Message-State: AOAM5300c2uSzBQWsYCfznVdtGvqEAYzL82zEY3gOQLslKhmXhvelut8
-        Mw+Wswa1sPdgEw8QbV6SppE=
-X-Google-Smtp-Source: ABdhPJxoDFCuwAc5cGM+VSc2wggf07/VDWjHulbCWtHzrMe1a+pYmYQNLrCmat8HM6MVG8ac5xTI1w==
-X-Received: by 2002:adf:e74a:0:b0:1ed:f95e:dc6d with SMTP id c10-20020adfe74a000000b001edf95edc6dmr17857402wrn.191.1646124630721;
-        Tue, 01 Mar 2022 00:50:30 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id az11-20020a05600c600b00b003820f5c48e9sm787434wmb.38.2022.03.01.00.50.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:50:30 -0800 (PST)
-Message-ID: <1940523d-4d98-b467-f518-7d5735e043e4@gmail.com>
-Date:   Tue, 1 Mar 2022 09:50:29 +0100
+        Tue, 1 Mar 2022 03:51:27 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35558931F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:50:46 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AA7871F43F9D;
+        Tue,  1 Mar 2022 08:50:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646124644;
+        bh=0ZrsARjiH24wsElmcwQCEqvABOocHSYJJ1IUet5VHj0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VkssrVfGYwFWa86K5JP4dvVJi6C+6lIuwJgIlWE43OPqM0Jkp6M9+FhyeHzetVEl+
+         GHv/S5dgJcAckf4Rz8kTvMI3l2e5f8DT3pWg6E9FH0/dMdwYbVh3DloQHKlmplgNrl
+         /OS4LXT69IGzmAt7ExHejLoZJgKgThPU/lkUtaI3B1X8gsNlxdIrX/2m3NQApgnQ9s
+         O7VmwhqHFJ0gpWAB6+nSGvaOOTp/YOQwllykSHbIkN/HgNEHhmUQyObYJGUj+vP1Ua
+         w61pUvqu9bVvZlIXtQ7a3Nw/3CJkFwNzfWJj0KB7IwvU14dF5AExlse8rU/ajiY6Zm
+         YPGpFHL9UWlOQ==
+Date:   Tue, 1 Mar 2022 09:50:37 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Xin Xiong <xiongx18@fudan.edu.cn>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        yuanxzhang@fudan.edu.cn, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: Re: [PATCH v2] mtd: rawnand: atmel: fix refcount issue in
+ atmel_nand_controller_init
+Message-ID: <20220301095037.1763e051@collabora.com>
+In-Reply-To: <20220301044556.36162-1-xiongx18@fudan.edu.cn>
+References: <20220301044556.36162-1-xiongx18@fudan.edu.cn>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] arm64: dts: mediatek: update mt7986a memory node
-Content-Language: en-US
-To:     Sam Shih <sam.shih@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>, Ryder Lee <ryder.lee@kernel.org>
-References: <20220119123537.9968-1-sam.shih@mediatek.com>
- <20220119123537.9968-2-sam.shih@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220119123537.9968-2-sam.shih@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue,  1 Mar 2022 12:45:56 +0800
+Xin Xiong <xiongx18@fudan.edu.cn> wrote:
 
-
-On 19/01/2022 13:35, Sam Shih wrote:
-> This patch updates the format of memory node in DT based on
-> maintainer comments in the following thread:
-> https://lore.kernel.org/all/bc0a9df0-8ba0-76ed-4522-43a3082f42b4@gmail.com/
+> The reference counting issue happens in several error handling paths
+> on a refcounted object "nc->dmac". In these paths, the function simply
+> returns the error code, forgetting to balance the reference count of
+> "nc->dmac", increased earlier by dma_request_channel(), which may
+> cause refcount leaks.
 > 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-
-Applied both with slightly better commit message. Please help the maintainer by 
-providing verbose commit message.
-
-Regards,
-Matthias
-
+> Fix it by decrementing the refcount of specific object in those error
+> paths.
+> 
+> Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+> Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
 > ---
->   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> V1 -> V2: Rewrited the error handling block
+> ---
+>  drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> index 5cd760abff51..21e420829572 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> @@ -19,7 +19,8 @@ chosen {
->   		stdout-path = "serial0:115200n8";
->   	};
->   
-> -	memory {
-> +	memory@40000000 {
-> +		device_type = "memory";
->   		reg = <0 0x40000000 0 0x40000000>;
->   	};
->   };
+> diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
+> index f3276ee9e4fe..0efeb5d77be0 100644
+> --- a/drivers/mtd/nand/raw/atmel/nand-controller.c
+> +++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+> @@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+>  	nc->mck = of_clk_get(dev->parent->of_node, 0);
+>  	if (IS_ERR(nc->mck)) {
+>  		dev_err(dev, "Failed to retrieve MCK clk\n");
+> -		return PTR_ERR(nc->mck);
+> +		ret = PTR_ERR(nc->mck);
+> +		goto out_release_dma;
+>  	}
+>  
+>  	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
+>  	if (!np) {
+>  		dev_err(dev, "Missing or invalid atmel,smc property\n");
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+> +		goto out_release_dma;
+>  	}
+>  
+>  	nc->smc = syscon_node_to_regmap(np);
+> @@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+>  	if (IS_ERR(nc->smc)) {
+>  		ret = PTR_ERR(nc->smc);
+>  		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
+> -		return ret;
+> +		goto out_release_dma;
+>  	}
+>  
+>  	return 0;
+> +
+> +out_release_dma:
+> +	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
+> +		if (nc->dmac) {
+> +			dma_release_channel(nc->dmac);
+> +			nc->dmac = NULL;
+> +		}
+> +	}
+
+Nit:
+
+	if (nc->dmac)
+		dma_release_channel(nc->dmac);
+
+should work just fine.
+
+> +
+> +	return ret;
+>  }
+>  
+>  static int
+

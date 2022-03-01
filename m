@@ -2,109 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871AB4C865B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 073CE4C865D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiCAIVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S233381AbiCAIWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 03:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiCAIVj (ORCPT
+        with ESMTP id S229956AbiCAIWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:21:39 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72826C935;
-        Tue,  1 Mar 2022 00:20:59 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c192so7054328wma.4;
-        Tue, 01 Mar 2022 00:20:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WRV1hdzmbVPmI+jsxWeBooUP3dqnp9gF+cD+vHx37cg=;
-        b=lEGyrOVqShVwDCrP9OwQ1wqH3cNhSwBY/RA3nyTHSWosd9CKRn65WtXZkGQIxXOoV2
-         3tKXfWL+tYQeBRGzTUeyTWlNqgQsYWUO5hM/p15NNlT7RHT5fJEZfw1k0R7squ4rzMLq
-         oLGc7DkzAZ9e1MGlYGb5lkZMcrBTF3ggW7O4mMeZk2FoLk8CVkGWPQ8e8bgUFghAfwYc
-         x0LucXz0ANCrW27dz0uKocFaL8UAd0CMQ78/kutKJz9cRPz6Xvq+9XHA2WWiOfYNh0v1
-         58rCuFQmNC6WpBqMFTXBPXKPnow9bFSGJ6lRb465rGuqL5lS3Jqd++IYHGNeOQ3t3Bw3
-         fELw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WRV1hdzmbVPmI+jsxWeBooUP3dqnp9gF+cD+vHx37cg=;
-        b=EYHV4ykJAlhjiJt5wN1PYFsupZYom+9wTdYfg8lEgxn+zPU5swHflYrmQnQyyareeo
-         r3RVgNxYGoW+fMgytwlk41sLdOsY9qu0jSEIlAkH3uNaIUgF/qCd5fe4tKAhg+V+JC3b
-         6FIK5DWwW0236G4RvJhpUSx+BJwkewDKJ0RkU0jk+g8UK/gOEOpb4tpWsloQUL4zd+IQ
-         ShiUrTgBL2pB9axdzZ8sE1UyjWPwIrkvMbIaQLJ4+CWo7uoz2jbQpXvZjao8YsimBI+2
-         C8nkmZZjeFMIQ5qJo+OmC2ZRaiKau9REEMqxk2WBWrXJcVGKlhXTyDxUQ/NN5SlQf4bZ
-         D9yg==
-X-Gm-Message-State: AOAM5300m01LF0lxwQyEA9svuLCgjr6YzIdLi3DwyWkw+wX1coHdJbcc
-        nx0g/ernP3kjA7uLNfGRqGE=
-X-Google-Smtp-Source: ABdhPJyCpmc78vN+pezWK67t1FYNLGkgoN6qM29kWj+87E3PvpdqVAibBMsy8mhmLh6JcdkxKJsYfA==
-X-Received: by 2002:a05:600c:1c1c:b0:381:45b4:3f69 with SMTP id j28-20020a05600c1c1c00b0038145b43f69mr11293245wms.86.1646122858205;
-        Tue, 01 Mar 2022 00:20:58 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id a8-20020a056000100800b001e30ef6f9basm18395498wrx.18.2022.03.01.00.20.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:20:57 -0800 (PST)
-Message-ID: <ea9ce41d-df1e-bec9-1c1d-e132698684ec@gmail.com>
-Date:   Tue, 1 Mar 2022 09:20:56 +0100
+        Tue, 1 Mar 2022 03:22:51 -0500
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C0D6C935;
+        Tue,  1 Mar 2022 00:22:10 -0800 (PST)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2218Lt14020571;
+        Tue, 1 Mar 2022 17:21:55 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2218Lt14020571
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646122915;
+        bh=h6XYBnCgNsp1dMoMUfTg3MLYf/0POolcYazLaGN/rG0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pqatdUy1vzvaMAWA30AewrdIHhHJnZIKEM8UacuT2Fyx1y7aw+YdCAK8DA9bLGgiR
+         nohee9OgpfENeKlz32R6HHv87GrSZSPQBnwh01JH7dbIztb68qrm2RNRduq4B5xc8f
+         wlmHJWEI79GGq+oVZmZvM26EkGl90pLv8gEWjW7oYCahOzi1T8SwP4+4F6NVAhEC+8
+         JBZSlFtcgbzXwKJ9Egov+jEJMIvlGmdYX4rkHljxhdTWhmMELB3Pqo+q5bZ59RR6S0
+         JF2LhsiKQvARCQ2puwYOInE44zZnfsxk9tmK0bJLty86ua60UfpvHnjOT91FFfE3AX
+         QJwWf7Aypo1Qw==
+X-Nifty-SrcIP: [209.85.215.177]
+Received: by mail-pg1-f177.google.com with SMTP id o26so13157221pgb.8;
+        Tue, 01 Mar 2022 00:21:55 -0800 (PST)
+X-Gm-Message-State: AOAM532OPs1n9Ka979K6SUMG7h7/l1GcoxHzDEOBy7HUvJxoVBcOpP7I
+        O8PAr0cBK9OQx1TwunhZT1L9J2VeGtF6Brnr3Rg=
+X-Google-Smtp-Source: ABdhPJyoGquDMHIw6PHP8BM5AV/0OwxVcxaQ/6dKLXUPv7TUz7w2+TQGi7fiRWb0aehP4iwYcg71jbhFuU6kIAqUfwU=
+X-Received: by 2002:a63:e758:0:b0:378:8511:cfe7 with SMTP id
+ j24-20020a63e758000000b003788511cfe7mr9814678pgk.126.1646122914464; Tue, 01
+ Mar 2022 00:21:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V5 1/6] dt-bindings: arm: mediatek: mmsys: add support for
- MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        robh+dt@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        jassisinghbrar@gmail.com, fparent@baylibre.com,
-        yongqiang.niu@mediatek.com, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220301080105.31323-1-rex-bc.chen@mediatek.com>
- <20220301080105.31323-2-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220301080105.31323-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220225144245.182659-1-masahiroy@kernel.org> <CAKwvOd=WjnHSHKLVRJifHxV2tyDsLTkek80NWU=do=FSHhNLug@mail.gmail.com>
+ <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
+In-Reply-To: <67b75a36cf874dfea0871649ccd268d3@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 1 Mar 2022 17:21:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
+Message-ID: <CAK7LNASatB_W3WmE3BOqFNwJcFQeqh_haEDMjZnfi127gcY0QQ@mail.gmail.com>
+Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure successful
+ write to files
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+David answered most of the questions from Nick.
 
 
-On 01/03/2022 09:01, Rex-BC Chen wrote:
-> Add "mediatek,mt8186-mmsys" to binding document.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+Let me answer this question:
+"Why call ferror as opposed to checking the return code of fflush?
+Reading the man page closer:"
 
-Applied, thanks!
 
-> ---
->   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml         | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> index 763c62323a74..b31d90dc9eb4 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> @@ -29,6 +29,7 @@ properties:
->                 - mediatek,mt8167-mmsys
->                 - mediatek,mt8173-mmsys
->                 - mediatek,mt8183-mmsys
-> +              - mediatek,mt8186-mmsys
->                 - mediatek,mt8192-mmsys
->                 - mediatek,mt8365-mmsys
->             - const: syscon
+When fprintf() happens to need to write data to the end device,
+the internal buffer is cleared anyway (even if the writing to the
+end device fails).
+(We do not notice the failure of this because this patch is
+removing xprintf().)
+
+
+If the buffer has been cleared by the previous fprintf() call,
+fflush() succeeds because there is no data in the internal buffer.
+
+So, checking the return value of fflush() is not enough.
+
+That's my understanding.
+(I ran a small piece of test code under "ulimit -f")
+
+
+So, we have two options:
+
+[1] Check the return values in *all* the call-sites
+    of fprintf() and fflush().
+
+
+[2] Call fprintf() and fflush() or whatever without checking
+     their return values.
+    And, check ferror() at the last moment.
+
+
+
+
+If you are really sure that all the return values are checked,
+you can go with [1], then you do not need to call ferror(),
+but it is generally less fragile than [2].
+
+
+
+
+
+
+On Tue, Mar 1, 2022 at 11:28 AM David Laight <David.Laight@aculab.com> wrot=
+e:
+>
+> Someone send HTML mail =E2=80=93 outlook is broken =E2=80=93 only lets yo=
+u top post :-(
+>
+>
+>
+> The return value from fprintf() is normally the number of bytes written t=
+o
+>
+> the internal buffer (8k in glibc?)
+>
+> Only if the buffer is full and an actual write() is done do you get any i=
+ndication of an error.
+>
+> So you can use the error return from fprintf() to terminate a loop =E2=80=
+=93 but it usually
+>
+> just isn=E2=80=99t worth the effort.
+>
+> The error status returned by ferror() is =E2=80=98sticky=E2=80=99, so you=
+ need only check once.
+>
+> But you need to check before fclose().
+>
+> Since fclose() has to write out the buffer =E2=80=93 that write can also =
+fail.
+>
+> I=E2=80=99m not sure whether fclose() returns and error in that case, but=
+ adding fflush()
+>
+> makes the coding easier.
+>
+>
+>
+> So if you have lots of fprintf() adding data to a file (which is often th=
+e case)
+>
+> almost all of them always succeed =E2=80=93 even if the disk is full.
+>
+> Adding the error paths that can never really happen just makes the
+>
+> code harder to read and clutters things up.
+>
+>
+>
+>                 David
+>
+>
+>
+> From: Nick Desaulniers <ndesaulniers@google.com>
+> Sent: 28 February 2022 23:01
+> To: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>; David Laigh=
+t <David.Laight@ACULAB.COM>; LKML <linux-kernel@vger.kernel.org>; Michal Ma=
+rek <michal.lkml@markovi.net>
+> Subject: Re: [PATCH v2] fixdep: use fflush() and ferror() to ensure succe=
+ssful write to files
+>
+>
+>
+> On Fri, Feb 25, 2022 at 6:43 AM Masahiro Yamada <masahiroy@kernel.org> wr=
+ote:
+> >
+> > Checking the return value of (v)printf does not ensure the successful
+> > write to the .cmd file.
+>
+> Masahiro,
+> Apologies for my delay reviewing; I was on vacation last week.
+>
+> Do you have more context for why this change is necessary? Perhaps you mi=
+ght describe further in the commit message the use case you're trying to su=
+pport?
+>
+> Reading the man pages for vprintf(3), fflush(3), and ferror(3), I'm curio=
+us why checking the return value of ferror(3) after not doing so for `vprin=
+tf` and `fflush` is preferred?
+>
+> Why not simply unconditionally add a call to fflush while leaving the exi=
+sting return code checking on vprintf?
+>
+> >
+> > Call fflush() and ferror() to make sure that everything has been
+> > written to the file.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> > Changes in v2:
+> >   - add error message
+> >
+> >  scripts/basic/fixdep.c | 46 +++++++++++++++++-------------------------
+> >  1 file changed, 19 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
+> > index 44e887cff49b..2328f9a641da 100644
+> > --- a/scripts/basic/fixdep.c
+> > +++ b/scripts/basic/fixdep.c
+> > @@ -105,25 +105,6 @@ static void usage(void)
+> >         exit(1);
+> >  }
+> >
+> > -/*
+> > - * In the intended usage of this program, the stdout is redirected to =
+.*.cmd
+> > - * files. The return value of printf() must be checked to catch any er=
+ror,
+> > - * e.g. "No space left on device".
+> > - */
+> > -static void xprintf(const char *format, ...)
+> > -{
+> > -       va_list ap;
+> > -       int ret;
+> > -
+> > -       va_start(ap, format);
+> > -       ret =3D vprintf(format, ap);
+> > -       if (ret < 0) {
+> > -               perror("fixdep");
+> > -               exit(1);
+>
+> Wouldn't the existing approach abort sooner if there was an error encount=
+ered?
+>
+> > -       }
+> > -       va_end(ap);
+> > -}
+> > -
+> >  struct item {
+> >         struct item     *next;
+> >         unsigned int    len;
+> > @@ -189,7 +170,7 @@ static void use_config(const char *m, int slen)
+> >
+> >         define_config(m, slen, hash);
+> >         /* Print out a dependency path from a symbol name. */
+> > -       xprintf("    $(wildcard include/config/%.*s) \\\n", slen, m);
+> > +       printf("    $(wildcard include/config/%.*s) \\\n", slen, m);
+> >  }
+> >
+> >  /* test if s ends in sub */
+> > @@ -318,13 +299,13 @@ static void parse_dep_file(char *m, const char *t=
+arget)
+> >                                  */
+> >                                 if (!saw_any_target) {
+> >                                         saw_any_target =3D 1;
+> > -                                       xprintf("source_%s :=3D %s\n\n"=
+,
+> > -                                               target, m);
+> > -                                       xprintf("deps_%s :=3D \\\n", ta=
+rget);
+> > +                                       printf("source_%s :=3D %s\n\n",
+> > +                                              target, m);
+> > +                                       printf("deps_%s :=3D \\\n", tar=
+get);
+> >                                 }
+> >                                 is_first_dep =3D 0;
+> >                         } else {
+> > -                               xprintf("  %s \\\n", m);
+> > +                               printf("  %s \\\n", m);
+> >                         }
+> >
+> >                         buf =3D read_file(m);
+> > @@ -347,8 +328,8 @@ static void parse_dep_file(char *m, const char *tar=
+get)
+> >                 exit(1);
+> >         }
+> >
+> > -       xprintf("\n%s: $(deps_%s)\n\n", target, target);
+> > -       xprintf("$(deps_%s):\n", target);
+> > +       printf("\n%s: $(deps_%s)\n\n", target, target);
+> > +       printf("$(deps_%s):\n", target);
+> >  }
+> >
+> >  int main(int argc, char *argv[])
+> > @@ -363,11 +344,22 @@ int main(int argc, char *argv[])
+> >         target =3D argv[2];
+> >         cmdline =3D argv[3];
+> >
+> > -       xprintf("cmd_%s :=3D %s\n\n", target, cmdline);
+> > +       printf("cmd_%s :=3D %s\n\n", target, cmdline);
+> >
+> >         buf =3D read_file(depfile);
+> >         parse_dep_file(buf, target);
+> >         free(buf);
+> >
+> > +       fflush(stdout);
+> > +
+> > +       /*
+> > +        * In the intended usage, the stdout is redirected to .*.cmd fi=
+les.
+> > +        * Call ferror() to catch errors such as "No space left on devi=
+ce".
+> > +        */
+> > +       if (ferror(stdout)) {
+>
+> Why call ferror as opposed to checking the return code of fflush?  Readin=
+g the man page closer:
+>
+>        The  function feof() tests the end-of-file indicator for the strea=
+m pointed to by stream, returning nonzero if it is set.  The end-of-file in=
+dicator can be cleared only by the function
+>        clearerr().
+>
+>        The function ferror() tests the error indicator for the stream poi=
+nted to by stream, returning nonzero if it is set.  The error indicator can=
+ be reset only by the clearerr() function.
+>
+> Does that imply that "the end-of-file indicator" is distinct from "the er=
+ror indicator?"
+>
+> > +               fprintf(stderr, "fixdep: not all data was written to th=
+e output\n");
+> > +               exit(1);
+> > +       }
+> > +
+> >         return 0;
+> >  }
+> > --
+> > 2.32.0
+> >
+>
+>
+>
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
+>
+> P Please consider the environment and don't print this e-mail unless you =
+really need to
+
+
+
+--=20
+Best Regards
+Masahiro Yamada

@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99E84C8D33
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024AB4C8D36
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 15:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbiCAOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 09:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S234422AbiCAOCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 09:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiCAOBY (ORCPT
+        with ESMTP id S229607AbiCAOCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 09:01:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D928290CD0;
-        Tue,  1 Mar 2022 06:00:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74A126152D;
-        Tue,  1 Mar 2022 14:00:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EF5C340F7;
-        Tue,  1 Mar 2022 14:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646143242;
-        bh=OCDdNe18bifA05pJN6Z3cL5GH76Vx+vSN/tAl+9N2NY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BXoUaM8AeIN8f71PC8fIcrdCRd3XA5bTRsNaI55YrB3n8AdYcHHNQ5PfFONmNJdx9
-         3/CPcWQI6xI4q3njZfKJ//7qUb0OLv2P2whtuS8vVnMjqGPoCVcBgHyuiPi2wNTcJ+
-         KSByydI8JzRxlo4gWWoVzIU41cydpMN+5Nu46TbYtJPRxdtzH4yMR64LlBcFEmPqIp
-         3wzu1lY8fiIAXNFPydAfWfshcQxjaRgRJyXZ322mrYl9USFIgjN6ICC0+WR+CyrjeE
-         Jxihmtaod4/dKtcpNMu61/NIh4k/DY+2ax2xbrEVmUuihjdGPL4LSD/jeHzVTjPcDD
-         a2kZEW+hgrGpQ==
-Received: by mail-vk1-f179.google.com with SMTP id k15so6861271vkn.13;
-        Tue, 01 Mar 2022 06:00:42 -0800 (PST)
-X-Gm-Message-State: AOAM532svOJnKNVCpOs0IlDGjZXcO4evCD1SPI7pm5Nj7EyslyoRbkPD
-        vJdwhXeldF8Otfh+pRp8enOgJ/Ks45erGexiw6s=
-X-Google-Smtp-Source: ABdhPJwoZPlQG03sWsMv2LaiAVeC86gQ0+wyv+RzPw7RH1ttQNeeKqagstcZB00XUabb5ygCz6Zjo4KWbVCaIqQUo1I=
-X-Received: by 2002:a05:6122:887:b0:332:699e:7e67 with SMTP id
- 7-20020a056122088700b00332699e7e67mr10404475vkf.35.1646143241667; Tue, 01 Mar
- 2022 06:00:41 -0800 (PST)
+        Tue, 1 Mar 2022 09:02:19 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFE2985BD;
+        Tue,  1 Mar 2022 06:01:38 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 195so14488128pgc.6;
+        Tue, 01 Mar 2022 06:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F/G/xOe5a6nu2fkfw8uYGgqkNpKpcFX9OCeRV8lAMEA=;
+        b=M/WZf0dAladje4iv4F/hGYw9kuGhDb1eMm48tQLJEnoRzblIt/aaanhWYp0t9h/V3M
+         SuaN66brC8T6KHk+R352mSC/VcYpyj2kjP8Ez3Pql0l0SR3cJnKqcNDtz3DeI3ap70EY
+         Dw9fSmqgFY6SnfEnzJTOVO/8sM7qM+TG8qri/2MqjQvfLBNT2Eg+xxxc18Rs2QnPbwVe
+         nyT3fQITL+d+iJXkZ/aLWAK6khTJABVSLpet4naIZNrsJC8rk6DSCLvu0OE0mcsJNfqz
+         q5Wv//Jl1c/DV9aXHGm0x0OOLuU9+/G4Z6Paou3BJS59ZU0TiD78jiaA9ZFpmpiSMOk6
+         /JDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F/G/xOe5a6nu2fkfw8uYGgqkNpKpcFX9OCeRV8lAMEA=;
+        b=ncTDZ/MhIgK0O9YItmw9/te0DqzwUlL+XR9x9rr4ZeVOKTOddpM6ThypMl2HPYClrd
+         xvdquSV0tdlq5ijKuyodUE2UHoXNMjiPUZtocRHB+YFydNeEPpBf/RojVdfKO8a3543+
+         SYfFGcQ/m8KDYZQyUN9McmTDuwoJYzHMpPZONSgWFJNOV8XDCrKN0Uks5LcPn2WBBfBh
+         RlnbhjzuA2hXnqqp4WYCGB6yVXrmQd3lyJzqMN4CqNL4r5fbDKUoDKGhFJjNc4gDDDdZ
+         S/5Jo3Pv9UnJgmUF2P3B2Loo103AKulZ3X2JmVF5fBZdZ6gZNDFGqq1zgcFxqtYcicof
+         a0tQ==
+X-Gm-Message-State: AOAM531NTl9Cyt7czEiwBVA8emgZJ7uBjJH5ZGPu5mY+Q01CNALGuFWE
+        nQaUhiTehsnNDNmoFrCHjnc=
+X-Google-Smtp-Source: ABdhPJxvTIlnU3gMQxETAVp/xnqA49sq44Qij7ZknsOWr166EOYo94ZbcpGEHGEGivB+qWQ6chrIaQ==
+X-Received: by 2002:a63:b06:0:b0:374:5e1a:150a with SMTP id 6-20020a630b06000000b003745e1a150amr21702994pgl.137.1646143297904;
+        Tue, 01 Mar 2022 06:01:37 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:18:efec::754])
+        by smtp.gmail.com with ESMTPSA id v14-20020a056a00148e00b004e1cee6f6b4sm17730734pfu.47.2022.03.01.06.01.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 06:01:37 -0800 (PST)
+Message-ID: <f76c15c5-9ee4-a825-73c8-223564a26d74@gmail.com>
+Date:   Tue, 1 Mar 2022 22:01:27 +0800
 MIME-Version: 1.0
-References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com> <1646045273-9343-20-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1646045273-9343-20-git-send-email-anshuman.khandual@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 1 Mar 2022 22:00:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRSE-=-rDkMTD8D-bNw5inb4Yb_8S-AzXAuAthn9PCJmA@mail.gmail.com>
-Message-ID: <CAJF2gTRSE-=-rDkMTD8D-bNw5inb4Yb_8S-AzXAuAthn9PCJmA@mail.gmail.com>
-Subject: Re: [PATCH V3 19/30] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-m68k@lists.linux-m68k.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com,
+        "krish.sadhukhan@oracle.com" <krish.sadhukhan@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220214081919.GA18337@lst.de>
+ <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com>
+ <20220214135834.GA30150@lst.de>
+ <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
+ <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com>
+ <20220222080543.GA5412@lst.de>
+ <00112505-4999-ac41-877e-49c4cc45312e@gmail.com>
+ <20220222160039.GA13380@lst.de>
+ <40f91949-58fa-4be2-5b01-ea34dda58670@gmail.com>
+ <a80a7efa-f15d-3649-f39f-c24820f9ef2b@gmail.com>
+ <20220301115340.GA3077@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20220301115340.GA3077@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,113 +95,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On 3/1/2022 7:53 PM, Christoph Hellwig wrote:
+> On Fri, Feb 25, 2022 at 10:28:54PM +0800, Tianyu Lan wrote:
+>>       One more perspective is that one device may have multiple queues and
+>> each queues should have independent swiotlb bounce buffer to avoid spin
+>> lock overhead. The number of queues is only available in the device
+>> driver. This means new API needs to be called in the device driver
+>> according to queue number.
+> 
+> Well, given how hell bent people are on bounce buffering we might
+> need some scalability work there anyway.
 
-On Mon, Feb 28, 2022 at 7:10 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
->
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/csky/Kconfig               |  1 +
->  arch/csky/include/asm/pgtable.h | 18 ------------------
->  arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 132f43f12dd8..209dac5686dd 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -6,6 +6,7 @@ config CSKY
->         select ARCH_HAS_GCOV_PROFILE_ALL
->         select ARCH_HAS_SYNC_DMA_FOR_CPU
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> +       select ARCH_HAS_VM_GET_PAGE_PROT
->         select ARCH_USE_BUILTIN_BSWAP
->         select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index 151607ed5158..2c6b1cfb1cce 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -76,24 +76,6 @@
->  #define MAX_SWAPFILES_CHECK() \
->                 BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
->
-> -#define __P000 PAGE_NONE
-> -#define __P001 PAGE_READ
-> -#define __P010 PAGE_READ
-> -#define __P011 PAGE_READ
-> -#define __P100 PAGE_READ
-> -#define __P101 PAGE_READ
-> -#define __P110 PAGE_READ
-> -#define __P111 PAGE_READ
-> -
-> -#define __S000 PAGE_NONE
-> -#define __S001 PAGE_READ
-> -#define __S010 PAGE_WRITE
-> -#define __S011 PAGE_WRITE
-> -#define __S100 PAGE_READ
-> -#define __S101 PAGE_READ
-> -#define __S110 PAGE_WRITE
-> -#define __S111 PAGE_WRITE
-> -
->  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  #define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
->
-> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> index bf2004aa811a..f9babbed17d4 100644
-> --- a/arch/csky/mm/init.c
-> +++ b/arch/csky/mm/init.c
-> @@ -197,3 +197,35 @@ void __init fixaddr_init(void)
->         vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
->         fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
->  }
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return PAGE_NONE;
-> +       case VM_READ:
-> +       case VM_WRITE:
-> +       case VM_WRITE | VM_READ:
-> +       case VM_EXEC:
-> +       case VM_EXEC | VM_READ:
-> +       case VM_EXEC | VM_WRITE:
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED:
-> +               return PAGE_NONE;
-> +       case VM_SHARED | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_WRITE:
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       case VM_SHARED | VM_EXEC:
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
-> --
-> 2.25.1
->
+According to my test on the local machine with two VMs, Linux guest 
+without swiotlb bounce buffer or with the fix patch from Andi Kleen can
+achieve about 40G/s throughput but it's just 24-25G/s with current 
+swiotlb code. Otherwise, the spinlock contention also consumes more cpu 
+usage.
 
 
--- 
-Best Regards
- Guo Ren
 
-ML: https://lore.kernel.org/linux-csky/
+
+

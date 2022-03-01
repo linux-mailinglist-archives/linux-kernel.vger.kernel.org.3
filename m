@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102384C8826
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3B54C881F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiCAJhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbiCAJg5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233905AbiCAJg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 1 Mar 2022 04:36:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C13C18BE18;
-        Tue,  1 Mar 2022 01:36:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A709ED1;
-        Tue,  1 Mar 2022 01:36:16 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.57.20.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1F08F3F73D;
-        Tue,  1 Mar 2022 01:36:13 -0800 (PST)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
-        mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4 4/4] Documentation: EM: Describe new registration method using DT
-Date:   Tue,  1 Mar 2022 09:35:24 +0000
-Message-Id: <20220301093524.8870-5-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220301093524.8870-1-lukasz.luba@arm.com>
-References: <20220301093524.8870-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233790AbiCAJgx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Mar 2022 04:36:53 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA6A8A6E4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 01:36:10 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9393D1F37E;
+        Tue,  1 Mar 2022 09:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646127369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TUvrHcAGDos5ULC1GLEdmmBfTgcilvUucu6ZddpraxU=;
+        b=foRYU9ABr0hd2wOhIt6pkd74d9Zy233u7DX+JvbICsyXGFsUkd1FEGorfDY5qqdQYgBxkC
+        FEjXKpi8MH72W9nYf8LVqV4kJYPKkIKBl8gFBeeEX4RPETIFH3E1aFOcM5GsETgf2Qz1mw
+        hsJLviT4QwVtORC9BSNbPJXHZMl3tnw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646127369;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TUvrHcAGDos5ULC1GLEdmmBfTgcilvUucu6ZddpraxU=;
+        b=JUmeO7A4AuQXnnhWyvU6ANZFI9u6ZKKifaXQA4c6WPNtpR0HihrLalyeGFVro+zTlY4/SS
+        ZBp/n5oPOZ0co5Bg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 7F06DA3B81;
+        Tue,  1 Mar 2022 09:36:09 +0000 (UTC)
+Date:   Tue, 01 Mar 2022 10:36:09 +0100
+Message-ID: <s5ho82qqak6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Zhen Ni <nizhen@uniontech.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: n64: Use platform_get_irq() to get the interrupt
+In-Reply-To: <20220301085536.24599-1-nizhen@uniontech.com>
+References: <20220301085536.24599-1-nizhen@uniontech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new registration method allows to get power values from the DT OPP
-definition. The new OPP entry property "opp-microwatt" contains total
-power expressed in micro-Watts. Align the EM documentation with this
-new possible registration method of EM.
+On Tue, 01 Mar 2022 09:55:36 +0100,
+Zhen Ni wrote:
+> 
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+> 
+> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- Documentation/power/energy-model.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+The same fix has been already queued at commit a544684b790f.
 
-diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-index 5ac62a7b4b7c..49549aab41b4 100644
---- a/Documentation/power/energy-model.rst
-+++ b/Documentation/power/energy-model.rst
-@@ -113,6 +113,16 @@ to: return warning/error, stop working or panic.
- See Section 3. for an example of driver implementing this
- callback, or Section 2.4 for further documentation on this API
- 
-+Registration of EM using DT
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The  EM can also be registered using OPP framework and information in DT
-+"operating-points-v2". Each OPP entry in DT can be extended with a property
-+"opp-microwatt" containing micro-Watts power value. This OPP DT property
-+allows a platform to register EM power values which are reflecting total power
-+(static + dynamic). These power values might be coming directly from
-+experiments and measurements.
-+
- Registration of 'simple' EM
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.17.1
 
+thanks,
+
+Takashi

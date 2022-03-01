@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0133D4C84AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A364C84B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiCAHKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S232799AbiCAHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiCAHKG (ORCPT
+        with ESMTP id S231542AbiCAHMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:10:06 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36A43BF8A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:09:25 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 139so13705587pge.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:09:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=66Sxg9TTb1+vJx2kh2rsB4ZZCACi/8CIbGkiP6YgOiQ=;
-        b=cyFY5zdVAMynn2mS9YKvfPe5YBDSyA0Dmjum+j0w7KGJtzWuteLYnUtF45IXOMokX9
-         UFyFvkVFCXPE9vqSKQnC6STvUHgFQ4iVtw+0o8AdwKzhCdoBP0mSSjShlGjj43IePk+m
-         apBW8vzf/YhvkdwADs0dvefU3S9fIkkc92h1md5f7jbUuvwKjiSOkN3cBz600GaR5Zaq
-         4SGQoHo/yEI7IaIBd8GjeWK8AO6k3HmcwZKyfZS30Tm3VCzSjjfp9/vFee9R3YxkhrnN
-         HtOyNS8se2ifhL7T3mGtiRVASsWZP8V57+I8vhMl7kFOPq7Ik841jE9vO98aN5ru0iMH
-         YsSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=66Sxg9TTb1+vJx2kh2rsB4ZZCACi/8CIbGkiP6YgOiQ=;
-        b=zzhmflLIhsDSKk0YbMVq1vWw9DkblvoV5nYADz3QAHw0Mnvb1q1/N57+IonptN8TNA
-         waeO0ZZ4/vBmQ3FMS4UxCKiXZG/pzcBtnDrEOwVszFeovVfcfWmb+w21p/RwT0tOwwaR
-         bKIMNU9x8dIebo/mWesVr2bt3i9x43lJqND0/qk+gWWwKPfgW0HYnqZzriXFydXGxzsZ
-         kySAY7OGVSMasQGpQt4lVpuPbseiNHYVyPKGG9t/ciPEcztEONfKJTtAFfTcaKAKDqTO
-         UuS/TPe/1VFRgNlWz6nSebyPSQxt0s+av4AlcHfDtAaS14wK7GX2FVTqZktnqZ8VJ4Rz
-         UG+Q==
-X-Gm-Message-State: AOAM5303+rn7ExwviC4R9cvQHAXHScrabHKnVpc9ST4lxE6HyNjOWLpl
-        bspc9Q+gfL00JOGvfbgx36Vs/CizBvMC7S8FOL0=
-X-Google-Smtp-Source: ABdhPJxjOxbWlhTQRSxDBBpVXd3UGjPHQzcLI8DztgPM+0iQqEyUrAMVvsr+PHcWnVgd8qSf6IHEviMX6i5NMlchQ68=
-X-Received: by 2002:a05:6a00:1954:b0:4e1:f25:ce41 with SMTP id
- s20-20020a056a00195400b004e10f25ce41mr25968987pfk.44.1646118565041; Mon, 28
- Feb 2022 23:09:25 -0800 (PST)
+        Tue, 1 Mar 2022 02:12:13 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1CD7A996;
+        Mon, 28 Feb 2022 23:11:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646118693; x=1677654693;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4V2cHjGMTWIff+0LFt6tojJMgcLMmFxrlr9mQKzw2QY=;
+  b=FXXVqjjIRHDAB1cH3tlq17FRavg9WCnvsVLS9+iIsx3by8X2l/COzR2Y
+   n50AAXGW41vRE4s6Quzs0kB4mk/tLxRT9Iyd1UJitow7y/iW22o1aqtG9
+   OhrL9GbSOVlkRwCdOUAvMVnONtFyZZJPVpwkHgh3H+BYKDwKECqd2eFm6
+   UAB1QqW7doTNHR3G3FHHn6uwSqkFeuEvS4S38S+runWtKWkFnzmG0uM5/
+   hFCT/7XVHgSCd+gQD74ILN6vd3FUPOyPzTUaZ7RM1vOUsh2bQfnD86wIk
+   P3ZUWGpqzqgs6O48tIBtbjLfN0YQBszH6Ex8R9TeONE4ixSSQbcg6OVCz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="252807220"
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="252807220"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 23:11:32 -0800
+X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
+   d="scan'208";a="510406873"
+Received: from twinkler-lnx.jer.intel.com ([10.12.91.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 23:11:30 -0800
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc] mei: me: add Alder Lake N device id.
+Date:   Tue,  1 Mar 2022 09:11:15 +0200
+Message-Id: <20220301071115.96145-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a17:90a:2a83:0:0:0:0 with HTTP; Mon, 28 Feb 2022 23:09:24
- -0800 (PST)
-Reply-To: eshahat.desmond@gmail.com
-From:   DESMOND <diallocherif836@gmail.com>
-Date:   Tue, 1 Mar 2022 15:09:24 +0800
-Message-ID: <CAEEG7pcBoeSaWnLnyGy866fchMJzJHQLQE4JW29jDZBARCB4xg@mail.gmail.com>
-Subject: Hello kindly reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Alexander Usyskin <alexander.usyskin@intel.com>
+
+Add Alder Lake N device ID.
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+---
+ drivers/misc/mei/hw-me-regs.h | 1 +
+ drivers/misc/mei/pci-me.c     | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/misc/mei/hw-me-regs.h b/drivers/misc/mei/hw-me-regs.h
+index 888c27bc3f1a..64ce3f830262 100644
+--- a/drivers/misc/mei/hw-me-regs.h
++++ b/drivers/misc/mei/hw-me-regs.h
+@@ -107,6 +107,7 @@
+ #define MEI_DEV_ID_ADP_S      0x7AE8  /* Alder Lake Point S */
+ #define MEI_DEV_ID_ADP_LP     0x7A60  /* Alder Lake Point LP */
+ #define MEI_DEV_ID_ADP_P      0x51E0  /* Alder Lake Point P */
++#define MEI_DEV_ID_ADP_N      0x54E0  /* Alder Lake Point N */
+ 
+ /*
+  * MEI HW Section
+diff --git a/drivers/misc/mei/pci-me.c b/drivers/misc/mei/pci-me.c
+index a05cdb25d0c4..33e58821e478 100644
+--- a/drivers/misc/mei/pci-me.c
++++ b/drivers/misc/mei/pci-me.c
+@@ -114,6 +114,7 @@ static const struct pci_device_id mei_me_pci_tbl[] = {
+ 	{MEI_PCI_DEVICE(MEI_DEV_ID_ADP_S, MEI_ME_PCH15_CFG)},
+ 	{MEI_PCI_DEVICE(MEI_DEV_ID_ADP_LP, MEI_ME_PCH15_CFG)},
+ 	{MEI_PCI_DEVICE(MEI_DEV_ID_ADP_P, MEI_ME_PCH15_CFG)},
++	{MEI_PCI_DEVICE(MEI_DEV_ID_ADP_N, MEI_ME_PCH15_CFG)},
+ 
+ 	/* required last entry */
+ 	{0, }
 -- 
-Hello good day
+2.34.1
 
-I sent you a mail last week i have been waiting for your reply. is
-about the fund i want you to claim i will explain better to you when
-you reply to me this time. am very serious about this i will be
-waiting to your reply thank
-
-Eshaha Desmond

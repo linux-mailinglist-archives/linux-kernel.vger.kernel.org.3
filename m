@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2396D4C806C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885864C8071
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 02:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiCABo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Feb 2022 20:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S231325AbiCABrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Feb 2022 20:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiCABoy (ORCPT
+        with ESMTP id S229991AbiCABrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Feb 2022 20:44:54 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E710BE9;
-        Mon, 28 Feb 2022 17:44:14 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id f18so8763139qtb.3;
-        Mon, 28 Feb 2022 17:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ijVtiJoCX033kgglssHFDQK/4oP5FPrgwPvKftWG7NU=;
-        b=ol4DQL0ca5JemLcFkQ8DxS87cD8v1ik9zyBS6qePe4NhbB1LmjzqdSFTsT5TMCtPeJ
-         Y1363nX8zXjBQBQe6XDnw3x3+PfXuKZcGgnxG8WkPZmLftKMniKr1DpFEh3ZYH+QAiDe
-         vTwLrG/UqXyTQWVdWqGkRGEQapO/1QmYLn0swRkhFvo0hGEVwJxo9/XX4nUP/PqE0yed
-         ckWU3gq/c9umPznNczYWFwZdywTmLrsZ5f2McdXZMoVCCjPMO3zHNaquJt6Ey7A3RTLa
-         j7JDCGy17bZR2YE1vQaYiDGWpoagd4qLTyTIDxKnkVfYuBboVFkPkPQYpgB4bicQJ6cU
-         ddww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ijVtiJoCX033kgglssHFDQK/4oP5FPrgwPvKftWG7NU=;
-        b=nU2VC7M92PEp+geuB6A1oVCj29dsBu/G9i189lPSD9b4wjTvHjakVeY0YNPe4VlkPw
-         eZEd6RhvLwFbtV4hRacpZT14nicDDKPBntD2G/WfuokYO4ELHbQj+w1lVLSxpQiUHN2s
-         gxYvKDZDERTk8HcOkI4N1ZOUYbfqw2m/ANIqHFNL/dK5s9qS4/2/W5Lq3nsuav+4t5dM
-         +Avy88fpgBocYk9grqDCiRA0siRcN8Y0S2426dItsnnHGyD3PrJrp/qzPcbhz+yx7lxZ
-         S1dRnYGjTP4fVebXLTdpeX0PhQGwgXDp+8DmNV/2TVSeCEi23igc0vpQgnOOod0okwR/
-         mIog==
-X-Gm-Message-State: AOAM5314Npqhv1b/eFPNB2Rw4zvOYdgief4WdMPfdPvcsnFzqWfT3UqI
-        sySKU0ZFR9wZq/xjfnrvIJ6Psk999Oo=
-X-Google-Smtp-Source: ABdhPJyxWuV2ytRAvxyA9QC3jVUgo0v+W1A5Mo1+hRGqwRivfKaS8N8n31zbv1Ynuht0e2JMNYBuUA==
-X-Received: by 2002:a05:622a:4ca:b0:2de:91c4:3d7c with SMTP id q10-20020a05622a04ca00b002de91c43d7cmr19030405qtx.618.1646099053438;
-        Mon, 28 Feb 2022 17:44:13 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05622a051300b002dff3437923sm6492305qtx.11.2022.02.28.17.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 17:44:13 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] selftests: vm: remove duplicated macro and use swap() to make code cleaner
-Date:   Tue,  1 Mar 2022 01:44:04 +0000
-Message-Id: <20220301014404.2052655-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Feb 2022 20:47:40 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B51184
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 17:46:58 -0800 (PST)
+X-UUID: 6f33e31bd00749f998d87b09d184cfc6-20220301
+X-UUID: 6f33e31bd00749f998d87b09d184cfc6-20220301
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1245295757; Tue, 01 Mar 2022 09:46:43 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 1 Mar 2022 09:46:42 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 1 Mar 2022 09:46:42 +0800
+Message-ID: <fa9a04263ed0b1aa54a140e7eec47e838d3e5587.camel@mediatek.com>
+Subject: Re: [PATCH v4 2/2] drm/mediatek: add devlink to cmdq dev
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <tzungbi@google.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Fei Shao" <fshao@chromium.org>,
+        Nancy Lin <nancy.lin@mediatek.com>, <singo.chang@mediatek.com>
+Date:   Tue, 1 Mar 2022 09:46:42 +0800
+In-Reply-To: <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
+References: <20211202064039.20797-1-jason-jh.lin@mediatek.com>
+         <20211202064039.20797-3-jason-jh.lin@mediatek.com>
+         <CAAOTY__rnVMRB=OhkTm4Ojh31yAcYwCQTBGozpGsnC_oC_jqvQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>
+Hi Chun-Kuang,
 
-The macro is duplicated, so remove one. And use swap to make code cleaner.
+Thanks for the reviews.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi (CGEL ZTE) <lv.ruyi@zte.com.cn>
+I forgot to add the comment that the patch should be based on [1].
+We can only apply it after applying [1].
+
+So please apply it after that. Thank you very much!
+
+Regards,
+Jason-JH.Lin
 ---
- tools/testing/selftests/vm/userfaultfd.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+[1] drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index ab394e6bff43..100f08362164 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -121,9 +121,6 @@ struct uffd_stats {
- #define swap(a, b) \
- 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
- 
--#define swap(a, b) \
--	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
--
- const char *examples =
-     "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
-     "./userfaultfd anon 100 99999\n\n"
-@@ -1424,7 +1421,6 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
- static int userfaultfd_stress(void)
- {
- 	void *area;
--	char *tmp_area;
- 	unsigned long nr;
- 	struct uffdio_register uffdio_register;
- 	struct uffd_stats uffd_stats[nr_cpus];
-@@ -1535,13 +1531,8 @@ static int userfaultfd_stress(void)
- 					    count_verify[nr], nr);
- 
- 		/* prepare next bounce */
--		tmp_area = area_src;
--		area_src = area_dst;
--		area_dst = tmp_area;
--
--		tmp_area = area_src_alias;
--		area_src_alias = area_dst_alias;
--		area_dst_alias = tmp_area;
-+		swap(area_src, area_dst);
-+		swap(area_src_alias, area_dst_alias);
- 
- 		uffd_stats_report(uffd_stats, nr_cpus);
- 	}
--- 
-2.25.1
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220222100741.30138-21-nancy.lin@mediatek.com/
+---
+
+On Sun, 2022-02-27 at 11:33 +0800, Chun-Kuang Hu wrote:
+> Hi, Jason:
+> 
+> Build error:
+> 
+> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c: In function
+> ‘mtk_drm_crtc_create’:
+> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:902:26: error: ‘struct
+> mtk_drm_private’ has no member named ‘dev’
+>   mtk_crtc->drm_dev = priv->dev;
+>                           ^
+> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:974:30: error: ‘struct
+> mtk_drm_private’ has no member named ‘dev’
+>    link = device_link_add(priv->dev, mtk_crtc->cmdq_client.chan-
+> >mbox->dev,
+>                               ^
+> In file included from ../include/linux/device.h:15:0,
+>                  from ../include/linux/dma-mapping.h:7,
+>                  from ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:7:
+> ../drivers/gpu/drm/mediatek/mtk_drm_crtc.c:977:16: error: ‘struct
+> mtk_drm_private’ has no member named ‘dev’
+>     dev_err(priv->dev, "Unable to link dev=%s\n",
+>                 ^
+> Regards,
+> Chun-Kuang.
+
 

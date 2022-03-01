@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEFF4C92C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01644C92C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 19:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbiCASQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 13:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S234249AbiCASRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 13:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiCASQI (ORCPT
+        with ESMTP id S232035AbiCASR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 13:16:08 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD531211
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:15:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646158527; x=1677694527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2exBBjBLdIHC1K+wFc+04tbUBRcDoyFCQXB7El+ibuk=;
-  b=CAySWsKr5miTj17W/lESFZQGvVV3nvlN/VNNvuTQiNuoL99chGqd1Y8I
-   oqO1LykIOc890YsEv0aLxRQdcqJK4Jnawve1B+p6Uq368hF76kZIEBRtM
-   yHX8URRauf07VJiiDE+MRT4It5VhMPp7TLsMfMMTQ2h8t3LBU5cMU03vc
-   Vfsm6Pl1YGKJ7oF6NqHUyxT9yiiQxKxr8yO3ZKQs+Tv1ys79qZWeNPdnt
-   UB0z61XzPZcPhB4hHUFguXlUfwrjNZlFo4ogU2ZIb37Zs+m0zAp4vl2lI
-   WyMJvtGOeKNQho11SL7sMHojhLOwoTjuq5u9sfkLcHRmJrGb5SMZ4dz/R
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="236713345"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="236713345"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 10:15:26 -0800
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="639463469"
-Received: from bklinvil-mobl.amr.corp.intel.com (HELO localhost) ([10.212.48.220])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 10:15:26 -0800
-Date:   Tue, 1 Mar 2022 10:15:25 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 37/44] memremap_pages: Set PKS PKey in PTEs if
- PGMAP_PROTECTIONS is requested
-Message-ID: <Yh5ivUp1dIFlih6L@iweiny-desk3>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-38-ira.weiny@intel.com>
- <CAPcyv4go5pqWdvR7w7kDjOKQywTUwZ=Tbn-LSmOyE-4GdhZsmg@mail.gmail.com>
+        Tue, 1 Mar 2022 13:17:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194A9396B1
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 10:16:48 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id b5so21901535wrr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 10:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LVn6k5aiaB+GlDaGyWJHbIXnA3GgZuVF6+u4SGe3ogM=;
+        b=WaiAgpv3J7rF8Pqe1r7FOjhpegyuZ0do0SeDPmp1nbUeL10bGp0rZEtl9XL1irkTtY
+         gGwOV2XFy3L+aVC1lcyX8Uq9H6WQGNNrRbPI+4i6CgrDUUKTgsQ/SG8/6wxtz+62VFe4
+         uPvZnxmcPzL+tpM9pZF8Q9oY0bcp46r9mSFV18Oc3p+qCDcngKOS5daijP/3nuJOLd7s
+         Z/qwEXpbzfSUMO+7rcfq6l007qVLnERcp37TB3TU0oxnlAUdE7jt4AAOY0csaHMccwv4
+         +kI0XDTdzl3Ixssxv4NPsRXLohKZvdyrjhMYFjhPTBplqwGxDSpXS8QN6elU3X2DjK7i
+         Q3dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LVn6k5aiaB+GlDaGyWJHbIXnA3GgZuVF6+u4SGe3ogM=;
+        b=65ToqC2p9KDMyB3LQhY97bkO69utB+3B07OghzeqeObG6otV/w+DsZod0YHOHrOpnu
+         IPE24ZOS/l+sSdKdscIZWYZeBNIqfHZ8fE6mDq5SkOJuScns9iaPOoFVqQrpaaopXHtp
+         e9OOYEX2sISEoOO3qLQdLedE6Bk3CoD3CMfjsN6nS0zV4OogcWO79Ndhx00lzsw1p1h7
+         YALuTPGJheOnq+AWWeQREKn4UbTV8wzcJwiVTKt+hxdVJZPw8sQV9ZwzC2xo6DPCJGVU
+         Z7EBOlfJM7bmcg5RVzaFLZNeGDSNBmduQJorWr9zHrFPKFrwzEC/PxAUgXo9uWsTCY6L
+         4J8g==
+X-Gm-Message-State: AOAM5306BtAD+toyY5k8bguIc1P2f4lsFdVuPN08PH8pVCE8vXSJs571
+        qkNsQPb2ENj3XNOgSB3L/VcWYhw0YG8=
+X-Google-Smtp-Source: ABdhPJz2O3+OUx/EA5k6y1mcMZVkUS6jqbXfFwpHb77tIU7478wTiF9L68gKP5PT0f+19+3an4UDew==
+X-Received: by 2002:a5d:678f:0:b0:1f0:2471:5a93 with SMTP id v15-20020a5d678f000000b001f024715a93mr900614wru.164.1646158606574;
+        Tue, 01 Mar 2022 10:16:46 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id l13-20020a05600002ad00b001ea78a5df11sm16831088wry.1.2022.03.01.10.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 10:16:46 -0800 (PST)
+Date:   Tue, 1 Mar 2022 19:16:44 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: boot flooded with unwind: Index not found
+Message-ID: <Yh5jDO6xPst7RSfa@Red>
+References: <Yh5ASXVoWoMj7/Rr@Red>
+ <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAPcyv4go5pqWdvR7w7kDjOKQywTUwZ=Tbn-LSmOyE-4GdhZsmg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 09:41:59AM -0800, Dan Williams wrote:
-> On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
-> >
-> > From: Ira Weiny <ira.weiny@intel.com>
-> >
-> > When the user requests protections the dev_pagemap mappings need to have
-> > a PKEY set.
-> >
-> > Define devmap_protection_adjust_pgprot() to add the PKey to the page
-> > protections.  Call it when PGMAP_PROTECTIONS is requested when remapping
-> > pages.
-> >
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > ---
+Le Tue, Mar 01, 2022 at 03:49:41PM +0000, Russell King (Oracle) a écrit :
+> On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
+> > Hello
+> > 
+> > I booted today linux-next (20220301) and my boot is flooded with:
+> > [    0.000000] unwind: Index not found c0f0c440
+> > [    0.000000] unwind: Index not found 00000000
+> > [    0.000000] unwind: Index not found c0f0c440
+> > [    0.000000] unwind: Index not found 00000000
+> > 
+> > This happen on a sun8i-a83t-bananapi-m3
 > 
-> Does this patch have a reason to exist independent of the patch that
-> introduced devmap_protection_enable()?
+> Have you enabled vmapped stacks?
 > 
-> Otherwise looks ok.
 
-Just easier to review this specific change.  For V8 I split the patches up
-quite a bit to be much more direct to 1 change/patch.  I think it worked out
-well and I don't plan to merge much in V9 because as you say this change looks
-good.  :-D
-
-Ira
+Yes, I have CONFIG_VMAP_STACK=y in my .config

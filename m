@@ -2,154 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115714C9487
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E384C9496
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 20:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbiCATlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 14:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S237238AbiCATnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 14:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbiCATlT (ORCPT
+        with ESMTP id S232112AbiCATnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 14:41:19 -0500
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318A765494;
-        Tue,  1 Mar 2022 11:40:38 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2d07c4a0d06so156071267b3.13;
-        Tue, 01 Mar 2022 11:40:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rC4BvLXBCXqc68pcQ7m+8z/EJtaEH/MsSh5u4qPMaYc=;
-        b=8EHGEbua/oGeSyQUtI/MrV2CcYEyH/d49+zMmDMvo8umN+6wx3t5kciPpKlA6rS225
-         G3jIUyIJNnFeaLorxKJaJQSRR8mDXcDNnxcLcKeB9dOGzexMychR3xow0PoTzl+oDIdf
-         YMNK7OeP3C5qC0sboLEk+LV1hQ0JeQz8+WjtC9jywXhRl/7U5SKKhkEu+guB6DOaZE+t
-         IbvgNvDSzhZzS4YsUkrezFfAQFlxTIGHacdc4pd/OLOonFjW6cKGMaA3euswl10djTxn
-         mU0Fi3TWf+wyhAzdqThTrcSzSwieOukwUERwQqwWYWLmloxMACCnYpYOVWosU0bsq29z
-         Jo1Q==
-X-Gm-Message-State: AOAM531ztxFb6jy4TYyI6dkfum8eUPuWyQaUPmoJaHt0FK0QCCvOgJLL
-        kDahWjtc/3K7QhTWe8wjW5sDUqtrKm6bVhmwxwM=
-X-Google-Smtp-Source: ABdhPJzqz8NvN2OYlSJ4r049oH9twxzobfp3rZ5a9AqKOhlvAWL0GuQURf4suVyw4zXef72pObOLA5ljD92LHelrPUU=
-X-Received: by 2002:a81:1611:0:b0:2d6:3290:9bd3 with SMTP id
- 17-20020a811611000000b002d632909bd3mr26858713yww.19.1646163637141; Tue, 01
- Mar 2022 11:40:37 -0800 (PST)
+        Tue, 1 Mar 2022 14:43:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09233204D;
+        Tue,  1 Mar 2022 11:42:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646163747; x=1677699747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0jEz/DJzpwaJIm6VwC7B5azcRqmPUDVe75s6sEfdqSk=;
+  b=oHksIjmR2s5BTQbWYHdyuSCpFZhBvkY8fcllomR0s5Nr2yxEfxkDw4m+
+   yLpMs+KO2EKpk1E4TqufnJSwKx+I4u1KD9zox0vF3IAZxlcOYAh5R+NOI
+   HvkFEu9ecvl6NSiqrEli6CY3ueyl7FoOVCyblOaocVTgUNDT7yM8V8C49
+   g+np/sirIiqQVJTPfn3xZOn53xYF1fGX0fJ6mJ+bs0TlwW6ZaskzMS3Da
+   JV89CTirT1L+DIniF4+o9mCz/DhvUQ0g1fzWisv+OTXzKSDnFEFtoECkR
+   r9SV2zUSRkg4Pq4R/04wDj+IlazMHPhy7K/wec0PZlSfNjcfVu3HVePBK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="252956430"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="252956430"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 11:42:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="493233881"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Mar 2022 11:42:08 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP8Nr-0000wF-Cm; Tue, 01 Mar 2022 19:42:07 +0000
+Date:   Wed, 2 Mar 2022 03:41:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, perex@perex.cz,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com, tzungbi@google.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: Re: [PATCH] ASoC: bt-sco: fix bt-sco-pcm-wb dai widget don't connect
+ to the endpoint
+Message-ID: <202203020332.YsOHk7De-lkp@intel.com>
+References: <20220301171137.27442-1-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-References: <20220224113807.91771-1-pmenzel@molgen.mpg.de>
-In-Reply-To: <20220224113807.91771-1-pmenzel@molgen.mpg.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 20:40:26 +0100
-Message-ID: <CAJZ5v0iCwJ10gM0+LsOMU9X3X4ToN_OHBW=9vVsfEP3+cRpudQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] acpi: exsystem: Add units to time variable names
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Robert Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301171137.27442-1-jiaxin.yu@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:38 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> `how_long` uses different units in both functions, so make it more
-> clear, what unit they expect.
->
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/acpi/acpica/exsystem.c | 20 ++++++++++----------
+Hi Jiaxin,
 
-As ACPICA material, this should be submitted to the upstream project
-via https://github.com/acpica/acpica/.
+Thank you for the patch! Yet something to improve:
 
-This applies to the other patches in the series too.
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on v5.17-rc6 next-20220301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->  1 file changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/exsystem.c b/drivers/acpi/acpica/exsystem.c
-> index 1281c07112de..6bc5b46e6927 100644
-> --- a/drivers/acpi/acpica/exsystem.c
-> +++ b/drivers/acpi/acpica/exsystem.c
-> @@ -107,7 +107,7 @@ acpi_status acpi_ex_system_wait_mutex(acpi_mutex mutex, u16 timeout)
->   *
->   * FUNCTION:    acpi_ex_system_do_stall
->   *
-> - * PARAMETERS:  how_long        - The amount of time to stall,
-> + * PARAMETERS:  how_long_us     - The amount of time to stall,
->   *                                in microseconds
->   *
->   * RETURN:      Status
-> @@ -120,13 +120,13 @@ acpi_status acpi_ex_system_wait_mutex(acpi_mutex mutex, u16 timeout)
->   *
->   ******************************************************************************/
->
-> -acpi_status acpi_ex_system_do_stall(u32 how_long)
-> +acpi_status acpi_ex_system_do_stall(u32 how_long_us)
->  {
->         acpi_status status = AE_OK;
->
->         ACPI_FUNCTION_ENTRY();
->
-> -       if (how_long > 255) {   /* 255 microseconds */
-> +       if (how_long_us > 255) {        /* 255 microseconds */
->                 /*
->                  * Longer than 255 usec, this is an error
->                  *
-> @@ -134,10 +134,10 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
->                  * order to support existing BIOSs)
->                  */
->                 ACPI_ERROR((AE_INFO,
-> -                           "Time parameter is too large (%u)", how_long));
-> +                           "Time parameter is too large (%u)", how_long_us));
->                 status = AE_AML_OPERAND_VALUE;
->         } else {
-> -               acpi_os_stall(how_long);
-> +               acpi_os_stall(how_long_us);
->         }
->
->         return (status);
-> @@ -147,7 +147,7 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
->   *
->   * FUNCTION:    acpi_ex_system_do_sleep
->   *
-> - * PARAMETERS:  how_long        - The amount of time to sleep,
-> + * PARAMETERS:  how_long_ms     - The amount of time to sleep,
->   *                                in milliseconds
->   *
->   * RETURN:      None
-> @@ -156,7 +156,7 @@ acpi_status acpi_ex_system_do_stall(u32 how_long)
->   *
->   ******************************************************************************/
->
-> -acpi_status acpi_ex_system_do_sleep(u64 how_long)
-> +acpi_status acpi_ex_system_do_sleep(u64 how_long_ms)
->  {
->         ACPI_FUNCTION_ENTRY();
->
-> @@ -168,11 +168,11 @@ acpi_status acpi_ex_system_do_sleep(u64 how_long)
->          * For compatibility with other ACPI implementations and to prevent
->          * accidental deep sleeps, limit the sleep time to something reasonable.
->          */
-> -       if (how_long > ACPI_MAX_SLEEP) {
-> -               how_long = ACPI_MAX_SLEEP;
-> +       if (how_long_ms > ACPI_MAX_SLEEP) {
-> +               how_long_ms = ACPI_MAX_SLEEP;
->         }
->
-> -       acpi_os_sleep(how_long);
-> +       acpi_os_sleep(how_long_ms);
->
->         /* And now we must get the interpreter again */
->
-> --
-> 2.35.1
->
+url:    https://github.com/0day-ci/linux/commits/Jiaxin-Yu/ASoC-bt-sco-fix-bt-sco-pcm-wb-dai-widget-don-t-connect-to-the-endpoint/20220302-011344
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: hexagon-randconfig-r045-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020332.YsOHk7De-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/de4d22036c32b5b4be162ace0b3ce74c193c43c0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jiaxin-Yu/ASoC-bt-sco-fix-bt-sco-pcm-wb-dai-widget-don-t-connect-to-the-endpoint/20220302-011344
+        git checkout de4d22036c32b5b4be162ace0b3ce74c193c43c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> sound/soc/codecs/bt-sco.c:26:1: error: extraneous closing brace ('}')
+   };
+   ^
+   1 error generated.
+
+
+vim +26 sound/soc/codecs/bt-sco.c
+
+5195ca4902fe0b Mark Brown 2013-08-19  21  
+5195ca4902fe0b Mark Brown 2013-08-19  22  static const struct snd_soc_dapm_route bt_sco_routes[] = {
+de4d22036c32b5 Jiaxin Yu  2022-03-02  23  	{ "BT_SCO_TX", NULL, "RX" },
+de4d22036c32b5 Jiaxin Yu  2022-03-02  24  	{ "TX", NULL, "BT_SCO_RX" },
+de4d22036c32b5 Jiaxin Yu  2022-03-02  25  };
+5195ca4902fe0b Mark Brown 2013-08-19 @26  };
+5195ca4902fe0b Mark Brown 2013-08-19  27  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,247 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492E74C8569
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945234C856C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbiCAHpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 02:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S232471AbiCAHp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiCAHpT (ORCPT
+        with ESMTP id S233072AbiCAHpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:45:19 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1B580CA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:44:38 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2d07ae0b1c0so135336237b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:44:38 -0800 (PST)
+        Tue, 1 Mar 2022 02:45:22 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0C56760;
+        Mon, 28 Feb 2022 23:44:41 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v21so18993932wrv.5;
+        Mon, 28 Feb 2022 23:44:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Qe1X7mYMjXko6WaUL3HZPQ/8TN0i+vTLPTdADUVrV6A=;
-        b=oKHFvyYc+b+VqpPJWEG0QQI4TQ49QS6dxgxtz4v5AxO60fH7IIgR0yVO/+eXVC0gfC
-         22DgwiLdgsz+oGyfFZyjl2IlMMUAGND3Z+DATVlEpsCANVC4XlfverhvM6TCNO9Ld/yT
-         nwl+ptG6zgKLWsJ10nx38xP4qIk8VF89eWP9Kan2yPb+xpg9YfKYtzvGIyh5rhcZAkEG
-         uYUNJn6CgcmXDiNSZ9XMkBPFgBjTNxwgQJz2oCTSCM1C4h0B9tq5685p+e85CTuEcnKs
-         tlMFzytchDn3SlpUV6/Tv6xB3jKv+RuP41lBj5C7Nm/uYtAmToECV7P1Fdq9HC36QTwJ
-         B4hQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9N9OiuGebRhfkNZJOLbrZK8yGd1uJ/RwgoMHb8+66t8=;
+        b=Bd+fGZjkwpi83khB3kaCW3TE7uA/n0ymRuN9QLFQQG4LrHj5rvdwgc1wEwX1Xxn6sq
+         DksXh6oU6CV9jSuMHBZvENgFiZud2pXFODfMSYUY6B24NNYWtSbHdkbY1C1b2koSfK8N
+         cWfgc47rnHia0nC6rcp7kmcPM2WaJBcMweTZJ73ldxsU5WkDvzbrwXdejlkplE1RXDrb
+         Ko3Ss7B4j3V6l0gIMXvvjcLhgknSGYPU0QV5Rry0O2dIp09EgT16VTg1/HM404dVNBJH
+         UGYDpiS8V3stQQI9uPZeejn4KCymYULGHOZDo4EB+H/EsNQxSDITLDXHNHEgD4ct5EnX
+         SkFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Qe1X7mYMjXko6WaUL3HZPQ/8TN0i+vTLPTdADUVrV6A=;
-        b=Ll7FwkGfnKrRXlJGwd2gIrKDlFieRT67L2kodCYWa6GqdNjha+hXxvoKxjttj5kntT
-         GQOzMgBwDA8g+6AgOYBhXCg5nMXXdW1MxUF8OTN17Xo/BRzOfS5TzMDToOYw+NEPH/Na
-         fV+p+JX/ZekfKSrXbi72Aj3MQB3Q+lEGcjCaAHKNsu1wgVFW87CV9kWdHboT89rb3pDH
-         GByHvzCsKPx28ZlawvjYvK4uNxAoOaYZZCmPXUPVs3O+sIyEcyvjgOUjk9C2aEYVbiMh
-         vwhY/7vr2Rbt5D4o7AoNf/Dj/yi1tTalx43h7xrbCBCNp3/poFkDdWNxfkB+RuAqOTjH
-         gY9A==
-X-Gm-Message-State: AOAM5310FNT1rGPq7g/1e9nsjWw62QBsV+J4Fg6bTNMbK6hHXKrg22dc
-        hhYGDShYH3FoMkNuLM0QFRyuWZdjl3ufgFbyOn/fYg==
-X-Google-Smtp-Source: ABdhPJx1tl1/b3S3sZfZuqz7dkpdAuY3FvclosjsCLKMt254WfGeHfOpJNrB/Ng8cL0MsK5hsmp+f6+QDNxVONtvjNk=
-X-Received: by 2002:a0d:f347:0:b0:2d6:916b:eb3f with SMTP id
- c68-20020a0df347000000b002d6916beb3fmr24378404ywf.141.1646120677626; Mon, 28
- Feb 2022 23:44:37 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9N9OiuGebRhfkNZJOLbrZK8yGd1uJ/RwgoMHb8+66t8=;
+        b=JIxfXZCA52AIZ6+hRPo/40ZO8Gy3VFXOGaEi/Vz02wi4IiaQ6yUUnTGWl/z8tk+K5x
+         /a2cQ08EWbJ9lTundmx2oFVScjl9vmk4WWycfTPBsMML2FCEooAZqciQj4V8IId34dtK
+         Ds6gAc6Vl14bblBinblxYilUOVgNOIyn5C8I6ELovC2OXMr+Ok0U/3HhKn2rLBP+Ut+J
+         lyd+XOi3YbieheVgZnKza2RJ7AS/2/YWKZAnvTIhdfjZ2q5ZIIeGlcyxgSeOhKP9Zj69
+         YYNRLVW1zAjWcG1Z6Cf14LcH7lx9uWGQdJcrPX38YY5tvpftkSa85K3eaLU2sZSvu4Zf
+         3+yA==
+X-Gm-Message-State: AOAM532cc/v1ncTtATk9hCcHPLDs34Lk8WOEWxtq408ACTmt1lkKS/Zv
+        0tBfwlrhEj2tDYebamYtRDU=
+X-Google-Smtp-Source: ABdhPJxBUb5/MBYpZP4ycan/j5lwLp+Y/Q02GVioXh44+q0ranawE0HXM7MhI3mcgC5A8bu7SuyoOw==
+X-Received: by 2002:a5d:62c9:0:b0:1ea:940f:d929 with SMTP id o9-20020a5d62c9000000b001ea940fd929mr18519621wrv.164.1646120680070;
+        Mon, 28 Feb 2022 23:44:40 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b00380e3225af9sm1717859wms.0.2022.02.28.23.44.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 23:44:39 -0800 (PST)
+Message-ID: <ecb43ffc-48ff-97ab-c411-0597f356dd1a@gmail.com>
+Date:   Tue, 1 Mar 2022 08:44:38 +0100
 MIME-Version: 1.0
-References: <20220228172347.614588246@linuxfoundation.org>
-In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Mar 2022 13:14:26 +0530
-Message-ID: <CA+G9fYvwkJJQ6-q6C9ii6WQFLRMr=tTuCsOFF=-WUqXmgJdRyw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/139] 5.15.26-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 4/4] arm64: dts: mt6358: add mt6358-keys node
+Content-Language: en-US
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220121140323.4080640-1-mkorpershoek@baylibre.com>
+ <20220121140323.4080640-5-mkorpershoek@baylibre.com>
+ <87v8xps705.fsf@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <87v8xps705.fsf@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 23:06, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.26 release.
-> There are 139 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.26-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On 08/02/2022 16:38, Mattijs Korpershoek wrote:
+> Hi Matthias,
+> 
+> On ven., janv. 21, 2022 at 15:03, Mattijs Korpershoek <mkorpershoek@baylibre.com> wrote:
+> 
+>> This enables the power,home keys on MediaTek boards with a mt6358 pmic.
+>>
+>> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Since the driver change has been merged [1], can we queue up the DT change?
+> Or should I resubmit this separately?
+> 
+> Thanks
 
-## Build
-* kernel: 5.15.26-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 798174743716117a3388365925d6d20985bf920d
-* git describe: v5.15.25-140-g798174743716
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.25-140-g798174743716
+Applied, thanks!
 
-## Test Regressions (compared to v5.15.25)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.25)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.25)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.25)
-No metric fixes found.
-
-## Test result summary
-total: 108667, pass: 93375, fail: 831, skip: 13467, xfail: 994
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 44 passed, 3 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 45 total, 41 passed, 4 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 50 passed, 15 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* prep-inline
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> 
+> [1] https://lore.kernel.org/all/YgIE%2F806gDmRJYCn@google.com/
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt6358.dtsi | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt6358.dtsi b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+>> index 95145076b7e6..98f3b0e0c9f6 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt6358.dtsi
+>> @@ -2,6 +2,7 @@
+>>   /*
+>>    * Copyright (c) 2020 MediaTek Inc.
+>>    */
+>> +#include <dt-bindings/input/input.h>
+>>   
+>>   &pwrap {
+>>   	pmic: mt6358 {
+>> @@ -357,5 +358,16 @@ mt6358_vsim2_reg: ldo_vsim2 {
+>>   		mt6358rtc: mt6358rtc {
+>>   			compatible = "mediatek,mt6358-rtc";
+>>   		};
+>> +
+>> +		mt6358keys: mt6358keys {
+>> +			compatible = "mediatek,mt6358-keys";
+>> +			power {
+>> +				linux,keycodes = <KEY_POWER>;
+>> +				wakeup-source;
+>> +			};
+>> +			home {
+>> +				linux,keycodes = <KEY_HOME>;
+>> +			};
+>> +		};
+>>   	};
+>>   };
+>> -- 
+>> 2.32.0

@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8854C8695
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 09:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150474C8553
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 08:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiCAIeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 03:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S233040AbiCAHjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 02:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiCAIeg (ORCPT
+        with ESMTP id S232823AbiCAHjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:34:36 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58CB31215
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 00:33:55 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id m6so1977688wrr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 00:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sSORGTi0IoA/DfZkQJS5hbRydSHYhg9vgr1wsIug+aQ=;
-        b=ja8zfW7ZO8t42SOrxjYk/1g1OiNSp6I3dw6entoB8N01FASu2pCL58f84IP5GU0V60
-         mpJiaHLcQoMKYglRXYwoMgKufxHd1Rt05Gh3UXxHz6Gg02tgfH4xG7lkJG8QftbNUCY6
-         dKMnOZ/I8ZT2FsKNSO6yUJRJ3A3khe7zKm2R6aN+OXT3k3fHDQFe8p9qtHvo+kepXOyk
-         Cv9dAdehjwlAxdT6W6ulfXGR0L8HeeUm+ivjepPX/ibULH+1yKvQsUKggFOizYZ8uDYp
-         3SiILaMfiNVIroJxUT7jxmpWl29BV6GFnms25HfRp6AvuuxncqOhVtHqx0dnDPfvnW24
-         H4Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sSORGTi0IoA/DfZkQJS5hbRydSHYhg9vgr1wsIug+aQ=;
-        b=RWeJcgmu3dSX71RNuOSX2l/4Vmd4ST2j5HC9uaUWr7CsXwYEXyZUWw73Ygg6eT+3gz
-         9mDYv5cmu1wJjMtXrNLESOrFG1Vl5siLkMeLWX5rMadDaviUzn9vt58cP0QJ4dV8es7L
-         muaw7H8Cbbv6+xlczsOXj7USWykVuBIjjKkrnYLoWTNGri74Yf52lBw5cPXiqg2kbeWC
-         EwXz5JcyrHpJMzNrJZJGrSxm4JH20NaO27Us2td6yU6R/g31W0ICPVKGcX+TOepSKUKp
-         qXNzJ+PdGGWA3JKrTgmM/uJMYEC9vk8cHnVTW4VsGPxy4zrCNraAVx56YNy6DC4guUdn
-         VCow==
-X-Gm-Message-State: AOAM531BfazjRdOcN0i8X21skdA79xbWafbDwxuw0x1ozIQmqXG8LK7s
-        AiSoD85lt5QGK99ktmcho28=
-X-Google-Smtp-Source: ABdhPJxtzVKIx0WMPTgOyRFRV+vczvtzK4cPKqRKOBPW2MGsNpFQqh2cqt61LACCM47DKeJhbom5ew==
-X-Received: by 2002:a5d:6885:0:b0:1ed:c0bc:c205 with SMTP id h5-20020a5d6885000000b001edc0bcc205mr18801977wru.683.1646123634238;
-        Tue, 01 Mar 2022 00:33:54 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m12-20020a7bcb8c000000b003811afe1d45sm1700654wmi.37.2022.03.01.00.33.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:33:53 -0800 (PST)
-Message-ID: <09ce5aab-0cc6-5903-8238-551085abd739@gmail.com>
-Date:   Tue, 1 Mar 2022 08:35:22 +0100
+        Tue, 1 Mar 2022 02:39:16 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A9670F71
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Feb 2022 23:38:35 -0800 (PST)
+Received: from progateway7-pub.mail.pro1.eigbox.com (unknown [67.222.38.55])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 40B0E80323C5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:38:35 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 7F0DD1004810E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 07:38:34 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id Ox5enHqEYctgJOx5enLEdC; Tue, 01 Mar 2022 07:38:34 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Oq2Kdwzt c=1 sm=1 tr=0 ts=621dcd7a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Fs+9GeyYp/NjQm15hUGN7qaNUe89P358GeibdtdsxFc=; b=bbqHFDAt1EjKoaX2ekWK5cDOsy
+        GluQfkjthbdm31a89dFQ+11GOlFbIHJxkRtg2JFFLy5ansA5q1khyi8JdD99aHTXtp/qm7gj3jLxj
+        1c/VRdyElwqVQ+nBos5XdeqQQ;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58366 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nOx5d-001coo-0O; Tue, 01 Mar 2022 00:38:33 -0700
+Subject: Re: [PATCH 5.15 000/139] 5.15.26-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220228172347.614588246@linuxfoundation.org>
+In-Reply-To: <20220228172347.614588246@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4f58b4e1-91b3-4949-6e45-051b2fb38732@w6rz.net>
+Date:   Mon, 28 Feb 2022 23:38:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2,0/2] Add mmsys reset control for MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, angelogioacchino.delregno@collabora.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220217082626.15728-1-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220217082626.15728-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nOx5d-001coo-0O
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:58366
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/28/22 9:22 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.26 release.
+> There are 139 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 02 Mar 2022 17:20:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.26-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On 17/02/2022 09:26, Rex-BC Chen wrote:
-> v2:
-> 1. Change variable type from unsigned int to u16.
-> 
-> v1:
-> 1. Add a new variable in mmsys driver data to control different register
->     offset for different SoCs.
-> 2. Add MT8183 reset register offset.
-> 3. Add mmsys reset control for MT8186.
-> 
-> This series is based on mmsys patch for MT8186 on [1].
-> [1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20220216084831.14883-4-rex-bc.chen@mediatek.com/
-> 
-> Rex-BC Chen (2):
->    soc: mediatek: mmsys: add sw0_rst_offset in mmsys driver data
->    soc: mediatek: mmsys: add mmsys reset control for MT8186
-> 
->   drivers/soc/mediatek/mt8183-mmsys.h | 2 ++
->   drivers/soc/mediatek/mt8186-mmsys.h | 2 ++
->   drivers/soc/mediatek/mtk-mmsys.c    | 7 +++++--
->   drivers/soc/mediatek/mtk-mmsys.h    | 3 +--
->   4 files changed, 10 insertions(+), 4 deletions(-)
-> 
+Tested-by: Ron Economos <re@w6rz.net>
 
-Series applied, thanks!

@@ -2,296 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C39D4C890D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 994764C8915
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 11:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiCAKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 05:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S234124AbiCAKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 05:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiCAKNW (ORCPT
+        with ESMTP id S229944AbiCAKP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:13:22 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B658240A20;
-        Tue,  1 Mar 2022 02:12:39 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 1 Mar
- 2022 18:12:37 +0800
-Message-ID: <4712c41c-fc9f-e8d1-c233-a6c2de0c23dd@amlogic.com>
-Date:   Tue, 1 Mar 2022 18:12:36 +0800
+        Tue, 1 Mar 2022 05:15:57 -0500
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438398CDB2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 02:15:16 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K7Cmd6DjQzMq5kH;
+        Tue,  1 Mar 2022 11:15:13 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K7CmZ5H8YzljTgL;
+        Tue,  1 Mar 2022 11:15:10 +0100 (CET)
+Message-ID: <f6b63133-d555-a77c-0847-de15a9302283@digikod.net>
+Date:   Tue, 1 Mar 2022 11:15:09 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
+User-Agent: 
 Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220225073922.3947-1-yu.tu@amlogic.com>
- <1j8rtvxnkv.fsf@starbuckisacylon.baylibre.com>
- <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
- <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
- <0054cf2f-f09d-5b01-d6ca-0dc877a757c3@amlogic.com>
- <c23fe6e7-879a-fab6-71ba-fcebdaf7ae37@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <c23fe6e7-879a-fab6-71ba-fcebdaf7ae37@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        James Morris <jmorris@namei.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20220228215935.748017-1-mic@digikod.net>
+ <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
+In-Reply-To: <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
-	Thank you very much for your advice.
 
-On 2022/3/1 17:27, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi,
-> 
-> On 01/03/2022 10:01, Yu Tu wrote:
->> Hi Jerome,
+On 01/03/2022 10:22, Christian Brauner wrote:
+> On Mon, Feb 28, 2022 at 10:59:35PM +0100, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
 >>
->> On 2022/3/1 16:36, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>>
->>> On Tue 01 Mar 2022 at 13:54, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> Hi Jerome,
->>>>
->>>> On 2022/2/28 18:59, Jerome Brunet wrote:
->>>>> [ EXTERNAL EMAIL ]
->>>>>
->>>>> On Fri 25 Feb 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>
->>>>>> Using the common Clock code to describe the UART baud rate
->>>>>> clock makes it easier for the UART driver to be compatible
->>>>>> with the baud rate requirements of the UART IP on different
->>>>>> meson chips. Add Meson S4 SoC compatible.
->>>>>>
->>>>>> The test method:
->>>>>> Start the console and run the following commands in turn:
->>>>>> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
->>>>>>
->>>>>> Since most SoCs are too old, I was able to find all the platforms 
->>>>>> myself
->>>>>> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
->>>>>> G12A and S4.
->>>>> GXL based board are still very common an easy to come by.
->>>>> I'm quite surprised that you are unable to test on this SoC family
->>>> The fact of the matter is that the S4 is our end-2020 chip, the G12A is
->>>> five years old, and the GXL is seven years old. If you must ask for a
->>>> test, I will report this problem to the leadership to coordinate 
->>>> resources.
->>>
->>> The age of the SoC is irrelevant. SoCs don't get deprecated based on age
->>> in mainline. It is not just GXL, same goes for meson8.
->>>
->>> These SoCs are actively used. Boards with these SoCs are still sold and
->>> easily available. See the VIM1 or the Libretech boards.
->>>
->>> Breaking things for the the users of these SoCs is not acceptable.
->>> So yes, looking at your series, I strongly recommend you do more tests.
->>>
->> You have a point there. Let's go back to the root of the problem. I 
->> aim to increase S4. The S4 uses 12MHZ to calculate baud. That's all.
->> Change it to CCF as you suggested. The changes are so large that you 
->> ask to test all the chips.
->> I also mentioned last time that using CCF would lead to a longer drive 
->> probe time and affect the board startup time. If this problem is not 
->> solved, can we reject the way you suggest using CCF?
+>> While transitionning to ACC_MODE() with commit 5300990c0370 ("Sanitize
+>> f_flags helpers") and then fixing it with commit 6d125529c6cb ("Fix
+>> ACC_MODE() for real"), we lost an open flags consistency check.  Opening
+>> a file with O_WRONLY | O_RDWR leads to an f_flags containing MAY_READ |
+>> MAY_WRITE (thanks to the ACC_MODE() helper) and an empty f_mode.
+>> Indeed, the OPEN_FMODE() helper transforms 3 (an incorrect value) to 0.
+>>
+>> Fortunately, vfs_read() and vfs_write() both check for FMODE_READ, or
+>> respectively FMODE_WRITE, and return an EBADF error if it is absent.
+>> Before commit 5300990c0370 ("Sanitize f_flags helpers"), opening a file
+>> with O_WRONLY | O_RDWR returned an EINVAL error.  Let's restore this safe
+>> behavior.
 > 
-> I have a much simpler proposal (non-tested):
-> 
-I can test it for you. But if you need to add S4 chips. Again, we need 
-to add a judgment. Is that acceptable to you?
+> That specific part seems a bit risky at first glance. Given that the
+> patch referenced is from 2009 this means we've been allowing O_WRONLY |
+> O_RDWR to succeed for almost 13 years now.
 
-What we've been talking about for a long time is how to make the least 
-changes and the least impact for the S4.
+Yeah, it's an old bug, but we should keep in mind that a file descriptor 
+created with such flags cannot be used to read nor write. However, 
+unfortunately, it can be used for things like ioctl, fstat, chdir… I 
+don't know if there is any user of this trick.
 
-The fact is that Amlogic has recommended 12MHz for baud rates for all 
-chips starting with the G12A. I really doubt whether the G12A/B and SM1 
-were tested before. So if we want to upload subsequent Amlogic chips, 
-not only the S4 needs to solve the 12MHz problem, but other chips can't 
-get around this area.
-> ============><===================================================
-> diff --git a/drivers/tty/serial/meson_uart.c 
-> b/drivers/tty/serial/meson_uart.c
-> index 45e00d928253..eda3fdad60d1 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -76,6 +76,12 @@
->   #define AML_UART_POLL_USEC        5
->   #define AML_UART_TIMEOUT_USEC        10000
+Either way, there is an inconsistency between those using ACC_MODE() and 
+those using OPEN_FMODE(). If we decide to take a side for the behavior 
+of one or the other, without denying to create such FD, it could also 
+break security policies. We have to choose what to potentially break…
+
+
 > 
-> +struct meson_uart_data {
-> +    struct clk    *clk_pclk;
-> +    struct clk    *clk_xtal;
-> +    struct clk    *clk_baud;
-> +};
-> +
->   static struct uart_driver meson_uart_driver;
-> 
->   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
-> @@ -293,16 +299,17 @@ static int meson_uart_startup(struct uart_port *port)
-> 
->   static void meson_uart_change_speed(struct uart_port *port, unsigned 
-> long baud)
->   {
-> +    struct meson_uart_data *private_data = port->private_data;
->       u32 val;
-> 
->       while (!meson_uart_tx_empty(port))
->           cpu_relax();
-> 
-> -    if (port->uartclk == 24000000) {
-> -        val = ((port->uartclk / 3) / baud) - 1;
-> +    if (clk_is_match(private_data->clk_baud, private_data->clk_xtal)) {
-> +        val = ((clk_get_rate(private_data->clk_baud) / 3) / baud) - 1;
->           val |= AML_UART_BAUD_XTAL;
->       } else {
-> -        val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
-> +        val = ((clk_get_rate(private_data->clk_baud) * 10 / (baud * 4) 
-> + 5) / 10) - 1;
->       }
->       val |= AML_UART_BAUD_USE;
->       writel(val, port->membase + AML_UART_REG5);
-> @@ -666,31 +673,26 @@ static inline struct clk 
-> *meson_uart_probe_clock(struct device *dev,
->   }
-> 
->   static int meson_uart_probe_clocks(struct platform_device *pdev,
-> -                   struct uart_port *port)
-> +                   struct meson_uart_data *private_data)
->   {
-> -    struct clk *clk_xtal = NULL;
-> -    struct clk *clk_pclk = NULL;
-> -    struct clk *clk_baud = NULL;
-> -
-> -    clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> -    if (IS_ERR(clk_pclk))
-> -        return PTR_ERR(clk_pclk);
-> +    private_data->clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> +    if (IS_ERR(private_data->clk_pclk))
-> +        return PTR_ERR(private_data->clk_pclk);
-> 
-> -    clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> -    if (IS_ERR(clk_xtal))
-> -        return PTR_ERR(clk_xtal);
-> +    private_data->clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> +    if (IS_ERR(private_data->clk_xtal))
-> +        return PTR_ERR(private_data->clk_xtal);
-> 
-> -    clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> -    if (IS_ERR(clk_baud))
-> -        return PTR_ERR(clk_baud);
-> -
-> -    port->uartclk = clk_get_rate(clk_baud);
-> +    private_data->clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> +    if (IS_ERR(private_data->clk_baud))
-> +        return PTR_ERR(private_data->clk_baud);
-> 
->       return 0;
->   }
-> 
->   static int meson_uart_probe(struct platform_device *pdev)
->   {
-> +    struct meson_uart_data *private_data;
->       struct resource *res_mem;
->       struct uart_port *port;
->       u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
-> @@ -714,6 +716,11 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       if (pdev->id < 0 || pdev->id >= AML_UART_PORT_NUM)
->           return -EINVAL;
-> 
-> +    private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
-> +                    GFP_KERNEL);
-> +    if (!private_data)
-> +        return -ENOMEM;
-> +
->       res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->       if (!res_mem)
->           return -ENODEV;
-> @@ -733,7 +740,7 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       if (!port)
->           return -ENOMEM;
-> 
-> -    ret = meson_uart_probe_clocks(pdev, port);
-> +    ret = meson_uart_probe_clocks(pdev, private_data);
->       if (ret)
->           return ret;
-> 
-> @@ -749,6 +756,7 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       port->x_char = 0;
->       port->ops = &meson_uart_ops;
->       port->fifosize = fifosize;
-> +    port->private_data = private_data;
-> 
->       meson_ports[pdev->id] = port;
->       platform_set_drvdata(pdev, port);
-> ============><===================================================
-> 
-> Neil
-> 
->>>>>
->>>>>>
->>>>>> Yu Tu (6):
->>>>>>     tty: serial: meson: Move request the register region to probe
->>>>>>     tty: serial: meson: Use devm_ioremap_resource to get register 
->>>>>> mapped
->>>>>>       memory
->>>>>>     tty: serial: meson: Describes the calculation of the UART baud 
->>>>>> rate
->>>>>>       clock using a clock frame
->>>>>>     tty: serial: meson: Make some bit of the REG5 register writable
->>>>>>     tty: serial: meson: The system stuck when you run the stty 
->>>>>> command on
->>>>>>       the console to change the baud rate
->>>>>>     tty: serial: meson: Added S4 SOC compatibility
->>>>>>
->>>>>> V6 -> V7: To solve the system stuck when you run the stty command on
->>>>>> the console to change the baud rate.
->>>>>> V5 -> V6: Change error format as discussed in the email.
->>>>>> V4 -> V5: Change error format.
->>>>>> V3 -> V4: Change CCF to describe the UART baud rate clock as 
->>>>>> discussed
->>>>>> in the email.
->>>>>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it 
->>>>>> must change
->>>>>> the DTS before it can be deleted
->>>>>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some 
->>>>>> changes as
->>>>>> discussed in the email
->>>>>>
->>>>>> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/ 
->>>>>>
->>>>>>
->>>>>>    drivers/tty/serial/meson_uart.c | 221 
->>>>>> ++++++++++++++++++++++----------
->>>>>>    1 file changed, 154 insertions(+), 67 deletions(-)
->>>>>>
->>>>>>
->>>>>> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
->>>>>
->>>
-> 
+>>
+>> To make it consistent with ACC_MODE(), this patch also changes
+>> OPEN_FMODE() to return FMODE_READ | FMODE_WRITE for O_WRONLY | O_RDWR.
+>> This may help protect from potential spurious issues.
+>>
+>> This issue could result in inconsistencies with AppArmor, Landlock and
+>> SELinux, but the VFS checks would still forbid read and write accesses.
+>> Tomoyo uses the ACC_MODE() transformation which is correct, and Smack
+>> doesn't check the file mode.  Filesystems using OPEN_FMODE() should also
+>> be protected by the VFS checks.
+>>
+>> Fixes: 5300990c0370 ("Sanitize f_flags helpers")
+>> Cc: Al Viro <viro@zeniv.linux.org.uk>
+>> Cc: Casey Schaufler <casey@schaufler-ca.com>
+>> Cc: Darrick J. Wong <djwong@kernel.org>
+>> Cc: Eric Paris <eparis@parisplace.org>
+>> Cc: John Johansen <john.johansen@canonical.com>
+>> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+>> Cc: Miklos Szeredi <miklos@szeredi.hu>
+>> Cc: Paul Moore <paul@paul-moore.com>
+>> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+>> Cc: Steve French <sfrench@samba.org>
+>> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> Link: https://lore.kernel.org/r/20220228215935.748017-1-mic@digikod.net
+>> ---
+>>   fs/file_table.c    | 3 +++
+>>   include/linux/fs.h | 5 +++--
+>>   2 files changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/file_table.c b/fs/file_table.c
+>> index 7d2e692b66a9..b936f69525d0 100644
+>> --- a/fs/file_table.c
+>> +++ b/fs/file_table.c
+>> @@ -135,6 +135,9 @@ static struct file *__alloc_file(int flags, const struct cred *cred)
+>>   	struct file *f;
+>>   	int error;
+>>   
+>> +	if ((flags & O_ACCMODE) == O_ACCMODE)
+>> +		return ERR_PTR(-EINVAL);
+>> +
+>>   	f = kmem_cache_zalloc(filp_cachep, GFP_KERNEL);
+>>   	if (unlikely(!f))
+>>   		return ERR_PTR(-ENOMEM);
+>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+>> index e2d892b201b0..83bc5aaf1c41 100644
+>> --- a/include/linux/fs.h
+>> +++ b/include/linux/fs.h
+>> @@ -3527,8 +3527,9 @@ int __init list_bdev_fs_names(char *buf, size_t size);
+>>   #define __FMODE_NONOTIFY	((__force int) FMODE_NONOTIFY)
+>>   
+>>   #define ACC_MODE(x) ("\004\002\006\006"[(x)&O_ACCMODE])
+>> -#define OPEN_FMODE(flag) ((__force fmode_t)(((flag + 1) & O_ACCMODE) | \
+>> -					    (flag & __FMODE_NONOTIFY)))
+>> +#define OPEN_FMODE(flag) ((__force fmode_t)( \
+>> +			(((flag + 1) & O_ACCMODE) ?: O_ACCMODE) | \
+>> +			(flag & __FMODE_NONOTIFY)))
+>>   
+>>   static inline bool is_sxid(umode_t mode)
+>>   {
+>>
+>> base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
+>> -- 
+>> 2.35.1
+>>

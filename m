@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DD24C881E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39FA4C8823
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 10:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiCAJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 04:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S233918AbiCAJhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 04:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiCAJgx (ORCPT
+        with ESMTP id S233843AbiCAJgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 04:36:53 -0500
+        Tue, 1 Mar 2022 04:36:54 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 749438A6FE;
-        Tue,  1 Mar 2022 01:36:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0942A8AE7A;
+        Tue,  1 Mar 2022 01:36:14 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 391B2ED1;
-        Tue,  1 Mar 2022 01:36:11 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8BF1106F;
+        Tue,  1 Mar 2022 01:36:13 -0800 (PST)
 Received: from e123648.arm.com (unknown [10.57.20.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ED8D53F73D;
-        Tue,  1 Mar 2022 01:36:08 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 825F03F73D;
+        Tue,  1 Mar 2022 01:36:11 -0800 (PST)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
@@ -28,9 +28,9 @@ Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
         daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
         mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v4 2/4] OPP: Add "opp-microwatt" supporting code
-Date:   Tue,  1 Mar 2022 09:35:22 +0000
-Message-Id: <20220301093524.8870-3-lukasz.luba@arm.com>
+Subject: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced EM registration
+Date:   Tue,  1 Mar 2022 09:35:23 +0000
+Message-Id: <20220301093524.8870-4-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220301093524.8870-1-lukasz.luba@arm.com>
 References: <20220301093524.8870-1-lukasz.luba@arm.com>
@@ -43,186 +43,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new property to the OPP: power value. The OPP entry in the DT can have
-"opp-microwatt". Add the needed code to handle this new property in the
-existing infrastructure.
+The Energy Model (EM) can be created based on DT entry:
+'dynamic-power-coefficient'. It's a 'simple' EM which is limited to the
+dynamic power. It has to fit into the math formula which requires also
+information about voltage. Some of the platforms don't expose voltage
+information, thus it's not possible to use EM registration using DT.
+
+This patch aims to fix it. It introduces new implementation of the EM
+registration callback. The new mechanism relies on the new OPP feature
+allowing to get power (which is coming from "opp-microwatt" DT property)
+expressed in micro-Watts.
+
+The patch also opens new opportunity to better support platforms, which
+have a decent static power. It allows to register 'advanced' EM (based
+on real power measurements) which models total power (static + dynamic),
+so better reflects real HW.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/opp/core.c     | 25 ++++++++++++++++++++++
- drivers/opp/debugfs.c  |  3 +++
- drivers/opp/of.c       | 47 ++++++++++++++++++++++++++++++++++++++++--
- include/linux/pm_opp.h | 12 ++++++++++-
- 4 files changed, 84 insertions(+), 3 deletions(-)
+ drivers/opp/of.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 3057beabd370..740407252298 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -113,6 +113,31 @@ unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_voltage);
- 
-+/**
-+ * dev_pm_opp_get_power() - Gets the power corresponding to an opp
-+ * @opp:	opp for which power has to be returned for
-+ *
-+ * Return: power in micro watt corresponding to the opp, else
-+ * return 0
-+ *
-+ * This is useful only for devices with single power supply.
-+ */
-+unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp)
-+{
-+	unsigned long opp_power = 0;
-+	int i;
-+
-+	if (IS_ERR_OR_NULL(opp)) {
-+		pr_err("%s: Invalid parameters\n", __func__);
-+		return 0;
-+	}
-+	for (i = 0; i < opp->opp_table->regulator_count; i++)
-+		opp_power += opp->supplies[i].u_watt;
-+
-+	return opp_power;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_opp_get_power);
-+
- /**
-  * dev_pm_opp_get_freq() - Gets the frequency corresponding to an available opp
-  * @opp:	opp for which frequency has to be returned for
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 596c185b5dda..45837f3c1765 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -99,6 +99,9 @@ static void opp_debug_create_supplies(struct dev_pm_opp *opp,
- 
- 		debugfs_create_ulong("u_amp", S_IRUGO, d,
- 				     &opp->supplies[i].u_amp);
-+
-+		debugfs_create_ulong("u_watt", S_IRUGO, d,
-+				     &opp->supplies[i].u_watt);
- 	}
- }
- 
 diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 2f40afa4e65c..7bff30f27dc1 100644
+index 7bff30f27dc1..9bae26577aca 100644
 --- a/drivers/opp/of.c
 +++ b/drivers/opp/of.c
-@@ -575,8 +575,9 @@ static bool _opp_is_supported(struct device *dev, struct opp_table *opp_table,
- static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
- 			      struct opp_table *opp_table)
- {
--	u32 *microvolt, *microamp = NULL;
--	int supplies = opp_table->regulator_count, vcount, icount, ret, i, j;
-+	u32 *microvolt, *microamp = NULL, *microwatt = NULL;
-+	int supplies = opp_table->regulator_count;
-+	int vcount, icount, pcount, ret, i, j;
- 	struct property *prop = NULL;
- 	char name[NAME_MAX];
- 
-@@ -688,6 +689,43 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
- 		}
- 	}
- 
-+	/* Search for "opp-microwatt" */
-+	sprintf(name, "opp-microwatt");
-+	prop = of_find_property(opp->np, name, NULL);
-+
-+	if (prop) {
-+		pcount = of_property_count_u32_elems(opp->np, name);
-+		if (pcount < 0) {
-+			dev_err(dev, "%s: Invalid %s property (%d)\n", __func__,
-+				name, pcount);
-+			ret = pcount;
-+			goto free_microamp;
-+		}
-+
-+		if (pcount != supplies) {
-+			dev_err(dev, "%s: Invalid number of elements in %s property (%d) with supplies (%d)\n",
-+				__func__, name, pcount, supplies);
-+			ret = -EINVAL;
-+			goto free_microamp;
-+		}
-+
-+		microwatt = kmalloc_array(pcount, sizeof(*microwatt),
-+					  GFP_KERNEL);
-+		if (!microwatt) {
-+			ret = -EINVAL;
-+			goto free_microamp;
-+		}
-+
-+		ret = of_property_read_u32_array(opp->np, name, microwatt,
-+						 pcount);
-+		if (ret) {
-+			dev_err(dev, "%s: error parsing %s: %d\n", __func__,
-+				name, ret);
-+			ret = -EINVAL;
-+			goto free_microwatt;
-+		}
-+	}
-+
- 	for (i = 0, j = 0; i < supplies; i++) {
- 		opp->supplies[i].u_volt = microvolt[j++];
- 
-@@ -701,8 +739,13 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
- 
- 		if (microamp)
- 			opp->supplies[i].u_amp = microamp[i];
-+
-+		if (microwatt)
-+			opp->supplies[i].u_watt = microwatt[i];
- 	}
- 
-+free_microwatt:
-+	kfree(microwatt);
- free_microamp:
- 	kfree(microamp);
- free_microvolt:
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 879c138c7b8e..0d85a63a1f78 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -32,14 +32,17 @@ enum dev_pm_opp_event {
-  * @u_volt_min:	Minimum voltage in microvolts corresponding to this OPP
-  * @u_volt_max:	Maximum voltage in microvolts corresponding to this OPP
-  * @u_amp:	Maximum current drawn by the device in microamperes
-+ * @u_watt:	Power used by the device in microwatts
-  *
-- * This structure stores the voltage/current values for a single power supply.
-+ * This structure stores the voltage/current/power values for a single power
-+ * supply.
-  */
- struct dev_pm_opp_supply {
- 	unsigned long u_volt;
- 	unsigned long u_volt_min;
- 	unsigned long u_volt_max;
- 	unsigned long u_amp;
-+	unsigned long u_watt;
- };
- 
- /**
-@@ -94,6 +97,8 @@ void dev_pm_opp_put_opp_table(struct opp_table *opp_table);
- 
- unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp);
- 
-+unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp);
-+
- unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp);
- 
- unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp);
-@@ -186,6 +191,11 @@ static inline unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp)
- 	return 0;
+@@ -1438,6 +1438,38 @@ struct device_node *dev_pm_opp_get_of_node(struct dev_pm_opp *opp)
  }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_of_node);
  
-+static inline unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp)
++/*
++ * Callback function provided to the Energy Model framework upon registration.
++ * It provides the power used by @dev at @kHz if it is the frequency of an
++ * existing OPP, or at the frequency of the first OPP above @kHz otherwise
++ * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
++ * frequency and @mW to the associated power.
++ *
++ * Returns 0 on success or a proper -EINVAL value in case of error.
++ */
++static int __maybe_unused
++_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
 +{
++	struct dev_pm_opp *opp;
++	unsigned long opp_freq, opp_power;
++
++	/* Find the right frequency and related OPP */
++	opp_freq = *kHz * 1000;
++	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
++	if (IS_ERR(opp))
++		return -EINVAL;
++
++	opp_power = dev_pm_opp_get_power(opp);
++	dev_pm_opp_put(opp);
++	if (!opp_power)
++		return -EINVAL;
++
++	*kHz = opp_freq / 1000;
++	*mW = opp_power / 1000;
++
 +	return 0;
 +}
 +
- static inline unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
- {
+ /*
+  * Callback function provided to the Energy Model framework upon registration.
+  * This computes the power estimated by @dev at @kHz if it is the frequency
+@@ -1488,6 +1520,24 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
  	return 0;
+ }
+ 
++static bool _of_has_opp_microwatt_property(struct device *dev)
++{
++	unsigned long power, freq = 0;
++	struct dev_pm_opp *opp;
++
++	/* Check if at least one OPP has needed property */
++	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
++	if (IS_ERR(opp))
++		return false;
++
++	power = dev_pm_opp_get_power(opp);
++	dev_pm_opp_put(opp);
++	if (!power)
++		return false;
++
++	return true;
++}
++
+ /**
+  * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
+  * @dev		: Device for which an Energy Model has to be registered
+@@ -1517,6 +1567,12 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+ 		goto failed;
+ 	}
+ 
++	/* First, try to find more precised Energy Model in DT */
++	if (_of_has_opp_microwatt_property(dev)) {
++		em_cb.active_power = _get_dt_power;
++		goto register_em;
++	}
++
+ 	np = of_node_get(dev->of_node);
+ 	if (!np) {
+ 		ret = -EINVAL;
+@@ -1538,6 +1594,7 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+ 		goto failed;
+ 	}
+ 
++register_em:
+ 	ret = em_dev_register_perf_domain(dev, nr_opp, &em_cb, cpus, true);
+ 	if (ret)
+ 		goto failed;
 -- 
 2.17.1
 

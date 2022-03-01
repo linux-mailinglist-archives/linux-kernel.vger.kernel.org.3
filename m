@@ -2,33 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BEF4C972A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 250954C972F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Mar 2022 21:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbiCAUnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 15:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S238286AbiCAUoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 15:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiCAUnt (ORCPT
+        with ESMTP id S238284AbiCAUoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:43:49 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03BEA4A3F8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 12:43:07 -0800 (PST)
+        Tue, 1 Mar 2022 15:44:08 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C3EE51E7E;
+        Tue,  1 Mar 2022 12:43:24 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C2F9892009C; Tue,  1 Mar 2022 21:43:05 +0100 (CET)
+        id 8D72892009C; Tue,  1 Mar 2022 21:43:22 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B541C92009B;
-        Tue,  1 Mar 2022 20:43:05 +0000 (GMT)
-Date:   Tue, 1 Mar 2022 20:43:05 +0000 (GMT)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8A25292009B;
+        Tue,  1 Mar 2022 20:43:22 +0000 (GMT)
+Date:   Tue, 1 Mar 2022 20:43:22 +0000 (GMT)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jean Delvare <jdelvare@suse.com>
-cc:     linux-kernel@vger.kernel.org
-Subject: [PING^3][PATCH 0/2] firmware: dmi: Avoid (some) empty names in kernel
- log
-In-Reply-To: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2203011745280.11354@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+cc:     Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PING^2][PATCH v3] pci: Work around ASMedia ASM2824 PCIe link training
+ failures
+In-Reply-To: <alpine.DEB.2.21.2202010240190.58572@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2203011742590.11354@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2202010240190.58572@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -41,13 +43,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2 Jan 2022, Maciej W. Rozycki wrote:
+On Tue, 1 Feb 2022, Maciej W. Rozycki wrote:
 
->  Resending as this has gone into void.  Original patches still apply in 
-> their original form at the same respective lines.
+> Attempt to handle cases with a downstream port of the ASMedia ASM2824 
+> PCIe switch where link training never completes and the link continues 
+> switching between speeds indefinitely with the data link layer never 
+> reaching the active state.
 
  Ping for:
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk/>.
+<https://lore.kernel.org/all/alpine.DEB.2.21.2202010240190.58572@angie.orcam.me.uk/>
 
   Maciej
-

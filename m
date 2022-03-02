@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8324CA58A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406C84CA592
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242066AbiCBNFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S242098AbiCBNF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242028AbiCBNEz (ORCPT
+        with ESMTP id S242088AbiCBNFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:04:55 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DD9C249E;
-        Wed,  2 Mar 2022 05:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646226253; x=1677762253;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=SfwU9RRrwUbs8J2J4RuaSBSxyXtRxCmuowf1qerOqMc=;
-  b=UWwmBNn98/FPBH/6pTUvRJJPiX1MihnL7Xhmuhto87MexhlMHuZm5X+y
-   VDD1tpGkCnwvyeRcbjqRUFfLYVbmXiyqqV+C5TxJy08C0YlLMu1SNJzl7
-   QdGMK3Xy6roD8d9e27XaVA/TfDcLy4AlS5tIojNvrugWWBhn+NVORCrcx
-   I=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 02 Mar 2022 05:04:13 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:11 -0800
-X-QCInternal: smtphost
-Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:34:00 +0530
-Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id 85F38587B; Wed,  2 Mar 2022 18:33:59 +0530 (IST)
-From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-To:     adrian.hunter@intel.com, quic_riteshh@quicinc.com,
-        asutoshd@quicinc.com, ulf.hansson@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH V4 7/7] mmc: cqhci: Capture eMMC and SD card errors
-Date:   Wed,  2 Mar 2022 18:33:47 +0530
-Message-Id: <1646226227-32429-8-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
-References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 08:05:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D68FC4289
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:04:31 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nPOeY-0004N5-BG; Wed, 02 Mar 2022 14:04:26 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-5c51-3418-45e9-21d0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5c51:3418:45e9:21d0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5F06B40CC0;
+        Wed,  2 Mar 2022 13:04:23 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 14:04:23 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     kernel test robot <yujie.liu@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arunachalam Santhanam <Arunachalam.Santhanam@in.bosch.com>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning:
+ Uninitialized variable: rx_event_msg [uninitvar]
+Message-ID: <20220302130423.ddd2ulldffpo5lb2@pengutronix.de>
+References: <202203021333.mMJpWPzx-lkp@intel.com>
+ <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
+ <20220302103219.kvpfhc6qz42t3pvv@pengutronix.de>
+ <CAMZ6Rq+HR=j2mD97etTgSapOix96P=pK70bTr9HeJu2Mjkn3+g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="56xh6vvo7owhvdci"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+HR=j2mD97etTgSapOix96P=pK70bTr9HeJu2Mjkn3+g@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add changes to capture eMMC and SD card errors.
-This is useful for debug and testing.
 
-Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
-Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
----
- drivers/mmc/host/cqhci-core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+--56xh6vvo7owhvdci
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
-index b0d30c3..b3d7d6d 100644
---- a/drivers/mmc/host/cqhci-core.c
-+++ b/drivers/mmc/host/cqhci-core.c
-@@ -822,8 +822,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
- 	pr_debug("%s: cqhci: IRQ status: 0x%08x\n", mmc_hostname(mmc), status);
- 
- 	if ((status & (CQHCI_IS_RED | CQHCI_IS_GCE | CQHCI_IS_ICCE)) ||
--	    cmd_error || data_error)
-+	    cmd_error || data_error) {
-+		if (status & CQHCI_IS_RED)
-+			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_RED);
-+		if (status & CQHCI_IS_GCE)
-+			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_GCE);
-+		if (status & CQHCI_IS_ICCE)
-+			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_ICCE);
- 		cqhci_error_irq(mmc, status, cmd_error, data_error);
-+	}
- 
- 	if (status & CQHCI_IS_TCC) {
- 		/* read TCN and complete the request */
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+On 02.03.2022 21:49:27, Vincent MAILHOL wrote:
+> > I think it's possible to assign rx_event_msg before the
+> > es58x_check_msg_len().
+>=20
+> Yes, I will do so. Even if this is a false positive, this pattern
+> can be misleading. e.g. during a code review, this does indeed
+> look incorrect at first glance.
+>=20
+> Also, doing such change would be consistent with was is done in
+> other functions:
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/etas_e=
+s58x/es58x_fd.c#L210
+>=20
+> This not being a bug fix, is it fine to send it to net-next?
 
+ACK
+
+> Or do you see a need to backport this?
+
+Don't think so.
+
+> > I think (hope?) the compiler will not optimize
+> > anything away. :)
+>=20
+> With a function call and a return statement, the compiler would
+> need to be severely defective to try to optimize this away :)
+
+I was thinking of this:
+
+| void *foo =3D bar->baz;
+|=20
+| if (!bar)
+|         return;
+|=20
+| printf("%p", foo);
+
+There were/are compilers that optimize the bar NULL pointer check away,
+because bar has already been de-referenced.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--56xh6vvo7owhvdci
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIfa1QACgkQrX5LkNig
+0123Qgf/RpK66S6/00nnYIK17FjG95rGgcEjTFYWj2ir4Ovuaw3GujZW1y0abN82
+TnG3X6EFnNHYVbf3U7KGYku+YJ/OvD5wsNY9/Cuvl1fK+ttCb89nO4CxeEmFarI9
+xErdeT656hGzVi3saAQEHSaE/JHedk2F61P8ncwm63z5U9r9nKN63bwqi/2S2j+s
+cJbv3LXbmUR473wZVgyZBXEC3JDM9KJ+PHo1g6RskySTtC6l1dx5La0gs8v72kqi
+X74fvgcJBXkCR/xppPhl1Iu7EwHt1xdZUI9YnPdeCF0EBa2ODK4jRGBJPolpj00i
+IadoT7WOi5iyhJmh1oNvZ1t4aWrbqQ==
+=wr6A
+-----END PGP SIGNATURE-----
+
+--56xh6vvo7owhvdci--

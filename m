@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553B14C9C35
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9674C9C3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239372AbiCBDi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S236960AbiCBDnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiCBDi0 (ORCPT
+        with ESMTP id S229911AbiCBDnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:38:26 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FB321815;
-        Tue,  1 Mar 2022 19:37:44 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso3643827pjj.2;
-        Tue, 01 Mar 2022 19:37:44 -0800 (PST)
+        Tue, 1 Mar 2022 22:43:04 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5A4B0EAF
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:42:20 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so632326pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 19:42:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PciJuOAlr8N3GqSNavEdG7YQccwdvrpqQWLs3HjQ+VA=;
-        b=PTrKRROTBIa4xEupzDIFrHPrHyenZvzWG12wzZoLZps2cuBcmiiusPNsfOHUIIhXY1
-         Dzaqn9aibxk9RctgxxOtEDHEWTp3Sx5miliKdiqss/S1J0EicS0fash1SGy1v9mPvfr7
-         T38SofsQMbg8X07nA6By9jVC+2Tz9jDdzuDjpqdBInKOA0ljX1TjvSOcpZjVtP61EznM
-         +MQTFBTgZ8VMToldXITtTwvHSIWnSfoU2zYEz5YHpxNW8GD7zvgtZ7FO3HaerB9nhzyO
-         xVjj4p3u8kb3Fo2eCDpluGcJlh/hyUHNARfmIpmcyD8f8C6pr0G5S+7Qxg4tswPptD3G
-         FDIw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaKbUMAikoW+2CrT8M+EU3vclV/Hjqlxq8ONhSLeM1E=;
+        b=2D4/T939Evpeki/nJ0chs+tQeIyQU/+z6U7Q3rDEcdOMLd5GtBzsn1fHAcLgpJbrb4
+         Rx8Ci27MxIkvcUIeZUaLiXekDlZn36VK4l1GnjZWzTlaYRmwyYlO4roWuOpnWZ/TJoZd
+         89f8ABoy080TOlgAchfJvRhoi4N1welgpRu801mxdptlmyfEl5c4O+7JG89L8JHb6ytc
+         AOJeSBGCB1vOm+XBSh+Gz9GBYa2/7aKJnpDiNQR7T/q0pWqX3vAdsJi0ho9m2bFCOPrL
+         t41JeeeAM+/xwt9a3da6oe0cVG0LmGrSUj+M/+4VKPROACsOb+ZJSXecV4F5QEZ1E5nf
+         9qfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PciJuOAlr8N3GqSNavEdG7YQccwdvrpqQWLs3HjQ+VA=;
-        b=gvDZLgHvRpznxGdkyCTrIXQHa106/TQZV99R2TzWfCFzyq2K0zkT5bZpdhmJLdLZvS
-         9l/UeqCUVHpa7i5DhvA9pg+5Ti8ng0DXUqubR4kqqN/hW2XOnPSbvXmH13xjl7RVpklO
-         uAev9uEhiaP4GQIeIV1n8J+Ba7DfE5w1sPKLeDIqcWj1mmfuFQHwcDF0IqPnl2C+cQdp
-         rjqIITB6XYNAwHCF8q3M7Md+5t1NgBPblK+QBFXbYIrSL583lEMazmCXtIBtY9HQa7hw
-         YkN3HWl2HIDxJrEGoHo/mXwbWiDA7gLvhtKsXwjbYRxWfbJsUNlkj/RivbvPqrQR4dQ9
-         qP+g==
-X-Gm-Message-State: AOAM533QTOElizu11nGdVnX+BFjApevuFIV6BsCPtDXfED/gWS8G9L8q
-        dhcTYJQutxImfSt1p3CsKXT1wFF3LNEOZ0lApOo=
-X-Google-Smtp-Source: ABdhPJx3DSL5oCKadQfLogOuMPj7/RztMmYXlngTeE6kQDqGd069vD88fNu+VHUk/rH2vprZMfwWvfhvn2DVYrJFk8A=
-X-Received: by 2002:a17:903:18d:b0:150:b6d:64cd with SMTP id
- z13-20020a170903018d00b001500b6d64cdmr28972607plg.123.1646192263949; Tue, 01
- Mar 2022 19:37:43 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaKbUMAikoW+2CrT8M+EU3vclV/Hjqlxq8ONhSLeM1E=;
+        b=f6y0Na1k7MQgRAkqlbYRf6AgjbDvYKHmC4ypo8Rdq/h/QeKW9ICuVXEyJYJL2PwHPY
+         3aeGxEBhULQyOjgBtu0zVwFKhdhiQ2JJkmYpzCND63Kes9L8ct9t5fluhyhAH6Jc23fq
+         LAYt81AZVdeZZrkHjhNoWmcBEEAe7/M7Ek2KLDMy79RCiJLhcQIymNjGSAbOTIdNHnSY
+         ABiQKGFO9UEMhkSAc0DWMcvfZ7Bv70ZVpUSX+2y5M0CKzjmr4o9Cw474woTUXgmAHQ2a
+         x9IU0RE1nfLGi5X4kiKEoBnNSQFMqL/9mbSV13wKPppFPpzCEectx7cQjUFv3fwivPSj
+         2j7w==
+X-Gm-Message-State: AOAM530IGE5wlQUpFbZKVwUZVxTiIxL18UQXBKqByP8VHs7NzR712qng
+        xDCxqeMA/DUADHoLcngQOfKup03Lmtv4AA==
+X-Google-Smtp-Source: ABdhPJwgSX9MeLbuWXyzeWaVSztTZEp+pZTmnRRuCS08oSrYYEhSHkPNhNG8Jj3zmd9wQ+Lw+Z5/1g==
+X-Received: by 2002:a17:902:8e82:b0:151:6f68:7088 with SMTP id bg2-20020a1709028e8200b001516f687088mr11139235plb.11.1646192540121;
+        Tue, 01 Mar 2022 19:42:20 -0800 (PST)
+Received: from always-x1.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id gz13-20020a17090b0ecd00b001bc5defa657sm3358585pjb.11.2022.03.01.19.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 19:42:19 -0800 (PST)
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     arei.gonglei@huawei.com, mst@redhat.com
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        herbert@gondor.apana.org.au, helei.sig11@bytedance.com,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: [PATCH v3 0/4] Introduce akcipher service for virtio-crypto
+Date:   Wed,  2 Mar 2022 11:39:13 +0800
+Message-Id: <20220302033917.1295334-1-pizhenwei@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220301064314.2028737-1-baymaxhuang@gmail.com> <20220301180512.06f7f6dc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220301180512.06f7f6dc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Harold Huang <baymaxhuang@gmail.com>
-Date:   Wed, 2 Mar 2022 11:37:32 +0800
-Message-ID: <CAHJXk3aA62C5s-MV-B6mCTuUJGCdc-pEJpEkxX7vBDwDdHaSrw@mail.gmail.com>
-Subject: Re: [PATCH net-next] tuntap: add sanity checks about msg_controllen
- in sendmsg
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev <netdev@vger.kernel.org>, Jason Wang <jasowang@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO HOST (VHOST)" <kvm@vger.kernel.org>,
-        "open list:VIRTIO HOST (VHOST)" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 10:05 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue,  1 Mar 2022 14:43:14 +0800 Harold Huang wrote:
-> > In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
-> > tun_sendmsg. Although we donot use msg_controllen in this path, we should
-> > check msg_controllen to make sure the caller pass a valid msg_ctl.
-> >
-> > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
-> >
-> > Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-> > Suggested-by: Jason Wang <jasowang@redhat.com>
-> > Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
->
-> Would you mind resending the same patch? It looks like it depended on
-> your other change so the build bot was unable to apply and test it.
+v2 -> v3:
+  Rename virtio_crypto_algs.c to virtio_crypto_skcipher_algs.c, and
+    minor changes of function name.
+  Minor changes in virtio_crypto_akcipher_algs.c: no need to copy from
+    buffer if opcode is verify.
 
-Yes, it depends on this patch [1] which has been applied to netdev.  I
-see this patch could be applied to netdev by git am. But if I use
-another patch that could be applied to linux master, it could not be
-applied to netdev anymore.
+v1 -> v2:
+  Fix 1 compiling warning reported by kernel test robot <lkp@intel.com>
+  Put "__le32 akcipher_algo;" instead of "__le32 reserve;" field of
+    struct virtio_crypto_config directly without size change.
+  Add padding in struct virtio_crypto_ecdsa_session_para to keep
+    64-bit alignment.
+  Remove irrelevant change by code format alignment.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=fb3f903769e8
+  Also CC crypto gurus Herbert and linux-crypto@vger.kernel.org.
+
+  Test with QEMU(patched by the v2 version), works fine.
+
+v1:
+  Introduce akcipher service, implement RSA algorithm, and a minor fix.
+
+zhenwei pi (4):
+  virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+  virtio-crypto: introduce akcipher service
+  virtio-crypto: implement RSA algorithm
+  virtio-crypto: rename skcipher algs
+
+ drivers/crypto/virtio/Makefile                |   3 +-
+ .../virtio/virtio_crypto_akcipher_algs.c      | 585 ++++++++++++++++++
+ drivers/crypto/virtio/virtio_crypto_common.h  |   7 +-
+ drivers/crypto/virtio/virtio_crypto_core.c    |   6 +-
+ drivers/crypto/virtio/virtio_crypto_mgr.c     |  15 +-
+ ...o_algs.c => virtio_crypto_skcipher_algs.c} |   4 +-
+ include/uapi/linux/virtio_crypto.h            |  82 ++-
+ 7 files changed, 693 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+ rename drivers/crypto/virtio/{virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c} (99%)
+
+-- 
+2.20.1
+

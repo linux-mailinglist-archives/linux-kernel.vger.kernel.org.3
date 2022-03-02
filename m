@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A784CA354
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4830F4CA35F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbiCBLTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S241490AbiCBLUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241790AbiCBLSt (ORCPT
+        with ESMTP id S241270AbiCBLTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:18:49 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4885960A8C;
-        Wed,  2 Mar 2022 03:16:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646219750;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=2E590GVKdRoZozo5tkYYbYzrccF+vxFAdL/JT2FI09M=;
-    b=tozWRQmYDCzObU5/ZjhaM7E0SuLk6lsx38bX05TwJ41FYWhK3TxpIQtirgACLZwyWK
-    bZ25sDR8MCOIccNxsb3TrhTIi2d8Q2c9J/zPRp3L3/ppfWVRjcBsi/7yM7sVFi0sNAvM
-    e97CQ2/Vkm2WLzOKACbbrKn58iXR2E7T2+/2T+LvkutuITlwYkQA6yt+P2N78XZ6IvK3
-    8IN/wHeDTUA9/cEbaABSM7cjbiaj/pWUqI5FOvgbBNmmDVoCZPVB1QlEIjnT8vFF3Q0B
-    DJcOh5oZqHBxz6H+pmILrm6qtv7ruVXsLLg5RLcwl/hVQGfw6TIHd533EfnqU55wHKEH
-    /Ctw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43oQ+E="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id V41e6fy22BFnToO
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 2 Mar 2022 12:15:49 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
-Date:   Wed, 2 Mar 2022 12:15:48 +0100
-Cc:     Paul Boddie <paul@boddie.org.uk>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <75CBD357-577A-402D-9E3B-DBE82A84BC43@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
- <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
- <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
- <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 06:19:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78B47DFC3
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646219867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2X8GxD21SAhhZdIvnCz2edJioDnTkcdOU0+RAKaTdzc=;
+        b=aexadk79nwkCvwRfFdsZaHNVwOVBYPI3al8Hgzqxw5dhQtfY2sxTb4WqsOsZmBJQjU79Me
+        Ae+1PJQ5hl23bALc+cYsPpR3t0F/QBrr2Q02EPt0nu6JDG6xOyQMgwB20N5pz7biLqkr6R
+        C5m8lQN9dd3Bcm23dbWNqM76FQnJFPQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-0uXEaCaROHuKE-0DarhYAg-1; Wed, 02 Mar 2022 06:17:46 -0500
+X-MC-Unique: 0uXEaCaROHuKE-0DarhYAg-1
+Received: by mail-ed1-f72.google.com with SMTP id eg48-20020a05640228b000b00413041cd917so812500edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 03:17:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2X8GxD21SAhhZdIvnCz2edJioDnTkcdOU0+RAKaTdzc=;
+        b=gASE7zh+KHgB7f/GOhKDondJQyKcAMcbtQtHsB6ZKL0F65GwewUiqaOomSZrzl8OPf
+         Rhpj9OhQuIpe+xbt+Pcd9k3P2bSm6/y6hWlTlQ0bBVafdfJbqJKu/yghzewKnVZOocIj
+         xn6u4D6UFy+conpJfpHKYiooATfT17t8silqRMOTIwZ3tKE1eI46tE1pjxDStKHSpsa1
+         s4oUTw4FnMDPhYGsL9xIfxps0iMPiQZEVPJaSSL7nRB+SKwGlyKFANW9aGjAfMCZBCaO
+         QrgzqAkz3LJEXcvexnqroFpp8XyhCuoZTZJJd9J6ipzW+y74BJc+0uajc4Yy5l/UyCXO
+         AoRA==
+X-Gm-Message-State: AOAM530f517Nrd2uUb2y8uO1oE8YVYkYi+InPIVJXQ9JNke8yAkUawZH
+        7ohJBAD3yTM/dJdYAYLqCEzdAZz9+1+/YEFKsuxXnVoXKYmyZU6HcbX1eXqYfcORp2FhnAObSJo
+        zJ12kEY9YEYhfT4rbYCUb01HW
+X-Received: by 2002:a17:907:6218:b0:6d1:c74:1507 with SMTP id ms24-20020a170907621800b006d10c741507mr21510157ejc.670.1646219863303;
+        Wed, 02 Mar 2022 03:17:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwsTsxQNCAG5cKHcFCRXeY/VSbYV9NrBdf6waIPCETjWZYNACuoETSJGfJgl1eix5EDeno8LQ==
+X-Received: by 2002:a17:907:6218:b0:6d1:c74:1507 with SMTP id ms24-20020a170907621800b006d10c741507mr21509896ejc.670.1646219858312;
+        Wed, 02 Mar 2022 03:17:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id qb30-20020a1709077e9e00b006d6f8c77695sm1341642ejc.101.2022.03.02.03.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 03:17:36 -0800 (PST)
+Message-ID: <eed70d81-0781-576f-7f88-9046d23c5bfb@redhat.com>
+Date:   Wed, 2 Mar 2022 12:17:36 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: Fixes tag needs some work in the drivers-x86 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220302081752.7fb5afd3@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220302081752.7fb5afd3@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+Hi,
 
-> Am 02.03.2022 um 11:25 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->=20
->> I added a printk for hdmi->sink_is_hdmi. This returns 1. Which IMHO =
-is to be expected
->> since I am using a HDMI connector and panel... So your patch will =
-still add the UYVY formats.
->> Either the synposys module inside the jz4780 or the panel does not =
-understand them.
->=20
-> By selecting the UYVY formats, the driver will enable the colorspace =
-converters in the dw-hdmi IP,
-> I don't see why it doesn't work here...
->=20
-> There is a bit called `Support Color Space Converter` in config0_id:
-> bit	|	Name	|	R/W	|	Desc
-> 2 	|	csc	| 	R 	|	Indicates if Color Space =
-Conversion block is present
->=20
-> Could you dump all the config0 bits:
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D><=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
-b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 54d8fdad395f..547731482da8 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -3431,6 +3431,7 @@ struct dw_hdmi *dw_hdmi_probe(struct =
-platform_device *pdev,
->        pdevinfo.id =3D PLATFORM_DEVID_AUTO;
->=20
->        config0 =3D hdmi_readb(hdmi, HDMI_CONFIG0_ID);
-> +       dev_info(dev, "config0: %x\n", config0);
->        config3 =3D hdmi_readb(hdmi, HDMI_CONFIG3_ID);
->=20
->        if (iores && config3 & HDMI_CONFIG3_AHBAUDDMA) {
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D><=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
->=20
-> If this bit is missing, this would explain the black screen.
+On 3/1/22 22:17, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   646f429ec2de ("platform/x86: amd-pmc: Set QOS during suspend on CZN w/ timer wakeup")
+> 
+> Fixes tag
+> 
+>   Fixes: 59348401ebed ("platform/x86: amd-pmc: Add special handling for timer based S0i3 wakeup"
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
 
-[    9.291011] dw-hdmi-ingenic 10180000.hdmi: config0: bf
+Thanks. I've fixed this and done a forced push to drivers-x86/for-next with
+the fixed commit.
 
-Hm. Or is the color-space conversion of the sw-hdmi module inside the =
-jz4780 broken
-or not configured properly?
+Regards,
 
-(cross-checked: RGB mode still works if I force hdmi->sink_is_hdmi =3D =
-false)
-
-BR and thanks,
-Nikolaus
+Hans
 

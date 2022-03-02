@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679E64CB01A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0704CB023
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244202AbiCBUm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S244228AbiCBUoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236431AbiCBUm0 (ORCPT
+        with ESMTP id S231127AbiCBUoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:42:26 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5BFD64CC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:41:42 -0800 (PST)
-Received: from [192.168.4.54] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D826220B7178;
-        Wed,  2 Mar 2022 12:41:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D826220B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646253702;
-        bh=nGnrN6wZvEIMXigwO2qniJwHemfc6PMUGGJtDX7QpyY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dAFrxi7X3t+esiOuFgK3Tzk+rFkAf/KzrW80FE0S6od4CLcVjt8fIFLXrWsqVIvoD
-         1FwuoMUnCbXzzT5sFHrS8IJ06B3+EjMmsyLwJHJ+b4Lnqq+Bqmuti1kv7BnSdbpmY2
-         nSpmnX/8MenODANPuc4P/GUOSnd/IBCfHGjKLm/g=
-Message-ID: <cd7dbd13-724f-0783-51dc-bbd246fa7a13@linux.microsoft.com>
-Date:   Wed, 2 Mar 2022 12:41:42 -0800
+        Wed, 2 Mar 2022 15:44:21 -0500
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BFA36B6A;
+        Wed,  2 Mar 2022 12:43:37 -0800 (PST)
+Received: by mail-pj1-f41.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so2753935pjb.3;
+        Wed, 02 Mar 2022 12:43:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lgYOR0NAjV43r8oYaHMPMronWC+T+uvO+TYbc9ZRf2U=;
+        b=Do7KuqMBP/y4oIXCc27REEmmeyXsQ6BpAC2gB6U/LVB2ZNfh4Nh9GmKMZPuFes/YLC
+         pHO8uQOYa/PKUaJhi3WDoHy8KcCkLkLZgvHOBnNnqfRzrGEz20DRVGbHUkIIRZWGQeu8
+         fzyZDAGiKgkuRZ2dtHZaLS6JzPV4zMF/sygEzbeF+6zvqGtxSzRIEZTFhRfQBIlE7RJF
+         9F9iFyjiuHKY1F/mE/XWWByHSumXeQHnLjkI2CPFr/t/5PwZpfOtCNX2x1/qW/0/t33L
+         A8k649uAPfZ972Tlr0KQCNp6qHYmmsl+UT0hXzwKmpD7N/O9s7bQ4EvEGLeMaLL2z9NI
+         jZIw==
+X-Gm-Message-State: AOAM532wr43A/92deLW2TbooI5zAFm1jwDp3LLIoYzl5q46w9sHMXH0W
+        tTkJFtYz6r/mm07TRtQWbFcqdUTLcF4=
+X-Google-Smtp-Source: ABdhPJyaNbmqlyYCF0pLP/kU5mYs6ZZtG6sJ6Lt4AcJ3790H8g6EdnWM4bXzhCMZArL+GVOyY1Rd0w==
+X-Received: by 2002:a17:902:d50b:b0:151:94d9:eeaf with SMTP id b11-20020a170902d50b00b0015194d9eeafmr5879371plg.133.1646253816786;
+        Wed, 02 Mar 2022 12:43:36 -0800 (PST)
+Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a910400b001bd171c7fd4sm5933510pjo.25.2022.03.02.12.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:43:35 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:43:32 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "hch@infradead.org" <hch@infradead.org>
+Cc:     Kanchan Joshi <joshiiitr@gmail.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "bcrl@kvack.org" <bcrl@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        SelvaKumar S <selvakuma.s1@samsung.com>,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "Remzi H. Arpaci-Dusseau" <remzi@cs.wisc.edu>
+Subject: Re: [PATCH v4 6/6] io_uring: add support for zone-append
+Message-ID: <20220302204332.dgstbjcpzgiurn5t@garbanzo>
+References: <MWHPR04MB375863C20C1EF2CB27E62703E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731091416.GA29634@infradead.org>
+ <MWHPR04MB37586D39CA389296CE0252A4E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731094135.GA4104@infradead.org>
+ <MWHPR04MB3758A4B2967DB1FABAAD9265E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731125110.GA11500@infradead.org>
+ <CY4PR04MB37517D633920E4D31AC6EA0DE74B0@CY4PR04MB3751.namprd04.prod.outlook.com>
+ <20200814081411.GA16943@infradead.org>
+ <CA+1E3r+WXC_MK5Zf2OZEv17ddJDjtXbhpRFoeDns4F341xMhow@mail.gmail.com>
+ <20200908151801.GA16742@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3] arm64: Do not defer reserve_crashkernel() for
- platforms with no DMA memory zones
-Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <1646242689-20744-1-git-send-email-vijayb@linux.microsoft.com>
- <CA+CK2bDbbx=8R=UthkMesWOST8eJMtOGJdfMRTFSwVmo0Vn0EA@mail.gmail.com>
-From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
-In-Reply-To: <CA+CK2bDbbx=8R=UthkMesWOST8eJMtOGJdfMRTFSwVmo0Vn0EA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200908151801.GA16742@infradead.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Pasha.
-
-Catalin, Will,
-
-I can generate a new version with suggested change from Pasha.  I'm fine 
-if you modify.
-
-Thanks,
-Vijay
-
-
-On 3/2/2022 10:15 AM, Pasha Tatashin wrote:
-> Hi Vijay,
+On Tue, Sep 08, 2020 at 04:18:01PM +0100, hch@infradead.org wrote:
+> On Mon, Sep 07, 2020 at 12:31:42PM +0530, Kanchan Joshi wrote:
+> > But there are use-cases which benefit from supporting zone-append on
+> > raw block-dev path.
+> > Certain user-space log-structured/cow FS/DB will use the device that
+> > way. Aerospike is one example.
+> > Pass-through is synchronous, and we lose the ability to use io-uring.
 > 
-> The patch looks good to me, just one nit below.
-> 
->> -phys_addr_t arm64_dma_phys_limit __ro_after_init;
->> +#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
->> +phys_addr_t __ro_after_init arm64_dma_phys_limit;
->> +#else
->> +phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
-> 
-> Since in this case arm64_dma_phys_limit is initialized during
-> declaration, it would make sense to use const instead of
-> __ro_after_init. Consider changing the above to this:
-> const phys_addr_t arm64_dma_phys_limit = PHYS_MASK + 1;
-> 
-> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> 
-> Thank you,
-> Pasha
+> So use zonefs, which is designed exactly for that use case.
+
+Using zonefs to test append alone can introduce a slight overhead with
+the VFS if we want to do something such as just testing any hot path
+with append and the block layer. If we want to live with that, that's
+fine!
+
+Just saying.
+
+  Luis

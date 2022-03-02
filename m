@@ -2,100 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F5A4C9A72
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299984C9A75
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiCBBda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S238741AbiCBBef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237754AbiCBBdZ (ORCPT
+        with ESMTP id S234218AbiCBBed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:33:25 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4B3DEB5;
-        Tue,  1 Mar 2022 17:32:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7c792bXTz4xRC;
-        Wed,  2 Mar 2022 12:32:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646184758;
-        bh=2Qup4iKVliQdfHZQ/dyiKxqOCHtCVx5xPxSyD+e9DrU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cQpdOvJegGZwY/jHMBviluoXSh0S27XtL4LRQLYiRx+dSWl2A8ChNNjKZH6qKMs4J
-         QjJtipFMSddRWdpUsE92TO7WvPFDSH+c+aigi3lJfwxm/hOJb5bcqT67y0KTFd91zt
-         gGnaY3ydtFd/nAgkG6qUNfXP2foSWCTBcZJuUd3TJP/0U9V7/u10/POTUP4wB4iudy
-         qKTG5GbiM6n91d5cRuCMY7ub2HsGsS7JNf6wsZBOpwCCjzDIAgQakA9STx06RP/6bG
-         A4rYczX8z5MR8N06meg9TzRRrBLVez1wvOwxm2o3G4LcWKBZS3Y4G61W0ex7wokIUk
-         xZuObx8Yq3auw==
-Date:   Wed, 2 Mar 2022 12:32:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Message-ID: <20220302123236.1b7c721b@canb.auug.org.au>
-In-Reply-To: <20220202151045.23205624@canb.auug.org.au>
-References: <20220202151045.23205624@canb.auug.org.au>
+        Tue, 1 Mar 2022 20:34:33 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAE553B55;
+        Tue,  1 Mar 2022 17:33:51 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so349052otl.12;
+        Tue, 01 Mar 2022 17:33:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=88xxT5vkW1FD5Lw+DjeY3rRe+OzWsSvDd95LTbfCqfw=;
+        b=GjkUATrPtGUZpS4Udxx35n4OZ1hV9rIMyYEycNTYpFPxMVOfFTi2eGWqJ5t60816+V
+         IzsVO+tjwx6GUSz4n2LPNt8JPF3kY+R6LO/vZke+m2RrUBb+p7VtKZY6Gw9Bybc5r6Zt
+         gdodx98ffw0ffbxKiUqLJvHU8IzSdsPTb1fvn7ywJ6qcpDZBsanBqRXpkIW/A+5hfOLt
+         MAfWqVVBRAc8Xx0lHSuxBKZ74Lb/cY6aqQsITrohe/df5X9HesW7L54tYFc3p3Vk11zj
+         ON/8+bKRQWhUa4f0fcrMRBIMV6nQn2M+cwdyxQtoHXjSGF0XrpFG3fZ/huFKh2oC4IGX
+         0PRw==
+X-Gm-Message-State: AOAM533rh9Wr3D1v0iftYq0oWXZT9hc6wM4A/M1fHhTWVIMm2xTxHGeo
+        SWiVza3t0+LDGWzJr6l9JlUysfT3IA==
+X-Google-Smtp-Source: ABdhPJxASzbqazLlVVSxOPjbvb6XUCjCoxGN0p8dOSbmV+NwTcHACaJNkJhLJK3Hut69Fx1CHhKRIQ==
+X-Received: by 2002:a05:6830:1b6f:b0:5af:d2f:eed9 with SMTP id d15-20020a0568301b6f00b005af0d2feed9mr14324518ote.331.1646184830209;
+        Tue, 01 Mar 2022 17:33:50 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id hq12-20020a0568709b0c00b000d3d5d4def7sm6627504oab.29.2022.03.01.17.33.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 17:33:49 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64/arm: dts: qcom: Drop bogus interrupt flags cell on MDSS nodes
+Date:   Tue,  1 Mar 2022 19:33:39 -0600
+Message-Id: <20220302013339.2354076-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sE0=Cr+s_nWrz3Xx=O94Wjz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sE0=Cr+s_nWrz3Xx=O94Wjz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The MDSS interrupt provider is a single cell, so specifying interrupt flags
+on the consumers is incorrect.
 
-Hi all,
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Add a bunch of missed cases
+---
+ arch/arm/boot/dts/qcom-msm8974.dtsi   | 4 ++--
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 +++---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi  | 5 ++---
+ arch/arm64/boot/dts/qcom/sdm660.dtsi  | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi  | 6 +++---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  | 6 +++---
+ 6 files changed, 14 insertions(+), 15 deletions(-)
 
-On Wed, 2 Feb 2022 15:10:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> After merging the drm tree, today's linux-next build (htmldocs) produced
-> this warning:
->=20
-> include/drm/drm_connector.h:637: warning: Function parameter or member 'e=
-did_hdmi_rgb444_dc_modes' not described in 'drm_display_info'
-> include/drm/drm_connector.h:637: warning: Function parameter or member 'e=
-did_hdmi_ycbcr444_dc_modes' not described in 'drm_display_info'
->=20
-> Introduced by commit
->=20
->   4adc33f36d80 ("drm/edid: Split deep color modes between RGB and YUV444")
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 412d94736c35..3b9af5e24907 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -1495,7 +1495,7 @@ mdp: mdp@fd900000 {
+ 				reg-names = "mdp_phys";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <0 0>;
++				interrupts = <0>;
+ 
+ 				clocks = <&mmcc MDSS_AHB_CLK>,
+ 					 <&mmcc MDSS_AXI_CLK>,
+@@ -1530,7 +1530,7 @@ dsi0: dsi@fd922800 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <4>;
+ 
+ 				assigned-clocks = <&mmcc BYTE0_CLK_SRC>,
+ 				                  <&mmcc PCLK0_CLK_SRC>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index f0f81c23c16f..0597d865a4a6 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -788,7 +788,7 @@ mdp: mdp@901000 {
+ 				reg-names = "mdp_phys";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <0>;
+ 
+ 				clocks = <&mmcc MDSS_AHB_CLK>,
+ 					 <&mmcc MDSS_AXI_CLK>,
+@@ -834,7 +834,7 @@ dsi0: dsi@994000 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <4>;
+ 
+ 				clocks = <&mmcc MDSS_MDP_CLK>,
+ 					 <&mmcc MDSS_BYTE0_CLK>,
+@@ -904,7 +904,7 @@ hdmi: hdmi-tx@9a0000 {
+ 					    "hdcp_physical";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <8 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <8>;
+ 
+ 				clocks = <&mmcc MDSS_MDP_CLK>,
+ 					 <&mmcc MDSS_AHB_CLK>,
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index 240293592ef9..f646fb80924f 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -1453,7 +1453,7 @@ mdp: mdp@c901000 {
+ 				reg-names = "mdp_phys";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <0>;
+ 
+ 				assigned-clocks = <&mmcc MDSS_MDP_CLK>,
+ 						  <&mmcc MDSS_VSYNC_CLK>;
+@@ -1530,7 +1530,7 @@ dsi0: dsi@c994000 {
+ 				power-domains = <&rpmpd SDM660_VDDCX>;
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <4>;
+ 
+ 				assigned-clocks = <&mmcc BYTE0_CLK_SRC>,
+ 						  <&mmcc PCLK0_CLK_SRC>;
+@@ -2487,4 +2487,3 @@ timer {
+ 				 <GIC_PPI 0 0xf08>;
+ 	};
+ };
+-
+diff --git a/arch/arm64/boot/dts/qcom/sdm660.dtsi b/arch/arm64/boot/dts/qcom/sdm660.dtsi
+index eccf6fde16b4..1d748c5305f4 100644
+--- a/arch/arm64/boot/dts/qcom/sdm660.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm660.dtsi
+@@ -163,7 +163,7 @@ dsi1: dsi@c996000 {
+ 		power-domains = <&rpmpd SDM660_VDDCX>;
+ 
+ 		interrupt-parent = <&mdss>;
+-		interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
++		interrupts = <5>;
+ 
+ 		assigned-clocks = <&mmcc BYTE1_CLK_SRC>,
+ 					<&mmcc PCLK1_CLK_SRC>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 41f4e46e1f85..95e6a97c2170 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -4281,7 +4281,7 @@ mdss_mdp: mdp@ae01000 {
+ 				power-domains = <&rpmhpd SDM845_CX>;
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <0>;
+ 
+ 				ports {
+ 					#address-cells = <1>;
+@@ -4333,7 +4333,7 @@ dsi0: dsi@ae94000 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <4>;
+ 
+ 				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+ 					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+@@ -4405,7 +4405,7 @@ dsi1: dsi@ae96000 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <5>;
+ 
+ 				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
+ 					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index fdaf303ba047..956848068871 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -3200,7 +3200,7 @@ mdss_mdp: mdp@ae01000 {
+ 				power-domains = <&rpmhpd SM8250_MMCX>;
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <0>;
+ 
+ 				ports {
+ 					#address-cells = <1>;
+@@ -3252,7 +3252,7 @@ dsi0: dsi@ae94000 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <4>;
+ 
+ 				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+ 					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+@@ -3325,7 +3325,7 @@ dsi1: dsi@ae96000 {
+ 				reg-names = "dsi_ctrl";
+ 
+ 				interrupt-parent = <&mdss>;
+-				interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
++				interrupts = <5>;
+ 
+ 				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
+ 					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
+-- 
+2.32.0
 
-I am still seeing these warnings.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/sE0=Cr+s_nWrz3Xx=O94Wjz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeyTQACgkQAVBC80lX
-0GypQQf/a4GZbxJBbUJsZte/TTgnf5Mb7VM2m3++z2VLPCb7SHsRUq7dPYpeDrD2
-vPmVX8LMUhsTqityHzZkrr3Sa0DzPipA1GrRI1qk1a6Wt4DC6gsfafancf+puqXM
-wnlKaDn8ZLKjiH2y2FI+FHtCa7eybBYF4CV10qEwxrj/kV95NiNik9W94N6Ph5im
-bi2Xro4As4NZ3qgJHcyB9cTE9qm86w3APM/ST4+GedqIBUikve4MT9MEOZeBVwtY
-m2hmnP6GEZ0051JPH2slaRvtQDhUkg/2389VhF5GroNqfmj/NwhGdfrDuzvjcHAE
-ezOq2DF14kB2gLI3kAKglJfwUwYVlA==
-=zYdX
------END PGP SIGNATURE-----
-
---Sig_/sE0=Cr+s_nWrz3Xx=O94Wjz--

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1401B4CA999
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7469D4CA99F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242758AbiCBPuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S241458AbiCBPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241804AbiCBPuQ (ORCPT
+        with ESMTP id S242415AbiCBPuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:50:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6224C52E31
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:49:15 -0800 (PST)
+        Wed, 2 Mar 2022 10:50:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700F158E55
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:49:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA12EB8207D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6528BC340F4;
-        Wed,  2 Mar 2022 15:49:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D412ECE2189
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:49:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1321EC340F1;
+        Wed,  2 Mar 2022 15:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646236152;
-        bh=Br4pxY4VoxIw0HBPSrXMfPZc3KO2Yla/93cf3653wX8=;
+        s=k20201202; t=1646236156;
+        bh=gZi+CrUhT+iAU5seHENLkIn+v+3EqQ+aMPe1Xaq/+2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFkKbokVY/Oyqzit1B8DwKOEtjHoXU+zhwvmWFR1RYNPx9cqToo6/mp+5UvA/wM5O
-         N9igwo89Eiucs+3idowV1I8fmdWkWEaEkpMmKwpkP/w2H6YpnmeU5i2XGU53u/o1BW
-         u+DjYC5EBKBwMrGU9d0Q29qqNUwFzDSXzzlDOMtLvr3XycKx9VkA4yxu/USWnLvP6f
-         13MIId5sXGucGyhhl2mo/FlS8xu+1XfHeLkli3Q22P0E3qpQMp/SyzTG56t7V8hMTW
-         YmXx3zG54cOyee0q7GTUnPjKIiUh+gKd50dFxsdY30hSz4sy1Iq0BXTWZFjDaU2d8Z
-         Y0N1IYxz0pV/A==
+        b=URMHZj4PS6XkbGAyr/CSCcrtqunr94F9hlGp6C3Z+wWSswDU/90ksVNbipPCgMOID
+         KIA9KwdCMzXqhnmLbVPFUBUE0+ScTuP/gtnWMjnf10X+jnGPCwZvn/+1NGUc067VV+
+         vJxu2oV+jAmeIUMAeJUu/ROCiYriksQY0VhhNZqOh4kut/JbDW4eSr0qW4xUCFbg7F
+         F7ylaURzj+CAo5c331wu+kVVa0cymsbHpcjREtXBsfGgiXvQ8rb8SI/gI3oiyDsdYZ
+         tUUrj+VP8Yp+F1BM9f0il9sdf/Md0fJsBbkurT3oppIVlTlMbnX6JEZb0m8P3OF+F2
+         hE4Gw0in4Jr1Q==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 15/19] rcu/context-tracking: Remove unused and/or unecessary middle functions
-Date:   Wed,  2 Mar 2022 16:48:06 +0100
-Message-Id: <20220302154810.42308-16-frederic@kernel.org>
+Subject: [PATCH 16/19] context_tracking: Convert state to atomic_t
+Date:   Wed,  2 Mar 2022 16:48:07 +0100
+Message-Id: <20220302154810.42308-17-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220302154810.42308-1-frederic@kernel.org>
 References: <20220302154810.42308-1-frederic@kernel.org>
@@ -67,12 +67,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some eqs functions are now only used internally by context tracking, so
-their public declarations can be removed.
-
-Also middle functions such as rcu_user_*() and rcu_idle_*()
-which now directly call to rcu_eqs_enter() and rcu_eqs_exit() can be
-wiped out as well.
+Context tracking's state and dynticks counter are going to be merged
+in a single field so that both updates can happen atomically and at the
+same time. Prepare for that with converting the state into an atomic_t.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Paul E. McKenney <paulmck@kernel.org>
@@ -90,262 +87,186 @@ Cc: Phil Auld <pauld@redhat.com>
 Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
 Cc: Alex Belits <abelits@marvell.com>
 ---
- include/linux/hardirq.h   |   8 ---
- include/linux/rcutiny.h   |   2 -
- include/linux/rcutree.h   |   2 -
- kernel/context_tracking.c | 137 ++++++++++++--------------------------
- 4 files changed, 44 insertions(+), 105 deletions(-)
+ include/linux/context_tracking.h       | 18 ++---------
+ include/linux/context_tracking_state.h | 42 +++++++++++++++++++++-----
+ kernel/context_tracking.c              | 15 +++++----
+ 3 files changed, 47 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
-index 345cdbe9c1b7..d57cab4d4c06 100644
---- a/include/linux/hardirq.h
-+++ b/include/linux/hardirq.h
-@@ -92,14 +92,6 @@ void irq_exit_rcu(void);
- #define arch_nmi_exit()		do { } while (0)
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index 086546569d14..63343c34ab4e 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -56,7 +56,7 @@ static inline enum ctx_state exception_enter(void)
+ 	    !context_tracking_enabled())
+ 		return 0;
+ 
+-	prev_ctx = this_cpu_read(context_tracking.state);
++	prev_ctx = __ct_state();
+ 	if (prev_ctx != CONTEXT_KERNEL)
+ 		ct_user_exit(prev_ctx);
+ 
+@@ -86,26 +86,14 @@ static __always_inline void context_tracking_guest_exit(void)
+ 		__ct_user_exit(CONTEXT_GUEST);
+ }
+ 
+-/**
+- * ct_state() - return the current context tracking state if known
+- *
+- * Returns the current cpu's context tracking state if context tracking
+- * is enabled.  If context tracking is disabled, returns
+- * CONTEXT_DISABLED.  This should be used primarily for debugging.
+- */
+-static __always_inline enum ctx_state ct_state(void)
+-{
+-	return context_tracking_enabled() ?
+-		this_cpu_read(context_tracking.state) : CONTEXT_DISABLED;
+-}
+ #else
+ static inline void user_enter(void) { }
+ static inline void user_exit(void) { }
+ static inline void user_enter_irqoff(void) { }
+ static inline void user_exit_irqoff(void) { }
+-static inline enum ctx_state exception_enter(void) { return 0; }
++static inline int exception_enter(void) { return 0; }
+ static inline void exception_exit(enum ctx_state prev_ctx) { }
+-static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
++static inline int ct_state(void) { return -1; }
+ static __always_inline bool context_tracking_guest_enter(void) { return false; }
+ static inline void context_tracking_guest_exit(void) { }
+ 
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 4efb97fe6518..3da44987dc71 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -9,6 +9,13 @@
+ /* Offset to allow distinguishing irq vs. task-based idle entry/exit. */
+ #define DYNTICK_IRQ_NONIDLE	((LONG_MAX / 2) + 1)
+ 
++enum ctx_state {
++	CONTEXT_DISABLED = -1,	/* returned by ct_state() if unknown */
++	CONTEXT_KERNEL = 0,
++	CONTEXT_USER,
++	CONTEXT_GUEST,
++};
++
+ struct context_tracking {
+ #ifdef CONFIG_CONTEXT_TRACKING_USER
+ 	/*
+@@ -19,12 +26,7 @@ struct context_tracking {
+ 	 */
+ 	bool active;
+ 	int recursion;
+-	enum ctx_state {
+-		CONTEXT_DISABLED = -1,	/* returned by ct_state() if unknown */
+-		CONTEXT_KERNEL = 0,
+-		CONTEXT_USER,
+-		CONTEXT_GUEST,
+-	} state;
++	atomic_t state;
+ #endif
+ 	atomic_t dynticks;		/* Even value for idle, else odd. */
+ 	long dynticks_nesting;		/* Track process nesting level. */
+@@ -33,6 +35,11 @@ struct context_tracking {
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+ DECLARE_PER_CPU(struct context_tracking, context_tracking);
++
++static __always_inline int __ct_state(void)
++{
++	return atomic_read(this_cpu_ptr(&context_tracking.state));
++}
  #endif
  
--#ifdef CONFIG_TINY_RCU
--static inline void rcu_nmi_enter(void) { }
--static inline void rcu_nmi_exit(void) { }
--#else
--extern void rcu_nmi_enter(void);
--extern void rcu_nmi_exit(void);
--#endif
--
- /*
-  * NMI vs Tracing
-  * --------------
-diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-index 9e07f8d9d544..f3326d88693a 100644
---- a/include/linux/rcutiny.h
-+++ b/include/linux/rcutiny.h
-@@ -96,8 +96,6 @@ static inline int rcu_needs_cpu(void)
- static inline void rcu_virt_note_context_switch(int cpu) { }
- static inline void rcu_cpu_stall_reset(void) { }
- static inline int rcu_jiffies_till_stall_check(void) { return 21 * HZ; }
--static inline void rcu_idle_enter(void) { }
--static inline void rcu_idle_exit(void) { }
- static inline void rcu_irq_exit_check_preempt(void) { }
- #define rcu_is_idle_cpu(cpu) \
- 	(is_idle_task(current) && !in_nmi() && !in_hardirq() && !in_serving_softirq())
-diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-index 408435ff7a06..54e84020e7e0 100644
---- a/include/linux/rcutree.h
-+++ b/include/linux/rcutree.h
-@@ -49,8 +49,6 @@ unsigned long start_poll_synchronize_rcu(void);
- bool poll_state_synchronize_rcu(unsigned long oldstate);
- void cond_synchronize_rcu(unsigned long oldstate);
+ #ifdef CONFIG_CONTEXT_TRACKING_USER
+@@ -53,9 +60,30 @@ static inline bool context_tracking_enabled_this_cpu(void)
+ 	return context_tracking_enabled() && __this_cpu_read(context_tracking.active);
+ }
  
--void rcu_idle_enter(void);
--void rcu_idle_exit(void);
- bool rcu_is_idle_cpu(int cpu);
- 
- #ifdef CONFIG_PROVE_RCU
++/**
++ * ct_state() - return the current context tracking state if known
++ *
++ * Returns the current cpu's context tracking state if context tracking
++ * is enabled.  If context tracking is disabled, returns
++ * CONTEXT_DISABLED.  This should be used primarily for debugging.
++ */
++static __always_inline int ct_state(void)
++{
++	int ret;
++
++	if (!context_tracking_enabled())
++		return CONTEXT_DISABLED;
++
++	preempt_disable();
++	ret = __ct_state();
++	preempt_enable();
++
++	return ret;
++}
++
+ static __always_inline bool context_tracking_in_user(void)
+ {
+-	return __this_cpu_read(context_tracking.state) == CONTEXT_USER;
++	return __ct_state() == CONTEXT_USER;
+ }
+ #else
+ static inline bool context_tracking_in_user(void) { return false; }
 diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index dc24a9782bbd..de247e758767 100644
+index de247e758767..69db43548768 100644
 --- a/kernel/context_tracking.c
 +++ b/kernel/context_tracking.c
-@@ -149,52 +149,17 @@ static noinstr void rcu_eqs_enter(bool user)
- }
- 
- /**
-- * rcu_idle_enter - inform RCU that current CPU is entering idle
-- *
-- * Enter idle mode, in other words, -leave- the mode in which RCU
-- * read-side critical sections can occur.  (Though RCU read-side
-- * critical sections can occur in irq handlers in idle, a possibility
-- * handled by irq_enter() and irq_exit().)
-- *
-- * If you add or remove a call to rcu_idle_enter(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--void rcu_idle_enter(void)
--{
--	lockdep_assert_irqs_disabled();
--	rcu_eqs_enter(false);
--}
--
--#ifdef CONFIG_NO_HZ_FULL
--/**
-- * rcu_user_enter - inform RCU that we are resuming userspace.
-- *
-- * Enter RCU idle mode right before resuming userspace.  No use of RCU
-- * is permitted between this call and rcu_user_exit(). This way the
-- * CPU doesn't need to maintain the tick for RCU maintenance purposes
-- * when the CPU runs in userspace.
-- *
-- * If you add or remove a call to rcu_user_enter(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--noinstr void rcu_user_enter(void)
--{
--	rcu_eqs_enter(true);
--}
--#endif /* CONFIG_NO_HZ_FULL */
--
--/**
-- * rcu_nmi_exit - inform RCU of exit from NMI context
-+ * ct_nmi_exit - inform RCU of exit from NMI context
-  *
-  * If we are returning from the outermost NMI handler that interrupted an
-  * RCU-idle period, update ct->dynticks and ct->dynticks_nmi_nesting
-  * to let the RCU grace-period handling know that the CPU is back to
-  * being RCU-idle.
-  *
-- * If you add or remove a call to rcu_nmi_exit(), be sure to test
-+ * If you add or remove a call to ct_nmi_exit(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
+@@ -337,6 +337,7 @@ static __always_inline void context_tracking_recursion_exit(void)
   */
--noinstr void rcu_nmi_exit(void)
-+noinstr void ct_nmi_exit(void)
+ void noinstr __ct_user_enter(enum ctx_state state)
  {
- 	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
++	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+ 	lockdep_assert_irqs_disabled();
  
-@@ -275,42 +240,7 @@ static void noinstr rcu_eqs_exit(bool user)
- }
+ 	/* Kernel threads aren't supposed to go to userspace */
+@@ -345,8 +346,8 @@ void noinstr __ct_user_enter(enum ctx_state state)
+ 	if (!context_tracking_recursion_enter())
+ 		return;
  
- /**
-- * rcu_idle_exit - inform RCU that current CPU is leaving idle
-- *
-- * Exit idle mode, in other words, -enter- the mode in which RCU
-- * read-side critical sections can occur.
-- *
-- * If you add or remove a call to rcu_idle_exit(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--void rcu_idle_exit(void)
--{
--	unsigned long flags;
--
--	local_irq_save(flags);
--	rcu_eqs_exit(false);
--	local_irq_restore(flags);
--}
--EXPORT_SYMBOL_GPL(rcu_idle_exit);
--
--#ifdef CONFIG_NO_HZ_FULL
--/**
-- * rcu_user_exit - inform RCU that we are exiting userspace.
-- *
-- * Exit RCU idle mode while entering the kernel because it can
-- * run a RCU read side critical section anytime.
-- *
-- * If you add or remove a call to rcu_user_exit(), be sure to test with
-- * CONFIG_RCU_EQS_DEBUG=y.
-- */
--void noinstr rcu_user_exit(void)
--{
--	rcu_eqs_exit(true);
--}
--#endif /* ifdef CONFIG_NO_HZ_FULL */
--
--/**
-- * rcu_nmi_enter - inform RCU of entry to NMI context
-+ * ct_nmi_enter - inform RCU of entry to NMI context
-  *
-  * If the CPU was idle from RCU's viewpoint, update ct->dynticks and
-  * ct->dynticks_nmi_nesting to let the RCU grace-period handling know
-@@ -318,10 +248,10 @@ void noinstr rcu_user_exit(void)
-  * long as the nesting level does not overflow an int.  (You will probably
-  * run out of stack space first.)
-  *
-- * If you add or remove a call to rcu_nmi_enter(), be sure to test
-+ * If you add or remove a call to ct_nmi_enter(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
-  */
--noinstr void rcu_nmi_enter(void)
-+noinstr void ct_nmi_enter(void)
- {
- 	long incby = 2;
- 	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
-@@ -436,7 +366,13 @@ void noinstr __ct_user_enter(enum ctx_state state)
- 			 * that will fire and reschedule once we resume in user/guest mode.
- 			 */
- 			rcu_irq_work_resched();
--			rcu_user_enter();
-+			/*
-+			 * Enter RCU idle mode right before resuming userspace.  No use of RCU
-+			 * is permitted between this call and rcu_eqs_exit(). This way the
-+			 * CPU doesn't need to maintain the tick for RCU maintenance purposes
-+			 * when the CPU runs in userspace.
-+			 */
-+			rcu_eqs_enter(true);
- 		}
- 		/*
- 		 * Even if context tracking is disabled on this CPU, because it's outside
-@@ -510,10 +446,10 @@ void noinstr __ct_user_exit(enum ctx_state state)
- 	if (__this_cpu_read(context_tracking.state) == state) {
- 		if (__this_cpu_read(context_tracking.active)) {
+-	if ( __this_cpu_read(context_tracking.state) != state) {
+-		if (__this_cpu_read(context_tracking.active)) {
++	if (__ct_state() != state) {
++		if (ct->active) {
  			/*
--			 * We are going to run code that may use RCU. Inform
--			 * RCU core about that (ie: we may need the tick again).
-+			 * Exit RCU idle mode while entering the kernel because it can
-+			 * run a RCU read side critical section anytime.
- 			 */
--			rcu_user_exit();
-+			rcu_eqs_exit(true);
- 			if (state == CONTEXT_USER) {
- 				instrumentation_begin();
- 				vtime_user_exit(current);
-@@ -595,16 +531,41 @@ DEFINE_PER_CPU(struct context_tracking, context_tracking) = {
- };
- EXPORT_SYMBOL_GPL(context_tracking);
- 
--
-+/**
-+ * ct_idle_enter - inform RCU that current CPU is entering idle
-+ *
-+ * Enter idle mode, in other words, -leave- the mode in which RCU
-+ * read-side critical sections can occur.  (Though RCU read-side
-+ * critical sections can occur in irq handlers in idle, a possibility
-+ * handled by irq_enter() and irq_exit().)
-+ *
-+ * If you add or remove a call to ct_idle_enter(), be sure to test with
-+ * CONFIG_RCU_EQS_DEBUG=y.
-+ */
- void ct_idle_enter(void)
+ 			 * At this stage, only low level arch entry code remains and
+ 			 * then we'll run in userspace. We can assume there won't be
+@@ -387,7 +388,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+ 		 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
+ 		 * is false because we know that CPU is not tickless.
+ 		 */
+-		__this_cpu_write(context_tracking.state, state);
++		atomic_set(&ct->state, state);
+ 	}
+ 	context_tracking_recursion_exit();
+ }
+@@ -440,11 +441,13 @@ NOKPROBE_SYMBOL(user_enter_callable);
+  */
+ void noinstr __ct_user_exit(enum ctx_state state)
  {
--	rcu_idle_enter();
-+	lockdep_assert_irqs_disabled();
-+	rcu_eqs_enter(false);
- }
- EXPORT_SYMBOL_GPL(ct_idle_enter);
- 
-+/**
-+ * ct_idle_exit - inform RCU that current CPU is leaving idle
-+ *
-+ * Exit idle mode, in other words, -enter- the mode in which RCU
-+ * read-side critical sections can occur.
-+ *
-+ * If you add or remove a call to ct_idle_exit(), be sure to test with
-+ * CONFIG_RCU_EQS_DEBUG=y.
-+ */
- void ct_idle_exit(void)
- {
--	rcu_idle_exit();
-+	unsigned long flags;
++	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
 +
-+	local_irq_save(flags);
-+	rcu_eqs_exit(false);
-+	local_irq_restore(flags);
-+
- }
- EXPORT_SYMBOL_GPL(ct_idle_exit);
+ 	if (!context_tracking_recursion_enter())
+ 		return;
  
-@@ -678,13 +639,3 @@ void ct_irq_exit_irqson(void)
- 	ct_irq_exit();
- 	local_irq_restore(flags);
+-	if (__this_cpu_read(context_tracking.state) == state) {
+-		if (__this_cpu_read(context_tracking.active)) {
++	if (__ct_state() == state) {
++		if (ct->active) {
+ 			/*
+ 			 * Exit RCU idle mode while entering the kernel because it can
+ 			 * run a RCU read side critical section anytime.
+@@ -457,7 +460,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
+ 				instrumentation_end();
+ 			}
+ 		}
+-		__this_cpu_write(context_tracking.state, CONTEXT_KERNEL);
++		atomic_set(&ct->state, CONTEXT_KERNEL);
+ 	}
+ 	context_tracking_recursion_exit();
  }
--
--noinstr void ct_nmi_enter(void)
--{
--	rcu_nmi_enter();
--}
--
--noinstr void ct_nmi_exit(void)
--{
--	rcu_nmi_exit();
--}
 -- 
 2.25.1
 

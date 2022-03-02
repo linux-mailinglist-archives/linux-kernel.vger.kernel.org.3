@@ -2,222 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB214CACF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BD34CACFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244416AbiCBSI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S244425AbiCBSKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240282AbiCBSI0 (ORCPT
+        with ESMTP id S244029AbiCBSKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:08:26 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C843220CB;
-        Wed,  2 Mar 2022 10:07:41 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso2797016ooc.12;
-        Wed, 02 Mar 2022 10:07:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J/s4xqCRoWiFmWXpzdAOAxlkHW471J5Hy/uYDHz0d/w=;
-        b=JGo4WaorBbqcjTp++mSkoEhTIVI9A4GY6eRo+ydHC3Ijjg633y9/PwTqXe9nGmy4eY
-         ZAYBWBwJ75GuA3NvGRfKn1gMonZO5Z5mFWIYvPSSZy+/d1Pl2gKyKKV5w/lhS3Sz8mPG
-         jyjjswc6Q6C5jqcQO274YdbbAKy2cDPN5ve5dC44/Vn7KPNsXTP5mcQKXH6qoyzu0+eT
-         TYlwuONO+bkgqqDSgeTs4d8JJQToUUk3+rt3z+pT6E5TewVGmGX+H1/AP7fPat+hAAzv
-         kxwNPLOo/O3N5C/7hGGiB7bqD9c3TEHT3iQUOXsyBj1WyFhIgMSDXIz97B+4aY+zTXE3
-         D7oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=J/s4xqCRoWiFmWXpzdAOAxlkHW471J5Hy/uYDHz0d/w=;
-        b=5bu2RBvAU5EgqeFvbZNo9aLEA9gFuuIoxh6SkhJjaDLbEYymUVmtu/m1urTKErtrQ2
-         rQ9Qd51ny+nQCPuo7vR3ky6US0mqEnsh8RNEXUQOb9WcuWn1Cx5hCSO1qbLQfnbPpTAG
-         OMXOkyFCSChFJPDDmp4JRlLT3QFKQ3DrqW5PLy8g203eiHLUEj3McACbTKGZaf2tUXXF
-         Jr3Bbbj7ShUBHSJipKAIndhaDp5Lot1QowiJNOIYKq87NvNzeE628dXoGkfRDMqGZhnv
-         OFaR6U48QOXBUwtHU1lNVo5YdNtjYqa1XB+qRp8KNWcJo3Dn26YSMHiCC07JY0rXbSso
-         Wj2w==
-X-Gm-Message-State: AOAM5313bNOSYOMaaDTzCObMRGvHElVQagx5yuHEF5EpayraHL5oHlp0
-        HP7ftrEgy4QSEyMkVbqi7gD/uFGEIyg=
-X-Google-Smtp-Source: ABdhPJxoGjEyS/1+OJYj+JdipE7YzymuX0KSN+LA/PHHMr2yp/LdeMXKkT1vJHY5zuHipRZz3BkUuA==
-X-Received: by 2002:a05:6870:e389:b0:d9:9ecc:1f23 with SMTP id x9-20020a056870e38900b000d99ecc1f23mr891762oad.20.1646244460943;
-        Wed, 02 Mar 2022 10:07:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 7-20020a4a1e07000000b002fcc8003c36sm8073887ooq.14.2022.03.02.10.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:07:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Mar 2022 10:07:39 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, David.Laight@ACULAB.COM,
-        linux-hwmon@vger.kernel.org, linux-assembly@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Message-ID: <20220302180739.GA2523230@roeck-us.net>
-References: <20220220190851.17965-1-W_Armin@gmx.de>
+        Wed, 2 Mar 2022 13:10:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7980D7090E;
+        Wed,  2 Mar 2022 10:09:48 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40621139F;
+        Wed,  2 Mar 2022 10:09:48 -0800 (PST)
+Received: from e108754-lin.cambridge.arm.com (unknown [10.1.195.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 71FB53F73D;
+        Wed,  2 Mar 2022 10:09:46 -0800 (PST)
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sean Kelley <skelley@nvidia.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/3] arch_topology, ACPI: populate cpu capacity from CPPC
+Date:   Wed,  2 Mar 2022 18:09:10 +0000
+Message-Id: <20220302180913.13229-1-ionela.voinescu@arm.com>
+X-Mailer: git-send-email 2.29.2.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220220190851.17965-1-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 20, 2022 at 08:08:51PM +0100, Armin Wolf wrote:
-> The new assembly code works on both 32 bit and 64 bit
-> cpus and allows for more compiler optimisations.
-> Since clang runs out of registers on 32 bit x86 when
-> using CC_OUT, we need to execute "setc" ourself.
-> Also modify the debug message so we can still see
-> the result (eax) when the carry flag was set.
-> 
-> Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Hi all,
 
-I still did not get any Reviewed-by: or Tested-by: tags for this patch.
-There was a suggested change (to either set or clear the carry flag
-before executing the out instructions) but that would actually change
-the behavior of the code and should be implemented as separate patch
-to make it easy to revert without impact on this patch if needed.
+v2->v3:
+ - v2 can be found at [2]
+ - Added sanity checking on perf_caps.highest_perf
 
-Unless someone steps up, that leaves this patch (unfortunately) in limbo.
+v1->v2:
+ - v1 can be found at [1]
+ - Changed debug prints to the format used on the DT path
+ - s/init_cpu_capacity_cppc/topology_init_cpu_capacity_cppc
 
-Guenter
+Patches are based on v5.17-rc6.
 
+The patches have been build tested on x86 and more thoroughly tested on
+Juno R2 (arm64), which uses the new functionality, with the following
+results:
 
+root@buildroot:~# dmesg | grep cpu_capacity
+[    2.191152] cpu_capacity: CPU0 cpu_capacity=38300 (raw).
+[    2.196482] cpu_capacity: CPU1 cpu_capacity=38300 (raw).
+[    2.201809] cpu_capacity: CPU2 cpu_capacity=38300 (raw).
+[    2.207136] cpu_capacity: CPU3 cpu_capacity=38300 (raw).
+[    2.212463] cpu_capacity: CPU4 cpu_capacity=102400 (raw).
+[    2.217877] cpu_capacity: CPU5 cpu_capacity=102400 (raw).
+[    2.223291] cpu_capacity: capacity_scale=102400
+[    2.227834] cpu_capacity: CPU0 cpu_capacity=383
+[    2.232376] cpu_capacity: CPU1 cpu_capacity=383
+[    2.236919] cpu_capacity: CPU2 cpu_capacity=383
+[    2.241462] cpu_capacity: CPU3 cpu_capacity=383
+[    2.246004] cpu_capacity: CPU4 cpu_capacity=1024
+[    2.250634] cpu_capacity: CPU5 cpu_capacity=1024
+[    2.255321] cpu_capacity: cpu_capacity initialization done
 
-> ---
-> Changes in v4:
-> - reword commit message
-> 
-> Changes in v3:
-> - make carry an unsigned char
-> - use "+a", ... for output registers
-> - drop "cc" from clobbered list
-> 
-> Changes in v2:
-> - fix clang running out of registers on 32 bit x86
-> - modify debug message
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 78 ++++++++--------------------------
->  1 file changed, 18 insertions(+), 60 deletions(-)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index c5939e68586d..38d23a8e83f2 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -119,7 +119,7 @@ struct smm_regs {
->  	unsigned int edx;
->  	unsigned int esi;
->  	unsigned int edi;
-> -} __packed;
-> +};
-> 
->  static const char * const temp_labels[] = {
->  	"CPU",
-> @@ -164,74 +164,32 @@ static int i8k_smm_func(void *par)
->  	struct smm_regs *regs = par;
->  	int eax = regs->eax;
->  	int ebx = regs->ebx;
-> +	unsigned char carry;
->  	long long duration;
-> -	int rc;
-> 
->  	/* SMM requires CPU 0 */
->  	if (smp_processor_id() != 0)
->  		return -EBUSY;
-> 
-> -#if defined(CONFIG_X86_64)
-> -	asm volatile("pushq %%rax\n\t"
-> -		"movl 0(%%rax),%%edx\n\t"
-> -		"pushq %%rdx\n\t"
-> -		"movl 4(%%rax),%%ebx\n\t"
-> -		"movl 8(%%rax),%%ecx\n\t"
-> -		"movl 12(%%rax),%%edx\n\t"
-> -		"movl 16(%%rax),%%esi\n\t"
-> -		"movl 20(%%rax),%%edi\n\t"
-> -		"popq %%rax\n\t"
-> -		"out %%al,$0xb2\n\t"
-> -		"out %%al,$0x84\n\t"
-> -		"xchgq %%rax,(%%rsp)\n\t"
-> -		"movl %%ebx,4(%%rax)\n\t"
-> -		"movl %%ecx,8(%%rax)\n\t"
-> -		"movl %%edx,12(%%rax)\n\t"
-> -		"movl %%esi,16(%%rax)\n\t"
-> -		"movl %%edi,20(%%rax)\n\t"
-> -		"popq %%rdx\n\t"
-> -		"movl %%edx,0(%%rax)\n\t"
-> -		"pushfq\n\t"
-> -		"popq %%rax\n\t"
-> -		"andl $1,%%eax\n"
-> -		: "=a"(rc)
-> -		:    "a"(regs)
-> -		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> -#else
-> -	asm volatile("pushl %%eax\n\t"
-> -	    "movl 0(%%eax),%%edx\n\t"
-> -	    "push %%edx\n\t"
-> -	    "movl 4(%%eax),%%ebx\n\t"
-> -	    "movl 8(%%eax),%%ecx\n\t"
-> -	    "movl 12(%%eax),%%edx\n\t"
-> -	    "movl 16(%%eax),%%esi\n\t"
-> -	    "movl 20(%%eax),%%edi\n\t"
-> -	    "popl %%eax\n\t"
-> -	    "out %%al,$0xb2\n\t"
-> -	    "out %%al,$0x84\n\t"
-> -	    "xchgl %%eax,(%%esp)\n\t"
-> -	    "movl %%ebx,4(%%eax)\n\t"
-> -	    "movl %%ecx,8(%%eax)\n\t"
-> -	    "movl %%edx,12(%%eax)\n\t"
-> -	    "movl %%esi,16(%%eax)\n\t"
-> -	    "movl %%edi,20(%%eax)\n\t"
-> -	    "popl %%edx\n\t"
-> -	    "movl %%edx,0(%%eax)\n\t"
-> -	    "lahf\n\t"
-> -	    "shrl $8,%%eax\n\t"
-> -	    "andl $1,%%eax\n"
-> -	    : "=a"(rc)
-> -	    :    "a"(regs)
-> -	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> -#endif
-> -	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> -		rc = -EINVAL;
-> +	asm volatile("out %%al,$0xb2\n\t"
-> +		     "out %%al,$0x84\n\t"
-> +		     "setc %0\n"
-> +		     : "=mr" (carry),
-> +		       "+a" (regs->eax),
-> +		       "+b" (regs->ebx),
-> +		       "+c" (regs->ecx),
-> +		       "+d" (regs->edx),
-> +		       "+S" (regs->esi),
-> +		       "+D" (regs->edi));
-> 
->  	duration = ktime_us_delta(ktime_get(), calltime);
-> -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
-> -		 (rc ? 0xffff : regs->eax & 0xffff), duration);
-> +	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x carry: %d (took %7lld usecs)\n",
-> +		 eax, ebx, regs->eax & 0xffff, carry, duration);
-> 
-> -	return rc;
-> +	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> +		return -EINVAL;
-> +
-> +	return 0;
->  }
-> 
->  /*
+root@buildroot:~# tail -n +1 /sys/devices/system/cpu/cpu*/cpu_capacity
+==> /sys/devices/system/cpu/cpu0/cpu_capacity <==
+383
+==> /sys/devices/system/cpu/cpu1/cpu_capacity <==
+383
+==> /sys/devices/system/cpu/cpu2/cpu_capacity <==
+383
+==> /sys/devices/system/cpu/cpu3/cpu_capacity <==
+383
+==> /sys/devices/system/cpu/cpu4/cpu_capacity <==
+1024
+==> /sys/devices/system/cpu/cpu5/cpu_capacity <==
+1024
+
+[1]
+https://lore.kernel.org/lkml/20210514095339.12979-1-ionela.voinescu@arm.com/
+[2]
+https://lore.kernel.org/lkml/20210824105651.28660-1-ionela.voinescu@arm.com/
+
+Thanks,
+Ionela.
+
+Ionela Voinescu (3):
+  x86, ACPI: rename init_freq_invariance_cppc to
+    arch_init_invariance_cppc
+  arch_topology: obtain cpu capacity using information from CPPC
+  arm64, topology: enable use of init_cpu_capacity_cppc()
+
+ arch/arm64/include/asm/topology.h |  4 ++++
+ arch/x86/include/asm/topology.h   |  2 +-
+ drivers/acpi/cppc_acpi.c          |  6 ++---
+ drivers/base/arch_topology.c      | 40 +++++++++++++++++++++++++++++++
+ include/linux/arch_topology.h     |  4 ++++
+ 5 files changed, 52 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+

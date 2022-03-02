@@ -2,218 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00CA4CA1B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932A74CA1CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240842AbiCBKFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S240879AbiCBKGc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 05:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbiCBKE5 (ORCPT
+        with ESMTP id S240869AbiCBKGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:04:57 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F8F606CC;
-        Wed,  2 Mar 2022 02:04:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646215452; x=1677751452;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Wzn++lJurRutF5rby/Xewg4HoOmXwfKOXv6PpAME9Zc=;
-  b=CLUCvppFrbc0K3ueUt96RxJ7BJVPjrXg8N5A7e9ZbSd9Gv1aK+rNwdCO
-   5UpMc76IyKhELbvKtKC1Qyv0zs82BaQCnAPAxzY0hy+tqIWRivDq4nsgg
-   jz/taWDaUONHUR2hMTYpzAj3FJZ42XXBZw0ILQ5URYrTL8hgLcOJ3d6ZD
-   ++heFsakwmNUROOaL/m3uqGRgMeo6MBcNL2/aANrPBQ35LTu1q2lSDCyL
-   ddCaCoVRP8u0Cu0seORAv3X0jHT4gjh9ruOS9uWNN/aWmvfhkJJpALR2Q
-   NUfb2vhyjgPornVWkVqYNCblHGrJ5haV9wrnc9AtWFXpRstwBNF4e/mYN
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,148,1643698800"; 
-   d="scan'208";a="164196080"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Mar 2022 03:04:12 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 2 Mar 2022 03:04:12 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Wed, 2 Mar 2022 03:04:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fY+IhOYt4OP4RYXBt20AnAFYOMknWhK/oOmJTVW3tF5+8LL3fYvfLjnkk7IaGhHj0/5sFXd76hmfpD7PAJifmyamJ1foeFQx7xf69548fclBq07lKi/GyGTgEeRLLpcWirEXayr/ZVR592KuEuqxczWrKO6FjoUXZBZUgxasvv5d7IUbT6Z0Jy8tudO/0G3lr0ZZsMhRW7HFppxesEjryRMwbXkQNB6hWg9lPCYk/Jg/j41L84E4MWWUWVWQ+sLQF2zsiBg45eyiQCyhGq8sKLXBVsJ1ZCwE5qJgYGaNm5PlBvqXNW+ibNFQ8nKcTglF3hoJfyVSdCBskyg7VJ+gdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wzn++lJurRutF5rby/Xewg4HoOmXwfKOXv6PpAME9Zc=;
- b=NSuNH2p9yGnSpFl/H9kCKG6loOZePFrDcn4492PNmQ/aPPhrpAPqogxO6g8kXS2YKMzmsu4stO6xw6O4zHOzkRX2f9E8CHyD6I6jkIEhF5Ti9iJ2RN0/u2PJ8+mEDBFWJfzfEc7QuhfUdSUKpO5n849J9azm0FJzgemysnedHkcoHX2EvaxiyA5R1bgTJ2UTkhD3DTaxKjXs71o1Cch2cc5lmhwIPOfgBRPO+hVAfRcxdJ57DKGNZh6vKq8iDwjqsnDI45fqYOqaU3Y8269fAE/Z7MfTxAD15McslUKV5V5//xLgGiy2YhBLpnAwub1DSi4bh+gRelmJRpuID1iOTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wzn++lJurRutF5rby/Xewg4HoOmXwfKOXv6PpAME9Zc=;
- b=dl6DdRbEaPCiHGfLfrCyipcHoT29am7wFeVH2/Ysu0I27gOqfloy0LlXVjIz1Xpc2mNlgNdP6irSD73mYoUOnixbT631XdC+u0dbmQYP1Qeiu6tVY0atI0uI7LxPm7qBtto3ClUljm2ULEQjb/4XJjpK2AmqAk/nsaSl3vHnwWo=
-Received: from BN6PR11MB0067.namprd11.prod.outlook.com (2603:10b6:405:62::33)
- by DM6PR11MB4659.namprd11.prod.outlook.com (2603:10b6:5:2a5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 10:04:07 +0000
-Received: from BN6PR11MB0067.namprd11.prod.outlook.com
- ([fe80::f9f1:3d24:83ad:d748]) by BN6PR11MB0067.namprd11.prod.outlook.com
- ([fe80::f9f1:3d24:83ad:d748%6]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
- 10:04:07 +0000
-From:   <Arun.Ramadoss@microchip.com>
-To:     <andrew@lunn.ch>
-CC:     <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
-        <hkallweit1@gmail.com>, <kuba@kernel.org>
-Subject: Re: [RFC PATCH net-next 1/4] net: phy: used the genphy_soft_reset for
- phy reset in Lan87xx
-Thread-Topic: [RFC PATCH net-next 1/4] net: phy: used the genphy_soft_reset
- for phy reset in Lan87xx
-Thread-Index: AQHYLeROcUXYFc5aiUylnSi5/LGqxKyr3ekA
-Date:   Wed, 2 Mar 2022 10:04:07 +0000
-Message-ID: <a7c3b0d4a8001146b774a4b831be860afded533c.camel@microchip.com>
-References: <20220228140510.20883-1-arun.ramadoss@microchip.com>
-         <20220228140510.20883-2-arun.ramadoss@microchip.com>
-         <Yh7iJpT0H1+3RncS@lunn.ch>
-In-Reply-To: <Yh7iJpT0H1+3RncS@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0654d1bf-2e7f-406e-d0e2-08d9fc33fd34
-x-ms-traffictypediagnostic: DM6PR11MB4659:EE_
-x-microsoft-antispam-prvs: <DM6PR11MB4659F6EE66809B0870B4E4AAEF039@DM6PR11MB4659.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2aGCi01Myx4j/GbUvwMLZUXQfPdq6txfGFs37eEMP+1//gnoEY3UVeoAsFToU59bFjMEkl2pm3Y1/5HSuLajb9pJGwqo14qnA8y7tVxeJqmWHlwtku2iBLUccpNKztWUQv+YGiVsBv5uAWuIg6p6W0D7t6R75Z+wBBbYtRKXyYISDv2SURW1/zGLRrzI7uDhGzvTpthRV2mVMphNpLUrkPzlvcQ4DV+sJZs+Z+D2NRfiq7mfkyuatHpFvuQt5/NO6flZO75qajMnxEkCvp5rtuRh/RCHkh6H5XKyHd9i/ndDhZbSSYXyczAFekKQTnOs3kMASYoBXVo/n0wi/1WtiP1lyh6RChBzPsJg12dN68WcySQjM30WZufF8P9hMqAHP2qub6wnUNl17VGcNIqjq70pP6hXc2Bo4PmxajJc59X9iYwNaM7odq17CPq+tNmMcLi/Sc2sWxOCzuCPPDLC2pcE6sVYJI2ru2/ftFWfB7N9ot8Q+G9046b3nCeX0q23a+MHweg8C2O2l8XDYGP5j0ibmWhGJ8zXl5/UgsjI502oJKmEpGSIabSLVTyIi2cIqBdKbpX49wg8RbDrvsTdu0w0fQe5bwW4PHPgv0owLKb0etkoAqvOHA4GcibBXYYecEMzPs4TnvVnetupa333d+Fl7UZywaAKnWI8dqt+Hdii4ndo8MXFhqUsn7feq9rXVyTpVp7Sj6W5du+XpCvV0N3qMgFnxmnqMI6XYuVbpNE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB0067.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(38100700002)(6512007)(122000001)(55236004)(83380400001)(186003)(2616005)(26005)(5660300002)(6916009)(54906003)(316002)(8936002)(71200400001)(6486002)(4326008)(8676002)(64756008)(66446008)(66476007)(66556008)(508600001)(36756003)(91956017)(66946007)(76116006)(86362001)(38070700005)(2906002)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YjQ3YlRxOEpXVjRRbVIvb2U2cUZkd1Vkeno1S2dPVGhVZmVqR1gwdEUyQ2hF?=
- =?utf-8?B?QjlFVTFkbUppdDJYWFR4OCtOcXFZdUJidDFHRittSEZiNEpBWUdHbk1nelpM?=
- =?utf-8?B?WVBGSlFvR3o3T3R3YXBhZUNmSDc0T0NEcXU1WjFUNlphT2lqSTZqRGRDdkdi?=
- =?utf-8?B?MXpFQXhFanM1WjRNeG5ZU3liRDREdHNBTGNxSnAvUElLU293T0F6dThtUHda?=
- =?utf-8?B?V3AvSlpnV2QwSHRJQUlQck16RXozeTFTMDdtZE1CM0hjZjhTajJsYmp0U0U4?=
- =?utf-8?B?bU0xMUhTcmdBRy9HUGk0bkRKMHNTWmJMSi9pTGRidTRvQUhla3pxWGNiUi9C?=
- =?utf-8?B?ckJhVTIzdVlqWGhaTi93b0p5aFd6bkZKalBkVEVZeDdiRFBSZ2Qxdnk5SjhC?=
- =?utf-8?B?Z3Q4Qjh1VnRWTEVmZXJMR3QzMDBIK21wekFtamsyMXAwTTV1eDdKWWw5dWow?=
- =?utf-8?B?SXlldWFkbVpIVDRPKzVHZ05ZNEdkVVhOS0NrclArakFUN2p0ck9xb1lYaENv?=
- =?utf-8?B?OWtwU3JpbnNGbnNrMk1sVWVWTFV1UTlhZ2g3WWd6LzNLZllLbi8wY1A2c24y?=
- =?utf-8?B?WXBpVHdIZkhDYldmUFNJeEczcFBXczRzWGNBVDROSENhNHIyOW1ZTU1TUWdK?=
- =?utf-8?B?cnNSZk9GdjFEM1A5YmtxUlp3QVdlYWVnem5QMWZjUXB3dEpWcGkyUjQ0dThG?=
- =?utf-8?B?U2NOWEZuMmxRVngyUllqRmNTSUprTDVJZzkyMWl3QXltMUYweXJCMjFHMytJ?=
- =?utf-8?B?UGpQNm9sa0V2UW80WHJrbUx6ZHNaaVJkU2F4TEtXRkN3N29NODZVRUF4cStM?=
- =?utf-8?B?RjFLWWcyTk9YUWk4eFFucGJsUUdPN0cwQkVEY2NZL3pRWnVudi84WlJBMVdv?=
- =?utf-8?B?OWgrdUhNNC9ld2hYRUNLdzVOSDdXOS9KKzZMTGR2NFZuSUFlczhlTDQrRWVB?=
- =?utf-8?B?cHUrT2didGJvNjE3TFVFTHQzK3ZCQkc1Nk1DNGpGdEd4QmkrL01XQ09NR1ZS?=
- =?utf-8?B?WDJBSmo3Z2xCbEVJSm5IcjRHTjZjNUVsbXNKOXhUOXM0RGhTUEE3aHI3VVV4?=
- =?utf-8?B?RXFmK2Zkc3VQNUdSK3dxdHBseXlJSzd6Nkt2ZTdROG1GV1JtOHU1VWdpc3lo?=
- =?utf-8?B?WnpISm1ldzRpWXZFbWZkY1FJS3p6Sk5EZkJDNHhoQUVwSEFXanhTVW5Oc2gr?=
- =?utf-8?B?MzdiVFZhbGtuaGlRNE14Uk81NmR1MFZSN2xiSWFkMmhPc21rUUoxTXUwMmRY?=
- =?utf-8?B?S1plWmMwV3JqMlRVUm1lUHhJSUxaNDJXTTlvQkNURHBVTzZjT3ZZTnFVckll?=
- =?utf-8?B?YmJIa1BhT3dOODQ2eE85RTRDTzlvT09RWjVVaUNWZk9nTStMVmlyV0NRYlpX?=
- =?utf-8?B?Q2FIN1B5cU5xYi9IT0dwVktpYlpHYmx6anUyUWhua2VLOUJtL1Y3Z3lrVWxR?=
- =?utf-8?B?S0g4cFNHYnBsZUw2Y0ZpZDB2RXltMUxaSEZiUTd3bWltaEdzOU4vaGQ5dmFE?=
- =?utf-8?B?TFBCeGt1WXp4TnNFeFU2VGRnMW93T092aWtuY2huOHI2eXp5dW9xamU5S2N0?=
- =?utf-8?B?T2pEcGJOYmxpUlFzQ2gwZEZwakpXTEovb2VYMm4yL3lDSmJEaUJuT2hxenBQ?=
- =?utf-8?B?d2pVaU8zS0kzN2dlSjIvOXRtTHFWS29VRnVYeFJJZWhVTEF1eUlZcDlqbnRi?=
- =?utf-8?B?aUZnbWZzWDloZEI1WEk2WjlKQ3gwTHdTSGVYbXhyZ3JtTzA4WUZaME1LTGJ5?=
- =?utf-8?B?a29vK2xiTVB4b0J4cGlTYlBaMmM3Mmp6UTRldENQUlVjNmZ4Tm8yb3diRnh4?=
- =?utf-8?B?QkhEL2ZYdkc1TU9ja2ZLT0d2bmw0bk5DWFQvaWZpWGdDSlZic0RDUmFDdHhV?=
- =?utf-8?B?S2czUDN1UkYxQnRibjBtcEliVHRDQzNqUGR1TEhZNXRPbDRteDFQYjRSOURt?=
- =?utf-8?B?RUJxVnpneGV5T0p3WVgyaWNCMlVCL2paVG5aMWY4RFllL2VRQ0pzMXlkZ1FY?=
- =?utf-8?B?ZWFiZnZMellNVFNwanBzTHR2ODB0K2VHUWpVVlRCUVErQU1Hak9CaDB5VDEw?=
- =?utf-8?B?bXFQcTlYaFpnQ2pHQUZUUDdYQTAxVTJlYmo3b3BQV2JSUlBISlNKeUh3TEtk?=
- =?utf-8?B?NkJvcDZxVHlDYlZDNVBJZkJPUnFRUHBVWktMMGJySS9rTUlrNjhXejF4WSt4?=
- =?utf-8?B?U2pqWVFUd0V4NkY5c3BEcjNsSVU3SmVDQkkrNzUvekdyM3k0bXlKTnBxQlVt?=
- =?utf-8?Q?vasggFvOdp7exml+u4fiAqU19wvC1ljfQfVHehEW4Y=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9E6F707C0E194344A5C2AD82145EB45B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 2 Mar 2022 05:06:25 -0500
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10053BB0BB;
+        Wed,  2 Mar 2022 02:05:42 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id n10so582188vkm.10;
+        Wed, 02 Mar 2022 02:05:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EYfrVL/3Fk55o7PeesHa/rcefVwDuQvh3Zqyw9HxNck=;
+        b=rfWplJha9OKbeEVMLVHvc8rfeL+90OqRyjDeiEL/ZoPX2hQ5gdKG3ZdtG+no/w4F+p
+         OnguJezzxM2tDIkfu1wvm2DfJRPrDRQr+9dIj348wHFbVdfWsWq4UEHhIsbJ8M5qq+rY
+         T0+IVcjW+3EY7tfnpDp4D8s2pJtgN0TqTF4RBrGDR0FtCm8VG7XU0yQin/3Om5lUrUzb
+         N3djNJdP97HV32MoCk0IhuR4hvvrWy+ywGypsp4+ciBVA8CDr+JgpSQqTDgdtHt3muXg
+         cgleyiUIrB0N5oy34xDlLF4+68k0iZ4dE07rk7frYjfclPZxWRUnZBvLEMgX/58zOUey
+         m+NQ==
+X-Gm-Message-State: AOAM531o0G2Djd/8Zgphb7GQSW/tsaoMuU8BSPxT1dw0D9lCU7dl1/B+
+        lsoWCluAgjxYpAv9CEX7JSW9C+gaczEH1Q==
+X-Google-Smtp-Source: ABdhPJx8+0YbfUdGRM/EUcSE7UvnFBBDPOp01Ea6jnM2+VzIJfhR/ksKn/oJ3xxsMx6XoqeDOUdR7g==
+X-Received: by 2002:a05:6122:549:b0:319:88bd:bd17 with SMTP id y9-20020a056122054900b0031988bdbd17mr13555360vko.37.1646215540836;
+        Wed, 02 Mar 2022 02:05:40 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id q23-20020a056102127700b0031c108bb5b6sm2161432vsg.23.2022.03.02.02.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 02:05:40 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id j3so1248743vsi.7;
+        Wed, 02 Mar 2022 02:05:39 -0800 (PST)
+X-Received: by 2002:a67:c499:0:b0:320:2cd8:9e1a with SMTP id
+ d25-20020a67c499000000b003202cd89e1amr266158vsk.38.1646215539723; Wed, 02 Mar
+ 2022 02:05:39 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB0067.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0654d1bf-2e7f-406e-d0e2-08d9fc33fd34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2022 10:04:07.0327
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: diqf5SMtnw+3EllhbfNtrSHbC6Shprr7tzu+KsBF86d2Fit5HEAVo3TlTMK6oRbDF7b0t+iuUgdaKilaxlXcEi45OS+CFnL3W6ExqYOkXDk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4659
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
+ <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk> <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+ <Yh1pYAOiskEQes3p@shell.armlinux.org.uk> <dc3c95a4-de06-9889-ce1e-f660fc9fbb95@csgroup.eu>
+ <c3b60de0-38cd-160a-aa15-831349e07e23@arm.com> <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
+ <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
+In-Reply-To: <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 2 Mar 2022 11:05:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU11kaOzanhHZRH+mLTJzaz-i=PnKdK7NF9V-qx6kp8wg@mail.gmail.com>
+Message-ID: <CAMuHMdU11kaOzanhHZRH+mLTJzaz-i=PnKdK7NF9V-qx6kp8wg@mail.gmail.com>
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTAzLTAyIGF0IDA0OjE5ICswMTAwLCBBbmRyZXcgTHVubiB3cm90ZToNCj4g
-RVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVu
-bGVzcyB5b3UNCj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBNb24sIEZlYiAy
-OCwgMjAyMiBhdCAwNzozNTowN1BNICswNTMwLCBBcnVuIFJhbWFkb3NzIHdyb3RlOg0KPiA+IFJl
-cGxhY2VkIGN1cnJlbnQgY29kZSBmb3Igc29mdCByZXNldHRpbmcgcGh5IHRvIGdlbnBoeV9zb2Z0
-X3Jlc2V0DQo+ID4gZnVuY3Rpb24uIEFuZCBhZGRlZCB0aGUgbWFjcm8gZm9yIExBTjg3eHggUGh5
-IElELg0KPiANCj4gSGkgQXJ1bg0KPiANCj4gUGxlYXNlIGRvbid0IG1peCBtdWx0aXBsZSB0aGlu
-Z3MgaW4gb25lIHBhdGNoLg0KPiANCj4gTG9va2luZyBhdCB0aGUgYWN0dWFsIHBhdGgsIHlvdSBo
-YXZlOg0KPiANCj4gPiArI2RlZmluZSBMQU44N1hYX1BIWV9JRCAgICAgICAgICAgICAgICAgICAg
-ICAgMHgwMDA3YzE1MA0KPiA+ICsjZGVmaW5lIE1JQ1JPQ0hJUF9QSFlfSURfTUFTSyAgICAgICAg
-ICAgICAgICAweGZmZmZmZmYwDQo+IA0KPiBQYXJ0IG9mIG1hY3JvcyBmb3IgUEhZIElELg0KPiAN
-Cj4gPiArDQo+ID4gIC8qIEV4dGVybmFsIFJlZ2lzdGVyIENvbnRyb2wgUmVnaXN0ZXIgKi8NCj4g
-PiAgI2RlZmluZSBMQU44N1hYX0VYVF9SRUdfQ1RMICAgICAgICAgICAgICAgICAgICAgKDB4MTQp
-DQo+ID4gICNkZWZpbmUgTEFOODdYWF9FWFRfUkVHX0NUTF9SRF9DVEwgICAgICAgICAgICAgICgw
-eDEwMDApDQo+ID4gQEAgLTE5NywyMCArMjAwLDEwIEBAIHN0YXRpYyBpbnQgbGFuODd4eF9waHlf
-aW5pdChzdHJ1Y3QgcGh5X2RldmljZQ0KPiA+ICpwaHlkZXYpDQo+ID4gICAgICAgaWYgKHJjIDwg
-MCkNCj4gPiAgICAgICAgICAgICAgIHJldHVybiByYzsNCj4gPiANCj4gPiAtICAgICAvKiBTb2Z0
-IFJlc2V0IHRoZSBTTUkgYmxvY2sgKi8NCj4gPiAtICAgICByYyA9IGFjY2Vzc19lcmVnX21vZGlm
-eV9jaGFuZ2VkKHBoeWRldiwgUEhZQUNDX0FUVFJfQkFOS19TTUksDQo+ID4gLSAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwLCAweDgwMDAsIDB4ODAwMCk7DQo+ID4gLSAg
-ICAgaWYgKHJjIDwgMCkNCj4gPiAtICAgICAgICAgICAgIHJldHVybiByYzsNCj4gPiAtDQo+ID4g
-LSAgICAgLyogQ2hlY2sgdG8gc2VlIGlmIHRoZSBzZWxmLWNsZWFyaW5nIGJpdCBpcyBjbGVhcmVk
-ICovDQo+ID4gLSAgICAgdXNsZWVwX3JhbmdlKDEwMDAsIDIwMDApOw0KPiA+IC0gICAgIHJjID0g
-YWNjZXNzX2VyZWcocGh5ZGV2LCBQSFlBQ0NfQVRUUl9NT0RFX1JFQUQsDQo+ID4gLSAgICAgICAg
-ICAgICAgICAgICAgICBQSFlBQ0NfQVRUUl9CQU5LX1NNSSwgMHgwMCwgMCk7DQo+ID4gKyAgICAg
-LyogcGh5IFNvZnQgcmVzZXQgKi8NCj4gPiArICAgICByYyA9IGdlbnBoeV9zb2Z0X3Jlc2V0KHBo
-eWRldik7DQo+ID4gICAgICAgaWYgKHJjIDwgMCkNCj4gPiAgICAgICAgICAgICAgIHJldHVybiBy
-YzsNCj4gPiAtICAgICBpZiAoKHJjICYgMHg4MDAwKSAhPSAwKQ0KPiA+IC0gICAgICAgICAgICAg
-cmV0dXJuIC1FVElNRURPVVQ7DQo+IA0KPiBTb2Z0IHJlc2V0Lg0KPiANCj4gPiANCj4gPiAgICAg
-ICAvKiBQSFkgSW5pdGlhbGl6YXRpb24gKi8NCj4gPiAgICAgICBmb3IgKGkgPSAwOyBpIDwgQVJS
-QVlfU0laRShpbml0KTsgaSsrKSB7DQo+ID4gQEAgLTI3Myw2ICsyNjYsOSBAQCBzdGF0aWMgaW50
-IGxhbjg3eHhfY29uZmlnX2luaXQoc3RydWN0DQo+ID4gcGh5X2RldmljZSAqcGh5ZGV2KQ0KPiA+
-ICB7DQo+ID4gICAgICAgaW50IHJjID0gbGFuODd4eF9waHlfaW5pdChwaHlkZXYpOw0KPiA+IA0K
-PiA+ICsgICAgIGlmIChyYyA8IDApDQo+ID4gKyAgICAgICAgICAgICBwaHlkZXZfZXJyKHBoeWRl
-diwgImZhaWxlZCB0byBpbml0aWFsaXplIHBoeVxuIik7DQo+ID4gKw0KPiANCj4gQSBuZXcgZXJy
-b3IgbWVzc2FnZS4NCj4gDQo+ID4gICAgICAgcmV0dXJuIHJjIDwgMCA/IHJjIDogMDsNCj4gPiAg
-fQ0KPiA+IA0KPiA+IEBAIC01MDYsMTggKzUwMiwxNCBAQCBzdGF0aWMgaW50DQo+ID4gbGFuODd4
-eF9jYWJsZV90ZXN0X2dldF9zdGF0dXMoc3RydWN0IHBoeV9kZXZpY2UgKnBoeWRldiwNCj4gPiAN
-Cj4gPiAgc3RhdGljIHN0cnVjdCBwaHlfZHJpdmVyIG1pY3JvY2hpcF90MV9waHlfZHJpdmVyW10g
-PSB7DQo+ID4gICAgICAgew0KPiA+IC0gICAgICAgICAgICAgLnBoeV9pZCAgICAgICAgID0gMHgw
-MDA3YzE1MCwNCj4gPiAtICAgICAgICAgICAgIC5waHlfaWRfbWFzayAgICA9IDB4ZmZmZmZmZjAs
-DQo+ID4gLSAgICAgICAgICAgICAubmFtZSAgICAgICAgICAgPSAiTWljcm9jaGlwIExBTjg3eHgg
-VDEiLA0KPiA+ICsgICAgICAgICAgICAgLnBoeV9pZCAgICAgICAgID0gTEFOODdYWF9QSFlfSUQs
-DQo+ID4gKyAgICAgICAgICAgICAucGh5X2lkX21hc2sgICAgPSBNSUNST0NISVBfUEhZX0lEX01B
-U0ssDQo+IA0KPiAybmQgcGFydCBvZiB0aGUgUEhZIElEIG1hY3Jvcy4NCj4gDQo+ID4gKyAgICAg
-ICAgICAgICAubmFtZSAgICAgICAgICAgPSAiTEFOODd4eCBUMSIsDQo+IA0KPiBBIGNoYW5nZSBp
-biBuYW1lLg0KPiANCj4gPiAgICAgICAgICAgICAgIC5mbGFncyAgICAgICAgICA9IFBIWV9QT0xM
-X0NBQkxFX1RFU1QsDQo+ID4gLQ0KPiA+ICAgICAgICAgICAgICAgLmZlYXR1cmVzICAgICAgID0g
-UEhZX0JBU0lDX1QxX0ZFQVRVUkVTLA0KPiA+IC0NCj4gPiAgICAgICAgICAgICAgIC5jb25maWdf
-aW5pdCAgICA9IGxhbjg3eHhfY29uZmlnX2luaXQsDQo+ID4gLQ0KPiA+ICAgICAgICAgICAgICAg
-LmNvbmZpZ19pbnRyICAgID0gbGFuODd4eF9waHlfY29uZmlnX2ludHIsDQo+ID4gICAgICAgICAg
-ICAgICAuaGFuZGxlX2ludGVycnVwdCA9IGxhbjg3eHhfaGFuZGxlX2ludGVycnVwdCwNCj4gPiAt
-DQo+IA0KPiBXaGl0ZSBzcGFjZSBjaGFuZ2VzLg0KPiANCj4gWW91IGNhbiBhbHNvIHVzZSBQSFlf
-SURfTUFUQ0hfTU9ERUwoKS4NCj4gDQo+ICAgICBBbmRyZXcNClRoYW5rcyBmb3IgdGhlIGNvbW1l
-bnQuIEkgd2lsbCBrZWVwIG9uZSBjaGFuZ2UgcGVyIHBhdGNoIGFuZCBzcGxpdCB0aGlzDQpwYXRj
-aCAmIHJlc2VuZC4NCg==
+Hi Anshuman,
+
+On Wed, Mar 2, 2022 at 10:51 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+> On 3/2/22 12:35 PM, Christophe Leroy wrote:
+> > Le 02/03/2022 à 04:22, Anshuman Khandual a écrit :
+> >> On 3/1/22 1:46 PM, Christophe Leroy wrote:
+> >>> Le 01/03/2022 à 01:31, Russell King (Oracle) a écrit :
+> >>>> On Tue, Mar 01, 2022 at 05:30:41AM +0530, Anshuman Khandual wrote:
+> >>>>> On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
+> >>>>>> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+> >>>>>>> This defines and exports a platform specific custom vm_get_page_prot() via
+> >>>>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> >>>>>>> macros can be dropped which are no longer needed.
+> >>>>>>
+> >>>>>> What I would really like to know is why having to run _code_ to work out
+> >>>>>> what the page protections need to be is better than looking it up in a
+> >>>>>> table.
+> >>>>>>
+> >>>>>> Not only is this more expensive in terms of CPU cycles, it also brings
+> >>>>>> additional code size with it.
+> >>>>>>
+> >>>>>> I'm struggling to see what the benefit is.
+> >>>>>
+> >>>>> Currently vm_get_page_prot() is also being _run_ to fetch required page
+> >>>>> protection values. Although that is being run in the core MM and from a
+> >>>>> platform perspective __SXXX, __PXXX are just being exported for a table.
+> >>>>> Looking it up in a table (and applying more constructs there after) is
+> >>>>> not much different than a clean switch case statement in terms of CPU
+> >>>>> usage. So this is not more expensive in terms of CPU cycles.
+> >>>>
+> >>>> I disagree.
+> >>>
+> >>> So do I.
+> >>>
+> >>>>
+> >>>> However, let's base this disagreement on some evidence. Here is the
+> >>>> present 32-bit ARM implementation:
+> >>>>
+> >>>> 00000048 <vm_get_page_prot>:
+> >>>>         48:       e200000f        and     r0, r0, #15
+> >>>>         4c:       e3003000        movw    r3, #0
+> >>>>                           4c: R_ARM_MOVW_ABS_NC   .LANCHOR1
+> >>>>         50:       e3403000        movt    r3, #0
+> >>>>                           50: R_ARM_MOVT_ABS      .LANCHOR1
+> >>>>         54:       e7930100        ldr     r0, [r3, r0, lsl #2]
+> >>>>         58:       e12fff1e        bx      lr
+> >>>>
+> >>>> That is five instructions long.
+> >>>
+> >>> On ppc32 I get:
+> >>>
+> >>> 00000094 <vm_get_page_prot>:
+> >>>         94: 3d 20 00 00     lis     r9,0
+> >>>                     96: R_PPC_ADDR16_HA     .data..ro_after_init
+> >>>         98: 54 84 16 ba     rlwinm  r4,r4,2,26,29
+> >>>         9c: 39 29 00 00     addi    r9,r9,0
+> >>>                     9e: R_PPC_ADDR16_LO     .data..ro_after_init
+> >>>         a0: 7d 29 20 2e     lwzx    r9,r9,r4
+> >>>         a4: 91 23 00 00     stw     r9,0(r3)
+> >>>         a8: 4e 80 00 20     blr
+> >>>
+> >>>
+> >>>>
+> >>>> Please show that your new implementation is not more expensive on
+> >>>> 32-bit ARM. Please do so by building a 32-bit kernel, and providing
+> >>>> the disassembly.
+> >>>
+> >>> With your series I get:
+> >>>
+> >>> 00000000 <vm_get_page_prot>:
+> >>>      0:     3d 20 00 00     lis     r9,0
+> >>>                     2: R_PPC_ADDR16_HA      .rodata
+> >>>      4:     39 29 00 00     addi    r9,r9,0
+> >>>                     6: R_PPC_ADDR16_LO      .rodata
+> >>>      8:     54 84 16 ba     rlwinm  r4,r4,2,26,29
+> >>>      c:     7d 49 20 2e     lwzx    r10,r9,r4
+> >>>     10:     7d 4a 4a 14     add     r10,r10,r9
+> >>>     14:     7d 49 03 a6     mtctr   r10
+> >>>     18:     4e 80 04 20     bctr
+> >>>     1c:     39 20 03 15     li      r9,789
+> >>>     20:     91 23 00 00     stw     r9,0(r3)
+> >>>     24:     4e 80 00 20     blr
+> >>>     28:     39 20 01 15     li      r9,277
+> >>>     2c:     91 23 00 00     stw     r9,0(r3)
+> >>>     30:     4e 80 00 20     blr
+> >>>     34:     39 20 07 15     li      r9,1813
+> >>>     38:     91 23 00 00     stw     r9,0(r3)
+> >>>     3c:     4e 80 00 20     blr
+> >>>     40:     39 20 05 15     li      r9,1301
+> >>>     44:     91 23 00 00     stw     r9,0(r3)
+> >>>     48:     4e 80 00 20     blr
+> >>>     4c:     39 20 01 11     li      r9,273
+> >>>     50:     4b ff ff d0     b       20 <vm_get_page_prot+0x20>
+> >>>
+> >>>
+> >>> That is definitely more expensive, it implements a table of branches.
+> >>
+> >> Okay, will split out the PPC32 implementation that retains existing
+> >> table look up method. Also planning to keep that inside same file
+> >> (arch/powerpc/mm/mmap.c), unless you have a difference preference.
+> >
+> > My point was not to get something specific for PPC32, but to amplify on
+> > Russell's objection.
+> >
+> > As this is bad for ARM and bad for PPC32, do we have any evidence that
+> > your change is good for any other architecture ?
+> >
+> > I checked PPC64 and there is exactly the same drawback. With the current
+> > implementation it is a small function performing table read then a few
+> > adjustment. After your change it is a bigger function implementing a
+> > table of branches.
+>
+> I am wondering if this would not be the case for any other switch case
+> statement on the platform ? Is there something specific/different just
+> on vm_get_page_prot() implementation ? Are you suggesting that switch
+> case statements should just be avoided instead ?
+>
+> >
+> > So, as requested by Russell, could you look at the disassembly for other
+> > architectures and show us that ARM and POWERPC are the only ones for
+> > which your change is not optimal ?
+>
+> But the primary purpose of this series is not to guarantee optimized
+> code on platform by platform basis, while migrating from a table based
+> look up method into a switch case statement.
+>
+> But instead, the purposes is to remove current levels of unnecessary
+> abstraction while converting a vm_flags access combination into page
+> protection. The switch case statement for platform implementation of
+> vm_get_page_prot() just seemed logical enough. Christoph's original
+> suggestion patch for x86 had the same implementation as well.
+>
+> But if the table look up is still better/preferred method on certain
+> platforms like arm or ppc32, will be happy to preserve that.
+
+I doubt the switch() variant would give better code on any platform.
+
+What about using tables everywhere, using designated initializers
+to improve readability?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

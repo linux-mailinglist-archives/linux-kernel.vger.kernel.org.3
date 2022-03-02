@@ -2,94 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82C04CA21E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76CC4CA21B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240976AbiCBK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S236372AbiCBKZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbiCBK0a (ORCPT
+        with ESMTP id S236253AbiCBKZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:26:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A817AD10D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646216746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fSrRNDpTZsFhlMpsmENClsaKs1lidW/Xhq22SIV8IOg=;
-        b=SGucAioKE2xe2otWSekWafpbw6mtwfHrybJUpLFrF/6qH0YgrELrE7AUO8GJfhEOr1ScXl
-        Jjlf+JsON4qzB57Nr926SVoHcMqIG6jVMDtuzCeL1+jRNpiZfMZpcSZ2qiDJ/b1y7dDlys
-        5ApX39ma5qY89AgnN4x6KyzyNKtq+us=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-96-_QMKm25sPWiww5mBf2CnDQ-1; Wed, 02 Mar 2022 05:25:43 -0500
-X-MC-Unique: _QMKm25sPWiww5mBf2CnDQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E96DA1006AA6;
-        Wed,  2 Mar 2022 10:25:40 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.192.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7AEA77B6F3;
-        Wed,  2 Mar 2022 10:24:58 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] KVM: x86: mmu: trace kvm_mmu_set_spte after the new SPTE was set
-Date:   Wed,  2 Mar 2022 12:24:57 +0200
-Message-Id: <20220302102457.588450-1-mlevitsk@redhat.com>
+        Wed, 2 Mar 2022 05:25:52 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CEBAD101
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:25:08 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id b5so1974171wrr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 02:25:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DKXEJNswJVuDL+USTupC0gsrP+tnzJ6kN2u2U+1FUvw=;
+        b=1uadc+8xwzLc6ZK8m0P37ZJT+uedeMUjCltkPqP1ylyWtgKiGkYLcRu6zJi0OJo8mm
+         j4iOS0r7Xwbo4O39e0yozgYePZsR/KMZSOHyxmx2fnTvxG5kxK9zzTSsSiKuIyv/roWy
+         BgtsZgJ9Cw2Ri9EijxlM7CGz4N1b/dsKVUxuhxszVL0ze8na0blMev93VbomLITA2mwl
+         ZVLOSPpZ4N0d57zQX/IoxnL9a1M6TEb2aXWkKDXEwXD6ctEyLuNGnO3zj2z53p3QKT8A
+         zjqSLSJpNaJ2tc09NNIv1EKzNDFSyzybxdkL0Idm/v1gh+Wv+yE4wSKencIclieBvJ8f
+         01AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DKXEJNswJVuDL+USTupC0gsrP+tnzJ6kN2u2U+1FUvw=;
+        b=QMsJHvQB701pl186boPo6WlLcQUsVNClP3TXH6PQDzAQfPCSXz7YngxzGgGVXJHJ1a
+         mMqkOS0+G68mXusyoia3nx6SK334Ri03LBJaUo2+KbP9s43SxJxw1egJhhjbEqBM8MpZ
+         P8JpKmJUK3Q/2ry1mYq4S13MsAHouQGzZVsNQyFw5g0gdMsH4IsozdJTpsE6MSGI1uDp
+         OhfppowSpV/I6KyAwA3Xw/6dECo4WyNbdKaPk6Q2h842FlTcxtpOSenbizLqew1Qcuih
+         75QvlpDg3jYIoieEGVRD4YKOvjcQwIY/9x+AkRgsD34mrAw5Z9A/X1lV/ZzJuX+xDkmi
+         ZRSg==
+X-Gm-Message-State: AOAM533WvSEmqIurzSPyKEtFpzwvV3+vW4DeyZFnpf+8YS8l+KDMkD/T
+        s93+NdEndrjvrB68xa7apeqmqQ==
+X-Google-Smtp-Source: ABdhPJyX21sYi2BLzXTXHIOIRGn1aBhi3MP5O7ODmfsDwU/tAASzOj3FtCZTJSYmbicFsxAelIcUHg==
+X-Received: by 2002:adf:8b85:0:b0:1ed:b97b:493d with SMTP id o5-20020adf8b85000000b001edb97b493dmr22392634wra.108.1646216706914;
+        Wed, 02 Mar 2022 02:25:06 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:3530:ddb:a61:e8db? ([2001:861:44c0:66c0:3530:ddb:a61:e8db])
+        by smtp.gmail.com with ESMTPSA id q16-20020a056000137000b001f046a21afcsm648621wrz.15.2022.03.02.02.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 02:25:06 -0800 (PST)
+Message-ID: <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
+Date:   Wed, 2 Mar 2022 11:25:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
+ for 8 bit modes
+Content-Language: en-US
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Boddie <paul@boddie.org.uk>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+References: <cover.1645895582.git.hns@goldelico.com>
+ <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
+ <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
+ <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It makes more sense to print new SPTE value than the
-old value.
+H,
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/mmu/mmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 01/03/2022 21:37, H. Nikolaus Schaller wrote:
+> Hi Neil,
+> 
+> 
+>> Am 01.03.2022 um 10:18 schrieb Neil Armstrong <narmstrong@baylibre.com>:
+>>
+>> Hi,
+>>
+>> On 26/02/2022 18:13, H. Nikolaus Schaller wrote:
+>>> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
+>>> introduced a new mechanism to negotiate bus formats between hdmi connectors
+>>> and bridges which is to be used e.g. for the jz4780 based CI20 board.
+>>> In this case dw-hdmi sets up a list of formats in
+>>> dw_hdmi_bridge_atomic_get_output_bus_fmts().
+>>> This includes e.g. MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the CI20 but
+>>> only produces a black screen.
+>>> Analysis revealed an omission in
+>>> Commit 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
+>>> to check for 8 bit with when adding UYVY8 or YUV8 formats.
+>>> This fix is based on the observation that max_bpc = 0 when running this
+>>> function while info->bpc = 8.
+>>
+>> In fact if bpc = 0, it should be considered as 8, so the issue is elsewhere.
+>>
+>>> Adding the proposed patch makes the jz4780/CI20 panel work again with default
+>>> MEDIA_BUS_FMT_RGB888_1X24 mode.
+>>> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
+>>> Fixes: 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
+>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>> ---
+>>>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 10 ++++++----
+>>>   1 file changed, 6 insertions(+), 4 deletions(-)
+>>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>>> index 43e375da131e8..c08e2cc96584c 100644
+>>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>>> @@ -2621,11 +2621,13 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>>>   		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
+>>>   	}
+>>>   -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>>> -		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
+>>> +	if (max_bpc >= 8 && info->bpc >= 8) {
+>>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>>> +			output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
+>>>   -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>>> -		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
+>>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>>> +			output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
+>>> +	}
+>>
+>> It should not select YUV here if it's not possible, so something is wrong.
+>>
+>> Can you check if https://lore.kernel.org/r/20220119123656.1456355-2-narmstrong@baylibre.com fixes this issue instead ?
+> 
+> Well, I had to manually fix it to be appliable to drm-misc/drm-misc-next
+> and specifically:
+> 
+> c03d0b52ff71 ("drm/connector: Fix typo in output format")
+> 
+> My resulting patch is attached.
+> 
+> Unfortunately it did not work.
+> 
+> I added a printk for hdmi->sink_is_hdmi. This returns 1. Which IMHO is to be expected
+> since I am using a HDMI connector and panel... So your patch will still add the UYVY formats.
+> 
+> Either the synposys module inside the jz4780 or the panel does not understand them.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 94f077722b290..0e209f0b2e1d2 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2690,8 +2690,8 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
- 	if (*sptep == spte) {
- 		ret = RET_PF_SPURIOUS;
- 	} else {
--		trace_kvm_mmu_set_spte(level, gfn, sptep);
- 		flush |= mmu_spte_update(sptep, spte);
-+		trace_kvm_mmu_set_spte(level, gfn, sptep);
- 	}
- 
- 	if (wrprot) {
--- 
-2.26.3
+By selecting the UYVY formats, the driver will enable the colorspace converters in the dw-hdmi IP,
+I don't see why it doesn't work here...
+
+There is a bit called `Support Color Space Converter` in config0_id:
+bit	|	Name	|	R/W	|	Desc
+2 	|	csc	| 	R 	|	Indicates if Color Space Conversion block is present
+
+Could you dump all the config0 bits:
+
+=======================><=============================
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 54d8fdad395f..547731482da8 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -3431,6 +3431,7 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+         pdevinfo.id = PLATFORM_DEVID_AUTO;
+
+         config0 = hdmi_readb(hdmi, HDMI_CONFIG0_ID);
++       dev_info(dev, "config0: %x\n", config0);
+         config3 = hdmi_readb(hdmi, HDMI_CONFIG3_ID);
+
+         if (iores && config3 & HDMI_CONFIG3_AHBAUDDMA) {
+=======================><=============================
+
+If this bit is missing, this would explain the black screen.
+
+Neil
+
+> 
+> Here is the EDID. Unfortunately it does not pretty print the extended descriptors for UYVY etc.
+> so that I don't know the exact capabilities of the panel. And what I am not sure is if the
+> jz4780 SoC can convert to UYVY or how it can.
+> 
+> root@letux:~# parse-edid </sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/edid
+> Checksum Correct
+> 
+> Section "Monitor"
+>          Identifier "LEN L1950wD"
+>          ModelName "LEN L1950wD"
+>          VendorName "LEN"
+>          # Monitor Manufactured week 34 of 2011
+>          # EDID version 1.3
+>          # Digital Display
+>          DisplaySize 410 260
+>          Gamma 2.20
+>          Option "DPMS" "true"
+>          Horizsync 30-81
+>          VertRefresh 50-76
+>          # Maximum pixel clock is 140MHz
+>          #Not giving standard mode: 1152x864, 75Hz
+>          #Not giving standard mode: 1280x720, 60Hz
+>          #Not giving standard mode: 1280x1024, 60Hz
+>          #Not giving standard mode: 1280x1024, 60Hz
+>          #Not giving standard mode: 1280x1024, 60Hz
+>          #Not giving standard mode: 1440x900, 60Hz
+>          #Not giving standard mode: 1440x900, 75Hz
+>          #Not giving standard mode: 1920x1080, 60Hz
+> 
+>          #Extension block found. Parsing...
+>          Modeline        "Mode 15" -hsync -vsync
+>          Modeline        "Mode 0" -hsync +vsync
+>          Modeline        "Mode 1" 27.027 1440 1478 1602 1716 480 484 487 525 -hsync -vsync interlace
+>          Modeline        "Mode 2" 27.027 1440 1478 1602 1716 480 484 487 525 -hsync -vsync interlace
+>          Modeline        "Mode 3" 27.027 720 736 798 858 480 489 495 525 -hsync -vsync
+>          Modeline        "Mode 4" 27.027 720 736 798 858 480 489 495 525 -hsync -vsync
+>          Modeline        "Mode 5" 27.000 1440 1464 1590 1728 576 578 581 625 -hsync -vsync interlace
+>          Modeline        "Mode 6" 27.000 1440 1464 1590 1728 576 578 581 625 -hsync -vsync interlace
+>          Modeline        "Mode 7" 27.000 720 732 796 864 576 581 586 625 -hsync -vsync
+>          Modeline        "Mode 8" 27.000 720 732 796 864 576 581 586 625 -hsync -vsync
+>          Modeline        "Mode 9" 74.250 1280 1720 1760 1980 720 725 730 750 +hsync +vsync
+>          Modeline        "Mode 10" 74.250 1280 1390 1420 1650 720 725 730 750 +hsync +vsync
+>          Modeline        "Mode 11" 74.250 1920 2448 2492 2640 1080 1082 1089 1125 +hsync +vsync interlace
+>          Modeline        "Mode 12" 74.250 1920 2008 2052 2200 1080 1082 1087 1125 +hsync +vsync interlace
+>          Modeline        "Mode 13" 148.500 1920 2448 2492 2640 1080 1084 1089 1125 +hsync +vsync
+>          Modeline        "Mode 14" 148.500 1920 2008 2052 2200 1080 1084 1089 1125 +hsync +vsync
+>          Modeline        "Mode 16" +hsync +vsync interlace
+>          Modeline        "Mode 17" +hsync +vsync interlace
+>          Modeline        "Mode 18" +hsync +vsync
+>          Option "PreferredMode" "Mode 15"
+> EndSection
+> root@letux:~# xxd /sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/
+> 00000000: 00ff ffff ffff ff00 30ae 8610 0101 0101  ........0.......
+> 00000010: 2215 0103 8029 1a78 eee5 b5a3 5549 9927  "....).x....UI.'
+> 00000020: 1350 54af ef00 714f 81c0 8180 8180 8180  .PT...qO........
+> 00000030: 9500 950f d1c0 2413 0020 4158 1620 050d  ......$.. AX. ..
+> 00000040: 2300 ffff 0000 001c 0000 00fc 004c 454e  #............LEN
+> 00000050: 204c 3139 3530 7744 0a20 0000 00fd 0032   L1950wD. .....2
+> 00000060: 4c1e 510e 000a 2020 2020 2020 0000 00ff  L.Q...      ....
+> 00000070: 0042 3334 3332 3834 350a 2020 2020 0101  .B3432845.    ..
+> 00000080: 0203 2171 4e06 0702 0315 9611 1213 0414  ..!qN...........
+> 00000090: 051f 9023 0907 0783 0100 0065 030c 0010  ...#.......e....
+> 000000a0: 008c 0ad0 9020 4031 200c 4055 00b9 8821  ..... @1 .@U...!
+> 000000b0: 0000 1801 1d80 1871 1c16 2058 2c25 00b9  .......q.. X,%..
+> 000000c0: 8821 0000 9e01 1d80 d072 1c16 2010 2c25  .!.......r.. .,%
+> 000000d0: 80b9 8821 0000 9e01 1d00 bc52 d01e 20b8  ...!.......R.. .
+> 000000e0: 2855 40b9 8821 0000 1e02 3a80 d072 382d  (U@..!....:..r8-
+> 000000f0: 4010 2c45 80b9 8821 0000 1e00 0000 00d0  @.,E...!........
+> root@letux:~# root@letux:~# dmesg|grep dw.hdmi
+> [    9.622138] dw-hdmi-ingenic 10180000.hdmi: Detected HDMI TX controller v1.31a with HDCP (DWC HDMI 3D TX PHY)
+> [    9.727840] dw-hdmi-ingenic 10180000.hdmi: registered DesignWare HDMI I2C bus driver
+> [   10.103864] dw_hdmi_bridge_atomic_get_output_bus_fmts: hdmi->sink_is_hdmi=1
+> 
+> So please let me know which parameters I should try to printk()...
+> 
+> BR and thanks,
+> Nikolaus
+> 
+> 
+> ------
+> 
+>  From c84a3c4a500684e57b1243fe5386696c48fa1e1b Mon Sep 17 00:00:00 2001
+> From: Neil Armstrong <narmstrong@baylibre.com>
+> Date: Wed, 19 Jan 2022 13:36:56 +0100
+> Subject: [PATCH] drm/bridge: dw-hdmi: filter out YUV output formats when DVI
+> 
+> When the display is not an HDMI sink, only the RGB output format is
+> valid. Thus stop returning YUV output formats when sink is not HDMI.
+> 
+> Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> ---
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 17 +++++++++--------
+>   1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index 43e375da131e8..0ec0cbe448e05 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2538,6 +2538,7 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>          struct drm_connector *conn = conn_state->connector;
+>          struct drm_display_info *info = &conn->display_info;
+>          struct drm_display_mode *mode = &crtc_state->mode;
+> +       struct dw_hdmi *hdmi = bridge->driver_private;
+>          u8 max_bpc = conn_state->max_requested_bpc;
+>          bool is_hdmi2_sink = info->hdmi.scdc.supported ||
+>                               (info->color_formats & DRM_COLOR_FORMAT_YCBCR420);
+> @@ -2564,7 +2565,7 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>           * If the current mode enforces 4:2:0, force the output but format
+>           * to 4:2:0 and do not add the YUV422/444/RGB formats
+>           */
+> -       if (conn->ycbcr_420_allowed &&
+> +       if (hdmi->sink_is_hdmi && conn->ycbcr_420_allowed &&
+>              (drm_mode_is_420_only(info, mode) ||
+>               (is_hdmi2_sink && drm_mode_is_420_also(info, mode)))) {
+>   
+> @@ -2595,36 +2596,36 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>           */
+>   
+>          if (max_bpc >= 16 && info->bpc == 16) {
+> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>                          output_fmts[i++] = MEDIA_BUS_FMT_YUV16_1X48;
+>   
+>                  output_fmts[i++] = MEDIA_BUS_FMT_RGB161616_1X48;
+>          }
+>   
+>          if (max_bpc >= 12 && info->bpc >= 12) {
+> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>                          output_fmts[i++] = MEDIA_BUS_FMT_UYVY12_1X24;
+>   
+> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>                          output_fmts[i++] = MEDIA_BUS_FMT_YUV12_1X36;
+>   
+>                  output_fmts[i++] = MEDIA_BUS_FMT_RGB121212_1X36;
+>          }
+>   
+>          if (max_bpc >= 10 && info->bpc >= 10) {
+> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>                          output_fmts[i++] = MEDIA_BUS_FMT_UYVY10_1X20;
+>   
+> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>                          output_fmts[i++] = MEDIA_BUS_FMT_YUV10_1X30;
+>   
+>                  output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
+>          }
+>   
+> -       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+> +       if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>                  output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
+>   
+> -       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +       if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>                  output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
+>   
+>          /* Default 8bit RGB fallback */
 

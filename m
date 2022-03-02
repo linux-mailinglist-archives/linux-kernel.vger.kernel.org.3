@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AA74CA599
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B104CA59B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiCBNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S237608AbiCBNJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiCBNIX (ORCPT
+        with ESMTP id S232317AbiCBNJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:08:23 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675DF2B24D;
-        Wed,  2 Mar 2022 05:07:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so1786916pjb.0;
-        Wed, 02 Mar 2022 05:07:40 -0800 (PST)
+        Wed, 2 Mar 2022 08:09:18 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8D20F59;
+        Wed,  2 Mar 2022 05:08:35 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bk29so2720803wrb.4;
+        Wed, 02 Mar 2022 05:08:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vy88rPf4HP0qCY7ppcGXjkLJQx9SMGIil+BjWV6/Jao=;
-        b=RbYvGZOEHlCYI4oDWtJXd+49ZvgEU+NXhe/5CMQ3gOY+QwmL8NdlPE+VrYzwz8gKId
-         ismE+esvInxP0L/UqtHVvV/BVfOA7Pdv1hHiFF8glUKrrFz1vjOGTdc5YwesuM1woF/s
-         VkN4oLIvMI/afgTgiq2aBiyuzAg1Qxm7aFulWtq4aaG35ESbP2M/q+NjsAHU8OGlmg4j
-         oXt2Z91eK4JHIZOd0pkLdxfOuRGUvP6i4GVlmTJm+HBl6+NN0iK4XZ6GY4rk2hxKdW9j
-         FtZdiHMa/gLQYosiay4D3RMT9yscSFA/tFleJr7Xm77VTR221vrW2DpMbGbsTAnfb1vV
-         Hmng==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xXlb7cc4EyqnzFw8PQ0fBnQFiOHYPm8hTsgKE/9CO8Q=;
+        b=np8mcRkHHqlMHinc7q2t/2Cpo2vbU8MWB+PuLJ05LpJg3PkpCND2SLdA8+h+nyquwP
+         5Ac60majuASwgCKFMdvHiZ0JIxrhJiDl2NUnqOR54PRxR0ViilucxdQPBYtYYxv41KPW
+         ed1su8/5e5wEAOZRJvbet8i6wZxQQh+13BcUZz1PviZNWQS47DdR6NIwvSZIrJTofUsR
+         AM7naPwKwGkd1MFJbdKJYtujY9wz3+ZF5lcfZAxCaymr1+ICDNoPvD+TgJ331G1JzMVT
+         b0KQyMiuvlaE6N/ndeQmh41u50QdE7chiwnvyFKXbO5NLfvPP2tnExYjQW76N6ZdX4wd
+         vl1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vy88rPf4HP0qCY7ppcGXjkLJQx9SMGIil+BjWV6/Jao=;
-        b=X1HYOX7uuMeVYnXjsrKU4M5meeKc8vN8+MieO2tHuI6Hxko7KzEQrD/7IlhpHSEFVa
-         90LmucWWTSwOmMvSelXrX7JL7ZlZYNjZxarUYKyWtn6NJ9Vh7A09W4EYaRHOuY8OG80n
-         Rm8dP7PPTEsR/nA4h5SCtlSS/w5L3CP6DfSbo0zJmxvXzywjV0oKFLyz9lDQu6jxfv2B
-         jfhMWTzNcT2e6rh67vgTzMsesVWQsgrdzkAt5ePvPDpYhqLuKcV9Y+ZRfkjlM9zWO4pz
-         U7mFRMdGBOp6xaKeiIq7YwwCZpx9jlELdujZImwtxz0dzZSSpNPruYGnRI1eD/9+f9Ph
-         DRvA==
-X-Gm-Message-State: AOAM533GsLE8vKRhSG3VGtVsjkRvcIVezPfkd6aFLu77qWlOWx5cuPrC
-        Hue3BEVo5jABciuOYVm3eTY=
-X-Google-Smtp-Source: ABdhPJxZ2jUdDyuL/30KkHL1bbiJEz0vZKIHg09OGKTHoPskVjy65Jtp/4Sxps/loMNSc8Hn5w6Rhw==
-X-Received: by 2002:a17:902:d4cc:b0:151:3857:817b with SMTP id o12-20020a170902d4cc00b001513857817bmr25133745plg.139.1646226459799;
-        Wed, 02 Mar 2022 05:07:39 -0800 (PST)
-Received: from 9a2d8922b8f1 ([122.161.53.154])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm20536758pfu.120.2022.03.02.05.07.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xXlb7cc4EyqnzFw8PQ0fBnQFiOHYPm8hTsgKE/9CO8Q=;
+        b=YVhWmStW704j/+7pA2RukzDFO8dCQ+CWG2XNxegsxG1G4erMr3Kp2saLa9mcVhjPfm
+         dbumB6s8xofE06WtwYvXuqg5TmahsDFP3C+sS/2vUM7aTe0QPhkjkxA5BW9w/DzMT81P
+         qAyQO0QiWY3dmWHUUo3t1u+cDRHkUwtr3Ye4B6O0jQ9ydQU1q4oGsfrvI3pEX26eWQG/
+         N8AheBvMMZyznECCwv2gfsPH/eiaZo7D8mXGRv8e7PSG8b6Vp56uTzRn/DDJyllwluaV
+         AnwwX1sZueDpbb6lZ2v3EdONmFTXdyw2AkYJUOGoNC3cSxqCLZF4mAau7LE7Jxf+T93B
+         C5Cg==
+X-Gm-Message-State: AOAM530S1V9M0gMxzpgIFSfGDX4alcXoHksryjjLKyqNcIoeIytX/MEj
+        0YJp9S1gympDm2daaaUvTS3vGtQwdcs=
+X-Google-Smtp-Source: ABdhPJzuQN521B1SFDVZQJm/ctLkm2aM+RnrCXlzS8OE0PrnAn77bMy5SiW3lTIfXcbxYhVHtuLpXw==
+X-Received: by 2002:adf:d1cc:0:b0:1f0:4570:bf75 with SMTP id b12-20020adfd1cc000000b001f04570bf75mr1502111wrd.656.1646226513863;
+        Wed, 02 Mar 2022 05:08:33 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g17-20020a5d4891000000b001e74e998bf9sm16698803wrq.33.2022.03.02.05.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 05:07:39 -0800 (PST)
-Date:   Wed, 2 Mar 2022 18:37:34 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: ns2: Fix spi-cpol and spi-cpha property
-Message-ID: <20220302130734.GA2026@9a2d8922b8f1>
-References: <20220228110903.97478-1-singh.kuldeep87k@gmail.com>
- <bdb6a903-6efc-e7ff-3a88-70ad9fe3fc09@gmail.com>
+        Wed, 02 Mar 2022 05:08:33 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] power: supply: ab8500: fix a handful of spelling mistakes
+Date:   Wed,  2 Mar 2022 13:08:32 +0000
+Message-Id: <20220302130832.1076437-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bdb6a903-6efc-e7ff-3a88-70ad9fe3fc09@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,40 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 01:31:50PM -0800, Florian Fainelli wrote:
-> 
-> 
-> On 2/28/2022 3:09 AM, Kuldeep Singh wrote:
-> > Broadcom ns2 platform has spi-cpol and spi-cpho properties set
-> > incorrectly. As per spi-slave-peripheral-prop.yaml, these properties are
-> > of flag or boolean type and not integer type. Fix the values.
-> > 
-> > CC: Ray Jui <rjui@broadcom.com>
-> > CC: Scott Branden <sbranden@broadcom.com>
-> > CC: Florian Fainelli <f.fainelli@gmail.com>
-> > Fixes: d69dbd9f41a7c (arm64: dts: Add ARM PL022 SPI DT nodes for NS2)
-> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> > ---
-> > Hi,
-> > 
-> > This patch is on top of git://github.com/broadcom/cygnus-linux.git,
-> > master branch which is not updated since 4.14 kernel.
-> > Hope the reference is correct. Thanks!
-> 
-> The reference is not correct, but it applied cleanly anyway. The correct
-> reference would have been the github.com/Broadcom/stblinux
-> refs/heads/devicetree-arm64/next
+There are a few spelling mistakes in comments and in a dev_err
+error message. Fix them.
 
-Thanks Florian for mentioning.
-I took a quick look at MAINTAINERS file before sending patch and found
-cygnus-linux repo as base reference. It seems the correct reference is
-not updated in MAINTAINERS file.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/power/supply/ab8500_chargalg.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> 
-> Applied, thanks!
-
-Thanks!
-
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index c9c7f7028af6..8842e51b8b1c 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -287,7 +287,7 @@ ab8500_chargalg_safety_timer_expired(struct hrtimer *timer)
+  * the maintenance timer
+  * @timer:     pointer to the timer structure
+  *
+- * This function gets called when the maintenence timer
++ * This function gets called when the maintenance timer
+  * expires
+  */
+ static enum hrtimer_restart
+@@ -431,7 +431,7 @@ static void ab8500_chargalg_stop_safety_timer(struct ab8500_chargalg *di)
+ /**
+  * ab8500_chargalg_start_maintenance_timer() - Start charging maintenance timer
+  * @di:		pointer to the ab8500_chargalg structure
+- * @duration:	duration of ther maintenance timer in minutes
++ * @duration:	duration of the maintenance timer in minutes
+  *
+  * The maintenance timer is used to maintain the charge in the battery once
+  * the battery is considered full. These timers are chosen to match the
+@@ -1271,7 +1271,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
+ 				STATE_SAFETY_TIMER_EXPIRED_INIT);
+ 	}
+ 	/*
+-	 * Check if any interrupts has occured
++	 * Check if any interrupts has occurred
+ 	 * that will prevent us from charging
+ 	 */
+ 
+@@ -1525,7 +1525,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
+ 				       bi->alert_high_temp_charge_voltage_uv,
+ 				       bi->alert_high_temp_charge_current_ua);
+ 		} else {
+-			dev_err(di->dev, "neither low or high temp event occured\n");
++			dev_err(di->dev, "neither low or high temp event occurred\n");
+ 			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
+ 			break;
+ 		}
 -- 
-Best Regards
-Kuldeep
+2.34.1
+

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB684CB25E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCE04CB264
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiCBWdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S230370AbiCBWeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiCBWcy (ORCPT
+        with ESMTP id S229453AbiCBWd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:32:54 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F1EA747;
-        Wed,  2 Mar 2022 14:32:10 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id f18so3077949qtb.3;
-        Wed, 02 Mar 2022 14:32:10 -0800 (PST)
+        Wed, 2 Mar 2022 17:33:58 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE0D4F45C;
+        Wed,  2 Mar 2022 14:33:14 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id v5so2580012qkj.4;
+        Wed, 02 Mar 2022 14:33:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=5wkcZfN4pZ3a3l+3rbDL3hrP2CqpjYo6641YbuD1Z7Y=;
-        b=VL8GKslkQfyhvjQaT0mMN7BaIwmwFq6sacRCmQHljoQBA+THJ2vLpspjYcX9md1xBh
-         7Lx71zUGLAqELrHktKtYMZ6c5rddsL/B6uzoCbrYu+ZgogUpnaN090340zyTGohsd7uf
-         8kWEeBScAb+bXOLZWfG7EA2lSEpJzE2Vs4WjM=
+        bh=MH2CJfGKAeTvDpXrtXLMMm+AC8F6kORH3TEKSbCrNfI=;
+        b=RKeNmy3FgK0W71enFNR21BoAMLPgQXHsfgsQCPyNwyuvfc7MZfNodSByaq0Xp2JeOP
+         tf5cFIpBZ6//AkroEjrR/w9M87A3MtinzkU6NksETqZj3V63/skTEg0IrWKa/DdihjUM
+         A2ac1oIm9AhN8QgbHXUX9hs/Ta4d9tz0s/WAU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5wkcZfN4pZ3a3l+3rbDL3hrP2CqpjYo6641YbuD1Z7Y=;
-        b=M6bShvz7WAVy+Wz/K0puFguUKCUDV2rg0h0QzPfPPJtGISfduPtfanDhTMucPG7t+G
-         zRyk/5/ZlkaFB/soVhJV3yiC/UAVWUfZaHPadwJYeBNbVpdr4bJ3q932oCZVGGtzN54l
-         gop5qRJRoAAu0I3UzXYNcSD7p63FiFEFO7LZ2q113G59aawzS6l93IsFt5Ah6uIiTH77
-         1yG7v9G1ElKUMNzlGC0um4eG/ep8jh2x4fH/iBodadngq1UDi4RC1z7zHZYv3/RYIrUo
-         03b91iqakoJarxt0oXmwD/0VOtq8j7R8u7MWJp0jhqUdobpcRmKV+ZNI8Xv8CbF6u2pJ
-         u8sA==
-X-Gm-Message-State: AOAM533j1W+rUDsTyKEvke6CUcjTcL3+Q6E8pI0HxB1Vc1EGVNdOEYRF
-        o66LRfzRknOgxzyT1llfDczzaTxdyJ7byiWGvGw=
-X-Google-Smtp-Source: ABdhPJzK4E9ZGkEhZzJG/1AYJMAeIbckwug2MSrPNlKv7JtSbd1wBW8lAKw6pABzthZinle3fGhjVs7GZ4i+xiYUEws=
-X-Received: by 2002:ac8:5d89:0:b0:2df:f357:c681 with SMTP id
- d9-20020ac85d89000000b002dff357c681mr18831790qtx.475.1646260329845; Wed, 02
- Mar 2022 14:32:09 -0800 (PST)
+        bh=MH2CJfGKAeTvDpXrtXLMMm+AC8F6kORH3TEKSbCrNfI=;
+        b=6mRQY/espVYJBbUDhVgXKRV1zrJrY+9xTWwL9RnmFCjuO9sgFgkXPe/ZcGurydP1/G
+         y+/exoCl7hjZefbDupHayEiTZYjdMwdUlZTYHqyMBl1OCRLTxL441qyGCXzlIEOOHEV0
+         08gtVQQnRWcOhj94CPqB4dflVGDcIkwyGrDb0MwOmLNbqd3I43hvTlg1rykxLdXvBfTw
+         92Gmq/Yf+lxgbfjQHOeimAoIWATZmTP4ncm2ZGWZYcSwwVIv6GhRuYFi+GiculV2bN3J
+         SNiTbeu6cDGJJxSqtdMC0CphhzrAILi1qeyF4/hzD0qMsr9mS1W+Ar9LZDvRSQyhbcwh
+         TePA==
+X-Gm-Message-State: AOAM5317+yejw+FLV2d5KK/VK3YFyUUapSa38PYE62MJurm1WHUUiuHP
+        5LY+eZ/uK8oCahKPB4KD9E12vbNAwLv9Y6yietM=
+X-Google-Smtp-Source: ABdhPJyEPtu3slh8282TJBc0g7ayy9DHHSl7hyRSC0WrVkNRJQUeSH83zE/yVMt2TqYx5LcoPN0nxADhKTQ6LJ7k4ss=
+X-Received: by 2002:a37:f903:0:b0:648:ca74:b7dc with SMTP id
+ l3-20020a37f903000000b00648ca74b7dcmr17319869qkj.666.1646260393417; Wed, 02
+ Mar 2022 14:33:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-7-clg@kaod.org>
-In-Reply-To: <20220302173114.927476-7-clg@kaod.org>
+References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-9-clg@kaod.org>
+In-Reply-To: <20220302173114.927476-9-clg@kaod.org>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Mar 2022 22:31:57 +0000
-Message-ID: <CACPK8XcAaQWdNqEJ3f2ko0wCuAwxptkY2EncV7A2TouWzd8cWA@mail.gmail.com>
-Subject: Re: [PATCH v2 06/10] spi: aspeed: Adjust direct mapping to device size
+Date:   Wed, 2 Mar 2022 22:33:00 +0000
+Message-ID: <CACPK8XeA9MUg-Ai4XMTRDDEK52UFHupAFcBTCN7ZhSHZOfTaBg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/10] spi: aspeed: Add support for the AST2400 SPI controller
 To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
 Cc:     linux-spi@vger.kernel.org,
         linux-mtd <linux-mtd@lists.infradead.org>,
@@ -80,144 +80,135 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, 2 Mar 2022 at 17:31, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
 >
-> The segment registers of the FMC/SPI controllers provide a way to
-> configure the mapping window of the flash device contents on the AHB
-> bus. Adjust this window to the size of the spi-mem mapping.
+> Extend the driver for the AST2400 SPI Flash Controller (SPI). This
+> controller has a slightly different interface which requires
+> adaptation of the 4B handling. Summary of features :
 >
-> Things get more complex with multiple devices. The driver needs to
-> also adjust the window of the next device to make sure that there is
-> no overlap, even if there is no available device. The proposal below
-> is not perfect but it is covering all the cases we have seen on
-> different boards with one and two devices on the same bus.
+>    . host Firmware
+>    . 1 chip select pin (CE0)
+>    . slightly different register set, between AST2500 and the legacy
+>      controller
+>    . no segment registers
+>    . single, dual mode.
 >
 > Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
 
 Reviewed-by: Joel Stanley <joel@jms.id.au>
 
 > ---
->  drivers/spi/spi-aspeed-smc.c | 88 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
+>  drivers/spi/spi-aspeed-smc.c | 33 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index b4854b521477..974ab215ec34 100644
+> index e133984d3c95..8c6d7f79d97f 100644
 > --- a/drivers/spi/spi-aspeed-smc.c
 > +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -405,6 +405,92 @@ static int aspeed_spi_chip_set_default_window(struct=
- aspeed_spi_chip *chip)
->         return chip->ahb_window_size ? 0 : -1;
+> @@ -32,6 +32,7 @@
+>  #define   CTRL_IO_DUAL_DATA            BIT(29)
+>  #define   CTRL_IO_QUAD_DATA            BIT(30)
+>  #define   CTRL_COMMAND_SHIFT           16
+> +#define   CTRL_IO_ADDRESS_4B           BIT(13) /* AST2400 SPI only */
+>  #define   CTRL_IO_DUMMY_SET(dummy)                                     \
+>         (((((dummy) >> 2) & 0x1) << 14) | (((dummy) & 0x3) << 6))
+>  #define   CTRL_CE_STOP_ACTIVE          BIT(2)
+> @@ -272,6 +273,8 @@ static bool aspeed_spi_supports_op(struct spi_mem *me=
+m, const struct spi_mem_op
+>         return spi_mem_default_supports_op(mem, op);
 >  }
 >
-> +static int aspeed_spi_set_window(struct aspeed_spi *aspi,
-> +                                const struct aspeed_spi_window *win)
-> +{
-> +       u32 start =3D aspi->ahb_base_phy + win->offset;
-> +       u32 end =3D start + win->size;
-> +       void __iomem *seg_reg =3D aspi->regs + CE0_SEGMENT_ADDR_REG + win=
-->cs * 4;
-> +       u32 seg_val_backup =3D readl(seg_reg);
-> +       u32 seg_val =3D aspi->data->segment_reg(aspi, start, end);
+> +static const struct aspeed_spi_data ast2400_spi_data;
 > +
-> +       if (seg_val =3D=3D seg_val_backup)
+>  static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_m=
+em_op *op)
+>  {
+>         struct aspeed_spi *aspi =3D spi_controller_get_devdata(mem->spi->=
+master);
+> @@ -301,6 +304,9 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem,=
+ const struct spi_mem_op *o
+>                         addr_mode |=3D (0x11 << chip->cs);
+>                 else
+>                         addr_mode &=3D ~(0x11 << chip->cs);
+> +
+> +               if (op->addr.nbytes =3D=3D 4 && chip->aspi->data =3D=3D &=
+ast2400_spi_data)
+> +                       ctl_val |=3D CTRL_IO_ADDRESS_4B;
+>         }
+>
+>         if (op->dummy.buswidth && op->dummy.nbytes)
+> @@ -392,7 +398,13 @@ static int aspeed_spi_chip_set_default_window(struct=
+ aspeed_spi_chip *chip)
+>         struct aspeed_spi_window windows[ASPEED_SPI_MAX_NUM_CS] =3D { 0 }=
+;
+>         struct aspeed_spi_window *win =3D &windows[chip->cs];
+>
+> -       aspeed_spi_get_windows(aspi, windows);
+> +       /* No segment registers for the AST2400 SPI controller */
+> +       if (aspi->data =3D=3D &ast2400_spi_data) {
+> +               win->offset =3D 0;
+> +               win->size =3D aspi->ahb_window_size;
+> +       } else {
+> +               aspeed_spi_get_windows(aspi, windows);
+> +       }
+>
+>         chip->ahb_base =3D aspi->ahb_base + win->offset;
+>         chip->ahb_window_size =3D win->size;
+> @@ -455,6 +467,10 @@ static int aspeed_spi_chip_adjust_window(struct aspe=
+ed_spi_chip *chip,
+>         struct aspeed_spi_window *win =3D &windows[chip->cs];
+>         int ret;
+>
+> +       /* No segment registers for the AST2400 SPI controller */
+> +       if (aspi->data =3D=3D &ast2400_spi_data)
 > +               return 0;
 > +
-> +       writel(seg_val, seg_reg);
+>         /*
+>          * Due to an HW issue on the AST2500 SPI controller, the CE0
+>          * window size should be smaller than the maximum 128MB.
+> @@ -539,6 +555,12 @@ static int aspeed_spi_dirmap_create(struct spi_mem_d=
+irmap_desc *desc)
+>                 else
+>                         addr_mode &=3D ~(0x11 << chip->cs);
+>                 writel(addr_mode, aspi->regs + CE_CTRL_REG);
 > +
-> +       /*
-> +        * Restore initial value if something goes wrong else we could
-> +        * loose access to the chip.
-> +        */
-> +       if (seg_val !=3D readl(seg_reg)) {
-> +               dev_err(aspi->dev, "CE%d invalid window [ 0x%.8x - 0x%.8x=
- ] %dMB",
-> +                       win->cs, start, end - 1, win->size >> 20);
-> +               writel(seg_val_backup, seg_reg);
-> +               return -EIO;
-> +       }
-> +
-> +       if (win->size)
-> +               dev_dbg(aspi->dev, "CE%d new window [ 0x%.8x - 0x%.8x ] %=
-dMB",
-> +                       win->cs, start, end - 1,  win->size >> 20);
-> +       else
-> +               dev_dbg(aspi->dev, "CE%d window closed", win->cs);
-> +
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Yet to be done when possible :
-> + * - Align mappings on flash size (we don't have the info)
-> + * - ioremap each window, not strictly necessary since the overall windo=
-w
-> + *   is correct.
-> + */
-> +static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
-> +                                        u32 local_offset, u32 size)
-> +{
-> +       struct aspeed_spi *aspi =3D chip->aspi;
-> +       struct aspeed_spi_window windows[ASPEED_SPI_MAX_NUM_CS] =3D { 0 }=
-;
-> +       struct aspeed_spi_window *win =3D &windows[chip->cs];
-> +       int ret;
-> +
-> +       aspeed_spi_get_windows(aspi, windows);
-> +
-> +       /* Adjust this chip window */
-> +       win->offset +=3D local_offset;
-> +       win->size =3D size;
-> +
-> +       if (win->offset + win->size > aspi->ahb_window_size) {
-> +               win->size =3D aspi->ahb_window_size - win->offset;
-> +               dev_warn(aspi->dev, "CE%d window resized to %dMB", chip->=
-cs, win->size >> 20);
-> +       }
-> +
-> +       ret =3D aspeed_spi_set_window(aspi, win);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Update chip mapping info */
-> +       chip->ahb_base =3D aspi->ahb_base + win->offset;
-> +       chip->ahb_window_size =3D win->size;
-> +
-> +       /*
-> +        * Also adjust next chip window to make sure that it does not
-> +        * overlap with the current window.
-> +        */
-> +       if (chip->cs < aspi->data->max_cs - 1) {
-> +               struct aspeed_spi_window *next =3D &windows[chip->cs + 1]=
-;
-> +
-> +               /* Change offset and size to keep the same end address */
-> +               if ((next->offset + next->size) > (win->offset + win->siz=
-e))
-> +                       next->size =3D (next->offset + next->size) - (win=
-->offset + win->size);
-> +               else
-> +                       next->size =3D 0;
-> +               next->offset =3D win->offset + win->size;
-> +
-> +               aspeed_spi_set_window(aspi, next);
-> +       }
-> +       return 0;
-> +}
-> +
->  static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
->  {
->         struct aspeed_spi *aspi =3D spi_controller_get_devdata(desc->mem-=
->spi->master);
-> @@ -419,6 +505,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_di=
-rmap_desc *desc)
->         if (op->data.dir !=3D SPI_MEM_DATA_IN)
->                 return -EOPNOTSUPP;
+> +               /* AST2400 SPI controller sets 4BYTE address mode in
+> +                * CE0 Control Register
+> +                */
+> +               if (op->addr.nbytes =3D=3D 4 && chip->aspi->data =3D=3D &=
+ast2400_spi_data)
+> +                       ctl_val |=3D CTRL_IO_ADDRESS_4B;
+>         }
 >
-> +       aspeed_spi_chip_adjust_window(chip, desc->info.offset, desc->info=
-.length);
+>         /* READ mode is the controller default setting */
+> @@ -805,6 +827,14 @@ static const struct aspeed_spi_data ast2400_fmc_data=
+ =3D {
+>         .segment_reg   =3D aspeed_spi_segment_reg,
+>  };
+>
+> +static const struct aspeed_spi_data ast2400_spi_data =3D {
+> +       .max_cs        =3D 1,
+> +       .hastype       =3D false,
+> +       .we0           =3D 0,
+> +       .ctl0          =3D 0x04,
+> +       /* No segment registers */
+> +};
 > +
->         if (desc->info.length > chip->ahb_window_size)
->                 dev_warn(aspi->dev, "CE%d window (%dMB) too small for map=
-ping",
->                          chip->cs, chip->ahb_window_size >> 20);
+>  static const struct aspeed_spi_data ast2500_fmc_data =3D {
+>         .max_cs        =3D 3,
+>         .hastype       =3D true,
+> @@ -849,6 +879,7 @@ static const struct aspeed_spi_data ast2600_spi_data =
+=3D {
+>
+>  static const struct of_device_id aspeed_spi_matches[] =3D {
+>         { .compatible =3D "aspeed,ast2400-fmc", .data =3D &ast2400_fmc_da=
+ta },
+> +       { .compatible =3D "aspeed,ast2400-spi", .data =3D &ast2400_spi_da=
+ta },
+>         { .compatible =3D "aspeed,ast2500-fmc", .data =3D &ast2500_fmc_da=
+ta },
+>         { .compatible =3D "aspeed,ast2500-spi", .data =3D &ast2500_spi_da=
+ta },
+>         { .compatible =3D "aspeed,ast2600-fmc", .data =3D &ast2600_fmc_da=
+ta },
 > --
 > 2.34.1
 >

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6BE4CA590
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C384CA58F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242101AbiCBNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S242060AbiCBNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242044AbiCBNE7 (ORCPT
+        with ESMTP id S242040AbiCBNE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:04:59 -0500
+        Wed, 2 Mar 2022 08:04:58 -0500
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47020C2483;
-        Wed,  2 Mar 2022 05:04:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2365BC2E40;
+        Wed,  2 Mar 2022 05:04:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646226256; x=1677762256;
+  t=1646226255; x=1677762255;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=zRkmD/3/0Ciauk5yzlPVMvJbgpl1+ykhnwt0BbO+vNA=;
-  b=rsesroQ9HOmnLBiIjdqwcSobuBDd0OSvefEVU+IV7c4lh7jezOt1UI3a
-   fQtn+b8KCChIZMEN4WABEjpJ2iLpbGO6oXzbc6Fhv3IMxuqv4U6JqVbuF
-   y/xv8U9OhLpp0sd1KStxzA5Lg+OaV1K3QMOZa1EMzdZprIBNSydm0PM+t
-   Q=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 Mar 2022 05:04:16 -0800
+  bh=4sywxk01cEBaroiqrhseZzU7BYxb6vKODGzjJcoNpM4=;
+  b=R2VBqqSz7t6L/7wzFSfaDrUFVep1j6Wr3eZoNHCJ884MM0DktN+kmgso
+   +ioaPMSqI/h9zSjBz/z8RkbS5Wn6Vuck/+TkvQt+n98ZNkjifcgpQv7ak
+   TH8ayBoKnXqUvwqycQQinkt+OnPfIyDSz5nALASOMvtIX+rd6WTsgWfrg
+   k=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 02 Mar 2022 05:04:14 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:14 -0800
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:13 -0800
 X-QCInternal: smtphost
 Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:33:52 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:33:53 +0530
 Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id 39B36587B; Wed,  2 Mar 2022 18:33:51 +0530 (IST)
+        id B235E5881; Wed,  2 Mar 2022 18:33:52 +0530 (IST)
 From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 To:     adrian.hunter@intel.com, quic_riteshh@quicinc.com,
         asutoshd@quicinc.com, ulf.hansson@linaro.org, agross@kernel.org,
@@ -46,9 +46,9 @@ Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
         Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
         Liangliang Lu <quic_luliang@quicinc.com>,
         "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH V4 1/7] mmc: core: Capture eMMC and SD card errors
-Date:   Wed,  2 Mar 2022 18:33:41 +0530
-Message-Id: <1646226227-32429-2-git-send-email-quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V4 2/7] mmc: sdhci: Capture eMMC and SD card errors
+Date:   Wed,  2 Mar 2022 18:33:42 +0530
+Message-Id: <1646226227-32429-3-git-send-email-quic_c_sbhanu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
 References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
@@ -68,78 +68,135 @@ This is useful for debug and testing.
 Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
 Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
 Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
 Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 ---
- drivers/mmc/core/core.c  |  6 ++++++
- include/linux/mmc/host.h | 23 +++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ drivers/mmc/host/sdhci.c | 52 +++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 40 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 368f104..f3679ed 100644
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -2242,6 +2242,12 @@ void mmc_rescan(struct work_struct *work)
- 		if (freqs[i] <= host->f_min)
- 			break;
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index 07c6da1..741fb06 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -3159,6 +3159,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
+ 	spin_lock_irqsave(&host->lock, flags);
+ 
+ 	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
+ 		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
+ 		       mmc_hostname(host->mmc));
+ 		sdhci_dumpregs(host);
+@@ -3181,6 +3182,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
+ 
+ 	if (host->data || host->data_cmd ||
+ 	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
+ 		pr_err("%s: Timeout waiting for hardware interrupt.\n",
+ 		       mmc_hostname(host->mmc));
+ 		sdhci_dumpregs(host);
+@@ -3240,11 +3242,15 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+ 
+ 	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
+ 		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
+-		if (intmask & SDHCI_INT_TIMEOUT)
++		if (intmask & SDHCI_INT_TIMEOUT) {
+ 			host->cmd->error = -ETIMEDOUT;
+-		else
++			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
++		} else {
+ 			host->cmd->error = -EILSEQ;
+-
++			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
++					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
++				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
++		}
+ 		/* Treat data command CRC error the same as data CRC error */
+ 		if (host->cmd->data &&
+ 		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
+@@ -3265,6 +3271,7 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+ 		int err = (auto_cmd_status & SDHCI_AUTO_CMD_TIMEOUT) ?
+ 			  -ETIMEDOUT :
+ 			  -EILSEQ;
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_AUTO_CMD);
+ 
+ 		if (sdhci_auto_cmd23(host, mrq)) {
+ 			mrq->sbc->error = err;
+@@ -3342,6 +3349,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+ 			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 				host->data_cmd = NULL;
+ 				data_cmd->error = -ETIMEDOUT;
++				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
+ 				__sdhci_finish_mrq(host, data_cmd->mrq);
+ 				return;
+ 			}
+@@ -3375,18 +3383,25 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+ 		return;
  	}
-+
-+	/*
-+	 * Ignore the command timeout errors observed during
-+	 * the card init as those are excepted.
-+	 */
-+	host->err_stats[MMC_ERR_CMD_TIMEOUT] = 0;
- 	mmc_release_host(host);
  
-  out:
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index 7afb57c..3b7f1e5 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -93,6 +93,23 @@ struct mmc_clk_phase_map {
+-	if (intmask & SDHCI_INT_DATA_TIMEOUT)
++	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 		host->data->error = -ETIMEDOUT;
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
++	}
+ 	else if (intmask & SDHCI_INT_DATA_END_BIT)
+ 		host->data->error = -EILSEQ;
+ 	else if ((intmask & SDHCI_INT_DATA_CRC) &&
+ 		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
+-			!= MMC_BUS_TEST_R)
++			!= MMC_BUS_TEST_R) {
+ 		host->data->error = -EILSEQ;
++		if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
++				host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
++			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
++	}
+ 	else if (intmask & SDHCI_INT_ADMA_ERROR) {
+ 		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
+ 		       intmask);
+ 		sdhci_adma_show_error(host);
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
+ 		host->data->error = -EIO;
+ 		if (host->ops->adma_workaround)
+ 			host->ops->adma_workaround(host, intmask);
+@@ -3905,20 +3920,33 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+ 	if (!host->cqe_on)
+ 		return false;
  
- struct mmc_host;
+-	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
++	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
+ 		*cmd_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_TIMEOUT)
++		if (intmask & SDHCI_INT_CRC) {
++			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
++					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
++				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
++		}
++	} else if (intmask & SDHCI_INT_TIMEOUT) {
+ 		*cmd_error = -ETIMEDOUT;
+-	else
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
++	} else
+ 		*cmd_error = 0;
  
-+enum mmc_err_stat {
-+	MMC_ERR_CMD_TIMEOUT,
-+	MMC_ERR_CMD_CRC,
-+	MMC_ERR_DAT_TIMEOUT,
-+	MMC_ERR_DAT_CRC,
-+	MMC_ERR_AUTO_CMD,
-+	MMC_ERR_ADMA,
-+	MMC_ERR_TUNING,
-+	MMC_ERR_CMDQ_RED,
-+	MMC_ERR_CMDQ_GCE,
-+	MMC_ERR_CMDQ_ICCE,
-+	MMC_ERR_REQ_TIMEOUT,
-+	MMC_ERR_CMDQ_REQ_TIMEOUT,
-+	MMC_ERR_ICE_CFG,
-+	MMC_ERR_MAX,
-+};
-+
- struct mmc_host_ops {
- 	/*
- 	 * It is optional for the host to implement pre_req and post_req in
-@@ -500,6 +517,7 @@ struct mmc_host {
+-	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
++	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
+ 		*data_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
++		if (intmask & SDHCI_INT_DATA_CRC) {
++			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
++					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
++				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
++		}
++	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 		*data_error = -ETIMEDOUT;
+-	else if (intmask & SDHCI_INT_ADMA_ERROR)
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
++	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+ 		*data_error = -EIO;
+-	else
++		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
++	} else
+ 		*data_error = 0;
  
- 	/* Host Software Queue support */
- 	bool			hsq_enabled;
-+	u32                     err_stats[MMC_ERR_MAX];
- 
- 	unsigned long		private[] ____cacheline_aligned;
- };
-@@ -635,6 +653,11 @@ static inline enum dma_data_direction mmc_get_dma_dir(struct mmc_data *data)
- 	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
- }
- 
-+static inline void mmc_debugfs_err_stats_inc(struct mmc_host *host,
-+		enum mmc_err_stat stat) {
-+	host->err_stats[stat] += 1;
-+}
-+
- int mmc_send_tuning(struct mmc_host *host, u32 opcode, int *cmd_error);
- int mmc_send_abort_tuning(struct mmc_host *host, u32 opcode);
- int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd);
+ 	/* Clear selected interrupts. */
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
 of Code Aurora Forum, hosted by The Linux Foundation

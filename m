@@ -2,97 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3604CAB28
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E01D4CAB36
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243307AbiCBRJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S243681AbiCBRMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbiCBRJw (ORCPT
+        with ESMTP id S243755AbiCBRLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:09:52 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56C72A24D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:09:08 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id h16-20020a056902009000b00628a70584b2so1499366ybs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:09:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ZMpzNEO4OPsp548pYzGhk7wZS3nBzSDrcI4nxyW6tZM=;
-        b=aiIy58X8kGzp5JdrFAHj8izY/rdF4BudQOUeB5/s3q4lshKXZ8omiY5VgIxx1xhf4Q
-         dL4vmHW8ZXhN7rL9CYSUcnfn6JmdPeZOm0gq2PBtrVRbSuGpUhOtGZG3N2eKrLAKmSAR
-         wWhWGgSCdOTafxyzWhmfnjnvO5aWcs15wKB4QVsUrdYVnaa9lYECPBmn9dahI2ohVyBw
-         JZx+NG4w2d7VMBIOlTGPDcJSKtUIJaQ06z7RksYPil+b27jX2AhwrL6zQ9HN8f5XxQDF
-         miXmPk/SGZHevMAarSD1RaPCIAyT8S2Pb1IC+5hY6XVK2bINUpvFjJjMymgqXMaFtds1
-         obUA==
+        Wed, 2 Mar 2022 12:11:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC370CF387
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:10:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646241055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OCk0IGN+JSNCGOmZy65+tm/Nx0eAS27c5ZIr+XIGJxc=;
+        b=ec047Mgd8dCtj7whfviaju5Bc7Xm2i+mqXiMsVCTE+6PGE51n613cc3B8TWhiGK4OAIxny
+        Fn4PsduDQSW59jprGQvhP4j1tILupWaaOjwX0nlFwEngiVzzIzWznOSDCA8wd40Hzwtbe3
+        lYyrQd3lfg5KrGY/Xy+ZfDI871v+2L4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-244-zU964_kyOcWoKoHNUGH9aA-1; Wed, 02 Mar 2022 12:10:54 -0500
+X-MC-Unique: zU964_kyOcWoKoHNUGH9aA-1
+Received: by mail-wr1-f71.google.com with SMTP id o9-20020adfca09000000b001ea79f7edf8so862717wrh.16
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:10:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ZMpzNEO4OPsp548pYzGhk7wZS3nBzSDrcI4nxyW6tZM=;
-        b=tqC+tm/iMVp3RJ9onOOlAARwgc46ZpTKGA2mUjytvFgO4qBPkTlhmOgBULN7f61laV
-         muf2hsetu5NPTCtdCAZLkIPoDLHuUYyt5D98MJ/6zotejmSrEMWUUlSBgZ3Wx5BOeKeH
-         fI3bY7wLGwRAoNzIvIw764t9SY89iyCPyiA/rQcyB+dm55r/xRHOZGkqQPrSE5geOofb
-         OondjRQd9HHDm/ipl4cj3XykkqAh9y8gVox+vjmEE3EUEfzpO/cIizUIyZa8BOofJzTC
-         1nierndZW//0iHD72cSdQ7xs3ingFR/Zl9bGjNrkbBoO4AX6E2IeTl2wEtPXHMBJbHUC
-         jdyg==
-X-Gm-Message-State: AOAM532Owozn3eo5/mewVBPldzGhkXbkCymYs+XdnXx/+ZhjY3kzfamd
-        /+d/v98kZtW5izHjib1HcQoVHGGjaXtP
-X-Google-Smtp-Source: ABdhPJyL7D59S0c7J3/2Op0q9aw5Wnve+xXjWrrlV45CTNX4k/0oMEztpE6wC4lT9bO6+BQsyODILO5P7lBB
-X-Received: from ezekiel.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:108e])
- (user=shraash job=sendgmr) by 2002:a25:35c2:0:b0:60f:c5d8:99ff with SMTP id
- c185-20020a2535c2000000b0060fc5d899ffmr29221573yba.380.1646240948002; Wed, 02
- Mar 2022 09:09:08 -0800 (PST)
-Date:   Wed,  2 Mar 2022 22:39:02 +0530
-Message-Id: <20220302170902.752687-1-shraash@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH] drm: Fix no previous prototype error in drm_nomodeset.c
-From:   Aashish Sharma <shraash@google.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        groeck@chromium.org, dri-devel@lists.freedesktop.org
-Cc:     Aashish Sharma <shraash@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OCk0IGN+JSNCGOmZy65+tm/Nx0eAS27c5ZIr+XIGJxc=;
+        b=lDGAHTx+3ccv0JbYpy1EkyE6+U8Nc8TTpIgiNM55k2xreoqBIwtDvfOxc7bn3+LDzq
+         XKa5OePbY3HpgoEBLl5pEqzxsZrqvWfSq9XT7yIGi7dZcdREombrc3oDvm1wRGnI52mR
+         4Q5Hte5OgDv1Rsyp/Z0FbXSQKBUelkUMFgqwansp/KRAv2AFScFRzg9Oqs02Qv6B3qP3
+         wbGxepag7xKBSEnCskbFUMT3BkNQ7Oh17A3XXAp8MVzfC2h/Yu/ptaifiWKKF4FnLHYq
+         +NY2RwhYpKKsVByEHdhBwdpriNIPXyXXYDtwpTBOI6icqoDHM+AXZEvjWepbb7wLKiqo
+         oCNw==
+X-Gm-Message-State: AOAM5327BqXn7Ic/yVJnKFzl1cqqikxRvZSPKoZrlWMy3Vi6rs1Jhc/j
+        9C48Lq0oDf6G+ZgRASoE+slPSjqwHft0aCA4BPGL3j4tLRjHfFJyyjNqEaI5y7vW4XbJvsiVIqo
+        PNSCB/kwjNvvTi9Mmfosr8vqT
+X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr22844994wrw.216.1646241052249;
+        Wed, 02 Mar 2022 09:10:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdCmMTM9zLSI+LlHPZY7Qi9z6yOB/Nx9cLAFKLKH9IIrgIyZ3Z4qt7cBDrf7wigHlwXxKhVQ==
+X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr22844983wrw.216.1646241051946;
+        Wed, 02 Mar 2022 09:10:51 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm5579398wra.97.2022.03.02.09.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 09:10:51 -0800 (PST)
+Date:   Wed, 2 Mar 2022 18:10:48 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220302171048.aijkcrwcrgsu475z@sgarzare-redhat>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302082021-mutt-send-email-mst@kernel.org>
+ <Yh93k2ZKJBIYQJjp@google.com>
+ <20220302095045-mutt-send-email-mst@kernel.org>
+ <Yh+F1gkCGoYF2lMV@google.com>
+ <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
+ <20220302112945-mutt-send-email-mst@kernel.org>
+ <Yh+gDZUbgBRx/1ro@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yh+gDZUbgBRx/1ro@google.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix this kernel test robot error:
+On Wed, Mar 02, 2022 at 04:49:17PM +0000, Lee Jones wrote:
+>On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+>
+>> On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
+>> > On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
+>> > >
+>> > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+>> > >
+>> > > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
+>> > > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+>> > > > >
+>> > > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+>> > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+>> > > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+>> > > > > > > during virtqueue clean-up and we mitigate the reported issues.
+>> > > > > > >
+>> > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+>> > > > > > >
+>> > > > > > > Cc: <stable@vger.kernel.org>
+>> > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+>> > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>> > > > > > > ---
+>> > > > > > >  drivers/vhost/vhost.c | 2 ++
+>> > > > > > >  1 file changed, 2 insertions(+)
+>> > > > > > >
+>> > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+>> > > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
+>> > > > > > > --- a/drivers/vhost/vhost.c
+>> > > > > > > +++ b/drivers/vhost/vhost.c
+>> > > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>> > > > > > >         int i;
+>> > > > > > >
+>> > > > > > >         for (i = 0; i < dev->nvqs; ++i) {
+>> > > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
+>> > > > > > >                 if (dev->vqs[i]->error_ctx)
+>> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+>> > > > > > >                 if (dev->vqs[i]->kick)
+>> > > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>> > > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
+>> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+>> > > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
+>> > > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
+>> > > > > > >         }
+>> > > > > >
+>> > > > > > So this is a mitigation plan but the bug is still there though
+>> > > > > > we don't know exactly what it is.  I would prefer adding something like
+>> > > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
+>> > > > >
+>> > > > > As a rework to this, or as a subsequent patch?
+>> > > >
+>> > > > Can be a separate patch.
+>> > > >
+>> > > > > Just before the first lock I assume?
+>> > > >
+>> > > > I guess so, yes.
+>> > >
+>> > > No problem.  Patch to follow.
+>> > >
+>> > > I'm also going to attempt to debug the root cause, but I'm new to this
+>> > > subsystem to it might take a while for me to get my head around.
+>> >
+>> > IIUC the root cause should be the same as the one we solved here:
+>> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+>> >
+>> > The worker was not stopped before calling vhost_dev_cleanup(). So while
+>> > the worker was still running we were going to free memory or initialize
+>> > fields while it was still using virtqueue.
+>>
+>> Right, and I agree but it's not the root though, we do attempt to stop all workers.
+>
+>Exactly.  This is what happens, but the question I'm going to attempt
+>to answer is *why* does this happen.
 
-drivers/gpu/drm/drm_nomodeset.c:8:6: error:
-no previous prototype for 'drm_firmware_drivers_only'
+IIUC the worker was still running because the /dev/vhost-vsock file was 
+not explicitly closed, so vhost_vsock_dev_release() was called in the 
+do_exit() of the process.
 
-Including drm_drv.h in drm_nomodeset.c which contains
-drm_firmware_drivers_only's declaration.
+In that case there was the issue, because vhost_dev_check_owner() 
+returned false in vhost_vsock_stop() since current->mm was NULL.
+So it returned earlier, without calling vhost_vq_set_backend(vq, NULL).
 
-Signed-off-by: Aashish Sharma <shraash@google.com>
----
- drivers/gpu/drm/drm_nomodeset.c | 1 +
- 1 file changed, 1 insertion(+)
+This did not stop the worker from continuing to run, causing the 
+multiple issues we are seeing.
 
-diff --git a/drivers/gpu/drm/drm_nomodeset.c b/drivers/gpu/drm/drm_nomodeset.c
-index f3978d5bd3a1..9402deb4985f 100644
---- a/drivers/gpu/drm/drm_nomodeset.c
-+++ b/drivers/gpu/drm/drm_nomodeset.c
-@@ -2,6 +2,7 @@
- 
- #include <linux/module.h>
- #include <linux/types.h>
-+#include <drm/drm_drv.h>
- 
- static bool drm_nomodeset;
- 
--- 
-2.35.1.574.g5d30c73bfb-goog
+current->mm was NULL, because in the do_exit() the address space is 
+cleaned in the exit_mm(), which is called before releasing the files 
+into the exit_task_work().
+
+This can be seen from the logs, where we see first the warnings printed 
+by vhost_dev_cleanup() and then the panic in the worker (e.g. here 
+https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000)
+
+Mike also added a few more helpful details in this thread: 
+https://lore.kernel.org/virtualization/20220221100500.2x3s2sddqahgdfyt@sgarzare-redhat/T/#ree61316eac63245c9ba3050b44330e4034282cc2
+
+Thanks,
+Stefano
 

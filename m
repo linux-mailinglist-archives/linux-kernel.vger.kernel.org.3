@@ -2,101 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4962B4C9A4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B07A4C9A50
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbiCBBP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S238857AbiCBBQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiCBBPZ (ORCPT
+        with ESMTP id S229771AbiCBBQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:15:25 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E08457B9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 17:14:43 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id c7so108597qka.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 17:14:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T0TkFFWcgAksB0r/eiWpvcxH5MHjEqDfjobzCtyWnt4=;
-        b=e5BlFQgu75oQLnkpJb4FsfUxJG+JyX/bm0JpdLwMDTpJB75rrgraCfEQeGrCast3B+
-         mzJkWKRtGPQYnkq7nN3TeOFq7QFm+o4UybKfiE4PsV+YtHxvYA0dV6ux8hBFOQ2tzmsi
-         qnKjdxdWamUx5ARjGGJE3yM3aZI8g3vqywCkww/hPmSdBG3AiHpO0RItvWPhEVEe0TyB
-         WqC6mpBLGn76ws20TyUxytKckE9JgJDN2M2vnnfUyCnULifrD7NkkI0OwCF2osEZaUQS
-         MwSYCMm+S8eD4N3vZYzUoWwHcWRwHdbEEnvQp3MdUw+zH1ipOlyKpm0LojIWGa3rckXU
-         UoRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T0TkFFWcgAksB0r/eiWpvcxH5MHjEqDfjobzCtyWnt4=;
-        b=wPcsgDNMdu0iypcCAONsv+PJ1SUyIvjTxNz09qxIpIVN8z/GfM1HZl/iW8Fsbuyuwm
-         e5D6EZ/z4QAPAW1sUxIXyUDGArMEh68mp8uXsAA7DQJ9A5tOaKytD2YUXihDhIvXuhov
-         ugoBYFrp/44egK+FOTrmFoNoy1lxV9GWGr3vWzAXWVgikQDWndTdwTK1sNX33mkUNkXZ
-         P2CR5EwUbO+a08bK9GArCsAa2tM9YrwUDzVsPQP8abydmnN4mhKStR9vGSvRL5eIt5ed
-         DojM0iGm7Tr+HoJnO+fbqr4Xwr4Q2/E29SfKCdpeKYl5sLMFCj7zHmk1d580Qer4ZB2Q
-         knnA==
-X-Gm-Message-State: AOAM533huLEA8gy5bXpsB/SB0S7BaAYdHjYNQhN39pvnu7/cPwNCk5N9
-        w8ShxL3Ypx47s9qT542VPJU=
-X-Google-Smtp-Source: ABdhPJyezYxwcR0F1+1iaSAiJqCwx5d3/dCvaoN6S/JKkuTi32iCrCtK8z5qItsWOPPrwQtUqDrJcA==
-X-Received: by 2002:a37:b447:0:b0:649:33c4:bd5e with SMTP id d68-20020a37b447000000b0064933c4bd5emr15256858qkf.342.1646183682470;
-        Tue, 01 Mar 2022 17:14:42 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id bq42-20020a05620a46aa00b006494fb49246sm7427360qkb.86.2022.03.01.17.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 17:14:42 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     mingo@redhat.com
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] sched/topology: avoid calling synchronize_rcu()
-Date:   Wed,  2 Mar 2022 01:14:33 +0000
-Message-Id: <20220302011433.2054613-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 20:16:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72214996A7;
+        Tue,  1 Mar 2022 17:16:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 275A3B81BFB;
+        Wed,  2 Mar 2022 01:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92128C340EE;
+        Wed,  2 Mar 2022 01:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646183757;
+        bh=ewUPkTFlUsosBWd4IqYZppZy3zDmtXuv9MukBGKEvd8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Yqp+tW7QNVHPNrg8/T3ZAqdjE0QauXRdEcVCbn6zqkUoT1m6rnOk39ks5sIYfpx7y
+         Z2vcCo1B5pPbspkoOogPj1VeMmgzszuBYglsY+L7jGQkqQcsM1f1+FqtpdCGXdVvrg
+         ceolLOjg9cxkv2lYILVGEfPLriE0iqRE6KdRvcezEVnuff9tXLTDQod27phOt+Lr7Z
+         wAZSQrk7GZSKtY8iXiS6e6hz9UTe3oLp4gPyf+4K02zE5/LSMxdz0mosWJZFpHMS7C
+         TTH3cCLUMCLCEDT1C1ljHEyNoIvMJcXFJGinkPAYxGK+7R9MC0a9bbQ9T/xnZoz2kX
+         yirILZIL9vHmA==
+Date:   Tue, 1 Mar 2022 17:15:56 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220301171556.7fcb6eeb@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220302115646.422e29cd@canb.auug.org.au>
+References: <20220302115646.422e29cd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi (CGEL ZTE) <lv.ruyi@zte.com.cn>
+On Wed, 2 Mar 2022 11:56:46 +1100 Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the net-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> 
+> Caused by commit
+> 
+>   12bbb0d163a9 ("net/smc: add sysctl for autocorking")
+> 
+> ( or maybe commit
+> 
+>   dcd2cf5f2fc0 ("net/smc: add autocorking support")
+> )
+> 
+> I have used the net-next tree from next-20220301 for today.
 
-Kfree_rcu() usually results in even simpler code than does
-synchronize_rcu() without synchronize_rcu()'s multi-millisecond
-latency, so replace synchronize_rcu() with kfree_rcu().
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi (CGEL ZTE) <lv.ruyi@zte.com.cn>
----
- kernel/sched/topology.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 974212620fa1..0ce302b4d732 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1970,8 +1970,7 @@ static void sched_reset_numa(void)
- 	if (distances || masks) {
- 		int i, j;
- 
--		synchronize_rcu();
--		kfree(distances);
-+		kfree_rcu(distances);
- 		for (i = 0; i < nr_levels && masks; i++) {
- 			if (!masks[i])
- 				continue;
--- 
-2.25.1
-
+Probably fixed by just pushed commit ef739f1dd3ac ("net: smc: fix
+different types in min()") ? Sorry about that.

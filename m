@@ -2,186 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E884CADE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52B84CADE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244743AbiCBSuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S244747AbiCBSu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbiCBSuA (ORCPT
+        with ESMTP id S235844AbiCBSuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:50:00 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 277564550B;
-        Wed,  2 Mar 2022 10:49:16 -0800 (PST)
-Received: from [192.168.1.17] (unknown [192.182.151.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A7F0C20B7178;
-        Wed,  2 Mar 2022 10:49:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A7F0C20B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646246955;
-        bh=Hb0MichcGnKy9W7QnftN3HlYDH5eIZ2HR+Yd+eYl9oA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bFjfT1E6FBhRudcO9bsU0kWiQq+tCxD9tzPSPXt6V87OZkcG7FiM41ymquDeblajJ
-         MsTrs8MyE17bSEKYptulAKHcZ19W7uyZXHVXn063U1tectcIlGMij0McLJtBzQVSWx
-         x4wIQoJAB1zLVjem1H089/lBHs3RxHl/wbBtVVBU=
-Message-ID: <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
-Date:   Wed, 2 Mar 2022 10:49:15 -0800
+        Wed, 2 Mar 2022 13:50:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B658B0E8C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:49:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646246980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LIqgahNWKBFxqAEMAXmZwl+PaaeTRoms/jZ1LE6sQe4=;
+        b=RSxkiAU+MMiCJDUljFiF0Jzho6yvLADFAwkp97UyPB04UJrNzxyxZ6UKWP5oK8O6lMBGj3
+        XUI046E7EXdP6SCsORd0G3JN84iDTkyOLYob2UPG+trkQ3BDYkTRutb1hPV+rnlZHSF/U6
+        GTSuJrcDgWtcFsOkB43VXqqnKkYD7Wo=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-34-ZaipU5mkO42SKSQvedamvw-1; Wed, 02 Mar 2022 13:49:37 -0500
+X-MC-Unique: ZaipU5mkO42SKSQvedamvw-1
+Received: by mail-lj1-f200.google.com with SMTP id v5-20020a2ea605000000b00246322afc8cso828800ljp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:49:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LIqgahNWKBFxqAEMAXmZwl+PaaeTRoms/jZ1LE6sQe4=;
+        b=Q+Iy8Ypz1hzLEOBdUxbM8xnwLTyI0LdXQf9SW4f5Tz33OcPe/Wvv69hDdrW51o3uxw
+         cZMn07kG+tZ7v6E69dbrDuf2kdMmDKQFcLZWITdAEPdh3opiSbGA3oy7OW38X2tCT798
+         DIdNUUXfW17d5LrclzRCktgekkJxgaumlHvfmQwKZ9HMjopxtBcNPLHF/l4n7xTv0ghv
+         IypBxayaac2eUfaLdc+sPXDqGDhXMKdC1z9zhqKbKJKCLIKpTSGi7n115agovbamN5yp
+         gpgBi1KufRoExrNnalleJcsAKXfVf32tJu4k3yNravUzV6O+bmBGumeie3J9yCDYDBNf
+         qsdQ==
+X-Gm-Message-State: AOAM530s/ZRRSX8XCOVdS4iepXh7Ysixy/9Et6EDgiyC6M3Mac/jWXWX
+        0cv9egWuH0jCJJ3/rEXsWRfR47sQVLAARse2wphiKopH5wDJ6hrMoqR2DwcwK2tAQ1T0fmrrcTQ
+        1jIlo0mpRx/+8Gl9kCXStokPIpSGzQzPMbMinJqje
+X-Received: by 2002:a2e:b0fb:0:b0:245:f4a9:3b5 with SMTP id h27-20020a2eb0fb000000b00245f4a903b5mr22018437ljl.92.1646246975780;
+        Wed, 02 Mar 2022 10:49:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxLI9Xtv8VVJRyoM8xP1vr/fEEcNyaG/k8jSqHBEy3b8mc2kotblpgoKshBbshYQGFcAx0aUenO7GaBIImvT3U=
+X-Received: by 2002:a2e:b0fb:0:b0:245:f4a9:3b5 with SMTP id
+ h27-20020a2eb0fb000000b00245f4a903b5mr22018430ljl.92.1646246975603; Wed, 02
+ Mar 2022 10:49:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Content-Language: en-US
-To:     Wei Liu <wei.liu@kernel.org>, Greg KH <gregkh@linuxfoundation.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, spronovo@linux.microsoft.com
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
- <Yh8ia7nJNN7ISR1l@kroah.com>
- <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
-From:   Iouri Tarassov <iourit@linux.microsoft.com>
-In-Reply-To: <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224230035.36547137@gandalf.local.home> <Yhhh730RX1HpdXp2@google.com>
+ <Yhhj9MLZTrhjSWUE@google.com> <20220225083209.24bafe2c@gandalf.local.home>
+ <20220225084256.071dcf82@gandalf.local.home> <YhmOifZcbbxVHPr9@google.com>
+ <CAAq0SUkUAMyCoLt=n9X7+QH93zZ00ZpXNjG-gv7xUzL3YGtaPQ@mail.gmail.com> <20220228110559.2a8e0b32@gandalf.local.home>
+In-Reply-To: <20220228110559.2a8e0b32@gandalf.local.home>
+From:   Wander Costa <wcosta@redhat.com>
+Date:   Wed, 2 Mar 2022 15:49:24 -0300
+Message-ID: <CAAq0SU=Ydb6_85jLADLbc7E1XuoEgGLMmQG1pXduEyBu5awApA@mail.gmail.com>
+Subject: Re: Strange output on the console
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Willy Tarreau <w@1wt.eu>,
+        David Laight <David.Laight@aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/2022 3:53 AM, Wei Liu wrote:
-> On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
-> > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
-> > > > > +struct dxgglobal *dxgglobal;
-> > > > 
-> > > > No, make this per-device, NEVER have a single device for your driver.
-> > > > The Linux driver model makes it harder to do it this way than to do it
-> > > > correctly.  Do it correctly please and have no global structures like
-> > > > this.
-> > > > 
-> > > 
-> > > This may not be as big an issue as you thought. The device discovery is
-> > > still done via the normal VMBus probing routine. For all intents and
-> > > purposes the dxgglobal structure can be broken down into per device
-> > > fields and a global structure which contains the protocol versioning
-> > > information -- my understanding is there will always be a global
-> > > structure to hold information related to the backend, regardless of how
-> > > many devices there are.
-> > 
-> > Then that is wrong and needs to be fixed.  Drivers should almost never
-> > have any global data, that is not how Linux drivers work.  What happens
-> > when you get a second device in your system for this?  Major rework
-> > would have to happen and the code will break.  Handle that all now as it
-> > takes less work to make this per-device than it does to have a global
-> > variable.
-> > 
+On Mon, Feb 28, 2022 at 1:11 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> It is perhaps easier to draw parallel from an existing driver. I feel
-> like we're talking past each other.
+> On Sat, 26 Feb 2022 08:49:45 -0300
+> Wander Costa <wcosta@redhat.com> wrote:
 >
-> Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
-> like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
-> units will be added to the list. I this the current code is following
-> this model. dxgglobal fulfills the role of a list.
->
-> Setting aside the question of whether it makes sense to keep a copy of
-> the per-VM state in each device instance, I can see the code be changed
-> to:
->
->     struct mutex device_mutex; /* split out from dxgglobal */
->     static LIST_HEAD(dxglist);
->     
->     /* Rename struct dxgglobal to struct dxgstate */
->     struct dxgstate {
->        struct list_head dxglist; /* link for dxglist */
->        /* ... original fields sans device_mutex */
->     }
->
->     /*
->      * Provide a bunch of helpers manipulate the list. Called in probe /
->      * remove etc.
->      */
->     struct dxgstate *find_dxgstate(...);
->     void remove_dxgstate(...);
->     int add_dxgstate(...);
->
-> This model is well understood and used in tree. It is just that it
-> doesn't provide much value in doing this now since the list will only
-> contain one element. I hope that you're not saying we cannot even use a
-> per-module pointer to quickly get the data structure we want to use,
-> right?
->
-> Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
-> into the device object? I think that can be done too.
->
-> The code can be changed as:
->
->     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
->     struct dxgstate { ... };
->
->     static int dxg_probe_vmbus(...) {
->
->         /* probe successfully */
->
-> 	struct dxgstate *state = kmalloc(...);
-> 	/* Fill in dxgstate with information from backend */
->
-> 	/* hdev->dev is the device object from the core driver framework */
-> 	dev_set_drvdata(&hdev->dev, state);
->     }
->
->     static int dxg_remove_vmbus(...) {
->         /* Normal stuff here ...*/
->
-> 	struct dxgstate *state = dev_get_drvdata(...);
-> 	dev_set_drvdata(..., NULL);
-> 	kfree(state);
->     }
->
->     /* In all other functions */
->     void do_things(...) {
->         struct dxgstate *state = dev_get_drvdata(...);
->
-> 	/* Use state in place of where dxgglobal was needed */
->
->     }
->
-> Iouri, notice this doesn't change anything regarding how userspace is
-> designed. This is about how kernel organises its data.
->
-> I hope what I wrote above can bring our understanding closer.
->
-> Thanks,
-> Wei.
 
+[snip]
 
-I can certainly remove dxgglobal and keep the  pointer to the global
-state in the device object.
+>
+> Anything else I could do to find out more?
+>
 
-This will require passing of the global pointer to all functions, which
-need to access it.
-
-
-Maybe my understanding of the Greg's suggestion was not correct. I
-thought the suggestion was
-
-to have multiple /dev/dxgN devices (one per virtual compute device).
-This would change how the user mode
-
-clients enumerate and communicate with compute devices.
-
-
-Thanks
-
-Iouri
+I think I have everything I need, thank you.
 

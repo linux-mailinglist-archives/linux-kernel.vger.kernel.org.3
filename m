@@ -2,267 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AD94C9FB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E434C9F8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiCBIrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
+        id S235409AbiCBIoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiCBIq5 (ORCPT
+        with ESMTP id S231694AbiCBIoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:46:57 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D506BAB9C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:46:14 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id m6so1508444wrr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:46:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=OAGdmlBU750HPm6uS/2rXxP2qybmRe1eYS45j7gSSxk=;
-        b=WP4yMtfpQleDkk9wS69RYgsd68w6DMQxWIrclmUo4ldChNykmhvZIvGgi45qagVVL0
-         UM9bmwGhBpdP8zVcFR071ykfwaDmXmlr2ZJCi+E0Qhw2yvSw3V9asr736pAim0U5wGpt
-         enFSpLql7sLfSqYp5bvc1GJ2tLchgQkdateHkYFSSo3CnNOstJzQnynEB1JGCcNYVjFt
-         XcpGwRjNrBhq6+TLM/u/r3cesiY5jqJ6imlF8CzyurvZSBtCDEbqxNgWUbFzXHb+XZHH
-         u8Kvv5U8rqogA7drPeghTaWJCRa8BFA2RzR4YtjnghgYZeyhAftCkO43oHmYFlySK5UT
-         578A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=OAGdmlBU750HPm6uS/2rXxP2qybmRe1eYS45j7gSSxk=;
-        b=dN/ljmkqNtPGv9rhI0eRluRkzRIlcLQQELfHa60KfwF6mVaSAd93suW1tfw9/xnub+
-         VG6bqyZxmK1zQkI80nOSpmYlQaAyW10q2czcZq+H6eFpVHuV8NY6z2rf+MSA+m1qLbIO
-         wUfcYryV8OCiwDi4DfwCfHdCPf1bEvUS3wH2pqc/C3AQVz0QdxR9/gEnaKMuJVn0A5QR
-         WO3DolU3U0/SOv4/VxMeFuqR4gl+mWu+nFfGhgwFVhOTBDvVsldYjnNapH38YDT69d/Y
-         FjIt4AM5w/Ut/wLFvRokTmsTAndJCXQRu0158tryho8Q8aPfvt2RVlla4L3oqxs+OwmX
-         VvMw==
-X-Gm-Message-State: AOAM533sCWJVNeJIwSi409E8grgl65DAuJUdEMKLoj0GF3YWzjyGjTkm
-        JUmkF0v/04lO4TpGKnhBYV5LYQ==
-X-Google-Smtp-Source: ABdhPJw5nDmQ7R5dprkc1DDIySxAi6zQnYTihowhbWzCteml7VcyIvHFYuoM8SHpvqOj/d50zsSxUg==
-X-Received: by 2002:a05:6000:15cb:b0:1ea:78fc:2201 with SMTP id y11-20020a05600015cb00b001ea78fc2201mr22973825wry.362.1646210772967;
-        Wed, 02 Mar 2022 00:46:12 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id r2-20020adff702000000b001efd7eb7c37sm7983296wrp.34.2022.03.02.00.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 00:46:12 -0800 (PST)
-References: <20220217063346.21691-1-liang.yang@amlogic.com>
- <20220217063346.21691-3-liang.yang@amlogic.com>
- <1jv8wzw78r.fsf@starbuckisacylon.baylibre.com>
- <4741f36a-e17a-75c3-124f-447e4426c436@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     "Liang.Yang" <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 2/2] dt-bindings: nand: meson: refine Amlogic
- NAND controller driver
-Date:   Wed, 02 Mar 2022 09:42:06 +0100
-In-reply-to: <4741f36a-e17a-75c3-124f-447e4426c436@amlogic.com>
-Message-ID: <1jczj47ne5.fsf@starbuckisacylon.baylibre.com>
+        Wed, 2 Mar 2022 03:44:12 -0500
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ADDF3B55F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:43:29 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADnLscqLh9iU9AFAg--.5230S2;
+        Wed, 02 Mar 2022 16:43:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     codrin.ciubotariu@microchip.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] misc: atmel-ssc: Handle error for clk_prepare_enable
+Date:   Wed,  2 Mar 2022 16:43:19 +0800
+Message-Id: <20220302084319.96435-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADnLscqLh9iU9AFAg--.5230S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4DZw4kXw47Kw43KF1DAwb_yoWkWrg_Ca
+        18ursrWr4Ykrs3Kw1UGr13uryDur4qqFyrXr1Iqay3tryDAw17urWDZrs8Ary7uw40yry3
+        G3Wqq3ySkrWagjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8ZwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUeHUDDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the potential failure of the clk_prepare_enable(),
+it should be better to check it and return error if fails.
 
-On Wed 02 Mar 2022 at 13:19, Liang.Yang <liang.yang@amlogic.com> wrote:
+Fixes: eb1f2930609b ("Driver for the Atmel on-chip SSC on AT32AP and AT91")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/misc/atmel-ssc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> Hi Jerome,
->
-> On 2022/2/28 19:36, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> 
->> On Thu 17 Feb 2022 at 14:33, Liang Yang <liang.yang@amlogic.com> wrote:
->> 
->>> convert txt to yaml and refine the meson NFC clock document.
->>>
->>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->>> ---
->>>   .../bindings/mtd/amlogic,meson-nand.txt       | 60 ----------------
->>>   .../bindings/mtd/amlogic,meson-nand.yaml      | 70 +++++++++++++++++++
->>>   2 files changed, 70 insertions(+), 60 deletions(-)
->>>   delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->>>   create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->>> deleted file mode 100644
->>> index 5794ab1147c1..000000000000
->>> --- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->>> +++ /dev/null
->>> @@ -1,60 +0,0 @@
->>> -Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
->>> -
->>> -This file documents the properties in addition to those available in
->>> -the MTD NAND bindings.
->>> -
->>> -Required properties:
->>> -- compatible : contains one of:
->>> -  - "amlogic,meson-gxl-nfc"
->>> -  - "amlogic,meson-axg-nfc"
->>> -- clocks     :
->>> -	A list of phandle + clock-specifier pairs for the clocks listed
->>> -	in clock-names.
->>> -
->>> -- clock-names: Should contain the following:
->>> -	"core" - NFC module gate clock
->>> -	"device" - device clock from eMMC sub clock controller
->>> -	"rx" - rx clock phase
->>> -	"tx" - tx clock phase
->>> -
->>> -- amlogic,mmc-syscon	: Required for NAND clocks, it's shared with SD/eMMC
->>> -				controller port C
->>> -
->>> -Optional children nodes:
->>> -Children nodes represent the available nand chips.
->>> -
->>> -Other properties:
->>> -see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
->>> -
->>> -Example demonstrate on AXG SoC:
->>> -
->>> -	sd_emmc_c_clkc: mmc@7000 {
->>> -		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
->>> -		reg = <0x0 0x7000 0x0 0x800>;
->>> -	};
->>> -
->>> -	nand-controller@7800 {
->>> -		compatible = "amlogic,meson-axg-nfc";
->>> -		reg = <0x0 0x7800 0x0 0x100>;
->>> -		#address-cells = <1>;
->>> -		#size-cells = <0>;
->>> -		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
->>> -
->>> -		clocks = <&clkc CLKID_SD_EMMC_C>,
->>> -			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
->>> -			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
->>> -			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
->>> -		clock-names = "core", "device", "rx", "tx";
->>> -		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
->>> -
->>> -		pinctrl-names = "default";
->>> -		pinctrl-0 = <&nand_pins>;
->>> -
->>> -		nand@0 {
->>> -			reg = <0>;
->>> -			#address-cells = <1>;
->>> -			#size-cells = <1>;
->>> -
->>> -			nand-on-flash-bbt;
->>> -		};
->>> -	};
->>> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->>> new file mode 100644
->>> index 000000000000..671f0a8fdc7c
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->>> @@ -0,0 +1,70 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
->>> +
->>> +maintainers:
->>> +  - liang.yang@amlogic.com
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - "amlogic,meson-gxl-nfc"
->>> +      - "amlogic,meson-axg-nfc"
->>> +
->>> +  reg:
->>> +    maxItems: 2
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 2
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: "core", "device"
->>> +
->>> +  "#clock-cells":
->>> +    const: 1
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clocks
->>> +  - clock-names
->>> +  - "#clock-cells"
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    nand-controller@7800 {
->>> +	compatible = "amlogic,meson-axg-nfc";
->>> +	reg = <0x0 0x7800 0x0 0x100>,
->>> +	      <0x0 0x7000 0x0 0x1>;
->> Please name the register ressources instead of relying on the order
-> ok
->> Also, use the actual size of region, not the size you are using in the
->> driver. AFAIK, the size of the 2nd region is not 0x1
-> yes, it should be 0x4 here, i will fix it.
-> we only need to use a 32bits SDEMMC_CLOCK register.
-> thanks.
-
-No, it is not the point.
-What register you need in the driver is not relevant.
-What is relevant is the actual size of the memory region - so it not 0x1
-or 0x4 ... more likely 0x800 from what I see in the AXG dts.
-
->> 
->>> +	#address-cells = <1>;
->>> +	#size-cells = <0>;
->>> +	interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
->>> +
->>> +	clocks = <&clkc CLKID_SD_EMMC_C>,
->>> +		<&clkc CLKID_FCLK_DIV2>;
->>> +	clock-names = "core", "device";
->>> +
->>> +	pinctrl-names = "default";
->>> +	pinctrl-0 = <&nand_pins>;
->>> +
->>> +	nand@0 {
->>> +		reg = <0>;
->>> +		#address-cells = <1>;
->>> +		#size-cells = <1>;
->>> +
->>> +		nand-on-flash-bbt;
->>> +	};
->>> +     };
->>> +
->>> +...
->>> \ No newline at end of file
->> .
+diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
+index d6cd5537126c..c76ca234af4b 100644
+--- a/drivers/misc/atmel-ssc.c
++++ b/drivers/misc/atmel-ssc.c
+@@ -192,6 +192,7 @@ static int ssc_probe(struct platform_device *pdev)
+ 	struct resource *regs;
+ 	struct ssc_device *ssc;
+ 	const struct atmel_ssc_platform_data *plat_dat;
++	int ret;
+ 
+ 	ssc = devm_kzalloc(&pdev->dev, sizeof(struct ssc_device), GFP_KERNEL);
+ 	if (!ssc) {
+@@ -226,7 +227,10 @@ static int ssc_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* disable all interrupts */
+-	clk_prepare_enable(ssc->clk);
++	ret = clk_prepare_enable(ssc->clk);
++	if (ret)
++		return ret;
++
+ 	ssc_writel(ssc->regs, IDR, -1);
+ 	ssc_readl(ssc->regs, SR);
+ 	clk_disable_unprepare(ssc->clk);
+-- 
+2.25.1
 

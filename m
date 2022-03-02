@@ -2,229 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A4A4CA618
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B534CA61E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242256AbiCBNei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S242271AbiCBNfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242254AbiCBNeg (ORCPT
+        with ESMTP id S235907AbiCBNfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:34:36 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBE2606CD;
-        Wed,  2 Mar 2022 05:33:52 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2BCE9FF;
-        Wed,  2 Mar 2022 14:33:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646228030;
-        bh=RDOP6CHuRPV47uUz35zmTXfqgF44gD4Z+83Jzns/7Ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MKlZ8NBfN7gO6YWA73a7YQ+0JidqlTFuRBXjTH25bMyF1XbyVJEnWe10Nv2IFKEAz
-         aoYX4VHy+GDwkWEQgk6LqwLAcPiQki8BEZHMl38Qj/EoUjGafaKXvikudfGJWdKBQf
-         9EWArd/2Oh32WcA+kIU1e4TVO547U9AlGA4ni1GA=
-Date:   Wed, 2 Mar 2022 15:33:37 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 63/66] staging: media: Add support for the Allwinner
- A31 ISP
-Message-ID: <Yh9yMYTJly5oDroa@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
- <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
- <Yh5CuyEJ+WhIAzYm@aptenodytes>
- <Yh8wD8lF2Hs+cxD7@pendragon.ideasonboard.com>
- <Yh9v2Tez3x6rwhB3@aptenodytes>
+        Wed, 2 Mar 2022 08:35:31 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536D9BDE74
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:34:48 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id em10-20020a17090b014a00b001bc3071f921so4792099pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 05:34:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g/0CGihmreYP75AblhYq/wa365Fq2crJ7rthQ8/LRIw=;
+        b=OxqV9xSNxet4uLHNXQBA5/6d7VsKxxBep6AmpAfNc7LxzgNLGIKeAxhaibUDtb9JbO
+         NSqNAMW71d6Jr9CyMEN5iTigMSS+vQNGjZ87wuFokpzomaZRw4PfZyBaCmiNuKiUH5ya
+         p0RyJyCq6zY90YYy8rKZPdeYR7OSfRk5CYFPctWPHvW1qfS23Gd4rvhVW29dEgc7s/fI
+         eudBqHWF1y0MMsJq7tOhiBv1qL/R0U309xMXkgUFuR7dNvA6dGxuHm1HaY7u2mEJ6Cin
+         vRnzOS+sRNuR2VVQ3Rlq8nzm8arMkJK9wVc2jFHEc6cTU/5dh30jfmynhhVWsVguXu7X
+         9gYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g/0CGihmreYP75AblhYq/wa365Fq2crJ7rthQ8/LRIw=;
+        b=McEXZt+IayoJCLOI1Pd4dVNWC8xNjxt6E7UCc5r7si7gAzHK8yumGPdDVOKa0aCjRY
+         EIka0aQanuMRCTi6KtRj0xrp4QgS+GycB136RVuK3oIFPx8PCmUlVVDIaATtgryOi7IP
+         VuRt6TfphuKYTiAXWeIdK2DUg3iNYerGiLumpyJA5AH0+iYF2fLlXnkClQ7jr3P3HKu6
+         K8ZXJZK8gwh6yLcbPm+WnhSC50wUDGO86cmVDTFRMlEv11UvFRr6cq25YwGj0ye1PbHj
+         Hhkn/tU1LCyj4prwBY2o11Xl1kRx8mh2D/P/pGelgo5NZ0GgjhFojpauO7wfISBGBM5k
+         grbw==
+X-Gm-Message-State: AOAM5313GhoLOps8yIb0diVQKTchhzUm6SHic1+VzIGTylOl6kBvO3V6
+        mTpiP01TuKqN20h0HSelC0qPPA==
+X-Google-Smtp-Source: ABdhPJyE1iWx1lWKj+H36O4PN4ngiSgwvqXfNlf2EPfHuhvB6INluq6wAlHqbkUpYueyr3kBnTIugw==
+X-Received: by 2002:a17:90a:6542:b0:1bd:149f:1c29 with SMTP id f2-20020a17090a654200b001bd149f1c29mr22011228pjs.240.1646228087854;
+        Wed, 02 Mar 2022 05:34:47 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id d10-20020a63360a000000b0037947abe4bbsm2486157pga.34.2022.03.02.05.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 05:34:47 -0800 (PST)
+Date:   Wed, 2 Mar 2022 21:34:41 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+Message-ID: <20220302133441.GM269879@dragon>
+References: <20220301062414.2987591-1-shawn.guo@linaro.org>
+ <20220301062414.2987591-3-shawn.guo@linaro.org>
+ <87ee3m2aed.wl-maz@kernel.org>
+ <20220302084028.GL269879@dragon>
+ <877d9c3b2u.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh9v2Tez3x6rwhB3@aptenodytes>
+In-Reply-To: <877d9c3b2u.wl-maz@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On Wed, Mar 02, 2022 at 02:23:37PM +0100, Paul Kocialkowski wrote:
-> On Wed 02 Mar 22, 10:51, Laurent Pinchart wrote:
-> > On Tue, Mar 01, 2022 at 04:58:51PM +0100, Paul Kocialkowski wrote:
-> > > On Mon 07 Feb 22, 18:16, Laurent Pinchart wrote:
-> > > > On Sat, Feb 05, 2022 at 07:54:26PM +0100, Paul Kocialkowski wrote:
-> > > > > Some Allwinner platforms come with an Image Signal Processor, which
-> > > > > supports various features in order to enhance and transform data
-> > > > > received by image sensors into good-looking pictures. In most cases,
-> > > > > the data is raw bayer, which gets internally converted to RGB and
-> > > > > finally YUV, which is what the hardware produces.
-> > > > > 
-> > > > > This driver supports ISPs that are similar to the A31 ISP, which was
-> > > > > the first standalone ISP found in Allwinner platforms. Simpler ISP
-> > > > > blocks were found in the A10 and A20, where they are tied to a CSI
-> > > > > controller. Newer generations of Allwinner SoCs (starting with the
-> > > > > H6, H616, etc) come with a new camera subsystem and revised ISP.
-> > > > > Even though these previous and next-generation ISPs are somewhat
-> > > > > similar to the A31 ISP, they have enough significant differences to
-> > > > > be out of the scope of this driver.
-> > > > > 
-> > > > > While the ISP supports many features, including 3A and many
-> > > > > enhancement blocks, this implementation is limited to the following:
-> > > > > - V3s (V3/S3) platform support;
-> > > > > - Bayer media bus formats as input;
-> > > > 
-> > > > Greyscale formats would also be nice to have, if the hardware can
-> > > > support that (it mostly just requires the ability to disable the CFA
-> > > > interpolation).
-> > > 
-> > > As far as I know there's no support for grayscale, only bayer formats
-> > > and YUV.
-> > > 
-> > > > > - Semi-planar YUV (NV12/NV21) as output;
-> > > > 
-> > > > Packed YUV would also be useful if the hardware supports it.
-> > > 
-> > > Same here, it only supports planar and semi-planar YUV as output.
-> > > 
-> > > > > - Debayering with per-component gain and offset configuration;
-> > > > > - 2D noise filtering with configurable coefficients.
-> > > > > 
-> > > > > Since many features are missing from the associated uAPI, the driver
-> > > > > is aimed to integrate staging until all features are properly
-> > > > > described.
-> > > > > 
-> > > > > On the technical side, it uses the v4l2 and media controller APIs,
-> > > > > with a video node for capture, a processor subdev and a video node
-> > > > > for parameters submission. A specific uAPI structure and associated
-> > > > > v4l2 meta format are used to configure parameters of the supported
-> > > > > modules.
-> > > > > 
-> > > > > One particular thing about the hardware is that configuration for
-> > > > > module registers needs to be stored in a DMA buffer and gets copied
-> > > > > to actual registers by the hardware at the next vsync, when instructed
-> > > > > by a flag. This is handled by the "state" mechanism in the driver.
-> > > > > 
-> > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > > ---
-> > > > >  drivers/staging/media/sunxi/Kconfig           |   1 +
-> > > > >  drivers/staging/media/sunxi/Makefile          |   1 +
-> > > > >  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  13 +
-> > > > >  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
-> > > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 572 +++++++++++++
-> > > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  86 ++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 751 ++++++++++++++++++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 +++++++++++++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 599 ++++++++++++++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  61 ++
-> > > > >  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
-> > > > >  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
-> > > > 
-> > > > Could you add a TODO file to list the issues that need to be fixed for
-> > > > the driver to move out of staging ? I'll already propose one entry:
-> > > > 
-> > > > - Add support in libcamera
-> > > 
-> > > Maybe it would be good to narrow down what level of support you have in mind
-> > > here. Just adding basic support fort the pipeline is probably doable, but
-> > > developing complex 3A algorithms would require very significant effort and
-> > > it would be a shame that this prevents the driver from leaving staging.
-> > > 
-> > > I think another obvious task would be to have a complete uAPI that reflects
-> > > all modules that are part of the ISP.
-> > > 
-> > > What do you think?
+On Wed, Mar 02, 2022 at 10:25:45AM +0000, Marc Zyngier wrote:
+> On Wed, 02 Mar 2022 08:40:28 +0000,
+> Shawn Guo <shawn.guo@linaro.org> wrote:
 > > 
-> > The reason why I'd like to see libcamera support for the ISP driver is
-> > to ensure that the kernel API is adequate for real use cases. The API
-> > can be split in three parts:
+> > Hi Marc,
 > > 
-> > - Pipeline configuration (this includes the media controller topology,
-> >   link setting, subdev pad format/selection rectangle configuration,
-> >   ...)
-> > - ISP parameters
-> > - ISP statistics
-> > 
-> > A pipeline handler implementation will cover the first parts. The second
-> > and third parts need to be tested too, but we don't need to implement
-> > every single feature. A very simple algorithm that demonstrates
-> > statistics can be captured and ISP parameters can be set should be
-> > enough to test and exercise the API in real scenarios. We're working on
-> > making basic AE and AWB algorithm implementations generic (or at least
-> > creating generic building blocks that can easily be assembled to create
-> > those algorithms, as the ISP statistics and parameters are specific to
-> > the ISP and thus require some ISP-specific code), so that should become
-> > a fairly easy task soon. I expect most of the work to go in the pipeline
-> > handler.
-> > 
-> > Does this sound fair to you ?
+> > On Tue, Mar 01, 2022 at 11:13:30AM +0000, Marc Zyngier wrote:
+> > > Hi Shawn,
 > 
-> Yes I understand that these aspects need to be tested too, but I feel like
-> having an implementation with a feedback look (even rudimentary and using
-> some generic helpers) would be quite a stretch.
-
-Don't be scared, it's not that difficult :-) A very basic feedback loop
-is easier to implement than the code that configures the pipeline and
-tracks buffers.
-
-> It would probably be sufficient to have some demo code that can receive stats
-> and set parameters, but without necessarily any connection between the two.
-> As such it's also my feeling that a standalone demo program could be easier
-> to manage for that purpose than libcamera support.
+> [...]
 > 
-> So how about making the requirement that a (free software) userspace
-> implementration must demonstrate ability to read relevant statistics
-> from the ISP and (independently) control parameters that affect the output?
+> > > 
+> > > > +static int qcom_mpm_set_type(struct irq_data *d, unsigned int type)
+> > > > +{
+> > > > +	struct qcom_mpm_priv *priv = d->chip_data;
+> > > > +	int pin = d->hwirq;
+> > > > +	unsigned int index = pin / 32;
+> > > > +	unsigned int shift = pin % 32;
+> > > > +
+> > > > +	switch (type & IRQ_TYPE_SENSE_MASK) {
+> > > > +	case IRQ_TYPE_EDGE_RISING:
+> > > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_RISING),
+> > > > +			     MPM_REG_RISING_EDGE, index, shift);
+> > > > +		break;
+> > > > +	case IRQ_TYPE_EDGE_FALLING:
+> > > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_FALLING),
+> > > > +			     MPM_REG_FALLING_EDGE, index, shift);
+> > > > +		break;
+> > > > +	case IRQ_TYPE_LEVEL_HIGH:
+> > > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_LEVEL_HIGH),
+> > > > +			     MPM_REG_POLARITY, index, shift);
+> > > > +		break;
+> > > > +	}
+> > > 
+> > > All these '!!(type & BLAH)' are totally superfluous, as they all expand
+> > > to 'true' by construction.
+> > 
+> > Yes, you are right!
+> > 
+> > > And this leads to a few questions:
+> > > 
+> > > - Shouldn't a rising interrupt clear the falling detection?
+> > > - Shouldn't a level-low clear the polarity?
+> > > - How do you handle IRQ_TYPE_EDGE_BOTH?
+> > > - How is MPM_REG_POLARITY evaluated for edge interrupts (resp the EDGE
+> > >   registers for level interrupts), as you never seem to be configuring
+> > >   a type here?
+> > 
+> > Honestly, qcom_mpm_set_type() was mostly taken from downstream without
+> > too much thinking.
 
-It's easy to create a test tool to demonstrate that the driver works
-fine, when the purpose of the test tool is to exercise the driver API in
-the way intended by the driver author. What such a test tool fails to
-demonstrate is the fitness of the API for real uses cases. This is why
-KMS requires userspace APIs to be exercised in a real display stack
-(X.org, Weston, Android hwcomposer, ...) and not just in a test tool.
-We're following the same rationale here.
+I have to take this statement back.  It seems that the current code has
+been diverted from the downstream in a wrong way.
 
-> > > > This isn't required to merge the driver in staging as long as ABI
-> > > > compatibility doesn't need to be preserved until the driver is moved out
-> > > > of staging.
-> > > >
-> > > > >  14 files changed, 3109 insertions(+)
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
-> > > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
-> > > > 
-> > > > [snip]
+> > I trusted it as a "good" reference as I have no
+> > document to verify the code.  These questions are great and resulted the
+> > code changes are pretty sensible to me.
+> 
+> I don't think these changes are enough. For example, an interrupt
+> being switched from level to edge is likely to misbehave (how do you
+> distinguish the two?). If that's what the downstream driver does, then
+> it is terminally broken.
 
--- 
-Regards,
+Could you take a look at downstream code and see if it answers all your
+questions?
 
-Laurent Pinchart
+It seems MPM_REG_POLARITY is only meant for level interrupts, since edge
+interrupts already have separate registers for rising and falling.
+
+I will fix my broken code by respecting the downstream logic.
+
+> As I asked before, we need some actual specs, or at least someone to
+> paraphrase it for us. There are a number of QC folks on Cc, and I
+> expect them to chime in and explain how MPM works here.
+> 
+> > 
+> > > - What initialises the MPM trigger types at boot time?
+> > 
+> > I dumped the vMPM region and it's all zeros.  My understanding is if
+> > vMPM needs any sort of initialization, it should be done by RPM firmware
+> > before APSS gets booting.
+> 
+> What about kexec? We can't rely on this memory region to always be
+> 0-initialised, nor do we know what that means.
+
+We are not relying on it being 0-initialised, but being initialised by
+RPM with initial physical MPM register values.
+
+Shawn
+
+[1] https://source.codeaurora.org/quic/la/kernel/msm-5.4/tree/drivers/irqchip/qcom-mpm.c/?h=LE.UM.6.2.4.r1#n187

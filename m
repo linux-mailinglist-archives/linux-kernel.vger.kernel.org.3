@@ -2,75 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAF34CAF3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD7C4CAF46
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242313AbiCBUA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S242488AbiCBUCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbiCBUA0 (ORCPT
+        with ESMTP id S234061AbiCBUCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:00:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB3CC1C96
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:59:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00813B8215D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C57C004E1;
-        Wed,  2 Mar 2022 19:59:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1646251180;
-        bh=cPto51IUsodLLQ4d6UJ8qZDMzV0zrvpcHqkBWSSdXp0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0epykNXgf1/rS0GnbmqWXBMGarXZFEZobMVVSUsfPcsRsxEW8PgOcQCWBAwHsqfnJ
-         p7SzMCBQjCLGhUdZKI8aNkYVp8RfZ0gxBDaBKn7xXcekmFB5vESRyRKGAT0hP2/h9Y
-         fd16A8k6Fyw+ce+/tvaUhLF5lZcGBWaYMr7avzt4=
-Date:   Wed, 2 Mar 2022 11:59:39 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Xavier Roche <xavier.roche@algolia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jean Delvare <jdelvare@suse.de>, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v3] tmpfs: support for file creation time
-Message-Id: <20220302115939.61896f0806c8b1c89e22ab56@linux-foundation.org>
-In-Reply-To: <CAHk-=wh1oc0=YuMJCnjV_aY4FswtWk3OeO4-SEbCmAXGkAfDPA@mail.gmail.com>
-References: <20220211213628.GA1919658@xavier-xps>
-        <20220211213628.GA1919658@xavier-xps>
-        <CAHk-=wh1oc0=YuMJCnjV_aY4FswtWk3OeO4-SEbCmAXGkAfDPA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 15:02:44 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C55C24AA;
+        Wed,  2 Mar 2022 12:02:01 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id e2so2505339pls.10;
+        Wed, 02 Mar 2022 12:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K7BFioUturBwb+BbemATArMiZ45qERJds2R0cuVDbIw=;
+        b=MRBXbyzXcOwpS19xaDmOY0I52vehm4ezY4ynZl4pbhxwhZh0mP8VWxXrTGjbZL1mYx
+         AzD1Awf8rHGV8KKaeAWHKSrScniPV4FCeFL7z9TeEZA5c/AotfF4ICu0aHiF+K8bVMtW
+         YOrAIooaLOg+Fmys1hcFsK1UwAuLaQ7uYCTYRrd8ukcy+oV7UjSd+vqWlvBmtZxdKOLe
+         lZUDngSFc/uAHb2biAQpU7lSXcefXXUKiFqFK9kjbkvfDbJqZMjwoKVDp5H0zIMRmlKJ
+         6ubVzhe5fchKEWw9kMBQzkJ4VIs8SMTqftTcPmUKNj8HBMb5AZZGMONEZ9HFT2m/f8tr
+         TTcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=K7BFioUturBwb+BbemATArMiZ45qERJds2R0cuVDbIw=;
+        b=qiaBWShFtnnhwzg457nkG+yqNqL0/Wc5iHnRcGVcrhaTnn0b2RwPBuglKGLwbY9bMx
+         QkAr5ujGxy3QBrzXAYynAxYG8l/E74LqCW9KUbF1GhZjcMWTeG9a1WVrIWrVyTaN6rzb
+         2DhjyCj9yWBuoT1JlNExCTi2rIJ/R0+VQ4idRmQ002J7nXMaR+JjSf405c0VlhWYgqrg
+         jsLagvn8VKFaUI7vTM5DpBUWci+vg1A9z1xmV7RAgsBI2oE6PR5lChBJ3Qkns0qps0Nf
+         xvRVYryXvc+jE4ee+te5FpT/XYCmb9xiRpYEuwqcu2ccL2j41Ph4aUH1XEabWrPe+s1w
+         LOJQ==
+X-Gm-Message-State: AOAM532OCgdr/zzkt1ZQeZBmZUhsWWuRuA1EH1BbLDP5q5d7//CuxLvN
+        89MJEDq1p9+1RX+cRSh10rg=
+X-Google-Smtp-Source: ABdhPJydHBf4tVaM+x8ndfATX0hlnrLlTExGZTYfxR/hDdo/5T/CTLdLNkZOjbr4oB0QLVMtmNyMaQ==
+X-Received: by 2002:a17:902:b087:b0:151:842a:d212 with SMTP id p7-20020a170902b08700b00151842ad212mr9587374plr.92.1646251320766;
+        Wed, 02 Mar 2022 12:02:00 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
+        by smtp.gmail.com with ESMTPSA id q7-20020a056a0002a700b004f357e3e42fsm6960pfs.36.2022.03.02.12.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:02:00 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:01:55 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 7/9] bpf: Lift permission check in __sys_bpf
+ when called from kernel.
+Message-ID: <20220302200155.sid3imy4iqm7k5qf@ast-mbp.dhcp.thefacebook.com>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-8-haoluo@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225234339.2386398-8-haoluo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 11:43:02 -0800 Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> On Mon, Feb 28, 2022 at 12:43 AM Xavier Roche <xavier.roche@algolia.com> wrote:
-> >
-> > Various filesystems (including ext4) now support file creation time.
-> > This patch adds such support for tmpfs-based filesystems.
+On Fri, Feb 25, 2022 at 03:43:37PM -0800, Hao Luo wrote:
+> After we introduced sleepable tracing programs, we now have an
+> interesting problem. There are now three execution paths that can
+> reach bpf_sys_bpf:
 > 
-> What's the odd huge-page noise in this patch?
+>  1. called from bpf syscall.
+>  2. called from kernel context (e.g. kernel modules).
+>  3. called from bpf programs.
+> 
+> Ideally, capability check in bpf_sys_bpf is necessary for the first two
+> scenarios. But it may not be necessary for the third case.
 
-I can't see such changes?
+Well, it's unnecessary for the first two as well.
+When called from the kernel lskel it's a pointless check.
+The kernel module can do anything regardless.
+When called from bpf syscall program it's not quite correct either.
+When CAP_BPF was introduced we've designed it to enforce permissions
+at prog load time. The prog_run doesn't check permissions.
+So syscall progs don't need this secondary permission check.
+Please add "case BPF_PROG_TYPE_SYSCALL:" to is_perfmon_prog_type()
+and combine it with this patch.
 
-This v3 patch is the v2 patch plus Hugh's changes
-(https://lkml.kernel.org/r/b954973a-b8d1-cab8-63bd-6ea8063de3@google.com).
+That would be the best. The alternative below is less appealing.
 
-I won't be merging v3 because this changelog lacks appropriate
-decription of Hugh's changes and lacks a Link: tag to Hugh's change.
+> An alternative of lifting this permission check would be introducing an
+> 'unpriv' version of bpf_sys_bpf, which doesn't check the current task's
+> capability. If the owner of the tracing prog wants it to be exclusively
+> used by root users, they can use the 'priv' version of bpf_sys_bpf; if
+> the owner wants it to be usable for non-root users, they can use the
+> 'unpriv' version.
 
+...
 
+> -	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
+> +	if (sysctl_unprivileged_bpf_disabled && !bpf_capable() && !uattr.is_kernel)
+
+This is great idea. If I could think of this I would went with it when prog_syscall
+was introduced.

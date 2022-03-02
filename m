@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7A74C9FC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAA94C9FCA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240206AbiCBItg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S240214AbiCBIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbiCBIt3 (ORCPT
+        with ESMTP id S238679AbiCBItz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:49:29 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386D434666;
-        Wed,  2 Mar 2022 00:48:46 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so2791559wmj.0;
-        Wed, 02 Mar 2022 00:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NAr1yVsp752ZMzsPgKRFJJwUy68LPTnH9CBBM9RWaAI=;
-        b=LXyIolK3Bd9PXgS3yc68jUcjclz23IjbY6nOu2QfMlRzjlEJusak7H4hfXCGaIQj13
-         NS1YuKUK7LPqWPKpVRg1vyTqyK/+tmh08+4Ls8BbWzPlRT8PK0XwdSet4NvFyD/ZipI+
-         2UcuNs7qVThAFgaaxfP/uUALR8oUyFKaMRKIh+vr+2pw7m2HXBRAPeJ71GTCF0SdlUsr
-         iWwD0vF/g70DiPQGSSRW4XhuJ7piTFF+H9BlTVZDaaalGCrKUOh7NteNld6QIhjBce4w
-         XeBHBRWWsxYupvmG9+SBU/Nq0fOqn6ICHNEPY2lfv3jto/ZQO1az8CGtA11pk7MdGDd7
-         kBng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NAr1yVsp752ZMzsPgKRFJJwUy68LPTnH9CBBM9RWaAI=;
-        b=lgcohCJEe4FAM2vQ3vZq+x3HvWFvQGebmRO5hxD/NdBm5ULnMsREgi6UuybZacge5m
-         77YQmcjznh4daujIJ5IwAPYCY4GNGikwyVZTvS05CWdsAwFWdVxbBp3oHvNpcsjASBHA
-         zeXlFs/hoA286qykLDhikvSEjlBK4omP3puSNiptMBSL2VwpT0sXb7PBrHp8UUY8V+hD
-         SAa1IbHo7oZlfzVdeYnnDVKovQFzvjepobltHI/ASzx8Vf0vkRUpTJVDcWbvw7H4XhZq
-         SoOQoE0g3n+7kY25G2svjiBH1fr6D8NTlWwYgc6w5yNGyVR/4HtFw+ZfD2PsRgp2hmmR
-         Okrg==
-X-Gm-Message-State: AOAM530Z5cowXDdsLukWmJ4Ebw8i5vo7NCECwnPrFk03OxLmgbNFUh6l
-        Uw2DkengvMLxtwwuYExzd6EEcJenbuJp8QN1s4Tk0je353c6sjoo
-X-Google-Smtp-Source: ABdhPJy2trScQjrVlon+5f1nz3EmeISoPsgtOCPX4BHWGXAtnPR6QBIB2U6iKsfJ1D2Ei2ZZA3nASqBFPKRABehKtgo=
-X-Received: by 2002:a05:600c:190c:b0:37d:1f40:34c2 with SMTP id
- j12-20020a05600c190c00b0037d1f4034c2mr20380299wmq.115.1646210925279; Wed, 02
- Mar 2022 00:48:45 -0800 (PST)
+        Wed, 2 Mar 2022 03:49:55 -0500
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1622F4B853
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:49:11 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADnhsR_Lx9im+EFAg--.50148S2;
+        Wed, 02 Mar 2022 16:49:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     codrin.ciubotariu@microchip.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] misc: atmel-ssc: Handle error for clk_prepare
+Date:   Wed,  2 Mar 2022 16:49:02 +0800
+Message-Id: <20220302084902.96651-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220301132623.GA19995@vscode.7~> <CAJ8uoz2y2r1wS3_sSgZ8jC2fkiyNCW_q4oQdc_JYe2bKO4NoJA@mail.gmail.com>
-In-Reply-To: <CAJ8uoz2y2r1wS3_sSgZ8jC2fkiyNCW_q4oQdc_JYe2bKO4NoJA@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Wed, 2 Mar 2022 09:48:33 +0100
-Message-ID: <CAJ+HfNiXD_T4qdA7hMep0ncTDnPCNdtV74F8P_oTWb=2ZVoG+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf] libbpf: unmap rings when umem deleted
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     lic121 <lic121@chinatelecom.cn>, bpf <bpf@vger.kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADnhsR_Lx9im+EFAg--.50148S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZFy7Cr1rWr4DXw1UZFWUurg_yoWftwb_Ca
+        1kZrnrWFWrCw4Skr17Jr1furWv9a1qqF45XryIqa13JryUA343XrWYvFn8ArWfuF4Ik3sx
+        G3ZF93ySkrWagjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8ZwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUOnmRUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 08:29, Magnus Karlsson <magnus.karlsson@gmail.com> wr=
-ote:
-> On Tue, Mar 1, 2022 at 6:57 PM lic121 <lic121@chinatelecom.cn> wrote:
-[...]
-> > Signed-off-by: lic121 <lic121@chinatelecom.cn>
+As the potential failure of the clk_prepare(),
+it should be better to check it and return error if fails.
 
-In addition to Magnus' comments; Please use your full name, as
-outlined in Documentation/process/5.Posting.rst.
+Fixes: eb1f2930609b ("Driver for the Atmel on-chip SSC on AT32AP and AT91")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/misc/atmel-ssc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Cheers!
-Bj=C3=B6rn
+diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
+index d6cd5537126c..e0207e837e35 100644
+--- a/drivers/misc/atmel-ssc.c
++++ b/drivers/misc/atmel-ssc.c
+@@ -25,7 +25,7 @@ static LIST_HEAD(ssc_list);
+ 
+ struct ssc_device *ssc_request(unsigned int ssc_num)
+ {
+-	int ssc_valid = 0;
++	int ssc_valid = 0, ret;
+ 	struct ssc_device *ssc;
+ 
+ 	mutex_lock(&user_lock);
+@@ -57,7 +57,9 @@ struct ssc_device *ssc_request(unsigned int ssc_num)
+ 	ssc->user++;
+ 	mutex_unlock(&user_lock);
+ 
+-	clk_prepare(ssc->clk);
++	ret = clk_prepare(ssc->clk);
++	if (ret)
++		return ret;
+ 
+ 	return ssc;
+ }
+-- 
+2.25.1
+

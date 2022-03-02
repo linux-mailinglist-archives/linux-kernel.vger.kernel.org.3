@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0752C4CAF0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6C24CAF14
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiCBTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S242427AbiCBTwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiCBTu6 (ORCPT
+        with ESMTP id S242348AbiCBTw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:50:58 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9A6D109B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:50:14 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id q11so2470982pln.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:50:14 -0800 (PST)
+        Wed, 2 Mar 2022 14:52:29 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B893D95E1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:51:45 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z2so2485816plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:51:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=lKk3x8uXXjQyBVKUKuzhJBJZvtvNO106582p6u2NXrQ=;
-        b=qPmZtH8mC9Mer8Naw7XSShiYWujI0J3vVPBJ/6dwQB4LyhA5u35peVR+FBq1ELY2IR
-         +Cx++8ZLYtMKXKQV14ldIpbynCLAsbmV8Ru+4d1aoZBUgXHe2xLI32h1Y1K7od2DdCRx
-         u13TXaE4PIa8dFW7h+dBaan/ZeioxcWzhKQpw3rfBXqZmM6KtqkVNliFjl4MNz8iVbU4
-         qCvIVARH1cn29hoc6QbH6OfEOnVtNoSiWX2jCnc0iNY2U/V0hvV831YnCUMqCkLBMijz
-         z4Br0RgRDOdtR7P2N5CpVkuozPQisNtcpoQ5NS/xKwSdJHpGmCqK9qnOqpRyafP5kNuX
-         5keA==
+        bh=K9X7JrhsxNcS6upS7mNhAwW5h+M5okT8FoWI5/raP6I=;
+        b=sS3kE8+PStEGIXHDPWwCcXaFdEQhEIzd9oj0L9waQDDookmKz6rjd8d6Vu5NBSuNj4
+         nqCMAfhxTsJSS5wE+scTdZznIvWkvkwDUEnyfIJaUTCpy6gXZl4J8PcNpTqohsjMhuFf
+         6vjSo1DGJqIWbOtLrL1lPLs2QqQg4xrl+q8hwIV05nAGEVsOLxDAbSLrkwMD8O3Ddh9X
+         mLRB5TuAb+VVk8elJE0i1/xtKirCP4v86NnisaGDLN5/JUEmoC6E1J4xos7OwXt5tIW/
+         dXzwcxa6VsFzjVF0oKY5oy++wV2V9Au//9o8qjhqvKiKajawoMrL6PXiEHizGYgloNNB
+         88UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lKk3x8uXXjQyBVKUKuzhJBJZvtvNO106582p6u2NXrQ=;
-        b=PK2xDhsleBcWTRVbQNFVjtqsyd1nwUfwnwL7dqTQubKyU4shHHfetY9n6NyHMTwXxr
-         1QiMYWLR+G01RL1JCaPJDiWGy1H8e5x51V6FHBPG6w5wW0bwswkoFYWme1T32EfKi2eM
-         6DxLiBoL5R873TsZs69XTDRpgTNozblQ84SSoh47Olq+8XbXrRBMvX6Aoe7GJJUNq4Pp
-         /+U9YXawk3hxE9d8Z+sttDjwa60brE5ljGx5I1I8CZT4lO+ch5lfO/nNGOCOf/LFR3tL
-         gtyHebBeZ356lJg1HJdaR9I2+44wARe59ozD2AdZOA5UMTeyBZSgdjjGXOP8QzZBUGk1
-         eZng==
-X-Gm-Message-State: AOAM533cT63XcFg1pQmK2zcAbY5I9F6bUxrwYGJhM50tsE0KqpE0Cpj3
-        tWwg/m2FLTVoU6x/ZS1ctV29iA==
-X-Google-Smtp-Source: ABdhPJyYNWFPT4igHZjd7zFnxDV0bSj59lBtVcBFxUip3++YhrRSCJhw3q9qoiVR+tVlOgLjHQ9VGA==
-X-Received: by 2002:a17:90a:6508:b0:1be:d59c:1f10 with SMTP id i8-20020a17090a650800b001bed59c1f10mr1412919pjj.229.1646250613939;
-        Wed, 02 Mar 2022 11:50:13 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00170200b004e0f0c0e13esm21500641pfc.66.2022.03.02.11.50.13
+        bh=K9X7JrhsxNcS6upS7mNhAwW5h+M5okT8FoWI5/raP6I=;
+        b=1JPkd73ncjDZZSgsfE0BfD37hESHmVuL/VgE8Jbs4y44nhEjPqBAqu8MBdNV/9y5+U
+         u3sbGgwaOaPENbd2Y3ETQcc+79+UruaqPqj7T+q9iBCDzBSJp67rs56DjgFGOyKWR/nG
+         tzPjzgGLm5rvpXV2u39zjSOiP3ta4JRZGlWaeqgw2PA9vBLDbYGVJ+MFfk5MnCMvUjWQ
+         ++ygbE3f6293Ppxys3HBT5sQyXdEagEenhZZq8wnCHs3YgqpqFMAAIA29ambW77lszes
+         b6Ec1r6bNAS1TjgUVq6Mpf/btfY/ImX2mgogtA+1ffslF3IqUR1GXlR5Uqvggk33BKis
+         i7IA==
+X-Gm-Message-State: AOAM530EfXtbjdk2bxsPB5UVaXYJIPs8nCV8sBfxKgANBGxeQczZfkA6
+        rH80vSkrFI2V9qKZSchMnRIUiQ==
+X-Google-Smtp-Source: ABdhPJx5Y9g4hxadedkvi+PWPXPzmugUGe/3dvfWJiSI56tdTwxtwePEn9v3CEPqzDuVEA3gqmW9jA==
+X-Received: by 2002:a17:90a:5917:b0:1be:d200:2501 with SMTP id k23-20020a17090a591700b001bed2002501mr1473742pji.15.1646250704687;
+        Wed, 02 Mar 2022 11:51:44 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g17-20020a62e311000000b004def1931fbcsm13903028pfh.63.2022.03.02.11.51.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 11:50:13 -0800 (PST)
-Date:   Wed, 2 Mar 2022 19:50:09 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
+        Wed, 02 Mar 2022 11:51:44 -0800 (PST)
+Date:   Wed, 2 Mar 2022 19:51:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -62,56 +62,95 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
         Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 02/28] KVM: x86/mmu: Check for present SPTE when
- clearing dirty bit in TDP MMU
-Message-ID: <Yh/Kcawg0NIjUA+5@google.com>
+Subject: Re: [PATCH v3 01/28] KVM: x86/mmu: Use common iterator for walking
+ invalid TDP MMU roots
+Message-ID: <Yh/KzDqsQSGm1CvK@google.com>
 References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-3-seanjc@google.com>
+ <20220226001546.360188-2-seanjc@google.com>
+ <Yh/Al8wGUOEgRmih@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-3-seanjc@google.com>
+In-Reply-To: <Yh/Al8wGUOEgRmih@google.com>
 X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> Explicitly check for present SPTEs when clearing dirty bits in the TDP
-> MMU.  This isn't strictly required for correctness, as setting the dirty
-> bit in a defunct SPTE will not change the SPTE from !PRESENT to PRESENT.
-> However, the guarded MMU_WARN_ON() in spte_ad_need_write_protect() would
-> complain if anyone actually turned on KVM's MMU debugging.
+On Wed, Mar 02, 2022, Mingwei Zhang wrote:
+> On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> > Now that tdp_mmu_next_root() can process both valid and invalid roots,
+> > extend it to be able to process _only_ invalid roots, add yet another
+> > iterator macro for walking invalid roots, and use the new macro in
+> > kvm_tdp_mmu_zap_invalidated_roots().
+> > 
+> > No functional change intended.
+> > 
+> > Reviewed-by: David Matlack <dmatlack@google.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/tdp_mmu.c | 74 ++++++++++++++------------------------
+> >  1 file changed, 26 insertions(+), 48 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index debf08212f12..25148e8b711d 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -98,6 +98,12 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+> >  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+> >  }
+> >  
+> > +enum tdp_mmu_roots_iter_type {
+> > +	ALL_ROOTS = -1,
+> > +	VALID_ROOTS = 0,
+> > +	INVALID_ROOTS = 1,
+> > +};
 > 
-> Fixes: a6a0b05da9f3 ("kvm: x86/mmu: Support dirty logging for the TDP MMU")
-> Cc: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 25148e8b711d..9357780ec28f 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1446,6 +1446,9 @@ static bool clear_dirty_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
->  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
->  			continue;
->  
-> +		if (!is_shadow_present_pte(iter.old_spte))
-> +			continue;
-> +
->  		if (spte_ad_need_write_protect(iter.old_spte)) {
->  			if (is_writable_pte(iter.old_spte))
->  				new_spte = iter.old_spte & ~PT_WRITABLE_MASK;
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+> I am wondering what the trick is to start from -1?
+
+-1 is arbitrary, any non-zero value would work.  More below.
+
+> >  /*
+> >   * Returns the next root after @prev_root (or the first root if @prev_root is
+> >   * NULL).  A reference to the returned root is acquired, and the reference to
+> > @@ -110,10 +116,16 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+> >   */
+> >  static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+> >  					      struct kvm_mmu_page *prev_root,
+> > -					      bool shared, bool only_valid)
+> > +					      bool shared,
+> > +					      enum tdp_mmu_roots_iter_type type)
+> >  {
+> >  	struct kvm_mmu_page *next_root;
+> >  
+> > +	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
+> > +
+> > +	/* Ensure correctness for the below comparison against role.invalid. */
+> > +	BUILD_BUG_ON(!!VALID_ROOTS || !INVALID_ROOTS);
+> > +
+> >  	rcu_read_lock();
+> >  
+> >  	if (prev_root)
+> > @@ -125,7 +137,7 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+> >  						   typeof(*next_root), link);
+> >  
+> >  	while (next_root) {
+> > -		if ((!only_valid || !next_root->role.invalid) &&
+> > +		if ((type == ALL_ROOTS || (type == !!next_root->role.invalid)) &&
+
+This is the code that deals with the enums.  It's making the type a tri-state,
+where the values of VALID_ROOTS and INVALID_ROOTS align with converting role.invalid
+to a boolean (always '0' or '1') so that they can be directly compared as above.
+
+Any value for ALL_ROOTS (other than '0' or '1' obviously) would work since the
+above logic requires ALL_ROOTS to be explicitly checked first.
+
+> >  		    kvm_tdp_mmu_get_root(next_root))
+> >  			break;
+> >  

@@ -2,189 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E01D4CAB36
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076964CAB3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243681AbiCBRMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S239550AbiCBRNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243755AbiCBRLt (ORCPT
+        with ESMTP id S234636AbiCBRNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:11:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC370CF387
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646241055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OCk0IGN+JSNCGOmZy65+tm/Nx0eAS27c5ZIr+XIGJxc=;
-        b=ec047Mgd8dCtj7whfviaju5Bc7Xm2i+mqXiMsVCTE+6PGE51n613cc3B8TWhiGK4OAIxny
-        Fn4PsduDQSW59jprGQvhP4j1tILupWaaOjwX0nlFwEngiVzzIzWznOSDCA8wd40Hzwtbe3
-        lYyrQd3lfg5KrGY/Xy+ZfDI871v+2L4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-zU964_kyOcWoKoHNUGH9aA-1; Wed, 02 Mar 2022 12:10:54 -0500
-X-MC-Unique: zU964_kyOcWoKoHNUGH9aA-1
-Received: by mail-wr1-f71.google.com with SMTP id o9-20020adfca09000000b001ea79f7edf8so862717wrh.16
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:10:54 -0800 (PST)
+        Wed, 2 Mar 2022 12:13:11 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567AB5595;
+        Wed,  2 Mar 2022 09:12:26 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2dbd8777564so26068887b3.0;
+        Wed, 02 Mar 2022 09:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AvcFqOYltGy+0NWy8JBCis1x7cnlm0NXxI65Z4H9cuA=;
+        b=YF7dFPct/RccQtzqMIZlbMgKl+DOMpfbkGMkkci+ZFO/QYDkK0opHy2/Gaonc1ZEaF
+         gs5PxnqeR5Tle5f3kkNArSNvSbbphHdrZre6jVTGygh53B7+jua7CTQ6vP5idUVvH1go
+         gtlXCOWQFPMT8SWzVRVhaHOhnktTI/5xjzS0CYeeLNgDj5nks3ZQPM9bD2hp0tjXbaiq
+         BhfzFdrRjPBU5EbVLBlZfWPoRK8XdJQH9A9H38Gi+mAS10YQ9f5qrPlNI29ZUVKN26bo
+         N2YMg5nNxffw1Pq3mfD2Bb1mHPob78PJa3jrR/hW78I7YVXSftkhIgSEeCkTO+oGRWmX
+         /PHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OCk0IGN+JSNCGOmZy65+tm/Nx0eAS27c5ZIr+XIGJxc=;
-        b=lDGAHTx+3ccv0JbYpy1EkyE6+U8Nc8TTpIgiNM55k2xreoqBIwtDvfOxc7bn3+LDzq
-         XKa5OePbY3HpgoEBLl5pEqzxsZrqvWfSq9XT7yIGi7dZcdREombrc3oDvm1wRGnI52mR
-         4Q5Hte5OgDv1Rsyp/Z0FbXSQKBUelkUMFgqwansp/KRAv2AFScFRzg9Oqs02Qv6B3qP3
-         wbGxepag7xKBSEnCskbFUMT3BkNQ7Oh17A3XXAp8MVzfC2h/Yu/ptaifiWKKF4FnLHYq
-         +NY2RwhYpKKsVByEHdhBwdpriNIPXyXXYDtwpTBOI6icqoDHM+AXZEvjWepbb7wLKiqo
-         oCNw==
-X-Gm-Message-State: AOAM5327BqXn7Ic/yVJnKFzl1cqqikxRvZSPKoZrlWMy3Vi6rs1Jhc/j
-        9C48Lq0oDf6G+ZgRASoE+slPSjqwHft0aCA4BPGL3j4tLRjHfFJyyjNqEaI5y7vW4XbJvsiVIqo
-        PNSCB/kwjNvvTi9Mmfosr8vqT
-X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr22844994wrw.216.1646241052249;
-        Wed, 02 Mar 2022 09:10:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwdCmMTM9zLSI+LlHPZY7Qi9z6yOB/Nx9cLAFKLKH9IIrgIyZ3Z4qt7cBDrf7wigHlwXxKhVQ==
-X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr22844983wrw.216.1646241051946;
-        Wed, 02 Mar 2022 09:10:51 -0800 (PST)
-Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
-        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm5579398wra.97.2022.03.02.09.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:10:51 -0800 (PST)
-Date:   Wed, 2 Mar 2022 18:10:48 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <20220302171048.aijkcrwcrgsu475z@sgarzare-redhat>
-References: <20220302075421.2131221-1-lee.jones@linaro.org>
- <20220302082021-mutt-send-email-mst@kernel.org>
- <Yh93k2ZKJBIYQJjp@google.com>
- <20220302095045-mutt-send-email-mst@kernel.org>
- <Yh+F1gkCGoYF2lMV@google.com>
- <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
- <20220302112945-mutt-send-email-mst@kernel.org>
- <Yh+gDZUbgBRx/1ro@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AvcFqOYltGy+0NWy8JBCis1x7cnlm0NXxI65Z4H9cuA=;
+        b=417+qRrUwpzYTBCf0q1sbyAde8njBGkcri/ZRLEkrGbXBd2P37bx0GUMLcnmPgeq2Z
+         3Cb0RQ4GtRRcfKAVAPQhSZxcgVysKaAXUoij0ggbxdro2kYr1ntSOpCQiNWzmqJee+C0
+         s0I0Uch6Y/TbKKLPvTAsvlP/SwVxBU60cHu61BIDmqArck1D6mFun0ydbrLbGzSnp1hn
+         EnXAroufIzsLIPLIy/4c+vOyQXsq2K2x8cCodFuUmY254eT22+2HtSL9AJXmOVbXlnzZ
+         FgsFK7IcxYmjgyXas1uMdOtJbfyw/3vDv2zMuxAG9GnsbAlPRCaMhYPNs5f88DwVojPu
+         fy2g==
+X-Gm-Message-State: AOAM532X++cjF1QqxTBAZ3N5vmI/WRROmDt1pAEAmXCwK4FkPD15ebaL
+        2BSyJffrBEoBuGfcQfoeCx6RT4SR9kYJ6CWva3s=
+X-Google-Smtp-Source: ABdhPJy69RwfdCCJC68UIsfdXRgP0PJVVpf3TFtA9o0oEVpIj8OY9p2dVyfF5kCHR5KWl1EEwNMj9doM+vj+bE3vShY=
+X-Received: by 2002:a0d:fa01:0:b0:2d6:595d:81d4 with SMTP id
+ k1-20020a0dfa01000000b002d6595d81d4mr31750715ywf.86.1646241145503; Wed, 02
+ Mar 2022 09:12:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Yh+gDZUbgBRx/1ro@google.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220302143427.447748-1-vkoul@kernel.org> <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+In-Reply-To: <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 2 Mar 2022 12:12:13 -0500
+Message-ID: <CAMdYzYoCeSKPQjUqigtP7GiAB8iDre9BRwVTqvmq_OA-N06NQw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
+ combo phy register compatible"
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:49:17PM +0000, Lee Jones wrote:
->On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+On Wed, Mar 2, 2022 at 12:04 PM Rob Herring <robh+dt@kernel.org> wrote:
 >
->> On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
->> > On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
->> > >
->> > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
->> > >
->> > > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
->> > > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
->> > > > >
->> > > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
->> > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
->> > > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
->> > > > > > > during virtqueue clean-up and we mitigate the reported issues.
->> > > > > > >
->> > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
->> > > > > > >
->> > > > > > > Cc: <stable@vger.kernel.org>
->> > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
->> > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
->> > > > > > > ---
->> > > > > > >  drivers/vhost/vhost.c | 2 ++
->> > > > > > >  1 file changed, 2 insertions(+)
->> > > > > > >
->> > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->> > > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
->> > > > > > > --- a/drivers/vhost/vhost.c
->> > > > > > > +++ b/drivers/vhost/vhost.c
->> > > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->> > > > > > >         int i;
->> > > > > > >
->> > > > > > >         for (i = 0; i < dev->nvqs; ++i) {
->> > > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
->> > > > > > >                 if (dev->vqs[i]->error_ctx)
->> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
->> > > > > > >                 if (dev->vqs[i]->kick)
->> > > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->> > > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
->> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
->> > > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
->> > > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
->> > > > > > >         }
->> > > > > >
->> > > > > > So this is a mitigation plan but the bug is still there though
->> > > > > > we don't know exactly what it is.  I would prefer adding something like
->> > > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
->> > > > >
->> > > > > As a rework to this, or as a subsequent patch?
->> > > >
->> > > > Can be a separate patch.
->> > > >
->> > > > > Just before the first lock I assume?
->> > > >
->> > > > I guess so, yes.
->> > >
->> > > No problem.  Patch to follow.
->> > >
->> > > I'm also going to attempt to debug the root cause, but I'm new to this
->> > > subsystem to it might take a while for me to get my head around.
->> >
->> > IIUC the root cause should be the same as the one we solved here:
->> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
->> >
->> > The worker was not stopped before calling vhost_dev_cleanup(). So while
->> > the worker was still running we were going to free memory or initialize
->> > fields while it was still using virtqueue.
->>
->> Right, and I agree but it's not the root though, we do attempt to stop all workers.
+> On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
+> > combo phy register compatible") as that was wrongly merged, so better to
+> > drop the wrong patch
+> >
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> > I am applying this to phy-next to fix the issue
 >
->Exactly.  This is what happens, but the question I'm going to attempt
->to answer is *why* does this happen.
+> Reverting will just cause a different warning that it is undocumented.
+> The fix in the other thread won't apply either if you revert.
 
-IIUC the worker was still running because the /dev/vhost-vsock file was 
-not explicitly closed, so vhost_vsock_dev_release() was called in the 
-do_exit() of the process.
+Reverting and reapplying the original patch would work.
+https://patchwork.kernel.org/project/linux-rockchip/patch/20220208091326.12495-2-yifeng.zhao@rock-chips.com/
 
-In that case there was the issue, because vhost_dev_check_owner() 
-returned false in vhost_vsock_stop() since current->mm was NULL.
-So it returned earlier, without calling vhost_vq_set_backend(vq, NULL).
-
-This did not stop the worker from continuing to run, causing the 
-multiple issues we are seeing.
-
-current->mm was NULL, because in the do_exit() the address space is 
-cleaned in the exit_mm(), which is called before releasing the files 
-into the exit_task_work().
-
-This can be seen from the logs, where we see first the warnings printed 
-by vhost_dev_cleanup() and then the panic in the worker (e.g. here 
-https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000)
-
-Mike also added a few more helpful details in this thread: 
-https://lore.kernel.org/virtualization/20220221100500.2x3s2sddqahgdfyt@sgarzare-redhat/T/#ree61316eac63245c9ba3050b44330e4034282cc2
-
-Thanks,
-Stefano
-
+>
+> Rob

@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5195D4CA6D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B124CA6DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240623AbiCBOAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S241548AbiCBOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237510AbiCBOAJ (ORCPT
+        with ESMTP id S240897AbiCBOBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:00:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E1C87C146
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:59:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646229565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xe2iwKfGIRkq9VyKQg0gm/3lc8YXGtL4KrUQ6qSmDg0=;
-        b=YwW6Ct5ZADx3AeHLI12xXgybpnFETyU4MT00z2h4DWBWJ6C7PuOe0dkKZrUmHO/KpMbtDw
-        TIoU7qBcWeYhWkolg6c6GC1ttqMMzXzSNV8wVkaxuQ7T+ciO6F3YmCr9TB4JLUYGwMyv37
-        LgoLx2QhSOCEJbvX3TXfo34HWZxHow4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-VT4LRjE5NQ-8glR5jKSTYA-1; Wed, 02 Mar 2022 08:59:24 -0500
-X-MC-Unique: VT4LRjE5NQ-8glR5jKSTYA-1
-Received: by mail-ej1-f72.google.com with SMTP id c23-20020a170906925700b006d6e2797863so1021074ejx.14
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 05:59:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xe2iwKfGIRkq9VyKQg0gm/3lc8YXGtL4KrUQ6qSmDg0=;
-        b=bHDY3934iT+kB0F9zbFCmuRJoKHokNDLW+zxmUKxpngohM0TVYz3OWM4t+nrrRzmM9
-         86lvN953Pywzs+3p79WAlaMVQPh8x0Eq3AizuPfImcCEOI0xaynQAoNraUkuBM8Q/YaR
-         trTVbGyFpF63/nd3QIeBQ2bHDbqThFjPZpmmC7o4svlXZjGbfxm5wC7PIgZjeEkVTPTU
-         +vTn5ApwgdOrUr2BwDCXv1PkYNAyIgSyEo9ge6j3mNHUyp9zCyf/wbrjt3VBq8UxTR4Z
-         ZNp2crd9Tgv0bxZ/5YyV1bq/gvkFsoSMOWohYue/SDxMFmLGtNPGE06Ud/kmmOTs42Sc
-         TXzg==
-X-Gm-Message-State: AOAM533KAhiPb8uMz7SnBz/Guw2IHf2TV8v++VM6okjmCjInX9omQC1L
-        M9OidJoSyI5npqPjwKOh7G5i1Hj3SrgCLioCi40ZNNQlwjajUtXZgY4YywAzWiOAeNpsaxyT+Cp
-        uxKYHBqi4iio3JQVhjxgmHSvU
-X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr23114030ejb.423.1646229563128;
-        Wed, 02 Mar 2022 05:59:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNhPgatvjDQdr29sr8p4ut5aR7tTRqN0kQcy5FzWNUczB6jUqUudHhRoIZ2HGAYUznew8Sbw==
-X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr23114006ejb.423.1646229562885;
-        Wed, 02 Mar 2022 05:59:22 -0800 (PST)
-Received: from [10.39.192.144] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id m25-20020a170906161900b006d43be5b95fsm6389055ejd.118.2022.03.02.05.59.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Mar 2022 05:59:22 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     Roi Dayan <roid@nvidia.com>
-Cc:     patchwork-bot+netdevbpf@kernel.org,
-        Toms Atteka <cpp.code.lv@gmail.com>, dev@openvswitch.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net
-Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6 extension header support
-Date:   Wed, 02 Mar 2022 14:59:21 +0100
-X-Mailer: MailMate (1.14r5875)
-Message-ID: <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
-In-Reply-To: <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
-References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
- <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
- <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
- <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 2 Mar 2022 09:01:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3197C148;
+        Wed,  2 Mar 2022 06:00:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EAD6B81FEC;
+        Wed,  2 Mar 2022 14:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7301DC340F1;
+        Wed,  2 Mar 2022 14:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646229623;
+        bh=JIzJgdja99gaS0mVD7G0oF0YG123mLDRGSr0/UKFBY8=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=Oyvc2LCtHuYPoFjcL5M8fI1RSTHr6U47iRjuhzOIY2yyBFmfeLhy1UdfepnP8EOBA
+         jyfBZ8akpF4nNhJd72EJmiKCuscf0oPUiawa/Yw85AybTi+KQK5XJ/2+vJpyFVJdBO
+         DQbY8OFx4xY5QcFEq1V0ekMLw9lefiJZKk6akTAFaw2Z0yzr90TbO37oYKW27mtwsa
+         C4sJvTZv1WH2inFpAl8NjZ53MBai5+MaH1eRt37cDnJBpMKqjqVvZAR8qEep1cm7qs
+         KQrLrJSqDhTAMxVZ39TNNHUIeOTmic67b9Oqu9pehoq9ZiI+CRdp3amu6deR4QABoG
+         TZjxly3pvbtcQ==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0AEB627C005B;
+        Wed,  2 Mar 2022 09:00:20 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Wed, 02 Mar 2022 09:00:21 -0500
+X-ME-Sender: <xms:c3gfYlJApHOxbxXXVZkJ7-wOP_8jNSzmT5CRY2W1uLgU75SJ0EoHWQ>
+    <xme:c3gfYhIrR34AvJoz4dnUDY8NtkAAaqb13smpvByKEMSy48dAmf_Wnz2olEBzoAcwF
+    V5GjHUzFmbvvEdRLUo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtgedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
+    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
+    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
+    drlhhuthhordhush
+X-ME-Proxy: <xmx:c3gfYtva9_xsK0Y0-8xy2xczyzGJ6FMkaecx0S-_VWAmFlh732Quhw>
+    <xmx:c3gfYmZd8FTx0ve2eQEgHlXS08flnULGDUuAdknZQtOzbH-uk7LxbQ>
+    <xmx:c3gfYsYsjejDFL4psgWiRUGEU1lpkC8dKlc-p3eWmWng5_ZeDdX29g>
+    <xmx:dHgfYmtrKbSDiBae5ya_UVTnLzmSIdIokF669pN5Dlh0d9eiNKuKZ4XJkeg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B0E8F21E0073; Wed,  2 Mar 2022 09:00:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <1b793ead-a47c-4719-b7b5-cba7d49633f2@www.fastmail.com>
+In-Reply-To: <20220301195457.21152-1-jithu.joseph@intel.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+Date:   Wed, 02 Mar 2022 05:59:59 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Jithu Joseph" <jithu.joseph@intel.com>, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Raj Ashok" <ashok.raj@intel.com>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [RFC 00/10] Introduce In Field Scan driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,64 +95,138 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2 Mar 2022, at 11:50, Roi Dayan wrote:
-
-> On 2022-03-02 12:03 PM, Roi Dayan wrote:
->>
->>
->> On 2022-02-25 12:40 PM, patchwork-bot+netdevbpf@kernel.org wrote:
->>> Hello:
->>>
->>> This patch was applied to netdev/net-next.git (master)
->>> by David S. Miller <davem@davemloft.net>:
->>>
->>> On Wed, 23 Feb 2022 16:54:09 -0800 you wrote:
->>>> This change adds a new OpenFlow field OFPXMT_OFB_IPV6_EXTHDR and
->>>> packets can be filtered using ipv6_ext flag.
->>>>
->>>> Signed-off-by: Toms Atteka <cpp.code.lv@gmail.com>
->>>> Acked-by: Pravin B Shelar <pshelar@ovn.org>
->>>> ---
->>>> =C2=A0 include/uapi/linux/openvswitch.h |=C2=A0=C2=A0 6 ++
->>>> =C2=A0 net/openvswitch/flow.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 140 +++++++++++++++++++++++++++++++
->>>> =C2=A0 net/openvswitch/flow.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 14 ++++
->>>> =C2=A0 net/openvswitch/flow_netlink.c=C2=A0=C2=A0 |=C2=A0 26 +++++-
->>>> =C2=A0 4 files changed, 184 insertions(+), 2 deletions(-)
->>>
->>> Here is the summary with links:
->>> =C2=A0=C2=A0 - [net-next,v8] net: openvswitch: IPv6: Add IPv6 extensi=
-on header support
->>> =C2=A0=C2=A0=C2=A0=C2=A0 https://git.kernel.org/netdev/net-next/c/28a=
-3f0601727
->>>
->>> You are awesome, thank you!
->>
->> Hi,
->>
->> After the merge of this patch I fail to do ipv6 traffic in ovs.
->> Am I missing something?
->>
->> ovs-vswitchd.log has this msg
->>
->> 2022-03-02T09:52:26.604Z|00013|odp_util(handler1)|WARN|attribute packe=
-t_type has length 2 but should have length 4
->>
->> Thanks,
->> Roi
+On Tue, Mar 1, 2022, at 11:54 AM, Jithu Joseph wrote:
+> Note to Maintainers:
+> Requesting x86 Maintainers to take a look at patch01 as it
+> touches arch/x86 portion of the kernel. Also would like to guide them
+> to patch07 which sets up hotplug notifiers and creates kthreads.
+>
+> Patch 2/10 - Adds Documentation. Requesting Documentation maintainer to 
+> review it.
+>
+> Requesting Greg KH to review the sysfs changes added by patch08.
+>
+> Patch10 adds tracing support, requesting Steven Rostedt to review that.
+>
+> Rest of the patches adds the IFS platform driver, requesting Platform 
+> driver maintainers
+> to review them.
 >
 >
-> I think there is a missing userspace fix. didnt verify yet.
-> but in ovs userspace odp-netlink.h created from datapath/linux/compat/i=
-nclude/linux/openvswitch.h
-> and that file is not synced the change here.
-> So the new enum OVS_KEY_ATTR_IPV6_EXTHDRS is missing and also struct
-> ovs_key_ipv6_exthdrs which is needed in lib/udp-util.c
-> in struct ovs_flow_key_attr_lens to add expected len for
-> OVS_KEY_ATTR_IPV6_EXTHDR.
+> In Field Scan (IFS) is a hardware feature to run circuit level tests on
+> a CPU core to detect problems that are not caught by parity or ECC checks.
+>
+> Intel will provide a firmware file containing the scan tests.  Similar to
+> microcode there is a separate file for each family-model-stepping. The
+> tests in the file are divided into some number of "chunks" that can be
+> run individually.
+>
+> The driver loads the tests into memory reserved BIOS local to each CPU
+> socket in a two step process using writes to MSRs to first load the
+> SHA hashes for the test. Then the tests themselves. Status MSRs provide
+> feedback on the success/failure of these steps.
+>
+> Tests are run by synchronizing execution of all threads on a core and
+> then writing to the ACTIVATE_SCAN MSR on all threads. Instruction
+> execution continues when:
+>
+> 1) all tests have completed
+> 2) execution was interrupted
+> 3) a test detected a problem
+>
+> In all cases reading the SCAN_STATUS MSR provides details on what
+> happened. Interrupted tests may be restarted.
+>
+> The IFS driver provides interfaces from /sys to reload tests and to
+> control execution:
+>
+> /sys/devices/system/cpu/ifs/reload
+>   Writing "1" to this file will reload the tests from
+>   /lib/firmware/intel/ifs/{ff-mm-ss}.scan
 
-I guess if this is creating backward compatibility issues, this patch sho=
-uld be reverted/fixed. As a kmod upgrade should not break existing deploy=
-ments.
+IMO this interface is wrong.  /lib/firmware is for firmware (or ucode, etc) files that should be provided by a distribution and loaded, as needed, by a driver so the hardware can function.  This is not at all what IFS does. For IFS, an administrator wants to run a specific test, and the test blob is part of the instruction to run the test.  The distribution should not be involved, and this should work even on systems where /lib/firmware is immutable.
 
+So either the blob should be written to a file in sysfs or it should be supplied by write or ioctl to a device node.
+
+>
+> /sys/devices/system/cpu/ifs/run_test
+>   Writing "1" to this file will trigger a scan on each core
+>   sequentially by logical CPU number (when HT is enabled this only
+>   runs the tests once for each core)
+>
+> /sys/devices/system/cpu/cpu#/ifs/run_test
+>   Writing "1" to one of these files will trigger a scan on just
+>   that core.
+>
+> Results of the tests are also provided in /sys:
+>
+> /sys/devices/system/cpu/ifs/status
+>   Global status. Will show the most serious status across
+>   all cores (fail > untested > pass)
+>
+> /sys/devices/system/cpu/ifs/cpu_fail_list
+> /sys/devices/system/cpu/ifs/cpu_pass_list
+> /sys/devices/system/cpu/ifs/cpu_untested_list
+>   CPU lists showing which CPUs have which test status
+>
+> /sys/devices/system/cpu/cpu#/ifs/status
+>   Status (pass/fail/untested) of each core
+>
+> /sys/devices/system/cpu/cpu#/ifs/details
+>   Hex value of the SCAN_STATUS MSR for the most recent test on
+>   this core. Note that the error_code field may contain driver
+>   defined software code not defined in the Intel SDM.
+>
+> Current driver limitations:
+>
+> 1) The ACTIVATE_SCAN MSR allows for running any consecutive subrange or
+> available tests. But the driver always tries to run all tests and only
+> uses the subrange feature to restart an interrupted test.
+>
+> 2) Hardware allows for some number of cores to be tested in parallel.
+> The driver does not make use of this, it only tests one core at a time.
+>
+>
+> Jithu Joseph (8):
+>   x86/microcode/intel: expose collect_cpu_info_early() for IFS
+>   platform/x86/intel/ifs: Add driver for In-Field Scan
+>   platform/x86/intel/ifs: Load IFS Image
+>   platform/x86/intel/ifs: Check IFS Image sanity
+>   platform/x86/intel/ifs: Authenticate and copy to secured memory
+>   platform/x86/intel/ifs: Create kthreads for online cpus for scan test
+>   platform/x86/intel/ifs: Add IFS sysfs interface
+>   platform/x86/intel/ifs: add ABI documentation for IFS
+>
+> Tony Luck (2):
+>   Documentation: In-Field Scan
+>   trace: platform/x86/intel/ifs: Add trace point to track Intel IFS
+>     operations
+>
+>  Documentation/ABI/stable/sysfs-driver-ifs |  85 +++++
+>  Documentation/x86/ifs.rst                 | 108 ++++++
+>  Documentation/x86/index.rst               |   1 +
+>  MAINTAINERS                               |   7 +
+>  arch/x86/include/asm/microcode_intel.h    |   6 +
+>  arch/x86/kernel/cpu/microcode/intel.c     |   8 +-
+>  drivers/platform/x86/intel/Kconfig        |   1 +
+>  drivers/platform/x86/intel/Makefile       |   1 +
+>  drivers/platform/x86/intel/ifs/Kconfig    |   9 +
+>  drivers/platform/x86/intel/ifs/Makefile   |   7 +
+>  drivers/platform/x86/intel/ifs/core.c     | 387 +++++++++++++++++++++
+>  drivers/platform/x86/intel/ifs/ifs.h      | 155 +++++++++
+>  drivers/platform/x86/intel/ifs/load.c     | 299 ++++++++++++++++
+>  drivers/platform/x86/intel/ifs/sysfs.c    | 394 ++++++++++++++++++++++
+>  include/trace/events/ifs.h                |  38 +++
+>  15 files changed, 1503 insertions(+), 3 deletions(-)
+>  create mode 100644 Documentation/ABI/stable/sysfs-driver-ifs
+>  create mode 100644 Documentation/x86/ifs.rst
+>  create mode 100644 drivers/platform/x86/intel/ifs/Kconfig
+>  create mode 100644 drivers/platform/x86/intel/ifs/Makefile
+>  create mode 100644 drivers/platform/x86/intel/ifs/core.c
+>  create mode 100644 drivers/platform/x86/intel/ifs/ifs.h
+>  create mode 100644 drivers/platform/x86/intel/ifs/load.c
+>  create mode 100644 drivers/platform/x86/intel/ifs/sysfs.c
+>  create mode 100644 include/trace/events/ifs.h
+>
+> -- 
+> 2.17.1

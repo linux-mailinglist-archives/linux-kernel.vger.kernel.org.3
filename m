@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B51A4CB03F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7BC4CB031
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244968AbiCBUuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S244303AbiCBUsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245029AbiCBUtm (ORCPT
+        with ESMTP id S231127AbiCBUsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:49:42 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4312E6540B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:55 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id cx5so2866481pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5AE2uRsYYk+x02Y3HTY/LR7/duyX8373bf9eEbOiMhw=;
-        b=VrC5/9ZfjKL0MIvIXSU975r5t328rIc0clW+nUjdfd8j3bKzwZxcRy1yQA3SLxLDOy
-         sSp6lAe4/Fs2beIQiA3Inx/yAPLsKwikO0zqTE/ly1/Fn/c7D1I6PD1GJ7IRvJnN5ioJ
-         93uMtqhrw0keVsXEjqLVU/0u5IwvtC2Kj6humVxy46R8v/V7sYJ5SkmTWQqE9CCqwea2
-         HEIHI6qDZRLLEqDM1apSgyYRCVhZWRRBlwtBpLKwI8ZOb6qnW+uALOYxGEXVhja1sAP5
-         VsrIKFlvobbwERFwZEWNoCcWeT5JLux7+Nhmb7EJx+AAJ5nUbsKYOCK7GezP6Q3vZnkM
-         bBdA==
+        Wed, 2 Mar 2022 15:48:39 -0500
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EA13BBC8;
+        Wed,  2 Mar 2022 12:47:54 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id s1so2595496plg.12;
+        Wed, 02 Mar 2022 12:47:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5AE2uRsYYk+x02Y3HTY/LR7/duyX8373bf9eEbOiMhw=;
-        b=41XUU5JtU1tnHPKcqZCn255nELthiSKZlKyZF8bXaegnPKq0Kh9r3pU2GvODiXI+ws
-         jlIQwIBr1DLrwypSZjGHl3YPSrLML/dHq+n9HWFgPx72CxTQFWnCz85wawUKcOsX49Lm
-         D0bz4e+AEimap6LIuWYKiYms8qtdQzm9PcK3UEKtM9gZcyvQifqv5omMxNTNYoxBZbWe
-         77ESG7P6xPPtIjDn7jlrpWLsTwxEl3gevOAU9qOU4VgZKPLgd2w+VnYDpkbiQRPWChXi
-         gxn7xpUcHJwf58z2cEBVkb+wso9L5ErQGIN6VJq5L8ygYHa0B7jJ0i9VJoDb8dS6y1DN
-         uTow==
-X-Gm-Message-State: AOAM533lNpDlL/BYkmRQHGYyadgrwI+cGv+4Q7Me5v1/q9vy0xHhaYhW
-        jxp2NAAMrCBEjG07bsO1akw=
-X-Google-Smtp-Source: ABdhPJw0Vdrj8JQ8Hht/3yFHRDC5KV/68Nh0Lx0vUn1K4P96RrSMwULBxpz4qw7+dDDafwNxXmEuIA==
-X-Received: by 2002:a17:903:2489:b0:14f:fe0b:554b with SMTP id p9-20020a170903248900b0014ffe0b554bmr32742239plw.113.1646254134788;
-        Wed, 02 Mar 2022 12:48:54 -0800 (PST)
-Received: from localhost.localdomain ([103.161.98.179])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/8RzJI/cV5QLUaK7OFWN4qtubroSrlMbLOdRPpIyWFQ=;
+        b=U/benTwITi48kAs3XKBcYSLSExoN8Ti8b3oerB4sNOEr5ZeQZdpPYq0Rrlaw7cCIj0
+         LD0TIlUc2wGkBZFbWkzgxPcXsCcdt0l8CY0rWDx5DFjhnGhXj9Mt3Oa7zUMDD60pdJEy
+         FjY79a4tuMcVonDlpVyuTL1hQwPDw+lxbkOq/qAwIR18szKUgISbxAOfjqaHiQhobHdJ
+         mtIhJ17xyApwbDD2Sbngxv9XfRXHTPQYqNEOBUNiAbivGAfjlA/QSeQ2+d7WPj9+LKM+
+         dzc1TiIQLCevnCs55moywtVG4dXNxoenS7Y9ya6ctuoyf5lvUQ8JkmxcyL4uWFtYOSOE
+         kVzg==
+X-Gm-Message-State: AOAM530sVtdmUce82nO9KGXyPSuefxN8Kat4tGtRuUnQ4/xYL8qrhRiQ
+        yYNUrFLOyWRRre5GmURxYhI=
+X-Google-Smtp-Source: ABdhPJxmupNHujhiGV8P8/41cjzWqCEh3zk4qKmxMoCyV6RrPawt20cUfWrygRx3Lca72CdYHeMo9Q==
+X-Received: by 2002:a17:903:248:b0:14f:139f:191f with SMTP id j8-20020a170903024800b0014f139f191fmr32545625plh.71.1646254074201;
+        Wed, 02 Mar 2022 12:47:54 -0800 (PST)
+Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
+        by smtp.gmail.com with ESMTPSA id lr11-20020a17090b4b8b00b001bc4098fa78sm6483516pjb.24.2022.03.02.12.47.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:48:54 -0800 (PST)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 16/16] staging: r8188eu: mark rtw_endofpktfile as bool
-Date:   Thu,  3 Mar 2022 02:17:37 +0530
-Message-Id: <20220302204737.49056-17-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302204737.49056-1-makvihas@gmail.com>
-References: <20220302204737.49056-1-makvihas@gmail.com>
+        Wed, 02 Mar 2022 12:47:53 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:47:50 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "hch@infradead.org" <hch@infradead.org>
+Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Kanchan Joshi <joshiiitr@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "bcrl@kvack.org" <bcrl@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        SelvaKumar S <selvakuma.s1@samsung.com>,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "Remzi H. Arpaci-Dusseau" <remzi@cs.wisc.edu>
+Subject: Re: [PATCH v4 6/6] io_uring: add support for zone-append
+Message-ID: <20220302204750.e3vt3w5uggd35x3a@garbanzo>
+References: <20200731064526.GA25674@infradead.org>
+ <MWHPR04MB37581344328A42EA7F5ED13EE74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <CA+1E3rLM4G4SwzD6RWsK6Ssp7NmhiPedZDjrqN3kORQr9fxCtw@mail.gmail.com>
+ <MWHPR04MB375863C20C1EF2CB27E62703E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731091416.GA29634@infradead.org>
+ <MWHPR04MB37586D39CA389296CE0252A4E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731094135.GA4104@infradead.org>
+ <MWHPR04MB3758A4B2967DB1FABAAD9265E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
+ <20200731125110.GA11500@infradead.org>
+ <20200731130802.GA16665@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200731130802.GA16665@infradead.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark rtw_endofpktfile as bool as it returns true/false.
+On Fri, Jul 31, 2020 at 02:08:02PM +0100, hch@infradead.org wrote:
+> And FYI, this is what I'd do for a hacky aio-only prototype (untested):
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- drivers/staging/r8188eu/include/xmit_osdep.h | 2 +-
- drivers/staging/r8188eu/os_dep/xmit_linux.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+So... are we OK with an aio-only approach (instead of using io-uring)
+for raw access to append?
 
-diff --git a/drivers/staging/r8188eu/include/xmit_osdep.h b/drivers/staging/r8188eu/include/xmit_osdep.h
-index 3e778dff0..00658681f 100644
---- a/drivers/staging/r8188eu/include/xmit_osdep.h
-+++ b/drivers/staging/r8188eu/include/xmit_osdep.h
-@@ -40,7 +40,7 @@ void rtw_os_xmit_resource_free(struct adapter *padapter,
- uint rtw_remainder_len(struct pkt_file *pfile);
- void _rtw_open_pktfile(struct sk_buff *pkt, struct pkt_file *pfile);
- uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen);
--int rtw_endofpktfile(struct pkt_file *pfile);
-+bool rtw_endofpktfile(struct pkt_file *pfile);
- 
- void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt);
- void rtw_os_xmit_complete(struct adapter *padapter,
-diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-index 717b980a8..a6012cffd 100644
---- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-@@ -54,7 +54,7 @@ uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
- 	return len;
- }
- 
--int rtw_endofpktfile(struct pkt_file *pfile)
-+bool rtw_endofpktfile(struct pkt_file *pfile)
- {
- 
- 	if (pfile->pkt_len == 0) {
--- 
-2.30.2
-
+  Luis

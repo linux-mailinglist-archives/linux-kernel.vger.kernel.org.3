@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AD34CAB2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3604CAB28
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243594AbiCBRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S243307AbiCBRJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiCBRKY (ORCPT
+        with ESMTP id S235582AbiCBRJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:10:24 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D7E6342;
-        Wed,  2 Mar 2022 09:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646240981; x=1677776981;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ARu95SNjYvUW6s+dQ5hSBTaIXLn2LgPc0xfUHeJLPZ8=;
-  b=Kcnwq8R/yC952bKJDjGmx4d8EwmscA4Ac5uEyQ0MaKD4CW7TZOtsVBXh
-   7u0iB61y0FvWqXn3Onu7RSiRWof4mPOucmAqP7j2bEnA71q4QZPER2UOb
-   cDhlV1CPYWAGXN06fYLCFruln7j2y61Au1JfDF+B9V/WYRG4eggm3aV8c
-   +aVRORwTVqAm7hk/HigDBFK9hitQaVgBIPXJJsjcLCNPWnXk6ZtciWKqn
-   bGklHoGHpPSGZcBNfmHvcW0jkFvMW2LVVsC3DVkl9u8zRuSycefSka/H7
-   3ZeK7HCQTZpZ2inApn2OqZAG0Fa6P06bM9n+kzPk1KYR1IWroNUbLZCIr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251027450"
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="251027450"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:09:15 -0800
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="511078765"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:09:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nPSSf-00APUi-LB;
-        Wed, 02 Mar 2022 19:08:25 +0200
-Date:   Wed, 2 Mar 2022 19:08:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        nvdimm@lists.linux.dev, Len Brown <lenb@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH v1 1/1] ACPI: Switch to use list_entry_is_head() helper
-Message-ID: <Yh+kiSMZPleBcOXh@smile.fi.intel.com>
-References: <20220211110423.22733-1-andriy.shevchenko@linux.intel.com>
- <Yh+SHs4CEWkiLxAe@smile.fi.intel.com>
- <CAJZ5v0g_3a7A5aFab6ZsM8nPDmivoTeNgdSG17Lt71mFKmNxmg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g_3a7A5aFab6ZsM8nPDmivoTeNgdSG17Lt71mFKmNxmg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Wed, 2 Mar 2022 12:09:52 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56C72A24D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:09:08 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id h16-20020a056902009000b00628a70584b2so1499366ybs.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:09:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ZMpzNEO4OPsp548pYzGhk7wZS3nBzSDrcI4nxyW6tZM=;
+        b=aiIy58X8kGzp5JdrFAHj8izY/rdF4BudQOUeB5/s3q4lshKXZ8omiY5VgIxx1xhf4Q
+         dL4vmHW8ZXhN7rL9CYSUcnfn6JmdPeZOm0gq2PBtrVRbSuGpUhOtGZG3N2eKrLAKmSAR
+         wWhWGgSCdOTafxyzWhmfnjnvO5aWcs15wKB4QVsUrdYVnaa9lYECPBmn9dahI2ohVyBw
+         JZx+NG4w2d7VMBIOlTGPDcJSKtUIJaQ06z7RksYPil+b27jX2AhwrL6zQ9HN8f5XxQDF
+         miXmPk/SGZHevMAarSD1RaPCIAyT8S2Pb1IC+5hY6XVK2bINUpvFjJjMymgqXMaFtds1
+         obUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ZMpzNEO4OPsp548pYzGhk7wZS3nBzSDrcI4nxyW6tZM=;
+        b=tqC+tm/iMVp3RJ9onOOlAARwgc46ZpTKGA2mUjytvFgO4qBPkTlhmOgBULN7f61laV
+         muf2hsetu5NPTCtdCAZLkIPoDLHuUYyt5D98MJ/6zotejmSrEMWUUlSBgZ3Wx5BOeKeH
+         fI3bY7wLGwRAoNzIvIw764t9SY89iyCPyiA/rQcyB+dm55r/xRHOZGkqQPrSE5geOofb
+         OondjRQd9HHDm/ipl4cj3XykkqAh9y8gVox+vjmEE3EUEfzpO/cIizUIyZa8BOofJzTC
+         1nierndZW//0iHD72cSdQ7xs3ingFR/Zl9bGjNrkbBoO4AX6E2IeTl2wEtPXHMBJbHUC
+         jdyg==
+X-Gm-Message-State: AOAM532Owozn3eo5/mewVBPldzGhkXbkCymYs+XdnXx/+ZhjY3kzfamd
+        /+d/v98kZtW5izHjib1HcQoVHGGjaXtP
+X-Google-Smtp-Source: ABdhPJyL7D59S0c7J3/2Op0q9aw5Wnve+xXjWrrlV45CTNX4k/0oMEztpE6wC4lT9bO6+BQsyODILO5P7lBB
+X-Received: from ezekiel.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:108e])
+ (user=shraash job=sendgmr) by 2002:a25:35c2:0:b0:60f:c5d8:99ff with SMTP id
+ c185-20020a2535c2000000b0060fc5d899ffmr29221573yba.380.1646240948002; Wed, 02
+ Mar 2022 09:09:08 -0800 (PST)
+Date:   Wed,  2 Mar 2022 22:39:02 +0530
+Message-Id: <20220302170902.752687-1-shraash@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH] drm: Fix no previous prototype error in drm_nomodeset.c
+From:   Aashish Sharma <shraash@google.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        groeck@chromium.org, dri-devel@lists.freedesktop.org
+Cc:     Aashish Sharma <shraash@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:36:20PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Mar 2, 2022 at 4:50 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Fri, Feb 11, 2022 at 01:04:23PM +0200, Andy Shevchenko wrote:
-> > > Since we got list_entry_is_head() helper in the generic header,
-> > > we may switch the ACPI modules to use it. This eliminates the
-> > > need in additional variable. In some cases it reduces critical
-> > > sections as well.
-> >
-> > Besides the work required in a couple of cases (LKP) there is an
-> > ongoing discussion about list loops (and this particular API).
-> >
-> > Rafael, what do you think is the best course of action here?
-> 
-> I think the current approach is to do the opposite of what this patch
-> is attempting to do: avoid using the list iterator outside of the
-> loop.
+Fix this kernel test robot error:
 
-OK, let's drop this change.
+drivers/gpu/drm/drm_nomodeset.c:8:6: error:
+no previous prototype for 'drm_firmware_drivers_only'
 
+Including drm_drv.h in drm_nomodeset.c which contains
+drm_firmware_drivers_only's declaration.
+
+Signed-off-by: Aashish Sharma <shraash@google.com>
+---
+ drivers/gpu/drm/drm_nomodeset.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/drm_nomodeset.c b/drivers/gpu/drm/drm_nomodeset.c
+index f3978d5bd3a1..9402deb4985f 100644
+--- a/drivers/gpu/drm/drm_nomodeset.c
++++ b/drivers/gpu/drm/drm_nomodeset.c
+@@ -2,6 +2,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/types.h>
++#include <drm/drm_drv.h>
+ 
+ static bool drm_nomodeset;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1.574.g5d30c73bfb-goog
 

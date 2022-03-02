@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C834C9E1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352C24C9E1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbiCBHBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S239803AbiCBHCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiCBHBH (ORCPT
+        with ESMTP id S239787AbiCBHCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:01:07 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5F3B0A75;
-        Tue,  1 Mar 2022 23:00:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646204425; x=1677740425;
-  h=from:to:cc:subject:date:message-id;
-  bh=fa3lg/CU1qTGW0rcp7IFfw+6PTmtzJTHq9PyqCePgn8=;
-  b=Ov818R+Lf1VdD+G24VhrTQQr/jnlc9G1YoOLRiWIUCkfjgu1vYv4aMge
-   +oFTvD+wxPCF0fs3CbP+VavIGhAmvwsh+uSqmDGj2Kh7mjUOs164ywuKv
-   wxIf4zlHVCmaAItFatbW+lPHBi+ndXGbiOCJTYEF0SgHqR19D2oJJKqg/
-   U=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 01 Mar 2022 23:00:24 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Mar 2022 23:00:22 -0800
-X-QCInternal: smtphost
-Received: from pmaliset-linux.qualcomm.com ([10.206.64.233])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 02 Mar 2022 12:30:06 +0530
-Received: by pmaliset-linux.qualcomm.com (Postfix, from userid 3848298)
-        id 7645B2077B; Wed,  2 Mar 2022 12:30:05 +0530 (IST)
-From:   Prasad Malisetty <quic_pmaliset@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>
-Subject: [PATCH v1] dt-bindings: pci: qcom: Document PCIe bindings for SC7280
-Date:   Wed,  2 Mar 2022 12:30:02 +0530
-Message-Id: <1646204402-7608-1-git-send-email-quic_pmaliset@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Wed, 2 Mar 2022 02:02:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70501B2523
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:01:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DE1D618E6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CB4C004E1;
+        Wed,  2 Mar 2022 07:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646204490;
+        bh=p5IQ8IpagSSBtlNBh7dDn+jFBz/i52xaf4GZ0TjhCfU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=k8rkvVoFTj9JErTYMBy0fvqfzzAZeuQeMIV7BZb1Q+cmsHGRBT0udOOAsMjaqj9ei
+         WptGdh6ovcQ/w7mrvyZZzLWL8pW6ANZxj3VnJmbKffWPepCUJIcmFLpDut0Mv3NCzq
+         zLWuFVCYjj1j45R/RoIikGxUl8UaLfZtnKqUPb3f8tWPFWm7bxLYaUC3kcI7E8YZhf
+         RxpbOqf68E1F5pA8L2tqhhhyQbeyTPNmG5hs7pr6IrJij4S5ICel4PbpdLpJzR8D75
+         5JPzTmKMAYMGj+/0vvdQAaBQOyRpvDEDRa5fBV9OSJ3iI6DU+0HWJKyHb0v3oCWHpP
+         a1ry3CFqI4cvw==
+Message-ID: <3d861bf6-c404-140d-b91a-60df3ddec304@kernel.org>
+Date:   Wed, 2 Mar 2022 15:01:26 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: avoid sb_start_intwrite during
+ eviction
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220215220039.1477906-1-jaegeuk@kernel.org>
+ <09683b83-b6c0-fe05-0dae-b93cab2f4b63@kernel.org>
+ <YhkpjWZ3NO5ihvH5@google.com> <Yh2lpb3c5X9aPJ+r@google.com>
+ <4b264607-4d60-7370-eca7-8816a3f8d29f@kernel.org>
+ <Yh8B/w9kPGU98Hfh@google.com> <Yh8C4aA+nBajs+fc@google.com>
+ <Yh8EgciUTRAbWDNG@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yh8EgciUTRAbWDNG@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,50 +63,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the PCIe DT bindings for SC7280 SoC.The PCIe IP is similar
-to the one used on SM8250. Add the compatible for SC7280.
+On 2022/3/2 13:45, Jaegeuk Kim wrote:
+> On 03/01, Jaegeuk Kim wrote:
+>> On 03/01, Jaegeuk Kim wrote:
+>>> On 03/02, Chao Yu wrote:
+>>>> On 2022/3/1 12:48, Jaegeuk Kim wrote:
+>>>>> 1. waiting for f2fs_evict_inode
+>>>>> [ 5560.043945]  __wait_on_freeing_inode+0xac/0xf0
+>>>>> [ 5560.045540]  ? var_wake_function+0x30/0x30
+>>>>> [ 5560.047036]  find_inode_fast+0x6d/0xc0
+>>>>> [ 5560.048473]  iget_locked+0x79/0x230
+>>>>> [ 5560.049933]  f2fs_iget+0x27/0x1200 [f2fs]
+>>>>> [ 5560.051496]  f2fs_lookup+0x18c/0x3e0 [f2fs]
+>>>>> [ 5560.053069]  __lookup_slow+0x84/0x150
+>>>>> [ 5560.054503]  walk_component+0x141/0x1b0
+>>>>> [ 5560.055938]  link_path_walk.part.0+0x23b/0x360
+>>>>> [ 5560.057541]  ? end_bio_bh_io_sync+0x37/0x50
+>>>>> [ 5560.059086]  path_parentat+0x3c/0x90
+>>>>> [ 5560.060492]  filename_parentat+0xd7/0x1e0
+>>>>> [ 5560.062002]  ? blk_mq_free_request+0x127/0x150
+>>>>> [ 5560.063576]  do_renameat2+0xc1/0x5b0
+>>>>>    --> sb_start_write(m->mnt_sb); ->  __sb_start_write(sb, SB_FREEZE_WRITE);
+>>>>>
+>>>>> [ 5560.064999]  ? __check_object_size+0x13f/0x150
+>>>>> [ 5560.066559]  ? strncpy_from_user+0x44/0x150
+>>>>> [ 5560.068038]  ? getname_flags.part.0+0x4c/0x1b0
+>>>>> [ 5560.069617]  __x64_sys_renameat2+0x51/0x60
+>>>>>
+>>>>> 2. waiting for sb_start_intwrite -> __sb_start_write(sb, SB_FREEZE_FS);
+>>>>
+>>>> It's still not clear that why __sb_start_write(sb, SB_FREEZE_FS) will be blocked,
+>>>> as SB_FREEZE_FS and SB_FREEZE_WRITE points to different locks.
+>>>
+>>> It seems I missed another call, thaw_super(), got SB_FREEZE_FS and then being
+>>> stuck to grab SB_FREEZE_WRITE.
+>>
+>> Ah, sorry. freeze_super().
+> 
+> Messed up. So, the lock order is SB_FREEZE_WRITE -> SB_FREEZE_FS in both cases.
 
-Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
----
- Documentation/devicetree/bindings/pci/qcom,pcie.txt | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Yeah, I noticed this, w/ such lock order, Thread C (freeze_super) will be blocked
+on SB_FREEZE_WRITE, and then Thread B won't be block on SB_FREEZE_FS, right?
 
-diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.txt b/Documentation/devicetree/bindings/pci/qcom,pcie.txt
-index 0adb56d..8e36f83 100644
---- a/Documentation/devicetree/bindings/pci/qcom,pcie.txt
-+++ b/Documentation/devicetree/bindings/pci/qcom,pcie.txt
-@@ -12,6 +12,7 @@
- 			- "qcom,pcie-ipq4019" for ipq4019
- 			- "qcom,pcie-ipq8074" for ipq8074
- 			- "qcom,pcie-qcs404" for qcs404
-+			- "qcom,pcie-sc7280" for sc7280
- 			- "qcom,pcie-sc8180x" for sc8180x
- 			- "qcom,pcie-sdm845" for sdm845
- 			- "qcom,pcie-sm8250" for sm8250
-@@ -147,6 +148,22 @@
- 			- "slave_bus"	AXI Slave clock
- 
- - clock-names:
-+	Usage: required for sc7280
-+	Value type: <stringlist>
-+	Definition: Should contain the following entries
-+			- "aux"         Auxiliary clock
-+			- "cfg"         Configuration clock
-+			- "bus_master"  Master AXI clock
-+			- "bus_slave"   Slave AXI clock
-+			- "slave_q2a"   Slave Q2A clock
-+			- "tbu"         PCIe TBU clock
-+			- "ddrss_sf_tbu" PCIe SF TBU clock
-+			- "pipe"        PIPE clock
-+			- "pipe_mux"    PIPE MUX
-+			- "phy_pipe"    PIPE output clock
-+			- "ref"         REFERENCE clock
-+
-+- clock-names:
- 	Usage: required for sdm845
- 	Value type: <stringlist>
- 	Definition: Should contain the following entries
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Thanks,
 
+> 
+>>
+>>>
+>>>>
+>>>> Thread A				Thread B				Thread C
+>>>> - rename
+>>>>   - sb_start_write
+>>>>    - __sb_start_write(SB_FREEZE_WRITE)
+>>>> ...
+>>>>       - f2fs_lookup
+>>>> ...
+>>>>         - __wait_on_freeing_inode
+>>>> 					- drop_slab
+>>>> 					 - prune_icache_sb
+>>>> 					  - inode_lru_isolate
+>>>> 					   :inode->i_state |= I_FREEING
+>>>> 										- Is there any flow that it has already held
+>>>> 										 SB_FREEZE_FS and try to lock SB_FREEZE_WRITE?
+>>>> 					   - f2fs_evict_inode
+>>>> 					    - __sb_start_write(SB_FREEZE_FS)
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>> [ 5560.152447]  percpu_rwsem_wait+0xaf/0x160
+>>>>> [ 5560.154000]  ? percpu_down_write+0xd0/0xd0
+>>>>> [ 5560.155498]  __percpu_down_read+0x4e/0x60
+>>>>> [ 5560.157000]  f2fs_evict_inode+0x5a3/0x610 [f2fs]
+>>>>> [ 5560.158648]  ? var_wake_function+0x30/0x30
+>>>>> [ 5560.160341]  evict+0xd2/0x180
+>>>>> [ 5560.161728]  prune_icache_sb+0x81/0xb0
+>>>>>    --> inode_lru_isolate() -> inode->i_state |= I_FREEING;
+>>>>>
+>>>>> [ 5560.163179]  super_cache_scan+0x169/0x1f0
+>>>>> [ 5560.164675]  do_shrink_slab+0x145/0x2b0
+>>>>> [ 5560.166121]  shrink_slab+0x186/0x2d0
+>>>>> [ 5560.167481]  drop_slab_node+0x4a/0x90
+>>>>> [ 5560.168876]  drop_slab+0x3e/0x80
+>>>>> [ 5560.170178]  drop_caches_sysctl_handler+0x75/0x90
+>>>>> [ 5560.171761]  proc_sys_call_handler+0x149/0x280
+>>>>> [ 5560.173328]  proc_sys_write+0x13/0x20
+>>>>> [ 5560.174667]  new_sync_write+0x117/0x1b0
+>>>>> [ 5560.176120]  vfs_write+0x1d5/0x270
+>>>>> [ 5560.177409]  ksys_write+0x67/0xe0
+>>>>>
+>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>>> ---
+>>>>>    Note, I found this call stack.
+>>>>>
+>>>>>    fs/f2fs/inode.c | 2 --
+>>>>>    1 file changed, 2 deletions(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>>>> index ab8e0c06c78c..882db4bd917b 100644
+>>>>> --- a/fs/f2fs/inode.c
+>>>>> +++ b/fs/f2fs/inode.c
+>>>>> @@ -778,7 +778,6 @@ void f2fs_evict_inode(struct inode *inode)
+>>>>>    	f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
+>>>>>    	f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
+>>>>> -	sb_start_intwrite(inode->i_sb);
+>>>>>    	set_inode_flag(inode, FI_NO_ALLOC);
+>>>>>    	i_size_write(inode, 0);
+>>>>>    retry:
+>>>>> @@ -809,7 +808,6 @@ void f2fs_evict_inode(struct inode *inode)
+>>>>>    		if (dquot_initialize_needed(inode))
+>>>>>    			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
+>>>>>    	}
+>>>>> -	sb_end_intwrite(inode->i_sb);
+>>>>>    no_delete:
+>>>>>    	dquot_drop(inode);
+>>>
+>>>
+>>> _______________________________________________
+>>> Linux-f2fs-devel mailing list
+>>> Linux-f2fs-devel@lists.sourceforge.net
+>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+>>
+>>
+>> _______________________________________________
+>> Linux-f2fs-devel mailing list
+>> Linux-f2fs-devel@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

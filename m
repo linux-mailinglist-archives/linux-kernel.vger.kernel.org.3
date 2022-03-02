@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6196A4CA137
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6834CA144
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiCBJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S240681AbiCBJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiCBJtn (ORCPT
+        with ESMTP id S239845AbiCBJue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:49:43 -0500
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D550CB91DC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:48:59 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA30F200004;
-        Wed,  2 Mar 2022 09:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646214538;
+        Wed, 2 Mar 2022 04:50:34 -0500
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8F7B91F4;
+        Wed,  2 Mar 2022 01:49:51 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K7q8s3c4hz9spV;
+        Wed,  2 Mar 2022 10:49:49 +0100 (CET)
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1646214587;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XONB/+Q2uIiRe6FA91u/IHYG5GnofPRpfBepye8euXo=;
-        b=UqmIVn9aM+peXOb7taEyk50/TbWkselngS71kTQC+m6EVIR91a3vgS/LXkLSm4VbNJRHAt
-        mRQnkT8cXd1Yqq+4gVX1CDoeqVrXpe7xdXY53Lqcww4gScaa0V7j3vp6Rmk4rdcupp8mDh
-        A3zrblyHzHHVfSYi8atnh5kBYM09Dl533z9/2FmoYTN/5m+MfBoj4ZlXvKArsAyYwpm4Co
-        US/BGQkjPd/N6gjexmmlEEXwzBA8aBOPkiAWzo1s36RktWKKWdbos5ymX1RY+NXV5rnKEF
-        sSYvsaF/ZVbwb3ItryvGFG0gltIvsHlCReVVS8dxtX9XBxulXsqZ201bm6cLPQ==
-Date:   Wed, 2 Mar 2022 10:48:57 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     codrin.ciubotariu@microchip.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] misc: atmel-ssc: Handle error for clk_prepare_enable
-Message-ID: <Yh89idAr6BiqqdaM@piout.net>
-References: <20220302084319.96435-1-jiasheng@iscas.ac.cn>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WspfyhO7TC+btHOAKHVih6axBfDGuMx5FJC+LFQ2iLw=;
+        b=rgSWZUdzsZNOa6xxI87LxGuVBOXX3HTlQ4WbAyx0st3axQ5UJkvmDgPPTwXd0LcOFJdUz1
+        OkyuJL/yJ9ZJ5FqrpuEOLNJPaeMsAfJaj3TdIJ29VzQIKx82QucZ+oeXq6HECkx5jbfO3P
+        ZZRze35imxj6T0zEdk3qS5/MR2U8kiaEXpQNy6zj1tXYBvPiBJRpiTDQxHPWjxu8nWy0rR
+        iNc0TgkOMTl6SzfXmAEwSHZgO0q+IxAqvLJZiUTvOizZG+4P3y/zX4ZtjUdzIaL/Gwxtx2
+        0mEOdc/8WOATZLM+EC1/jbvGwEuGDXCBLj/dtb294YCPG+Etcu0qWjWLTGUSTw==
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v4 0/3] Support XDPE112
+Date:   Wed,  2 Mar 2022 10:49:18 +0100
+Message-Id: <cover.1646214248.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302084319.96435-1-jiasheng@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 16:43:19+0800, Jiasheng Jiang wrote:
-> As the potential failure of the clk_prepare_enable(),
-> it should be better to check it and return error if fails.
-> 
+Add support for Infineon Multi-phase XDPE112 family regulator. The main
+difference to the XDPE122 family is it uses a different format for
+voltage out. Add the required logic to the existing xdpe12284 driver
+accordingly.
 
-this will never ever fail, this patch doesn't fix any actual issue
+Changes in v4:
+- move VOUT_MODE format detection into identify function
 
-> Fixes: eb1f2930609b ("Driver for the Atmel on-chip SSC on AT32AP and AT91")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/misc/atmel-ssc.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
-> index d6cd5537126c..c76ca234af4b 100644
-> --- a/drivers/misc/atmel-ssc.c
-> +++ b/drivers/misc/atmel-ssc.c
-> @@ -192,6 +192,7 @@ static int ssc_probe(struct platform_device *pdev)
->  	struct resource *regs;
->  	struct ssc_device *ssc;
->  	const struct atmel_ssc_platform_data *plat_dat;
-> +	int ret;
->  
->  	ssc = devm_kzalloc(&pdev->dev, sizeof(struct ssc_device), GFP_KERNEL);
->  	if (!ssc) {
-> @@ -226,7 +227,10 @@ static int ssc_probe(struct platform_device *pdev)
->  	}
->  
->  	/* disable all interrupts */
-> -	clk_prepare_enable(ssc->clk);
-> +	ret = clk_prepare_enable(ssc->clk);
-> +	if (ret)
-> +		return ret;
-> +
->  	ssc_writel(ssc->regs, IDR, -1);
->  	ssc_readl(ssc->regs, SR);
->  	clk_disable_unprepare(ssc->clk);
-> -- 
-> 2.25.1
-> 
+Changes in v3:
+- detect VOUT_MODE during probing
+- set xdpe122_identify/xdpe122_read_word_data only if VOUT is vid
+
+Changes in v2:
+- rebase on current hwmon-next branch
+
+Marcello Sylvester Bauer (3):
+  dt-bindings: trivial-devices: Add xdpe11280
+  hwmon (xdpe12284): Add support for xdpe11280
+  hwmon (xdpe12284): Add regulator support
+
+ .../devicetree/bindings/trivial-devices.yaml  |  2 ++
+ Documentation/hwmon/xdpe12284.rst             | 12 ++++---
+ drivers/hwmon/pmbus/Kconfig                   |  6 ++++
+ drivers/hwmon/pmbus/xdpe12284.c               | 32 +++++++++++++++++--
+ 4 files changed, 45 insertions(+), 7 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+

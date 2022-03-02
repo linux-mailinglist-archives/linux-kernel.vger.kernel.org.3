@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD454CA978
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6D94CA97B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240582AbiCBPtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S240656AbiCBPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiCBPtE (ORCPT
+        with ESMTP id S240399AbiCBPtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:49:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D5A186
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:48:20 -0800 (PST)
+        Wed, 2 Mar 2022 10:49:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2089112A80
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:48:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBC89B8207C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C17C004E1;
-        Wed,  2 Mar 2022 15:48:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B151F61735
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E967FC340F3;
+        Wed,  2 Mar 2022 15:48:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646236097;
-        bh=0KJEmQMfD0mkItKaL0wbwcXFL0Zc4EphzXf7C8T2G8E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hQJxvlx5RF5464dNX1LQjQ0fZ90fvBudjI/2K1jR8y3NAu8GCmozz15B9mbwBqLMN
-         CFplBmQxOg4T9/n55V6HOxNCJYJ7PgcQuISCIdbeknEetk9j2CvHxFdbSnauIVwbak
-         iv8RIBBqT7K9o9yehV5uMqpAxRhPpNIN06Xl431sTJGC6rtVMJh/HkKNdV6EzepsIR
-         UylegeXaZQ20mWcEV52Z2h43IaOrjdH8XZan2Ie1fYkmpRV4fB0Grde2GfUCOPGBCD
-         nrvSCNWgWhCbpQs0be+uNNzg8wSP0QdxXJrIykhZkU+ZECqBukX/FDC22WF/RiThUd
-         odVUSdV7XrB7Q==
+        s=k20201202; t=1646236101;
+        bh=lrSD1SAPG1K49lgvrlMSeV7b6eHs5r6JW1h42/uZTAw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jrr2BWmarghJx1xzUsDRsq9BNUuqYX9FyNguYMWSIgBbLcuX6w/cyzhPP+3EnLKR9
+         gE5IRilsTq5dlFj8fx17lNb9oP0wmGXk5sE7BRg++WzcdaW3Ik+qR8UthvMxHexwmR
+         Vy4SBnNxcIMaDSNmzeo88oAFvXJ9jSPV5HtfokqDYHY0UnmLyIYeai8daoICj4SCq1
+         kkwoI3ueyeQtRclKWbK1ak1W4IEVdx0Yp9zLAxNKo90mS+lTshBOXVWg+FbPBKkD6A
+         sGPFauNnybg0dgSxlFF/kRetl/ZGW24kH9eyouHiCaMQUVj2PoPRfkAEOpkVhnVml6
+         1c5TzORZOEhtg==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -49,10 +49,12 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 00/19] rcu/context-tracking: Merge RCU eqs-dynticks counter to context tracking
-Date:   Wed,  2 Mar 2022 16:47:51 +0100
-Message-Id: <20220302154810.42308-1-frederic@kernel.org>
+Subject: [PATCH 01/19] context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
+Date:   Wed,  2 Mar 2022 16:47:52 +0100
+Message-Id: <20220302154810.42308-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220302154810.42308-1-frederic@kernel.org>
+References: <20220302154810.42308-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,108 +67,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This mixes up the RCU dynticks counter and the context tracking state
-updates into a single atomic instruction. This may serve several
-purposes:
+The context tracking namespace is going to expand and some new functions
+will require even longer names. Start shrinking the context_tracking
+prefix to "ct" as is already the case for some existing macros, this
+will make the introduction of new functions easier.
 
-1) Improve CPU isolation with deferring some disturbances until sensitive
-   userspace workload completes and goes to the kernel. This can take
-   several forms, for example smp_call_function_housekeeping() or
-   on_each_housekeeping_cpu() to enqueue and execute work on all
-   housekeeping CPUs. Then an atomic operation on ct->state can defer
-   the work on nohz_full CPUs until they run in kernel (or IPI them
-   if they are in kernel mode), see this proposal by Peter:
-   https://lore.kernel.org/all/20210929151723.162004989@infradead.org/#r
-
-2) Unearth sysidle (https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=sysidle.2017.05.11a&id=fe5ac724d81a3c7803e60c2232718f212f3f38d4)
-   This feature allowed to shutdown the tick on the last housekeeping
-   CPU once the rest of the system is fully idle. We needed some proper
-   fully ordered context tracking for that.
-
-Inspired by Peterz: https://lore.kernel.org/all/20210929151723.162004989@infradead.org
-
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	rcu/context-tracking
-
-HEAD: e4eaff86ec91c1cbde9a113cf5232dac9f897337
-
-Thanks,
-	Frederic
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc: Yu Liao<liaoyu15@huawei.com>
+Cc: Phil Auld <pauld@redhat.com>
+Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
+Cc: Alex Belits <abelits@marvell.com>
 ---
+ include/linux/context_tracking.h | 12 ++++++------
+ kernel/context_tracking.c        | 20 ++++++++++----------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-Frederic Weisbecker (19):
-      context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
-      context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()
-      context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
-      context_tracking: Rename context_tracking_cpu_set() to context_tracking_cpu_track_user()
-      context_tracking: Split user tracking Kconfig
-      context_tracking: Take idle eqs entrypoints over RCU
-      context_tracking: Take IRQ eqs entrypoints over RCU
-      context_tracking: Take NMI eqs entrypoints over RCU
-      rcu/context-tracking: Remove rcu_irq_enter/exit()
-      rcu/context_tracking: Move dynticks counter to context tracking
-      rcu/context_tracking: Move dynticks_nesting to context tracking
-      rcu/context_tracking: Move dynticks_nmi_nesting to context tracking
-      rcu/context-tracking: Move deferred nocb resched to context tracking
-      rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
-      rcu/context-tracking: Remove unused and/or unecessary middle functions
-      context_tracking: Convert state to atomic_t
-      rcu/context-tracking: Use accessor for dynticks counter value
-      rcu/context_tracking: Merge dynticks counter and context tracking states
-      context_tracking: Exempt CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK from non-active tracking
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index 7a14807c9d1a..773035124bad 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -14,8 +14,8 @@
+ extern void context_tracking_cpu_set(int cpu);
+ 
+ /* Called with interrupts disabled.  */
+-extern void __context_tracking_enter(enum ctx_state state);
+-extern void __context_tracking_exit(enum ctx_state state);
++extern void __ct_user_enter(enum ctx_state state);
++extern void __ct_user_exit(enum ctx_state state);
+ 
+ extern void context_tracking_enter(enum ctx_state state);
+ extern void context_tracking_exit(enum ctx_state state);
+@@ -38,13 +38,13 @@ static inline void user_exit(void)
+ static __always_inline void user_enter_irqoff(void)
+ {
+ 	if (context_tracking_enabled())
+-		__context_tracking_enter(CONTEXT_USER);
++		__ct_user_enter(CONTEXT_USER);
+ 
+ }
+ static __always_inline void user_exit_irqoff(void)
+ {
+ 	if (context_tracking_enabled())
+-		__context_tracking_exit(CONTEXT_USER);
++		__ct_user_exit(CONTEXT_USER);
+ }
+ 
+ static inline enum ctx_state exception_enter(void)
+@@ -74,7 +74,7 @@ static inline void exception_exit(enum ctx_state prev_ctx)
+ static __always_inline bool context_tracking_guest_enter(void)
+ {
+ 	if (context_tracking_enabled())
+-		__context_tracking_enter(CONTEXT_GUEST);
++		__ct_user_enter(CONTEXT_GUEST);
+ 
+ 	return context_tracking_enabled_this_cpu();
+ }
+@@ -82,7 +82,7 @@ static __always_inline bool context_tracking_guest_enter(void)
+ static __always_inline void context_tracking_guest_exit(void)
+ {
+ 	if (context_tracking_enabled())
+-		__context_tracking_exit(CONTEXT_GUEST);
++		__ct_user_exit(CONTEXT_GUEST);
+ }
+ 
+ /**
+diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+index 36a98c48aedc..ad2a973393a6 100644
+--- a/kernel/context_tracking.c
++++ b/kernel/context_tracking.c
+@@ -51,15 +51,15 @@ static __always_inline void context_tracking_recursion_exit(void)
+ }
+ 
+ /**
+- * context_tracking_enter - Inform the context tracking that the CPU is going
+- *                          enter user or guest space mode.
++ * __ct_user_enter - Inform the context tracking that the CPU is going
++ *		     to enter user or guest space mode.
+  *
+  * This function must be called right before we switch from the kernel
+  * to user or guest space, when it's guaranteed the remaining kernel
+  * instructions to execute won't use any RCU read side critical section
+  * because this function sets RCU in extended quiescent state.
+  */
+-void noinstr __context_tracking_enter(enum ctx_state state)
++void noinstr __ct_user_enter(enum ctx_state state)
+ {
+ 	/* Kernel threads aren't supposed to go to userspace */
+ 	WARN_ON_ONCE(!current->mm);
+@@ -101,7 +101,7 @@ void noinstr __context_tracking_enter(enum ctx_state state)
+ 	}
+ 	context_tracking_recursion_exit();
+ }
+-EXPORT_SYMBOL_GPL(__context_tracking_enter);
++EXPORT_SYMBOL_GPL(__ct_user_enter);
+ 
+ void context_tracking_enter(enum ctx_state state)
+ {
+@@ -119,7 +119,7 @@ void context_tracking_enter(enum ctx_state state)
+ 		return;
+ 
+ 	local_irq_save(flags);
+-	__context_tracking_enter(state);
++	__ct_user_enter(state);
+ 	local_irq_restore(flags);
+ }
+ NOKPROBE_SYMBOL(context_tracking_enter);
+@@ -132,8 +132,8 @@ void context_tracking_user_enter(void)
+ NOKPROBE_SYMBOL(context_tracking_user_enter);
+ 
+ /**
+- * context_tracking_exit - Inform the context tracking that the CPU is
+- *                         exiting user or guest mode and entering the kernel.
++ * __ct_user_exit - Inform the context tracking that the CPU is
++ * 		    exiting user or guest mode and entering the kernel.
+  *
+  * This function must be called after we entered the kernel from user or
+  * guest space before any use of RCU read side critical section. This
+@@ -143,7 +143,7 @@ NOKPROBE_SYMBOL(context_tracking_user_enter);
+  * This call supports re-entrancy. This way it can be called from any exception
+  * handler without needing to know if we came from userspace or not.
+  */
+-void noinstr __context_tracking_exit(enum ctx_state state)
++void noinstr __ct_user_exit(enum ctx_state state)
+ {
+ 	if (!context_tracking_recursion_enter())
+ 		return;
+@@ -166,7 +166,7 @@ void noinstr __context_tracking_exit(enum ctx_state state)
+ 	}
+ 	context_tracking_recursion_exit();
+ }
+-EXPORT_SYMBOL_GPL(__context_tracking_exit);
++EXPORT_SYMBOL_GPL(__ct_user_exit);
+ 
+ void context_tracking_exit(enum ctx_state state)
+ {
+@@ -176,7 +176,7 @@ void context_tracking_exit(enum ctx_state state)
+ 		return;
+ 
+ 	local_irq_save(flags);
+-	__context_tracking_exit(state);
++	__ct_user_exit(state);
+ 	local_irq_restore(flags);
+ }
+ NOKPROBE_SYMBOL(context_tracking_exit);
+-- 
+2.25.1
 
-
- .../RCU/Design/Requirements/Requirements.rst       |  10 +-
- Documentation/RCU/stallwarn.rst                    |   6 +-
- .../time/context-tracking/arch-support.txt         |   6 +-
- arch/Kconfig                                       |   8 +-
- arch/arm/Kconfig                                   |   2 +-
- arch/arm/kernel/entry-common.S                     |   4 +-
- arch/arm/kernel/entry-header.S                     |  12 +-
- arch/arm/mach-imx/cpuidle-imx6q.c                  |   5 +-
- arch/arm64/Kconfig                                 |   2 +-
- arch/arm64/kernel/entry-common.c                   |  14 +-
- arch/csky/Kconfig                                  |   2 +-
- arch/csky/kernel/entry.S                           |   8 +-
- arch/mips/Kconfig                                  |   2 +-
- arch/powerpc/Kconfig                               |   2 +-
- arch/powerpc/include/asm/context_tracking.h        |   2 +-
- arch/riscv/Kconfig                                 |   2 +-
- arch/riscv/kernel/entry.S                          |  12 +-
- arch/sparc/Kconfig                                 |   2 +-
- arch/sparc/kernel/rtrap_64.S                       |   2 +-
- arch/x86/Kconfig                                   |   4 +-
- arch/x86/mm/fault.c                                |   2 +-
- drivers/acpi/processor_idle.c                      |   5 +-
- drivers/cpuidle/cpuidle-psci.c                     |   8 +-
- drivers/cpuidle/cpuidle.c                          |   9 +-
- include/linux/context_tracking.h                   |  81 ++--
- include/linux/context_tracking_irq.h               |  21 +
- include/linux/context_tracking_state.h             |  92 +++-
- include/linux/entry-common.h                       |  10 +-
- include/linux/hardirq.h                            |  12 +-
- include/linux/rcupdate.h                           |   7 +-
- include/linux/rcutiny.h                            |   6 -
- include/linux/rcutree.h                            |  15 +-
- include/linux/tracepoint.h                         |   4 +-
- init/Kconfig                                       |   4 +-
- kernel/context_tracking.c                          | 526 +++++++++++++++++++--
- kernel/cpu_pm.c                                    |   8 +-
- kernel/entry/common.c                              |  16 +-
- kernel/extable.c                                   |   4 +-
- kernel/locking/lockdep.c                           |   2 +-
- kernel/rcu/Kconfig                                 |   2 +
- kernel/rcu/rcu.h                                   |   4 -
- kernel/rcu/tree.c                                  | 478 ++-----------------
- kernel/rcu/tree.h                                  |   8 -
- kernel/rcu/tree_exp.h                              |   2 +-
- kernel/rcu/tree_plugin.h                           |  36 +-
- kernel/rcu/tree_stall.h                            |   7 +-
- kernel/rcu/update.c                                |   2 +-
- kernel/sched/core.c                                |   2 +-
- kernel/sched/idle.c                                |  11 +-
- kernel/softirq.c                                   |   4 +-
- kernel/time/Kconfig                                |  22 +-
- kernel/time/tick-sched.c                           |   2 +-
- kernel/trace/trace.c                               |   8 +-
- 53 files changed, 793 insertions(+), 734 deletions(-)

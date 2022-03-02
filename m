@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFB94CB0D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F1A4CB0D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbiCBVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S235450AbiCBVMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245127AbiCBVMO (ORCPT
+        with ESMTP id S245068AbiCBVMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:12:14 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168D9DCE34
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:11:26 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id r65so1980693wma.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5/nH1g76OJr2xP0kEzxoO9d69o0mEYaKTMfwjCEna4k=;
-        b=s/I0Z2y4z8YB6ZgpjPwn9fMiOpI90kwAS3l0VUO3xvtkNUJzA9qE3bhuyGk/bXfQyX
-         CaLoMUsM5bZeyiAJNnSt1vQiKqvQNMOlvbItUvclxl441XuqepRsZyfpgjMSmtGF0A7P
-         3ULeQDYSW5jYhYhSUYI7a4jRSa8K6qHGn6hfgQdyAe+kHzeGqB+o1h8CvJPeuNtMyXlF
-         1iDb3yANtGm4wZMsOQf3ULA5P0y4XIkn8TZ3l/zpcuTro47K9g+PBA1L47uSICN0lUJR
-         bl/w5MqNWNLcDwJ54KJC2eF3jCXaEWg0ziruH6Z6kIgIjPNUyHy+ESBVMKQPJLHOhaOL
-         9B4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5/nH1g76OJr2xP0kEzxoO9d69o0mEYaKTMfwjCEna4k=;
-        b=6ZhfRDARKslahrudjTIpKrUOhjLM8zS6dWSN7jplx4XLWo5hLn9m3WnBhXxnEOJxF+
-         qB+pe2AahUVhh1n4UyQHTDrM/2kFyHPrmzx98G8Plj+6uUnT88+9G6nVqlfpc/Kh03jF
-         h3dlhOdUKWA/myEx+DtGpD5ar+ePQo2LAFMTGXnl2nSiHXMDP56CrznO9vxL9BCLhNoc
-         Ty8Fy54LqnHs6iS3h3xApq97zeVH6rx/LkdhDtGyrB5UErS32V5PtOR2h/Xnuev0ffXe
-         VaalPMNW5+xDHMcaRHypav6Oqpnm9/KrArehA1bYu8oYqc+wjf28KDu03d20jlrTgytW
-         34Cw==
-X-Gm-Message-State: AOAM530dHl7ch2Q/L8vLfWL5IUGlpXTw4s4kMFV0wroXAXLzjvRDeDyv
-        p7JDazFhoMrZqtpPdmNCYgU4BA==
-X-Google-Smtp-Source: ABdhPJwPZwmrufp36YqMiXKGpIU+QwG7owyQ8MQP9+2rxoDOdGiEo9TNglb3MQRuVp+z7hOzJXjONQ==
-X-Received: by 2002:a05:600c:1990:b0:381:1806:1d9 with SMTP id t16-20020a05600c199000b00381180601d9mr1365346wmq.93.1646255484689;
-        Wed, 02 Mar 2022 13:11:24 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm145776wmp.44.2022.03.02.13.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 13:11:24 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, john@metanate.com,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 02/18] crypto: rockchip: do not use uninit variable
-Date:   Wed,  2 Mar 2022 21:10:57 +0000
-Message-Id: <20220302211113.4003816-3-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220302211113.4003816-1-clabbe@baylibre.com>
-References: <20220302211113.4003816-1-clabbe@baylibre.com>
+        Wed, 2 Mar 2022 16:12:00 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1873DBD39;
+        Wed,  2 Mar 2022 13:11:15 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4C2881C0004;
+        Wed,  2 Mar 2022 21:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646255474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T9RsY3uL4J3j0QOwi8eKlTAS0yrmwlj/haQTgokIQXQ=;
+        b=FVtXaR59dk3Dpj0gSPFUJzD4LNvPpvFO2l8uVCUH0+AJBf0JfPfOilYl50dKbTCKnGnId+
+        Or3yqwH7cEuxisdTB04xyx+L227Hlu8o7F1zCYT8zlJy2js2rOUpe9bzlEEbiPBNA+3BjS
+        H+z3yZW9Og4fFNbExBz57LUSLs46ddmD0HYJqMEu2mlbnm/xnF8x5EafBP29rriwR4bRcB
+        0bdsd3ZyVsLiG1WaMX56HQHxAstZpKG1n3rNkNGM/J1CeDow3q9+edbAdGGI2dRKG8+q3j
+        bcSDpnR3K/hYxFu+FcKMBdiYjwOHJfkT5BnjdWl3zciVgSYqfG6yAwcINhIxpg==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 6/8] ARM: dts: sun8i: v3s: Add support for the ISP
+Date:   Wed,  2 Mar 2022 22:10:58 +0100
+Message-Id: <20220302211100.65264-7-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-crypto_info->dev is not yet set, so use pdev-dev instead.
+The V3s (and related platforms) come with an instance of the A31 ISP.
+Even though it is very close to the A31 ISP, it is not exactly
+register-compatible and a dedicated compatible only is used as a
+result.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Just like most other blocks of the camera pipeline, the ISP uses
+the common CSI bus, module and ram clock as well as reset.
+
+A port connection to the ISP is added to CSI0 for convenience since
+CSI0 serves for MIPI CSI-2 interface support, which is likely to
+receive raw data that will need to be processed by the ISP to produce
+a final image.
+
+The interconnects property is used to inherit the proper DMA offset.
+
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/crypto/rockchip/rk3288_crypto.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 35 ++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-index 45cc5f766788..21d3f1458584 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto.c
-@@ -381,7 +381,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
- 			       "rk-crypto", pdev);
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index a9405e011f3e..3d56a9471199 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -643,6 +643,14 @@ csi0_in_mipi_csi2: endpoint {
+ 						remote-endpoint = <&mipi_csi2_out_csi0>;
+ 					};
+ 				};
++
++				port@2 {
++					reg = <2>;
++
++					csi0_out_isp: endpoint {
++						remote-endpoint = <&isp_in_csi0>;
++					};
++				};
+ 			};
+ 		};
  
- 	if (err) {
--		dev_err(crypto_info->dev, "irq request failed.\n");
-+		dev_err(&pdev->dev, "irq request failed.\n");
- 		goto err_crypto;
- 	}
- 
+@@ -701,5 +709,32 @@ csi1: camera@1cb4000 {
+ 			resets = <&ccu RST_BUS_CSI>;
+ 			status = "disabled";
+ 		};
++
++		isp: isp@1cb8000 {
++			compatible = "allwinner,sun8i-v3s-isp";
++			reg = <0x01cb8000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI1_SCLK>,
++				 <&ccu CLK_DRAM_CSI>;
++			clock-names = "bus", "mod", "ram";
++			resets = <&ccu RST_BUS_CSI>;
++			interconnects = <&mbus 5>;
++			interconnect-names = "dma-mem";
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++
++					isp_in_csi0: endpoint {
++						remote-endpoint = <&csi0_out_isp>;
++					};
++				};
++			};
++		};
+ 	};
+ };
 -- 
-2.34.1
+2.35.1
 

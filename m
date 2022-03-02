@@ -2,272 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2B84CA5DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404644CA5E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242174AbiCBNYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S239595AbiCBN0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242152AbiCBNY2 (ORCPT
+        with ESMTP id S240476AbiCBN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:24:28 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1109140AD;
-        Wed,  2 Mar 2022 05:23:43 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2772BE000B;
-        Wed,  2 Mar 2022 13:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646227422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3lWTG0gcGGbb63Q514N2waqyjTzAQQv9mi2bl0IjFZU=;
-        b=D6ASxIIXcd7UuceF+qoJdzdfOmYnKNQ7frw3t21QBWafjG5DUfUkq+Wzaig6BAFhIo9v5p
-        CeB7J7lUWrcBidvO1oRCgNSbjXJzk5QkSQaPDnRhLop/9uf/rSGBWB6cj3skn644PYKCMW
-        /vOa1tokbeD9ijeuAgPKF4bch6zFZdW3qhR7WmylDGWvKT9X9Iwc6Gguy2Zb1ybHFjyjWT
-        JJjL2EjyQ5Vr+F5jEKByXnD6u3Wajg+LC9eVip0a8IUfZGgzw/8HWaFrALduJWc5elfpqZ
-        ra8BdH8YMw5pz5iiAREfbGKR3kjRp25U63MjAPK3z0P942qaExkcUtAhMoqpcQ==
-Date:   Wed, 2 Mar 2022 14:23:37 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 63/66] staging: media: Add support for the Allwinner
- A31 ISP
-Message-ID: <Yh9v2Tez3x6rwhB3@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
- <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
- <Yh5CuyEJ+WhIAzYm@aptenodytes>
- <Yh8wD8lF2Hs+cxD7@pendragon.ideasonboard.com>
+        Wed, 2 Mar 2022 08:26:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F4C4849
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:25:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5423CB81FE8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD36C340F3;
+        Wed,  2 Mar 2022 13:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646227527;
+        bh=F6FIEVKpXfOXQzl6pfzkGq/Nkv1/7ozJxp/16CBPavo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bKlLlUxeTbIJkFL893+V2gUGl1DL2QjubHFyNVRwqacLLJGKHQM6MRsPo1IW+7EG3
+         TYgVh9z/qbBSKTAiDwPDBbyX/6KHX5M6pKohaOqIeycDL+p2uqX8p76aWTPvaHNQir
+         JXWmv+1YI5OGHfOE6cmnzwcCoi5k9dMoYgJ+lh3lAu0BiVXPXUURHOzPz2eKwiNFt9
+         fJpjQ/9XkA4FxizbNcmIeeE266CatyOP0uSLbZDGW7zmNNGfQe8zWRkahyeylkXfPk
+         jo3OghsPXfJxgTZqfEn3sKZffEqqiVmGisO4ViSnanMmaAdjHl/mY29KkDgrRN7TCd
+         NCmCS4ECUEA+A==
+Date:   Wed, 2 Mar 2022 14:25:22 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Remap IO space to bus
+ address 0x0
+Message-ID: <20220302142522.029932c9@dellmb>
+In-Reply-To: <20220302141515.51340cab@dellmb>
+References: <20220218212526.16021-1-pali@kernel.org>
+        <87o82r0zjh.fsf@BL-laptop>
+        <875yoz0wpw.fsf@BL-laptop>
+        <20220301092539.lru7hsaqxrjqz32r@pali>
+        <Yh9ruVkK1gikOuA1@lunn.ch>
+        <20220302141515.51340cab@dellmb>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="K5/ovBA9OpV1w3Z2"
-Content-Disposition: inline
-In-Reply-To: <Yh8wD8lF2Hs+cxD7@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2 Mar 2022 14:15:15 +0100
+Marek Beh=C3=BAn <kabel@kernel.org> wrote:
 
---K5/ovBA9OpV1w3Z2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Laurent,
-
-On Wed 02 Mar 22, 10:51, Laurent Pinchart wrote:
-> Hi Paul,
+> On Wed, 2 Mar 2022 14:06:01 +0100
+> Andrew Lunn <andrew@lunn.ch> wrote:
 >=20
-> On Tue, Mar 01, 2022 at 04:58:51PM +0100, Paul Kocialkowski wrote:
-> > On Mon 07 Feb 22, 18:16, Laurent Pinchart wrote:
-> > > On Sat, Feb 05, 2022 at 07:54:26PM +0100, Paul Kocialkowski wrote:
-> > > > Some Allwinner platforms come with an Image Signal Processor, which
-> > > > supports various features in order to enhance and transform data
-> > > > received by image sensors into good-looking pictures. In most cases,
-> > > > the data is raw bayer, which gets internally converted to RGB and
-> > > > finally YUV, which is what the hardware produces.
+> > On Tue, Mar 01, 2022 at 10:25:39AM +0100, Pali Roh=C3=A1r wrote: =20
+> > > On Monday 28 February 2022 17:42:03 Gregory CLEMENT wrote:   =20
+> > > > > Hello Pali,
+> > > > >   =20
+> > > > >> Remap PCI I/O space to the bus address 0x0 in the Armada 37xx
+> > > > >> device-tree in order to support legacy I/O port based cards whic=
+h have
+> > > > >> hardcoded I/O ports in low address space.
+> > > > >>
+> > > > >> Some legacy PCI I/O based cards do not support 32-bit I/O addres=
+sing.
+> > > > >>
+> > > > >> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resour=
+ces from
+> > > > >> 'ranges' DT property") this driver can work with I/O windows whi=
+ch
+> > > > >> have   =20
+> > > > >
+> > > > > Should we add a "Fixes: 64f160e19e92 ("PCI: aardvark: Configure P=
+CIe
+> > > > > resources from 'ranges' DT property")" tag ?   =20
 > > > >=20
-> > > > This driver supports ISPs that are similar to the A31 ISP, which was
-> > > > the first standalone ISP found in Allwinner platforms. Simpler ISP
-> > > > blocks were found in the A10 and A20, where they are tied to a CSI
-> > > > controller. Newer generations of Allwinner SoCs (starting with the
-> > > > H6, H616, etc) come with a new camera subsystem and revised ISP.
-> > > > Even though these previous and next-generation ISPs are somewhat
-> > > > similar to the A31 ISP, they have enough significant differences to
-> > > > be out of the scope of this driver.
+> > > > Waiting for your confirmation I tried to applied it but it failed.
 > > > >=20
-> > > > While the ISP supports many features, including 3A and many
-> > > > enhancement blocks, this implementation is limited to the following:
-> > > > - V3s (V3/S3) platform support;
-> > > > - Bayer media bus formats as input;
+> > > > Did you base this patch on v5.17-rc1 ?
+> > > >=20
+> > > > Gregory   =20
 > > >=20
-> > > Greyscale formats would also be nice to have, if the hardware can
-> > > support that (it mostly just requires the ability to disable the CFA
-> > > interpolation).
+> > > Hello! This change is breaking booting of Turris Mox kernel with older
+> > > bootloader due to bugs in bootloader.   =20
 > >=20
-> > As far as I know there's no support for grayscale, only bayer formats
-> > and YUV.
+> > Do you know what actually goes wrong?
 > >=20
-> > > > - Semi-planar YUV (NV12/NV21) as output;
-> > >=20
-> > > Packed YUV would also be useful if the hardware supports it.
-> >=20
-> > Same here, it only supports planar and semi-planar YUV as output.
-> >=20
-> > > > - Debayering with per-component gain and offset configuration;
-> > > > - 2D noise filtering with configurable coefficients.
-> > > >=20
-> > > > Since many features are missing from the associated uAPI, the driver
-> > > > is aimed to integrate staging until all features are properly
-> > > > described.
-> > > >=20
-> > > > On the technical side, it uses the v4l2 and media controller APIs,
-> > > > with a video node for capture, a processor subdev and a video node
-> > > > for parameters submission. A specific uAPI structure and associated
-> > > > v4l2 meta format are used to configure parameters of the supported
-> > > > modules.
-> > > >=20
-> > > > One particular thing about the hardware is that configuration for
-> > > > module registers needs to be stored in a DMA buffer and gets copied
-> > > > to actual registers by the hardware at the next vsync, when instruc=
-ted
-> > > > by a flag. This is handled by the "state" mechanism in the driver.
-> > > >=20
-> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > ---
-> > > >  drivers/staging/media/sunxi/Kconfig           |   1 +
-> > > >  drivers/staging/media/sunxi/Makefile          |   1 +
-> > > >  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  13 +
-> > > >  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
-> > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 572 +++++++++++++
-> > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  86 ++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 751 ++++++++++++++=
-++++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 +++++++++++++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 599 ++++++++++++++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  61 ++
-> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
-> > > >  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
-> > >=20
-> > > Could you add a TODO file to list the issues that need to be fixed for
-> > > the driver to move out of staging ? I'll already propose one entry:
-> > >=20
-> > > - Add support in libcamera
-> >=20
-> > Maybe it would be good to narrow down what level of support you have in=
- mind
-> > here. Just adding basic support fort the pipeline is probably doable, b=
-ut
-> > developing complex 3A algorithms would require very significant effort =
-and
-> > it would be a shame that this prevents the driver from leaving staging.
-> >=20
-> > I think another obvious task would be to have a complete uAPI that refl=
-ects
-> > all modules that are part of the ISP.
-> >=20
-> > What do you think?
+> > I've not been involved in the discussion, but looking at the comments
+> > above, not changing the space can result in non-working cards. So it
+> > does sound like something which in general we want to do. Does the
+> > current code assume the bootloader has initialized some registers with
+> > specific values? Can that be moved into the driver so it also works
+> > with older bootloaders? =20
 >=20
-> The reason why I'd like to see libcamera support for the ISP driver is
-> to ensure that the kernel API is adequate for real use cases. The API
-> can be split in three parts:
+> No. TF-A may remap CPU PCIe window, and so U-Boot fixes these addresses
+> in device-tree. But the fixup function was at first written in such a
+> way that it assumes that the ranges propreties contains specific
+> values. The proposed DT change, together with the fixup function in
+> older U-Boot, will break ranges property to non-functional state.
 >=20
-> - Pipeline configuration (this includes the media controller topology,
->   link setting, subdev pad format/selection rectangle configuration,
->   ...)
-> - ISP parameters
-> - ISP statistics
+> See corresponding U-Boot patches
 >=20
-> A pipeline handler implementation will cover the first parts. The second
-> and third parts need to be tested too, but we don't need to implement
-> every single feature. A very simple algorithm that demonstrates
-> statistics can be captured and ISP parameters can be set should be
-> enough to test and exercise the API in real scenarios. We're working on
-> making basic AE and AWB algorithm implementations generic (or at least
-> creating generic building blocks that can easily be assembled to create
-> those algorithms, as the ISP statistics and parameters are specific to
-> the ISP and thus require some ISP-specific code), so that should become
-> a fairly easy task soon. I expect most of the work to go in the pipeline
-> handler.
+> https://patchwork.ozlabs.org/project/uboot/patch/20200408172522.18941-5-m=
+arek.behun@nic.cz/
+> https://patchwork.ozlabs.org/project/uboot/patch/20210526155940.26141-5-p=
+ali@kernel.org/
+> https://patchwork.ozlabs.org/project/uboot/patch/20220223125232.7974-1-ka=
+bel@kernel.org/
 >=20
-> Does this sound fair to you ?
+> The last patch is not merged yet.
 
-Yes I understand that these aspects need to be tested too, but I feel like
-having an implementation with a feedback look (even rudimentary and using
-some generic helpers) would be quite a stretch.
+To explain more:
+- the first patch added the ranges property fixup. After that patch
+  (which was applied sometime not long after 8th April 2020) U-Boot
+  fixes the ranges property in a way that does not work with the
+  proposed DT change.
+- the second patch extended the fixup, but it still won't work
+  correctly with the proposed DT change
+- the third U-Boot patch will fix this issue, afterwards the DT change
+  won't break PCIe. This patch is not yet merged in U-Boot
 
-It would probably be sufficient to have some demo code that can receive sta=
-ts
-and set parameters, but without necessarily any connection between the two.
-As such it's also my feeling that a standalone demo program could be easier
-to manage for that purpose than libcamera support.
+It is questionable how many users have updated U-Boot to the version
+with first fixup. AFAIK we at Turris did not make an automatic update
+for U-Boot yet for Turris MOX, it was done manually only for some
+boards that had some problems or users wanted certain features.
 
-So how about making the requirement that a (free software) userspace
-implementration must demonstrate ability to read relevant statistics
-=66rom the ISP and (independently) control parameters that affect the outpu=
-t?
+But we can't change the device-tree because it will break the
+functinality for some users.
 
-Paul
+What we could do is add another patch to U-Boot that would change IO
+window address if certain conditions are met (for example if the ranges
+proprety was not changed by the user and thus contains a specific
+value that can be checked for).
 
-> > > This isn't required to merge the driver in staging as long as ABI
-> > > compatibility doesn't need to be preserved until the driver is moved =
-out
-> > > of staging.
-> > >
-> > > >  14 files changed, 3109 insertions(+)
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-=2Ec
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-=2Eh
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_capture.c
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_capture.h
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_params.c
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_params.h
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_proc.c
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_proc.h
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
-_reg.h
-> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6=
-i-isp-config.h
-> > >=20
-> > > [snip]
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---K5/ovBA9OpV1w3Z2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIfb9kACgkQ3cLmz3+f
-v9HLxgf7BVSjJJaoUtt14ZCC2KEHslFkkaoYKWqbTuYs7HZKbshhkU08H1x98kan
-j6GLaOTw7UDo8sGQPXTfJzmNnOH/nN4mGMjn+C8L5TfRHZ3IKk+JHjBpDXSPJzAN
-Du4q7ZZumbRtI1thugIkLiqere3R2XWQiR3EdtrwfphlAfFsZYWD4TvZyp3F1keQ
-x+rPg016fDfxqrgDrIVub5jLqxp4oTkqf7iyZxotB1mLEI/jwUsZEGSzT6i2dV1H
-nl5PKhXlzFcH5MpquyNEaOH6GQXej6Z4CzVo/YQP8wsA/EzcOpKqPXyaJ0BTuGYt
-Kj1aXtVJx9oiqB+RsZ4vOMg1Q5QffA==
-=W9up
------END PGP SIGNATURE-----
-
---K5/ovBA9OpV1w3Z2--
+Marek

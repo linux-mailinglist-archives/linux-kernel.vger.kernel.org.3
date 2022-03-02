@@ -2,68 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC374CB085
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424FF4CB07B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245043AbiCBVAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S245022AbiCBVAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245017AbiCBVAW (ORCPT
+        with ESMTP id S244936AbiCBVAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:00:22 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC63D206B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:59:38 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id d3so2530442qvb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:59:38 -0800 (PST)
+        Wed, 2 Mar 2022 16:00:15 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34625D2062
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:59:30 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 27so2647865pgk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7mUjbtpCCtsOG9jYKgJxNZISxNazpeqTfffY69y8STE=;
-        b=aavMfozFmXfin3ehGCM8/cbJ45gjcXA92LUIHvpXcrPFXksrvC/pAH/jfvGXai4FFU
-         ocGOv6ED9Yo92B+9cv5uRySx8W76NvdLsdd+an8GuVsUp8UsyWQWuk4Fu1WiyVV6hay3
-         8WMCK36dr/G68oEUEQruwQX6r2ZFZWQf3TlcTHhmfK7ciULdgYxfDEofhXOhIItGXVjO
-         t4H86M42+EGuAhcr94NUcW1h68cuSzyG2ZFjHbUBOa1GYbuY5C1/BI7M8GbE5OafZqJh
-         vvzyAa4IzAvS63bD+8vlcs2zZEiyGcYQxOLjFvcoVJXH3u2PREZc4O1v1KJAHnyzSAF6
-         ypmA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R/oQqieG0aXWXHs93Td97reRxAIjZoSgBmUtDJFVhjU=;
+        b=d2ZFN7FzXJICmnX4Tyt0wAx0nHny3V7g7RBF7BzoFi4JqvMjvTlFe6r9CSmtZHYpfY
+         sI7cCbacBhQSn0c2nYjk/wWGRSWn9quhJSSynH9lMYRKPPdVW/LYlF+HQ4F3tfS4GoN+
+         rfxT6gA9HHGJJFfNnOWheyqKpysRyPxkd0f8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7mUjbtpCCtsOG9jYKgJxNZISxNazpeqTfffY69y8STE=;
-        b=Vy+ZLhTZCRIok850blz8VT8MuLLFGA6FT+Ckd3LO32ebiD05KPaGW/Sk7h0ztdtZR3
-         VHSKZYiMXbRnJGLcyhzQaplmulKIZzky2XYs8yxnAGFIIaqjGf/UFvOUBCNR/RDJ2sc8
-         nHoprwFrA82orm0+PUoz66B7bgBumHIsZnalqSJyDaZIlCZbFOy6avmTE1MmYFnSiMU/
-         4Zy0UrUO/AWF7toZ8Y2lZbgYmZKRT+QEW3sor8upxsVFxQZYC6AhmK90YfuE7p2dBQeE
-         UYSJ6rRFgBc3CtNPwkYM2nHhayQyjOFmQ60UX7XjNxDGPZ2k3dWhBoCA2TPfTifNUwxW
-         wtgg==
-X-Gm-Message-State: AOAM532Vf+17dfvxkF2lOj5NspuYyTLsdyPyOT4GQWjT/FQSOCefFLxS
-        3NzKnWn5l3vvKZQ8KBLgmhrjeRlpZJgNsJFzeTHb/g==
-X-Google-Smtp-Source: ABdhPJx9v0p/md2jydNCQ6XCgdb9TFM9VczTiKrSjtKaCqAuPjqYf5f3eAI8AFE+zTL1zbzO1qaq4dBXim2UgWtVyHg=
-X-Received: by 2002:ad4:5883:0:b0:432:b007:962b with SMTP id
- dz3-20020ad45883000000b00432b007962bmr20943794qvb.55.1646254778062; Wed, 02
- Mar 2022 12:59:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R/oQqieG0aXWXHs93Td97reRxAIjZoSgBmUtDJFVhjU=;
+        b=4YDW4GJecnq30ldE5wvFfeLHPpPQHxk+Yvwpvb4WXua4Z4yo18RpIkHpuPMzxgPubY
+         fP+AIN44GQ2qnzmtcwEP0Kr5W4gp3z4x/gQsjU+AlD0HHPu6+DOVEfY34E2Lu5cv6piW
+         7i3COMnXYFItMIWD4HVTNHBiDVcqd01cXKWpjIJgFoWwh6phlSWCcezk3Rqnx6o96pwj
+         D3wFfPZd0nA/Tj/EkDdEsko55eKHHIYIX9mYqc3r6FlkS5+BHfCcAsRWeXFiV7R2xWi/
+         JuwUdsHAnVC2IYOr3zQ7ne+F2nnF8hkl4Q/b7yb3xQXm0z/EMxjoTg1R+J7bxEO3ambj
+         duCw==
+X-Gm-Message-State: AOAM533rezEAPB1+vVE6m69gfvUZnZxnvZdxmtEVydTA+cXeQlO3DCdt
+        FLo2W6y335NyRMv3XKjLkDtHgg==
+X-Google-Smtp-Source: ABdhPJwV5Vftpu3BNFYOd1YAI3xcgBfQbmCq2DPnKYT59xnVma61vCMoUamoUdgwMbiUWTPibOctJw==
+X-Received: by 2002:a63:595e:0:b0:378:b203:a74e with SMTP id j30-20020a63595e000000b00378b203a74emr13280856pgm.328.1646254769698;
+        Wed, 02 Mar 2022 12:59:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z9-20020a655a49000000b00373459df190sm58337pgs.35.2022.03.02.12.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:59:29 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:59:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        David Laight <David.Laight@aculab.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <202203021256.69D7C4BCA6@keescook>
+References: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
+ <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+ <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
+ <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
+ <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
+ <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+ <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+ <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
+ <202203021158.DB5204A0@keescook>
+ <CAHk-=wikKPC0LUqZ8++EC5JOvGdBqVH9uUaTX=DvBioDoReYww@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220302203045.184500-1-bhupesh.sharma@linaro.org> <20220302203045.184500-8-bhupesh.sharma@linaro.org>
-In-Reply-To: <20220302203045.184500-8-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 2 Mar 2022 23:59:27 +0300
-Message-ID: <CAA8EJpqEy+669gpDsy-zGp2NpDP-d7ZxNf7RVo=OQZdvGdZOvQ@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] arm64: dts: qcom: sa8155: Enable PCIe nodes
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
-        lorenzo.pieralisi@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wikKPC0LUqZ8++EC5JOvGdBqVH9uUaTX=DvBioDoReYww@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +137,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 23:31, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
-> SA8155p ADP board supports the PCIe0 controller in the RC
-> mode (only). So add the support for the same.
->
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 42 ++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> index 8756c2b25c7e..3f6b3ee404f5 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> @@ -387,9 +387,51 @@ &usb_2_qmpphy {
->         vdda-pll-supply = <&vdda_usb_ss_dp_core_1>;
->  };
->
-> +&pcie0 {
-> +       status = "okay";
-> +};
-> +
-> +&pcie0_phy {
-> +       status = "okay";
-> +       vdda-phy-supply = <&vreg_l18c_0p88>;
-> +       vdda-pll-supply = <&vreg_l8c_1p2>;
-> +};
-> +
-> +&pcie1_phy {
-> +       vdda-phy-supply = <&vreg_l18c_0p88>;
-> +       vdda-pll-supply = <&vreg_l8c_1p2>;
-> +};
-> +
->  &tlmm {
->         gpio-reserved-ranges = <0 4>;
->
-> +       bt_en_default: bt_en_default {
-> +               mux {
-> +                       pins = "gpio172";
-> +                       function = "gpio";
-> +               };
-> +
-> +               config {
-> +                       pins = "gpio172";
-> +                       drive-strength = <2>;
-> +                       bias-pull-down;
-> +               };
-> +       };
-> +
-> +       wlan_en_default: wlan_en_default {
-> +               mux {
-> +                       pins = "gpio169";
-> +                       function = "gpio";
-> +               };
-> +
-> +               config {
-> +                       pins = "gpio169";
-> +                       drive-strength = <16>;
-> +                       output-high;
-> +                       bias-pull-up;
-> +               };
-> +       };
-> +
+On Wed, Mar 02, 2022 at 12:18:45PM -0800, Linus Torvalds wrote:
+> On Wed, Mar 2, 2022 at 12:07 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > I've long wanted to change kfree() to explicitly set pointers to NULL on
+> > free. https://github.com/KSPP/linux/issues/87
+> 
+> We've had this discussion with the gcc people in the past, and gcc
+> actually has some support for it, but it's sadly tied to the actual
+> function name (ie gcc has some special-casing for "free()")
+> 
+> See
+> 
+>     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94527
+> 
+> for some of that discussion.
+> 
+> Oh, and I see some patch actually got merged since I looked there last
+> so that you can mark "deallocator" functions, but I think it's only
+> for the context matching, not for actually killing accesses to the
+> pointer afterwards.
 
-Not related to PCIe
+Ah! I missed that getting added in GCC 11. But yes, there it is:
 
->         usb2phy_ac_en1_default: usb2phy_ac_en1_default {
->                 mux {
->                         pins = "gpio113";
-> --
-> 2.35.1
->
+https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute
 
+Hah, now we may need to split __malloc from __alloc_size. ;)
+
+I'd still like the NULL assignment behavior, though, since some things
+can easily avoid static analysis.
 
 -- 
-With best wishes
-Dmitry
+Kees Cook

@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E3D4CB038
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114024CB02C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244610AbiCBUtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        id S244234AbiCBUsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244463AbiCBUtB (ORCPT
+        with ESMTP id S231127AbiCBUsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:49:01 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206846D84A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:16 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 195so2637148pgc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:16 -0800 (PST)
+        Wed, 2 Mar 2022 15:48:16 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0B31260A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:47:31 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id z11so2609925pla.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:47:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=X/qCzXaSJsTevlXZxqUkbNmOTkHTMDBspxfTDqWAX6k=;
-        b=BrUxiwuIeoNRbH8jZ36dzBZx/WriEcfMeF8R1thCBtA3mPceDRxvDDHJgIUlNSC73/
-         o8Ef0k/TlerQjGcBWXZY+nR5akDOMaGKr3yHpeHCt3TQNMxRVYYjON2xCuT8rO8Swnfe
-         G+MXqBP4mCD7SbVk/YT4+0t+hiiXfQUkMchwIVn5PTt9IVAlouYbHelpbKEwI872JcKk
-         MLIxt8ZfX6NR6htfwg3FXsYR8EiP9WdKyLGmpepz3Salhb/t5eSGeNXPvojeuX5K/vPG
-         iyeJ8OO2fI0e6rofjpAjwAUuwRqDoe4c9htP7ol076HnELRjXsXztp9MI/X7bMP7kBOQ
-         j49g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w2++eX0uxoFYGn6KsfxgmKtFhWBbHG1cFniS6G65R/8=;
+        b=ZvIT3UHrIkyHs392SzCJH5dcOt5KKLuzWyEeIFZOeA2qaJiPK7ton6Y6Lr1ivan4Js
+         UzcI337HwVIoduHg/JgXtl2CQGrDZmUSf3ucbmrtJ6IgtSvNqsQw36nM9FV52EIaWM4b
+         nNaiaF1+GKtFMTHQmBdtFfqVv6D55x5mgDz3jaj/0PN4CGVqdFbUWNqbbt7gXCxUwNEZ
+         da1NehZYGkvWBSXYrG4bJB5le52dQRBSQDyWXcguuRqdmtaZ4BLJPrvK2Xn/b+IdPCLb
+         oKjS+t4qWNIvM64IklH38agjF+NntHojUc4Pfaf5e5zzZCaWU8He9HomqZ7O07yFoHYc
+         1kCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=X/qCzXaSJsTevlXZxqUkbNmOTkHTMDBspxfTDqWAX6k=;
-        b=4W73oVvsG5QXHYTFJNthXY8segmzAbYmcMsEt+rJXgV6k+lqzYIU3yBjPAFyMQGHEl
-         6lLOfia7hy+GWXXE7UZJ6CH7675EAvVCJCoSgiz/LBiZSeZTJDSMrKzOX+5hTCx5MFhl
-         sKPywjsGQLP5z7DMZ29rSVKnrs94eLXFMVs16I53Da7pZJJsR+0LFHAAGfNsKw0XqHU8
-         ECniTFJ5Dnnbv0jlTPabQM0Q5sFjjTQO2n+deksBBtr67ccv+BBP4GOvyKgcWjbiWqnH
-         ZGdFKOPynS3bR9L7bbKFFOOJ74O/Lg6f9JytXy+dNn8lFfLUuNg0vHlR7zbBfJBfLmO+
-         7B8Q==
-X-Gm-Message-State: AOAM532xwG38H71tSLZ105OoIQgqgn6QerTlrib4LN6fkcOI9OaEnC0E
-        TqvljmViqXdw77iLU7gNE6QiQ5CMPdr/+A==
-X-Google-Smtp-Source: ABdhPJzBpsupHvG4Cux6vxKxRLWFsQe6QIitvMOhFX2OwjcuhGmCCe9xm+u30rBgNOjUkQLql+HQ9w==
-X-Received: by 2002:a05:6a00:3006:b0:4f6:54ba:3581 with SMTP id ay6-20020a056a00300600b004f654ba3581mr4128592pfb.83.1646254095641;
-        Wed, 02 Mar 2022 12:48:15 -0800 (PST)
-Received: from localhost.localdomain ([103.161.98.179])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w2++eX0uxoFYGn6KsfxgmKtFhWBbHG1cFniS6G65R/8=;
+        b=yIv089c9RQ9oCZh15YB8Ga5iKpiP7nOvb1T3mK6XwLZpIHHxICnDaxbKoV0BxBAtig
+         6C55jJI91bW8DxwYefYrXXHU2cClqKb/+q+SXtAypAqj/rQR99tm23UZiVpxEogxSGZS
+         n6uK4hyE7QdtMpUcdl/YGT4VNi0tbU9l6WzXhJJRNNHO4bjz+aIQ4XzzCLKjVf04T6WV
+         Yb7WSXjn9LSkWa/UxzVJLsdleeIZFghhMoAelKhDTfuBppObh5JdjzaJi+CPm+OrBn6x
+         mviy8AWWAhS2kOSM/XmJReRsZl0SwBXTgpj1Fp3zmAOJiQ1EQHvJQsJ9H/C8SObQJh6e
+         bxqA==
+X-Gm-Message-State: AOAM531GN0TCtZc/0glmxVD8FfbVEXzNrg5oKCemtkuWLNNxgb4T1zjI
+        UEvSBmuSBTsrnol3DyajqcAHsw==
+X-Google-Smtp-Source: ABdhPJxkbHtoXR7YSBFfm/MXCJjH0S84GP7djHmq1H20YYhQpwJ2f0WnZE7RRove22yTCjGhMKM0DQ==
+X-Received: by 2002:a17:90b:4595:b0:1be:db22:8327 with SMTP id hd21-20020a17090b459500b001bedb228327mr1644495pjb.99.1646254051075;
+        Wed, 02 Mar 2022 12:47:31 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v23-20020a17090a521700b001bbfc181c93sm5892971pjh.19.2022.03.02.12.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:48:15 -0800 (PST)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 04/16] staging: r8188eu: mark PS_RDY_CHECK as bool
-Date:   Thu,  3 Mar 2022 02:17:25 +0530
-Message-Id: <20220302204737.49056-5-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302204737.49056-1-makvihas@gmail.com>
-References: <20220302204737.49056-1-makvihas@gmail.com>
+        Wed, 02 Mar 2022 12:47:30 -0800 (PST)
+Date:   Wed, 2 Mar 2022 20:47:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
+ asynchronous worker
+Message-ID: <Yh/X3m1rjYaY2s0z@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-23-seanjc@google.com>
+ <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+ <Yh+xA31FrfGoxXLB@google.com>
+ <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
+ <Yh/GoUPxMRyFqFc5@google.com>
+ <442859af-6454-b15e-b2ad-0fc7c4e22909@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <442859af-6454-b15e-b2ad-0fc7c4e22909@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark PS_RDY_CHECK as bool as it returns true/false.
+On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> On 3/2/22 20:33, Sean Christopherson wrote:
+> > What about that idea?  Put roots invalidated by "fast zap" on_another_  list?
+> > My very original idea of moving the roots to a separate list didn't work because
+> > the roots needed to be reachable by the mmu_notifier.  But we could just add
+> > another list_head (inside the unsync_child_bitmap union) and add the roots to
+> > _that_  list.
+> 
+> Perhaps the "separate list" idea could be extended to have a single worker
+> for all kvm_tdp_mmu_put_root() work, and then indeed replace
+> kvm_tdp_mmu_zap_invalidated_roots() with a flush of _that_ worker.  The
+> disadvantage is a little less parallelism in zapping invalidated roots; but
+> what is good for kvm_tdp_mmu_zap_invalidated_roots() is just as good for
+> kvm_tdp_mmu_put_root(), I suppose.  If one wants separate work items, KVM
+> could have its own workqueue, and then you flush that workqueue.
+> 
+> For now let's do it the simple but ugly way.  Keeping
+> next_invalidated_root() does not make things worse than the status quo, and
+> further work will be easier to review if it's kept separate from this
+> already-complex work.
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_pwrctrl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Oof, that's not gonna work.  My approach here in v3 doesn't work either.  I finally
+remembered why I had the dedicated tdp_mmu_defunct_root flag and thus the smp_mb_*()
+dance.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-index b20436f75..7beabf82e 100644
---- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-+++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-@@ -151,7 +151,7 @@ static void pwr_state_check_handler(struct timer_list *t)
- 	rtw_ps_cmd(padapter);
- }
- 
--static u8 PS_RDY_CHECK(struct adapter *padapter)
-+static bool PS_RDY_CHECK(struct adapter *padapter)
- {
- 	u32 curr_time, delta_time;
- 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
--- 
-2.30.2
+kvm_tdp_mmu_zap_invalidated_roots() assumes that it was gifted a reference to
+_all_ invalid roots by kvm_tdp_mmu_invalidate_all_roots().  This works in the
+current code base only because kvm->slots_lock is held for the entire duration,
+i.e. roots can't become invalid between the end of kvm_tdp_mmu_invalidate_all_roots()
+and the end of kvm_tdp_mmu_zap_invalidated_roots().
 
+Marking a root invalid in kvm_tdp_mmu_put_root() breaks that assumption, e.g. if a
+new root is created and then dropped, it will be marked invalid but the "fast zap"
+will not have a reference.  The "defunct" flag prevents this scenario by allowing
+the "fast zap" path to identify invalid roots for which it did not take a reference.
+By virtue of holding a reference, "fast zap" also guarantees that the roots it needs
+to invalidate and put can't become defunct.
+
+My preference would be to either go back to a variant of v2, or to implement my
+"second list" idea.  
+
+I also need to figure out why I didn't encounter errors in v3, because I distinctly
+remember underflowing the refcount before adding the defunct flag...

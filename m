@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A38B4CA808
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62624CA80A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242981AbiCBO3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S243022AbiCBO3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242949AbiCBO26 (ORCPT
+        with ESMTP id S242944AbiCBO27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:28:58 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D733C48C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:09 -0800 (PST)
+        Wed, 2 Mar 2022 09:28:59 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A5C47395
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646231289; x=1677767289;
+  t=1646231291; x=1677767291;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2Nualmy4B+q/pQAvCYh3cT6KycdN+hRzdBV0Onrkv+U=;
-  b=B0tkAkRQFgiGyJg8jlT/qTAD7LeiGlF/wns7WY6uv+9ITt+dAnvPAb7A
-   lpVAgj3MJmjTZxado4IX+OO33R0Rkpwgd95DfZoVq7aRIqbR7asZQ0VxX
-   uBzJND4I0vgsOZqiVb8KKZncE2uXj0e98MqSZ8NqeETCBenZJfyIUJBSd
-   wtzQ+Qvr1+OIukDhd1ThKOoQ2lE7o4SgkRw7IGdqhIWY+Sq4Q9zf0A6yP
-   Uub1VRSVn1Psl/SEE5dlfrCQ1+2eyc8EsFAU6sYmtxWPXz6o3Yy8/hzyp
-   cwxbOlWaEbaaM0ztYK8BORp7r/SYgJFABU1u9RChM60PNvDDHa0bu/D/Z
+  bh=7Eyk1Snf0+17yJ5f1VxY5oGcoVgWWtAgnBX8SxYyado=;
+  b=bwebELV7dv/l2Njq5W5E5cSwTa6dId6NRQPfhdpjz3HN8bUDYUICfIeO
+   qvLcwLE8l6ky+uNBpl3hdsmtK3lCo/PGoBePFnL5XLmK7xpicl5cxmz7T
+   MVHPDbWR5EmlT0zziTtVqW5rpQeu8zWvH9fe9KyESZe3umDxRlqbdLZJa
+   L+Wj7XXg/NBJMXVh6pPm8V52FKVBIJ7isvV5KjAL9Odq2mDIwfi+1RHM8
+   LTBD/MocYgQXHLuZIhcg8IMrfzGOD6P9zLUxJmZXR1terkAWIWlW0eIUr
+   7tXP1IADjpsZ6dLd1bcVXmKjZ6ImNzoix9FLDEiIHd5eicUhguBcL5p4w
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="314129227"
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253603658"
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="314129227"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:08 -0800
+   d="scan'208";a="253603658"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="493553167"
+   d="scan'208";a="807493051"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 02 Mar 2022 06:28:01 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 02 Mar 2022 06:28:02 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 2245F2D6; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
+        id 2FAE235B; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -52,17 +52,17 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [PATCHv5 07/30] x86/traps: Add #VE support for TDX guest
-Date:   Wed,  2 Mar 2022 17:27:43 +0300
-Message-Id: <20220302142806.51844-8-kirill.shutemov@linux.intel.com>
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCHv5 08/30] x86/tdx: Add HLT support for TDX guests
+Date:   Wed,  2 Mar 2022 17:27:44 +0300
+Message-Id: <20220302142806.51844-9-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,287 +71,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtualization Exceptions (#VE) are delivered to TDX guests due to
-specific guest actions which may happen in either user space or the
-kernel:
+The HLT instruction is a privileged instruction, executing it stops
+instruction execution and places the processor in a HALT state. It
+is used in kernel for cases like reboot, idle loop and exception fixup
+handlers. For the idle case, interrupts will be enabled (using STI)
+before the HLT instruction (this is also called safe_halt()).
 
- * Specific instructions (WBINVD, for example)
- * Specific MSR accesses
- * Specific CPUID leaf accesses
- * Access to specific guest physical addresses
+To support the HLT instruction in TDX guests, it needs to be emulated
+using TDVMCALL (hypercall to VMM). More details about it can be found
+in Intel Trust Domain Extensions (Intel TDX) Guest-Host-Communication
+Interface (GHCI) specification, section TDVMCALL[Instruction.HLT].
 
-Syscall entry code has a critical window where the kernel stack is not
-yet set up. Any exception in this window leads to hard to debug issues
-and can be exploited for privilege escalation. Exceptions in the NMI
-entry code also cause issues. Returning from the exception handler with
-IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
+In TDX guests, executing HLT instruction will generate a #VE, which is
+used to emulate the HLT instruction. But #VE based emulation will not
+work for the safe_halt() flavor, because it requires STI instruction to
+be executed just before the TDCALL. Since idle loop is the only user of
+safe_halt() variant, handle it as a special case.
 
-For these reasons, the kernel avoids #VEs during the syscall gap and
-the NMI entry code. Entry code paths do not access TD-shared memory,
-MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
-that might generate #VE. VMM can remove memory from TD at any point,
-but access to unaccepted (or missing) private memory leads to VM
-termination, not to #VE.
+To avoid *safe_halt() call in the idle function, define the
+tdx_guest_idle() and use it to override the "x86_idle" function pointer
+for a valid TDX guest.
 
-Similarly to page faults and breakpoints, #VEs are allowed in NMI
-handlers once the kernel is ready to deal with nested NMIs.
+Alternative choices like PV ops have been considered for adding
+safe_halt() support. But it was rejected because HLT paravirt calls
+only exist under PARAVIRT_XXL, and enabling it in TDX guest just for
+safe_halt() use case is not worth the cost.
 
-During #VE delivery, all interrupts, including NMIs, are blocked until
-TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
-the VE info.
-
-TDGETVEINFO retrieves the #VE info from the TDX module, which also
-clears the "#VE valid" flag.  This must be done before anything else as
-any #VE that occurs while the valid flag is set escalates to #DF by TDX
-module. It will result in an oops.
-
-Virtual NMIs are inhibited if the #VE valid flag is set. NMI will not be
-delivered until TDGETVEINFO is called.
-
-For now, convert unhandled #VE's (everything, until later in this
-series) so that they appear just like a #GP by calling the
-ve_raise_fault() directly. The ve_raise_fault() function is similar
-to #GP handler and is responsible for sending SIGSEGV to userspace
-and CPU die and notifying debuggers and other die chain users.
-
-Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- arch/x86/coco/tdx.c             | 31 +++++++++++++
- arch/x86/include/asm/idtentry.h |  4 ++
- arch/x86/include/asm/tdx.h      | 21 +++++++++
- arch/x86/kernel/idt.c           |  3 ++
- arch/x86/kernel/traps.c         | 81 +++++++++++++++++++++++++++++++++
- 5 files changed, 140 insertions(+)
+ arch/x86/coco/tdcall.S     | 13 ++++++
+ arch/x86/coco/tdx.c        | 93 +++++++++++++++++++++++++++++++++++++-
+ arch/x86/include/asm/tdx.h |  4 ++
+ arch/x86/kernel/process.c  |  4 ++
+ 4 files changed, 112 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/coco/tdcall.S b/arch/x86/coco/tdcall.S
+index 4767e0b5f0d9..29e81104d312 100644
+--- a/arch/x86/coco/tdcall.S
++++ b/arch/x86/coco/tdcall.S
+@@ -138,6 +138,19 @@ SYM_FUNC_START(__tdx_hypercall)
+ 
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+ 
++	/*
++	 * For the idle loop STI needs to be called directly before the TDCALL
++	 * that enters idle (EXIT_REASON_HLT case). STI instruction enables
++	 * interrupts only one instruction later. If there is a window between
++	 * STI and the instruction that emulates the HALT state, there is a
++	 * chance for interrupts to happen in this window, which can delay the
++	 * HLT operation indefinitely. Since this is the not the desired
++	 * result, conditionally call STI before TDCALL.
++	 */
++	testq $TDX_HCALL_ISSUE_STI, %rsi
++	jz .Lskip_sti
++	sti
++.Lskip_sti:
+ 	tdcall
+ 
+ 	/*
 diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index 34818dc31248..6b2b738a2ba2 100644
+index 6b2b738a2ba2..0c8214e1cdb5 100644
 --- a/arch/x86/coco/tdx.c
 +++ b/arch/x86/coco/tdx.c
-@@ -10,6 +10,7 @@
+@@ -7,6 +7,7 @@
+ #include <linux/cpufeature.h>
+ #include <asm/coco.h>
+ #include <asm/tdx.h>
++#include <asm/vmx.h>
  
  /* TDX module Call Leaf IDs */
  #define TDX_GET_INFO			1
-+#define TDX_GET_VEINFO			3
+@@ -30,6 +31,17 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+ 	return __tdx_hypercall(&args, 0);
+ }
  
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-@@ -52,6 +53,36 @@ static void get_info(unsigned int *gpa_width)
++/*
++ * The TDG.VP.VMCALL-Instruction-execution sub-functions are defined
++ * independently from but are currently matched 1:1 with VMX EXIT_REASONs.
++ * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
++ * guest sides of these calls.
++ */
++static u64 hcall_func(u64 exit_reason)
++{
++	return exit_reason;
++}
++
+ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ 				   struct tdx_module_output *out)
+ {
+@@ -53,6 +65,62 @@ static void get_info(unsigned int *gpa_width)
  	*gpa_width = out.rcx & GENMASK(5, 0);
  }
  
-+void tdx_get_ve_info(struct ve_info *ve)
++static u64 __cpuidle __halt(const bool irq_disabled, const bool do_sti)
 +{
-+	struct tdx_module_output out;
++	struct tdx_hypercall_args args = {
++		.r10 = TDX_HYPERCALL_STANDARD,
++		.r11 = hcall_func(EXIT_REASON_HLT),
++		.r12 = irq_disabled,
++	};
 +
 +	/*
-+	 * Called during #VE handling to retrieve the #VE info from the
-+	 * TDX module.
++	 * Emulate HLT operation via hypercall. More info about ABI
++	 * can be found in TDX Guest-Host-Communication Interface
++	 * (GHCI), section 3.8 TDG.VP.VMCALL<Instruction.HLT>.
 +	 *
-+	 * This should called done early in #VE handling.  A "nested"
-+	 * #VE which occurs before this will raise a #DF and is not
-+	 * recoverable.
++	 * The VMM uses the "IRQ disabled" param to understand IRQ
++	 * enabled status (RFLAGS.IF) of the TD guest and to determine
++	 * whether or not it should schedule the halted vCPU if an
++	 * IRQ becomes pending. E.g. if IRQs are disabled, the VMM
++	 * can keep the vCPU in virtual HLT, even if an IRQ is
++	 * pending, without hanging/breaking the guest.
 +	 */
-+	tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out);
-+
-+	/* Interrupts and NMIs can be delivered again. */
-+	ve->exit_reason = out.rcx;
-+	ve->exit_qual   = out.rdx;
-+	ve->gla         = out.r8;
-+	ve->gpa         = out.r9;
-+	ve->instr_len   = lower_32_bits(out.r10);
-+	ve->instr_info  = upper_32_bits(out.r10);
++	return __tdx_hypercall(&args, do_sti ? TDX_HCALL_ISSUE_STI : 0);
 +}
 +
-+bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
++static bool handle_halt(void)
 +{
-+	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
++	/*
++	 * Since non safe halt is mainly used in CPU offlining
++	 * and the guest will always stay in the halt state, don't
++	 * call the STI instruction (set do_sti as false).
++	 */
++	const bool irq_disabled = irqs_disabled();
++	const bool do_sti = false;
 +
-+	return false;
++	if (__halt(irq_disabled, do_sti))
++		return false;
++
++	return true;
 +}
 +
- void __init tdx_early_init(void)
- {
- 	unsigned int gpa_width;
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 1345088e9902..8ccc81d653b3 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -625,6 +625,10 @@ DECLARE_IDTENTRY_XENCB(X86_TRAP_OTHER,	exc_xen_hypervisor_callback);
- DECLARE_IDTENTRY_RAW(X86_TRAP_OTHER,	exc_xen_unknown_trap);
- #endif
- 
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+DECLARE_IDTENTRY(X86_TRAP_VE,		exc_virtualization_exception);
-+#endif
++void __cpuidle tdx_safe_halt(void)
++{
++	 /*
++	  * For do_sti=true case, __tdx_hypercall() function enables
++	  * interrupts using the STI instruction before the TDCALL. So
++	  * set irq_disabled as false.
++	  */
++	const bool irq_disabled = false;
++	const bool do_sti = true;
 +
- /* Device interrupts common/spurious */
- DECLARE_IDTENTRY_IRQ(X86_TRAP_OTHER,	common_interrupt);
- #ifdef CONFIG_X86_LOCAL_APIC
++	/*
++	 * Use WARN_ONCE() to report the failure.
++	 */
++	if (__halt(irq_disabled, do_sti))
++		WARN_ONCE(1, "HLT instruction emulation failed\n");
++}
++
+ void tdx_get_ve_info(struct ve_info *ve)
+ {
+ 	struct tdx_module_output out;
+@@ -76,11 +144,32 @@ void tdx_get_ve_info(struct ve_info *ve)
+ 	ve->instr_info  = upper_32_bits(out.r10);
+ }
+ 
++/* Handle the kernel #VE */
++static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
++{
++	switch (ve->exit_reason) {
++	case EXIT_REASON_HLT:
++		return handle_halt();
++	default:
++		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
++		return false;
++	}
++}
++
+ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
+ {
+-	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
++	bool ret;
++
++	if (user_mode(regs))
++		ret = false;
++	else
++		ret = virt_exception_kernel(regs, ve);
++
++	/* After successful #VE handling, move the IP */
++	if (ret)
++		regs->ip += ve->instr_len;
+ 
+-	return false;
++	return ret;
+ }
+ 
+ void __init tdx_early_init(void)
 diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 003c4d101297..8af81ea2779d 100644
+index 8af81ea2779d..1f150e7a2f8f 100644
 --- a/arch/x86/include/asm/tdx.h
 +++ b/arch/x86/include/asm/tdx.h
-@@ -5,6 +5,7 @@
+@@ -13,6 +13,7 @@
+ #define TDX_HYPERCALL_STANDARD  0
  
- #include <linux/bits.h>
- #include <linux/init.h>
-+#include <asm/ptrace.h>
+ #define TDX_HCALL_HAS_OUTPUT	BIT(0)
++#define TDX_HCALL_ISSUE_STI	BIT(1)
  
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
-@@ -55,6 +56,22 @@ struct tdx_hypercall_args {
- 	u64 r15;
- };
+ /*
+  * SW-defined error codes.
+@@ -87,9 +88,12 @@ void tdx_get_ve_info(struct ve_info *ve);
  
-+/*
-+ * Used by the #VE exception handler to gather the #VE exception
-+ * info from the TDX module. This is a software only structure
-+ * and not part of the TDX module/VMM ABI.
-+ */
-+struct ve_info {
-+	u64 exit_reason;
-+	u64 exit_qual;
-+	/* Guest Linear (virtual) Address */
-+	u64 gla;
-+	/* Guest Physical Address */
-+	u64 gpa;
-+	u32 instr_len;
-+	u32 instr_info;
-+};
-+
- #ifdef CONFIG_INTEL_TDX_GUEST
+ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
  
- void __init tdx_early_init(void);
-@@ -66,6 +83,10 @@ u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- /* Used to request services from the VMM */
- u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
- 
-+void tdx_get_ve_info(struct ve_info *ve);
-+
-+bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
++void tdx_safe_halt(void);
 +
  #else
  
  static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index df0fa695bb09..1da074123c16 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -68,6 +68,9 @@ static const __initconst struct idt_data early_idts[] = {
- 	 */
- 	INTG(X86_TRAP_PF,		asm_exc_page_fault),
- #endif
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+	INTG(X86_TRAP_VE,		asm_exc_virtualization_exception),
-+#endif
- };
++static inline void tdx_safe_halt(void) { };
  
- /*
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 733b6490523c..1c3cb952fa2a 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -62,6 +62,7 @@
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
- #include <asm/vdso.h>
+ #endif /* CONFIG_INTEL_TDX_GUEST */
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index e131d71b3cae..2e90d57cf86e 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -46,6 +46,7 @@
+ #include <asm/proto.h>
+ #include <asm/frame.h>
+ #include <asm/unwind.h>
 +#include <asm/tdx.h>
  
- #ifdef CONFIG_X86_64
- #include <asm/x86_init.h>
-@@ -1278,6 +1279,86 @@ DEFINE_IDTENTRY(exc_device_not_available)
- 	}
- }
+ #include "process.h"
  
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+
-+#define VE_FAULT_STR "VE fault"
-+
-+static void ve_raise_fault(struct pt_regs *regs, long error_code)
-+{
-+	if (user_mode(regs)) {
-+		gp_user_force_sig_segv(regs, X86_TRAP_VE, error_code, VE_FAULT_STR);
-+		return;
-+	}
-+
-+	if (gp_try_fixup_and_notify(regs, X86_TRAP_VE, error_code, VE_FAULT_STR))
-+		return;
-+
-+	die_addr(VE_FAULT_STR, regs, error_code, 0);
-+}
-+
-+/*
-+ * Virtualization Exceptions (#VE) are delivered to TDX guests due to
-+ * specific guest actions which may happen in either user space or the
-+ * kernel:
-+ *
-+ *  * Specific instructions (WBINVD, for example)
-+ *  * Specific MSR accesses
-+ *  * Specific CPUID leaf accesses
-+ *  * Access to specific guest physical addresses
-+ *
-+ * In the settings that Linux will run in, virtualization exceptions are
-+ * never generated on accesses to normal, TD-private memory that has been
-+ * accepted.
-+ *
-+ * Syscall entry code has a critical window where the kernel stack is not
-+ * yet set up. Any exception in this window leads to hard to debug issues
-+ * and can be exploited for privilege escalation. Exceptions in the NMI
-+ * entry code also cause issues. Returning from the exception handler with
-+ * IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
-+ *
-+ * For these reasons, the kernel avoids #VEs during the syscall gap and
-+ * the NMI entry code. Entry code paths do not access TD-shared memory,
-+ * MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
-+ * that might generate #VE. VMM can remove memory from TD at any point,
-+ * but access to unaccepted (or missing) private memory leads to VM
-+ * termination, not to #VE.
-+ *
-+ * Similarly to page faults and breakpoints, #VEs are allowed in NMI
-+ * handlers once the kernel is ready to deal with nested NMIs.
-+ *
-+ * During #VE delivery, all interrupts, including NMIs, are blocked until
-+ * TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
-+ * the VE info.
-+ *
-+ * If a guest kernel action which would normally cause a #VE occurs in
-+ * the interrupt-disabled region before TDGETVEINFO, a #DF (fault
-+ * exception) is delivered to the guest which will result in an oops.
-+ */
-+DEFINE_IDTENTRY(exc_virtualization_exception)
-+{
-+	struct ve_info ve;
-+
-+	/*
-+	 * NMIs/Machine-checks/Interrupts will be in a disabled state
-+	 * till TDGETVEINFO TDCALL is executed. This ensures that VE
-+	 * info cannot be overwritten by a nested #VE.
-+	 */
-+	tdx_get_ve_info(&ve);
-+
-+	cond_local_irq_enable(regs);
-+
-+	/*
-+	 * If tdx_handle_virt_exception() could not process
-+	 * it successfully, treat it as #GP(0) and handle it.
-+	 */
-+	if (!tdx_handle_virt_exception(regs, &ve))
-+		ve_raise_fault(regs, 0);
-+
-+	cond_local_irq_disable(regs);
-+}
-+
-+#endif
-+
- #ifdef CONFIG_X86_32
- DEFINE_IDTENTRY_SW(iret_error)
- {
+@@ -873,6 +874,9 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+ 	} else if (prefer_mwait_c1_over_halt(c)) {
+ 		pr_info("using mwait in idle threads\n");
+ 		x86_idle = mwait_idle;
++	} else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
++		pr_info("using TDX aware idle routine\n");
++		x86_idle = tdx_safe_halt;
+ 	} else
+ 		x86_idle = default_idle;
+ }
 -- 
 2.34.1
 

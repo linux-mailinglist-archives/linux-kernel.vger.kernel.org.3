@@ -2,127 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FEB4CA880
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46A14CA883
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243233AbiCBOuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S243238AbiCBOvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiCBOuI (ORCPT
+        with ESMTP id S232191AbiCBOvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:50:08 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DA92B180
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:49:24 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646232563;
+        Wed, 2 Mar 2022 09:51:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2A0B2B180
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:50:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646232647;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OsfRjPGADDznTwP6UP8rO2/tn0zLOEDntHkPMrLfO3o=;
-        b=PQI6UudmCrIGk9Y4uQdDksKVK6LvG6dl92N2Mvx4EmNEfYLMKjoHBg9snNfeBkTpZ4r4kO
-        LIaewMgebD9I++aM6yMtQwZGmhIsqKcjCB1Ey26O6w0/yV7XbcTskVBoYQ7SqR+rncLUSX
-        PVfpMV0setuD2ryMTi3OR5Tmz63ex975Z0jJ65tZzDKpW7R+SOXbtlZnIgDjPQ5ePI4O6m
-        N+93hFSwXE66o80VQ6HGLFpB4ZD8J84T5EMrUZV1D5FgBPa1sJZNpwL4wUGr75WjGHt1qB
-        OQDdaJeVAUBfD9Nk6GVfD8cd4j7WqVa7ode1d24qRyd7rh3cZkmXu98HE+jDcg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646232563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OsfRjPGADDznTwP6UP8rO2/tn0zLOEDntHkPMrLfO3o=;
-        b=gEbU27e2+ZIKq7GlcvsN82xEJPYX/NfomHyHT6KYdvp6RloQF2dbRV/sCha36zIJYT/ISb
-        fUTiHzlbxee742DA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: two locations: was: Re: [PATCH printk v1 03/13] printk: use
- percpu flag instead of cpu_online()
-In-Reply-To: <Yg0C+UtoegnybA4q@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-4-john.ogness@linutronix.de>
- <Yg0C+UtoegnybA4q@alley>
-Date:   Wed, 02 Mar 2022 15:55:23 +0106
-Message-ID: <87v8wwh0jw.fsf@jogness.linutronix.de>
+        bh=vyTbPbzLV6BhTjCf6yQIefb7DNZSD/rDYL7+DnSGw1A=;
+        b=YZLdAd6V85Awe2c9qQHQLoXrERYxZDfGWwTNM3i5oQrNoMqghiPBn/DsnGvvVnWTz20qZM
+        iYhffMhkhZ+yM7Je9hKmZEgRwhv0Ey52RvASc9SlKNGDP1+RRRd5jyxcVDTLoxHpxasHip
+        wFLfl0hTxzAKP/M0UncNHd4VoUdluBo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-m-ShuNnXNzKV-A8MX03HHA-1; Wed, 02 Mar 2022 09:50:43 -0500
+X-MC-Unique: m-ShuNnXNzKV-A8MX03HHA-1
+Received: by mail-wr1-f71.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so716549wrp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:50:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vyTbPbzLV6BhTjCf6yQIefb7DNZSD/rDYL7+DnSGw1A=;
+        b=rIGUgwL2g+96jnim0MYPtGpHn1EWsFIZUIPXkkVczmnDoEpt6EFufhAH+kdoGCQs31
+         2asDORAq8CO2yke36HwvU06Bd4dxyQ9MrjYsFKeZxOqgRYB61C9lMSA2YIGS91YKC9E2
+         gGjwaKm7sVf6J6AatgpzvCtRJ9gH8+ZjqLn7lKnEuAX+N/dMgZ9lhKCqz5k0xDSk41QH
+         USXlEl/8yB7wIkudMQ6IsMV0j6UVODni/GSQOfNAEhftKrw9X7ZKNgNTYl6+vpexteS6
+         8RPMJ3A0LJkHlpzhJa20mZtDSVp1oUQloR1Si41efYi44cJatPrYZ97u2fZPB7UiACdQ
+         qB2Q==
+X-Gm-Message-State: AOAM533iptfiFoZswrlcG1RSBZeR944pIqFju3OTRmPqTpQvgBLkqmeZ
+        phd05hl43z9vAVZlhFSoJbhce074R+t7zqZLYQSYmN5EEOs1ib/yKs/wVuZYmU1E0yeN/vxA9CC
+        5pEkyNb2xUZv+t8BeCxJPB8pj
+X-Received: by 2002:adf:f550:0:b0:1f0:2381:ac2c with SMTP id j16-20020adff550000000b001f02381ac2cmr4323635wrp.189.1646232642005;
+        Wed, 02 Mar 2022 06:50:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQNu/fXS905mfblMrRA5G2rPob+EQ5Bu1JcHzO8Z63AfxXQlVwQA2iUhIru+dm9U5yRai4qA==
+X-Received: by 2002:adf:f550:0:b0:1f0:2381:ac2c with SMTP id j16-20020adff550000000b001f02381ac2cmr4323627wrp.189.1646232641759;
+        Wed, 02 Mar 2022 06:50:41 -0800 (PST)
+Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
+        by smtp.gmail.com with ESMTPSA id k19-20020adfd233000000b001f0358e47bdsm1971249wrh.50.2022.03.02.06.50.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 06:50:41 -0800 (PST)
+Date:   Wed, 2 Mar 2022 09:50:38 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220302094946-mutt-send-email-mst@kernel.org>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302093446.pjq3djoqi434ehz4@sgarzare-redhat>
+ <20220302083413-mutt-send-email-mst@kernel.org>
+ <20220302141121.sohhkhtiiaydlv47@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302141121.sohhkhtiiaydlv47@sgarzare-redhat>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16, Petr Mladek <pmladek@suse.com> wrote:
->> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
->> index d1b773823d63..b346e60e9e51 100644
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -2577,11 +2577,11 @@ static int have_callable_console(void)
->>   *
->>   * Console drivers may assume that per-cpu resources have been allocated. So
->>   * unless they're explicitly marked as being able to cope (CON_ANYTIME) don't
->> - * call them until this CPU is officially up.
->> + * call them until per-cpu resources have been allocated.
->>   */
->>  static inline int can_use_console(void)
->>  {
->> -	return cpu_online(raw_smp_processor_id()) || have_callable_console();
->> +	return (printk_percpu_data_ready() || have_callable_console());
->>  }
->
-> cpu_online(raw_smp_processor_id()) check is used also in
-> call_console_drivers(). The same logic should be used in both
-> locations.
->
-> I found this when reviewing 6th patch that replaced both checks
-> with a single one.
->
-> Note that I am still not sure if this change is correct at all.
-> It will allow to always call the console during CPU hotplug
-> and I am not sure if it is safe. IMHO, it might cause problems when
-> a console driver uses, for example, CPU-bound workqueues.
+On Wed, Mar 02, 2022 at 03:11:21PM +0100, Stefano Garzarella wrote:
+> On Wed, Mar 02, 2022 at 08:35:08AM -0500, Michael S. Tsirkin wrote:
+> > On Wed, Mar 02, 2022 at 10:34:46AM +0100, Stefano Garzarella wrote:
+> > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > >
+> > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > 
+> > > This issue is similar to [1] that should be already fixed upstream by [2].
+> > > 
+> > > However I think this patch would have prevented some issues, because
+> > > vhost_vq_reset() sets vq->private to NULL, preventing the worker from
+> > > running.
+> > > 
+> > > Anyway I think that when we enter in vhost_dev_cleanup() the worker should
+> > > be already stopped, so it shouldn't be necessary to take the mutex. But in
+> > > order to prevent future issues maybe it's better to take them, so:
+> > > 
+> > > Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > 
+> > > [1]
+> > > https://syzkaller.appspot.com/bug?id=993d8b5e64393ed9e6a70f9ae4de0119c605a822
+> > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+> > 
+> > 
+> > Right. I want to queue this but I would like to get a warning
+> > so we can detect issues like [2] before they cause more issues.
+> 
+> I agree, what about moving the warning that we already have higher up, right
+> at the beginning of the function?
+> 
+> I mean something like this:
+> 
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe2..1721ff3f18c0 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -692,6 +692,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>  {
+>         int i;
+> +       WARN_ON(!llist_empty(&dev->work_list));
+> +
+>         for (i = 0; i < dev->nvqs; ++i) {
+>                 if (dev->vqs[i]->error_ctx)
+>                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+> @@ -712,7 +714,6 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>         dev->iotlb = NULL;
+>         vhost_clear_msg(dev);
+>         wake_up_interruptible_poll(&dev->wait, EPOLLIN | EPOLLRDNORM);
+> -       WARN_ON(!llist_empty(&dev->work_list));
+>         if (dev->worker) {
+>                 kthread_stop(dev->worker);
+>                 dev->worker = NULL;
+> 
 
-You are correct. We must take hotplug into account for !CON_ANYTIME
-consoles. There may be some hotplug callbacks that make memory
-unavailable for the console.
+Hmm I'm not sure why it matters.
 
-However, I will add the use of printk_percpu_data_ready() in the
-check. !CON_ANYTIME consoles also should not be called until the per-cpu
-areas are ready. For example, it would be bad if a console queued
-irq_work before per-cpu areas are setup (cpu_online() is true during
-this time).
+> And maybe we can also check vq->private and warn in the loop, because the
+> work_list may be empty if the device is doing nothing.
+> 
+> Thanks,
+> Stefano
 
-One of my main concerns was that raw_smp_processor_id() was used for the
-check. It is conceptually wrong to exclude certain consoles based on a
-current CPU when migration is still enabled. I understand that the use
-of can_use_console() is an optimization to avoid doing extra work where
-there are no consoles available. But the task could be preemptible there
-and _conceptually_, could get moved to another CPU before its write()
-callback is called. The cpu_online() check belongs in code where
-preemption is disabled.
-
-If the context is preemptible, I do not think it will ever see
-!cpu_online(). So I think if the cpu_online() check is limited to
-unlocking when console_trylock() was used, it will be correct.
-
-In the current implementation of printk(), it would be odd to do this
-conditional check (perhaps by passing @do_cond_resched to
-can_use_console()). But my series does significant refactoring and
-actually does need to distinguish between console_lock() and
-console_trylock() due to the kthreads and supporting the handover. So it
-should work well that the cpu_online() check for !CON_ANYTIME is only
-performed when !preemptible.
-
-Regardless, my v2 will keep cpu_online() checks since they are necessary
-for hotplug support.
-
-John

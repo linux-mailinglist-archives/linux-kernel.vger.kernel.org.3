@@ -2,186 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491BD4CA038
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E81E4CA03B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240299AbiCBJDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S240315AbiCBJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240296AbiCBJD2 (ORCPT
+        with ESMTP id S240303AbiCBJDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:03:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0887DF19
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646211764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5m7KRWlGmGXQPZRa0GAEBXpq42RC/iuN2Lc7+CRIcfQ=;
-        b=Y2SxrvRWtsMRzrVSgZm9yc2q+kPR+fXNZTuCPkCj4iXV7tqTuDMNLvPZb1f4lbd7xTpckd
-        sdCVLnntdqzkT3zxjTmmPnqNiTlkLCd9lPIYpbkqsJ+b+5fxUhdS8a7syFlB8fyj6YTrc3
-        H0CtQlJnhAyV5V9m/vhusXSaGLULDIA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-oUQHEnoIMTi_YNjpXQZOoA-1; Wed, 02 Mar 2022 04:02:44 -0500
-X-MC-Unique: oUQHEnoIMTi_YNjpXQZOoA-1
-Received: by mail-ed1-f69.google.com with SMTP id f9-20020a0564021e8900b00412d0a6ef0dso628964edf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:02:43 -0800 (PST)
+        Wed, 2 Mar 2022 04:03:37 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460E19C0D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:02:54 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id bd1so992868plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R4uOo5MHkeQgzq17T9YFrhDC6UuQ0Je/UgBAobCZK4Y=;
+        b=NB7oDpZG1zrTleofPpyTpCvySKZckLxHjXrTodWOnM02cHwTokRsxQhz226NYS51v8
+         weGGODXATipQwe9eixdr8HjDeI4Z+E/d1z/gYlGrU4gcOcTdmd1zN5D5Vdl2M9SN7nj8
+         je5N326XMvsXKjl9kXGyQ4SDYHmobI8tYA++cuEK7Iovn8qXcU6Gx8Cvc+D2nQaZuS1C
+         Oh0X1R9UOjS1m0PoPboOEd0zdg4arkp+74+rfb2E8wtXiwcr+heiI8swox8UyoSn9i26
+         FtZlGTbNgxrKSVdvnCQx0C/lFtWfTr/T4AM8Eyvcs4k5qM7+3L5cMBclXPv5Qwg2Kjz6
+         utJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5m7KRWlGmGXQPZRa0GAEBXpq42RC/iuN2Lc7+CRIcfQ=;
-        b=jk7xO5whSQ66Sf8MySSjcWbC3hvl3Bw+qpNvqzNi1Y+EHHoHvkYPqNrs/klQEfKDc7
-         jrDWQaCh8tmJWTgtKfI+KvBIJ/UDaQ+c2GqtmpkCYPbPVvp2NTfPexEwWz8cZNumDegy
-         sxOKIenCyIPL+2WWYA5dK+xVYEQaXf+2FoIowGjImD1Tf54W9X8LDGqnAto/UeWUlvpx
-         ZK7Yj1eRyNFts16eWr9G+7dT8XQX5fc/NPwJQk3ouIHWAoKyJnX8GOSQeCEClqWtAOJE
-         V+UCjPzN2lgMYnGbWsuyp5a3Cjn+RIT0Z+vof9ugNdtC2H8O+olBfkwLhG9O/vq/BcI1
-         ufYA==
-X-Gm-Message-State: AOAM533Cn3kcPyn6qs7okdi9Lt248CV0LMTnoz/qWfHq7GkwfY8uZR9d
-        VszspGw8b+ohkr/gNjFhOXtau684ujrwT0fWb2RnWiRzsMlkPjI3LS1Dxj3ymBKvlxCe9MCqejr
-        Db038whmRYmaP/DmW53sY6kwd
-X-Received: by 2002:a17:907:9719:b0:6d9:b294:4b99 with SMTP id jg25-20020a170907971900b006d9b2944b99mr1666681ejc.444.1646211762672;
-        Wed, 02 Mar 2022 01:02:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw0TwWywbhgLNniN7uMilV2yLr7OxssKA0/Kv/mzgbSSZhxjPaeICrPzEzMI3qq74bwYNQbKw==
-X-Received: by 2002:a17:907:9719:b0:6d9:b294:4b99 with SMTP id jg25-20020a170907971900b006d9b2944b99mr1666657ejc.444.1646211762450;
-        Wed, 02 Mar 2022 01:02:42 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id v7-20020a056402348700b00415b38e920bsm712730edc.95.2022.03.02.01.02.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 01:02:41 -0800 (PST)
-Message-ID: <832a5b2e-d70c-f1a6-e377-7697b1eb7049@redhat.com>
-Date:   Wed, 2 Mar 2022 10:02:41 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R4uOo5MHkeQgzq17T9YFrhDC6UuQ0Je/UgBAobCZK4Y=;
+        b=MbKEjciZZfM3dDu2ejnafvV7xf+ruTo/2j0UQ8yRH53/1LFv19dTHlv3VE1KnOQAJo
+         boRLJJOdIUxATnFUz6zk5CHvZW5Awl2YhKzTJuVckw7dmJrvGH/soSCa/TrQ8a0EwHKS
+         dfYl6ozdgUxyLchInkwUE9Od3WhP8Zrz6oRLWQsgp2kfMWSQ+oZjyRUu/5xjGRKZmOTP
+         5jSvuPoIbqFIbdxL24g5yNgnksuJXhatsapEw1uvJ1dFyfkCWHrKnata9l0SwEIe9Avq
+         62aDp92iDp0kQvOv0GDl0iaEbD7efIzZq5ZccaO/a+74bbYZl84exreEQhbN6cEstPCQ
+         pj2A==
+X-Gm-Message-State: AOAM532dymxMdLS4nkN7X5Sz8ry94eq1MehwUagidmGQQ77uuR2zrW/a
+        Vxbu6t4a6Dzfzo1uDXUroT0=
+X-Google-Smtp-Source: ABdhPJwnq5VviDuQV2d+MxqmT3gBbwUOhuOZU5vyoHoOiukTwPepAlMDov6Mb6n6JDegnvyNa5Gr5A==
+X-Received: by 2002:a17:90a:1d04:b0:1bc:98ca:5e6f with SMTP id c4-20020a17090a1d0400b001bc98ca5e6fmr26362307pjd.32.1646211773654;
+        Wed, 02 Mar 2022 01:02:53 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056a00088800b004bca31c8e56sm21461840pfj.115.2022.03.02.01.02.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 01:02:53 -0800 (PST)
+Date:   Wed, 2 Mar 2022 22:02:46 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>, paskripkin@gmail.com
+Cc:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org,
+        realwakka@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: pi433: prevent uninitialized data from being
+ printed out
+Message-ID: <Yh8ytrK7EJjYbrHF@mail.google.com>
+References: <Yhmruyr2BUn0+3O3@mail.google.com>
+ <593b1840-aba1-3fcb-daef-9cc0011d0805@gmail.com>
+ <20220228064415.GB2794@kadam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] ACPI / x86: Work around broken XSDT on Advantech
- DAC-BJ01 board
-Content-Language: en-US
-To:     Mark Cilissen <mark@yotsuba.nl>, linux-acpi@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kernel test robot <lkp@intel.com>
-References: <20220302040800.10355-1-mark@yotsuba.nl>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220302040800.10355-1-mark@yotsuba.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228064415.GB2794@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/2/22 05:08, Mark Cilissen wrote:
-> On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
-> but the XSDT points to a truncated FADT. This causes all sorts of trouble
-> and usually a complete failure to boot after the following error occurs:
+On Mon, Feb 28, 2022 at 09:44:15AM +0300, Dan Carpenter wrote:
+> On Sat, Feb 26, 2022 at 04:08:48PM +0300, Pavel Skripkin wrote:
+> > > Patch dependency:
+> > > 
+> > > - this patch depends on the following patch to be applied first as
+> > > both of them change the same file:
+> > > https://lore.kernel.org/lkml/Yhla4a1Clpguoo2h@mail.google.com/
+> > > ---
+> > 
+> > You can send all these patches as a patch series with proper order. It will
+> > help maintainers to not break the order while applying.
+> > 
 > 
->   ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
->   ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
->   ACPI: Unable to start ACPI Interpreter
-> 
-> This leaves the ACPI implementation in such a broken state that subsequent
-> kernel subsystem initialisations go wrong, resulting in among others
-> mismapped PCI memory, SATA and USB enumeration failures, and freezes.
-> 
-> As this is an older embedded platform that will likely never see any BIOS
-> updates to address this issue and its default shipping OS only complies to
-> ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
-> top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
-> 
-> Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> v2:
-> - Reduce DMI match count to 4 to not overflow dmi_system_id structure
-> Reported-by: kernel test robot <lkp@intel.com>
-> - Change board ident to correct name
-> - Fix small style issue
-> - Fix up subject as per Rafael's changes
-> 
-> As this patch is CC'd to stable, it seemed wiser to submit a V2 rather
-> than an additional fixup patch to process.
-> ---
->  arch/x86/kernel/acpi/boot.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 5b6d1a95776f..b47338cd579d 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -1328,6 +1328,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
->  	return 0;
->  }
->  
-> +static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
-> +{
-> +	if (!acpi_force) {
-> +		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
-> +		acpi_gbl_do_not_use_xsdt = TRUE;
-> +	} else {
-> +		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
-> +	}
-> +	return 0;
-> +}
-> +
->  static int __init dmi_disable_acpi(const struct dmi_system_id *d)
->  {
->  	if (!acpi_force) {
-> @@ -1451,6 +1462,19 @@ static const struct dmi_system_id acpi_dmi_table[] __initconst = {
->  		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
->  		     },
->  	 },
-> +	/*
-> +	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
-> +	 */
-> +	{
-> +	 .callback = disable_acpi_xsdt,
-> +	 .ident = "Advantech DAC-BJ01",
-> +	 .matches = {
-> +		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
-> +		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
-> +		     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
-> +		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
-> +		     },
-> +	 },
+> 1) All what Pavel said is true.
 
-Heh, I should have noticed this new version before replying. I see that
-you've dropped the BIOS-date match. But that actually is often more useful
-then the BIOS_VERSION, sometimes vendors don't bump the version when
-doing a new BIOS build.
+Hi Pavel, Hi Dan, 
 
-If you only want to match the exact BIOS you tested against I would
-drop the BIOS_VENDOR check instead.
+thanks for taking the time to review my patch (and apologies for taking
+this long to reply back to you guys).
 
-Regards,
+This patch ended up being merged yesterday so I will be extra careful
+for the next patches I send :)
 
-Hans
+> 3) Greg is going to see that and he is *never* going to click on that
+>    link.  In staging then we do not care about the order of patches.
+>    Everything is applied in first come first serve basis.  If Greg finds
+>    out that order matters and it is not sent as a patch set then he
+>    just deletes all your patches and asks you to resend everything
+>    correctly.
 
+Noted.
 
+Best regards,
 
->  	{}
->  };
->  
-> 
-> base-commit: 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
-
+Paulo Almeida

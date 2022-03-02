@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DD34C9ECA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA9C4C9ECC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiCBH61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S239991AbiCBH67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbiCBH6Y (ORCPT
+        with ESMTP id S236101AbiCBH65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:58:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113DF33E03;
-        Tue,  1 Mar 2022 23:57:41 -0800 (PST)
+        Wed, 2 Mar 2022 02:58:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685577EA31
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:58:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1CCC6091F;
-        Wed,  2 Mar 2022 07:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800BFC004E1;
-        Wed,  2 Mar 2022 07:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646207860;
-        bh=sE3KvyyqnB13hEUuAfARfOA7aKTVzjN39A4KBMKEWmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K+uaCR+ZHGIk2a9vkcZ2GZIDnzA1nOq5Mog+MTTZO7TpHanYei0eixq1HXKnO2KyY
-         LCWfEqd4tTveNXWETjwTjUxz1GHP2O9rlrc52PvY9OEsZQ59JyQXCfInymbHtkeIdI
-         U/wzQGSj0DEW1xqTOl2Lo15zw7QigsZBmyDyhMHc=
-Date:   Wed, 2 Mar 2022 08:57:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Youngjin Jang <yj84.jang@samsung.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        js07.lee@samsung.com
-Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-Message-ID: <Yh8jb/X5ZNFvVQlf@kroah.com>
-References: <CGME20220302064921epcas1p19fbe8c017d776657caa696a3cef10093@epcas1p1.samsung.com>
- <20220302064917.64073-1-yj84.jang@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302064917.64073-1-yj84.jang@samsung.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17A00B81F1E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CA6C004E1;
+        Wed,  2 Mar 2022 07:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646207891;
+        bh=fHrv4m4CZ1D4uxW2jCaTRj1I7ej4PPHZOGKkWlysm4g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dUnB2XUTnE5vK5JzLbAgEW50QvwE2+UBfxSaTeoskrlX9XDeXehPnrq/P5UhtMEEM
+         OoCqfowmWiTr5JGkwnZVzxEaRU9L+sGHxYpQMgJ0Qo5zapzgyFjulVDuGyh5GO/4Eq
+         ANmbKiA/vjEudisECe7n+T9xOkvg8i7U6oAHkxWipuvQdAL/BOOMRV7cXTvDhnAG/9
+         O+Grnr6iOYd0+SWrN0ZIRjoz+ITdwY73Yy6L4SnKASL2kpaQuGJ+lRHlfBRFea7MRA
+         Dvzg8izETb1AKQ34OQjdA6QuTEGc0GY8yhJHOU7BrZ7KtU436+0jYXgGFXWt/+vDc3
+         3RVNzJL6IfQsQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nPJs9-00BbrE-2m; Wed, 02 Mar 2022 07:58:09 +0000
+Date:   Wed, 02 Mar 2022 07:58:05 +0000
+Message-ID: <87sfs06b1u.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
+In-Reply-To: <20220225033548.1912117-5-kaleshsingh@google.com>
+References: <20220225033548.1912117-1-kaleshsingh@google.com>
+        <20220225033548.1912117-5-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, broonie@kernel.org, mhiramat@kernel.org, pcc@google.com, madvenka@linux.microsoft.com, qwandor@google.com, ascull@google.com, ardb@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,75 +80,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
-> From: "yj84.jang" <yj84.jang@samsung.com>
+On Fri, 25 Feb 2022 03:34:49 +0000,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> currently, suspend_report_result() prints only function information.
-> If any driver uses common pm function, nobody knows who called
-> failed function exactly.
+> Maps the stack pages in the flexible private VA range and allocates
+> guard pages below the stack as unbacked VA space. The stack is aligned
+> to twice its size to aid overflow detection (implemented in a subsequent
+> patch in the series).
 > 
-> So, device information is needed to recognize specific wrong driver.
-> 
-> e.g.)
-> PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 returns 0
-> PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 returns 0
-> after patch,
-> PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 (amba) returns 0
-> PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 (armv7-pmu) returns 0
-> 
-> Signed-off-by: yj84.jang <yj84.jang@samsung.com>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > ---
->  drivers/base/power/main.c  | 10 +++++-----
->  drivers/pci/pci-driver.c   | 14 +++++++-------
->  drivers/pnp/driver.c       |  2 +-
->  drivers/usb/core/hcd-pci.c |  4 ++--
->  include/linux/pm.h         |  8 ++++----
->  5 files changed, 19 insertions(+), 19 deletions(-)
 > 
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index 04ea92c..a762fe8 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -485,7 +485,7 @@ static int dpm_run_callback(pm_callback_t cb, struct device *dev,
->  	trace_device_pm_callback_start(dev, info, state.event);
->  	error = cb(dev);
->  	trace_device_pm_callback_end(dev, error);
-> -	suspend_report_result(cb, error);
-> +	suspend_report_result(dev, cb, error);
+> Changes in v4:
+>   - Replace IS_ERR_OR_NULL check with IS_ERR check now that
+>     pkvm_alloc_private_va_range() returns an error for null
+>     pointer, per Fuad
+> 
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+> 
+>  arch/arm64/kvm/hyp/nvhe/setup.c | 25 +++++++++++++++++++++----
+>  1 file changed, 21 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+> index 27af337f9fea..1b69a25c1861 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/setup.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+> @@ -105,11 +105,28 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+>  		if (ret)
+>  			return ret;
 >  
->  	initcall_debug_report(dev, calltime, cb, error);
->  
-> @@ -1568,7 +1568,7 @@ static int legacy_suspend(struct device *dev, pm_message_t state,
->  	trace_device_pm_callback_start(dev, info, state.event);
->  	error = cb(dev, state);
->  	trace_device_pm_callback_end(dev, error);
-> -	suspend_report_result(cb, error);
-> +	suspend_report_result(dev, cb, error);
->  
->  	initcall_debug_report(dev, calltime, cb, error);
->  
-> @@ -1855,7 +1855,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
->  	device_unlock(dev);
->  
->  	if (ret < 0) {
-> -		suspend_report_result(callback, ret);
-> +		suspend_report_result(dev, callback, ret);
->  		pm_runtime_put(dev);
->  		return ret;
+> -		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
+> +		/*
+> +		 * Private mappings are allocated upwards from __io_map_base
+> +		 * so allocate the guard page first then the stack.
+> +		 */
+> +		start = (void *)pkvm_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
+> +		if (IS_ERR(start))
+> +			return PTR_ERR(start);
+> +
+> +		/*
+> +		 * The stack is aligned to twice its size to facilitate overflow
+> +		 * detection.
+> +		 */
+> +		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_pa;
+>  		start = end - PAGE_SIZE;
+> -		ret = pkvm_create_mappings(start, end, PAGE_HYP);
+> -		if (ret)
+> -			return ret;
+> +		start = (void *)__pkvm_create_private_mapping((phys_addr_t)start,
+> +					PAGE_SIZE, PAGE_SIZE * 2, PAGE_HYP);
+
+Similar comments as the previous patch. I'd rather you treat each
+stack as a two-page VA, populated by a single page. It would be a lot
+clearer, and less fragile.
+
+> +		if (IS_ERR(start))
+> +			return PTR_ERR(start);
+> +		end = start + PAGE_SIZE;
+> +
+> +		/* Update stack_hyp_va to end of the stack's private VA range */
+> +		per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va = (unsigned long) end;
 >  	}
-> @@ -1960,10 +1960,10 @@ int dpm_suspend_start(pm_message_t state)
->  }
->  EXPORT_SYMBOL_GPL(dpm_suspend_start);
 >  
-> -void __suspend_report_result(const char *function, void *fn, int ret)
-> +void __suspend_report_result(const char *function, struct device *dev, void *fn, int ret)
->  {
->  	if (ret)
-> -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
-> +		pr_err("%s(): %pS (%s) returns %d\n", function, fn, dev_driver_string(dev), ret);
+>  	/*
 
-If you have a struct device, please use dev_err().
+Thanks,
 
-thanks,
+	M.
 
-greg k-h
+-- 
+Without deviation from the norm, progress is not possible.

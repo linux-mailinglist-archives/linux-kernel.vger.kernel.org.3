@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E934CA826
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7F14CA81D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241585AbiCBObG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S243019AbiCBOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243049AbiCBO3d (ORCPT
+        with ESMTP id S243044AbiCBO3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Mar 2022 09:29:33 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4F753E32
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A0C532CD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646231304; x=1677767304;
+  t=1646231302; x=1677767302;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WS5Q7BgxLXBWcRJDdCeKCSCtFtPpW1Fk6DSiIbIbKOQ=;
-  b=J8TQG4hzSmfGb3p3tBk/FD42ONKUFGd9eMNSw/mDvmU/xObcNPV6LvBv
-   qNSevglbJ8Y3VyHibL8Cj/kVRQGT45aWC28d/r1yhrAEJEGBv175qsvEt
-   FeItCd+w0Cx5I9OEkuNwZqEGAdcGqJv2TODIDLEb2R8x8E0TBuDiMmhjq
-   VEGo47d2vRI9Pjj1TMMIpC5huiZ+RvdVYDi8CKFq70eOEmj6bi0VIjtBC
-   s0LWbsmDPJAx2idKQ83YGS2pMnQ+FdqTj/WJEB0kfqc+EpBGVZCw87pwO
-   OPORXh3hAx10rG/f9ZAMCVGtwnrCwW6xl5sdKeRnivI9dJVKYervW37ej
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233376491"
+  bh=FHmqnZUDzTv0Ru5J5ZrA+DEjq8yfsmBIk9DO8a9YqK4=;
+  b=jcisVahbq2ymB65ERhS09h8dJpnQuaO5mXQyVm7z8h31Jvk09jfEkpxU
+   x6gIMOTAMGWWMtXdkc5DqORP1iY6OYrDARbHbXRslspNFj8t8RgZLybqu
+   SlhcUyPNGUWgOu6ZSO86LNt3YVowWlommwjxzKrinZfpm2nRM2rMl4Y2f
+   xRStxwUT86AjE/hf+BTrbntY94MuNkxQTWHYtemuKOJoUeQvPMUe9ScGz
+   7aWD3y+9ZhEBpw+E8oReBfnk6zGzKiGpQyiENUjbhyEoG/FBkDABMeV5E
+   dK3aNLUNfXduZ59sNXVNbi0oOnnpEQ0/aLEsZCp47NoH1n//noCzdi9Fh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233376487"
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="233376491"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+   d="scan'208";a="233376487"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="639791193"
+   d="scan'208";a="545512486"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Mar 2022 06:28:09 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 02 Mar 2022 06:28:09 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id B7AB84DA; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
+        id C2FA84F8; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -51,11 +51,10 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [PATCHv5 18/30] x86/tdx: Port I/O: add early boot support
-Date:   Wed,  2 Mar 2022 17:27:54 +0300
-Message-Id: <20220302142806.51844-19-kirill.shutemov@linux.intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv5 19/30] x86/tdx: Wire up KVM hypercalls
+Date:   Wed,  2 Mar 2022 17:27:55 +0300
+Message-Id: <20220302142806.51844-20-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
@@ -71,97 +70,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-TDX guests cannot do port I/O directly. The TDX module triggers a #VE
-exception to let the guest kernel emulate port I/O by converting them
-into TDCALLs to call the host.
+KVM hypercalls use the VMCALL or VMMCALL instructions. Although the ABI
+is similar, those instructions no longer function for TDX guests.
 
-But before IDT handlers are set up, port I/O cannot be emulated using
-normal kernel #VE handlers. To support the #VE-based emulation during
-this boot window, add a minimal early #VE handler support in early
-exception handlers. This is similar to what AMD SEV does. This is
-mainly to support earlyprintk's serial driver, as well as potentially
-the VGA driver.
+Make vendor-specific TDVMCALLs instead of VMCALL. This enables TDX
+guests to run with KVM acting as the hypervisor.
 
-The early handler only supports I/O-related #VE exceptions. Unhandled or
-failed exceptions will be handled via early_fixup_exceptions() (like
-normal exception failures). At runtime I/O-related #VE exceptions (along
-with other types) handled by virt_exception_kernel().
+Among other things, KVM hypercall is used to send IPIs.
 
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Since the KVM driver can be built as a kernel module, export
+tdx_kvm_hypercall() to make the symbols visible to kvm.ko.
+
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- arch/x86/coco/tdx.c        | 16 ++++++++++++++++
- arch/x86/include/asm/tdx.h |  4 ++++
- arch/x86/kernel/head64.c   |  3 +++
- 3 files changed, 23 insertions(+)
+ arch/x86/coco/tdx.c             | 17 +++++++++++++++++
+ arch/x86/include/asm/kvm_para.h | 22 ++++++++++++++++++++++
+ arch/x86/include/asm/tdx.h      | 11 +++++++++++
+ 3 files changed, 50 insertions(+)
 
 diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index 1f58375f61df..391a05c7b1da 100644
+index 391a05c7b1da..c82e8eda8c8b 100644
 --- a/arch/x86/coco/tdx.c
 +++ b/arch/x86/coco/tdx.c
-@@ -389,6 +389,22 @@ static bool handle_io(struct pt_regs *regs, u32 exit_qual)
- 		return handle_out(regs, size, port);
+@@ -58,6 +58,23 @@ static u64 hcall_func(u64 exit_reason)
+ 	return exit_reason;
  }
  
-+/*
-+ * Early #VE exception handler. Only handles a subset of port I/O.
-+ * Intended only for earlyprintk. If failed, return false.
-+ */
-+__init bool tdx_early_handle_ve(struct pt_regs *regs)
++#ifdef CONFIG_KVM_GUEST
++long tdx_kvm_hypercall(unsigned int nr, unsigned long p1, unsigned long p2,
++		       unsigned long p3, unsigned long p4)
 +{
-+	struct ve_info ve;
++	struct tdx_hypercall_args args = {
++		.r10 = nr,
++		.r11 = p1,
++		.r12 = p2,
++		.r13 = p3,
++		.r14 = p4,
++	};
 +
-+	tdx_get_ve_info(&ve);
-+
-+	if (ve.exit_reason != EXIT_REASON_IO_INSTRUCTION)
-+		return false;
-+
-+	return handle_io(regs, ve.exit_qual);
++	return __tdx_hypercall(&args, 0);
 +}
++EXPORT_SYMBOL_GPL(tdx_kvm_hypercall);
++#endif
 +
- void tdx_get_ve_info(struct ve_info *ve)
+ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ 				   struct tdx_module_output *out)
  {
- 	struct tdx_module_output out;
+diff --git a/arch/x86/include/asm/kvm_para.h b/arch/x86/include/asm/kvm_para.h
+index 56935ebb1dfe..57bc74e112f2 100644
+--- a/arch/x86/include/asm/kvm_para.h
++++ b/arch/x86/include/asm/kvm_para.h
+@@ -7,6 +7,8 @@
+ #include <linux/interrupt.h>
+ #include <uapi/asm/kvm_para.h>
+ 
++#include <asm/tdx.h>
++
+ #ifdef CONFIG_KVM_GUEST
+ bool kvm_check_and_clear_guest_paused(void);
+ #else
+@@ -32,6 +34,10 @@ static inline bool kvm_check_and_clear_guest_paused(void)
+ static inline long kvm_hypercall0(unsigned int nr)
+ {
+ 	long ret;
++
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return tdx_kvm_hypercall(nr, 0, 0, 0, 0);
++
+ 	asm volatile(KVM_HYPERCALL
+ 		     : "=a"(ret)
+ 		     : "a"(nr)
+@@ -42,6 +48,10 @@ static inline long kvm_hypercall0(unsigned int nr)
+ static inline long kvm_hypercall1(unsigned int nr, unsigned long p1)
+ {
+ 	long ret;
++
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return tdx_kvm_hypercall(nr, p1, 0, 0, 0);
++
+ 	asm volatile(KVM_HYPERCALL
+ 		     : "=a"(ret)
+ 		     : "a"(nr), "b"(p1)
+@@ -53,6 +63,10 @@ static inline long kvm_hypercall2(unsigned int nr, unsigned long p1,
+ 				  unsigned long p2)
+ {
+ 	long ret;
++
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return tdx_kvm_hypercall(nr, p1, p2, 0, 0);
++
+ 	asm volatile(KVM_HYPERCALL
+ 		     : "=a"(ret)
+ 		     : "a"(nr), "b"(p1), "c"(p2)
+@@ -64,6 +78,10 @@ static inline long kvm_hypercall3(unsigned int nr, unsigned long p1,
+ 				  unsigned long p2, unsigned long p3)
+ {
+ 	long ret;
++
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return tdx_kvm_hypercall(nr, p1, p2, p3, 0);
++
+ 	asm volatile(KVM_HYPERCALL
+ 		     : "=a"(ret)
+ 		     : "a"(nr), "b"(p1), "c"(p2), "d"(p3)
+@@ -76,6 +94,10 @@ static inline long kvm_hypercall4(unsigned int nr, unsigned long p1,
+ 				  unsigned long p4)
+ {
+ 	long ret;
++
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return tdx_kvm_hypercall(nr, p1, p2, p3, p4);
++
+ 	asm volatile(KVM_HYPERCALL
+ 		     : "=a"(ret)
+ 		     : "a"(nr), "b"(p1), "c"(p2), "d"(p3), "S"(p4)
 diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 10f39bec7c7d..c20062698198 100644
+index c20062698198..db8bf9a86b97 100644
 --- a/arch/x86/include/asm/tdx.h
 +++ b/arch/x86/include/asm/tdx.h
-@@ -64,11 +64,15 @@ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
+@@ -75,5 +75,16 @@ static inline bool tdx_early_handle_ve(struct pt_regs *regs) { return false; }
  
- void tdx_safe_halt(void);
- 
-+bool tdx_early_handle_ve(struct pt_regs *regs);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
- static inline void tdx_safe_halt(void) { };
- 
-+static inline bool tdx_early_handle_ve(struct pt_regs *regs) { return false; }
-+
  #endif /* CONFIG_INTEL_TDX_GUEST */
  
++#if defined(CONFIG_KVM_GUEST) && defined(CONFIG_INTEL_TDX_GUEST)
++long tdx_kvm_hypercall(unsigned int nr, unsigned long p1, unsigned long p2,
++		       unsigned long p3, unsigned long p4);
++#else
++static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
++				     unsigned long p2, unsigned long p3,
++				     unsigned long p4)
++{
++	return -ENODEV;
++}
++#endif /* CONFIG_INTEL_TDX_GUEST && CONFIG_KVM_GUEST */
  #endif /* !__ASSEMBLY__ */
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 6dff50c3edd6..ecbf50e5b8e0 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -417,6 +417,9 @@ void __init do_early_exception(struct pt_regs *regs, int trapnr)
- 	    trapnr == X86_TRAP_VC && handle_vc_boot_ghcb(regs))
- 		return;
- 
-+	if (trapnr == X86_TRAP_VE && tdx_early_handle_ve(regs))
-+		return;
-+
- 	early_fixup_exception(regs, trapnr);
- }
- 
+ #endif /* _ASM_X86_TDX_H */
 -- 
 2.34.1
 

@@ -2,191 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF184CA050
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0224CA054
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239621AbiCBJI0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 04:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S240334AbiCBJIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237615AbiCBJIY (ORCPT
+        with ESMTP id S237615AbiCBJI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:08:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D7A31532;
-        Wed,  2 Mar 2022 01:07:41 -0800 (PST)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K7pBv2bRRz67LWc;
-        Wed,  2 Mar 2022 17:06:31 +0800 (CST)
-Received: from lhreml717-chm.china.huawei.com (10.201.108.68) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 10:07:39 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml717-chm.china.huawei.com (10.201.108.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 09:07:38 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Wed, 2 Mar 2022 09:07:38 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYLIIBaGfq6jzuvUWvoNXYZoVi1qypDgGAgAAyBYCAAAJ0AIAAJJMAgAADqICAAA5SAIAAKPSAgABSJgCAAI+xAIAAaN2AgAATPQCAACLkgIAAFhCAgACQeqA=
-Date:   Wed, 2 Mar 2022 09:07:38 +0000
-Message-ID: <635f11c40e814d749ccf533f1414ba4e@huawei.com>
-References: <20220228180520.GO219866@nvidia.com>
- <20220228131614.27ad37dc.alex.williamson@redhat.com>
- <20220228202919.GP219866@nvidia.com>
- <20220228142034.024e7be6.alex.williamson@redhat.com>
- <20220228234709.GV219866@nvidia.com>
- <20220228214110.4deb551f.alex.williamson@redhat.com>
- <20220301131528.GW219866@nvidia.com>
- <20220301123047.1171c730.alex.williamson@redhat.com>
- <20220301203938.GY219866@nvidia.com>
- <20220301154431.42b27278.alex.williamson@redhat.com>
- <20220302000329.GZ219866@nvidia.com>
-In-Reply-To: <20220302000329.GZ219866@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.91.128]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 2 Mar 2022 04:08:29 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671B33EA0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:07:44 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 9E1911F44B8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646212063;
+        bh=Ztnm82SiYGhB+IIBhUFDj5KSeiwqthDaJ6+SaFW7jDc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KUqKDdi13sQCl89F9qY+zjLPxgs5aT4gvYm7hQTXhX6TFcjaXTQIejpmoLInjKlKA
+         1lze8Z9sdtK/kXRrpL4WgcxMkKmQ6jh06gyczXHxKFlD7nci9SKb2zUs8vUNvu0TlX
+         pjOank8TIJwP8xfwXQcpWdKYWulNOfHAVel6b+EnHQiYhkmjvgxO+dNN2YrYSxRF29
+         1Zfnp4baunep0BjAasY4ZGsC4KivL339GlTHSRq/UX97qfW3/oYGX/Qi7b1WDUmPhk
+         DnD9adkT3EOWlj0VrhKOe1/gBzEiWV3G/SIRWkEeh7gGOQ7bOXT6lphhTRCv/KnsqK
+         /29lgW0vzuN0A==
+Message-ID: <6db20053-71dc-d0e3-aac9-de5da1d7ba9e@collabora.com>
+Date:   Wed, 2 Mar 2022 10:07:40 +0100
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1,2/3] drm/mediatek: Add TOPCKGEN select mux control
+ dpi_clk
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        matthias.bgg@gmail.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com, allen-kh.cheng@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <1645782833-27875-1-git-send-email-xinlei.lee@mediatek.com>
+ <1645782833-27875-3-git-send-email-xinlei.lee@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1645782833-27875-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 25/02/22 10:53, xinlei.lee@mediatek.com ha scritto:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Dpi_clk is controlled by the mux selected
+> by TOPCKGEN and APMIXEDSYS can support small resolution.
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 
+Hello Xinlei,
 
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 02 March 2022 00:03
-> To: Alex Williamson <alex.williamson@redhat.com>
-> Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
-> kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; cohuck@redhat.com; mgurtovoy@nvidia.com;
-> yishaih@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
-> <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
-> Jonathan Cameron <jonathan.cameron@huawei.com>; Wangzhou (B)
-> <wangzhou1@hisilicon.com>
-> Subject: Re: [PATCH v6 09/10] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
-> 
-> On Tue, Mar 01, 2022 at 03:44:31PM -0700, Alex Williamson wrote:
-> > On Tue, 1 Mar 2022 16:39:38 -0400
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > > On Tue, Mar 01, 2022 at 12:30:47PM -0700, Alex Williamson wrote:
-> > > > Wouldn't it make more sense if initial-bytes started at QM_MATCH_SIZE
-> > > > and dirty-bytes was always sizeof(vf_data) - QM_MATCH_SIZE?  ie.
-> QEMU
-> > > > would know that it has sizeof(vf_data) - QM_MATCH_SIZE remaining even
-> > > > while it's getting ENOMSG after reading QM_MATCH_SIZE bytes of data.
-> > >
-> > > The purpose of this ioctl is to help userspace guess when moving on to
-> > > STOP_COPY is a good idea ie when the device has done almost all the
-> > > work it is going to be able to do in PRE_COPY. ENOMSG is a similar
-> > > indicator.
-> > >
-> > > I expect all devices to have some additional STOP_COPY trailer_data in
-> > > addition to their PRE_COPY initial_data and dirty_data
-> > >
-> > > There is a choice to make if we report the trailer_data during
-> > > PRE_COPY or not. As this is all estimates, it doesn't matter unless
-> > > the trailer_data is very big.
-> > >
-> > > Having all devices trend toward a 0 dirty_bytes to say they are are
-> > > done all the pre-copy they can do makes sense from an API
-> > > perspective. If one device trends toward 10MB due to a big
-> > > trailer_data and one trends toward 0 bytes, how will qemu consistently
-> > > decide when best to trigger STOP_COPY? It makes the API less useful.
-> > >
-> > > So, I would not include trailer_data in the dirty_bytes.
-> >
-> > That assumes that it's possible to keep up with the device dirty
-> > rate.
-> 
-> It keeps options open so we have this choice someday.
-> 
-> We already see that implementations are using vCPU throttling as part
-> of their migration strategy, and we are seriously looking at DMA
-> throttling. It is not a big leap to imagine that
-> internal-state-dirtying throttling will happne someday.
-> 
-> With throttling iterations would ratchet up the throttle until they
-> reach an absolute small amount of dirty then cut over to STOP_COPY
-> 
-> > It seems like a better approach for userspace would be to look at how
-> > dirty_bytes is trending.
-> 
-> It may be biw, but this approach doesn't care if the trailing_bytes
-> are included or not, so lets leave them out and preserve the other
-> operating model.
-> 
-> > If we exclude STOP_COPY trailing data from the VFIO_DEVICE_MIG_PRECOPY
-> > ioctl, it seems even more of a disconnect that when we enter the
-> > STOP_COPY state, suddenly we start getting new data out of a PRECOPY
-> > ioctl.
-> 
-> Why? That amounts can go up at any time, how does it matter if it goes
-> up after STOP_COPY or instantly before?
-> 
-> > BTW, "VFIO_DEVICE" should be reserved for ioctls and data structures
-> > relative to the device FD, appending it with _MIG is too subtle for me.
-> > This is also a GET operation for INFO, so I'd think for consistency
-> > with the existing vfio uAPI we'd name this something like
-> > VFIO_MIG_GET_PRECOPY_INFO where the structure might be named
-> > vfio_precopy_info.
-> 
-> Sure
-> 
-> > So if we don't think this is the right approach for STOP_COPY, then why
-> > are we pushing that it has any purpose outside of PRECOPY or might be
-> > implemented by a non-PRECOPY driver for use in STOP_COPY?
-> 
-> It is just simpler and more consistent to implement the math under
-> this ioctl in all cases then to try and artificially restrict it.
-> 
-> But I don't have a use case for it, so lets block it if you prefer.
-> 
-> Shameerali will you make these adjustments to the PRE_COPY patch?
+as it was pointed out by reviewers in the MT8195 DisplayPort series, that is
+adding the same logic that you are proposing in this patch, the clock parent
+selection should be performed by the clock drivers, I'd say in the callback
+.set_rate_and_parent(), and not by the mtk_dpi driver.
 
-Sure. I think we can summarize the discussion as below,
-
- - Rename the MIG_PRECOPY ioctl to VFIO_MIG_GET_PRECOPY_INFO and
-  structure to vfio_precopy_info.
- - This ioctl is only valid in PRE_COPY state and should return -EINVAL in
-  other states(Update the documentation).
- - No changes to the initial_bytes & dirty_bytes descriptions.
-
-Please let me know if I missed anything.
-
-I will address other comments on this series as well and sent out a
-revised one soon.
+Please fix this in the proper drivers (clocks!) instead.
 
 Thanks,
-Shameer    
+Angelo
+
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dpi.c | 38 ++++++++++++++++++++++++++----
+>   1 file changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 4554e2de1430..bad686817e29 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -63,6 +63,14 @@ enum mtk_dpi_out_color_format {
+>   	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
+>   };
+>   
+> +enum TVDPLL_CLK {
+> +	TVDPLL_PLL = 0,
+> +	TVDPLL_D2 = 2,
+> +	TVDPLL_D4 = 4,
+> +	TVDPLL_D8 = 8,
+> +	TVDPLL_D16 = 16,
+> +};
+> +
+>   struct mtk_dpi {
+>   	struct drm_encoder encoder;
+>   	struct drm_bridge bridge;
+> @@ -73,6 +81,7 @@ struct mtk_dpi {
+>   	struct clk *engine_clk;
+>   	struct clk *pixel_clk;
+>   	struct clk *tvd_clk;
+> +	struct clk *pclk_src[5];
+>   	int irq;
+>   	struct drm_display_mode mode;
+>   	const struct mtk_dpi_conf *conf;
+> @@ -459,6 +468,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   	struct videomode vm = { 0 };
+>   	unsigned long pll_rate;
+>   	unsigned int factor;
+> +	struct clk *clksrc = NULL;
+>   
+>   	/* let pll_rate can fix the valid range of tvdpll (1G~2GHz) */
+>   	factor = dpi->conf->cal_factor(mode->clock);
+> @@ -473,11 +483,26 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   
+>   	vm.pixelclock = pll_rate / factor;
+>   	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
+> -	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
+> -		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
+> -	else
+> -		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
+> +	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE)) {
+> +		if (factor == 8)
+> +			clksrc = dpi->pclk_src[2];
+> +		else if (factor == 4)
+> +			clksrc = dpi->pclk_src[1];
+> +		else
+> +			clksrc = dpi->pclk_src[1];
+> +		}
+> +	else {
+> +		if (factor == 8)
+> +			clksrc = dpi->pclk_src[3];
+> +		else if (factor == 4)
+> +			clksrc = dpi->pclk_src[2];
+> +		else
+> +			clksrc = dpi->pclk_src[2];
+> +	}
+>   
+> +	clk_prepare_enable(dpi->pixel_clk);
+> +	clk_set_parent(dpi->pixel_clk, clksrc);
+> +	clk_disable_unprepare(dpi->pixel_clk);
+>   
+>   	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
+>   
+> @@ -893,6 +918,11 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	dpi->pclk_src[1] = devm_clk_get_optional(dev, "tvdpll_d2");
+> +	dpi->pclk_src[2] = devm_clk_get_optional(dev, "tvdpll_d4");
+> +	dpi->pclk_src[3] = devm_clk_get_optional(dev, "tvdpll_d8");
+> +	dpi->pclk_src[4] = devm_clk_get_optional(dev, "tvdpll_d16");
+> +
+>   	dpi->irq = platform_get_irq(pdev, 0);
+>   	if (dpi->irq <= 0)
+>   		return -EINVAL;
+

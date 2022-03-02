@@ -2,111 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374694CADBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAF64CADC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243207AbiCBSl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S244456AbiCBSoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiCBSl2 (ORCPT
+        with ESMTP id S233944AbiCBSo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:41:28 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE7D207B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:40:45 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so205253pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:40:45 -0800 (PST)
+        Wed, 2 Mar 2022 13:44:28 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5AFCA0ED;
+        Wed,  2 Mar 2022 10:43:44 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id a23so5656047eju.3;
+        Wed, 02 Mar 2022 10:43:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sFxoRgrz8KohI1fJKR74aYbi9fTI6OzJ5gZS0IdaClo=;
-        b=FqtKhM2WF7Jc6NpSCyY6TObLSgAalvebQmDZ7Cmnj3Q6/HPOsS2yrpPnaqq4PCyRlc
-         rPuOQ3zSY6orsEbVMmCw8vqQmgu17OkywHjW/ut7YGDpCj2Z3eRmyVvHObByzeUYI1BI
-         f9ykpZhAyXvTC2hGuLC7ICDLhWy3TMlg65fHU=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MYacYFBXciHmpzBVvSdoS7PTXsJUtBNkCcTgWfD2hXg=;
+        b=IirjpbFJTyj19jcvRBrG6M2PJAxHcjEHQfbNn3mOZadb1e1ccHA/LRrHk1rksJpt35
+         MMt2dm7wSSrSlQQTxI44MM0nypv3syVFTI5nsJPKjrZqprWNhtUpFBqSmN7jueiuRM9O
+         nM1/br4YMIBeEaR/nknarhnm2LTZnxp8rxb9jOgLVboCFtdMZok9gz9GuCPYUoA0jX+N
+         IcsILGgEFTzGaOtAw+W4jNLvqf2OCbQ2R+153snnJ8Ltdo/8MshR/5j02p+VlkM+E33r
+         J0KpTmjs0vzUF2pWRa2+W654eN+vr/n+pXKZMBNudNlOAfIqSM9ZhZzjnl51p3wTxGZy
+         tlLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sFxoRgrz8KohI1fJKR74aYbi9fTI6OzJ5gZS0IdaClo=;
-        b=SQugRM6i9Lex3OqnSqANR05/eJfUA44Ua3IhLPUtfSFpZ/xnfk3dvOTlGFNhabdYHL
-         pr/DGCG88IkUs2PDPiDxfPDI+e21vrkQ8Z1PpF52dVwY/T0fY0HrVQmoso9aGxjkySpj
-         FeA4s2EIPZYsGELw7GHz8cMXKEglwlvj0t6m19S8JSKWnB577GbEod7XVY4g1yNyThWa
-         Uq6/Z5Wd8vEcgXgO+yIBUZwqRgwiDj8Ij2r/ng+vOgD0avSEBSvB4eB8zNkq9Io0xko5
-         8IkPJ4kZDP2VxqXNriOzvVokcWjAznnLVWV8fnricViw4E1yDJ87Ze2YWdrNkK91CYFY
-         ZpvQ==
-X-Gm-Message-State: AOAM530OOsvCYIlpLnQfyT6/Ki3kzwAScsud1FgnlkvAKplfDVcTX5C1
-        0mZ9HhrNaLER0BrJZkqDouAR8Q==
-X-Google-Smtp-Source: ABdhPJyklsyONHI38lOVI0R5wsUnGsW6kq05jCjs2DiOqIxIjANGoPXFxwEDemY6YKQCv1gPZ1G1Qg==
-X-Received: by 2002:a17:90b:1645:b0:1bf:11:66ae with SMTP id il5-20020a17090b164500b001bf001166aemr1164990pjb.198.1646246444742;
-        Wed, 02 Mar 2022 10:40:44 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056a00114300b004cc39630bfcsm21702579pfm.207.2022.03.02.10.40.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:40:44 -0800 (PST)
-Date:   Wed, 2 Mar 2022 10:40:43 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
-Message-ID: <202203021039.0DF89D3F2C@keescook>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.072632223@infradead.org>
- <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
- <Yh+dMJsH+ZMPfqwD@thelio-3990X>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MYacYFBXciHmpzBVvSdoS7PTXsJUtBNkCcTgWfD2hXg=;
+        b=TkHI2XU/n8ywJ8R+ZT3MFLG/e4zro/gZaQ5EBVMaYvr8mdDPfUx1iFhlRZqx70+B+D
+         5ZRTLb2vNR9xUeCY4gz8ruxsWDQkANC+Fk9DRS/XSspZU1DUqJbbwrq/Gu4VlA7iuzUd
+         KU5xWEzlNMAmQ5g8NySLtIuWXCoq6abLglAh2Z8h3aM9T/w5x3EuRx4erESza+6IESjF
+         50+uZkGLIIoz8iHKbmMJ+PAOK2bPSfDBX+GUv8wA9IZVEZFQozJCB/MMo8DS8yQHRmh8
+         ZLg/l0kSaLC7CG9cCGLqeCh492UjCKOhuy9Q31vDUp8ohWZujXGa66U7iU4YFgM2VKnO
+         n0ZA==
+X-Gm-Message-State: AOAM532SiP/XTfom5//6ANSxs8C0bl/OgCqo6uVplzYu5GSuwoyj6gNg
+        8hwLFCQCRY/k1YisdJmp4kaVTO2g5f+wHpQb+98=
+X-Google-Smtp-Source: ABdhPJyuYRtx7NDrJEc4gq8pmV8JxkyEHirpVjET0jmaEbM8g2xi3VgPWfm3DCWICSOT7fYRWup0wjnZgNE081ucq84=
+X-Received: by 2002:a17:906:e28a:b0:6d6:e2e9:d39d with SMTP id
+ gg10-20020a170906e28a00b006d6e2e9d39dmr8101292ejb.2.1646246622894; Wed, 02
+ Mar 2022 10:43:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh+dMJsH+ZMPfqwD@thelio-3990X>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220228235741.102941-1-shy828301@gmail.com> <20220228235741.102941-3-shy828301@gmail.com>
+ <968ccc31-a87c-4657-7193-464f6b5b9259@huawei.com>
+In-Reply-To: <968ccc31-a87c-4657-7193-464f6b5b9259@huawei.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 2 Mar 2022 10:43:31 -0800
+Message-ID: <CAHbLzkqNq_H6Cdwzd-3VazsQbEz=ZUFU60ec+Py8w3nhx7E5pw@mail.gmail.com>
+Subject: Re: [PATCH 2/8] mm: khugepaged: remove redundant check for VM_NO_KHUGEPAGED
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        darrick.wong@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 09:37:04AM -0700, Nathan Chancellor wrote:
-> However, I think we could still address Peter's complaint of "there
-> should be an easier way for me to use the tools that are already in my
-> PATH" with his first iteration of this patch [1], which I feel is
-> totally reasonable:
-> 
-> $ make LLVM=-14
-> 
-> It is still easy to use (in fact, it is shorter than 'CC=clang-14') and
-> it does not change anything else about how we build with LLVM. We would
-> just have to add something along the lines of
-> 
-> "If your LLVM tools have a suffix like Debian's (clang-14, ld.lld-14,
-> etc.), use LLVM=<suffix>.
-> 
-> $ make LLVM=-14"
-> 
-> to Documentation/kbuild/llvm.rst.
-> 
-> I might change the patch not to be so clever though:
-> 
-> ifneq ($(LLVM),)
-> ifneq ($(LLVM),1)
-> LLVM_SFX := $(LLVM)
-> endif
-> endif
+On Tue, Mar 1, 2022 at 1:07 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> On 2022/3/1 7:57, Yang Shi wrote:
+> > The hugepage_vma_check() called by khugepaged_enter_vma_merge() does
+> > check VM_NO_KHUGEPAGED. Remove the check from caller and move the check
+> > in hugepage_vma_check() up.
+> >
+> > More checks may be run for VM_NO_KHUGEPAGED vmas, but MADV_HUGEPAGE is
+> > definitely not a hot path, so cleaner code does outweigh.
+> >
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  mm/khugepaged.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 131492fd1148..82c71c6da9ce 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -366,8 +366,7 @@ int hugepage_madvise(struct vm_area_struct *vma,
+> >                * register it here without waiting a page fault that
+> >                * may not happen any time soon.
+> >                */
+> > -             if (!(*vm_flags & VM_NO_KHUGEPAGED) &&
+> > -                             khugepaged_enter_vma_merge(vma, *vm_flags))
+> > +             if (khugepaged_enter_vma_merge(vma, *vm_flags))
+> >                       return -ENOMEM;
+> >               break;
+> >       case MADV_NOHUGEPAGE:
+> > @@ -446,6 +445,9 @@ static bool hugepage_vma_check(struct vm_area_struct *vma,
+> >       if (!transhuge_vma_enabled(vma, vm_flags))
+> >               return false;
+> >
+> > +     if (vm_flags & VM_NO_KHUGEPAGED)
+> > +             return false;
+> > +
+>
+> This patch does improve the readability. But I have a question.
+> It seems VM_NO_KHUGEPAGED is not checked in the below if-condition:
+>
+>         /* Only regular file is valid */
+>         if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && vma->vm_file &&
+>             (vm_flags & VM_EXEC)) {
+>                 struct inode *inode = vma->vm_file->f_inode;
+>
+>                 return !inode_is_open_for_write(inode) &&
+>                         S_ISREG(inode->i_mode);
+>         }
+>
+> If we return false due to VM_NO_KHUGEPAGED here, it seems it will affect the
+> return value of this CONFIG_READ_ONLY_THP_FOR_FS condition check.
+> Or am I miss something?
 
-I like this idea! I think it's much easier to control than PATH (though
-I see the rationale there too).
+Yes, it will return false instead of true if that file THP check is
+true, but wasn't that old behavior actually problematic? Khugepaged
+definitely can't collapse VM_NO_KHUGEPAGED vmas even though it
+satisfies all the readonly file THP checks. With the old behavior
+khugepaged may scan an exec file hugetlb vma IIUC although it will
+fail later due to other page sanity checks, i.e. page compound check.
 
--- 
-Kees Cook
+>
+> Thanks.
+>
+> >       if (vma->vm_file && !IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) -
+> >                               vma->vm_pgoff, HPAGE_PMD_NR))
+> >               return false;
+> > @@ -471,7 +473,8 @@ static bool hugepage_vma_check(struct vm_area_struct *vma,
+> >               return false;
+> >       if (vma_is_temporary_stack(vma))
+> >               return false;
+> > -     return !(vm_flags & VM_NO_KHUGEPAGED);
+> > +
+> > +     return true;
+> >  }
+> >
+> >  int __khugepaged_enter(struct mm_struct *mm)
+> >
+>
+>

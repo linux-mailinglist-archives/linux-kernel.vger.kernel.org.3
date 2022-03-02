@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C684A4C9DCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E2C4C9DCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239707AbiCBG3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 01:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S239713AbiCBGae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 01:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiCBG3v (ORCPT
+        with ESMTP id S231644AbiCBGac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 01:29:51 -0500
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F39943DA50;
-        Tue,  1 Mar 2022 22:29:07 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACHjPCeDh9iXMcDAg--.17642S2;
-        Wed, 02 Mar 2022 14:28:50 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     kuninori.morimoto.gx@renesas.com
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, f.suligoi@asem.it,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] ASoC: fsi: Add check for clk_enable
-Date:   Wed,  2 Mar 2022 14:28:44 +0800
-Message-Id: <20220302062844.46869-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 2 Mar 2022 01:30:32 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7585C345
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 22:29:50 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id d11so783091vsm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 22:29:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/jtPWna49+ilTACF3yuz8A6a8AX5IHL0XkTLmK7g2p0=;
+        b=BJyev2DVGxJYPzfB3LKf85fSZNMOklg4QAu/FbbK4KTkVfdKeq2ZtkkJWkiKzXHjLu
+         naaPAnHaRvXLw612RkjHChy1ZXJRJ2vxuONYRIDeY9+VsIeR8DFZmvK9ZbBrzr3Yl5Id
+         HaNcB9VfIwp9urKpuqcb2gnW8ik3+V9lrcdapIQUmnbSNhR9Z/uwps9uxyutO5zmgV0B
+         bzURsdm7EdJjSYGToVuyr3zjXVQcMHRRfmPiWzcOyvskqmD0x+zdsELqEU2W6Ulqeyqr
+         SzVpCVNVla6oQDxwZcM8cNVd5le3XUkpIlEA+ucA+aslPYwTPWTSvPemciCoBUNtgUl9
+         3zwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/jtPWna49+ilTACF3yuz8A6a8AX5IHL0XkTLmK7g2p0=;
+        b=RFys+74q5oQ3aBi7vvE7xcsO7VU00kAHepgFEGlye9AqQmkMUC4/CnFS0JJRtrDefI
+         cWKN3BC9/CYQulEvMADk3GnEhNncCHc15WW+YaOn5kzGaNgX+EZul82C4lX5734H0Vo0
+         GEOoMtqwiwxfgd1GpjW6zGaMhOFY4XdtGWpQBg8F7tEohNQ1XtJ4B7pGjAHaGuGAjS7p
+         br9a9OetUaDVczT8GKhIDyg0W0iQ8OH6EGh/ENptYckA1gXWP8DknlAkmZHfkG7yYFxS
+         alefHW30BvkFwPTGmG7jCspRfxhkRZ0WHIJ0ZiH24EjHgvX+x1VRp0RWmG0mkGdNgOLh
+         H0gA==
+X-Gm-Message-State: AOAM533g24rS4yhjEcSNRH+lPp4UATRU6onu1Nw+hcRP/IHn7oebpcKw
+        7Ky/RdCDgn98JA/xoMIMQhhXfAYjHIlxQYnCLaQ=
+X-Google-Smtp-Source: ABdhPJzczXlkZW5IbVmmqILrfhMNj+bgEwUysVq9Rlbqmsaz7KgJ0gZZCxfM/NOESQWiPreQxrH1PcbKVrSqswZ+huE=
+X-Received: by 2002:a67:e3c5:0:b0:31c:a:599c with SMTP id k5-20020a67e3c5000000b0031c000a599cmr11072685vsm.17.1646202589708;
+ Tue, 01 Mar 2022 22:29:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHjPCeDh9iXMcDAg--.17642S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF15uFW3uw4kKFW7Arb_yoWkuFc_Aa
-        1jg39Iqw15urWfCasrJr4UJ34j9r4UZF1UGryIqF1ftayUJr15ur4UZr9Yvrn0qw1a9as3
-        A3WDZr4xArW3CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb38FF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUnuWlDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ac5:cde6:0:0:0:0:0 with HTTP; Tue, 1 Mar 2022 22:29:49 -0800 (PST)
+Reply-To: jamesthomasinfo3@gmail.com
+From:   james thomas <williamsjane347@gmail.com>
+Date:   Wed, 2 Mar 2022 06:29:49 +0000
+Message-ID: <CAFLGuG3Wz7Ski3iW36gwCVbeC9w+djumxv1uueYeCv8G=BevrA@mail.gmail.com>
+Subject: Greeting
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jamesthomasinfo3[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [williamsjane347[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [williamsjane347[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+Greeting
 
-Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+In a brief introduction, I am a lawyer ,JAMES THOMOS, from Northern
+Ireland but now i lives in USA, I sent you  an email about your
+deceased relative family , but I have not received any response
+from you, deceased is a citizen of  your  country with the same
+surname with you, he is an exporter of gold here in USA.
 
-v1 -> v2
+'He died a few years ago with his family, leaving his company,and huge
+amounts of money deposited in the UBS INVESTMENT BANK  in LONDON.
 
-* Change 1. Seperate the error handler.
-
-v2 -> v3
-
-* Change 1. Revert disable_xck and disable_ick.
----
- sound/soc/sh/fsi.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
-index cdf3b7f69ba7..e9a1eb6bdf66 100644
---- a/sound/soc/sh/fsi.c
-+++ b/sound/soc/sh/fsi.c
-@@ -816,14 +816,27 @@ static int fsi_clk_enable(struct device *dev,
- 			return ret;
- 		}
- 
--		clk_enable(clock->xck);
--		clk_enable(clock->ick);
--		clk_enable(clock->div);
-+		ret = clk_enable(clock->xck);
-+		if (ret)
-+			goto err;
-+		ret = clk_enable(clock->ick);
-+		if (ret)
-+			goto disable_xck;
-+		ret = clk_enable(clock->div);
-+		if (ret)
-+			goto disable_ick;
- 
- 		clock->count++;
- 	}
- 
- 	return ret;
-+
-+disable_ick:
-+	clk_disable(clock->ick);
-+disable_xck:
-+	clk_disable(clock->xck);
-+err:
-+	return ret;
- }
- 
- static int fsi_clk_disable(struct device *dev,
--- 
-2.25.1
-
+I'm his personal lawyer and I need your cooperation So that we can get
+the money from the bank before the government finally seizes  it, the
+Total amount in the bank is =E2=82=AC6.7 million,EUR. but I will explain,mo=
+re
+detail if I hear from you.

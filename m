@@ -2,223 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6674C9DC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C684A4C9DCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239703AbiCBG2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 01:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S239707AbiCBG3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 01:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239667AbiCBG2Q (ORCPT
+        with ESMTP id S231644AbiCBG3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 01:28:16 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF8712AAB;
-        Tue,  1 Mar 2022 22:27:31 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V61DD7-_1646202448;
-Received: from 30.226.12.26(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V61DD7-_1646202448)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 02 Mar 2022 14:27:29 +0800
-Message-ID: <4af380e8-796b-2dd6-4ebc-e40e7fa51ce1@linux.alibaba.com>
-Date:   Wed, 2 Mar 2022 14:27:28 +0800
+        Wed, 2 Mar 2022 01:29:51 -0500
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F39943DA50;
+        Tue,  1 Mar 2022 22:29:07 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACHjPCeDh9iXMcDAg--.17642S2;
+        Wed, 02 Mar 2022 14:28:50 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     kuninori.morimoto.gx@renesas.com
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, f.suligoi@asem.it,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] ASoC: fsi: Add check for clk_enable
+Date:   Wed,  2 Mar 2022 14:28:44 +0800
+Message-Id: <20220302062844.46869-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] io_uring: Add support for napi_busy_poll
-Content-Language: en-US
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <cover.1646142288.git.olivier@trillion01.com>
- <aa38a667ef28cce54c08212fdfa1e2b3747ad3ec.1646142288.git.olivier@trillion01.com>
- <29bad95d-06f8-ea7c-29fe-81e52823c90a@linux.alibaba.com>
- <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
-From:   Hao Xu <haoxu@linux.alibaba.com>
-In-Reply-To: <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowACHjPCeDh9iXMcDAg--.17642S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF15uFW3uw4kKFW7Arb_yoWkuFc_Aa
+        1jg39Iqw15urWfCasrJr4UJ34j9r4UZF1UGryIqF1ftayUJr15ur4UZr9Yvrn0qw1a9as3
+        A3WDZr4xArW3CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb38FF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUnuWlDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-On 3/2/22 04:06, Olivier Langlois wrote:
-> On Wed, 2022-03-02 at 02:31 +0800, Hao Xu wrote:
->>> +       ne = kmalloc(sizeof(*ne), GFP_NOWAIT);
->>> +       if (!ne)
->>> +               goto out;
->> IMHO, we need to handle -ENOMEM here, I cut off the error handling
->> when
->>
->> I did the quick coding. Sorry for misleading.
-> If you are correct, I would be shocked about this.
->
-> I did return in my 'Linux Device Drivers' book and nowhere it is
-> mentionned that the kmalloc() can return something else than a pointer
->
-> No mention at all about the return value
->
-> in man page:
-> https://www.kernel.org/doc/htmldocs/kernel-api/API-kmalloc.html
-> API doc:
->
-> https://www.kernel.org/doc/html/latest/core-api/mm-api.html?highlight=kmalloc#c.kmalloc
->
-> header file:
-> https://elixir.bootlin.com/linux/latest/source/include/linux/slab.h#L522
->
-> I did browse into the kmalloc code. There is a lot of paths to cover
-> but from preliminary reading, it pretty much seems that kmalloc only
-> returns a valid pointer or NULL...
->
-> /**
->   * kmem_cache_alloc - Allocate an object
->   * @cachep: The cache to allocate from.
->   * @flags: See kmalloc().
->   *
->   * Allocate an object from this cache.  The flags are only relevant
->   * if the cache has no available objects.
->   *
->   * Return: pointer to the new object or %NULL in case of error
->   */
->   
->   /**
->   * __do_kmalloc - allocate memory
->   * @size: how many bytes of memory are required.
->   * @flags: the type of memory to allocate (see kmalloc).
->   * @caller: function caller for debug tracking of the caller
->   *
->   * Return: pointer to the allocated memory or %NULL in case of error
->   */
->
-> I'll need someone else to confirm about possible kmalloc() return
-> values with perhaps an example
->
-> I am a bit skeptic that something special needs to be done here...
->
-> Or perhaps you are suggesting that io_add_napi() returns an error code
-> when allocation fails.
-This is what I mean.
->
-> as done here:
-> https://elixir.bootlin.com/linux/latest/source/arch/alpha/kernel/core_marvel.c#L867
->
-> If that is what you suggest, what would this info do for the caller?
->
-> IMHO, it wouldn't help in any way...
+Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Hmm, I'm not sure, you're probably right based on that ENOMEM here shouldn't
+v1 -> v2
 
-fail the arm poll, but we wanna do it, we can do something like what we 
-do for
+* Change 1. Seperate the error handler.
 
-kmalloc() in io_arm_poll_handler()). I'll leave it to others.
+v2 -> v3
 
->>> @@ -7519,7 +7633,11 @@ static int __io_sq_thread(struct io_ring_ctx
->>> *ctx, bool cap_entries)
->>>                      !(ctx->flags & IORING_SETUP_R_DISABLED))
->>>                          ret = io_submit_sqes(ctx, to_submit);
->>>                  mutex_unlock(&ctx->uring_lock);
->>> -
->>> +#ifdef CONFIG_NET_RX_BUSY_POLL
->>> +               if (!list_empty(&ctx->napi_list) &&
->>> +                   io_napi_busy_loop(&ctx->napi_list))
->> I'm afraid we may need lock for sqpoll too, since io_add_napi() could
->> be
->> in iowq context.
->>
->> I'll take a look at the lock stuff of this patch tomorrow, too late
->> now
->> in my timezone.
-> Ok, please do. I'm not a big user of io workers. I may have omitted to
-> consider this possibility.
->
-> If that is the case, I think that this would be very easy to fix by
-> locking the spinlock while __io_sq_thread() is using napi_list.
->> How about:
->>
->> if (list is singular) {
->>
->>       do something;
->>
->>       return;
->>
->> }
->>
->> while (!io_busy_loop_end() && io_napi_busy_loop())
->>
->>       ;
->>
-> is there a concern with the current code?
-> What would be the benefit of your suggestion over current code?
+* Change 1. Revert disable_xck and disable_ick.
+---
+ sound/soc/sh/fsi.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-No, it's just coding style concern, since I see
-
-do {
-
-     if() {
-
-         break;
-
-     }
-
-} while();
-
-which means the if statement is actually not int the loop. Anyway, it's just
-
-personal taste.
-
->
-> To me, it seems that if io_blocking_napi_busy_loop() is called, a
-> reasonable expectation would be that some busy looping is done or else
-> you could return the function without doing anything which would, IMHO,
-> be misleading.
->
-> By definition, napi_busy_loop() is not blocking and if you desire the
-> device to be in busy poll mode, you need to do it once in a while or
-> else, after a certain time, the device will return back to its
-> interrupt mode.
->
-> IOW, io_blocking_napi_busy_loop() follows the same logic used by
-> napi_busy_loop() that does not call loop_end() before having perform 1
-> loop iteration.
-I see, thanks for explanation. I'm ok with this.
->
->> Btw, start_time seems not used in singular branch.
-> I know. This is why it is conditionally initialized.
-
-like what I said, just personal taste.
-
-
-+static void io_blocking_napi_busy_loop(struct list_head *napi_list,
-
-+                                      struct io_wait_queue *iowq)
-+{
-+       if (list_is_singular(napi_list)) {
-+               struct napi_entry *ne =
-+                       list_first_entry(napi_list,
-+                                        struct napi_entry, list);
+diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
+index cdf3b7f69ba7..e9a1eb6bdf66 100644
+--- a/sound/soc/sh/fsi.c
++++ b/sound/soc/sh/fsi.c
+@@ -816,14 +816,27 @@ static int fsi_clk_enable(struct device *dev,
+ 			return ret;
+ 		}
+ 
+-		clk_enable(clock->xck);
+-		clk_enable(clock->ick);
+-		clk_enable(clock->div);
++		ret = clk_enable(clock->xck);
++		if (ret)
++			goto err;
++		ret = clk_enable(clock->ick);
++		if (ret)
++			goto disable_xck;
++		ret = clk_enable(clock->div);
++		if (ret)
++			goto disable_ick;
+ 
+ 		clock->count++;
+ 	}
+ 
+ 	return ret;
 +
-+               napi_busy_loop(ne->napi_id, io_busy_loop_end, iowq,
-+                              true, BUSY_POLL_BUDGET);
-+               io_check_napi_entry_timeout(ne);
-+               break;
-+       }
-+
-+       while (io_napi_busy_loop(napi_list)) {
-+               if(io_busy_loop_end(iowq, busy_loop_current_time()))
-+                       break;
-+       }
-+}
++disable_ick:
++	clk_disable(clock->ick);
++disable_xck:
++	clk_disable(clock->xck);
++err:
++	return ret;
+ }
+ 
+ static int fsi_clk_disable(struct device *dev,
+-- 
+2.25.1
 
-
->
-> Greetings,

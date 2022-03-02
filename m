@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3460A4CA0FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F084CA108
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbiCBJlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S240578AbiCBJoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbiCBJlh (ORCPT
+        with ESMTP id S232019AbiCBJn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:41:37 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5614435864
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:40:54 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id r13so2457774ejd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:40:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=a665Vh1AQEI8/JHOaUtolrVCd5eUvzoKFIu0MORh4DE=;
-        b=V+kDDNDBbkWYgbedXcmPEmuyhRIOPi7Wn09NUBJqNQyKxEvyKgY16ou+8U3YsO9TCr
-         3y6Kns2qAFNGKDmZJvrWGkgPZnL3boVi2WbOCQbMYSVIdJw61ehgL46CHo32dYhPwopZ
-         bx41H+zMqoi7pMPe6GuH1xmOWa4ALA0Vy3NDCoqJk0/0rUR2JyE3NeF2cqqojDGeArnW
-         x261ZBGb6RyZU7nrhhQCqtC1/XN9QfsBwjNAkQbUAzNLHoISR6lP9amBQgQL/EQcbCME
-         hP4rrUE2jb93WIHrUlPPFUVd7WpZKfbpYC7hBdWcT9n/VgmEI3au6BU/Zmk3s+KRqEMg
-         zG/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=a665Vh1AQEI8/JHOaUtolrVCd5eUvzoKFIu0MORh4DE=;
-        b=cvcTCZS77x8xiGdrq5iO7ykMFizg48PN8uotKE4pcGoekpIWvKsCmeH50ZWix+FfDi
-         BHHFjoc9ECkZcl7V8lpRilRjDmLlVSTta1GGY2ENJ02YFTX63rnv4UBCk+iTWuROaBGI
-         E9/i9BSEPYfUAlzjaKp0Slkmt6BUIO4H7nnjj2PpSIuLmB7eM2VHbPe18JTwibKQoiQ2
-         zCwMQOKEc3jl0ZiGG22MOBrJWhJwXg5Z0Wtxm1Teep3SaNO/7y4xhOVd2USLJ3Mjfb3Y
-         MTMBCvneWgvOG2nTAyv48bvgYt4ELYBLCMv2A0DXw0CsQqFSUbGbw150EbheLMyhaYaX
-         AMkA==
-X-Gm-Message-State: AOAM5302d3JQPkCs+5RagMuEx2mY1tJ/q+7Wdo4DDKjvVEczMjml+Jec
-        BA4AFhGYO2FiSBzl6KcCtLGDMnv+PNPRcA6qPAA=
-X-Google-Smtp-Source: ABdhPJzY9KbaSzemk0bqXQSO8xXFu4X/3e8QXlmI3ezzctHJ8NvRN/pPy4WYtRBe0WF6gRLjyFrtkxRjvLZV/kmtGeI=
-X-Received: by 2002:a17:906:1603:b0:6ce:362:c938 with SMTP id
- m3-20020a170906160300b006ce0362c938mr22421257ejd.253.1646214052790; Wed, 02
- Mar 2022 01:40:52 -0800 (PST)
+        Wed, 2 Mar 2022 04:43:59 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048583FBE1;
+        Wed,  2 Mar 2022 01:43:13 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 2229h2yQ5018936, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 2229h2yQ5018936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 2 Mar 2022 17:43:02 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 2 Mar 2022 17:43:02 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 2 Mar 2022 17:43:02 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026]) by
+ RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026%5]) with mapi id
+ 15.01.2308.021; Wed, 2 Mar 2022 17:43:02 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Ricky WU <ricky_wu@realtek.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Topic: [PATCH v2] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Index: AQHYLhiam9g55Mvmak6rZ30/oxnp2g==
+Date:   Wed, 2 Mar 2022 09:43:01 +0000
+Message-ID: <1badf10aba764191a1a752edcbf90389@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.102]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzMvMiCkV6TIIDA3OjU0OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Sender: mrsaliceragnvar@gmail.com
-Received: by 2002:a17:906:1e83:0:0:0:0 with HTTP; Wed, 2 Mar 2022 01:40:52
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Wed, 2 Mar 2022 09:40:52 +0000
-X-Google-Sender-Auth: -2jT5061v7ng9L5iN0b-FsWVuTA
-Message-ID: <CAGHGhXCrcT=on2zFmkhCq5_5MwVaqwt1rcK1D46BumR1UbchoQ@mail.gmail.com>
-Subject: Investment proposal,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:631 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5055]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsaliceragnvar[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend.,
-
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction.
-I'm Mrs. Aisha. Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel
-Muammar. Gaddafi). I have an investment funds worth Twenty Seven
-Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
-and i need an investment Manager/Partner and because of my Asylum
-Status I will authorize you the ownership of the investment funds,
-However, I am interested in you for investment project assistance in
-your country, may be from there,. we can build a business relationship
-in the nearest future..
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
-
-Your urgent reply will be appreciated if only you are interested in
-this investment project..
-Best Regards
-Mrs. Aisha. Al-Gaddafi..
+U0Qgc3BlYyBkZWZpbml0aW9uOg0KIkhvc3QgcHJvdmlkZXMgYXQgbGVhc3QgNzQgQ2xvY2tzIGJl
+Zm9yZSBpc3N1aW5nIGZpcnN0IGNvbW1hbmQiDQpBZnRlciAxbXMgZm9yIHRoZSB2b2x0YWdlIHN0
+YWJsZSB0aGVuIHN0YXJ0IGlzc3VpbmcgdGhlIENsb2NrIHNpZ25hbHMNCg0KaWYgUE9XRVIgU1RB
+VEUgaXMNCk1NQ19QT1dFUl9PRkYgdG8gTU1DX1BPV0VSX1VQIHRvIGlzc3VlIENsb2NrIHNpZ25h
+bCB0byBjYXJkDQpNTUNfUE9XRVJfVVAgdG8gTU1DX1BPV0VSX09OIHRvIHN0b3AgaXNzdWluZyBz
+aWduYWwgdG8gY2FyZA0KDQpTaWduZWQtb2ZmLWJ5OiBSaWNreSBXdSA8cmlja3lfd3VAcmVhbHRl
+ay5jb20+DQotLS0NCnYyOg0KbW9kaWZ5IGNvbW1pdCBtZXNzYWdlDQptb3ZlIG1kZWxheSg1KSB0
+byBob3N0LT5wb3dlcl9kZWxheV9tcw0KcmVwbGFjZSBob3N0LT5wb3dlcl9zdGF0ZSB3aXRoIGhv
+c3QtPnByZXZfcG93ZXJfc3RhdGUNCi0tLQ0KIGRyaXZlcnMvbW1jL2hvc3QvcnRzeF9wY2lfc2Rt
+bWMuYyB8IDI5ICsrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQs
+IDE5IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9tbWMvaG9zdC9ydHN4X3BjaV9zZG1tYy5jIGIvZHJpdmVycy9tbWMvaG9zdC9ydHN4X3BjaV9z
+ZG1tYy5jDQppbmRleCAyYTNmMTRhZmU5ZjguLmQyNjgwM2QzZjRjYSAxMDA2NDQNCi0tLSBhL2Ry
+aXZlcnMvbW1jL2hvc3QvcnRzeF9wY2lfc2RtbWMuYw0KKysrIGIvZHJpdmVycy9tbWMvaG9zdC9y
+dHN4X3BjaV9zZG1tYy5jDQpAQCAtMzgsMTAgKzM4LDcgQEAgc3RydWN0IHJlYWx0ZWtfcGNpX3Nk
+bW1jIHsNCiAJYm9vbAkJCWRvdWJsZV9jbGs7DQogCWJvb2wJCQllamVjdDsNCiAJYm9vbAkJCWlu
+aXRpYWxfbW9kZTsNCi0JaW50CQkJcG93ZXJfc3RhdGU7DQotI2RlZmluZSBTRE1NQ19QT1dFUl9P
+TgkJMQ0KLSNkZWZpbmUgU0RNTUNfUE9XRVJfT0ZGCQkwDQotDQorCWludAkJCXByZXZfcG93ZXJf
+c3RhdGU7DQogCWludAkJCXNnX2NvdW50Ow0KIAlzMzIJCQljb29raWU7DQogCWludAkJCWNvb2tp
+ZV9zZ19jb3VudDsNCkBAIC05MDksNyArOTA2LDcgQEAgc3RhdGljIGludCBzZF9zZXRfYnVzX3dp
+ZHRoKHN0cnVjdCByZWFsdGVrX3BjaV9zZG1tYyAqaG9zdCwNCiAJcmV0dXJuIGVycjsNCiB9DQog
+DQotc3RhdGljIGludCBzZF9wb3dlcl9vbihzdHJ1Y3QgcmVhbHRla19wY2lfc2RtbWMgKmhvc3Qp
+DQorc3RhdGljIGludCBzZF9wb3dlcl9vbihzdHJ1Y3QgcmVhbHRla19wY2lfc2RtbWMgKmhvc3Qs
+IHVuc2lnbmVkIGNoYXIgcG93ZXJfbW9kZSkNCiB7DQogCXN0cnVjdCBydHN4X3BjciAqcGNyID0g
+aG9zdC0+cGNyOw0KIAlzdHJ1Y3QgbW1jX2hvc3QgKm1tYyA9IGhvc3QtPm1tYzsNCkBAIC05MTcs
+OSArOTE0LDE0IEBAIHN0YXRpYyBpbnQgc2RfcG93ZXJfb24oc3RydWN0IHJlYWx0ZWtfcGNpX3Nk
+bW1jICpob3N0KQ0KIAl1MzIgdmFsOw0KIAl1OCB0ZXN0X21vZGU7DQogDQotCWlmIChob3N0LT5w
+b3dlcl9zdGF0ZSA9PSBTRE1NQ19QT1dFUl9PTikNCisJaWYgKGhvc3QtPnByZXZfcG93ZXJfc3Rh
+dGUgPT0gTU1DX1BPV0VSX09OKQ0KIAkJcmV0dXJuIDA7DQogDQorCWlmIChob3N0LT5wcmV2X3Bv
+d2VyX3N0YXRlID09IE1NQ19QT1dFUl9VUCkgew0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIo
+cGNyLCBTRF9CVVNfU1RBVCwgU0RfQ0xLX1RPR0dMRV9FTiwgMCk7DQorCQlnb3RvIGZpbmlzaDsN
+CisJfQ0KKw0KIAltc2xlZXAoMTAwKTsNCiANCiAJcnRzeF9wY2lfaW5pdF9jbWQocGNyKTsNCkBA
+IC05NDAsMTAgKzk0MiwxNSBAQCBzdGF0aWMgaW50IHNkX3Bvd2VyX29uKHN0cnVjdCByZWFsdGVr
+X3BjaV9zZG1tYyAqaG9zdCkNCiAJaWYgKGVyciA8IDApDQogCQlyZXR1cm4gZXJyOw0KIA0KKwlt
+ZGVsYXkoMSk7DQorDQogCWVyciA9IHJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgQ0FSRF9P
+RSwgU0RfT1VUUFVUX0VOLCBTRF9PVVRQVVRfRU4pOw0KIAlpZiAoZXJyIDwgMCkNCiAJCXJldHVy
+biBlcnI7DQogDQorCS8qIHNlbmQgYXQgbGVhc3QgNzQgY2xvY2tzICovDQorCXJ0c3hfcGNpX3dy
+aXRlX3JlZ2lzdGVyKHBjciwgU0RfQlVTX1NUQVQsIFNEX0NMS19UT0dHTEVfRU4sIFNEX0NMS19U
+T0dHTEVfRU4pOw0KKw0KIAlpZiAoUENJX1BJRChwY3IpID09IFBJRF81MjYxKSB7DQogCQkvKg0K
+IAkJICogSWYgdGVzdCBtb2RlIGlzIHNldCBzd2l0Y2ggdG8gU0QgRXhwcmVzcyBtYW5kYXRvcmls
+eSwNCkBAIC05NjgsNyArOTc1LDggQEAgc3RhdGljIGludCBzZF9wb3dlcl9vbihzdHJ1Y3QgcmVh
+bHRla19wY2lfc2RtbWMgKmhvc3QpDQogCQl9DQogCX0NCiANCi0JaG9zdC0+cG93ZXJfc3RhdGUg
+PSBTRE1NQ19QT1dFUl9PTjsNCitmaW5pc2g6DQorCWhvc3QtPnByZXZfcG93ZXJfc3RhdGUgPSBw
+b3dlcl9tb2RlOw0KIAlyZXR1cm4gMDsNCiB9DQogDQpAQCAtOTc3LDcgKzk4NSw3IEBAIHN0YXRp
+YyBpbnQgc2RfcG93ZXJfb2ZmKHN0cnVjdCByZWFsdGVrX3BjaV9zZG1tYyAqaG9zdCkNCiAJc3Ry
+dWN0IHJ0c3hfcGNyICpwY3IgPSBob3N0LT5wY3I7DQogCWludCBlcnI7DQogDQotCWhvc3QtPnBv
+d2VyX3N0YXRlID0gU0RNTUNfUE9XRVJfT0ZGOw0KKwlob3N0LT5wcmV2X3Bvd2VyX3N0YXRlID0g
+TU1DX1BPV0VSX09GRjsNCiANCiAJcnRzeF9wY2lfaW5pdF9jbWQocGNyKTsNCiANCkBAIC0xMDAz
+LDcgKzEwMTEsNyBAQCBzdGF0aWMgaW50IHNkX3NldF9wb3dlcl9tb2RlKHN0cnVjdCByZWFsdGVr
+X3BjaV9zZG1tYyAqaG9zdCwNCiAJaWYgKHBvd2VyX21vZGUgPT0gTU1DX1BPV0VSX09GRikNCiAJ
+CWVyciA9IHNkX3Bvd2VyX29mZihob3N0KTsNCiAJZWxzZQ0KLQkJZXJyID0gc2RfcG93ZXJfb24o
+aG9zdCk7DQorCQllcnIgPSBzZF9wb3dlcl9vbihob3N0LCBwb3dlcl9tb2RlKTsNCiANCiAJcmV0
+dXJuIGVycjsNCiB9DQpAQCAtMTUwNiwxMCArMTUxNCwxMSBAQCBzdGF0aWMgaW50IHJ0c3hfcGNp
+X3NkbW1jX2Rydl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KIA0KIAlob3N0
+ID0gbW1jX3ByaXYobW1jKTsNCiAJaG9zdC0+cGNyID0gcGNyOw0KKwltbWMtPmlvcy5wb3dlcl9k
+ZWxheV9tcyA9IDU7DQogCWhvc3QtPm1tYyA9IG1tYzsNCiAJaG9zdC0+cGRldiA9IHBkZXY7DQog
+CWhvc3QtPmNvb2tpZSA9IC0xOw0KLQlob3N0LT5wb3dlcl9zdGF0ZSA9IFNETU1DX1BPV0VSX09G
+RjsNCisJaG9zdC0+cHJldl9wb3dlcl9zdGF0ZSA9IE1NQ19QT1dFUl9PRkY7DQogCUlOSVRfV09S
+SygmaG9zdC0+d29yaywgc2RfcmVxdWVzdCk7DQogCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYs
+IGhvc3QpOw0KIAlwY3ItPnNsb3RzW1JUU1hfU0RfQ0FSRF0ucF9kZXYgPSBwZGV2Ow0KLS0gDQoy
+LjI1LjENCg==

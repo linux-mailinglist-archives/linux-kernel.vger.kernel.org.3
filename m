@@ -2,191 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF694CA381
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7DA4CA2B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240839AbiCBLXI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 06:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S241187AbiCBLGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241411AbiCBLWy (ORCPT
+        with ESMTP id S238647AbiCBLGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:22:54 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3487657;
-        Wed,  2 Mar 2022 03:22:11 -0800 (PST)
-Date:   Wed, 02 Mar 2022 10:40:07 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v1 3/3] drm/panel : innolux-ej030na and abt-y030xx067a :
- add .enable and .disable
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-Id: <VM548R.0I9BAN681OS83@crapouillou.net>
-In-Reply-To: <20220301153122.20660-4-cbranchereau@gmail.com>
-References: <20220301153122.20660-1-cbranchereau@gmail.com>
-        <20220301153122.20660-4-cbranchereau@gmail.com>
+        Wed, 2 Mar 2022 06:06:16 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31164A3F4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:05:30 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id u16so1602849pfg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 03:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iM4tqoBNZnRDhHlhJv4qaUp41vM2/itvqk+JO0plpzU=;
+        b=eUCFUBtB8g0HcK0Dm6lzd43xTsjUZvZy+n8LQ7kZQiOs8hWrHoopwzWWggNY93Kth/
+         d+yg12rDsIzVf25SP9oTp5FxUy9c7NkqTmGgGLdn7tyqW/nDr780P+yvFBiU5EQousk4
+         8sF3aEpksyhIccyC3cM2mH4iDzP3NwL0I57CYqkOZCBILQKhuvZJVPOLGySLYvx/yXwh
+         I6elZu4Ycv6/m7nev9kSR83Qi7GDI/FnMQVrrxDTYB5k+y8RspG3E10tHtL55dXk1NuM
+         A8+SxU51PuLkX6Sw3L2WJ6uX0gpfMDEV2TZLS49hJbLwt/YRIWVY6txZDZQwPMwPUTSu
+         0amQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iM4tqoBNZnRDhHlhJv4qaUp41vM2/itvqk+JO0plpzU=;
+        b=uBQDCZRihXDyhoiPIbaPof/8sMudqphOHypiA+ZCsY1dfMHpsTvIonjt6R239J0mwI
+         DGQQX+HhK8NBgvhwNAQypW4Mq/47b6FZXCWwN5VtsMUbh27usMHzENZioWy/ujGNQHFX
+         BJzvAXvTbWRgFhwbHm1e7Il+EH20bVoSpXfGC79t8C8h2qBKpdWflop6i1oI00Uz1O6X
+         ZLTra8hPVqQQ8yapKq0hQBi6xjofB/W/FHeMgMGzE3IIWhQnN3QPVfsrZroTEdxheWey
+         ztdoydPpUXoRp+hhE3E+f8YosnaUC2/+xr6kbYq4vYGDcwzjC7FhqdLh2lAWSCg8scMc
+         0IGg==
+X-Gm-Message-State: AOAM531QIX0XOk0bbNmEaU3hDVCorFNxmfUb5cPkW99XbMHgp+9xjhWD
+        mcJw5bR8GKqPHkdexe195xXSTg==
+X-Google-Smtp-Source: ABdhPJxeyMaemFdosUe7a1Nz/OmLGcqy/zp1HyS7opVeuNuR2PmDhFIdpuZN0hRH0U2QcVKyK817Qg==
+X-Received: by 2002:a63:2a45:0:b0:373:1850:d5b with SMTP id q66-20020a632a45000000b0037318500d5bmr24767273pgq.563.1646219130121;
+        Wed, 02 Mar 2022 03:05:30 -0800 (PST)
+Received: from localhost.localdomain ([171.50.175.145])
+        by smtp.gmail.com with ESMTPSA id hk1-20020a17090b224100b001b8cff17f89sm5049186pjb.12.2022.03.02.03.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 03:05:29 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        robh+dt@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v2 0/5] Add ethernet support for Qualcomm SA8155p-ADP board
+Date:   Wed,  2 Mar 2022 16:35:03 +0530
+Message-Id: <20220302110508.69053-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Changes since v1:
+-----------------
+- v1 can be seen here: https://lore.kernel.org/netdev/20220126221725.710167-1-bhupesh.sharma@linaro.org/t/
+- Fixed review comments from Bjorn - broke the v1 series into two
+  separate series - one each for 'net' tree and 'arm clock/dts' tree
+  - so as to ease review of the same from the respective maintainers.
+- This series is intended for the 'arm msm clock/dts' tree.
+- Other changes:
+  - Dropped [PATCH 7/8] from v1.
+  - Added more background on the emac gdsc issue, requiring it to be in
+    ALWAYS_ON state in [PATCH 5/5].
+  - Collected Ack from Rob for [PATCH 1/5].
+  - Broke down v1's [PATCH 3/8] into 3 separate patches (one each for emac,
+    pci and ufs gdsc defines) - one of which is carried as [PATCH 2/5]
+    in this series, which is used to enable emac GDSC.
 
-Le mar., mars 1 2022 at 16:31:22 +0100, Christophe Branchereau 
-<cbranchereau@gmail.com> a écrit :
-> Following the introduction of bridge_atomic_enable in the ingenic
-> drm driver, the crtc is enabled between .prepare and .enable, if
-> it exists.
-> 
-> Add it so the backlight is only enabled after the crtc is, to avoid
-> graphical issues.
-> 
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-> ---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 23 ++++++++++++--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31 
-> ++++++++++++++++---
->  2 files changed, 48 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c 
-> b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> index f043b484055b..b5736344e3ec 100644
-> --- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> +++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> @@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel 
-> *panel)
->  		goto err_disable_regulator;
->  	}
-> 
-> -	msleep(120);
-> -
->  	return 0;
-> 
->  err_disable_regulator:
-> @@ -202,6 +200,25 @@ static int y030xx067a_unprepare(struct drm_panel 
-> *panel)
->  	return 0;
->  }
-> 
-> +static int y030xx067a_enable(struct drm_panel *panel)
-> +{
-> +	if (panel->backlight) {
-> +		/* Wait for the picture to be ready before enabling backlight */
-> +		msleep(120);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int y030xx067a_disable(struct drm_panel *panel)
-> +{
-> +	struct y030xx067a *priv = to_y030xx067a(panel);
-> +
-> +	regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
+The SA8155p-ADP board supports on-board ethernet (Gibabit Interface),
+with support for both RGMII and RMII buses.
 
-Shouldn't that be balanced by a regmap_set_bits() in the .enable() 
-function?
+This patchset adds the support for the same.
 
-Cheers,
--Paul
+Note that this patchset is based on an earlier sent patchset
+for adding PDC controller support on SM8150 (see [1]).
 
-> +
-> +	return 0;
-> +}
-> +
->  static int y030xx067a_get_modes(struct drm_panel *panel,
->  				struct drm_connector *connector)
->  {
-> @@ -239,6 +256,8 @@ static int y030xx067a_get_modes(struct drm_panel 
-> *panel,
->  static const struct drm_panel_funcs y030xx067a_funcs = {
->  	.prepare	= y030xx067a_prepare,
->  	.unprepare	= y030xx067a_unprepare,
-> +	.enable		= y030xx067a_enable,
-> +	.disable	= y030xx067a_disable,
->  	.get_modes	= y030xx067a_get_modes,
->  };
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c 
-> b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> index c558de3f99be..6de7370185cd 100644
-> --- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> +++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> @@ -80,8 +80,6 @@ static const struct reg_sequence 
-> ej030na_init_sequence[] = {
->  	{ 0x47, 0x08 },
->  	{ 0x48, 0x0f },
->  	{ 0x49, 0x0f },
-> -
-> -	{ 0x2b, 0x01 },
->  };
-> 
->  static int ej030na_prepare(struct drm_panel *panel)
-> @@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel 
-> *panel)
->  		goto err_disable_regulator;
->  	}
-> 
-> -	msleep(120);
-> -
->  	return 0;
-> 
->  err_disable_regulator:
-> @@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel 
-> *panel)
->  	return 0;
->  }
-> 
-> +static int ej030na_enable(struct drm_panel *panel)
-> +{
-> +	struct ej030na *priv = to_ej030na(panel);
-> +
-> +	/* standby off */
-> +	regmap_write(priv->map, 0x2b, 0x01);
-> +
-> +	if (panel->backlight) {
-> +		/* Wait for the picture to be ready before enabling backlight */
-> +		msleep(120);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ej030na_disable(struct drm_panel *panel)
-> +{
-> +	struct ej030na *priv = to_ej030na(panel);
-> +
-> +	/* standby on */
-> +	regmap_write(priv->map, 0x2b, 0x00);
-> +
-> +	return 0;
-> +}
-> +
->  static int ej030na_get_modes(struct drm_panel *panel,
->  			     struct drm_connector *connector)
->  {
-> @@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel 
-> *panel,
->  static const struct drm_panel_funcs ej030na_funcs = {
->  	.prepare	= ej030na_prepare,
->  	.unprepare	= ej030na_unprepare,
-> +	.enable		= ej030na_enable,
-> +	.disable	= ej030na_disable,
->  	.get_modes	= ej030na_get_modes,
->  };
-> 
-> --
-> 2.34.1
-> 
+[1]. https://lore.kernel.org/linux-arm-msm/20220226184028.111566-1-bhupesh.sharma@linaro.org/T/
 
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Bhupesh Sharma (2):
+  clk: qcom: gcc: Add emac GDSC support for SM8150
+  clk: qcom: gcc-sm8150: Use ALWAYS_ON flag as a workaround for emac
+    gdsc
+
+Vinod Koul (3):
+  dt-bindings: net: qcom,ethqos: Document SM8150 SoC compatible
+  arm64: dts: qcom: sm8150: add ethernet node
+  arm64: dts: qcom: sa8155p-adp: Enable ethernet node
+
+ .../devicetree/bindings/net/qcom,ethqos.txt   |   4 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts      | 144 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  27 ++++
+ drivers/clk/qcom/gcc-sm8150.c                 |  40 +++--
+ include/dt-bindings/clock/qcom,gcc-sm8150.h   |   1 +
+ 5 files changed, 203 insertions(+), 13 deletions(-)
+
+-- 
+2.35.1
 

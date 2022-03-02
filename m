@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE704CA120
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F5A4CA121
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbiCBJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S240639AbiCBJrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240642AbiCBJrN (ORCPT
+        with ESMTP id S240648AbiCBJrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:47:13 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED14B8229
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:46:29 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Mar 2022 04:47:16 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E8986D9
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:46:32 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0A27E21121;
+        Wed,  2 Mar 2022 09:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646214391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zU0omcjj6FNIaoNnjAuvB9rjRyhqvWJLX6/CjwTASF8=;
+        b=QW0dRsrypn1bL/WOIg/fcK0vKQ622cJBIy91DRi1HftPB079qk0Qp3mgboAmt1E+D0+Tnm
+        hNk7pvvJ3+hre162gXcLEsjySGt59/5GrwLPA4kkRTyr1lOVUWO2Vo9cQ0WmVOVteMnq4y
+        As5ox4USY1QcQJoDDh11k4LmjzdsFpU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 69B7C3F5FB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:46:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646214388;
-        bh=/i/Tl5JDYxHy1DfeqPaVUUr4WPXCyRWi21gK1tt8oLA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Z0iLz+Q5TyiKheYP6UTnya+zncGbH+RViExGQ6DCLKlQYStSjv99UaOJFqChE4Jjl
-         qCKXI0wDUrJO6xmHMCCy7qOvrPMvX9wnx/l5CMhhLebiw2KCLfuaKvvHu94Xxrpea9
-         CUx5sNPEYjl4ZpeOcSbMui4pI/yAo/E6gBQjmR5fzWENCa3WZWO+QsQmVp2JMcqQS7
-         xvSdGGaHVXqDipi3r/9vXt+4T2n2by/GmOn2qhjEEG7ICd33q2qWJH10qwedz/B5cw
-         v+h/Lc5oKPppEdGUw+2dSRd+pM5o9Pj1b6vf0SuFDmjgJ2wbcWB7knc8DnDNRcol7f
-         VoE4oMdtsllZQ==
-Received: by mail-ed1-f72.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so698224edb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:46:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/i/Tl5JDYxHy1DfeqPaVUUr4WPXCyRWi21gK1tt8oLA=;
-        b=EZ1e6rja6c33Wzld+r10M6Z3YazQNzSUIjWuR1rg7vNwsGLcIsdXvECWTj5Ot2o+LK
-         lvc2A4Knt65AFt90+OZkRbFqs9ImdBJFYqzNA/rlX/NbiRg1Vp1lGW7N2z/RmWEZWN40
-         bNOeveQ8YzOE6iNmJO2EDwRE1O1fDo6H9sFYvvBlT9UdjrbpLZ0+WaZJDfDNudkgvjES
-         Ge+Nqir3w7qtRgWRR4x4bvmIAK04am2zQ+8V9JTAr7WVBH+fiEflHDjTLa+D5Nofx3Fx
-         o6sl1nK5WKd9oucosdOGQeIRMu2Oay1Hn6t+AfHM1keUBmZnvAThW4Fqp2zc5qnKJ6xy
-         IyYQ==
-X-Gm-Message-State: AOAM533zhf4CEpQstyA7iPlZbCb5fknIx1kBABN/iT+GF6EOle42cxLx
-        q6E8YoOzYZQiMJ0PkE1gzmpB2qZ/SheGTdj7fx0kElR8GEgjMgwg8tY6O4fi1KOcR15oVigZKXm
-        Luo4H7sS7eJGKPBGGwJa8DGe6HJzCFBjpGqLw2dwmsA==
-X-Received: by 2002:a17:907:3fa8:b0:6d3:477a:efe with SMTP id hr40-20020a1709073fa800b006d3477a0efemr23515481ejc.401.1646214387402;
-        Wed, 02 Mar 2022 01:46:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyPOkiH4a9QCn+Wd7L5hlKw9lulPSI6MAqtbvWliZVQXaUWpoXaMt7gC/299TK5aFIrth7zTg==
-X-Received: by 2002:a17:907:3fa8:b0:6d3:477a:efe with SMTP id hr40-20020a1709073fa800b006d3477a0efemr23515473ejc.401.1646214387252;
-        Wed, 02 Mar 2022 01:46:27 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id ho12-20020a1709070e8c00b006ce3f158e87sm6159767ejc.2.2022.03.02.01.46.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 01:46:26 -0800 (PST)
-Message-ID: <16c07205-cd2d-fb9a-771e-7874a568026c@canonical.com>
-Date:   Wed, 2 Mar 2022 10:46:25 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 1DE3CA3B85;
+        Wed,  2 Mar 2022 09:46:28 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 10:46:28 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgel.zte@gmail.com, naoya.horiguchi@nec.com, minchan@kernel.org,
+        hannes@cmpxchg.org, rogerq@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, guo.ziliang@zte.com.cn,
+        Zeal Robot <zealci@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH linux-next] mm: swap: get rid of deadloop in swapin
+ readahead
+Message-ID: <Yh889CjjSxigdEAY@dhcp22.suse.cz>
+References: <20220221111749.1928222-1-cgel.zte@gmail.com>
+ <YhyAfSTkXFmIam9+@dhcp22.suse.cz>
+ <20220228073315.c855e15b108089187a40d2b0@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 3/5] dt-bindings: Add power-domains property to
- ahci-platform
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220301152421.57281-1-linux@fw-web.de>
- <20220301152421.57281-4-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220301152421.57281-4-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228073315.c855e15b108089187a40d2b0@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2022 16:24, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Mon 28-02-22 07:33:15, Andrew Morton wrote:
+> On Mon, 28 Feb 2022 08:57:49 +0100 Michal Hocko <mhocko@suse.com> wrote:
 > 
-> Some SoC using power-domains property so add it here
+> > On Mon 21-02-22 11:17:49, cgel.zte@gmail.com wrote:
+> > > From: Guo Ziliang <guo.ziliang@zte.com.cn>
+> > > 
+> > > In our testing, a deadloop task was found. Through sysrq printing, same 
+> > > stack was found every time, as follows:
+> > > __swap_duplicate+0x58/0x1a0
+> > > swapcache_prepare+0x24/0x30
+> > > __read_swap_cache_async+0xac/0x220
+> > > read_swap_cache_async+0x58/0xa0
+> > > swapin_readahead+0x24c/0x628
+> > > do_swap_page+0x374/0x8a0
+> > > __handle_mm_fault+0x598/0xd60
+> > > handle_mm_fault+0x114/0x200
+> > > do_page_fault+0x148/0x4d0
+> > > do_translation_fault+0xb0/0xd4
+> > > do_mem_abort+0x50/0xb0
+> > > 
+> > > The reason for the deadloop is that swapcache_prepare() always returns
+> > > EEXIST, indicating that SWAP_HAS_CACHE has not been cleared, so that
+> > > it cannot jump out of the loop. We suspect that the task that clears
+> > > the SWAP_HAS_CACHE flag never gets a chance to run. We try to lower
+> > > the priority of the task stuck in a deadloop so that the task that
+> > > clears the SWAP_HAS_CACHE flag will run. The results show that the
+> > > system returns to normal after the priority is lowered.
+> > > 
+> > > In our testing, multiple real-time tasks are bound to the same core,
+> > > and the task in the deadloop is the highest priority task of the
+> > > core, so the deadloop task cannot be preempted.
+> > > 
+> > > Although cond_resched() is used by __read_swap_cache_async, it is an
+> > > empty function in the preemptive system and cannot achieve the purpose
+> > > of releasing the CPU. A high-priority task cannot release the CPU
+> > > unless preempted by a higher-priority task. But when this task
+> > > is already the highest priority task on this core, other tasks
+> > > will not be able to be scheduled. So we think we should replace
+> > > cond_resched() with schedule_timeout_uninterruptible(1),
+> > > schedule_timeout_interruptible will call set_current_state
+> > > first to set the task state, so the task will be removed
+> > > from the running queue, so as to achieve the purpose of
+> > > giving up the CPU and prevent it from running in kernel
+> > > mode for too long.
+> > 
+> > I am sorry but I really do not see how this case is any different from
+> > any other kernel code path being hogged by a RT task. We surely
+> > shouldn't put sleeps into all random paths which are doing cond_resched
+> > at the moment. 
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> changes in v4: none
-> changes in v3:
->   - new patch
-> ---
->  Documentation/devicetree/bindings/ata/ahci-platform.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+> But this cond_resched() is different from most.  This one is attempting
+> to yield the CPU so this task can make progress.  And cond_resched()
+> simply isn't an appropriate way of doing this because under this fairly
+> common situation, it's a no-op.
 
+I might be really missing something but I really do not see how is this
+any different from the page allocator path which only does cond_resched
+as well (well, except for throttling but that might just not trigger).
+Or other paths which just do cond_resched while waiting for a progress
+somewhere else.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+Not that I like this situation but !PREEMPT kernel with RT priority
+tasks is rather limited and full of potential priblems IMHO.
+-- 
+Michal Hocko
+SUSE Labs

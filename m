@@ -2,155 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5234CA56F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F584CA57D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242018AbiCBNDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S242036AbiCBNE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234065AbiCBNDM (ORCPT
+        with ESMTP id S239833AbiCBNEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:03:12 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B4F20F51;
-        Wed,  2 Mar 2022 05:02:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646226147;
-        bh=tCuozGRQsDZceQ1EBnhysNv3YHpcwwqpdXYo/ZBImus=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=qDxd60XR5drJf8bwq63rj4X3X2qlNPHQf3xsbNStaSRkrLMLQuWdny2Zb7ZUu6hrO
-         59+bXq4NPWia48Dvs3vS1lTFvL8YhhDiSUcahoOST03kgn/hbFldQO5umig3t21G9g
-         QL3hyemqD189nDE4cHgv+E4OUoMDiC6fir0/ckCg=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 07FE11281285;
-        Wed,  2 Mar 2022 08:02:27 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id P8Toy0NqOhgX; Wed,  2 Mar 2022 08:02:26 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646226146;
-        bh=tCuozGRQsDZceQ1EBnhysNv3YHpcwwqpdXYo/ZBImus=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=XuIbaRq2cRmudIn0tCjYzDQ6U6GgPDFdmFXykfNDiDeiID8tKhsyMNvIOr9tEecvG
-         f4F3/soQI5AeLjUwOX08bACkE24xkbR2dRnM9zdf0ADOM+eldeC5LRWkG1XY0zL8Lm
-         lECGSxIVJxOdDrF5MPICGQqUO4eLfv9vKF9NVeb4=
-Received: from [IPv6:2601:5c4:4300:c551::c447] (unknown [IPv6:2601:5c4:4300:c551::c447])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D7CFC1281216;
-        Wed,  2 Mar 2022 08:02:25 -0500 (EST)
-Message-ID: <c0fc6e9c096778dce5c1e63c29af5ebdce83aca6.camel@HansenPartnership.com>
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
- outside the loop
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, jakobkoschel@gmail.com,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        keescook@chromium.org, jannh@google.com,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org
-Date:   Wed, 02 Mar 2022 08:02:23 -0500
-In-Reply-To: <20220301075839.4156-3-xiam0nd.tong@gmail.com>
-References: <20220301075839.4156-1-xiam0nd.tong@gmail.com>
-         <20220301075839.4156-3-xiam0nd.tong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 08:04:52 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66AC2483;
+        Wed,  2 Mar 2022 05:04:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646226250; x=1677762250;
+  h=from:to:cc:subject:date:message-id;
+  bh=a4hQ2aAPW5IsY3w8Y0zEVgQ+Gmampycmr+DnS2bxoZw=;
+  b=mVqUDCQhKqbehTyosKVVDC0EV41Szv+pfrbxzf+5Yrm3s7ROI3mkKCSq
+   eiyoIGpdDPOVaGj65193oupSWKPbPvMFg8U5wK7tAaS1Zev+F69mx2Lt2
+   oKRc3ldaMn808akbbYuDEBEaiGPjWtvRwHMKmpEIRcoCFcBdZ2NFET5hn
+   U=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 02 Mar 2022 05:04:10 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:08 -0800
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:33:50 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id 37F6C5850; Wed,  2 Mar 2022 18:33:49 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     adrian.hunter@intel.com, quic_riteshh@quicinc.com,
+        asutoshd@quicinc.com, ulf.hansson@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V4 0/7] mmc: add error statistics for eMMC and SD card
+Date:   Wed,  2 Mar 2022 18:33:40 +0530
+Message-Id: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 15:58 +0800, Xiaomeng Tong wrote:
-> For each list_for_each_entry* macros(10 variants), implements a
-> respective
-> new *_inside one. Such as the new macro list_for_each_entry_inside
-> for
-> list_for_each_entry. The idea is to be as compatible with the
-> original
-> interface as possible and to minimize code changes.
-> 
-> Here are 2 examples:
-> 
-> list_for_each_entry_inside:
->  - declare the iterator-variable pos inside the loop. Thus, the
-> origin
->    declare of the inputed *pos* outside the loop should be removed.
-> In
->    other words, the inputed *pos* now is just a string name.
->  - add a new "type" argument as the type of the container struct this
-> is
->    embedded in, and should be inputed when calling the macro.
-> 
-> list_for_each_entry_safe_continue_inside:
->  - declare the iterator-variable pos and n inside the loop. Thus, the
->    origin declares of the inputed *pos* and *n* outside the loop
-> should
->    be removed. In other words, the inputed *pos* and *n* now are just
->    string name.
->  - add a new "start" argument as the given iterator to start with and
->    can be used to get the container struct *type*. This should be
-> inputed
->    when calling the macro.
-> 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->  include/linux/list.h | 156
-> +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 156 insertions(+)
-> 
-> diff --git a/include/linux/list.h b/include/linux/list.h
-> index dd6c2041d..1595ce865 100644
-> --- a/include/linux/list.h
-> +++ b/include/linux/list.h
-> @@ -639,6 +639,19 @@ static inline void list_splice_tail_init(struct
-> list_head *list,
->  	     !list_entry_is_head(pos, head, member);			
-> \
->  	     pos = list_next_entry(pos, member))
->  
-> +/**
-> + * list_for_each_entry_inside
-> + *  - iterate over list of given type and keep iterator inside the
-> loop
-> + * @pos:	the type * to use as a loop cursor.
-> + * @type:	the type of the container struct this is embedded in.
-> + * @head:	the head for your list.
-> + * @member:	the name of the list_head within the struct.
-> + */
-> +#define list_for_each_entry_inside(pos, type, head, member)		
-> \
-> +	for (type * pos = list_first_entry(head, type, member);		
-> \
-> +	     !list_entry_is_head(pos, head, member);			
-> \
-> +	     pos = list_next_entry(pos, member))
-> +
->  
+Changes since V3:
+	-Dropped error stats feature flag as suggested by Adrain Hunter.
+	-Separated error state related changes in separate patches as
+	 suggested by Adrain Hunter.
+	  [PATCH V4 4/7] : error state debug fs
+	  [PATCH V4 5/7] : error state enable function
+	  [PATCH V4 6/7] : error state enable in error case
+	 Note: we are enabling error state before calling sdhci_dumpregs
+	 we couldn't add the err state in error stats array as err state
+	 is not error type.
+	-Corrected Signed-off-by order as suggested by Bjron Andersson.
+	-Moved error state enable code from sdhci_dumpregs to error
+	 conditions as suggested by Adrain Hunter.
 
-pos shouldn't be an input to the macro since it's being declared inside
-it.  All that will do will set up confusion about the shadowing of pos.
-The macro should still work as
+Changes since V2:
+	-Removed userspace error stats clear debug fs entry as suggested
+	 by Adrain Hunter.
+	-Split patch into 4 patches
+	  [PATCH V3 1/4] : sdhci driver
+	  [PATCH V3 2/4] : debug fs entries
+	  [PATCH V3 3/4] : core driver
+	  [PATCH V3 4/4] : cqhci driver
+	-Used for loop to print error messages instead of using printf
+	 statements for all error messages as suggested by Adrain Hunter.
+	-Introduced one flag to enable error stats feature, if any other
+	 client wants to use this feature, they need to enable that flag.
+	-Moved reset command timeout error statement to card init flow
+	 as suggested by Adrain Hunter.
 
-#define list_for_each_entry_inside(type, head, member) \
-  ...
+Changes since V1:
+	-Removed sysfs entry for eMMC and SD card error statistics and added
 
-For safety, you could
+Shaik Sajida Bhanu (7):
+  mmc: core: Capture eMMC and SD card errors
+  mmc: sdhci: Capture eMMC and SD card errors
+  mmc: debugfs: Add debug fs entry for mmc driver
+  mmc: debugfs: Add debug fs error state entry for mmc driver
+  mmc: core: Set error state for mmc driver
+  mmc: sdhci: Set error state for mmc driver
+  mmc: cqhci: Capture eMMC and SD card errors
 
-#define POS __UNIQUE_ID(pos)
+ drivers/mmc/core/core.c       |  6 ++++
+ drivers/mmc/core/debugfs.c    | 75 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/mmc/host/cqhci-core.c |  9 +++++-
+ drivers/mmc/host/sdhci.c      | 74 +++++++++++++++++++++++++++++++++++-------
+ include/linux/mmc/host.h      | 29 +++++++++++++++++
+ 5 files changed, 180 insertions(+), 13 deletions(-)
 
-and use POS as the loop variable .. you'll have to go through an
-intermediate macro to get it to be stable.  There are examples in
-linux/rcupdate.h
-
-James
-
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 

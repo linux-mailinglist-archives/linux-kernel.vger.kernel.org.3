@@ -2,79 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EAB4C9F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4614C9F27
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240098AbiCBI0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S240120AbiCBI3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbiCBI0n (ORCPT
+        with ESMTP id S239666AbiCBI3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:26:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63AE0B82CC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646209560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YtrInDoeeooDXLH4/ASDNuBM89b2Da/ya3ncv+m8FWA=;
-        b=NrKxjS2mZ+3LnBTNJCqK+BpA/wvESboaJuprHaZfPRJe6Vhr9BJ5QjipGwKmKGkpMhGDZN
-        tcA4cEpdd6JCOxI1V+8K/WJWZb4DGmZ29Ry5t5KweCDXskl+gZc5TgulC8NcFclj/Lcufz
-        E3EHKq9FlGA4zQz7FLTkcP/hCdREJDk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-sAHRB3rVNm6CEswhqULziw-1; Wed, 02 Mar 2022 03:25:57 -0500
-X-MC-Unique: sAHRB3rVNm6CEswhqULziw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F944824FA7;
-        Wed,  2 Mar 2022 08:25:55 +0000 (UTC)
-Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 629027FCE4;
-        Wed,  2 Mar 2022 08:25:49 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 16:25:45 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>, yukuai3@huawei.com,
-        linux-next <linux-next@vger.kernel.org>, axboe@kernel.dk,
-        linux-block@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [next-20220225][Oops][ppc] lvm snapshot merge results kernel
- panics (throtl_pending_timer_fn)
-Message-ID: <Yh8qCS5JM8ZbtqY4@T590>
-References: <d583adf0-2d98-60b6-620c-722912c05852@linux.vnet.ibm.com>
+        Wed, 2 Mar 2022 03:29:48 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4833916F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:29:05 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id q11so930634pln.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nhj2UYDv6lhlSNPLYeAs8t7voAVPXKimrviFdjCHzWM=;
+        b=DApuqsEmjJNLujancfXfCthOkTnRIUPq28/r6tOxkHmRYgOlkugPPK0h8zAh8enpIU
+         HfkQBBHhLbFz8qxRq7E2RLuHrElDGGUHS9Y244UdqIirJhWbIHaCrn4YF7xafhgTecpu
+         x6OH95W7ts5LUCdSkrPRN+VLxTqzK7oKM7OtnhOIOVkuakDHhP+07oAY8HWOUrVKWwpS
+         DnRwLDlUAcWgA1CnWdFtO0QOL8kLiRQ+vjGLe4BEgo4v9XJAX76t8Q0sNmUSx1tdL1/b
+         w7Y2MRd1la+tiYmu/lVxcH6LXEof0W4BIhpWEx+hwGiQJUbmqWHEmQaFjYs8VD1Hu04i
+         l7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nhj2UYDv6lhlSNPLYeAs8t7voAVPXKimrviFdjCHzWM=;
+        b=KIMbQVYCCYLXGVBAHp/uJQlZ9BSDEcZvtCxuvIroRvC270+A4X9Fr3sCC54Y+Gf31v
+         wZAn+0IdZBaBm/I9s5HIUMfyvSkuy6+nFEm44JrWaw2fhAnIFFujQ/lxxrl+TfstjaCs
+         LbjRgNaQB/QGAT5A5b5i3Z02RbPBS+NSvMfjPwcMefI7NlGrS4bU5CqEre21/BSuvXXI
+         OtWk11hkSEp5UWKCoN4Y3MDfO2FM2IVEFeNJpNYTPsqA9O/IbXYwZyOCF5lZE02d6bCC
+         2nakA+kk/EAl1dcDsNkNmv65KV1uP5i+hNuEyUfIVOuLST6v3TYMY3/0TtysN430zmxR
+         5axg==
+X-Gm-Message-State: AOAM531QxrPk72skbHVj5qVxQ5FlztVkg+ItR/sCoRFO4VIqSeRdshG3
+        F6BLe4QHFWi0JmlE4KHaIlRQLg==
+X-Google-Smtp-Source: ABdhPJw2Snc+gQoBgYJzFskUkuKAvbAT2RF7i6kPMEQuXqdEKU1ZjuWSi3E8iJ7UVQPqE+7d8aedhQ==
+X-Received: by 2002:a17:902:e5c4:b0:151:9bf6:f47f with SMTP id u4-20020a170902e5c400b001519bf6f47fmr635388plf.110.1646209745090;
+        Wed, 02 Mar 2022 00:29:05 -0800 (PST)
+Received: from FVFYT0MHHV2J.bytedance.net ([61.120.150.70])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056a000c9400b004f396b965a9sm20922228pfv.49.2022.03.02.00.28.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 00:29:04 -0800 (PST)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
+        hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org
+Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v4 0/6] Fix some bugs related to ramp and dax
+Date:   Wed,  2 Mar 2022 16:27:12 +0800
+Message-Id: <20220302082718.32268-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d583adf0-2d98-60b6-620c-722912c05852@linux.vnet.ibm.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 01:31:39PM +0530, Abdul Haleem wrote:
-> Greeting's
-> 
-> Linux next kernel 5.17.0-rc5-next-20220225 crashed on my power 10 LPAR when
-> merge lvm snapshot on nvme disk
+This series is based on next-20220225.
 
-Please try next-20220301, in which the "bad" patch of 'block: cancel all
-throttled bios in del_gendisk()' is dropped.
+Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+those on those changes, there are placed in this series.  Patch 3-4
+are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+since the previous patch remove the usage of follow_invalidate_pte().
 
+v4:
+- Fix compilation error on riscv.
 
-Thanks,
-Ming
+v3:
+- Based on next-20220225.
+
+v2:
+- Avoid the overly long line in lots of places suggested by Christoph.
+- Fix a compiler warning reported by kernel test robot since pmd_pfn()
+  is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+- Split a new patch 4 for preparation of fixing the dax bug.
+
+Muchun Song (6):
+  mm: rmap: fix cache flush on THP pages
+  dax: fix cache flush on PMD-mapped pages
+  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+  mm: pvmw: add support for walking devmap pages
+  dax: fix missing writeprotect the pte entry
+  mm: remove range parameter from follow_invalidate_pte()
+
+ fs/dax.c             | 82 +++++-----------------------------------------------
+ include/linux/mm.h   |  3 --
+ include/linux/rmap.h |  3 ++
+ mm/internal.h        | 26 +++++++++++------
+ mm/memory.c          | 23 ++-------------
+ mm/page_vma_mapped.c |  5 ++--
+ mm/rmap.c            | 68 +++++++++++++++++++++++++++++++++++--------
+ 7 files changed, 89 insertions(+), 121 deletions(-)
+
+-- 
+2.11.0
 

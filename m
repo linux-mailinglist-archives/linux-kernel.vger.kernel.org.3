@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56A4CB036
+	by mail.lfdr.de (Postfix) with ESMTP id A29624CB035
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244608AbiCBUtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S244640AbiCBUtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244470AbiCBUs5 (ORCPT
+        with ESMTP id S234099AbiCBUs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:48:57 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE325D1BA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:10 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t5so2965091pfg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:09 -0800 (PST)
+        Wed, 2 Mar 2022 15:48:58 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04028606F1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:13 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d187so2944817pfa.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ueLCg3tmJELA0lOiV59xYuNsQ/Nirz2sRRrkKg8aSPQ=;
-        b=jlWEiz82aeDhJ3ZK8Sf2LFDBbMlf/ZiXGxjGK+rpwtBtG8988DC1eHHfhGdDVbZwBS
-         Ittwxzux4HQI7oE1YKmpzkti68A8+x/JI1pCNTt9m0dXpr/jdO1RGYwt1Fc1WOvxpD8G
-         eMs+s4P6iFjdfNW4zjKmA1wq37ZC6kmfmMkIGYn06TtRXCu1QKwpvl2ZdlP0wwnGVnRi
-         jOkszLlU+k0ILUmDA0WYGltY9Ky/kZv01h2Kipy3w9wldoPCMH603rt6ngrKE9YiSXOC
-         coa2rP2YhbmpoMXul4oqo99zUMX2nGWVn/EsE/wZ0Pth/3R1g1W4T2+7PrbzVb46EuPE
-         JSUw==
+        bh=mIoDn3EA8TVCn84Dm3V6h82LZaIrnrhUBixZa0FUPlg=;
+        b=QBqqUc72LLt5d+ZGpIgqsTAeFT4aCrxKy31QdV+QmSbhssjwBUnECJIze7uFxMYIso
+         rJidVw0y8hcrdZeuUeTEYGRiKDJ6K7NxRs0PoK/kZk5yt8vvPdhDFmVP8KZ7sDvnXq2s
+         3GDP/pH/VS+8RNhqUYmEeHD7DdKfbnytG1reFyGq+dz16BeYXpLNJP1+jpZtzUHLkYV2
+         skg3pxcWlV3e1/HzKYhh2il5lQ+MdJDeHRMjuv/iGr7UJ0S9iHDkECQNypyrMMKaZApY
+         l+QQaXBBGQPYbju8XkRonZQNCkkLcRXqbBVzREaeyQ/dUgyN3pa0FWf2BQhZyQRZ5Hwl
+         kP1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ueLCg3tmJELA0lOiV59xYuNsQ/Nirz2sRRrkKg8aSPQ=;
-        b=xCORCV1MguJLw7uFnaFsDZKRz5CxzngpEwMSD5azbUiIbtShw/NZa3q/5Jh2RW5npm
-         OARfMadeod+WsCVaHvx1KIzV8zsykqPq/1t1Zjd4G26esnzSE1i3C5gn34ukJRmZy4Jc
-         OOwsxUy6lHfLqyBqIKSWr7KQMZgx+Im+L3kAk/mfv5aukV37fc/NKfGIxQjWbsUXF2M2
-         AAUAaesYK/qk38LzGKcmftcTACymT4mtyreqlHndgyt0aEp2vH7fZYdUkcKh2G1eyucD
-         0gHLOfRibI4xoM4+O/Aqgf0IFzuNPho/CzXzJ3duOAQ+UEHsWCsZv/Fbttgfx2s3Eu8q
-         B9Vw==
-X-Gm-Message-State: AOAM532fyzuzSGKNz6XRoRlXQfWaKOZ9kqtOp7kWmYTjw+9F+58GcAiB
-        0Sub8awSViMo68l5h0Br4E7dWSNP4Ft0dg==
-X-Google-Smtp-Source: ABdhPJx1drPamGX0OGSlhS8Vzw5ZB39prTM1oS4YnYAxezrAjWyBt6jx5m/KMsttVgoXgBUorMWPiQ==
-X-Received: by 2002:a63:28d:0:b0:365:8e16:5c19 with SMTP id 135-20020a63028d000000b003658e165c19mr27463068pgc.579.1646254089505;
-        Wed, 02 Mar 2022 12:48:09 -0800 (PST)
+        bh=mIoDn3EA8TVCn84Dm3V6h82LZaIrnrhUBixZa0FUPlg=;
+        b=s03sGQCn7gCaZxxEDQ8pF116moZMGYt+amjr2vZQQnsG6vvFU0vUtG/IFPF6DMNsBe
+         WsTsLTBva4psXJMS99N7xCf5vg1qRLLPbmgtV1GSq/TAVtcs/O8QHzIz5CaqDUcuee4I
+         VT9BYm7/PSNkmGnrWpXhlsb6My/KiAzpSqlLrynKeKpNqnkQbZx/wLYXQMEW4zIzNSkr
+         wH/MAgkWjH8AAhjaYrYHXNnHM1OeloJQ+dt8UVxxnAdfxZTdXFhpfB9NNYb1Cyr06QAx
+         AZyoiaLlUplH6uu6TSagyhQw+2FNpON+AdlV6XgGKXXKWaozuC2WpMMB9UqKQpKvF4jD
+         e8LQ==
+X-Gm-Message-State: AOAM533XUhNk+BmuyS7e3UKl0+ZbFrHtTqYWOMnz6l/J+0BEitThJ6XB
+        M4X6JokVAoltyEcZ5+put1g=
+X-Google-Smtp-Source: ABdhPJzHcQw6NXwzbiQcgQvYzhpVcsxMou3WjWWtCbyNYfAdOvDSYYW1ccpmo2MSyU3WBYLYNbsH/w==
+X-Received: by 2002:a05:6a00:1593:b0:4f6:6c38:f75d with SMTP id u19-20020a056a00159300b004f66c38f75dmr394165pfk.81.1646254092559;
+        Wed, 02 Mar 2022 12:48:12 -0800 (PST)
 Received: from localhost.localdomain ([103.161.98.179])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.06
+        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:48:09 -0800 (PST)
+        Wed, 02 Mar 2022 12:48:12 -0800 (PST)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -56,9 +56,9 @@ To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Martin Kaiser <martin@kaiser.cx>
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 02/16] staging: r8188eu: mark rtw_is_cckratesonly_included as bool
-Date:   Thu,  3 Mar 2022 02:17:23 +0530
-Message-Id: <20220302204737.49056-3-makvihas@gmail.com>
+Subject: [PATCH 03/16] staging: r8188eu: mark rtw_is_desired_network as bool
+Date:   Thu,  3 Mar 2022 02:17:24 +0530
+Message-Id: <20220302204737.49056-4-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220302204737.49056-1-makvihas@gmail.com>
 References: <20220302204737.49056-1-makvihas@gmail.com>
@@ -74,40 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark rtw_is_cckratesonly_included as bool as it returns true/false.
+Mark rtw_is_desired_network as bool as it returns true/false.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_ieee80211.c | 2 +-
- drivers/staging/r8188eu/include/ieee80211.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-index a7b7b0f14..5a0e42ed4 100644
---- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
-+++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-@@ -81,7 +81,7 @@ bool	rtw_is_cckrates_included(u8 *rate)
- 	return false;
- }
- 
--uint	rtw_is_cckratesonly_included(u8 *rate)
-+bool	rtw_is_cckratesonly_included(u8 *rate)
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 4bb6edcc0..8d36ab955 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -571,7 +571,7 @@ static void rtw_add_network(struct adapter *adapter,
+ /* 			(3) WMM */
+ /*			(4) HT */
+ /*			(5) others */
+-static int rtw_is_desired_network(struct adapter *adapter, struct wlan_network *pnetwork)
++static bool rtw_is_desired_network(struct adapter *adapter, struct wlan_network *pnetwork)
  {
- 	u32 i = 0;
- 
-diff --git a/drivers/staging/r8188eu/include/ieee80211.h b/drivers/staging/r8188eu/include/ieee80211.h
-index 1a15db097..8c20363cd 100644
---- a/drivers/staging/r8188eu/include/ieee80211.h
-+++ b/drivers/staging/r8188eu/include/ieee80211.h
-@@ -874,7 +874,7 @@ int rtw_get_bit_value_from_ieee_value(u8 val);
- 
- bool	rtw_is_cckrates_included(u8 *rate);
- 
--uint	rtw_is_cckratesonly_included(u8 *rate);
-+bool	rtw_is_cckratesonly_included(u8 *rate);
- 
- int rtw_check_network_type(unsigned char *rate, int ratelen, int channel);
- 
+ 	struct security_priv *psecuritypriv = &adapter->securitypriv;
+ 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 -- 
 2.30.2
 

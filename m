@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184D64CAEDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E234CAEE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241812AbiCBTk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S241843AbiCBTma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241788AbiCBTky (ORCPT
+        with ESMTP id S234643AbiCBTm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:40:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537B5C55B3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QhltOUDlJxC8ltF2HbQFI8+ZrdiigruHgZquqQqDwQQ=; b=VhPuSfmMaK958MrW/CrCjL0EAA
-        cJoWTKNIG0pLmT5k7gabXZyz1Vg+E8q1Sffzmh3L437cSES81Gr+VszCuLte20gVO8Dc7zkhOtJ6G
-        LiB0pSb2YAlsQFTHRvXyEWRFbnMGER323Fm5AmUkcqaBKW/BxZkw3fBOc6aEljXj6zDVn95ym6kTd
-        6osmgQ7/dQ7mK72MpSHsxTLY08IcCWcry6Tl1L0x2b8407bq+RDV5jxh2uRNvjaTVceL+F1p7Hohk
-        vyjZINVQm0Sy8ivc/oc2MEv8x1fIWyR66mjs0+ciE9sIvKp4f/0fvOtJ8yS9MFiKqMZDD0HVbBX6b
-        uIhV6hFQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPUp0-00Egof-Ni; Wed, 02 Mar 2022 19:39:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 30B073001EA;
-        Wed,  2 Mar 2022 20:39:37 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E14FA203C59BD; Wed,  2 Mar 2022 20:39:36 +0100 (CET)
-Date:   Wed, 2 Mar 2022 20:39:36 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ndesaulniers@google.com, rostedt@goodmis.org,
-        samitolvanen@google.com, x86@kernel.org
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-ID: <Yh/H+IyKnnC0w5TN@hirez.programming.kicks-ass.net>
-References: <20220224151322.892372059@infradead.org>
- <20220228150705.aab2d654b973109bab070ffe@kernel.org>
- <20220228232513.GH11184@worktop.programming.kicks-ass.net>
- <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
- <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
- <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
- <20220301191245.GI11184@worktop.programming.kicks-ass.net>
- <20220301200547.GK11184@worktop.programming.kicks-ass.net>
- <1646236764.vx04n8yp12.naveen@linux.ibm.com>
- <Yh/GXaqzDNfp93Jd@hirez.programming.kicks-ass.net>
+        Wed, 2 Mar 2022 14:42:29 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A2C4E1F;
+        Wed,  2 Mar 2022 11:41:45 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id h17so2479338plc.5;
+        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vjf7RPI2PKTb2kP9VHjBAcKqQnyTyYbCaciuvjfKLdQ=;
+        b=Dt6FS/uern+P5cz68+l/TVM/2ptRyGYPwDpkvrmWlwJNRyGimf1HFkiHrhNRYEqIr4
+         hMhStkL/cQSxSRpl8KEGVGFH13H5RlSm6EHsDf+7dwiFmollv0lCusMFh0W9nBB2iDlC
+         snYE7crbNCuDi/lkJMEbk21nFCiKV0GT1TsosUOJG1bOzqoXaMI0/sWvPKNZdmRNkCVT
+         Q0T/wzMMiQTi07QoQB4aBAjDOlNJEViAaVp2HGhBRm+Xy8k4SoN5t2NKH0fmJkDYnns8
+         pOKffa6ADQaF6G7FXCWwGo8mDCHKO2C5a9YVfs5hlI+qOOsr65lYAi+2DB2tb37iXAE4
+         9cqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vjf7RPI2PKTb2kP9VHjBAcKqQnyTyYbCaciuvjfKLdQ=;
+        b=KbNdBhRNHXDqLi2ppKTkUDmSBelYIG7qX8bN91Sanm5AO1tSK5AHA22euWnr96B1V0
+         8ZHZdxrRmtRF8CpZhNwiq1fRaJ2jxCaxSydiyj1KMmCdFNsonKzBx7bC0pX+cmcWd+6s
+         f2KJiZ+4IcwTzHenhOzH2drimbc0X1fGc6GaWzNUr/t7quUzyHE99sp4pE5UowTQ4dcz
+         Jo1MiFM/5bIlDq0DP8JnHvMpmpK5RE/lNQdXRXZotBvV5wutOU2wr3nMHC+BL+Swk2SQ
+         fQ8N5yBk7/6w5YE0mFXMR1jj9Z3SGTAM+ZTIcZESbt9lxfClaNaK6X01lwIDAs40oRcg
+         zVbw==
+X-Gm-Message-State: AOAM532wbw32UOj+doLPfBet/LKAI5U4cN9T8/EZafa4ECDVNVOD40jV
+        5RyvfXjksv0qVcF6Jydm1ns=
+X-Google-Smtp-Source: ABdhPJyEfgPOChikbUCIQi7LbvhSiDjtwB171jmFJnjCe8nZwlmuSPzXITLl3okBRlj/xYFJRcI9ow==
+X-Received: by 2002:a17:902:e807:b0:150:2801:86f8 with SMTP id u7-20020a170902e80700b00150280186f8mr27465791plg.64.1646250105307;
+        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
+        by smtp.gmail.com with ESMTPSA id bo10-20020a17090b090a00b001bc8405bd55sm5892624pjb.30.2022.03.02.11.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
+Date:   Wed, 2 Mar 2022 11:41:41 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+Message-ID: <20220302194141.c4gvqz5v4mmmbwsv@ast-mbp.dhcp.thefacebook.com>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-5-haoluo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh/GXaqzDNfp93Jd@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220225234339.2386398-5-haoluo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 08:32:45PM +0100, Peter Zijlstra wrote:
-> I wonder if you also want to tighten up on_func_entry? Wouldn't the
-> above suggest something like:
-> 
-> kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-> 					 bool *on_func_entry)
-> {
-> #ifdef PPC64_ELF_ABI_V2
-> 	unsigned long entry = ppc_function_entry((void *)addr) - addr;
-> 	*on_func_entry = !offset || offset == entry;
-> 	if (*on_func_entry)
-> 		offset = entry;
-> #else
-> 	*on_func_entry = !offset;
-> #endif
-> 	return (void *)(addr + offset);
-> }
+On Fri, Feb 25, 2022 at 03:43:34PM -0800, Hao Luo wrote:
+> diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
+> index e7c2276be33e..c73c7ab3680e 100644
+> --- a/include/linux/tracepoint-defs.h
+> +++ b/include/linux/tracepoint-defs.h
+> @@ -51,6 +51,7 @@ struct bpf_raw_event_map {
+>  	void			*bpf_func;
+>  	u32			num_args;
+>  	u32			writable_size;
+> +	u32			sleepable;
 
-One question though; the above seems to work for +0 or +8 (IIRC your
-instructions are 4 bytes each and the GEP is 2 instructions).
+It increases the size for all tracepoints. 
+See BPF_RAW_TP in include/asm-generic/vmlinux.lds.h
+Please switch writeable_size and sleepable to u16.
+>  
+> -static const struct bpf_func_proto *
+> -syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> +/* Syscall helpers that are also allowed in sleepable tracing prog. */
+> +const struct bpf_func_proto *
+> +tracing_prog_syscall_func_proto(enum bpf_func_id func_id,
+> +				const struct bpf_prog *prog)
+>  {
+>  	switch (func_id) {
+>  	case BPF_FUNC_sys_bpf:
+>  		return &bpf_sys_bpf_proto;
+> -	case BPF_FUNC_btf_find_by_name_kind:
+> -		return &bpf_btf_find_by_name_kind_proto;
+>  	case BPF_FUNC_sys_close:
+>  		return &bpf_sys_close_proto;
+> -	case BPF_FUNC_kallsyms_lookup_name:
+> -		return &bpf_kallsyms_lookup_name_proto;
+>  	case BPF_FUNC_mkdir:
+>  		return &bpf_mkdir_proto;
+>  	case BPF_FUNC_rmdir:
+>  		return &bpf_rmdir_proto;
+>  	case BPF_FUNC_unlink:
+>  		return &bpf_unlink_proto;
+> +	default:
+> +		return NULL;
+> +	}
+> +}
 
-But what do we want to happen for +4 ?
+If I read this correctly the goal is to disallow find_by_name_kind
+and lookup_name from sleepable tps. Why? What's the harm?

@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569584CA9B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E0F4CA9BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240693AbiCBPy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S239630AbiCBP7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiCBPy1 (ORCPT
+        with ESMTP id S231392AbiCBP67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:54:27 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421B249FB1
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646236423; x=1677772423;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qbujCBUUgtRWzXMjdt3ZZyu7YDdq0pA0BSSFCMRt2B4=;
-  b=SptAXb2QSiMgSqOdrLD71UIqof7qp9AjfSwjH1DxgkAw/mernDOzxuXM
-   2nhNfkC2jeiAxldCrJofHW5yo6GWwdKEqDpNiF2tcyr1Gt52rWEIRt/dQ
-   uFNyhnkRT87Gbjr91VbV9xdoJuq+BmlUMS3njTD2W9Ko6QvoG3t82kNPm
-   tt9xY0AaFbG0KMyv3eSpKO1SYquhSa+9EeMiBo4UF93SwbTjC3pYFeZ7E
-   gMDMXyO71CZf49SAJEU9iAugZQCTdps4OM7wNBwV/3GyVNBvL4aA0FV9C
-   xkA4/5eZ1e6oZAKtbEwg/HcBGPVnZMg/wn2IbG/sjKjCUUgsBZYFxuFoi
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,149,1643698800"; 
-   d="scan'208";a="147819436"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Mar 2022 08:53:42 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 2 Mar 2022 08:53:41 -0700
-Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 2 Mar 2022 08:53:40 -0700
-From:   <nicolas.ferre@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mihai Sain <mihai.sain@microchip.com>
-Subject: [PATCH] ARM: at91: add support in soc driver for new SAMA5D29
-Date:   Wed, 2 Mar 2022 16:53:29 +0100
-Message-ID: <20220302155329.27668-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 2 Mar 2022 10:58:59 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5649D4AE01
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:58:16 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so693090wmf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 07:58:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S7tBxL3zCrsmorspR7qPusrnc1TbsRYLggUh4+p6MEo=;
+        b=x7f7c2SCinYE0MhyzXnrqP7gjrhNRCE4IyOZQSela0bBvemhD+IbNSM+fPbXcMa8Rz
+         RUAvlekxqc9fQEFuKlfqxAVxZekoNANTDkXI1SdGwjelE03LqmuSltivVZmw0Ep5hSWs
+         ztLpCVRSCE7uQnRGcD0GV/9CC+bfmRpWqG/FuSf8qQn7IC0A2fzeehWs4lSWICvnf7iV
+         OFwl4xO0qAlqi+6VgrfyLEQbq1uscBTk0XYElKcO3NVKUstvQ1lZh++f84FUr0OLMm3S
+         ZxtCLYA16yDxYWvv4N80WLNnhtm6lNgGx7e8gv6Yz6sN470Eg0A8baKKgJM7zzwpzccA
+         8YTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S7tBxL3zCrsmorspR7qPusrnc1TbsRYLggUh4+p6MEo=;
+        b=4D/5ABYLF/uuZoKss2dDIeA9md4Se00bnVDszUbJd/WupLb77IZYS2tZYEexo5YOuS
+         5YWcaL/cKgIm8qIVNF4daRhCCEF1kBTb6aSdX3AD+zArvwI5UM6mitBzMhcjQxABAgrE
+         Xh31MB6VC7mb818uCy7RxhJxq/VhSp3dcq6KkD9J7UfFsldsOh+9wi08dkk9iwJl9ZSC
+         ec7qXFGcDR5Tz8enPCs4q/ty865jMNyCH1lLz96oZcnUbOeRlHb//WnutJ8IA9NfnIHT
+         2OO3e9b7116KbprhdsrFJ0VrlWc3/5gttEQ7biTSkTkxsDA1fFdQQQncv51DWIcSq7S6
+         yVgQ==
+X-Gm-Message-State: AOAM531j4WMl/TF/EVEi/oKL6Dv1Kyl9adXsgW76+Mu1wQ/OBaUbFmfn
+        VL3UAltg8EhCvfEuIJ0GTlszjw==
+X-Google-Smtp-Source: ABdhPJypg+b21zNLXqV+F0y7KcTaJmTZ+m1NyDelT51EGx+VrpgB4V48jUYw7ZH84y1/mFvFnaqTWQ==
+X-Received: by 2002:a05:600c:1c9c:b0:386:f4ed:3f59 with SMTP id k28-20020a05600c1c9c00b00386f4ed3f59mr189896wms.27.1646236694737;
+        Wed, 02 Mar 2022 07:58:14 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98? ([2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98])
+        by smtp.googlemail.com with ESMTPSA id l7-20020adfc787000000b001f049375350sm487067wrg.8.2022.03.02.07.58.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 07:58:13 -0800 (PST)
+Message-ID: <d1f82398-3f94-2f48-db92-d1fe487032c7@linaro.org>
+Date:   Wed, 2 Mar 2022 16:58:08 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     shruthi.sanil@intel.com, tglx@linutronix.de, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mgross@linux.intel.com, srikanth.thokala@intel.com,
+        lakshmi.bai.raja.subramanian@intel.com,
+        mallikarjunappa.sangannavar@intel.com
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-3-shruthi.sanil@intel.com>
+ <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
+ <Yh925VvqejDe2SR8@smile.fi.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <Yh925VvqejDe2SR8@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mihai Sain <mihai.sain@microchip.com>
+On 02/03/2022 14:53, Andy Shevchenko wrote:
+> On Tue, Mar 01, 2022 at 10:09:06PM +0100, Daniel Lezcano wrote:
+>> On 22/02/2022 10:56, shruthi.sanil@intel.com wrote:
+> 
+>>> +		/* Clear interrupt for periodic timer*/
+>>
+>> nit: comment format is:
+>>
+>> /*
+>>   * my comment
+>>   */
+>>
+>> One line comment format is usually for the network subsystem
+> 
+> Huh?
+> Any pointers to the documentation, please?
 
-Add detection of new SAMA5D29 by the SoC driver.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst#n598
 
-Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
- drivers/soc/atmel/soc.c | 3 +++
- drivers/soc/atmel/soc.h | 1 +
- 2 files changed, 4 insertions(+)
+Well actually it is for multi line, so I may have confused with these 
+one line comments.
 
-diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
-index a490ad7e090f..b2d365ae0282 100644
---- a/drivers/soc/atmel/soc.c
-+++ b/drivers/soc/atmel/soc.c
-@@ -156,6 +156,9 @@ static const struct at91_soc socs[] __initconst = {
- 	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
- 		 AT91_CIDR_VERSION_MASK, SAMA5D28C_LD2G_EXID_MATCH,
- 		 "sama5d28c 256MiB LPDDR2 SiP", "sama5d2"),
-+	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAMA5D29CN_EXID_MATCH,
-+		 "sama5d29", "sama5d2"),
- 	AT91_SOC(SAMA5D3_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
- 		 AT91_CIDR_VERSION_MASK, SAMA5D31_EXID_MATCH,
- 		 "sama5d31", "sama5d3"),
-diff --git a/drivers/soc/atmel/soc.h b/drivers/soc/atmel/soc.h
-index c3eb3c8f0834..2ecaa75b00f0 100644
---- a/drivers/soc/atmel/soc.h
-+++ b/drivers/soc/atmel/soc.h
-@@ -95,6 +95,7 @@ at91_soc_init(const struct at91_soc *socs);
- #define SAMA5D28C_LD2G_EXID_MATCH	0x00000072
- #define SAMA5D28CU_EXID_MATCH		0x00000010
- #define SAMA5D28CN_EXID_MATCH		0x00000020
-+#define SAMA5D29CN_EXID_MATCH		0x00000023
- 
- #define SAMA5D3_CIDR_MATCH		0x0a5c07c0
- #define SAMA5D31_EXID_MATCH		0x00444300
+On the other hand having one line comment telling what does the function 
+right after is not really useful. The function names are self-explanatory.
+
+>>> +		keembay_timer_clear_pending_int(tim_base);
+>>> +	} else {
+>>> +		/* Disable the timer for one shot timer */
+>>
+>> comment format
+>>
+>>> +		keembay_timer_disable(tim_base);
+>>> +	}
+> 
+
+
 -- 
-2.32.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

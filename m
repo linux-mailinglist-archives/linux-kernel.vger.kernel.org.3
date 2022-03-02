@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3540C4CAF0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752C4CAF0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiCBTsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S242337AbiCBTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242430AbiCBTsh (ORCPT
+        with ESMTP id S231847AbiCBTu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:48:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E0D3A718
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:47:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646250469;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ndR+qkKf8IiCmXwP6/0TLhJyNK+iAc9DAT0Oa/pgpY=;
-        b=bEQu/eDpX2c1362jIYKSMea7mUpwv4MazescCBcIAqXlJacy8FV8okttZfNbEle8fO/zKd
-        +9oBTyudOcFqQtKznL8qGWJSt8JwvuUqaUCoaZl4QqM4A7x3KhzLxW5seam0eFqFZZePZX
-        tsC5nLZSrIoCl5Y5atg+2VwrBXQYFHY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-WbOJVkcBMIi9ejUU8YJ7zg-1; Wed, 02 Mar 2022 14:47:44 -0500
-X-MC-Unique: WbOJVkcBMIi9ejUU8YJ7zg-1
-Received: by mail-wm1-f71.google.com with SMTP id p35-20020a05600c1da300b0038151176781so1219751wms.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:47:44 -0800 (PST)
+        Wed, 2 Mar 2022 14:50:58 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9A6D109B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:50:14 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id q11so2470982pln.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:50:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lKk3x8uXXjQyBVKUKuzhJBJZvtvNO106582p6u2NXrQ=;
+        b=qPmZtH8mC9Mer8Naw7XSShiYWujI0J3vVPBJ/6dwQB4LyhA5u35peVR+FBq1ELY2IR
+         +Cx++8ZLYtMKXKQV14ldIpbynCLAsbmV8Ru+4d1aoZBUgXHe2xLI32h1Y1K7od2DdCRx
+         u13TXaE4PIa8dFW7h+dBaan/ZeioxcWzhKQpw3rfBXqZmM6KtqkVNliFjl4MNz8iVbU4
+         qCvIVARH1cn29hoc6QbH6OfEOnVtNoSiWX2jCnc0iNY2U/V0hvV831YnCUMqCkLBMijz
+         z4Br0RgRDOdtR7P2N5CpVkuozPQisNtcpoQ5NS/xKwSdJHpGmCqK9qnOqpRyafP5kNuX
+         5keA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9ndR+qkKf8IiCmXwP6/0TLhJyNK+iAc9DAT0Oa/pgpY=;
-        b=R+J5HZfeib0gUhbHYvg5Lx9Zf8BdAbrV1HFFmxUZ2KGzfetmBvRcwRoAouri9mlNSp
-         7SI0Y2cabn4NjH2WwHpOTEPXsLUKurJKBvSMGJWzUuRzaywVrk1twWUbPZMYMg4skfHs
-         5kI9oeU4CCyBh5wNVTV7cSe/wTyvvmDevuWBprv9pYPlwhFsvlTt8uE4Ni95FUQT0hyI
-         kYteciqMJgx8qqAkjatooHDe60Xz6zr+oOz+HqYnlnO4YlfyvxUvtMv/ryQ4eSRKh5wf
-         n8xBOlWhtPUZZk/xPFndEmZmk8jDzGlKT6eAC0CilHwcDvLTAU2zCQodRjILexWWKj09
-         pvAw==
-X-Gm-Message-State: AOAM531X/sJ78Sli6HWt/YiOOrrsyMl88k+5QRHi970oITQnscoRTmDQ
-        yGhckpPMXrUYE/KWise9HA5zx+iA1Cpk5+Cz9u+P7fGLH7Fw5RWp5j2NvZk0klGMzRSjoZ0UkW/
-        zrQHbWFeJuPHk36xW0mkWGMhe
-X-Received: by 2002:adf:a749:0:b0:1ef:7d81:f4cd with SMTP id e9-20020adfa749000000b001ef7d81f4cdmr17935829wrd.133.1646250463116;
-        Wed, 02 Mar 2022 11:47:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytQkVIbt3RjmxG7srv9p6KdE7ADQdJ/WVQfRQmhaoGILBPTLLpENUyF/E4HqcmI+2MYZN+gw==
-X-Received: by 2002:adf:a749:0:b0:1ef:7d81:f4cd with SMTP id e9-20020adfa749000000b001ef7d81f4cdmr17935812wrd.133.1646250462893;
-        Wed, 02 Mar 2022 11:47:42 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm8935824wmp.44.2022.03.02.11.47.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 11:47:42 -0800 (PST)
-Message-ID: <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
-Date:   Wed, 2 Mar 2022 20:47:38 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lKk3x8uXXjQyBVKUKuzhJBJZvtvNO106582p6u2NXrQ=;
+        b=PK2xDhsleBcWTRVbQNFVjtqsyd1nwUfwnwL7dqTQubKyU4shHHfetY9n6NyHMTwXxr
+         1QiMYWLR+G01RL1JCaPJDiWGy1H8e5x51V6FHBPG6w5wW0bwswkoFYWme1T32EfKi2eM
+         6DxLiBoL5R873TsZs69XTDRpgTNozblQ84SSoh47Olq+8XbXrRBMvX6Aoe7GJJUNq4Pp
+         /+U9YXawk3hxE9d8Z+sttDjwa60brE5ljGx5I1I8CZT4lO+ch5lfO/nNGOCOf/LFR3tL
+         gtyHebBeZ356lJg1HJdaR9I2+44wARe59ozD2AdZOA5UMTeyBZSgdjjGXOP8QzZBUGk1
+         eZng==
+X-Gm-Message-State: AOAM533cT63XcFg1pQmK2zcAbY5I9F6bUxrwYGJhM50tsE0KqpE0Cpj3
+        tWwg/m2FLTVoU6x/ZS1ctV29iA==
+X-Google-Smtp-Source: ABdhPJyYNWFPT4igHZjd7zFnxDV0bSj59lBtVcBFxUip3++YhrRSCJhw3q9qoiVR+tVlOgLjHQ9VGA==
+X-Received: by 2002:a17:90a:6508:b0:1be:d59c:1f10 with SMTP id i8-20020a17090a650800b001bed59c1f10mr1412919pjj.229.1646250613939;
+        Wed, 02 Mar 2022 11:50:13 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id h2-20020a056a00170200b004e0f0c0e13esm21500641pfc.66.2022.03.02.11.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 11:50:13 -0800 (PST)
+Date:   Wed, 2 Mar 2022 19:50:09 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 02/28] KVM: x86/mmu: Check for present SPTE when
+ clearing dirty bit in TDP MMU
+Message-ID: <Yh/Kcawg0NIjUA+5@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-3-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-fbdev@vger.kernel.org, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-video@atrey.karlin.mff.cuni.cz,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Mack <daniel@zonque.org>
-References: <20220218093334.24830-1-msuchanek@suse.de>
- <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
- <20220302193846.GT3113@kunlun.suse.cz>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220302193846.GT3113@kunlun.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226001546.360188-3-seanjc@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 3/2/22 20:38, Michal Suchánek wrote:
-> Hello,
+On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> Explicitly check for present SPTEs when clearing dirty bits in the TDP
+> MMU.  This isn't strictly required for correctness, as setting the dirty
+> bit in a defunct SPTE will not change the SPTE from !PRESENT to PRESENT.
+> However, the guarded MMU_WARN_ON() in spte_ad_need_write_protect() would
+> complain if anyone actually turned on KVM's MMU debugging.
 > 
-> On Wed, Mar 02, 2022 at 08:31:25PM +0100, Thomas Zimmermann wrote:
->> Hi,
->>
->> is this ready to be merged?
+> Fixes: a6a0b05da9f3 ("kvm: x86/mmu: Support dirty logging for the TDP MMU")
+> Cc: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> The objections raised so far have been addressed in v4.
->
-> I think this is good to merge.
->
-
-The v4 patches looks good to me and have provided my Reviewed-by to all of them.
- 
-> Thanks
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 25148e8b711d..9357780ec28f 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1446,6 +1446,9 @@ static bool clear_dirty_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+>  			continue;
+>  
+> +		if (!is_shadow_present_pte(iter.old_spte))
+> +			continue;
+> +
+>  		if (spte_ad_need_write_protect(iter.old_spte)) {
+>  			if (is_writable_pte(iter.old_spte))
+>  				new_spte = iter.old_spte & ~PT_WRITABLE_MASK;
+> -- 
+> 2.35.1.574.g5d30c73bfb-goog
 > 
-> Michal
-> 
->>
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-

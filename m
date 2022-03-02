@@ -2,130 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADD64CAFF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1C64CAFF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244012AbiCBUda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S233970AbiCBUf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244113AbiCBUdZ (ORCPT
+        with ESMTP id S231263AbiCBUf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:33:25 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA2C5F96;
-        Wed,  2 Mar 2022 12:32:30 -0800 (PST)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K85Ny1nYfz67Nln;
-        Thu,  3 Mar 2022 04:31:14 +0800 (CST)
-Received: from lhreml714-chm.china.huawei.com (10.201.108.65) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 21:32:27 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml714-chm.china.huawei.com (10.201.108.65) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 20:32:26 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Wed, 2 Mar 2022 20:32:26 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     John Garry <john.garry@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v7 04/10] hisi_acc_vfio_pci: add new vfio_pci driver for
- HiSilicon ACC devices
-Thread-Topic: [PATCH v7 04/10] hisi_acc_vfio_pci: add new vfio_pci driver for
- HiSilicon ACC devices
-Thread-Index: AQHYLlsz/33ZeFvw7UOxSpAU81YIs6ysc3GAgAAY+FA=
-Date:   Wed, 2 Mar 2022 20:32:26 +0000
-Message-ID: <26885cd104714b748ab4337f6b924288@huawei.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
- <20220302172903.1995-5-shameerali.kolothum.thodi@huawei.com>
- <499b0d93-9352-b52f-0ee8-7dc7fd0bac5c@huawei.com>
-In-Reply-To: <499b0d93-9352-b52f-0ee8-7dc7fd0bac5c@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.91.128]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 2 Mar 2022 15:35:28 -0500
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA6D5AA73;
+        Wed,  2 Mar 2022 12:34:44 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id m6so4601304wrr.10;
+        Wed, 02 Mar 2022 12:34:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9E1Gw4+rs3O1SDqvrlAIeVXWi4IR/tSpwpoKpax7Rfo=;
+        b=i1GS/q5DuakYgNxrzDPFiAlgjHvyTjPS5+aDE36hZaMxjvIBQIiCn49VKe+arJT3Yh
+         /QA8n5tAqAn+Wiu3VwLxCXMA7mlKfHXhFrxUCao1ZaUltOFYjdJIpwoMICWx11F+1qPG
+         X2kUQGfYFFTBHqfoxmxoL21PuMTUJp7i+gSrmwtd5SQuBTOQ46rnKmmnROy6DqQK/03t
+         zGG7D9ckenKAh4Jq8IqlrziPGMs0mXNysmhF4jFeWeeb5nEVVlQDZXcpZkGPh/xkJBBj
+         A2ms1pMPEXG+0D5YEb9a8d/66nmStINsAzrC4re4RoqDqQeurbJrJa/pmpM5a74LcfPa
+         bxQQ==
+X-Gm-Message-State: AOAM532WjQnUaZbQKZPVzwnk0lBvGFVnKb9ij8zkCvhbaMYWxD31SD/0
+        GMfglv9Wq+vdUoquuxvLp0c=
+X-Google-Smtp-Source: ABdhPJxiHpcBYXTzhl1QAXBe6qiGYiDETVvLNqNe4BXPTQREY5EVhtRPyir85t8G8YMQW4rCh91Mvw==
+X-Received: by 2002:a5d:68c6:0:b0:1ed:e119:23e6 with SMTP id p6-20020a5d68c6000000b001ede11923e6mr24063358wrw.654.1646253282698;
+        Wed, 02 Mar 2022 12:34:42 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id l12-20020a5d6d8c000000b001efd2c071dbsm55423wrs.20.2022.03.02.12.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:34:42 -0800 (PST)
+Date:   Wed, 2 Mar 2022 20:34:40 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Message-ID: <20220302203440.inzt6z6mxhs56wab@liuwe-devbox-debian-v2>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+ <Yh8ia7nJNN7ISR1l@kroah.com>
+ <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
+ <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9obiBHYXJyeQ0KPiBT
-ZW50OiAwMiBNYXJjaCAyMDIyIDE5OjAzDQo+IFRvOiBTaGFtZWVyYWxpIEtvbG90aHVtIFRob2Rp
-IDxzaGFtZWVyYWxpLmtvbG90aHVtLnRob2RpQGh1YXdlaS5jb20+Ow0KPiBrdm1Admdlci5rZXJu
-ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1jcnlwdG9Admdl
-ci5rZXJuZWwub3JnDQo+IENjOiBsaW51eC1wY2lAdmdlci5rZXJuZWwub3JnOyBhbGV4LndpbGxp
-YW1zb25AcmVkaGF0LmNvbTsgamdnQG52aWRpYS5jb207DQo+IGNvaHVja0ByZWRoYXQuY29tOyBt
-Z3VydG92b3lAbnZpZGlhLmNvbTsgeWlzaGFpaEBudmlkaWEuY29tOyBMaW51eGFybQ0KPiA8bGlu
-dXhhcm1AaHVhd2VpLmNvbT47IGxpdWxvbmdmYW5nIDxsaXVsb25nZmFuZ0BodWF3ZWkuY29tPjsg
-WmVuZ3RhbyAoQikNCj4gPHByaW1lLnplbmdAaGlzaWxpY29uLmNvbT47IEpvbmF0aGFuIENhbWVy
-b24NCj4gPGpvbmF0aGFuLmNhbWVyb25AaHVhd2VpLmNvbT47IFdhbmd6aG91IChCKSA8d2FuZ3po
-b3UxQGhpc2lsaWNvbi5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjcgMDQvMTBdIGhpc2lf
-YWNjX3ZmaW9fcGNpOiBhZGQgbmV3IHZmaW9fcGNpIGRyaXZlciBmb3INCj4gSGlTaWxpY29uIEFD
-QyBkZXZpY2VzDQo+IA0KPiBPbiAwMi8wMy8yMDIyIDE3OjI4LCBTaGFtZWVyIEtvbG90aHVtIHdy
-b3RlOg0KPiA+ICtjb25maWcgSElTSV9BQ0NfVkZJT19QQ0kNCj4gPiArCXRyaXN0YXRlICJWRklP
-IFBDSSBzdXBwb3J0IGZvciBIaVNpbGljb24gQUNDIGRldmljZXMiDQo+ID4gKwlkZXBlbmRzIG9u
-IChBUk02NCAmJiBWRklPX1BDSV9DT1JFKSB8fCAoQ09NUElMRV9URVNUICYmIDY0QklUKQ0KPiAN
-Cj4gVGhpcyBtZWFucyB0aGF0IHdlIHdpbGwgaGF2ZSBISVNJX0FDQ19WRklPX1BDST15IGZvciBD
-T01QSUxFX1RFU1Q9eSBhbmQNCj4gNjRCSVQ9eSBhbmQgVkZJT19QQ0lfQ09SRT1uLCBidXQgLi4u
-DQo+IA0KPiA+ICsJaGVscA0KPiA+ICsJICBUaGlzIHByb3ZpZGVzIGdlbmVyaWMgUENJIHN1cHBv
-cnQgZm9yIEhpU2lsaWNvbiBBQ0MgZGV2aWNlcw0KPiA+ICsJICB1c2luZyB0aGUgVkZJTyBmcmFt
-ZXdvcmsuDQo+ID4gKw0KPiA+ICsJICBJZiB5b3UgZG9uJ3Qga25vdyB3aGF0IHRvIGRvIGhlcmUs
-IHNheSBOLg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZmaW8vcGNpL2hpc2lsaWNvbi9NYWtl
-ZmlsZQ0KPiBiL2RyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29uL01ha2VmaWxlDQo+ID4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLmM2NmIzNzgzZjJmOQ0KPiA+
-IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9kcml2ZXJzL3ZmaW8vcGNpL2hpc2lsaWNvbi9NYWtl
-ZmlsZQ0KPiA+IEBAIC0wLDAgKzEsNCBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVy
-OiBHUEwtMi4wLW9ubHkNCj4gPiArb2JqLSQoQ09ORklHX0hJU0lfQUNDX1ZGSU9fUENJKSArPSBo
-aXNpLWFjYy12ZmlvLXBjaS5vDQo+ID4gK2hpc2ktYWNjLXZmaW8tcGNpLXkgOj0gaGlzaV9hY2Nf
-dmZpb19wY2kubw0KPiA+ICsNCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92ZmlvL3BjaS9oaXNp
-bGljb24vaGlzaV9hY2NfdmZpb19wY2kuYw0KPiBiL2RyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29u
-L2hpc2lfYWNjX3ZmaW9fcGNpLmMNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4
-IDAwMDAwMDAwMDAwMC4uODEyOWMzNDU3YjNiDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBi
-L2RyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29uL2hpc2lfYWNjX3ZmaW9fcGNpLmMNCj4gPiBAQCAt
-MCwwICsxLDEwMCBAQA0KPiA+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1v
-bmx5DQo+ID4gKy8qDQo+ID4gKyAqIENvcHlyaWdodCAoYykgMjAyMSwgSGlTaWxpY29uIEx0ZC4N
-Cj4gPiArICovDQo+ID4gKw0KPiA+ICsjaW5jbHVkZSA8bGludXgvZGV2aWNlLmg+DQo+ID4gKyNp
-bmNsdWRlIDxsaW51eC9ldmVudGZkLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9maWxlLmg+DQo+
-ID4gKyNpbmNsdWRlIDxsaW51eC9oaXNpX2FjY19xbS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgv
-aW50ZXJydXB0Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1
-ZGUgPGxpbnV4L3BjaS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvdmZpby5oPg0KPiA+ICsjaW5j
-bHVkZSA8bGludXgvdmZpb19wY2lfY29yZS5oPg0KPiA+ICsNCj4gPiArc3RhdGljIGludCBoaXNp
-X2FjY192ZmlvX3BjaV9vcGVuX2RldmljZShzdHJ1Y3QgdmZpb19kZXZpY2UgKmNvcmVfdmRldikN
-Cj4gPiArew0KPiA+ICsJc3RydWN0IHZmaW9fcGNpX2NvcmVfZGV2aWNlICp2ZGV2ID0NCj4gPiAr
-CQljb250YWluZXJfb2YoY29yZV92ZGV2LCBzdHJ1Y3QgdmZpb19wY2lfY29yZV9kZXZpY2UsIHZk
-ZXYpOw0KPiA+ICsJaW50IHJldDsNCj4gPiArDQo+ID4gKwlyZXQgPSB2ZmlvX3BjaV9jb3JlX2Vu
-YWJsZSh2ZGV2KTsNCj4gPiArCWlmIChyZXQpDQo+ID4gKwkJcmV0dXJuIHJldDsNCj4gPiArDQo+
-ID4gKwl2ZmlvX3BjaV9jb3JlX2ZpbmlzaF9lbmFibGUodmRldik7DQo+IA0KPiAuLi4gdGhlcmUg
-ZG9lcyBub3Qgc2VlbSB0byBiZSBhIHN0dWIgZm9yIHZmaW9fcGNpX2NvcmVfZmluaXNoX2VuYWJs
-ZSgpLA0KPiBzbyBJIGRvbid0IHRoaW5rIHRoYXQgd2UgY29tcGlsZSB1bmRlciB0aGUgY29uZGl0
-aW9ucyBkZXNjcmliZWQuIEkgdGhpbmsNCj4gdGhhdCBISVNJX0FDQ19WRklPX1BDSSBzaG91bGQg
-YWx3YXlzIGRlcGVuZHMgb24gSElTSV9BQ0NfVkZJT19QQ0kNCj4gDQoNClRoYXQgbG9va3Mgcmln
-aHQuIEkgZG8gcmVtZW1iZXIgcnVubmluZyBhIGNvbXBpbGUgdGVzdCB3aXRoIHg4Nl82NC4gTWF5
-DQpiZSBWRklPX1BDSV9DT1JFIHdhcyBzb21laG93IHNlbGVjdGVkLg0KDQpJIHdpbGwgbWFrZSB0
-aGUgImRlcGVuZHMgb24gVkZJT19QQ0lfQ09SRSIgY29tbW9uLg0KDQpUaGFua3MsDQpTaGFtZWVy
-DQo=
+On Wed, Mar 02, 2022 at 10:49:15AM -0800, Iouri Tarassov wrote:
+> On 3/2/2022 3:53 AM, Wei Liu wrote:
+> > On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
+> > > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
+> > > > > > +struct dxgglobal *dxgglobal;
+> > > > > 
+> > > > > No, make this per-device, NEVER have a single device for your driver.
+> > > > > The Linux driver model makes it harder to do it this way than to do it
+> > > > > correctly.  Do it correctly please and have no global structures like
+> > > > > this.
+> > > > > 
+> > > > 
+> > > > This may not be as big an issue as you thought. The device discovery is
+> > > > still done via the normal VMBus probing routine. For all intents and
+> > > > purposes the dxgglobal structure can be broken down into per device
+> > > > fields and a global structure which contains the protocol versioning
+> > > > information -- my understanding is there will always be a global
+> > > > structure to hold information related to the backend, regardless of how
+> > > > many devices there are.
+> > > 
+> > > Then that is wrong and needs to be fixed.  Drivers should almost never
+> > > have any global data, that is not how Linux drivers work.  What happens
+> > > when you get a second device in your system for this?  Major rework
+> > > would have to happen and the code will break.  Handle that all now as it
+> > > takes less work to make this per-device than it does to have a global
+> > > variable.
+> > > 
+> >
+> > It is perhaps easier to draw parallel from an existing driver. I feel
+> > like we're talking past each other.
+> >
+> > Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
+> > like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
+> > units will be added to the list. I this the current code is following
+> > this model. dxgglobal fulfills the role of a list.
+> >
+> > Setting aside the question of whether it makes sense to keep a copy of
+> > the per-VM state in each device instance, I can see the code be changed
+> > to:
+> >
+> >     struct mutex device_mutex; /* split out from dxgglobal */
+> >     static LIST_HEAD(dxglist);
+> >     
+> >     /* Rename struct dxgglobal to struct dxgstate */
+> >     struct dxgstate {
+> >        struct list_head dxglist; /* link for dxglist */
+> >        /* ... original fields sans device_mutex */
+> >     }
+> >
+> >     /*
+> >      * Provide a bunch of helpers manipulate the list. Called in probe /
+> >      * remove etc.
+> >      */
+> >     struct dxgstate *find_dxgstate(...);
+> >     void remove_dxgstate(...);
+> >     int add_dxgstate(...);
+> >
+> > This model is well understood and used in tree. It is just that it
+> > doesn't provide much value in doing this now since the list will only
+> > contain one element. I hope that you're not saying we cannot even use a
+> > per-module pointer to quickly get the data structure we want to use,
+> > right?
+> >
+> > Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
+> > into the device object? I think that can be done too.
+> >
+> > The code can be changed as:
+> >
+> >     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
+> >     struct dxgstate { ... };
+> >
+> >     static int dxg_probe_vmbus(...) {
+> >
+> >         /* probe successfully */
+> >
+> > 	struct dxgstate *state = kmalloc(...);
+> > 	/* Fill in dxgstate with information from backend */
+> >
+> > 	/* hdev->dev is the device object from the core driver framework */
+> > 	dev_set_drvdata(&hdev->dev, state);
+> >     }
+> >
+> >     static int dxg_remove_vmbus(...) {
+> >         /* Normal stuff here ...*/
+> >
+> > 	struct dxgstate *state = dev_get_drvdata(...);
+> > 	dev_set_drvdata(..., NULL);
+> > 	kfree(state);
+> >     }
+> >
+> >     /* In all other functions */
+> >     void do_things(...) {
+> >         struct dxgstate *state = dev_get_drvdata(...);
+> >
+> > 	/* Use state in place of where dxgglobal was needed */
+> >
+> >     }
+> >
+> > Iouri, notice this doesn't change anything regarding how userspace is
+> > designed. This is about how kernel organises its data.
+> >
+> > I hope what I wrote above can bring our understanding closer.
+> >
+> > Thanks,
+> > Wei.
+> 
+> 
+> I can certainly remove dxgglobal and keep the  pointer to the global
+> state in the device object.
+> 
+
+No, no more global pointer needed. You just call dev_drv_setdata in the
+place that you assign to the global pointer.
+
+> This will require passing of the global pointer to all functions, which
+> need to access it.
+> 
+
+And in the place you need the global pointer, call dev_drv_getdata.
+
+> 
+> Maybe my understanding of the Greg's suggestion was not correct. I
+> thought the suggestion was
+> 
+> to have multiple /dev/dxgN devices (one per virtual compute device).
+> This would change how the user mode
+> 
+
+No. You still have only one /dev/dxg here.
+
+Wei.

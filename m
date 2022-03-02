@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F89F4CA6A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ADC4CA6A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiCBNx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S234152AbiCBNy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242551AbiCBNwL (ORCPT
+        with ESMTP id S242654AbiCBNww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:52:11 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE99C7928
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:51:05 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id ay7so1725392oib.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 05:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2Q5Z2Hl1hZvkszX7CBO5pUSGzGfZOYEQpwIVpdgtmQ=;
-        b=FP+bynfk1ysyDiNnkC9KgX9jCfH7/TJOU9n+U4V9HaQx0WW2tRg7/2VqPHHR1608ta
-         yyjeqmh+DBkf+OMWzqcVZarvvZ980C4trVBM4xU0FDThBiO0neJ1FzzmBTytFJYwv3fS
-         USg8AIF/UZLbOT8WqvIE8ONJtF4fsWVefn7e/CrgXkSWydtIfEGC5MuK1A+V6JJquMoV
-         +geNltCHATosYMoLnnCWkybTJe7n9Tdj+aua4tt9mFhKqfqwLrODV1XOScummJ7qvVZk
-         EGGSKeSbvqf6HYRK1E4ELzTHicwL8fmtJboFGfc7e7LJRJwlZZZPAugeuhS+GnKsguMI
-         47cw==
+        Wed, 2 Mar 2022 08:52:52 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F52C6254
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:51:24 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B0FFD3F5F5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:51:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646229073;
+        bh=sqmPaXdxxxGctLDB8wPzIBqrPvGA/5GcLbU1pcYO7kw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=YTaGRLEcpQu841LkpCD2mR+MnTa8an/n2pqeFYhrhzEnCkM/QYHuWmlJNWYhFx1gI
+         XU4YJcGqT9xgIsdFCzvLTlY/EKK+Jvn6L8/EiRtZd5bUGTbfSCfKfW26e66z7MHH36
+         YqY/EkGuzMb/8Pzzek4WTPflHw6E+vVxYd0hRgcJtX4HXOmPssHSuiZKp25M0zlG4S
+         COUMhzXmO8B2qca/wVGs5rehVdNb3aWK54UwKap4Yk2EEXgjrV8wsj35ayWdlj8dOD
+         kkfPXQjwVR6FKuQAUhV66V5LoAHXPjTZClzaZeVkC1feRwY1wDhPQILOjGJrmK4XP9
+         aWPculVQYAF+w==
+Received: by mail-ej1-f69.google.com with SMTP id c23-20020a170906925700b006d6e2797863so1010051ejx.14
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 05:51:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2Q5Z2Hl1hZvkszX7CBO5pUSGzGfZOYEQpwIVpdgtmQ=;
-        b=wLKNy1D1ZHotw0E4hhGkQJUXg8izBkaMHpopBbNZ+ZgwAd2kS8NgB8P0DWcguJZhFn
-         /8nO1WMJU1ueAvk/C300oJU5upanD0NkGO70pR2iIqDh1tpjfdWdn1z353Vw5bPvgC3h
-         3YlaihKky7a/OcT+2CPVbXaHN81MH39k1VzTF10IqOSZ9ARF0GFPK7tmoMgHrm4QROHe
-         pQjUBb+tfo38kJ2rPsKwS9O8swQzo/pKfAxcxL3uVEPDapS/UnqGDrriuUnxEfHJNlPf
-         cJpjkut/qZExQCuDUODpSVo44CUi82uX9GIM1WC0PB7DGbRuABc6wx3b4iLhdi5CENCa
-         KJ2A==
-X-Gm-Message-State: AOAM531ZzODsUy5v4ckl+wBPwkIDMLWD1A2183xOL6vsBpIQYKCHoLHj
-        8S0ovOq3JC7+5GOhReMMTR93vbRxYz/kAWfzbwPu+Q==
-X-Google-Smtp-Source: ABdhPJzWCeqifSSqBVqJlgBL9zwAjMuw5sDzwl4AbSYO0OZK2rcQTuXD6jvm9whXhzb/jLvChByxTFX8NH+IPcKXymo=
-X-Received: by 2002:a05:6808:ecd:b0:2cd:90e5:25cb with SMTP id
- q13-20020a0568080ecd00b002cd90e525cbmr17830278oiv.128.1646229064999; Wed, 02
- Mar 2022 05:51:04 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sqmPaXdxxxGctLDB8wPzIBqrPvGA/5GcLbU1pcYO7kw=;
+        b=w8V7z+EsnNusNn7FDEow5qJ1eVtTwID6b4e7IJ63JArBHSyEVr6oh52Ytm4yKCoojY
+         qkkb4TLqHIJMH/hWL2hLSJu52W2USZG+gXhuC0sUzvbPHhlHcdTyetl7zGfqcQDjm/Gr
+         9vjDgp+R96v4P2gpV0O7Am7ntiCfFF54U37s5oJZmBaki7OIKBFKXToNqvmHG6vJ2+l9
+         fG+5/99TACtq4QBLxWOd8YXsS9ZMy4Jflfv8X4M8zyxihxLrLke2TedLmLBULgWBkTRm
+         SJviXGjW+R1pc9sLiQaJAMJj140+rIIDOf2PQ+ko1g4Zn9ppuIwXPafB37LRS/EGZ1g3
+         wGpw==
+X-Gm-Message-State: AOAM53162v7inqSWOXpPMdtfQDkvYK72E+EnvTBTAbrpUTfAkx79Da0O
+        ql8EXwRmCytk8kObHQc27YqxNqAVyUUvN7rSoaDxAujjJ6K4dkFESaXroOMrCO22MNJnjG53E5c
+        XgHa8ru5Ul9APDlwF1pTXlelGFbS3E3n9cVuaiCKQyA==
+X-Received: by 2002:aa7:cc02:0:b0:411:487e:36fe with SMTP id q2-20020aa7cc02000000b00411487e36femr29496881edt.338.1646229073281;
+        Wed, 02 Mar 2022 05:51:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxX4GrcpOZdSJtCi/COSwNz1OLfF4qe+Oy6hmPfNQADJxnPOKAqrg9txmB1CGt/uFrFMkDGjQ==
+X-Received: by 2002:aa7:cc02:0:b0:411:487e:36fe with SMTP id q2-20020aa7cc02000000b00411487e36femr29496856edt.338.1646229073047;
+        Wed, 02 Mar 2022 05:51:13 -0800 (PST)
+Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm8402272edt.70.2022.03.02.05.51.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 05:51:12 -0800 (PST)
+Message-ID: <2b1f7c07-3cc9-9637-4621-3c5e0e09a65e@canonical.com>
+Date:   Wed, 2 Mar 2022 14:51:11 +0100
 MIME-Version: 1.0
-References: <0000000000009ee0ca05d9288b83@google.com> <5fb25913-c4be-123-b013-b76fc37994@google.com>
-In-Reply-To: <5fb25913-c4be-123-b013-b76fc37994@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 2 Mar 2022 14:50:53 +0100
-Message-ID: <CACT4Y+Z6u8vRVpqsKmvNmCo6MU-rBrrhKfEsrkEKTD-6p6oZdw@mail.gmail.com>
-Subject: Re: [syzbot] kernel BUG in hugepage_add_anon_rmap
-To:     Hugh Dickins <hughd@google.com>
-Cc:     syzbot <syzbot+d7ed29a6231d3747fb31@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, willy@infradead.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add QCOM SM6125 display clock
+ bindings
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220226200911.230030-1-marijn.suijten@somainline.org>
+ <20220226200911.230030-3-marijn.suijten@somainline.org>
+ <ea5d34c6-fe75-c096-d5b2-6a327c9d0ae5@canonical.com>
+ <62ebb074-b8de-0dc3-2bbc-e43dca9d2ced@linaro.org>
+ <05310308-b0ff-56a0-83ac-855b1b795936@canonical.com>
+ <20220302125417.iu52rvdxrmo25wwt@SoMainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220302125417.iu52rvdxrmo25wwt@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,87 +102,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Mar 2022 at 18:31, 'Hugh Dickins' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> On Tue, 1 Mar 2022, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    196d330d7fb1 Add linux-next specific files for 20220222
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15b0618a700000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=45b71d0aea81d553
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=d7ed29a6231d3747fb31
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+d7ed29a6231d3747fb31@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > kernel BUG at mm/rmap.c:2330!
-> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 1 PID: 4289 Comm: syz-executor.0 Not tainted 5.17.0-rc5-next-20220222-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:hugepage_add_anon_rmap+0x1f5/0x240 mm/rmap.c:2330
->
-> Already fixed in next-20220301 by latest version (16f06327291e)
-> of "mm/migrate: Convert remove_migration_ptes() to folios".
+On 02/03/2022 13:54, Marijn Suijten wrote:
+> On 2022-02-28 10:23:19, Krzysztof Kozlowski wrote:
+>> On 27/02/2022 22:43, Dmitry Baryshkov wrote:
+>>> On 27/02/2022 13:03, Krzysztof Kozlowski wrote:
+>>>> On 26/02/2022 21:09, Marijn Suijten wrote:
+>>>>> From: Martin Botka <martin.botka@somainline.org>
+>>>>>
+>>>>> Add device tree bindings for display clock controller for
+>>>>> Qualcomm Technology Inc's SM6125 SoC.
+>>>>>
+>>>>> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>>>>> ---
+>>>>>   .../bindings/clock/qcom,dispcc-sm6125.yaml    | 87 +++++++++++++++++++
+>>>>>   .../dt-bindings/clock/qcom,dispcc-sm6125.h    | 41 +++++++++
+>>>>>   2 files changed, 128 insertions(+)
+>>>>>   create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
+>>>>>   create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm6125.h
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..3465042d0d9f
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
+>>>>> @@ -0,0 +1,87 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6125.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Qualcomm Display Clock Controller Binding for SM6125
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Martin Botka <martin.botka@somainline.org>
+>>>>> +
+>>>>> +description: |
+>>>>> +  Qualcomm display clock control module which supports the clocks and
+>>>>> +  power domains on SM6125.
+>>>>> +
+>>>>> +  See also:
+>>>>> +    dt-bindings/clock/qcom,dispcc-sm6125.h
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - qcom,sm6125-dispcc
+>>>>> +
+>>>>> +  clocks:
+>>>>> +    items:
+>>>>> +      - description: Board XO source
+>>>>> +      - description: Byte clock from DSI PHY0
+>>>>> +      - description: Pixel clock from DSI PHY0
+>>>>> +      - description: Pixel clock from DSI PHY1
+>>>>> +      - description: Link clock from DP PHY
+>>>>> +      - description: VCO DIV clock from DP PHY
+>>>>> +      - description: AHB config clock from GCC
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    items:
+>>>>> +      - const: bi_tcxo
+>>>>> +      - const: dsi0_phy_pll_out_byteclk
+>>>>> +      - const: dsi0_phy_pll_out_dsiclk
+>>>>> +      - const: dsi1_phy_pll_out_dsiclk
+>>>>> +      - const: dp_phy_pll_link_clk
+>>>>> +      - const: dp_phy_pll_vco_div_clk
+>>>>> +      - const: cfg_ahb_clk
+>>>>> +
+>>>>> +  '#clock-cells':
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  '#power-domain-cells':
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +  - clocks
+>>>>> +  - clock-names
+>>>>> +  - '#clock-cells'
+>>>>> +  - '#power-domain-cells'
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    #include <dt-bindings/clock/qcom,rpmcc.h>
+>>>>> +    #include <dt-bindings/clock/qcom,gcc-sm6125.h>
+>>>>> +    clock-controller@5f00000 {
+>>>>> +      compatible = "qcom,sm6125-dispcc";
+>>>>> +      reg = <0x5f00000 0x20000>;
+>>>>> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+>>>>> +               <&dsi0_phy 0>,
+>>>>> +               <&dsi0_phy 1>,
+>>>>> +               <0>,
+>>>>
+>>>> This does not look like a valid phandle. This clock is required, isn't it?
+> 
+> I remember it being used like this before, though upon closer inspection
+> only qcom,gcc-msm8998.yaml uses it as example.
+> 
+> The clock should be optional, in that case it is perhaps desired to omit
+> it from clock-names instead, or pretend there's a `dsi1_phy 1`?
 
-Let's tell syzbot so that it will report new bugs:
+I propose to omit it.
 
-#syz fix: mm/migrate: Convert remove_migration_ptes() to folios
+> 
+>>>
+>>> Not, it's not required for general dispcc support.
+>>> dispcc uses DSI and DP PHY clocks to provide respective pixel/byte/etc 
+>>> clocks. However if support for DP is not enabled, the dispcc can work 
+>>> w/o DP phy clock. Thus we typically add 0 phandles as placeholders for 
+> 
+> Is there any semantic difference between omitting the clock from DT (in
+> clocks= /and/ clock-names=) or setting it to a 0 phandle?
+
+Yes, there is. The DT validation does not check the meaning behind
+values, so there is no difference between valid phandle/ID and 0. While
+not having a clock at all is spotted by validation.
+
+> 
+>>> DSI/DP clock sources and populate them as support for respective 
+>>> interfaces gets implemented.
+>>>
+>>
+>> Then the clock is optional, isn't it? While not modeling it as optional?
+> 
+> It looks like this should be modelled using minItems: then, and
+> "optional" text/comment? Other clocks are optional as well, we don't
+> have DSI 1 in downstream SM6125 DT sources and haven't added the DP PLL
+> in our to-be-upstreamed mainline tree yet.
+
+Are they really optional? Or maybe they should not even be provided?
 
 
-> > Code: 89 ef e8 6e ad f8 ff 0f 0b e8 77 b2 c4 ff 48 83 eb 01 e9 a6 fe ff ff e8 69 b2 c4 ff 48 83 eb 01 e9 ff fe ff ff e8 5b b2 c4 ff <0f> 0b e8 54 b2 c4 ff 0f 0b e8 4d b2 c4 ff 49 8d 6c 24 ff eb b4 48
-> > RSP: 0018:ffffc9000fa8f9b8 EFLAGS: 00010216
-> > RAX: 0000000000002b78 RBX: 0000000000000000 RCX: ffffc90003bd1000
-> > RDX: 0000000000040000 RSI: ffffffff81b47f75 RDI: 0000000000000003
-> > RBP: ffffea0001008040 R08: 0000000000000000 R09: 0000000000000000
-> > R10: ffffffff81b47eab R11: 0000000000000000 R12: ffff88801e231210
-> > R13: 0000000020400000 R14: ffff8880738f8700 R15: 0000000000000000
-> > FS:  00007f1a19594700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f33cc0df300 CR3: 000000001ca70000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  remove_migration_pte+0x5fd/0xc50 mm/migrate.c:234
-> >  rmap_walk_anon+0x44b/0x9e0 mm/rmap.c:2236
-> >  rmap_walk+0x92/0xd0 mm/rmap.c:2302
-> >  remove_migration_ptes mm/migrate.c:271 [inline]
-> >  unmap_and_move_huge_page mm/migrate.c:1259 [inline]
-> >  migrate_pages+0x1709/0x4030 mm/migrate.c:1379
-> >  do_mbind mm/mempolicy.c:1334 [inline]
-> >  kernel_mbind+0x4d7/0x7d0 mm/mempolicy.c:1481
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f1a18489059
-> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f1a19594168 EFLAGS: 00000246 ORIG_RAX: 00000000000000ed
-> > RAX: ffffffffffffffda RBX: 00007f1a1859c030 RCX: 00007f1a18489059
-> > RDX: 0000000000000000 RSI: 0000000000800000 RDI: 0000000020001000
-> > RBP: 00007f1a184e308d R08: 0000000000000000 R09: 0000000000000002
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffe5da8cc9f R14: 00007f1a19594300 R15: 0000000000022000
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:hugepage_add_anon_rmap+0x1f5/0x240 mm/rmap.c:2330
-> > Code: 89 ef e8 6e ad f8 ff 0f 0b e8 77 b2 c4 ff 48 83 eb 01 e9 a6 fe ff ff e8 69 b2 c4 ff 48 83 eb 01 e9 ff fe ff ff e8 5b b2 c4 ff <0f> 0b e8 54 b2 c4 ff 0f 0b e8 4d b2 c4 ff 49 8d 6c 24 ff eb b4 48
-> > RSP: 0018:ffffc9000fa8f9b8 EFLAGS: 00010216
-> > RAX: 0000000000002b78 RBX: 0000000000000000 RCX: ffffc90003bd1000
-> > RDX: 0000000000040000 RSI: ffffffff81b47f75 RDI: 0000000000000003
-> > RBP: ffffea0001008040 R08: 0000000000000000 R09: 0000000000000000
-> > R10: ffffffff81b47eab R11: 0000000000000000 R12: ffff88801e231210
-> > R13: 0000000020400000 R14: ffff8880738f8700 R15: 0000000000000000
-> > FS:  00007f1a19594700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f33cc0df300 CR3: 000000001ca70000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+Best regards,
+Krzysztof

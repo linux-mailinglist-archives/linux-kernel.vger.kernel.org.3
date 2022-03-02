@@ -2,92 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8CA4C99CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 01:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC584C99CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 01:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbiCBAVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 19:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S238750AbiCBAXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 19:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiCBAVP (ORCPT
+        with ESMTP id S230090AbiCBAXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 19:21:15 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A1337A3D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 16:20:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646180434; x=1677716434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=98dQ6Q9QcfcsxeOBu96Yxqiy5CHpmxJunOMgXVgmFu8=;
-  b=QbytN07tlqoC2gtGiEthqs/aYY6HhQTCMDwSNlirqZWM6vHx9L2cvBd8
-   hHpN/VJAriirzf/WKL5SLfQGafn/BZd0Pw4OA+UKpY1TSodDPL5LhvlrY
-   4V4nDx1Jfddu4h0p4n8fYN+gQP8WtjUDfsznBkAfUyLbonjgCoO45EodU
-   To4vr4AFfks89KR/kY/yqlV4RdsSm9vl3SS2o0WMMDBiqi0rYwaG2+hSx
-   IOk7jMxnFAv64+SS4WqL+WvMq2mKwPnfS5Yq/TEZLNkzwhRea95vY+g5d
-   BaXf1lY7qJLdaisH1dKPBUcTEo6NenD4SUyGyekflP+cljfT9mIhkKTgr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="233889531"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="233889531"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 16:20:28 -0800
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="630201468"
-Received: from bklinvil-mobl.amr.corp.intel.com (HELO localhost) ([10.212.48.220])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 16:20:27 -0800
-Date:   Tue, 1 Mar 2022 16:20:26 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 39/44] memremap_pages: Add memremap.pks_fault_mode
-Message-ID: <Yh64SuAXpqMt7RFG@iweiny-desk3>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-40-ira.weiny@intel.com>
- <15f8b55bdb85130a8036332f850a561447681203.camel@intel.com>
+        Tue, 1 Mar 2022 19:23:01 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5653E0EE;
+        Tue,  1 Mar 2022 16:22:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7ZYv1ChRz4xcq;
+        Wed,  2 Mar 2022 11:22:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646180533;
+        bh=dAP0ZGftN0DtRSKRVIj+eVXmzd7nsxKydwHZQ5ZXAdU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JhtfPjOE5b6myYSkCUuDgBHozNF6u6Nrfrz3jV1YxZRWd4sUKgmS4p3bzc8jqLaAo
+         /pK1SbTPgOPmYzPo7/OiYN9xn1jL/5eFpDUnbcfA05V5q9+SK4eHFbKweng01Y84Y2
+         h1sSGahRk6oYEgpye91jCIp0HOkgvxovcpEm+2vHef8u8ffAIR+GNj8AeHr9Vwpk2f
+         HVyH3Bc6FCFI5eGfQLipZjcn6zUjvLGZuhDY8TbtOGf9Jf37KjolXnH2CGynCXhiqB
+         Y0/mE18GssuBlS405k/rUiKRQ51hYCa55fgdQ2sxOF3kUSGJ3glqSNmOAz8ZC9GlPI
+         k/ercW7sE0zwA==
+Date:   Wed, 2 Mar 2022 11:22:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Dust Li <dust.li@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220302112209.355def40@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15f8b55bdb85130a8036332f850a561447681203.camel@intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/3rw2I3JrDfSWQiBsGkIt2sO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 05:16:26PM -0800, Edgecombe, Rick P wrote:
-> On Thu, 2022-01-27 at 09:55 -0800, ira.weiny@intel.com wrote:
-> > +static int param_get_pks_fault_mode(char *buffer, const struct
-> > kernel_param *kp)
-> > +{
-> > +       int ret = 0;
-> This doesn't need to be initialized.
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, fixed,
-Ira
+Hi all,
 
-> 
-> > +
-> > +       switch (pks_fault_mode) {
-> > +       case PKS_MODE_STRICT:
-> > +               ret = sysfs_emit(buffer, "strict\n");
-> > +               break;
-> > +       case PKS_MODE_RELAXED:
-> > +               ret = sysfs_emit(buffer, "relaxed\n");
-> > +               break;
-> > +       default:
-> > +               ret = sysfs_emit(buffer, "<unknown>\n");
-> > +               break;
-> > +       }
-> > +
-> > +       return ret;
-> > +}
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  net/smc/af_smc.c
+
+between commit:
+
+  4d08b7b57ece ("net/smc: Fix cleanup when register ULP fails")
+
+from the net tree and commit:
+
+  462791bbfa35 ("net/smc: add sysctl interface for SMC")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/smc/af_smc.c
+index 284befa90967,6447607675fa..000000000000
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@@ -3087,14 -3287,20 +3293,22 @@@ static int __init smc_init(void
+  	rc =3D tcp_register_ulp(&smc_ulp_ops);
+  	if (rc) {
+  		pr_err("%s: tcp_ulp_register fails with %d\n", __func__, rc);
+ -		goto out_sock;
+ +		goto out_ib;
+  	}
+ =20
++ 	rc =3D smc_sysctl_init();
++ 	if (rc) {
++ 		pr_err("%s: sysctl_init fails with %d\n", __func__, rc);
++ 		goto out_ulp;
++ 	}
++=20
+  	static_branch_enable(&tcp_have_smc);
+  	return 0;
+ =20
++ out_ulp:
++ 	tcp_unregister_ulp(&smc_ulp_ops);
+ +out_ib:
+ +	smc_ib_unregister_client();
+  out_sock:
+  	sock_unregister(PF_SMC);
+  out_proto6:
+
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeuLEACgkQAVBC80lX
+0GxXxAf/c3JLhvQZbbd21vYirxRsH8mlecMX7Qi1f3zpj/Dp+5yAgjmtWcOTlhkh
+dXB6ZkWwv5DoZOtrFZKjx/ron4dtrDlkzUnI1bO3Mq9q5UEph4h0NK2g/5AOt2dq
+UEPQ6hjAGVJTT5q6dsuisnkELd5dsgVL7B9d2+uppODO78/mzk1BYJsN5YXwWVNw
+cKtY3k850jiKnZYGXL2G7cKrKSE4J7gYD5GblXG3ILB/gZlJ5jXG4dSDniOPUgXg
+Id+a94mxqGWEFYC/qny8A3Pb2pv6vYdEvdqYyjrVGh4XG6slIpvtPZuZscWRPs7d
+HdC5hxhKAMDKfgLqdnVGNue5ja2ybQ==
+=m+8O
+-----END PGP SIGNATURE-----
+
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO--

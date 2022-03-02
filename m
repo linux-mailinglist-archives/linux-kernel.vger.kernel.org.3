@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1EF4CB1B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C26A4CB1B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242646AbiCBWEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S243115AbiCBWFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238838AbiCBWEo (ORCPT
+        with ESMTP id S238838AbiCBWFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:04:44 -0500
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9100CC9920;
-        Wed,  2 Mar 2022 14:04:00 -0800 (PST)
-Received: from [45.44.224.220] (port=57060 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1nPX4h-000136-2O; Wed, 02 Mar 2022 17:03:59 -0500
-Message-ID: <a549f23857b327131c621dbc9a029a91401967c8.camel@trillion01.com>
-Subject: Re: [PATCH v4 2/2] io_uring: Add support for napi_busy_poll
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     Hao Xu <haoxu@linux.alibaba.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 02 Mar 2022 17:03:58 -0500
-In-Reply-To: <81a915d3-cf5f-a884-4649-704a5cf26835@linux.alibaba.com>
-References: <cover.1646142288.git.olivier@trillion01.com>
-         <aa38a667ef28cce54c08212fdfa1e2b3747ad3ec.1646142288.git.olivier@trillion01.com>
-         <29bad95d-06f8-ea7c-29fe-81e52823c90a@linux.alibaba.com>
-         <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
-         <4af380e8-796b-2dd6-4ebc-e40e7fa51ce1@linux.alibaba.com>
-         <81a915d3-cf5f-a884-4649-704a5cf26835@linux.alibaba.com>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.4 
+        Wed, 2 Mar 2022 17:05:18 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23CDC992D;
+        Wed,  2 Mar 2022 14:04:34 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id u16so3081038pfg.12;
+        Wed, 02 Mar 2022 14:04:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vBbzqL5wzXDyYewKK9YMLC34hfMZMISsP5DKji4BCmA=;
+        b=RusE2PCgcFMfdKKim3gWHJLEn0607dTkVampVLsN1xn9JkifVakSEZTZ4Fh+iJqm4T
+         FoyEwSCoemDQDoEkLVvfiYETQXXn1I2d0mKG/futFc2g8P5EZDHmncUZex3ff7VH8IRi
+         tJoui5HpHjfqVlj9zlKpTRTF58kQoBd1rqujKbKgNGYo92y1wnhxOVHZfLzBTBuESso3
+         bz4wQrMQ1TkSOZU6sReOVKiuoTeu8oC1pUwoYn1kKiremw8PhZ0PEp2NQRXstNLOi0DK
+         aH3l5OYhubb7SjTGZhXCP1bdSDO0Pnz9rPALQgNapYJXhP+RXbpjCpn89oqWQLx8JgiB
+         Vwew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vBbzqL5wzXDyYewKK9YMLC34hfMZMISsP5DKji4BCmA=;
+        b=FZIQtEKQwZnnAP10o9WHGlwYAW9WOYiCgw6Z5/mUnl6iDoRJsRUMcD+5pnmTCpP/kF
+         VzwxUhrByW5s+cCw4sNr4fjbPhlEls7URkPHrLBAW9yx9rEhq25qyJTmysl5pnVtPqr3
+         ksREFP3fKjJq194WConehnIKYAndPHZVYdtNyXwjsHcqFvJZUBZaD9GACG+IhAm5OAqH
+         WACkHQsAtPA1SK1WYqX/9zcu7dGWd8IIvpKBU8BJj3X0GZt/5fZ4aArDeXXSmcL4Kbay
+         ZqxsSwuqw2t9dGsFuy//b4U7fwGocXq/t/JGA8jeqjegQWYtyyBkfv/nlOuRbd8J66O0
+         HJZA==
+X-Gm-Message-State: AOAM533pY2lRfssbFaZz0xTRtI3VaKsyWYEto19Uvc/R5b4uZLEhnpK0
+        CGt7mHuxJhplF8qNvxXoBE8=
+X-Google-Smtp-Source: ABdhPJzBawCCDj6DACutvBz+CF09wvWCPc2LPZ2M+2c/U341UijhRcpLO4Eq8QSmRI0cXlQgii98hg==
+X-Received: by 2002:a63:5d0a:0:b0:377:1ad7:5be1 with SMTP id r10-20020a635d0a000000b003771ad75be1mr23721319pgb.576.1646258673997;
+        Wed, 02 Mar 2022 14:04:33 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:f1fc:2949:1f18:b6ff])
+        by smtp.gmail.com with ESMTPSA id k7-20020a6555c7000000b0034e101ca75csm130304pgs.6.2022.03.02.14.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:04:33 -0800 (PST)
+Date:   Wed, 2 Mar 2022 14:04:30 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     William Mahon <wmahon@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        William Mahon <wmahon@google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
+Subject: Re: [PATCH v3] HID: Add mapping for KEY_DICTATE
+Message-ID: <Yh/p7qOHh3cqANMf@google.com>
+References: <20220218215531.1.I5dbf50eb1a7a6734ee727bda4a8573358c6d3ec0@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218215531.1.I5dbf50eb1a7a6734ee727bda4a8573358c6d3ec0@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-02 at 14:38 +0800, Hao Xu wrote:
-> > > 
-> > > 
-> > > If that is what you suggest, what would this info do for the
-> > > caller?
-> > > 
-> > > IMHO, it wouldn't help in any way...
-> > 
-> > Hmm, I'm not sure, you're probably right based on that ENOMEM here 
-> > shouldn't
-> > 
-> > fail the arm poll, but we wanna do it, we can do something like
-> > what 
-> > we do for
->                              ^---but if we wanna do it
-My position is that being able to perform busy poll is a nice to have
-feature if the necessary resources are available. If not the request
-will still be handled correctly so nothing special should be done in
-case of mem alloc problem.
+Hi William,
 
-but fair enough, lets wait for Jens and Pavel to chime him if they
-would like to see something to be done here.
+On Fri, Feb 18, 2022 at 09:59:08PM +0000, William Mahon wrote:
+> Numerous keyboards are adding dictate keys which allows for text
+> messages to be dictated by a microphone.
+> 
+> This patch adds a new key definition KEY_DICTATE and maps 0x0c/0x0d8
+> usage code to this new keycode. Additionally hid-debug is adjusted to
+> recognize this new usage code as well.
+> 
+> Signed-off-by: William Mahon <wmahon@google.com>
 
-Beside that, all I need to know is if napi_list needs to be protected
-in __io_sq_thread with regards to io worket threads to start working on
-a v5.
+Was about to apply but scripts are complaining about difference between
+from and signed-of-by addresses. Could you please make them match?
 
-I'll look into this question too...
+Thanks.
 
+-- 
+Dmitry

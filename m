@@ -2,176 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A254CB362
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CD84CB35D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiCBX4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 18:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiCBXz6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229765AbiCBXz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 2 Mar 2022 18:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229738AbiCBXz5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Mar 2022 18:55:57 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995A413110E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:55:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD770131112
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:55:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646265314; x=1677801314;
+  t=1646265313; x=1677801313;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RYhnBVg37Hvg/itaelH1cM2fBftR4o5ezh8YvKEbl2U=;
-  b=MHEgnyq38bHckbwLq3SQ6wGoWziGZDmGaEuc21jLamq23VBgedrl0Tkw
-   eoAjtbquDdggNY679/zqXNVposQxHPD711qfbtaiiTk+MdX0x1KvddzuP
-   E+yv6/I6Tibhri5TLlToD+kdLcZ7K170Rt8iycCKo+sRGVcr2QCxXF0mr
-   9yhS61YVVh4i6rkLzA3yXi7LFGRPrQB8gGWDMZHOvEQ7AZPPnOIeAY6Ln
-   LMJSyK7riajONWCb7eH4e7wYcZxY1wXgKSZTGs929XYZMBTOt1zxLBiHp
-   YIdzEYB7QK7EaMEbUuIuMFpBKTKU/vdiPyodEC9HPlf/TSwxHF9UXb5XP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233496797"
+  bh=MhUQaja/NcVj8kw9fjRzNWwu1H0JU2FYXWCdvlaoY6k=;
+  b=HOIjDO/CCbUYYArHDX1kr0EGRursI1wzvRYeSdYstiodv21KN8YYRBxI
+   A+OpneKVVd4xaYDMCSq04hkisl4rG1LxzwRu/rGjD+g487P2r1RhQJkmL
+   s9dfQ3n3MjlqYYx+QcEjnOQZxHsVTS5avtCfSiGJy2GDlNSyj4+V6FCtc
+   MTYCU+lDz99fyixNhWky8jJKPQ8ctmgmRwiP0l9g20emzgilTTYdZ5RZQ
+   biwTbnA+41bL0OR1dYDIPGW7px4b9JUQ2qUfnkSdEDQYzmISSV6rEbMRh
+   EyVqrkCz763SOJaGtHdaQGr8vCwDYL8V4zKlxZ26lQNNOPceWM93T+yvo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233496793"
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="233496797"
+   d="scan'208";a="233496793"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:33:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="594181259"
+   d="scan'208";a="594181258"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
   by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2022 15:33:00 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nPYSp-000250-MT; Wed, 02 Mar 2022 23:32:59 +0000
-Date:   Thu, 3 Mar 2022 07:32:47 +0800
+        id 1nPYSp-00024v-Lf; Wed, 02 Mar 2022 23:32:59 +0000
+Date:   Thu, 3 Mar 2022 07:32:51 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Dmitry Shmidt <dimitrysh@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.9-p-release
- 3994/9999] security/commoncap.c:75:5: warning: no previous declaration for
- '__cap_capable'
-Message-ID: <202203030705.8QZOBwpb-lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [frederic-dynticks:rcu/context-tracking 14/19]
+ kernel/rcu/tree_plugin.h:932:13: error: static declaration of
+ 'rcu_preempt_deferred_qs' follows non-static declaration
+Message-ID: <202203030729.s3AJ15rL-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.9-p-release
-head:   74f5cdd2ad41ea660f18bcaf7ce3d8d3e8e88428
-commit: 0268f76e4b39897c7b9ecf5fae695dbbc7bb7426 [3994/9999] ANDROID: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants
-config: i386-randconfig-r034-20211122 (https://download.01.org/0day-ci/archive/20220303/202203030705.8QZOBwpb-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking
+head:   e4eaff86ec91c1cbde9a113cf5232dac9f897337
+commit: 5a91f02835a27bd066154ab87408505806710e19 [14/19] rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220303/202203030729.s3AJ15rL-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/0268f76e4b39897c7b9ecf5fae695dbbc7bb7426
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.9-p-release
-        git checkout 0268f76e4b39897c7b9ecf5fae695dbbc7bb7426
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=5a91f02835a27bd066154ab87408505806710e19
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks rcu/context-tracking
+        git checkout 5a91f02835a27bd066154ab87408505806710e19
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from include/linux/audit.h:26:0,
-                    from security/commoncap.c:11:
-   include/linux/sched.h:1260:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
-    ^~~~~
->> security/commoncap.c:75:5: warning: no previous declaration for '__cap_capable' [-Wmissing-declarations]
-    int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
-        ^~~~~~~~~~~~~
-   In file included from include/linux/capability.h:15:0,
-                    from security/commoncap.c:10:
-   security/commoncap.c: In function 'cap_prctl_drop':
-   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:903:7: note: in expansion of macro 'cap_valid'
-     if (!cap_valid(cap))
-          ^~~~~~~~~
-   security/commoncap.c: In function 'cap_task_prctl':
-   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:933:8: note: in expansion of macro 'cap_valid'
-      if (!cap_valid(arg2))
-           ^~~~~~~~~
-   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:1017:10: note: in expansion of macro 'cap_valid'
-      if (((!cap_valid(arg3)) | arg4 | arg5))
-             ^~~~~~~~~
+   In file included from kernel/rcu/tree.c:4457:
+>> kernel/rcu/tree_plugin.h:932:13: error: static declaration of 'rcu_preempt_deferred_qs' follows non-static declaration
+     932 | static void rcu_preempt_deferred_qs(struct task_struct *t)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/rcupdate.h:227,
+                    from include/linux/rcupdate_wait.h:9,
+                    from kernel/rcu/tree.c:25:
+   include/linux/rcutree.h:63:6: note: previous declaration of 'rcu_preempt_deferred_qs' was here
+      63 | void rcu_preempt_deferred_qs(struct task_struct *t);
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/rcu/tree.c:4457:
+   kernel/rcu/tree_plugin.h:932:13: warning: 'rcu_preempt_deferred_qs' defined but not used [-Wunused-function]
+     932 | static void rcu_preempt_deferred_qs(struct task_struct *t)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/__cap_capable +75 security/commoncap.c
+vim +/rcu_preempt_deferred_qs +932 kernel/rcu/tree_plugin.h
 
-    59	
-    60	/**
-    61	 * __cap_capable - Determine whether a task has a particular effective capability
-    62	 * @cred: The credentials to use
-    63	 * @ns:  The user namespace in which we need the capability
-    64	 * @cap: The capability to check for
-    65	 * @audit: Whether to write an audit message or not
-    66	 *
-    67	 * Determine whether the nominated task has the specified capability amongst
-    68	 * its effective set, returning 0 if it does, -ve if it does not.
-    69	 *
-    70	 * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
-    71	 * and has_capability() functions.  That is, it has the reverse semantics:
-    72	 * cap_has_capability() returns 0 when a task has a capability, but the
-    73	 * kernel's capable() and has_capability() returns 1 for this case.
-    74	 */
-  > 75	int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
-    76			int cap, int audit)
-    77	{
-    78		struct user_namespace *ns = targ_ns;
-    79	
-    80		/* See if cred has the capability in the target user namespace
-    81		 * by examining the target user namespace and all of the target
-    82		 * user namespace's parents.
-    83		 */
-    84		for (;;) {
-    85			/* Do we have the necessary capabilities? */
-    86			if (ns == cred->user_ns)
-    87				return cap_raised(cred->cap_effective, cap) ? 0 : -EPERM;
-    88	
-    89			/* Have we tried all of the parent namespaces? */
-    90			if (ns == &init_user_ns)
-    91				return -EPERM;
-    92	
-    93			/* 
-    94			 * The owner of the user namespace in the parent of the
-    95			 * user namespace has all caps.
-    96			 */
-    97			if ((ns->parent == cred->user_ns) && uid_eq(ns->owner, cred->euid))
-    98				return 0;
-    99	
-   100			/*
-   101			 * If you have a capability in a parent user ns, then you have
-   102			 * it over all children user namespaces as well.
-   103			 */
-   104			ns = ns->parent;
-   105		}
-   106	
-   107		/* We never get here */
-   108	}
-   109	
+790da248978a072 Paul E. McKenney 2021-09-29  927  
+790da248978a072 Paul E. McKenney 2021-09-29  928  // Except that we do need to respond to a request by an expedited grace
+790da248978a072 Paul E. McKenney 2021-09-29  929  // period for a quiescent state from this CPU.  Note that requests from
+790da248978a072 Paul E. McKenney 2021-09-29  930  // tasks are handled when removing the task from the blocked-tasks list
+790da248978a072 Paul E. McKenney 2021-09-29  931  // below.
+790da248978a072 Paul E. McKenney 2021-09-29 @932  static void rcu_preempt_deferred_qs(struct task_struct *t)
+790da248978a072 Paul E. McKenney 2021-09-29  933  {
+790da248978a072 Paul E. McKenney 2021-09-29  934  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+790da248978a072 Paul E. McKenney 2021-09-29  935  
+790da248978a072 Paul E. McKenney 2021-09-29  936  	if (rdp->cpu_no_qs.b.exp)
+790da248978a072 Paul E. McKenney 2021-09-29  937  		rcu_report_exp_rdp(rdp);
+790da248978a072 Paul E. McKenney 2021-09-29  938  }
+3e31009898699df Paul E. McKenney 2018-06-21  939  
+
+:::::: The code at line 932 was first introduced by commit
+:::::: 790da248978a0722d92d1471630c881704f7eb0d rcu: Make idle entry report expedited quiescent states
+
+:::::: TO: Paul E. McKenney <paulmck@kernel.org>
+:::::: CC: Paul E. McKenney <paulmck@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

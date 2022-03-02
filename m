@@ -2,149 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF174CAAC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924674CAABE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243503AbiCBQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S243391AbiCBQuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbiCBQum (ORCPT
+        with ESMTP id S242753AbiCBQuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:50:42 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8357CB647;
-        Wed,  2 Mar 2022 08:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646239787;
-        bh=gxRPdEU+QPahBjvaCt/q+5WcE48CF2vkdjeoCYbnm8k=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DIMAUtcbBH5aqT9ZHQJ49EvcpD8/ypWqdlBWZPQQMbaBqO5jD+/8XM0cbNeG9S1ZM
-         b9YaXqmGovnW/hbIQWTfqZVUN8P4BqoDlTzQMa3ucH125OJGinNUXcRZ0mEyGyC/M0
-         jgA9WqEk+61Rwwl1vXZePt++Kygkx/354hdI5sNk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.242.61] ([80.187.121.99]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MBlxW-1nUvo71KOK-00CCTW; Wed, 02
- Mar 2022 17:49:47 +0100
-Message-ID: <666d1565-0467-bb21-916b-073392129e1a@gmx.de>
-Date:   Wed, 2 Mar 2022 17:48:19 +0100
+        Wed, 2 Mar 2022 11:50:04 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019F4CA73B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:49:21 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso1644165wmr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:49:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=IecOz5iKn2Rc7yD1b1vqfvTpVOYHa2wL2PoxDv2Qr/w=;
+        b=VIpMijEI/uc7QRXHd8OO4zobB3xGHjz4KThVMq514TNw8RwXRYNSQBSrVjnHjxY/O3
+         l2zH6Fnc4g7cXglDba8qa97Y60BjqOi/08Td2ssOClPjgo2nZjxZ5uM6JK9LNl67aDQX
+         gUSqG+T8ucekupVq7KheTANlEi90R6HHLHrmK6xVXJROxoYMuVMd51xKMMPnh2UJLPox
+         cVRcZ2YIOo3Y4OzB4SDJuF87jLQ7x42oV9w3qB/s1UXjEkj6bKqen/wgYWVukInOW5g2
+         NiTjge+zSAtBPJp5ddERJiqnrLi83eYLRdF2Miz0jbs/TDPeruRJXTDi23qQWPGymHYs
+         D9vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=IecOz5iKn2Rc7yD1b1vqfvTpVOYHa2wL2PoxDv2Qr/w=;
+        b=AWHc38p/ATLaAPqG2wKJxnL03ghUMr5RKx9kGDhueOn8dJqVOHBGK4g2LzrWXVa608
+         nKyH5PlOFh6AAQIf8c2SF0LEmpJYJew0g3P79FShCrRTyPexNZN1D6zrtMFwdjxPWfq1
+         JCsVgOBjcUHvSI/Ls9nsCwO2VC9qYOYPXO01qPjrwKpPBb5ocGohciNOn4Pi5EW1EJWK
+         XGM22hfECygBU3sQN8d80quaUfkqWt0vDax0Uchfdi2GCeWQazgB7fcRR/UzNHipOSpn
+         ktLzbYfcukfr9v+tfvhusLegt9s0fSNW2fapZxUfuEjcFWB2kmIX4F0W5WfEINLI1746
+         gLag==
+X-Gm-Message-State: AOAM532ta90s6YhB3jrVG8qQ1P0O5UBqAtYItH2UUiZG9NttNn7VZjqx
+        7ZSrOsW6JclEkCmJi30XjB3Yzw==
+X-Google-Smtp-Source: ABdhPJyfbodKVJwvZA9sMWbjL8XK8jIc29C/7YVF8TlsJ7M4ci3plCbQeVXpYLBlRnsDqwXOYk/BBw==
+X-Received: by 2002:a1c:4603:0:b0:381:19fe:280b with SMTP id t3-20020a1c4603000000b0038119fe280bmr524853wma.67.1646239759465;
+        Wed, 02 Mar 2022 08:49:19 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05600c4f8f00b003842f011bc5sm2707823wmq.2.2022.03.02.08.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 08:49:18 -0800 (PST)
+Date:   Wed, 2 Mar 2022 16:49:17 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <Yh+gDZUbgBRx/1ro@google.com>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302082021-mutt-send-email-mst@kernel.org>
+ <Yh93k2ZKJBIYQJjp@google.com>
+ <20220302095045-mutt-send-email-mst@kernel.org>
+ <Yh+F1gkCGoYF2lMV@google.com>
+ <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
+ <20220302112945-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] video: fbdev: sm712fb: Fix crash in smtcfb_write()
-Content-Language: en-US
-To:     Zheyu Ma <zheyuma97@gmail.com>, sudipm.mukherjee@gmail.com,
-        teddy.wang@siliconmotion.com
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220302143311.2109322-1-zheyuma97@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220302143311.2109322-1-zheyuma97@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jWj92EA9VN2CX3/FfWKXV7Wf4QzTMp4F0RdNd9teZOaVJaTwfM/
- z6zv8GaRMaBYDFqDoC3j4AFCCYfDyZKl1a5AefVuBN5MDm9QLcnbymtz6px/wLjOlTshd/V
- BXA4Ttg4qeQvlf/uK6XGRbWVnIgKAGSbK+tSHPGkzO329uMnxLzPrXuedGI0YPGm/RARiOl
- wetzzGtJTs7+Jifa37Hmw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b4o7OKXxOvc=:3+02oL21ahFgW0JgnDjGPr
- oh3YlTwndNXo83yaKdaAhiEX9XT8LcyiP74h0zMaNA8RILtMzLB+xG/t3v8mFR6q7TyyKpfbg
- wXR3HdnjwV7Lq27CkUuVoJazqnacDXhKU3R3h60pzmiysIM6igaAHspAUG054DuUYqnFWQMeE
- Cb0FvvjAZcsUuhyiTStAcoZFXyMgzqSbJeix367DdS3/PhxldhjLP03+hJiOYi6JYmpJQTAXY
- Dl3Fi74FEvxgmbW4yPvu3sT49hIl+ZME4VG01A7qj9BMFO8+qqsaxIGXguwdwXOYgMh0Bv2pf
- WJNkfbTT6rb48kRfTm14u5AzfBAxGd2lMQuNwo7yKUpIZ5gFSX4TlKwOqYCkgwagTRj5TPuv1
- iMM/xGVafTZ1kixB87pFhLx1BD8o6BGAzHewMVLVL6scXQ3KVZ2dDPLPKrVesWqBM520Uipel
- PC6TLdJ9agW8MBOeM4LwWlepnXbQk8ai+ou0LZhKgY0QeMjpm/0cZ0/nOR/gCS1DS4w3hGiNW
- 9NhNyAy2I6Lfsc5oZlpRIl7Tx3ERrZODRD+wqDeofykMm8y5qpN8V9KRKBdeDXYCVc/TiHVXV
- FHsj3fi9XTnmoD1KEK9Hd2VcRt2UoQyK3cGnqTT45ecDh0No+kKGw6kRKJNppNDvQrnrMo4sP
- vfAFXsB6C9PUwQ0WE0OL/T/b8HpvUk48qNaYLhxoIloivxSmJOm9axXnhNpfV+34q0aJClvYM
- PpZlXMK/6buNhl9eVj9D3szUINc1oO/BPX+4zgTQugrnICrMSdWPm/4BeYuAnuIAuo27sV+5r
- cVwHFYp2EuT7glZ16l/GJ5vzY5VoQagK6609qWHjUvx+YTJ1bPsk6K3Dv229BPTzhGg3GWh64
- mG85I+kchWaME2DBFaJORAvAWggUbqdtfQT0bEtsbiThItF0l8u7fRAlybWvYUUURm9CxDZE5
- QKVTQ2WoiXMcVsAC1eAtpQLz8QMZu3p6wInpRjTYvqd+wvj68AD8zisl8tpAsQ+qETcY2YCvp
- 5ZxgIJCJDKJb5kAclIqrxFHa0rGcWwHCf6bhZznMZS4DidNcHEkqiYkvMyjlJgkma1pyAWqUT
- gmlFHFgC54EfFg=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302112945-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 15:33, Zheyu Ma wrote:
-> When the sm712fb driver writes three bytes to the framebuffer, the
-> driver will crash:
->
->     BUG: unable to handle page fault for address: ffffc90001ffffff
->     RIP: 0010:smtcfb_write+0x454/0x5b0
->     Call Trace:
->      vfs_write+0x291/0xd60
->      ? do_sys_openat2+0x27d/0x350
->      ? __fget_light+0x54/0x340
->      ksys_write+0xce/0x190
->      do_syscall_64+0x43/0x90
->      entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> Fix it by removing the open-coded endianness fixup-code.
->
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
 
-Thanks... it's already in the fbdev git tree and queued up for v5.18...
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/com=
-mit/?h=3Dfor-next&id=3Dbd771cf5c4254511cc4abb88f3dab3bd58bdf8e8
+> On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
+> > On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > >
+> > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > >
+> > > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
+> > > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > > > >
+> > > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > > > > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > > > > >
+> > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > > > > >
+> > > > > > > Cc: <stable@vger.kernel.org>
+> > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > > ---
+> > > > > > >  drivers/vhost/vhost.c | 2 ++
+> > > > > > >  1 file changed, 2 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
+> > > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > >         int i;
+> > > > > > >
+> > > > > > >         for (i = 0; i < dev->nvqs; ++i) {
+> > > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
+> > > > > > >                 if (dev->vqs[i]->error_ctx)
+> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+> > > > > > >                 if (dev->vqs[i]->kick)
+> > > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
+> > > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+> > > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
+> > > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
+> > > > > > >         }
+> > > > > >
+> > > > > > So this is a mitigation plan but the bug is still there though
+> > > > > > we don't know exactly what it is.  I would prefer adding something like
+> > > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
+> > > > >
+> > > > > As a rework to this, or as a subsequent patch?
+> > > >
+> > > > Can be a separate patch.
+> > > >
+> > > > > Just before the first lock I assume?
+> > > >
+> > > > I guess so, yes.
+> > >
+> > > No problem.  Patch to follow.
+> > >
+> > > I'm also going to attempt to debug the root cause, but I'm new to this
+> > > subsystem to it might take a while for me to get my head around.
+> > 
+> > IIUC the root cause should be the same as the one we solved here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+> > 
+> > The worker was not stopped before calling vhost_dev_cleanup(). So while 
+> > the worker was still running we were going to free memory or initialize 
+> > fields while it was still using virtqueue.
+> 
+> Right, and I agree but it's not the root though, we do attempt to stop all workers.
 
-Helge
+Exactly.  This is what happens, but the question I'm going to attempt
+to answer is *why* does this happen.
 
-
-> ---
->  drivers/video/fbdev/sm712fb.c | 21 ++++-----------------
->  1 file changed, 4 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/video/fbdev/sm712fb.c b/drivers/video/fbdev/sm712fb=
-.c
-> index 0dbc6bf8268a..e355089ac7d6 100644
-> --- a/drivers/video/fbdev/sm712fb.c
-> +++ b/drivers/video/fbdev/sm712fb.c
-> @@ -1130,7 +1130,7 @@ static ssize_t smtcfb_write(struct fb_info *info, =
-const char __user *buf,
->  		count =3D total_size - p;
->  	}
->
-> -	buffer =3D kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL=
-);
-> +	buffer =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
->  	if (!buffer)
->  		return -ENOMEM;
->
-> @@ -1148,24 +1148,11 @@ static ssize_t smtcfb_write(struct fb_info *info=
-, const char __user *buf,
->  			break;
->  		}
->
-> -		for (i =3D c >> 2; i--;) {
-> -			fb_writel(big_swap(*src), dst++);
-> +		for (i =3D (c + 3) >> 2; i--;) {
-> +			fb_writel(big_swap(*src), dst);
-> +			dst++;
->  			src++;
->  		}
-> -		if (c & 3) {
-> -			u8 *src8 =3D (u8 *)src;
-> -			u8 __iomem *dst8 =3D (u8 __iomem *)dst;
-> -
-> -			for (i =3D c & 3; i--;) {
-> -				if (i & 1) {
-> -					fb_writeb(*src8++, ++dst8);
-> -				} else {
-> -					fb_writeb(*src8++, --dst8);
-> -					dst8 +=3D 2;
-> -				}
-> -			}
-> -			dst =3D (u32 __iomem *)dst8;
-> -		}
->
->  		*ppos +=3D c;
->  		buf +=3D c;
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

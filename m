@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1611A4CB1D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ADB4CB1C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245279AbiCBWJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:09:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S244708AbiCBWIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245129AbiCBWI6 (ORCPT
+        with ESMTP id S243977AbiCBWIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:08:58 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D9E70CE6;
-        Wed,  2 Mar 2022 14:08:10 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 34057E000E;
-        Wed,  2 Mar 2022 22:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646258889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBqPZZqPY9lU8X5Wjn7tKR9Ob2xGkc1rtG7l6mI1mps=;
-        b=OnW6YeCcBytSObB4yBq52lv2w/gBp2a7JMOdxNPfW9tbRP2unuNlDhmmoCB5v7H17HfLUT
-        aCFtNumO8BuAv77Ukcbhhqezs7hM0Qesmx4vCFMX6DBTZHbpor/7zk/1rsWwUowsU4gKSb
-        8UKikF4fLyfc+TPcmww/jN6nMQLQy4oAFatb/I7+Z+CBdptvUCzMdvudH5qcmIQheXiy0L
-        8CYtspdiiDYqgQOV9koxS6VErciAhSLlbnnryucojIPdJdpMB+st/1kkGywWI+B3khv4Kz
-        dugkXx3qQARsnYLLbPb2asrvu1Rg5z4+FvTCxLruMO60GRy168BeNZ/ZKLu94A==
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 9/9] MAINTAINERS: Add entry for the Allwinner A83T MIPI CSI-2 bridge
-Date:   Wed,  2 Mar 2022 23:07:39 +0100
-Message-Id: <20220302220739.144303-10-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220302220739.144303-1-paul.kocialkowski@bootlin.com>
-References: <20220302220739.144303-1-paul.kocialkowski@bootlin.com>
+        Wed, 2 Mar 2022 17:08:45 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBA449911
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:08:01 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id s25so4270164lji.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 14:08:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6IlbQWXqli0bmJJpEgImJp1eEsIqn79OOyyTrciOKiU=;
+        b=ZEZMRswskOjswx6tJdzOvd++uDOMnhizQ9xgMMjRdj2BFHJllPm9AMgDZ8dtNx2AE4
+         lstU8jkmYtaE4AJOYbLN9mzvDZkWEVRfNSoJx2hjNTCBMYYjABkC9jPrQEc3TSTQGotl
+         WetlPAt5KoS7AZpTnWofwgwyxQvdkqsf6AkbgPXNnHlMTH+a9SN1E093aSV4gY7YKM/Y
+         JKNiYiBqBO4+4Gbxo2eolwv2M4Yofo6Di41Wkj/TIBtGyh/RCOYExF7X+dQlfIMO/CsI
+         TtyNhQWqOjdRHlrkhjeKImuKiFcJmE6cQ2yYT83Gh/SGdxPKbE3VTLJB6qCdrdCv9Dyw
+         FUDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6IlbQWXqli0bmJJpEgImJp1eEsIqn79OOyyTrciOKiU=;
+        b=8G/vodnTA1I6K6O8/Pp88iREzyJEfkScyhn2ozp2fJ5oo8Vv6J2PoPr+d8+kt3Zo5l
+         pyAHmBP2G4ThCIyg2OLYlBCJQX/ZYCYB+Wsah9NBKgC5i4phgoR4gmg6NxGJRoN/x+GV
+         xCRhwtJBPpDu8p+x4tFClL9PLxKD1FMlNkcHoObgkpbGlEE7xJvv7vi45JMybbWGybCn
+         IusuUyAPJIFAsG1Kcrj0+wdqfkpaL26tUeZ6N5rr8cpSzFQ+d5VJ8C+q1Q0nWcjKEhgE
+         TrwrlsII8ryMy0MbREsda+1+RKHwZQsemsQw2Syd2833n+r+0Nprx2wa/ciGkZOZFzfQ
+         fC4A==
+X-Gm-Message-State: AOAM531quKfL+TGSVJk+EkNQS/I8yJqgBSQdcF0KPEzTeCNw4vwb/xVF
+        58x5ifYoJf+h17oQEcw5tTQQ57T5SB/z5RU08TCuXw==
+X-Google-Smtp-Source: ABdhPJxvXZVvpAwnwfaWp0w0zI5ONop0YB93AcJksBmO2Pv9KbxT0bwVjHz9OXE1PXZZorxAK0BiXEmEYwJy2rrxEA0=
+X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
+ y2-20020a05651c154200b002338ff5eb80mr21217835ljp.352.1646258876867; Wed, 02
+ Mar 2022 14:07:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224145138.952963315@infradead.org> <20220224151322.072632223@infradead.org>
+ <CAKwvOdkD2WY=hEHy8_0zs70AGx6LRQwxL5mEZyB30uqpruYJyA@mail.gmail.com>
+ <Yh+dMJsH+ZMPfqwD@thelio-3990X> <CAKwvOdmouBTe5pH3JoP6EEfwNT5=6WvX3oCEZRxO0Dkf38S14w@mail.gmail.com>
+ <Yh/egU1LZudfrgVy@dev-arch.thelio-3990X>
+In-Reply-To: <Yh/egU1LZudfrgVy@dev-arch.thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 2 Mar 2022 14:07:45 -0800
+Message-ID: <CAKwvOdkN+pT_og0QjX+MM1dDL8-CMzt8i73tXoguB49Qza3zJA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/39] kbuild: Fix clang build
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org,
+        x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer of the Allwinner A83T MIPI CSI-2 bridge media
-driver.
+On Wed, Mar 2, 2022 at 1:15 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Wed, Mar 02, 2022 at 11:18:07AM -0800, Nick Desaulniers wrote:
+> > I'd be much more amenable to that approach.
+>
+> Sounds good, tentative patch attached, it passes all of my testing.
+> There is an instance of $(LLVM) in tools/testing/selftests/lib.mk that I
+> did not touch, as that will presumably have to go through the selftests
+> tree. I can send a separate patch for that later.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index de575061362e..ed1758d194a5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -760,6 +760,14 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
- F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
- 
-+ALLWINNER A83T MIPI CSI-2 BRIDGE DRIVER
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
-+F:	drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/
-+
- ALLWINNER CPUFREQ DRIVER
- M:	Yangtao Li <tiny.windzz@gmail.com>
- L:	linux-pm@vger.kernel.org
+LGTM!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 -- 
-2.35.1
-
+Thanks,
+~Nick Desaulniers

@@ -2,196 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376C94CA1D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17324CA1DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240877AbiCBKKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S240898AbiCBKLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234834AbiCBKKi (ORCPT
+        with ESMTP id S235168AbiCBKLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:10:38 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEC0DFF5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:09:55 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id j17so1953796wrc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 02:09:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=i3lmfqgkK7OBdnfa+g16DQZSqexmJcfPngJ3iL8JFWQ=;
-        b=bzryLYEMc/kLGuQY1ack35QrumDbfAAp12lRcHhGRZeRw3oO5F44yuF7vhUYLtpE0O
-         kMy2DU9fhJxiBXZb82oORVE4N1hHhwyuyKYb2gReXiN7L82d0LxDZUQYFnaCX34zzNeh
-         splWSun2E5ixCRR0zqN2xYH9MnCS5elMDFCez/Gby3yfYdCdv/8OmcBKUnuvzP0mKJAd
-         5xcLDSScqB1vu+Orw8j8tZWytNnFEUqVUB80IpYZPPtQj6rOuZK+WtM8OgpJ3unXtfaL
-         WLb7VnIBPAzjxu8re6JZuOfVlEd+mbEcFyPUWFsT5Wvbr+S2xl34QGDWEowrFdvoNNh1
-         2XTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=i3lmfqgkK7OBdnfa+g16DQZSqexmJcfPngJ3iL8JFWQ=;
-        b=0wiU4TucDdNn71aJ+29zWei3/X2fWgPKql6CVs4+Jics8e0QkonyEi25ahyjdalKom
-         SLb2FicehNjSjsP4PO35ZVMUItWuc9TbIIGmVVrYF/JUO9UbYEtPd8ARh4PYMfSq1LJK
-         h5D0OhVh6XWhNkETAR1foCVdG4bktVMKVTk13ODl24m4HivpDAMpxeA7SuNleWtg6mua
-         ZU0vO518dyaTclas9FlCu2f82+bJslOkoF6ZWSPOEd3NQeRSzBlOxlqojX4T0deNmLkF
-         an2IhBNlkyzuLYwwT6K9PopbLxJbVx9GruPJkHyRnu+7Zfxr3/MKp4k2h9mcqp0PSEcQ
-         2XnQ==
-X-Gm-Message-State: AOAM533AW42ofsFHfzw/YgfugL2trxDWhFMVS8yMJBe0iE1YHemOzjUM
-        XZFjsLTt3hWr4Jl9++PZz5c=
-X-Google-Smtp-Source: ABdhPJw7PGmLyGuK3YhzMCMHZQjy8g0xWTjRS30Z/UhRoTnIwz0j4WFk+41wk8fRnLT5sMDQhhToMg==
-X-Received: by 2002:adf:b1da:0:b0:1f0:1205:89c1 with SMTP id r26-20020adfb1da000000b001f0120589c1mr5214930wra.27.1646215794139;
-        Wed, 02 Mar 2022 02:09:54 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id v8-20020a1cf708000000b0034d7b5f2da0sm5165034wmh.33.2022.03.02.02.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 02:09:53 -0800 (PST)
-Date:   Wed, 2 Mar 2022 11:09:49 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: boot flooded with unwind: Index not found
-Message-ID: <Yh9CbcrfDvN2Z9Y9@Red>
-References: <Yh5ASXVoWoMj7/Rr@Red>
- <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
- <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
- <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
- <Yh8tWdiWPgZLyQtx@Red>
- <CAMj1kXGRtdftpoqmd7HBonBBS67jO=YWzoESPAagGfQBZUDQWg@mail.gmail.com>
- <Yh8w7ldudhmbYv4N@Red>
- <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
+        Wed, 2 Mar 2022 05:11:09 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3470F26AEA;
+        Wed,  2 Mar 2022 02:10:27 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1nPLw7-000VIa-Og; Wed, 02 Mar 2022 11:10:23 +0100
+Received: from p57bd9552.dip0.t-ipconnect.de ([87.189.149.82] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1nPLw7-0043nS-IM; Wed, 02 Mar 2022 11:10:23 +0100
+Message-ID: <36f05f50-ff5e-71fb-3afb-475c3ac5a376@physik.fu-berlin.de>
+Date:   Wed, 2 Mar 2022 11:10:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.149.82
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, Mar 02, 2022 at 10:45:46AM +0100, Ard Biesheuvel a écrit :
-> On Wed, 2 Mar 2022 at 09:55, Corentin Labbe <clabbe.montjoie@gmail.com> wrote:
-> >
-> > Le Wed, Mar 02, 2022 at 09:44:52AM +0100, Ard Biesheuvel a écrit :
-> > > On Wed, 2 Mar 2022 at 09:40, Corentin Labbe <clabbe.montjoie@gmail.com> wrote:
-> > > >
-> > > > Le Tue, Mar 01, 2022 at 05:52:30PM +0100, Ard Biesheuvel a écrit :
-> > > > > On Tue, 1 Mar 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > >
-> > > > > > On Tue, 1 Mar 2022 at 16:52, Russell King (Oracle)
-> > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > >
-> > > > > > > On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
-> > > > > > > > Hello
-> > > > > > > >
-> > > > > > > > I booted today linux-next (20220301) and my boot is flooded with:
-> > > > > > > > [    0.000000] unwind: Index not found c0f0c440
-> > > > > > > > [    0.000000] unwind: Index not found 00000000
-> > > > > > > > [    0.000000] unwind: Index not found c0f0c440
-> > > > > > > > [    0.000000] unwind: Index not found 00000000
-> > > > > > > >
-> > > > > > > > This happen on a sun8i-a83t-bananapi-m3
-> > > > > > >
-> > > > > > > Have you enabled vmapped stacks?
-> > > > > > >
-> > > > > >
-> > > > > > This is probably related to
-> > > > > >
-> > > > > > 538b9265c063 ARM: unwind: track location of LR value in stack frame
-> > > > > >
-> > > > > > which removes a kernel_text_address() check on frame->pc as it is
-> > > > > > essentially redundant, given that we won't find unwind data otherwise.
-> > > > > > Unfortunately, I failed to realise that the other check carries a
-> > > > > > pr_warn(), which may apparently fire spuriously in some cases.
-> > > > > >
-> > > > > > The 0x0 value can easily be filtered out, but i would be interesting
-> > > > > > where the other value originates from. We might be able to solve this
-> > > > > > with a simple .nounwind directive in a asm routine somewhere.
-> > > > > >
-> > > > > > I'll prepare a patch that disregards the 0x0 value - could you check
-> > > > > > in the mean time what the address 0xcf0c440 coincides with in your
-> > > > > > build?
-> > > > >
-> > > > > Something like the below should restore the previous behavior, while
-> > > > > taking the kernel_text_address() check out of the hot path.
-> > > > >
-> > > > > --- a/arch/arm/kernel/unwind.c
-> > > > > +++ b/arch/arm/kernel/unwind.c
-> > > > > @@ -400,7 +400,8 @@ int unwind_frame(struct stackframe *frame)
-> > > > >
-> > > > >         idx = unwind_find_idx(frame->pc);
-> > > > >         if (!idx) {
-> > > > > -               pr_warn("unwind: Index not found %08lx\n", frame->pc);
-> > > > > +               if (frame->pc && kernel_text_address(frame->pc))
-> > > > > +                       pr_warn("unwind: Index not found %08lx\n", frame->pc);
-> > > > >                 return -URC_FAILURE;
-> > > > >         }
-> > > >
-> > > > Hello
-> > > >
-> > > > This is a more detailed trace from my follow up after your patch:
-> > >
-> > > So the log below is from a kernel that has the above patch applied?
-> > > Could you please share the .config?
-> > >
-> >
-> > Yes this is a kernel with above patch applied (this board do not boot without it).
-> 
-> It's not entirely clear to me how (or whether) the recent changes to
-> unwind.c cause this issue, but one thing that stands out in the
-> current code is the unguarded dereference of a value pulled of the
-> stack as a memory address.
-> 
-> It is worth noting that the only unwind entries in vmlinux that load
-> SP from the stack directly (as opposed to unwinding it by moving from
-> the frame pointer or by addition/subtraction) are the
-> __irq_svc/__pabt_svc/__dabt_svc entry routines, and given that the
-> bogus address 60000013 looks suspiciously like a PSR value (which is
-> stored in the vicinity of SP on the exception stack), my suspicion is
-> that some unwinder annotations are out of sync with the actual code.
-> 
-> So while the below does not fix the root cause, i.e., that the
-> unwinder unwinds SP incorrectly causing us to dereference a bogus
-> pointer, it should avoid the subsequent crash. Please give it a go.
-> 
-> --- a/arch/arm/kernel/unwind.c
-> +++ b/arch/arm/kernel/unwind.c
-> @@ -27,6 +27,7 @@
->  #include <linux/sched.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
-> +#include <linux/uaccess.h>
->  #include <linux/list.h>
-> 
->  #include <asm/sections.h>
-> @@ -236,10 +237,11 @@ static int unwind_pop_register(struct
-> unwind_ctrl_block *ctrl,
->                 if (*vsp >= (unsigned long *)ctrl->sp_high)
->                         return -URC_FAILURE;
-> 
-> -       /* Use READ_ONCE_NOCHECK here to avoid this memory access
-> -        * from being tracked by KASAN.
-> +       /* Use get_kernel_nofault() here to avoid this memory access
-> +        * from causing a fatal fault, and from being tracked by KASAN.
->          */
-> -       ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
-> +       if (get_kernel_nofault(ctrl->vrs[reg], *vsp))
-> +               return -URC_FAILURE;
->         if (reg == 14)
->                 ctrl->lr_addr = *vsp;
->         (*vsp)++;
+Hello!
 
-The crash disappeared (but the suspicious RCU usage is still here).
+On 2/11/22 21:15, Sergey Shtylyov wrote:
+> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
+> that code to start the IRQ #s from 16 instead.
+> 
+> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+> 
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> ---
+> The patch is against Linus Torvalds' 'linux.git' repo.
+> 
+>  arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
+>  include/linux/sh_intc.h        |    6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+> ===================================================================
+> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
+> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
+> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+>  	mov	r4, r0		! save vector->jmp table offset for later
+>  
+>  	shlr2	r4		! vector to IRQ# conversion
+> -	add	#-0x10, r4
+>  
+> -	cmp/pz	r4		! is it a valid IRQ?
+> +	mov	#0x10, r5
+> +	cmp/ge	r5, r4		! is it a valid IRQ?
+>  	bt	10f
+>  
+>  	/*
+> Index: linux/include/linux/sh_intc.h
+> ===================================================================
+> --- linux.orig/include/linux/sh_intc.h
+> +++ linux/include/linux/sh_intc.h
+> @@ -13,9 +13,9 @@
+>  /*
+>   * Convert back and forth between INTEVT and IRQ values.
+>   */
+> -#ifdef CONFIG_CPU_HAS_INTEVT
+> -#define evt2irq(evt)		(((evt) >> 5) - 16)
+> -#define irq2evt(irq)		(((irq) + 16) << 5)
+> +#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
+> +#define evt2irq(evt)		((evt) >> 5)
+> +#define irq2evt(irq)		((irq) << 5)
+>  #else
+>  #define evt2irq(evt)		(evt)
+>  #define irq2evt(irq)		(irq)
+
+Successfully boot-tested without any issues on my SH-7785LCR on top of fb184c4af9b9.
+
+Tested-By: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+
+Thanks,
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+

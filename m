@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125004CAE0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBE54CAE11
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244787AbiCBTDL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 14:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S244813AbiCBTDW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 14:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiCBTDI (ORCPT
+        with ESMTP id S244791AbiCBTDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:03:08 -0500
+        Wed, 2 Mar 2022 14:03:15 -0500
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ED0426E3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:02:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4B652A713
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:02:29 -0800 (PST)
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-1XKlL060NB2R6BVqulBtFg-1; Wed, 02 Mar 2022 14:02:18 -0500
-X-MC-Unique: 1XKlL060NB2R6BVqulBtFg-1
+ us-mta-287-X6Jj7_TLPuWSKOXBcV-bIw-1; Wed, 02 Mar 2022 14:02:22 -0500
+X-MC-Unique: X6Jj7_TLPuWSKOXBcV-bIw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68F4A84A5F0;
-        Wed,  2 Mar 2022 19:02:17 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7ECEB84A5F3;
+        Wed,  2 Mar 2022 19:02:21 +0000 (UTC)
 Received: from x1.com (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E8EBA19C59;
-        Wed,  2 Mar 2022 19:02:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0114819C59;
+        Wed,  2 Mar 2022 19:02:17 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Clark Williams <williams@redhat.com>,
         Juri Lelli <juri.lelli@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [PATCH V3 02/15] rtla/osnoise: Add an option to set the threshold
-Date:   Wed,  2 Mar 2022 20:01:27 +0100
-Message-Id: <031861200ffdb24a1df4aa72c458706889a20d5d.1646247211.git.bristot@kernel.org>
+Subject: [PATCH V3 03/15] rtla/osnoise: Add the automatic trace option
+Date:   Wed,  2 Mar 2022 20:01:28 +0100
+Message-Id: <ef04c961b227eb93a83cd0b54bfca45e1a381b77.1646247211.git.bristot@kernel.org>
 In-Reply-To: <cover.1646247211.git.bristot@kernel.org>
 References: <cover.1646247211.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -57,9 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the -T/--threshold option to set the minimum threshold to be
-considered a noise to osnoise top and hist commands. Also update
-the man pages.
+Add the -a/--auto <arg in us> option. This option sets some commonly
+used options while debugging the system. It aims to help users produce
+reports in the field, reducing the number of arguments passed to the
+tool in the first approach to a problem.
+
+It is equivalent to setting osnoise/stop_tracing_us with the argument,
+setting tracing_thresh to 1 us, and saving the trace to osnoise_trace.txt
+file if the trace is stopped automatically.
 
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
@@ -67,169 +72,130 @@ Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
  .../tools/rtla/common_osnoise_options.rst     |  5 +++++
- tools/tracing/rtla/src/osnoise_hist.c         | 22 +++++++++++++++----
- tools/tracing/rtla/src/osnoise_top.c          | 20 ++++++++++++++---
- 3 files changed, 40 insertions(+), 7 deletions(-)
+ tools/tracing/rtla/src/osnoise_hist.c         | 19 ++++++++++++++++---
+ tools/tracing/rtla/src/osnoise_top.c          | 19 ++++++++++++++++---
+ 3 files changed, 37 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/tools/rtla/common_osnoise_options.rst b/Documentation/tools/rtla/common_osnoise_options.rst
-index d556883e4e26..27f1493f7bc0 100644
+index 27f1493f7bc0..f792ca58c211 100644
 --- a/Documentation/tools/rtla/common_osnoise_options.rst
 +++ b/Documentation/tools/rtla/common_osnoise_options.rst
-@@ -15,3 +15,8 @@
+@@ -1,3 +1,8 @@
++**-a**, **--auto** *us*
++
++        Set the automatic trace mode. This mode sets some commonly used options
++        while debugging the system. It is equivalent to use **-s** *us* **-T 1 -t**.
++
+ **-p**, **--period** *us*
  
-         Stop the trace if the total sample is higher than the argument in microseconds.
-         If **-T** is set, it will also save the trace to the output.
-+
-+**-T**, **--threshold** *us*
-+
-+        Specify the minimum delta between two time reads to be considered noise.
-+        The default threshold is *5 us*.
+         Set the *osnoise* tracer period in microseconds.
 diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-index 52c053cc1789..ab02219de528 100644
+index ab02219de528..5698da2fe3dd 100644
 --- a/tools/tracing/rtla/src/osnoise_hist.c
 +++ b/tools/tracing/rtla/src/osnoise_hist.c
-@@ -21,6 +21,7 @@ struct osnoise_hist_params {
- 	char			*trace_output;
- 	unsigned long long	runtime;
- 	unsigned long long	period;
-+	long long		threshold;
- 	long long		stop_us;
- 	long long		stop_total_us;
- 	int			sleep_time;
-@@ -425,15 +426,16 @@ static void osnoise_hist_usage(char *usage)
+@@ -426,11 +426,12 @@ static void osnoise_hist_usage(char *usage)
  
  	static const char * const msg[] = {
  		"",
--		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-t[=file]] \\",
--		"	  [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] [--no-summary] \\",
--		"	  [--no-index] [--with-zeros]",
-+		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-T us] \\",
-+		"	  [-t[=file]] [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] \\",
-+		"	  [--no-summary] [--no-index] [--with-zeros]",
+-		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-T us] \\",
+-		"	  [-t[=file]] [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] \\",
++		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
++		"	  [-T us] [-t[=file]] [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] \\",
+ 		"	  [--no-summary] [--no-index] [--with-zeros]",
  		"",
  		"	  -h/--help: print this menu",
++		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
  		"	  -p/--period us: osnoise period in us",
  		"	  -r/--runtime us: osnoise runtime in us",
  		"	  -s/--stop us: stop trace if a single sample is higher than the argument in us",
- 		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
-+		"	  -T/--threshold us: the minimum delta to be considered a noise",
- 		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
- 		"	  -d/--duration time[s|m|h|d]: duration of the session",
- 		"	  -D/--debug: print debug info",
-@@ -497,6 +499,7 @@ static struct osnoise_hist_params
- 			{"stop",		required_argument,	0, 's'},
- 			{"stop-total",		required_argument,	0, 'S'},
- 			{"trace",		optional_argument,	0, 't'},
-+			{"threshold",		required_argument,	0, 'T'},
- 			{"no-header",		no_argument,		0, '0'},
- 			{"no-summary",		no_argument,		0, '1'},
- 			{"no-index",		no_argument,		0, '2'},
-@@ -507,7 +510,7 @@ static struct osnoise_hist_params
+@@ -487,6 +488,7 @@ static struct osnoise_hist_params
+ 
+ 	while (1) {
+ 		static struct option long_options[] = {
++			{"auto",		required_argument,	0, 'a'},
+ 			{"bucket-size",		required_argument,	0, 'b'},
+ 			{"entries",		required_argument,	0, 'E'},
+ 			{"cpus",		required_argument,	0, 'c'},
+@@ -510,7 +512,7 @@ static struct osnoise_hist_params
  		/* getopt_long stores the option index here. */
  		int option_index = 0;
  
--		c = getopt_long(argc, argv, "c:b:d:E:Dhp:P:r:s:S:t::0123",
-+		c = getopt_long(argc, argv, "c:b:d:E:Dhp:P:r:s:S:t::T:0123",
+-		c = getopt_long(argc, argv, "c:b:d:E:Dhp:P:r:s:S:t::T:0123",
++		c = getopt_long(argc, argv, "a:c:b:d:E:Dhp:P:r:s:S:t::T:0123",
  				 long_options, &option_index);
  
  		/* detect the end of the options. */
-@@ -565,6 +568,9 @@ static struct osnoise_hist_params
- 		case 'S':
- 			params->stop_total_us = get_llong_from_str(optarg);
+@@ -518,6 +520,17 @@ static struct osnoise_hist_params
  			break;
-+		case 'T':
-+			params->threshold = get_llong_from_str(optarg);
-+			break;
- 		case 't':
- 			if (optarg)
- 				/* skip = */
-@@ -645,6 +651,14 @@ osnoise_hist_apply_config(struct osnoise_tool *tool, struct osnoise_hist_params
- 		}
- 	}
  
-+	if (params->threshold) {
-+		retval = osnoise_set_tracing_thresh(tool->context, params->threshold);
-+		if (retval) {
-+			err_msg("Failed to set tracing_thresh\n");
-+			goto out_err;
-+		}
-+	}
+ 		switch (c) {
++		case 'a':
++			/* set sample stop to auto_thresh */
++			params->stop_us = get_llong_from_str(optarg);
 +
- 	return 0;
- 
- out_err:
++			/* set sample threshold to 1 */
++			params->threshold = 1;
++
++			/* set trace */
++			params->trace_output = "osnoise_trace.txt";
++
++			break;
+ 		case 'b':
+ 			params->bucket_size = get_llong_from_str(optarg);
+ 			if ((params->bucket_size == 0) || (params->bucket_size >= 1000000))
 diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index 7af769b9c0de..07fb1b8314d3 100644
+index 07fb1b8314d3..a6f434f85738 100644
 --- a/tools/tracing/rtla/src/osnoise_top.c
 +++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -23,6 +23,7 @@ struct osnoise_top_params {
- 	char			*trace_output;
- 	unsigned long long	runtime;
- 	unsigned long long	period;
-+	long long		threshold;
- 	long long		stop_us;
- 	long long		stop_total_us;
- 	int			sleep_time;
-@@ -244,14 +245,15 @@ void osnoise_top_usage(char *usage)
+@@ -245,10 +245,11 @@ void osnoise_top_usage(char *usage)
  	int i;
  
  	static const char * const msg[] = {
--		"  usage: rtla osnoise [top] [-h] [-q] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-t[=file]] \\",
--		"	  [-c cpu-list] [-P priority]",
-+		"  usage: rtla osnoise [top] [-h] [-q] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-T us] \\",
-+		"	  [-t[=file]] [-c cpu-list] [-P priority]",
+-		"  usage: rtla osnoise [top] [-h] [-q] [-D] [-d s] [-p us] [-r us] [-s us] [-S us] [-T us] \\",
+-		"	  [-t[=file]] [-c cpu-list] [-P priority]",
++		"  usage: rtla osnoise [top] [-h] [-q] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
++		"	  [-T us] [-t[=file]] [-c cpu-list] [-P priority]",
  		"",
  		"	  -h/--help: print this menu",
++		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
  		"	  -p/--period us: osnoise period in us",
  		"	  -r/--runtime us: osnoise runtime in us",
  		"	  -s/--stop us: stop trace if a single sample is higher than the argument in us",
- 		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
-+		"	  -T/--threshold us: the minimum delta to be considered a noise",
- 		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
- 		"	  -d/--duration time[s|m|h|d]: duration of the session",
- 		"	  -D/--debug: print debug info",
-@@ -302,6 +304,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
- 			{"runtime",		required_argument,	0, 'r'},
- 			{"stop",		required_argument,	0, 's'},
- 			{"stop-total",		required_argument,	0, 'S'},
-+			{"threshold",		required_argument,	0, 'T'},
- 			{"trace",		optional_argument,	0, 't'},
- 			{0, 0, 0, 0}
- 		};
-@@ -309,7 +312,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
+@@ -294,6 +295,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
+ 
+ 	while (1) {
+ 		static struct option long_options[] = {
++			{"auto",		required_argument,	0, 'a'},
+ 			{"cpus",		required_argument,	0, 'c'},
+ 			{"debug",		no_argument,		0, 'D'},
+ 			{"duration",		required_argument,	0, 'd'},
+@@ -312,7 +314,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
  		/* getopt_long stores the option index here. */
  		int option_index = 0;
  
--		c = getopt_long(argc, argv, "c:d:Dhp:P:qr:s:S:t::",
-+		c = getopt_long(argc, argv, "c:d:Dhp:P:qr:s:S:t::T:",
+-		c = getopt_long(argc, argv, "c:d:Dhp:P:qr:s:S:t::T:",
++		c = getopt_long(argc, argv, "a:c:d:Dhp:P:qr:s:S:t::T:",
  				 long_options, &option_index);
  
  		/* Detect the end of the options. */
-@@ -367,6 +370,9 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
- 			else
- 				params->trace_output = "osnoise_trace.txt";
+@@ -320,6 +322,17 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
  			break;
-+		case 'T':
-+			params->threshold = get_llong_from_str(optarg);
-+			break;
- 		default:
- 			osnoise_top_usage("Invalid option");
- 		}
-@@ -425,6 +431,14 @@ osnoise_top_apply_config(struct osnoise_tool *tool, struct osnoise_top_params *p
- 		}
- 	}
  
-+	if (params->threshold) {
-+		retval = osnoise_set_tracing_thresh(tool->context, params->threshold);
-+		if (retval) {
-+			err_msg("Failed to set tracing_thresh\n");
-+			goto out_err;
-+		}
-+	}
+ 		switch (c) {
++		case 'a':
++			/* set sample stop to auto_thresh */
++			params->stop_us = get_llong_from_str(optarg);
 +
- 	return 0;
- 
- out_err:
++			/* set sample threshold to 1 */
++			params->threshold = 1;
++
++			/* set trace */
++			params->trace_output = "osnoise_trace.txt";
++
++			break;
+ 		case 'c':
+ 			retval = parse_cpu_list(optarg, &params->monitored_cpus);
+ 			if (retval)
 -- 
 2.34.1
 

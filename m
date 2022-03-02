@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B364CB04D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BB64CB04F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242160AbiCBUwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S242896AbiCBUxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233970AbiCBUwk (ORCPT
+        with ESMTP id S242626AbiCBUws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:52:40 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B536005E;
-        Wed,  2 Mar 2022 12:51:56 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso5871373pjk.1;
-        Wed, 02 Mar 2022 12:51:56 -0800 (PST)
+        Wed, 2 Mar 2022 15:52:48 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFBDA9E1E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:52:04 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p17so2613207plo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1/zjEbSfhRRwQcZ+Urt/JTyvvofyCg2mmN4lvs+NezQ=;
+        b=Oep9w9nuZJVR02ibZvrEcTVkv0YiWk56vRe7ZtORUExSC9xXaEYaPW4RK27O5kGvyw
+         b4DdWZ8EywmcbRx8/foJt0NiNzP04MVr1kyq41Q+6NG2YsRUk1l2yIDKqY8vnFl2LdnQ
+         NwqWJD2CnGnvj295X5nkl6oYxqgwfqhBgsqZM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dPwpOA3dlf+QjLGZg4hJmQgB+HaIen/E3co4VabBIO0=;
-        b=0cJ93QzI+mxJq7HD74Tmvm0MtzGHWh4rWBJcf7JyDmnqxGh2YISXTHLN0ZJfSwWnzc
-         hAJVtssSyYA9PEtIj6nM0SXnx56jQVe0n0lK8gcyEXVC9xBvFaaUVX4xkNrI2/eyBq5T
-         ZRqFMeieluevNJqZTbBlzOI0thWw9rSgltxPnbE+uBChl2vyRVkxv4mbhc+7Z6QeNjSH
-         fL2AhW4yMjglUtyqSFVMxJVloEKQpVsTV7JBzvj0Dw9N0rIooxlwjH3T69W42azfDFAd
-         tLPWMUmlPSR66ynD/8iR19Xm3cvqGMAvYFfWWiiNYiAj1OzBFNi5bdWiKdkHVTZ21c6E
-         j2pA==
-X-Gm-Message-State: AOAM530dnmxti3+tvm5MwomXXIHsUc/qAnsslDIo6xzQeHHorNf292XT
-        BTPsZjlm+MRuIsGhtl1bFEM=
-X-Google-Smtp-Source: ABdhPJwzgpXKdWzWCPNEiMTVvwvSfu+YBTWnIewxSzHltR/uF+7LfUo5oePNVku1wMQwhNQb/c88KQ==
-X-Received: by 2002:a17:90a:2e0a:b0:1be:d5a0:cc5a with SMTP id q10-20020a17090a2e0a00b001bed5a0cc5amr1688125pjd.120.1646254315591;
-        Wed, 02 Mar 2022 12:51:55 -0800 (PST)
-Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
-        by smtp.gmail.com with ESMTPSA id w17-20020a056a0014d100b004f1063290basm77192pfu.15.2022.03.02.12.51.53
+        bh=1/zjEbSfhRRwQcZ+Urt/JTyvvofyCg2mmN4lvs+NezQ=;
+        b=aUSNxRsxiLsB/adzh5KaOZw/BVFA1W1NFhOU7hAlZTuQ+1D6D+zacQNFBsZTFaVB+3
+         jev5bymbVzhegvwAa3uPiLXg7KMaKMNiN5NbHD+fssukDcu9n9SJMKExUIEY4UL3Yb5g
+         zQXg+yy/iHLMazOP8fwqx/uODkG3ykyC/ZzV/jCixl/o894HqZqmgXC0s6z4+8I0uokt
+         c81O+lb2wVxdjfdlxk8lm4MCO+UzSKPB1ynEYfbBjTOBg6hclrOW7yAaeFa7IwKshuhk
+         lUxMBsML59Tf7LoFLOkC5I2fTB+7CB7JC1vKlYTRqW4aMuoeEBelievWVQdOnPZNGBiB
+         M/XQ==
+X-Gm-Message-State: AOAM532lzQP/uNJHrCAe5202uMuP+mhkYyRw7kvwatItjPW4YIJ/2kKV
+        9QnO41SL4OLdTaQ7uWUXAk7vzg==
+X-Google-Smtp-Source: ABdhPJyywT7+4z2Og3DinCge0OBdaL2iq4lk9mSh5O2CZZ5d2WMPgmh0kS9M4Dj9llTUA5VewclR8A==
+X-Received: by 2002:a17:902:8f83:b0:151:5c71:a6e6 with SMTP id z3-20020a1709028f8300b001515c71a6e6mr20427267plo.126.1646254323838;
+        Wed, 02 Mar 2022 12:52:03 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056a000c8c00b004e1a76f0a8asm71669pfv.51.2022.03.02.12.52.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:51:54 -0800 (PST)
-Date:   Wed, 2 Mar 2022 12:51:51 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "hch@infradead.org" <hch@infradead.org>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Kanchan Joshi <joshiiitr@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "bcrl@kvack.org" <bcrl@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        SelvaKumar S <selvakuma.s1@samsung.com>,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "Remzi H. Arpaci-Dusseau" <remzi@cs.wisc.edu>
-Subject: Re: [PATCH v4 6/6] io_uring: add support for zone-append
-Message-ID: <20220302205151.76f6wfqb2t3llnvf@garbanzo>
-References: <e871eef2-8a93-fdbc-b762-2923526a2db4@gmail.com>
- <80d27717-080a-1ced-50d5-a3a06cf06cd3@kernel.dk>
- <da4baa8c-76b0-7255-365c-d8b58e322fd0@gmail.com>
- <65a7e9a6-aede-31ce-705c-b7f94f079112@kernel.dk>
- <d4f9a5d3-1df2-1060-94fa-f77441a89299@gmail.com>
- <CA+1E3rJ3SoLU9aYcugAQgJnSPnJtcCwjZdMREXS3FTmXgy3yow@mail.gmail.com>
- <f030a338-cd52-2e83-e1da-bdbca910d49e@kernel.dk>
- <CA+1E3rKxZk2CatTuPcQq5d14vXL9_9LVb2_+AfR2m9xn2WTZdg@mail.gmail.com>
- <MWHPR04MB3758DC08EA17780E498E9EC0E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
- <20200731064526.GA25674@infradead.org>
+        Wed, 02 Mar 2022 12:52:03 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:52:02 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, Adam Langley <agl@google.com>,
+        linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
+Subject: Re: [PATCH 1/1] sign-file: Use OpenSSL provided define to compile
+ out deprecated APIs
+Message-ID: <202203021251.1DB0383C@keescook>
+References: <20211005161833.1522737-1-lee.jones@linaro.org>
+ <YVyE3Ax1PRtiBwf+@gmail.com>
+ <CAL9PXLws4DjvPB=1KNpom3W52pXNauXQ4V==MprDx73YQ1-sgg@mail.gmail.com>
+ <YVyKc51r2tfMmQuO@gmail.com>
+ <YVyVNkijABL7CxnM@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200731064526.GA25674@infradead.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YVyVNkijABL7CxnM@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 07:45:26AM +0100, hch@infradead.org wrote:
-> On Fri, Jul 31, 2020 at 06:42:10AM +0000, Damien Le Moal wrote:
-> > > - We may not be able to use RWF_APPEND, and need exposing a new
-> > > type/flag (RWF_INDIRECT_OFFSET etc.) user-space. Not sure if this
-> > > sounds outrageous, but is it OK to have uring-only flag which can be
-> > > combined with RWF_APPEND?
-> > 
-> > Why ? Where is the problem ? O_APPEND/RWF_APPEND is currently meaningless for
-> > raw block device accesses. We could certainly define a meaning for these in the
-> > context of zoned block devices.
+On Tue, Oct 05, 2021 at 07:11:02PM +0100, Lee Jones wrote:
+> On Tue, 05 Oct 2021, Eric Biggers wrote:
 > 
-> We can't just add a meaning for O_APPEND on block devices now,
+> > On Tue, Oct 05, 2021 at 10:14:58AM -0700, Adam Langley wrote:
+> > > On Tue, Oct 5, 2021 at 10:01 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> > > > I ran into these same -Wdeprecated-declarations compiler warnings on another
+> > > > project that uses the ENGINE API to access OpenSSL's support for PKCS#11 tokens.
+> > > > The conclusion was that in OpenSSL 3.0, the new API for PKCS#11 support isn't
+> > > > actually ready yet, so we had to keep using the ENGINE API and just add
+> > > > -Wno-deprecated-declarations to the compiler flags.
+> > > >
+> > > > Your patch just removes support for PKCS#11 in that case, which seems
+> > > > undesirable.  (Unless no one is actually using it?)
+> > > 
+> > > The patch removes support when OPENSSL_NO_ENGINE is defined, but
+> > > that's not defined by default in OpenSSL 3.0. (Unless something
+> > > changed recently.)
+> > > 
+> > > When OPENSSL_NO_ENGINE is defined, ENGINE support is not compiled into
+> > > OpenSSL and the headers don't include the functions:
+> > > https://github.com/openssl/openssl/blob/master/include/openssl/engine.h
+> > > .
+> > 
+> > Okay so this patch is actually a build fix for when OpenSSL doesn't include
+> > ENGINE support?
+> 
+> Correct.
+> 
+> > Currently this patch claims that it's removing the use of a
+> > "deprecated" API, which is something entirely different.
+> 
+> I see your point.
+> 
+> Happy to rejig the commit message if that would help.
 
-Make sense.
+*thread necromancy*
 
-Is a new call system call for nameless writes called for instead then?
-Then there is no baggage. Or is this completely stupid?
+Hi,
 
-> as it was previously silently ignored.  I also really don't think any
-> of these semantics even fit the block device to start with.  If you
-> want to work on raw zones use zonefs, that's what is exists for.
+These warnings are quite noisy on Fedora rawhide and other distros that
+have moved to OpenSSL 3.0. It's not clear to me from this thread if this
+patch is actually the correct fix?
 
-Using zonefs adds a slight VFS overhead. Fine if we want to live with
-that, but I have a feeling if we want to do something like just testing
-hot paths alone to compare apples to apples we'd want something more
-fine grained.
+-Kees
 
-  Luis
+-- 
+Kees Cook

@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A5E4CB330
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A254CB362
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiCBXzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 18:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S229784AbiCBX4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 18:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiCBXzs (ORCPT
+        with ESMTP id S229761AbiCBXz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:55:48 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D70C1301A7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:55:03 -0800 (PST)
+        Wed, 2 Mar 2022 18:55:58 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995A413110E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:55:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646265303; x=1677801303;
+  t=1646265314; x=1677801314;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J0QbwjCwDYXvMNsZ5InVMIU+FlQX9LNCp20z66s3YCI=;
-  b=N4KbMYvwgrFi/8qP6Tw5HqLC/XwJ+wyccsyU5sM+m8BPWcCwsllCKJZx
-   5guFVOTmWr+rgmXX0r/vd78fDy4GOxikGmf1qEX704K6JmrwZXd+oD3oV
-   eCZz7wqOwqy9AMZx81wJqbnsXFNqxoeIc7/URdhuuZvBS9U2kWhAW5zpk
-   1v87AqZQkZD6KRSYorUji7clalee7uf2YZq5oZWjDsYZzGZlgEznZXSlJ
-   nE+toLG/dCGVMt1TmUbtmG39jovB+4ajYcAuOIDKuFsCS9nxbMoO1ThZs
-   qirNeQokavNL4OE72OQ6y9Rt3M92k/Ua5tVc1IpYFVpal0RzkWMwPgaZY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253459978"
+  bh=RYhnBVg37Hvg/itaelH1cM2fBftR4o5ezh8YvKEbl2U=;
+  b=MHEgnyq38bHckbwLq3SQ6wGoWziGZDmGaEuc21jLamq23VBgedrl0Tkw
+   eoAjtbquDdggNY679/zqXNVposQxHPD711qfbtaiiTk+MdX0x1KvddzuP
+   E+yv6/I6Tibhri5TLlToD+kdLcZ7K170Rt8iycCKo+sRGVcr2QCxXF0mr
+   9yhS61YVVh4i6rkLzA3yXi7LFGRPrQB8gGWDMZHOvEQ7AZPPnOIeAY6Ln
+   LMJSyK7riajONWCb7eH4e7wYcZxY1wXgKSZTGs929XYZMBTOt1zxLBiHp
+   YIdzEYB7QK7EaMEbUuIuMFpBKTKU/vdiPyodEC9HPlf/TSwxHF9UXb5XP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233496797"
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253459978"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:33:01 -0800
+   d="scan'208";a="233496797"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:33:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="709698415"
+   d="scan'208";a="594181259"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2022 15:33:00 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2022 15:33:00 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nPYSp-00024t-Kg; Wed, 02 Mar 2022 23:32:59 +0000
-Date:   Thu, 3 Mar 2022 07:32:44 +0800
+        id 1nPYSp-000250-MT; Wed, 02 Mar 2022 23:32:59 +0000
+Date:   Thu, 3 Mar 2022 07:32:47 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/050-nvme 9/15] m68k-linux-ld: apple.c:undefined
- reference to `devm_apple_rtkit_init'
-Message-ID: <202203030728.ft88aFTm-lkp@intel.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Dmitry Shmidt <dimitrysh@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.9-p-release
+ 3994/9999] security/commoncap.c:75:5: warning: no previous declaration for
+ '__cap_capable'
+Message-ID: <202203030705.8QZOBwpb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,51 +64,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/050-nvme
-head:   fa98fe78deae80c3ca00451876f72fd38b2b3ee9
-commit: 27dce760587c8c88aef9a2ef877a92df348075a6 [9/15] WIP: nvme-apple: add initial Apple SoC NVMe driver
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220303/202203030728.ft88aFTm-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
+Hi John,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.9-p-release
+head:   74f5cdd2ad41ea660f18bcaf7ce3d8d3e8e88428
+commit: 0268f76e4b39897c7b9ecf5fae695dbbc7bb7426 [3994/9999] ANDROID: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants
+config: i386-randconfig-r034-20211122 (https://download.01.org/0day-ci/archive/20220303/202203030705.8QZOBwpb-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/27dce760587c8c88aef9a2ef877a92df348075a6
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/050-nvme
-        git checkout 27dce760587c8c88aef9a2ef877a92df348075a6
+        # https://github.com/ammarfaizi2/linux-block/commit/0268f76e4b39897c7b9ecf5fae695dbbc7bb7426
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.9-p-release
+        git checkout 0268f76e4b39897c7b9ecf5fae695dbbc7bb7426
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_destroy':
-   apple.c:(.text+0x51e): undefined reference to `apple_sart_remove_allowed_region'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_setup':
-   apple.c:(.text+0x5c2): undefined reference to `apple_sart_add_allowed_region'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_probe':
-   apple.c:(.text+0x1332): undefined reference to `apple_sart_get'
->> m68k-linux-ld: apple.c:(.text+0x152e): undefined reference to `devm_apple_rtkit_init'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_disable':
-   apple.c:(.text+0x17a4): undefined reference to `apple_rtkit_is_crashed'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_shutdown':
-   apple.c:(.text+0x1a1e): undefined reference to `apple_rtkit_is_running'
->> m68k-linux-ld: apple.c:(.text+0x1a30): undefined reference to `apple_rtkit_shutdown'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_remove':
-   apple.c:(.text+0x1ad6): undefined reference to `apple_rtkit_is_running'
-   m68k-linux-ld: apple.c:(.text+0x1ae6): undefined reference to `apple_rtkit_shutdown'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_reset_work':
-   apple.c:(.text+0x1b4e): undefined reference to `apple_rtkit_is_crashed'
->> m68k-linux-ld: apple.c:(.text+0x1b94): undefined reference to `apple_rtkit_is_running'
-   m68k-linux-ld: apple.c:(.text+0x1bec): undefined reference to `apple_rtkit_shutdown'
->> m68k-linux-ld: apple.c:(.text+0x1c00): undefined reference to `apple_rtkit_reinit'
->> m68k-linux-ld: apple.c:(.text+0x1c3c): undefined reference to `apple_rtkit_boot'
-   m68k-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_timeout':
-   apple.c:(.text+0x2280): undefined reference to `apple_rtkit_is_crashed'
-   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
+   In file included from include/linux/audit.h:26:0,
+                    from security/commoncap.c:11:
+   include/linux/sched.h:1260:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
+    ^~~~~
+>> security/commoncap.c:75:5: warning: no previous declaration for '__cap_capable' [-Wmissing-declarations]
+    int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+        ^~~~~~~~~~~~~
+   In file included from include/linux/capability.h:15:0,
+                    from security/commoncap.c:10:
+   security/commoncap.c: In function 'cap_prctl_drop':
+   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:903:7: note: in expansion of macro 'cap_valid'
+     if (!cap_valid(cap))
+          ^~~~~~~~~
+   security/commoncap.c: In function 'cap_task_prctl':
+   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:933:8: note: in expansion of macro 'cap_valid'
+      if (!cap_valid(arg2))
+           ^~~~~~~~~
+   include/uapi/linux/capability.h:355:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1017:10: note: in expansion of macro 'cap_valid'
+      if (((!cap_valid(arg3)) | arg4 | arg5))
+             ^~~~~~~~~
+
+
+vim +/__cap_capable +75 security/commoncap.c
+
+    59	
+    60	/**
+    61	 * __cap_capable - Determine whether a task has a particular effective capability
+    62	 * @cred: The credentials to use
+    63	 * @ns:  The user namespace in which we need the capability
+    64	 * @cap: The capability to check for
+    65	 * @audit: Whether to write an audit message or not
+    66	 *
+    67	 * Determine whether the nominated task has the specified capability amongst
+    68	 * its effective set, returning 0 if it does, -ve if it does not.
+    69	 *
+    70	 * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+    71	 * and has_capability() functions.  That is, it has the reverse semantics:
+    72	 * cap_has_capability() returns 0 when a task has a capability, but the
+    73	 * kernel's capable() and has_capability() returns 1 for this case.
+    74	 */
+  > 75	int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+    76			int cap, int audit)
+    77	{
+    78		struct user_namespace *ns = targ_ns;
+    79	
+    80		/* See if cred has the capability in the target user namespace
+    81		 * by examining the target user namespace and all of the target
+    82		 * user namespace's parents.
+    83		 */
+    84		for (;;) {
+    85			/* Do we have the necessary capabilities? */
+    86			if (ns == cred->user_ns)
+    87				return cap_raised(cred->cap_effective, cap) ? 0 : -EPERM;
+    88	
+    89			/* Have we tried all of the parent namespaces? */
+    90			if (ns == &init_user_ns)
+    91				return -EPERM;
+    92	
+    93			/* 
+    94			 * The owner of the user namespace in the parent of the
+    95			 * user namespace has all caps.
+    96			 */
+    97			if ((ns->parent == cred->user_ns) && uid_eq(ns->owner, cred->euid))
+    98				return 0;
+    99	
+   100			/*
+   101			 * If you have a capability in a parent user ns, then you have
+   102			 * it over all children user namespaces as well.
+   103			 */
+   104			ns = ns->parent;
+   105		}
+   106	
+   107		/* We never get here */
+   108	}
+   109	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

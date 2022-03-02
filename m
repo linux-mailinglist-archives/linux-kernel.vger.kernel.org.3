@@ -2,148 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD314CAA17
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1134CAA1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241918AbiCBQ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S240229AbiCBQ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbiCBQ0o (ORCPT
+        with ESMTP id S234152AbiCBQ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:26:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C413B76E33
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:00 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646238359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m7NOla583Dkc2hPJm4Geje9sBORuvB2xZD1bf3QcRf0=;
-        b=Qy+3zIMLj+7Rr1DQ41rQCdAwVFuQGyDYXVmWIRf0EIDo24k2KHuegBQEmHY2ThGiOo4vu1
-        e3rpbuhWvBbdDs0yxbaH+AsfAPXlSyeBNI3vXBNsVLeHYiPygQTRblS1kfadDSayLZ8i1P
-        u5HXrFIy1r81I3DR+0OnBRpqb193e3JVoWUEGiYa9xKzI7UtyFvH5HDYdV2kNaDYbFRTkl
-        +y9Roxk/TB1cT56WkNYGkhKlOvp4Vtez0c/EyUSSdZobpnA0rv5ed+rTNb/GP9e2mk4aeq
-        DflBSwptsNJfrgfENNEo1YUin+gsrsPh9V+RdJaN31E/37y5fRucynfba7iccw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646238359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m7NOla583Dkc2hPJm4Geje9sBORuvB2xZD1bf3QcRf0=;
-        b=Du14RPYMtbTfQ/71wH5f9Vcj+4qABQOtVVN3bp1MLQnAY4J+MVhvu0+jU7nITIiFh5tGx+
-        LCxAyEp1paHscgBg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v1 07/13] printk: move buffer definitions into
- console_emit_next_record() caller
-In-Reply-To: <Yg0iA/McHYWK6d4D@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-8-john.ogness@linutronix.de>
- <Yg0iA/McHYWK6d4D@alley>
-Date:   Wed, 02 Mar 2022 17:31:58 +0106
-Message-ID: <87pmn4gw2x.fsf@jogness.linutronix.de>
+        Wed, 2 Mar 2022 11:27:23 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A2BCD313
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:39 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222GJ9qN012351;
+        Wed, 2 Mar 2022 16:26:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RcSH3mtdEpdXRg0L6aPSqeiO4AoEs5HLm3q9XVTMxrM=;
+ b=d8wiG2blvPNoRBBELdrPbZePAKfogIi+SRTb2El7CV8oJMN6zlHmUo6ETQSX6DNc/YCD
+ Y7XmG3ug0Sc1uZRq+QazE04kQPnEhqor6JXSYg0KjNQt62gCsSZKLhIANlW1TVMFwMWU
+ gPeR0Xl4yNCIUd3FJ6FXl92zXAmKph0P3Xj5gpCZ2bPgla0ZOdsboDi+e5XLh/OxSrTD
+ EK/UaecgK3X7bu/wf74WbgJD9h31G3ii6x4V7WRJzB9ax2lloH12vKrKCeXPeSHsnH/h
+ mIZjeFqXc8QtoFq2Mc3r5p8Op1gVr96ANdhUHqf1JBQfo1OaNmmhshgT65VHCyvGhx1Q hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc0384dy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:26:06 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222GKRDN016088;
+        Wed, 2 Mar 2022 16:26:06 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc0384cu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:26:05 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222GH9lM018544;
+        Wed, 2 Mar 2022 16:26:03 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3egbj1afhd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:26:03 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222GQ1Uj55902570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 16:26:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 448DAAE045;
+        Wed,  2 Mar 2022 16:26:01 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9EF24AE04D;
+        Wed,  2 Mar 2022 16:26:00 +0000 (GMT)
+Received: from localhost (unknown [9.43.109.149])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Mar 2022 16:26:00 +0000 (GMT)
+Date:   Wed, 02 Mar 2022 21:55:58 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
+To:     andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz, mhiramat@kernel.org,
+        ndesaulniers@google.com, rostedt@goodmis.org,
+        samitolvanen@google.com
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.714815604@infradead.org>
+In-Reply-To: <20220224151322.714815604@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1646238087.afjf09xr2j.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SkRKCoQCZ7dl2feNbEMk1eRAkiPwxr4U
+X-Proofpoint-ORIG-GUID: ZSVhR5uNO1x7LtpaBXolgpK0ciyj9Ej8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=862 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203020071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16, Petr Mladek <pmladek@suse.com> wrote:
->> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
->> index 822b7b6ad6d1..02bde45c1149 100644
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -2597,13 +2611,13 @@ static bool console_emit_next_record(struct console *con, bool *handover)
->>  		goto skip;
->>  	}
->>  
->> -	if (con->flags & CON_EXTENDED) {
->> -		write_text = &ext_text[0];
->> -		len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
->> -		len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
->> +	if (ext_text) {
->> +		write_text = ext_text;
->> +		len = info_print_ext_header(ext_text, CONSOLE_EXT_LOG_MAX, r.info);
->> +		len += msg_print_ext_body(ext_text + len, CONSOLE_EXT_LOG_MAX - len,
->>  					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
->>  	} else {
->> -		write_text = &text[0];
->> +		write_text = text;
->>  		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
->
-> @text and @ext_text buffers are never used at the same time. It might
-> be enough to use a single text[CONSOLE_EXT_LOG_MAX] buffer. It would
-> even slightly simplify the code.
+Peter Zijlstra wrote:
+> Have ftrace_location() search the symbol for the __fentry__ location
+> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
+>=20
+> This avoids a whole bunch of assumptions about __fentry__ being at
+> func+0.
+>=20
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/trace/ftrace.c |   30 ++++++++++++++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+>=20
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -1578,7 +1578,24 @@ unsigned long ftrace_location_range(unsi
+>   */
+>  unsigned long ftrace_location(unsigned long ip)
+>  {
+> -	return ftrace_location_range(ip, ip);
+> +	struct dyn_ftrace *rec;
+> +	unsigned long offset;
+> +	unsigned long size;
+> +
+> +	rec =3D lookup_rec(ip, ip);
+> +	if (!rec) {
+> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
+> +			goto out;
+> +
+> +		if (!offset)
+> +			rec =3D lookup_rec(ip - offset, (ip - offset) + size);
+> +	}
+> +
+> +	if (rec)
+> +		return rec->ip;
+> +
+> +out:
+> +	return 0;
+>  }
+> =20
+>  /**
+> @@ -5110,11 +5127,16 @@ int register_ftrace_direct(unsigned long
+>  	struct ftrace_func_entry *entry;
+>  	struct ftrace_hash *free_hash =3D NULL;
+>  	struct dyn_ftrace *rec;
+> -	int ret =3D -EBUSY;
+> +	int ret =3D -ENODEV;
+> =20
+>  	mutex_lock(&direct_mutex);
+> =20
+> +	ip =3D ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	/* See if there's a direct function at @ip already */
+> +	ret =3D -EBUSY;
+>  	if (ftrace_find_rec_direct(ip))
+>  		goto out_unlock;
 
-No, they _are_ used at the same time.
+I think some of the validation at this point can be removed (diff below).
 
-r.text_buf is @text. msg_print_ext_body() takes @ext_text and
-&r.text_buf[0]. Unfortunately msg_print_ext_body() does not work "in
-place" like record_print_text() does.
+> =20
+> @@ -5222,6 +5244,10 @@ int unregister_ftrace_direct(unsigned lo
+> =20
+>  	mutex_lock(&direct_mutex);
+> =20
+> +	ip =3D ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	entry =3D find_direct_entry(&ip, NULL);
+>  	if (!entry)
+>  		goto out_unlock;
 
->> @@ -2650,6 +2664,9 @@ static bool console_emit_next_record(struct console *con, bool *handover)
->>   */
->>  static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handover)
->>  {
->> +	static char dropped_text[DROPPED_TEXT_MAX];
->> +	static char ext_text[CONSOLE_EXT_LOG_MAX];
->> +	static char text[CONSOLE_LOG_MAX];
->
-> These buffers are for printing from console_unlock(). The same buffers
-> will need to be allocated for each console in the kthreads.
->
-> It might make sense to allocate these buffers in register_console()
-> and store the pointers in struct console.
->
-> Well, we might need extra buffers for atomic console drivers and
-> diffent contexts that would be used during panic. But maybe
-> they can be allocated in register_console() as well.
+We should also update modify_ftrace_direct(). An incremental diff below.
 
-register_console() happens quite early. But my plan for v2 is to make
-them global static variables and allocate them on the first
-register_console().
 
->>  	bool any_usable = false;
->>  	struct console *con;
->>  	bool any_progress;
->> @@ -2667,7 +2684,16 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
->>  				continue;
->>  			any_usable = true;
->>  
->> -			progress = console_emit_next_record(con, handover);
->> +			if (con->flags & CON_EXTENDED) {
->> +				/* Extended consoles do not print "dropped messages". */
->> +				progress = console_emit_next_record(con, &text[0],
->
-> IMHO, &text[0] buffer is not used for extended consoles.
+- Naveen
 
-Yes. msg_print_ext_body() needs it.
 
->> +								    &ext_text[0], NULL,
->> +								    handover);
->> +			} else {
->> +				progress = console_emit_next_record(con, &text[0],
->> +								    NULL, &dropped_text[0],
->> +								    handover);
->> +			}
->>  			if (*handover)
->>  				return true;
->
-> I do not resist on allocating the buffers in register_console(). I am
-> not sure if it would really makes things easier.
+---
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 65d7553668ca3d..17ce4751a2051a 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -5126,7 +5126,6 @@ int register_ftrace_direct(unsigned long ip, unsigned=
+ long addr)
+ 	struct ftrace_direct_func *direct;
+ 	struct ftrace_func_entry *entry;
+ 	struct ftrace_hash *free_hash =3D NULL;
+-	struct dyn_ftrace *rec;
+ 	int ret =3D -ENODEV;
+=20
+ 	mutex_lock(&direct_mutex);
+@@ -5140,26 +5139,6 @@ int register_ftrace_direct(unsigned long ip, unsigne=
+d long addr)
+ 	if (ftrace_find_rec_direct(ip))
+ 		goto out_unlock;
+=20
+-	ret =3D -ENODEV;
+-	rec =3D lookup_rec(ip, ip);
+-	if (!rec)
+-		goto out_unlock;
+-
+-	/*
+-	 * Check if the rec says it has a direct call but we didn't
+-	 * find one earlier?
+-	 */
+-	if (WARN_ON(rec->flags & FTRACE_FL_DIRECT))
+-		goto out_unlock;
+-
+-	/* Make sure the ip points to the exact record */
+-	if (ip !=3D rec->ip) {
+-		ip =3D rec->ip;
+-		/* Need to check this ip for a direct. */
+-		if (ftrace_find_rec_direct(ip))
+-			goto out_unlock;
+-	}
+-
+ 	ret =3D -ENOMEM;
+ 	direct =3D ftrace_find_direct_func(addr);
+ 	if (!direct) {
+@@ -5380,6 +5359,10 @@ int modify_ftrace_direct(unsigned long ip,
+ 	mutex_lock(&direct_mutex);
+=20
+ 	mutex_lock(&ftrace_lock);
++	ip =3D ftrace_location(ip);
++	if (!ip)
++		goto out_unlock;
++
+ 	entry =3D find_direct_entry(&ip, &rec);
+ 	if (!entry)
+ 		goto out_unlock;
+--=20
+2.35.1
 
-I'll give it a try for v2.
-
-John

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EEA4CB043
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19FC4CB041
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244710AbiCBUt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S242249AbiCBUty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244838AbiCBUtf (ORCPT
+        with ESMTP id S244710AbiCBUti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:49:35 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A184DD465
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:35 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so1770071pju.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:35 -0800 (PST)
+        Wed, 2 Mar 2022 15:49:38 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4617CD64EA
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:38 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 195so2637935pgc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ezGZS6wKoaDPZZr1vSGSOGCOOXHs/t5LaRnTO/HK9rM=;
-        b=LawSeR1NmUPUaUioLDLVRqBuUyq3N4d67ynn20lLI3i3DZ3CODegap5Yx7zLInYZ/r
-         O8E5M8tCP1pGZ9VUwlv+xv98o9JL8OsaV30TLtKckOZNrYzkWxO3OjkYw+5ETMEVG4ib
-         K2IGe5HzdbqZcgrhpAfHFCC6HvDVOmji0/t9EzKBXtMtqTsQbbvlLgoOnwpSWSRR2v8h
-         GJuxjshLyHG92UAdodKsXzogzMlZC4wnVaurId9t2/7NhZWFFWjuk6S5lMwZuWCIOHrV
-         JLIUQYW/5Qo9fDK5jBeWmreyJmekoOFaYbF9ZEGgMk/veivOmr2veDI4EdWhjvNy3/S6
-         ngtQ==
+        bh=qqbW4mdqciy+82dvr9Ujq0D1mLaRlfhiMe48ZVZg+Ds=;
+        b=JJ6JYyQE/5/9vxeTZIIdWgeBM/zmg+L98MNjcZd0o2zhHMBTDjYcxsp/LuqCKUuFsJ
+         viLEUxdLWN1Kg1SWyfTYIBNpl2ih0WB7MwW1HJCHhDisEU7cBvdIPoSrykrsH/5DW6x9
+         yYLtqtF2CdidfNOlAaKFnU1+UKtH6gIttB4IkwstNnOtF8ogVfZTTX5KSPJUHPFz41Zp
+         1fc4X7h72QUp2ryaurEPId7wNP673kqBCSebYIzwgaPKPEaVxyea2ZtuuvJ4++wHhHux
+         EoT1F/hTytT+15sSnDJf8tkkHK3wY/oJcpwROOl3TvQ4gatqRJ89ZFt7htd7sCVKI2rf
+         2vPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ezGZS6wKoaDPZZr1vSGSOGCOOXHs/t5LaRnTO/HK9rM=;
-        b=qYggJ79h7MZ0UG9nQ40pqDikFKcBXRhQVUaCNu1erILc0J8D+KTYBkfivlX8N8nIBS
-         /G7DRiYn0GqpSi545YaPIzeyC8xzaZ9JHrWN9wPrYSg6UBGaBgvB4YgvGLOLzpbFOpn/
-         SQIwGdbuqVR/dJkyfszuWc91rA4+pIbnLv98h89GmqVgn3gKnTZtJ8ksh8WPFOhKMFP8
-         QjdqvmxlJubhrddq89Ar/b4zr7jtL6SOL34DIY3GoWKeYz3IDnXIUxn+ZhcFXJ1JH5p5
-         HQ7eJPI4J8Sf1QNYi3m5qCiqc76I+R+6Iv1pqfwEe0HAvBb5NTfZ/NeBUuRTWNtUS2Em
-         tZwg==
-X-Gm-Message-State: AOAM530uiyUhb1RC6vJaKSiZXp4tJ9LZHQy4sh+XGWHtfBonr/8TZJpH
-        XYFEFG9tXCioVLaRlNYUMnQ=
-X-Google-Smtp-Source: ABdhPJzQJ3VVGTz9pnkt/XW/nXhMX9DaRNvZpdSD6AbdCZsfrAJkHTTFWDXhW9jS3HYgUMIXa+uCzw==
-X-Received: by 2002:a17:902:6bc5:b0:14f:ae30:3b6f with SMTP id m5-20020a1709026bc500b0014fae303b6fmr33142297plt.60.1646254114629;
-        Wed, 02 Mar 2022 12:48:34 -0800 (PST)
+        bh=qqbW4mdqciy+82dvr9Ujq0D1mLaRlfhiMe48ZVZg+Ds=;
+        b=t14g84MGxO05DZF7Y4NuKnfLk52+QnuhoEdpt7twuX3qMfg0048bX14BotjX9O6wuM
+         mYez5B89HV2m4xjLEDXuf+TTBjOwSKYK1K876Td6c1VvQ+2D1PPx5+FRRWBCN5ESBC7H
+         qOyN3M9sl2v0hPj4dWBwDWxT8sgoI1rh1uxQu/ZIZJpd/GOCeKvMDn2JZbpr0mW5jKpU
+         n8dYLFOk/B4V3XWcgfzHtwnlgqy4kaMNtKQamEEGEV968XAGOo6oq7ke35IXgLZ1D2iz
+         DZQBiPDd/pjT3AxDMMh7AOsJOVDG4opydKC94hprI+Y+Itr1TLpTgy3DlOvqnVJwi6Gk
+         ScDw==
+X-Gm-Message-State: AOAM533bU3Y4Jysaj2fTPcYHxltFtDqVJXPFhwO0ikxDAzAUjfQscW7G
+        HP0DqcEYjL1OFDz1fwa7Ums=
+X-Google-Smtp-Source: ABdhPJxPv4BnSvxVWj8xRhjbwT5XPOZlzy7nsDZ/fonBx/0aZNrIynaWFG7cZ+7WPnnjhQt35h/xtA==
+X-Received: by 2002:a05:6a00:248c:b0:4e1:4b53:18f1 with SMTP id c12-20020a056a00248c00b004e14b5318f1mr35078186pfv.79.1646254117836;
+        Wed, 02 Mar 2022 12:48:37 -0800 (PST)
 Received: from localhost.localdomain ([103.161.98.179])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.31
+        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:48:34 -0800 (PST)
+        Wed, 02 Mar 2022 12:48:37 -0800 (PST)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -56,9 +56,9 @@ To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Martin Kaiser <martin@kaiser.cx>
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 10/16] staging: r8188eu: mark is_basicrate as bool
-Date:   Thu,  3 Mar 2022 02:17:31 +0530
-Message-Id: <20220302204737.49056-11-makvihas@gmail.com>
+Subject: [PATCH 11/16] staging: r8188eu: mark is_ap_in_tkip as bool
+Date:   Thu,  3 Mar 2022 02:17:32 +0530
+Message-Id: <20220302204737.49056-12-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220302204737.49056-1-makvihas@gmail.com>
 References: <20220302204737.49056-1-makvihas@gmail.com>
@@ -74,26 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark is_basicrate as bool as it returns true/false.
+Mark is_ap_in_tkip as bool as it returns true/false.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_wlan_util.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_wlan_util.c   | 2 +-
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index eef8523c3..8e8a82a1e 100644
+index 8e8a82a1e..665b07719 100644
 --- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
 +++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -167,7 +167,7 @@ static unsigned char ratetbl_val_2wifirate(unsigned char rate)
- 	return val;
+@@ -1013,7 +1013,7 @@ void update_beacon_info(struct adapter *padapter, u8 *pframe, uint pkt_len, stru
+ 	}
  }
  
--static int is_basicrate(struct adapter *padapter, unsigned char rate)
-+static bool is_basicrate(struct adapter *padapter, unsigned char rate)
+-unsigned int is_ap_in_tkip(struct adapter *padapter)
++bool is_ap_in_tkip(struct adapter *padapter)
  {
- 	int i;
- 	unsigned char val;
+ 	u32 i;
+ 	struct ndis_802_11_var_ie *pIE;
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index cf397ac68..0c555ea67 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -508,7 +508,7 @@ unsigned int receive_disconnect(struct adapter *padapter,
+ 
+ unsigned char get_highest_rate_idx(u32 mask);
+ int support_short_GI(struct adapter *padapter, struct HT_caps_element *caps);
+-unsigned int is_ap_in_tkip(struct adapter *padapter);
++bool is_ap_in_tkip(struct adapter *padapter);
+ 
+ void report_join_res(struct adapter *padapter, int res);
+ void report_survey_event(struct adapter *padapter, struct recv_frame *precv_frame);
 -- 
 2.30.2
 

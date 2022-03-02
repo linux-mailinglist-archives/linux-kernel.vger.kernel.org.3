@@ -2,163 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC76E4CAAB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF174CAAC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiCBQsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S243503AbiCBQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241049AbiCBQss (ORCPT
+        with ESMTP id S233651AbiCBQum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:48:48 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1318C50E19
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:48:04 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K80RQ4bLwz9sSR;
-        Wed,  2 Mar 2022 17:48:02 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ojv3flF-hEnn; Wed,  2 Mar 2022 17:48:02 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K80RP3v1Kz9sSN;
-        Wed,  2 Mar 2022 17:48:01 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 208A88B76D;
-        Wed,  2 Mar 2022 17:48:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id O_1AzIOzJJwo; Wed,  2 Mar 2022 17:48:01 +0100 (CET)
-Received: from [172.25.230.108] (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CB7358B763;
-        Wed,  2 Mar 2022 17:48:00 +0100 (CET)
-Message-ID: <a120fa0c-4d00-ed4c-cffa-0df1fb5abb2b@csgroup.eu>
-Date:   Wed, 2 Mar 2022 17:48:00 +0100
+        Wed, 2 Mar 2022 11:50:42 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8357CB647;
+        Wed,  2 Mar 2022 08:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646239787;
+        bh=gxRPdEU+QPahBjvaCt/q+5WcE48CF2vkdjeoCYbnm8k=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=DIMAUtcbBH5aqT9ZHQJ49EvcpD8/ypWqdlBWZPQQMbaBqO5jD+/8XM0cbNeG9S1ZM
+         b9YaXqmGovnW/hbIQWTfqZVUN8P4BqoDlTzQMa3ucH125OJGinNUXcRZ0mEyGyC/M0
+         jgA9WqEk+61Rwwl1vXZePt++Kygkx/354hdI5sNk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.242.61] ([80.187.121.99]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MBlxW-1nUvo71KOK-00CCTW; Wed, 02
+ Mar 2022 17:49:47 +0100
+Message-ID: <666d1565-0467-bb21-916b-073392129e1a@gmx.de>
+Date:   Wed, 2 Mar 2022 17:48:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] powerpc/vdso64: link vdso64 with linker
-Content-Language: fr-FR
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <20200901222523.1941988-1-ndesaulniers@google.com>
- <20200901222523.1941988-2-ndesaulniers@google.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20200901222523.1941988-2-ndesaulniers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] video: fbdev: sm712fb: Fix crash in smtcfb_write()
+Content-Language: en-US
+To:     Zheyu Ma <zheyuma97@gmail.com>, sudipm.mukherjee@gmail.com,
+        teddy.wang@siliconmotion.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220302143311.2109322-1-zheyuma97@gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220302143311.2109322-1-zheyuma97@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jWj92EA9VN2CX3/FfWKXV7Wf4QzTMp4F0RdNd9teZOaVJaTwfM/
+ z6zv8GaRMaBYDFqDoC3j4AFCCYfDyZKl1a5AefVuBN5MDm9QLcnbymtz6px/wLjOlTshd/V
+ BXA4Ttg4qeQvlf/uK6XGRbWVnIgKAGSbK+tSHPGkzO329uMnxLzPrXuedGI0YPGm/RARiOl
+ wetzzGtJTs7+Jifa37Hmw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b4o7OKXxOvc=:3+02oL21ahFgW0JgnDjGPr
+ oh3YlTwndNXo83yaKdaAhiEX9XT8LcyiP74h0zMaNA8RILtMzLB+xG/t3v8mFR6q7TyyKpfbg
+ wXR3HdnjwV7Lq27CkUuVoJazqnacDXhKU3R3h60pzmiysIM6igaAHspAUG054DuUYqnFWQMeE
+ Cb0FvvjAZcsUuhyiTStAcoZFXyMgzqSbJeix367DdS3/PhxldhjLP03+hJiOYi6JYmpJQTAXY
+ Dl3Fi74FEvxgmbW4yPvu3sT49hIl+ZME4VG01A7qj9BMFO8+qqsaxIGXguwdwXOYgMh0Bv2pf
+ WJNkfbTT6rb48kRfTm14u5AzfBAxGd2lMQuNwo7yKUpIZ5gFSX4TlKwOqYCkgwagTRj5TPuv1
+ iMM/xGVafTZ1kixB87pFhLx1BD8o6BGAzHewMVLVL6scXQ3KVZ2dDPLPKrVesWqBM520Uipel
+ PC6TLdJ9agW8MBOeM4LwWlepnXbQk8ai+ou0LZhKgY0QeMjpm/0cZ0/nOR/gCS1DS4w3hGiNW
+ 9NhNyAy2I6Lfsc5oZlpRIl7Tx3ERrZODRD+wqDeofykMm8y5qpN8V9KRKBdeDXYCVc/TiHVXV
+ FHsj3fi9XTnmoD1KEK9Hd2VcRt2UoQyK3cGnqTT45ecDh0No+kKGw6kRKJNppNDvQrnrMo4sP
+ vfAFXsB6C9PUwQ0WE0OL/T/b8HpvUk48qNaYLhxoIloivxSmJOm9axXnhNpfV+34q0aJClvYM
+ PpZlXMK/6buNhl9eVj9D3szUINc1oO/BPX+4zgTQugrnICrMSdWPm/4BeYuAnuIAuo27sV+5r
+ cVwHFYp2EuT7glZ16l/GJ5vzY5VoQagK6609qWHjUvx+YTJ1bPsk6K3Dv229BPTzhGg3GWh64
+ mG85I+kchWaME2DBFaJORAvAWggUbqdtfQT0bEtsbiThItF0l8u7fRAlybWvYUUURm9CxDZE5
+ QKVTQ2WoiXMcVsAC1eAtpQLz8QMZu3p6wInpRjTYvqd+wvj68AD8zisl8tpAsQ+qETcY2YCvp
+ 5ZxgIJCJDKJb5kAclIqrxFHa0rGcWwHCf6bhZznMZS4DidNcHEkqiYkvMyjlJgkma1pyAWqUT
+ gmlFHFgC54EfFg=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/2/22 15:33, Zheyu Ma wrote:
+> When the sm712fb driver writes three bytes to the framebuffer, the
+> driver will crash:
+>
+>     BUG: unable to handle page fault for address: ffffc90001ffffff
+>     RIP: 0010:smtcfb_write+0x454/0x5b0
+>     Call Trace:
+>      vfs_write+0x291/0xd60
+>      ? do_sys_openat2+0x27d/0x350
+>      ? __fget_light+0x54/0x340
+>      ksys_write+0xce/0x190
+>      do_syscall_64+0x43/0x90
+>      entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> Fix it by removing the open-coded endianness fixup-code.
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
+Thanks... it's already in the fbdev git tree and queued up for v5.18...
+https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/com=
+mit/?h=3Dfor-next&id=3Dbd771cf5c4254511cc4abb88f3dab3bd58bdf8e8
 
-Le 02/09/2020 à 00:25, Nick Desaulniers a écrit :
-> Rather than invoke the compiler as the driver, use the linker. That way
-> we can check --orphan-handling=warn support correctly, as cc-ldoption
-> was removed in
-> commit 055efab3120b ("kbuild: drop support for cc-ldoption").
-> 
-> Painstakingly compared the output between `objdump -a` before and after
-> this change. Now function symbols have the correct type of FUNC rather
-> than NONE, and the entry is slightly different (which doesn't matter for
-> the vdso). Binary size is the same.
-> 
-> Fixes: commit f2af201002a8 ("powerpc/build: vdso linker warning for orphan sections")
-> Link: https://lore.kernel.org/lkml/CAKwvOdnn3wxYdJomvnveyD_njwRku3fABWT_bS92duihhywLJQ@mail.gmail.com/
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Helge
 
-Is this change still necessary ? If so please rebase as we have changed 
-the structure of VDSO source files (Only one directory common to 32 and 64).
-
-Christophe
 
 > ---
->   arch/powerpc/include/asm/vdso.h         | 17 ++---------------
->   arch/powerpc/kernel/vdso64/Makefile     |  8 ++++++--
->   arch/powerpc/kernel/vdso64/vdso64.lds.S |  1 -
->   3 files changed, 8 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/vdso.h b/arch/powerpc/include/asm/vdso.h
-> index 2ff884853f97..11b2ecf49f79 100644
-> --- a/arch/powerpc/include/asm/vdso.h
-> +++ b/arch/powerpc/include/asm/vdso.h
-> @@ -24,19 +24,7 @@ int vdso_getcpu_init(void);
->   
->   #else /* __ASSEMBLY__ */
->   
-> -#ifdef __VDSO64__
-> -#define V_FUNCTION_BEGIN(name)		\
-> -	.globl name;			\
-> -	name:				\
+>  drivers/video/fbdev/sm712fb.c | 21 ++++-----------------
+>  1 file changed, 4 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/sm712fb.c b/drivers/video/fbdev/sm712fb=
+.c
+> index 0dbc6bf8268a..e355089ac7d6 100644
+> --- a/drivers/video/fbdev/sm712fb.c
+> +++ b/drivers/video/fbdev/sm712fb.c
+> @@ -1130,7 +1130,7 @@ static ssize_t smtcfb_write(struct fb_info *info, =
+const char __user *buf,
+>  		count =3D total_size - p;
+>  	}
+>
+> -	buffer =3D kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL=
+);
+> +	buffer =3D kmalloc(PAGE_SIZE, GFP_KERNEL);
+>  	if (!buffer)
+>  		return -ENOMEM;
+>
+> @@ -1148,24 +1148,11 @@ static ssize_t smtcfb_write(struct fb_info *info=
+, const char __user *buf,
+>  			break;
+>  		}
+>
+> -		for (i =3D c >> 2; i--;) {
+> -			fb_writel(big_swap(*src), dst++);
+> +		for (i =3D (c + 3) >> 2; i--;) {
+> +			fb_writel(big_swap(*src), dst);
+> +			dst++;
+>  			src++;
+>  		}
+> -		if (c & 3) {
+> -			u8 *src8 =3D (u8 *)src;
+> -			u8 __iomem *dst8 =3D (u8 __iomem *)dst;
 > -
-> -#define V_FUNCTION_END(name)		\
-> -	.size name,.-name;
-> -
-> -#define V_LOCAL_FUNC(name) (name)
-> -#endif /* __VDSO64__ */
-> -
-> -#ifdef __VDSO32__
-> -
-> +#if defined(__VDSO32__) || defined (__VDSO64__)
->   #define V_FUNCTION_BEGIN(name)		\
->   	.globl name;			\
->   	.type name,@function; 		\
-> @@ -46,8 +34,7 @@ int vdso_getcpu_init(void);
->   	.size name,.-name;
->   
->   #define V_LOCAL_FUNC(name) (name)
-> -
-> -#endif /* __VDSO32__ */
-> +#endif /* __VDSO{32|64}__ */
->   
->   #endif /* __ASSEMBLY__ */
->   
-> diff --git a/arch/powerpc/kernel/vdso64/Makefile b/arch/powerpc/kernel/vdso64/Makefile
-> index 38c317f25141..7ea3ce537d0a 100644
-> --- a/arch/powerpc/kernel/vdso64/Makefile
-> +++ b/arch/powerpc/kernel/vdso64/Makefile
-> @@ -32,9 +32,13 @@ $(obj)/%.so: OBJCOPYFLAGS := -S
->   $(obj)/%.so: $(obj)/%.so.dbg FORCE
->   	$(call if_changed,objcopy)
->   
-> +ldflags-y := -shared -soname linux-vdso64.so.1 \
-> +	$(call ld-option, --eh-frame-hdr) \
-> +	$(call ld-option, --orphan-handling=warn) -T
-> +
->   # actual build commands
-> -quiet_cmd_vdso64ld = VDSO64L $@
-> -      cmd_vdso64ld = $(CC) $(c_flags) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) $(call cc-ldoption, -Wl$(comma)--orphan-handling=warn)
-> +quiet_cmd_vdso64ld = LD      $@
-> +      cmd_vdso64ld = $(cmd_ld)
->   
->   # install commands for the unstripped file
->   quiet_cmd_vdso_install = INSTALL $@
-> diff --git a/arch/powerpc/kernel/vdso64/vdso64.lds.S b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-> index 4e3a8d4ee614..58c33b704b6a 100644
-> --- a/arch/powerpc/kernel/vdso64/vdso64.lds.S
-> +++ b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-> @@ -11,7 +11,6 @@ OUTPUT_FORMAT("elf64-powerpcle", "elf64-powerpcle", "elf64-powerpcle")
->   OUTPUT_FORMAT("elf64-powerpc", "elf64-powerpc", "elf64-powerpc")
->   #endif
->   OUTPUT_ARCH(powerpc:common64)
-> -ENTRY(_start)
->   
->   SECTIONS
->   {
+> -			for (i =3D c & 3; i--;) {
+> -				if (i & 1) {
+> -					fb_writeb(*src8++, ++dst8);
+> -				} else {
+> -					fb_writeb(*src8++, --dst8);
+> -					dst8 +=3D 2;
+> -				}
+> -			}
+> -			dst =3D (u32 __iomem *)dst8;
+> -		}
+>
+>  		*ppos +=3D c;
+>  		buf +=3D c;
+

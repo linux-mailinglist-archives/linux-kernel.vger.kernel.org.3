@@ -2,162 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8AC4CAED7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF02B4CAEDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241761AbiCBThg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S241759AbiCBTjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241716AbiCBThe (ORCPT
+        with ESMTP id S233668AbiCBTjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:37:34 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98765D76D4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:36:50 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id u11-20020a17090ae00b00b001bc4cef20f1so1432396pjy.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:36:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=/rFz9WuD68JZvZdSymWTaIZIBcr35Cslo8bOp/2Fz0s=;
-        b=Z4dNVLLzNoxuSxQda8ipH6FUJbpN1A5Yyt4TiE7QlIDG6OCU+SMgpd03L2qd+jlK8e
-         4k4XCoZwnrytb/orxLBsohQHlnWQqQmsO08rtTNDHVSMe2J3WXgDVsXV5P0/OffCQRcH
-         Wvym0V5NY2s9tXPNy8IXmig2GWkYZ8dUqez5IGk/HqpyNfVS5bPTUodnc74DvdvI7J6s
-         IDMBKp81GlX4gzm0cSqV7Nhw3VEsNwk52eacNIqToFTjc/clwiEe5k5A0ybJyNT3AMAB
-         VP+RIyMbNW7VmxD+YU7N16wS3NRDb4OEkyOjTj/ZbXMpMBU4+3TuD5XgVRMAo4Rrzuqu
-         oJXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=/rFz9WuD68JZvZdSymWTaIZIBcr35Cslo8bOp/2Fz0s=;
-        b=ite/4/hZm9LAvzdiWDzs3+88h1JYGeRuhsjr75qiVmMy/vQdTGRDWFlw+k++25w+nh
-         5UTswZpoJBvQjJX4tCjd5jzYCNMxxGmeH6tWO022Mp4VOyPgdkTDyChMDMby4hMxryUB
-         dcPyYpSqgJhAd+ioJKIO9My40wc0aks+ZtK07y34RiKbt/cY9sJunOgHXK67vWY8b5fz
-         bykQXS6BAqF7iTaBSIDAF7BhkCon0zfwt7/sfiA7PUKRppW3pHEv44xQdNRLAhM8XzWN
-         QfLVlAjo3gAfl/gMoBksibz10Vdcor1Pcss7OWHf51Lcj0aCs8RBhz8BhGBZB/sU6j95
-         M6Vg==
-X-Gm-Message-State: AOAM532xIOlYWUHfy1x0gsM6WOAQURYCl+7jPiOD2TTism+1r6oq0sHt
-        iepz4xRuu37PbTFNCoHAK9Eq+A0KTm4=
-X-Google-Smtp-Source: ABdhPJwOCBzLooZc0i5PnERg9swC5nI04if9PXMoPCbrZH7AGxIoIhWNk5iwcUhjs9Q88WX2SbGsqMkxB8U=
-X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:306])
- (user=ctshao job=sendgmr) by 2002:a17:902:edcd:b0:14d:c114:b86b with SMTP id
- q13-20020a170902edcd00b0014dc114b86bmr32115492plk.166.1646249810047; Wed, 02
- Mar 2022 11:36:50 -0800 (PST)
-Date:   Wed,  2 Mar 2022 19:36:38 +0000
-In-Reply-To: <20220302102705.15c32822@gandalf.local.home>
-Message-Id: <20220302193638.11034-1-ctshao@google.com>
-Mime-Version: 1.0
-References: <20220302102705.15c32822@gandalf.local.home>
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH v2] config: Allow kernel installation packaging to override pkg-config
-From:   Chun-Tse Shao <ctshao@google.com>
-To:     rostedt@goodmis.org
-Cc:     ctshao@google.com, devicetree@vger.kernel.org,
-        frowand.list@gmail.com, jpoimboe@redhat.com,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, peterz@infradead.org, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 14:39:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95248C485F;
+        Wed,  2 Mar 2022 11:38:49 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 099132199B;
+        Wed,  2 Mar 2022 19:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646249928; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SqbJsc1TBGvxQcYVNa9lPWZfK+TLadggigkpbeRkDR8=;
+        b=Cs8G4w0HowThm3kITe3nH4J1b3Dp2Zri0J/tFIt6wGn/jMJcxg2Z0Ar5XGIrgKDzvstgnl
+        3c7E+QhR2O4dP+y7txv4Jf4gzKhrF/ukQdhHLZEPkNbPozFy8cT9IwgyugJlT8o33cuBLx
+        hzMlTYIGBITkxAg1VO9W8/2jNqporbA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646249928;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SqbJsc1TBGvxQcYVNa9lPWZfK+TLadggigkpbeRkDR8=;
+        b=okr0zA+HwG4MIR5vKGAb9kJUBDMgJPDjTd5F2qQEYxw96PsgzQ8ayWJNTt6Dld/jyPitGA
+        Wxom2jaza1u584Bg==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5C202A3B84;
+        Wed,  2 Mar 2022 19:38:47 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 20:38:46 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Helge Deller <deller@gmx.de>, x86@kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Martin Mares <mj@ucw.cz>,
+        linux-video@atrey.karlin.mff.cuni.cz,
+        Daniel Mack <daniel@zonque.org>
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+Message-ID: <20220302193846.GT3113@kunlun.suse.cz>
+References: <20220218093334.24830-1-msuchanek@suse.de>
+ <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
-what pkg-config and parameters are used.
+Hello,
 
-Signed-off-by: Chun-Tse Shao <ctshao@google.com>
----
- Makefile               | 3 ++-
- scripts/Makefile       | 4 ++--
- scripts/dtc/Makefile   | 6 +++---
- tools/objtool/Makefile | 4 ++--
- 4 files changed, 9 insertions(+), 8 deletions(-)
+On Wed, Mar 02, 2022 at 08:31:25PM +0100, Thomas Zimmermann wrote:
+> Hi,
+> 
+> is this ready to be merged?
 
-diff --git a/Makefile b/Makefile
-index daeb5c88b50b..f6c5bef7e141 100644
---- a/Makefile
-+++ b/Makefile
-@@ -430,6 +430,7 @@ else
- HOSTCC	= gcc
- HOSTCXX	= g++
- endif
-+HOSTPKG_CONFIG	= pkg-config
- 
- export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
- 			      -O2 -fomit-frame-pointer -std=gnu89
-@@ -525,7 +526,7 @@ KBUILD_LDFLAGS_MODULE :=
- KBUILD_LDFLAGS :=
- CLANG_FLAGS :=
- 
--export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
-+export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
- export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
- export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
- export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
-diff --git a/scripts/Makefile b/scripts/Makefile
-index ce5aa9030b74..f084f08ed176 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -14,8 +14,8 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
- HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
- HOSTLDLIBS_sorttable = -lpthread
- HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
--HOSTCFLAGS_sign-file.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
--HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
-+HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
-+HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
- 
- ifdef CONFIG_UNWINDER_ORC
- ifeq ($(ARCH),x86_64)
-diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
-index 95aaf7431bff..743fc08827ea 100644
---- a/scripts/dtc/Makefile
-+++ b/scripts/dtc/Makefile
-@@ -18,7 +18,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
- # Source files need to get at the userspace version of libfdt_env.h to compile
- HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
- 
--ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
-+ifeq ($(shell $(HOSTPKG_CONFIG) --exists yaml-0.1 2>/dev/null && echo yes),)
- ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
- $(error dtc needs libyaml for DT schema validation support. \
- 	Install the necessary libyaml development package.)
-@@ -27,9 +27,9 @@ HOST_EXTRACFLAGS += -DNO_YAML
- else
- dtc-objs	+= yamltree.o
- # To include <yaml.h> installed in a non-default path
--HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
-+HOSTCFLAGS_yamltree.o := $(shell $(HOSTPKG_CONFIG) --cflags yaml-0.1)
- # To link libyaml installed in a non-default path
--HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
-+HOSTLDLIBS_dtc	:= $(shell $(HOSTPKG_CONFIG) yaml-0.1 --libs)
- endif
- 
- # Generated files need one more search path to include headers in source tree
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 92ce4fce7bc7..549acc5859e9 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -19,8 +19,8 @@ LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
- OBJTOOL    := $(OUTPUT)objtool
- OBJTOOL_IN := $(OBJTOOL)-in.o
- 
--LIBELF_FLAGS := $(shell pkg-config libelf --cflags 2>/dev/null)
--LIBELF_LIBS  := $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
-+LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-+LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
- 
- all: $(OBJTOOL)
- 
--- 
-2.35.1.574.g5d30c73bfb-goog
+The objections raised so far have been addressed in v4.
+
+I think this is good to merge.
+
+Thanks
+
+Michal
+
+> 
+> Best regards
+> Thomas
+> 
+> Am 18.02.22 um 10:33 schrieb Michal Suchanek:
+> > Since switch to simpledrm VESA graphic modes are no longer available
+> > with legacy BIOS.
+> > 
+> > The x86 realmode boot code enables the VESA graphic modes when option
+> > FB_BOOT_VESA_SUPPORT is enabled.
+> > 
+> > To enable use of VESA modes with simpledrm in legacy BIOS boot mode drop
+> > dependency of BOOT_VESA_SUPPORT on FB, also drop the FB_ prefix, and
+> > select the option when simpledrm is built-in on x86.
+> > 
+> > Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> >   arch/x86/boot/video-vesa.c   | 4 ++--
+> >   drivers/gpu/drm/tiny/Kconfig | 1 +
+> >   drivers/video/fbdev/Kconfig  | 9 ++++-----
+> >   3 files changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/x86/boot/video-vesa.c b/arch/x86/boot/video-vesa.c
+> > index 7e185977a984..c2c6d35e3a43 100644
+> > --- a/arch/x86/boot/video-vesa.c
+> > +++ b/arch/x86/boot/video-vesa.c
+> > @@ -83,7 +83,7 @@ static int vesa_probe(void)
+> >   			   (vminfo.memory_layout == 4 ||
+> >   			    vminfo.memory_layout == 6) &&
+> >   			   vminfo.memory_planes == 1) {
+> > -#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
+> > +#ifdef CONFIG_BOOT_VESA_SUPPORT
+> >   			/* Graphics mode, color, linear frame buffer
+> >   			   supported.  Only register the mode if
+> >   			   if framebuffer is configured, however,
+> > @@ -121,7 +121,7 @@ static int vesa_set_mode(struct mode_info *mode)
+> >   	if ((vminfo.mode_attr & 0x15) == 0x05) {
+> >   		/* It's a supported text mode */
+> >   		is_graphic = 0;
+> > -#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
+> > +#ifdef CONFIG_BOOT_VESA_SUPPORT
+> >   	} else if ((vminfo.mode_attr & 0x99) == 0x99) {
+> >   		/* It's a graphics mode with linear frame buffer */
+> >   		is_graphic = 1;
+> > diff --git a/drivers/gpu/drm/tiny/Kconfig b/drivers/gpu/drm/tiny/Kconfig
+> > index 712e0004e96e..1bc30c64ed15 100644
+> > --- a/drivers/gpu/drm/tiny/Kconfig
+> > +++ b/drivers/gpu/drm/tiny/Kconfig
+> > @@ -54,6 +54,7 @@ config DRM_GM12U320
+> >   config DRM_SIMPLEDRM
+> >   	tristate "Simple framebuffer driver"
+> >   	depends on DRM && MMU
+> > +	select BOOT_VESA_SUPPORT if X86 && DRM_SIMPLEDRM = y
+> >   	select DRM_GEM_SHMEM_HELPER
+> >   	select DRM_KMS_HELPER
+> >   	help
+> > diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> > index 6ed5e608dd04..4f3be9b7a520 100644
+> > --- a/drivers/video/fbdev/Kconfig
+> > +++ b/drivers/video/fbdev/Kconfig
+> > @@ -66,9 +66,8 @@ config FB_DDC
+> >   	select I2C_ALGOBIT
+> >   	select I2C
+> > -config FB_BOOT_VESA_SUPPORT
+> > +config BOOT_VESA_SUPPORT
+> >   	bool
+> > -	depends on FB
+> >   	help
+> >   	  If true, at least one selected framebuffer driver can take advantage
+> >   	  of VESA video modes set at an early boot stage via the vga= parameter.
+> > @@ -627,7 +626,7 @@ config FB_VESA
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT
+> > +	select BOOT_VESA_SUPPORT
+> >   	help
+> >   	  This is the frame buffer device driver for generic VESA 2.0
+> >   	  compliant graphic cards. The older VESA 1.2 cards are not supported.
+> > @@ -1051,7 +1050,7 @@ config FB_INTEL
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT if FB_INTEL = y
+> > +	select BOOT_VESA_SUPPORT if FB_INTEL = y
+> >   	depends on !DRM_I915
+> >   	help
+> >   	  This driver supports the on-board graphics built in to the Intel
+> > @@ -1378,7 +1377,7 @@ config FB_SIS
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT if FB_SIS = y
+> > +	select BOOT_VESA_SUPPORT if FB_SIS = y
+> >   	select FB_SIS_300 if !FB_SIS_315
+> >   	help
+> >   	  This is the frame buffer device driver for the SiS 300, 315, 330
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
+
+
 

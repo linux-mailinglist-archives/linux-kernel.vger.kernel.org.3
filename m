@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890024CAB22
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9894CAB1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240985AbiCBRIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S240570AbiCBRFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237931AbiCBRII (ORCPT
+        with ESMTP id S234082AbiCBRFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:08:08 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C31CDBA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:07:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646240842; x=1677776842;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CgIe1kHyv6NI9EgUPct1h95cPeTgztF8ec5o6Q6LPYM=;
-  b=k65FWj57O3gvEjeaQepVjjpwfpU/DCDJIViRJXk/E0bUy47MiRmdZAe2
-   /xa74ylkoyN8L4Ypvns03yMBd6FZSmPx6zKNkd/I4ErYiyZX9WwQLcjqH
-   XSrUeBmEHF+W8kKaZjeW1M6E+o+Gc2fTDUyHZPSKcHFE+HFfZJo2ed6MR
-   07TeYeuSB2I2PMZaONuSASfiZifrw7zKtjETCn1NKMFQtizklHZjLwpoA
-   u7V+qP2UeVVULmTy7BP88FGpiN3OACmkI85rOvjEUcwxdNLBRPLv7NWOx
-   OCkBhYjcUkPkYay6g7Zyf5ODPkOyY3a4ROnUpfJpxsyiO3hritIrR0BFV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="316665026"
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="316665026"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:04:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="576174436"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 02 Mar 2022 09:04:16 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPSOd-0001cs-Qj; Wed, 02 Mar 2022 17:04:15 +0000
-Date:   Thu, 3 Mar 2022 01:04:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Benedict Wong <benedictwong@google.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Eyal Birger <eyal.birger@gmail.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.9-q-release
- 5921/9999] net/xfrm/xfrm_interface.c:739:13: warning: no previous
- declaration for 'xfrmi_get_link_net'
-Message-ID: <202203030039.jNXm03Zp-lkp@intel.com>
+        Wed, 2 Mar 2022 12:05:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512D411A32;
+        Wed,  2 Mar 2022 09:04:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E109261923;
+        Wed,  2 Mar 2022 17:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A256C340F8;
+        Wed,  2 Mar 2022 17:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646240661;
+        bh=Icqzp9SWIKc87+ugA8V1Jg/Egl5KGIZgDSmOGMm1YjM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XlN89rRBvF+GlGzocnWiX3bxrAI2gW6UwYY9sVM2abvIaNKse/VLFty1vRTc36Lnb
+         SSdHHvC8+2f2xs+Ai+f5bVGIc8xGogCj6Xyb3IQod3sJNXMpuMbh4JtLyo9FuyGkdw
+         QeBMia/6AvkZY4fLDs3RGxSd9SeT98vWiiplnvECmf9Llo3Gs8qymYHZUxLFsgwJYU
+         tv+h0w8B4RKHuO09aJMWRTYACMp+HDRufCp5FtTLwnLm4Bcwn/PmxRjlHgSf+8G+tN
+         O847KYrkTuVKbaDKHuhpSwE9AdztBEOaKZZFVcGY81gCrxvtANDYA62iBj0dPtefFM
+         p1yp2/FLiHc5g==
+Received: by mail-qt1-f172.google.com with SMTP id w1so2223762qtj.2;
+        Wed, 02 Mar 2022 09:04:21 -0800 (PST)
+X-Gm-Message-State: AOAM531YYhk0294cAtarzAowPBKj/rN84kxan5QIUj8rYjcmjc2WKhhr
+        8u9j4COXkZMscPZt1XHPVWoVml7Rku4vi6FzpQ==
+X-Google-Smtp-Source: ABdhPJzVh9qPRrBt75o8AJLwWVKH7Kq5B4Apg3LHn1XCzh/s46oA4VubuT2CvtvTNnOdmGBFZvtsF8c7sASSb8loYU0=
+X-Received: by 2002:ac8:4e56:0:b0:2de:7120:61c9 with SMTP id
+ e22-20020ac84e56000000b002de712061c9mr24266586qtw.684.1646240660169; Wed, 02
+ Mar 2022 09:04:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220302143427.447748-1-vkoul@kernel.org>
+In-Reply-To: <20220302143427.447748-1-vkoul@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 2 Mar 2022 11:04:08 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+Message-ID: <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
+ combo phy register compatible"
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +73,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steffen,
+On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
+> combo phy register compatible") as that was wrongly merged, so better to
+> drop the wrong patch
+>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+> I am applying this to phy-next to fix the issue
 
-FYI, the error/warning still remains.
+Reverting will just cause a different warning that it is undocumented.
+The fix in the other thread won't apply either if you revert.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.9-q-release
-head:   4be78b108a3a1d1ffbc2367c5a45855715451482
-commit: f5bb9e918c9307843fbb8e6943ebfcdcac08d2f2 [5921/9999] BACKPORT: xfrm: Add virtual xfrm interfaces
-config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20220303/202203030039.jNXm03Zp-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/f5bb9e918c9307843fbb8e6943ebfcdcac08d2f2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.9-q-release
-        git checkout f5bb9e918c9307843fbb8e6943ebfcdcac08d2f2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/xfrm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/kasan.h:4:0,
-                    from include/linux/slab.h:118,
-                    from include/linux/textsearch.h:8,
-                    from include/linux/skbuff.h:30,
-                    from include/linux/icmp.h:20,
-                    from net/xfrm/xfrm_interface.c:16:
-   include/linux/sched.h:1260:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
-    ^~~~~
->> net/xfrm/xfrm_interface.c:739:13: warning: no previous declaration for 'xfrmi_get_link_net' [-Wmissing-declarations]
-    struct net *xfrmi_get_link_net(const struct net_device *dev)
-                ^~~~~~~~~~~~~~~~~~
-
-
-vim +/xfrmi_get_link_net +739 net/xfrm/xfrm_interface.c
-
-   738	
- > 739	struct net *xfrmi_get_link_net(const struct net_device *dev)
-   740	{
-   741		struct xfrm_if *xi = netdev_priv(dev);
-   742	
-   743		return dev_net(xi->phydev);
-   744	}
-   745	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Rob

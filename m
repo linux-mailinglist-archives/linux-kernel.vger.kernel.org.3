@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B5B4CA113
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9804CA117
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240619AbiCBJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S240621AbiCBJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiCBJp4 (ORCPT
+        with ESMTP id S233118AbiCBJqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:45:56 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DD7EDA3;
-        Wed,  2 Mar 2022 01:45:10 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 411D01F410A9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646214309;
-        bh=zrznIpBFL8LiCItblwyMn7DORd4urUBkf/OPWsULH8s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RWxbwhcNszQIibXpghBJ1fzAbnZAgqcSmSelbPLSfSIwt7OXxk9yODmdAFrjXk2KL
-         kS1JCVexs9zuid8LlT1s/WEbQcTI8mnKEsoV0VAqrDiSLn3eAIh6uNOzAw51UFJ1W1
-         TNf/vIHnU7s9cp/BH6wBhd9F9nqApEE/EQc52d7svGIN5kOl8O8rRlPQkvMVfjFeLt
-         tm8OM2E/F6H1/RGQUAGju+kIir9elWnhAmwVtAoIE84KAuGtvigKg1u6G2ihFZFbFy
-         Jei4dABf+536KNiQ8ugLQs9gJcKZNUBnT39S9Kpr5LQwhIQA+u8C/GAgv38dmrO25S
-         7Bk2fbYCNuMiw==
-Message-ID: <dee15f20-0f7d-58c6-728b-3e14f84f0833@collabora.com>
-Date:   Wed, 2 Mar 2022 10:45:06 +0100
+        Wed, 2 Mar 2022 04:46:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D623EF0F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:45:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D94261589
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856C9C340EF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646214358;
+        bh=2JnRdqk9IpbS2csdbNfGa/teFvYHGo28QkZ62lr+Dws=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qfMtk41Dv85APtPi8l9R6uufvD2N9rrV/Lk5bQgs9VzeDpGrWN4DJn5d9hgyz0Cb+
+         ZGBbGCY+EqIcUJ8NZJkeE5K+gh/wGJVkQ3qwUm7pcrGM1GXL1G1yhW3emdYYZB9+59
+         OpZUukkg8JdYu3aeONCpZXdLcgHzAOOSpTHoLyuVHZyV0KCBYT1NvGWTWMtrn/z7k5
+         h1LhsZF6kp1Cvy0W0xf5LRINDpE28jxM3YmOg2Li4HL6VCwNXfW/5NrhOdSGRlxKa9
+         fkULnNS/z09J2cSwcj+ivkjgnStoHymEJXFFBCC9AgABnZp7NTQhaLv7NSiicCY36B
+         QFJHqDroqCrKw==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2dbd97f9bfcso10408847b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:45:58 -0800 (PST)
+X-Gm-Message-State: AOAM532orE3Rp5lRIu/pCWQuXEzIc4tBzEQGyQizS6k9gzKs9cqYneBw
+        XNqp1XiTORW3j3xSe7vZIlzYgJa1zP9wYs4SciE=
+X-Google-Smtp-Source: ABdhPJy8nJPrKgjnbXTEDSLNhyS8V4ljopIoHhZI6FY00r4UrNDHSYwhSyKDn+3vK05t64V8Q7MFIK2OhPPoA4pswM0=
+X-Received: by 2002:a81:84d5:0:b0:2d1:e85:bf04 with SMTP id
+ u204-20020a8184d5000000b002d10e85bf04mr29646515ywf.465.1646214357573; Wed, 02
+ Mar 2022 01:45:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [RESEND,V7,3/6] media: mtk-jpegenc: manage jpegenc multi-hardware
-Content-Language: en-US
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com
-References: <1645693637-627-1-git-send-email-kyrie.wu@mediatek.com>
- <1645693637-627-4-git-send-email-kyrie.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1645693637-627-4-git-send-email-kyrie.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <Yh5ASXVoWoMj7/Rr@Red> <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
+ <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+ <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+ <Yh8tWdiWPgZLyQtx@Red> <CAMj1kXGRtdftpoqmd7HBonBBS67jO=YWzoESPAagGfQBZUDQWg@mail.gmail.com>
+ <Yh8w7ldudhmbYv4N@Red>
+In-Reply-To: <Yh8w7ldudhmbYv4N@Red>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 2 Mar 2022 10:45:46 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
+Message-ID: <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
+Subject: Re: boot flooded with unwind: Index not found
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,284 +70,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/02/22 10:07, kyrie.wu ha scritto:
-> From: kyrie wu <kyrie.wu@mediatek.com>
-> 
-> manage each hardware information, including irq/clk/power.
-> the hardware includes HW0 and HW1.
-> 
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> ---
->   drivers/media/platform/mtk-jpeg/Makefile      |  11 +-
->   .../media/platform/mtk-jpeg/mtk_jpeg_core.c   |  76 +++++---
->   .../media/platform/mtk-jpeg/mtk_jpeg_core.h   |  37 ++++
->   .../media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c | 168 ++++++++++++++++++
->   4 files changed, 267 insertions(+), 25 deletions(-)
-> 
+On Wed, 2 Mar 2022 at 09:55, Corentin Labbe <clabbe.montjoie@gmail.com> wro=
+te:
+>
+> Le Wed, Mar 02, 2022 at 09:44:52AM +0100, Ard Biesheuvel a =C3=A9crit :
+> > On Wed, 2 Mar 2022 at 09:40, Corentin Labbe <clabbe.montjoie@gmail.com>=
+ wrote:
+> > >
+> > > Le Tue, Mar 01, 2022 at 05:52:30PM +0100, Ard Biesheuvel a =C3=A9crit=
+ :
+> > > > On Tue, 1 Mar 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote=
+:
+> > > > >
+> > > > > On Tue, 1 Mar 2022 at 16:52, Russell King (Oracle)
+> > > > > <linux@armlinux.org.uk> wrote:
+> > > > > >
+> > > > > > On Tue, Mar 01, 2022 at 04:48:25PM +0100, Corentin Labbe wrote:
+> > > > > > > Hello
+> > > > > > >
+> > > > > > > I booted today linux-next (20220301) and my boot is flooded w=
+ith:
+> > > > > > > [    0.000000] unwind: Index not found c0f0c440
+> > > > > > > [    0.000000] unwind: Index not found 00000000
+> > > > > > > [    0.000000] unwind: Index not found c0f0c440
+> > > > > > > [    0.000000] unwind: Index not found 00000000
+> > > > > > >
+> > > > > > > This happen on a sun8i-a83t-bananapi-m3
+> > > > > >
+> > > > > > Have you enabled vmapped stacks?
+> > > > > >
+> > > > >
+> > > > > This is probably related to
+> > > > >
+> > > > > 538b9265c063 ARM: unwind: track location of LR value in stack fra=
+me
+> > > > >
+> > > > > which removes a kernel_text_address() check on frame->pc as it is
+> > > > > essentially redundant, given that we won't find unwind data other=
+wise.
+> > > > > Unfortunately, I failed to realise that the other check carries a
+> > > > > pr_warn(), which may apparently fire spuriously in some cases.
+> > > > >
+> > > > > The 0x0 value can easily be filtered out, but i would be interest=
+ing
+> > > > > where the other value originates from. We might be able to solve =
+this
+> > > > > with a simple .nounwind directive in a asm routine somewhere.
+> > > > >
+> > > > > I'll prepare a patch that disregards the 0x0 value - could you ch=
+eck
+> > > > > in the mean time what the address 0xcf0c440 coincides with in you=
+r
+> > > > > build?
+> > > >
+> > > > Something like the below should restore the previous behavior, whil=
+e
+> > > > taking the kernel_text_address() check out of the hot path.
+> > > >
+> > > > --- a/arch/arm/kernel/unwind.c
+> > > > +++ b/arch/arm/kernel/unwind.c
+> > > > @@ -400,7 +400,8 @@ int unwind_frame(struct stackframe *frame)
+> > > >
+> > > >         idx =3D unwind_find_idx(frame->pc);
+> > > >         if (!idx) {
+> > > > -               pr_warn("unwind: Index not found %08lx\n", frame->p=
+c);
+> > > > +               if (frame->pc && kernel_text_address(frame->pc))
+> > > > +                       pr_warn("unwind: Index not found %08lx\n", =
+frame->pc);
+> > > >                 return -URC_FAILURE;
+> > > >         }
+> > >
+> > > Hello
+> > >
+> > > This is a more detailed trace from my follow up after your patch:
+> >
+> > So the log below is from a kernel that has the above patch applied?
+> > Could you please share the .config?
+> >
+>
+> Yes this is a kernel with above patch applied (this board do not boot wit=
+hout it).
 
-Hello Kyrie,
+It's not entirely clear to me how (or whether) the recent changes to
+unwind.c cause this issue, but one thing that stands out in the
+current code is the unguarded dereference of a value pulled of the
+stack as a memory address.
 
-despite my v6 review, where I also gave you solutions for an issue with
-more than one example, this v7 still didn't get one out of the many
-requested fixes.
+It is worth noting that the only unwind entries in vmlinux that load
+SP from the stack directly (as opposed to unwinding it by moving from
+the frame pointer or by addition/subtraction) are the
+__irq_svc/__pabt_svc/__dabt_svc entry routines, and given that the
+bogus address 60000013 looks suspiciously like a PSR value (which is
+stored in the vicinity of SP on the exception stack), my suspicion is
+that some unwinder annotations are out of sync with the actual code.
 
-I'm sure that this was not intentional, so it's not a problem...
+So while the below does not fix the root cause, i.e., that the
+unwinder unwinds SP incorrectly causing us to dereference a bogus
+pointer, it should avoid the subsequent crash. Please give it a go.
 
-In any case, this gave me the opportunity to see some more issues inside
-of this patch: let's get it perfect!
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -27,6 +27,7 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/uaccess.h>
+ #include <linux/list.h>
 
+ #include <asm/sections.h>
+@@ -236,10 +237,11 @@ static int unwind_pop_register(struct
+unwind_ctrl_block *ctrl,
+                if (*vsp >=3D (unsigned long *)ctrl->sp_high)
+                        return -URC_FAILURE;
 
-...snip...
-
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> index 3e4811a41ba2..31e941ef84bd 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
-> @@ -9,6 +9,7 @@
->   #ifndef _MTK_JPEG_CORE_H
->   #define _MTK_JPEG_CORE_H
->   
-> +#include <linux/clk.h>
->   #include <linux/interrupt.h>
->   #include <media/v4l2-ctrls.h>
->   #include <media/v4l2-device.h>
-> @@ -60,6 +61,7 @@ enum mtk_jpeg_ctx_state {
->    * @cap_q_default_fourcc:	capture queue default fourcc
->    */
->   struct mtk_jpeg_variant {
-> +	bool is_multihw;
-
-Thanks for this fix, this name makes it way clearer!
-
->   	struct clk_bulk_data *clks;
->   	int num_clks;
->   	struct mtk_jpeg_fmt *formats;
-> @@ -74,6 +76,38 @@ struct mtk_jpeg_variant {
->   	u32 cap_q_default_fourcc;
->   };
->   
-> +enum mtk_jpegenc_hw_id {
-> +	MTK_JPEGENC_HW0,
-> +	MTK_JPEGENC_HW1,
-> +	MTK_JPEGENC_HW_MAX,
-> +};
-> +
-> +/**
-> + * struct mtk_vcodec_clk - Structure used to store vcodec clock information
-> + */
-> +struct mtk_jpegenc_clk {
-> +	struct clk_bulk_data *clks;
-> +	int	clk_num;
-
-Why is clk_num tabbed?
-
-> +};
-> +
-> +/**
-> + * struct mtk_jpegenc_comp_dev - JPEG COREX abstraction
-> + * @dev:		        JPEG device
-> + * @plat_dev:		    platform device data
-> + * @reg_base:		    JPEG registers mapping
-> + * @master_dev:		    mtk_jpeg_dev device
-> + * @pm:	                mtk_jpegenc_pm
-> + * @jpegenc_irq:	    jpeg encode irq num
-
-You're using tabulations *and* spaces.... please use either, not both, as it's
-not necessary. Besides, this is also producing bad indentation.
-
-> + */
-> +struct mtk_jpegenc_comp_dev {
-> +	struct device		*dev;
-> +	struct platform_device *plat_dev;
-> +	void __iomem		*reg_base;
-> +	struct mtk_jpeg_dev *master_dev;
-> +	struct mtk_jpegenc_clk	venc_clk;
-> +	int jpegenc_irq;
-> +};
-> +
->   /**
->    * struct mtk_jpeg_dev - JPEG IP abstraction
->    * @lock:		the mutex protecting this structure
-> @@ -100,6 +134,9 @@ struct mtk_jpeg_dev {
->   	void __iomem		*reg_base;
->   	struct delayed_work job_timeout_work;
->   	const struct mtk_jpeg_variant *variant;
-> +
-> +	void __iomem *reg_encbase[MTK_JPEGENC_HW_MAX];
-> +	struct mtk_jpegenc_comp_dev *enc_hw_dev[MTK_JPEGENC_HW_MAX];
->   };
->   
->   /**
-> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> index a2b6e1f85c2d..3d967bff1352 100644
-> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
-> @@ -5,11 +5,27 @@
->    *
->    */
->   
-> +#include <linux/clk.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
->   #include <linux/io.h>
->   #include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/slab.h>
-> +#include <media/media-device.h>
->   #include <media/videobuf2-core.h>
->   #include <media/videobuf2-dma-contig.h>
-> +#include <media/videobuf2-v4l2.h>
-> +#include <media/v4l2-mem2mem.h>
-> +#include <media/v4l2-dev.h>
-> +#include <media/v4l2-device.h>
-> +#include <media/v4l2-fh.h>
-> +#include <media/v4l2-event.h>
->   
-> +#include "mtk_jpeg_core.h"
->   #include "mtk_jpeg_enc_hw.h"
->   
->   static const struct mtk_jpeg_enc_qlt mtk_jpeg_enc_quality[] = {
-> @@ -30,6 +46,21 @@ static const struct mtk_jpeg_enc_qlt mtk_jpeg_enc_quality[] = {
->   	{.quality_param = 97, .hardware_value = JPEG_ENC_QUALITY_Q97},
->   };
->   
-> +#if defined(CONFIG_OF)
-> +static const struct of_device_id mtk_jpegenc_drv_ids[] = {
-> +	{
-> +		.compatible = "mediatek,mt8195-jpgenc0",
-> +		.data = (void *)MTK_JPEGENC_HW0,
-> +	},
-> +	{
-> +		.compatible = "mediatek,mt8195-jpgenc1",
-> +		.data = (void *)MTK_JPEGENC_HW1,
-> +	},
-
-I've already pointed out an issue with this in your v6 series:
-
-https://patchwork.kernel.org/comment/24726607/
-
-Besides, I want to add up that the SoC distinction is already done in the
-parent node which, in MT8195's case, is named "mediatek,mt8195-jpgenc", so
-you really don't have to redo this distinction "from scratch" here in the
-sub-driver, as you can just get your information from the parent device/node.
-
-So, just "mediatek,jpgenc-hw" should be totally enough here.
-
-Please fix this for v8.
-
-
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_jpegenc_drv_ids);
-> +#endif
-> +
->   void mtk_jpeg_enc_reset(void __iomem *base)
->   {
->   	writel(0, base + JPEG_ENC_RSTB);
-
-...snip...
-
-> +
-> +static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
-> +{
-> +	struct mtk_jpegenc_clk *jpegenc_clk;
-> +	struct mtk_jpeg_dev *master_dev;
-> +	struct mtk_jpegenc_comp_dev *dev;
-> +	int ret, comp_idx;
-> +
-> +	struct device *decs = &pdev->dev;
-> +
-> +	if (!decs->parent)
-> +		return -EPROBE_DEFER;
-> +
-> +	master_dev = dev_get_drvdata(decs->parent);
-> +	if (!master_dev)
-> +		return -EPROBE_DEFER;
-> +
-> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return -ENOMEM;
-> +
-> +	dev->plat_dev = pdev;
-> +
-> +	jpegenc_clk = &dev->venc_clk;
-> +
-> +	jpegenc_clk->clk_num = devm_clk_bulk_get_all(&pdev->dev,
-> +						     &jpegenc_clk->clks);
-
-Using dev_err_probe() looks more appropriate here:
-
-	if (jpegenc_clk->clk_num < 0)
-		return dev_err_probe(&pdev->dev, jpegenc_clk->clk_num,
-				     "Failed to get jpegenc clocks\n");
-
-
-> +	if (jpegenc_clk->clk_num < 0) {
-> +		dev_err(&pdev->dev, "Failed to get jpegenc clock count\n");
-> +		return jpegenc_clk->clk_num;
-> +	}
-> +
-> +	dev->reg_base =
-> +		devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(dev->reg_base)) {
-> +		ret = PTR_ERR(dev->reg_base);
-> +		goto err;
-
-There's no need for any goto here, as you're not reverting any operation.
-
-Hence, you can just:
-
-	if (IS_ERR(dev->reg_base))
-		return PTR_ERR(dev->reg_base);
-
-> +	}
-> +
-> +	ret = mtk_jpegenc_hw_init_irq(dev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to register JPEGENC irq handler.\n");
-
-You are already printing an error inside of mtk_jpegenc_hw_init_irq(), so printing
-another one here is redundant.
-Either remove the prints in the function or, more appropriately, remove this print.
-
-Also, same "goto" comment applies here, you can simply return ret.
-
-> +		goto err;
-> +	}
-> +
-> +	comp_idx = (enum mtk_jpegenc_hw_id)of_device_get_match_data(decs);
-> +	if (comp_idx < MTK_JPEGENC_HW_MAX) {
-
-`comp_idx` is a bit misleading, this is not using the component framework.
-
-....but this will probably be refactored after following the suggestion that
-I gave you in v6 and again now.
-
-> +		master_dev->enc_hw_dev[comp_idx] = dev;
-> +		master_dev->reg_encbase[comp_idx] = dev->reg_base;
-> +		dev->master_dev = master_dev;
-> +	} else {
-> +		dev_err(&pdev->dev, "Failed to get_match_data.\n");
-> +		goto err;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, dev);
-> +	pm_runtime_enable(&pdev->dev);
-> +
-> +	return 0;
-> +
-> +err:
-
-This label serves no real purpose: please remove.
-
-> +	return ret;
-> +}
-> +
-
-
-
-Regards,
-Angelo
+-       /* Use READ_ONCE_NOCHECK here to avoid this memory access
+-        * from being tracked by KASAN.
++       /* Use get_kernel_nofault() here to avoid this memory access
++        * from causing a fatal fault, and from being tracked by KASAN.
+         */
+-       ctrl->vrs[reg] =3D READ_ONCE_NOCHECK(*(*vsp));
++       if (get_kernel_nofault(ctrl->vrs[reg], *vsp))
++               return -URC_FAILURE;
+        if (reg =3D=3D 14)
+                ctrl->lr_addr =3D *vsp;
+        (*vsp)++;

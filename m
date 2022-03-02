@@ -2,1463 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6232D4CA790
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC244CA780
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242765AbiCBOKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S241219AbiCBOJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242802AbiCBOKj (ORCPT
+        with ESMTP id S242813AbiCBOJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:10:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72C9745050
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:09:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646230120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U1GTiBuBG3FM0vTYR1bPtnMTeTWdpHC+WKnfzO9MUAA=;
-        b=gcwCbp8ji/wV3YNBpjC59tJFjguJeqEf2Tiv6u6x2h1LEKebrtfJ7aHxpAXfvKoCopSld+
-        APOLARoK7Olk2IM4O2ah6yYOwWpOW4rYmlkqk99JPI8SK0cEwpFHaVNS33BWsjlxTkAaXk
-        1CTM9n51/dej+1qSbjn6vNiDCQ5bZRM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-URosfHU4Oc--mmnRppW3VQ-1; Wed, 02 Mar 2022 09:08:35 -0500
-X-MC-Unique: URosfHU4Oc--mmnRppW3VQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4EA680734B;
-        Wed,  2 Mar 2022 14:08:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C64D84972;
-        Wed,  2 Mar 2022 14:08:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 16/19] netfs: Rename rename read_helper.c to io.c
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@redhat.com>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 02 Mar 2022 14:08:02 +0000
-Message-ID: <164623008253.3564931.17696230276323837122.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk>
-References: <164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Wed, 2 Mar 2022 09:09:34 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F02DD72
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:08:32 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222CT84J006557;
+        Wed, 2 Mar 2022 14:08:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=ac8dw52fjLWlZDRBaGJEKwX4NiC89aw/sWkJc10bJN0=;
+ b=hRsuWphBdSgpacbIgzklvAdduRPjd1+9GEsJgL5bHyM+Vklp1Ak9e0nDCBloHsI6IJep
+ SGb9nXjMGyPn9+gwiQtyCu8cHVqB9P5X8w/6E2myeJ1u1qkqmZQOPsri1+RcitLmDXDh
+ j/jb0qNVPIlG73syggzKltnLlNb+Gy2HYAGLm6fTBSQ2PkyPis3Ux6CmsSLnR8lY55QD
+ GmJdBWu95cRyvsdyA5ZyWxof+Z8eZYCHPp+/zsbApJP8gOyCsjVrDHBO6bLJc36y143y
+ XSPwls8JTkCSOOaHKgiwsK+DZQUFfe3jXtbzwzUCZX7UtKgkBFmfMUV7xroPASiycAFT LQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ehdayv7xj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 14:08:09 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 222E6qOq039772;
+        Wed, 2 Mar 2022 14:08:08 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2176.outbound.protection.outlook.com [104.47.58.176])
+        by aserp3020.oracle.com with ESMTP id 3efc16pavw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 14:08:08 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GkzGmzav9poVLMFWbBNZRis3tNfwCVT2XM0cdYdUrngV20+czoAVDJepGijPgDT+Ny71BClDS8nBTYwt6d5rwdnRsLQk43MeKUO3Vg6Iv3r3h8bx7jRgfWmum1qKTFYANw8ZVq3b060vwI+5X+7ELXGHqei7cozr3ftzC8+FP1ky6zTqVL6FckOalA1TCvC1EyAHrp38NUNt11GfNTw/i4kqe8We5q/0NEPL0rOzT/DW+Mes2hkkFs7drB04DACwpacjxLUokkoePWbwPXnFzJAOOqrEMB9JghmZcNpghkVso5yuNUZD74Op/u/wwSra9E9lTLtnfPvl4OFRKzdG4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ac8dw52fjLWlZDRBaGJEKwX4NiC89aw/sWkJc10bJN0=;
+ b=fbsy7AZTELEPQDsAKl9vWjNNJgWpOV/b6YRgUONEi4ETyGmH/cY12UlnXUVmf84OYj9snBHs3ZjrRwHfC0y5ZTWgjoTVvC63lV237gVp+MrTTIipHDyAZdI+fM/elHsTx51tFOJKj2B6eykUa2j55YXnsWN6YqjSjGOs2++iyFAu5s6lwrWFXAR/ny302gaLkrIg1JjsNwa+PaO+k/RBhlpypw9pn8yAyz+srmzqRXBpEWroMfCgYID5KmVPlZvLC7pjY/XjiEBLZD67wNxzkgWNojovv3e14hjnb9DVUfvU78f3Z0xdf+Y46zX8J+rEXgaPSy4xKWYDSK35WI2M4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ac8dw52fjLWlZDRBaGJEKwX4NiC89aw/sWkJc10bJN0=;
+ b=wZFPSRLdQk3xHyQpyzOLmoLEXdR3AyobhXQZjCnRq40uitY9hZSU+gSMkOHCKM/gPE85bYP928Dj+eu7O3E6K3ZsOLdRDd/vRapG6GpeJ5F+stXQQI1w+HsOpWRstg8WN1MABb9q7vd8jdu1Zg6y2Nvti3NY2BmG+atOlMvIh/Q=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by BLAPR10MB4948.namprd10.prod.outlook.com (2603:10b6:208:307::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 14:08:06 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a%3]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 14:08:06 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vasily Gorbik <gor@linux.ibm.com>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: Re: [PATCH v6 08/71] Maple Tree: Add new data structure
+Thread-Topic: [PATCH v6 08/71] Maple Tree: Add new data structure
+Thread-Index: AQHYInpU/hKtaWQ3X0yDuzeh55NMz6ymqQwAgAJzKICAAL9NAIABOHaAgAAktgCAAQA8AA==
+Date:   Wed, 2 Mar 2022 14:08:06 +0000
+Message-ID: <20220302140725.4yxcedu35dswxjzu@revolver>
+References: <20220215143728.3810954-1-Liam.Howlett@oracle.com>
+ <20220215144241.3812052-1-Liam.Howlett@oracle.com>
+ <20220215144241.3812052-8-Liam.Howlett@oracle.com>
+ <your-ad-here.call-01645924312-ext-0398@work.hours>
+ <20220228143633.r4zoemgtmrq4uzvb@revolver>
+ <your-ad-here.call-01646100074-ext-8278@work.hours>
+ <20220301203935.r74qjc7p6qbno4xw@revolver>
+ <your-ad-here.call-01646175058-ext-9349@work.hours>
+In-Reply-To: <your-ad-here.call-01646175058-ext-9349@work.hours>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0901b850-5172-4f5e-c266-08d9fc561312
+x-ms-traffictypediagnostic: BLAPR10MB4948:EE_
+x-microsoft-antispam-prvs: <BLAPR10MB49487B6BB60444E963A98383FD039@BLAPR10MB4948.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7jY0tZXCNgyYRlazOEciHX8FrOvYAR4ar4KmJc6Np/GiuULEnCYSW4MTEEAuemWKsXrsURs3ltmfBbzCiSfXMsWGKq4wr5ydCABIIGyomouVNDrUd5ATyljCi09pFfGIXpJmk1vU6fWQbq3fvGYQMPz8Rpxc4t3cI1FrNHwx5IGU+ol9A0wcWvfaLPHjAi5jGlVaLIhLZKVvxwLP+pSYoPMo3rFIDXCsN/7RBn1jUURmLBTB57phCFLZcz08Eqm0SyJ39PVQBKzt+av755R051cJ0FhQXDI8Jinxk6XzNVS+6bh2QKyBexfCUHAkBd9c4ctohiqPr8gDjkWpGrXkhISJu0k6jCYAjUj4NJt3pAd/zKRJQS9GqAG4Z8h662figO1oiYU8S1cCocjA7aRZC/SQBZQhqYCiNQs4RimC7ySWwdZLSfZ5HqWnCZkdm8+HmZsRG9GfaVbuRT/d1DURo/Gb+/sZTG4phj0GU/O2IvpJ4xEkY6OJ3UUbHpW+RzViRbCJJO+mDCw77oxyCItXzjA9xSPfvta8IHHcaQlhV4T8rmJDgIgw3xWowvuz44NIG4W3S8BpyL6Qp4xQkVCs6zs8x+6PTUWnc9guOfP4Yt1IG5TL9AwuQIALz2SKwMbrZPLG+9/ugvYdlmpj32eVH3Hh5Ctl6ovuA2uNtP7H4t7Hv87ruz7i8Qp71E6CgE9/9t9r9vOfkV/NYTh37v1YqQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(86362001)(64756008)(8936002)(8676002)(4326008)(66476007)(66446008)(66946007)(66556008)(71200400001)(76116006)(33716001)(44832011)(2906002)(6486002)(508600001)(91956017)(5660300002)(38070700005)(38100700002)(316002)(6916009)(6506007)(122000001)(83380400001)(9686003)(6512007)(54906003)(1076003)(26005)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3yFGcfyy1IPLjdpadaPtIKb6IEy4B04QXbakk8BAZjEG1Vq2XYrmKuFTLBZL?=
+ =?us-ascii?Q?j8NtnYnt6ZR85O5RUD7clWVvDzsicm+9nlAIE7AaDQla6NXiIKOy7Db8E7Fs?=
+ =?us-ascii?Q?Z5VMwBaEqTU+S3cV8j8mZN74pLeYxNRvOuLS5D7iP6giUMySMwuKRLL1bt/A?=
+ =?us-ascii?Q?Wo3SNsNqV2Ce7AfmvNTsxhSb8xRk+FCCaHFYb/id9S8xJdw/L18nNEqt/jgX?=
+ =?us-ascii?Q?VonW1iq4w9m7KjvOXl23K+B8r5BykKoP1zlD3Epz6KIIyi70UoSYzTqzYDGB?=
+ =?us-ascii?Q?vM9aZCbdPDGiHR7JYglVIRaWx0seL+mysc9oQSgUidFGVCbKa4TpfFbrv08w?=
+ =?us-ascii?Q?+gyUJBQTLks50AZhTi2PO8o/xGqoGEewtnYZfCu+KLtrzwanaP4oF8R+D//F?=
+ =?us-ascii?Q?h+rMcX7HQYWBIH/886HQdHTtxFSzGo3ZecEhtKZEhgXDzWMdMXifIeGDf6fJ?=
+ =?us-ascii?Q?/rEw+aGvXrGClvPRbYsM4eM7tiAnCOm8ZXxCwY82UICEC+lA6Q4WlKe+yx30?=
+ =?us-ascii?Q?TQm9MBqpoBcFI6RckTlGBZDPdS7wr4Ziibd/Y1FUcU3LE2VI94cBzZPrhmbE?=
+ =?us-ascii?Q?xBJzo37kk4nGYbJI2Mx65t6eneRssJnMcKYwYa+5OBPOOFpe0U+TCOQpdgUA?=
+ =?us-ascii?Q?Zfu5a7ao5GqNjZbNkqBpi4P+2DyPiegFaWCqu0/TbKqK93GvfFlmzRgptDri?=
+ =?us-ascii?Q?ebMNGU0NaOr7RkdekYaJfxh/j36S8dwetwRMmQeROhoBR+y6katLbu/Bxj0P?=
+ =?us-ascii?Q?dyKq+W3HdG7oo+YZGDtPdqVGqvBEg2ExrMrVA+Vm2uVeZBTK6hjytKTuN6hN?=
+ =?us-ascii?Q?4BKjRLQsGFtq1QU3bBSMykm/EKC4Zpy5bePnjJszeNaRDGf5gpog3gg5l2XP?=
+ =?us-ascii?Q?rbdrNbzqydJxtQNqev/woJM1pUQIPdopnpEaEGHzLEVg6AwAeUzthBaktHXF?=
+ =?us-ascii?Q?p+Y6PukU7cKyYOCeUkAm8gzMG75xn72PWK33FK6V4Wryt1M4m2nQxTllUde4?=
+ =?us-ascii?Q?EqE/yzprMWT1qHR6VRpFscfhYd1YlePnFSaAR3tXHPW6IY5WXP3gIMoE+WXJ?=
+ =?us-ascii?Q?oveMW5WDLgXDVRgaZMqW438XT5vNyxr+ZiyMrbXp+SgMSRA43E3f4nFcZL9L?=
+ =?us-ascii?Q?QmMx+PYOOVw9yVgDm/TwAh9uUqhQbSxJuZ/xE7HzYP81D8Npoza4L00OeTpj?=
+ =?us-ascii?Q?kZ5wgD/ElCQRq/aVIrPKbO/RzKQgw+tzmDeVYR5RWdbfa0vNX0qiR54kTDma?=
+ =?us-ascii?Q?ui4HdhmKjysU5axR/iI4vypweHgL44P98J6szKWk6ayCySUGstpXLygDXDOc?=
+ =?us-ascii?Q?o93HHz6OpCtPVz3YBD45kmFZFmg5iJdrKD7cFW4SJyG6MX/9x9Idae3MBA2m?=
+ =?us-ascii?Q?MgAML7GrdFMBYs/g9b8rHliyyjaNc7fxJs5JMCwsJmMDWFC4LpJw2kydZnbV?=
+ =?us-ascii?Q?R3ncIxfpRq3VQl8VLwmozYaLF1t1CusGv6i5MXrvyWF9cG+JuKKDZB5MGWws?=
+ =?us-ascii?Q?PXAooyxue8gcgQCAqFd7c2WOZwquD3OhzViXGFyX7ZyLoGCOCT5udShmypO+?=
+ =?us-ascii?Q?anTtLywfvV4bRhr8+3EzfpWa5F9kn+lZIDpsWVlpl5mA7tUo9WIlhzcnwWGM?=
+ =?us-ascii?Q?cOTCyvwrw2h9k6sliqz+Vmg=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <95B40A9984349E4681D528368CB69D75@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0901b850-5172-4f5e-c266-08d9fc561312
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2022 14:08:06.6238
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: at7tzbUrqz/cEliTeZPAsnl8bIzrPCiGUa2gwXFmMwfcUqWtS4RFi4KFyBNhbIS2PGWD1esdF2fHQSw9/geO4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4948
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10273 signatures=685966
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
+ bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203020061
+X-Proofpoint-GUID: w6isX6pyppS3AQ8bE1inHXW6p3C0nNuq
+X-Proofpoint-ORIG-GUID: w6isX6pyppS3AQ8bE1inHXW6p3C0nNuq
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The read_helper.c file now only contains I/O functions, so rename the file
-to io.c.  It will eventually get write-side I/O functions also.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
----
-
- fs/netfs/Makefile      |    4 
- fs/netfs/internal.h    |   10 -
- fs/netfs/io.c          |  656 ++++++++++++++++++++++++++++++++++++++++++++++++
- fs/netfs/read_helper.c |  656 ------------------------------------------------
- 4 files changed, 663 insertions(+), 663 deletions(-)
- create mode 100644 fs/netfs/io.c
- delete mode 100644 fs/netfs/read_helper.c
-
-diff --git a/fs/netfs/Makefile b/fs/netfs/Makefile
-index 029657b6db63..f684c0cd1ec5 100644
---- a/fs/netfs/Makefile
-+++ b/fs/netfs/Makefile
-@@ -2,9 +2,9 @@
- 
- netfs-y := \
- 	buffered_read.o \
-+	io.o \
- 	main.o \
--	objects.o \
--	read_helper.o
-+	objects.o
- 
- netfs-$(CONFIG_NETFS_STATS) += stats.o
- 
-diff --git a/fs/netfs/internal.h b/fs/netfs/internal.h
-index f9dd64521fe6..e2c80b10bf4d 100644
---- a/fs/netfs/internal.h
-+++ b/fs/netfs/internal.h
-@@ -20,6 +20,11 @@
-  */
- void netfs_rreq_unlock_folios(struct netfs_io_request *rreq);
- 
-+/*
-+ * io.c
-+ */
-+int netfs_begin_read(struct netfs_io_request *rreq, bool sync);
-+
- /*
-  * main.c
-  */
-@@ -44,11 +49,6 @@ static inline void netfs_see_request(struct netfs_io_request *rreq,
- 	trace_netfs_rreq_ref(rreq->debug_id, refcount_read(&rreq->ref), what);
- }
- 
--/*
-- * read_helper.c
-- */
--int netfs_begin_read(struct netfs_io_request *rreq, bool sync);
--
- /*
-  * stats.c
-  */
-diff --git a/fs/netfs/io.c b/fs/netfs/io.c
-new file mode 100644
-index 000000000000..3db9356eb7c2
---- /dev/null
-+++ b/fs/netfs/io.c
-@@ -0,0 +1,656 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* Network filesystem high-level read support.
-+ *
-+ * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/export.h>
-+#include <linux/fs.h>
-+#include <linux/mm.h>
-+#include <linux/pagemap.h>
-+#include <linux/slab.h>
-+#include <linux/uio.h>
-+#include <linux/sched/mm.h>
-+#include <linux/task_io_accounting_ops.h>
-+#include "internal.h"
-+
-+/*
-+ * Clear the unread part of an I/O request.
-+ */
-+static void netfs_clear_unread(struct netfs_io_subrequest *subreq)
-+{
-+	struct iov_iter iter;
-+
-+	iov_iter_xarray(&iter, READ, &subreq->rreq->mapping->i_pages,
-+			subreq->start + subreq->transferred,
-+			subreq->len   - subreq->transferred);
-+	iov_iter_zero(iov_iter_count(&iter), &iter);
-+}
-+
-+static void netfs_cache_read_terminated(void *priv, ssize_t transferred_or_error,
-+					bool was_async)
-+{
-+	struct netfs_io_subrequest *subreq = priv;
-+
-+	netfs_subreq_terminated(subreq, transferred_or_error, was_async);
-+}
-+
-+/*
-+ * Issue a read against the cache.
-+ * - Eats the caller's ref on subreq.
-+ */
-+static void netfs_read_from_cache(struct netfs_io_request *rreq,
-+				  struct netfs_io_subrequest *subreq,
-+				  enum netfs_read_from_hole read_hole)
-+{
-+	struct netfs_cache_resources *cres = &rreq->cache_resources;
-+	struct iov_iter iter;
-+
-+	netfs_stat(&netfs_n_rh_read);
-+	iov_iter_xarray(&iter, READ, &rreq->mapping->i_pages,
-+			subreq->start + subreq->transferred,
-+			subreq->len   - subreq->transferred);
-+
-+	cres->ops->read(cres, subreq->start, &iter, read_hole,
-+			netfs_cache_read_terminated, subreq);
-+}
-+
-+/*
-+ * Fill a subrequest region with zeroes.
-+ */
-+static void netfs_fill_with_zeroes(struct netfs_io_request *rreq,
-+				   struct netfs_io_subrequest *subreq)
-+{
-+	netfs_stat(&netfs_n_rh_zero);
-+	__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
-+	netfs_subreq_terminated(subreq, 0, false);
-+}
-+
-+/*
-+ * Ask the netfs to issue a read request to the server for us.
-+ *
-+ * The netfs is expected to read from subreq->pos + subreq->transferred to
-+ * subreq->pos + subreq->len - 1.  It may not backtrack and write data into the
-+ * buffer prior to the transferred point as it might clobber dirty data
-+ * obtained from the cache.
-+ *
-+ * Alternatively, the netfs is allowed to indicate one of two things:
-+ *
-+ * - NETFS_SREQ_SHORT_READ: A short read - it will get called again to try and
-+ *   make progress.
-+ *
-+ * - NETFS_SREQ_CLEAR_TAIL: A short read - the rest of the buffer will be
-+ *   cleared.
-+ */
-+static void netfs_read_from_server(struct netfs_io_request *rreq,
-+				   struct netfs_io_subrequest *subreq)
-+{
-+	netfs_stat(&netfs_n_rh_download);
-+	rreq->netfs_ops->issue_read(subreq);
-+}
-+
-+/*
-+ * Release those waiting.
-+ */
-+static void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async)
-+{
-+	trace_netfs_rreq(rreq, netfs_rreq_trace_done);
-+	netfs_clear_subrequests(rreq, was_async);
-+	netfs_put_request(rreq, was_async, netfs_rreq_trace_put_complete);
-+}
-+
-+/*
-+ * Deal with the completion of writing the data to the cache.  We have to clear
-+ * the PG_fscache bits on the folios involved and release the caller's ref.
-+ *
-+ * May be called in softirq mode and we inherit a ref from the caller.
-+ */
-+static void netfs_rreq_unmark_after_write(struct netfs_io_request *rreq,
-+					  bool was_async)
-+{
-+	struct netfs_io_subrequest *subreq;
-+	struct folio *folio;
-+	pgoff_t unlocked = 0;
-+	bool have_unlocked = false;
-+
-+	rcu_read_lock();
-+
-+	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
-+		XA_STATE(xas, &rreq->mapping->i_pages, subreq->start / PAGE_SIZE);
-+
-+		xas_for_each(&xas, folio, (subreq->start + subreq->len - 1) / PAGE_SIZE) {
-+			/* We might have multiple writes from the same huge
-+			 * folio, but we mustn't unlock a folio more than once.
-+			 */
-+			if (have_unlocked && folio_index(folio) <= unlocked)
-+				continue;
-+			unlocked = folio_index(folio);
-+			folio_end_fscache(folio);
-+			have_unlocked = true;
-+		}
-+	}
-+
-+	rcu_read_unlock();
-+	netfs_rreq_completed(rreq, was_async);
-+}
-+
-+static void netfs_rreq_copy_terminated(void *priv, ssize_t transferred_or_error,
-+				       bool was_async)
-+{
-+	struct netfs_io_subrequest *subreq = priv;
-+	struct netfs_io_request *rreq = subreq->rreq;
-+
-+	if (IS_ERR_VALUE(transferred_or_error)) {
-+		netfs_stat(&netfs_n_rh_write_failed);
-+		trace_netfs_failure(rreq, subreq, transferred_or_error,
-+				    netfs_fail_copy_to_cache);
-+	} else {
-+		netfs_stat(&netfs_n_rh_write_done);
-+	}
-+
-+	trace_netfs_sreq(subreq, netfs_sreq_trace_write_term);
-+
-+	/* If we decrement nr_copy_ops to 0, the ref belongs to us. */
-+	if (atomic_dec_and_test(&rreq->nr_copy_ops))
-+		netfs_rreq_unmark_after_write(rreq, was_async);
-+
-+	netfs_put_subrequest(subreq, was_async, netfs_sreq_trace_put_terminated);
-+}
-+
-+/*
-+ * Perform any outstanding writes to the cache.  We inherit a ref from the
-+ * caller.
-+ */
-+static void netfs_rreq_do_write_to_cache(struct netfs_io_request *rreq)
-+{
-+	struct netfs_cache_resources *cres = &rreq->cache_resources;
-+	struct netfs_io_subrequest *subreq, *next, *p;
-+	struct iov_iter iter;
-+	int ret;
-+
-+	trace_netfs_rreq(rreq, netfs_rreq_trace_copy);
-+
-+	/* We don't want terminating writes trying to wake us up whilst we're
-+	 * still going through the list.
-+	 */
-+	atomic_inc(&rreq->nr_copy_ops);
-+
-+	list_for_each_entry_safe(subreq, p, &rreq->subrequests, rreq_link) {
-+		if (!test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags)) {
-+			list_del_init(&subreq->rreq_link);
-+			netfs_put_subrequest(subreq, false,
-+					     netfs_sreq_trace_put_no_copy);
-+		}
-+	}
-+
-+	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
-+		/* Amalgamate adjacent writes */
-+		while (!list_is_last(&subreq->rreq_link, &rreq->subrequests)) {
-+			next = list_next_entry(subreq, rreq_link);
-+			if (next->start != subreq->start + subreq->len)
-+				break;
-+			subreq->len += next->len;
-+			list_del_init(&next->rreq_link);
-+			netfs_put_subrequest(next, false,
-+					     netfs_sreq_trace_put_merged);
-+		}
-+
-+		ret = cres->ops->prepare_write(cres, &subreq->start, &subreq->len,
-+					       rreq->i_size, true);
-+		if (ret < 0) {
-+			trace_netfs_failure(rreq, subreq, ret, netfs_fail_prepare_write);
-+			trace_netfs_sreq(subreq, netfs_sreq_trace_write_skip);
-+			continue;
-+		}
-+
-+		iov_iter_xarray(&iter, WRITE, &rreq->mapping->i_pages,
-+				subreq->start, subreq->len);
-+
-+		atomic_inc(&rreq->nr_copy_ops);
-+		netfs_stat(&netfs_n_rh_write);
-+		netfs_get_subrequest(subreq, netfs_sreq_trace_get_copy_to_cache);
-+		trace_netfs_sreq(subreq, netfs_sreq_trace_write);
-+		cres->ops->write(cres, subreq->start, &iter,
-+				 netfs_rreq_copy_terminated, subreq);
-+	}
-+
-+	/* If we decrement nr_copy_ops to 0, the usage ref belongs to us. */
-+	if (atomic_dec_and_test(&rreq->nr_copy_ops))
-+		netfs_rreq_unmark_after_write(rreq, false);
-+}
-+
-+static void netfs_rreq_write_to_cache_work(struct work_struct *work)
-+{
-+	struct netfs_io_request *rreq =
-+		container_of(work, struct netfs_io_request, work);
-+
-+	netfs_rreq_do_write_to_cache(rreq);
-+}
-+
-+static void netfs_rreq_write_to_cache(struct netfs_io_request *rreq)
-+{
-+	rreq->work.func = netfs_rreq_write_to_cache_work;
-+	if (!queue_work(system_unbound_wq, &rreq->work))
-+		BUG();
-+}
-+
-+/*
-+ * Handle a short read.
-+ */
-+static void netfs_rreq_short_read(struct netfs_io_request *rreq,
-+				  struct netfs_io_subrequest *subreq)
-+{
-+	__clear_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
-+	__set_bit(NETFS_SREQ_SEEK_DATA_READ, &subreq->flags);
-+
-+	netfs_stat(&netfs_n_rh_short_read);
-+	trace_netfs_sreq(subreq, netfs_sreq_trace_resubmit_short);
-+
-+	netfs_get_subrequest(subreq, netfs_sreq_trace_get_short_read);
-+	atomic_inc(&rreq->nr_outstanding);
-+	if (subreq->source == NETFS_READ_FROM_CACHE)
-+		netfs_read_from_cache(rreq, subreq, NETFS_READ_HOLE_CLEAR);
-+	else
-+		netfs_read_from_server(rreq, subreq);
-+}
-+
-+/*
-+ * Resubmit any short or failed operations.  Returns true if we got the rreq
-+ * ref back.
-+ */
-+static bool netfs_rreq_perform_resubmissions(struct netfs_io_request *rreq)
-+{
-+	struct netfs_io_subrequest *subreq;
-+
-+	WARN_ON(in_interrupt());
-+
-+	trace_netfs_rreq(rreq, netfs_rreq_trace_resubmit);
-+
-+	/* We don't want terminating submissions trying to wake us up whilst
-+	 * we're still going through the list.
-+	 */
-+	atomic_inc(&rreq->nr_outstanding);
-+
-+	__clear_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
-+	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
-+		if (subreq->error) {
-+			if (subreq->source != NETFS_READ_FROM_CACHE)
-+				break;
-+			subreq->source = NETFS_DOWNLOAD_FROM_SERVER;
-+			subreq->error = 0;
-+			netfs_stat(&netfs_n_rh_download_instead);
-+			trace_netfs_sreq(subreq, netfs_sreq_trace_download_instead);
-+			netfs_get_subrequest(subreq, netfs_sreq_trace_get_resubmit);
-+			atomic_inc(&rreq->nr_outstanding);
-+			netfs_read_from_server(rreq, subreq);
-+		} else if (test_bit(NETFS_SREQ_SHORT_IO, &subreq->flags)) {
-+			netfs_rreq_short_read(rreq, subreq);
-+		}
-+	}
-+
-+	/* If we decrement nr_outstanding to 0, the usage ref belongs to us. */
-+	if (atomic_dec_and_test(&rreq->nr_outstanding))
-+		return true;
-+
-+	wake_up_var(&rreq->nr_outstanding);
-+	return false;
-+}
-+
-+/*
-+ * Check to see if the data read is still valid.
-+ */
-+static void netfs_rreq_is_still_valid(struct netfs_io_request *rreq)
-+{
-+	struct netfs_io_subrequest *subreq;
-+
-+	if (!rreq->netfs_ops->is_still_valid ||
-+	    rreq->netfs_ops->is_still_valid(rreq))
-+		return;
-+
-+	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
-+		if (subreq->source == NETFS_READ_FROM_CACHE) {
-+			subreq->error = -ESTALE;
-+			__set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
-+		}
-+	}
-+}
-+
-+/*
-+ * Assess the state of a read request and decide what to do next.
-+ *
-+ * Note that we could be in an ordinary kernel thread, on a workqueue or in
-+ * softirq context at this point.  We inherit a ref from the caller.
-+ */
-+static void netfs_rreq_assess(struct netfs_io_request *rreq, bool was_async)
-+{
-+	trace_netfs_rreq(rreq, netfs_rreq_trace_assess);
-+
-+again:
-+	netfs_rreq_is_still_valid(rreq);
-+
-+	if (!test_bit(NETFS_RREQ_FAILED, &rreq->flags) &&
-+	    test_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags)) {
-+		if (netfs_rreq_perform_resubmissions(rreq))
-+			goto again;
-+		return;
-+	}
-+
-+	netfs_rreq_unlock_folios(rreq);
-+
-+	clear_bit_unlock(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-+	wake_up_bit(&rreq->flags, NETFS_RREQ_IN_PROGRESS);
-+
-+	if (test_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags))
-+		return netfs_rreq_write_to_cache(rreq);
-+
-+	netfs_rreq_completed(rreq, was_async);
-+}
-+
-+static void netfs_rreq_work(struct work_struct *work)
-+{
-+	struct netfs_io_request *rreq =
-+		container_of(work, struct netfs_io_request, work);
-+	netfs_rreq_assess(rreq, false);
-+}
-+
-+/*
-+ * Handle the completion of all outstanding I/O operations on a read request.
-+ * We inherit a ref from the caller.
-+ */
-+static void netfs_rreq_terminated(struct netfs_io_request *rreq,
-+				  bool was_async)
-+{
-+	if (test_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags) &&
-+	    was_async) {
-+		if (!queue_work(system_unbound_wq, &rreq->work))
-+			BUG();
-+	} else {
-+		netfs_rreq_assess(rreq, was_async);
-+	}
-+}
-+
-+/**
-+ * netfs_subreq_terminated - Note the termination of an I/O operation.
-+ * @subreq: The I/O request that has terminated.
-+ * @transferred_or_error: The amount of data transferred or an error code.
-+ * @was_async: The termination was asynchronous
-+ *
-+ * This tells the read helper that a contributory I/O operation has terminated,
-+ * one way or another, and that it should integrate the results.
-+ *
-+ * The caller indicates in @transferred_or_error the outcome of the operation,
-+ * supplying a positive value to indicate the number of bytes transferred, 0 to
-+ * indicate a failure to transfer anything that should be retried or a negative
-+ * error code.  The helper will look after reissuing I/O operations as
-+ * appropriate and writing downloaded data to the cache.
-+ *
-+ * If @was_async is true, the caller might be running in softirq or interrupt
-+ * context and we can't sleep.
-+ */
-+void netfs_subreq_terminated(struct netfs_io_subrequest *subreq,
-+			     ssize_t transferred_or_error,
-+			     bool was_async)
-+{
-+	struct netfs_io_request *rreq = subreq->rreq;
-+	int u;
-+
-+	_enter("[%u]{%llx,%lx},%zd",
-+	       subreq->debug_index, subreq->start, subreq->flags,
-+	       transferred_or_error);
-+
-+	switch (subreq->source) {
-+	case NETFS_READ_FROM_CACHE:
-+		netfs_stat(&netfs_n_rh_read_done);
-+		break;
-+	case NETFS_DOWNLOAD_FROM_SERVER:
-+		netfs_stat(&netfs_n_rh_download_done);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	if (IS_ERR_VALUE(transferred_or_error)) {
-+		subreq->error = transferred_or_error;
-+		trace_netfs_failure(rreq, subreq, transferred_or_error,
-+				    netfs_fail_read);
-+		goto failed;
-+	}
-+
-+	if (WARN(transferred_or_error > subreq->len - subreq->transferred,
-+		 "Subreq overread: R%x[%x] %zd > %zu - %zu",
-+		 rreq->debug_id, subreq->debug_index,
-+		 transferred_or_error, subreq->len, subreq->transferred))
-+		transferred_or_error = subreq->len - subreq->transferred;
-+
-+	subreq->error = 0;
-+	subreq->transferred += transferred_or_error;
-+	if (subreq->transferred < subreq->len)
-+		goto incomplete;
-+
-+complete:
-+	__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
-+	if (test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags))
-+		set_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags);
-+
-+out:
-+	trace_netfs_sreq(subreq, netfs_sreq_trace_terminated);
-+
-+	/* If we decrement nr_outstanding to 0, the ref belongs to us. */
-+	u = atomic_dec_return(&rreq->nr_outstanding);
-+	if (u == 0)
-+		netfs_rreq_terminated(rreq, was_async);
-+	else if (u == 1)
-+		wake_up_var(&rreq->nr_outstanding);
-+
-+	netfs_put_subrequest(subreq, was_async, netfs_sreq_trace_put_terminated);
-+	return;
-+
-+incomplete:
-+	if (test_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags)) {
-+		netfs_clear_unread(subreq);
-+		subreq->transferred = subreq->len;
-+		goto complete;
-+	}
-+
-+	if (transferred_or_error == 0) {
-+		if (__test_and_set_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags)) {
-+			subreq->error = -ENODATA;
-+			goto failed;
-+		}
-+	} else {
-+		__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
-+	}
-+
-+	__set_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
-+	set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
-+	goto out;
-+
-+failed:
-+	if (subreq->source == NETFS_READ_FROM_CACHE) {
-+		netfs_stat(&netfs_n_rh_read_failed);
-+		set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
-+	} else {
-+		netfs_stat(&netfs_n_rh_download_failed);
-+		set_bit(NETFS_RREQ_FAILED, &rreq->flags);
-+		rreq->error = subreq->error;
-+	}
-+	goto out;
-+}
-+EXPORT_SYMBOL(netfs_subreq_terminated);
-+
-+static enum netfs_io_source netfs_cache_prepare_read(struct netfs_io_subrequest *subreq,
-+						       loff_t i_size)
-+{
-+	struct netfs_io_request *rreq = subreq->rreq;
-+	struct netfs_cache_resources *cres = &rreq->cache_resources;
-+
-+	if (cres->ops)
-+		return cres->ops->prepare_read(subreq, i_size);
-+	if (subreq->start >= rreq->i_size)
-+		return NETFS_FILL_WITH_ZEROES;
-+	return NETFS_DOWNLOAD_FROM_SERVER;
-+}
-+
-+/*
-+ * Work out what sort of subrequest the next one will be.
-+ */
-+static enum netfs_io_source
-+netfs_rreq_prepare_read(struct netfs_io_request *rreq,
-+			struct netfs_io_subrequest *subreq)
-+{
-+	enum netfs_io_source source;
-+
-+	_enter("%llx-%llx,%llx", subreq->start, subreq->start + subreq->len, rreq->i_size);
-+
-+	source = netfs_cache_prepare_read(subreq, rreq->i_size);
-+	if (source == NETFS_INVALID_READ)
-+		goto out;
-+
-+	if (source == NETFS_DOWNLOAD_FROM_SERVER) {
-+		/* Call out to the netfs to let it shrink the request to fit
-+		 * its own I/O sizes and boundaries.  If it shinks it here, it
-+		 * will be called again to make simultaneous calls; if it wants
-+		 * to make serial calls, it can indicate a short read and then
-+		 * we will call it again.
-+		 */
-+		if (subreq->len > rreq->i_size - subreq->start)
-+			subreq->len = rreq->i_size - subreq->start;
-+
-+		if (rreq->netfs_ops->clamp_length &&
-+		    !rreq->netfs_ops->clamp_length(subreq)) {
-+			source = NETFS_INVALID_READ;
-+			goto out;
-+		}
-+	}
-+
-+	if (WARN_ON(subreq->len == 0))
-+		source = NETFS_INVALID_READ;
-+
-+out:
-+	subreq->source = source;
-+	trace_netfs_sreq(subreq, netfs_sreq_trace_prepare);
-+	return source;
-+}
-+
-+/*
-+ * Slice off a piece of a read request and submit an I/O request for it.
-+ */
-+static bool netfs_rreq_submit_slice(struct netfs_io_request *rreq,
-+				    unsigned int *_debug_index)
-+{
-+	struct netfs_io_subrequest *subreq;
-+	enum netfs_io_source source;
-+
-+	subreq = netfs_alloc_subrequest(rreq);
-+	if (!subreq)
-+		return false;
-+
-+	subreq->debug_index	= (*_debug_index)++;
-+	subreq->start		= rreq->start + rreq->submitted;
-+	subreq->len		= rreq->len   - rreq->submitted;
-+
-+	_debug("slice %llx,%zx,%zx", subreq->start, subreq->len, rreq->submitted);
-+	list_add_tail(&subreq->rreq_link, &rreq->subrequests);
-+
-+	/* Call out to the cache to find out what it can do with the remaining
-+	 * subset.  It tells us in subreq->flags what it decided should be done
-+	 * and adjusts subreq->len down if the subset crosses a cache boundary.
-+	 *
-+	 * Then when we hand the subset, it can choose to take a subset of that
-+	 * (the starts must coincide), in which case, we go around the loop
-+	 * again and ask it to download the next piece.
-+	 */
-+	source = netfs_rreq_prepare_read(rreq, subreq);
-+	if (source == NETFS_INVALID_READ)
-+		goto subreq_failed;
-+
-+	atomic_inc(&rreq->nr_outstanding);
-+
-+	rreq->submitted += subreq->len;
-+
-+	trace_netfs_sreq(subreq, netfs_sreq_trace_submit);
-+	switch (source) {
-+	case NETFS_FILL_WITH_ZEROES:
-+		netfs_fill_with_zeroes(rreq, subreq);
-+		break;
-+	case NETFS_DOWNLOAD_FROM_SERVER:
-+		netfs_read_from_server(rreq, subreq);
-+		break;
-+	case NETFS_READ_FROM_CACHE:
-+		netfs_read_from_cache(rreq, subreq, NETFS_READ_HOLE_IGNORE);
-+		break;
-+	default:
-+		BUG();
-+	}
-+
-+	return true;
-+
-+subreq_failed:
-+	rreq->error = subreq->error;
-+	netfs_put_subrequest(subreq, false, netfs_sreq_trace_put_failed);
-+	return false;
-+}
-+
-+/*
-+ * Begin the process of reading in a chunk of data, where that data may be
-+ * stitched together from multiple sources, including multiple servers and the
-+ * local cache.
-+ */
-+int netfs_begin_read(struct netfs_io_request *rreq, bool sync)
-+{
-+	unsigned int debug_index = 0;
-+	int ret;
-+
-+	_enter("R=%x %llx-%llx",
-+	       rreq->debug_id, rreq->start, rreq->start + rreq->len - 1);
-+
-+	if (rreq->len == 0) {
-+		pr_err("Zero-sized read [R=%x]\n", rreq->debug_id);
-+		netfs_put_request(rreq, false, netfs_rreq_trace_put_zero_len);
-+		return -EIO;
-+	}
-+
-+	rreq->work.func = netfs_rreq_work;
-+
-+	if (sync)
-+		netfs_get_request(rreq, netfs_rreq_trace_get_hold);
-+
-+	/* Chop the read into slices according to what the cache and the netfs
-+	 * want and submit each one.
-+	 */
-+	atomic_set(&rreq->nr_outstanding, 1);
-+	do {
-+		if (!netfs_rreq_submit_slice(rreq, &debug_index))
-+			break;
-+
-+	} while (rreq->submitted < rreq->len);
-+
-+	if (sync) {
-+		/* Keep nr_outstanding incremented so that the ref always belongs to
-+		 * us, and the service code isn't punted off to a random thread pool to
-+		 * process.
-+		 */
-+		for (;;) {
-+			wait_var_event(&rreq->nr_outstanding,
-+				       atomic_read(&rreq->nr_outstanding) == 1);
-+			netfs_rreq_assess(rreq, false);
-+			if (!test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags))
-+				break;
-+			cond_resched();
-+		}
-+
-+		ret = rreq->error;
-+		if (ret == 0 && rreq->submitted < rreq->len) {
-+			trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_read);
-+			ret = -EIO;
-+		}
-+		netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
-+	} else {
-+		/* If we decrement nr_outstanding to 0, the ref belongs to us. */
-+		if (atomic_dec_and_test(&rreq->nr_outstanding))
-+			netfs_rreq_assess(rreq, false);
-+	}
-+	return ret;
-+}
-diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
-deleted file mode 100644
-index 3db9356eb7c2..000000000000
---- a/fs/netfs/read_helper.c
-+++ /dev/null
-@@ -1,656 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/* Network filesystem high-level read support.
-- *
-- * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-- * Written by David Howells (dhowells@redhat.com)
-- */
--
--#include <linux/module.h>
--#include <linux/export.h>
--#include <linux/fs.h>
--#include <linux/mm.h>
--#include <linux/pagemap.h>
--#include <linux/slab.h>
--#include <linux/uio.h>
--#include <linux/sched/mm.h>
--#include <linux/task_io_accounting_ops.h>
--#include "internal.h"
--
--/*
-- * Clear the unread part of an I/O request.
-- */
--static void netfs_clear_unread(struct netfs_io_subrequest *subreq)
--{
--	struct iov_iter iter;
--
--	iov_iter_xarray(&iter, READ, &subreq->rreq->mapping->i_pages,
--			subreq->start + subreq->transferred,
--			subreq->len   - subreq->transferred);
--	iov_iter_zero(iov_iter_count(&iter), &iter);
--}
--
--static void netfs_cache_read_terminated(void *priv, ssize_t transferred_or_error,
--					bool was_async)
--{
--	struct netfs_io_subrequest *subreq = priv;
--
--	netfs_subreq_terminated(subreq, transferred_or_error, was_async);
--}
--
--/*
-- * Issue a read against the cache.
-- * - Eats the caller's ref on subreq.
-- */
--static void netfs_read_from_cache(struct netfs_io_request *rreq,
--				  struct netfs_io_subrequest *subreq,
--				  enum netfs_read_from_hole read_hole)
--{
--	struct netfs_cache_resources *cres = &rreq->cache_resources;
--	struct iov_iter iter;
--
--	netfs_stat(&netfs_n_rh_read);
--	iov_iter_xarray(&iter, READ, &rreq->mapping->i_pages,
--			subreq->start + subreq->transferred,
--			subreq->len   - subreq->transferred);
--
--	cres->ops->read(cres, subreq->start, &iter, read_hole,
--			netfs_cache_read_terminated, subreq);
--}
--
--/*
-- * Fill a subrequest region with zeroes.
-- */
--static void netfs_fill_with_zeroes(struct netfs_io_request *rreq,
--				   struct netfs_io_subrequest *subreq)
--{
--	netfs_stat(&netfs_n_rh_zero);
--	__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
--	netfs_subreq_terminated(subreq, 0, false);
--}
--
--/*
-- * Ask the netfs to issue a read request to the server for us.
-- *
-- * The netfs is expected to read from subreq->pos + subreq->transferred to
-- * subreq->pos + subreq->len - 1.  It may not backtrack and write data into the
-- * buffer prior to the transferred point as it might clobber dirty data
-- * obtained from the cache.
-- *
-- * Alternatively, the netfs is allowed to indicate one of two things:
-- *
-- * - NETFS_SREQ_SHORT_READ: A short read - it will get called again to try and
-- *   make progress.
-- *
-- * - NETFS_SREQ_CLEAR_TAIL: A short read - the rest of the buffer will be
-- *   cleared.
-- */
--static void netfs_read_from_server(struct netfs_io_request *rreq,
--				   struct netfs_io_subrequest *subreq)
--{
--	netfs_stat(&netfs_n_rh_download);
--	rreq->netfs_ops->issue_read(subreq);
--}
--
--/*
-- * Release those waiting.
-- */
--static void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async)
--{
--	trace_netfs_rreq(rreq, netfs_rreq_trace_done);
--	netfs_clear_subrequests(rreq, was_async);
--	netfs_put_request(rreq, was_async, netfs_rreq_trace_put_complete);
--}
--
--/*
-- * Deal with the completion of writing the data to the cache.  We have to clear
-- * the PG_fscache bits on the folios involved and release the caller's ref.
-- *
-- * May be called in softirq mode and we inherit a ref from the caller.
-- */
--static void netfs_rreq_unmark_after_write(struct netfs_io_request *rreq,
--					  bool was_async)
--{
--	struct netfs_io_subrequest *subreq;
--	struct folio *folio;
--	pgoff_t unlocked = 0;
--	bool have_unlocked = false;
--
--	rcu_read_lock();
--
--	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
--		XA_STATE(xas, &rreq->mapping->i_pages, subreq->start / PAGE_SIZE);
--
--		xas_for_each(&xas, folio, (subreq->start + subreq->len - 1) / PAGE_SIZE) {
--			/* We might have multiple writes from the same huge
--			 * folio, but we mustn't unlock a folio more than once.
--			 */
--			if (have_unlocked && folio_index(folio) <= unlocked)
--				continue;
--			unlocked = folio_index(folio);
--			folio_end_fscache(folio);
--			have_unlocked = true;
--		}
--	}
--
--	rcu_read_unlock();
--	netfs_rreq_completed(rreq, was_async);
--}
--
--static void netfs_rreq_copy_terminated(void *priv, ssize_t transferred_or_error,
--				       bool was_async)
--{
--	struct netfs_io_subrequest *subreq = priv;
--	struct netfs_io_request *rreq = subreq->rreq;
--
--	if (IS_ERR_VALUE(transferred_or_error)) {
--		netfs_stat(&netfs_n_rh_write_failed);
--		trace_netfs_failure(rreq, subreq, transferred_or_error,
--				    netfs_fail_copy_to_cache);
--	} else {
--		netfs_stat(&netfs_n_rh_write_done);
--	}
--
--	trace_netfs_sreq(subreq, netfs_sreq_trace_write_term);
--
--	/* If we decrement nr_copy_ops to 0, the ref belongs to us. */
--	if (atomic_dec_and_test(&rreq->nr_copy_ops))
--		netfs_rreq_unmark_after_write(rreq, was_async);
--
--	netfs_put_subrequest(subreq, was_async, netfs_sreq_trace_put_terminated);
--}
--
--/*
-- * Perform any outstanding writes to the cache.  We inherit a ref from the
-- * caller.
-- */
--static void netfs_rreq_do_write_to_cache(struct netfs_io_request *rreq)
--{
--	struct netfs_cache_resources *cres = &rreq->cache_resources;
--	struct netfs_io_subrequest *subreq, *next, *p;
--	struct iov_iter iter;
--	int ret;
--
--	trace_netfs_rreq(rreq, netfs_rreq_trace_copy);
--
--	/* We don't want terminating writes trying to wake us up whilst we're
--	 * still going through the list.
--	 */
--	atomic_inc(&rreq->nr_copy_ops);
--
--	list_for_each_entry_safe(subreq, p, &rreq->subrequests, rreq_link) {
--		if (!test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags)) {
--			list_del_init(&subreq->rreq_link);
--			netfs_put_subrequest(subreq, false,
--					     netfs_sreq_trace_put_no_copy);
--		}
--	}
--
--	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
--		/* Amalgamate adjacent writes */
--		while (!list_is_last(&subreq->rreq_link, &rreq->subrequests)) {
--			next = list_next_entry(subreq, rreq_link);
--			if (next->start != subreq->start + subreq->len)
--				break;
--			subreq->len += next->len;
--			list_del_init(&next->rreq_link);
--			netfs_put_subrequest(next, false,
--					     netfs_sreq_trace_put_merged);
--		}
--
--		ret = cres->ops->prepare_write(cres, &subreq->start, &subreq->len,
--					       rreq->i_size, true);
--		if (ret < 0) {
--			trace_netfs_failure(rreq, subreq, ret, netfs_fail_prepare_write);
--			trace_netfs_sreq(subreq, netfs_sreq_trace_write_skip);
--			continue;
--		}
--
--		iov_iter_xarray(&iter, WRITE, &rreq->mapping->i_pages,
--				subreq->start, subreq->len);
--
--		atomic_inc(&rreq->nr_copy_ops);
--		netfs_stat(&netfs_n_rh_write);
--		netfs_get_subrequest(subreq, netfs_sreq_trace_get_copy_to_cache);
--		trace_netfs_sreq(subreq, netfs_sreq_trace_write);
--		cres->ops->write(cres, subreq->start, &iter,
--				 netfs_rreq_copy_terminated, subreq);
--	}
--
--	/* If we decrement nr_copy_ops to 0, the usage ref belongs to us. */
--	if (atomic_dec_and_test(&rreq->nr_copy_ops))
--		netfs_rreq_unmark_after_write(rreq, false);
--}
--
--static void netfs_rreq_write_to_cache_work(struct work_struct *work)
--{
--	struct netfs_io_request *rreq =
--		container_of(work, struct netfs_io_request, work);
--
--	netfs_rreq_do_write_to_cache(rreq);
--}
--
--static void netfs_rreq_write_to_cache(struct netfs_io_request *rreq)
--{
--	rreq->work.func = netfs_rreq_write_to_cache_work;
--	if (!queue_work(system_unbound_wq, &rreq->work))
--		BUG();
--}
--
--/*
-- * Handle a short read.
-- */
--static void netfs_rreq_short_read(struct netfs_io_request *rreq,
--				  struct netfs_io_subrequest *subreq)
--{
--	__clear_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
--	__set_bit(NETFS_SREQ_SEEK_DATA_READ, &subreq->flags);
--
--	netfs_stat(&netfs_n_rh_short_read);
--	trace_netfs_sreq(subreq, netfs_sreq_trace_resubmit_short);
--
--	netfs_get_subrequest(subreq, netfs_sreq_trace_get_short_read);
--	atomic_inc(&rreq->nr_outstanding);
--	if (subreq->source == NETFS_READ_FROM_CACHE)
--		netfs_read_from_cache(rreq, subreq, NETFS_READ_HOLE_CLEAR);
--	else
--		netfs_read_from_server(rreq, subreq);
--}
--
--/*
-- * Resubmit any short or failed operations.  Returns true if we got the rreq
-- * ref back.
-- */
--static bool netfs_rreq_perform_resubmissions(struct netfs_io_request *rreq)
--{
--	struct netfs_io_subrequest *subreq;
--
--	WARN_ON(in_interrupt());
--
--	trace_netfs_rreq(rreq, netfs_rreq_trace_resubmit);
--
--	/* We don't want terminating submissions trying to wake us up whilst
--	 * we're still going through the list.
--	 */
--	atomic_inc(&rreq->nr_outstanding);
--
--	__clear_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
--	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
--		if (subreq->error) {
--			if (subreq->source != NETFS_READ_FROM_CACHE)
--				break;
--			subreq->source = NETFS_DOWNLOAD_FROM_SERVER;
--			subreq->error = 0;
--			netfs_stat(&netfs_n_rh_download_instead);
--			trace_netfs_sreq(subreq, netfs_sreq_trace_download_instead);
--			netfs_get_subrequest(subreq, netfs_sreq_trace_get_resubmit);
--			atomic_inc(&rreq->nr_outstanding);
--			netfs_read_from_server(rreq, subreq);
--		} else if (test_bit(NETFS_SREQ_SHORT_IO, &subreq->flags)) {
--			netfs_rreq_short_read(rreq, subreq);
--		}
--	}
--
--	/* If we decrement nr_outstanding to 0, the usage ref belongs to us. */
--	if (atomic_dec_and_test(&rreq->nr_outstanding))
--		return true;
--
--	wake_up_var(&rreq->nr_outstanding);
--	return false;
--}
--
--/*
-- * Check to see if the data read is still valid.
-- */
--static void netfs_rreq_is_still_valid(struct netfs_io_request *rreq)
--{
--	struct netfs_io_subrequest *subreq;
--
--	if (!rreq->netfs_ops->is_still_valid ||
--	    rreq->netfs_ops->is_still_valid(rreq))
--		return;
--
--	list_for_each_entry(subreq, &rreq->subrequests, rreq_link) {
--		if (subreq->source == NETFS_READ_FROM_CACHE) {
--			subreq->error = -ESTALE;
--			__set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
--		}
--	}
--}
--
--/*
-- * Assess the state of a read request and decide what to do next.
-- *
-- * Note that we could be in an ordinary kernel thread, on a workqueue or in
-- * softirq context at this point.  We inherit a ref from the caller.
-- */
--static void netfs_rreq_assess(struct netfs_io_request *rreq, bool was_async)
--{
--	trace_netfs_rreq(rreq, netfs_rreq_trace_assess);
--
--again:
--	netfs_rreq_is_still_valid(rreq);
--
--	if (!test_bit(NETFS_RREQ_FAILED, &rreq->flags) &&
--	    test_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags)) {
--		if (netfs_rreq_perform_resubmissions(rreq))
--			goto again;
--		return;
--	}
--
--	netfs_rreq_unlock_folios(rreq);
--
--	clear_bit_unlock(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
--	wake_up_bit(&rreq->flags, NETFS_RREQ_IN_PROGRESS);
--
--	if (test_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags))
--		return netfs_rreq_write_to_cache(rreq);
--
--	netfs_rreq_completed(rreq, was_async);
--}
--
--static void netfs_rreq_work(struct work_struct *work)
--{
--	struct netfs_io_request *rreq =
--		container_of(work, struct netfs_io_request, work);
--	netfs_rreq_assess(rreq, false);
--}
--
--/*
-- * Handle the completion of all outstanding I/O operations on a read request.
-- * We inherit a ref from the caller.
-- */
--static void netfs_rreq_terminated(struct netfs_io_request *rreq,
--				  bool was_async)
--{
--	if (test_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags) &&
--	    was_async) {
--		if (!queue_work(system_unbound_wq, &rreq->work))
--			BUG();
--	} else {
--		netfs_rreq_assess(rreq, was_async);
--	}
--}
--
--/**
-- * netfs_subreq_terminated - Note the termination of an I/O operation.
-- * @subreq: The I/O request that has terminated.
-- * @transferred_or_error: The amount of data transferred or an error code.
-- * @was_async: The termination was asynchronous
-- *
-- * This tells the read helper that a contributory I/O operation has terminated,
-- * one way or another, and that it should integrate the results.
-- *
-- * The caller indicates in @transferred_or_error the outcome of the operation,
-- * supplying a positive value to indicate the number of bytes transferred, 0 to
-- * indicate a failure to transfer anything that should be retried or a negative
-- * error code.  The helper will look after reissuing I/O operations as
-- * appropriate and writing downloaded data to the cache.
-- *
-- * If @was_async is true, the caller might be running in softirq or interrupt
-- * context and we can't sleep.
-- */
--void netfs_subreq_terminated(struct netfs_io_subrequest *subreq,
--			     ssize_t transferred_or_error,
--			     bool was_async)
--{
--	struct netfs_io_request *rreq = subreq->rreq;
--	int u;
--
--	_enter("[%u]{%llx,%lx},%zd",
--	       subreq->debug_index, subreq->start, subreq->flags,
--	       transferred_or_error);
--
--	switch (subreq->source) {
--	case NETFS_READ_FROM_CACHE:
--		netfs_stat(&netfs_n_rh_read_done);
--		break;
--	case NETFS_DOWNLOAD_FROM_SERVER:
--		netfs_stat(&netfs_n_rh_download_done);
--		break;
--	default:
--		break;
--	}
--
--	if (IS_ERR_VALUE(transferred_or_error)) {
--		subreq->error = transferred_or_error;
--		trace_netfs_failure(rreq, subreq, transferred_or_error,
--				    netfs_fail_read);
--		goto failed;
--	}
--
--	if (WARN(transferred_or_error > subreq->len - subreq->transferred,
--		 "Subreq overread: R%x[%x] %zd > %zu - %zu",
--		 rreq->debug_id, subreq->debug_index,
--		 transferred_or_error, subreq->len, subreq->transferred))
--		transferred_or_error = subreq->len - subreq->transferred;
--
--	subreq->error = 0;
--	subreq->transferred += transferred_or_error;
--	if (subreq->transferred < subreq->len)
--		goto incomplete;
--
--complete:
--	__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
--	if (test_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags))
--		set_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags);
--
--out:
--	trace_netfs_sreq(subreq, netfs_sreq_trace_terminated);
--
--	/* If we decrement nr_outstanding to 0, the ref belongs to us. */
--	u = atomic_dec_return(&rreq->nr_outstanding);
--	if (u == 0)
--		netfs_rreq_terminated(rreq, was_async);
--	else if (u == 1)
--		wake_up_var(&rreq->nr_outstanding);
--
--	netfs_put_subrequest(subreq, was_async, netfs_sreq_trace_put_terminated);
--	return;
--
--incomplete:
--	if (test_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags)) {
--		netfs_clear_unread(subreq);
--		subreq->transferred = subreq->len;
--		goto complete;
--	}
--
--	if (transferred_or_error == 0) {
--		if (__test_and_set_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags)) {
--			subreq->error = -ENODATA;
--			goto failed;
--		}
--	} else {
--		__clear_bit(NETFS_SREQ_NO_PROGRESS, &subreq->flags);
--	}
--
--	__set_bit(NETFS_SREQ_SHORT_IO, &subreq->flags);
--	set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
--	goto out;
--
--failed:
--	if (subreq->source == NETFS_READ_FROM_CACHE) {
--		netfs_stat(&netfs_n_rh_read_failed);
--		set_bit(NETFS_RREQ_INCOMPLETE_IO, &rreq->flags);
--	} else {
--		netfs_stat(&netfs_n_rh_download_failed);
--		set_bit(NETFS_RREQ_FAILED, &rreq->flags);
--		rreq->error = subreq->error;
--	}
--	goto out;
--}
--EXPORT_SYMBOL(netfs_subreq_terminated);
--
--static enum netfs_io_source netfs_cache_prepare_read(struct netfs_io_subrequest *subreq,
--						       loff_t i_size)
--{
--	struct netfs_io_request *rreq = subreq->rreq;
--	struct netfs_cache_resources *cres = &rreq->cache_resources;
--
--	if (cres->ops)
--		return cres->ops->prepare_read(subreq, i_size);
--	if (subreq->start >= rreq->i_size)
--		return NETFS_FILL_WITH_ZEROES;
--	return NETFS_DOWNLOAD_FROM_SERVER;
--}
--
--/*
-- * Work out what sort of subrequest the next one will be.
-- */
--static enum netfs_io_source
--netfs_rreq_prepare_read(struct netfs_io_request *rreq,
--			struct netfs_io_subrequest *subreq)
--{
--	enum netfs_io_source source;
--
--	_enter("%llx-%llx,%llx", subreq->start, subreq->start + subreq->len, rreq->i_size);
--
--	source = netfs_cache_prepare_read(subreq, rreq->i_size);
--	if (source == NETFS_INVALID_READ)
--		goto out;
--
--	if (source == NETFS_DOWNLOAD_FROM_SERVER) {
--		/* Call out to the netfs to let it shrink the request to fit
--		 * its own I/O sizes and boundaries.  If it shinks it here, it
--		 * will be called again to make simultaneous calls; if it wants
--		 * to make serial calls, it can indicate a short read and then
--		 * we will call it again.
--		 */
--		if (subreq->len > rreq->i_size - subreq->start)
--			subreq->len = rreq->i_size - subreq->start;
--
--		if (rreq->netfs_ops->clamp_length &&
--		    !rreq->netfs_ops->clamp_length(subreq)) {
--			source = NETFS_INVALID_READ;
--			goto out;
--		}
--	}
--
--	if (WARN_ON(subreq->len == 0))
--		source = NETFS_INVALID_READ;
--
--out:
--	subreq->source = source;
--	trace_netfs_sreq(subreq, netfs_sreq_trace_prepare);
--	return source;
--}
--
--/*
-- * Slice off a piece of a read request and submit an I/O request for it.
-- */
--static bool netfs_rreq_submit_slice(struct netfs_io_request *rreq,
--				    unsigned int *_debug_index)
--{
--	struct netfs_io_subrequest *subreq;
--	enum netfs_io_source source;
--
--	subreq = netfs_alloc_subrequest(rreq);
--	if (!subreq)
--		return false;
--
--	subreq->debug_index	= (*_debug_index)++;
--	subreq->start		= rreq->start + rreq->submitted;
--	subreq->len		= rreq->len   - rreq->submitted;
--
--	_debug("slice %llx,%zx,%zx", subreq->start, subreq->len, rreq->submitted);
--	list_add_tail(&subreq->rreq_link, &rreq->subrequests);
--
--	/* Call out to the cache to find out what it can do with the remaining
--	 * subset.  It tells us in subreq->flags what it decided should be done
--	 * and adjusts subreq->len down if the subset crosses a cache boundary.
--	 *
--	 * Then when we hand the subset, it can choose to take a subset of that
--	 * (the starts must coincide), in which case, we go around the loop
--	 * again and ask it to download the next piece.
--	 */
--	source = netfs_rreq_prepare_read(rreq, subreq);
--	if (source == NETFS_INVALID_READ)
--		goto subreq_failed;
--
--	atomic_inc(&rreq->nr_outstanding);
--
--	rreq->submitted += subreq->len;
--
--	trace_netfs_sreq(subreq, netfs_sreq_trace_submit);
--	switch (source) {
--	case NETFS_FILL_WITH_ZEROES:
--		netfs_fill_with_zeroes(rreq, subreq);
--		break;
--	case NETFS_DOWNLOAD_FROM_SERVER:
--		netfs_read_from_server(rreq, subreq);
--		break;
--	case NETFS_READ_FROM_CACHE:
--		netfs_read_from_cache(rreq, subreq, NETFS_READ_HOLE_IGNORE);
--		break;
--	default:
--		BUG();
--	}
--
--	return true;
--
--subreq_failed:
--	rreq->error = subreq->error;
--	netfs_put_subrequest(subreq, false, netfs_sreq_trace_put_failed);
--	return false;
--}
--
--/*
-- * Begin the process of reading in a chunk of data, where that data may be
-- * stitched together from multiple sources, including multiple servers and the
-- * local cache.
-- */
--int netfs_begin_read(struct netfs_io_request *rreq, bool sync)
--{
--	unsigned int debug_index = 0;
--	int ret;
--
--	_enter("R=%x %llx-%llx",
--	       rreq->debug_id, rreq->start, rreq->start + rreq->len - 1);
--
--	if (rreq->len == 0) {
--		pr_err("Zero-sized read [R=%x]\n", rreq->debug_id);
--		netfs_put_request(rreq, false, netfs_rreq_trace_put_zero_len);
--		return -EIO;
--	}
--
--	rreq->work.func = netfs_rreq_work;
--
--	if (sync)
--		netfs_get_request(rreq, netfs_rreq_trace_get_hold);
--
--	/* Chop the read into slices according to what the cache and the netfs
--	 * want and submit each one.
--	 */
--	atomic_set(&rreq->nr_outstanding, 1);
--	do {
--		if (!netfs_rreq_submit_slice(rreq, &debug_index))
--			break;
--
--	} while (rreq->submitted < rreq->len);
--
--	if (sync) {
--		/* Keep nr_outstanding incremented so that the ref always belongs to
--		 * us, and the service code isn't punted off to a random thread pool to
--		 * process.
--		 */
--		for (;;) {
--			wait_var_event(&rreq->nr_outstanding,
--				       atomic_read(&rreq->nr_outstanding) == 1);
--			netfs_rreq_assess(rreq, false);
--			if (!test_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags))
--				break;
--			cond_resched();
--		}
--
--		ret = rreq->error;
--		if (ret == 0 && rreq->submitted < rreq->len) {
--			trace_netfs_failure(rreq, NULL, ret, netfs_fail_short_read);
--			ret = -EIO;
--		}
--		netfs_put_request(rreq, false, netfs_rreq_trace_put_hold);
--	} else {
--		/* If we decrement nr_outstanding to 0, the ref belongs to us. */
--		if (atomic_dec_and_test(&rreq->nr_outstanding))
--			netfs_rreq_assess(rreq, false);
--	}
--	return ret;
--}
 
 
+* Vasily Gorbik <gor@linux.ibm.com> [220301 17:51]:
+> On Tue, Mar 01, 2022 at 08:39:44PM +0000, Liam Howlett wrote:
+> > * Vasily Gorbik <gor@linux.ibm.com> [220228 21:01]:
+> > > This condition is not present in mas_dead_leaves() where we potential=
+ly
+> > > iterate over all 16 slots, simply checking that we have a "valid" nod=
+e pointer
+> > > with:
+> > >=20
+> > > entry & ~MAPLE_NODE_MASK !=3D 0
+> >=20
+> > I have fixed this and another issue that Hugh pointed out [1].  I have
+> > been working on an s390 VM since you reported your issue and have been
+> > getting strange behaviour and have been able to detect the bug reported
+> > by Hugh with the config KASAN option.  With the fix I described above
+> > and fixing the do_mas_align_munmap() splitting order I broken in my
+> > linked list removal, I am now able to boot my s390 VM and log in with
+> > KASAN, VM debug, maple tree debug, rbtree debug, debug page flags, and
+> > Poison pages after freeing all set in the config I use.  I've pushed th=
+e
+> > fix to a tag on my branch [2] and I'd appreciate it if you could test i=
+t
+> > on your side.
+>=20
+> Great, I gave it a spin and it looks much better now! I'll go run some st=
+ress
+> tests.
+>=20
+> BTW, since you've made efforts to isolate mapple tests in userspace I
+> wonder how much sense it would make to use libfuzzer to give API some goo=
+d
+> coverage-guided exercise.
+>=20
+> I've written a minimal libfuzzer test (just a hack) for the "Normal API" =
+and got
+> couple of flavours of crashes. Just rebased onto your latest branch state
+> and still get them. Please have a look if those are valid findings.
+
+
+Thanks!  Yes, the first one is certainly a valid bug.  I was able to
+reproduce it and fix the issue in my tree.  I'll have a look and see
+what else it throws out.
+
+Cheers,
+Liam=

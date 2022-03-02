@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224F64CA237
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1464CA23A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbiCBKdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S241008AbiCBKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240992AbiCBKdP (ORCPT
+        with ESMTP id S241002AbiCBKd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:33:15 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E3238B9
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:32:29 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nPMHP-0004fM-BT; Wed, 02 Mar 2022 11:32:23 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5c51-3418-45e9-21d0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5c51:3418:45e9:21d0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D8D2340B54;
-        Wed,  2 Mar 2022 10:32:19 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 11:32:19 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Subject: Re: drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning:
- Uninitialized variable: rx_event_msg [uninitvar]
-Message-ID: <20220302103219.kvpfhc6qz42t3pvv@pengutronix.de>
-References: <202203021333.mMJpWPzx-lkp@intel.com>
- <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
+        Wed, 2 Mar 2022 05:33:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1392C1CFF6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:32:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646217161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kPpPQo0rFTcgUQrPoN9LDSfjjllxDYkn6tRSloMNpvs=;
+        b=elxaCj4yQnho9Ikx+U5T/yf4bQ9kYlzdd8qPXTA2jGpW9U4a/0LhwgGEsFsd/Y68pdaX8O
+        CHDN8+zu7x2sePE/MRFWo62Aq+zafjoim3MLPsZkrHeslesbY2rAhub755YpMo/kPIDrBV
+        x99PDU0IXTbdniPpH7BNBriPTEl7x3w=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-490-j2vgLDkXM3qhIelyhtb6LA-1; Wed, 02 Mar 2022 05:32:40 -0500
+X-MC-Unique: j2vgLDkXM3qhIelyhtb6LA-1
+Received: by mail-ej1-f71.google.com with SMTP id o22-20020a1709061d5600b006d1aa593787so792096ejh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 02:32:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kPpPQo0rFTcgUQrPoN9LDSfjjllxDYkn6tRSloMNpvs=;
+        b=LlxkC8EXlJatfxRQ0xdzfynd4VDoynjYi4361NoAnp4L1SF/1WTHMDmgsAweQkX7K+
+         40p5HRvkRzfUpidQ265wFkQylXGFsYrthcT/Q7W1t3+kRGvKlSyFmVFUDt9cMClSoqBW
+         EUDu9b629m1TgmgWP4fcCNNKsQdRMlEDaC11JLlLjdHWp1HsAySe5kPNMAav/PWwRlAu
+         QaJfhQlafCasOTqsX4RyHGgxRxzrgGrkiCmC27pJzB9yDJcT+oPV4UarVWdPDHLHjbwN
+         Og91s1qTD0dXB2a6PljrgoiBzJEC5RbsOV15SlxJCG7ylz/OjGIvAS37XEEGBfO0thSj
+         AnZg==
+X-Gm-Message-State: AOAM531SwQgLKD4aNiB6QKlyXOJy5CwF7NmUjDkj3HlG4Bx1YNk5CjM2
+        V0h7gC1Sz0RYxWJj51tqG04ZHZyMcjX/E2s3p7Gny4/ZysHNJj8Bg41JCHKUdTU6UCehYyrA1Qk
+        7KaFojQEGYsaeOGcH4CQ5uxAC
+X-Received: by 2002:a50:8d1a:0:b0:415:a1ce:89a8 with SMTP id s26-20020a508d1a000000b00415a1ce89a8mr4185346eds.146.1646217159197;
+        Wed, 02 Mar 2022 02:32:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzgt5fBNpSUSHz6W30noIClOvZSA7o9CWwo8lkYp+IWSlTUeGZLpFqRU4MWM0XGxUgTLVLFbg==
+X-Received: by 2002:a50:8d1a:0:b0:415:a1ce:89a8 with SMTP id s26-20020a508d1a000000b00415a1ce89a8mr4185326eds.146.1646217158987;
+        Wed, 02 Mar 2022 02:32:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id f3-20020a056402068300b0041594aa9eedsm1554151edy.54.2022.03.02.02.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 02:32:38 -0800 (PST)
+Message-ID: <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
+Date:   Wed, 2 Mar 2022 11:32:37 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="es7shakc2uxqunjk"
-Content-Disposition: inline
-In-Reply-To: <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: build warning after merge of the drm tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220202150201.290c7d3d@canb.auug.org.au>
+ <20220202150320.3e9bdd62@canb.auug.org.au>
+ <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+ <20220302123417.2c84200b@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220302123417.2c84200b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---es7shakc2uxqunjk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 3/2/22 02:34, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 2 Feb 2022 09:38:37 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> On 2/2/22 05:03, Stephen Rothwell wrote:
+>>>
+>>> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
+>>>>
+>>>> After merging the drm tree, today's linux-next build (htmldocs) produced
+>>>> this warning:
+>>>>
+>>>> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'  
+>>>
+>>> Actually:
+>>>
+>>> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'  
+>>
+>> Thank you for reporting this, I will prepare a patch fixing this.
+> 
+> I am still seeing this warning.
 
-On 02.03.2022 17:47:08, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   575115360652e9920cc56a028a286ebe9bf82694
-> commit: c664e2137a27680922d8aeb64fb10313416b254f can: etas_es58x: add sup=
-port for the ETAS ES58X_FD CAN USB interfaces
-> date:   11 months ago
-> compiler: powerpc64-linux-gcc (GCC) 11.2.0
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <yujie.liu@intel.com>
->=20
->=20
-> cppcheck possible warnings: (new ones prefixed by >>, may not be real pro=
-blems)
->=20
->    In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
-> >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialize=
-d variable: rx_event_msg [uninitvar]
->     ret =3D es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
->           ^
->=20
-> vim +174 drivers/net/can/usb/etas_es58x/es58x_fd.c
->=20
-> c664e2137a2768 Vincent Mailhol 2021-04-10  165
-> c664e2137a2768 Vincent Mailhol 2021-04-10  166  static int es58x_fd_rx_ev=
-ent_msg(struct net_device *netdev,
-> c664e2137a2768 Vincent Mailhol 2021-04-10  167  				 const struct es58x_f=
-d_urb_cmd *es58x_fd_urb_cmd)
-> c664e2137a2768 Vincent Mailhol 2021-04-10  168  {
-> c664e2137a2768 Vincent Mailhol 2021-04-10  169  	struct es58x_device *es5=
-8x_dev =3D es58x_priv(netdev)->es58x_dev;
-> c664e2137a2768 Vincent Mailhol 2021-04-10  170  	u16 msg_len =3D get_unal=
-igned_le16(&es58x_fd_urb_cmd->msg_len);
-> c664e2137a2768 Vincent Mailhol 2021-04-10 @171  	const struct es58x_fd_rx=
-_event_msg *rx_event_msg;
-> c664e2137a2768 Vincent Mailhol 2021-04-10  172  	int ret;
-> c664e2137a2768 Vincent Mailhol 2021-04-10  173
-> c664e2137a2768 Vincent Mailhol 2021-04-10 @174  	ret =3D es58x_check_msg_=
-len(es58x_dev->dev, *rx_event_msg, msg_len);
-> c664e2137a2768 Vincent Mailhol 2021-04-10  175  	if (ret)
-> c664e2137a2768 Vincent Mailhol 2021-04-10  176  		return ret;
-> c664e2137a2768 Vincent Mailhol 2021-04-10  177
-> c664e2137a2768 Vincent Mailhol 2021-04-10  178  	rx_event_msg =3D &es58x_=
-fd_urb_cmd->rx_event_msg;
-> c664e2137a2768 Vincent Mailhol 2021-04-10  179
-> c664e2137a2768 Vincent Mailhol 2021-04-10  180  	return es58x_rx_err_msg(=
-netdev, rx_event_msg->error_code,
-> c664e2137a2768 Vincent Mailhol 2021-04-10  181  				rx_event_msg->event_c=
-ode,
-> c664e2137a2768 Vincent Mailhol 2021-04-10  182  				get_unaligned_le64(&r=
-x_event_msg->timestamp));
-> c664e2137a2768 Vincent Mailhol 2021-04-10  183  }
-> c664e2137a2768 Vincent Mailhol 2021-04-10  184
+Weird, this should be fixed by:
 
-Thanks for the report.
+https://cgit.freedesktop.org/drm-misc/commit/?id=ccbeca4ca04302d129602093c8d611065e3f7958
 
-This looks like a false positive to me, as es58x_check_msg_len() is not
-a function, but a macro:
+Which was added to the "drm-misc-next-2022-02-23" drm-misc tag/pull-req 7 days ago,
+which was merged into drm-next 6 days ago ?
 
-| #define es58x_check_msg_len(dev, msg, actual_len)			\
-| 	__es58x_check_msg_len(dev, __stringify(msg),			\
-| 			      actual_len, sizeof(msg))
+I just reverted that did a make htmldocs and got the warning, then re-applied and
+the warning was gone...
 
-__es58x_check_msg_len() don't use "rx_event_msg" directly, but only a
-string representation of it and a "sizeof()".
+Regards,
 
-I think it's possible to assign rx_event_msg before the
-es58x_check_msg_len(). I think (hope?) the compiler will not optimize
-anything away. :)
+Hans
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---es7shakc2uxqunjk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIfR7AACgkQrX5LkNig
-013QCQgAqK9CFYzDpArq0c7Bm8GbARd+F9DP/5Ir6bmH34+nSEvwBXvIB2bqDlLS
-5O6vzlP32gdyQTiUj7wZE9urPrtXkRcxrewMeoezOVuTNVfH32hwWANBYeyfP0g+
-8h1ePZHny0wbhGuGMzR7GRyEwtAfDQMpkfnzwrsY0AA6T5tshvWE/ToMVjtR6iqz
-kIyok2Q01jbLYyqoFjHMYDXhyLIS3kKxt8tUYiUKmxeqvdMW9Azw1eUuBWCRoJ9z
-feAmwJS6+BXnmOAvX9CLIlFo1asRCZKikRgPjDiEkcX8/Kc5OLeItu4+bYZx5cEk
-UdTZSPc0DW5omA7gnaBoOQiufTPk+Q==
-=t9ZQ
------END PGP SIGNATURE-----
-
---es7shakc2uxqunjk--

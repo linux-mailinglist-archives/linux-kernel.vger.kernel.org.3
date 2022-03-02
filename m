@@ -2,74 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302324CB006
+	by mail.lfdr.de (Postfix) with ESMTP id AB76E4CB007
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239302AbiCBUj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S244116AbiCBUkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239929AbiCBUjy (ORCPT
+        with ESMTP id S243631AbiCBUjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:39:54 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD05C46654;
-        Wed,  2 Mar 2022 12:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Lnsq5ECKK2HtO41PTE0g9xeHGI0dZEMSI8nTo7bFmeg=; b=dYjKhLD9ma//TONGDNJRWUs+md
-        3SDdsoIxiJ5l4UWOYksN3g55iM6o1eOhNX+oRBHgSrSQYFcmXHf0PsVB0zZ1DypQcjXUX0ZdqtkCo
-        96rHs2cdKKCZKY4K1vzWCDgX1EluXJdyez9dyUJSz0rU0MXF3lyYH6ElnfdBRNs3cOqJLTGDVjpFN
-        X8s4pIh2pJoqp8DO59gXBx8bew0U9zJil/e6NSdzNbXamGycdfEo/O2oD6IpdsCZcxsFjsfMnoPX1
-        FQPSH9IcZGjpoGoWGdIFIimr0L4NNUGAby5p2o+EguhUGwjalFbiwBV/5NMn4VBNLpVFzaEsmAiD4
-        JQkhx/6Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPVkT-0046vs-HN; Wed, 02 Mar 2022 20:39:01 +0000
-Date:   Wed, 2 Mar 2022 12:39:01 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Yan Zhu <zhuyan34@huawei.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        keescook@chromium.org, kpsingh@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liucheng32@huawei.com, netdev@vger.kernel.org,
-        nixiaoming@huawei.com, songliubraving@fb.com,
-        xiechengliang1@huawei.com, yhs@fb.com, yzaikin@google.com,
-        zengweilin@huawei.com
-Subject: Re: [PATCH v3 sysctl-next] bpf: move bpf sysctls from
- kernel/sysctl.c to bpf module
-Message-ID: <Yh/V5QN1OhN9IKsI@bombadil.infradead.org>
-References: <Yh1dtBTeRtjD0eGp@bombadil.infradead.org>
- <20220302020412.128772-1-zhuyan34@huawei.com>
+        Wed, 2 Mar 2022 15:39:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD59A48394
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:39:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646253551;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vlSN1ce+rKktPC0zZEd6egBCU+uP7yvWtLT1wgIfjGo=;
+        b=XDmeXE6Ar22FFdHxogTbZVJS1VLN6+X5KGkZyoYLcz1swhynUVoBtWbKHFymcuVTw/RD6/
+        P23hPWtl7y3whQKiWnRIYzCgdDMX2a7Yp50onTefxp5ig0hzLH9RxDbMWKmFZKzHablW6P
+        AZT3Ke30P7LtzPBmnF6fVvQSHpDdkZU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-yBv3wbkUPPSblAXy95s1Bw-1; Wed, 02 Mar 2022 15:39:10 -0500
+X-MC-Unique: yBv3wbkUPPSblAXy95s1Bw-1
+Received: by mail-wr1-f69.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso1057126wrq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:39:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vlSN1ce+rKktPC0zZEd6egBCU+uP7yvWtLT1wgIfjGo=;
+        b=huuAL9j/OA+hdqqxkOu8TwQKCdiOWTWT8fmVmma7Nm3p4Dq2E99bmjyq5cWQODAU3R
+         wuwj/eir3pIm2SZKzVXJgQK2B1x9uXLHjugZ/EFezlNVCUgiN6fbWaplfEDqxgI5EtWV
+         aV/HWPNsNFxskOp7rgparuoQlEvr2drnd1uxqu+1PiF1KnTsBa7i5JkYddTDHM2yygjF
+         ZmivJWkOpInt0xDeLSyRxUW/dWCv2gTdLkUkRMO5LJuSs3K1Dmqsg3As9Tqardbwuruv
+         +uja8GTGJTWyeOdEtAMhWQmZMPzdVLXs2BXdepOQeaN7qNZ59rrnYHxDKiZA/kAswfrc
+         1R6w==
+X-Gm-Message-State: AOAM532+9syOJNYKwsy0hj7NdENUqdvJ66Ea4K6g1t09BNMoN7qrus/u
+        Nt9AidwWFEZNXMUWFQBppvEUgNavmcpH/YbVprRpiRa4jLb1PoeNyD0+yA90GGIPvTwZc1ORixZ
+        akULvyVyH0RCiNj0Ffedqk92Z
+X-Received: by 2002:a05:600c:a51:b0:381:3dc6:c724 with SMTP id c17-20020a05600c0a5100b003813dc6c724mr1261774wmq.106.1646253548853;
+        Wed, 02 Mar 2022 12:39:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzBJXf9B+5/Uv338YP5HJJ8ya0kM2lSFZCLI0P+MsJBqatWbo6lHUHD1NmOL1Wu80SBlqAx4Q==
+X-Received: by 2002:a05:600c:a51:b0:381:3dc6:c724 with SMTP id c17-20020a05600c0a5100b003813dc6c724mr1261753wmq.106.1646253548650;
+        Wed, 02 Mar 2022 12:39:08 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id b13-20020a05600c4e0d00b003816cb4892csm12523764wmq.0.2022.03.02.12.39.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 12:39:07 -0800 (PST)
+Message-ID: <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
+Date:   Wed, 2 Mar 2022 21:39:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302020412.128772-1-zhuyan34@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
+ shadow page is zapped
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20220225182248.3812651-1-seanjc@google.com>
+ <20220225182248.3812651-5-seanjc@google.com>
+ <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
+ <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
+ <Yh/JdHphCLOm4evG@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yh/JdHphCLOm4evG@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:04:12AM +0800, Yan Zhu wrote:
-> We're moving sysctls out of kernel/sysctl.c as its a mess. We
-> already moved all filesystem sysctls out. And with time the goal is
-> to move all sysctls out to their own susbsystem/actual user.
-> 
-> kernel/sysctl.c has grown to an insane mess and its easy to run
-> into conflicts with it. The effort to move them out is part of this.
-> 
-> Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
+On 3/2/22 20:45, Sean Christopherson wrote:
+> AMD NPT is hosed because KVM's awful ASID scheme doesn't assign an ASID per root
+> and doesn't force a new ASID.  IMO, this is an SVM mess and not a TDP MMU bug.
 
-Daniel, let me know if this makes more sense now, and if so I can
-offer take it through sysctl-next to avoid conflicts more sysctl knobs
-get moved out from kernel/sysctl.c.
+I agree.
 
-  Luis
+> In the short term, I think something like the following would suffice.  Long term,
+> we really need to redo SVM ASID management so that ASIDs are tied to a KVM root.
+
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index c5e3f219803e..7899ca4748c7 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3857,6 +3857,9 @@ static void svm_load_mmu_pgd(struct kvm_vcpu 
+*vcpu, hpa_t root_hpa,
+         unsigned long cr3;
+
+         if (npt_enabled) {
++               if (is_tdp_mmu_root(root_hpa))
++                       svm->current_vmcb->asid_generation = 0;
++
+                 svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
+                 vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
+
+Why not just new_asid (even unconditionally, who cares)?
+
+BTW yeah, the smoke test worked but the actual one failed horribly.
+
+Paolo
+

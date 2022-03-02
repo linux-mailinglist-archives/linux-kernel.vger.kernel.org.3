@@ -2,110 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A964CA9FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8740A4CAA02
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241715AbiCBQUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S241811AbiCBQUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238228AbiCBQUE (ORCPT
+        with ESMTP id S234388AbiCBQUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:20:04 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B6A11149
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:19:21 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so1570054wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BgI8sFrydK5FTn/7e1TRvZf45as613ywq4EmjpiUGno=;
-        b=mc1v4qGg4jJ2tODesV1KU6A7Y3OYtWWWQ7Zujh/RUofxBAHg0a7ysBrtKe/wQbgZGv
-         fsz4H0B/IUi0AF45fckWnnSJzJozr4Hk0akezyJfX/hKJg7zLInTC4O8bsYeqrMHWARX
-         MX76OjU/C6NHHVNPohTLmneuEArql5wki6hyz++VFI0Xq8spr6FvHbsu3Au2QZRjdPC7
-         YKsBvI13Sp/pZlR/eumbBsZcCL+IEts7yg7u6ZojoOfnRwvy6XCKW2BnqMBSGMXffMQB
-         GU9wXpS+0eTtIu203cE4VjbYPRtgqwh18YVx/65qcTg/3PkPfLZkeqseNntSDgTSnlLP
-         MVFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BgI8sFrydK5FTn/7e1TRvZf45as613ywq4EmjpiUGno=;
-        b=lW24+FKQsK9TwHmrUL55+hBOfPM2Iu5QANc+F0TQUNWwZz1FH46NzH+txRDPEZBtIE
-         mnH4wjARoJ4dt5BNxA94AiW8ICCAwUMzRMOX8Ur9Pw7aFrpN+qw15FOSxaxanOLA/UAf
-         eunjz4597DLMcEqSfRfLUs/nTLXgcUqX/+dgyjCsRhKYcnj/DQC6/Lk0FFNY9su3XqDx
-         Za9gIpGIfNc72qA0E0IkXgy4ptMOd1EjHhJL+jzDbNesANxQFKYbG8yhLnQZ7Xz2jbUk
-         SyygerM0GvZJzhvXFxWRK8O70tCPMpuXZy7okcruQ9KrpcLcXt0oiRu4aoOg1wtnD7yk
-         JgXA==
-X-Gm-Message-State: AOAM530Lep49qXY2Hd7vMg3zUskuXwxM4qpb+Q9WaHouRlzHW7K8tSll
-        PXJ4kSHojzt8OlDux3M7vh93cQ==
-X-Google-Smtp-Source: ABdhPJyYA7ctJCwfna7Guslsg1HHzVclL/ntG/Oe7hbbAwqSsQv1yNoVySgOeeCulhYwPrFwYePfjA==
-X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr435984wmh.59.1646237959729;
-        Wed, 02 Mar 2022 08:19:19 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id o3-20020a1c7503000000b0038100e2a1adsm5999091wmc.47.2022.03.02.08.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:19:19 -0800 (PST)
-Date:   Wed, 2 Mar 2022 16:19:17 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220302161917.gx5icfszakoye4uh@maple.lan>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
+        Wed, 2 Mar 2022 11:20:47 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5304511149;
+        Wed,  2 Mar 2022 08:20:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C5F1139F;
+        Wed,  2 Mar 2022 08:20:04 -0800 (PST)
+Received: from [10.57.42.101] (unknown [10.57.42.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADC4D3F73D;
+        Wed,  2 Mar 2022 08:20:02 -0800 (PST)
+Message-ID: <3dc14ad9-8ce1-a2e3-3bab-953b79af82be@arm.com>
+Date:   Wed, 2 Mar 2022 16:20:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228234322.2073104-14-atomlin@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] perf: Set build-id using build-id header on new mmap
+ records
+Content-Language: en-US
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     acme@kernel.org, linux-perf-users@vger.kernel.org,
+        coresight@lists.linaro.org, Denis Nikitin <denik@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220224171955.862983-1-james.clark@arm.com>
+ <20220224171955.862983-2-james.clark@arm.com> <YhwAPrOP/ky4HLfC@krava>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <YhwAPrOP/ky4HLfC@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
-> No functional change.
-> 
-> This patch migrates kdb_modules list to core kdb code
-> since the list of added/or loaded modules is no longer
-> private.
-> 
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  kernel/debug/kdb/kdb_main.c    | 5 +++++
->  kernel/debug/kdb/kdb_private.h | 4 ----
->  kernel/module/main.c           | 4 ----
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> index 0852a537dad4..5369bf45c5d4 100644
-> --- a/kernel/debug/kdb/kdb_main.c
-> +++ b/kernel/debug/kdb/kdb_main.c
-> @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
->  int kdb_grep_leading;
->  int kdb_grep_trailing;
->  
-> +#ifdef CONFIG_MODULES
-> +extern struct list_head modules;
-> +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
-
-If modules is no longer static then why do we kdb_modules at all?
-kdb_modules is used exactly once and it can now simply be replaced
-with &modules.
 
 
-Daniel.
+On 27/02/2022 22:50, Jiri Olsa wrote:
+> On Thu, Feb 24, 2022 at 05:19:55PM +0000, James Clark wrote:
+>> MMAP records that occur after the build-id header is parsed do not have
+>> their build-id set even if the filename matches an entry from the
+>> header. Set the build-id on these dsos as long as the MMAP record
+>> doesn't have its own build-id set.
+>>
+>> This fixes an issue with off target analysis where the local version of
+>> a dso is loaded rather than one from ~/.debug via a build-id.
+> 
+> nice catch :)
+> 
+>>
+>> Reported-by: Denis Nikitin <denik@chromium.org>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/util/dso.h    |  1 +
+>>  tools/perf/util/header.c |  1 +
+>>  tools/perf/util/map.c    | 16 ++++++++++++++--
+>>  3 files changed, 16 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+>> index 011da3924fc1..3a9fd4d389b5 100644
+>> --- a/tools/perf/util/dso.h
+>> +++ b/tools/perf/util/dso.h
+>> @@ -167,6 +167,7 @@ struct dso {
+>>  	enum dso_load_errno	load_errno;
+>>  	u8		 adjust_symbols:1;
+>>  	u8		 has_build_id:1;
+>> +	u8		 header_build_id:1;
+>>  	u8		 has_srcline:1;
+>>  	u8		 hit:1;
+>>  	u8		 annotate_warned:1;
+>> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+>> index 6da12e522edc..571d73d4f976 100644
+>> --- a/tools/perf/util/header.c
+>> +++ b/tools/perf/util/header.c
+>> @@ -2200,6 +2200,7 @@ static int __event_process_build_id(struct perf_record_header_build_id *bev,
+>>  
+>>  		build_id__init(&bid, bev->data, size);
+>>  		dso__set_build_id(dso, &bid);
+>> +		dso->header_build_id = 1;
+>>  
+>>  		if (dso_space != DSO_SPACE__USER) {
+>>  			struct kmod_path m = { .name = NULL, };
+>> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+>> index 1803d3887afe..4ae91e491e23 100644
+>> --- a/tools/perf/util/map.c
+>> +++ b/tools/perf/util/map.c
+>> @@ -127,7 +127,7 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+>>  
+>>  	if (map != NULL) {
+>>  		char newfilename[PATH_MAX];
+>> -		struct dso *dso;
+>> +		struct dso *dso, *header_bid_dso;
+>>  		int anon, no_dso, vdso, android;
+>>  
+>>  		android = is_android_lib(filename);
+>> @@ -185,7 +185,19 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+>>  
+>>  		if (build_id__is_defined(bid))
+>>  			dso__set_build_id(dso, bid);
+>> -
+>> +		else {
+> 
+> nit please add { } to the if clause as well
+> 
+>> +			/*
+>> +			 * If the mmap event had no build ID, search for an existing dso from the
+>> +			 * build ID header by name. Otherwise only the dso loaded at the time of
+>> +			 * reading the header will have the build ID set and all future mmaps will
+>> +			 * have it missing.
+>> +			 */
+>> +			header_bid_dso = __dsos__find(&machine->dsos, filename, false);
+> 
+> is this 'perf top' safe? I think dso should be added in the
+> same thread, but please check and add comment why we don't
+> need locking in here
+
+Seems like there are multiple synthesize_threads_workers using the same machine->dsos object so
+I think locking is needed.
+
+At first I thought of doing this:
+
+  diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+  index 4ae91e491e23..b87b81e3d41c 100644
+  --- a/tools/perf/util/map.c
+  +++ b/tools/perf/util/map.c
+  @@ -192,7 +192,9 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+                           * reading the header will have the build ID set and all future mmaps will
+                           * have it missing.
+                           */
+  +                       down_read(&machine->dsos.lock);
+                          header_bid_dso = __dsos__find(&machine->dsos, filename, false);
+  +                       up_read(&machine->dsos.lock);
+                          if (header_bid_dso && header_bid_dso->header_build_id) {
+                                  dso__set_build_id(dso, &header_bid_dso->bid);
+                                  dso->header_build_id = 1;
+
+But then I was wondering why it doesn't need a write lock all the way from machine__findnew_dso_id() to
+dso__put()? At the moment there are writes to the dso like dso__set_loaded(), dso->nsinfo = nsi and
+dso__set_build_id(), so another thread could find the dso in a partially constructed state.
+
+Not sure if this is an issue currently without my patch, but at least with it they would have to be found
+with header_build_id already set to 1 otherwise it will mess things up.
+
+Extending the write lock outside of machine__findnew_dso_id() is difficult because it already
+releases it before it returns. Does it need to be changed so that machine__findnew_dso_id() takes all the
+arguments needed to construct it inside the lock?
+
+James
+
+> 
+> thanks,
+> jirka
+> 
+>> +			if (header_bid_dso && header_bid_dso->header_build_id) {
+>> +				dso__set_build_id(dso, &header_bid_dso->bid);
+>> +				dso->header_build_id = 1;
+>> +			}
+>> +		}
+>>  		dso__put(dso);
+>>  	}
+>>  	return map;
+>> -- 
+>> 2.28.0
+>>

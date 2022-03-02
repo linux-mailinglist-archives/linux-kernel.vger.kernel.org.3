@@ -2,226 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A444CADF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6664CADFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244759AbiCBS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S244761AbiCBS5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237134AbiCBS4G (ORCPT
+        with ESMTP id S233625AbiCBS5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:56:06 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7917C6205;
-        Wed,  2 Mar 2022 10:55:21 -0800 (PST)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K83G72lBhz67xQL;
-        Thu,  3 Mar 2022 02:55:11 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 19:55:20 +0100
-Received: from [10.47.84.129] (10.47.84.129) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 2 Mar
- 2022 18:55:18 +0000
-Message-ID: <fb7d9ad2-9767-3f6a-2859-4262c992cc76@huawei.com>
-Date:   Wed, 2 Mar 2022 18:55:17 +0000
+        Wed, 2 Mar 2022 13:57:09 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11312C6205
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:56:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646247386; x=1677783386;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tuVXfx1Tgtb2olCY+IIzIqMfIaSBzsqP7r46EEQmWvU=;
+  b=QFI0GfkYCxRaYbc7woMo8orzDkAdo0NGNcnJSLaWh/ZcGI8yxz6498qM
+   4n2gN4x6F+R+5uRGE+bfPyAIh73SuNHeoLAbzjgBXSp0Ai41R5nx1H/MN
+   WqQrHK/+pMHUOcJ/iQcyGUeMPNOyEYKSZsWs/paMkCLh/pXQtLEfC6Ite
+   ZUrFP96Ybtz3HIgTZ6INChEbDFzZvfXtXhhvrcWjYzGyCAv59LVlrPvGm
+   ThR78gG6rWGCVa3E/z8Amyaubj6Z5fFofCbpKYlRq5ZTf1v2p9ilbp+e9
+   D3BdbwycUj8Dz/SnB7gc9OG2mUYTL1hdkG+Ae4Q+Pb1il0AR8xFiw4pBJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234097522"
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="234097522"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 10:56:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="576212133"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 02 Mar 2022 10:56:23 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPU99-0001m8-AY; Wed, 02 Mar 2022 18:56:23 +0000
+Date:   Thu, 3 Mar 2022 02:56:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Angelo Dureghello <angelo@sysam.it>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Ungerer <gerg@kernel.org>
+Subject: arch/m68k/coldfire/device.c:511:35: error: 'MCFEDMA_BASE' undeclared
+ here (not in a function); did you mean 'MCFDMA_BASE0'?
+Message-ID: <202203030252.P752DK46-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v7 02/10] crypto: hisilicon/qm: Move few definitions to
- common header
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
- <20220302172903.1995-3-shameerali.kolothum.thodi@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220302172903.1995-3-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.84.129]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 17:28, Shameer Kolothum wrote:
-> From: Longfang Liu <liulongfang@huawei.com>
-> 
-> Move Doorbell and Mailbox definitions to common header
-> file. Also export QM mailbox functions.
-> 
-> This will be useful when we introduce VFIO PCI HiSilicon
-> ACC live migration driver.
-> 
-> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> ---
->   drivers/crypto/hisilicon/qm.c | 32 +++++------------------------
->   include/linux/hisi_acc_qm.h   | 38 +++++++++++++++++++++++++++++++++++
->   2 files changed, 43 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-> index ed23e1d3fa27..8c29f9fba573 100644
-> --- a/drivers/crypto/hisilicon/qm.c
-> +++ b/drivers/crypto/hisilicon/qm.c
-> @@ -33,23 +33,6 @@
->   #define QM_ABNORMAL_EVENT_IRQ_VECTOR	3
->   
->   /* mailbox */
-> -#define QM_MB_CMD_SQC			0x0
-> -#define QM_MB_CMD_CQC			0x1
-> -#define QM_MB_CMD_EQC			0x2
-> -#define QM_MB_CMD_AEQC			0x3
-> -#define QM_MB_CMD_SQC_BT		0x4
-> -#define QM_MB_CMD_CQC_BT		0x5
-> -#define QM_MB_CMD_SQC_VFT_V2		0x6
-> -#define QM_MB_CMD_STOP_QP		0x8
-> -#define QM_MB_CMD_SRC			0xc
-> -#define QM_MB_CMD_DST			0xd
-> -
-> -#define QM_MB_CMD_SEND_BASE		0x300
-> -#define QM_MB_EVENT_SHIFT		8
-> -#define QM_MB_BUSY_SHIFT		13
-> -#define QM_MB_OP_SHIFT			14
-> -#define QM_MB_CMD_DATA_ADDR_L		0x304
-> -#define QM_MB_CMD_DATA_ADDR_H		0x308
->   #define QM_MB_PING_ALL_VFS		0xffff
->   #define QM_MB_CMD_DATA_SHIFT		32
->   #define QM_MB_CMD_DATA_MASK		GENMASK(31, 0)
-> @@ -103,19 +86,12 @@
->   #define QM_DB_CMD_SHIFT_V1		16
->   #define QM_DB_INDEX_SHIFT_V1		32
->   #define QM_DB_PRIORITY_SHIFT_V1		48
-> -#define QM_DOORBELL_SQ_CQ_BASE_V2	0x1000
-> -#define QM_DOORBELL_EQ_AEQ_BASE_V2	0x2000
->   #define QM_QUE_ISO_CFG_V		0x0030
->   #define QM_PAGE_SIZE			0x0034
->   #define QM_QUE_ISO_EN			0x100154
->   #define QM_CAPBILITY			0x100158
->   #define QM_QP_NUN_MASK			GENMASK(10, 0)
->   #define QM_QP_DB_INTERVAL		0x10000
-> -#define QM_QP_MAX_NUM_SHIFT		11
-> -#define QM_DB_CMD_SHIFT_V2		12
-> -#define QM_DB_RAND_SHIFT_V2		16
-> -#define QM_DB_INDEX_SHIFT_V2		32
-> -#define QM_DB_PRIORITY_SHIFT_V2		48
->   
->   #define QM_MEM_START_INIT		0x100040
->   #define QM_MEM_INIT_DONE		0x100044
-> @@ -693,7 +669,7 @@ static void qm_mb_pre_init(struct qm_mailbox *mailbox, u8 cmd,
->   }
->   
->   /* return 0 mailbox ready, -ETIMEDOUT hardware timeout */
-> -static int qm_wait_mb_ready(struct hisi_qm *qm)
-> +int qm_wait_mb_ready(struct hisi_qm *qm)
->   {
->   	u32 val;
->   
-> @@ -701,6 +677,7 @@ static int qm_wait_mb_ready(struct hisi_qm *qm)
->   					  val, !((val >> QM_MB_BUSY_SHIFT) &
->   					  0x1), POLL_PERIOD, POLL_TIMEOUT);
->   }
-> +EXPORT_SYMBOL_GPL(qm_wait_mb_ready);
+Hi Angelo,
 
-Since these will be public they require a more distinctive name, like 
-hisi_qm_wait_mb_ready or hisi_acc_qm_wait_mb_ready
+FYI, the error/warning still remains.
 
->   
->   /* 128 bit should be written to hardware at one time to trigger a mailbox */
->   static void qm_mb_write(struct hisi_qm *qm, const void *src)
-> @@ -745,8 +722,8 @@ static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
->   	return -EBUSY;
->   }
->   
-> -static int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
-> -		 bool op)
-> +int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
-> +	  bool op)
->   {
->   	struct qm_mailbox mailbox;
->   	int ret;
-> @@ -762,6 +739,7 @@ static int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
->   
->   	return ret;
->   }
-> +EXPORT_SYMBOL_GPL(qm_mb);
->   
->   static void qm_db_v1(struct hisi_qm *qm, u16 qn, u8 cmd, u16 index, u8 priority)
->   {
-> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-> index 3068093229a5..8befb59c6fb3 100644
-> --- a/include/linux/hisi_acc_qm.h
-> +++ b/include/linux/hisi_acc_qm.h
-> @@ -34,6 +34,40 @@
->   #define QM_WUSER_M_CFG_ENABLE		0x1000a8
->   #define WUSER_M_CFG_ENABLE		0xffffffff
->   
-> +/* mailbox */
-> +#define QM_MB_CMD_SQC                   0x0
-> +#define QM_MB_CMD_CQC                   0x1
-> +#define QM_MB_CMD_EQC                   0x2
-> +#define QM_MB_CMD_AEQC                  0x3
-> +#define QM_MB_CMD_SQC_BT                0x4
-> +#define QM_MB_CMD_CQC_BT                0x5
-> +#define QM_MB_CMD_SQC_VFT_V2            0x6
-> +#define QM_MB_CMD_STOP_QP               0x8
-> +#define QM_MB_CMD_SRC                   0xc
-> +#define QM_MB_CMD_DST                   0xd
-> +
-> +#define QM_MB_CMD_SEND_BASE		0x300
-> +#define QM_MB_EVENT_SHIFT               8
-> +#define QM_MB_BUSY_SHIFT		13
-> +#define QM_MB_OP_SHIFT			14
-> +#define QM_MB_CMD_DATA_ADDR_L		0x304
-> +#define QM_MB_CMD_DATA_ADDR_H		0x308
-> +#define QM_MB_MAX_WAIT_CNT		6000
-> +
-> +/* doorbell */
-> +#define QM_DOORBELL_CMD_SQ              0
-> +#define QM_DOORBELL_CMD_CQ              1
-> +#define QM_DOORBELL_CMD_EQ              2
-> +#define QM_DOORBELL_CMD_AEQ             3
-> +
-> +#define QM_DOORBELL_SQ_CQ_BASE_V2	0x1000
-> +#define QM_DOORBELL_EQ_AEQ_BASE_V2	0x2000
-> +#define QM_QP_MAX_NUM_SHIFT             11
-> +#define QM_DB_CMD_SHIFT_V2		12
-> +#define QM_DB_RAND_SHIFT_V2		16
-> +#define QM_DB_INDEX_SHIFT_V2		32
-> +#define QM_DB_PRIORITY_SHIFT_V2		48
-> +
->   /* qm cache */
->   #define QM_CACHE_CTL			0x100050
->   #define SQC_CACHE_ENABLE		BIT(0)
-> @@ -414,6 +448,10 @@ pci_ers_result_t hisi_qm_dev_slot_reset(struct pci_dev *pdev);
->   void hisi_qm_reset_prepare(struct pci_dev *pdev);
->   void hisi_qm_reset_done(struct pci_dev *pdev);
->   
-> +int qm_wait_mb_ready(struct hisi_qm *qm);
-> +int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
-> +	  bool op);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb184c4af9b9f4563e7a126219389986a71d5b5b
+commit: d7e9d01ac2920959b474c6363dba269a868f4db9 m68k: add ColdFire mcf5441x eDMA platform support
+date:   3 years ago
+config: m68k-buildonly-randconfig-r003-20220112 (https://download.01.org/0day-ci/archive/20220303/202203030252.P752DK46-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7e9d01ac2920959b474c6363dba269a868f4db9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d7e9d01ac2920959b474c6363dba269a868f4db9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
 
-As above, please notice how everything else has a "hisi" prefix
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +
->   struct hisi_acc_sgl_pool;
->   struct hisi_acc_hw_sgl *hisi_acc_sg_buf_map_to_hw_sgl(struct device *dev,
->   	struct scatterlist *sgl, struct hisi_acc_sgl_pool *pool,
+All errors (new ones prefixed by >>):
 
+   In file included from include/linux/kernel.h:10,
+                    from arch/m68k/coldfire/device.c:11:
+   include/linux/scatterlist.h: In function 'sg_set_buf':
+   arch/m68k/include/asm/page_no.h:33:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      33 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/scatterlist.h:143:9: note: in expansion of macro 'BUG_ON'
+     143 |         BUG_ON(!virt_addr_valid(buf));
+         |         ^~~~~~
+   include/linux/scatterlist.h:143:17: note: in expansion of macro 'virt_addr_valid'
+     143 |         BUG_ON(!virt_addr_valid(buf));
+         |                 ^~~~~~~~~~~~~~~
+   arch/m68k/coldfire/device.c: At top level:
+>> arch/m68k/coldfire/device.c:511:35: error: 'MCFEDMA_BASE' undeclared here (not in a function); did you mean 'MCFDMA_BASE0'?
+     511 |                 .start          = MCFEDMA_BASE,
+         |                                   ^~~~~~~~~~~~
+         |                                   MCFDMA_BASE0
+>> arch/m68k/coldfire/device.c:512:50: error: 'MCFEDMA_SIZE' undeclared here (not in a function)
+     512 |                 .end            = MCFEDMA_BASE + MCFEDMA_SIZE - 1,
+         |                                                  ^~~~~~~~~~~~
+>> arch/m68k/coldfire/device.c:516:35: error: 'MCFEDMA_IRQ_INTR0' undeclared here (not in a function)
+     516 |                 .start          = MCFEDMA_IRQ_INTR0,
+         |                                   ^~~~~~~~~~~~~~~~~
+>> arch/m68k/coldfire/device.c:522:35: error: 'MCFEDMA_IRQ_INTR16' undeclared here (not in a function)
+     522 |                 .start          = MCFEDMA_IRQ_INTR16,
+         |                                   ^~~~~~~~~~~~~~~~~~
+>> arch/m68k/coldfire/device.c:528:35: error: 'MCFEDMA_IRQ_INTR56' undeclared here (not in a function)
+     528 |                 .start          = MCFEDMA_IRQ_INTR56,
+         |                                   ^~~~~~~~~~~~~~~~~~
+>> arch/m68k/coldfire/device.c:534:35: error: 'MCFEDMA_IRQ_ERR' undeclared here (not in a function)
+     534 |                 .start          = MCFEDMA_IRQ_ERR,
+         |                                   ^~~~~~~~~~~~~~~
+
+
+vim +511 arch/m68k/coldfire/device.c
+
+   508	
+   509	static struct resource mcf_edma_resources[] = {
+   510		{
+ > 511			.start		= MCFEDMA_BASE,
+ > 512			.end		= MCFEDMA_BASE + MCFEDMA_SIZE - 1,
+   513			.flags		= IORESOURCE_MEM,
+   514		},
+   515		{
+ > 516			.start		= MCFEDMA_IRQ_INTR0,
+   517			.end		= MCFEDMA_IRQ_INTR0 + 15,
+   518			.flags		= IORESOURCE_IRQ,
+   519			.name		= "edma-tx-00-15",
+   520		},
+   521		{
+ > 522			.start		= MCFEDMA_IRQ_INTR16,
+   523			.end		= MCFEDMA_IRQ_INTR16 + 39,
+   524			.flags		= IORESOURCE_IRQ,
+   525			.name		= "edma-tx-16-55",
+   526		},
+   527		{
+ > 528			.start		= MCFEDMA_IRQ_INTR56,
+   529			.end		= MCFEDMA_IRQ_INTR56,
+   530			.flags		= IORESOURCE_IRQ,
+   531			.name		= "edma-tx-56-63",
+   532		},
+   533		{
+ > 534			.start		= MCFEDMA_IRQ_ERR,
+   535			.end		= MCFEDMA_IRQ_ERR,
+   536			.flags		= IORESOURCE_IRQ,
+   537			.name		= "edma-err",
+   538		},
+   539	};
+   540	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

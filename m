@@ -2,181 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC744C9D93
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 06:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7474C4C9D96
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 06:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239637AbiCBFq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 00:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S239661AbiCBFrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 00:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiCBFqY (ORCPT
+        with ESMTP id S233570AbiCBFrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 00:46:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564C08878B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 21:45:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 95AFCCE20F0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:45:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2BAC004E1;
-        Wed,  2 Mar 2022 05:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646199939;
-        bh=volcjSUHwwVSylhbVEb2XS2jZRERTMkqWLs2N8h9r8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iJq6XCeFYhz9jzuq0BAahxbq5t+6Dox+An0D7ti4589VvmXvq+BEmkzIxL04d/mRI
-         WqTWQKokLwss59y9PpBaCy1bov4KROYSxRFetI6N09HM160FFMlBkgadGU6VbEveGL
-         8Y9uG3jlX+cS2T1+OVWKwQZrEbvKwoesomXmH+EZz/tvwIKjlKmg7VMaCRXkVmjZJd
-         JYQ/Qhl7VfWtF2+0aSaA8sLEktBCIms+NHtZ8b5+9M6TzM+QTnYkYePVz4wZJh6vOr
-         pTSrFZ3qrFMhc6XvFt/LSCy2Rf3W5EZGVx2ob7ulspJmcbR/RB7laaZXmK3AkJGIRa
-         iY6hc+yTCGj6A==
-Date:   Tue, 1 Mar 2022 21:45:37 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: avoid sb_start_intwrite during
- eviction
-Message-ID: <Yh8EgciUTRAbWDNG@google.com>
-References: <20220215220039.1477906-1-jaegeuk@kernel.org>
- <09683b83-b6c0-fe05-0dae-b93cab2f4b63@kernel.org>
- <YhkpjWZ3NO5ihvH5@google.com>
- <Yh2lpb3c5X9aPJ+r@google.com>
- <4b264607-4d60-7370-eca7-8816a3f8d29f@kernel.org>
- <Yh8B/w9kPGU98Hfh@google.com>
- <Yh8C4aA+nBajs+fc@google.com>
+        Wed, 2 Mar 2022 00:47:16 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2E3B18A2;
+        Tue,  1 Mar 2022 21:46:34 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id i11so719764eda.9;
+        Tue, 01 Mar 2022 21:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ju1hFzCBSx147XTyPzHG3qmNTxLyCXpzXti14uOg3Zw=;
+        b=XQF+mq2xUo6VNixetWdZ1ah04YUZjzhSzra/CYRofSGJDE9oyqxQuOsZ2aUlKxVCUK
+         upIwsYaFU/7tAgmruY53YzGBr+StWr+B9KHUo9cqkRL2cuHRfwHwTcy82cYaMpl3HTpH
+         P0BG3FHsuxSd/Xkrhm9wVVh9j+nwICAzyorT1NVBqF+eAPZrKpQQvMjr1olL9YgtjdbQ
+         bdurXInJVclLC4K5jxGfbX3AZjf5gxXCwr7kPEaHMMIRz9I8KgpAFaQl1J0Ja5HB4smK
+         OeXCLZCc11TNtROxRT6zvHWmHwF7yvMErvmyyxY3sSj3vMvOHY0DSlRA2YuUhN3HC0q1
+         Lzeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ju1hFzCBSx147XTyPzHG3qmNTxLyCXpzXti14uOg3Zw=;
+        b=7v9W0JwB7zNHw0abOWM1d45u2mJsIsQqElN9/pZ9wZCec0fSHKOaXHLMri5vtxxxCk
+         YOKYindtSjJMC84gIN7Ijjuvu1C+brhhTk4tcjS70Vl5UhNIczy/XJ7hsqgehUmYzaOc
+         014ek/oEVDFKIZR6dYTM5I7CbeOR1L6+3A6ML1EJUfuVuh34iF6PQcOfPG/61m+FcJuG
+         qKs7eMqTHQlwLaUgohH5SM+ZwTnjyFwuc2Nl4Hf3xpqXkIDoHrBEOBqJa52AyK9w1gTP
+         ikZ4I2jnXpJRw+Nv12JSSEPukSfNGmYYZ+QKwB2VsP6uep6ZTQKxvvyfa538Eup2xS4s
+         7wEA==
+X-Gm-Message-State: AOAM530opk/+Dg9YusxLR5HSf3ewimchcJDrS2jjicrK3h1qEMTnle2L
+        M+XnkT8I1pF/p1KHnTXO4R99SKNlC3nMuNiT95lUoA8ERt0=
+X-Google-Smtp-Source: ABdhPJytECZlniE35uFfJSbPDZN0wge61h9/VBUAoayESw7OZkGGA6NQylxJFClTJ/9x3nWvWshmwHeuXwBl7OsJPYk=
+X-Received: by 2002:a05:6402:5304:b0:413:8a0c:c54a with SMTP id
+ eo4-20020a056402530400b004138a0cc54amr19691262edb.172.1646199992679; Tue, 01
+ Mar 2022 21:46:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh8C4aA+nBajs+fc@google.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220227134009.1298488-1-dzm91@hust.edu.cn> <d4bed569-d448-8b59-0774-c036e4c9abe9@iogearbox.net>
+In-Reply-To: <d4bed569-d448-8b59-0774-c036e4c9abe9@iogearbox.net>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Wed, 2 Mar 2022 13:46:04 +0800
+Message-ID: <CAD-N9QUptT_h4FtjPTNyc72jrUHW0R_-Ggf3R1V3Fsz4hoyuAw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: cgroup: remove WARN_ON at bpf_cgroup_link_release
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01, Jaegeuk Kim wrote:
-> On 03/01, Jaegeuk Kim wrote:
-> > On 03/02, Chao Yu wrote:
-> > > On 2022/3/1 12:48, Jaegeuk Kim wrote:
-> > > > 1. waiting for f2fs_evict_inode
-> > > > [ 5560.043945]  __wait_on_freeing_inode+0xac/0xf0
-> > > > [ 5560.045540]  ? var_wake_function+0x30/0x30
-> > > > [ 5560.047036]  find_inode_fast+0x6d/0xc0
-> > > > [ 5560.048473]  iget_locked+0x79/0x230
-> > > > [ 5560.049933]  f2fs_iget+0x27/0x1200 [f2fs]
-> > > > [ 5560.051496]  f2fs_lookup+0x18c/0x3e0 [f2fs]
-> > > > [ 5560.053069]  __lookup_slow+0x84/0x150
-> > > > [ 5560.054503]  walk_component+0x141/0x1b0
-> > > > [ 5560.055938]  link_path_walk.part.0+0x23b/0x360
-> > > > [ 5560.057541]  ? end_bio_bh_io_sync+0x37/0x50
-> > > > [ 5560.059086]  path_parentat+0x3c/0x90
-> > > > [ 5560.060492]  filename_parentat+0xd7/0x1e0
-> > > > [ 5560.062002]  ? blk_mq_free_request+0x127/0x150
-> > > > [ 5560.063576]  do_renameat2+0xc1/0x5b0
-> > > >   --> sb_start_write(m->mnt_sb); ->  __sb_start_write(sb, SB_FREEZE_WRITE);
-> > > > 
-> > > > [ 5560.064999]  ? __check_object_size+0x13f/0x150
-> > > > [ 5560.066559]  ? strncpy_from_user+0x44/0x150
-> > > > [ 5560.068038]  ? getname_flags.part.0+0x4c/0x1b0
-> > > > [ 5560.069617]  __x64_sys_renameat2+0x51/0x60
-> > > > 
-> > > > 2. waiting for sb_start_intwrite -> __sb_start_write(sb, SB_FREEZE_FS);
-> > > 
-> > > It's still not clear that why __sb_start_write(sb, SB_FREEZE_FS) will be blocked,
-> > > as SB_FREEZE_FS and SB_FREEZE_WRITE points to different locks.
-> > 
-> > It seems I missed another call, thaw_super(), got SB_FREEZE_FS and then being
-> > stuck to grab SB_FREEZE_WRITE.
-> 
-> Ah, sorry. freeze_super().
+On Wed, Mar 2, 2022 at 12:28 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 2/27/22 2:40 PM, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > When syzkaller injects fault into memory allocation at
+> > bpf_prog_array_alloc, the kernel encounters a memory failure and
+> > returns non-zero, thus leading to one WARN_ON at
+> > bpf_cgroup_link_release. The stack trace is as follows:
+> >
+> >   __kmalloc+0x7e/0x3d0
+> >   bpf_prog_array_alloc+0x4f/0x60
+> >   compute_effective_progs+0x132/0x580
+> >   ? __sanitizer_cov_trace_pc+0x1a/0x40
+> >   update_effective_progs+0x5e/0x260
+> >   __cgroup_bpf_detach+0x293/0x760
+> >   bpf_cgroup_link_release+0xad/0x400
+> >   bpf_link_free+0xca/0x190
+> >   bpf_link_put+0x161/0x1b0
+> >   bpf_link_release+0x33/0x40
+> >   __fput+0x286/0x9f0
+> >
+> > Fix this by removing the WARN_ON for __cgroup_bpf_detach.
+> >
+> > Reported-by: syzkaller <syzkaller@googlegroups.com>
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+> >   kernel/bpf/cgroup.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > index 514b4681a90a..fdbdcee6c9fa 100644
+> > --- a/kernel/bpf/cgroup.c
+> > +++ b/kernel/bpf/cgroup.c
+> > @@ -896,8 +896,8 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+> >               return;
+> >       }
+> >
+> > -     WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> > -                                 cg_link->type));
+> > +     __cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> > +                                 cg_link->type);
+>
+> "Fixing" by removing WARN_ON is just papering over the issue which in this case as
+> mentioned is allocation failure on detach/teardown when allocating and recomputing
+> effective prog arrays..
 
-Messed up. So, the lock order is SB_FREEZE_WRITE -> SB_FREEZE_FS in both cases.
+Hi Daniel,
 
-> 
-> > 
-> > > 
-> > > Thread A				Thread B				Thread C
-> > > - rename
-> > >  - sb_start_write
-> > >   - __sb_start_write(SB_FREEZE_WRITE)
-> > > ...
-> > >      - f2fs_lookup
-> > > ...
-> > >        - __wait_on_freeing_inode
-> > > 					- drop_slab
-> > > 					 - prune_icache_sb
-> > > 					  - inode_lru_isolate
-> > > 					   :inode->i_state |= I_FREEING
-> > > 										- Is there any flow that it has already held
-> > > 										 SB_FREEZE_FS and try to lock SB_FREEZE_WRITE?
-> > > 					   - f2fs_evict_inode
-> > > 					    - __sb_start_write(SB_FREEZE_FS)
-> > > 
-> > > Thanks,
-> > > 
-> > > > 
-> > > > [ 5560.152447]  percpu_rwsem_wait+0xaf/0x160
-> > > > [ 5560.154000]  ? percpu_down_write+0xd0/0xd0
-> > > > [ 5560.155498]  __percpu_down_read+0x4e/0x60
-> > > > [ 5560.157000]  f2fs_evict_inode+0x5a3/0x610 [f2fs]
-> > > > [ 5560.158648]  ? var_wake_function+0x30/0x30
-> > > > [ 5560.160341]  evict+0xd2/0x180
-> > > > [ 5560.161728]  prune_icache_sb+0x81/0xb0
-> > > >   --> inode_lru_isolate() -> inode->i_state |= I_FREEING;
-> > > > 
-> > > > [ 5560.163179]  super_cache_scan+0x169/0x1f0
-> > > > [ 5560.164675]  do_shrink_slab+0x145/0x2b0
-> > > > [ 5560.166121]  shrink_slab+0x186/0x2d0
-> > > > [ 5560.167481]  drop_slab_node+0x4a/0x90
-> > > > [ 5560.168876]  drop_slab+0x3e/0x80
-> > > > [ 5560.170178]  drop_caches_sysctl_handler+0x75/0x90
-> > > > [ 5560.171761]  proc_sys_call_handler+0x149/0x280
-> > > > [ 5560.173328]  proc_sys_write+0x13/0x20
-> > > > [ 5560.174667]  new_sync_write+0x117/0x1b0
-> > > > [ 5560.176120]  vfs_write+0x1d5/0x270
-> > > > [ 5560.177409]  ksys_write+0x67/0xe0
-> > > > 
-> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > ---
-> > > >   Note, I found this call stack.
-> > > > 
-> > > >   fs/f2fs/inode.c | 2 --
-> > > >   1 file changed, 2 deletions(-)
-> > > > 
-> > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > > index ab8e0c06c78c..882db4bd917b 100644
-> > > > --- a/fs/f2fs/inode.c
-> > > > +++ b/fs/f2fs/inode.c
-> > > > @@ -778,7 +778,6 @@ void f2fs_evict_inode(struct inode *inode)
-> > > >   	f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
-> > > >   	f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
-> > > > -	sb_start_intwrite(inode->i_sb);
-> > > >   	set_inode_flag(inode, FI_NO_ALLOC);
-> > > >   	i_size_write(inode, 0);
-> > > >   retry:
-> > > > @@ -809,7 +808,6 @@ void f2fs_evict_inode(struct inode *inode)
-> > > >   		if (dquot_initialize_needed(inode))
-> > > >   			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
-> > > >   	}
-> > > > -	sb_end_intwrite(inode->i_sb);
-> > > >   no_delete:
-> > > >   	dquot_drop(inode);
-> > 
-> > 
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+you're right. This is not a good fix, any idea to fix the underlying
+bug perfectly?
+
+>
+> >       cg = cg_link->cgroup;
+> >       cg_link->cgroup = NULL;
+> >
+>

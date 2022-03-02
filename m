@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7D94C9DDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1EA4C9DDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239722AbiCBGiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 01:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S239725AbiCBGi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 01:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiCBGiF (ORCPT
+        with ESMTP id S231644AbiCBGi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 01:38:05 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297C85F8C9;
-        Tue,  1 Mar 2022 22:37:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7ktj0KcQz4xNm;
-        Wed,  2 Mar 2022 17:37:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646203037;
-        bh=5+BxKhtnAqvVfvAgUzx1TGaC8TMewO/v7AoiFI0Ypwo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JYNvi/cKne4TYhAasMb7Xbcx0CzgqvCQ919SrUlnFD0wI07eahhxGRtjiuN+6NuN6
-         DPOTd/pPLdRTduaWITnjyAHullQTBTMBY1vcVx06pMlrWtBJz59f6ME47JQAOQiDap
-         J4VGhtEPRAdAQl6jw6/HNSLOzi+jJOrATpxTr6HKEOjpYfYkwlWOasePkWkqfVMILL
-         zYA2kB/7mBVjdmVeOgOB7zfq7Xxlgqv8mU+Qj9xK1nXom99CVSfSwoKjriACHKmIUS
-         Xt+ng4SGh97/VdyryGFNIxU/OnIqgLhxZ2AtoiYqX4P4VX3szMoWD+s8ll5Vr/v9Wh
-         Y2WE+0Pw32K3A==
-Date:   Wed, 2 Mar 2022 17:37:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mhi tree
-Message-ID: <20220302173714.78c9f43c@canb.auug.org.au>
+        Wed, 2 Mar 2022 01:38:56 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F46013DDE;
+        Tue,  1 Mar 2022 22:38:13 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V61CwrZ_1646203089;
+Received: from 30.226.12.26(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V61CwrZ_1646203089)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 02 Mar 2022 14:38:10 +0800
+Message-ID: <81a915d3-cf5f-a884-4649-704a5cf26835@linux.alibaba.com>
+Date:   Wed, 2 Mar 2022 14:38:09 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sWOK5kgboj74CDu8mLDMOXW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] io_uring: Add support for napi_busy_poll
+Content-Language: en-US
+From:   Hao Xu <haoxu@linux.alibaba.com>
+To:     Olivier Langlois <olivier@trillion01.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <cover.1646142288.git.olivier@trillion01.com>
+ <aa38a667ef28cce54c08212fdfa1e2b3747ad3ec.1646142288.git.olivier@trillion01.com>
+ <29bad95d-06f8-ea7c-29fe-81e52823c90a@linux.alibaba.com>
+ <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
+ <4af380e8-796b-2dd6-4ebc-e40e7fa51ce1@linux.alibaba.com>
+In-Reply-To: <4af380e8-796b-2dd6-4ebc-e40e7fa51ce1@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,55 +50,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sWOK5kgboj74CDu8mLDMOXW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
-
-After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
-
-drivers/bus/mhi/ep/main.c: In function 'mhi_ep_register_controller':
-drivers/bus/mhi/ep/main.c:1426:9: error: implicit declaration of function '=
-irq_set_status_flags' [-Werror=3Dimplicit-function-declaration]
- 1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
-      |         ^~~~~~~~~~~~~~~~~~~~
-drivers/bus/mhi/ep/main.c:1426:46: error: 'IRQ_NOAUTOEN' undeclared (first =
-use in this function); did you mean 'IRQF_NO_AUTOEN'?
- 1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
-      |                                              ^~~~~~~~~~~~
-      |                                              IRQF_NO_AUTOEN
-drivers/bus/mhi/ep/main.c:1426:46: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-
-Caused by commit
-
-  6cb3bc57b0c5 ("bus: mhi: ep: Add support for processing MHI endpoint inte=
-rrupts")
-
-Presumably a missing include.
-
-I have used the mhi tree from next-20220301 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/sWOK5kgboj74CDu8mLDMOXW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIfEJoACgkQAVBC80lX
-0Gw71Qf+MXipuPeCVQ9CHodunMeCX9a8HXN82zhxWlfkQpMjZ9XZ64XrPMVT4/P8
-t57cC77AjcgE+GUd83ZTQPi5HObbNevXXycFlfK+wbahWa1h6mXXZKWQ4r3zHtKI
-KLlpow+PY2APOZV+hTqGaloJtNQHrHgujdciIKKAG/ILnAg4Ct+Cd9ysuX4CiDCd
-0R5PLo6U0W5cjIC5VwhjyMETpvoiBac8ZS7MMiVM2uV0nN6HvDRxwx79maaAJ1fp
-45tE79wrGsbZFSieHcGBiYcxX270lvtlsFOhadqW6XXGYEWj/3YzXhZgA+uGYtl8
-LV+v8S70W1ubnmROHHlocEXSm7OewA==
-=b5DF
------END PGP SIGNATURE-----
-
---Sig_/sWOK5kgboj74CDu8mLDMOXW--
+On 3/2/22 14:27, Hao Xu wrote:
+>
+> On 3/2/22 04:06, Olivier Langlois wrote:
+>> On Wed, 2022-03-02 at 02:31 +0800, Hao Xu wrote:
+>>>> +       ne = kmalloc(sizeof(*ne), GFP_NOWAIT);
+>>>> +       if (!ne)
+>>>> +               goto out;
+>>> IMHO, we need to handle -ENOMEM here, I cut off the error handling
+>>> when
+>>>
+>>> I did the quick coding. Sorry for misleading.
+>> If you are correct, I would be shocked about this.
+>>
+>> I did return in my 'Linux Device Drivers' book and nowhere it is
+>> mentionned that the kmalloc() can return something else than a pointer
+>>
+>> No mention at all about the return value
+>>
+>> in man page:
+>> https://www.kernel.org/doc/htmldocs/kernel-api/API-kmalloc.html
+>> API doc:
+>>
+>> https://www.kernel.org/doc/html/latest/core-api/mm-api.html?highlight=kmalloc#c.kmalloc 
+>>
+>>
+>> header file:
+>> https://elixir.bootlin.com/linux/latest/source/include/linux/slab.h#L522
+>>
+>> I did browse into the kmalloc code. There is a lot of paths to cover
+>> but from preliminary reading, it pretty much seems that kmalloc only
+>> returns a valid pointer or NULL...
+>>
+>> /**
+>>   * kmem_cache_alloc - Allocate an object
+>>   * @cachep: The cache to allocate from.
+>>   * @flags: See kmalloc().
+>>   *
+>>   * Allocate an object from this cache.  The flags are only relevant
+>>   * if the cache has no available objects.
+>>   *
+>>   * Return: pointer to the new object or %NULL in case of error
+>>   */
+>>     /**
+>>   * __do_kmalloc - allocate memory
+>>   * @size: how many bytes of memory are required.
+>>   * @flags: the type of memory to allocate (see kmalloc).
+>>   * @caller: function caller for debug tracking of the caller
+>>   *
+>>   * Return: pointer to the allocated memory or %NULL in case of error
+>>   */
+>>
+>> I'll need someone else to confirm about possible kmalloc() return
+>> values with perhaps an example
+>>
+>> I am a bit skeptic that something special needs to be done here...
+>>
+>> Or perhaps you are suggesting that io_add_napi() returns an error code
+>> when allocation fails.
+> This is what I mean.
+>>
+>> as done here:
+>> https://elixir.bootlin.com/linux/latest/source/arch/alpha/kernel/core_marvel.c#L867 
+>>
+>>
+>> If that is what you suggest, what would this info do for the caller?
+>>
+>> IMHO, it wouldn't help in any way...
+>
+> Hmm, I'm not sure, you're probably right based on that ENOMEM here 
+> shouldn't
+>
+> fail the arm poll, but we wanna do it, we can do something like what 
+> we do for
+                             ^---but if we wanna do it

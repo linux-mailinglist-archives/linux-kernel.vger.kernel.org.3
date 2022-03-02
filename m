@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7A24C9BD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDCF4C9BCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiCBDKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S239258AbiCBDJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239260AbiCBDKN (ORCPT
+        with ESMTP id S233684AbiCBDJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:10:13 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77A3AAF1CD;
-        Tue,  1 Mar 2022 19:09:29 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowACXnsLO3x5iwKaQAQ--.25965S2;
-        Wed, 02 Mar 2022 11:09:03 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, f.suligoi@asem.it,
-        kuninori.morimoto.gx@renesas.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] ASoC: fsi: Add check for clk_enable
-Date:   Wed,  2 Mar 2022 11:09:00 +0800
-Message-Id: <20220302030900.46341-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 22:09:57 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2B4E0EA;
+        Tue,  1 Mar 2022 19:09:15 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id bm39so325175qkb.0;
+        Tue, 01 Mar 2022 19:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HT+Mtr5Nff2ageK7dbN94vU/EQesBvLqX1yuZAcRck0=;
+        b=dPwC/rmwjWPNXK0t7BJJ6dux5/N4QJAp73A5BHoQ0+Jun3fMu1eTDALAhU/Kej566l
+         5mmW8OoScc5wlCGRRZ0A/w+ktM2veKscRQZ+SkcbGcxf/XtnnHPEMYmXhA6kfSOXV5lw
+         3lUH9hcra2VpuWd1zOOxPJuC/ZY1W9dmgH0GU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HT+Mtr5Nff2ageK7dbN94vU/EQesBvLqX1yuZAcRck0=;
+        b=ENarzyOMdljNSA4eQIJHQnFOyN/Fcp8j/SwY5bFmISSF8bPHXc28vb1Hosygk1wlMo
+         n8wpQi4AMQCDyPy2C9WemjjiBvAvji/2hp4cHwtkO9Pu6Fh+tM12rN+G6rMIcOR0lNdW
+         lJdpJ67HT2p30OrBzp5NCW52uW1zVzO9d7DzoZx6Qnjic6gRxmmSl7LFFF0yg6A+p5We
+         LIz6jBMJ04Vb/utpAyLcgq4G30uTjvlXhYq+ZfQ6Oi/xWlnZyjz6+Z7FeuV1yNKB3HqH
+         lI0K5YhMTZBcdEu/duNRAon8OQ1J6OBTF6yAr0Vgn+xWbK/VTBugT5djOA8C/wZZZJhN
+         1pZQ==
+X-Gm-Message-State: AOAM5332P59VWrEBFz99PgVvHzd0xpB1/0RT64VspgT9GlIqMO/kZ1Ph
+        Su8/l5b32tcos29DocsOudr+job/GiX4fIZZFrg=
+X-Google-Smtp-Source: ABdhPJxa0POJ5iMZchDS1hHP6nIyKRmvr9j5KH1/LsFO7CsMjnlOEqfR/0MoiiOCu3HDY273CUfvvjunpBaZrCv9ql0=
+X-Received: by 2002:a37:a4d1:0:b0:508:19df:7093 with SMTP id
+ n200-20020a37a4d1000000b0050819df7093mr15260167qke.346.1646190554732; Tue, 01
+ Mar 2022 19:09:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACXnsLO3x5iwKaQAQ--.25965S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF15uFW3uw4kKFW7Arb_yoWkXwb_Aa
-        1jg39Iq3W5urWfCasrJr4UA34j9r47Za4UGryIq3Z3tayUJrs8ur48Z3sYvrn0qw1Y9as3
-        Aa1DZr4xArW3CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UQvtAUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220302024930.18758-1-tommy_huang@aspeedtech.com>
+In-Reply-To: <20220302024930.18758-1-tommy_huang@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 2 Mar 2022 03:09:02 +0000
+Message-ID: <CACPK8XdKH5BaGC9mtgg17ndiJyOneuzzUbrLmxYZKmi6RRzzpg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/5] Add Aspeed AST2600 soc display support
+To:     Tommy Haung <tommy_huang@aspeedtech.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+On Wed, 2 Mar 2022 at 02:49, Tommy Haung <tommy_huang@aspeedtech.com> wrote:
+>
+> v6:
+>   Remove some unnecessary reset patch.
+>   Refine patch format.
+>   Add detail explain of SOC display reset bits.
+>
+> v5:
+>   Add lost reset define.
+>
+> v4:
+>   Add necessary reset control for ast2600.
+>   Add chip caps for futher use.
+>   These code are test on AST2500 and AST2600 by below steps.
+>
+>   1. Add below config to turn VT and LOGO on.
+>
+>         CONFIG_TTY=y
+>         CONFIG_VT=y
+>         CONFIG_CONSOLE_TRANSLATIONS=y
+>         CONFIG_VT_CONSOLE=y
+>         CONFIG_VT_CONSOLE_SLEEP=y
+>         CONFIG_HW_CONSOLE=y
+>         CONFIG_VT_HW_CONSOLE_BINDING=y
+>         CONFIG_UNIX98_PTYS=y
+>         CONFIG_LDISC_AUTOLOAD=y
+>         CONFIG_DEVMEM=y
+>         CONFIG_DUMMY_CONSOLE=y
+>         CONFIG_FRAMEBUFFER_CONSOLE=y
+>         CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+>         CONFIG_LOGO=y
+>         CONFIG_LOGO_LINUX_CLUT224=y
+>
+>   2. The Linux logo will be shown on the screen, when the BMC boot in Linux.
+>
+> v3:
+>   Refine the patch for clear separate purpose.
+>   Skip to send devicetree patch
 
-Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Looks good! Thanks Tommy.
 
-v1 -> v2
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-* Change 1. Seperate the error handler.
----
- sound/soc/sh/fsi.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+I'll apply this once I've tested it on hardware.
 
-diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
-index cdf3b7f69ba7..91050478844a 100644
---- a/sound/soc/sh/fsi.c
-+++ b/sound/soc/sh/fsi.c
-@@ -816,14 +816,27 @@ static int fsi_clk_enable(struct device *dev,
- 			return ret;
- 		}
- 
--		clk_enable(clock->xck);
--		clk_enable(clock->ick);
--		clk_enable(clock->div);
-+		ret = clk_enable(clock->xck);
-+		if (ret)
-+			goto err;
-+		ret = clk_enable(clock->ick);
-+		if (ret)
-+			goto disable_xck;
-+		ret = clk_enable(clock->div);
-+		if (ret)
-+			goto disable_ick;
- 
- 		clock->count++;
- 	}
- 
- 	return ret;
-+
-+disable_xck:
-+	clk_disable(clock->xck);
-+disable_ick:
-+	clk_disable(clock->ick);
-+err:
-+	return ret;
- }
- 
- static int fsi_clk_disable(struct device *dev,
--- 
-2.25.1
-
+>
+> v2:
+>   Remove some unnecessary patch.
+>   Refine for reviwer request.
+>
+> v1:
+>   First add patch.
+>
+> Joel Stanley (2):
+>   ARM: dts: aspeed: Add GFX node to AST2600
+>   ARM: dts: aspeed: ast2600-evb: Enable GFX device
+>
+> Tommy Haung (3):
+>   drm/aspeed: Update INTR_STS handling
+>   drm/aspeed: Add AST2600 chip support
+>   ARM: dtsi: aspeed: Modified gfx reset control
+>
+>  arch/arm/boot/dts/aspeed-ast2600-evb.dts | 18 ++++++++++++++++++
+>  arch/arm/boot/dts/aspeed-g6.dtsi         | 11 +++++++++++
+>  drivers/gpu/drm/aspeed/aspeed_gfx.h      |  1 +
+>  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c  | 15 ++++++++++++++-
+>  4 files changed, 44 insertions(+), 1 deletion(-)
+>
+> --
+> 2.17.1
+>

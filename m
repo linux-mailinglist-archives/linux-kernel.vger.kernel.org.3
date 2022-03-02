@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B284CB028
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3A64CB032
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244230AbiCBUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S244360AbiCBUsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiCBUqQ (ORCPT
+        with ESMTP id S244354AbiCBUss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:46:16 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0780B38789;
-        Wed,  2 Mar 2022 12:45:33 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id f5so5861601ybg.9;
-        Wed, 02 Mar 2022 12:45:32 -0800 (PST)
+        Wed, 2 Mar 2022 15:48:48 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52743FBC7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:03 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so5847406pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y6qqvHc/+bg7logl0Wqx5hN0gsT9pLtg+9GuBdEyV/s=;
-        b=N6mzMrvWJ3NnD3ZyiJjMdVcsCSd17WTZeB6K7pfo5O4CTlaCF/zVdybZv+jhlTrmxe
-         uPhSjCcemXAPPjSrv6Mt5HWt3iMD5ymv09MAlL+oTjIdHYCdg/0ssExCUuNBW85SJtyL
-         6OeZi79DSlqdlABdL8kngO2BoTutu+xJFXugejEjTOelpI2a+1M4P6YxOlDkDUJyF29p
-         PgdD7Ic+/VgjKaC6I7tmOHYd0tLr5EfPZX9OcETMEavgE8GzKwipHdx6ClJQBP2rXN9f
-         EGUY3EVA/3aCTBVmeMF2lzsoXWVLoxju/7BmHfIIowzLDvJ2L+u3IWbGBpTNizOgCwuq
-         xi8Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eoKQqCbI8PxL6l9piEDwf9eS8EFbrh6cCOCe/ltlwc4=;
+        b=ASeGJrfLRf/uRKaUvdh8TJg8raWbVzeyEUkn4pekIqzqxSAXb/GNo5doCQv013EQiA
+         Wd3ZjFZ5fKmPdd5sr8m8IUU3yWd2ci13b9omZL6ugqsdjz97AHAD+lEp/UQeddhywZmp
+         yR1CPpQXKzLYxO6zdAag+spSYMLJvZg8ecQtTUqk2/3ceIwdIwkkL2EBY1WePGmd37hP
+         KxKM/wxUY80ySGPxgYxPDoadheG92qG0iunt/EUR3oUNpQHFTJBVksuj0XgmxkuAuOYA
+         Gi91nHAtBmtvVOgR+j/zFsmoRcQcEsou4GfrSSytvOY6/N3d1Pz4Vy940W9bCYc7lI0x
+         yeBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y6qqvHc/+bg7logl0Wqx5hN0gsT9pLtg+9GuBdEyV/s=;
-        b=MqTU/7efOxboHWpzNtbPuUYy5P3UtEZkdXGobys3I+yE4NONEoIYDh2OMaAtgEXsto
-         0etjCrSBMc0cfPzYeUmqZVIFiPWatz6xYCBLAMVlSurHao+yl7p0kFLVCoG5iQuPz7Ir
-         oNnA7Jl4Odo0KYnHkXYXUVNC7AeamPH9BaJstB3x4ZJZ3tcikMFUvlkzcMIPFKzs7zYi
-         iax6xJPG9IgJCb1METWlCUbtyk8Cb0JQSKPm8+rcnPrPRx9pVMmMExlSCORysR5mmncl
-         evi/IKZurk3WxnGJCtChu8jqCRaIyPl30DgrD1wALp5wtH/LODB1QhepuGYVwPufVb8S
-         cs+g==
-X-Gm-Message-State: AOAM5302zMnxAGgWroUQhPc5HYFLcZAvoLm4RBOH7/RakyzxosXy/4eG
-        3uDEi+NsIXfD/Mx4CCUJfsXYgvL7wr8BtVJvGcg=
-X-Google-Smtp-Source: ABdhPJzRUMWLpsd+tQeqMe+lON1YrQZx9JkRO/Ga9/nynwkkheUILhBEVszCKkAbAE9UfTyjpoKk7tOUpMQSERi2HWM=
-X-Received: by 2002:a25:23d2:0:b0:628:771a:9d3 with SMTP id
- j201-20020a2523d2000000b00628771a09d3mr10191498ybj.215.1646253932161; Wed, 02
- Mar 2022 12:45:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eoKQqCbI8PxL6l9piEDwf9eS8EFbrh6cCOCe/ltlwc4=;
+        b=czZC8Lq2MykcSm057VcpUkrSV1WVnB/f9upvR1MzfSVj6Wx2NjHioBgw7TdVDraOlx
+         WmhPoFVJdDlp0YUDbg4gEvh7NIBpWygUZL1B/ff7kbv+/oiZs6ghvlgXI1LUNiNOOVSM
+         3Q5WmWYYEcma/+94Fy1uhKg7+lm1qQRMFYBjPblC0ESc3y52Q4iWR7ZpHOsDIJrIq/JC
+         daYDlXvb8kvo4pJ6A6PazU9wu4LRh5nZhml/IV5uuRQOTx5ymf2qMVfmDswZMhvShvkw
+         leyB7nifB3WmpLiCla3KOxuCGsZQDNU9eOt7gqhjN4q5eGlHwVdE8iUCQky0jWhOvvtE
+         O7Dw==
+X-Gm-Message-State: AOAM533OSaEbGd6+hW8ICzR/Hwjz2KNw2J964jNjduzd3+lVQE3ItnYc
+        qK7HEdtoR3s0Hd4z8+/7Ntc=
+X-Google-Smtp-Source: ABdhPJwc8llIZdxMOho86N5zl7n2dsqX/toWP1I4HBVNCQHLPvrwfS5Xz8R4VJlL5puQky/fDmxwMg==
+X-Received: by 2002:a17:903:2284:b0:151:9670:9012 with SMTP id b4-20020a170903228400b0015196709012mr5002543plh.110.1646254083196;
+        Wed, 02 Mar 2022 12:48:03 -0800 (PST)
+Received: from localhost.localdomain ([103.161.98.179])
+        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:48:02 -0800 (PST)
+From:   Vihas Makwana <makvihas@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vihas Makwana <makvihas@gmail.com>
+Subject: [PATCH 00/16] staging: r8188eu: convert functions to return bool
+Date:   Thu,  3 Mar 2022 02:17:21 +0530
+Message-Id: <20220302204737.49056-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 2 Mar 2022 20:44:56 +0000
-Message-ID: <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
-Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,38 +72,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:16 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Nowadays PC-style parallel ports come in the form of PCI and PCIe option
-> cards and there are some combined parallel/serial option cards as well
-> that we handle in the parport subsystem.  There is nothing in particular
-> that would prevent them from being used in any system equipped with PCI
-> or PCIe connectivity, except that we do not permit the PARPORT_PC config
-> option to be selected for platforms for which ARCH_MIGHT_HAVE_PC_PARPORT
-> has not been set for.
->
-> The only PCI platforms that actually can't make use of PC-style parallel
-> port hardware are those newer PCIe systems that have no support for I/O
-> cycles in the host bridge, required by such parallel ports.  Notably,
-> this includes the s390 arch, which has port I/O accessors that cause
-> compilation warnings (promoted to errors with `-Werror'), and there are
-> other cases such as the POWER9 PHB4 device, though this one has variable
-> port I/O accessors that depend on the particular system.  Also it is not
-> clear whether the serial port side of devices enabled by PARPORT_SERIAL
-> uses port I/O or MMIO.  Finally Super I/O solutions are always either
-> ISA or platform devices.
->
-> Make the PARPORT_PC option selectable also for PCI systems then, except
-> for the s390 arch, however limit the availability of PARPORT_PC_SUPERIO
-> to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update platforms
-> accordingly for the required <asm/parport.h> header.
->
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+There are many functions which return true/false but are marked as int, 
+uint, s32 etc. Mark them as bool.
 
-Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Vihas Makwana (16):
+  staging: r8188eu: mark rtw_is_cckrates_included as bool
+  staging: r8188eu: mark rtw_is_cckratesonly_included as bool
+  staging: r8188eu: mark rtw_is_desired_network as bool
+  staging: r8188eu: mark PS_RDY_CHECK as bool
+  staging: r8188eu: mark check_indicate_seq as bool
+  staging: r8188eu: mark enqueue_reorder_recvframe as bool
+  staging: r8188eu: mark recv_indicatepkts_in_order as bool
+  staging: r8188eu: mark cckrates_included as bool
+  staging: r8188eu: mark cckratesonly_included as bool
+  staging: r8188eu: mark is_basicrate as bool
+  staging: r8188eu: mark is_ap_in_tkip as bool
+  staging: r8188eu: mark rtl8188eu_xmitframe_complete as bool
+  staging: r8188eu: mark check_fwstate as bool
+  staging: r8188eu: mark IS_MCAST as bool
+  staging: r8188eu: mark IsFrameTypeCtrl as bool
+  staging: r8188eu: mark rtw_endofpktfile as bool
 
-Usually parport patches goes via Greg's tree. Adding Greg.
+ drivers/staging/r8188eu/core/rtw_ieee80211.c    | 4 ++--
+ drivers/staging/r8188eu/core/rtw_mlme.c         | 2 +-
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c      | 2 +-
+ drivers/staging/r8188eu/core/rtw_recv.c         | 7 +++----
+ drivers/staging/r8188eu/core/rtw_wlan_util.c    | 8 ++++----
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c    | 2 +-
+ drivers/staging/r8188eu/include/ieee80211.h     | 4 ++--
+ drivers/staging/r8188eu/include/rtl8188e_xmit.h | 2 +-
+ drivers/staging/r8188eu/include/rtw_mlme.h      | 2 +-
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h  | 6 +++---
+ drivers/staging/r8188eu/include/wifi.h          | 4 ++--
+ drivers/staging/r8188eu/include/xmit_osdep.h    | 2 +-
+ drivers/staging/r8188eu/os_dep/xmit_linux.c     | 2 +-
+ 13 files changed, 23 insertions(+), 24 deletions(-)
 
 -- 
-Regards
-Sudip
+2.30.2
+

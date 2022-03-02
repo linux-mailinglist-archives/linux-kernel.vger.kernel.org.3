@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E234CAEE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FF74CAEE8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241843AbiCBTma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S241912AbiCBTnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbiCBTm3 (ORCPT
+        with ESMTP id S241902AbiCBTnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:42:29 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A2C4E1F;
-        Wed,  2 Mar 2022 11:41:45 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id h17so2479338plc.5;
-        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vjf7RPI2PKTb2kP9VHjBAcKqQnyTyYbCaciuvjfKLdQ=;
-        b=Dt6FS/uern+P5cz68+l/TVM/2ptRyGYPwDpkvrmWlwJNRyGimf1HFkiHrhNRYEqIr4
-         hMhStkL/cQSxSRpl8KEGVGFH13H5RlSm6EHsDf+7dwiFmollv0lCusMFh0W9nBB2iDlC
-         snYE7crbNCuDi/lkJMEbk21nFCiKV0GT1TsosUOJG1bOzqoXaMI0/sWvPKNZdmRNkCVT
-         Q0T/wzMMiQTi07QoQB4aBAjDOlNJEViAaVp2HGhBRm+Xy8k4SoN5t2NKH0fmJkDYnns8
-         pOKffa6ADQaF6G7FXCWwGo8mDCHKO2C5a9YVfs5hlI+qOOsr65lYAi+2DB2tb37iXAE4
-         9cqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vjf7RPI2PKTb2kP9VHjBAcKqQnyTyYbCaciuvjfKLdQ=;
-        b=KbNdBhRNHXDqLi2ppKTkUDmSBelYIG7qX8bN91Sanm5AO1tSK5AHA22euWnr96B1V0
-         8ZHZdxrRmtRF8CpZhNwiq1fRaJ2jxCaxSydiyj1KMmCdFNsonKzBx7bC0pX+cmcWd+6s
-         f2KJiZ+4IcwTzHenhOzH2drimbc0X1fGc6GaWzNUr/t7quUzyHE99sp4pE5UowTQ4dcz
-         Jo1MiFM/5bIlDq0DP8JnHvMpmpK5RE/lNQdXRXZotBvV5wutOU2wr3nMHC+BL+Swk2SQ
-         fQ8N5yBk7/6w5YE0mFXMR1jj9Z3SGTAM+ZTIcZESbt9lxfClaNaK6X01lwIDAs40oRcg
-         zVbw==
-X-Gm-Message-State: AOAM532wbw32UOj+doLPfBet/LKAI5U4cN9T8/EZafa4ECDVNVOD40jV
-        5RyvfXjksv0qVcF6Jydm1ns=
-X-Google-Smtp-Source: ABdhPJyEfgPOChikbUCIQi7LbvhSiDjtwB171jmFJnjCe8nZwlmuSPzXITLl3okBRlj/xYFJRcI9ow==
-X-Received: by 2002:a17:902:e807:b0:150:2801:86f8 with SMTP id u7-20020a170902e80700b00150280186f8mr27465791plg.64.1646250105307;
-        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
-        by smtp.gmail.com with ESMTPSA id bo10-20020a17090b090a00b001bc8405bd55sm5892624pjb.30.2022.03.02.11.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 11:41:45 -0800 (PST)
-Date:   Wed, 2 Mar 2022 11:41:41 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
-Message-ID: <20220302194141.c4gvqz5v4mmmbwsv@ast-mbp.dhcp.thefacebook.com>
-References: <20220225234339.2386398-1-haoluo@google.com>
- <20220225234339.2386398-5-haoluo@google.com>
+        Wed, 2 Mar 2022 14:43:00 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBCCC7D5D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:42:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646250137; x=1677786137;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=R1Fmxe77VIXvXjw0v+E/opMnmQzI/f1rgNL0Yh1AgeU=;
+  b=ICIe3OLZWd7gzc1PW0DjHFwlCy4mzsdBJjhs1DBtnOVMu7V507TpwjCj
+   zupGtsybbcHT90iu/vTZRkIJWoSGwhY7jt1KNUd1xr+WxCUCKfxvFN/z3
+   zT9dN3ka4wS2fH4mtTEEFgToM43TL1NkotHbkTga4oAxghBNYgdAhWDMv
+   h/fGUkIlilrcZ/VGuBfVPDJ1hBLDJseZTvYPzCqt9muvBYQ+9QXsim4TJ
+   EPXvincGC+ze/FP/IMQgg2yeuZkhKeFQVcMcrNKUSUSatXmOWWY4+VIix
+   dCLpBfPi1dYfG+qoebL2/kq88Ci47rMIHYhXKNyGW2lZZflBOLv5siimc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237000670"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="237000670"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 11:42:00 -0800
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="576225796"
+Received: from harmanpr-mobl3.amr.corp.intel.com (HELO [10.209.50.39]) ([10.209.50.39])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 11:41:59 -0800
+Message-ID: <6adfbd21-142d-5fe3-41c9-fb2996c9452a@intel.com>
+Date:   Wed, 2 Mar 2022 11:41:53 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225234339.2386398-5-haoluo@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-16-kirill.shutemov@linux.intel.com>
+ <20220302174210.q5r6zl2lsa6hut6q@treble>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv5 15/30] x86/boot: Port I/O: allow to hook up alternative
+ helpers
+In-Reply-To: <20220302174210.q5r6zl2lsa6hut6q@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 03:43:34PM -0800, Hao Luo wrote:
-> diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-> index e7c2276be33e..c73c7ab3680e 100644
-> --- a/include/linux/tracepoint-defs.h
-> +++ b/include/linux/tracepoint-defs.h
-> @@ -51,6 +51,7 @@ struct bpf_raw_event_map {
->  	void			*bpf_func;
->  	u32			num_args;
->  	u32			writable_size;
-> +	u32			sleepable;
+On 3/2/22 09:42, Josh Poimboeuf wrote:
+> At the very least, please remove the ability for future code to> accidentally bypass 'pio_ops'.  Going forward, are we really expected
+to> just remember to always use pio_ops for i/o?  Or else TDX will just>
+silently break?  That's just not acceptable.
+What did you have in mind here?  The in/out() instruction wrappers could
+be moved to a spot where they're impossible to call directly, for instance.
 
-It increases the size for all tracepoints. 
-See BPF_RAW_TP in include/asm-generic/vmlinux.lds.h
-Please switch writeable_size and sleepable to u16.
->  
-> -static const struct bpf_func_proto *
-> -syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> +/* Syscall helpers that are also allowed in sleepable tracing prog. */
-> +const struct bpf_func_proto *
-> +tracing_prog_syscall_func_proto(enum bpf_func_id func_id,
-> +				const struct bpf_prog *prog)
->  {
->  	switch (func_id) {
->  	case BPF_FUNC_sys_bpf:
->  		return &bpf_sys_bpf_proto;
-> -	case BPF_FUNC_btf_find_by_name_kind:
-> -		return &bpf_btf_find_by_name_kind_proto;
->  	case BPF_FUNC_sys_close:
->  		return &bpf_sys_close_proto;
-> -	case BPF_FUNC_kallsyms_lookup_name:
-> -		return &bpf_kallsyms_lookup_name_proto;
->  	case BPF_FUNC_mkdir:
->  		return &bpf_mkdir_proto;
->  	case BPF_FUNC_rmdir:
->  		return &bpf_rmdir_proto;
->  	case BPF_FUNC_unlink:
->  		return &bpf_unlink_proto;
-> +	default:
-> +		return NULL;
-> +	}
-> +}
+I guess we could get really fancy and use objtool to look for any I/O
+instructions that show up outside of the "official" pio_ops copies.
+That would prevent anyone using inline assembly.
 
-If I read this correctly the goal is to disallow find_by_name_kind
-and lookup_name from sleepable tps. Why? What's the harm?
+In the end, though, TDX *is* a new sub-architecture.  There are lots of
+ways it's going to break silently and nobody will notice on bare metal.
+ SEV is the same way with things like the C (encryption) bit in the page
+tables.  Adding more safeguards sounds like a good idea but, in the end,
+we're going to have to find the non-obvious issues with testing.

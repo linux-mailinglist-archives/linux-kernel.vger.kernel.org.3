@@ -2,61 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD554C9F07
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347A24C9F09
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbiCBISM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S234170AbiCBITJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236530AbiCBISJ (ORCPT
+        with ESMTP id S235476AbiCBITE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:18:09 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B264DB9F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:17:24 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id b35so1701911ybi.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:17:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W8ybIWPIDdU71F39jjIJuRp774Q9dzDoXBqOCvd7O4U=;
-        b=ZzhQoE+bWReOuJtPViXNbioMXBS4tOpAPRe2I4nwgVgedngWp6nnezdT07Nytd8noK
-         3csGIm+2HAspPrBxJAysB0JWXe/8xY+nj5GnA90eH6IkovzBOmEg0mlMmbGUzwBIxQJJ
-         D9C3fDEDvqNTmby4MaQT0uzk33QVxqe7Ovjew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W8ybIWPIDdU71F39jjIJuRp774Q9dzDoXBqOCvd7O4U=;
-        b=GIzc6hsUCV2DUj7dECG2hD9GkT6I0urY6sLBnXIHtK5TDo58U7eUA7N5NiHgM8QFA9
-         VRzakBJfEwhl7PxvQBMwcthp3b0u9fvNrflONYZWwj5Ofd0W8/VMgk8Pben6qgie5KR0
-         o+o74lJ4ynStz7kJtSDP86FjdBDrivf9YzCIhOJUfS8c5gvdS7riTcXPlfXTkAI0P+dS
-         XUCo++t3CI53a01UTgyZHHlSiFSXnkcYkNDoonHhL/P881iL6LIhYQNUKpB6tLoyuDAg
-         oqTCcv2bfh9kIydzZHIQ5zXwrzgJnJiesbMtAH18SoRXM9OtG/e5CtEcigP1X5VELsGI
-         A9fA==
-X-Gm-Message-State: AOAM531JLiyoev9tUhcVPK32OFtbd8q4CLWxCvIwjahWrwQ9ebugPNNF
-        g1Jv2EsiwQ5ofFcxD+JuJOLttKF26K0ISdkn7OPeHQ==
-X-Google-Smtp-Source: ABdhPJySFL84Glj1KBjaq8+mv4vgDRdz49QiUGC21kriLSCqk3K+tO9UtP7yGBNj5Ucpdl55B/6mmh+z0tPYcgdGMt0=
-X-Received: by 2002:a25:1181:0:b0:624:6c32:e341 with SMTP id
- 123-20020a251181000000b006246c32e341mr27601367ybr.437.1646209043908; Wed, 02
- Mar 2022 00:17:23 -0800 (PST)
+        Wed, 2 Mar 2022 03:19:04 -0500
+Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9142B185;
+        Wed,  2 Mar 2022 00:18:21 -0800 (PST)
+Received: from [167.98.27.226] (helo=[10.35.6.178])
+        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nPKBe-0005Nk-TK; Wed, 02 Mar 2022 08:18:18 +0000
+Message-ID: <3b29f372-bfe4-2527-d074-0e589442c3da@codethink.co.uk>
+Date:   Wed, 2 Mar 2022 08:18:18 +0000
 MIME-Version: 1.0
-References: <20220219092533.12596-1-linmiaohe@huawei.com> <20220219092533.12596-2-linmiaohe@huawei.com>
-In-Reply-To: <20220219092533.12596-2-linmiaohe@huawei.com>
-From:   Vitaly Wool <vitaly.wool@konsulko.com>
-Date:   Wed, 2 Mar 2022 09:17:13 +0100
-Message-ID: <CAM4kBB+PxUVWAJmr1448yKrzJtGpW6Zqh-vWevnqHweDCi+qtw@mail.gmail.com>
-Subject: Re: [PATCH 1/9] mm/z3fold: declare z3fold_mount with __init
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on
+ some boards
+Content-Language: en-GB
+To:     helgaas@kernel.org, linux-pci@vger.kernel.org
+Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +45,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 10:26 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> z3fold_mount is only called during init. So we should declare it
-> with __init.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Reviewed-by: Vitaly Wool <vitaly.wool@konsulko.com>
-> ---
->  mm/z3fold.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/z3fold.c b/mm/z3fold.c
-> index b3c0577b8095..e86aafea6599 100644
-> --- a/mm/z3fold.c
-> +++ b/mm/z3fold.c
-> @@ -345,7 +345,7 @@ static struct file_system_type z3fold_fs = {
->  };
->
->  static struct vfsmount *z3fold_mnt;
-> -static int z3fold_mount(void)
-> +static int __init z3fold_mount(void)
->  {
->         int ret = 0;
->
+On 28/02/2022 23:22, Ben Dooks wrote:
+> The fu740 PCIe core does not probe any devices on the SiFive Unmatched
+> board without this fix (or having U-Boot explicitly start the PCIe via
+> either boot-script or user command). The fix is to start the link at
+> Gen1 speeds and once the link is up then change the speed back.
+> 
+> The U-Boot driver claims to set the link-speed to Gen1 to get the probe
+> to work (and U-Boot does print link up at Gen1) in the following code:
+> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 > --
-> 2.23.0
->
+> Note, this patch has had significant re-work since the previous 4
+> sets, including trying to fix style, message, reliance on the U-Boot
+> fix and the comments about usage of LINK_CAP and reserved fields.
+
+So the pci-imx6.c driver does wait after the setting of
+PCIE_LINK_WIDTH_SPEED_CONTROL for the PCIE_LINK_WIDTH_SPEED_CONTROL
+to show PORT_LOGIC_SPEED_CHANGE. Not sure if this is needed in this
+case.
+
+I have put this driver in to our CI and it so far seems to be working
+in our case. I'm not sure if there's anything we could do better to
+detect already initialised values from U-Boot and avoid this. Also I
+am questioning if we need some sort of hardware property to control
+the behaviour.
+
+Does anyone at SiFive have any more information about whether this fix
+is now correct? It is very annoying for us as we network boot and thus
+the PCIe does not come up without this fix in.
+
+Note, it is possible the pci-imx6.c driver does not build, could not
+find a field called linl in the struct dw_pcie. I will try and see if
+this driver is being built or not.
+
+> ---
+>   drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
+>   1 file changed, 50 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+> index 842b7202b96e..16ad52f53490 100644
+> --- a/drivers/pci/controller/dwc/pcie-fu740.c
+> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
+> @@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
+>   {
+>   	struct device *dev = pci->dev;
+>   	struct fu740_pcie *afp = dev_get_drvdata(dev);
+> +	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +	int ret;
+> +	u32 orig, tmp;
+> +
+> +	/*
+> +	 * Force Gen1 when starting link, due to some devices not
+> +	 * probing at higher speeds. This happens with the PCIe switch
+> +	 * on the Unmatched board. The fix in U-Boot is to force Gen1
+> +	 * and hope later resets will clear this capaility.
+> +	 */
+> +
+> +	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
+> +	dw_pcie_dbi_ro_wr_en(pci);
+> +
+> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> +	orig = tmp & PCI_EXP_LNKCAP_SLS;
+> +	tmp &= ~PCI_EXP_LNKCAP_SLS;
+> +	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
+> +	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+>   
+>   	/* Enable LTSSM */
+>   	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
+> -	return 0;
+> +
+> +	ret = dw_pcie_wait_for_link(pci);
+> +	if (ret) {
+> +		dev_err(dev, "error: link did not start\n");
+> +		goto err;
+> +	}
+> +
+> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> +	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
+> +		dev_dbg(dev, "changing speed back to original\n");
+> +
+> +		tmp &= ~PCI_EXP_LNKCAP_SLS;
+> +		tmp |= orig;
+> +		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+> +
+> +		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+> +		tmp |= PORT_LOGIC_SPEED_CHANGE;
+> +		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
+> +
+> +		ret = dw_pcie_wait_for_link(pci);
+> +		if (ret) {
+> +			dev_err(dev, "error: link did not start at new speed\n");
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	ret = 0;
+> +err:
+> +	// todo - if we do have an unliekly error, what do we do here?
+> +	dw_pcie_dbi_ro_wr_dis(pci);
+> +	return ret;
+>   }
+>   
+>   static int fu740_pcie_host_init(struct pcie_port *pp)
+
+
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html

@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C6B4CA16D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B67D4CA182
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240739AbiCBJ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
+        id S240850AbiCBJ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiCBJ5W (ORCPT
+        with ESMTP id S240836AbiCBJ6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:57:22 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20197E58D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:56:39 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 50A2B21121;
-        Wed,  2 Mar 2022 09:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646214998; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AsBBJp+vpeojcN6nK12nMkVYJtAIRctCNR7mUwGffGU=;
-        b=jn8kfNZOwRxK667m3IpT1XdbOyixz/CozEsfm9DoPCJq/hAfv3kLcquT/0UJkIQKSH6dBq
-        ZcQ3ia5vZQF7D7mbJxtKE6xvLjySKiQJ/6QSkq/iMmA4oA7YU1+6NJBlI5XHPcHs/EN5E5
-        3hEqfJ//XJinHfWS3qHN2s0oncTJTV0=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 93EA8A3B93;
-        Wed,  2 Mar 2022 09:56:37 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 10:56:37 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Maninder Singh <maninder1.s@samsung.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vaneet Narang <v.narang@samsung.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [hnaz-mm:master 272/379] lib/vsprintf.c:991:13: warning:
- variable 'modbuildid' set but not used
-Message-ID: <Yh8/Vbu05MEQylMx@alley>
-References: <202203012040.uFWGm3My-lkp@intel.com>
- <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
- <Yh5yhoW+y9qcn1RM@casper.infradead.org>
+        Wed, 2 Mar 2022 04:58:21 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF31E13DD0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:57:27 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowABnSfKGPx9iVqntAQ--.27856S2;
+        Wed, 02 Mar 2022 17:57:26 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/xlnx: Handle error for dma_set_mask
+Date:   Wed,  2 Mar 2022 17:57:24 +0800
+Message-Id: <20220302095724.170542-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh5yhoW+y9qcn1RM@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-CM-TRANSID: zQCowABnSfKGPx9iVqntAQ--.27856S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtr45GF45CFy7JFW8Jr13urg_yoWDJFbEvF
+        WUZFWkXF1qyr1vqr42krnIyr9YyFn0qrsxWF18Ka4fXrW5Jr93Xa1UZF1kGr4UZ34UCr4U
+        Ar4q93yfJF4xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU8iSdDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,142 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-03-01 19:22:46, Matthew Wilcox wrote:
-> On Tue, Mar 01, 2022 at 10:24:48AM -0800, Andrew Morton wrote:
-> > >    lib/vsprintf.c: In function 'va_format':
-> > >    lib/vsprintf.c:1759:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> > >     1759 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
-> > >          |         ^~~
-> > 
-> > I wonder what this means.
-> 
-> It means the compiler thinks we might want to add:
-> 
-> __attribute__((format(gnu_printf, x, y))) to the function declaration so it
-> can type-check the arguments.
-> 
-> 'format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)'
->      The 'format' attribute specifies that a function takes 'printf',
->      'scanf', 'strftime' or 'strfmon' style arguments that should be
->      type-checked against a format string.  For example, the
->      declaration:
-> 
->           extern int
->           my_printf (void *my_object, const char *my_format, ...)
->                 __attribute__ ((format (printf, 2, 3)));
-> 
->      causes the compiler to check the arguments in calls to 'my_printf'
->      for consistency with the 'printf' style format string argument
->      'my_format'.
-> 
-> 
-> I haven't looked into this at all and have no idea if we should.
+As the potential failure of the dma_set_mask(),
+it should be better to check it and return error
+if fails.
 
-There is the macro __printf(x, y). This particular warning can be
-fixed by:
-
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1672,6 +1672,7 @@ char *escaped_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
- 	return buf;
- }
- 
-+__printf(5, 0)
- static char *va_format(char *buf, char *end, struct va_format *va_fmt,
- 		       struct printf_spec spec, const char *fmt)
- {
-
-
-But it seems to be can of worms. I get more warnings after fixing this
-one. The following patch calmed down the warnings in vsprintf.o. But
-it triggered another warning elsewhere, for example:
-
-kernel/trace/bpf_trace.c: In function ‘____bpf_trace_printk’:
-kernel/trace/bpf_trace.c:383:2: warning: function ‘____bpf_trace_printk’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-  ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
-  ^~~
-kernel/trace/bpf_trace.c: In function ‘____bpf_trace_vprintk’:
-kernel/trace/bpf_trace.c:439:2: warning: function ‘____bpf_trace_vprintk’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-  ret = bstr_printf(buf, sizeof(buf), fmt, bin_args);
-  ^~~
-
-
-From 66f6166e968d8c7e752260e7ee7e1c0414cd2cce Mon Sep 17 00:00:00 2001
-From: Petr Mladek <pmladek@suse.com>
-Date: Wed, 2 Mar 2022 10:03:14 +0100
-Subject: [PATCH] vsprintf: Fix warnings about missing gnu_printf attribute in vsprintf.o
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-The following warning is produced by: make W=1 lib/vsprintf.o
-
-lib/vsprintf.c:1770:1: error: multiple storage classes in declaration specifiers
- static char *va_format(char *buf, char *end, struct va_format *va_fmt,
- ^~~~~~
-lib/vsprintf.c:1770:14: warning: no previous prototype for ‘va_format’ [-Wmissing-prototypes]
- static char *va_format(char *buf, char *end, struct va_format *va_fmt,
-              ^~~~~~~~~
-
-More similar warnings are printed after fixing the 1st one:
-
-lib/vsprintf.c: In function ‘pointer’:
-lib/vsprintf.c:2522:3: warning: function ‘pointer’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-   return va_format(buf, end, ptr, spec, fmt);
-   ^~~~~~
-lib/vsprintf.c: In function ‘vbin_printf’:
-lib/vsprintf.c:3213:12: warning: function ‘vbin_printf’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-            spec);
-            ^~~~
-lib/vsprintf.c: In function ‘bstr_printf’:
-lib/vsprintf.c:3398:5: warning: function ‘bstr_printf’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
-     str = pointer(fmt, str, end, get_arg(void *), spec);
-     ^~~
-
-Add the proposed annotation.
-
-Signed-off-by: Petr Mladek <pmladek@suse.com>
+Fixes: d76271d22694 ("drm: xlnx: DRM/KMS driver for Xilinx ZynqMP DisplayPort Subsystem")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- include/linux/string.h | 3 +++
- lib/vsprintf.c         | 2 ++
- 2 files changed, 5 insertions(+)
+ drivers/dma/mmp_tdma.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index b6572aeca2f5..e37eaecb7906 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -196,8 +196,11 @@ int __sysfs_match_string(const char * const *array, size_t n, const char *s);
- #define sysfs_match_string(_a, _s) __sysfs_match_string(_a, ARRAY_SIZE(_a), _s)
+diff --git a/drivers/dma/mmp_tdma.c b/drivers/dma/mmp_tdma.c
+index a262e0eb4cc9..e6cf3d174238 100644
+--- a/drivers/dma/mmp_tdma.c
++++ b/drivers/dma/mmp_tdma.c
+@@ -722,7 +722,10 @@ static int mmp_tdma_probe(struct platform_device *pdev)
+ 	tdev->device.residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
+ 	tdev->device.descriptor_reuse = true;
  
- #ifdef CONFIG_BINARY_PRINTF
-+__printf(3, 0)
- int vbin_printf(u32 *bin_buf, size_t size, const char *fmt, va_list args);
-+__printf(3, 0)
- int bstr_printf(char *buf, size_t size, const char *fmt, const u32 *bin_buf);
-+__printf(3, 4)
- int bprintf(u32 *bin_buf, size_t size, const char *fmt, ...) __printf(3, 4);
- #endif
+-	dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
++	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
++	if (ret)
++		return ret;
++
+ 	platform_set_drvdata(pdev, tdev);
  
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3b8129dd374c..981c71da5e3d 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1672,6 +1672,7 @@ char *escaped_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
- 	return buf;
- }
- 
-+__printf(5, 0)
- static char *va_format(char *buf, char *end, struct va_format *va_fmt,
- 		       struct printf_spec spec, const char *fmt)
- {
-@@ -2498,6 +2499,7 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
-  * @precision: precision of a number
-  * @qualifier: qualifier of a number (long, size_t, ...)
-  */
-+__printf(1, 0)
- static noinline_for_stack
- int format_decode(const char *fmt, struct printf_spec *spec)
- {
+ 	ret = dmaenginem_async_device_register(&tdev->device);
 -- 
-2.26.2
+2.25.1
 

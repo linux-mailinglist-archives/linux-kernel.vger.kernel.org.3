@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5779A4CADB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680A34CADAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiCBShC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S244664AbiCBSha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiCBSg6 (ORCPT
+        with ESMTP id S242218AbiCBSh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:36:58 -0500
+        Wed, 2 Mar 2022 13:37:27 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95964CA310
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:36:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71536D887A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646246174;
+        s=mimecast20190719; t=1646246203;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O+z7hfIz3tju9l3ISOjUkJ5y2WlvKCbxrD0GfgR9pWQ=;
-        b=GSvK5PszDoMKB2ap90qPNyg2DMpqo8YN8ptenpRVVh64RHQyedjE0t+nDFbMWJxjX02q02
-        BGxgtvrsWf2BaNUR6I0rcMx7bP+MHJ8f2teFQKNMafmy6Bj3fCcNzRrIECPTCS+/uHdsfr
-        SIDb4eoMBQ1cCZBOfJIptR/T7pmhYYE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=dkI26oH12rAI/rcHa+Bb6lkfS1t78b0pEHbqKtN0UIk=;
+        b=JG/AbnL4k5MurG3+LE2PiTDqH5L+zeER9Jm2tfIT76KmxBdHqBZPDDDE/D2TaMcBocLNAm
+        iVmuGIfJkiAmr79H9lhcTggU3EpqthySOUwIw3SXeo9hw/Yv0r3c21SjQnnO57kFjYXTsv
+        waUhITVtQFAaT8Kfd3i6jDtqwJsEPqQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-meHCMPrdM9O2dWf988efgQ-1; Wed, 02 Mar 2022 13:36:10 -0500
-X-MC-Unique: meHCMPrdM9O2dWf988efgQ-1
-Received: by mail-wr1-f69.google.com with SMTP id b7-20020a05600003c700b001efac398af7so946911wrg.22
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:36:10 -0800 (PST)
+ us-mta-322-CtMbYqwTOPy6N0xzHisYnw-1; Wed, 02 Mar 2022 13:36:42 -0500
+X-MC-Unique: CtMbYqwTOPy6N0xzHisYnw-1
+Received: by mail-wm1-f70.google.com with SMTP id n31-20020a05600c3b9f00b003812242973aso1142211wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:36:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=O+z7hfIz3tju9l3ISOjUkJ5y2WlvKCbxrD0GfgR9pWQ=;
-        b=aZ2WWrjwuZz/EKsCddOQiraBEM/dCYnitV8PfqDiAVVV1+Rfbty27768aaQfl3aCrq
-         fvy4kcfu9cvIpgTyNPh8x+91rgBuK3/SWVfkQlnPNHQieeQtCSb8r7zG9MCwGJ8+1sy2
-         VE7bcNNEYi0R7Cu9Lb8XB+tY7sjxfDmsLpkOMKhDJbX9OV0ErOxALbgByy64CMAV1NNS
-         SIwM0KrywUJEREJ8RKbovT7X7/Vcv6iXzqV0ETFHlFGa8ywUpONfB+ZH7p+/CueHLHLL
-         sYMtivZDMzNYOGGTCofBBlYy0rbxM0QDX8kXxMHKfJ15qorV9tgxoBOo6OSwKQs45JyZ
-         epPA==
-X-Gm-Message-State: AOAM533By/OeXCc/JQY0RDn/P6aCMQk831QGKyzDBJpLAdjaRFqnZ41z
-        ur0UpgfCLZRM1+3+tPv4LBBPukkUwu8noNV9pSDSRJI/gFMQyWAxiMihT6i8/9hXPoSTRoFAGIB
-        ZIpayB3eNHBr4u9AJX0H7b1e7
-X-Received: by 2002:a1c:ed18:0:b0:37e:7a1d:a507 with SMTP id l24-20020a1ced18000000b0037e7a1da507mr891231wmh.187.1646246168641;
-        Wed, 02 Mar 2022 10:36:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzK1LyeBTns5xp8BRVl8tBbJ+tsmFf1e/LJyM7IwboRYO6afj8px0VabpMjJzNMLAUJKms2DQ==
-X-Received: by 2002:a1c:ed18:0:b0:37e:7a1d:a507 with SMTP id l24-20020a1ced18000000b0037e7a1da507mr891205wmh.187.1646246168412;
-        Wed, 02 Mar 2022 10:36:08 -0800 (PST)
+        bh=dkI26oH12rAI/rcHa+Bb6lkfS1t78b0pEHbqKtN0UIk=;
+        b=JexkvcZOZkc1MYI5LawpFPQp1vXgAwSQDwyo/xqx6dAehnXcGvGQOTee6zJxo4OPv+
+         YeG1cfi93eBhuawo3DA+VyYGvHWbSxLe1OHBjlf+ijVXf4lR3FomwbX6GGE/MUjkWvWY
+         kep4WypiVqjJb9K9RFlaQVhlFqnK8TP0u12Cz8A1bZkzFzBsVqt6OnM4U9AIqUliI346
+         3jI4Y++ClAo3lAqrI3FjgcqdhTcd3/a8FhHVTLy2m6RKiQyCsnyLMkzYdHcU9CnWOsSP
+         wWASo/wZroYDqWh08WrwG34ZilFrw7AOFSp60Ts4tP6+KKl2Qhd/f2YX0ofX+svJIVRj
+         jp8A==
+X-Gm-Message-State: AOAM533Stdx/sZHj5YD8FZr+Hr1v1ydXAP8l9UQlkbHYz83UwjIRuX6l
+        EDB9gKg1l37e7D7NPYeDbt/CJX8WvWOMIwN9lsD83y1dUQVFDSmhjsGaTm32FVip+MNZKEEkeFC
+        vMqck67uddEQXAv2jpDMRphyP
+X-Received: by 2002:a7b:cb44:0:b0:381:4dd8:5ec4 with SMTP id v4-20020a7bcb44000000b003814dd85ec4mr931450wmj.12.1646246201232;
+        Wed, 02 Mar 2022 10:36:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw0vLxk9UjI8UxS7wBOYxHK0l/sumk1InbU7uquyOLxzs3VdPsMO4Q7v+TvpQSfv85JSO/PCw==
+X-Received: by 2002:a7b:cb44:0:b0:381:4dd8:5ec4 with SMTP id v4-20020a7bcb44000000b003814dd85ec4mr931433wmj.12.1646246201019;
+        Wed, 02 Mar 2022 10:36:41 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id f16-20020adff590000000b001f0122f63e1sm5754207wro.85.2022.03.02.10.36.05
+        by smtp.googlemail.com with ESMTPSA id g11-20020a5d554b000000b001f0326a23ddsm2875275wrw.70.2022.03.02.10.36.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 10:36:07 -0800 (PST)
-Message-ID: <43809107-cd8a-21f5-c45b-2f39c1bd037e@redhat.com>
-Date:   Wed, 2 Mar 2022 19:36:04 +0100
+        Wed, 02 Mar 2022 10:36:40 -0800 (PST)
+Message-ID: <764356ef-dd0f-01bd-129c-a821136a4f6e@redhat.com>
+Date:   Wed, 2 Mar 2022 19:36:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous
- worker
+Subject: Re: [PATCH v3 26/28] KVM: selftests: Split out helper to allocate
+ guest mem via memfd
 Content-Language: en-US
-To:     David Matlack <dmatlack@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
         Ben Gardon <bgardon@google.com>,
         Mingwei Zhang <mizhang@google.com>
 References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-23-seanjc@google.com>
- <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
- <Yh+q59WsjgCdMcP7@google.com>
- <CALzav=dzqOp-css8kgqHhCLJnbUrUZt+e_YStCj2HFy0oD+vGg@mail.gmail.com>
+ <20220226001546.360188-27-seanjc@google.com>
+ <b41c303fc49e1b31d3e8ef92177a0de2458901bd.camel@infradead.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALzav=dzqOp-css8kgqHhCLJnbUrUZt+e_YStCj2HFy0oD+vGg@mail.gmail.com>
+In-Reply-To: <b41c303fc49e1b31d3e8ef92177a0de2458901bd.camel@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -98,27 +95,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 19:33, David Matlack wrote:
-> On Wed, Mar 2, 2022 at 9:35 AM Sean Christopherson <seanjc@google.com> wrote:
+On 3/1/22 00:36, David Woodhouse wrote:
+> On Sat, 2022-02-26 at 00:15 +0000, Sean Christopherson wrote:
+>> Extract the code for allocating guest memory via memfd out of
+>> vm_userspace_mem_region_add() and into a new helper, kvm_memfd_alloc().
+>> A future selftest to populate a guest with the maximum amount of guest
+>> memory will abuse KVM's memslots to alias guest memory regions to a
+>> single memfd-backed host region, i.e. needs to back a guest with memfd
+>> memory without a 1:1 association between a memslot and a memfd instance.
 >>
->> On Wed, Mar 02, 2022, Paolo Bonzini wrote:
->>> However, I think we now need a module_get/module_put when creating/destroying
->>> a VM; the workers can outlive kvm_vm_release and therefore any reference
->>> automatically taken by VFS's fops_get/fops_put.
+>> No functional change intended.
 >>
->> Haven't read the rest of the patch, but this caught my eye.  We _already_ need
->> to handle this scenario.  As you noted, any worker, i.e. anything that takes a
->> reference via kvm_get_kvm() without any additional guarantee that the module can't
->> be unloaded is suspect. x86 is mostly fine, though kvm_setup_async_pf() is likely
->> affected, and other architectures seem to have bugs.
->>
->> Google has an internal patch that addresses this.  I believe David is going to post
->> the fix... David?
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > 
-> This was towards the back of my queue but I can bump it to the front.
-> I'll have the patches out this week.
+> While we're at it, please can we make the whole thing go away and just
+> return failure #ifndef MFD_CLOEXEC, instead of breaking the build on
+> older userspace?
 
-Thanks!
+We can just use old school F_SETFD if that's helpful for you.
 
 Paolo
 

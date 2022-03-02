@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC184C9FED
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64C24C9FF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240250AbiCBIyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S240266AbiCBIzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234861AbiCBIyX (ORCPT
+        with ESMTP id S235558AbiCBIzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:54:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202475FF04;
-        Wed,  2 Mar 2022 00:53:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B81296124D;
-        Wed,  2 Mar 2022 08:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED9BC004E1;
-        Wed,  2 Mar 2022 08:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646211218;
-        bh=G74+aJfG6CYsfJpqACXBWrfFsPqguSBtGOY3haphRKI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lf1K83pfZJ0TAdTTKhvpqcbQIDZD5zpio0iBwWG6ZCzkz3KPJA1kvmZmAVsctBLfS
-         Vm/KMgJJXcNO8HI5RLO7oaBZc5SsnNw44K6jocTDFr9ltgAMntutPJ6qif0Mvg+iUY
-         7zvswMwmD7/toHQhBSpxgyY8lwJ4X41mdyVEdjmo=
-Date:   Wed, 2 Mar 2022 09:53:34 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, Alexander Graf <graf@amazon.com>,
-        Jann Horn <jannh@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH 2/3] random: provide notifier for VM fork
-Message-ID: <Yh8wjrf7HVf56Anw@kroah.com>
-References: <20220301231038.530897-1-Jason@zx2c4.com>
- <20220301231038.530897-3-Jason@zx2c4.com>
+        Wed, 2 Mar 2022 03:55:17 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7508160062;
+        Wed,  2 Mar 2022 00:54:34 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 91B021C0B81; Wed,  2 Mar 2022 09:54:32 +0100 (CET)
+Date:   Wed, 2 Mar 2022 09:54:32 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        linux-leds@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH 0/2] leds: pca955x: Expose GPIOs for all pins
+Message-ID: <20220302085432.GA11054@duo.ucw.cz>
+References: <20210921043936.468001-1-andrew@aj.id.au>
+ <d2b85ad7-aef7-6088-03f5-cbd6e0bcab5d@kaod.org>
+ <CACPK8Xdvns7PK9t1ZutAbkJqhb5eRcoWCDySQGsfbtLv+XMvqQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="zhXaljGHf11kAtnf"
 Content-Disposition: inline
-In-Reply-To: <20220301231038.530897-3-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACPK8Xdvns7PK9t1ZutAbkJqhb5eRcoWCDySQGsfbtLv+XMvqQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 12:10:37AM +0100, Jason A. Donenfeld wrote:
-> Drivers such as WireGuard need to learn when VMs fork in order to clear
-> sessions. This commit provides a simple notifier_block for that, with a
-> register and unregister function. When no VM fork detection is compiled
-> in, this turns into a no-op, similar to how the power notifier works.
-> 
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c  | 15 +++++++++++++++
->  include/linux/random.h |  5 +++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 6bd1bbab7392..483fd2dc2057 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -1141,6 +1141,8 @@ void add_bootloader_randomness(const void *buf, size_t size)
->  EXPORT_SYMBOL_GPL(add_bootloader_randomness);
->  
->  #if IS_ENABLED(CONFIG_VMGENID)
-> +static BLOCKING_NOTIFIER_HEAD(vmfork_notifier);
-> +
->  /*
->   * Handle a new unique VM ID, which is unique, not secret, so we
->   * don't credit it, but we do immediately force a reseed after so
-> @@ -1152,11 +1154,24 @@ void add_vmfork_randomness(const void *unique_vm_id, size_t size)
->  	if (crng_ready()) {
->  		crng_reseed(true);
->  		pr_notice("crng reseeded due to virtual machine fork\n");
-> +		blocking_notifier_call_chain(&vmfork_notifier, 0, NULL);
->  	}
->  }
->  #if IS_MODULE(CONFIG_VMGENID)
->  EXPORT_SYMBOL_GPL(add_vmfork_randomness);
->  #endif
-> +
-> +int register_random_vmfork_notifier(struct notifier_block *nb)
-> +{
-> +	return blocking_notifier_chain_register(&vmfork_notifier, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(register_random_vmfork_notifier);
-> +
-> +int unregister_random_vmfork_notifier(struct notifier_block *nb)
-> +{
-> +	return blocking_notifier_chain_unregister(&vmfork_notifier, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(unregister_random_vmfork_notifier);
->  #endif
->  
->  struct fast_pool {
-> diff --git a/include/linux/random.h b/include/linux/random.h
-> index e84b6fa27435..7fccbc7e5a75 100644
-> --- a/include/linux/random.h
-> +++ b/include/linux/random.h
-> @@ -31,6 +31,11 @@ extern void add_hwgenerator_randomness(const void *buffer, size_t count,
->  				       size_t entropy);
->  #if IS_ENABLED(CONFIG_VMGENID)
->  extern void add_vmfork_randomness(const void *unique_vm_id, size_t size);
-> +extern int register_random_vmfork_notifier(struct notifier_block *nb);
-> +extern int unregister_random_vmfork_notifier(struct notifier_block *nb);
-> +#else
-> +static inline int register_random_vmfork_notifier(struct notifier_block *nb) { return 0; }
-> +static inline int unregister_random_vmfork_notifier(struct notifier_block *nb) { return 0; }
->  #endif
->  
->  extern void get_random_bytes(void *buf, size_t nbytes);
-> -- 
-> 2.35.1
-> 
 
-It seems crazy that the "we just were spawned as a new vm" notifier is
-based in the random driver, but sure, put it here for now!  :)
+--zhXaljGHf11kAtnf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi!
+
+> > > Without these patches the driver limits the number of pins exposed on
+> > > the gpiochip to the number of pins specified as GPIO in the devicetre=
+e,
+> > > but doesn't map between the GPIO and pin number spaces. The result is
+> > > that specifying offset or interleaved GPIOs in the devicetree gives
+> > > unexpected behaviour in userspace.
+> > >
+> > > By always exposing all pins as GPIOs the patches resolve the lack of
+> > > mapping between GPIO offsets and pins on the package in the driver by
+> > > ensuring we always have a 1-to-1 mapping.
+> > >
+> > > The issue is primarily addressed by patch 1/2. Patch 2/2 makes it
+> > > possible to not expose any pins as LEDs (and therefore make them all
+> > > accessible as GPIOs). This has a follow-on effect of allowing the dri=
+ver
+> > > to bind to a device instantiated at runtime without requiring a
+> > > description in the devicetree.
+> > >
+> > > I've tested the series under qemu to inspect the various interactions
+> > > between LEDs vs GPIOs as well as conflicting GPIO requests.
+>=20
+> > > Please review!
+> >
+> > This is simpler than the 'ngpio' business we had before.
+> >
+> > Reviewed-by: C=E9dric Le Goater <clg@kaod.org>
+>=20
+> I saw that you recently merged some LED patches. I was wondering if
+> you could consider this series for v5.18. It still applies cleanly,
+> and we've been running it for a while now, so it's very well tested.
+
+Thanks, applied. I must say this is really ninja-mutant driver, but I
+see no better way.
+
++++ b/drivers/leds/leds-pca955x.c
+@@ -429,7 +429,7 @@ pca955x_get_pdata(struct i2c_client *client, struct pca=
+955x_chipdef *chip)
+        int count;
+
+This really should be unsigned. Care to fix/submit a patch?
+
+Best regards,
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--zhXaljGHf11kAtnf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYh8wyAAKCRAw5/Bqldv6
+8oNLAJ96DjXmoElXBR+MSiaDzZLxaLlC0QCdGgbx+NMDlutN+emWDQPClInhLhc=
+=IHSy
+-----END PGP SIGNATURE-----
+
+--zhXaljGHf11kAtnf--

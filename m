@@ -2,155 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E5F4CB355
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B5F4CB3BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiCBX6g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 18:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S229781AbiCCAAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiCBX6e (ORCPT
+        with ESMTP id S229793AbiCCAAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:58:34 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7DD0659D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:57:49 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-214-E8EQuzy4Px6_ZuHM3Sq0SA-1; Wed, 02 Mar 2022 23:57:46 +0000
-X-MC-Unique: E8EQuzy4Px6_ZuHM3Sq0SA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 2 Mar 2022 23:57:44 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 2 Mar 2022 23:57:44 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?iso-8859-1?Q?=27Uwe_Kleine-K=F6nig=27?= 
-        <u.kleine-koenig@pengutronix.de>, Jiri Slaby <jslaby@suse.cz>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Paul Mackerras" <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Michal Simek" <michal.simek@xilinx.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Alexander Shiyan" <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Andy Gross <agross@kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Takao Orito <orito.takao@socionext.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?iso-8859-1?Q?Andreas_F=E4rber?= <afaerber@suse.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: RE: [PATCH v3] serial: make uart_console_write->putchar()'s character
- an unsigned char
-Thread-Topic: [PATCH v3] serial: make uart_console_write->putchar()'s
- character an unsigned char
-Thread-Index: AQHYLl5tVpWrjMz0S0GPyaCV/1nc9aysw9yA
-Date:   Wed, 2 Mar 2022 23:57:44 +0000
-Message-ID: <5c7045c1910143e08ced432d938b5825@AcuMS.aculab.com>
-References: <20220302072732.1916-1-jslaby@suse.cz>
- <20220302175242.ejiaf36vszr4xvou@pengutronix.de>
-In-Reply-To: <20220302175242.ejiaf36vszr4xvou@pengutronix.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 2 Mar 2022 19:00:20 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07073496A7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:59:36 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso6219120pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 15:59:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ckCBduCU8rIC3xMm3IAzUST/V5HZeQGdJRo5tI2p308=;
+        b=KxhA+CG1r0bDnPfRKPRFC4gWUhhykeI8AD5VmSGys12v1gnCr1jqlAXuyRGCQEa5xu
+         MbxFpEqZObEdVp9jxGfe67+QSPDRS3eTe7Knh2vk8ZwqewwaTmNiZmbGTB/JCDGJrzt0
+         Kr7KUS9mo0vj05w/YDjQlaHpwIy5/BKQoglm9GVlHLe0e4jDc9EG8M1vN6BPd19TwktT
+         pHCwVpH0nat/DKrUdcH21H5XA8rHzH3vn0zpKjYPLfTLOEMlOaAZ0yu03RSIvjMik4iU
+         sFJFW8xyL7nOO3FV/nd6fHVCtBIXYCUvAn3UTVbbMXXgOaEBUf210V2B8LzHhtVXpqXm
+         CD6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ckCBduCU8rIC3xMm3IAzUST/V5HZeQGdJRo5tI2p308=;
+        b=3IJrxt8GzTE1OWC4GKNIAddk92QcBZgNPMAEgQItjqlIDSNNPy6sR4nN6emtzeGuYt
+         YX6yQJVg5rUu5w+V6NlTdCuR/hDxXQtFHBlOPgn3HQAJXFfBiDrGdU+aQ9+tELK4gOqa
+         qbf+YcaKVXv84HG/X6/ty/Kh47lF/KjMZxAkGapm/vZEsqCtu2UtEuqQ/99SWaw9drt8
+         Bd+VhuaXTU4MRUzNaP7wo0WYEKnpPs6pA6LOfw1f5KQ2h2l1s5XOiZmZPVsYCf0JnmeS
+         +SW5LOkfDzU5+ouLOI0xyXNYhTLTTtT0OhBcz8W/AiOaVZByRXuASHsbrG/i++T6gexp
+         PywA==
+X-Gm-Message-State: AOAM533UB9xRo4szV3BTga/7A6DSG2n1SOFW0TvacIAvT/XHnxtZJ5bS
+        wn8Bpj0BPxZXMO/C5R1K4nhZiQ==
+X-Google-Smtp-Source: ABdhPJwnOxGOxT+j0GWCzApEGE5efrNfWQ84mPA2upSypv5fvtV9FoH1ielmix1ygb7LhabIpUzT8A==
+X-Received: by 2002:a17:902:8306:b0:14f:a386:6a44 with SMTP id bd6-20020a170902830600b0014fa3866a44mr33123916plb.140.1646265575211;
+        Wed, 02 Mar 2022 15:59:35 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm299171pfl.44.2022.03.02.15.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 15:59:34 -0800 (PST)
+Date:   Wed, 2 Mar 2022 23:59:30 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
+ deferred TLB flush logic
+Message-ID: <YiAE4ju0a3MWXr31@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-5-seanjc@google.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226001546.360188-5-seanjc@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König
-> Sent: 02 March 2022 17:53
+On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> Explicitly ignore the result of zap_gfn_range() when putting the last
+> reference to a TDP MMU root, and add a pile of comments to formalize the
+> TDP MMU's behavior of deferring TLB flushes to alloc/reuse.  Note, this
+> only affects the !shared case, as zap_gfn_range() subtly never returns
+> true for "flush" as the flush is handled by tdp_mmu_zap_spte_atomic().
 > 
-> On Wed, Mar 02, 2022 at 08:27:32AM +0100, Jiri Slaby wrote:
-> > Currently, uart_console_write->putchar's second parameter (the
-> > character) is of type int. It makes little sense, provided uart_console_write()
-> > accepts the input string as "const char *s" and passes its content -- the
-> > characters -- to putchar(). So switch the character's type to unsigned
-> > char.
-> >
-> > We don't use char as that is signed on some platforms. That would cause
-> > troubles for drivers which (implicitly) cast the char to u16 when
-> > writing to the device. Sign extension would happen in that case and the
-> > value written would be completely different to the provided char. DZ is
-> > an example of such a driver -- on MIPS, it uses u16 for dz_out in
-> > dz_console_putchar().
+> Putting the root without a flush is ok because even if there are stale
+> references to the root in the TLB, they are unreachable because KVM will
+> not run the guest with the same ASID without first flushing (where ASID
+> in this context refers to both SVM's explicit ASID and Intel's implicit
+> ASID that is constructed from VPID+PCID+EPT4A+etc...).
 > 
-> I always thought this was bigger than 8bit for hardware that supports
-> wider characters. But if that's the case that's completely unsupported,
-> there isn't even CS9.
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c     |  8 ++++++++
+>  arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 80607513a1f2..5a931c89d27b 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5069,6 +5069,14 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
+>  	kvm_mmu_sync_roots(vcpu);
+>  
+>  	kvm_mmu_load_pgd(vcpu);
+> +
+> +	/*
+> +	 * Flush any TLB entries for the new root, the provenance of the root
+> +	 * is unknown.  In theory, even if KVM ensures there are no stale TLB
+> +	 * entries for a freed root, in theory, an out-of-tree hypervisor could
+> +	 * have left stale entries.  Flushing on alloc also allows KVM to skip
+> +	 * the TLB flush when freeing a root (see kvm_tdp_mmu_put_root()).
+> +	 */
+>  	static_call(kvm_x86_flush_tlb_current)(vcpu);
+>  out:
+>  	return r;
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 12866113fb4f..e35bd88d92fd 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  	list_del_rcu(&root->link);
+>  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+>  
+> -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+> +	/*
+> +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
+> +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> +	 * to a different pCPU.  Note, the local TLB flush on reuse also
+> +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> +	 * intermediate paging structures, that may be zapped, as such entries
+> +	 * are associated with the ASID on both VMX and SVM.
+> +	 */
+> +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
 
-The real problem is that using char (or short) for a function parameter
-or result is very likely to require the compile add code to mask
-the value to 8 (or 16) bits.
-
-Remember that almost every time you do anything with a signed or unsigned
-char/short variable the compiler has to use the integer promotion rules
-to convert the value to int.
-
-You'll almost certainly get better code if the value is left in an
-int (or unsigned int) variable until the low 8 bits get written to
-a buffer (or hardware register).
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Understood that we could avoid the TLB flush here. Just curious why the
+"(void)" is needed here? Is it for compile time reason?
+>  
+>  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+>  }
+> -- 
+> 2.35.1.574.g5d30c73bfb-goog
+> 

@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E964CA1C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523CF4CA1D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240866AbiCBKGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        id S240828AbiCBKIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiCBKGR (ORCPT
+        with ESMTP id S234834AbiCBKIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:06:17 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB32AA2EA;
-        Wed,  2 Mar 2022 02:05:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id B87CD1F44C4F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646215532;
-        bh=Px5GBQ7EElBGp4NHQzwbv9Xg/hWCIXOMw+5mUBSPG2w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KgVMT15N2sjROZubbpp8d8WeavE8c+WnOJo8lSV3mcp4FWNTN5a0E1n5mF7b8L2r/
-         WBE0z93+LCWoewqdEpB12TDge0xCWcKwvbZtpFAOTSSain4IsLWu1S6eiEObc7X7LC
-         D8ds76/q5vrK87/dBQI5610sq0VcTAjTsTh+v30++rpJfKJjklLZaI+T22koGpxcZU
-         mJER3zD0mRXJJK/xQPzmpCkCBhdwUmcvaHBAbp+J4Q8ddQiT9GltvlfDJQPUiZMB9k
-         JyEax3kaPE2xHPgwtsAwj6mS1Im+5HB+hlOopN2wSE0dfgxBb2uTrffMiycESfJaD4
-         oIaoCuVA9OlHQ==
-Message-ID: <0b7ec857-2dd7-1037-2896-07103506ce17@collabora.com>
-Date:   Wed, 2 Mar 2022 11:05:29 +0100
+        Wed, 2 Mar 2022 05:08:43 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20AE023
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:07:59 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id o18-20020a05600c4fd200b003826701f847so2310629wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 02:07:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zc2Kxkwq8yRJOIjT0AKi1HEEsJsOWY9kQ95eThh2v70=;
+        b=ecAKqbUejfhOR4GBhQMpQI50QgEqRyNg/QnFeZcpReex2f/aKqpIJhK5D5uM8fAKWF
+         mMf0G85D4XF9vE0xLxfF7IiVw6iAd7xy76WbrDFUoHm9U2roE5BFSjaD6rDbUu1nyLDs
+         TUSLnUg4xns+ak4kN47GRaBDCiJs28GqnYG0nqw5JNZUjyvWuY6qte9Dl5jC9gDq4POq
+         DWkEu69p7F7FmjVZ1US0DD/+mB5Qi8VwuedvAKxN2FVzxj5c0H3I9cSDR4Ftpmt/VfAS
+         RZWk1CVThRo0jiotRwXIm+yIw9Cz03uAGiiqgwmCgWlCK4jT6bdRalYJSElqXS5X/Rlm
+         UEwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zc2Kxkwq8yRJOIjT0AKi1HEEsJsOWY9kQ95eThh2v70=;
+        b=k3h1bdDZa9AxfAfPeAHr6aPRzdFJ4mcOLUINmNhuj5AR0gxOt4+sabyn7y1GMASve4
+         l/dRojVEUa8g7hEE4wX9Nmw/DS6ROY0TXADOvnUGzKHz4EpeCzXjNJRqjq2+QbaTxs37
+         49+fI1cIkhDOKdtpDMCFtC7jSOmGB0v4CPAFHqJ0guSAjSyaID18GpEzowSJhZu6vUgB
+         hFkQd4cm2h9mCZ1W3zBViukIVpoe3Rmw5YqYhoNXtMi1xTl6TuEPBI+UZfJOSVZ6usg/
+         bTAaobX7RsD8+R+A0UAPBpF4gzAO0mBfVEOSIy0W2YCIUiVfXuNFQqkmiREF+qQtNUyA
+         9ICg==
+X-Gm-Message-State: AOAM530Ia6M6+wSLla/mF3+ZXRv7/bfy4c/f4CNnvDFP2YtpZHIEzUHh
+        NmTrOJ529z2Td+3wDtHc9iAW/A==
+X-Google-Smtp-Source: ABdhPJz8M0JUlRrgQnR37WHwsfOfDjkWNajdAFWhrLUoxOp/RJdiuL9DzgCo0omQgu5pxB9pI/a4/w==
+X-Received: by 2002:a05:600c:378b:b0:381:67e7:e20c with SMTP id o11-20020a05600c378b00b0038167e7e20cmr10999452wmr.32.1646215677851;
+        Wed, 02 Mar 2022 02:07:57 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id i5-20020a1c3b05000000b00382871cf734sm4075730wma.25.2022.03.02.02.07.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 02:07:57 -0800 (PST)
+Date:   Wed, 2 Mar 2022 10:07:55 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <Yh9B+wKDKXHZ6ly/@google.com>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302093446.pjq3djoqi434ehz4@sgarzare-redhat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v12 19/23] drm/mediatek: add dma dev get function
-Content-Language: en-US
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>, CK Hu <ck.hu@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        singo.chang@mediatek.com, srv_heupstream@mediatek.com
-References: <20220222100741.30138-1-nancy.lin@mediatek.com>
- <20220222100741.30138-20-nancy.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220222100741.30138-20-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302093446.pjq3djoqi434ehz4@sgarzare-redhat>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,11 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/02/22 11:07, Nancy.Lin ha scritto:
-> This is a preparation for adding support for the ovl_adaptor sub driver
-> Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
-> dma_dev_get function for getting representative dma dev in ovl_adaptor.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+On Wed, 02 Mar 2022, Stefano Garzarella wrote:
 
-Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
+> On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > during virtqueue clean-up and we mitigate the reported issues.
+> > 
+> > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> 
+> This issue is similar to [1] that should be already fixed upstream by [2].
+> 
+> However I think this patch would have prevented some issues, because
+> vhost_vq_reset() sets vq->private to NULL, preventing the worker from
+> running.
+> 
+> Anyway I think that when we enter in vhost_dev_cleanup() the worker should
+> be already stopped, so it shouldn't be necessary to take the mutex. But in
+> order to prevent future issues maybe it's better to take them, so:
+
+
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Thanks for the analysis and the review Stefano.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

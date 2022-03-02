@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104E64CA82B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1FE4CA821
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243029AbiCBObZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S243111AbiCBOai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243037AbiCBO3c (ORCPT
+        with ESMTP id S243067AbiCBO3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:29:32 -0500
+        Wed, 2 Mar 2022 09:29:44 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB52952B0E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A7551E52
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646231300; x=1677767300;
+  t=1646231304; x=1677767304;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=S9SfIX6kIXFmjBprn/1nIPO+8rspIsSPS3fl4bagj28=;
-  b=kCEqiWSmbuRV1ZIHTfK3VH0vhQEviVSwXDd0lAzxJ9S8TrKaErO5/MOF
-   ifma6HIkekKLct2MFX506Em70BRD591oLxVOGgANwjoMbytPSoBMMYD11
-   HPcxm/e5irpHqzU4RLnyzjDSj99DcS5JfFYkgB/n3L53PUjIXVjrQD2H1
-   Cq+ReCaLJmieMO2O66ljHuPlEyK27JF3Cm37tljbI6P6hRz+TytjcqiPr
-   btG17J3UHN50pCnDbgAoL/jJUYu8dItAZM++VssIWLlQsyqk1oyhO/5LP
-   HrUV4OaY7tRGk8m2RTQDoBEZe0qxJSiPWUlwJl4FT78xmSgAO+6JGlHV1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233376484"
+  bh=FI7ts3ddWiJt2vgVWaXRndDV9uR/SMBzOmQIiJZCOuA=;
+  b=MjIddxeFchuzMndxuOb208alIknRG/rGHFN+zBc/EiNlCXsll+Aar45Q
+   H+Zjwwcsc22C+dDjPh7Lee4c9gl+N3xZak/tdt6DfQxZgT8QQKnIBUm8l
+   UI0t35VElsSsCycVwX8V5PnsWiIGSzi1GFB5tNPm1PMkUVN3TwuYTMdzd
+   XAADd7PtEfIeIYOOYDp+UQa3ydmwthyLcopbCBiWpVT9NF5IHFj0Q/JGE
+   xsaiWWLuHAKeNaISF7UfphyjSL6xPE3tE7CoW3PJlnIIJQ5dzvnDlSe12
+   2697c/U6fwu5+UzrhEJVgiO30KuygRZTqCJs4EdM7vp+A6TnBukzK6sC9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233376494"
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="233376484"
+   d="scan'208";a="233376494"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:14 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="551270234"
+   d="scan'208";a="551270237"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga008.jf.intel.com with ESMTP; 02 Mar 2022 06:28:08 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 9E6BA44C; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
+        id AC4CD4A7; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -51,11 +51,10 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [PATCHv5 16/30] x86/boot: Port I/O: add decompression-time support for TDX
-Date:   Wed,  2 Mar 2022 17:27:52 +0300
-Message-Id: <20220302142806.51844-17-kirill.shutemov@linux.intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv5 17/30] x86/tdx: Port I/O: add runtime hypercalls
+Date:   Wed,  2 Mar 2022 17:27:53 +0300
+Message-Id: <20220302142806.51844-18-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
@@ -71,237 +70,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Port I/O instructions trigger #VE in the TDX environment. In response to
-the exception, kernel emulates these instructions using hypercalls.
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-But during early boot, on the decompression stage, it is cumbersome to
-deal with #VE. It is cleaner to go to hypercalls directly, bypassing #VE
-handling.
+TDX hypervisors cannot emulate instructions directly. This includes
+port I/O which is normally emulated in the hypervisor. All port I/O
+instructions inside TDX trigger the #VE exception in the guest and
+would be normally emulated there.
 
-Hook up TDX-specific port I/O helpers if booting in TDX environment.
+Use a hypercall to emulate port I/O. Extend the
+tdx_handle_virt_exception() and add support to handle the #VE due to
+port I/O instructions.
 
+String I/O operations are not supported in TDX. Unroll them by declaring
+CC_ATTR_GUEST_UNROLL_STRING_IO confidential computing attribute.
+
+== Userspace Implications ==
+
+The ioperm() facility allows userspace access to I/O instructions like
+inb/outb.  Among other things, this allows writing userspace device
+drivers.
+
+This series has no special handling for ioperm(). Users will be able to
+successfully request I/O permissions but will induce a #VE on their
+first I/O instruction. If this is undesirable users can enable kernel
+lockdown feature with 'lockdown=integrity' kernel command line option.
+It makes ioperm() fail.
+
+More robust handling of this situation (denying ioperm() in all TDX
+guests) will be addressed in follow-on work.
+
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- arch/x86/boot/compressed/Makefile |  2 +-
- arch/x86/boot/compressed/tdcall.S |  3 ++
- arch/x86/boot/compressed/tdx.c    | 72 +++++++++++++++++++++++++++++++
- arch/x86/include/asm/shared/tdx.h | 29 +++++++++++++
- arch/x86/include/asm/tdx.h        | 24 -----------
- 5 files changed, 105 insertions(+), 25 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdcall.S
+ arch/x86/coco/core.c |  7 +++-
+ arch/x86/coco/tdx.c  | 79 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 732f6b21ecbd..8fd0e6ae2e1f 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -101,7 +101,7 @@ ifdef CONFIG_X86_64
- endif
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 9113baebbfd2..5615b75e6fc6 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -18,7 +18,12 @@ static u64 cc_mask __ro_after_init;
  
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
--vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
- 
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-diff --git a/arch/x86/boot/compressed/tdcall.S b/arch/x86/boot/compressed/tdcall.S
-new file mode 100644
-index 000000000000..59b80ab6b41c
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdcall.S
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include "../../coco/tdcall.S"
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index dec68c184358..0d88339dcc41 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -2,6 +2,10 @@
- 
- #include "../cpuflags.h"
- #include "../string.h"
-+#include "../io.h"
-+
-+#include <vdso/limits.h>
-+#include <uapi/asm/vmx.h>
- 
- #include <asm/shared/tdx.h>
- 
-@@ -12,6 +16,66 @@ bool early_is_tdx_guest(void)
- 	return tdx_guest_detected;
- }
- 
-+static inline unsigned int tdx_io_in(int size, u16 port)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r12 = size,
-+		.r13 = 0,
-+		.r14 = port,
-+	};
-+
-+	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+		return UINT_MAX;
-+
-+	return args.r11;
-+}
-+
-+static inline void tdx_io_out(int size, u16 port, u32 value)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r12 = size,
-+		.r13 = 1,
-+		.r14 = port,
-+		.r15 = value,
-+	};
-+
-+	__tdx_hypercall(&args, 0);
-+}
-+
-+static inline u8 tdx_inb(u16 port)
-+{
-+	return tdx_io_in(1, port);
-+}
-+
-+static inline u16 tdx_inw(u16 port)
-+{
-+	return tdx_io_in(2, port);
-+}
-+
-+static inline u32 tdx_inl(u16 port)
-+{
-+	return tdx_io_in(4, port);
-+}
-+
-+static inline void tdx_outb(u8 value, u16 port)
-+{
-+	tdx_io_out(1, port, value);
-+}
-+
-+static inline void tdx_outw(u16 value, u16 port)
-+{
-+	tdx_io_out(2, port, value);
-+}
-+
-+static inline void tdx_outl(u32 value, u16 port)
-+{
-+	tdx_io_out(4, port, value);
-+}
-+
- void early_tdx_detect(void)
+ static bool intel_cc_platform_has(enum cc_attr attr)
  {
- 	u32 eax, sig[3];
-@@ -24,4 +88,12 @@ void early_tdx_detect(void)
- 
- 	/* Cache TDX guest feature status */
- 	tdx_guest_detected = true;
-+
-+	/* Use hypercalls instead of I/O instructions */
-+	pio_ops.inb = tdx_inb;
-+	pio_ops.inw = tdx_inw;
-+	pio_ops.inl = tdx_inl;
-+	pio_ops.outb = tdx_outb;
-+	pio_ops.outw = tdx_outw;
-+	pio_ops.outl = tdx_outl;
+-	return false;
++	switch (attr) {
++	case CC_ATTR_GUEST_UNROLL_STRING_IO:
++		return true;
++	default:
++		return false;
++	}
  }
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 8209ba9ffe1a..51bce6351124 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -2,7 +2,36 @@
- #ifndef _ASM_X86_SHARED_TDX_H
- #define _ASM_X86_SHARED_TDX_H
  
-+#include <linux/bits.h>
-+#include <linux/types.h>
-+
-+#define TDX_HYPERCALL_STANDARD  0
-+
-+#define TDX_HCALL_HAS_OUTPUT	BIT(0)
-+#define TDX_HCALL_ISSUE_STI	BIT(1)
-+
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
+ /*
+diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
+index e6163e7e3247..1f58375f61df 100644
+--- a/arch/x86/coco/tdx.c
++++ b/arch/x86/coco/tdx.c
+@@ -19,6 +19,16 @@
+ #define EPT_READ	0
+ #define EPT_WRITE	1
  
-+#ifndef __ASSEMBLY__
++/* Port I/O direction */
++#define PORT_READ	0
++#define PORT_WRITE	1
++
++/* See Exit Qualification for I/O Instructions in VMX documentation */
++#define VE_IS_IO_IN(e)		((e) & BIT(3))
++#define VE_GET_IO_SIZE(e)	(((e) & GENMASK(2, 0)) + 1)
++#define VE_GET_PORT_NUM(e)	((e) >> 16)
++#define VE_IS_IO_STRING(e)	((e) & BIT(4))
++
+ /*
+  * Wrapper for standard use of __tdx_hypercall with no output aside from
+  * return code.
+@@ -312,6 +322,73 @@ static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 	return true;
+ }
+ 
++static bool handle_in(struct pt_regs *regs, int size, int port)
++{
++	struct tdx_hypercall_args args = {
++		.r10 = TDX_HYPERCALL_STANDARD,
++		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
++		.r12 = size,
++		.r13 = PORT_READ,
++		.r14 = port,
++	};
++	bool success;
++	u64 mask = GENMASK(BITS_PER_BYTE * size, 0);
++
++	/*
++	 * Emulate the I/O read via hypercall. More info about ABI can be found
++	 * in TDX Guest-Host-Communication Interface (GHCI) section titled
++	 * "TDG.VP.VMCALL<Instruction.IO>".
++	 */
++	success = !__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
++
++	/* Update part of the register affected by the emulated instruction */
++	regs->ax &= ~mask;
++	if (success)
++		regs->ax |= args.r11 & mask;
++
++	return success;
++}
++
++static bool handle_out(struct pt_regs *regs, int size, int port)
++{
++	u64 mask = GENMASK(BITS_PER_BYTE * size, 0);
++
++	/*
++	 * Emulate the I/O write via hypercall. More info about ABI can be found
++	 * in TDX Guest-Host-Communication Interface (GHCI) section titled
++	 * "TDG.VP.VMCALL<Instruction.IO>".
++	 */
++	return !_tdx_hypercall(hcall_func(EXIT_REASON_IO_INSTRUCTION), size,
++			       PORT_WRITE, port, regs->ax & mask);
++}
 +
 +/*
-+ * Used in __tdx_hypercall() to pass down and get back registers' values of
-+ * the TDCALL instruction when requesting services from the VMM.
++ * Emulate I/O using hypercall.
 + *
-+ * This is a software only structure and not part of the TDX module/VMM ABI.
++ * Assumes the IO instruction was using ax, which is enforced
++ * by the standard io.h macros.
++ *
++ * Return True on success or False on failure.
 + */
-+struct tdx_hypercall_args {
-+	u64 r10;
-+	u64 r11;
-+	u64 r12;
-+	u64 r13;
-+	u64 r14;
-+	u64 r15;
-+};
++static bool handle_io(struct pt_regs *regs, u32 exit_qual)
++{
++	bool in;
++	int size, port;
 +
-+/* Used to request services from the VMM */
-+u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
++	if (VE_IS_IO_STRING(exit_qual))
++		return false;
 +
-+#endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 76cffbda0e79..10f39bec7c7d 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -3,16 +3,10 @@
- #ifndef _ASM_X86_TDX_H
- #define _ASM_X86_TDX_H
- 
--#include <linux/bits.h>
- #include <linux/init.h>
- #include <asm/ptrace.h>
- #include <asm/shared/tdx.h>
- 
--#define TDX_HYPERCALL_STANDARD  0
--
--#define TDX_HCALL_HAS_OUTPUT	BIT(0)
--#define TDX_HCALL_ISSUE_STI	BIT(1)
--
- /*
-  * SW-defined error codes.
-  *
-@@ -40,21 +34,6 @@ struct tdx_module_output {
- 	u64 r11;
- };
- 
--/*
-- * Used in __tdx_hypercall() to pass down and get back registers' values of
-- * the TDCALL instruction when requesting services from the VMM.
-- *
-- * This is a software only structure and not part of the TDX module/VMM ABI.
-- */
--struct tdx_hypercall_args {
--	u64 r10;
--	u64 r11;
--	u64 r12;
--	u64 r13;
--	u64 r14;
--	u64 r15;
--};
--
- /*
-  * Used by the #VE exception handler to gather the #VE exception
-  * info from the TDX module. This is a software only structure
-@@ -79,9 +58,6 @@ void __init tdx_early_init(void);
- u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		      struct tdx_module_output *out);
- 
--/* Used to request services from the VMM */
--u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
--
- void tdx_get_ve_info(struct ve_info *ve);
- 
- bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
++	in   = VE_IS_IO_IN(exit_qual);
++	size = VE_GET_IO_SIZE(exit_qual);
++	port = VE_GET_PORT_NUM(exit_qual);
++
++
++	if (in)
++		return handle_in(regs, size, port);
++	else
++		return handle_out(regs, size, port);
++}
++
+ void tdx_get_ve_info(struct ve_info *ve)
+ {
+ 	struct tdx_module_output out;
+@@ -361,6 +438,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+ 		return handle_cpuid(regs);
+ 	case EXIT_REASON_EPT_VIOLATION:
+ 		return handle_mmio(regs, ve);
++	case EXIT_REASON_IO_INSTRUCTION:
++		return handle_io(regs, ve->exit_qual);
+ 	default:
+ 		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+ 		return false;
 -- 
 2.34.1
 

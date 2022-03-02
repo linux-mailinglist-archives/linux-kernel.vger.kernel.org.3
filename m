@@ -2,97 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1783C4CABC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4256E4CABCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243911AbiCBRag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S244025AbiCBRbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243918AbiCBRaT (ORCPT
+        with ESMTP id S243915AbiCBRaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:30:19 -0500
-Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D32A04DF54
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:29:01 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1646242141; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=A/7P7csz45sM8M75vo/R3s4K0v3XOsjwI3F7niEIByg=; b=MP+lyDGKCb4BAf9vrWJEa4I9rxVKGsV7mqVcslIOBseEI6HoRchjLgd23c3P1Kd5R2otwf2T
- 5+VUEi+P5g9fURKOg4GfnMG0yHxMbUKY7FEowDLI1Wsh4X/1bHskzGb+3+dWcB4C0gRA0TzJ
- wBsTq55gsXHkGUQSAWCDAbVBo4s=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 621fa94dea5f8dddb548d433 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Mar 2022 17:28:45
- GMT
-Sender: quic_akhilpo=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2C686C4314F; Wed,  2 Mar 2022 17:28:45 +0000 (UTC)
+        Wed, 2 Mar 2022 12:30:46 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633DB4B414;
+        Wed,  2 Mar 2022 09:29:47 -0800 (PST)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K81L744Wvz67DpL;
+        Thu,  3 Mar 2022 01:28:31 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 2 Mar 2022 18:29:44 +0100
+Received: from A2006125610.china.huawei.com (10.47.91.128) by
+ lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Mar 2022 17:29:37 +0000
+From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
+        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
+        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
+        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
+Subject: [PATCH v7 00/10] vfio/hisilicon: add ACC live migration driver
+Date:   Wed, 2 Mar 2022 17:28:53 +0000
+Message-ID: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
+X-Mailer: git-send-email 2.12.0.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.91.128]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-Received: from hyd-lnxbld559.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akhilpo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A0A55C43637;
-        Wed,  2 Mar 2022 17:28:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A0A55C43637
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 10/10] drm/msm/a6xx: Free gmu_debug crashstate bo
-Date:   Wed,  2 Mar 2022 22:57:36 +0530
-Message-Id: <20220302225551.v1.10.I94896351ce7af04c2249ced42cf1557fb2bb0d33@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646242056-2456-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1646242056-2456-1-git-send-email-quic_akhilpo@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Free gmu_debug bo while destroying the gpu crashstate.
+Hi,
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+This series attempts to add vfio live migration support for HiSilicon
+ACC VF devices based on the new v2 migration protocol definition and
+mlx5 v9 series discussed here[0].
 
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c | 3 +++
- 1 file changed, 3 insertions(+)
+v6 --> v7
+ -Renamed MIG_PRECOPY ioctl name and struct name. Updated ioctl descriptions
+  regarding ioctl validity (patch #7).
+- Adressed comments from Jason and Alex on PRE_COPY read() and ioctl() fns
+  (patch #9).
+- Moved only VF PCI ids to pci_ids.h(patch #3).
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-index 4d4588a..09bb993 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-@@ -1054,6 +1054,9 @@ static void a6xx_gpu_state_destroy(struct kref *kref)
- 	if (a6xx_state->gmu_hfi)
- 		kvfree(a6xx_state->gmu_hfi->data);
- 
-+	if (a6xx_state->gmu_debug)
-+		kvfree(a6xx_state->gmu_debug->data);
-+
- 	list_for_each_entry_safe(obj, tmp, &a6xx_state->objs, node)
- 		kfree(obj);
- 
+This is sanity tested on a HiSilicon platform using the Qemu branch
+provided here[1].
+
+Please take a look and let me know your feedback.
+
+Thanks,
+Shameer
+[0] https://lore.kernel.org/kvm/20220224142024.147653-1-yishaih@nvidia.com/
+[1] https://github.com/jgunthorpe/qemu/commits/vfio_migration_v2
+
+v5 --> v6
+ -Report PRE_COPY support and use that for early compatibility check
+  between src and dst devices.
+ -For generic PRE_COPY support, included patch #7 from Jason(Thanks!).
+ -Addressed comments from Alex(Thanks!).
+ -Added the QM state register update to QM driver(patch #8) since that
+  is being used in migration driver to decide whether the device is
+  ready to save the state.
+
+RFCv4 --> v5
+  - Dropped RFC tag as v2 migration APIs are more stable now.
+  - Addressed review comments from Jason and Alex (Thanks!).
+
+v3 --> RFCv4
+-Based on migration v2 protocol and mlx5 v7 series.
+-Added RFC tag again as migration v2 protocol is still under discussion.
+-Added new patch #6 to retrieve the PF QM data.
+-PRE_COPY compatibility check is now done after the migration data
+ transfer. This is not ideal and needs discussion.
+
+RFC v2 --> v3
+ -Dropped RFC tag as the vfio_pci_core subsystem framework is now
+  part of 5.15-rc1.
+ -Added override methods for vfio_device_ops read/write/mmap calls
+  to limit the access within the functional register space.
+ -Patches 1 to 3 are code refactoring to move the common ACC QM
+  definitions and header around.
+
+RFCv1 --> RFCv2
+
+ -Adds a new vendor-specific vfio_pci driver(hisi-acc-vfio-pci)
+  for HiSilicon ACC VF devices based on the new vfio-pci-core
+  framework proposal.
+
+ -Since HiSilicon ACC VF device MMIO space contains both the
+  functional register space and migration control register space,
+  override the vfio_device_ops ioctl method to report only the
+  functional space to VMs.
+
+ -For a successful migration, we still need access to VF dev
+  functional register space mainly to read the status registers.
+  But accessing these while the Guest vCPUs are running may leave
+  a security hole. To avoid any potential security issues, we
+  map/unmap the MMIO regions on a need basis and is safe to do so.
+  (Please see hisi_acc_vf_ioremap/unmap() fns in patch #4).
+ 
+ -Dropped debugfs support for now.
+ -Uses common QM functions for mailbox access(patch #3).
+
+Jason Gunthorpe (1):
+  vfio: Extend the device migration protocol with PRE_COPY
+
+Longfang Liu (3):
+  crypto: hisilicon/qm: Move few definitions to common header
+  crypto: hisilicon/qm: Set the VF QM state register
+  hisi_acc_vfio_pci: Add support for VFIO live migration
+
+Shameer Kolothum (6):
+  crypto: hisilicon/qm: Move the QM header to include/linux
+  hisi_acc_qm: Move VF PCI device IDs to common header
+  hisi_acc_vfio_pci: add new vfio_pci driver for HiSilicon ACC devices
+  hisi_acc_vfio_pci: Restrict access to VF dev BAR2 migration region
+  hisi_acc_vfio_pci: Add helper to retrieve the struct pci_driver
+  hisi_acc_vfio_pci: Use its own PCI reset_done error handler
+
+ drivers/crypto/hisilicon/hpre/hpre.h          |    2 +-
+ drivers/crypto/hisilicon/hpre/hpre_main.c     |   19 +-
+ drivers/crypto/hisilicon/qm.c                 |   42 +-
+ drivers/crypto/hisilicon/sec2/sec.h           |    2 +-
+ drivers/crypto/hisilicon/sec2/sec_main.c      |   21 +-
+ drivers/crypto/hisilicon/sgl.c                |    2 +-
+ drivers/crypto/hisilicon/zip/zip.h            |    2 +-
+ drivers/crypto/hisilicon/zip/zip_main.c       |   17 +-
+ drivers/vfio/pci/Kconfig                      |    2 +
+ drivers/vfio/pci/Makefile                     |    2 +
+ drivers/vfio/pci/hisilicon/Kconfig            |   16 +
+ drivers/vfio/pci/hisilicon/Makefile           |    4 +
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1369 +++++++++++++++++
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
+ drivers/vfio/vfio.c                           |   71 +-
+ .../qm.h => include/linux/hisi_acc_qm.h       |   49 +
+ include/linux/pci_ids.h                       |    3 +
+ include/uapi/linux/vfio.h                     |  113 +-
+ 18 files changed, 1792 insertions(+), 58 deletions(-)
+ create mode 100644 drivers/vfio/pci/hisilicon/Kconfig
+ create mode 100644 drivers/vfio/pci/hisilicon/Makefile
+ create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+ create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+ rename drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h (87%)
+
 -- 
-2.7.4
+2.25.1
 

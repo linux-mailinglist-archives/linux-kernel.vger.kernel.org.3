@@ -2,126 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBAA4CA440
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAF64CA444
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbiCBLxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        id S241632AbiCBLyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237334AbiCBLxl (ORCPT
+        with ESMTP id S235302AbiCBLyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:53:41 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5E49274
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:52:57 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id AD2281F37E;
-        Wed,  2 Mar 2022 11:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646221975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=17Yx87zcUkbxgqjZC6j2RKiiBVRCwqSfkoMpziNTDNM=;
-        b=nXIttdMYoc1ALis0aYUH0cDJw8pOnFSjZ7x9GMK6AF3pTLTf9rb7mXrDkRqGV/gCepIuGd
-        Dqs4jXuWKFa1ihM5BrGLxKiwgD4hUchct6XQuu26F7UGjR5cxrUXHJnhaZgN4y1YQ5O0O7
-        8fy/2eoT9zP6RrnbySW5W5Yt0Fv7rYM=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 18019A3B83;
-        Wed,  2 Mar 2022 11:52:55 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 12:52:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Maninder Singh <maninder1.s@samsung.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vaneet Narang <v.narang@samsung.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [hnaz-mm:master 272/379] lib/vsprintf.c:991:13: warning:
- variable 'modbuildid' set but not used
-Message-ID: <Yh9alvkQhbbgppW0@alley>
-References: <202203012040.uFWGm3My-lkp@intel.com>
- <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
- <Yh5yhoW+y9qcn1RM@casper.infradead.org>
- <8735k0isum.fsf@jogness.linutronix.de>
+        Wed, 2 Mar 2022 06:54:21 -0500
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3143AB0EBD;
+        Wed,  2 Mar 2022 03:53:38 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id bk29so2375307wrb.4;
+        Wed, 02 Mar 2022 03:53:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XY6dOIHv3yCkAU7WwLMsImSV4WkNa/CQsBsSl28qGtg=;
+        b=jmQfEq/vpDxAe+EHUS0Q4YvyMIAMxzXJGmQ8+32/z9l0DJH9KNW+pSkF8WZ83dYx+H
+         /qGMTFo3Drzq7ew/h2OWJjEI+mdqUNROhkMGonsPEOrPcucWsFK+80WtFiZcE1plI78n
+         tfNqeqCQsBMh3c/l5rh9sz5CjuDUDwj17Wn1W4M43YGKcT6Osh1Ud9h7l6Vm8m9fa1pG
+         BjzfhEaakZYcPk2NzfNNuMKpskMqWzSe9osPJUFeiQnFU4EsKmdHzxXEC/lJMCrgxGA4
+         gFoyiqPQp8mznjWjISqmKjdd3zbENk1Lsnm6T+cYCHjti0RN9NOpgPh7Ib6orV3+/Ido
+         2Cjw==
+X-Gm-Message-State: AOAM531YEpGfwKWdHBePzaTHlJDJLjb7p2AZ1HWUjY8cJJmZ4u1154/a
+        KV0mEVc5epheoFvkCn8Vl2I=
+X-Google-Smtp-Source: ABdhPJwIDUbYiY4aCi4VVrdNo3TXYAZ5KxSeI6sokMU1uNP1Mg9Shsv6w5X4RG7chrs+dwf72qUK2w==
+X-Received: by 2002:a05:6000:18ab:b0:1f0:1581:fdcf with SMTP id b11-20020a05600018ab00b001f01581fdcfmr5492711wri.490.1646222016686;
+        Wed, 02 Mar 2022 03:53:36 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id x3-20020a5d6b43000000b001e317fb86ecsm16481386wrw.57.2022.03.02.03.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 03:53:36 -0800 (PST)
+Date:   Wed, 2 Mar 2022 11:53:34 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Iouri Tarassov <iourit@linux.microsoft.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Message-ID: <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+ <Yh8ia7nJNN7ISR1l@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8735k0isum.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yh8ia7nJNN7ISR1l@kroah.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-03-02 10:58:49, John Ogness wrote:
-> On 2022-03-01, Matthew Wilcox <willy@infradead.org> wrote:
-> >> >    lib/vsprintf.c: In function 'va_format':
-> >> >    lib/vsprintf.c:1759:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-> >> >     1759 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
-> >> >          |         ^~~
-> >> 
-> >> I wonder what this means.
-> >
-> > It means the compiler thinks we might want to add:
-> >
-> > __attribute__((format(gnu_printf, x, y))) to the function declaration so it
-> > can type-check the arguments.
-> >
-> > 'format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)'
-> >      The 'format' attribute specifies that a function takes 'printf',
-> >      'scanf', 'strftime' or 'strfmon' style arguments that should be
-> >      type-checked against a format string.  For example, the
-> >      declaration:
-> >
-> >           extern int
-> >           my_printf (void *my_object, const char *my_format, ...)
-> >                 __attribute__ ((format (printf, 2, 3)));
-> >
-> >      causes the compiler to check the arguments in calls to 'my_printf'
-> >      for consistency with the 'printf' style format string argument
-> >      'my_format'.
-> >
-> >
-> > I haven't looked into this at all and have no idea if we should.
+On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
+> On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
+> > > > +struct dxgglobal *dxgglobal;
+> > > 
+> > > No, make this per-device, NEVER have a single device for your driver.
+> > > The Linux driver model makes it harder to do it this way than to do it
+> > > correctly.  Do it correctly please and have no global structures like
+> > > this.
+> > > 
+> > 
+> > This may not be as big an issue as you thought. The device discovery is
+> > still done via the normal VMBus probing routine. For all intents and
+> > purposes the dxgglobal structure can be broken down into per device
+> > fields and a global structure which contains the protocol versioning
+> > information -- my understanding is there will always be a global
+> > structure to hold information related to the backend, regardless of how
+> > many devices there are.
 > 
-> AFAICT it is not possible to use the gnu_printf format attribute for
-> this because the va_list to check is a field within the passed in struct
-> pointer @va_fmt.
+> Then that is wrong and needs to be fixed.  Drivers should almost never
+> have any global data, that is not how Linux drivers work.  What happens
+> when you get a second device in your system for this?  Major rework
+> would have to happen and the code will break.  Handle that all now as it
+> takes less work to make this per-device than it does to have a global
+> variable.
+> 
 
-My understanding is that it can be handled by passing '0' as the
-FIRST-TO-CHECK parameter:
+It is perhaps easier to draw parallel from an existing driver. I feel
+like we're talking past each other.
 
-<paste>
-format (archetype, string-index, first-to-check)
-The format attribute specifies that a function takes printf, scanf,
-strftime or strfmon style arguments that should be type-checked
-against a format string. For example, the declaration:
+Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
+like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
+units will be added to the list. I this the current code is following
+this model. dxgglobal fulfills the role of a list.
 
-[...]
+Setting aside the question of whether it makes sense to keep a copy of
+the per-VM state in each device instance, I can see the code be changed
+to:
 
-"For functions where the arguments are not available to be checked
-(such as vprintf), specify the third parameter as zero."
-<paste>
+    struct mutex device_mutex; /* split out from dxgglobal */
+    static LIST_HEAD(dxglist);
+    
+    /* Rename struct dxgglobal to struct dxgstate */
+    struct dxgstate {
+       struct list_head dxglist; /* link for dxglist */
+       /* ... original fields sans device_mutex */
+    }
 
-, cut&pasted from
-https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes
+    /*
+     * Provide a bunch of helpers manipulate the list. Called in probe /
+     * remove etc.
+     */
+    struct dxgstate *find_dxgstate(...);
+    void remove_dxgstate(...);
+    int add_dxgstate(...);
 
+This model is well understood and used in tree. It is just that it
+doesn't provide much value in doing this now since the list will only
+contain one element. I hope that you're not saying we cannot even use a
+per-module pointer to quickly get the data structure we want to use,
+right?
 
-Well, this particular function va_format() is never used with
-open-coded @arg parameter. It always just passes @arg from
-the caller. So that the check is not important.
+Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
+into the device object? I think that can be done too.
 
-Best Regards,
-Petr
+The code can be changed as:
+
+    /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
+    struct dxgstate { ... };
+
+    static int dxg_probe_vmbus(...) {
+
+        /* probe successfully */
+
+	struct dxgstate *state = kmalloc(...);
+	/* Fill in dxgstate with information from backend */
+
+	/* hdev->dev is the device object from the core driver framework */
+	dev_set_drvdata(&hdev->dev, state);
+    }
+
+    static int dxg_remove_vmbus(...) {
+        /* Normal stuff here ...*/
+
+	struct dxgstate *state = dev_get_drvdata(...);
+	dev_set_drvdata(..., NULL);
+	kfree(state);
+    }
+
+    /* In all other functions */
+    void do_things(...) {
+        struct dxgstate *state = dev_get_drvdata(...);
+
+	/* Use state in place of where dxgglobal was needed */
+
+    }
+
+Iouri, notice this doesn't change anything regarding how userspace is
+designed. This is about how kernel organises its data.
+
+I hope what I wrote above can bring our understanding closer.
+
+Thanks,
+Wei.

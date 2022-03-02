@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829404C9B69
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A2E4C9B6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239152AbiCBCuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 21:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S239156AbiCBCvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 21:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbiCBCuf (ORCPT
+        with ESMTP id S232091AbiCBCvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:50:35 -0500
+        Tue, 1 Mar 2022 21:51:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB071AA03D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 18:49:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF52CAA03D;
+        Tue,  1 Mar 2022 18:50:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94E41B81BFB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F263C340F2;
-        Wed,  2 Mar 2022 02:49:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E87DB81D71;
+        Wed,  2 Mar 2022 02:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEECFC340EE;
+        Wed,  2 Mar 2022 02:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646189390;
-        bh=FysnhgPEa69XwFrDLrSLB1oxl+aL0JbGynml4vaPzbE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qrhOglzuZ0rA7h+F3Z34gKOn7cP8FhkgK5DtxfGcudkObGWZ9iu6H7+5IY6P5exCg
-         IBuGYtM6Mz6Lj6dpznP0t8yafIwbLLpe6JLzWBK11AdNMuX/YsstFvGXwbv6nY5dcj
-         kVtc0KuDLZ0/jBr4LAnXVrNzh1CdHcnN3R3dqDVc5J/2CPfvJ0stRa+wfNOcIFcIfe
-         l2NWO26XVed1z5V6U0/cEewjFdPJ0txOXrfEd8xGe+Fl3DzrPkNLESjrFmtvORaeEt
-         tmn63mUPdMe4WJuTS+QPdq3q3/VNkMwnAj+8+Y9Fa1RlulGlBfogeGT1LGsqHWlox9
-         Cf7vj8KKa9P2g==
-Message-ID: <4c8ce495-a27b-cba7-7a81-26adf9a4c604@kernel.org>
-Date:   Wed, 2 Mar 2022 10:49:47 +0800
+        s=k20201202; t=1646189423;
+        bh=1Ut1LLr4Atq1Pq8gzeCGEnkTqlLWoJAo/XJ606dYG4A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u2FpaszFDe2MOIYTVPe0Go/spev6D6ZnV5PuPmm8rY/F8T5/wezkRfkScVhaitzzx
+         z0kwqnK2kYs8Q50/D1afpRwF7G2fqmTa/3ZC82c2TxtO38Pcpuv6IlO/8sqcGLBtuA
+         rZjtKREqSQAcH1jNficJaSW2Tox58ABz32Q9PGXLQShWx7H6Z2gaS+fR2Ok8MtnceT
+         NCnuuaElaN62PwaeMHdIllbvjo/Sg04vvagz4n55ToFIxqh82+wGzPjkUDSqM4WwQj
+         trPMomrbfrVWqRds4bz5Udns8anCKSyCSuR2+ZhxxYSLUp3GYYtT2cVNuZqhpSQVnV
+         1zM3qUhoXFJDw==
+Date:   Tue, 1 Mar 2022 18:50:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Dongli Zhang <dongli.zhang@oracle.com>, dsahern@gmail.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
+        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
+Subject: Re: [PATCH net-next v4 4/4] net: tun: track dropped skb via
+ kfree_skb_reason()
+Message-ID: <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220226084929.6417-5-dongli.zhang@oracle.com>
+References: <20220226084929.6417-1-dongli.zhang@oracle.com>
+        <20220226084929.6417-5-dongli.zhang@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] erofs: fix ztailpacking on > 4GiB filesystems
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, Yue Hu <huyue2@yulong.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/22 11:31, Gao Xiang wrote:
-> z_idataoff here is an absolute physical offset, so it should use
-> erofs_off_t (64 bits at least). Otherwise, it'll get trimmed and
-> cause the decompresion failure.
-> 
-> Fixes: ab92184ff8f1 ("erofs: add on-disk compressed tail-packing inline support")
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+On Sat, 26 Feb 2022 00:49:29 -0800 Dongli Zhang wrote:
+> +	SKB_DROP_REASON_SKB_PULL,	/* failed to pull sk_buff data */
+> +	SKB_DROP_REASON_SKB_TRIM,	/* failed to trim sk_buff data */
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+IDK if these are not too low level and therefore lacking meaning.
 
-Thanks,
+What are your thoughts David?
+
+Would it be better to up level the names a little bit and call SKB_PULL
+something like "HDR_TRUNC" or "HDR_INV" or "HDR_ERR" etc or maybe
+"L2_HDR_ERR" since in this case we seem to be pulling off ETH_HLEN?
+
+For SKB_TRIM the error comes from allocation failures, there may be
+a whole bunch of skb helpers which will fail only under mem pressure,
+would it be better to identify them and return some ENOMEM related
+reason, since, most likely, those will be noise to whoever is tracking
+real errors?
+
+>  	SKB_DROP_REASON_DEV_HDR,	/* there is something wrong with
+>  					 * device driver specific header
+>  					 */
+> +	SKB_DROP_REASON_DEV_READY,	/* device is not ready */
+
+What is ready? link is not up? peer not connected? can we expand?

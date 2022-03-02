@@ -2,223 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F844CAB8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB63B4CAB8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239999AbiCBR1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S243818AbiCBR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiCBR1c (ORCPT
+        with ESMTP id S233700AbiCBR1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:27:32 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2067.outbound.protection.outlook.com [40.107.223.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1BDCA324;
-        Wed,  2 Mar 2022 09:26:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RDDYlN8Z7pFbJjcv5ZVCCBBeGOgNsc+wPjbU/mm5Y+BKLhjJ34mpGkL2EOF0Czcu2ExOS6Nct32jCux6BcX/WQpnRfj86ezfZV1Zu+TnlTQwJvoAWMDxmEFeTAxnxgUdWt1pNOG80CkH9jWwrJd+uVW08Ex7F6E/sYF4oewDYsgH6mHj2vHDTtJM+9ju7PDc3EMF0Zti6jgWdY8HP147OLmgMLWsCqka4nTqoA+S+//m1RA1+kl94CNkVDJ/XfAMoE+AZhzvnejwSjI+csZlayxDhXm9+NaGd15n5lfPtYmHPQ/TLhs2aqauwzXLlxFsl/40KvSV8aOs6iiDrPmJEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=di/XHU4DwcFdoRGpIE4JLdvP7eayx9JMiKgLVQl/ES0=;
- b=H5np2sjC7t+H8TUhZBBqc+hSByevBFJswUFKcxuGGqGIV+cIak1e5UqV/wNEx/tuV7E8miVh1feIhfsXtfkkOHEP8+N1NNcmZdfaYSXwcIrPebKa8ktuPuPgHH9qeFjzHFeLY3Oxd9FPNW0qgGZSO7tF3SU05DCsqkBfPMgh2B7evluPozjxpiOWNlwXGT9o4oQjfKUHGJz1NMrZILkiBH8h0fSqz5b/0C8wnE0ZKfju7ZQHPLBJ9TewOV2j9uQJlJoYesro3/LsfctOASA/JmbF8jRG8qrAgv/O3btO3KZRCTlXT/s1kkg3vkfIYhbmlA2vU9oUf64VwNbYut+0tA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=di/XHU4DwcFdoRGpIE4JLdvP7eayx9JMiKgLVQl/ES0=;
- b=rChSPMHWjtsf7hNapc4ecRZOhG9mbjrWpNNWnz2CXM93BsE25MfElWUa0RyzBNJ7g2QkYwaZ6OHDfMbXRtWsX7ac7hmvG6FwTuXsIsnPx/ST08prQxuqZCxOThuBapqthWB9A2LrHWczL+uUpvXwnG9wgPtyMf0MNT/uj2WZbGc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM6PR12MB3804.namprd12.prod.outlook.com (2603:10b6:5:1cd::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Wed, 2 Mar
- 2022 17:26:44 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ad74:927:9e6:d2cd%2]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
- 17:26:44 +0000
-Date:   Wed, 2 Mar 2022 17:26:32 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        x86@kernel.org, stable@vger.kernel.org,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
- `threshold_create_bank()` fails
-Message-ID: <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-3-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301094608.118879-3-ammarfaizi2@gnuweeb.org>
-X-ClientProxiedBy: CH2PR18CA0048.namprd18.prod.outlook.com
- (2603:10b6:610:55::28) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Wed, 2 Mar 2022 12:27:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0D50CA337
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646242010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0JShSuOVLOzs3H1G/w8tPv6MflNWdaL6JxcHTBNKQ3o=;
+        b=f7v05PQHwTOQE2PRjKCL5kMQiUGwV/3TeavOqC4nsGtr9VCpPZMsUp2a+ieLxyMjvFLN19
+        PZrMvriFnB600kWhkwwd3n/VMTtKdBZQ9g7Wl8xdvmodLkHj5kwTPKWZUaCkaMXe2LcZ8+
+        Q3izfar2rJVQWoyLBCMyXkSoKzJ2ywI=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-44-_dBH7qtPN36Z2-9F6Oesjw-1; Wed, 02 Mar 2022 12:26:48 -0500
+X-MC-Unique: _dBH7qtPN36Z2-9F6Oesjw-1
+Received: by mail-il1-f200.google.com with SMTP id m17-20020a923f11000000b002c10e8f4c44so1725484ila.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:26:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0JShSuOVLOzs3H1G/w8tPv6MflNWdaL6JxcHTBNKQ3o=;
+        b=6hPCq88PY7zvnBBhTz9BGned8j3/xoOPG9iMbZXf8Kmr58J23vxLWiiGXCizfcSQOQ
+         SQ1tXZffdcjgI+EOay1OWl6yX50HAXDTssnppSLY8RptByQl5+nMy8tQVXGNFb+zIm28
+         p4WRiwxu7ZTzRgEdy3I633yheL3vG7qcaB/thAcvLuBtmDIuIgfimLxeCUl+SO0DTzlB
+         ubcnYhXa191jrjbRfVMXVmMpt9jozWNx8uepDnbOJHYEjBycPttXw3qkviBFr2PwdKbK
+         TbVO6L9mDBFkCpQOhYzq8l7NkyC4fzEv7BnLtX0M2nMRxK3CTDSPwaXtVVeAea78wLB0
+         3viw==
+X-Gm-Message-State: AOAM530MUuNTTCbeElF0Br54yyaInbCOfmZmGi7A5uQ29n/YM4COFdnj
+        zkY7k5FbA5846+UTTJRRnoNd3sm5c2LJqTRlnVuhclXtxXnjJVEXxFqLwOZlcf5Js++mqKyEfrR
+        SD9xQPjEKfSBIivMUCd6wIWct
+X-Received: by 2002:a05:6e02:1a06:b0:2c2:20c8:c016 with SMTP id s6-20020a056e021a0600b002c220c8c016mr27470761ild.143.1646242008005;
+        Wed, 02 Mar 2022 09:26:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzL8xcxepFTjy/r3mc6Yk5JN69xs++O5rrSs71VHh3GfhTigqI2aHu4Hez7d8OX8UoAnpiSrg==
+X-Received: by 2002:a05:6e02:1a06:b0:2c2:20c8:c016 with SMTP id s6-20020a056e021a0600b002c220c8c016mr27470748ild.143.1646242007786;
+        Wed, 02 Mar 2022 09:26:47 -0800 (PST)
+Received: from ?IPV6:2601:280:4400:a2e0::11d7? ([2601:280:4400:a2e0::11d7])
+        by smtp.gmail.com with ESMTPSA id p2-20020a92d682000000b002c291ae0e1bsm9853732iln.23.2022.03.02.09.26.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 09:26:47 -0800 (PST)
+Message-ID: <7f1ba14f-34e8-5f05-53b7-c12913693df8@redhat.com>
+Date:   Wed, 2 Mar 2022 12:26:45 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 37690116-803a-4829-5533-08d9fc71d27f
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3804:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3804347863C20C29D77010D8F8039@DM6PR12MB3804.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SwNWSdE8eSIoGjz0czUEP7Md4IsavWgxqW9fZhmm0nX2SRh/EY0SI40NRSEpL7eH/qZ+loVM6GU+MEYJERFrCPQ2fpPGCYkNESTdqzso/U6bI4CB0As6ZCJMzkk1vF3iCbJ/S9joOwQIMP7udohAlp8oiME83+24o0R3gG5k7O6QiHEI7yrcECgwDOq57W7byWGWLNHYLVQ2nc1b3KbkvAD5cTcPAPfQ1/rLfwk0Y+DjsMchfqGSuczoIbJLtLWB8iVULw1mXJy/UN9HtEAh0z2VX3RgxvvhOJX8S1xHtDtfkHfL1EHZa3DTkLrI7stsGgs/C5kHDdrtt8mEvI8+W6OMIMov+QY8O0oz6z8NVTHPGf7nsTHOkrHQKjfD+l2GchqB+WRJ69cwidMCwiaX6CCeanAqQNhLRrCEtjf3EVi9QjbbBNNhkXsNEYqyTUit/ue6c2pW3ERudY1ewj3Joi/hit90TEkd8Hr6cjdLypgiZTp5AzWBxFuNcN4aN45++U+Ylm3iFf4CG7xYJhPnnDnLZo8qvQr0PnVPCM9QzTZsAH1P/oX/yAQ+qurw+oT/O/KFDfoAA+0cQ5K1JDMX8WVbiDCVaFU25uCleI4tgMaci6WbCwqzYJ7VD+yBS0ctQneB1OLhE80ShCUXxC4x+e2ervzqYpBmU6TJ3CdQ5JuEiP4ZCqBGVdRz4IoP00XPhpAF+wrAgCc3C5ufaL9nBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(54906003)(6512007)(44832011)(38100700002)(6916009)(7416002)(33716001)(83380400001)(2906002)(5660300002)(9686003)(8676002)(4326008)(66946007)(66476007)(66556008)(86362001)(316002)(6486002)(508600001)(186003)(8936002)(26005)(6506007)(6666004)(81973001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IwhIcfSiOuUBdyp3cri2hipuCC5y+7TCUEYvB3GIpehFNR0+DoO0OOrrrWqW?=
- =?us-ascii?Q?i4UNbeTBbSX/qi8OQUjWlvGuwQOC1u6bO+btdQN7T8MqLQUiuBu4b3FDfImc?=
- =?us-ascii?Q?ay90TWPhUqt77w+ANf3V0YveKYZitJrdKszggjQAN0GFYixYGYBOcxMG+P0m?=
- =?us-ascii?Q?1UivDnlyB2t2Ie596vfCYVw5VvKCbPGHTAoVNGTA9pNl58uYzkS2DbcbO7nk?=
- =?us-ascii?Q?WnXz/JSu2er7V2d0t44aQwJKIfsRTB+aa6MD2gxm14jkxPa1QTI42DKDQJzX?=
- =?us-ascii?Q?NYrxd+w/37t5L6ptFvtQAuCJhbKtjRHF1459l7CZmw4PkGPnI3Pr3yzlLRZX?=
- =?us-ascii?Q?5OZKg4pDsXsgvFEkLSdsamrTZXALsnLUhSrJNzhlQIgsfvdyUFiM7gevw25I?=
- =?us-ascii?Q?+r31UlXCJGJc7Poxk96mEjKKpCDv6PQRiMRWrPFNYp0ehiC+fLYlNV6L39ig?=
- =?us-ascii?Q?b243UT2KjLgSgK+4nPgqg1jsjFt1nyDo1VpO/sK6IRv+zobgtX1sL9bU75So?=
- =?us-ascii?Q?0xMQmZm5Lw2M6AR8Nax0Kt0v7WCIanf9y9QqwMAMv1nNQQuHq8mEtmfRGO05?=
- =?us-ascii?Q?t2o1W0x7FRIEB5WOhmC5k8ECZ/RshO245V9hnnrQpU0Jg/zoCX433zrmLRlV?=
- =?us-ascii?Q?pNUQu3Axxlhz9/XSy98nVTiA7Kpc9wxigFNjFht/sNWfqw8TMWeCy6dgpwCr?=
- =?us-ascii?Q?+DB2U1M8zLPjWBi2o7zRQOyQmOzSc9qz0HlqTA3ieb1/yDss2LCpFEftoLvt?=
- =?us-ascii?Q?sEDq6wmkPHo2nqbeopswFCXpmMlF8fVNr/3kCwE2CnKFQIIM5MHV70C8I0L6?=
- =?us-ascii?Q?IC1xAEc6o2OUVDplfvOA+18eVgVloaS2DOjr+k9YkNKZUF9TRqQtcaqw8KGn?=
- =?us-ascii?Q?HNCtZ2bRlZrbhNBkHWhviyEc9XYnirqcqQc8niOltf8kNCOTsBP5t+gyonoc?=
- =?us-ascii?Q?t514kyAOxvbkYHh+V+nSdOi71sMrepPysJ60m2y9jf1PbYM6uHqvCl8/aK8k?=
- =?us-ascii?Q?vkufKkB9alV3wdPbXGziPxhsp7UJMsZLH6QrJGZ8h8PVvBeraQWOq0Gkbxxm?=
- =?us-ascii?Q?5+SotAtp4hA+Xxsu6UwU4TdXAIg/wYk7m2Bo7mi0jh1qwySEru1M3akH4M3r?=
- =?us-ascii?Q?1upd1nQs3ZmHef0WSGlZFU3pStv8xoq+WFDFGXqOv32J3+nYUe5SpIzHiMjB?=
- =?us-ascii?Q?bDpRywzhNhtloN6GjhMMvstAirrJmBxHVZl56a144Nqp34NEdh/Ag4uthV73?=
- =?us-ascii?Q?NTs7OG2ADQHvtwpr8iwOxiEGNTtg7wSLftHbnpxhiHViSNvNA9HvFJ0lmDqH?=
- =?us-ascii?Q?789czc1fA12ZfJzMl3KUXbfvZT58Q/aJGMUiHjVBqJd4uOLBjPSfMPDDv3QW?=
- =?us-ascii?Q?F+ft8tncDCN30i0xK+CDUr0jsMNW6jZTsJ2LtL+SYGshLkKsWkqwVVyXnxDN?=
- =?us-ascii?Q?lQoSev+eFYJoibvYlToUq4RtDnsammUJMkqQVG40Eo0My6oRbpNXv8jtzlVr?=
- =?us-ascii?Q?H67fT6ludrA6gYpNkQcQ0Yw4zHct8Jn7TSuLJXUcodwEQIZ9Viix69+YVL3m?=
- =?us-ascii?Q?HHc9sbBnR84GD26AbB0kkkF0Pvoi3N+Ka0h9UK4JTuORcfCBnnimVhBc75Yj?=
- =?us-ascii?Q?TW36nbGTpmmw5aVSsbDo9Tg=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37690116-803a-4829-5533-08d9fc71d27f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 17:26:44.7387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jsNSWK/Y6cv4EAX4VB7iEcedqXit1iJm5Edu8SlnA0B/yRdbFBMi0EqpmdaFSf/CHBfO3ATcNBkAGyRZkdE4oQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3804
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] mm/oom: do not oom reap task with an unresolved robust
+ futex
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        jsavitz@redhat.com, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@collabora.com
+References: <20220114180135.83308-1-npache@redhat.com>
+ <YeUuWcNArnDhOjFY@dhcp22.suse.cz>
+ <ad639326-bea8-9bfb-23e3-4e2b216d9645@redhat.com>
+ <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
+ <YeZ/mL808DpA8mdG@dhcp22.suse.cz>
+ <118fc685-c68d-614f-006a-7d5487302122@redhat.com>
+ <Yh9+O/xqNLnV1jmA@dhcp22.suse.cz>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <Yh9+O/xqNLnV1jmA@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 04:46:08PM +0700, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+
+
+On 3/2/22 09:24, Michal Hocko wrote:
+> Sorry, this has slipped through cracks.
 > 
+> On Mon 14-02-22 15:39:31, Nico Pache wrote:
+> [...]
+>> We've recently been discussing the following if statement in __oom_reap_task_mm:
+>> 	if (vma_is_anonymous(vma) || !(vma->vm_flags & VM_SHARED))
+>>
+>> Given the comment above it, and some of the upstream discussion the original
+>> RFC, we are struggling to see why this should be a `||` and not an `&&`. If we
+>> only want to reap anon memory and reaping shared memory can be dangerous is this
+>> statement incorrect?
+>>
+>> We have a patch queued up to make this change, but wanted to get your opinion on
+>> why this was originally designed this way in case we are missing something.
+> 
+> I do not really see why this would be wrong. Private file backed
+> mappings can contain a reapable memory as well. I do not see how this
+> would solve the futex issue.
+We were basing our discussion around the following comment:
+/*
+ * Only anonymous pages have a good chance to be dropped
+ * without additional steps which we cannot afford as we
+ * are OOM already.
+ *
+ * We do not even care about fs backed pages because all
+ * which are reclaimable have already been reclaimed and
+ * we do not want to block exit_mmap by keeping mm ref
+ * count elevated without a good reason.
+ */
 
-Hi Ammar,
+So changing to an && would align the functionality with this comment by ignoring
+fs backed pages, and additionally it prevents shared mappings from being reaped.
+We have tested this change and found we can no longer reproduce the issue. In
+our case we allocate the mutex on a MAP_SHARED|MAP_ANONYMOUS mmap so the if-
+statement in question would no longer return true after the && change.
 
-...
+If it is the case that private fs backed pages matter perhaps we want something
+like this:
+	if ((vma_is_anonymous(vma) && !(vma->vm_flags & VM_SHARED))
+	||(!vma_is_anonymous(vma) && !(vma->vm_flags & VM_SHARED)))
 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 9f4b508886dd..a5ef161facd9 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -1346,19 +1346,23 @@ int mce_threshold_create_device(unsigned int cpu)
->  	if (!bp)
->  		return -ENOMEM;
->  
-> +	/*
-> +	 * If we fail, mce_threshold_remove_device() will free the @bp
-> +	 * via @threshold_banks.
-> +	 */
-> +	this_cpu_write(threshold_banks, bp);
-> +
->  	for (bank = 0; bank < numbanks; ++bank) {
->  		if (!(this_cpu_read(bank_map) & (1 << bank)))
->  			continue;
->  		err = threshold_create_bank(bp, cpu, bank);
-> -		if (err)
-> -			goto out_err;
-> +		if (err) {
-> +			mce_threshold_remove_device(cpu);
-> +			return err;
-> +		}
->  	}
-> -	this_cpu_write(threshold_banks, bp);
->
+or more simply:
+	if(!(vma->vm_flags & VM_SHARED))
 
-The threshold interrupt handler uses this pointer. I think the goal here is to
-set this pointer when the list is fully formed and clear this pointer before
-making any changes to the list. Otherwise, the interrupt handler will operate
-on incomplete data if an interrupt comes in the middle of these updates.
+to exclude all VM_SHARED mappings.
 
-The changes below should deal with memory leak issue while avoiding a race
-with the threshold interrupt. What do you think?
+-- Nico
 
-Thanks,
-Yazen
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1940d305db1c..8f3b7859331d 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1294,10 +1294,22 @@ static void threshold_remove_bank(struct threshold_bank *bank)
- 	kfree(bank);
- }
- 
-+void _mce_threshold_remove_device(struct threshold_bank **bp)
-+{
-+	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
-+
-+	for (bank = 0; bank < numbanks; bank++) {
-+		if (bp[bank]) {
-+			threshold_remove_bank(bp[bank]);
-+			bp[bank] = NULL;
-+		}
-+	}
-+	kfree(bp);
-+}
-+
- int mce_threshold_remove_device(unsigned int cpu)
- {
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
--	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
- 
- 	if (!bp)
- 		return 0;
-@@ -1308,13 +1320,7 @@ int mce_threshold_remove_device(unsigned int cpu)
- 	 */
- 	this_cpu_write(threshold_banks, NULL);
- 
--	for (bank = 0; bank < numbanks; bank++) {
--		if (bp[bank]) {
--			threshold_remove_bank(bp[bank]);
--			bp[bank] = NULL;
--		}
--	}
--	kfree(bp);
-+	_mce_threshold_remove_device(bp);
- 	return 0;
- }
- 
-@@ -1360,6 +1366,6 @@ int mce_threshold_create_device(unsigned int cpu)
- 		mce_threshold_vector = amd_threshold_interrupt;
- 	return 0;
- out_err:
--	mce_threshold_remove_device(cpu);
-+	_mce_threshold_remove_device(bp);
- 	return err;
- }

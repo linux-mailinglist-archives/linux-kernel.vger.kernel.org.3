@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E0A4CB244
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF09A4CB246
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiCBWZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S233420AbiCBW0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiCBWZq (ORCPT
+        with ESMTP id S229660AbiCBW0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:25:46 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE37E61DC;
-        Wed,  2 Mar 2022 14:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646259883;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=iQfNJuH2Ji0pVE8fbybSO1iLM6ySE3fcPhmj0E324Ao=;
-    b=tE231fH5UsT9bLVeBm4aBSqC3K8UPgFe3CjQmY24dlNuUZWoHCHt3ejFr8EkmDDg/7
-    qiMj4GjqUcxmf1lvwOcefDUJ4/bBcZz4hKf+vFUSyywKOGFlGHrVlMON3lWTXsvfTPLd
-    YiqbJH+8OoEMcEs86uEiIjc+z7kBKMNNM0ukuOREaSqhVTrBLp6TwbWnIvsVTEnzSMrB
-    4tzonn0e9ds6zxCQSIiXjvTnGKKkLsMWRBTrE28VbAdIyxzTTFIPHwnFKPJIIIjs5mLT
-    kvk7LeuCZ9eajRQJdkj7QmpEy4EFmVmL5Orza9Z7nLY1Df/YZGK22ka8zW9eIROpizCh
-    ZPYg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43oQ+E="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id V41e6fy22MOhWCe
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 2 Mar 2022 23:24:43 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <4cb08b5d-c1ec-f2b4-a107-63a771146ec0@baylibre.com>
-Date:   Wed, 2 Mar 2022 23:24:42 +0100
-Cc:     Paul Boddie <paul@boddie.org.uk>, Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <598F3A49-9CE2-4C59-95D4-CDA888A3B3BF@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
- <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
- <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
- <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
- <75CBD357-577A-402D-9E3B-DBE82A84BC43@goldelico.com>
- <4cb08b5d-c1ec-f2b4-a107-63a771146ec0@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 17:26:39 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98B4E3C74
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:25:54 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z2so2814050plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 14:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g7EzPTbKYLqO23m3ywH5y06sJN6hD3WoKEJqYdmdBo8=;
+        b=a9yHIBRHVnkkbeJTPV3c7G5nXhO7+BJASkO0lFCAY8yXyU+/uaBydkqUomDxsuecPC
+         b+DLOTNSKvcGdpbIcWKyXEMs939C8QZvZ67peRNpPBbJc/tWDaIlBFvMn6C4H76PxOpI
+         Tb+o/c/TYtDJYPyfJE+K4jkP72YTPt28V5ipJSdnOI/iSDZI4oT4ENpdNOUkfpx8DarH
+         YkiPc2l4g/2iXH2u7O/wZyJ0SfrGr7PDkS6CL0VgM/O74V3NG8CSPZqdfc7QgsR0f639
+         vQTihqM4qujlCo0NR3ubWH0Jl2hh5WhNmm3wUj8OglcB0xe51c+ubeRXs7rJCEGTZ+GT
+         K8vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g7EzPTbKYLqO23m3ywH5y06sJN6hD3WoKEJqYdmdBo8=;
+        b=n3ecxT8W/h+VkiXrwjo1llxRZCSJmQFFGNyPVQtZ42w41TaZvtFus3LkiXO621926l
+         4p1WRnjPGtR4OLY0s1y9oNVoomYQWoG0qdNaMHIdCt+oyTTqomzOZ+hd8qJaV+Z2VOQw
+         8SwbFIBeI/sTue4m66lg8Noe9LH3ZO0q6489ZmzToi7z/sTYVUCiTkxydZ8XuUqsFnYS
+         Y/vHtlppFLYku1nBH6JKizsBv90AA4GHJirPn8mr2/9jj88YjTv1vSKWUFw/WQkps7Tb
+         QZt1GNtc5XEYlpXtUhF2ifNVL2dn/yZ0YhVy/Sx6tMwNRPbiaGdjD5hwYDFc0Nsb8IG2
+         Z3tQ==
+X-Gm-Message-State: AOAM532rPMNxH+e7Qrhqv2RheBN1ZbIPEVip5rk0gVMSVrBw+Z1LoCbx
+        XPWCzv4f7ufmcgu18OA7vZYHMQ==
+X-Google-Smtp-Source: ABdhPJxh60e2JCqYRzDosRtR/WPg4G8rMpZ4yODgVrKuRP5vrYsN/D9bp4drrWD5DdfQRADr/oEbjw==
+X-Received: by 2002:a17:902:7109:b0:151:8311:d3b5 with SMTP id a9-20020a170902710900b001518311d3b5mr10511752pll.13.1646259954286;
+        Wed, 02 Mar 2022 14:25:54 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056a000b8100b004f111c21535sm181713pfj.80.2022.03.02.14.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:25:53 -0800 (PST)
+Date:   Wed, 2 Mar 2022 22:25:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
+ asynchronous worker
+Message-ID: <Yh/u7l+q2xZRx/KR@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-23-seanjc@google.com>
+ <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+ <Yh+xA31FrfGoxXLB@google.com>
+ <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
+ <Yh/GoUPxMRyFqFc5@google.com>
+ <442859af-6454-b15e-b2ad-0fc7c4e22909@redhat.com>
+ <Yh/X3m1rjYaY2s0z@google.com>
+ <94b5c78d-3878-1a6c-ab53-37daf3d6eb9c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94b5c78d-3878-1a6c-ab53-37daf3d6eb9c@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> On 3/2/22 21:47, Sean Christopherson wrote:
+> > On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> > > For now let's do it the simple but ugly way.  Keeping
+> > > next_invalidated_root() does not make things worse than the status quo, and
+> > > further work will be easier to review if it's kept separate from this
+> > > already-complex work.
+> > 
+> > Oof, that's not gonna work.  My approach here in v3 doesn't work either.  I finally
+> > remembered why I had the dedicated tdp_mmu_defunct_root flag and thus the smp_mb_*()
+> > dance.
+> > 
+> > kvm_tdp_mmu_zap_invalidated_roots() assumes that it was gifted a reference to
+> > _all_ invalid roots by kvm_tdp_mmu_invalidate_all_roots().  This works in the
+> > current code base only because kvm->slots_lock is held for the entire duration,
+> > i.e. roots can't become invalid between the end of kvm_tdp_mmu_invalidate_all_roots()
+> > and the end of kvm_tdp_mmu_zap_invalidated_roots().
+> 
+> Yeah, of course that doesn't work if kvm_tdp_mmu_zap_invalidated_roots()
+> calls kvm_tdp_mmu_put_root() and the worker also does the same
+> kvm_tdp_mmu_put_root().
+> 
+> But, it seems so me that we were so close to something that works and is
+> elegant with the worker idea.  It does avoid the possibility of two "puts",
+> because the work item is created on the valid->invalid transition.  What do
+> you think of having a separate workqueue for each struct kvm, so that
+> kvm_tdp_mmu_zap_invalidated_roots() can be replaced with a flush?
 
-> Am 02.03.2022 um 15:34 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->=20
-> Hi,
->=20
->> (cross-checked: RGB mode still works if I force hdmi->sink_is_hdmi =3D =
-false)
->=20
-> I don't understand what's wrong, can you try to make the logic select =
-MEDIA_BUS_FMT_YUV8_1X24 instead of DRM_COLOR_FORMAT_YCBCR422 ?
+I definitely like the idea, but I'm getting another feeling of deja vu.  Ah, I
+think the mess I created was zapping via async worker without a dedicated workqueue,
+and so the flush became very annoying/painful.
 
-I have forced hdmi->sink_is_hdmi =3D false and replaced
+I have the "dedicated list" idea coded up.  If testing looks good, I'll post it as
+a v3.5 (without your xchg() magic or other kvm_tdp_mmu_put_root() changes).  That
+way we have a less-awful backup (and/or an intermediate step) if the workqueue
+idea is delayed or doesn't work.  Assuming it works, it's much prettier than having
+a defunct flag.
 
- 	/* Default 8bit RGB fallback */
--	output_fmts[i++] =3D MEDIA_BUS_FMT_RGB888_1X24;
-+	output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+> I can probably do it next Friday.
 
-And then screen remains black. MEDIA_BUS_FMT_RGB888_1X24 works.
-(MEDIA_BUS_FMT_VUY8_1X24 doesn't work either).
+Early-ish warning, I'll be offline March 11th - March 23rd inclusive.  
 
-So this indicates that YUV conversion is not working properly. Maybe =
-missing some special
-setup.
-
-What I have to test if it works on a different monitor. Not that this =
-specific panel
-(a 7 inch waveshare touch with HDMIinput) is buggy and reports YUV =
-capabilities
-but does not handle them...
-
-On the other hand this panel works on RasPi and OMAP5 (where I admit I =
-do not know in
-which mode).
-
-> If your CSC is broken, we'll need to disable it on your platform.
-
-Indeed.
-
-So it seems as if we need a mechanism to overwrite =
-dw_hdmi_bridge_atomic_get_output_bus_fmts()
-in our ingenic-dw-hdmi platform specialization [1] to always return =
-MEDIA_BUS_FMT_RGB888_1X24.
-
-Or alternatively set sink_is_hdmi =3D false there (unfortunately there =
-is no direct access to
-struct dw_hdmi in a specialization drivers).
-
-Is this already possible or how can it be done?
-
-BR and thanks,
-Nikolaus
-
-[1]: =
-https://lore.kernel.org/all/24a27226a22adf5f5573f013e5d7d89b0ec73664.16458=
-95582.git.hns@goldelico.com/=
+FWIW, other than saving me from another painful rebase, there's no urgent need to
+get this series into 5.18.

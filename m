@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1494CAAAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A74CAAB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbiCBQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S242189AbiCBQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiCBQmn (ORCPT
+        with ESMTP id S239131AbiCBQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:42:43 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB85CF3BC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:41:59 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222EqN0j005345;
-        Wed, 2 Mar 2022 16:41:38 GMT
+        Wed, 2 Mar 2022 11:43:40 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770DB49C93
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:42:57 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222Eq6mO010129;
+        Wed, 2 Mar 2022 16:41:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=NLQhFdDbco3Q7cD64mKoFgRLbwwsjMsi9EPxf+xOeIU=;
- b=I3SFkg9PLeyuuNe0xp5w7RO5vlTDIbeoeYTrn+gPlNCByBEOBEktUrbAbV/WKSjShAum
- 1Uc62fXb8x8H0EJeSaHi7Jjj0nfYqkhTl0nzJLajIygaWkGB5Sq0g09TxG9A/5kq3res
- li/VJSBpPlsQYrPcMFFT7mLnotEOeUhXQ0u/pz0CyPRQYX1qxLVlv5Sx1S8CbbIRVmmf
- nNGDRiEz7jbnpw34Pon7MQ2tq1wcQyDxSy9ULb0vTnc+XIbpBMUvu4nRMB/BB8erf1rl
- Uy/j+6BSpLub7XzZjirfVNoTKgksyxOdr3EtcWdwIpTZWFmzCHR+56rh5KQJcIbw68KC Aw== 
+ bh=lg9XKOy6opyS7UrsVBPxdV8zBBRDaWAGpVrxi52azCg=;
+ b=00BS+lc8ZMiwhpP2fb0nb3d23jpNDzyk7ONwLFmIITJ1y5fv3V9oqYIIej9nogJnM0AC
+ FwWfPaGgUxqgrBCKGIWPbmutZwSa4xzPqqrMlQLQY0V7+J8RdxKjaGrsCdHLt3HuzYDD
+ AOxkka/U9/P3YbWKW3O25fpNTsFjmJsvCjcIwaELlOrMMz5rSdilfSE3KikNi2aUKZQ7
+ OKpFL5SfWe1Mg5ZI1dC6RMSwT6BRLxxhCbyDutP9bWeiP1Pboz7r3liocWaUgcjylba3
+ 9oZW13HIznpD4k2dNv5GAchaMXyr0CXpyqnBxVeT91h9fMf2ys0RPRaSzoPAlOdgx4Fu 7g== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14bxe2c-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ehbk9cwys-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 02 Mar 2022 16:41:38 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 222GM3eO163335;
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 222GM3eP163335;
         Wed, 2 Mar 2022 16:41:37 GMT
 Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2040.outbound.protection.outlook.com [104.47.56.40])
-        by userp3030.oracle.com with ESMTP id 3ef9b18d4v-2
+        by userp3030.oracle.com with ESMTP id 3ef9b18d4v-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 02 Mar 2022 16:41:37 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D//FRXBpoeZGoDH7GlMR2v+ZnbKbfRnVvleWRNeGTUdg/RKmpqSrhrDlCvQaNKyZKzUNzwL0ZnrARIBRumkSWIoBTXP7nJ6/htvKRsv4ke3I5jN8uHVtUts8njQJ4UbbitOwiP097oSaDHDwEu8vHHnQtPYl1lFvUochaQk2HcuNxv5P2G94HqjeYs88GrdKtIaHPfu3cZTaAHU6K3Ljv7eVfWooui/AQayCA4Y1SbFUMKn+HT2zaC4ldotszHa+OWyFQt1bSZwJuz1Tt4RsfhsI6kvGEh3/wzEjbEnKgdLVSbC9HZ5k05TXHhbhXolo/pkPokoUSTtq7ny3u/ZLaA==
+ b=MItzig8dWH9dnsScU1iZAdeug144LM7aW/IP4SUsLyF+MVzbqjWtvMc7HVWgtYxRjLG5r+Qg1x+wXVEwoE1ncIx8fmSMpJj9EOFX764PZCZ1/1pskytPRV4lxjlx/cEtlDM9fQx3mhGfFiIZBylVIlNMMOcpQ2GH0v5GJvANq+V4EQ9v9qdJ5hdUbG5g/Rc1bhfcC2aaTq/houPecpCOjV4yw3X3ZCdDeZWZlu1bIWfm90rftzW47ijhDjt+DnP5e6rSm2CXIQNza200oFDBqUiaMOwxT1iVIsO3giPV7od8iwtu+i7R6OoMTcRK/G4E90rhuelEfr5jPExsvmX5ww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NLQhFdDbco3Q7cD64mKoFgRLbwwsjMsi9EPxf+xOeIU=;
- b=ZLejBnI3k8TcrSOOqG6QrkWmlpFQU6qtCRsDk0Jz11fwgXC0nuYWYow4ryvVhi4zKtORShkKO3OWTvt4+l8z+ZWIB++GMOcihhLfQyWp98j30DvgFM/+JbkURcc+8d1t2sijH2XbHLcwK4uX61KrVGwoiKi5PaWlNGIKEFm/MqM9Js288lM+K/bcYY+HmTX2DOBkZm+TXFXalIdfO23BEEDQmxwSfXNypyqfQc1ocPSXOHQCsA7TASfHlcEPxMj7Lm+PDJBv2/r7xPnsYqtQfrcXi6cNXXg8Du1Fu8g3obtKCEfHM0q6gviEo5YsFtUjK9DsWxYuKiv2coLk7i/dEQ==
+ bh=lg9XKOy6opyS7UrsVBPxdV8zBBRDaWAGpVrxi52azCg=;
+ b=lqjd5CcCsoFb6NgayGM2l5P4+N8CjHdVjA2b54akAC3PfXYo94jIByx2VTLqmk/wK33Ian03Gws4tOEFqTraQlOvnbpUTXebaJg6E/os6z+nQuzKecOkHgzF0a6vuWDLli+gteYJNvlhKjp5CqNfWXUubA8ndzHw+r15FaYBXR1gOr/3BwmFZUaMTj5SuewQtkHW8F4VbfqF8PCiQXSqpajbF3FYRCI8A5KxviTUDVNZNbnl4NxCWwoCOFajK1FmO1k4xhHd6p3M4w3/oLvedZ/Emj4ul3Up7rMqlrFozi60Y5h06h7D8ZPjqJYJlt+ajtGPF4FsvnonfhXwjwZiZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NLQhFdDbco3Q7cD64mKoFgRLbwwsjMsi9EPxf+xOeIU=;
- b=B4ahnZvHX78AknjNaklHE9TJT0Rpfr90yKbe/0vkDcedGZu3n8LrRc1KpcnyI+TyX2JFZFl5iYLclg2Bu9EOHMgXEB5UbNYSUn3ex/7dhL8sv+7t0lFNLgl20Y/gliNXNx6S1hIxm6D1deaTNwJxhvLDEH3Fw+9HbtoVlD5pO/8=
+ bh=lg9XKOy6opyS7UrsVBPxdV8zBBRDaWAGpVrxi52azCg=;
+ b=Phq7eGknBjDCXWbVofHPUZ/QGKXTZNhyct0qFmqI2mbMWkGSNieOB9b9CPP8t+KIIRvyQqYXzv4HcbYeOYWoJMQjvD/faRU4i6S2rfmlfa61j0K1acpwVTEQ7VIUSeA++3v+BYzbcyIvmHZ0yIG2SvKgyMKMvBIag0rD2BrHTVg=
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
  by MWHPR1001MB2144.namprd10.prod.outlook.com (2603:10b6:301:2b::32) with
  Microsoft SMTP Server (version=TLS1_2,
@@ -61,16 +61,16 @@ Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
- 16:41:33 +0000
+ 16:41:34 +0000
 From:   Dongli Zhang <dongli.zhang@oracle.com>
 To:     xen-devel@lists.xenproject.org, x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
         jgross@suse.com, sstabellini@kernel.org, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         joe.jin@oracle.com
-Subject: [PATCH v4 1/2] x86/xen/time: fix indentation issue
-Date:   Wed,  2 Mar 2022 08:40:31 -0800
-Message-Id: <20220302164032.14569-2-dongli.zhang@oracle.com>
+Subject: [PATCH v4 2/2] xen: delay xen_hvm_init_time_ops() if kdump is boot on vcpu>=32
+Date:   Wed,  2 Mar 2022 08:40:32 -0800
+Message-Id: <20220302164032.14569-3-dongli.zhang@oracle.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220302164032.14569-1-dongli.zhang@oracle.com>
 References: <20220302164032.14569-1-dongli.zhang@oracle.com>
@@ -80,61 +80,61 @@ X-ClientProxiedBy: BYAPR21CA0019.namprd21.prod.outlook.com
  (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1b9d917c-880d-4ecc-8cf0-08d9fc6b82a0
+X-MS-Office365-Filtering-Correlation-Id: e6c7a851-a288-4101-9d60-08d9fc6b82d2
 X-MS-TrafficTypeDiagnostic: MWHPR1001MB2144:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB2144B071033710CA6D6BF8B2F0039@MWHPR1001MB2144.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB2144933E92981062FCEDE954F0039@MWHPR1001MB2144.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BOAOOwEnXtxf/3GBye9xL1e1O08uocpcqxFhwv0M4vQjWVskdHzqqhcVJkAJ4g4G5eech8HlXL0wiKvtZVeCg/c7dA5LtR5kkWXiMKyu04VgbP7/U+HDZADt7ow4bwdggzF6v6MGhZSwEpsunz/qmAd4rPEtk5C2DL9r/EwWDfgVhWyWAuQ92BLVImIDCwDDHPgEDYkLLxeNuD4ME48jNQpwKSXRDlLLsXai3v4ewWqTYW3INB3wKoQBdyoqdmxJ1wdyEhBu3hnPayYWoifvUGK5vwSTP+gAsw+4itD8XpC7jzP2MG9I/tBO1OoJuObIQGEhvcKkNXRI4AndSmJjm2zqDh3oMYIP7i6g5LcsZjlTfXlk6VOX7WR4i0UQmGVcGT//zOr6AlH1xwLC7wCrJ5FwurGUYgkC61UYnD/XoMTOf6UTMhx18+IKJn4FLIr5N3KY2RmRbWlvJktEm404gni7eYW6fc3xdgVePUAng7+YPMHz0Zzkl4S6RbYsnYlqU61RgzwX0k1v39u9udJgLHO1qk6Z9eeKrlVH0pSjBRrkbGT//ojwkTo6DNuTt+HnAtTAyuznavDKOCccAs0rpIE4M3Zjv8nzqQ6BmvN2KvoDVT/RsAcTsUslGCMkg/ZFRZ4utrBHPgGUeDyaieeWJ+bt80u4THW2QSByZKi6J9oVtBGDjo2RZ/ItgImz9ECwb6pvRSCm7LLtrGCEY/g08A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(66556008)(36756003)(4744005)(2906002)(44832011)(5660300002)(38100700002)(107886003)(6486002)(38350700002)(86362001)(508600001)(8936002)(1076003)(186003)(316002)(26005)(6512007)(6506007)(66946007)(8676002)(52116002)(66476007)(4326008)(2616005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: cXzcLtN367nYb75mjgBNknNLsWj9dDgUUPKuW34dBXyRfAXX4F0sAMGb9LZU+sI75WUkgUuc5abpViiqN4kL2HCHSNXS/4WFlUSZZhhPqtIH50QaO3YSPPnm5iKyJstlMJ5P8KQDdf+2/y8tZsIULi4wo8S0TP76zIerCVtXI6OOAMuXQt9sZ/sGq3R75SdhOQhgRJVmRdDSYSR1El4GT+hiasArpdgXZ+K6O7J/d2s4sLL1yF2A8EtYuDeV+RkS5PWZexV+Qz20Pd4yOO0KE7bk8cIzNpHXSA9AhM7ySBtt4BE1p/qYeE5kATOVrdlRA+IbKJpA9s8MgCVed1DpLscD/0Xl6u8cXSjBVu5pOfJFi6or6T9da1kLIEVBNlir1s7Nf09dj7o5ZywuYJUsC9C3KZmU/OPWqRqd4EDbftQ7YkQooP7VPU2VXB4xo3KIeMpVKVN1mW709oGLNgXhPyzeSidh2Qx7wwmr7XaB9AQRqjSdwWkEWD37QXkktohwwo+swpFAlLFHKtKMRngUqgTvDRaYBpn1VLEWZ61U1wje6Knj0QVBOGqFxTjJB6F5yFN7hjxpkBpNYejOuJwB9F6NGBMAos9Sl38Ialvm2txIljFo+T/mSSsiyzG9+pAN3moiXrQKisfoMAoxDD4DjMpFTMJhraCr47OzLAOQFmUMfqpLNeLbrZqynIGTBoa79HReMoVkXoYrm6HPx9Fg7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(66556008)(36756003)(2906002)(44832011)(5660300002)(38100700002)(107886003)(6486002)(38350700002)(86362001)(508600001)(8936002)(1076003)(186003)(316002)(26005)(6512007)(6506007)(66946007)(8676002)(52116002)(66476007)(4326008)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vKJCryAhZW3FKQFev2LQFqrIPC+QtMGFsOWVlSPJUXBAP7O+m95iX76HZ4aE?=
- =?us-ascii?Q?c4OlSNA6mim5h0L44N+CCSHX4SvY+urV7xmsaQOhkZVy9zijuhESdgMfRsXl?=
- =?us-ascii?Q?Mdxf6idSZTG6NO+ujf7Ca8GcSMbHUI74QnxPyLXPfWHFTpTNEoV8e43DKV70?=
- =?us-ascii?Q?xPm8APAH9Qm51No8zBtP/VBibNnr2Ec1TMHWzCmEtawUqrIvFWmuV84EVVjk?=
- =?us-ascii?Q?PIj7F50M1r+LuKx9ydUoG3AuKFqgqzYRQz3BdFFRnHgCZF683DrzwPEdZ1pq?=
- =?us-ascii?Q?ZgZjfgeQHpDlRr+3LfTb2JZNUZ2IITSlCCo2tVYyI3pSuapnD4jyFvo20Q2S?=
- =?us-ascii?Q?oSq2iscBKnDV8o4Poe7XQUzOEgYaPQr1yAuj71jee8sFBmSYaxPVEKrFaMn+?=
- =?us-ascii?Q?qJYyCLBFZ8WmnjmnCWuQ2jfcXF0NNjn+51AjiV19ghBcwz9mIXaoStAIMi3C?=
- =?us-ascii?Q?+YhvuqlurEzExMoatda1qG8Df5GtvbYvgaoTQnx4v13snuh7wZNmuH5qcwPh?=
- =?us-ascii?Q?43+SjjAbB+fnnjQDTB8FLiHcobx9tgrILQN6SfMwocm0SSxv7nvNSaA1ogf8?=
- =?us-ascii?Q?IBgTwqakggICggsSWkUK/4fs1KatSRPIXS2rkcTMDUlFbWlZ8Q46ZG9eF3kl?=
- =?us-ascii?Q?69ecuxOSxb+DXGNzQUPtQBj1TqcU9mO92i8DRrReiKlMwu8tXlDpxIYMdJhQ?=
- =?us-ascii?Q?qYsg51TTeYJoexLeHJIPJTlB4WE19Sl1wzwAqenIAFBMP7pag/ySSMge18z3?=
- =?us-ascii?Q?BnUlUoXT4Vi98l11GTw1rKNKONMykpixMssadvUUIJLzh0jLq0Jqs+mw9Wry?=
- =?us-ascii?Q?rtEMQPI+DIcuKd++JCAjZF6xohjlNqO0STJT17VneGiNyLvdeeptvXrTfqC7?=
- =?us-ascii?Q?a6pkY2ftwin7sfemDhNbAsNKfB6254kPv2CHLfKLCb7X+9NOgTewwxwKVGiQ?=
- =?us-ascii?Q?2RAwtESY9OgeXS1K4UWx5OI6C2agYY+gFzq81DxEz2bCm7OaLY4WD46oi0su?=
- =?us-ascii?Q?k2Q9DE22EzZ/kotTa9hm/igtPQtvcGrbDhShOkoZzd1PzMqrhmywikhiDUeQ?=
- =?us-ascii?Q?FCBnl6N/OL96VKTR7snImx7iooMMk0qEqLar7sN24FPKlPNz05wxWvFvdRS/?=
- =?us-ascii?Q?OeXVTdoqmBjmNlCTWUp26MH1iwrHk5PuW9aNR3vOKz/H7WxbH4L6QPQeSe+v?=
- =?us-ascii?Q?ZcxUYTPV81dcX/0msyIhKxN+H8y3y/N45ymYCNgoXMLPLtttA72baGOI95gw?=
- =?us-ascii?Q?Iv3jw/+Cl5Gb9Wbx9ziDhWmwPPlSq4rH6R2rzvbftdBC2dwOTKcHpoHdQOLv?=
- =?us-ascii?Q?vHJzrqumlA8vRdFmFsCJHx1HQuiQiHBGn8ztMOObWsK2N3rTVIsRctKeOFTu?=
- =?us-ascii?Q?t1aSuQOLdoGlgMbmIqToFiw9gOKvrCLunEAOieBeF6tFEBow0tdr9GApUL12?=
- =?us-ascii?Q?G4bFHRXbjNBNvgQgkvZwaE2z1qgzGQwWzukj8Tx5HS99EXjc32ePlVU3efIP?=
- =?us-ascii?Q?Ya8zC6IIOYcWb5BZEWAJKT2lL+ORhL3VvRa2NXSyo3YC7c1aoBXwVxr4uYNH?=
- =?us-ascii?Q?eqmkey9vuSy2sJcnI+NqgvHGiLuf/Qg4MqMwonWc94Rr02mZ9Q3vztxTetd/?=
- =?us-ascii?Q?b/bOoxExoMTaACZRBblJ76M=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dOP///kj3fAaOgnhY7LTb31y6qH/A3m0+YO1aKOod7OIRuieNNMitZODQ1yt?=
+ =?us-ascii?Q?YO3IIzFOb610lRl3MBrE0UOBPCldK70iQVIDa5Bv46yQLnHflde/6n/3zwsR?=
+ =?us-ascii?Q?DKD3xO40OsUfFPh+AWWakQHqS31RB/pmn/cFAfGHQFPhglofbq+GUzqIHpXc?=
+ =?us-ascii?Q?pFmRbWSN+0ngplFtuTqnEAymp3X0Sp2IhC+xksSJ4xHLRMTOiJDsdIUKlNWg?=
+ =?us-ascii?Q?yY/qopm4Dafr8ODhvCl8iQKk/Cgh6QvQz2StFSRTps4vzwoRtQNg4RSKetQM?=
+ =?us-ascii?Q?7U2bRK3RnTlOHmBQG9OxdHgZVBPA6If9HjDotySzIy/JZkugchpwDr261hqI?=
+ =?us-ascii?Q?KYz7OnWQ2L63Qo3ybV0hL5MKqXv/0ZbwT7un8hdKRdkyMEoDiMgUwbZdzsw6?=
+ =?us-ascii?Q?5IRrhrUqYYKq5FvGrFFC9tpcVy5xiKX8ROTxE5WTG56uUQjEsjtzl4oZhynx?=
+ =?us-ascii?Q?LYcg0G57VAzxF8WNzA0tOvg7i49pzOWI6ox7X21JiIyieJnoOtZGI5Vkiv/R?=
+ =?us-ascii?Q?Exrju77OGuXPLRlqaGD7qlAmNdVHk9OmhDHur2FuXYnM8uIE1iawhsCSHAXO?=
+ =?us-ascii?Q?+e2V/88i1VrFm5A0z747bqRTIkHqCBJis8mbLdhg+UejCSmcR8hW3o0b+6qz?=
+ =?us-ascii?Q?8TOyI9caH/qLZA3yZneykNz9vo82v89ts7XOFMy5yk2jVcB6lXFQL0+NUCNW?=
+ =?us-ascii?Q?4zUIbXAKcsgDIl5cE/hMVm0EHNL90pypnigBJ+klUBI/ZreoCJkM6w1lWxc3?=
+ =?us-ascii?Q?UvTYTWiIPzgkLyVqp0T3teVzzTiKFMr5xnS6RPX4JBRzBM0+v/oHxrU4KG68?=
+ =?us-ascii?Q?fg3zzW9PWkMOn4te9uEIuIKhwAfVqT2UyjYpj3Pt0y9BoqfWkIH5thmoNURl?=
+ =?us-ascii?Q?dC6e46xLYMQ2jkYnsicYSBBWdw5J59zmyYyDjI1HynLCDrxb155Nm54qInr2?=
+ =?us-ascii?Q?qYSkisxfHLueFRFswiOH1e902e/cIO7cup1YmzmQNJ/CC1yO+QuJDnKV+4/r?=
+ =?us-ascii?Q?pbyjBAUtlOV15kfFKE35OPCJHc8km2GGQTlnxftoXXTPa/3iwVsq6aJSVnC4?=
+ =?us-ascii?Q?QVg32erY6n6dR11RTp6yGoP2hkLe0hT7EZQHQ+qiI0Fj46VJOc+81J5HUD4x?=
+ =?us-ascii?Q?UTRIi/Z2+lClX/xaWy+xkZk5otKRmi4S29+JZNXMLCrt2SL66TzbtwcHl3qS?=
+ =?us-ascii?Q?kyDxoS5+RlSnpYmz4JmBQveJDas4QvtFIO3rQY9UDKlpSskNm24PtTRSn1Un?=
+ =?us-ascii?Q?aTXV7MB48g0yRCw2aNctyn+zVEuz+PrMH/sjTTY7FKbb8XuZD7Rd8Qc8mOoC?=
+ =?us-ascii?Q?oOswq4T3o675mv+iU34C1RBvlpbTuNYD0vtW1ONpdvYZQ/KP96qLrnCaKWp6?=
+ =?us-ascii?Q?TqWNK6Js9PfvyoEyqYMIUrqeJW9ta3Ukg3i/UHCBjLPT7KULX/7b7sHNUmg4?=
+ =?us-ascii?Q?/RYVV1rg44rqpk9pctMvJqBbGPgiqKFdAv3/GNTnPf1kAflxq3wZjDz7juLL?=
+ =?us-ascii?Q?GZ3EAbUGzg29ya/IeZfmOzIdONq+2VewlDaQKinHgKKrecVIzOP/3C1CaqUe?=
+ =?us-ascii?Q?X06WRAy0MdPrOgWFla2wuR/l72yQE2zvjktcCdZWYSAxWrkyVf/CZI0E0jQi?=
+ =?us-ascii?Q?Quxs3Zl5CmZZaQRkXe9gZ80=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b9d917c-880d-4ecc-8cf0-08d9fc6b82a0
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6c7a851-a288-4101-9d60-08d9fc6b82d2
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 16:41:33.3989
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 16:41:33.7114
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a7tealzHKi2/Y4MUQ6jZSpoZBmB2kqqrTwCwXcX8MgfQpHBReBLJlAyfYrSQnPkRWlifeiHXD2sb2wnxJegnpQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: +1TgDRK4ve3mXHKXq/401zlsOIroDpALX/dfar9kXhL/HxH9/6/IK3CgJgUpVd9areO02m/3TYxAvtB4nlsExg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2144
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
  mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
  definitions=main-2203020073
-X-Proofpoint-GUID: xPsxU6gPkrmz3Wlg0gwV9WTg5hs2wqHP
-X-Proofpoint-ORIG-GUID: xPsxU6gPkrmz3Wlg0gwV9WTg5hs2wqHP
+X-Proofpoint-GUID: qkEPK_YnsbroMSihPPrq00FLhgwsaZjL
+X-Proofpoint-ORIG-GUID: qkEPK_YnsbroMSihPPrq00FLhgwsaZjL
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -145,26 +145,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change.
+The sched_clock() can be used very early since commit 857baa87b642
+("sched/clock: Enable sched clock early"). In addition, with commit
+38669ba205d1 ("x86/xen/time: Output xen sched_clock time from 0"), kdump
+kernel in Xen HVM guest may panic at very early stage when accessing
+&__this_cpu_read(xen_vcpu)->time as in below:
 
+setup_arch()
+ -> init_hypervisor_platform()
+     -> x86_init.hyper.init_platform = xen_hvm_guest_init()
+         -> xen_hvm_init_time_ops()
+             -> xen_clocksource_read()
+                 -> src = &__this_cpu_read(xen_vcpu)->time;
+
+This is because Xen HVM supports at most MAX_VIRT_CPUS=32 'vcpu_info'
+embedded inside 'shared_info' during early stage until xen_vcpu_setup() is
+used to allocate/relocate 'vcpu_info' for boot cpu at arbitrary address.
+
+However, when Xen HVM guest panic on vcpu >= 32, since
+xen_vcpu_info_reset(0) would set per_cpu(xen_vcpu, cpu) = NULL when
+vcpu >= 32, xen_clocksource_read() on vcpu >= 32 would panic.
+
+This patch calls xen_hvm_init_time_ops() again later in
+xen_hvm_smp_prepare_boot_cpu() after the 'vcpu_info' for boot vcpu is
+registered when the boot vcpu is >= 32.
+
+This issue can be reproduced on purpose via below command at the guest
+side when kdump/kexec is enabled:
+
+"taskset -c 33 echo c > /proc/sysrq-trigger"
+
+The bugfix for PVM is not implemented due to the lack of testing
+environment.
+
+Cc: Joe Jin <joe.jin@oracle.com>
 Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
 ---
- arch/x86/xen/time.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changed since v1:
+  - Add commit message to explain why xen_hvm_init_time_ops() is delayed
+    for any vcpus. (Suggested by Boris Ostrovsky)
+  - Add a comment in xen_hvm_smp_prepare_boot_cpu() referencing the related
+    code in xen_hvm_guest_init(). (suggested by Juergen Gross)
+Changed since v2:
+  - Delay for all VCPUs. (Suggested by Boris Ostrovsky)
+  - Add commit message that why PVM is not supported by this patch
+  - Test if kexec/kdump works with mainline xen (HVM and PVM)
+Changed since v3:
+  - Re-use v2 but move the login into xen_hvm_init_time_ops() (Suggested
+    by Boris Ostrovsky)
 
+ arch/x86/xen/smp_hvm.c |  6 ++++++
+ arch/x86/xen/time.c    | 25 ++++++++++++++++++++++++-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/xen/smp_hvm.c b/arch/x86/xen/smp_hvm.c
+index 6ff3c887e0b9..b70afdff419c 100644
+--- a/arch/x86/xen/smp_hvm.c
++++ b/arch/x86/xen/smp_hvm.c
+@@ -19,6 +19,12 @@ static void __init xen_hvm_smp_prepare_boot_cpu(void)
+ 	 */
+ 	xen_vcpu_setup(0);
+ 
++	/*
++	 * Called again in case the kernel boots on vcpu >= MAX_VIRT_CPUS.
++	 * Refer to comments in xen_hvm_init_time_ops().
++	 */
++	xen_hvm_init_time_ops();
++
+ 	/*
+ 	 * The alternative logic (which patches the unlock/lock) runs before
+ 	 * the smp bootup up code is activated. Hence we need to set this up
 diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
-index d9c945ee1100..55b3407358a9 100644
+index 55b3407358a9..dcf292cc859e 100644
 --- a/arch/x86/xen/time.c
 +++ b/arch/x86/xen/time.c
-@@ -45,7 +45,7 @@ static unsigned long xen_tsc_khz(void)
+@@ -558,16 +558,36 @@ static void xen_hvm_setup_cpu_clockevents(void)
  
- static u64 xen_clocksource_read(void)
+ void __init xen_hvm_init_time_ops(void)
  {
--        struct pvclock_vcpu_time_info *src;
-+	struct pvclock_vcpu_time_info *src;
- 	u64 ret;
++	static bool hvm_time_initialized;
++
++	if (hvm_time_initialized)
++		return;
++
+ 	/*
+ 	 * vector callback is needed otherwise we cannot receive interrupts
+ 	 * on cpu > 0 and at this point we don't know how many cpus are
+ 	 * available.
+ 	 */
+ 	if (!xen_have_vector_callback)
+-		return;
++		goto exit;
  
- 	preempt_disable_notrace();
+ 	if (!xen_feature(XENFEAT_hvm_safe_pvclock)) {
+ 		pr_info("Xen doesn't support pvclock on HVM, disable pv timer");
++		goto exit;
++	}
++
++	/*
++	 * Only MAX_VIRT_CPUS 'vcpu_info' are embedded inside 'shared_info'.
++	 * The __this_cpu_read(xen_vcpu) is still NULL when Xen HVM guest
++	 * boots on vcpu >= MAX_VIRT_CPUS (e.g., kexec), To access
++	 * __this_cpu_read(xen_vcpu) via xen_clocksource_read() will panic.
++	 *
++	 * The xen_hvm_init_time_ops() should be called again later after
++	 * __this_cpu_read(xen_vcpu) is available.
++	 */
++	if (!__this_cpu_read(xen_vcpu)) {
++		pr_info("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
++			xen_vcpu_nr(0));
+ 		return;
+ 	}
+ 
+@@ -577,6 +597,9 @@ void __init xen_hvm_init_time_ops(void)
+ 	x86_cpuinit.setup_percpu_clockev = xen_hvm_setup_cpu_clockevents;
+ 
+ 	x86_platform.set_wallclock = xen_set_wallclock;
++
++exit:
++	hvm_time_initialized = true;
+ }
+ #endif
+ 
 -- 
 2.17.1
 

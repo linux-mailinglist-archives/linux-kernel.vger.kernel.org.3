@@ -2,173 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072B14CA91B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFC54CA926
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243498AbiCBPea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S242088AbiCBPhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243487AbiCBPe2 (ORCPT
+        with ESMTP id S238025AbiCBPhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:34:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FFB754BD4;
-        Wed,  2 Mar 2022 07:33:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 559D913D5;
-        Wed,  2 Mar 2022 07:33:44 -0800 (PST)
-Received: from lpieralisi (unknown [10.57.37.208])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B4EC3F73D;
-        Wed,  2 Mar 2022 07:33:43 -0800 (PST)
-Date:   Wed, 2 Mar 2022 15:33:38 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhelgaas@google.com, michals@xilinx.com
-Subject: Re: [PATCH v2 2/2] PCI: xilinx-cpm: Add support for Versal CPM5 Root
- Port
-Message-ID: <Yh+OUvLi56/H4l2z@lpieralisi>
-References: <20220215124606.28627-1-bharat.kumar.gogada@xilinx.com>
- <20220215124606.28627-3-bharat.kumar.gogada@xilinx.com>
+        Wed, 2 Mar 2022 10:37:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7684DC4879
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646235411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HiWuNUMDb+jMyibsjnWGqQsYAJ9IA+FOAlDaEyD0AQE=;
+        b=e1cEDTPxqc0JHEvUHxfuraIli1GbyhjKHnGmwCozmPVtsRD9fyaIwYxvPN5IasRzmVgwvR
+        ksZtAXnwW2dxzahV9G97GZctS+Z6I1Eqk+P70g+8jKIOBojQlQvnaIY5QQasbuhzcF+Vb9
+        +ePcGkOb/qXLteG0LKqkWpnsHhtFctk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-323-Sx75Kl9_Psqx1sm2SRYwLA-1; Wed, 02 Mar 2022 10:36:48 -0500
+X-MC-Unique: Sx75Kl9_Psqx1sm2SRYwLA-1
+Received: by mail-wr1-f69.google.com with SMTP id f14-20020adfc98e000000b001e8593b40b0so763769wrh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 07:36:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HiWuNUMDb+jMyibsjnWGqQsYAJ9IA+FOAlDaEyD0AQE=;
+        b=VYSzMc3bjcO4IjKQJCLJ+GX3Re59PCv/HrHn3twODRyeiCUzXzNtJeBC4o0KU/oomG
+         Re38HXOxES+5N4HvPnNRpiDDYg7o3qMw8Rj1+7x/gSJPjm80rdWSj9S4vFxx1nA36UoR
+         ThYIcboixw1jeZMS2+YdM1/wJpiC6GfH9LMjHShJXd8tuUy2N+nlimPOera99wtnGxB2
+         2j+eaUtw2al/WCFjHdpEfzEjHPGmLQ42X13wz/ZuJHEemMF96TIl6tYC4vmwwk2Oi5K9
+         UzJCA+Bc1dUFziG36De/szfOA33sdnyehkrcjpwd8go7zxPjBqbemdNU9jAmX8qOeDus
+         KmWA==
+X-Gm-Message-State: AOAM533CTNNvB8XuXsbgFloRZr6Ay7bfKgZVqeaM9J3lh81Jl8fwLBWy
+        WdvOzje55f5sD6tumG/4LjZSq2XKREk0QufsaZzTnqyWE84pPi2DQm0Mrc3G5t3d2u64aGNZqn0
+        z4GtMTtcDL/BJ8HVnVvlp/jDD
+X-Received: by 2002:adf:914f:0:b0:1ed:bb92:d0cc with SMTP id j73-20020adf914f000000b001edbb92d0ccmr23760987wrj.297.1646235407395;
+        Wed, 02 Mar 2022 07:36:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyOXNVA6Ca35935P9zNNj3hLgvVWqdH+AVRnYEdYqNaoKk8H9E6ae22MHAewrFcGgr/Nliwkg==
+X-Received: by 2002:adf:914f:0:b0:1ed:bb92:d0cc with SMTP id j73-20020adf914f000000b001edbb92d0ccmr23760976wrj.297.1646235407162;
+        Wed, 02 Mar 2022 07:36:47 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id m12-20020a7bcb8c000000b003811afe1d45sm5852294wmi.37.2022.03.02.07.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 07:36:46 -0800 (PST)
+Date:   Wed, 2 Mar 2022 16:36:43 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220302153643.glkmvnn2czrgpoyl@sgarzare-redhat>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302093446.pjq3djoqi434ehz4@sgarzare-redhat>
+ <20220302083413-mutt-send-email-mst@kernel.org>
+ <20220302141121.sohhkhtiiaydlv47@sgarzare-redhat>
+ <20220302094946-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220215124606.28627-3-bharat.kumar.gogada@xilinx.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220302094946-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 06:16:06PM +0530, Bharat Kumar Gogada wrote:
-> Xilinx Versal Premium series has CPM5 block which supports Root Port
-> functioning at Gen5 speed.
-> 
-> Xilinx Versal CPM5 has few changes with existing CPM block.
-> - CPM5 has dedicated register space for control and status registers.
-> - CPM5 legacy interrupt handling needs additional register bit
->   to enable and handle legacy interrupts.
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->  drivers/pci/controller/pcie-xilinx-cpm.c | 33 +++++++++++++++++++++++-
->  1 file changed, 32 insertions(+), 1 deletion(-)
+On Wed, Mar 02, 2022 at 09:50:38AM -0500, Michael S. Tsirkin wrote:
+>On Wed, Mar 02, 2022 at 03:11:21PM +0100, Stefano Garzarella wrote:
+>> On Wed, Mar 02, 2022 at 08:35:08AM -0500, Michael S. Tsirkin wrote:
+>> > On Wed, Mar 02, 2022 at 10:34:46AM +0100, Stefano Garzarella wrote:
+>> > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+>> > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+>> > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+>> > > > during virtqueue clean-up and we mitigate the reported issues.
+>> > > >
+>> > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+>> > >
+>> > > This issue is similar to [1] that should be already fixed upstream by [2].
+>> > >
+>> > > However I think this patch would have prevented some issues, because
+>> > > vhost_vq_reset() sets vq->private to NULL, preventing the worker from
+>> > > running.
+>> > >
+>> > > Anyway I think that when we enter in vhost_dev_cleanup() the worker should
+>> > > be already stopped, so it shouldn't be necessary to take the mutex. But in
+>> > > order to prevent future issues maybe it's better to take them, so:
+>> > >
+>> > > Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > >
+>> > > [1]
+>> > > https://syzkaller.appspot.com/bug?id=993d8b5e64393ed9e6a70f9ae4de0119c605a822
+>> > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+>> >
+>> >
+>> > Right. I want to queue this but I would like to get a warning
+>> > so we can detect issues like [2] before they cause more issues.
+>>
+>> I agree, what about moving the warning that we already have higher up, right
+>> at the beginning of the function?
+>>
+>> I mean something like this:
+>>
+>> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+>> index 59edb5a1ffe2..1721ff3f18c0 100644
+>> --- a/drivers/vhost/vhost.c
+>> +++ b/drivers/vhost/vhost.c
+>> @@ -692,6 +692,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>>  {
+>>         int i;
+>> +       WARN_ON(!llist_empty(&dev->work_list));
+>> +
+>>         for (i = 0; i < dev->nvqs; ++i) {
+>>                 if (dev->vqs[i]->error_ctx)
+>>                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+>> @@ -712,7 +714,6 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>>         dev->iotlb = NULL;
+>>         vhost_clear_msg(dev);
+>>         wake_up_interruptible_poll(&dev->wait, EPOLLIN | EPOLLRDNORM);
+>> -       WARN_ON(!llist_empty(&dev->work_list));
+>>         if (dev->worker) {
+>>                 kthread_stop(dev->worker);
+>>                 dev->worker = NULL;
+>>
+>
+>Hmm I'm not sure why it matters.
 
-Only a couple of very minor suggestions below.
+Because after this new patch, putting locks in the while loop, when we 
+finish the loop the workers should be stopped, because vhost_vq_reset() 
+sets vq->private to NULL.
 
-> diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-> index c7cd44ed4dfc..eb69f494571a 100644
-> --- a/drivers/pci/controller/pcie-xilinx-cpm.c
-> +++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-> @@ -35,6 +35,10 @@
->  #define XILINX_CPM_PCIE_MISC_IR_ENABLE	0x00000348
->  #define XILINX_CPM_PCIE_MISC_IR_LOCAL	BIT(1)
->  
-> +#define XILINX_CPM_PCIE_IR_STATUS       0x000002A0
-> +#define XILINX_CPM_PCIE_IR_ENABLE       0x000002A8
-> +#define XILINX_CPM_PCIE_IR_LOCAL        BIT(0)
-> +
->  /* Interrupt registers definitions */
->  #define XILINX_CPM_PCIE_INTR_LINK_DOWN		0
->  #define XILINX_CPM_PCIE_INTR_HOT_RESET		3
-> @@ -109,6 +113,7 @@
->   * @intx_irq: legacy interrupt number
->   * @irq: Error interrupt number
->   * @lock: lock protecting shared register access
-> + * @is_cpm5: value to check cpm version
->   */
->  struct xilinx_cpm_pcie {
->  	struct device			*dev;
-> @@ -120,6 +125,7 @@ struct xilinx_cpm_pcie {
->  	int				intx_irq;
->  	int				irq;
->  	raw_spinlock_t			lock;
-> +	bool                            is_cpm5;
->  };
->  
->  static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
-> @@ -285,6 +291,14 @@ static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
->  		generic_handle_domain_irq(port->cpm_domain, i);
->  	pcie_write(port, val, XILINX_CPM_PCIE_REG_IDR);
->  
-> +	if (port->is_cpm5) {
-> +		val = readl_relaxed(port->cpm_base + XILINX_CPM_PCIE_IR_STATUS);
-> +		if (val)
-> +			writel_relaxed(val,
-> +				       port->cpm_base +
-> +				       XILINX_CPM_PCIE_IR_STATUS);
-> +	}
-> +
->  	/*
->  	 * XILINX_CPM_PCIE_MISC_IR_STATUS register is mapped to
->  	 * CPM SLCR block.
-> @@ -484,6 +498,12 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
->  	 */
->  	writel(XILINX_CPM_PCIE_MISC_IR_LOCAL,
->  	       port->cpm_base + XILINX_CPM_PCIE_MISC_IR_ENABLE);
-> +
-> +	if (port->is_cpm5) {
-> +		writel(XILINX_CPM_PCIE_IR_LOCAL,
-> +		       port->cpm_base + XILINX_CPM_PCIE_IR_ENABLE);
-> +	}
-> +
->  	/* Enable the Bridge enable bit */
->  	pcie_write(port, pcie_read(port, XILINX_CPM_PCIE_REG_RPSC) |
->  		   XILINX_CPM_PCIE_REG_RPSC_BEN,
-> @@ -504,6 +524,9 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
->  	struct platform_device *pdev = to_platform_device(dev);
->  	struct resource *res;
->  
-> +	if (of_device_is_compatible(dev->of_node, "xlnx,versal-cpm5-host-1.00"))
-> +		port->is_cpm5 = true;
+But the best thing IMHO is to check that there is no backend set for 
+each vq, so the workers have been stopped correctly at this point.
 
-port->is_cpm5 = of_device_is_compatible(dev->of_node,
-					"xlnx,versal-cpm5-host-1.00");
+Thanks,
+Stefano
 
-?
-
-> +		port->is_cpm5 = true;
-> +
->  	port->cpm_base = devm_platform_ioremap_resource_byname(pdev,
->  							       "cpm_slcr");
->  	if (IS_ERR(port->cpm_base))
-> @@ -518,7 +541,14 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
->  	if (IS_ERR(port->cfg))
->  		return PTR_ERR(port->cfg);
->  
-> -	port->reg_base = port->cfg->win;
-> +	if (!port->is_cpm5) {
-
-Nit: I'd keep the check as above for consistency but it is not really
-important:
-
-if (port->is_cpm5)
-	...
-else
-	...
-
-> +		port->reg_base = port->cfg->win;
-> +	} else {
-> +		port->reg_base = devm_platform_ioremap_resource_byname(pdev,
-> +								       "cpm_csr");
-> +		if (IS_ERR(port->reg_base))
-> +			return PTR_ERR(port->reg_base);
-> +	}
->  
->  	return 0;
->  }
-> @@ -593,6 +623,7 @@ static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
->  
->  static const struct of_device_id xilinx_cpm_pcie_of_match[] = {
->  	{ .compatible = "xlnx,versal-cpm-host-1.00", },
-> +	{ .compatible = "xlnx,versal-cpm5-host-1.00", },
->  	{}
->  };
->  
-> -- 
-> 2.17.1
-> 

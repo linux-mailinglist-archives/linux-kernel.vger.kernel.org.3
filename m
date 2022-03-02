@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E494CA58E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB714CA58D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242080AbiCBNFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S242069AbiCBNFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242035AbiCBNE5 (ORCPT
+        with ESMTP id S242034AbiCBNE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Mar 2022 08:04:57 -0500
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B446BC334B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903FCC249E;
         Wed,  2 Mar 2022 05:04:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
   t=1646226255; x=1677762255;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Ei9xZmq+zF939bmO9VvFSVHK064S9yezB1LXtbk8v3g=;
-  b=iPp9oQWR8fMPAmS7XBS1t3Bgpglx+GZ3PKHSfZQyZJQsFRDcx5G9B1ZM
-   JKSJuXk2LpAIrp969WmM9lrnyXfM4XjULqOLkzV6L1XYGbKKaq9v51anu
-   pkFcoetCgSQEUr6y09Oq7apO/Er6CDUWrZDegha6wcvopWcThSvb9A9MY
-   U=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  bh=HZxY7+ZsrGw8oObNGY8X+cyJQXGArfCk6MTvsHYl7TY=;
+  b=QT27cEtQTXNLa2RuougvwBHc+fOkYkoARx0rKAsmsQm7SfDpHfZXn4ae
+   ms3wJdgEIXndWHpC/cX/IKS+sY8wKaut1MBDPGbfftZdD731j2uO72AJm
+   WksoVduVPQp7GBnqY+bnnfuvtpBlsVV/k+NOChVWkc4DRlOjutkxHRF/N
+   Q=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
   by alexa-out.qualcomm.com with ESMTP; 02 Mar 2022 05:04:14 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:13 -0800
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Mar 2022 05:04:13 -0800
 X-QCInternal: smtphost
 Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:33:56 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 02 Mar 2022 18:33:57 +0530
 Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id 807EC587B; Wed,  2 Mar 2022 18:33:55 +0530 (IST)
+        id C80A8587B; Wed,  2 Mar 2022 18:33:56 +0530 (IST)
 From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 To:     adrian.hunter@intel.com, quic_riteshh@quicinc.com,
         asutoshd@quicinc.com, ulf.hansson@linaro.org, agross@kernel.org,
@@ -46,9 +46,9 @@ Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
         Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
         Liangliang Lu <quic_luliang@quicinc.com>,
         "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH V4 4/7] mmc: debugfs: Add debug fs error state entry for mmc driver
-Date:   Wed,  2 Mar 2022 18:33:44 +0530
-Message-Id: <1646226227-32429-5-git-send-email-quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V4 5/7] mmc: core: Set error state for mmc driver
+Date:   Wed,  2 Mar 2022 18:33:45 +0530
+Message-Id: <1646226227-32429-6-git-send-email-quic_c_sbhanu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
 References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
@@ -62,51 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add debug fs entry error state to query eMMC and SD card errors statistics.
-If any errors occurred in eMMC and SD card driver level then
-err_state value will be set to 1.
+If any errors observed in eMMC and SD card set error state.
+
+User can read error state value and confirm any errors observed or not,
+error state set means error obeserved and vice versa.
 
 Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
 Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
 Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
 Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 ---
- drivers/mmc/core/debugfs.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ include/linux/mmc/host.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-index db0988c..7d78eac 100644
---- a/drivers/mmc/core/debugfs.c
-+++ b/drivers/mmc/core/debugfs.c
-@@ -222,6 +222,19 @@ static int mmc_clock_opt_set(void *data, u64 val)
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+index 3b7f1e5..28baa07 100644
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -518,6 +518,7 @@ struct mmc_host {
+ 	/* Host Software Queue support */
+ 	bool			hsq_enabled;
+ 	u32                     err_stats[MMC_ERR_MAX];
++	bool			err_state;
  
- DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
- 	"%llu\n");
-+static int mmc_err_state_get(void *data, u64 *val)
+ 	unsigned long		private[] ____cacheline_aligned;
+ };
+@@ -653,6 +654,11 @@ static inline enum dma_data_direction mmc_get_dma_dir(struct mmc_data *data)
+ 	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
+ }
+ 
++static inline void mmc_debugfs_err_stats_enable(struct mmc_host *host)
 +{
-+	struct mmc_host *host = data;
-+
-+	if (!host)
-+		return -EINVAL;
-+
-+	*val = host->err_state ? 1 : 0;
-+
-+	return 0;
++	host->err_state = true;
 +}
 +
-+DEFINE_SIMPLE_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
- 
- static int mmc_err_stats_show(struct seq_file *file, void *data)
- {
-@@ -293,6 +306,8 @@ void mmc_add_host_debugfs(struct mmc_host *host)
- 	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
- 				   &mmc_clock_fops);
- 
-+	debugfs_create_file("err_state", 0600, root, host,
-+		&mmc_err_state);
- 	debugfs_create_file("err_stats", 0600, root, host,
- 		&mmc_err_stats_fops);
- 
+ static inline void mmc_debugfs_err_stats_inc(struct mmc_host *host,
+ 		enum mmc_err_stat stat) {
+ 	host->err_stats[stat] += 1;
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
 of Code Aurora Forum, hosted by The Linux Foundation

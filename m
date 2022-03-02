@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A2C4CADB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D054CADB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbiCBSih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S241405AbiCBShP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237926AbiCBSi2 (ORCPT
+        with ESMTP id S242995AbiCBShM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:38:28 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E5233E87
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:37:43 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id pj17so1217637ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:37:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PoZkJu6l4h6aEzKk7gmr65X6dMSH0Mhj2hdZdZe2/k8=;
-        b=sCZsWSaON5fifyK+cTu9Jpav7ukmQdPZcvJ8b1jip96KR+SkxHipK9wJjrwjFVQPCL
-         asHEqwz1jlbctMX6R4MF5ZgHzXalSY9PNXzB5M1ELN40mdln2T/k1KoIZ6nSC/1+52N0
-         SuD1XUwvqwnjZA+T5HBrlH5+8wV1Y8nsT6gNrcLfzINuhkvaglQCEo//V1+vhpdwxIEy
-         /KbdSVBZDeMzxuQy/z3t5sCw7fnJiE762wYu1WuM/gyjoroTgVxZaY2HJxmdqtuELCyg
-         X0yLgvkUZVZEPLbAXDuQZVGbGghDWdxyVFRJ56apHgHQbMJ0B7lDAM3r2uHEcSaaayvw
-         Q8Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PoZkJu6l4h6aEzKk7gmr65X6dMSH0Mhj2hdZdZe2/k8=;
-        b=v/6iHG0z121BgY25WUjAs8tR8XuI8HAqKIfbPIwW7tLd6LEfPtIPTS3vC6MBO/uL/a
-         yp7WkFKWDPWHhQ+GnKPSsG+3SP96PAxtmfr/ekvCUS0XIZBeAjgOak0sdrK3ZcoFpAvV
-         r2UJClJ+gCjGCtuiSOyTxr3w2F/Q6HFgnwfM44/oHGMgRyXOUexMHCUUgR3JCZMOC9T2
-         b8aECu6+S4MZaPb1froypGpgI5TLsW+KokFVC7Q3JBSaadftEX6sA9vkBqdFVxc4kbpz
-         Gkn7aN8NJR/e/2e7HOJnGmErJ+Qt/EzWMOSLnSJOiyGzyNBoylSx2JOmghOzXp47d9KH
-         JgWQ==
-X-Gm-Message-State: AOAM5300SuMWp3gCitgjmvl15/onLAYSJ0vBsimlUj3pfkcGKCdAlfb/
-        A0TGYxn2wIQZYL1fFaqy4CJsaA==
-X-Google-Smtp-Source: ABdhPJz4rF9lPkcQKUWNfVTvbozvbxjzwEWTM141WwHUI8VTZcXbD4YSDWRS8Hr9C8nf3kA1RjFEmQ==
-X-Received: by 2002:a17:906:9913:b0:6d6:dc48:5d49 with SMTP id zl19-20020a170906991300b006d6dc485d49mr9576712ejb.325.1646246261332;
-        Wed, 02 Mar 2022 10:37:41 -0800 (PST)
-Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
-        by smtp.gmail.com with ESMTPSA id b17-20020aa7c6d1000000b0041301be2b5esm8732375eds.58.2022.03.02.10.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:37:40 -0800 (PST)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2] bluetooth: hci_event: don't print an error on vendor events
-Date:   Wed,  2 Mar 2022 18:35:17 +0000
-Message-Id: <20220302183515.448334-1-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 2 Mar 2022 13:37:12 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822A6D8371
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:36:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646246187; x=1677782187;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P0U7Q/yazxD84c4kQUYlKKDrEeJF19pk8j8NIb7iKJU=;
+  b=CsS42kZaV41VnaGg5+hBZVnIGNraSy9gqnhi4/bmujXjGG+JMEbUe+DS
+   is1cOgoZtWTOapLsOKBm08o76ywxOIw+pPVT+EuLAPTx5OdlR70Xaq03n
+   YkSdDrpE9R0Mf+oNK24Xb7hOkiQhu+tekK2j8cgoLKbt5rRYyE6BCVSjG
+   /h9rs2rI+Iaae9iSE/e5/CgsddQm62oHJ4uKemBtsXEyhYZt3pfNxtO/s
+   Lf7la4fkBdLX1VkTYMteetGTgs+MeaeCp8AiXXUIzmd8l4I678YEO3DxC
+   DDiu2dy5G5Gecz7PIhNZrCmW+VF6JLoXr7QF+z2z8gv3oMh3NI3cvMRsT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253670329"
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="253670329"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 10:36:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="508298794"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 02 Mar 2022 10:36:22 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPTpl-0001ju-UR; Wed, 02 Mar 2022 18:36:21 +0000
+Date:   Thu, 3 Mar 2022 02:35:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xuewei Zhang <xueweiz@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: [linux-stable-rc:queue/4.9 3392/9999] kernel/sched/fair.c:4428:1:
+ warning: the frame size of 1152 bytes is larger than 1024 bytes
+Message-ID: <202203030251.fqUkx508-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,67 +64,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events"),
-some devices see warnings being printed for vendor events, e.g.
+Hi Xuewei,
 
-[   75.806141] Bluetooth: hci0: setting up wcn399x
-[   75.948311] Bluetooth: hci0: unexpected event 0xff length: 14 > 0
-[   75.955552] Bluetooth: hci0: QCA Product ID   :0x0000000a
-[   75.961369] Bluetooth: hci0: QCA SOC Version  :0x40010214
-[   75.967417] Bluetooth: hci0: QCA ROM Version  :0x00000201
-[   75.973363] Bluetooth: hci0: QCA Patch Version:0x00000001
-[   76.000289] Bluetooth: hci0: QCA controller version 0x02140201
-[   76.006727] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-[   76.986850] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.013574] Bluetooth: hci0: QCA Downloading qca/oneplus6/crnv21.bin
-[   77.024302] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.032681] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.040674] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.049251] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.057997] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.066320] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.075065] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.083073] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.091250] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.099417] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.110166] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.118672] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.127449] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.137190] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.146192] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.154242] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.163183] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.171202] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.179364] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.187259] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.198451] Bluetooth: hci0: QCA setup on UART is completed
+FYI, the error/warning still remains.
 
-Avoid printing the event length warning for vendor events, this reverts
-to the previous behaviour where such warnings weren't printed.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.9
+head:   443d6630b05c3eaff71448a86e4b776194f317ef
+commit: bdb6fa8234e59dfb1e0136352adf7684ac9c11af [3392/9999] sched/fair: Scale bandwidth quota and period without losing quota/period ratio precision
+config: parisc-randconfig-r004-20220123 (https://download.01.org/0day-ci/archive/20220303/202203030251.fqUkx508-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=bdb6fa8234e59dfb1e0136352adf7684ac9c11af
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.9
+        git checkout bdb6fa8234e59dfb1e0136352adf7684ac9c11af
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash kernel/sched/
 
-Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/sched/fair.c: In function 'sched_cfs_period_timer':
+>> kernel/sched/fair.c:4428:1: warning: the frame size of 1152 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    }
+    ^
+
+
+vim +4428 kernel/sched/fair.c
+
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4376  
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4377  static enum hrtimer_restart sched_cfs_period_timer(struct hrtimer *timer)
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4378  {
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4379  	struct cfs_bandwidth *cfs_b =
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4380  		container_of(timer, struct cfs_bandwidth, period_timer);
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4381  	int overrun;
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4382  	int idle = 0;
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4383  	int count = 0;
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4384  
+51f2176d74ace4c kernel/sched/fair.c Ben Segall     2014-05-19  4385  	raw_spin_lock(&cfs_b->lock);
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4386  	for (;;) {
+77a4d1a1b9a122c kernel/sched/fair.c Peter Zijlstra 2015-04-15  4387  		overrun = hrtimer_forward_now(timer, cfs_b->period);
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4388  		if (!overrun)
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4389  			break;
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4390  
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4391  		if (++count > 3) {
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4392  			u64 new, old = ktime_to_ns(cfs_b->period);
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4393  
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4394  			/*
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4395  			 * Grow period by a factor of 2 to avoid losing precision.
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4396  			 * Precision loss in the quota/period ratio can cause __cfs_schedulable
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4397  			 * to fail.
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4398  			 */
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4399  			new = old * 2;
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4400  			if (new < max_cfs_quota_period) {
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4401  				cfs_b->period = ns_to_ktime(new);
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4402  				cfs_b->quota *= 2;
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4403  
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4404  				pr_warn_ratelimited(
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4405  	"cfs_period_timer[cpu%d]: period too short, scaling up (new cfs_period_us = %lld, cfs_quota_us = %lld)\n",
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4406  					smp_processor_id(),
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4407  					div_u64(new, NSEC_PER_USEC),
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4408  					div_u64(cfs_b->quota, NSEC_PER_USEC));
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4409  			} else {
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4410  				pr_warn_ratelimited(
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4411  	"cfs_period_timer[cpu%d]: period too short, but cannot scale up without losing precision (cfs_period_us = %lld, cfs_quota_us = %lld)\n",
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4412  					smp_processor_id(),
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4413  					div_u64(old, NSEC_PER_USEC),
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4414  					div_u64(cfs_b->quota, NSEC_PER_USEC));
+bdb6fa8234e59df kernel/sched/fair.c Xuewei Zhang   2019-10-03  4415  			}
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4416  
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4417  			/* reset count so we don't come right back in here */
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4418  			count = 0;
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4419  		}
+33f2a3e176bd508 kernel/sched/fair.c Phil Auld      2019-04-23  4420  
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4421  		idle = do_sched_cfs_period_timer(cfs_b, overrun);
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4422  	}
+4cfafd3082afc70 kernel/sched/fair.c Peter Zijlstra 2015-05-14  4423  	if (idle)
+4cfafd3082afc70 kernel/sched/fair.c Peter Zijlstra 2015-05-14  4424  		cfs_b->period_active = 0;
+51f2176d74ace4c kernel/sched/fair.c Ben Segall     2014-05-19  4425  	raw_spin_unlock(&cfs_b->lock);
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4426  
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4427  	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25 @4428  }
+029632fbb7b7c9d kernel/sched_fair.c Peter Zijlstra 2011-10-25  4429  
+
+:::::: The code at line 4428 was first introduced by commit
+:::::: 029632fbb7b7c9d85063cc9eb470de6c54873df3 sched: Make separate sched*.c translation units
+
+:::::: TO: Peter Zijlstra <a.p.zijlstra@chello.nl>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
+
 ---
-Changes since v1:
- * Don't return early! Vendor events still get parsed despite the
-   warning. I should have looked a little more closely at that...
----
- net/bluetooth/hci_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index fc30f4c03d29..9b7c9ab77971 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -6822,7 +6822,7 @@ static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
- 	 * possible to partially parse the event so leave to callback to
- 	 * decide if that is acceptable.
- 	 */
--	if (skb->len > ev->max_len)
-+	if (skb->len > ev->max_len && event != HCI_EV_VENDOR)
- 		bt_dev_warn(hdev, "unexpected event 0x%2.2x length: %u > %u",
- 			    event, skb->len, ev->max_len);
- 
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

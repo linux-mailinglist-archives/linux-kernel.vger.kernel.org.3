@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBF74CA45E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4174CA461
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241653AbiCBMDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S241660AbiCBMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiCBMDu (ORCPT
+        with ESMTP id S241654AbiCBMEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:03:50 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7556543ECE;
-        Wed,  2 Mar 2022 04:03:06 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d07ae0b1c4so14292447b3.11;
-        Wed, 02 Mar 2022 04:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KEc+gL7G0rfMOn0cIRVoJHGoUVkINZBV6EdCwelWeLY=;
-        b=qkdK/+ATV/9wPMkziZWYAeiYZo+HGHDpmFAJ/X17ldr3JhIVJXm4Q0mlCj52+oGkmw
-         kXJolCgr3pk8tNp2rEzJvQ+Wu4HU8xRzXEXHMu03RYSuJ7JKFqPfbA4XXAQY5uFHgZbd
-         d18LgpA4n53BPQqUHocMtmY68PKoG+GIQuoKQf0qhFHMpcw48pOvDv//xl3WrwtvTIr9
-         hu3ZMJLO28NyS8E8lvzsI7WQK4UOzxlJdvpQ3fTA7AAkQ4VD0zpsRhccqnztAEpJXdiY
-         QEq63PDQ9UCr8Sra5zLEH/nYny0bxQkl3qqhPlilImHqS8o5p8P0QjtJgttb+p6Rygyi
-         sT7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KEc+gL7G0rfMOn0cIRVoJHGoUVkINZBV6EdCwelWeLY=;
-        b=kbIM4MRNbbO1ieIREtvT1cXbIaNcD1HYbAXFiTsC1cg1w0aWVwtzNFK4LG9y4bIytU
-         6020Y2efMGbZxJLdnFJMO3M+nrJxbklFCOZ3bZp38eUjTVqzR8eH8J3vgcsd2skJyY/n
-         wraeHsG+SVXAmAxxH1Z2DP2lwQtrRDyXlefPsIH2CO85t2GFkBGAlCqbWzFoaL3UvX1Q
-         o57Ncu9v8my5L9WR7xFKj6vX7DmH8zQnRoVpQ+DmXfaUvfJCkIE1JXQ8NM3HN9Ef41A3
-         DcmOVd+pHXeZK/zLl88TO2UjdoGTEDoShpFMya0U5JecI3A76k2GilMxoycQxJ5YYVkX
-         Cmaw==
-X-Gm-Message-State: AOAM5302Y+9BjjJoIxCZfTyqOh7/JSayhLIkzvpcHZ7edrcnRaDBZtSC
-        Fkedy/HJviTeDducUlWiTiNc5MYHBIcbjH75oL0=
-X-Google-Smtp-Source: ABdhPJxkmqg+OQb60NqbTgMXL7RTUX1yPYC6XnE92tIAaE7OlMIRWq2UCtYXS0J2bPJsBhsKBFZUqMFi3AZyf3EVGOg=
-X-Received: by 2002:a81:8044:0:b0:2db:2d8b:154f with SMTP id
- q65-20020a818044000000b002db2d8b154fmr22960083ywf.191.1646222585705; Wed, 02
- Mar 2022 04:03:05 -0800 (PST)
+        Wed, 2 Mar 2022 07:04:16 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE5251E67;
+        Wed,  2 Mar 2022 04:03:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646222613; x=1677758613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=68K16nujGDCTSNjCY8/TpmteZ29qZKod6wKiz0CeOmg=;
+  b=el+5zE53osCLDu/dgvkOB+DrUHR5TjS5MkkSvn80VBanzGJmDPVW7aJ/
+   /qpet0zRPGtB/3IXrTilgOjbInQzOgpQi66YELiTprwIEQEjC/+1Ulv09
+   fWWLA20FgnVctuz+Auw2EOc8V7sWkmzYcpdIVxiWCqnZI21XKn3Zkiv97
+   FRXiaqegE81+VybsI3o8xaLbpTHPQyaTTfgZo2fEYE4xmb6VcviyzRa4R
+   2yxLVAlVbmfajgHDgwfsY36lswOlwdQe17k2w4BBOWJOE9Z1bxAh1ej5P
+   jK5x6feYKBZjlDlz4fZ2kL2OJcT8m0qnDJliIHsgt9qnWxlb9Y4Cgbayz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253308475"
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="253308475"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 04:03:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="686115463"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Mar 2022 04:03:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 02 Mar 2022 14:03:18 +0200
+Date:   Wed, 2 Mar 2022 14:03:18 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <Yh9dBlrWm3OicQWa@kuha.fi.intel.com>
+References: <20220223102353.3833578-1-xji@analogixsemi.com>
+ <20220223102353.3833578-2-xji@analogixsemi.com>
 MIME-Version: 1.0
-References: <20220225125553.1185108-1-benchuanggli@gmail.com>
- <20220225125553.1185108-2-benchuanggli@gmail.com> <CAPDyKFq5MdGWefVW6Uwe74Ef5giW+68qRS2hmXNmHLqpfqav8A@mail.gmail.com>
- <4b35e465-626a-7218-ed9a-4e5cf28c1ccc@intel.com> <CACT4zj9AxpOuDn-1fFAgY7Y-X_w+OHisASpa6tUBHQZuSExjFQ@mail.gmail.com>
- <CAPDyKFp-XrLOSUAbsW5JGNCs6aO8Gp1YgmkqiwVpN5byO1XXCQ@mail.gmail.com> <CACT4zj_6k=0gNRw=EFHR=9-7fWJ=bT4Q1VsPMWrkVPftjLb=Hw@mail.gmail.com>
-In-Reply-To: <CACT4zj_6k=0gNRw=EFHR=9-7fWJ=bT4Q1VsPMWrkVPftjLb=Hw@mail.gmail.com>
-From:   Ben Chuang <benchuanggli@gmail.com>
-Date:   Wed, 2 Mar 2022 20:02:54 +0800
-Message-ID: <CACT4zj9Gkhpvtqfp19rBteZSdwcbArE8cOYmRYt7AgrsAabSxw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        greg.tu@genesyslogic.com.tw,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-        SeanHY.Chen@genesyslogic.com.tw,
-        Kevin Chang <kevin.chang@lcfuturecenter.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223102353.3833578-2-xji@analogixsemi.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,144 +67,305 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Wed, Mar 2, 2022 at 6:04 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Wed, 2 Mar 2022 at 03:10, Ben Chuang <benchuanggli@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Mar 1, 2022 at 6:05 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > >
-> > > On 28/02/2022 19:03, Ulf Hansson wrote:
-> > > > On Fri, 25 Feb 2022 at 13:56, Ben Chuang <benchuanggli@gmail.com> wrote:
-> > > >>
-> > > >> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > > >>
-> > > >> Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
-> > > >> gated of upstream port can be enabled.
-> > > >>
-> > > >> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > > >> Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
-> > > >> ---
-> > > >>  drivers/mmc/host/sdhci-pci-gli.c | 54 ++++++++++++++++++++++++++++++++
-> > > >>  1 file changed, 54 insertions(+)
-> > > >>
-> > > >> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-> > > >> index 97035d77c18c..cf99b6af792d 100644
-> > > >> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> > > >> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> > > >> @@ -873,6 +873,55 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
-> > > >>         pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
-> > > >>  }
-> > > >>
-> > > >> +#ifdef CONFIG_PM
-> > > >> +static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
-> > > >> +{
-> > > >> +       struct sdhci_pci_slot *slot = chip->slots[0];
-> > > >> +       struct sdhci_host *host = slot->host;
-> > > >> +       u16 clock;
-> > > >> +
-> > > >> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> > > >> +       clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
-> > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> > > >> +
-> > > >> +       return 0;
-> > > >> +}
-> > > >> +
-> > > >> +static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
-> > > >> +{
-> > > >> +       struct sdhci_pci_slot *slot = chip->slots[0];
-> > > >> +       struct sdhci_host *host = slot->host;
-> > > >> +       ktime_t timeout;
-> > > >> +       u16 clock;
-> > > >> +
-> > > >> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> > > >> +
-> > > >> +       clock |= SDHCI_CLOCK_PLL_EN;
-> > > >> +       clock &= ~SDHCI_CLOCK_INT_STABLE;
-> > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> > > >> +
-> > > >> +       timeout = ktime_add_ms(ktime_get(), 150);
-> > > >> +       while (1) {
-> > > >> +               bool timedout = ktime_after(ktime_get(), timeout);
-> > > >> +
-> > > >> +               clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> > > >> +               if (clock & SDHCI_CLOCK_INT_STABLE)
-> > > >> +                       break;
-> > > >> +               if (timedout) {
-> > > >> +                       pr_err("%s: PLL clock never stabilised.\n",
-> > > >> +                              mmc_hostname(host->mmc));
-> > > >> +                       sdhci_dumpregs(host);
-> > > >> +                       break;
-> > > >> +               }
-> > > >> +               udelay(10);
-> > > >> +       }
-> > >
-> > > Could use something like read_poll_timeout() here e.g.
-> > >
-> > >         if (read_poll_timeout(sdhci_readw, clk, (clk & SDHCI_CLOCK_INT_STABLE),
-> > >                               1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
-> > >                 pr_err("%s: PLL clock never stabilised.\n",
-> > >                        mmc_hostname(host->mmc));
-> > >                 sdhci_dumpregs(host);
-> > >         }
-> > >
-> > >
-> >
-> > Thanks for the tip. I will prepare the next patch.
-> >
-> > > >> +       clock |= SDHCI_CLOCK_CARD_EN;
-> > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> > > >> +
-> > > >> +       return 0;
-> > > >> +}
-> > > >
-> > > > Both functions above look very similar to what sdhci_set_clock() does.
-> > > > Can you use that, rather than open coding the above?
-> > > >
-> >
-> > The codes turn on/off the clock but it doesn't change the clock.
-> > Using sdhci_set_clock()  needs to store the clock value because it
-> > clears the clock.
->
-> Well, in that case at least you can call sdhci_enable_clk() from
-> gl9763e_runtime_resume(), rather than open coding it (the code looks
-> like a direct copy of that code). All you need is to give the
-> sdhci_enable_clk() the correct "clk" as in-parameter.
->
+This does not apply on top of Greg's latest usb-next branch. You need
+to rebase this. There are also a few more nitpicks below.
 
-I want to explain a little more,
-gl9763e is used as a boot disk controller.
-In gl9763e_runtime_suspend(), gl9763e still needs the internal clock
-to keep states.
-So gl9763e_runtime_suspend() only clears SDHCI_CLOCK_PLL_EN and
-SDHCI_CLOCK_CARD_EN.
-The SDHCI_CLOCK_INT_EN is still one (1) In runtime suspend,
+On Wed, Feb 23, 2022 at 06:23:52PM +0800, Xin Ji wrote:
+> diff --git a/drivers/usb/typec/anx7411.h b/drivers/usb/typec/anx7411.h
+> new file mode 100644
+> index 000000000000..cc0b7a570438
+> --- /dev/null
+> +++ b/drivers/usb/typec/anx7411.h
+> @@ -0,0 +1,273 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +/*
+> + * Copyright(c) 2022, Analogix Semiconductor. All rights reserved.
+> + *
+> + */
+> +
+> +#ifndef __ANX7411_H__
+> +#define __ANX7411_H__
+> +
+> +#define TCPC_ADDRESS1		0x58
+> +#define TCPC_ADDRESS2		0x56
+> +#define TCPC_ADDRESS3		0x54
+> +#define TCPC_ADDRESS4		0x52
+> +#define SPI_ADDRESS1		0x7e
+> +#define SPI_ADDRESS2		0x6e
+> +#define SPI_ADDRESS3		0x64
+> +#define SPI_ADDRESS4		0x62
+> +
+> +struct anx7411_i2c_select {
+> +	u8 tcpc_address;
+> +	u8 spi_address;
+> +};
+> +
+> +#define VENDOR_ID		0x1F29
+> +#define PRODUCT_ID		0x7411
 
-If using sdhci_enable_clk()  in gl9763e_runtime_resume(), sdhci_enable_clk()
-only fills one (1) to this bit (SDHCI_CLOCK_INT_EN) again, it cannot
-cause internal stable bit
-(SDHCI_CLOCK_INT_STABLE) to one for gl9763e in the first while loop.
+Please make that VENDOR_ID_<vendor name>, and the same with the
+product ID.
 
-> >
-> > > > Other than that, I would appreciate it if Adrian could have a look at
-> > > > this too. For example, I wonder if perhaps
-> > > > sdhci_runtime_suspend|resume_host() should be called in these paths
-> > > > too.
-> > >
-> > > Assuming the host controller does not lose state information, it should be fine.
-> > >
-> >
-> > Yes, the host always has aux. power and keep state.
-> >
-> > Thank you both for your comments.
->
-> Okay, thanks for confirming!
->
-> [...]
->
-> Kind regards
-> Uffe
+> +/* TCPC register define */
+> +
+> +#define TCPC_ROLE_CONTROL	0x1A
+> +
+> +#define TCPC_COMMAND		0x23
+> +#define TCPC_CMD_I2C_IDLE	0xFF
+> +#define TCPC_CMD_LOOK4CONN	0x99
+> +#define SINK_CTRL_EN		0x55
+> +#define SINK_CTRL_DIS		0x44
+> +
+> +#define ANALOG_CTRL_10		0xAA
 
-Best regards,
-Ben
+Those are TCPC commands and registers. I though I already asked that
+you move the register and command definitions from
+drivers/usb/typec/tcpm/tcpci.h to include/linux/usb/tcpci.h?
+
+You need to do that in a separate patch, but I really think it would
+be worth doing, even though there are only a few shared definitions
+here.
+
+> +#define STATUS_LEN		2
+> +#define ALERT_0			0xCB
+> +#define RECEIVED_MSG		BIT(7)
+> +#define SOFTWARE_INT		BIT(6)
+> +#define MSG_LEN			32
+> +#define HEADER_LEN		2
+> +#define MSG_HEADER		0x00
+> +#define MSG_TYPE		0x01
+> +#define MSG_RAWDATA		0x02
+> +#define MSG_LEN_MASK		0x1F
+> +
+> +#define ALERT_1			0xCC
+> +#define INTP_POW_ON		BIT(7)
+> +#define INTP_POW_OFF		BIT(6)
+> +
+> +#define VBUS_THRESHOLD_H	0xDD
+> +#define VBUS_THRESHOLD_L	0xDE
+> +
+> +#define FW_CTRL_0		0xF0
+> +#define UNSTRUCT_VDM_EN		BIT(0)
+> +#define DELAY_200MS		BIT(1)
+> +#define VSAFE0			0
+> +#define VSAFE1			BIT(2)
+> +#define VSAFE2			BIT(3)
+> +#define VSAFE3			(BIT(2) | BIT(3))
+> +#define FRS_EN			BIT(7)
+> +
+> +#define FW_PARAM		0xF1
+> +#define DONGLE_IOP		BIT(0)
+> +
+> +#define FW_CTRL_2		0xF7
+> +#define SINK_CTRL_DIS_FLAG	BIT(5)
+> +
+> +/* SPI register define */
+> +#define OCM_CTRL_0		0x6E
+> +#define OCM_RESET		BIT(6)
+> +
+> +#define MAX_VOLTAGE		0xAC
+> +#define MAX_POWER		0xAD
+> +#define MIN_POWER		0xAE
+> +
+> +#define REQUEST_VOLTAGE		0xAF
+> +#define VOLTAGE_UNIT		100 /* mV per unit */
+> +
+> +#define REQUEST_CURRENT		0xB1
+> +#define CURRENT_UNIT		50 /* mA per unit */
+> +
+> +#define CMD_SEND_BUF		0xC0
+> +#define CMD_RECV_BUF		0xE0
+> +
+> +#define REQ_VOL_20V_IN_100MV	0xC8
+> +#define REQ_CUR_2_25A_IN_50MA	0x2D
+> +#define REQ_CUR_3_25A_IN_50MA	0x41
+> +
+> +#define DEF_5V			5000
+> +#define DEF_1_5A		1500
+> +
+> +enum anx7411_typec_message_type {
+> +	TYPE_SRC_CAP = 0x00,
+> +	TYPE_SNK_CAP = 0x01,
+> +	TYPE_SNK_IDENTITY = 0x02,
+> +	TYPE_SVID = 0x03,
+> +	TYPE_SET_SNK_DP_CAP = 0x08,
+> +	TYPE_PSWAP_REQ = 0x10,
+> +	TYPE_DSWAP_REQ = 0x11,
+> +	TYPE_VDM = 0x14,
+> +	TYPE_OBJ_REQ = 0x16,
+> +	TYPE_DP_ALT_ENTER = 0x19,
+> +	TYPE_DP_DISCOVER_MODES_INFO = 0x27,
+> +	TYPE_GET_DP_CONFIG = 0x29,
+> +	TYPE_DP_CONFIGURE = 0x2A,
+> +	TYPE_GET_DP_DISCOVER_MODES_INFO = 0x2E,
+> +	TYPE_GET_DP_ALT_ENTER = 0x2F,
+> +};
+> +
+> +#define REQUEST_CURRENT		0xB1
+> +#define REQUEST_VOLTAGE		0xAF
+
+Double definition - you already defined those two in this same file
+above.
+
+> +#define FW_CTRL_1		0xB2
+> +#define AUTO_PD_EN		BIT(1)
+> +#define TRYSRC_EN		BIT(2)
+> +#define TRYSNK_EN		BIT(3)
+> +#define FORCE_SEND_RDO		BIT(6)
+> +
+> +#define FW_VER			0xB4
+> +#define FW_SUBVER		0xB5
+> +
+> +#define INT_MASK		0xB6
+> +#define INT_STS			0xB7
+> +#define OCM_BOOT_UP		BIT(0)
+> +#define OC_OV_EVENT		BIT(1)
+> +#define VCONN_CHANGE		BIT(2)
+> +#define VBUS_CHANGE		BIT(3)
+> +#define CC_STATUS_CHANGE	BIT(4)
+> +#define DATA_ROLE_CHANGE	BIT(5)
+> +#define PR_CONSUMER_GOT_POWER	BIT(6)
+> +#define HPD_STATUS_CHANGE	BIT(7)
+> +
+> +#define SYSTEM_STSTUS		0xB8
+> +/* 0: SINK off; 1: SINK on */
+> +#define SINK_STATUS		BIT(1)
+> +/* 0: VCONN off; 1: VCONN on*/
+> +#define VCONN_STATUS		BIT(2)
+> +/* 0: vbus off; 1: vbus on*/
+> +#define VBUS_STATUS		BIT(3)
+> +/* 1: host; 0:device*/
+> +#define DATA_ROLE		BIT(5)
+> +/* 0: Chunking; 1: Unchunked*/
+> +#define SUPPORT_UNCHUNKING	BIT(6)
+> +/* 0: HPD low; 1: HPD high*/
+> +#define HPD_STATUS		BIT(7)
+> +
+> +#define DATA_DFP		1
+> +#define DATA_UFP		2
+> +#define POWER_SOURCE		1
+> +#define POWER_SINK		2
+> +
+> +#define CC_STATUS		0xB9
+> +#define CC1_RD			BIT(0)
+> +#define CC2_RD			BIT(4)
+> +#define CC1_RA			BIT(1)
+> +#define CC2_RA			BIT(5)
+> +#define CC1_RD			BIT(0)
+> +#define CC1_RP(cc)		(((cc) >> 2) & 0x03)
+> +#define CC2_RP(cc)		(((cc) >> 6) & 0x03)
+> +
+> +#define PD_REV_INIT		0xBA
+> +
+> +#define PD_EXT_MSG_CTRL		0xBB
+> +#define SRC_CAP_EXT_REPLY	BIT(0)
+> +#define MANUFACTURER_INFO_REPLY	BIT(1)
+> +#define BATTERY_STS_REPLY	BIT(2)
+> +#define BATTERY_CAP_REPLY	BIT(3)
+> +#define ALERT_REPLY		BIT(4)
+> +#define STATUS_REPLY		BIT(5)
+> +#define PPS_STATUS_REPLY	BIT(6)
+> +#define SNK_CAP_EXT_REPLY	BIT(7)
+> +
+> +#define NO_CONNECT		0x00
+> +#define USB3_1_CONNECTED	0x01
+> +#define DP_ALT_4LANES		0x02
+> +#define USB3_1_DP_2LANES	0x03
+> +#define CC1_CONNECTED		0x01
+> +#define CC2_CONNECTED		0x02
+> +#define SELECT_PIN_ASSIGMENT_C	0x04
+> +#define SELECT_PIN_ASSIGMENT_D	0x08
+> +#define SELECT_PIN_ASSIGMENT_E	0x10
+> +#define SELECT_PIN_ASSIGMENT_U	0x00
+> +#define REDRIVER_ADDRESS	0x20
+> +#define REDRIVER_OFFSET		0x00
+> +
+> +#define DP_SVID			0xFF01
+> +#define VDM_ACK			0x40
+> +#define VDM_CMD_RES		0x00
+> +#define VDM_CMD_DIS_ID		0x01
+> +#define VDM_CMD_DIS_SVID	0x02
+> +#define VDM_CMD_DIS_MOD		0x03
+> +#define VDM_CMD_ENTER_MODE	0x04
+> +#define VDM_CMD_EXIT_MODE	0x05
+> +#define VDM_CMD_ATTENTION	0x06
+> +#define VDM_CMD_GET_STS		0x10
+> +#define VDM_CMD_AND_ACK_MASK	0x5F
+> +
+> +#define MAX_ALTMODE		2
+> +
+> +#define HAS_SOURCE_CAP		BIT(0)
+> +#define HAS_SINK_CAP		BIT(1)
+> +#define HAS_SINK_WATT		BIT(2)
+> +
+> +enum anx7411_psy_state {
+> +	/* copy from drivers/usb/typec/tcpm */
+> +	ANX7411_PSY_OFFLINE = 0,
+> +	ANX7411_PSY_FIXED_ONLINE,
+> +
+> +	/* private */
+> +	/* PD keep in, but disconnct power to bq25700,
+> +	 * this state can be active when higher capacity adapter plug in,
+> +	 * and change to ONLINE state when higher capacity adapter plug out
+> +	 */
+> +	ANX7411_PSY_HANG = 0xff,
+> +};
+> +
+> +struct typec_params {
+> +	int request_current; /* ma */
+> +	int request_voltage; /* mv */
+> +	int cc_connect;
+> +	int cc_orientation_valid;
+> +	int cc_status;
+> +	int data_role;
+> +	int power_role;
+> +	int vconn_role;
+> +	int dp_altmode_enter;
+> +	int cust_altmode_enter;
+> +	struct usb_role_switch *role_sw;
+> +	struct typec_port *port;
+> +	struct typec_partner *partner;
+> +	struct typec_mux *typec_mux;
+> +	struct typec_switch *typec_switch;
+> +	struct typec_altmode *amode[MAX_ALTMODE];
+> +	struct typec_altmode *port_amode[MAX_ALTMODE];
+> +	struct typec_displayport_data data;
+> +	int pin_assignment;
+> +	struct typec_capability caps;
+> +	u32 src_pdo[PDO_MAX_OBJECTS];
+> +	u32 sink_pdo[PDO_MAX_OBJECTS];
+> +	u8 caps_flags;
+> +	u8 src_pdo_nr;
+> +	u8 sink_pdo_nr;
+> +	u8 sink_watt;
+> +	u8 sink_voltage;
+> +};
+> +
+> +struct anx7411_data {
+> +	int fw_version;
+> +	int fw_subversion;
+> +	struct i2c_client *tcpc_client;
+> +	struct i2c_client *spi_client;
+> +	struct gpio_desc *intp_gpiod;
+> +	struct fwnode_handle *connector_fwnode;
+> +	struct typec_params typec;
+> +	int intp_irq;
+> +	struct work_struct work;
+> +	struct workqueue_struct *workqueue;
+> +	/* Lock for interrupt work queue */
+> +	struct mutex lock;
+> +
+> +	enum anx7411_psy_state psy_online;
+> +	enum power_supply_usb_type usb_type;
+> +	struct power_supply *psy;
+> +	struct power_supply_desc psy_desc;
+> +	struct device *dev;
+> +};
+> +
+> +#endif /* __ANX7411_H__ */
+
+thanks,
+
+-- 
+heikki

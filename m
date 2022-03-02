@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9F14C9F0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5514C9F0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240068AbiCBIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S240075AbiCBIXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbiCBIXT (ORCPT
+        with ESMTP id S240070AbiCBIXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:23:19 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C932538786
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:22:35 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K7n6n1tJBzbc0g;
-        Wed,  2 Mar 2022 16:17:53 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 2 Mar
- 2022 16:22:32 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <willy@infradead.org>, <shy828301@gmail.com>,
-        <william.kucharski@oracle.com>, <hughd@google.com>,
-        <peterx@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH] mm/huge_memory: make is_transparent_hugepage() static
-Date:   Wed, 2 Mar 2022 16:21:45 +0800
-Message-ID: <20220302082145.12028-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Wed, 2 Mar 2022 03:23:43 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FC14BB93
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:23:00 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d07ae0b1c0so8485147b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rzapgAUyKoJq0tJStFGL7TnQDA9QwFfn3d0fRWN05EI=;
+        b=Mb6EF1IqUQplrdckkYJaWOPWFlbpamBSXlnWHkeFzL5xVU8l9Af4VjCCYjJ1rXGtHF
+         ktCj77UQ8uZK6tLF105LmuwST4YlAMKLP8Vu2XVKUtyhpTap4PpVmLWKOPNdCBp4WNrb
+         nIKcJ2aD+N9+yZAOMdtrZUB8U5akWovR4/vxs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rzapgAUyKoJq0tJStFGL7TnQDA9QwFfn3d0fRWN05EI=;
+        b=clU6mxxhm5/uHWYuRaqTZ3UD3yvHBC3Sqg6nKMdZK26OBoVBrAX/K/n5ITiZnVlPcG
+         b6jhM5kuis8NwPPnaCRHW7I6SlcV2nTYDcT67wUHNqTR7utT+rM133koCQM1Co1r6Yf8
+         VrbgAdPQH5SpNAN3kSVT4mmF6zxfZHs6T2WU5AWODdmtEtwCwmD/NXTpLJ4+G0GwNhLY
+         SLbkWYiU7OleD/24JrgqWSFSdNUoULrjI/qKtvcEIltflSleLESEkwHRw037r3PbsiGo
+         JynHhupIQLX1DxSvbfk2uZiRzv2pMiJdw0+VmHO6iQ3/4qvYGIutWC8EsgdPwSeG6c/C
+         ejfQ==
+X-Gm-Message-State: AOAM533I6LKM0NnlM8nSt5y3kBTGQ6F8ZS351ZGEsYqZ6VE/PF5qQl5c
+        dKceAnceW0Ytamh9u3zhZcG7OchXZfcHfAlwp+Vzmg==
+X-Google-Smtp-Source: ABdhPJzeeVdz4NAS+ovirSZ++TOJF6ZtWiQgMOOEOXtVPqJgdpLR0WgLjmNaqBKPWjmOCGSRyv9eGGJMetKEcbJ704o=
+X-Received: by 2002:a81:6e44:0:b0:2d0:b675:a0 with SMTP id j65-20020a816e44000000b002d0b67500a0mr28372775ywc.352.1646209379370;
+ Wed, 02 Mar 2022 00:22:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220219092533.12596-1-linmiaohe@huawei.com> <20220219092533.12596-5-linmiaohe@huawei.com>
+In-Reply-To: <20220219092533.12596-5-linmiaohe@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Wed, 2 Mar 2022 09:22:48 +0100
+Message-ID: <CAM4kBB+kHtNNhvHrQJ8JQyDwf02nMGq_vmyPfYaQwrRn0neo_A@mail.gmail.com>
+Subject: Re: [PATCH 4/9] mm/z3fold: remove unneeded page_mapcount_reset and ClearPagePrivate
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's only used inside the huge_memory.c now. Don't export it and make
-it static. We can thus reduce the size of huge_memory.o a bit.
+On Sat, Feb 19, 2022 at 10:26 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> Page->page_type and PagePrivate are not used in z3fold. We should remove
+> these confusing unneeded operations. The z3fold do these here is due to
+> referring to zsmalloc's migration code which does need these operations.
 
-Without this patch:
-   text	   data	    bss	    dec	    hex	filename
-  32319	   2965	      4	  35288	   89d8	mm/huge_memory.o
+Absolutely, thanks for pointing this out.
 
-With this patch:
-   text	   data	    bss	    dec	    hex	filename
-  32042	   2957	      4	  35003	   88bb	mm/huge_memory.o
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- include/linux/huge_mm.h | 6 ------
- mm/huge_memory.c        | 3 +--
- 2 files changed, 1 insertion(+), 8 deletions(-)
+Reviewed-by: Vitaly Wool <vitaly.wool@konsulko.com>
 
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 0734aff8fa19..2999190adc22 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -183,7 +183,6 @@ unsigned long thp_get_unmapped_area(struct file *filp, unsigned long addr,
- 
- void prep_transhuge_page(struct page *page);
- void free_transhuge_page(struct page *page);
--bool is_transparent_hugepage(struct page *page);
- 
- bool can_split_folio(struct folio *folio, int *pextra_pins);
- int split_huge_page_to_list(struct page *page, struct list_head *list);
-@@ -341,11 +340,6 @@ static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
- 
- static inline void prep_transhuge_page(struct page *page) {}
- 
--static inline bool is_transparent_hugepage(struct page *page)
--{
--	return false;
--}
--
- #define transparent_hugepage_flags 0UL
- 
- #define thp_get_unmapped_area	NULL
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index b49e1a11df2e..592588825c07 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -533,7 +533,7 @@ void prep_transhuge_page(struct page *page)
- 	set_compound_page_dtor(page, TRANSHUGE_PAGE_DTOR);
- }
- 
--bool is_transparent_hugepage(struct page *page)
-+static inline bool is_transparent_hugepage(struct page *page)
- {
- 	if (!PageCompound(page))
- 		return false;
-@@ -542,7 +542,6 @@ bool is_transparent_hugepage(struct page *page)
- 	return is_huge_zero_page(page) ||
- 	       page[1].compound_dtor == TRANSHUGE_PAGE_DTOR;
- }
--EXPORT_SYMBOL_GPL(is_transparent_hugepage);
- 
- static unsigned long __thp_get_unmapped_area(struct file *filp,
- 		unsigned long addr, unsigned long len,
--- 
-2.23.0
-
+> ---
+>  mm/z3fold.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> index eb89271aea83..2f848ea45b4d 100644
+> --- a/mm/z3fold.c
+> +++ b/mm/z3fold.c
+> @@ -420,7 +420,6 @@ static void free_z3fold_page(struct page *page, bool headless)
+>                 __ClearPageMovable(page);
+>                 unlock_page(page);
+>         }
+> -       ClearPagePrivate(page);
+>         __free_page(page);
+>  }
+>
+> @@ -1635,7 +1634,6 @@ static int z3fold_page_migrate(struct address_space *mapping, struct page *newpa
+>         INIT_LIST_HEAD(&new_zhdr->buddy);
+>         new_mapping = page_mapping(page);
+>         __ClearPageMovable(page);
+> -       ClearPagePrivate(page);
+>
+>         get_page(newpage);
+>         z3fold_page_lock(new_zhdr);
+> @@ -1655,7 +1653,6 @@ static int z3fold_page_migrate(struct address_space *mapping, struct page *newpa
+>
+>         queue_work_on(new_zhdr->cpu, pool->compact_wq, &new_zhdr->work);
+>
+> -       page_mapcount_reset(page);
+>         clear_bit(PAGE_CLAIMED, &page->private);
+>         put_page(page);
+>         return 0;
+> --
+> 2.23.0
+>

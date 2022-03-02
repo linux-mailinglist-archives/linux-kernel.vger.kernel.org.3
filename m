@@ -2,138 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96124CAF9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6F14CAF9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243219AbiCBUVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S243247AbiCBUVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiCBUVf (ORCPT
+        with ESMTP id S238020AbiCBUVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:21:35 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1059DC7C2F;
-        Wed,  2 Mar 2022 12:20:51 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D6138580219;
-        Wed,  2 Mar 2022 15:20:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 02 Mar 2022 15:20:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yotsuba.nl; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=Y4citP6qvkfZbc
-        tuQIIS1b0ZdrVeMn1xNzLS9Ph5y6M=; b=McXYxw0Um2bbmAsQGXHrMFz4djRXlS
-        sYZyC1zgybNbGt77JDt2wBUFrwHIa+rdAxuvAhJv6YdoQPWhgfxne8U4wmfyfj0a
-        qHiHPI11EemrmivwoExE/kP8ZaXaqfExQLlRYjbDIdB7avmBvfLRV04zKew4R2aj
-        1MNcMDj/l5E7CmaO0Q9HaWNYwMGhZNFuPBNxffTfCEj2HNZkzCWvZCp7GWt+L4X/
-        s+yisDXz+lVHCZzV+4j4GxOQhS/eQOgMllJarHdAbpNvppWYpCyvpR09oShU5yhi
-        4GY/Vx/5jQUfH8SzygAOI1qGGVBoOzn8DqhO2IZSRQamxPAQRcY4ex+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=Y4citP6qvkfZbctuQIIS1b0ZdrVeMn1xNzLS9Ph5y
-        6M=; b=nN9EPUmpbxLDBOJlDeG7W+HQ+XUozD8Vx+tFQKL0kqbUD/v7MAb3SgoUI
-        +ocs02TWNpUSbdK5ToGcDarzjcWbZ0jiLFDGt3xTyldfxUqoJ4IuIhsDhU2tB3gH
-        8WumCGr1R0p27ULuNeNYxcVLJ5HEgO/WCvoMiSLzDcE2Qdbq9UyP73uYd7freaqt
-        +cNsKJbuGS7gfevPGq+5oqsAp/ilufu09XBCRgGtFvHTbaQpVJ0WKI7zxI6wPwB/
-        kgJ6cBD8Y+CYIapXDbSOEqCom9t2bNyVgqK2UurrjHAw92qtI4ysqQKi+w2oH+g+
-        xjV863pTdYgBPXRgNKniHlLUkvNMQ==
-X-ME-Sender: <xms:n9EfYomnyCuBeNUuPw3IBlk302HW7IA8pv4B0qJvvwsVp7zGDDF4jw>
-    <xme:n9EfYn2HNnPLe_MfkynHF6A0MQJG-yN0wVp-JUGzgJBIze8hoVEJk8RAWHZqn-b9x
-    N9n4nD-5Laq82V2YWI>
-X-ME-Received: <xmr:n9EfYmpWjlDVlYaF-M8xlhKQPVGeIDbu8O6s-KdNtJZ5WQd6Tp1nPwrbzcjR_ceDg4CZAJT7TRuCI-KGQOOtbqYoZiUolIotGaH8RRzpB-dQrKA34hX6TxXvL9U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtgedgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjfffgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeforghr
-    khcuvehilhhishhsvghnuceomhgrrhhkseihohhtshhusggrrdhnlheqnecuggftrfgrth
-    htvghrnhepkeffhfefhfetleejtedvueefkefgkeekjeevhfekjeehgedufeegledvudev
-    vddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grrhhkseihohhtshhusggrrdhnlh
-X-ME-Proxy: <xmx:n9EfYklz2QjCyKfl5ukCwbKDJb51x3ouwrovHCfjImy8jFNi3E7kUQ>
-    <xmx:n9EfYm1wufObY-0Vr2Bhm9Dv44b10_a94_NDsCMkxUMtNLg-OoGytQ>
-    <xmx:n9EfYrtoWQz9RBUzPB2Fdh1GJ_DFyZCX-hQD-AKN-31nmZ6HIo1rwQ>
-    <xmx:n9EfYvv3wLZsHapufq9U-cFRoSNBqQiT80wdrF2xuIH8eLXSiY-ytA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Mar 2022 15:20:45 -0500 (EST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH v2] ACPI / x86: Work around broken XSDT on Advantech
- DAC-BJ01 board
-From:   Mark Cilissen <mark@yotsuba.nl>
-In-Reply-To: <832a5b2e-d70c-f1a6-e377-7697b1eb7049@redhat.com>
-Date:   Wed, 2 Mar 2022 21:20:42 +0100
-Cc:     linux-acpi@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kernel test robot <lkp@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7BD8A71A-95C7-4A10-82FD-BEAAE0B0DDE9@yotsuba.nl>
-References: <20220302040800.10355-1-mark@yotsuba.nl>
- <832a5b2e-d70c-f1a6-e377-7697b1eb7049@redhat.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Mar 2022 15:21:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351C3CA0D0;
+        Wed,  2 Mar 2022 12:21:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAD83B82217;
+        Wed,  2 Mar 2022 20:21:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D33C004E1;
+        Wed,  2 Mar 2022 20:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646252463;
+        bh=TbPfqvLDgAnMp5ltWMw/6z2C84cSoa1KkRYE/VyZtRw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KISMtzdU9znwz/epSuDnr0sjPIuK8ujGADnt3b1I3wCZjGosYA3w9F8zKEXf6lbX1
+         RciFmxzE+9ujXNmmXqQzyTpCCSTjlzTwkemJ83TgmGBkYKlhbtQNdMq0CruH1mPKQa
+         IVOvE/YSoO2twnhk7Wtzb9Ajrxdz63nhCnzOkhDQ=
+Date:   Wed, 2 Mar 2022 21:20:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Message-ID: <Yh/Rq9PwWZAN8Mu2@kroah.com>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+ <Yh8ia7nJNN7ISR1l@kroah.com>
+ <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
+ <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 2 Mar 4 Reiwa, at 10:02, Hans de Goede <hdegoede@redhat.com> wrote:
->=20
-> Hi,
+On Wed, Mar 02, 2022 at 10:49:15AM -0800, Iouri Tarassov wrote:
+> On 3/2/2022 3:53 AM, Wei Liu wrote:
+> > On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
+> > > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
+> > > > > > +struct dxgglobal *dxgglobal;
+> > > > > 
+> > > > > No, make this per-device, NEVER have a single device for your driver.
+> > > > > The Linux driver model makes it harder to do it this way than to do it
+> > > > > correctly.  Do it correctly please and have no global structures like
+> > > > > this.
+> > > > > 
+> > > > 
+> > > > This may not be as big an issue as you thought. The device discovery is
+> > > > still done via the normal VMBus probing routine. For all intents and
+> > > > purposes the dxgglobal structure can be broken down into per device
+> > > > fields and a global structure which contains the protocol versioning
+> > > > information -- my understanding is there will always be a global
+> > > > structure to hold information related to the backend, regardless of how
+> > > > many devices there are.
+> > > 
+> > > Then that is wrong and needs to be fixed.  Drivers should almost never
+> > > have any global data, that is not how Linux drivers work.  What happens
+> > > when you get a second device in your system for this?  Major rework
+> > > would have to happen and the code will break.  Handle that all now as it
+> > > takes less work to make this per-device than it does to have a global
+> > > variable.
+> > > 
+> >
+> > It is perhaps easier to draw parallel from an existing driver. I feel
+> > like we're talking past each other.
+> >
+> > Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
+> > like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
+> > units will be added to the list. I this the current code is following
+> > this model. dxgglobal fulfills the role of a list.
+> >
+> > Setting aside the question of whether it makes sense to keep a copy of
+> > the per-VM state in each device instance, I can see the code be changed
+> > to:
+> >
+> >     struct mutex device_mutex; /* split out from dxgglobal */
+> >     static LIST_HEAD(dxglist);
+> >     
+> >     /* Rename struct dxgglobal to struct dxgstate */
+> >     struct dxgstate {
+> >        struct list_head dxglist; /* link for dxglist */
+> >        /* ... original fields sans device_mutex */
+> >     }
+> >
+> >     /*
+> >      * Provide a bunch of helpers manipulate the list. Called in probe /
+> >      * remove etc.
+> >      */
+> >     struct dxgstate *find_dxgstate(...);
+> >     void remove_dxgstate(...);
+> >     int add_dxgstate(...);
+> >
+> > This model is well understood and used in tree. It is just that it
+> > doesn't provide much value in doing this now since the list will only
+> > contain one element. I hope that you're not saying we cannot even use a
+> > per-module pointer to quickly get the data structure we want to use,
+> > right?
+> >
+> > Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
+> > into the device object? I think that can be done too.
+> >
+> > The code can be changed as:
+> >
+> >     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
+> >     struct dxgstate { ... };
+> >
+> >     static int dxg_probe_vmbus(...) {
+> >
+> >         /* probe successfully */
+> >
+> > 	struct dxgstate *state = kmalloc(...);
+> > 	/* Fill in dxgstate with information from backend */
+> >
+> > 	/* hdev->dev is the device object from the core driver framework */
+> > 	dev_set_drvdata(&hdev->dev, state);
+> >     }
+> >
+> >     static int dxg_remove_vmbus(...) {
+> >         /* Normal stuff here ...*/
+> >
+> > 	struct dxgstate *state = dev_get_drvdata(...);
+> > 	dev_set_drvdata(..., NULL);
+> > 	kfree(state);
+> >     }
+> >
+> >     /* In all other functions */
+> >     void do_things(...) {
+> >         struct dxgstate *state = dev_get_drvdata(...);
+> >
+> > 	/* Use state in place of where dxgglobal was needed */
+> >
+> >     }
+> >
+> > Iouri, notice this doesn't change anything regarding how userspace is
+> > designed. This is about how kernel organises its data.
+> >
+> > I hope what I wrote above can bring our understanding closer.
+> >
+> > Thanks,
+> > Wei.
+> 
+> 
+> I can certainly remove dxgglobal and keep the  pointer to the global
+> state in the device object.
+> 
+> This will require passing of the global pointer to all functions, which
+> need to access it.
+> 
+> 
+> Maybe my understanding of the Greg's suggestion was not correct. I
+> thought the suggestion was
+> 
+> to have multiple /dev/dxgN devices (one per virtual compute device).
 
-Hi Hans,
+You have one device per HV device, as the bus already provides you.
+That's all you really need, right?  Who would be opening the same device
+node multiple times?
 
->=20
->> [=E2=80=A6]
->=20
-> Heh, I should have noticed this new version before replying. I see =
-that
-> you've dropped the BIOS-date match. But that actually is often more =
-useful
-> then the BIOS_VERSION, sometimes vendors don't bump the version when
-> doing a new BIOS build.
->=20
-> If you only want to match the exact BIOS you tested against I would
-> drop the BIOS_VENDOR check instead.
+> This would change how the user mode
+> clients enumerate and communicate with compute devices.
 
-I am admittedly bit wary of dropping the BIOS_VENDOR check. As the cause =
-of
-this issue seems to be specifically a BIOS compilation error, it feels=20=
+What does userspace have to do here?  It should just open the device
+node that is present when needed.  How will there be multiple userspace
+clients for a single HV device?
 
-incomplete to leave this match out.
+thanks,
 
-Since =E2=80=9CCRB=E2=80=9D in the DMI product name indicates the board =
-design is derivative
-of a generic Intel reference design (=E2=80=9CCustomer Reference =
-Board=E2=80=9D),
-maybe it=E2=80=99s better to drop the SYS_VENDOR match instead?
-It seems to bear little relation to the actual vendor (Advantech)
-encountered in my testing hardware, anyway.
-
-Let me know; if you still feel it=E2=80=99s better to drop the =
-BIOS_VENDOR match,
-I will do that instead.
-
-> Regards,
->=20
-> Hans
-
-Thanks and regards,
-
-Mark
-
+greg k-h

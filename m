@@ -2,87 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D164CB08D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD914CB08F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243669AbiCBVCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S239833AbiCBVCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiCBVCJ (ORCPT
+        with ESMTP id S237588AbiCBVCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:02:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CE0D2069;
-        Wed,  2 Mar 2022 13:01:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Mar 2022 16:02:13 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2377DBD25;
+        Wed,  2 Mar 2022 13:01:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED85FB81FB1;
-        Wed,  2 Mar 2022 21:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373FAC340EF;
-        Wed,  2 Mar 2022 21:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646254882;
-        bh=pZMMoaiSp8YleU3wN8sImtSMq9BxXGCX7Zfl1Pe7QD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYHdl47qdJ+kPW01KWr5eEu+Mly9YCoqjHEDPP/7ln9wzjC7sUYr8ECtKDmp4LNPT
-         V3LZeSHIziSS+35f93pNcO2bfp+VDl4UMIwiP/br0by18qcdB3dTeJzfXD4AkAnNNq
-         Niryo7xgV0bWZDYJ5L/LrvltT9FwYU4nmvLZA8AIrBuXBNjntd5yJjAH3F49vwaJUc
-         WLj2av77MnSA/DVioCN8VafQ4OZRBXuM7vboDaiyXgdYZyOkmjSxlW3FgDrTPtkZpH
-         DQ7LfkIJ7FyumKIlr9uVc5b0US6149uLdQirmA5QwMRmV7m3fKC0d8S/y/T3X6Rbx5
-         lj+iTtYNI54hA==
-Date:   Wed, 2 Mar 2022 16:01:18 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.19 09/13] selftests/ftrace: Do not trace
- do_softirq because of PREEMPT_RT
-Message-ID: <Yh/bHmpENqn1x7kK@sashalap>
-References: <20220223023152.242065-1-sashal@kernel.org>
- <20220223023152.242065-9-sashal@kernel.org>
- <20220224224622.GD6522@duo.ucw.cz>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K863n53qyz4xcP;
+        Thu,  3 Mar 2022 08:01:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646254886;
+        bh=SQUuc3pybNpsZ8c1blUw1EbYy3GfHMBlhW9RHVMoqao=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Du9og/MyYKgDTOobVi4U0CYVKywdskIZFGVoA/aKoS58xYNkyVIlvEJ62HX8is6tv
+         ih9XKHNFUEYNYchn/JuuDQkH6xKoL4seNHWly4dZkmnXXntWMY7239K0Fqdb9/D4ct
+         bLJMjVuoSr9Su5KlnhPDUaxhfMumjwI/9BVyu0hv00bnm3s4I9PAluv2S0ESONoFyl
+         6Td3sGScqPaQLvBZ6Hqz9is3JcWqBh2Ngan8eUGPfWj1ae9iAPcNJVnGSoCXeibqHW
+         Xa+Cy40swvjv6hw7GCTC6ZlEl9i6xvhPI3Cz5AB1AMa5o7ax5Qu6oM0BPimfaltLkU
+         JXYgY+GbbzugA==
+Date:   Thu, 3 Mar 2022 08:01:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20220303080124.32dd0d15@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220224224622.GD6522@duo.ucw.cz>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ICDADcts05.GOWJxqhjO1BI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 11:46:22PM +0100, Pavel Machek wrote:
->On Tue 2022-02-22 21:31:48, Sasha Levin wrote:
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
->> [ Upstream commit 6fec1ab67f8d60704cc7de64abcfd389ab131542 ]
->>
->> The PREEMPT_RT patchset does not use do_softirq() function thus trying
->> to filter for do_softirq fails for such kernel:
->>
->>   echo do_softirq
->>   ftracetest: 81: echo: echo: I/O error
->>
->> Choose some other visible function for the test.  The function does not
->> have to be actually executed during the test, because it is only testing
->> filter API interface.
->
->This needs -rt patch even on mainline, right?
->
->It is certainly not needed in -stable branches.
+--Sig_/ICDADcts05.GOWJxqhjO1BI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'll drop it, thanks.
+Hi all,
 
--- 
-Thanks,
-Sasha
+In commit
+
+  de2c6f98817f ("ASoC: soc-compress: prevent the potentially use of null po=
+inter")
+
+Fixes tag
+
+  Fixes: 467fece ("ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-da=
+i.c")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ICDADcts05.GOWJxqhjO1BI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIf2yUACgkQAVBC80lX
+0GwJ4gf9Hgq9pA8em56U1sZ8Cx8BDiV+Yu4kfkOT3Psr9mdodRUwwNjrx95DmZLE
++qIK7H13elHstBFq5DFoF3EYakiwed++XMjqmAHkX2Z/1hM7kV/tw/6IvhOrqmXB
+miDwXdNQvkbqVeVQAnpSGsq/QdndCsda6Jco5YvJjy8BY7Rs0fHE/6CeiPl7FBPe
+med5DkfxLAsrM0vUjuffQjSuBcZi5sHfNYUkTVxr1z1N4tkIHAVV2rFj5g+wTapT
+JwcbU/KsAwHU2I7uNFM0DWQOHQlgPtHta+mt/RhtSMZm5NxTXmWHRE9rsA1iqnMq
+oClqCxGf1Kqsv6/vh3PW1LF0SxPIkg==
+=Q5TE
+-----END PGP SIGNATURE-----
+
+--Sig_/ICDADcts05.GOWJxqhjO1BI--

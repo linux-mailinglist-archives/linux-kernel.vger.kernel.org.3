@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0534CAA75
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C034CAA77
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243231AbiCBQhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S243053AbiCBQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242163AbiCBQhd (ORCPT
+        with ESMTP id S242840AbiCBQhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:37:33 -0500
+        Wed, 2 Mar 2022 11:37:35 -0500
 Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CE3C4B78
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:36:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2CBCEA01
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:36:52 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646239008;
+        t=1646239009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uo3r1XZ2YxXX2Y0KQk7NP/LkQS2+d42pEDKbCuKVO2A=;
-        b=dqtbv/8FM/BpZ36aN0SoEvBbrDqGpQNujrrTiFrcZ/GGK1iACrmtY3v9EpgsqMoF5kVf+V
-        T77/+r0QQUpdIhNtrvEvaDV4gqjloM1z7E8wkpf36GllOgJ+Wk5zA4ChirBxB4zHXCD8Ai
-        ZlMMu+FEdx2HixPTDXf2hhJwnz8Ki+I=
+        bh=Y1tVVcjXP0EERa5LTGRHGhA3byiWB4oonSnJ546jpQY=;
+        b=Lt4GrBE4AcuD8i0t9r97+W9VG/37yQMTx3JTaWtBhqz73Ts6O4gHTwfWe/kSPuGcx5X2Mo
+        5T5ocOiZw0whxQHDZxGV14Ovfb18EmMLsBiOoSZhPraZ349MCqlDwi5bfAklOErZc2h5/5
+        5aV2NFs1OglbiLieI37hZm7xGihH/Vs=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -36,9 +36,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm 04/22] kasan: improve stack frame info in reports
-Date:   Wed,  2 Mar 2022 17:36:24 +0100
-Message-Id: <aa613f097c12f7b75efb17f2618ae00480fb4bc3.1646237226.git.andreyknvl@google.com>
+Subject: [PATCH mm 05/22] kasan: print basic stack frame info for SW_TAGS
+Date:   Wed,  2 Mar 2022 17:36:25 +0100
+Message-Id: <029aaa87ceadde0702f3312a34697c9139c9fb53.1646237226.git.andreyknvl@google.com>
 In-Reply-To: <cover.1646237226.git.andreyknvl@google.com>
 References: <cover.1646237226.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -56,47 +56,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-- Print at least task name and id for reports affecting allocas
-  (get_address_stack_frame_info() does not support them).
-
-- Capitalize first letter of each sentence.
+Software Tag-Based mode tags stack allocations when CONFIG_KASAN_STACK
+is enabled. Print task name and id in reports for stack-related bugs.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/report_generic.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ mm/kasan/kasan.h          |  2 +-
+ mm/kasan/report_sw_tags.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
-index 3751391ff11a..7e03cca569a7 100644
---- a/mm/kasan/report_generic.c
-+++ b/mm/kasan/report_generic.c
-@@ -180,7 +180,7 @@ static void print_decoded_frame_descr(const char *frame_descr)
- 		return;
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index d1e111b7d5d8..4447df0d7343 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -274,7 +274,7 @@ void *kasan_find_first_bad_addr(void *addr, size_t size);
+ const char *kasan_get_bug_type(struct kasan_access_info *info);
+ void kasan_metadata_fetch_row(char *buffer, void *row);
  
- 	pr_err("\n");
--	pr_err("this frame has %lu %s:\n", num_objects,
-+	pr_err("This frame has %lu %s:\n", num_objects,
- 	       num_objects == 1 ? "object" : "objects");
+-#if defined(CONFIG_KASAN_GENERIC) && defined(CONFIG_KASAN_STACK)
++#if defined(CONFIG_KASAN_STACK)
+ void kasan_print_address_stack_frame(const void *addr);
+ #else
+ static inline void kasan_print_address_stack_frame(const void *addr) { }
+diff --git a/mm/kasan/report_sw_tags.c b/mm/kasan/report_sw_tags.c
+index d2298c357834..44577b8d47a7 100644
+--- a/mm/kasan/report_sw_tags.c
++++ b/mm/kasan/report_sw_tags.c
+@@ -51,3 +51,14 @@ void kasan_print_tags(u8 addr_tag, const void *addr)
  
- 	while (num_objects--) {
-@@ -266,13 +266,14 @@ void kasan_print_address_stack_frame(const void *addr)
- 	if (WARN_ON(!object_is_on_stack(addr)))
- 		return;
- 
+ 	pr_err("Pointer tag: [%02x], memory tag: [%02x]\n", addr_tag, *shadow);
+ }
++
++#ifdef CONFIG_KASAN_STACK
++void kasan_print_address_stack_frame(const void *addr)
++{
++	if (WARN_ON(!object_is_on_stack(addr)))
++		return;
++
 +	pr_err("The buggy address belongs to stack of task %s/%d\n",
 +	       current->comm, task_pid_nr(current));
-+
- 	if (!get_address_stack_frame_info(addr, &offset, &frame_descr,
- 					  &frame_pc))
- 		return;
- 
--	pr_err("\n");
--	pr_err("addr %px is located in stack of task %s/%d at offset %lu in frame:\n",
--	       addr, current->comm, task_pid_nr(current), offset);
-+	pr_err(" and is located at offset %lu in frame:\n", offset);
- 	pr_err(" %pS\n", frame_pc);
- 
- 	if (!frame_descr)
++}
++#endif
 -- 
 2.25.1
 

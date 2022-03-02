@@ -2,158 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B3D4CB3C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8AE4CB352
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiCCAUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S229865AbiCBX6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 18:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiCCAUI (ORCPT
+        with ESMTP id S229819AbiCBX6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:20:08 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B001FA42
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:19:21 -0800 (PST)
+        Wed, 2 Mar 2022 18:58:52 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828B22B1E;
+        Wed,  2 Mar 2022 15:58:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646266761; x=1677802761;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LMWdww3gKVSvMPGl0y+W3jt1a4ZtdGZp8Jk/8TdBtFs=;
-  b=GGa6zocP2ld2LGZGOAnfkohlYZAtZwHlDbl5jmMUGcuP3SVV4KRIOlnX
-   Uyj60G4ltsZbdYwUF6wdV5K2Q+wrEbUqLbI6YYHTR08eVSUJDHersoK2A
-   4g5sqSib0lvwj9ROEVoLPDaHF1JYFaWU3gZXwnc72U354Fr1auzhTu+VF
-   u5/m4BowumypOIuGeh20sERDVafMefVLdCnmrIEEiYIRD/ZjRegNBlKYy
-   6eAhp2W7bkfxZRhxDoaMNU4vDaFGI6YjhIyLRkMTyBfrBvfuQY3NEFHMq
-   eH0Ne9m3ME13YmnvIBn4++R96udgdb5QNwE8Sbh4BAANeZ9W44tSw5jrL
+  t=1646265488; x=1677801488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8rc56ekTbeKFOC2iDvS+DEuqovVns3lGZWNghGxdVAg=;
+  b=K58o9uRBYY7duBV0u+jYh31vDxU+I046W1LQUrR72tM9GTIg55EGKIRG
+   g9wQ2sLIJuqgOc81lnueCv9qK19KJc8sOFu9ghsR5Tp7du2meoSoMp1xG
+   GNMeddsVdCF4m6tadQwrK7PK2CwqLG8Q8ba8gFD50p0mT3OilmwXz5Pt9
+   yXdA43Y1HxmVSZjisWpOzaMNHfElUX97sysjhbL70AIboLqILB69W1zRK
+   vEpthpy0DDyD5pwGKVkHh4+fR9APIHQ3cpFSn80xMyRvWTgDmRVKGvzch
+   gLiOX0P8160SYjU3at5j/zDuPFMeCBIqvaAh7BuMhL+BZdk2YnT6oDpxI
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237038479"
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251101580"
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="237038479"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:12:00 -0800
+   d="scan'208";a="251101580"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:12:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="493719715"
+   d="scan'208";a="630572209"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Mar 2022 15:11:59 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Mar 2022 15:11:59 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nPY8U-00023E-F7; Wed, 02 Mar 2022 23:11:58 +0000
-Date:   Thu, 3 Mar 2022 07:11:12 +0800
+        id 1nPY8U-00023G-Fz; Wed, 02 Mar 2022 23:11:58 +0000
+Date:   Thu, 3 Mar 2022 07:11:15 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [frederic-dynticks:rcu/context-tracking 13/19]
- kernel/context_tracking.c:91:4: error: implicit declaration of function
- 'rcu_irq_work_resched'
-Message-ID: <202203030735.RQy2zusl-lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v11 26/27] ima: Restrict informational audit messages to
+ init_ima_ns
+Message-ID: <202203030748.dQ8i3hT2-lkp@intel.com>
+References: <20220302134703.1273041-27-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220302134703.1273041-27-stefanb@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking
-head:   e4eaff86ec91c1cbde9a113cf5232dac9f897337
-commit: 5cb63f8df32ee1a43ca46337d6c8554a27d44165 [13/19] rcu/context-tracking: Move deferred nocb resched to context tracking
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220303/202203030735.RQy2zusl-lkp@intel.com/config)
+Hi Stefan,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc6]
+[cannot apply to zohar-integrity/next-integrity linux/master jmorris-security/next-testing next-20220302]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fb184c4af9b9f4563e7a126219389986a71d5b5b
+config: arm64-randconfig-r006-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030748.dQ8i3hT2-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=5cb63f8df32ee1a43ca46337d6c8554a27d44165
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/context-tracking
-        git checkout 5cb63f8df32ee1a43ca46337d6c8554a27d44165
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/781d4b92eee902d5ebcac657814703974f8e8b28
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
+        git checkout 781d4b92eee902d5ebcac657814703974f8e8b28
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/context_tracking.c:91:4: error: implicit declaration of function 'rcu_irq_work_resched' [-Werror,-Wimplicit-function-declaration]
-                           rcu_irq_work_resched();
-                           ^
+>> security/integrity/ima/ima_main.c:200:32: error: too many arguments to function call, expected 2, have 3
+                                   ima_update_xattr(ns, iint, file);
+                                   ~~~~~~~~~~~~~~~~           ^~~~
+   security/integrity/ima/ima.h:413:20: note: 'ima_update_xattr' declared here
+   static inline void ima_update_xattr(struct integrity_iint_cache *iint,
+                      ^
    1 error generated.
 
 
-vim +/rcu_irq_work_resched +91 kernel/context_tracking.c
+vim +200 security/integrity/ima/ima_main.c
 
-    51	
-    52	/**
-    53	 * __ct_user_enter - Inform the context tracking that the CPU is going
-    54	 *		     to enter user or guest space mode.
-    55	 *
-    56	 * This function must be called right before we switch from the kernel
-    57	 * to user or guest space, when it's guaranteed the remaining kernel
-    58	 * instructions to execute won't use any RCU read side critical section
-    59	 * because this function sets RCU in extended quiescent state.
-    60	 */
-    61	void noinstr __ct_user_enter(enum ctx_state state)
-    62	{
-    63		lockdep_assert_irqs_disabled();
-    64	
-    65		/* Kernel threads aren't supposed to go to userspace */
-    66		WARN_ON_ONCE(!current->mm);
-    67	
-    68		if (!context_tracking_recursion_enter())
-    69			return;
-    70	
-    71		if ( __this_cpu_read(context_tracking.state) != state) {
-    72			if (__this_cpu_read(context_tracking.active)) {
-    73				/*
-    74				 * At this stage, only low level arch entry code remains and
-    75				 * then we'll run in userspace. We can assume there won't be
-    76				 * any RCU read-side critical section until the next call to
-    77				 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
-    78				 * on the tick.
-    79				 */
-    80				if (state == CONTEXT_USER) {
-    81					instrumentation_begin();
-    82					trace_user_enter(0);
-    83					vtime_user_enter(current);
-    84					instrumentation_end();
-    85				}
-    86				/*
-    87				 * Other than generic entry implementation, we may be past the last
-    88				 * rescheduling opportunity in the entry code. Trigger a self IPI
-    89				 * that will fire and reschedule once we resume in user/guest mode.
-    90				 */
-  > 91				rcu_irq_work_resched();
-    92				rcu_user_enter();
-    93			}
-    94			/*
-    95			 * Even if context tracking is disabled on this CPU, because it's outside
-    96			 * the full dynticks mask for example, we still have to keep track of the
-    97			 * context transitions and states to prevent inconsistency on those of
-    98			 * other CPUs.
-    99			 * If a task triggers an exception in userspace, sleep on the exception
-   100			 * handler and then migrate to another CPU, that new CPU must know where
-   101			 * the exception returns by the time we call exception_exit().
-   102			 * This information can only be provided by the previous CPU when it called
-   103			 * exception_enter().
-   104			 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
-   105			 * is false because we know that CPU is not tickless.
-   106			 */
-   107			__this_cpu_write(context_tracking.state, state);
-   108		}
-   109		context_tracking_recursion_exit();
-   110	}
-   111	EXPORT_SYMBOL_GPL(__ct_user_enter);
-   112	
+   176	
+   177	static void ima_check_last_writer(struct ima_namespace *ns,
+   178					  struct integrity_iint_cache *iint,
+   179					  struct inode *inode, struct file *file)
+   180	{
+   181		fmode_t mode = file->f_mode;
+   182		bool update;
+   183	
+   184		if (!(mode & FMODE_WRITE))
+   185			return;
+   186	
+   187		mutex_lock(&iint->mutex);
+   188		if (atomic_read(&inode->i_writecount) == 1) {
+   189			update = test_and_clear_bit(IMA_UPDATE_XATTR,
+   190						    &iint->atomic_flags);
+   191			if (!IS_I_VERSION(inode) ||
+   192			    !inode_eq_iversion(inode, iint->version) ||
+   193			    (iint->flags & IMA_NEW_FILE)) {
+   194				mask_iint_ns_status_flags
+   195						(iint,
+   196						 ~(IMA_DONE_MASK | IMA_NEW_FILE));
+   197				iint->measured_pcrs = 0;
+   198	
+   199				if (update)
+ > 200					ima_update_xattr(ns, iint, file);
+   201			}
+   202		}
+   203		mutex_unlock(&iint->mutex);
+   204	}
+   205	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

@@ -2,180 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C544C9F48
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976094C9F58
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbiCBId4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S236394AbiCBIhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiCBIdy (ORCPT
+        with ESMTP id S229808AbiCBIhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:33:54 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F593BA7C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646209991; x=1677745991;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Oui4n8lGmF/MoFM+iiGkoNYH16T5RdswDifc7f47oJs=;
-  b=X9YB4+BukPRzToTl6/PalX9YkXjK06HfV0z0qhx/GMSePZ6mwfAlGEDc
-   niyp6/+gpuQEBQwNoeoPEubjgW73CQ8d+noql3ufGvCUlP5NvelUeJmKX
-   K9UCZdvEBKmLojXurXzYdpZn7ohTCwZz2Xal81L+h9OkCOmzMri6Y1XlV
-   fbYLNixM1Yw+6wF3upNSsxgnXxER+K+Tp24WbW6BpZPXEtAlOPw6LaTC5
-   sj0oDsbxIG7ZhKMJZZPzq4+hYBB8gzfE/Na8qc5VQWph6WfEantDoQ0ek
-   yrYqGczs3tgbh8FzQT5E2atQl4ZEYR1cXql1wytzfXRdLfW73Y3svh18e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="233960523"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="233960523"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 00:33:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="686062520"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Mar 2022 00:33:10 -0800
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 00:33:10 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 2 Mar 2022 00:33:10 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 2 Mar 2022 00:33:00 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gM8inHXPg+p1zxho8l03OCGXQTF4Kc99xqbDNxMa4kCL53BcfbQRW9BEvx3uGCOjxZ+0xRMzQdKVtWnXJ6PUtg0ByTxAut1ajKqtq/YocpALbJzcFoQBmLdGPUzs7SLHXpyyL4xOzlAmUYa1XZPiYPri9FhehzDbQqCIIBpp7jsXwEofkivzV2dmcgeXYOZlYDDfxRkFKoDm/fDwI9Ll3FZXXzdZSH13frmNdTMYpK5K7u9yDVbKehs03SirQXMPAUMBPD/0ycrd5FZQTaiK/vqsskPbQ8CY4ahmDMyl4LNLYP0jFycpTmIdjycGI8kpwYnvFSPLruOlfxRKfyiJJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RGaGf+ddceTyzuH0gw8DMRIriamnw07d5YQp9Bwqe0g=;
- b=YgMZNcLNJGwAt6G5enhD1MsW6b1i8Gy2fAAd++Wi5wOumrtQftd3P3lmn6+GPb2IfrU2XU24NRjc9EMuYOSOVnR8b/d9ppskvsHBiLl2TSlYzMZdg8JpZ5yOZ6c902faLZ8N7n49MN9hjJqnx8GlSy65RZSe5yc6XrY6EcA5PzoT+znuluvx97EsjVGKHN+MpYJDw0rP/elLLrL9cwmj8O3dDZyhm+kTUyDCX9onK4oghXJzlVhrYPpNvDyBHIx9x4k7koKS+oZ5tEGySjpnQb/ozg+xipWRAGfeBpSht1RMcRVNhVgZpH1iuIqnlMsy0bS34ey+6xDtZeg8uVCHtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by DM6PR11MB4444.namprd11.prod.outlook.com (2603:10b6:5:1de::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Wed, 2 Mar
- 2022 08:32:58 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::586f:a77f:238a:ab8]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::586f:a77f:238a:ab8%2]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
- 08:32:58 +0000
-Message-ID: <191b6d46-cb8d-4e5d-8c4c-9dae91e32a45@intel.com>
-Date:   Wed, 2 Mar 2022 16:32:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [xfs] 6191cf3ad5: stress-ng.rename.ops_per_sec -73.5% regression
-Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>,
-        Brian Foster <bfoster@redhat.com>
-CC:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, <lkp@lists.01.org>,
-        <lkp@intel.com>, <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>
-References: <20220131154927.GF16385@xsang-OptiPlex-9020>
-From:   Yin Fengwei <fengwei.yin@intel.com>
-In-Reply-To: <20220131154927.GF16385@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HK2PR06CA0012.apcprd06.prod.outlook.com
- (2603:1096:202:2e::24) To CO1PR11MB4820.namprd11.prod.outlook.com
- (2603:10b6:303:6f::8)
+        Wed, 2 Mar 2022 03:37:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17B51A0BE0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646210207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/2FAiDhGcTywdRgwSmwFCo5u8TBif4JlceniLJIbtkU=;
+        b=SIAO5+bErRhfvTo4VjNYfnin2HRmwuXWULt6VEwf1b1ToVzRAC5DzoXSUkSm17/u61YGkt
+        PvjqnoS4Nw5qABPnmVPiQoxBl8BSgPVNF/E5MZhsr1D1JZaHtX7QlXUYQmEbaWNO/AxkeB
+        s6/HQCDtiJ2fdyi7P4Vho6shwzRK6gs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-yKMvKRnqNNC3_cKh6-mprw-1; Wed, 02 Mar 2022 03:36:41 -0500
+X-MC-Unique: yKMvKRnqNNC3_cKh6-mprw-1
+Received: by mail-wm1-f70.google.com with SMTP id f13-20020a05600c154d00b003818123caf9so590196wmg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:36:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/2FAiDhGcTywdRgwSmwFCo5u8TBif4JlceniLJIbtkU=;
+        b=VgAb4Q0D7ZikSB8f/46pa70BUUsYuMRqsclt/euLgtFhtg8YahOQqzzNkALwVctp+K
+         gclrdQmedUhl+72ufoBdFq8ny/NZOO1nGAB4UdJSN39liLA3Ufv4wSAIolGjxzJUCsfb
+         N9s0vx9PIEh0u/G20RS/mGL8WcyQMYa+7HqOJwN7F/BqD+9UebYAtsO4SEw6SdXeRIUI
+         3WjyEVLl4EezNHjfb9F73KxiJReVEOZCPdqSTpJLhvTGYGjHWt3p1v9PgEAur4+58SfD
+         IBtP+c2eqm6DMXGRvdsbZce4WaMS1ihqXexa5KG+P0Q+10kKLMZ/Ooapk905BCB5eq2g
+         yOyQ==
+X-Gm-Message-State: AOAM532SkTb10cpfUlbwLxVcGzT3/0n7L8I0Hg8oL0QINszFm+sJfFZv
+        fCW0T/ivkeH+ZBj6aRRoR0ILzJKpC5l2exUxzwHOX5tXwDbNfyifbAiophSkb+DjXPJiPoCAHxF
+        HhfNNmlVs5/JeFY2HLkrDKkS2
+X-Received: by 2002:a05:600c:3c9b:b0:380:be98:6204 with SMTP id bg27-20020a05600c3c9b00b00380be986204mr19516439wmb.121.1646210200111;
+        Wed, 02 Mar 2022 00:36:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJymEdMSgAgaDqjHhyxTJw/DIf4G/pqblQVXnivxlcluwVfKcMGVsVinJaSMoAx4IDiFG167KA==
+X-Received: by 2002:a05:600c:3c9b:b0:380:be98:6204 with SMTP id bg27-20020a05600c3c9b00b00380be986204mr19516421wmb.121.1646210199815;
+        Wed, 02 Mar 2022 00:36:39 -0800 (PST)
+Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
+        by smtp.gmail.com with ESMTPSA id q11-20020adfcd8b000000b001e320028660sm15805542wrj.92.2022.03.02.00.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 00:36:39 -0800 (PST)
+Date:   Wed, 2 Mar 2022 03:36:36 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, Alexander Graf <graf@amazon.com>,
+        Jann Horn <jannh@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH 3/3] wireguard: device: clear keys on VM fork
+Message-ID: <20220302033314-mutt-send-email-mst@kernel.org>
+References: <20220301231038.530897-1-Jason@zx2c4.com>
+ <20220301231038.530897-4-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d215d4c-1c29-4442-d9e5-08d9fc274187
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4444:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR11MB4444ACD01B26928D105435C9EE039@DM6PR11MB4444.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1Rnplk8OLiDjis9pD5j7H/G08xR8VYL2yg1imdKlHf3A81dohszulRuNwva30tGo45hX8BQ/BUsT3vaVj2rYJSoR9zmZnC/0duj+81pIhqP13Yelqu7hALn9ZqKOYbJnAQwxX3vMZn/4fd7u9w2PRdyh63qzFnJU/bLff057MX95zA1HUIDpgxwE//fcDzpiZ/yOAcOnBvQ7wiXUdKPUA03HcBbplUBa/E+GP88ElL/ZD4R8r9BexDOnqtKU/X61Gl+9yLLmrrtPEYYXiiFgsK605MZkuM2qLTzpg/d+Glc1vccjw5qrptIsif1r5Xu0cn1zx8A4mZViOvp+O5UR3Kg5xcaJZ2Tzgei6MjBCHaUvUr455PgmuSMGiEJ0M24nAVJle9QIMZbA7BDqzuAZSN0zhKGH+0ysy8A63DROA+hanavn+W2mNNOPubPCXIMDiK+vB7BwV4jHf48ylGnh4al47oHcBB4wlZi7fg13TDKX4dJ83CX8/anqKyk/xyQQutt7f2+geHSy6zdSF2+Zfv5/cItmS/AL11ZdgdGBWTHv7HFgAjtElRXM3L00dGXvUMKCpwW+jCA6p5JmtZsRuf2aaShmLzhso2NLrC1x0ZWy8aRE4UdtoSJQgnlcZrHnEU+l3OI9TKofIgO9JAYoEhJOfKXfAF1vFelR3CCbhfRFUa9fNQDO9bnCVKJj0n/41frC8lSTTCNJpQMdqOBuN9i62ibKyjTOEgXCEFb2Q5Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(6486002)(6506007)(6666004)(508600001)(2616005)(53546011)(110136005)(2906002)(86362001)(66946007)(66556008)(66476007)(4326008)(186003)(8936002)(8676002)(4744005)(5660300002)(26005)(83380400001)(82960400001)(316002)(38100700002)(31686004)(36756003)(6512007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1AxaE9PQ0gwMkNiYUU1S2NSaEgyYXh2dTRTTW9EU1lOM1ZQZHIvRjBLVmZU?=
- =?utf-8?B?NDdpMWx6SThCamxGVGdSYTdLK1FiblVJMFhHcUd2aWlHeitkRk1IMzVQOHh2?=
- =?utf-8?B?T3J0Sm9PSVg2OGVYTTljRkh5NEtadnFRSFdZY21UVFZQaUY0aFJ2bldCcDh0?=
- =?utf-8?B?WW9lV2I1ZXNQVjJHM293YVVoRDVrYVRsbnJxRzhlSjdmdWZyY0tmbUFBdXA0?=
- =?utf-8?B?dzlZS1FGRVN3TXNPWFEzbmE4U2QwUDZqVTkvTlFGTEJKV0FqVmR5N2NUZVNF?=
- =?utf-8?B?OGdKL211dDdaK2xLMTJrbVlkaWpIY0RjbFA5MkxPTTRZdEVxaXYvTEhBWFk2?=
- =?utf-8?B?amx5MTZyTFRTTjZoTnJGUGt1Tkk2QVFCckt0ZVVYQkVnUitsVnBjb2ZiL2ZM?=
- =?utf-8?B?a0VwczdhWWs4eHVoWnlyZ0grb2pvR0V3RFU1SjBxNUdyN1RmaHhNb0pNMlNi?=
- =?utf-8?B?L0lJYzNoSHlPRlRpRk90eVErT1loTml1c2p3RUZTZFlYc1dyRHdydmZENThi?=
- =?utf-8?B?Z1EzbENHL01KeXBLcFJPZk50bVluWEZFWmlkam9wUm12VHdCTFZ3Q00yMW9v?=
- =?utf-8?B?WkRaK2xpeG1mQ0czVHJwbmZ1WVROSVVmUytZVzl3YnBiK2RzbzN2NHVxSWFu?=
- =?utf-8?B?SVpOYUMwMnZiSTZvVHd3NDNZWjlSREN5aTdML0dwbUhrVFZmY05CS0Z2ai9p?=
- =?utf-8?B?THFTUGRQVFVxQ1R4Vmd4aGgveHhSQStBcEJGdWF5SndYWGZmb001dVljbTg3?=
- =?utf-8?B?REhjeVJIUmpUNGVGb0RNYlNLeVYvb3loNGJoVEJLcm56bkJXUzRPZUxjWktI?=
- =?utf-8?B?bkc4SmRGeVJ2K1VselNmMWpmZVA0SnhmTzkwY1hUYkVWVk5RT240dEJFZkJ2?=
- =?utf-8?B?cGpHWThzL01aR0lvYUhGb0lYK0V4cG5sUi9vTFBFdysvS1hrc1kwQXpSdlFU?=
- =?utf-8?B?dS90dHpETGpMVU9LMlRZcWNuejFLYkpLNWZSMDJ6dWZMRk9SY2NQUlBCMith?=
- =?utf-8?B?OGZmRCs5MEg3bUUwdWlyNnU5Z3ZwWXJiMXM1dStGQVk2enlsU3lZNHJTVmdH?=
- =?utf-8?B?T21JK3d6R0NXVUlrYzZia05pNElxNWROcUdNeW4vTkl1bEdHdWJ5cjZodGw0?=
- =?utf-8?B?cmRGa2w5YnN5WWJkVUdIZmhOOEdpV2pFZm5jbmd2dnJjSFI1UzhMU0JBWFh3?=
- =?utf-8?B?UmhYNmgzelIvRldzMlZFdnorQUQ4MGU5dDFTTHoraTZRRHFSTjVsT0Q4T2pS?=
- =?utf-8?B?Q25NbFFLeXhaWDZ6UmV6Tnl3endPVFVWUHhUandKKzhwMG91aWFUdW9VU1dI?=
- =?utf-8?B?ckRtQ25UWEpsN2dmK0lEanBweHdCRWVKVnJnRyt0TTdxRG92ZjhGL2Fta1JJ?=
- =?utf-8?B?ZTJKcTNLWm1KSU1FSTBndFVyNitvOENxWWFyYjlMdFFjNEF2ZVczc0JsUC92?=
- =?utf-8?B?bDFsUXBWWU5hUFRxQU5Qak9aMGJCZmlsK3ZjT1gzc0JDMktqVzhWUWkyZmF2?=
- =?utf-8?B?N3VLZXdYekN0aFNIbGlGWGNWaHlmazZXTFg4K2Q1NytOU0x0S2ZWVlFjS2o0?=
- =?utf-8?B?SUQxOVdpcE54eXRtNVF4WXdhb0p3T2xCc1hsSEozT2lXbGV2T3UyeGM0dFlP?=
- =?utf-8?B?d0ttcThkWkFWTGpTQ3laZ01tRnN1L3Ftd085MnFsRDlteGRwbnN4OHZGcWlB?=
- =?utf-8?B?WWtJbGJJNThWbnRndEFjQUVoVU8yT1dZTCt5RllMM2hsMUdyV2g1UG81RlE3?=
- =?utf-8?B?cUIybm14U2VFUU4raHBpSUFGMDM4SnJ5bUJSNGJvaTBTNDB5T3hLcGlnVFVI?=
- =?utf-8?B?SlRLR2VjYVdaRzIrMWVxN09HUFVSUVRBTnZPVjlWNWs0K1I2c3BERnBhL3hn?=
- =?utf-8?B?bmJIV0RoVjIzNzFhTXJFTHllZzhLMXgrV3IrbW85b2c5cVhwYVNqYldFYkho?=
- =?utf-8?B?R3ArWnZzV3JDOXJtT1VUVkVXWm9tSC9BNXR0eFJ2VjJ3V210ajZUdW4yMmE4?=
- =?utf-8?B?WDVRUTlQWWpsVEVOVFl3QXNpcDBrbUl0cWZSYytMVEdRaldsaG5ZWTEwNEhh?=
- =?utf-8?B?WXF5cllwempTT0wwM2t2TmRKck1wQVd3bTVlbUhiTnNxcGZwSTNsM292L1cz?=
- =?utf-8?B?WHhRY0tZTzFSbUZ2OXhGeHV1ZElGNldKbHQ5MWF1R1RIVkNzOC9PZDNGWFN4?=
- =?utf-8?Q?V8sUyl1ctJWOTr8fIH4nSNg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d215d4c-1c29-4442-d9e5-08d9fc274187
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 08:32:58.5637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FtTQX0KHIAmjVxCFRx3p2A/r38xaoTe80PGz9bg0aSMQ1z5HF7UnoSDvOLKoUxe1JsAQsr0140ofq5BIuxYoIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4444
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301231038.530897-4-Jason@zx2c4.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 02, 2022 at 12:10:38AM +0100, Jason A. Donenfeld wrote:
+> When a virtual machine forks, it's important that WireGuard clear
+> existing sessions so that different plaintext is not transmitted using
+> the same key+nonce, which can result in catastrophic cryptographic
+> failure. To accomplish this, we simply hook into the newly added vmfork
+> notifier, which can use the same notification function we're already
+> using for PM notifications.
+> 
+> As a bonus, it turns out that, like the vmfork registration function,
+> the PM registration function is stubbed out when CONFIG_PM_SLEEP is not
+> set, so we can actually just remove the maze of ifdefs, which makes it
+> really quite clean to support both notifiers at once.
+> 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-On 2022/1/31 23:49, kernel test robot wrote:
->        0.00           +59.8       59.78        perf-profile.calltrace.cycles-pp.osq_lock.__mutex_lock.flush_workqueue.xfs_fs_statfs.statfs_by_dentry
->       23.44 ±  2%     +61.0       84.49        perf-profile.calltrace.cycles-pp.vfs_statfs.user_statfs.__do_sys_statfs.do_syscall_64.entry_SYSCALL_64_after_hwframe
->       23.40 ±  2%     +61.1       84.47        perf-profile.calltrace.cycles-pp.statfs_by_dentry.vfs_statfs.user_statfs.__do_sys_statfs.do_syscall_64
+Catastrophic cryptographic failure sounds bad :(
+So in another thread we discussed that there's a race with this
+approach, and we don't know how big it is. Question is how expensive
+it would be to fix it properly checking for fork after every use of
+key+nonce and before transmitting it. I did a quick microbenchmark
+and it did not seem too bad - care posting some numbers?
 
-We did further check of the perf data. From above three lines,
-the patch brought higher lock content (+59.8) in this extreme cases.
-
-Regarding the patch could fix race issue, we will not tracking this
-report. Let us know if you have any comments. Thanks.
-
-
-Regards
-Yin, Fengwei
+> ---
+> Hi Jakub,
+> 
+> I wasn't planning on sending other WireGuard changes to net-next this
+> cycle, and this one here depends on previous things in my random.git
+> tree. Is it okay with you if I take this through my tree rather than
+> net-next? Alternatively, I could send it through net after rc1 if you'd
+> prefer that. Or we could just wait for 5.19, but that seems a long way's
+> off.
+> 
+> Thanks,
+> Jason
+> 
+>  drivers/net/wireguard/device.c | 27 ++++++++++++++-------------
+>  1 file changed, 14 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
+> index a46067c38bf5..22cc27c221f8 100644
+> --- a/drivers/net/wireguard/device.c
+> +++ b/drivers/net/wireguard/device.c
+> @@ -59,7 +59,10 @@ static int wg_open(struct net_device *dev)
+>  	return ret;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+> +static int wg_pm_notification(struct notifier_block *nb, unsigned long action, void *data);
+> +static struct notifier_block pm_notifier = { .notifier_call = wg_pm_notification };
+> +static struct notifier_block vm_notifier = { .notifier_call = wg_pm_notification };
+> +
+>  static int wg_pm_notification(struct notifier_block *nb, unsigned long action,
+>  			      void *data)
+>  {
+> @@ -70,10 +73,10 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action,
+>  	 * its normal operation rather than as a somewhat rare event, then we
+>  	 * don't actually want to clear keys.
+>  	 */
+> -	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
+> +	if (nb == &pm_notifier && (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID)))
+>  		return 0;
+>  
+> -	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
+> +	if (nb == &pm_notifier && action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
+>  		return 0;
+>  
+>  	rtnl_lock();
+> @@ -91,9 +94,6 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action,
+>  	return 0;
+>  }
+>  
+> -static struct notifier_block pm_notifier = { .notifier_call = wg_pm_notification };
+> -#endif
+> -
+>  static int wg_stop(struct net_device *dev)
+>  {
+>  	struct wg_device *wg = netdev_priv(dev);
+> @@ -424,16 +424,18 @@ int __init wg_device_init(void)
+>  {
+>  	int ret;
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  	ret = register_pm_notifier(&pm_notifier);
+>  	if (ret)
+>  		return ret;
+> -#endif
+>  
+> -	ret = register_pernet_device(&pernet_ops);
+> +	ret = register_random_vmfork_notifier(&vm_notifier);
+>  	if (ret)
+>  		goto error_pm;
+>  
+> +	ret = register_pernet_device(&pernet_ops);
+> +	if (ret)
+> +		goto error_vm;
+> +
+>  	ret = rtnl_link_register(&link_ops);
+>  	if (ret)
+>  		goto error_pernet;
+> @@ -442,10 +444,10 @@ int __init wg_device_init(void)
+>  
+>  error_pernet:
+>  	unregister_pernet_device(&pernet_ops);
+> +error_vm:
+> +	unregister_random_vmfork_notifier(&vm_notifier);
+>  error_pm:
+> -#ifdef CONFIG_PM_SLEEP
+>  	unregister_pm_notifier(&pm_notifier);
+> -#endif
+>  	return ret;
+>  }
+>  
+> @@ -453,8 +455,7 @@ void wg_device_uninit(void)
+>  {
+>  	rtnl_link_unregister(&link_ops);
+>  	unregister_pernet_device(&pernet_ops);
+> -#ifdef CONFIG_PM_SLEEP
+> +	unregister_random_vmfork_notifier(&vm_notifier);
+>  	unregister_pm_notifier(&pm_notifier);
+> -#endif
+>  	rcu_barrier();
+>  }
+> -- 
+> 2.35.1
+> 
+> 
 

@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4014CA9E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8E34CA9E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbiCBQNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S241220AbiCBQOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237727AbiCBQNI (ORCPT
+        with ESMTP id S237727AbiCBQOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:13:08 -0500
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17529CD9
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:12:23 -0800 (PST)
-Received: by mail-ua1-f50.google.com with SMTP id y1so989222uap.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:12:23 -0800 (PST)
+        Wed, 2 Mar 2022 11:14:03 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB47CCC5B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:13:17 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 132so2034963pga.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n1sj86b59iu9bNEKeM9TJNWPtdaS8+JumVKQjHmv3eA=;
+        b=VWjgRI5lBrSTdoy6GdW6JXhgIDzq9FlKFxNwvF7m95RNXP439RhBdJYvjWJ6DD292P
+         xFMuGvkHVhQVE/f8bIsjpcKkakU0m/tknZtH+BUst+W7Vmfjc4pp1dMq29RE9cCHi9tJ
+         JMzWzErO2G3z3FgM3+D/GSfYWUt8iUzNuekmpnSNjrW9CFpWHyoMdIwkK7buxbF3Egph
+         5demaYzOQx59dNv4FeF32mmi2xvC6Lhi8EZSodLGgLUDvnIPKpwDK7j9rvTZTkdsQVa+
+         1imTP83PkikIDrwncEunCvypcav5RgtIAZTuP3L8qEyNYL3oYL9FJWCQyN74IC+hZjyB
+         yXSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/qRg/Mm/97zJFeWgtUsYDDaU5xcw69+jJupgj9B3Thk=;
-        b=igKYxARf2kVHH+A/qGCAYoDftmK3ScJWuPlTpGxEGTO4pc8B+Ji6e/wo1MliVS5HbJ
-         Rwsy8oTb7u7jkvsYbJOEVGFjSH3rTsf+zKO5sd3GhigK3QWhPAvSpesj1XTVW5W7O07E
-         gdZbOMrOHWeIv6PGKDiN7OlH1wih8JSrSIkAnt3RxNbCJhZUmrQYbGtzvWYXH90GmXrD
-         1XKZlkHJc24KQQs9NfyK8iY7AZwPEfTxLL30q4LF8ugFPc/yGkAUbnfRxjMEaOuAjQE8
-         6fYHr7SQv0met7K2PJ75eEwZfKwWNxDrvk5WFkVzTlclO9zpw+2+l9HncbPfR5SPkx4q
-         wb6w==
-X-Gm-Message-State: AOAM532yFLPy9jHE5Eo8j39uFCmOys1WE887vtOxTyswFmZgyTh14KGe
-        zVj0QWjVdddC/VF0dnLHJT7SUn4u5VoJ+w==
-X-Google-Smtp-Source: ABdhPJxn97amtGJSdQX7NaxHzymPjvm7M2zeavVebRa86ef9DzNny9GodKIGgcGkaDPMgaSrrrNbIQ==
-X-Received: by 2002:ab0:7602:0:b0:347:b460:72c2 with SMTP id o2-20020ab07602000000b00347b46072c2mr3682579uap.12.1646237542062;
-        Wed, 02 Mar 2022 08:12:22 -0800 (PST)
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
-        by smtp.gmail.com with ESMTPSA id m6-20020a0561023e8600b0031bb1803345sm2130363vsv.6.2022.03.02.08.12.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 08:12:21 -0800 (PST)
-Received: by mail-vk1-f176.google.com with SMTP id j9so1155959vkj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:12:21 -0800 (PST)
-X-Received: by 2002:a1f:9f82:0:b0:336:8f32:eb24 with SMTP id
- i124-20020a1f9f82000000b003368f32eb24mr1457974vke.0.1646237541363; Wed, 02
- Mar 2022 08:12:21 -0800 (PST)
+        bh=n1sj86b59iu9bNEKeM9TJNWPtdaS8+JumVKQjHmv3eA=;
+        b=BNTluZdbFThdCiqBVgnBHuf3HLTN9Oj1rlmCx/MUFwXWP1xg9Zh/4vqOR/SAD9bSC8
+         WRXmdUH+px1+RLyOma55JI78c/BkMfE7BJU8P4rk0A2ulMrKPn1ip+GodblHbyt9OiLs
+         TzuEyJ1djmlWrepQjUcH5GESA6vTsxwtO2FE5Y1nw++K9aDyuNvx3HrkwkBF2y2suFaV
+         WQ2jU2CvFmf0kAxrO4UhsqX6zcd8Wdu68uo7ZLWSjfBVqQWtM5quQnk/CBSnBqb+CWOo
+         JchSGco2RpyggMDPl5zPQxqtzepqcKLf2uCutT3Zl9i05j61GwaXdU+EAuK2u9zjgme3
+         tBnw==
+X-Gm-Message-State: AOAM531QEmA+CmcNc3He16II+1B+xj6Le/bWQ17kx+2Yu4dLRxvPHEEO
+        sqPPq/EyizXPGAagzHb6hMHq1jC/ekBA6ml5Fa0bvA==
+X-Google-Smtp-Source: ABdhPJwQd5Cizg2aDLx093iBkzUoSzIjhzGF6B+14pI6HOErfkISahucNl96Q9cPDTvaIcQL25XgBd1FLaxEG7Qnn7U=
+X-Received: by 2002:a05:6a00:b52:b0:4f0:ff67:413 with SMTP id
+ p18-20020a056a000b5200b004f0ff670413mr33650623pfo.61.1646237596578; Wed, 02
+ Mar 2022 08:13:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 2 Mar 2022 17:12:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXAMwmfLoaGnKhgfOEWY+O2Ek6J3nM-5mQThUnJFxhA3Q@mail.gmail.com>
-Message-ID: <CAMuHMdXAMwmfLoaGnKhgfOEWY+O2Ek6J3nM-5mQThUnJFxhA3Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] auxdisplay: lcd2s: Fix lcd2s_redefine_char() feature
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Lars Poeschel <poeschel@lemonage.de>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com> <20220302142806.51844-30-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220302142806.51844-30-kirill.shutemov@linux.intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 2 Mar 2022 08:13:05 -0800
+Message-ID: <CAPcyv4gpCY5PW04T78M-0rkiGfXZGQTSdv31mV4LRXpxvWabeg@mail.gmail.com>
+Subject: Re: [PATCHv5 29/30] ACPICA: Avoid cache flush inside virtual machines
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, sdeep@vmware.com,
+        Sean Christopherson <seanjc@google.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 2:03 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> It seems that the lcd2s_redefine_char() has never been properly
-> tested. The buffer is filled by DEF_CUSTOM_CHAR command followed
-> by the character number (from 0 to 7), but immediately after that
-> these bytes are got rewritten by the decoded hex stream.
+On Wed, Mar 2, 2022 at 6:28 AM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
 >
-> Fix the index to fill the buffer after the command and number.
+> WBINVD is not supported in TDX guest and triggers #VE. There's no robust
+> way to emulate it. The kernel has to avoid it.
 >
-> Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
-> Cc: Lars Poeschel <poeschel@lemonage.de>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ACPI_FLUSH_CPU_CACHE() flushes caches usign WBINVD on entering sleep
+> states. It is required to prevent data loss.
+>
+> While running inside virtual machine, the kernel can bypass cache
+> flushing. Changing sleep state in a virtual machine doesn't affect the
+> host system sleep state and cannot lead to data loss.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>

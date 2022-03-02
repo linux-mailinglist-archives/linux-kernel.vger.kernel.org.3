@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB63B4CAB8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EA24CAB8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243818AbiCBR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S243824AbiCBR1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233700AbiCBR1e (ORCPT
+        with ESMTP id S241805AbiCBR1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:27:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0D50CA337
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646242010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JShSuOVLOzs3H1G/w8tPv6MflNWdaL6JxcHTBNKQ3o=;
-        b=f7v05PQHwTOQE2PRjKCL5kMQiUGwV/3TeavOqC4nsGtr9VCpPZMsUp2a+ieLxyMjvFLN19
-        PZrMvriFnB600kWhkwwd3n/VMTtKdBZQ9g7Wl8xdvmodLkHj5kwTPKWZUaCkaMXe2LcZ8+
-        Q3izfar2rJVQWoyLBCMyXkSoKzJ2ywI=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-_dBH7qtPN36Z2-9F6Oesjw-1; Wed, 02 Mar 2022 12:26:48 -0500
-X-MC-Unique: _dBH7qtPN36Z2-9F6Oesjw-1
-Received: by mail-il1-f200.google.com with SMTP id m17-20020a923f11000000b002c10e8f4c44so1725484ila.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:26:48 -0800 (PST)
+        Wed, 2 Mar 2022 12:27:42 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC69CA33B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:26:59 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id x3so2040078qvd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5g4e3FoDZ04w3yN9r9/DrAhXMgzBOA3m1TJsZRCqpfs=;
+        b=LB74V1s71KJAopRug7ZclBoN6D00aUe7NnQmke84eYdl0Oc86XRIy1BL2LWnNtOmCJ
+         HcvHbKy8hzchOyqDZqAvLS0dMntrTFjlSUxNiQg25Rfo2kOC67yheiJNKUU/tYTBORgF
+         alRny5RwvS9ly3kDB0FiQ0Gibo3BCkZ71jC47/q5CRmWGD7aSk1KQbYPMMldIzPBVH9W
+         VVd6iLn6uRtnLh4/HjVJ7ksuilf7iGldDvbW9C/RDErjBZDMFI9O6JDNQBzVCKECewRv
+         jGFSZtsxN4LF6R665EKdbA3tvYb044LZbOgwpe6BbJCIjkjgBv9sbEQYy8iOqC4kOnTZ
+         cZHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0JShSuOVLOzs3H1G/w8tPv6MflNWdaL6JxcHTBNKQ3o=;
-        b=6hPCq88PY7zvnBBhTz9BGned8j3/xoOPG9iMbZXf8Kmr58J23vxLWiiGXCizfcSQOQ
-         SQ1tXZffdcjgI+EOay1OWl6yX50HAXDTssnppSLY8RptByQl5+nMy8tQVXGNFb+zIm28
-         p4WRiwxu7ZTzRgEdy3I633yheL3vG7qcaB/thAcvLuBtmDIuIgfimLxeCUl+SO0DTzlB
-         ubcnYhXa191jrjbRfVMXVmMpt9jozWNx8uepDnbOJHYEjBycPttXw3qkviBFr2PwdKbK
-         TbVO6L9mDBFkCpQOhYzq8l7NkyC4fzEv7BnLtX0M2nMRxK3CTDSPwaXtVVeAea78wLB0
-         3viw==
-X-Gm-Message-State: AOAM530MUuNTTCbeElF0Br54yyaInbCOfmZmGi7A5uQ29n/YM4COFdnj
-        zkY7k5FbA5846+UTTJRRnoNd3sm5c2LJqTRlnVuhclXtxXnjJVEXxFqLwOZlcf5Js++mqKyEfrR
-        SD9xQPjEKfSBIivMUCd6wIWct
-X-Received: by 2002:a05:6e02:1a06:b0:2c2:20c8:c016 with SMTP id s6-20020a056e021a0600b002c220c8c016mr27470761ild.143.1646242008005;
-        Wed, 02 Mar 2022 09:26:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzL8xcxepFTjy/r3mc6Yk5JN69xs++O5rrSs71VHh3GfhTigqI2aHu4Hez7d8OX8UoAnpiSrg==
-X-Received: by 2002:a05:6e02:1a06:b0:2c2:20c8:c016 with SMTP id s6-20020a056e021a0600b002c220c8c016mr27470748ild.143.1646242007786;
-        Wed, 02 Mar 2022 09:26:47 -0800 (PST)
-Received: from ?IPV6:2601:280:4400:a2e0::11d7? ([2601:280:4400:a2e0::11d7])
-        by smtp.gmail.com with ESMTPSA id p2-20020a92d682000000b002c291ae0e1bsm9853732iln.23.2022.03.02.09.26.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 09:26:47 -0800 (PST)
-Message-ID: <7f1ba14f-34e8-5f05-53b7-c12913693df8@redhat.com>
-Date:   Wed, 2 Mar 2022 12:26:45 -0500
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5g4e3FoDZ04w3yN9r9/DrAhXMgzBOA3m1TJsZRCqpfs=;
+        b=iVPYPOcqLgeCBBxQHEEA0g8rsINMwG3ubvwxML6qNpLzle8vkzTOGA4IWWPBtP9RPH
+         M38JXT3lR8w4TluDdMeBKUgrznSccZ4ZrVy+nAWBHK0d4Q8U3inIqUUd74zrc75xfJkR
+         ut/r0yji9/EGLn+iF4St1skPyvLYlHjEp2Q/j8xA+9C44JaYzwLLlxbrHYZ1H/L5ttfC
+         1YBYZb29rVVRtZo3S0DtUfHyZ29lHNA6dWQ0zou5IzJWcq+uH4OS+9VGHKDauq7mA6+v
+         YGTV4ZZyhU86l6BU8Ywj2sWnZFmnoUJat45aztDl8tguexlXibkZ9ovDO+FPgHNPKGT3
+         THkg==
+X-Gm-Message-State: AOAM533M2AiYhrzyC93gSXLIPm69a2sIzpBHyWXp0xOA0SfSEzQEeDti
+        zLKIQOsz3UZUP8f4oBUAkcot16nobJF3YxOk5SQ=
+X-Google-Smtp-Source: ABdhPJyCD0GZMhmbwW2CTTlmI4eJC4c5yH/eFxWGq0joUGcdKm6BWwdUcQIHhkjO0L/HO5SgNnYOfevJgw9sZiWoMdE=
+X-Received: by 2002:ad4:5fcb:0:b0:432:d049:c6d with SMTP id
+ jq11-20020ad45fcb000000b00432d0490c6dmr17509351qvb.39.1646242018249; Wed, 02
+ Mar 2022 09:26:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] mm/oom: do not oom reap task with an unresolved robust
- futex
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        jsavitz@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@collabora.com
-References: <20220114180135.83308-1-npache@redhat.com>
- <YeUuWcNArnDhOjFY@dhcp22.suse.cz>
- <ad639326-bea8-9bfb-23e3-4e2b216d9645@redhat.com>
- <43a6c470-9fc2-6195-9a25-5321d17540e5@redhat.com>
- <YeZ/mL808DpA8mdG@dhcp22.suse.cz>
- <118fc685-c68d-614f-006a-7d5487302122@redhat.com>
- <Yh9+O/xqNLnV1jmA@dhcp22.suse.cz>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <Yh9+O/xqNLnV1jmA@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:ad4:5f4b:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 09:26:57 -0800 (PST)
+Reply-To: michellegoodman45@gmail.com
+From:   Michelle Goodman <michellegoodman358@gmail.com>
+Date:   Wed, 2 Mar 2022 17:26:57 +0000
+Message-ID: <CAAnwc9u5Wxo9fB-=Eg9dEXQrnzkWV7Sa2CtLrxPvQKfj3G12RQ@mail.gmail.com>
+Subject: Halo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f2b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4992]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [michellegoodman358[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [michellegoodman45[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [michellegoodman358[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hallo, ich hoffe du hast meine Nachricht erhalten.
+Ich brauche schnelle Antworten
 
-
-On 3/2/22 09:24, Michal Hocko wrote:
-> Sorry, this has slipped through cracks.
-> 
-> On Mon 14-02-22 15:39:31, Nico Pache wrote:
-> [...]
->> We've recently been discussing the following if statement in __oom_reap_task_mm:
->> 	if (vma_is_anonymous(vma) || !(vma->vm_flags & VM_SHARED))
->>
->> Given the comment above it, and some of the upstream discussion the original
->> RFC, we are struggling to see why this should be a `||` and not an `&&`. If we
->> only want to reap anon memory and reaping shared memory can be dangerous is this
->> statement incorrect?
->>
->> We have a patch queued up to make this change, but wanted to get your opinion on
->> why this was originally designed this way in case we are missing something.
-> 
-> I do not really see why this would be wrong. Private file backed
-> mappings can contain a reapable memory as well. I do not see how this
-> would solve the futex issue.
-We were basing our discussion around the following comment:
-/*
- * Only anonymous pages have a good chance to be dropped
- * without additional steps which we cannot afford as we
- * are OOM already.
- *
- * We do not even care about fs backed pages because all
- * which are reclaimable have already been reclaimed and
- * we do not want to block exit_mmap by keeping mm ref
- * count elevated without a good reason.
- */
-
-So changing to an && would align the functionality with this comment by ignoring
-fs backed pages, and additionally it prevents shared mappings from being reaped.
-We have tested this change and found we can no longer reproduce the issue. In
-our case we allocate the mutex on a MAP_SHARED|MAP_ANONYMOUS mmap so the if-
-statement in question would no longer return true after the && change.
-
-If it is the case that private fs backed pages matter perhaps we want something
-like this:
-	if ((vma_is_anonymous(vma) && !(vma->vm_flags & VM_SHARED))
-	||(!vma_is_anonymous(vma) && !(vma->vm_flags & VM_SHARED)))
-
-or more simply:
-	if(!(vma->vm_flags & VM_SHARED))
-
-to exclude all VM_SHARED mappings.
-
--- Nico
-
+Danke.
+Michelle

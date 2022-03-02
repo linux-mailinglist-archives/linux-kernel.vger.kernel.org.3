@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0821C4C9AA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4024A4C9AAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238659AbiCBBlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S238957AbiCBBsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiCBBlg (ORCPT
+        with ESMTP id S236717AbiCBBs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:41:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB78A1BE8;
-        Tue,  1 Mar 2022 17:40:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C13BB81BEA;
-        Wed,  2 Mar 2022 01:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76B5C340EE;
-        Wed,  2 Mar 2022 01:40:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646185252;
-        bh=t7b7XBlaSW5C/zrCE4sLY8sBYlVGnx0VRe90U0a1Cy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l3lTt8RMP2oSRblhVvuP/nR4t/f5RP5+dKwTfzyAbQLkLM4vYMpAbJi0fUWGfwBys
-         WfrKmrTRN8b0ISJTN/m86zV74A7TWcU5T0vLRq3wkvaZkUX06hqPYlVlsg/h1ujrOQ
-         tdZU7LUgSMB4/5vPlwDbVdITsVtOAJjjzkgW2GP0BUMkwNyQJB4A3/zzJculY7sXfg
-         GjV4atlpSv7E7dy7ipGz26JmvlNTrpNqQMXhBV5FOlZX0ejmbR3A3icA8epoqvJYHs
-         myfzsMdAxzUd6ZRXo2kIVVvSjndwL8xKbCHmxaiBYy3JVbaDoNsjfh6XqcmS/WRaJP
-         RPJP7jGfou74Q==
-Date:   Wed, 2 Mar 2022 02:41:37 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] x86/sgx: Free backing memory after faulting the
- enclave page
-Message-ID: <Yh7LUU401weiq0ew@iki.fi>
-References: <20220301125836.3430-1-jarkko@kernel.org>
- <3a083b4d-9645-dec6-8cdc-481429dd0a1f@intel.com>
+        Tue, 1 Mar 2022 20:48:28 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB25B17AAD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 17:47:44 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id bm39so208472qkb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 17:47:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mgf1HAXmo18JSbss+8HqPirEGYISw1T1YWytow0MUCs=;
+        b=LUX5mz/uFs1tXRIyjHFWvNomENb+XL1uTGGmGp/Sv0C6k7AU6+O+nZ+rrdxX/q7eay
+         yoSXrmjDlwwTx1wsjkJzkiLYjjYRCc9nuqfKyJP8LsiR6WEmdPP8+KjhPfJSs4UTJk0U
+         MOv9Z0S2VDibn98ytvyhkhI9BGvz28EloqmS+aOiYl0LYBsEF1ot8nHSriUKtIsCFGLW
+         1tljeoqleRlL+iNjA1iX6fuTt/t8hfnW03BQspKnkljtUFnOmRjEcUzzQxxWV/qw5wmF
+         qUS5bbz8u4Lyf4Tbx7pWT6qDrANRDkDsdJsqXXaIG6iT9yWHw87tJq+gWHPMB8P0bplS
+         YF/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mgf1HAXmo18JSbss+8HqPirEGYISw1T1YWytow0MUCs=;
+        b=gzEH0BW0WcvcT0Hpw/rZ32B8zmDIsGnCvbzwNTkkNzO9ecK/SmBJGw+28DBGihRkUv
+         8ADhcfxxO5iS5ZZjZjkpiiPEONT6+PyASXQwUtiMUoEAs2pUzBg9n0Tw/H/3CW8vZN2O
+         jGzOw2PY7s++LgAsp4JVhbSa3Dut/2DxN8BkNHmZRf+xd8oUvQ2qJt5UfhqX1tQQYyuY
+         xZwGC2INcPow5+Fv3tkC4lpYfJeVjwosTVec+I8S76rawOuHNgHxhDJNjQ4hAHcTieWv
+         wEYKZ+qC5OyAJvW+f01Wmp4xmzayZoba4G5yBznKnyMjUKAosGSUZjuvRe3CfmJanyh6
+         VSdA==
+X-Gm-Message-State: AOAM5320Bd3gRkR/+NXsH/085yGE3Ieg3+x6TZ4tDaTAMd9eAhwM+MFD
+        5WWi0y3bgSxAcdcekUXn3xR6HW7wqG3bZTLYMbuuhg==
+X-Google-Smtp-Source: ABdhPJzrU2fR07uEXITY9Nq9WB/Rf4BURiyOAXE3/3F5S7O6zXheS1LlqUyywuxrHbREKt0PcmAq73kOAe+5zjC2QGs=
+X-Received: by 2002:a05:620a:4307:b0:507:d5b1:f65e with SMTP id
+ u7-20020a05620a430700b00507d5b1f65emr15266386qko.363.1646185663888; Tue, 01
+ Mar 2022 17:47:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a083b4d-9645-dec6-8cdc-481429dd0a1f@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220302012931.4107196-1-bjorn.andersson@linaro.org> <20220302012931.4107196-2-bjorn.andersson@linaro.org>
+In-Reply-To: <20220302012931.4107196-2-bjorn.andersson@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 2 Mar 2022 04:47:32 +0300
+Message-ID: <CAA8EJppiNbJhrdFgJ0sESBM5m3oyazS-8dG8919xdZu50fZ8aQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Issue MDSS reset during initialization
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,37 +73,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:54:14AM -0800, Dave Hansen wrote:
-> On 3/1/22 04:58, Jarkko Sakkinen wrote:
-> > @@ -32,14 +58,16 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
-> >  	else
-> >  		page_index = PFN_DOWN(encl->size);
-> >  
-> > +	page_pcmd_off = sgx_encl_get_backing_page_pcmd_offset(encl, page_index);
-> > +
-> >  	ret = sgx_encl_lookup_backing(encl, page_index, &b);
-> >  	if (ret)
-> >  		return ret;
-> 
-> What tree is this against?  It looks like it might be on top of
-> Kristen's overcommit series.
-> 
-> It would be best if you could test this on top of tip/sgx.  Kristen
-> changed code in this area as well.
+On Wed, 2 Mar 2022 at 04:27, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> It's typical for the bootloader to bring up the display for showing a
+> boot splash or efi framebuffer. But in some cases the kernel driver ends
+> up only partially configuring (in particular) the DPU, which might
+> result in e.g. that two different data paths attempts to push data to
+> the interface - with resulting graphical artifacts.
+>
+> Naturally the end goal would be to inherit the bootloader's
+> configuration and provide the user with a glitch free handover from the
+> boot configuration to a running DPU.
+>
+> But as implementing seamless transition from the bootloader
+> configuration to the running OS will be a considerable effort, start by
+> simply resetting the entire MDSS to its power-on state, to avoid the
+> partial configuration.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>
+> Changes since v1:
+> - Rather than trying to deconfigure individual pieces of the DPU, reset the
+>   entire block.
+>
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c | 18 ++++++++++++++++++
+>  drivers/gpu/drm/msm/msm_drv.c            |  4 ++++
+>  drivers/gpu/drm/msm/msm_kms.h            |  1 +
+>  3 files changed, 23 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
+> index b10ca505f9ac..419eaaefe606 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/irqdesc.h>
+>  #include <linux/irqchip/chained_irq.h>
+> +#include <linux/reset.h>
+>  #include "dpu_kms.h"
+>
+>  #define to_dpu_mdss(x) container_of(x, struct dpu_mdss, base)
+> @@ -31,6 +32,7 @@ struct dpu_mdss {
+>         void __iomem *mmio;
+>         struct clk_bulk_data *clocks;
+>         size_t num_clocks;
+> +       struct reset_control *reset;
+>         struct dpu_irq_controller irq_controller;
+>  };
+>
+> @@ -197,10 +199,18 @@ static void dpu_mdss_destroy(struct msm_mdss *mdss)
+>         dpu_mdss->mmio = NULL;
+>  }
+>
+> +static int dpu_mdss_reset(struct msm_mdss *mdss)
+> +{
+> +       struct dpu_mdss *dpu_mdss = to_dpu_mdss(mdss);
+> +
+> +       return reset_control_reset(dpu_mdss->reset);
+> +}
+> +
+>  static const struct msm_mdss_funcs mdss_funcs = {
+>         .enable = dpu_mdss_enable,
+>         .disable = dpu_mdss_disable,
+>         .destroy = dpu_mdss_destroy,
+> +       .reset = dpu_mdss_reset,
+>  };
+>
+>  int dpu_mdss_init(struct platform_device *pdev)
+> @@ -227,6 +237,13 @@ int dpu_mdss_init(struct platform_device *pdev)
+>         }
+>         dpu_mdss->num_clocks = ret;
+>
+> +       dpu_mdss->reset = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+> +       if (IS_ERR(dpu_mdss->reset)) {
+> +               ret = PTR_ERR(dpu_mdss->reset);
+> +               DPU_ERROR("failed to acquire mdss reset, ret=%d", ret);
+> +               goto reset_parse_err;
+> +       }
+> +
+>         dpu_mdss->base.dev = &pdev->dev;
+>         dpu_mdss->base.funcs = &mdss_funcs;
+>
+> @@ -252,6 +269,7 @@ int dpu_mdss_init(struct platform_device *pdev)
+>  irq_error:
+>         _dpu_mdss_irq_domain_fini(dpu_mdss);
+>  irq_domain_error:
+> +reset_parse_err:
+>  clk_parse_err:
+>         if (dpu_mdss->mmio)
+>                 devm_iounmap(&pdev->dev, dpu_mdss->mmio);
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 129fa841ac22..7595f83da3f1 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -388,6 +388,10 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
+>         if (ret)
+>                 return ret;
+>
+> +       /* Issue a reset of the entire MDSS */
+> +       if (priv->mdss && priv->mdss->funcs->reset)
+> +               priv->mdss->funcs->reset(priv->mdss);
+> +
 
-I rebased this against latest stuff and now I did a sanity check:
+I think this is incorrect. In this way reset happens after all
+subdevice are probed. They might have programmed some state of the
+corresponding block. The clocks are already registered, so the clock
+framework will be out of sync.
+I think the reset should happen before calling of_platform_populate(),
+so the device state is consistent with the driver.
 
-$ git fetch tip
-remote: Enumerating objects: 75, done.
-remote: Counting objects: 100% (75/75), done.
-remote: Compressing objects: 100% (12/12), done.
-remote: Total 77 (delta 65), reused 65 (delta 63), pack-reused 2
-Unpacking objects: 100% (77/77), 34.07 KiB | 157.00 KiB/s, done.
-From git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-   161a9a33702a..cedd3614e5d9  perf/core  -> tip/perf/core
-   6255b48aebfd..25795ef6299f  sched/core -> tip/sched/core
+Also see the https://git.linaro.org/people/dmitry.baryshkov/kernel.git/log/?h=dpu-mdss-rework,
+which reworks the mdss driver and mdss probing.
 
-$ git rebase tip/x86/sgx 
-Current branch master is up to date.
+>         /* Bind all our sub-components: */
+>         ret = component_bind_all(dev, ddev);
+>         if (ret)
+> diff --git a/drivers/gpu/drm/msm/msm_kms.h b/drivers/gpu/drm/msm/msm_kms.h
+> index 2a4f0526cb98..716a34fca1cd 100644
+> --- a/drivers/gpu/drm/msm/msm_kms.h
+> +++ b/drivers/gpu/drm/msm/msm_kms.h
+> @@ -205,6 +205,7 @@ struct msm_mdss_funcs {
+>         int (*enable)(struct msm_mdss *mdss);
+>         int (*disable)(struct msm_mdss *mdss);
+>         void (*destroy)(struct msm_mdss *mdss);
+> +       int (*reset)(struct msm_mdss *mdss);
+>  };
+>
+>  struct msm_mdss {
+> --
+> 2.33.1
+>
 
-BR, Jarkko
+
+-- 
+With best wishes
+Dmitry

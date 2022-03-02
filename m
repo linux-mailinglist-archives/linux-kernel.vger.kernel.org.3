@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6B94CB0B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7A54CB0C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbiCBVLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S245059AbiCBVL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiCBVLW (ORCPT
+        with ESMTP id S234898AbiCBVLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:11:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9755B6D01
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:10:38 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id y5so2002286wmi.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=dQsFhF1/hV1naVDlbcCm3YVz6Er9ziLGvWW482VtK3Q=;
-        b=K/eASSZiHGsNk3WKGGcy7BgI65UgOtLPWPoWEFkbEMo59l5HNvPWcYR35FHdrlShr4
-         5xFuug7BnHoGw67glt0a72xAbnihBvVm6v+CuFacgR2DF6phuBwCBp8u2pN830W67Jhw
-         3Wpt24zx6BQWyRtJWnXmuKtir+/oesk7s9JaRJkv0KH4bkO8kf2AexzLLYUKRHrZUlNE
-         6l6MffU3UWBbLsCVN3VLYsUSHIJoUe/FAJ4k9riNqikL1KcZw4EXoSHKM54vc/0sZQ7B
-         Phh2Aks98ecZihS5NKjdgM+5BtRC0PggapwU7Y91IhVOOp0euvhRplyo8KdN5EFph8+d
-         kHHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=dQsFhF1/hV1naVDlbcCm3YVz6Er9ziLGvWW482VtK3Q=;
-        b=RsyMvx/IRYTIit4oOdt2LlDl39IQGc5M2ur33LkIjQD93gsBUBJOpWfq9DCHZKVHhZ
-         KznR1sHoWLUJ5TvWGRMeds+oTMrL1TNsnirWWNjhX11TIrbVowUBnYHnHTGYhZ94xFcC
-         FIHWDZ3W5McKo0aOVVpthVMtQ6FPcd0T2Zxo9pdPFiv/qtvOv6zlNiEKNhjgb7dSeCIg
-         hm9UwFqYnV1i5fmaymTey5iMT9d1yrjaloP7+Kx5L6RtrGtuV92hsfcXqi5M5/k0SAjE
-         RNAZEWKR+tpo3g6jYeckYNhIo/mhtD33ydRv3g5GsPmXsdUEwgCfekULrRxsHqP1zEQ1
-         iT1A==
-X-Gm-Message-State: AOAM530qqdQxfSJNy3X/XvT0AL/wry9CcAWBxSRnTlPJcvPP5ZtHpjIO
-        M/1ddNTu5MHgBoIP+bogyc/H2A==
-X-Google-Smtp-Source: ABdhPJz3l7hSdXw5FPBP4h5QrTtNeUrO/cpc7nHx9qcYgH+e/DxuEe7f9waYf+ZJ40PnOn5vzrIFQA==
-X-Received: by 2002:a05:600c:5118:b0:381:71f6:bb93 with SMTP id o24-20020a05600c511800b0038171f6bb93mr1342536wms.169.1646255437350;
-        Wed, 02 Mar 2022 13:10:37 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id b13-20020a05600c4e0d00b003816cb4892csm12624945wmq.0.2022.03.02.13.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 13:10:36 -0800 (PST)
-Date:   Wed, 2 Mar 2022 22:10:35 +0100
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     John Keeping <john@metanate.com>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 00/16] crypto: rockchip: permit to pass self-tests
-Message-ID: <Yh/dS1LBmUlM2zPD@Red>
-References: <20220228194037.1600509-1-clabbe@baylibre.com>
- <Yh4Y99KCi+1lbrve@donbot>
+        Wed, 2 Mar 2022 16:11:54 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092DAB7146;
+        Wed,  2 Mar 2022 13:11:08 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A9C3C1C0005;
+        Wed,  2 Mar 2022 21:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646255466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=itH78pPfoQ6UhbplnnBJkFGPYw1yUjwOppLHajcMFfQ=;
+        b=PJBpm/gO8KB6e00LHTjZVoEHKJ+1osZ7S0kwRXAIu76EhaL/iTe+znrsAFPAFNfoJ4GsWS
+        YAWn6j3R7skPVF9q+XsGWx3gvsLhkSU6N3fBFDy1Xu0E5Sm4dAJhA1SZkNwBcK5XcarmMG
+        AiesJ0JuyNuIzV8Xd8OpoSGP1aeK5xKiz7fRCQL8hZEIBBzYEZCkKj+PGBmbtiwjzTtwPa
+        1TgpIPYROFbTIeXQayFwp0gd1wlGcsEq7U9my883onJcJKpyhZKvZdXsd/lT+8N1JuuRRt
+        ZPZ8gyAM5x5BoDycZGeePmBKf294e4y5ZAd0zUSe0frTEsZljFu440C0sYRxeg==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 0/8] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support
+Date:   Wed,  2 Mar 2022 22:10:52 +0100
+Message-Id: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh4Y99KCi+1lbrve@donbot>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,25 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Mar 01, 2022 at 01:00:39PM +0000, John Keeping a �crit :
-> On Mon, Feb 28, 2022 at 07:40:21PM +0000, Corentin Labbe wrote:
-> > The rockchip crypto driver is broken and do not pass self-tests.
-> > This serie's goal is to permit to become usable and pass self-tests.
-> > 
-> > This whole serie is tested on a rk3328-rock64 with selftests (with
-> > CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
-> 
-> I previously noticed this breakage on rk3288 but never got time to
-> investigate (disabling the driver was quicker).
-> 
-> This series fixes everything on rk3288 as well, thanks!
-> 
-> I hit the same warnings as the kernel test robot as well as a missing
-> new kconfig dependency (see separate reply to patch 10), but this is
-> 
-> Tested-by: John Keeping <john@metanate.com>
-> 
+This new version is an offspring from the big "Allwinner A31/A83T
+MIPI CSI-2 Support and A31 ISP Support" series, which was split into
+individual series for better clarity and handling.
 
-Thanks for the test, but since I have added some code in v2, could you re-test it ?
+This part only concerns Allwinner platform support changes.
+Note that the device-tree bindings for the MIPI CSI-2 controller
+and ISP are still under review in their dedicated series, so these
+patches should probably not be merged yet, although feedback about
+them is welcome.
 
-Regards
+Changes since all-in-one v2:
+- Corrected mbus index used for the interconnects;
+- Used extended mbus binding and exported the DRAM clock for that;
+- Reworked the description of the core openfirmware change to give
+  more insight about the situation.
+
+Kévin L'hôpital (1):
+  ARM: dts: sun8i: a83t: bananapi-m3: Enable MIPI CSI-2 with OV8865
+
+Paul Kocialkowski (7):
+  of: Mark interconnects property supplier as optional
+  dt-bindings: interconnect: sunxi: Add V3s mbus compatible
+  clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header
+  ARM: dts: sun8i: v3s: Add mbus node to represent the interconnect
+  ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
+  ARM: dts: sun8i: v3s: Add support for the ISP
+  ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+
+ .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |   2 +
+ arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts  | 102 +++++++++++++++
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  26 ++++
+ arch/arm/boot/dts/sun8i-v3s.dtsi              | 121 ++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun8i-v3s.h          |   4 -
+ drivers/of/property.c                         |   2 +-
+ include/dt-bindings/clock/sun8i-v3s-ccu.h     |   4 +-
+ 7 files changed, 254 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1
+

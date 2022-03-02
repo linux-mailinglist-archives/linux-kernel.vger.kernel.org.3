@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A663E4CAE1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2B44CAE35
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244842AbiCBTD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S244898AbiCBTFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244850AbiCBTDz (ORCPT
+        with ESMTP id S244591AbiCBTFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:03:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAEE4AE09;
-        Wed,  2 Mar 2022 11:03:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Mar 2022 14:05:46 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AFCD048D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:05:03 -0800 (PST)
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3E44614C9;
-        Wed,  2 Mar 2022 19:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9472BC004E1;
-        Wed,  2 Mar 2022 19:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646247782;
-        bh=o//HJ6BOALyflat2+5/GXiJeuCPk+VlksyaDQu6xvUo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vFrX8MUdmDI0aw/CwGNlWdVxijOAupdHvPGORfc9vfwp7o9C3E1UfWW6zSvKXoVHs
-         PZwc4C/SYJZKagYuC8rtAcyj6JvNYd7B0tAs4yMk5FyTjhnVCzloNeiMpnYw1EAwde
-         kzFHoX0Lm7lo3yrq6Sd9pQgyinqc6EeWhRw/B2wwP36yEvva87s0wjEPmflAkRRrV3
-         LvIfkTTXdyZUJsgAXz0K33lu+ttMODStUdQMmAaNG/ipZn0hh3vABvjaGyMPMTUQsQ
-         Qvh3dlPm4WYvjNrexqoPy7FXkQoHZnWZn5UqzaZcyWld0LHiz3vbdyJEKe7MnX3JPI
-         xdz7ju2+U5kqA==
-Date:   Wed, 2 Mar 2022 11:03:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, dsahern@gmail.com,
-        edumazet@google.com
-Subject: Re: [PATCH net-next v4 2/4] net: tap: track dropped skb via
- kfree_skb_reason()
-Message-ID: <20220302110300.1ac78804@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <0556b706-cb4d-b0b6-ef29-443123afd71d@oracle.com>
-References: <20220226084929.6417-1-dongli.zhang@oracle.com>
-        <20220226084929.6417-3-dongli.zhang@oracle.com>
-        <20220301184209.1f11b350@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <0556b706-cb4d-b0b6-ef29-443123afd71d@oracle.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6DD723F60E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:05:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646247901;
+        bh=o/gq2zH0XhC0PaitqVD/LagQpkqLCpBFDwRKMGbmd0w=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+         In-Reply-To:Content-Type;
+        b=paifCzoumozPCgowa7dzMuwXNt5AtzNtgP1WBHuhsti2tBLjMHEHucxawN3B+TM1G
+         CNSpca91RncTQM9IVHpW6yxHhnf3udLllgtDWGpZrdaHsT065UmvnI2u6VBN7PXfqh
+         5qQUpwt4iy8q/NtXdTd7c8ixPKyJbJ6T10GpkfWmcTMmx9MrCfhWXIh8nwtPrEfWzC
+         YVV0F57X64k2qX7a2qac1lmhYralJf9WUxuMllqPvbOVtWTF789iFnzavdIi7r87N8
+         oZJElokxFjeHOHq0AuE7vuY9TqjPHL6ZYqMvZ1rt0U4hZUlEeWcSJBMQO+yF1mRh2v
+         DXbnwuYGLJGTA==
+Received: by mail-lf1-f72.google.com with SMTP id i24-20020a0565123e1800b0044567f5a29bso970595lfv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:05:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:cc:from:in-reply-to
+         :content-transfer-encoding;
+        bh=o/gq2zH0XhC0PaitqVD/LagQpkqLCpBFDwRKMGbmd0w=;
+        b=hNK9llTpdzlmSTRBl9u3TxlWL7UVjAPb4ikfDMSM++M1RZ/2Ewmvi18i90LGBw2OhW
+         MyL035P8NN5o6+8OtDtm4vnL4XaE/Sh9vRGnbGafaCyssBk6QQkftITGLgXSB6EOiVQp
+         9bZTFRJnsA92ZeSdvcRRmHi8z+jMnx4z81ILGdjYxX8pT71nHsVb+H5bAyxZ2AeMRhmd
+         XverK3yVNhGiG2stQyE4GoFmM2L5U/D0Ntt9N70Y8idL6n15/4MUwJ5skbtoQSd7zAFn
+         5BPVeYch1OPDFLjDjLaPFu2/lbjsKEzTUt/tuebKG2TOl0uLHqlcMIxfq2BFheQmq3iE
+         c18g==
+X-Gm-Message-State: AOAM533qM7tCW8OROqx+S+liDcQfbxwdU4S1Q7bqelwVXAlmPvaP9eMX
+        jWNEva9zvYPEN2Nj7reEmAzjpicW3K4RueRWyu3FtY4OiSzLSRxj0Q7UktmrfOk0X0QRvp/3bAT
+        QK3alUMCDxbcZNwH2pkm8fNYfqG/nKYDPCqeSMgJZkQ==
+X-Received: by 2002:a05:6402:26cb:b0:3fa:3817:1f78 with SMTP id x11-20020a05640226cb00b003fa38171f78mr30654867edd.219.1646247889946;
+        Wed, 02 Mar 2022 11:04:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy5ud+uzIs5hvG4Gs8CgEyL9Hzob7WkoDzIJWUkIA9MRmpeL5TH6uATTuuggM0eZzWdPfuGEw==
+X-Received: by 2002:a05:6402:26cb:b0:3fa:3817:1f78 with SMTP id x11-20020a05640226cb00b003fa38171f78mr30654817edd.219.1646247889629;
+        Wed, 02 Mar 2022 11:04:49 -0800 (PST)
+Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm6630349ejj.74.2022.03.02.11.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 11:04:46 -0800 (PST)
+Message-ID: <211b3d35-1d8d-b71c-996a-b185324815f7@canonical.com>
+Date:   Wed, 2 Mar 2022 20:04:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yash Shah <yash.shah@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-rockchip@lists.infradead.org
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 09:43:29 -0800 Dongli Zhang wrote:
-> On 3/1/22 6:42 PM, Jakub Kicinski wrote:
-> > On Sat, 26 Feb 2022 00:49:27 -0800 Dongli Zhang wrote:  
-> >> +	SKB_DROP_REASON_SKB_CSUM,	/* sk_buff checksum error */  
-> > 
-> > Can we spell it out a little more? It sounds like the checksum was
-> > incorrect. Will it be clear that computing the checksum failed, rather
-> > than checksum validation failed?  
+On 14/02/2022 22:21, Krzysztof Kozlowski wrote:
+> Hi,
 > 
-> I am just trying to make the reasons as generic as possible so that:
+> Changes since v1:
+> 1. Add tags.
+> 2. Adjust subject (Uwe).
 > 
-> 1. We may minimize the number of reasons.
-> 
-> 2. People may re-use the same reason for all CSUM related issue.
 
-The generic nature is fine, my concern is to clearly differentiate
-errors in _validating_ the checksum from errors in _generating_ them.
-"sk_buff checksum error" does not explain which one had taken place.
+Hi Thierry, Uwe and Lee,
 
-> >> +	SKB_DROP_REASON_SKB_COPY_DATA,	/* failed to copy data from or to
-> >> +					 * sk_buff
-> >> +					 */  
-> > 
-> > Here should we specify that it's copying from user space?  
-> 
-> Same as above. I am minimizing the number of reasons so that any memory copy for
-> sk_buff may re-use this reason.
+Any comments here? Rob acked all these, so these are clear to go via PWM
+tree.
 
-IIUC this failure is equivalent to user passing an invalid buffer. 
-I mean something like:
 
-	send(fd, (void *)random(), 1000, 0);
-
-I'd be tempted to call the reason something link SKB_UCOPY_FAULT.
-To indicate it's a problem copying from user space. EFAULT is the
-typical errno for that. WDYT?
-
+Best regards,
+Krzysztof

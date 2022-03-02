@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F814CA225
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE8F4CA229
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiCBK2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S238286AbiCBK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235643AbiCBK2O (ORCPT
+        with ESMTP id S233902AbiCBK3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:28:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2C91FD1A;
-        Wed,  2 Mar 2022 02:27:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC850139F;
-        Wed,  2 Mar 2022 02:27:31 -0800 (PST)
-Received: from [10.57.21.40] (unknown [10.57.21.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B488C3F70D;
-        Wed,  2 Mar 2022 02:27:29 -0800 (PST)
-Message-ID: <5529d0f7-e81f-4def-0d34-eb3f1801cc45@arm.com>
-Date:   Wed, 2 Mar 2022 10:27:28 +0000
+        Wed, 2 Mar 2022 05:29:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81E68F983;
+        Wed,  2 Mar 2022 02:29:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 735E4B81F64;
+        Wed,  2 Mar 2022 10:29:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9CEC004E1;
+        Wed,  2 Mar 2022 10:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646216944;
+        bh=SxiAf4w0t5Z/laDZISR+TqH6C7L6uEHJCHh5rWwHoak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Au0FuN8NZqg5fQ+d6O/N1dmXPu5GNfYEnDbEMSaNG1Y8T2Tj3ITcdCF+0wuIe+1Ah
+         n/4TUvcQEpUqLJNbhS5GCJAMPbx5IaJfUSfUfh1M1K7pKH10FHyZMcLMjMGLhYYV5L
+         IueFz4+O6nHwvx8amotFPOc55B48mTAqTV4VWUdU=
+Date:   Wed, 2 Mar 2022 11:29:00 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Kyle Sanderson <kyle.leet@gmail.com>,
+        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        device-mapper development <dm-devel@redhat.com>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+Message-ID: <Yh9G7FyCLtsm2mFA@kroah.com>
+References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
+ <20220219210354.GF59715@dread.disaster.area>
+ <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
+ <YhN76/ONC9qgIKQc@silpixa00400314>
+ <CACsaVZJFane88cXxG_E1VkcMcJm8YVN+GDqQ2+tRYNpCf+m8zA@mail.gmail.com>
+ <CAHk-=whVT2GcwiJM8m-XzgJj8CjytTHi_pmgmOnSpzvGWzZM1A@mail.gmail.com>
+ <Yh0y75aegqS4jIP7@silpixa00400314>
+ <Yh1aLfy/oBawCJIg@gondor.apana.org.au>
+ <CAHk-=wi+xewHz=BH7LcZAxrj9JXi66s9rp+kBqRchVG3a-b2BA@mail.gmail.com>
+ <Yh2c4Vwu61s51d6N@gondor.apana.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH] coresight: core: Fix coresight device probe failure issue
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-References: <20220302080132.20946-1-quic_jinlmao@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220302080132.20946-1-quic_jinlmao@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh2c4Vwu61s51d6N@gondor.apana.org.au>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 08:01, Mao Jinlong wrote:
-> It is possibe that probe failure issue happens when the device
-> and its child_device's probe happens at the same time.
-> In coresight_make_links, has_conns_grp is true for parent, but
-> has_conns_grp is false for child device as has_conns_grp is set
-> to true in coresight_create_conns_sysfs_group. The probe of parent
-> device will fail at this condition. Add has_conns_grp check for
-> child device before make the links and make the process from
-> device_register to connection_create be atomic to avoid this
-> probe failure issue.
+On Tue, Mar 01, 2022 at 04:11:13PM +1200, Herbert Xu wrote:
+> On Mon, Feb 28, 2022 at 05:12:20PM -0800, Linus Torvalds wrote:
+> > 
+> > It sounds like it was incidental and almost accidental that it fixed
+> > that thing, and nobody realized it should perhaps be also moved to
+> > stable.
 > 
-> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Suggested-by: Mike Leach <mike.leach@linaro.org>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->   drivers/hwtracing/coresight/coresight-core.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 88653d1c06a4..7ce78dddfe31 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1382,7 +1382,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
->   			continue;
->   		conn->child_dev =
->   			coresight_find_csdev_by_fwnode(conn->child_fwnode);
-> -		if (conn->child_dev) {
-> +		if (conn->child_dev && conn->child_dev->has_conns_grp) {
->   			ret = coresight_make_links(csdev, conn,
->   						   conn->child_dev);
->   			if (ret)
-> @@ -1619,6 +1619,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->   	csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
->   	dev_set_name(&csdev->dev, "%s", desc->name);
->   
-> +	mutex_lock(&coresight_mutex);
->   	ret = device_register(&csdev->dev);
->   	if (ret) {
->   		put_device(&csdev->dev);
-> @@ -1645,8 +1646,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->   		}
->   	}
->   
-> -	mutex_lock(&coresight_mutex);
-> -
->   	ret = coresight_create_conns_sysfs_group(csdev);
->   	if (!ret)
->   		ret = coresight_fixup_device_conns(csdev);
-> @@ -1666,6 +1665,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->   err_free_csdev:
->   	kfree(csdev);
->   err_out:
-> +	mutex_unlock(&coresight_mutex);
+> Yes this was incidental.  The patch in question fixes an issue in
+> OOM situations where drivers that must allocate memory on each
+> request may lead to dead-lock so it's not really targeted at qat.
 
-This appears to be wrong. We may do an unlock when we didn't lock it in
-the first place.
-Please could you double check. Also, I think it may be neater to move
-the kfree(csdev) to the only user and return straight away from there.
+Ok, so what commits should I backport to kernels older than 5.10 to
+resolve this?
 
-Cheers
-Suzuki
+thanks,
 
-
-
-
->   	/* Cleanup the connection information */
->   	coresight_release_platform_data(NULL, desc->pdata);
->   	return ERR_PTR(ret);
-
+greg k-h

@@ -2,78 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E827B4CA5F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FD54CA5F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242200AbiCBN0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S242205AbiCBN1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbiCBN0j (ORCPT
+        with ESMTP id S235127AbiCBN06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:26:39 -0500
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566B2DE7;
-        Wed,  2 Mar 2022 05:25:56 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id u10so1157923wra.9;
-        Wed, 02 Mar 2022 05:25:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yfk2Zok3t0Vw4DfsAGuxBuROVgr+WDNIArMCRZveyF4=;
-        b=38RULZBLzeLYqBQseMsdtz8ClmrRKdoqGLLgIiTprzgnckHdp4K3LJy6n7VPi0A6fG
-         Y09RXooWOc2hACNCqRMGgxeO3QBUie5R5GWxOp7HsPIdj4Fm5TnLjQrkPqXbBaFJPcEc
-         N6yOdS6/ot6x0/Edg/1+mg1hvFKU6a0yHCuIas7TEBQAeAU8+xXi4Ji3JvnYLFFLGxtq
-         qUBvoJrvrazi1Z044wv7lPpWm3D3j9jIbelttejp1CGcMw0Jl0llbl5/eit8vfl7qRBr
-         LChWPRTfx/F9hT+Fh4RgzVK4y+bQCdfrL6AA0IdZPAraE/MJn24WIwCH/ycZp6URqlAm
-         KvqA==
-X-Gm-Message-State: AOAM531AG4yIpPIT93jxpCc34y3+WP7/jkBdo7uIdz0Gk0/auLMty+P4
-        h5f630N/6U9KFcmrBjvTFNF+2Bvq39Q=
-X-Google-Smtp-Source: ABdhPJwh+jnexT1ewqtomhIDD5TRreNmf8JL5VMmDuWYmP84nMrp+zK782JTOHJcbL1hSCDEHsRjXg==
-X-Received: by 2002:a5d:6488:0:b0:1ea:7ff1:93e with SMTP id o8-20020a5d6488000000b001ea7ff1093emr24307485wri.284.1646227554586;
-        Wed, 02 Mar 2022 05:25:54 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id d18-20020adff2d2000000b001f025ea3a20sm3657228wrp.0.2022.03.02.05.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 05:25:54 -0800 (PST)
-Date:   Wed, 2 Mar 2022 13:25:52 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v3 10/30] drivers: hv: dxgkrnl: Creation of compute
- device sync objects
-Message-ID: <20220302132552.bssianizq25c3fu4@liuwe-devbox-debian-v2>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <438c7537f0b5b8f6f5afc35f968a3cf38047d290.1646163378.git.iourit@linux.microsoft.com>
+        Wed, 2 Mar 2022 08:26:58 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10041CFFE;
+        Wed,  2 Mar 2022 05:26:15 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E9A591F44E0D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646227574;
+        bh=vIbI9aNzOb5Yz1Pb7B8zVtgYkA/gIFiYF+AyCtFN6y8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mO/NL1EeZ7vpHaJLT+lciSlTguGF2C81AFnzhEdgFH6TC5y/Brb9oJ6+DxM9vmujM
+         FELXibdgQSP7F7AtjgHoJDL3a4XzhsaWXLM0hEj0TqZsGocHvvvkbUH3sVZpNsS0x+
+         za59oWN6X7M+SQN6r4hKc/wKjXYFI3u8I+wMcLcUyguRhVOLZIpg8dG0qBTnXDepfb
+         Bb9vGfTK0Y28bV1ElQ5DZ5sdEh/ZV7RkRBvxL+zqLui/ITL7YP9aJVeJm8AHIUgL6s
+         pKd95O0mBomkxpuTZEeNb4nwOVKA3E27bdgZwe0xPw0qyfPJLt7r6oThxqXyF1On7u
+         DRtsfAzLL1KMA==
+Message-ID: <f006d46c-8060-3bee-b589-5e39c1ebf768@collabora.com>
+Date:   Wed, 2 Mar 2022 14:26:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <438c7537f0b5b8f6f5afc35f968a3cf38047d290.1646163378.git.iourit@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v15 00/12] Add Mediatek Soc DRM (vdosys0) support for
+ mt8195
+Content-Language: en-US
+To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        hsinyi@chromium.org, fshao@chromium.org, moudy.ho@mediatek.com,
+        roy-cw.yeh@mediatek.com, CK Hu <ck.hu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Jitao shi <jitao.shi@mediatek.com>, nancy.lin@mediatek.com,
+        singo.chang@mediatek.com, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
+ <c73eefcbf85cbb1eb9d1278e675608f8d9775693.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <c73eefcbf85cbb1eb9d1278e675608f8d9775693.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:45:57AM -0800, Iouri Tarassov wrote:
-[...]
-> +void dxgadapter_remove_syncobj(struct dxgsyncobject *object)
-> +{
-> +	down_write(&object->adapter->shared_resource_list_lock);
-> +	if (object->syncobj_list_entry.next) {
-> +		list_del(&object->syncobj_list_entry);
-> +		object->syncobj_list_entry.next = NULL;
-> +	}
+Il 14/02/22 11:13, Jason-JH Lin ha scritto:
+> Hello Matthias,
+> 
+> The DRM parts are all reviewed by Chun-Kuang.
+> Can you spare some time to give us some suggestion for mmsys parts?
+> 
+> Or do you think we should separate the driver of mmsys related patches
+> to another series and resend again?
+> Would it be better to combine mmsys related patches from vdosys0 [1]
+> and vdosys1 [2] series?
+> 
+> e.g.
+> [v1,0/7] soc: mediatek: mmsys: add mt8195 mmsys support
+> [v1,1/7] dt-bindings: arm: mediatek: mmsys: add power and gce
+> properties
+> [v1,2/7] dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding
+> [v1,3/7] dt-bindings: reset: mt8195: add vdosys1 reset control bit
+> [v1,4/7] soc: mediatek: mmsys: add mtk-mmsys support for mt8195 vdosys0
+> [v1,5/7] soc: mediatek: mmsys: add mtk-mmsys support for mt8195 vdosys1
+> [v1,6/7] soc: mediatek: mmsys: add mtk-mmsys config API for mt8195
+> vdosys1
+> [v1,7/7] soc: mediatek: mmsys: modify reset controller for MT8195
+> vdosys1
+> 
+> ---
+> [1] Add Mediatek Soc DRM (vdosys0) support for mt8195
+> -
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=608548
+> [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+> -
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=604065
+> ---
+> 
+> Regards,
+> Jason-JH.Lin
+> 
 
-Just use list_del here.
+Hello everyone,
 
-Thanks,
-Wei.
+I think that all the drm/mediatek and soc/mediatek patches in this series
+are safe and ready (and also tested for regressions on older SoCs).
+
+Feel free to pick them in your trees.
+
+Cheers,
+Angelo
+
+

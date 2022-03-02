@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D744CB307
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 00:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B22E4CB2D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 00:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiCBXpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 18:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
+        id S229549AbiCBXqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 18:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiCBXpr (ORCPT
+        with ESMTP id S229497AbiCBXqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:45:47 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8A73E5C5;
-        Wed,  2 Mar 2022 15:43:33 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222Mnb7N008466;
-        Wed, 2 Mar 2022 23:43:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=i5BWb3tqsZ4eoh82ODgmPwJgY+o4LlIyFrdu6rEg8Ak=;
- b=pJtwsLeTgC1Ub+ayC8j8aUk3FRTc3evGdqJgL6RzT6j8vs5Gk7vvIFTpli27VUngJ23w
- eZ5Qg/Z8wY5bRs0zhXtJ7PB8k3dSaByBOe6VYH/aMIWSyIZ4mzhljrZggZdiGnD08ksZ
- SHkJJXclmN4W9woqvwtNK4E0P+Ddpoe4PmysCr5475b+ziDDt/QiPP9SEHrQas7YqJk9
- AoK0lRQdVGPpgDHLzj+MWLB3uFIyoqWYjirNTi8pAdADBoNe8AzQjMmPNtsWfzQI0FDQ
- v5haQDeFLs8gv0fKVJqSr2lBaMQEEdpR885+NPUrEjHlDHJu6blQfvZtBHo+b+XRRaQv Ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc03g1pr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 23:43:08 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222NWN4R024561;
-        Wed, 2 Mar 2022 23:43:08 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc03g1ph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 23:43:08 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222Nb81Y025228;
-        Wed, 2 Mar 2022 23:43:06 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma05wdc.us.ibm.com with ESMTP id 3ej75rmnmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 23:43:06 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Nh5tf34603432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Mar 2022 23:43:05 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85205AE066;
-        Wed,  2 Mar 2022 23:43:05 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3AD3DAE05F;
-        Wed,  2 Mar 2022 23:43:04 +0000 (GMT)
-Received: from [9.160.116.147] (unknown [9.160.116.147])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Mar 2022 23:43:04 +0000 (GMT)
-Message-ID: <11ab9dfa-494b-5103-5f26-aa6c29567f52@linux.ibm.com>
-Date:   Wed, 2 Mar 2022 18:43:03 -0500
+        Wed, 2 Mar 2022 18:46:06 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D24EF54;
+        Wed,  2 Mar 2022 15:43:57 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id p15so3299065oip.3;
+        Wed, 02 Mar 2022 15:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lp3igCTBUuzlbWnkmK/gfxOOr4818cn0YOZlkpHeS+Y=;
+        b=Vyo3B7vRjlNFrwo7KK5xiCzmwAwgIeI+e6v3ufQAUXsoASn7b969YNcvCcuHiPea2I
+         YzFEwcOXeQBM+zdx0YKGj/JH8ti7+Vs+Kjid3MQcyAMeGZb5Lfoh1oXcOoJMwqfJx4rK
+         dnag0LkQhg7Hr/3NsJJagy9JkpZw1E7UDlPUr78P5YpeubzK/lv4uT27mgpJXCVpV6NW
+         sWU0oj8795lkxGzRCXDeA6vbp/+413Smrlt5Edf7ciI6ut74AhfP5dua3VMezb7mfOMU
+         kS00SwNL1Vnp5v3Hro5skR7n0xjoPMUoBjKWTwz0j9Kd/sSZJkxfiROEw4lZOtwnJo/W
+         pgVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lp3igCTBUuzlbWnkmK/gfxOOr4818cn0YOZlkpHeS+Y=;
+        b=7FyZXGum2T/cJa5pGGQJ9LPEQenmmSMAQzaPBrYxo5t7Nr5si8Dm2Zx/Ejp/P4zrcK
+         lZ3xI7Ejr9uB/pS78Nwd2oAqQ++cTgh0Ozmrtk9HDhl/WV9bmyA2T8xWJABM/Ja9iWox
+         5QihIdXKvsbbEbQrgSy8kGiJlez4lXK6GcL+Zmjh9b5eeH1LIAwZ7knRnURMquyDP2Y+
+         sjC+OhunIRXK415R1VsDLh1v+M1V+ujyOrVGnQK4n1sS8Z5bCqVMTz2+7nQf5HlfjpFA
+         muhAbJWrUrWjgnFCJuu0GSXdkvrS8hPT2Pdw48DRLE6y7y6eZHfuoNPahFN4dCSO9LHp
+         pqIw==
+X-Gm-Message-State: AOAM531DTBOdAwwCxPK++hRopJWTYVnJgS9yVZtVrn9EAw3nHlM7PMlS
+        yPtorFNTDdNqWe389tVKeLOP+UvD4+0eBcc3Roo=
+X-Google-Smtp-Source: ABdhPJzbX9RgtlE7iKrIsuSOmMNrhk6U1PLpHkbJ75YlDSAlitrKKmBHBsXT/m5122I+aCzffWcKZKxZUXkdSGaNGo4=
+X-Received: by 2002:a05:6808:3091:b0:2d4:c180:d586 with SMTP id
+ bl17-20020a056808309100b002d4c180d586mr2139157oib.120.1646264632489; Wed, 02
+ Mar 2022 15:43:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v18 07/18] s390/vfio-ap: refresh guest's APCB by filtering
- APQNs assigned to mdev
-Content-Language: en-US
-To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
- <20220215005040.52697-8-akrowiak@linux.ibm.com>
- <2b1f788b-5197-f5e8-52cf-58995d758ef7@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <2b1f788b-5197-f5e8-52cf-58995d758ef7@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qwP7h1CS1yQLyuuEgo_Weg01A1yRzyDt
-X-Proofpoint-ORIG-GUID: zPYtVih04kZnTT8H_SA9_2e3W9lyBqk4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203020098
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220303075733.481987a8@canb.auug.org.au> <4804f1e7-8a25-ad8c-dd63-589ed34260c6@amd.com>
+In-Reply-To: <4804f1e7-8a25-ad8c-dd63-589ed34260c6@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 2 Mar 2022 18:43:41 -0500
+Message-ID: <CADnq5_PEobgWeJu8jipJx0gxSiiDiKLp372+5GLvTqncdG6zHA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,98 +67,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/2/22 14:35, Jason J. Herne wrote:
-> On 2/14/22 19:50, Tony Krowiak wrote:
->> Refresh the guest's APCB by filtering the APQNs assigned to the 
->> matrix mdev
->> that do not reference an AP queue device bound to the vfio_ap device
->> driver. The mdev's APQNs will be filtered according to the following 
->> rules:
->>
->> * The APID of each adapter and the APQI of each domain that is not in 
->> the
->> host's AP configuration is filtered out.
->>
->> * The APID of each adapter comprising an APQN that does not reference a
->> queue device bound to the vfio_ap device driver is filtered. The APQNs
->> are derived from the Cartesian product of the APID of each adapter and
->> APQI of each domain assigned to the mdev.
->>
->> The control domains that are not assigned to the host's AP configuration
->> will also be filtered before assigning them to the guest's APCB.
->>
->> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
->> ---
->>   drivers/s390/crypto/vfio_ap_ops.c | 96 ++++++++++++++++++++++++++++++-
->>   1 file changed, 93 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/s390/crypto/vfio_ap_ops.c 
->> b/drivers/s390/crypto/vfio_ap_ops.c
->> index 4b676a55f203..b67b2f0faeea 100644
->> --- a/drivers/s390/crypto/vfio_ap_ops.c
->> +++ b/drivers/s390/crypto/vfio_ap_ops.c
->> @@ -317,6 +317,63 @@ static void vfio_ap_matrix_init(struct 
->> ap_config_info *info,
->>       matrix->adm_max = info->apxa ? info->Nd : 15;
->>   }
->>   +static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev 
->> *matrix_mdev)
->> +{
->> +    bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
->> +           (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
->> +}
->> +
->> +/*
->> + * vfio_ap_mdev_filter_matrix - copy the mdev's AP configuration to 
->> the KVM
->> + *                guest's APCB then filter the APIDs that do not
->> + *                comprise at least one APQN that references a
->> + *                queue device bound to the vfio_ap device driver.
->> + *
->> + * @matrix_mdev: the mdev whose AP configuration is to be filtered.
->> + */
->> +static void vfio_ap_mdev_filter_matrix(unsigned long *apm, unsigned 
->> long *aqm,
->> +                       struct ap_matrix_mdev *matrix_mdev)
->> +{
->> +    int ret;
->> +    unsigned long apid, apqi, apqn;
->> +
->> +    ret = ap_qci(&matrix_dev->info);
->> +    if (ret)
->> +        return;
->> +
->> +    vfio_ap_matrix_init(&matrix_dev->info, &matrix_mdev->shadow_apcb);
+On Wed, Mar 2, 2022 at 5:11 PM Luben Tuikov <luben.tuikov@amd.com> wrote:
 >
-> Do you need to call vfio_ap_matrix_init here? It seems to me like this 
-> would
-> only be necesarry if apxa could be dynamically added or removed. Here 
-> is a
-> copy of vfio_ap_matrix_init, for reference:
+> In our local branch it is:
 >
-> static void vfio_ap_matrix_init(struct ap_config_info *info,
->                 struct ap_matrix *matrix)
-> {
->     matrix->apm_max = info->apxa ? info->Na : 63;
->     matrix->aqm_max = info->apxa ? info->Nd : 15;
->     matrix->adm_max = info->apxa ? info->Nd : 15;
-> }
+>     60862e45da3b5a drm/amd/display: Don't fill up the logs
+>     ...
+>     Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
 >
-> It seems like this should be figured out once and stored when the
-> ap_matrix_mdev struct is first created. Unless I'm wrong, and the 
-> status of
-> apxa can change dynamically, in which case the maximums would need to be
-> updated somewhere.
+> Which exists:
+>
+>     5898243ba7acdb drm/amd/display: Add dsc pre-validation in atomic check
+>
+> So maybe something happened in merging, etc.
 
-It's an interesting question to which I don't have a definitive answer. 
-I'll run it
-by our architects. On the other hand, making this call here is not entirely
-unreasonable and merely superfluous at worst, but I'll look into it.
+That's the commit in our development branch, but that doesn't directly
+correspond to the -next branch.  I've fixed it up and pushed a new
+-next branch.
 
-Tony K
+Alex
 
 >
+> Regards,
+> Luben
 >
-
+> On 2022-03-02 15:57, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >   d15628d483a5 ("drm/amd/display: Don't fill up the logs")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: 17ce8a6907f7 ("drm/amd/display: Add dsc pre-validation in atomic check")
+> >
+>
+> Regards,
+> --
+> Luben

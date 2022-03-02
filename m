@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E012C4CA9DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6616F4CA9E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241098AbiCBQLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S241161AbiCBQMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240976AbiCBQL1 (ORCPT
+        with ESMTP id S239458AbiCBQMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:11:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE30CCC51
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:10:41 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646237438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpCfdVVubW/5G0sCMTdrqI3pOqQD2o+xFQjD5MgYmgQ=;
-        b=WRkhAdBb7SOJYqxgIbggjqJ3ei5dTHS/fVTdC4uahMcr28/kwat/66PI6vs0/wnbIkyNaN
-        1KJdJ5UgD54fHrHswSy2LFEgO+yya+YKCRcpIYoqqbl4oG8Lmovb8r/3OZzYwTRhffJ+V0
-        eHk6CsMrb34IEl4riAoaqESlwW8FK6sbIHTVH9twnnMStBDrppYGTHrX/NJ1WBE2LddwH5
-        xXuGid1H+9IY2Ir2w8DRtoXIJRsU+CICRyr3HL3L4qo/quGspS8ef+EgLUGcThGqoS8E5Q
-        D/r62FdKy8XRBhV0gk3a+kg0dLD9R2pWisjg4qQySzz0AzOVZ9MeixKdxZY2ig==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646237438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpCfdVVubW/5G0sCMTdrqI3pOqQD2o+xFQjD5MgYmgQ=;
-        b=z4vbD2QK33o8oy9EYz0naUUQzwVX5z/N4UycCIzCGPye1jxW5U+whM2OvsNzPn+SOelOCk
-        XyTaO5Nn5JV2dYBw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 06/13] printk: refactor and rework printing logic
-In-Reply-To: <Yg0bjsObmb9Zp1YP@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-7-john.ogness@linutronix.de>
- <Yg0bjsObmb9Zp1YP@alley>
-Date:   Wed, 02 Mar 2022 17:16:37 +0106
-Message-ID: <87sfs0gwsi.fsf@jogness.linutronix.de>
+        Wed, 2 Mar 2022 11:12:38 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5973CB92E;
+        Wed,  2 Mar 2022 08:11:54 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id p8so2328355pfh.8;
+        Wed, 02 Mar 2022 08:11:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rqjAwReHv4OR7mYsT5etlrN8Eh3Kjp+z7Ky+T2IUaEg=;
+        b=eFhR3U14smputqGxx6Caa7v19Ws9oHUcSIJYzxmxeUkughMnuMY5MxwjDBrj4nmzlR
+         gWkLzliBfmD3/bTvWXpsYcGf6kOMAzwWfXP85Wzr0djP+cHhqed3T6bm0iK74phKn2ZU
+         cwJpSmNmuYZST/IC6kmCYOdt8J+3AHapMOF7VApCf6YM/lIQQYeIgnfLLLe+ZcoDYQOO
+         U/9TG8Z0xs/I7F04jZwN9lS5QORQuJBgQl9K6ZN0aUQ/bd1MNK6IIc/jWW+JDNCsuofW
+         3hsYzsMRUcqZ5c5IYQqNp5mq0P9LnKl67wh0Ba2s9gcP0xqg7hEZdYw51yo706zqlw9y
+         cn0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rqjAwReHv4OR7mYsT5etlrN8Eh3Kjp+z7Ky+T2IUaEg=;
+        b=Q1ROz57ryXt5UYREaAdI+qJg6sPI3eGC+muU0EtgJaCKfnRVc1yZZA5sw53JzknHIP
+         Prve+gehNUPLJic0WFWOF6nZxISiWpQj3d0+9rSxf0ilgkS8M5F1FUXH/D2yS3zL5A8B
+         dEHpAoYb2lDmc+ZgxiEYB6MKLYBVoqQOTvaySLtl9pvYQoEuL/q3byMq7UFWDVsVYay7
+         MTIz4BOrBg3lxn+L8TRE7tCLm4ZRjxqCJaQCgleG7hRkWRU+lT5WC8wgCgnovphtdtt4
+         Ubf8xqnPPW/nA+SLygPJvfzfa80RUpUM1ij3bEc2xN9y3YoDwCeKTSaOXFk5zpJVfvVt
+         P7kA==
+X-Gm-Message-State: AOAM531xi7trdFnedRvNJd40k7fNcvOKPBbniVHpx7L5KXl4R0k6EhJP
+        p7vDaLadPRZ+gKJO5rg8ZDo=
+X-Google-Smtp-Source: ABdhPJxXfOvebzgkOzuyHmiHPzOUEp4mLCS8w+BcalJev3JX+XHkm9xHho5WVyg6E0fyjGmUtHvu2w==
+X-Received: by 2002:a63:1113:0:b0:378:deae:5840 with SMTP id g19-20020a631113000000b00378deae5840mr8381753pgl.87.1646237514175;
+        Wed, 02 Mar 2022 08:11:54 -0800 (PST)
+Received: from jxt.. ([103.150.185.227])
+        by smtp.gmail.com with ESMTPSA id d10-20020a63360a000000b0037947abe4bbsm2809382pga.34.2022.03.02.08.11.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 08:11:53 -0800 (PST)
+From:   YI <afctgo@gmail.com>
+X-Google-Original-From: YI <uuuuuu@protonmail.com>
+To:     trivial@kernel.org
+Cc:     YI <afctgo@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Colin Cross <ccross@google.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] docs: proc.rst: fix wrong time unit
+Date:   Thu,  3 Mar 2022 00:11:16 +0800
+Message-Id: <20220302161122.3984304-1-uuuuuu@protonmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,181 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16, Petr Mladek <pmladek@suse.com> wrote:
->> Refactor/rework printing logic in order to prepare for moving to threaded
->> console printing.
->> 
->> - Move @console_seq into struct console so that the current "position" of
->>   each console can be tracked individually.
->> 
->> - Move @console_dropped into struct console so that the current drop count
->>   of each console can be tracked individually.
->> 
->> - Modify printing logic so that each console independently loads, prepares,
->>   prints, and delays its next record.
->> 
->> - Remove exclusive_console logic. Since console positions are handled
->>   independently, replaying past records occurs naturally.
->
-> It would be great to say if it has any behavior change.
->
-> There is one change caused by moving printk_delay(). I suggest to do
-> it in a separate patch. See below for more details.
+From: YI <afctgo@gmail.com>
 
-OK. I will do it in a separate patch.
+Dear Trivial Patch Monkey, 
 
-> Another change is that console replaying the log (former exclusive
-> console) does not longer block other consoles. New messages appear
-> on other consoles while the newly added console is still replaying.
->
-> Otherwise it should not change the existing behavior.
+This commit fixes a small documentaion problem reported in
+https://bugzilla.kernel.org/show_bug.cgi?id=194593.
 
-OK, I will mention behavior changes.
+Some fields in the file /proc/$pid/stat represent time.
+Their units are clock_t, not jiffies as stated in the documentation.
+This commit fixes https://bugzilla.kernel.org/show_bug.cgi?id=194593.
 
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -2560,31 +2524,167 @@ int is_console_locked(void)
->>  EXPORT_SYMBOL(is_console_locked);
->>  
->>  /*
->> - * Check if we have any console that is capable of printing while cpu is
->> - * booting or shutting down. Requires console_sem.
->> + * Check if the given console is currently capable and allowed to print
->> + * records.
->> + *
->> + * Requires the console_lock.
->>   */
->> -static int have_callable_console(void)
->> +static inline bool console_is_usable(struct console *con)
->>  {
->> -	struct console *con;
->> +	if (!(con->flags & CON_ENABLED))
->> +		return false;
->>  
->> -	for_each_console(con)
->> -		if ((con->flags & CON_ENABLED) &&
->> -				(con->flags & CON_ANYTIME))
->> -			return 1;
->> +	if (!con->write)
->> +		return false;
->>  
->> -	return 0;
->> +	/*
->> +	 * Console drivers may assume that per-cpu resources have been
->> +	 * allocated. So unless they're explicitly marked as being able to
->> +	 * cope (CON_ANYTIME) don't call them until per-cpu resources have
->> +	 * been allocated.
->> +	 */
->> +	if (!printk_percpu_data_ready() &&
->> +	    !(con->flags & CON_ANYTIME))
->> +		return false;
->
-> Just for record. I am not completely sure about this check. It is
-> being discussed in the 3rd patch.
+Reported-by: hujunjie
+Signed-off-by: YI <afctgo@gmail.com>
+---
+ Documentation/filesystems/proc.rst | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Yes. In that discussion I mention that I will change it for v2.
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 061744c436d9..433ad4623630 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -340,10 +340,10 @@ It's slow but very precise.
+   cmin_flt      number of minor faults with child's
+   maj_flt       number of major faults
+   cmaj_flt      number of major faults with child's
+-  utime         user mode jiffies
+-  stime         kernel mode jiffies
+-  cutime        user mode jiffies with child's
+-  cstime        kernel mode jiffies with child's
++  utime         user mode processor time (clock_t)
++  stime         kernel mode processor time (clock_t)
++  cutime        user mode processor time (clock_t) with child's
++  cstime        kernel mode processor time (clock_t) with child's
+   priority      priority level
+   nice          nice level
+   num_threads   number of threads
+@@ -370,8 +370,8 @@ It's slow but very precise.
+   rt_priority   realtime priority
+   policy        scheduling policy (man sched_setscheduler)
+   blkio_ticks   time spent waiting for block IO
+-  gtime         guest time of the task in jiffies
+-  cgtime        guest time of the task children in jiffies
++  gtime         guest time of the task in processor time (clock_t)
++  cgtime        guest time of the task children in processor time (clock_t)
+   start_data    address above which program data+bss is placed
+   end_data      address below which program data+bss is placed
+   start_brk     address above which program heap can be expanded with brk()
+-- 
+2.34.1
 
->> +
->> +	return true;
->> +}
->> +
->> +static void __console_unlock(void)
->> +{
->> +	console_locked = 0;
->> +	up_console_sem();
->> +}
->> +
->> +/*
->> + * Print one record for the given console. The record printed is whatever
->> + * record is the next available record for the given console.
->> + *
->> + * Requires the console_lock.
->> + *
->> + * Returns false if the given console has no next record to print, otherwise
->> + * true.
->> + *
->> + * @handover will be set to true if a printk waiter has taken over the
->> + * console_lock, in which case the caller is no longer holding the
->> + * console_lock. Otherwise it is set to false.
->> + */
->> +static bool console_emit_next_record(struct console *con, bool *handover)
->> +{
->> +	static char ext_text[CONSOLE_EXT_LOG_MAX];
->> +	static char text[CONSOLE_LOG_MAX];
->> +	struct printk_info info;
->> +	struct printk_record r;
->> +	unsigned long flags;
->> +	char *write_text;
->> +	size_t len;
->> +
->> +	prb_rec_init_rd(&r, &info, text, sizeof(text));
->> +
->> +	*handover = false;
->> +
->> +	if (!prb_read_valid(prb, con->seq, &r))
->> +		return false;
->> +
->> +	if (con->seq != r.info->seq) {
->> +		con->dropped += r.info->seq - con->seq;
->> +		con->seq = r.info->seq;
->> +	}
->> +
->> +	/* Skip record that has level above the console loglevel. */
->> +	if (suppress_message_printing(r.info->level)) {
->> +		con->seq++;
->> +		goto skip;
->> +	}
->> +
->> +	if (con->flags & CON_EXTENDED) {
->> +		write_text = &ext_text[0];
->> +		len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
->> +		len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
->> +					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
->> +	} else {
->> +		write_text = &text[0];
->> +		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
->> +	}
->> +
->> +	/*
->> +	 * While actively printing out messages, if another printk()
->> +	 * were to occur on another CPU, it may wait for this one to
->> +	 * finish. This task can not be preempted if there is a
->> +	 * waiter waiting to take over.
->> +	 *
->> +	 * Interrupts are disabled because the hand over to a waiter
->> +	 * must not be interrupted until the hand over is completed
->> +	 * (@console_waiter is cleared).
->> +	 */
->> +	printk_safe_enter_irqsave(flags);
->> +	console_lock_spinning_enable();
->> +
->> +	stop_critical_timings();	/* don't trace print latency */
->> +	call_console_driver(con, write_text, len);
->> +	start_critical_timings();
->> +
->> +	con->seq++;
->> +
->> +	*handover = console_lock_spinning_disable_and_check();
->> +	printk_safe_exit_irqrestore(flags);
->> +
->> +	printk_delay(r.info->level);
->
-> This is the desired behavior when the messages are printed by
-> kthreads. Though, it will delay the output more times when
-> more consoles are registered and the messages are printed
-> synchronously from console_unlock().
->
-> It is probably not super important. The delay is used only
-> for debugging and people probably adjust it by a personal
-> taste.
->
-> Anyway, we should not hide this behavior change in this hude patch.
-> IMHO, it is perfectly fine to keep the delay in vprintk_emit() for
-> now. We could move it into console_flush_all() and kthread loops
-> in a separate patch later.
-
-OK, I will move it in a separate patch. And I will move it into the
-kthreads and console_flush_all() so that the delay is only once per
-successful output.
-
-John

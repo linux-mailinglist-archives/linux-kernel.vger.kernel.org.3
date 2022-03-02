@@ -2,123 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB764CAB67
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B594CAB75
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243754AbiCBRT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S243764AbiCBRXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243740AbiCBRTW (ORCPT
+        with ESMTP id S233163AbiCBRXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:19:22 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA4AC7E9D;
-        Wed,  2 Mar 2022 09:18:38 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso2628486ooc.12;
-        Wed, 02 Mar 2022 09:18:38 -0800 (PST)
+        Wed, 2 Mar 2022 12:23:40 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217E4BBAB
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:22:55 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id bx5so2359387pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=cwLG9kTnhX2GqkeQf8KU8q/jw+pGFKDaUnw1ajiL6WA=;
-        b=Ph+RbvL6FanSOSwQxZUf26lIJLD1mcS3h0APBOTmjL0rL8sL58KJLFAGiWptkhBp5f
-         z5ZgRL+10UyFNfksj//XcL9pJCGCD6qYN9UCdiS8SIRssuw3151XtoQsw11ASk+hEEQs
-         7UWDCkB2pqpxxqJssBKAq8izDqfQt3z4hlBl78kUt3xIc/snzVPeNxjkge/VZOSWHaLR
-         40GJ26I2rx8DmUJSGIItZ1LqEOGI32dpoM2HZZb4qQv4d7UgQ4MF7I8MHghj3+jwXqm8
-         sv+M1n5AKMMjPdnNP0hgHgFXQ8GowrimHS7zngUz0tPwpAWrZaH9Fx1B11OQPzUNAcML
-         C9vA==
+        bh=Jklf8XPuym2PP8A66P9TwV3A0pOKZ2tfA0gEcqm6VHU=;
+        b=JCnfVceXbb7gtnysgddHpYe+fZSK1mwYXlQ9n8cgZmLcjIvEAEax475FB2bAKmLvYm
+         7ld6i+2lkqVHygprODVZpZg8RaTihov8S5A6HJUnOQDHQbaNjlObmzqxVIHLLCG1PsMh
+         7MUw6VDSYcUG2Hrs3gkHPqu3r6RslxC4gm+UOIy+ItO1o5s8loyFtrIn3Lhno9r8AIa0
+         H8jY0REOsHbJF8dBleSo9CLHklTHHv+lpWzoC2YtNjG2t9Y1zjyn5SEwR+50l676Z5Gf
+         E8iZkOnZbtV/P0PbHahihueRwEWd4PwK+PCzcCTvi2KFjLZx4QxHaw4elUwYxwbnjiyt
+         zmUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=cwLG9kTnhX2GqkeQf8KU8q/jw+pGFKDaUnw1ajiL6WA=;
-        b=LNvUgFBFAZzAONYCafiqBWiLhv+0lmjkf3GptQLDrnFHQsCRQ+yln6WR4wYH10xY15
-         8z/imfVYtVk+3+woCjA84ao9eqfzlM/+9oRiEzqgNcZK9FCA9kqoA8I1eoM/qIIt4RKW
-         AqxCCBt74+G3p4w9EZAQcqARZUf0rJrN2GanX8N19VjNTCOb/4AmneuE7tACvd6m49/U
-         OHwY2aHcnPkEyAFWa0+zWMRHyJMRO2jATngrdPb3vWd2FPdpiDeK3tlRjGVX9WZ9iI7H
-         RXb3auryrvuiAA/FHYquK9JSZaRk70hVYwdcAFcLOanPj0aC+sCXilLskJAl5/IuMOEX
-         4IDA==
-X-Gm-Message-State: AOAM533xeKufT9EOljbSplasytugfV5W+3mBj1iYIWtAnoI/qu5f+5uv
-        YVg1qi9UMwEqKgxD/SCS8uqTenpnSso=
-X-Google-Smtp-Source: ABdhPJzaTl0H10yq5ZoNdnQwMSeiQ6SyTqU2PuD1HxWe6SG7t/bXRnCfIG9yWUnPnd3RZp+WwWGEPA==
-X-Received: by 2002:a05:6870:c987:b0:d7:3d45:6692 with SMTP id hi7-20020a056870c98700b000d73d456692mr683349oab.34.1646241517676;
-        Wed, 02 Mar 2022 09:18:37 -0800 (PST)
-Received: from localhost ([98.200.8.69])
-        by smtp.gmail.com with ESMTPSA id m7-20020a9d6447000000b005acf7e4c507sm7983689otl.20.2022.03.02.09.18.36
+        bh=Jklf8XPuym2PP8A66P9TwV3A0pOKZ2tfA0gEcqm6VHU=;
+        b=P7SPweHoN+1djW81gyLXapyS/8fGbHIbb92kARFVQV15nFosQ9f576ng+cZ+1Gg4lp
+         O+mZLmQoFrU9PiMRNXUxtICrrOGRVmgkQmKw02NwfSjfHg9mpGA7b/luUSdxcxvjXMiM
+         AXzr6U2xD1B9MNbtW0bt34V0XHEtU5+4G1VupaUrE+ZmnKPkirDiVRoNrsCr23jQ+i8f
+         PMbveqHDXP1LcA7Lb10gYVDWzC3fL3y5loT5pxaRRgkJGgYOg4lgXRAE28BXtajaKfmI
+         QLu6nSVS0x9GMpkJvzEkriFEzp6YbxrF1JiGciChMbqtD9/d8KJMYph1HBQOtvh2nZlz
+         esAA==
+X-Gm-Message-State: AOAM531WmwDLmt9NoW7bi6Xh4Lb0NX3N9HTEIq3BCSQYyErzw8Q+Q0hy
+        f0ubSe/AAy7KanmbIjlqr4g=
+X-Google-Smtp-Source: ABdhPJzhAaDYo23YzK1/SpdmOHYrat1lErBtR/w0fcviW8SQM2/DBGIsAiPQFsF/IgQn1wI6MMu4kg==
+X-Received: by 2002:a17:90a:528b:b0:1bc:c5f9:82a with SMTP id w11-20020a17090a528b00b001bcc5f9082amr852446pjh.210.1646241774169;
+        Wed, 02 Mar 2022 09:22:54 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090ad81300b001bc447c2c91sm5661748pjv.31.2022.03.02.09.22.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:18:37 -0800 (PST)
-Date:   Wed, 2 Mar 2022 09:18:35 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Michael Mueller <mimu@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
-Message-ID: <Yh+m65BSfQgaDFwi@yury-laptop>
-References: <20220223164420.45344-1-andriy.shevchenko@linux.intel.com>
- <20220224123620.57fd6c8b@p-imbrenda>
- <3640a910-60fe-0935-4dfc-55bb65a75ce5@linux.ibm.com>
- <Yh+Qw6Pb+Cd9JDNa@smile.fi.intel.com>
+        Wed, 02 Mar 2022 09:22:53 -0800 (PST)
+Date:   Wed, 2 Mar 2022 17:22:48 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>
+Subject: Re: [PATCH 2/5] mm/slub: use stackdepot to save stack trace in
+ objects
+Message-ID: <Yh+n6MmSkjYM43iQ@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220225180318.20594-1-vbabka@suse.cz>
+ <20220225180318.20594-3-vbabka@suse.cz>
+ <YhtH5o2+7r85THg1@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <4b6e9dbb-ba3e-f33c-956e-07b5f81deee8@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh+Qw6Pb+Cd9JDNa@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4b6e9dbb-ba3e-f33c-956e-07b5f81deee8@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:44:03PM +0200, Andy Shevchenko wrote:
-> On Thu, Feb 24, 2022 at 01:10:34PM +0100, Michael Mueller wrote:
-> > On 24.02.22 12:36, Claudio Imbrenda wrote:
+On Wed, Mar 02, 2022 at 05:51:32PM +0100, Vlastimil Babka wrote:
+> On 2/27/22 10:44, Hyeonggon Yoo wrote:
+> > On Fri, Feb 25, 2022 at 07:03:15PM +0100, Vlastimil Babka wrote:
+> >> From: Oliver Glitta <glittao@gmail.com>
+> >> 
+> >> Many stack traces are similar so there are many similar arrays.
+> >> Stackdepot saves each unique stack only once.
+> >>
+> >> Replace field addrs in struct track with depot_stack_handle_t handle.  Use
+> >> stackdepot to save stack trace.
+> >>
+> > 
+> > I think it's not a replacement?
 > 
-> ...
+> It is, for the array 'addrs':
 > 
-> > we do that at several places
+> -#ifdef CONFIG_STACKTRACE
+> -	unsigned long addrs[TRACK_ADDRS_COUNT];	/* Called from address */
+> +#ifdef CONFIG_STACKDEPOT
+> +	depot_stack_handle_t handle;
 > 
-> Thanks for pointing out.
-> 
-> > arch/s390/kernel/processor.c:	for_each_set_bit_inv(bit, (long
-> > *)&stfle_fac_list, MAX_FACILITY_BIT)
-> 
-> This one requires a separate change, not related to this patch.
-> 
-> > arch/s390/kvm/interrupt.c:	set_bit_inv(IPM_BIT_OFFSET + gisc, (unsigned long
-> > *) gisa);
-> 
-> This is done in the patch. Not sure how it appears in your list.
-> 
-> > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
-> > sca->mcn);
-> > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
-> > &sca->mcn);
-> 
-> These two should be fixed in a separate change.
-> 
-> Also this kind of stuff:
-> 
-> 	bitmap_copy(kvm->arch.cpu_feat, (unsigned long *) data.feat,
-> 	            KVM_S390_VM_CPU_FEAT_NR_BITS);
-> 
-> might require a new API like
-> 
-> bitmap_from_u64_array()
-> bitmap_to_u64_array()
-> 
-> Yury?
+> Not confuse with 'addr' which is the immediate caller and indeed stays
+> for redundancy/kernels without stack trace enabled.
+>
 
-If BE32 is still the case then yes.
+Oh, my fault. Right. I was confused.
+I should read it again.
+
+> >> The benefits are smaller memory overhead and possibility to aggregate
+> >> per-cache statistics in the following patch using the stackdepot handle
+> >> instead of matching stacks manually.
+> >> 
+> >> [ vbabka@suse.cz: rebase to 5.17-rc1 and adjust accordingly ]
+> >> 
+> >> This was initially merged as commit 788691464c29 and reverted by commit
+> >> ae14c63a9f20 due to several issues, that should now be fixed.
+> >> The problem of unconditional memory overhead by stackdepot has been
+> >> addressed by commit 2dba5eb1c73b ("lib/stackdepot: allow optional init
+> >> and stack_table allocation by kvmalloc()"), so the dependency on
+> >> stackdepot will result in extra memory usage only when a slab cache
+> >> tracking is actually enabled, and not for all CONFIG_SLUB_DEBUG builds.
+> >> The build failures on some architectures were also addressed, and the
+> >> reported issue with xfs/433 test did not reproduce on 5.17-rc1 with this
+> >> patch.
+> > 
+> > This is just an idea and beyond this patch.
+> > 
+> > After this patch, now we have external storage that records stack traces.
+> 
+> Well, we had it before this patch too.
+>
+> > It's possible that some rare stack traces are in stack depot, but
+> > not reachable because track is overwritten.
+> 
+> Yes.
+> 
+> > I think it's worth implementing a way to iterate through stacks in stack depot?
+> 
+> The question is for what use case? We might even not know who stored
+> them - could have been page_owner, or other stack depot users.
+
+> But the point is usually not to learn about all existing traces, but to
+> determine which ones cause an object lifetime bug, or memory leak.
+
+Yeah, this is exactly what I misunderstood.
+I thought purpose of free_traces is to show all existing traces.
+But I realized today that free trace without alloc trace is not useful.
+
+I'll review v2 with these in mind.
+Thank you.
+
+> >> 
+> >> Signed-off-by: Oliver Glitta <glittao@gmail.com>
+> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> >> Cc: David Rientjes <rientjes@google.com>
+> >> Cc: Christoph Lameter <cl@linux.com>
+> >> Cc: Pekka Enberg <penberg@kernel.org>
+> >> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> > 
+> 
+
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

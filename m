@@ -2,104 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5D24C9E8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453594C9E90
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239910AbiCBHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S239920AbiCBHq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiCBHqs (ORCPT
+        with ESMTP id S239914AbiCBHqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:46:48 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA446AD135;
-        Tue,  1 Mar 2022 23:46:01 -0800 (PST)
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N94FT-1oImfn11vj-0164aE; Wed, 02 Mar 2022 08:46:00 +0100
-Received: by mail-wr1-f51.google.com with SMTP id t11so1301829wrm.5;
-        Tue, 01 Mar 2022 23:46:00 -0800 (PST)
-X-Gm-Message-State: AOAM5304jN8qOfqoq5j0og2DZFTXpl274KvKpSQG3SfZvZgP0hqb3qfA
-        tXq1+Pm4LlA/8mEX9jfucl7HqbeHhOAg7+wC6UQ=
-X-Google-Smtp-Source: ABdhPJybMCpDhJ+avRiNAbCh29mtDBhmslr8rmSojY+YWnXGrOU1j3Ds5dfV+KlsD75CKqxDSQB3Q+Oo96ISZoS4UMs=
-X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
- c2-20020a5d63c2000000b001ef840ee139mr14713156wrw.192.1646207159864; Tue, 01
- Mar 2022 23:45:59 -0800 (PST)
+        Wed, 2 Mar 2022 02:46:53 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D227B0E88;
+        Tue,  1 Mar 2022 23:46:08 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso4075074pjj.2;
+        Tue, 01 Mar 2022 23:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=otpwk78u6yviw/MoUg3r3NHs9lgfJsOxOMAplftcHjc=;
+        b=LAlLJIHiID33W7Uc3QmQGx4pAqnRj5khVAs4NO8o9tivxdlMOtdIwW0x41BnCVBBRx
+         7Wh4XbUvUUBrouONOyHebRByANqhEurghmW8zIRBxGH+6/nmXm0/QDPrgM4DPYuOYMvr
+         dl5pw1imQe2CpRJ95iQe8KkBW14O1qSjNd7BDMB6QnKN5o0WaADI3s4GETWeCXC0fYIV
+         votMQ+FnLumxRm4ac6Y63miiFtstGfwFYezyd0ozWVDWmytzAGPzwm96fji0QCpYg+EC
+         hBWoE/kqB7mfJQJ8mnvBxKIvQWX0Kcnqg++5e3Dj/SHvzSrC3QxlrGqf+W6xKZoWD7EN
+         OhVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=otpwk78u6yviw/MoUg3r3NHs9lgfJsOxOMAplftcHjc=;
+        b=3/Wxfx3jFnDkFQpsQ38SZI8IuM2Va4WVMv8TmcxB8pVLw0m4CfXuGulSGpoSF1Df0l
+         NP4p1CuIuY64NY3Divc59q2b4a0XndpPVvSch9SRrqPCtLryxdlnzmJMkXhWsehj+dJx
+         eE4AeFWeVrzWRplz/RWi56Ik3a+xhrmyZGlScK8GfLO8McFlXx8qJYRAQugZZGYDpXto
+         qumoQjHD8b7f4LL1+pMUR5/SUkh2DZ7qhr5deJMMAniseokDL3bft/QHscCAmUYWq4BU
+         6HbRneIoqlLLARESoR4+e5fffzT3Li1re+HuyuzhDUOKLymR9+tIr/nvlFEiAHEUnv5d
+         t9Eg==
+X-Gm-Message-State: AOAM533WEADBWw6/oBd+7n226TyRSuO5j7anqbuOuZI2Gntx2qdGuXDH
+        g/wMdxTtPLw6XlEpoKJDNyQ=
+X-Google-Smtp-Source: ABdhPJzYof9x9kIeWw3MGZlRgNzsBGZfuwM0dLo0FGIjggfpQlGehyQdTi6D2b7lsgaKpirIiogrRA==
+X-Received: by 2002:a17:902:e34b:b0:14f:af20:4b3c with SMTP id p11-20020a170902e34b00b0014faf204b3cmr30005852plc.56.1646207167836;
+        Tue, 01 Mar 2022 23:46:07 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056a000b8a00b004de9129eb80sm20233905pfj.85.2022.03.01.23.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 23:46:07 -0800 (PST)
+Message-ID: <4d9bd945-3af7-2e71-29df-8046eb0601ca@gmail.com>
+Date:   Wed, 2 Mar 2022 15:45:57 +0800
 MIME-Version: 1.0
-References: <20220302095008.27b6c6a9@canb.auug.org.au>
-In-Reply-To: <20220302095008.27b6c6a9@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 2 Mar 2022 08:45:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
-Message-ID: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3Cr2PuXLC9siqzXDcJxqZ4TEVBDmtyV/el+EjybgZ8uEfmu+khK
- mLd21uJRZKq8SwmHlnB54cpWK1kZADXGeOgWFxRjaGnEBgtE4nu4LrJNUvkhkkJjyBHGKl7
- k1SSh6QkzIgFgA1mqvBs88Ge9GL2sgX0vFoR0QW7RKhXWv06lKZBt/Xu5cRVQK1p1MMfihF
- OlLuynTN86jLhkKBRbxHA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Mh4zv9/yuZQ=:TngWQWr18gIhmKLMQH2Eob
- UABlGxHbj5/2ZNsItGWtp8RqWWRnD12H9AjNEH91c6xS322Chw4r50iXQPqbZXUduXLb9sQ+1
- miOSLcbJ7EfSOqSh8p+Y5xetFwUFjKY5mg34ID9uAhXCXnqbDXKjqDuCSiWgWI+iYKHMQw13+
- 3X1mtSqkBhWjHOwK8jXEGyfI0ZSPo/UCRVdLTE0W70Qz6eafcUzqXDv19dy2K00Zrs4B0Pn+B
- OBexUgCIAY5K1LEvp3NRKzx5dzDdHl4kpwuuRgtdnz6Q9Z6m5ZLt6O9vAfZ3HFfwql+ksbgYG
- bf0moKD/bpgOQuw++Ns5oJkaNNHVWb2ArFpT0q92BjGksXtGdBdbiWD3NioIEUQViOEYe/qiI
- SOxBcMFU0O/8vG/Zd7aWd8slEcRf5HY5M1VGcLoa0bF0QwiXVLJBTVZ0uxNpjTYpI28IZSW6k
- f1nRUu9g6VF1eSmaUGAXdt8kJAJeg7MJ+yx6mL3EyN2dfN9Y/dESPmUuPVQ1BSBSTef7XoHDh
- 4sX0qj7fkAs/kR1IQGcMZPGZwjfmHTr27GhwMPymmW/Z1CX8eGFA4l0Y0vO49uC/0YHc1a9n+
- MsiNgX0NmywXsoo2FmvGwTwEaR/exJg0OwBlzYnVfjq3FLH/S0whm1p8bEv78VRafFbNdPLDx
- 67b2TZR1gHVPkj+1W8/6d6N2WiMDfuA0sW8/1IsNSpRQy2CyZpgvwP1UbBWMGQJgxGbBUQxpJ
- siOWagSh0KxuktguTbLesA2E9lX6AGPtY8cqkssgisbJzMXX8uDtDwLiJDh8VJ9oAy88hpUJj
- mUV+J59Y2DB7E+gqDnBYnOQQQJIDYP1CnPG3SlKqmHxYb3FMTo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH 19/19] KVM: sefltests: Add x86-64 test to verify MMU
+ reacts to CPUID updates
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+References: <20210622200529.3650424-1-seanjc@google.com>
+ <20210622200529.3650424-20-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <20210622200529.3650424-20-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 11:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the arm-soc tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> drivers/soc/mediatek/mtk-mmsys.c:64:10: error: 'const struct mtk_mmsys_driver_data' has no member named 'sw0_rst_offset'
->    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->       |          ^~~~~~~~~~~~~~
-> In file included from drivers/soc/mediatek/mtk-mmsys.c:18:
-> drivers/soc/mediatek/mt8186-mmsys.h:55:57: warning: excess elements in struct initializer
->    55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
->       |                                                         ^~~~~
-> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
->    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->       |                           ^~~~~~~~~~~~~~~~~~~~~~
-> drivers/soc/mediatek/mt8186-mmsys.h:55:57: note: (near initialization for 'mt8186_mmsys_driver_data')
->    55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
->       |                                                         ^~~~~
-> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
->    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->       |                           ^~~~~~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   831785f0e5b9 ("soc: mediatek: mmsys: add mmsys reset control for MT8186")
->
-> I have used the arm-soc tree from next-20220301 for today.
+On 23/6/2021 4:05 am, Sean Christopherson wrote:
+> Add an x86-only test to verify that x86's MMU reacts to CPUID updates
+> that impact the MMU.  KVM has had multiple bugs where it fails to
+> reconfigure the MMU after the guest's vCPU model changes.
+> 
+> Sadly, this test is effectively limited to shadow paging because the
 
-I'm going on vacation right now, did a quick revert of that commit to fix the
-build. Rex-BC Chen, Matthias: please send a proper fix that I can apply next
-week when I get back, to replace my revert.
+The x86_64/mmu_role_test fails when "N=/sys/module/kvm_intel/parameters/ept" :
 
-         Arnd
+KVM_SET_CPUID2 failed, rc: -1 errno: 22 (due to "63f5a1909f9e")
+
+Does this regression meet your expectations even after "feb627e8d6f6" ?
+
+> hardware page walk handler doesn't support software disabling of GBPAGES
+> support, and KVM doesn't manually walk the GVA->GPA on faults for
+> performance reasons (doing so would large defeat the benefits of TDP).
+> 
+> Don't require !TDP for the tests as there is still value in running the
+> tests with TDP, even though the tests will fail (barring KVM hacks).
+
+In this case, we could assert that the test will fail, rather than throwing the 
+failure,
+which is unfriendly to many CI systems. What do you think ?
+
+> E.g. KVM should not completely explode if MAXPHYADDR results in KVM using
+> 4-level vs. 5-level paging for the guest.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   tools/testing/selftests/kvm/.gitignore        |   1 +
+>   tools/testing/selftests/kvm/Makefile          |   1 +
+>   .../selftests/kvm/include/x86_64/processor.h  |   3 +
+>   .../selftests/kvm/x86_64/mmu_role_test.c      | 147 ++++++++++++++++++
+>   4 files changed, 152 insertions(+)
+>   create mode 100644 tools/testing/selftests/kvm/x86_64/mmu_role_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index e0e14150744e..6ead3403eca6 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -15,6 +15,7 @@
+>   /x86_64/hyperv_cpuid
+>   /x86_64/hyperv_features
+>   /x86_64/mmio_warning_test
+> +/x86_64/mmu_role_test
+>   /x86_64/platform_info_test
+>   /x86_64/set_boot_cpu_id
+>   /x86_64/set_sregs_test
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 61e2accd080d..8dc007bac0fe 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -47,6 +47,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
+>   TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
+>   TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
+> +TEST_GEN_PROGS_x86_64 += x86_64/mmu_role_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
+>   TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index f21126941f19..914b0d16929c 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -55,6 +55,9 @@
+>   #define CPUID_PKU		(1ul << 3)
+>   #define CPUID_LA57		(1ul << 16)
+>   
+> +/* CPUID.0x8000_0001.EDX */
+> +#define CPUID_GBPAGES		(1ul << 26)
+> +
+>   #define UNEXPECTED_VECTOR_PORT 0xfff0u
+>   
+>   /* General Registers in 64-Bit Mode */
+> diff --git a/tools/testing/selftests/kvm/x86_64/mmu_role_test.c b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
+> new file mode 100644
+> index 000000000000..523371cf8e8f
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
+> @@ -0,0 +1,147 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +
+> +#define VCPU_ID			1
+> +
+> +#define MMIO_GPA	0x100000000ull
+> +
+> +static void guest_code(void)
+> +{
+> +	(void)READ_ONCE(*((uint64_t *)MMIO_GPA));
+> +	(void)READ_ONCE(*((uint64_t *)MMIO_GPA));
+> +
+> +	GUEST_ASSERT(0);
+> +}
+> +
+> +static void guest_pf_handler(struct ex_regs *regs)
+> +{
+> +	/* PFEC == RSVD | PRESENT (read, kernel). */
+> +	GUEST_ASSERT(regs->error_code == 0x9);
+> +	GUEST_DONE();
+> +}
+> +
+> +static void mmu_role_test(u32 *cpuid_reg, u32 evil_cpuid_val)
+> +{
+> +	u32 good_cpuid_val = *cpuid_reg;
+> +	struct kvm_run *run;
+> +	struct kvm_vm *vm;
+> +	uint64_t cmd;
+> +	int r;
+> +
+> +	/* Create VM */
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +	run = vcpu_state(vm, VCPU_ID);
+> +
+> +	/* Map 1gb page without a backing memlot. */
+> +	__virt_pg_map(vm, MMIO_GPA, MMIO_GPA, X86_PAGE_SIZE_1G);
+> +
+> +	r = _vcpu_run(vm, VCPU_ID);
+> +
+> +	/* Guest access to the 1gb page should trigger MMIO. */
+> +	TEST_ASSERT(r == 0, "vcpu_run failed: %d\n", r);
+> +	TEST_ASSERT(run->exit_reason == KVM_EXIT_MMIO,
+> +		    "Unexpected exit reason: %u (%s), expected MMIO exit (1gb page w/o memslot)\n",
+> +		    run->exit_reason, exit_reason_str(run->exit_reason));
+> +
+> +	TEST_ASSERT(run->mmio.len == 8, "Unexpected exit mmio size = %u", run->mmio.len);
+> +
+> +	TEST_ASSERT(run->mmio.phys_addr == MMIO_GPA,
+> +		    "Unexpected exit mmio address = 0x%llx", run->mmio.phys_addr);
+> +
+> +	/*
+> +	 * Effect the CPUID change for the guest and re-enter the guest.  Its
+> +	 * access should now #PF due to the PAGE_SIZE bit being reserved or
+> +	 * the resulting GPA being invalid.  Note, kvm_get_supported_cpuid()
+> +	 * returns the struct that contains the entry being modified.  Eww.
+> +	 */
+> +	*cpuid_reg = evil_cpuid_val;
+> +	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+> +
+> +	/*
+> +	 * Add a dummy memslot to coerce KVM into bumping the MMIO generation.
+> +	 * KVM does not "officially" support mucking with CPUID after KVM_RUN,
+> +	 * and will incorrectly reuse MMIO SPTEs.  Don't delete the memslot!
+> +	 * KVM x86 zaps all shadow pages on memslot deletion.
+> +	 */
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+> +				    MMIO_GPA << 1, 10, 1, 0);
+> +
+> +	/* Set up a #PF handler to eat the RSVD #PF and signal all done! */
+> +	vm_init_descriptor_tables(vm);
+> +	vcpu_init_descriptor_tables(vm, VCPU_ID);
+> +	vm_handle_exception(vm, PF_VECTOR, guest_pf_handler);
+> +
+> +	r = _vcpu_run(vm, VCPU_ID);
+> +	TEST_ASSERT(r == 0, "vcpu_run failed: %d\n", r);
+> +
+> +	cmd = get_ucall(vm, VCPU_ID, NULL);
+> +	TEST_ASSERT(cmd == UCALL_DONE,
+> +		    "Unexpected guest exit, exit_reason=%s, ucall.cmd = %lu\n",
+> +		    exit_reason_str(run->exit_reason), cmd);
+> +
+> +	/*
+> +	 * Restore the happy CPUID value for the next test.  Yes, changes are
+> +	 * indeed persistent across VM destruction.
+> +	 */
+> +	*cpuid_reg = good_cpuid_val;
+> +
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_cpuid_entry2 *entry;
+> +	int opt;
+> +
+> +	/*
+> +	 * All tests are opt-in because TDP doesn't play nice with reserved #PF
+> +	 * in the GVA->GPA translation.  The hardware page walker doesn't let
+> +	 * software change GBPAGES or MAXPHYADDR, and KVM doesn't manually walk
+> +	 * the GVA on fault for performance reasons.
+> +	 */
+> +	bool do_gbpages = false;
+> +	bool do_maxphyaddr = false;
+> +
+> +	setbuf(stdout, NULL);
+> +
+> +	while ((opt = getopt(argc, argv, "gm")) != -1) {
+> +		switch (opt) {
+> +		case 'g':
+> +			do_gbpages = true;
+> +			break;
+> +		case 'm':
+> +			do_maxphyaddr = true;
+> +			break;
+> +		case 'h':
+> +		default:
+> +			printf("usage: %s [-g (GBPAGES)] [-m (MAXPHYADDR)]\n", argv[0]);
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!do_gbpages && !do_maxphyaddr) {
+> +		print_skip("No sub-tests selected");
+> +		return 0;
+> +	}
+> +
+> +	entry = kvm_get_supported_cpuid_entry(0x80000001);
+> +	if (!(entry->edx & CPUID_GBPAGES)) {
+> +		print_skip("1gb hugepages not supported");
+> +		return 0;
+> +	}
+> +
+> +	if (do_gbpages) {
+> +		pr_info("Test MMIO after toggling CPUID.GBPAGES\n\n");
+> +		mmu_role_test(&entry->edx, entry->edx & ~CPUID_GBPAGES);
+> +	}
+> +
+> +	if (do_maxphyaddr) {
+> +		pr_info("Test MMIO after changing CPUID.MAXPHYADDR\n\n");
+> +		entry = kvm_get_supported_cpuid_entry(0x80000008);
+> +		mmu_role_test(&entry->eax, (entry->eax & ~0xff) | 0x20);
+> +	}
+> +
+> +	return 0;
+> +}

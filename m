@@ -2,222 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE824CB13D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9701B4CB142
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbiCBV0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S245278AbiCBV1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236363AbiCBV0b (ORCPT
+        with ESMTP id S237821AbiCBV1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:26:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12BBBECE7;
-        Wed,  2 Mar 2022 13:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lVF6m9QgZUAbOU/dXdGrVqsI+ZX3uNFQUVqEhiINOzw=; b=FZp4wIVLOfMGHVp9iDtJ2OT31l
-        Oab4IOVWSCP+7godZvjIarWYkI3Esxn1Q7pNYAkEWk+tNQmpoHaUXZ9NNdAL0+vXN7JNzCpz0Asu0
-        FVmJ5PzKyAg2XDlQIOlzvWwZLsfpMwhTqbYcTnx6h0/v9ACVnvBbMorjmMYWzz3xVYfSwQP+vAurD
-        Ncegd6WOpALK14VFITyDKZ49XxDT5THrPkR35tTWT0gqTqZTXQm9YcC4joB6bBtDNt+6H+3O/d35k
-        XXUCxQvxJNqKC/zFEha6pvzFrvJt+SoKBp1OLDuO1EsknCnVzaFwMUOJh3O6JmAcosjo4kok26CVL
-        R7gi7ZrQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPWTg-004IP1-He; Wed, 02 Mar 2022 21:25:44 +0000
-Date:   Wed, 2 Mar 2022 13:25:44 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        keescook@chromium.org, yzaikin@google.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v2 3/3] mm: hugetlb: add hugetlb_free_vmemmap sysctl
-Message-ID: <Yh/g2BRPZC3370mX@bombadil.infradead.org>
-References: <20220302083758.32528-1-songmuchun@bytedance.com>
- <20220302083758.32528-4-songmuchun@bytedance.com>
+        Wed, 2 Mar 2022 16:27:31 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CBABDE6E;
+        Wed,  2 Mar 2022 13:26:48 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso3484806ooi.3;
+        Wed, 02 Mar 2022 13:26:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hbPLIPVEhqYqHfs1Um9iAPDP4qWKQ+uSdm7/6sopBSs=;
+        b=Mv+LaJYB+SA4Gbw/TvkgP6UXGUyDAZl7xfL9R5cyflND5dmC+AIgvmlm/sue5gq32N
+         G9ibPWfiMfcS5ujeZ63a/xhF33/qb3AEGL71TzJ9xkXY1oT0GHsYyDkHINacAqBCLaa5
+         4Hak2Pw6NQX0CEqdXEQvp5E7NJi0LeFfaUntYSZLm2uD2kwO0Yw5GlkvLKpP78fA4rf3
+         JW8L1DORTSxKni4xRJvo5OXaOZYY/4jeVJ3UOK3ZgrRNZZCiQ/0jE0rr6ubEYN0l4vW1
+         3qJcUTKojMK94z3xwG/rxocbzJbBbZmqJqDcQR9IAkp0bQD765NVKEfIXKiYg2BplKs0
+         oLug==
+X-Gm-Message-State: AOAM533SYjxdYNBVRtRqL7/8fKqz7mHYTIhgQGKujWHxbTQoVOYgbRfw
+        1vEXYC3YcMVSc204wIkADA==
+X-Google-Smtp-Source: ABdhPJze+wINl7VQoz5UIFxIOi5ofrkD+iYOPHxAw6NzR+bGkT+e8/nTZouORjU+OMOwKXIhDU/5pA==
+X-Received: by 2002:a05:6870:1242:b0:d3:6168:3191 with SMTP id 2-20020a056870124200b000d361683191mr1471979oao.9.1646256407349;
+        Wed, 02 Mar 2022 13:26:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p185-20020aca5bc2000000b002d97bda3871sm49303oib.54.2022.03.02.13.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 13:26:46 -0800 (PST)
+Received: (nullmailer pid 79377 invoked by uid 1000);
+        Wed, 02 Mar 2022 21:26:45 -0000
+Date:   Wed, 2 Mar 2022 15:26:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] dt-bindings: spi: Add Aspeed SMC controllers
+ device tree binding
+Message-ID: <Yh/hFS2XW9SjK4Pl@robh.at.kernel.org>
+References: <20220302173114.927476-1-clg@kaod.org>
+ <20220302173114.927476-4-clg@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220302083758.32528-4-songmuchun@bytedance.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302173114.927476-4-clg@kaod.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:37:58PM +0800, Muchun Song wrote:
-> We must add "hugetlb_free_vmemmap=on" to boot cmdline and reboot the
-> server to enable the feature of freeing vmemmap pages of HugeTLB
-> pages. Rebooting usually taske a long time. Add a sysctl to enable
-> the feature at runtime and do not need to reboot.
+On Wed, Mar 02, 2022 at 06:31:07PM +0100, Cédric Le Goater wrote:
+> The "interrupt" property is optional because it is only necessary for
+> controllers supporting DMAs (Not implemented yet in the new driver).
 > 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
 > ---
->  Documentation/admin-guide/sysctl/vm.rst | 13 ++++++++++
->  include/linux/memory_hotplug.h          |  9 +++++++
->  mm/hugetlb_vmemmap.c                    | 42 ++++++++++++++++++++++++++++-----
->  mm/hugetlb_vmemmap.h                    |  4 +++-
->  mm/memory_hotplug.c                     |  5 ++++
->  5 files changed, 66 insertions(+), 7 deletions(-)
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 90 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++
+>  2 files changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
 > 
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> index f4804ce37c58..01f18e6cc227 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -561,6 +561,19 @@ Change the minimum size of the hugepage pool.
->  See Documentation/admin-guide/mm/hugetlbpage.rst
->  
->  
-> +hugetlb_free_vmemmap
-> +====================
+> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> new file mode 100644
+> index 000000000000..0289a4f52196
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +A toggle value indicating if vmemmap pages are allowed to be optimized.
-> +If it is off (0), then it can be set true (1).  Once true, the vmemmap
-> +pages associated with each HugeTLB page will be optimized, and the toggle
-> +cannot be set back to false.  It only optimizes the subsequent allocation
-> +of HugeTLB pages from buddy system, while already allocated HugeTLB pages
-> +will not be optimized.
+> +title: Aspeed SMC controllers bindings
+> +
+> +maintainers:
+> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +  - Cédric Le Goater <clg@kaod.org>
+> +
+> +description: |
+> +  This binding describes the Aspeed Static Memory Controllers (FMC and
+> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-fmc
+> +      - aspeed,ast2600-spi
+> +      - aspeed,ast2500-fmc
+> +      - aspeed,ast2500-spi
+> +      - aspeed,ast2400-fmc
+> +      - aspeed,ast2400-spi
+> +
+> +  reg:
+> +    items:
+> +      - description: registers
+> +      - description: memory mapping
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "@[0-9a-f]+":
+> +    type: object
+> +
+> +    properties:
+> +      spi-rx-bus-width:
+> +        enum: [1, 2, 4]
+> +
+> +    required:
+> +      - reg
 
-The commit log or documentation does not descrie why its safe to toggle
-one way and not the other?
+No need for required here, spi-controller.yaml already enforces that.
 
-  Luis
+Otherwise,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
 
 > +
-> +See Documentation/admin-guide/mm/hugetlbpage.rst
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
 > +
+> +unevaluatedProperties: false
 > +
->  nr_hugepages_mempolicy
->  ======================
->  
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index e0b2209ab71c..20d7edf62a6a 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -351,4 +351,13 @@ void arch_remove_linear_mapping(u64 start, u64 size);
->  extern bool mhp_supports_memmap_on_memory(unsigned long size);
->  #endif /* CONFIG_MEMORY_HOTPLUG */
->  
-> +#ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
-> +bool mhp_memmap_on_memory(void);
-> +#else
-> +static inline bool mhp_memmap_on_memory(void)
-> +{
-> +	return false;
-> +}
-> +#endif
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
 > +
->  #endif /* __LINUX_MEMORY_HOTPLUG_H */
-> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> index 836d1117f08b..3bcc8f25bd50 100644
-> --- a/mm/hugetlb_vmemmap.c
-> +++ b/mm/hugetlb_vmemmap.c
-> @@ -10,6 +10,7 @@
+> +    spi@1e620000 {
+> +        reg = <0x1e620000 0xc4>, <0x20000000 0x10000000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        compatible = "aspeed,ast2600-fmc";
+> +        clocks = <&syscon ASPEED_CLK_AHB>;
+> +        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +        flash@0 {
+> +                reg = < 0 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +        flash@1 {
+> +                reg = < 1 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +        flash@2 {
+> +                reg = < 2 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4175103e928d..f5ab77548ef6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2925,6 +2925,15 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
+>  F:	drivers/mmc/host/sdhci-of-aspeed*
 >  
->  #define pr_fmt(fmt)	"HugeTLB: " fmt
->  
-> +#include <linux/memory_hotplug.h>
->  #include "hugetlb_vmemmap.h"
->  
->  /*
-> @@ -118,17 +119,14 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
->  	BUILD_BUG_ON(__NR_USED_SUBPAGE >=
->  		     RESERVE_VMEMMAP_SIZE / sizeof(struct page));
->  
-> -	if (!hugetlb_free_vmemmap_enabled())
-> -		return;
-> -
-> -	if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON) &&
-> -	    !is_power_of_2(sizeof(struct page))) {
-> +	if (!is_power_of_2(sizeof(struct page))) {
->  		/*
->  		 * The hugetlb_free_vmemmap_enabled_key can be enabled when
->  		 * CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON. It should
->  		 * be disabled if "struct page" crosses page boundaries.
->  		 */
-> -		static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
-> +		if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON))
-> +			static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
->  		return;
->  	}
->  
-> @@ -147,3 +145,35 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
->  	pr_info("can free %d vmemmap pages for %s\n", h->nr_free_vmemmap_pages,
->  		h->name);
->  }
+> +ASPEED SMC SPI DRIVER
+> +M:	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +M:	Cédric Le Goater <clg@kaod.org>
+> +L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	linux-spi@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
 > +
-> +static struct ctl_table hugetlb_vmemmap_sysctls[] = {
-> +	{
-> +		.procname	= "hugetlb_free_vmemmap",
-> +		.data		= &hugetlb_free_vmemmap_enabled_key.key,
-> +		.mode		= 0644,
-> +		/* only handle a transition from default "0" to "1" */
-> +		.proc_handler	= proc_do_static_key,
-> +		.extra1		= SYSCTL_ONE,
-> +		.extra2		= SYSCTL_ONE,
-> +	},
-> +	{ }
-> +};
-> +
-> +static __init int hugetlb_vmemmap_sysctls_init(void)
-> +{
-> +	/*
-> +	 * The vmemmap pages cannot be optimized if
-> +	 * "memory_hotplug.memmap_on_memory" is enabled unless
-> +	 * "hugetlb_free_vmemmap" is enabled as well since
-> +	 * "hugetlb_free_vmemmap" takes precedence over
-> +	 * "memory_hotplug.memmap_on_memory".
-> +	 */
-> +	if (mhp_memmap_on_memory() && !hugetlb_free_vmemmap_enabled())
-> +		return 0;
-> +
-> +	if (is_power_of_2(sizeof(struct page)))
-> +		register_sysctl_init("vm", hugetlb_vmemmap_sysctls);
-> +
-> +	return 0;
-> +}
-> +late_initcall(hugetlb_vmemmap_sysctls_init);
-> diff --git a/mm/hugetlb_vmemmap.h b/mm/hugetlb_vmemmap.h
-> index cb2bef8f9e73..b67a159027f4 100644
-> --- a/mm/hugetlb_vmemmap.h
-> +++ b/mm/hugetlb_vmemmap.h
-> @@ -21,7 +21,9 @@ void hugetlb_vmemmap_init(struct hstate *h);
->   */
->  static inline unsigned int free_vmemmap_pages_per_hpage(struct hstate *h)
->  {
-> -	return h->nr_free_vmemmap_pages;
-> +	if (hugetlb_free_vmemmap_enabled())
-> +		return h->nr_free_vmemmap_pages;
-> +	return 0;
->  }
->  #else
->  static inline int alloc_huge_page_vmemmap(struct hstate *h, struct page *head)
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index c226a337c1ef..c2115e566abc 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -50,6 +50,11 @@ static bool memmap_on_memory __ro_after_init;
->  #ifdef CONFIG_MHP_MEMMAP_ON_MEMORY
->  module_param(memmap_on_memory, bool, 0444);
->  MODULE_PARM_DESC(memmap_on_memory, "Enable memmap on memory for memory hotplug");
-> +
-> +bool mhp_memmap_on_memory(void)
-> +{
-> +	return memmap_on_memory;
-> +}
->  #endif
->  
->  enum {
+>  ASPEED VIDEO ENGINE DRIVER
+>  M:	Eddie James <eajames@linux.ibm.com>
+>  L:	linux-media@vger.kernel.org
 > -- 
-> 2.11.0
+> 2.34.1
+> 
 > 

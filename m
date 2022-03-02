@@ -2,219 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12EF4CB1E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DDE4CB1FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiCBWLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        id S239678AbiCBWMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiCBWLe (ORCPT
+        with ESMTP id S230045AbiCBWMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:11:34 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66C5BE48
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:10:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646259050; x=1677795050;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZZNmIXkT92rLNIrnGw3gjJqLIkRflGEcKN16NURYJHc=;
-  b=EpVLu/6URf1NsC2YjjaO4cuHrsctZPrRo4o5Y9CF7M140yY2gXRccaAV
-   iqRg2k6lYDDXI9ADy8SLPC4Dvz/jwJivyhN7vILN1/z5fexbW+ksFOJZe
-   669nxh99teOH4HORBG6ZjqYog9+2rUcfT8tkn3Zizh0a1vPaW3Yw04dlP
-   QaGznUBgaR96w1iltCLO8Tio1dG3oDRJFhPPe+YRCvq+HojQG51Zl1hTC
-   rG+P7TSeJ4Hh9JsUy4P6PTKu7jzxuqbc57kMVpii+bAlkSYsa+hL6vGtW
-   qHVJBAXqT8lj35nnvjQ/YQYZj663p7CgTypslsSQG8j4evSXIohqb0VS3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253445797"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253445797"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 14:10:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="551457162"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 02 Mar 2022 14:10:48 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPXBH-0001zc-F8; Wed, 02 Mar 2022 22:10:47 +0000
-Date:   Thu, 3 Mar 2022 06:09:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Elder <elder@linaro.org>
-Subject: [mani-mhi:mhi-next 17/30] drivers/bus/mhi/ep/ring.c:45:66: sparse:
- sparse: incorrect type in argument 3 (different address spaces)
-Message-ID: <202203030603.3nhJUwR0-lkp@intel.com>
+        Wed, 2 Mar 2022 17:12:42 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2053.outbound.protection.outlook.com [40.107.96.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9707DC3373;
+        Wed,  2 Mar 2022 14:11:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bhUJL/nqtaC+5ghZ+C1btXUi9YQ73ZK1hzYrmYRfXtEzGa6YBhbrbQ2w4EwTYsn5Je6l3o+np6788GKrXlUBshEWAARECfKkpWCpWaKF/sKdVgdkya+KdY70JnbGbRNmV5+/Je4N4rwejLJtbAeBBPZa653+BfJjBfGdnNX0KmDEcasj2wT/XAKDZaZzNKdW36Q21iGJMZHWZpmHvJ4p4pdW/nmqRpNkKK/DkwOKVNPB24XXdkkqPHqk3aJltX3c86hWzY50U4BHdlMNzP+wLCs2TiAQ4dIVSDE/52l3o8pB0W6oIsC8/6u6KFDMyUMmnnjedoEu8szN2EunJ7OmrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nwOdKmrjEMyh+ZevlDfjLL4uQyJ94Aoz4+x1VHTJLt0=;
+ b=YcxeE4VV8H5ypoifpDBdlnHao3GU2qB6kPDLWcqN7j8zNhyQLOWXrkU/KSb+zWriGtKCjp1IePEXCWCsTcllRvZKZpLQoNg9ekbNYPVdlNQTDIZHUXBVcqJNn0OK9oN3eIhK8f/PpqoAlwGGHyQ08IHjNHFkdkYuCgDPT/rsrswA2KHqVimJNxX1fu3NFLzAhqYq6x1N3OHsjIsC7r1LvQGQdm7rtoK1aYeOryIoE2uHsIHlYa8JvrdXpr8XkrWMYyRw3e61GwFG7SO4iZK99GIiTM51xdaYB+YimoZ8sJVL0O/dbXZNPKdFma2VgBexWeX4oycgKKA5PBY+oW/YAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nwOdKmrjEMyh+ZevlDfjLL4uQyJ94Aoz4+x1VHTJLt0=;
+ b=B/jAV6ToFf+fO/FNvLtdKwd8+/1a0tTMSSX7VVlmnQohhrJaI0IGIlWJHUV9g6naD9J/GISRfxaOt707tethzLMJP/mq0qbHu6yFlhDxP55BOtvUW6/JvbIjc8xJCUx0a0vU0e26J/JvkGG9jEqE0DGQpRIWuXh3IMWXPocCGHc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DM5PR12MB1820.namprd12.prod.outlook.com (2603:10b6:3:10d::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.26; Wed, 2 Mar 2022 22:11:56 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b908:1ec9:3e42:ea00]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b908:1ec9:3e42:ea00%5]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 22:11:56 +0000
+Message-ID: <4804f1e7-8a25-ad8c-dd63-589ed34260c6@amd.com>
+Date:   Wed, 2 Mar 2022 17:11:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+Content-Language: en-CA
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220303075733.481987a8@canb.auug.org.au>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+In-Reply-To: <20220303075733.481987a8@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0137.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::16) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5dbaaa36-66c1-4010-d245-08d9fc99a9b5
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1820:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1820E75F190053D45348580799039@DM5PR12MB1820.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SkG1RfbmvledhCpaQTQO5mtY/ok93AKO3uGssVgJrG8WthC9OaWVIJVj8sJYQjCxV9vn3RgpykoKDKcnFSy3g+AIhJgaM5P1SOlBGEYZ639HGrKZtYetZlrVACFk12CdkFJXznzt7aWfSPuWClDPneCra6xrfUISYFfi+pC+/zI6Nd2D9wCmqDUc6MfV6l71GAxyqCEUE66HhMbHtECHCRuefvVlyKrUY/meqBWA/7hfAsCsyk/KFILab7aPb4hExWBnzIjnCFmPzANTCuFuDNM84Oq3lqLI63vVET8QYYgoAX2fOa3FlKJm3P23+RGymVGfNLRvub3lsgYj306RdHOiW4ylVxpJ2toUDZA7sdjI9MU7q+kXoxgi2MsPLnCvOP/LJqbMVT0S+7h8Hd+mZ5ohyxYD1wBCAt+xTDHFb+BcFRuWeFfbocInvjhPsGMkgqCtIGPlEkMH6FfweSGAj82VFbVHxI7YY0fhqRHw+fkL6ZQ8Cj3PT6p/DeCPfnkL0mfnFapk7n74zTWm0yT6ptU3XULzL2gQeTOodaBGY/q8NZlhbac4pZ8mdtKeYxstSczZJc3iA00rnbwglBFZc82YGoRLCojZ4c8jhAkl6uSetwthS6U7PB0J0QnkPrx3Wkkkp15GW7tDh4vRoRAPBJvOnsP3PPplLihPSmvYAX4VGNdDizg3Pog0QAoEw2Zb1e4cpdUIRPbUkrsesswllmEBaasTgX1xe26eMrhIgJo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(8676002)(66946007)(26005)(4326008)(186003)(2616005)(316002)(508600001)(6486002)(53546011)(110136005)(54906003)(86362001)(6666004)(6506007)(6512007)(31696002)(36756003)(31686004)(2906002)(8936002)(4744005)(5660300002)(44832011)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WmdWVllRaVhnYVpveG1aTHV3ODZ4RnlrNVZJMmg0YUlEZ1Mzcm8rMStVTWdp?=
+ =?utf-8?B?UG9Yd3B0OGRvKzdlUFBXNXl3WlE3MzZBRWpxenN5eDk3SFpJekEyTkZRL3VH?=
+ =?utf-8?B?VWw3MmJkV0lsVTFOb0NleGpBT1JTRDI1azc2N205WVNzZEI2Y0JRL3d1TUtj?=
+ =?utf-8?B?V2dsZUcyN1hYYjRIZkxZU0p2d0k1aWxPS3VwTklZWk45ODZwWkcyblN0MWFj?=
+ =?utf-8?B?SzJ1cTI2SHdMWUk3QjB3UnYwbm5McXRNWFVZK0ZUaWozMzRzTkJ1TVVSYlhN?=
+ =?utf-8?B?MG1vaGFnNHVxZENxS29lREZVay9MQlF1VlRVQXZFV1ZiVHlkRy9QYzNZSmVI?=
+ =?utf-8?B?bGovVFM1TENKYStTdUtmVWo5YkV4S2FKQnBqeFlDdC9sRjltazZLZGFCRDI1?=
+ =?utf-8?B?U1ZCbnQxbGxFbWY1bzhzZmd4ZmNyd0RNSWMxdmlSMWJyZng1YnlLN0NYdDRP?=
+ =?utf-8?B?TFU3T3FDZUtnMjN0ejRjaVRLRE9VNXQ1TFF3eGhIRGZ6a3Flck1yYWtKZmtt?=
+ =?utf-8?B?Z2NwaFdOSzBJa2RXZ0hLWUFiaDNzejZnUmFRL2wzUXVLMUFzcFBCK0kzcUdz?=
+ =?utf-8?B?Z3dCSEx2UXlTUEcrWGpyRGxkZXo3T2l0cjlvTVhkdU9wRjFJRGlkbVBpZWJF?=
+ =?utf-8?B?djR2RjNhcllQSzNSK2VVUTBrcXNKTzlrQUgzd05DQmVOQ0Eya0dNWERES21m?=
+ =?utf-8?B?bWpwZFNBVndWYlF6bE9lN3VCWVZBRVpwRGdITThYTFlwV1NPTmVIT2FPWlJD?=
+ =?utf-8?B?WG1QM3piaTRNY0paalR2dktqUDd1dWFtM3Q4SWtLWXJmVWdVUlBLcXA2UTAz?=
+ =?utf-8?B?OUFxbkJheWdhUlQvTUFMTmpjTU9iWThCbXZVdmJuVUZOVkcxUVNjRnlGYVZH?=
+ =?utf-8?B?MHJGZnNCVFdVRE9tdlNETkRZcllJTzcwb1ZtdHg0c3ZYYW1sdnFkNStKRXdt?=
+ =?utf-8?B?dGRMM2k2emFwRWxYaHpvbUxnMG41a3NGN3o1Z2o4c3l2U1kydEZMUnN1N0NB?=
+ =?utf-8?B?R2hUMUU2TkZnUkVxeVFJTTFTNWptWkFKeDkvNzg1d3VXamE4YmlWL0NxZlJn?=
+ =?utf-8?B?WVowd1oxRGhvTnphMTkwWlIwL3o2cDI3ZjZSQThiajZrbW1SUHJZbHNwL0VT?=
+ =?utf-8?B?MmVtTE1HRjB0K2xaMkRyOXpCZWhmM3dnRkJnc1NNWlh1Q1FTc1NqNDR4RjBU?=
+ =?utf-8?B?ZGN4Nmp0cm5LMFFXb2xsWlBZb0FPUkhQbDRrVTRQdWNNUHhlb0QwQkxEa0Nq?=
+ =?utf-8?B?TW9RSTZjYytiekVvTnVVakZIaTNnNThHTlN5amtHVUtlb2ZHMllKUk9NU1NZ?=
+ =?utf-8?B?cDlaQWZ0N0ZwRTJaSy9GcmRhQ0liSUkxZ0Fkbnp6V3V5Nnd2TDd3U0RhWkhw?=
+ =?utf-8?B?dzBlV3FyTzdFSmYzL0ZBSDVzVEhrVlg5WFEzS3MyM2VCK3ZyWlpySkdBZzlI?=
+ =?utf-8?B?T1Nmd2xlZ1M0aDVuWGZJTmFxQXU0bk1DWmhrbEJ3S2ZpOVZFTThjVmkyMnBt?=
+ =?utf-8?B?TUg2MXBYMWpNMm5oRDVXVzcyWU8zK0ZoQ1loa1cvS0MyVGRxZWFMekc3TlpW?=
+ =?utf-8?B?VXViaWlDeG93bEJkN1NncGZCQW14eHhQcGUxRkoraWU3YTRmQ2JHL3AxQkg2?=
+ =?utf-8?B?YzdzWjJLU0cvRGh5Ymk3WFVIcEhiWjg0bUxURmJxMUFDNkpPZW4xaTl6OGNu?=
+ =?utf-8?B?NTZKSWF2K0N1cnVXanp5NXRrVDRuMmk3aGZBN3RiYXZIWWVWQmtKbURjYW4v?=
+ =?utf-8?B?cU9ZSFBiWHhNQmorTElOeExDNFo4RXB6M2E5bzJUaTIxeVRkZ084d29lUzRN?=
+ =?utf-8?B?UTdUTzJxblFLd3hVR0hEbDhISWhFVFdKaEM4TzhiTU0yWHFrTE41NGgrVGxt?=
+ =?utf-8?B?dmd4NkEyeDJjRjJrS3haN3dpUkVpZVIrWXVHVHRpYkoyclRiWTV6RUFBY0Q3?=
+ =?utf-8?B?NU1hVkFUZU9udERiQXArUm0yOTlzZHBIWndQVXB1NkVwYStCeWpCanJrdTZ6?=
+ =?utf-8?B?Q00xRC9rcjJtdHZUQXNKaUI2QjU4bzFQKzNtcTlGaFVlRU8vaDRUeHpGVWRi?=
+ =?utf-8?B?ZWg3WjZsTVRvTWVkeGl5SlIzVFZjT3N6dlI3SnF4SmJSVWtCK28wYnpsOGVU?=
+ =?utf-8?Q?bfIM=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5dbaaa36-66c1-4010-d245-08d9fc99a9b5
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 22:11:55.9128
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OrUqXqCqpcbkW8eVoTfzcJHTHD9scY+0bE2jbb8a4xPJz8waTZ03Sb3guTFHXff6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1820
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git mhi-next
-head:   4aa2b597db8f8808b7e0f89239cd98c3a56b21b1
-commit: 118a636617aad5e65564efd8c11c60ed1a45e494 [17/30] bus: mhi: ep: Add support for ring management
-config: ia64-randconfig-s031-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030603.3nhJUwR0-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=118a636617aad5e65564efd8c11c60ed1a45e494
-        git remote add mani-mhi https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
-        git fetch --no-tags mani-mhi mhi-next
-        git checkout 118a636617aad5e65564efd8c11c60ed1a45e494
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/bus/mhi/ep/ drivers/nvmem/
+In our local branch it is:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+    60862e45da3b5a drm/amd/display: Don't fill up the logs
+    ...
+    Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
 
+Which exists:
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/bus/mhi/ep/ring.c:45:66: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void [noderef] __iomem *to @@     got struct mhi_ring_element * @@
-   drivers/bus/mhi/ep/ring.c:45:66: sparse:     expected void [noderef] __iomem *to
-   drivers/bus/mhi/ep/ring.c:45:66: sparse:     got struct mhi_ring_element *
-   drivers/bus/mhi/ep/ring.c:52:66: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void [noderef] __iomem *to @@     got struct mhi_ring_element * @@
-   drivers/bus/mhi/ep/ring.c:52:66: sparse:     expected void [noderef] __iomem *to
-   drivers/bus/mhi/ep/ring.c:52:66: sparse:     got struct mhi_ring_element *
-   drivers/bus/mhi/ep/ring.c:58:74: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void [noderef] __iomem *to @@     got struct mhi_ring_element * @@
-   drivers/bus/mhi/ep/ring.c:58:74: sparse:     expected void [noderef] __iomem *to
-   drivers/bus/mhi/ep/ring.c:58:74: sparse:     got struct mhi_ring_element *
->> drivers/bus/mhi/ep/ring.c:130:51: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *from @@     got struct mhi_ring_element *el @@
-   drivers/bus/mhi/ep/ring.c:130:51: sparse:     expected void [noderef] __iomem *from
-   drivers/bus/mhi/ep/ring.c:130:51: sparse:     got struct mhi_ring_element *el
+    5898243ba7acdb drm/amd/display: Add dsc pre-validation in atomic check
 
-vim +45 drivers/bus/mhi/ep/ring.c
+So maybe something happened in merging, etc.
 
-    24	
-    25	static int __mhi_ep_cache_ring(struct mhi_ep_ring *ring, size_t end)
-    26	{
-    27		struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-    28		struct device *dev = &mhi_cntrl->mhi_dev->dev;
-    29		size_t start, copy_size;
-    30		int ret;
-    31	
-    32		/* Don't proceed in the case of event ring. This happens during mhi_ep_ring_start(). */
-    33		if (ring->type == RING_TYPE_ER)
-    34			return 0;
-    35	
-    36		/* No need to cache the ring if write pointer is unmodified */
-    37		if (ring->wr_offset == end)
-    38			return 0;
-    39	
-    40		start = ring->wr_offset;
-    41		if (start < end) {
-    42			copy_size = (end - start) * sizeof(struct mhi_ring_element);
-    43			ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
-    44							(start * sizeof(struct mhi_ring_element)),
-  > 45							&ring->ring_cache[start], copy_size);
-    46			if (ret < 0)
-    47				return ret;
-    48		} else {
-    49			copy_size = (ring->ring_size - start) * sizeof(struct mhi_ring_element);
-    50			ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase +
-    51							(start * sizeof(struct mhi_ring_element)),
-    52							&ring->ring_cache[start], copy_size);
-    53			if (ret < 0)
-    54				return ret;
-    55	
-    56			if (end) {
-    57				ret = mhi_cntrl->read_from_host(mhi_cntrl, ring->rbase,
-    58								&ring->ring_cache[0],
-    59								end * sizeof(struct mhi_ring_element));
-    60				if (ret < 0)
-    61					return ret;
-    62			}
-    63		}
-    64	
-    65		dev_dbg(dev, "Cached ring: start %zu end %zu size %zu\n", start, end, copy_size);
-    66	
-    67		return 0;
-    68	}
-    69	
-    70	static int mhi_ep_cache_ring(struct mhi_ep_ring *ring, u64 wr_ptr)
-    71	{
-    72		size_t wr_offset;
-    73		int ret;
-    74	
-    75		wr_offset = mhi_ep_ring_addr2offset(ring, wr_ptr);
-    76	
-    77		/* Cache the host ring till write offset */
-    78		ret = __mhi_ep_cache_ring(ring, wr_offset);
-    79		if (ret)
-    80			return ret;
-    81	
-    82		ring->wr_offset = wr_offset;
-    83	
-    84		return 0;
-    85	}
-    86	
-    87	int mhi_ep_update_wr_offset(struct mhi_ep_ring *ring)
-    88	{
-    89		u64 wr_ptr;
-    90	
-    91		wr_ptr = mhi_ep_mmio_get_db(ring);
-    92	
-    93		return mhi_ep_cache_ring(ring, wr_ptr);
-    94	}
-    95	
-    96	/* TODO: Support for adding multiple ring elements to the ring */
-    97	int mhi_ep_ring_add_element(struct mhi_ep_ring *ring, struct mhi_ring_element *el)
-    98	{
-    99		struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-   100		struct device *dev = &mhi_cntrl->mhi_dev->dev;
-   101		size_t old_offset = 0;
-   102		u32 num_free_elem;
-   103		int ret;
-   104	
-   105		ret = mhi_ep_update_wr_offset(ring);
-   106		if (ret) {
-   107			dev_err(dev, "Error updating write pointer\n");
-   108			return ret;
-   109		}
-   110	
-   111		if (ring->rd_offset < ring->wr_offset)
-   112			num_free_elem = (ring->wr_offset - ring->rd_offset) - 1;
-   113		else
-   114			num_free_elem = ((ring->ring_size - ring->rd_offset) + ring->wr_offset) - 1;
-   115	
-   116		/* Check if there is space in ring for adding at least an element */
-   117		if (!num_free_elem) {
-   118			dev_err(dev, "No space left in the ring\n");
-   119			return -ENOSPC;
-   120		}
-   121	
-   122		old_offset = ring->rd_offset;
-   123		mhi_ep_ring_inc_index(ring);
-   124	
-   125		dev_dbg(dev, "Adding an element to ring at offset (%zu)\n", ring->rd_offset);
-   126	
-   127		/* Update rp in ring context */
-   128		ring->ring_ctx->generic.rp = cpu_to_le64((ring->rd_offset * sizeof(*el)) + ring->rbase);
-   129	
- > 130		ret = mhi_cntrl->write_to_host(mhi_cntrl, el, ring->rbase + (old_offset * sizeof(*el)),
-   131					       sizeof(*el));
-   132		if (ret < 0)
-   133			return ret;
-   134	
-   135		return 0;
-   136	}
-   137	
+Regards,
+Luben
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 2022-03-02 15:57, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   d15628d483a5 ("drm/amd/display: Don't fill up the logs")
+> 
+> Fixes tag
+> 
+>   Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 17ce8a6907f7 ("drm/amd/display: Add dsc pre-validation in atomic check")
+> 
+
+Regards,
+-- 
+Luben

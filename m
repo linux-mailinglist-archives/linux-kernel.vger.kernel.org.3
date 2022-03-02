@@ -2,141 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2A14CAA3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093214CAA45
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242080AbiCBQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S242561AbiCBQdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237188AbiCBQcj (ORCPT
+        with ESMTP id S242543AbiCBQdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:32:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7ABCC52F;
-        Wed,  2 Mar 2022 08:31:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 2 Mar 2022 11:33:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1B7C6255;
+        Wed,  2 Mar 2022 08:32:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 36EA21F383;
-        Wed,  2 Mar 2022 16:31:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646238714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A2F6617F7;
+        Wed,  2 Mar 2022 16:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDCBC004E1;
+        Wed,  2 Mar 2022 16:32:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Jx2KF4SC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646238734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Ys3yoRdu+W55dGxYFlu3KoIzoE0Kz5MUvLUMJ8H1DZg=;
-        b=MRjk++jPxoC3SRj+V6OA/DZh8e4I6kpJoLcGSJzYlX5/V85zt6ZpGUauWWWnjPj+6BSHpc
-        Mkm2RfiVQtie8XbczTVbogPVgCYlj3noZEoVEMMAzri024QPNE82anDWnImrOwOVPJ/3c3
-        cc0PmyvrVgvGym3w9h52I6/RLHSjHzI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646238714;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ys3yoRdu+W55dGxYFlu3KoIzoE0Kz5MUvLUMJ8H1DZg=;
-        b=3pB/TAy48D7xr2gEVjVbRCj7zD9kvd15/ymFBNfSoLi9EEfmZ3SJZZkC0gGJHZF8zPfQmK
-        mR3TJ7mYJEqWR5BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F354613A83;
-        Wed,  2 Mar 2022 16:31:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VRrROfmbH2L+MwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 02 Mar 2022 16:31:53 +0000
-Message-ID: <1cc1eb98-fe46-4563-16d3-ac00b630ecd3@suse.cz>
-Date:   Wed, 2 Mar 2022 17:31:53 +0100
+        bh=pn15odJ1axHr1tSHXKM6R6gy8OQYz+UX/tuJV8kTZOI=;
+        b=Jx2KF4SCMS6oQ81ruL+PmUOxb313LAgFJH4b+Nm/AbpnaHEQrJ93HFFJlkrZFljIclR1Ig
+        7MjMDAT88vIHvYQ5jVCXMswnqvnSTAn/DRep7zjTiB1RFfgW3eKlFxCp1420xGYalEM2Wc
+        ntxUnKyAuMw/wp27G1pbbLokW2Kvk8w=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6b026337 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Mar 2022 16:32:14 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 17:32:07 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh+cB5bWarl8CFN1@zx2c4.com>
+References: <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+ <20220302031738-mutt-send-email-mst@kernel.org>
+ <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+ <20220302074503-mutt-send-email-mst@kernel.org>
+ <Yh93UZMQSYCe2LQ7@zx2c4.com>
+ <20220302092149-mutt-send-email-mst@kernel.org>
+ <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
+ <20220302101602-mutt-send-email-mst@kernel.org>
+ <Yh+PET49oHNpxn+H@zx2c4.com>
+ <20220302111737-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 5/5] slab, documentation: add description of debugfs files
- for SLUB caches
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
-References: <20220225180318.20594-1-vbabka@suse.cz>
- <20220225180318.20594-6-vbabka@suse.cz>
- <Yhr01naZNIa2SxEd@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Yhr01naZNIa2SxEd@ip-172-31-19-208.ap-northeast-1.compute.internal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220302111737-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 04:49, Hyeonggon Yoo wrote:
-> I think it's not traces of "currently free objects"
-> because index bit of free objects are set in obj_map bitmap?
+Hi Michael,
 
-Hm right, thanks.
+On Wed, Mar 02, 2022 at 11:22:46AM -0500, Michael S. Tsirkin wrote:
+> > Because that 16 byte read of vmgenid is not atomic. Let's say you read
+> > the first 8 bytes, and then the VM is forked.
+> 
+> But at this point when VM was forked plaintext key and nonce are all in
+> buffer, and you previously indicated a fork at this point is harmless.
+> You wrote "If it changes _after_ that point of check ... it doesn't
+> matter:"
 
-> It's weird but it's traces of allocated objects that have been freed at
-> least once (or <not available>)
-> 
-> I think we can fix the code or doc?
+Ahhh, fair point. I think you're right.
 
-For now I'll fix the doc. Not clear to me myself what's the best usecase for
-free_traces file. For alloc_traces it's clearly debugging memory leaks.
-Freeing traces are most useful when a bug is detected and they are dumped in
-dmesg. The debugfs file might be just for a rough idea where freeing usually
-happens.
+Alright, so all we're talking about here is an ordinary 16-byte read,
+and 16 bytes of storage per keypair, and a 16-byte comparison.
 
-> Please tell me if I'm missing something :)
-> 
->> +    Information in the output:
->> +    Number of objects, freeing function, minimal/average/maximal jiffies since free,
->> +    pid range of the freeing processes, cpu mask of freeing cpus, and stack trace.
->> +
->> +    Example:::
->> +
->> +    51 acpi_ut_update_ref_count+0x6a6/0x782 age=236886/237027/237772 pid=1 cpus=1
->> +	kfree+0x2db/0x420
->> +	acpi_ut_update_ref_count+0x6a6/0x782
->> +	acpi_ut_update_object_reference+0x1ad/0x234
->> +	acpi_ut_remove_reference+0x7d/0x84
->> +	acpi_rs_get_prt_method_data+0x97/0xd6
->> +	acpi_get_irq_routing_table+0x82/0xc4
->> +	acpi_pci_irq_find_prt_entry+0x8e/0x2e0
->> +	acpi_pci_irq_lookup+0x3a/0x1e0
->> +	acpi_pci_irq_enable+0x77/0x240
->> +	pcibios_enable_device+0x39/0x40
->> +	do_pci_enable_device.part.0+0x5d/0xe0
->> +	pci_enable_device_flags+0xfc/0x120
->> +	pci_enable_device+0x13/0x20
->> +	virtio_pci_probe+0x9e/0x170
->> +	local_pci_probe+0x48/0x80
->> +	pci_device_probe+0x105/0x1c0
->> +
-> 
-> Everything else looks nice!
-> 
->>  Christoph Lameter, May 30, 2007
->>  Sergey Senozhatsky, October 23, 2015
->> -- 
->> 2.35.1
->> 
->> 
-> 
+Still seems much worse than just having a single word...
 
+Jason

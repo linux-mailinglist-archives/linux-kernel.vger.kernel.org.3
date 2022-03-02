@@ -2,142 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F284CA8F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1614CA8FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiCBPVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S243444AbiCBPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiCBPVQ (ORCPT
+        with ESMTP id S236652AbiCBPX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:21:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1DA6C6258
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:20:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646234432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o+/uKNtMSqxxtp2IKJVl4PtqKh8tUPajkwApvE96v0s=;
-        b=F62HoBvxQvsuhnI5hkLI3rusopjv4boXe9nwkMe28ubRHIqxPdRc59ChdZXY0F8s2zcmRz
-        XZkHcKNtk965LMthI3/m3/PoFjThxqdatEHVHsp/ZAtBu0BGkQi6OZlPFEZX7j17b6zJZd
-        UkHwuwLRW0wOk1xp8kKPCRYC+O9+Vl4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-UtVpu8_iNDqRFYsVPZmMqA-1; Wed, 02 Mar 2022 10:20:32 -0500
-X-MC-Unique: UtVpu8_iNDqRFYsVPZmMqA-1
-Received: by mail-wm1-f70.google.com with SMTP id d8-20020a05600c34c800b0037e3cd6225eso634103wmq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 07:20:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o+/uKNtMSqxxtp2IKJVl4PtqKh8tUPajkwApvE96v0s=;
-        b=as1Wp4+KGrN81KCRzszHjBsUi1e4tKFGxcAvUTlwyVn2PY7u42LiaFLF6lnmbw1zGk
-         VNyAwS6HyQe6AsFuosqKqseWcC0BwOXnGJqAr3jAoJpfUvAGfayHpWdan6rShQUHJaR7
-         g8fuSOGU1XAwl1whL8wmY2Yx4OsWjv6qfZJGtsgPNrIHFWdggfk96ESkSQxcnoNagedl
-         KRGG+mW7e2YvVZwGzzd/sj21E/MP5McOp/u6symhYC4rr6RTucpFRlYwxDntI0BndlWI
-         i4rd22oSR63zhrxT/Ub6tfu6meScxhigadooMoAF6xbtUbCRYUb6+d1+d13zeOWqtwG2
-         qOig==
-X-Gm-Message-State: AOAM531KHTUHjjhiIK/FrYJmUSDEOupOht7q7hKe4+t/7gzntOhwBMPa
-        78XDGQSKQtYxqJYGn055cxcEcjzMpivYw3+W9jpPzIJ10SlxRCDVnkek6FhCh3PJTob1Kh0bHee
-        9xJcuZWxKc858ew5cg++u7oly
-X-Received: by 2002:a05:6000:114d:b0:1ee:f251:52c6 with SMTP id d13-20020a056000114d00b001eef25152c6mr22351311wrx.618.1646234430698;
-        Wed, 02 Mar 2022 07:20:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxaRd2QDCauXRg0Cy1iugecAP23hz+39Lwf58iM9a92otz79fxfMO534ZE5Hi2k0kqltL5FeA==
-X-Received: by 2002:a05:6000:114d:b0:1ee:f251:52c6 with SMTP id d13-20020a056000114d00b001eef25152c6mr22351286wrx.618.1646234430410;
-        Wed, 02 Mar 2022 07:20:30 -0800 (PST)
-Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
-        by smtp.gmail.com with ESMTPSA id m18-20020a5d56d2000000b001edc00dbeeasm16452690wrw.69.2022.03.02.07.20.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 07:20:29 -0800 (PST)
-Date:   Wed, 2 Mar 2022 10:20:25 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laszlo Ersek <lersek@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220302101602-mutt-send-email-mst@kernel.org>
-References: <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
- <Yh5JwK6toc/zBNL7@zx2c4.com>
- <20220301121419-mutt-send-email-mst@kernel.org>
- <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
- <20220302031738-mutt-send-email-mst@kernel.org>
- <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
- <20220302074503-mutt-send-email-mst@kernel.org>
- <Yh93UZMQSYCe2LQ7@zx2c4.com>
- <20220302092149-mutt-send-email-mst@kernel.org>
- <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
+        Wed, 2 Mar 2022 10:23:59 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2051.outbound.protection.outlook.com [40.107.95.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9846E527C0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:23:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ofvG1TjM3GASBnbnZpVdhsojL9hafUyOdYs0nEvO+5gUpbquLbP/McuhxdIkunzqkPJ/GIRXHtRbXjO2UNasVmwjRVU93iAbRSv/CMM9XPUoOcl1sskEje4K0KkB6iCfoQERDUE4waH1XkWle0mKigqLZ+FYhmEcJf4Bwy51AJcv/TM8QVVzyCscaSf//sTJYHUEXdVl/VUPlZOWoTXLQO256d0ECCOzwA7BN2gmCR6b5ZpHvtSdNwYDqaNl4EeWTrn9P/3RB7BODe3sfouusTZemS0dXSrqWm+jEXR1GTQuyHfzl6U4b2tDvy/5tWGAHqLnKqHFGgKVAd3N+6vCLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iYtftxkv8G198spSZH9kRhU5w3RT3qyW5gt0UcWVjf0=;
+ b=B8mK/zhoSdyPNqBcy46Hk/iZO5b0Am+9wcvIINVItt3XKcvp6qNm8kuO7Dzjseu8+2nI9YQIHmW16NTXdEw9jm14NvtLbWHAZWpXUiYICQ3I+TLUBzA2xgZUC1CFJNH8yPwI/EMv+NLBUlU6f6wdNL3PB5Kd/Zd3Kw9Ox6V+3x+gzE5f8Mdch26SMF+8dC4eRZa/aXhtHUnSbKcGoe+UmBsE7YmoznolL0EBXEPnP12YvYaFE9ykBJZt9lcbCrqEDXz0d3QblyR9cWKWHFLAlKTCPR7LZaJr747tKBmjFYcBPnxhASGnUO+V4nria+qembIilcBLIspMe9DqpXOBSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=calian.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iYtftxkv8G198spSZH9kRhU5w3RT3qyW5gt0UcWVjf0=;
+ b=b/qAXFsPGvHrwoajQ9vkHAmvP/Crrk7u04p1dSK8m4NElUN/fmzfygM43XlwU9rkMqkw7hLMtbuIfWgaNV/TEX7fFnihKDJawMyNx3z3iU+x2pS5N3+z4l3VfPZ1rNqqEJRhgeskuVIv35nVwPNO6YqB2X0lDu7Ykln4++NsYT8=
+Received: from DM5PR22CA0008.namprd22.prod.outlook.com (2603:10b6:3:101::18)
+ by BN6PR02MB2817.namprd02.prod.outlook.com (2603:10b6:404:fc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 15:23:13 +0000
+Received: from DM3NAM02FT029.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:101:cafe::a0) by DM5PR22CA0008.outlook.office365.com
+ (2603:10b6:3:101::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
+ Transport; Wed, 2 Mar 2022 15:23:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT029.mail.protection.outlook.com (10.13.4.98) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Wed, 2 Mar 2022 15:23:12 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 2 Mar 2022 07:23:05 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 2 Mar 2022 07:23:05 -0800
+Envelope-to: robert.hancock@calian.com,
+ lkp@intel.com,
+ kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org,
+ maz@kernel.org
+Received: from [10.254.241.50] (port=54602)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nPQoj-000Fm2-N0; Wed, 02 Mar 2022 07:23:05 -0800
+Message-ID: <42bb9699-dd87-9e26-30ae-d2d4b4c03b21@xilinx.com>
+Date:   Wed, 2 Mar 2022 16:23:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: drivers/irqchip/irq-xilinx-intc.c:127:14: warning: no previous
+ prototype for 'xintc_get_irq'
+Content-Language: en-US
+To:     Robert Hancock <robert.hancock@calian.com>,
+        "lkp@intel.com" <lkp@intel.com>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "maz@kernel.org" <maz@kernel.org>
+References: <202203011058.VcuVhghd-lkp@intel.com>
+ <f6c6273d66174a2cf86b43c8ed7d5c985f9410dd.camel@calian.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <f6c6273d66174a2cf86b43c8ed7d5c985f9410dd.camel@calian.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fca362bb-03cc-42fa-8ee7-08d9fc6090da
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2817:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR02MB2817DC0369691D3E140B9769C6039@BN6PR02MB2817.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4EwYyaUo3brmagHqZci1H5tFZQ/A5FL1eGMuRPeJQy74i0goZmiHG40hNVShz3yM/aZHoYgbOHezLfc1epl5AoLdCguj6I7GVXeOEhm55U4YFKQZZz5PL0QkFz5CAmXN5HVpmb5s7tbw0ymZj3cisQjyAOnhA4UKgiPdo58XRNQPWIAv8eaLQeoNcOOFcTrjZhVFMzCPtaBZ4BPrAqeEgVCFKLLbaBUZH7cuGQiNMAA0cq5GJL2AoZHtI3Lj/dDPaL3Gj4wtfHGiOy7DRHa4TZ2wM5AsO0i48d8THzKnpOrkodm7TzMsB2BTO83gfcjulNB13xNxQRYAv4HP5E+fWb40eE7G/cwiDQ5oQe6WsYjm574uBwT9EIrvdndsaVZb5ElQvp/yfB2l+FtwjL7atH2LTxVvVgansdm+D4UOAOyOuSeGz/VfSJnCEAReP59y5bezFKmaAD+fUPf8jCtm4i/OccAprflQO1kKP1XNBz6ZN9yKpgcMC35MjeX/6fb37f9GbNcU6OGnMZ7kSN/vIb1ci8fi7OaiSl/Gor2lHberGKlwm/Sf9LhkGDVwrLHhCys6iB0bSv2k6tKCcEJSebjJpUuWdELILzjC0BdpBoQqyrkYQOUHD9P5RRRsu8EIycdPp1dTliMyKDtehakxkZcS/LsAnphkMffDaY2HI/2HFPOieZat8yR/DFhuDUUyvuPj9kVp3Nd1K7sUZQqLNlbw42e2DFZXb4RpQ1a8oal+yz+RMYq/HohAxz45+rA+0Oj6gCcApnrsUCVlgGww6DxxnS6qxIW5/hN2VCefQ6Kff4vVax/CWomtsumUU6GPJ1cJQ3n6HGklW/2g8oaGBQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(186003)(26005)(426003)(336012)(110136005)(40460700003)(53546011)(2906002)(2616005)(82310400004)(36860700001)(31696002)(83380400001)(47076005)(7636003)(356005)(54906003)(44832011)(5660300002)(4326008)(31686004)(70206006)(8936002)(9786002)(966005)(508600001)(36756003)(316002)(70586007)(8676002)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 15:23:12.6000
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fca362bb-03cc-42fa-8ee7-08d9fc6090da
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2817
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:14:56PM +0100, Jason A. Donenfeld wrote:
-> Hi Michael,
+Hi Robert,
+
+On 3/1/22 17:34, Robert Hancock wrote:
+> On Tue, 2022-03-01 at 12:18 +0800, kernel test robot wrote:
+>> Hi Robert,
+>>
+>> First bad commit (maybe != root cause):
+>>
+>> tree:
+>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!IOGos0k!2JH7Pv3yO6KGoGUAasL6gdyffBveJ7sKR_ufk10CoE_SvRF6pyxPfYs8jFbEg2JhJnk$
+>>    master
+>> head:   719fce7539cd3e186598e2aed36325fe892150cf
+>> commit: debf69cfd4c618c7036a13cc4edd1faf87ce7d53 irqchip/xilinx: Expose
+>> Kconfig option for Zynq/ZynqMP
+>> date:   10 months ago
+>> config: arm64-randconfig-r031-20220227 (
+>> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220301/202203011058.VcuVhghd-lkp@intel.com/config__;!!IOGos0k!2JH7Pv3yO6KGoGUAasL6gdyffBveJ7sKR_ufk10CoE_SvRF6pyxPfYs8jFbE3gypuYE$
+>>   )
+>> compiler: aarch64-linux-gcc (GCC) 11.2.0
+>> reproduce (this is a W=1 build):
+>>          wget
+>> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!IOGos0k!2JH7Pv3yO6KGoGUAasL6gdyffBveJ7sKR_ufk10CoE_SvRF6pyxPfYs8jFbEO8rziu4$
+>>    -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          #
+>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=debf69cfd4c618c7036a13cc4edd1faf87ce7d53__;!!IOGos0k!2JH7Pv3yO6KGoGUAasL6gdyffBveJ7sKR_ufk10CoE_SvRF6pyxPfYs8jFbEPEVofBw$
+>>   
+>>          git remote add linus
+>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!IOGos0k!2JH7Pv3yO6KGoGUAasL6gdyffBveJ7sKR_ufk10CoE_SvRF6pyxPfYs8jFbEg2JhJnk$
+>>   
+>>          git fetch --no-tags linus master
+>>          git checkout debf69cfd4c618c7036a13cc4edd1faf87ce7d53
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross
+>> O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/
+>> drivers/irqchip/
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> drivers/irqchip/irq-xilinx-intc.c:127:14: warning: no previous prototype
+>>>> for 'xintc_get_irq' [-Wmissing-prototypes]
+>>       127 | unsigned int xintc_get_irq(void)
+>>           |              ^~~~~~~~~~~~~
+>>
 > 
-> On Wed, Mar 2, 2022 at 3:46 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > I just don't see how "value changed while it was read" is so different
-> > from "value changed one clock after it was read".  Since we don't detect
-> > the latter I don't see why we should worry about the former.
+> The issue here is that on MicroBlaze, xintc_get_irq is called by do_IRQ in
+> arch/microblaze/kernel/irq.c. The function definition it uses for that function
+> is in arch/microblaze/include/asm/irq.h which the irqchip driver obviously
+> can't include. Possibly the solution is to move that declaration to a non-arch-
+> specific header file which can be included in both places.
 > 
-> The "barrier" is at the point where the plaintext has been chosen AND
-> the nonce for a given keypair has been selected. So, if you have
-> plaintext in a buffer, and a key in a buffer, and the nonce for that
-> encryption in a buffer, and then after those are all selected, you
-> check to see if the vmgenid has changed since the birth of that key,
-> then you're all set. If it changes _after_ that point of check (your
-> "one clock after"), it doesn't matter: you'll just be
-> double-transmitting the same ciphertext, which is something that flaky
-> wifi sometimes does _anyway_ (and attackers can do intentionally), so
-> network protocols already are resilient to replay. This is the same
-> case you asked about earlier, and then answered yourself, when you
-> were wondering about reaching down into qdiscs.
-> 
-> Jason
+> I think this would warning have started showing up on aarch64 when the driver
+> was allowed to be selected for ZynqMP platforms, but I would assume it was
+> there on Microblaze all along..
 
-So writing some code:
+I solved it in xilinx linux tree by this patch but didn't sent it out yet.
 
-1:
-	put plaintext in a buffer
-	put a key in a buffer
-	put the nonce for that encryption in a buffer
+Feel free to take a look at it.
+https://github.com/Xilinx/linux-xlnx/commit/731d1aa34bdd78ffcd81b35f1d90d9667451fcf7
 
-	if vm gen id != stored vm gen id
-		stored vm gen id = vm gen id
-		goto 1
+Thanks,
+Michal
 
-I think this is race free, but I don't see why does it matter whether we
-read gen id atomically or not.
-
--- 
-MST
 

@@ -2,146 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5285F4CA4B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C464CA4C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241742AbiCBMUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S240699AbiCBMZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241744AbiCBMUF (ORCPT
+        with ESMTP id S234874AbiCBMZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:20:05 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B610657168
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 04:19:20 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id x6-20020a4a4106000000b003193022319cso1668265ooa.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 04:19:20 -0800 (PST)
+        Wed, 2 Mar 2022 07:25:25 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E218C1C8D;
+        Wed,  2 Mar 2022 04:24:40 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id o8so1477248pgf.9;
+        Wed, 02 Mar 2022 04:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n2AHBorZms8YAGoG9GhF+kfihvE43wMRpP4hUA+7xto=;
-        b=r4fh2zx+7V9cjuHBtWdTH+AuC8ckxuv3eEjvJg2jgDKfSSAKj2ATaKGBVZMKjnkHqf
-         HgcJoT9GYZUogc7cmeUiNUy28YO1+8JNBTdXoqYeqPqWWDbfr+XTQwEW8uRyTW4u4m0i
-         p3yZH/6ARzIxhZ6KEnS00wlZFdLvd7EDxldDgKHDvbrux95w+RY1ZPlCWsrYS104b7P5
-         7Fz8jTM9orYw2DZEaNRdeH12F4eysoZRdsbU7FCWGzPqa84E0Ca8a2uuDEsjFDO/hqvK
-         FQlFtx6ntGzjq+KwsakdXWEQxMXIGbCfjIIK73MUVFBJ0WHSZGPe23km98T+SgmmmEP6
-         smwg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cDTg97giT1w4UkqUHDJQChQ0iXlcc4URzPQyrsb+epo=;
+        b=U3lVbRMIfoWU+t87B4a2k2mgM8CkO2PEG90/U3hxRhx5a7LCpwNPQLz9zVBA/aWpc0
+         780KVNWRLuHbVNqjc/IypFEOf2qquswJquVo1gMLLPYXR6MHqFapZefKfFZnmT1SLtio
+         IlPNcfhBuxuCQYoJ0QHT/jcWgxVsXaLmc2WrbT1B38e/ZIHTj6SmL+UhJCAhina6zP5X
+         yNU/f20G6tM0WrKKJX/+nvqm+1l3RvP4gdP/zhtT1Z2YrSndoJaxkhgOkVTFhUwe+YL7
+         5+Nm94CE3vwKc2fHEeWitVKtxuvmCMX5QwiearRNDBkWRYbKbv4aZXfm3wRauu84qtic
+         0ziA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n2AHBorZms8YAGoG9GhF+kfihvE43wMRpP4hUA+7xto=;
-        b=SDTvdTvmVBv36VI8y8MKrbmSD/v7hFPBQ45u8zg8Lt46r/YSWk68db10KZ7Cdt4OKX
-         h+HFBjlIFGlO6huKrhINgFqCh9f4Maf0PIeRHSuBwx3dHAkza008wPTomCoc/TNbt+2/
-         VJnM53ztbbq0wbGIgynb3NMIWIEeOdnxKiqFzjn/3sv1ozq4wCvPSOycE0JA1NrUw1CT
-         ZT+WLWEV/ccVT16gWaTtiXtjvWiZsnBozfYNmQxSMk2hWhEJssZydZzmczXHXP4+LFuc
-         196cCrqQsSZqWQ//pBtTBycYKj3nhILZxGab2xDkvr+JzTvFTP4mH+7FO/bWaZwqfIFy
-         o/aw==
-X-Gm-Message-State: AOAM53015XPS4ch8RC92yj+U3vHgTlUamQq2Wz0rcs+JdlApUIppnqnV
-        OuPhvtaWqjd82FVpvI1QwRuvypvDttaU+PpP3lsRFQ==
-X-Google-Smtp-Source: ABdhPJzRsnGNx1fdPAqwBzv9n93Ob+rDaO5Q/Mm9UetP4uvFOGd1t9zNatKQ5mno6z4JPqg2SO/qtToGVI/930EUBFc=
-X-Received: by 2002:a05:6870:434f:b0:bf:9f2a:26f0 with SMTP id
- x15-20020a056870434f00b000bf9f2a26f0mr7372412oah.40.1646223560034; Wed, 02
- Mar 2022 04:19:20 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cDTg97giT1w4UkqUHDJQChQ0iXlcc4URzPQyrsb+epo=;
+        b=5hL8Yd3tKPSdbK16dW0s1hglxR8QCpw30fCIwwN+wYFrn1hETY8Ka+3GnoO7YwmdQl
+         6qCG1xoqTaI5l3YY2vukuPHgws6RGL5ahckdGIBgqmfiZ8dvJfu+imJpkU2GobQ9cISy
+         NuQdsqLtAGog/xMQgSELedIl8HyUNgne50nxyBm4ubd5mB2Ht87mugsEDBLBivj68fJ8
+         o7ui/8l5pHAxAuDXYfUSgi2m43X7mL00fGo9uZWnqhA5p3eyI4RD3216pJ0BpQhQBATd
+         6z8tqoqFXK52+4qGPgXkgIiJXNLqwFL21Um4rOA75iZY0OCFg1Fl0i5UNQ7iFSvNxGd6
+         Znnw==
+X-Gm-Message-State: AOAM532e8pwfKNLE1QWHI5QVMuGvn3NBW5/iZaQEhPLBpVyHumvC1YJc
+        K30HcHUpiG9IvqfuzaKIgw==
+X-Google-Smtp-Source: ABdhPJwEA1XwhWCIzafS1YdEePdYyPSB+32gTHUngKk5ncC0ydYcP6rusXTAUGm49fRiKPBfhlZcIw==
+X-Received: by 2002:a62:ddcc:0:b0:4e1:c248:d4a7 with SMTP id w195-20020a62ddcc000000b004e1c248d4a7mr32718797pff.63.1646223879848;
+        Wed, 02 Mar 2022 04:24:39 -0800 (PST)
+Received: from localhost.localdomain ([8.21.11.252])
+        by smtp.gmail.com with ESMTPSA id gb9-20020a17090b060900b001beecaf986dsm3121105pjb.52.2022.03.02.04.24.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 04:24:39 -0800 (PST)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     m.grzeschik@pengutronix.de, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v2] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
+Date:   Wed,  2 Mar 2022 20:24:23 +0800
+Message-Id: <20220302122423.4029168-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220301072511.117818-1-bhupesh.sharma@linaro.org>
- <20220301072511.117818-6-bhupesh.sharma@linaro.org> <d51717a2-0a50-f2fb-0d2d-e233c6e75d4b@linaro.org>
-In-Reply-To: <d51717a2-0a50-f2fb-0d2d-e233c6e75d4b@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 2 Mar 2022 17:49:09 +0530
-Message-ID: <CAH=2NtwGzDCACt16YfMCys+qBF+peTCyJo+WTsEk5CfPUpE2sw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] PCI: qcom: Add SM8150 SoC support
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
-        lorenzo.pieralisi@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+During driver initialization, the pointer of card info, i.e. the
+variable 'ci' is required. However, the definition of
+'com20020pci_id_table' reveals that this field is empty for some
+devices, which will cause null pointer dereference when initializing
+these devices.
 
-On Tue, 1 Mar 2022 at 17:13, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 01/03/2022 10:25, Bhupesh Sharma wrote:
-> > The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
-> > SM8250. Hence the support is added reusing the members of ops_2_7_0.
-> >
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >   drivers/pci/controller/dwc/pcie-qcom.c | 16 ++++++++++++++++
-> >   1 file changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index c19cd506ed3f..66fbc0234888 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1487,6 +1487,17 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
-> >       .config_sid = qcom_pcie_config_sid_sm8250,
-> >   };
-> >
-> > +/* Qcom IP rev.: 1.5.0 */
-> > +static const struct qcom_pcie_ops ops_1_5_0 = {
-> > +     .get_resources = qcom_pcie_get_resources_2_7_0,
-> > +     .init = qcom_pcie_init_2_7_0,
-> > +     .deinit = qcom_pcie_deinit_2_7_0,
-> > +     .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> > +     .post_init = qcom_pcie_post_init_2_7_0,
-> > +     .post_deinit = qcom_pcie_post_deinit_2_7_0,
-> > +     .config_sid = qcom_pcie_config_sid_sm8250,
-> > +};
-> > +
->
-> This duplicates the ops_1_9_0, doesn't it?
-> I'd suggest to reuse 1.9.0 structure and add a comment that it's also
-> used for 1.5.0.
+The following log reveals it:
 
-Ack. I will fix this in v3.
+[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
+[    3.975181] Call Trace:
+[    3.976208]  local_pci_probe+0x13f/0x210
+[    3.977248]  pci_device_probe+0x34c/0x6d0
+[    3.977255]  ? pci_uevent+0x470/0x470
+[    3.978265]  really_probe+0x24c/0x8d0
+[    3.978273]  __driver_probe_device+0x1b3/0x280
+[    3.979288]  driver_probe_device+0x50/0x370
 
-Regards,
-Bhupesh
+Fix this by checking whether the 'ci' is a null pointer first.
 
-> >   static const struct qcom_pcie_cfg apq8084_cfg = {
-> >       .ops = &ops_1_0_0,
-> >   };
-> > @@ -1511,6 +1522,10 @@ static const struct qcom_pcie_cfg sdm845_cfg = {
-> >       .ops = &ops_2_7_0,
-> >   };
-> >
-> > +static const struct qcom_pcie_cfg sm8150_cfg = {
-> > +     .ops = &ops_1_5_0,
-> > +};
-> > +
-> >   static const struct qcom_pcie_cfg sm8250_cfg = {
-> >       .ops = &ops_1_9_0,
-> >   };
-> > @@ -1626,6 +1641,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> >       { .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
-> >       { .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
-> >       { .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-> > +     { .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
-> >       { .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-> >       { .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
-> >       { .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
->
->
-> --
-> With best wishes
-> Dmitry
+Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+Changes in v2:
+    - Add 'fixes' tag
+---
+ drivers/net/arcnet/com20020-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/arcnet/com20020-pci.c b/drivers/net/arcnet/com20020-pci.c
+index 6382e1937cca..c580acb8b1d3 100644
+--- a/drivers/net/arcnet/com20020-pci.c
++++ b/drivers/net/arcnet/com20020-pci.c
+@@ -138,6 +138,9 @@ static int com20020pci_probe(struct pci_dev *pdev,
+ 		return -ENOMEM;
+ 
+ 	ci = (struct com20020_pci_card_info *)id->driver_data;
++	if (!ci)
++		return -EINVAL;
++
+ 	priv->ci = ci;
+ 	mm = &ci->misc_map;
+ 
+-- 
+2.25.1
+

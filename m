@@ -2,129 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91664C9C1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF29E4C9C29
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiCBD1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S239353AbiCBDaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiCBD1A (ORCPT
+        with ESMTP id S229792AbiCBDaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:27:00 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D06660D;
-        Tue,  1 Mar 2022 19:26:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XbFMl8ygbbuT4PyTmKV/u+beyNvicJ8Gt9pLl62uelHDmJcSWDQUY33kWrVnh7Dd3n1wHnzDww05i4IP7OWq+xWvKYsNlCQm5xovo2YQQDwC6Ce6kPDEcmL/zAhRd1b2S5xLYScdTF5YP7PwevykbdgRbHV0NPnE8Kgpg48Cm6WSlKM/QNLqGmyDPVjktP2yQeAcxdSt5u/14rgt5cN5ZOu7dA9YVrLu5hJrrNcRRRFHEUBePY260KDgFxAG0fG03P8p5LqdL8XOVJbdmaBq+9tZzxwldVKnvVFaC9ZYnYJMayUE2ertj5jdOs8RRkbSka7Lm2n+T/RAmwMdcPM1vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=arZxQ1tFCEKaKTiHRpXXomAgXeTQMuwVREWTutaEJsE=;
- b=Et4kSt/6mQZMPfAL2aeBTco4pDaFXznDLcBZi0NtjsqLZlqCHKcB8UoLL9tj+3EeQab3/wPngeWaum88iSLyDjoHk8ISudpKR22o2cMDdDZKZ2EcFLNoRfZTeuv2ke5bsKj2Qe0oHyX/mhcVX4AysHtsIbZZw1/y9ZbLiwmyihJtHGC0IVdEIq7YobWTZh6wdACG4ap1xg1H1jxsnhopi1lGpUXOhhdk7Snzlgtt1TWRkXhZQTlHs1y4qkmsNMdg4ubtq5kSna2Ob8X3yxFj/j5edDF5Kw5v4+pFof65X5UTpO/rI3NdbRwlwI9rrWjhStFYuuSQp2feHXguSD1YDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=arZxQ1tFCEKaKTiHRpXXomAgXeTQMuwVREWTutaEJsE=;
- b=TILwhgpX4MeFaSOL0yyS7iQw1XH0DYyEyF8YE9StfZfnZXJRdG4FZp1vp7gQCo5TzeEDM4T8pBr7idFjH0kTzJDUhnkTeL6hupzxCRnFFCW+Rj3AfK/aRK4HKuEYsWdg4244GYUd8Vj1sUw4/HZIYwU0rJSby3PjNCOOvB0T23k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by BN6PR1201MB0244.namprd12.prod.outlook.com (2603:10b6:405:54::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 03:26:15 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::a105:faab:243:1dd3]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::a105:faab:243:1dd3%11]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
- 03:26:15 +0000
-Message-ID: <14b6a691-d31e-2e54-cf91-352b9b30414d@amd.com>
-Date:   Tue, 1 Mar 2022 22:26:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211117134926.1d339d71@canb.auug.org.au>
- <20220120142639.02c54ae9@canb.auug.org.au>
- <20220302123126.65bcbc82@canb.auug.org.au>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <20220302123126.65bcbc82@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BL1PR13CA0430.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::15) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
+        Tue, 1 Mar 2022 22:30:23 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DFFB0D17;
+        Tue,  1 Mar 2022 19:29:40 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id o7-20020a056820040700b003205d5eae6eso12644oou.5;
+        Tue, 01 Mar 2022 19:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Q0bxE67I8y0tNyscEgKpcVLyNoRx4Y38uQCKmsrJXs=;
+        b=Y947JocD2+sMdok3nZr8cn9CnXm1HJHtBdilWI7XGsiHzz0gnVNoW6s9GlC6DCPo8f
+         Hs3+xo9n5QzmKwx5UOu6jbuBvVKgaIU3IhRp1TzH8GXoPgxc/s4KMu4HP/nhYi3apncQ
+         zu1Cd7RJbcX1Jh9Kq4Dw/CMTQj7hvtBi/A/ags+MJPqUdzC2yREUAe73YJIy4Ir1H+/n
+         kwv9pmdrPZtlff3xH41ULkhMu4ZWblUt2VDr37uoq0gVboVn8LE//4Qwily7fjxzhlkC
+         vSGnK+i4ktzKLhZ93hsvIEitS0vDTkgD5mmRr3i3cJkYp126CL78a0tUShM2xg5HLb4f
+         0wDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Q0bxE67I8y0tNyscEgKpcVLyNoRx4Y38uQCKmsrJXs=;
+        b=A38/NL5lbkPEOH9Bd80aq66uLBk8Is3f/3lAsqXYw36WubMLcJnWLX90HPUlwLLCqt
+         cOFaGAVwYGxghNANTi09VSiX+xLM/t1qVIhJGgNjGuHfsPvc+Vo9i9cV8obzj2UMH73D
+         /4FLWwlyTzI4Z5UiVH4kGclHqUFU89XQEQWUnvlUspvHDLMoNvMYxlPFFUs1QdogrSQN
+         kDb/5JCj4H4QHH0Hr1c1+Qrd9uSZEeRLlGJiVFynrC0yzOGJ9MoQ3gZodN+aOXSitiv/
+         OETgWp79WC5kVpngaovw+JnDl7TH4XAPabBpXaBJMkaK78B1Aw75ME1gmzeRfGCByH+8
+         WpzA==
+X-Gm-Message-State: AOAM531eBlOKwH4SP1yHW8lM+xYJl40qs7lFT24mdIqUYKbLvrl8rNfJ
+        6prMhxoXkdHwtAFH1p0rmtA=
+X-Google-Smtp-Source: ABdhPJy17OB73gebQWHaD3DcjnRxBmx0KdCe+tnIIJ0DXj+s62oFSr9rFn+6UqsMBVq99jXvVqMUKA==
+X-Received: by 2002:a4a:e865:0:b0:318:4b66:ffe0 with SMTP id m5-20020a4ae865000000b003184b66ffe0mr13923364oom.80.1646191780103;
+        Tue, 01 Mar 2022 19:29:40 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.59])
+        by smtp.googlemail.com with ESMTPSA id kw10-20020a056870ac0a00b000d75f1d9b87sm1061411oab.52.2022.03.01.19.29.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 19:29:39 -0800 (PST)
+Message-ID: <2071f8a0-148d-96fa-75b9-8277c2f87287@gmail.com>
+Date:   Tue, 1 Mar 2022 20:29:37 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8c9d8dbe-97bf-4050-fccd-08d9fbfc687a
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0244:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB02448657769B44E183262301EA039@BN6PR1201MB0244.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rTU17CG29J0aJR9uBYuUz2w84HJ7JsGDF+ABd5NMKtJJE6F9tXRcmNgPTSRWOm5dQvt/McfvE3aT19aLO3+88VYNIjhlw7QyVEhd1BAtJ40Maecpp4LU6zUXTE6xZqAEVCaWhAkQibhMV16nC4vNiuy/eDhFHVg/D9QobVbO1oQY57jiXPVcVqxtIZa/g2cETzrLQUFgEl7uVLnflihABPS5VGprBlwHv1yFA3LK+W8RlgpNbLH2He9igiipG1eywewybtYZp7Oy8HXl7dR0F3lsRgXYZPLTGB5bgwPojQFL1+DldPhgRbZwkRHJJl+K+yKyoG5IAlWPpcDyawziYkEXMgsV4ZBUCHqo0V24cMsY9EaTTb8dRCH1jdcxDOrnkTONGuxTSjnA0Id3khc+yQw4uFyvfoqvvdtSsiquHo+FEE13e9+4dIusacIVjSyF0iDfZmw+xw4HH7ngzZ8PpS3h9CEp+ChxwwW2tzl1ULSq5bUsEbdEx1rJmqUZEhfQiF/Ebeg8Zrw2LdZdVtgRYqQeLRUEf9TKxowQrYlmCN/TWCSSnOw/VO6Rw7HfdxLXVhTlXdXt3FkdweK+d3eVKTMA8dHRd0SFfl/WCFU6vGTopgc0V3xlRyyLwy5CnhwpLbVFEdVu1L+bJ1KO/GeEjFi6XO3fAy/7RHcfTJcyvrc2NONRf0U0hIguOyrkSlYDYFq/7WfKKKvUXlgs0Ld8JWv4hSBkb6rbWhY4JtYhsoI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(6512007)(53546011)(6506007)(186003)(2616005)(83380400001)(2906002)(110136005)(54906003)(316002)(8936002)(4326008)(8676002)(31686004)(6486002)(66476007)(508600001)(66556008)(66946007)(31696002)(6666004)(44832011)(4744005)(36756003)(86362001)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFE2bXcyMnJmUk0xNlFyOFpZa0Y4SEJ4NlFaVnJ1YzNUMWp2eGlMSXFBMzJT?=
- =?utf-8?B?K2dsamhySndKSEQrNWsrM3JZRjZjdGZMeUdyRTE1aWNrN2FFMnBlM2Njcng0?=
- =?utf-8?B?bEpqNUhrL1RFSnVVbG1QalRjKytGVnlRU1R2bkV2dEY1YU1CWkVDL3RZaklu?=
- =?utf-8?B?VFhqK3FRRXBaWnFROTZSeDllWGR4Ym9QYlZrWnhuSjZ2NVo0WVNRY3pRTTgz?=
- =?utf-8?B?U3M2Y0pPT0ljSzIzZVVlT0Z6eFhnR1U4dVFWREhINGZpdUpLc3pQYkJ3ZDda?=
- =?utf-8?B?Umt5WUZtY3ZibzRQVDR0MHZ4OUVodTlqeVFuVkRXSGk2YlEzTStkY3d3czBC?=
- =?utf-8?B?WnluMENKQjllN2VpY2xVK2R5Ry94aVpKOUd2OFFJTkhobVliNWxzVGVDR09E?=
- =?utf-8?B?MHlHV1FLTmgyNmlRY1hMa0pmMXErVHVEY0R1eUE3bGpocTFDd0p5Tk5SVjI0?=
- =?utf-8?B?bFZZek1adUJIUHlqV21GUHl6ZEVMUG9BUGNjcUtUdXJDTFl4NGpTUW1WdUlF?=
- =?utf-8?B?dzMrTDRqNlpNblI5dWxaZzVPbmpRMEE1emJjaW5uUXJzSDRKbmxBYlNIZEFN?=
- =?utf-8?B?ZStyZHNENEVMQzZwdkNlY1MrY1dGQ3FkZWtKdjNBR1gyQm5PK2ppS2RqNzRa?=
- =?utf-8?B?THI0V2VTaUpITGluRkJEYllPRXZ6NnJkempiUU1iVlhYd0NXc00zMzJlaEFl?=
- =?utf-8?B?VTc5ekdXTmhKOUpyRnJIenkxRHpwTkhjZ0F6UFpUbFdPdDJtZzRVMzhpZmV6?=
- =?utf-8?B?b1RnZHVySjY1c2d3dVZxYXdpTm0vUkZ4QjBnTFhTVE9mcXFhY2NXRnJOK0JO?=
- =?utf-8?B?K290Rzh1RzFFYWxLQzBsNldhYUlZQzB5TkdGZXJUMERrbys0QVU4enNKcjRW?=
- =?utf-8?B?dnYxRzVNL0cySEFzbjhlejVlaXpRZjlaNnNkcEFQQm9OWHNPcjdtdFM1b3NK?=
- =?utf-8?B?Mk1LK0VMSmZXa29SK1pYQ0Y0Z0tWV2tBVEJnRTAwN1puV2hMTm1MYXozT1pX?=
- =?utf-8?B?cHYxKys2YjRKWDkrVjJjWkJ2Z0E5ME5mR3hOcWFNT3cvbzNWN1FnTkNDWHhZ?=
- =?utf-8?B?QjdXa216M0lLMlo3YmVEamhIZVJhKys3N2N0MjBhWVdTbWk5ZEJVaUQ1NmFy?=
- =?utf-8?B?dmhDR0gxNkVmVW01RW9TbUJmWWE5SEJPNUVKNmVKKzc3VEkvSjExRm9OdjRj?=
- =?utf-8?B?TnRSOGtvZUdNRnJqbGg2U3FsLzhIanRKQWd1eEVzblpmbWhQYVpyem5XeU1D?=
- =?utf-8?B?bTVnS2hGMHlnMUVWOUVCTkNoeGhmOUlDWVhaNlhvaUlPYWFWWkh5emYxaENG?=
- =?utf-8?B?Y3VlSmhIeUdpVEpiVFhwS09XMmZTeEFqMDNkeUpPT2xsK2Fpa0tINjBhb01a?=
- =?utf-8?B?V3pLNkh4NU1QaVJZNS8rcXdIcGVKUUVObUtCeGdxV1VGaVI5U0RWYXFzSzAr?=
- =?utf-8?B?ZHo3OS8rUHdySC9TL1VWazVtR3E2ejVueXQvWk5ETzdRVnQxL21iSlRrSHZh?=
- =?utf-8?B?VkdUb2VvczRIbEJnMnROWWhuYnEyRkNjcUJVNE5za3JmTTdic3djNERTRVZt?=
- =?utf-8?B?b0puY2hLdlhkYS90eWoyM0hQNFlUZkRRNE1Sd3Nwait3N2E4S1ZNTzdhYjk3?=
- =?utf-8?B?NWViOG5kVW9VL2lHY2lnR1d1cXdnZDBpOTNRYkNVYnJwM0JFWm01a3VhM1Zn?=
- =?utf-8?B?eG50K3Z6ZUE2cUZIa1dMWFB1bUU2eDd4QTFpbFdHZFhoV2t4a0R1bC9sT2Vs?=
- =?utf-8?B?SXBlMC9rVENRM09ZMFE4TWpPS2tLTmF5aHRoOUtqUkc3dmw1dXI1aWh5U3dL?=
- =?utf-8?B?cU9EeUo2enZRakdQNnJvSXR3dDMzZHhrY2JiUEwvQThjRFZKUHdZMUNBd3Qz?=
- =?utf-8?B?Sk1HRmk0NXJRTUxMemMyMkVpODBkQXZhdUNKSHZCUnc2NDRuTlV4V3FPZzRa?=
- =?utf-8?B?NjRLbkpudFF0aXJXb1FDYy9aZDk1M2M0eGRlb2J1VVRzU2lRMk5nb1ovVVlP?=
- =?utf-8?B?ZEYza0pNWjVDWVdUSHpSNEt6bHF2RHdWbEpCU0dEeHhnSUh1S293NTc0M0tl?=
- =?utf-8?B?RkRKckdTY0sremczK05zNUo5TXRkeXlIQkErV1FQKzBNZXdKM3RRNWw1YTNw?=
- =?utf-8?B?NWRxbmtVTHJJb0Q5Y1NDSldvbjNQSFdPTXMxNVBjSWNxUDFhVXpmWUJSYzlE?=
- =?utf-8?B?WUk5TzdYYS9KLzBYWFEwSE1tNmc4TU9oWVRrMVJnc0ZVb1RDbkt2Q1VUQWVa?=
- =?utf-8?Q?wL9m9pCZYOx4yQNrkcxh0ktRVxfPYIll0L+6JiiUKs=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9d8dbe-97bf-4050-fccd-08d9fbfc687a
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 03:26:15.7075
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N95FvjjAkGa+XS6d3wIJDepVFrkLbXWT/JM/Qy/AfnBlptfLzKmGfK/DPM+xTOLSWlc+ESy5tT7yR45B/HJ/qQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0244
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH net-next v4 4/4] net: tun: track dropped skb via
+ kfree_skb_reason()
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
+        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
+References: <20220226084929.6417-1-dongli.zhang@oracle.com>
+ <20220226084929.6417-5-dongli.zhang@oracle.com>
+ <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,24 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please check you have commit c7703ce38c1e Andrey Grodzovsky   3 weeks 
-ago    drm/amdgpu: Fix htmldoc warning
+On 3/1/22 7:50 PM, Jakub Kicinski wrote:
+> On Sat, 26 Feb 2022 00:49:29 -0800 Dongli Zhang wrote:
+>> +	SKB_DROP_REASON_SKB_PULL,	/* failed to pull sk_buff data */
+>> +	SKB_DROP_REASON_SKB_TRIM,	/* failed to trim sk_buff data */
+> 
+> IDK if these are not too low level and therefore lacking meaning.
+> 
+> What are your thoughts David?
 
-Andrey
+I agree. Not every kfree_skb is worthy of a reason. "Internal
+housekeeping" errors are random and nothing a user / admin can do about
+drops.
 
-On 2022-03-01 20:31, Stephen Rothwell wrote:
-> Hi all,
->
-> On Thu, 20 Jan 2022 14:26:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>> After merging the drm-misc tree, today's linux-next build (htmldocs)
->>> produced this warning:
->>>
->>> include/drm/gpu_scheduler.h:316: warning: Function parameter or member 'work' not described in 'drm_sched_job'
->>>
->>> Introduced by commit
->>>
->>>    542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
->> I am still seeing this warning.
-> I am still seeing this warning.
->
+IMHO, the value of the reason code is when it aligns with SNMP counters
+(original motivation for this direction) and relevant details like TCP
+or UDP checksum mismatch, packets for a socket that is not open, socket
+is full, ring buffer is full, packets for "other host", etc.
+
+> 
+> Would it be better to up level the names a little bit and call SKB_PULL
+> something like "HDR_TRUNC" or "HDR_INV" or "HDR_ERR" etc or maybe
+> "L2_HDR_ERR" since in this case we seem to be pulling off ETH_HLEN?
+> 
+> For SKB_TRIM the error comes from allocation failures, there may be
+> a whole bunch of skb helpers which will fail only under mem pressure,
+> would it be better to identify them and return some ENOMEM related
+> reason, since, most likely, those will be noise to whoever is tracking
+> real errors?
+> 
+>>  	SKB_DROP_REASON_DEV_HDR,	/* there is something wrong with
+>>  					 * device driver specific header
+>>  					 */
+>> +	SKB_DROP_REASON_DEV_READY,	/* device is not ready */
+> 
+> What is ready? link is not up? peer not connected? can we expand?
+
+As I recall in this case it is the tfile for a tun device disappeared -
+ie., a race condition.

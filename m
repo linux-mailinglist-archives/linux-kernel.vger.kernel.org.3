@@ -2,114 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D2D4C9E8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5D24C9E8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbiCBHqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
+        id S239910AbiCBHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239880AbiCBHqA (ORCPT
+        with ESMTP id S234393AbiCBHqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:46:00 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE82AD135
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:45:18 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso4073459pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 23:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=F9EtQ8yCDPdY6oJUsT6nUpz0TTVJMffkSKOyUDKlf6g=;
-        b=dNj/gUws35uaqKdhHY3lu4/zgchEG0cqtQXu3vowcftUBbkQXDkZR/CJz0J4FqCnym
-         YHsfvEv3jRC6KpDCQY61D7QW5Q8oVYrwz+W/iVgktqhA3/qjboT8klvbsxZN4hYr0ITE
-         pix8SawqbDMwN93+4g22NeRi8YOW2YoF2EUAS99h2CYBbGwL7ESNnIiBnzojb6OKOG3P
-         00zgyWDWKDTGg1u3jvQXsogb/NO6DTpgHC56HONXtaW39xDBqLBzAABe0+5ETvNga1ug
-         bKu3nMCvrCIIZdAfh6U1gwvcnicUJ872A6zvrzzSd8mI8IHX6dNmZa5jVZf67asZkh+N
-         QQ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=F9EtQ8yCDPdY6oJUsT6nUpz0TTVJMffkSKOyUDKlf6g=;
-        b=goxmSpp9iWUfDQ9/TBqmVShS+RNB8TlMsSHpzbdkWea44TXJ5pUFINUXCpRE6t/+1n
-         QMQmi0aBJN/1gMc1nQ0ZcKg+Z81r5pdBsRcXta4RcussfsOGIK72O1O6PMS4V2ijdTkM
-         tNKLp2skMZo0HGYG/FFKPBL5DJyJpfYs4e01PNszH9kn0/mtM4jWlddXrmJ5+e21YTAM
-         Fg25DK3qETdhdZkY/i7j2eMlcljV8CBI5vfucmkmXgDNENTkUJX6dzm76ZAOTYQ7MjUd
-         EHYFlcf+3Ogit9fTHkubDZzr6DTG88gFHD8NFMtOj5Gpd/sIRluJ4BH8SD8aBvS6O3kN
-         TbvA==
-X-Gm-Message-State: AOAM533dIdgpAwQg5fUyHj20yTVRWz2HG+/MYNYwGOEd6oGD1oqSygQ1
-        DoQ3nqEydo/2+uvVuLkKTVaQqw==
-X-Google-Smtp-Source: ABdhPJwYMu1C28ILx7eUzFRPd7Lj2NxP1BHQ8w5qbPr6FmhQ/Gj7s683H8KNjPhBk+XXAQ0mNbiCjA==
-X-Received: by 2002:a17:902:b696:b0:151:7777:2211 with SMTP id c22-20020a170902b69600b0015177772211mr9195582pls.46.1646207117588;
-        Tue, 01 Mar 2022 23:45:17 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056a00114300b004e099ec2871sm20035153pfm.154.2022.03.01.23.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 23:45:17 -0800 (PST)
-Date:   Wed, 2 Mar 2022 13:15:15 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced
- EM registration
-Message-ID: <20220302074515.dqzoutfiobildiph@vireshk-i7>
-References: <20220301093524.8870-1-lukasz.luba@arm.com>
- <20220301093524.8870-4-lukasz.luba@arm.com>
+        Wed, 2 Mar 2022 02:46:48 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA446AD135;
+        Tue,  1 Mar 2022 23:46:01 -0800 (PST)
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N94FT-1oImfn11vj-0164aE; Wed, 02 Mar 2022 08:46:00 +0100
+Received: by mail-wr1-f51.google.com with SMTP id t11so1301829wrm.5;
+        Tue, 01 Mar 2022 23:46:00 -0800 (PST)
+X-Gm-Message-State: AOAM5304jN8qOfqoq5j0og2DZFTXpl274KvKpSQG3SfZvZgP0hqb3qfA
+        tXq1+Pm4LlA/8mEX9jfucl7HqbeHhOAg7+wC6UQ=
+X-Google-Smtp-Source: ABdhPJybMCpDhJ+avRiNAbCh29mtDBhmslr8rmSojY+YWnXGrOU1j3Ds5dfV+KlsD75CKqxDSQB3Q+Oo96ISZoS4UMs=
+X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
+ c2-20020a5d63c2000000b001ef840ee139mr14713156wrw.192.1646207159864; Tue, 01
+ Mar 2022 23:45:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301093524.8870-4-lukasz.luba@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220302095008.27b6c6a9@canb.auug.org.au>
+In-Reply-To: <20220302095008.27b6c6a9@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 2 Mar 2022 08:45:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
+Message-ID: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:3Cr2PuXLC9siqzXDcJxqZ4TEVBDmtyV/el+EjybgZ8uEfmu+khK
+ mLd21uJRZKq8SwmHlnB54cpWK1kZADXGeOgWFxRjaGnEBgtE4nu4LrJNUvkhkkJjyBHGKl7
+ k1SSh6QkzIgFgA1mqvBs88Ge9GL2sgX0vFoR0QW7RKhXWv06lKZBt/Xu5cRVQK1p1MMfihF
+ OlLuynTN86jLhkKBRbxHA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Mh4zv9/yuZQ=:TngWQWr18gIhmKLMQH2Eob
+ UABlGxHbj5/2ZNsItGWtp8RqWWRnD12H9AjNEH91c6xS322Chw4r50iXQPqbZXUduXLb9sQ+1
+ miOSLcbJ7EfSOqSh8p+Y5xetFwUFjKY5mg34ID9uAhXCXnqbDXKjqDuCSiWgWI+iYKHMQw13+
+ 3X1mtSqkBhWjHOwK8jXEGyfI0ZSPo/UCRVdLTE0W70Qz6eafcUzqXDv19dy2K00Zrs4B0Pn+B
+ OBexUgCIAY5K1LEvp3NRKzx5dzDdHl4kpwuuRgtdnz6Q9Z6m5ZLt6O9vAfZ3HFfwql+ksbgYG
+ bf0moKD/bpgOQuw++Ns5oJkaNNHVWb2ArFpT0q92BjGksXtGdBdbiWD3NioIEUQViOEYe/qiI
+ SOxBcMFU0O/8vG/Zd7aWd8slEcRf5HY5M1VGcLoa0bF0QwiXVLJBTVZ0uxNpjTYpI28IZSW6k
+ f1nRUu9g6VF1eSmaUGAXdt8kJAJeg7MJ+yx6mL3EyN2dfN9Y/dESPmUuPVQ1BSBSTef7XoHDh
+ 4sX0qj7fkAs/kR1IQGcMZPGZwjfmHTr27GhwMPymmW/Z1CX8eGFA4l0Y0vO49uC/0YHc1a9n+
+ MsiNgX0NmywXsoo2FmvGwTwEaR/exJg0OwBlzYnVfjq3FLH/S0whm1p8bEv78VRafFbNdPLDx
+ 67b2TZR1gHVPkj+1W8/6d6N2WiMDfuA0sW8/1IsNSpRQy2CyZpgvwP1UbBWMGQJgxGbBUQxpJ
+ siOWagSh0KxuktguTbLesA2E9lX6AGPtY8cqkssgisbJzMXX8uDtDwLiJDh8VJ9oAy88hpUJj
+ mUV+J59Y2DB7E+gqDnBYnOQQQJIDYP1CnPG3SlKqmHxYb3FMTo=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-03-22, 09:35, Lukasz Luba wrote:
->  /**
->   * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
->   * @dev		: Device for which an Energy Model has to be registered
-> @@ -1517,6 +1567,12 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->  		goto failed;
->  	}
->  
-> +	/* First, try to find more precised Energy Model in DT */
-> +	if (_of_has_opp_microwatt_property(dev)) {
-> +		em_cb.active_power = _get_dt_power;
+On Tue, Mar 1, 2022 at 11:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> drivers/soc/mediatek/mtk-mmsys.c:64:10: error: 'const struct mtk_mmsys_driver_data' has no member named 'sw0_rst_offset'
+>    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>       |          ^~~~~~~~~~~~~~
+> In file included from drivers/soc/mediatek/mtk-mmsys.c:18:
+> drivers/soc/mediatek/mt8186-mmsys.h:55:57: warning: excess elements in struct initializer
+>    55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
+>       |                                                         ^~~~~
+> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
+>    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>       |                           ^~~~~~~~~~~~~~~~~~~~~~
+> drivers/soc/mediatek/mt8186-mmsys.h:55:57: note: (near initialization for 'mt8186_mmsys_driver_data')
+>    55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
+>       |                                                         ^~~~~
+> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
+>    64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>       |                           ^~~~~~~~~~~~~~~~~~~~~~
+>
+> Caused by commit
+>
+>   831785f0e5b9 ("soc: mediatek: mmsys: add mmsys reset control for MT8186")
+>
+> I have used the arm-soc tree from next-20220301 for today.
 
-You can also do (to fix the warning) this instead:
+I'm going on vacation right now, did a quick revert of that commit to fix the
+build. Rex-BC Chen, Matthias: please send a proper fix that I can apply next
+week when I get back, to replace my revert.
 
-em_cb = EM_DATA_CB(_get_dt_power);
-
-Similar for the else part.
-
-> +		goto register_em;
-> +	}
-> +
->  	np = of_node_get(dev->of_node);
->  	if (!np) {
->  		ret = -EINVAL;
-> @@ -1538,6 +1594,7 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->  		goto failed;
->  	}
->  
-> +register_em:
->  	ret = em_dev_register_perf_domain(dev, nr_opp, &em_cb, cpus, true);
->  	if (ret)
->  		goto failed;
-> -- 
-> 2.17.1
-
--- 
-viresh
+         Arnd

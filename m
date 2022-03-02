@@ -2,126 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982584CAE16
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A663E4CAE1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244824AbiCBTDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S244842AbiCBTD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244816AbiCBTDY (ORCPT
+        with ESMTP id S244850AbiCBTDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:03:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B375DEE5;
-        Wed,  2 Mar 2022 11:02:40 -0800 (PST)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K83QY1FMLz67LfL;
-        Thu,  3 Mar 2022 03:02:29 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 20:02:37 +0100
-Received: from [10.47.84.129] (10.47.84.129) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 2 Mar
- 2022 19:02:36 +0000
-Message-ID: <499b0d93-9352-b52f-0ee8-7dc7fd0bac5c@huawei.com>
-Date:   Wed, 2 Mar 2022 19:02:35 +0000
+        Wed, 2 Mar 2022 14:03:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAEE4AE09;
+        Wed,  2 Mar 2022 11:03:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3E44614C9;
+        Wed,  2 Mar 2022 19:03:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9472BC004E1;
+        Wed,  2 Mar 2022 19:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646247782;
+        bh=o//HJ6BOALyflat2+5/GXiJeuCPk+VlksyaDQu6xvUo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vFrX8MUdmDI0aw/CwGNlWdVxijOAupdHvPGORfc9vfwp7o9C3E1UfWW6zSvKXoVHs
+         PZwc4C/SYJZKagYuC8rtAcyj6JvNYd7B0tAs4yMk5FyTjhnVCzloNeiMpnYw1EAwde
+         kzFHoX0Lm7lo3yrq6Sd9pQgyinqc6EeWhRw/B2wwP36yEvva87s0wjEPmflAkRRrV3
+         LvIfkTTXdyZUJsgAXz0K33lu+ttMODStUdQMmAaNG/ipZn0hh3vABvjaGyMPMTUQsQ
+         Qvh3dlPm4WYvjNrexqoPy7FXkQoHZnWZn5UqzaZcyWld0LHiz3vbdyJEKe7MnX3JPI
+         xdz7ju2+U5kqA==
+Date:   Wed, 2 Mar 2022 11:03:00 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
+        joao.m.martins@oracle.com, joe.jin@oracle.com, dsahern@gmail.com,
+        edumazet@google.com
+Subject: Re: [PATCH net-next v4 2/4] net: tap: track dropped skb via
+ kfree_skb_reason()
+Message-ID: <20220302110300.1ac78804@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <0556b706-cb4d-b0b6-ef29-443123afd71d@oracle.com>
+References: <20220226084929.6417-1-dongli.zhang@oracle.com>
+        <20220226084929.6417-3-dongli.zhang@oracle.com>
+        <20220301184209.1f11b350@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <0556b706-cb4d-b0b6-ef29-443123afd71d@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v7 04/10] hisi_acc_vfio_pci: add new vfio_pci driver for
- HiSilicon ACC devices
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
- <20220302172903.1995-5-shameerali.kolothum.thodi@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220302172903.1995-5-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.84.129]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 17:28, Shameer Kolothum wrote:
-> +config HISI_ACC_VFIO_PCI
-> +	tristate "VFIO PCI support for HiSilicon ACC devices"
-> +	depends on (ARM64 && VFIO_PCI_CORE) || (COMPILE_TEST && 64BIT)
+On Wed, 2 Mar 2022 09:43:29 -0800 Dongli Zhang wrote:
+> On 3/1/22 6:42 PM, Jakub Kicinski wrote:
+> > On Sat, 26 Feb 2022 00:49:27 -0800 Dongli Zhang wrote:  
+> >> +	SKB_DROP_REASON_SKB_CSUM,	/* sk_buff checksum error */  
+> > 
+> > Can we spell it out a little more? It sounds like the checksum was
+> > incorrect. Will it be clear that computing the checksum failed, rather
+> > than checksum validation failed?  
+> 
+> I am just trying to make the reasons as generic as possible so that:
+> 
+> 1. We may minimize the number of reasons.
+> 
+> 2. People may re-use the same reason for all CSUM related issue.
 
-This means that we will have HISI_ACC_VFIO_PCI=y for COMPILE_TEST=y and 
-64BIT=y and VFIO_PCI_CORE=n, but ...
+The generic nature is fine, my concern is to clearly differentiate
+errors in _validating_ the checksum from errors in _generating_ them.
+"sk_buff checksum error" does not explain which one had taken place.
 
-> +	help
-> +	  This provides generic PCI support for HiSilicon ACC devices
-> +	  using the VFIO framework.
-> +
-> +	  If you don't know what to do here, say N.
-> diff --git a/drivers/vfio/pci/hisilicon/Makefile b/drivers/vfio/pci/hisilicon/Makefile
-> new file mode 100644
-> index 000000000000..c66b3783f2f9
-> --- /dev/null
-> +++ b/drivers/vfio/pci/hisilicon/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_HISI_ACC_VFIO_PCI) += hisi-acc-vfio-pci.o
-> +hisi-acc-vfio-pci-y := hisi_acc_vfio_pci.o
-> +
-> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> new file mode 100644
-> index 000000000000..8129c3457b3b
-> --- /dev/null
-> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, HiSilicon Ltd.
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/eventfd.h>
-> +#include <linux/file.h>
-> +#include <linux/hisi_acc_qm.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/vfio.h>
-> +#include <linux/vfio_pci_core.h>
-> +
-> +static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
-> +{
-> +	struct vfio_pci_core_device *vdev =
-> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> +	int ret;
-> +
-> +	ret = vfio_pci_core_enable(vdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vfio_pci_core_finish_enable(vdev);
+> >> +	SKB_DROP_REASON_SKB_COPY_DATA,	/* failed to copy data from or to
+> >> +					 * sk_buff
+> >> +					 */  
+> > 
+> > Here should we specify that it's copying from user space?  
+> 
+> Same as above. I am minimizing the number of reasons so that any memory copy for
+> sk_buff may re-use this reason.
 
-... there does not seem to be a stub for vfio_pci_core_finish_enable(), 
-so I don't think that we compile under the conditions described. I think 
-that HISI_ACC_VFIO_PCI should always depends on HISI_ACC_VFIO_PCI
+IIUC this failure is equivalent to user passing an invalid buffer. 
+I mean something like:
 
-> +
-> +	return 0;
-> +}
+	send(fd, (void *)random(), 1000, 0);
+
+I'd be tempted to call the reason something link SKB_UCOPY_FAULT.
+To indicate it's a problem copying from user space. EFAULT is the
+typical errno for that. WDYT?
 

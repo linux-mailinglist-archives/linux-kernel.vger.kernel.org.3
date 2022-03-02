@@ -2,143 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED05B4CB064
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC374CB085
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244867AbiCBU7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S245043AbiCBVAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiCBU7I (ORCPT
+        with ESMTP id S245017AbiCBVAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:59:08 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668D7D2050;
-        Wed,  2 Mar 2022 12:58:24 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2dbfe58670cso33061237b3.3;
-        Wed, 02 Mar 2022 12:58:24 -0800 (PST)
+        Wed, 2 Mar 2022 16:00:22 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC63D206B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:59:38 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id d3so2530442qvb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:59:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gUqcADQZPQvyqaonjnYhl1TaoPMyKV8P7rze27ZP3KI=;
-        b=N5hUOPiLewMUCD+5KaZBMFUn/haOQVDaN2+TFsgiefTgfSDB3L0BGarLhWkc3S3e6R
-         hSaSRV2kSmo2m2GWw0aJ07cybXs2J2cF2RvWIowhPhzEBmvVZ7p5g4YDUzytYOgV0bsu
-         aGafKhgfGfEdHlszoLI2vpItjmasBo6wNfuoRH968Z8To3WUqKyos+4fppD1hCZckv+8
-         d6BtmIXTWZdfrnXXjKMUmU/nCPIqL0OTGzLtMAEbLh7W6+RJShWDachnrSA1yRwB7cuP
-         g28TfoEa9XbBDn7BocwY6DlDEMKrHYBKXR4dJdjY+VQZYC7M0To0hft+yr7OKyAic7u9
-         flvg==
+        bh=7mUjbtpCCtsOG9jYKgJxNZISxNazpeqTfffY69y8STE=;
+        b=aavMfozFmXfin3ehGCM8/cbJ45gjcXA92LUIHvpXcrPFXksrvC/pAH/jfvGXai4FFU
+         ocGOv6ED9Yo92B+9cv5uRySx8W76NvdLsdd+an8GuVsUp8UsyWQWuk4Fu1WiyVV6hay3
+         8WMCK36dr/G68oEUEQruwQX6r2ZFZWQf3TlcTHhmfK7ciULdgYxfDEofhXOhIItGXVjO
+         t4H86M42+EGuAhcr94NUcW1h68cuSzyG2ZFjHbUBOa1GYbuY5C1/BI7M8GbE5OafZqJh
+         vvzyAa4IzAvS63bD+8vlcs2zZEiyGcYQxOLjFvcoVJXH3u2PREZc4O1v1KJAHnyzSAF6
+         ypmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gUqcADQZPQvyqaonjnYhl1TaoPMyKV8P7rze27ZP3KI=;
-        b=FceiW4m0uXcOdfQUIxnVgU2WUgQ3cTIBBXXvifDduLgTuQ/KCNmxKUT7Jd51RdHmSR
-         apNX2aWMSZUxmZyNaL2tdDh3vV1mPDIVBoiktpos+LYfd18bLlD58P/9iV36Hh78lHv6
-         EW69eV5gJb50uhwInXluJZixyXpSZ8Nx3fx1fytLtjn2eFv9B4kAjMDCW0oMdCZ7X+KA
-         srg6uXJhGh7eQUA71FUU5zasLSO3avXVFQePXoqyKZO5cvwhg/p5+DQLbEtbNVXN/l8q
-         Fn4xFbOHhrUD4dvMB+K52vGCki5EdGfjayAGvr6pjpXZJUw2CQQ9YTnxOsXq3wNyRTxK
-         uKmQ==
-X-Gm-Message-State: AOAM531pu54OjCCPzm9Yyb4oCR5/VLvjLVBQfyERnlYh6WiSLQk15cQu
-        i0LPoXF/8s2Tg2qhxvZdqv6k3W+3vbFcFcDOpEhGpob2vAk=
-X-Google-Smtp-Source: ABdhPJyhnP/LKgkQf+hwmnQFbFT/ZhPe40O2TgJ+0PIiJBYrw0Hr8AGUZNoc/OSbiGZUEN7gVRf9rsSVpJ0Uk7OiJ2M=
-X-Received: by 2002:a81:6357:0:b0:2d7:2af4:6e12 with SMTP id
- x84-20020a816357000000b002d72af46e12mr31920195ywb.317.1646254703556; Wed, 02
- Mar 2022 12:58:23 -0800 (PST)
+        bh=7mUjbtpCCtsOG9jYKgJxNZISxNazpeqTfffY69y8STE=;
+        b=Vy+ZLhTZCRIok850blz8VT8MuLLFGA6FT+Ckd3LO32ebiD05KPaGW/Sk7h0ztdtZR3
+         VHSKZYiMXbRnJGLcyhzQaplmulKIZzky2XYs8yxnAGFIIaqjGf/UFvOUBCNR/RDJ2sc8
+         nHoprwFrA82orm0+PUoz66B7bgBumHIsZnalqSJyDaZIlCZbFOy6avmTE1MmYFnSiMU/
+         4Zy0UrUO/AWF7toZ8Y2lZbgYmZKRT+QEW3sor8upxsVFxQZYC6AhmK90YfuE7p2dBQeE
+         UYSJ6rRFgBc3CtNPwkYM2nHhayQyjOFmQ60UX7XjNxDGPZ2k3dWhBoCA2TPfTifNUwxW
+         wtgg==
+X-Gm-Message-State: AOAM532Vf+17dfvxkF2lOj5NspuYyTLsdyPyOT4GQWjT/FQSOCefFLxS
+        3NzKnWn5l3vvKZQ8KBLgmhrjeRlpZJgNsJFzeTHb/g==
+X-Google-Smtp-Source: ABdhPJx9v0p/md2jydNCQ6XCgdb9TFM9VczTiKrSjtKaCqAuPjqYf5f3eAI8AFE+zTL1zbzO1qaq4dBXim2UgWtVyHg=
+X-Received: by 2002:ad4:5883:0:b0:432:b007:962b with SMTP id
+ dz3-20020ad45883000000b00432b007962bmr20943794qvb.55.1646254778062; Wed, 02
+ Mar 2022 12:59:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302183515.448334-1-caleb.connolly@linaro.org> <21F7790B-8849-4131-AF09-4E622B1A9E9D@holtmann.org>
-In-Reply-To: <21F7790B-8849-4131-AF09-4E622B1A9E9D@holtmann.org>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 2 Mar 2022 12:58:12 -0800
-Message-ID: <CABBYNZJPN6o-v2OpAXND0+UfwB3AQL2=r6CDQ0S8PktWZqijMw@mail.gmail.com>
-Subject: Re: [PATCH v2] bluetooth: hci_event: don't print an error on vendor events
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
+References: <20220302203045.184500-1-bhupesh.sharma@linaro.org> <20220302203045.184500-8-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220302203045.184500-8-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 2 Mar 2022 23:59:27 +0300
+Message-ID: <CAA8EJpqEy+669gpDsy-zGp2NpDP-d7ZxNf7RVo=OQZdvGdZOvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] arm64: dts: qcom: sa8155: Enable PCIe nodes
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
+        lorenzo.pieralisi@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel, Caleb,
+On Wed, 2 Mar 2022 at 23:31, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>
+> SA8155p ADP board supports the PCIe0 controller in the RC
+> mode (only). So add the support for the same.
+>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 42 ++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> index 8756c2b25c7e..3f6b3ee404f5 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+> @@ -387,9 +387,51 @@ &usb_2_qmpphy {
+>         vdda-pll-supply = <&vdda_usb_ss_dp_core_1>;
+>  };
+>
+> +&pcie0 {
+> +       status = "okay";
+> +};
+> +
+> +&pcie0_phy {
+> +       status = "okay";
+> +       vdda-phy-supply = <&vreg_l18c_0p88>;
+> +       vdda-pll-supply = <&vreg_l8c_1p2>;
+> +};
+> +
+> +&pcie1_phy {
+> +       vdda-phy-supply = <&vreg_l18c_0p88>;
+> +       vdda-pll-supply = <&vreg_l8c_1p2>;
+> +};
+> +
+>  &tlmm {
+>         gpio-reserved-ranges = <0 4>;
+>
+> +       bt_en_default: bt_en_default {
+> +               mux {
+> +                       pins = "gpio172";
+> +                       function = "gpio";
+> +               };
+> +
+> +               config {
+> +                       pins = "gpio172";
+> +                       drive-strength = <2>;
+> +                       bias-pull-down;
+> +               };
+> +       };
+> +
+> +       wlan_en_default: wlan_en_default {
+> +               mux {
+> +                       pins = "gpio169";
+> +                       function = "gpio";
+> +               };
+> +
+> +               config {
+> +                       pins = "gpio169";
+> +                       drive-strength = <16>;
+> +                       output-high;
+> +                       bias-pull-up;
+> +               };
+> +       };
+> +
 
-On Wed, Mar 2, 2022 at 11:20 AM Marcel Holtmann <marcel@holtmann.org> wrote:
->
-> Hi Caleb,
->
-> > Since commit 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events"),
-> > some devices see warnings being printed for vendor events, e.g.
-> >
-> > [   75.806141] Bluetooth: hci0: setting up wcn399x
-> > [   75.948311] Bluetooth: hci0: unexpected event 0xff length: 14 > 0
-> > [   75.955552] Bluetooth: hci0: QCA Product ID   :0x0000000a
-> > [   75.961369] Bluetooth: hci0: QCA SOC Version  :0x40010214
-> > [   75.967417] Bluetooth: hci0: QCA ROM Version  :0x00000201
-> > [   75.973363] Bluetooth: hci0: QCA Patch Version:0x00000001
-> > [   76.000289] Bluetooth: hci0: QCA controller version 0x02140201
-> > [   76.006727] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-> > [   76.986850] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.013574] Bluetooth: hci0: QCA Downloading qca/oneplus6/crnv21.bin
-> > [   77.024302] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.032681] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.040674] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.049251] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.057997] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.066320] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.075065] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.083073] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.091250] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.099417] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.110166] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.118672] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.127449] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.137190] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.146192] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.154242] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.163183] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.171202] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.179364] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.187259] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-> > [   77.198451] Bluetooth: hci0: QCA setup on UART is completed
-> >
-> > Avoid printing the event length warning for vendor events, this reverts
-> > to the previous behaviour where such warnings weren't printed.
-> >
-> > Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
-> > Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > ---
-> > Changes since v1:
-> > * Don't return early! Vendor events still get parsed despite the
-> >   warning. I should have looked a little more closely at that...
-> > ---
-> > net/bluetooth/hci_event.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
->
-> patch has been applied to bluetooth-stable tree.
->
-> Regards
->
-> Marcel
+Not related to PCIe
 
-I believe a proper fix has already been pushed to bluetooth-next:
+>         usb2phy_ac_en1_default: usb2phy_ac_en1_default {
+>                 mux {
+>                         pins = "gpio113";
+> --
+> 2.35.1
+>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=314d8cd2787418c5ac6b02035c344644f47b292b
-
-HCI_EV_VENDOR shall be assumed to be variable length and that also
-uses bt_dev_warn_ratelimited to avoid spamming the logs in case it
-still fails.
 
 -- 
-Luiz Augusto von Dentz
+With best wishes
+Dmitry

@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877394CADA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70684CADA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244652AbiCBSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S244651AbiCBSft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244615AbiCBSfm (ORCPT
+        with ESMTP id S244650AbiCBSfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:35:42 -0500
+        Wed, 2 Mar 2022 13:35:45 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 538C0D5DD2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:34:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B656D8371
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:35:01 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E5CF1509;
-        Wed,  2 Mar 2022 10:34:58 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBF4A150C;
+        Wed,  2 Mar 2022 10:35:00 -0800 (PST)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9F08F3F73D;
-        Wed,  2 Mar 2022 10:34:55 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7E17B3F73D;
+        Wed,  2 Mar 2022 10:34:58 -0800 (PST)
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -31,9 +31,9 @@ Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
         Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
         Luca Abeni <luca.abeni@santannapisa.it>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] sched/deadline: Merge dl_task_can_attach() and dl_cpu_busy()
-Date:   Wed,  2 Mar 2022 19:34:30 +0100
-Message-Id: <20220302183433.333029-4-dietmar.eggemann@arm.com>
+Subject: [PATCH 4/6] sched/deadline: Use __node_2_[pdl|dle]() and rb_first_cached() consistently
+Date:   Wed,  2 Mar 2022 19:34:31 +0100
+Message-Id: <20220302183433.333029-5-dietmar.eggemann@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220302183433.333029-1-dietmar.eggemann@arm.com>
 References: <20220302183433.333029-1-dietmar.eggemann@arm.com>
@@ -48,154 +48,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both functions are doing almost the same, that is checking if admission
-control is still respected.
-
-With exclusive cpusets, dl_task_can_attach() checks if the destination
-cpuset (i.e. its root domain) has enough CPU capacity to accommodate the
-task.
-dl_cpu_busy() checks if there is enough CPU capacity in the cpuset in
-case the CPU is hot-plugged out.
-
-dl_task_can_attach() is used to check if a task can be admitted while
-dl_cpu_busy() is used to check if a CPU can be hotplugged out.
-
-Make dl_cpu_busy() able to deal with a task and use it instead of
-dl_task_can_attach() in task_can_attach().
+Deploy __node_2_pdl(node), __node_2_dle(node) and rb_first_cached()
+consistently throughout the sched class source file which makes the
+code at least easier to read.
 
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
- kernel/sched/core.c     | 13 +++++++----
- kernel/sched/deadline.c | 52 +++++++++++------------------------------
- kernel/sched/sched.h    |  3 +--
- 3 files changed, 24 insertions(+), 44 deletions(-)
+ kernel/sched/deadline.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d342c4c779f7..68736d1dc0f4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8805,8 +8805,11 @@ int task_can_attach(struct task_struct *p,
- 	}
- 
- 	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
--					      cs_cpus_allowed))
--		ret = dl_task_can_attach(p, cs_cpus_allowed);
-+					      cs_cpus_allowed)) {
-+		int cpu = cpumask_any_and(cpu_active_mask, cs_cpus_allowed);
-+
-+		ret = dl_cpu_busy(cpu, p);
-+	}
- 
- out:
- 	return ret;
-@@ -9090,8 +9093,10 @@ static void cpuset_cpu_active(void)
- static int cpuset_cpu_inactive(unsigned int cpu)
- {
- 	if (!cpuhp_tasks_frozen) {
--		if (dl_cpu_busy(cpu))
--			return -EBUSY;
-+		int ret = dl_cpu_busy(cpu, NULL);
-+
-+		if (ret)
-+			return ret;
- 		cpuset_update_active_cpus();
- 	} else {
- 		num_cpus_frozen++;
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 81bf97648e42..de677b1e3767 100644
+index de677b1e3767..3242dd4972e1 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -2992,41 +2992,6 @@ bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr)
+@@ -450,7 +450,7 @@ static inline int is_leftmost(struct task_struct *p, struct dl_rq *dl_rq)
+ {
+ 	struct sched_dl_entity *dl_se = &p->dl;
+ 
+-	return dl_rq->root.rb_leftmost == &dl_se->rb_node;
++	return rb_first_cached(&dl_rq->root) == &dl_se->rb_node;
  }
  
+ static void init_dl_rq_bw_ratio(struct dl_rq *dl_rq);
+@@ -1433,6 +1433,9 @@ void init_dl_inactive_task_timer(struct sched_dl_entity *dl_se)
+ 	timer->function = inactive_task_timer;
+ }
+ 
++#define __node_2_dle(node) \
++	rb_entry((node), struct sched_dl_entity, rb_node)
++
  #ifdef CONFIG_SMP
--int dl_task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed)
--{
--	unsigned long flags, cap;
--	unsigned int dest_cpu;
--	struct dl_bw *dl_b;
--	bool overflow;
--	int ret;
--
--	dest_cpu = cpumask_any_and(cpu_active_mask, cs_cpus_allowed);
--
--	rcu_read_lock_sched();
--	dl_b = dl_bw_of(dest_cpu);
--	raw_spin_lock_irqsave(&dl_b->lock, flags);
--	cap = dl_bw_capacity(dest_cpu);
--	overflow = __dl_overflow(dl_b, cap, 0, p->dl.dl_bw);
--	if (overflow) {
--		ret = -EBUSY;
--	} else {
--		/*
--		 * We reserve space for this task in the destination
--		 * root_domain, as we can't fail after this point.
--		 * We will free resources in the source root_domain
--		 * later on (see set_cpus_allowed_dl()).
--		 */
--		int cpus = dl_bw_cpus(dest_cpu);
--
--		__dl_add(dl_b, p->dl.dl_bw, cpus);
--		ret = 0;
--	}
--	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
--	rcu_read_unlock_sched();
--
--	return ret;
--}
--
- int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 				 const struct cpumask *trial)
- {
-@@ -3048,7 +3013,7 @@ int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 	return ret;
+ 
+ static void inc_dl_deadline(struct dl_rq *dl_rq, u64 deadline)
+@@ -1462,10 +1465,9 @@ static void dec_dl_deadline(struct dl_rq *dl_rq, u64 deadline)
+ 		cpudl_clear(&rq->rd->cpudl, rq->cpu);
+ 		cpupri_set(&rq->rd->cpupri, rq->cpu, rq->rt.highest_prio.curr);
+ 	} else {
+-		struct rb_node *leftmost = dl_rq->root.rb_leftmost;
+-		struct sched_dl_entity *entry;
++		struct rb_node *leftmost = rb_first_cached(&dl_rq->root);
++		struct sched_dl_entity *entry = __node_2_dle(leftmost);
+ 
+-		entry = rb_entry(leftmost, struct sched_dl_entity, rb_node);
+ 		dl_rq->earliest_dl.curr = entry->deadline;
+ 		cpudl_set(&rq->rd->cpudl, rq->cpu, entry->deadline);
+ 	}
+@@ -1506,9 +1508,6 @@ void dec_dl_tasks(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)
+ 	dec_dl_migration(dl_se, dl_rq);
  }
  
--bool dl_cpu_busy(unsigned int cpu)
-+int dl_cpu_busy(int cpu, struct task_struct *p)
+-#define __node_2_dle(node) \
+-	rb_entry((node), struct sched_dl_entity, rb_node)
+-
+ static inline bool __dl_less(struct rb_node *a, const struct rb_node *b)
  {
- 	unsigned long flags, cap;
- 	struct dl_bw *dl_b;
-@@ -3058,11 +3023,22 @@ bool dl_cpu_busy(unsigned int cpu)
- 	dl_b = dl_bw_of(cpu);
- 	raw_spin_lock_irqsave(&dl_b->lock, flags);
- 	cap = dl_bw_capacity(cpu);
--	overflow = __dl_overflow(dl_b, cap, 0, 0);
-+	overflow = __dl_overflow(dl_b, cap, 0, p ? p->dl.dl_bw : 0);
-+
-+	if (!overflow && p) {
-+		/*
-+		 * We reserve space for this task in the destination
-+		 * root_domain, as we can't fail after this point.
-+		 * We will free resources in the source root_domain
-+		 * later on (see set_cpus_allowed_dl()).
-+		 */
-+		__dl_add(dl_b, p->dl.dl_bw, dl_bw_cpus(cpu));
-+	}
-+
- 	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
- 	rcu_read_unlock_sched();
+ 	return dl_time_before(__node_2_dle(a)->deadline, __node_2_dle(b)->deadline);
+@@ -1979,7 +1978,7 @@ static struct sched_dl_entity *pick_next_dl_entity(struct rq *rq,
+ 	if (!left)
+ 		return NULL;
  
--	return overflow;
-+	return overflow ? -EBUSY : 0;
+-	return rb_entry(left, struct sched_dl_entity, rb_node);
++	return __node_2_dle(left);
  }
- #endif
  
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 4dfc3b02df61..0720cf0c7df1 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -324,9 +324,8 @@ extern void __setparam_dl(struct task_struct *p, const struct sched_attr *attr);
- extern void __getparam_dl(struct task_struct *p, struct sched_attr *attr);
- extern bool __checkparam_dl(const struct sched_attr *attr);
- extern bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr);
--extern int  dl_task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed);
- extern int  dl_cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
--extern bool dl_cpu_busy(unsigned int cpu);
-+extern int  dl_cpu_busy(int cpu, struct task_struct *p);
+ static struct task_struct *pick_task_dl(struct rq *rq)
+@@ -2074,15 +2073,17 @@ static int pick_dl_task(struct rq *rq, struct task_struct *p, int cpu)
+  */
+ static struct task_struct *pick_earliest_pushable_dl_task(struct rq *rq, int cpu)
+ {
+-	struct rb_node *next_node = rq->dl.pushable_dl_tasks_root.rb_leftmost;
+ 	struct task_struct *p = NULL;
++	struct rb_node *next_node;
  
- #ifdef CONFIG_CGROUP_SCHED
+ 	if (!has_pushable_dl_tasks(rq))
+ 		return NULL;
  
++	next_node = rb_first_cached(&rq->dl.pushable_dl_tasks_root);
++
+ next_node:
+ 	if (next_node) {
+-		p = rb_entry(next_node, struct task_struct, pushable_dl_tasks);
++		p = __node_2_pdl(next_node);
+ 
+ 		if (pick_dl_task(rq, p, cpu))
+ 			return p;
+@@ -2248,8 +2249,7 @@ static struct task_struct *pick_next_pushable_dl_task(struct rq *rq)
+ 	if (!has_pushable_dl_tasks(rq))
+ 		return NULL;
+ 
+-	p = rb_entry(rq->dl.pushable_dl_tasks_root.rb_leftmost,
+-		     struct task_struct, pushable_dl_tasks);
++	p = __node_2_pdl(rb_first_cached(&rq->dl.pushable_dl_tasks_root));
+ 
+ 	BUG_ON(rq->cpu != task_cpu(p));
+ 	BUG_ON(task_current(rq, p));
 -- 
 2.25.1
 

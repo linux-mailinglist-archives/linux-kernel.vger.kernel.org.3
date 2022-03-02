@@ -2,125 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFBA4CA9BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3398D4CA9C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241049AbiCBQA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S241482AbiCBQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiCBQA0 (ORCPT
+        with ESMTP id S229717AbiCBQBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:00:26 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B35749935
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:59:43 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222Dn9hn015167;
-        Wed, 2 Mar 2022 15:59:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=fn8PREjURTpghn1F9WFEr6MGljlMas5uHe2iDMalPfg=;
- b=BBPgZPGwXmRk2B8yfFuZVwd3kLu+MGGWP/XolMgmxO3Y8VvoKBGbB20WYlRAXKEwQHxj
- xzWux8NEu2IV+OO62TbSemGcluh0OQLR2JpwBinJlIImJICGd4FxBE2mKCXsJwM4m3Rp
- qdZ6kazhEVr3+RS1MjinDbmIZo8fcmGjnNM8C4i5z2B8yQlXeSWkUs9Vdpr0bWfd05BD
- Ne20DQvF57jr2sG/+PtqYTU6E6j4RaTWVe4wd3j0uGG5u4wHdNL/T9sUSurGXD5EhtNA
- +3lxJBLnRdNaze+tqLCJq2rPpWOIBI4r/nCzLKjIdSgrYNP3XiB9aIgKcAKGpjV8N2BK pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej9ssb437-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 15:59:12 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222F8aSg008611;
-        Wed, 2 Mar 2022 15:59:11 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej9ssb42b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 15:59:11 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222FqhtU029703;
-        Wed, 2 Mar 2022 15:59:08 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3efbu9fa0q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 15:59:08 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Fx6eu49545488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Mar 2022 15:59:06 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 592FA5204F;
-        Wed,  2 Mar 2022 15:59:06 +0000 (GMT)
-Received: from localhost (unknown [9.43.109.149])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D52F352050;
-        Wed,  2 Mar 2022 15:59:05 +0000 (GMT)
-Date:   Wed, 02 Mar 2022 21:29:04 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ndesaulniers@google.com, rostedt@goodmis.org,
-        samitolvanen@google.com, x86@kernel.org
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.892372059@infradead.org>
-        <20220228150705.aab2d654b973109bab070ffe@kernel.org>
-        <20220228232513.GH11184@worktop.programming.kicks-ass.net>
-        <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
-        <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
-        <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
-        <20220301191245.GI11184@worktop.programming.kicks-ass.net>
-        <20220301200547.GK11184@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220301200547.GK11184@worktop.programming.kicks-ass.net>
+        Wed, 2 Mar 2022 11:01:19 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1552E2E;
+        Wed,  2 Mar 2022 08:00:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646236836; x=1677772836;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IlGvGhlzZw5Rk1Dvudqx76u6Ai1Xc9o+P12hHfydFOc=;
+  b=kNVXChhv8tp52f/nuckMlqUcAtR14F9YctgibfjqfpkPn8c2kqa1B/SS
+   SJDkIV301ojYGRvT5Mqt/TNGRQj3bdIkneWb8hsM9M/k3mZvoT0IK2qu7
+   aTaTgLYYNUWLUWkX/O1mLHUdiZ0Hs+BBrvdO1Xpo0IPwycHjDNopmoRka
+   xQ7dkytFFX+unxYSj4IyUI/xlkOAnpXrMCcR/X4pyxK+r7r/eo4d9n09A
+   t92dwVvt9sy6Z2qyhg1+FC3X/JvSlWIJnKTmjjtB9v6lYWLl2H/HR8D2q
+   /z6vOhFzWvf8IJFtyyAWFO/00aJ4bheJt131NfbKRDE3pImBYnVUYqjV6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="314153580"
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="314153580"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 08:00:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="778915064"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Mar 2022 08:00:11 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BD08B183; Wed,  2 Mar 2022 18:00:28 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v3 1/1] iio: multiplexer: Make use of device properties
+Date:   Wed,  2 Mar 2022 18:00:25 +0200
+Message-Id: <20220302160025.54348-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1646236571.m56yc0kmzw.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: F9eSvP7ZQOwr-b1w8dxU4p3lDBeCfBjZ
-X-Proofpoint-ORIG-GUID: yuAjbp7usWWFQdDwgeH5y0sfWKFvC8e2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- clxscore=1015 suspectscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203020068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
->=20
-> How does this look?
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-I gave this a quick test on powerpc and this looks good to me.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Peter Rosin <peda@axentia.se>
+---
+v3: split variable definitions on 1 per line basis (Peter), fixed typo (Jonathan)
+ drivers/iio/multiplexer/Kconfig   |  1 -
+ drivers/iio/multiplexer/iio-mux.c | 49 +++++++++++++++----------------
+ 2 files changed, 23 insertions(+), 27 deletions(-)
 
-> --- a/include/linux/kprobes.h
-> +++ b/include/linux/kprobes.h
-> @@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
->  extern void kprobes_inc_nmissed_count(struct kprobe *p);
->  extern bool arch_within_kprobe_blacklist(unsigned long addr);
->  extern int arch_populate_kprobe_blacklist(void);
-> -extern bool arch_kprobe_on_func_entry(unsigned long offset);
-
-There is a __weak definition of this function in kernel/kprobes.c which=20
-should also be removed.
-
-
-Thanks,
-Naveen
+diff --git a/drivers/iio/multiplexer/Kconfig b/drivers/iio/multiplexer/Kconfig
+index a1e1332d1206..928f424a1ed3 100644
+--- a/drivers/iio/multiplexer/Kconfig
++++ b/drivers/iio/multiplexer/Kconfig
+@@ -9,7 +9,6 @@ menu "Multiplexers"
+ config IIO_MUX
+ 	tristate "IIO multiplexer driver"
+ 	select MULTIPLEXER
+-	depends on OF || COMPILE_TEST
+ 	help
+ 	  Say yes here to build support for the IIO multiplexer.
+ 
+diff --git a/drivers/iio/multiplexer/iio-mux.c b/drivers/iio/multiplexer/iio-mux.c
+index f422d44377df..93558fddfa9b 100644
+--- a/drivers/iio/multiplexer/iio-mux.c
++++ b/drivers/iio/multiplexer/iio-mux.c
+@@ -10,11 +10,12 @@
+ #include <linux/err.h>
+ #include <linux/iio/consumer.h>
+ #include <linux/iio/iio.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/mux/consumer.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ 
+ struct mux_ext_info_cache {
+ 	char *data;
+@@ -324,37 +325,21 @@ static int mux_configure_channel(struct device *dev, struct mux *mux,
+ 	return 0;
+ }
+ 
+-/*
+- * Same as of_property_for_each_string(), but also keeps track of the
+- * index of each string.
+- */
+-#define of_property_for_each_string_index(np, propname, prop, s, i)	\
+-	for (prop = of_find_property(np, propname, NULL),		\
+-	     s = of_prop_next_string(prop, NULL),			\
+-	     i = 0;							\
+-	     s;								\
+-	     s = of_prop_next_string(prop, s),				\
+-	     i++)
+-
+ static int mux_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *np = pdev->dev.of_node;
+ 	struct iio_dev *indio_dev;
+ 	struct iio_channel *parent;
+ 	struct mux *mux;
+-	struct property *prop;
+-	const char *label;
++	const char **labels;
++	int all_children;
++	int children;
+ 	u32 state;
+ 	int sizeof_ext_info;
+-	int children;
+ 	int sizeof_priv;
+ 	int i;
+ 	int ret;
+ 
+-	if (!np)
+-		return -ENODEV;
+-
+ 	parent = devm_iio_channel_get(dev, "parent");
+ 	if (IS_ERR(parent))
+ 		return dev_err_probe(dev, PTR_ERR(parent),
+@@ -366,9 +351,21 @@ static int mux_probe(struct platform_device *pdev)
+ 		sizeof_ext_info *= sizeof(*mux->ext_info);
+ 	}
+ 
++	all_children = device_property_string_array_count(dev, "channels");
++	if (all_children < 0)
++		return all_children;
++
++	labels = devm_kmalloc_array(dev, all_children, sizeof(*labels), GFP_KERNEL);
++	if (!labels)
++		return -ENOMEM;
++
++	ret = device_property_read_string_array(dev, "channels", labels, all_children);
++	if (ret < 0)
++		return ret;
++
+ 	children = 0;
+-	of_property_for_each_string(np, "channels", prop, label) {
+-		if (*label)
++	for (state = 0; state < all_children; state++) {
++		if (*labels[state])
+ 			children++;
+ 	}
+ 	if (children <= 0) {
+@@ -395,7 +392,7 @@ static int mux_probe(struct platform_device *pdev)
+ 	mux->cached_state = -1;
+ 
+ 	mux->delay_us = 0;
+-	of_property_read_u32(np, "settle-time-us", &mux->delay_us);
++	device_property_read_u32(dev, "settle-time-us", &mux->delay_us);
+ 
+ 	indio_dev->name = dev_name(dev);
+ 	indio_dev->info = &mux_info;
+@@ -426,11 +423,11 @@ static int mux_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	i = 0;
+-	of_property_for_each_string_index(np, "channels", prop, label, state) {
+-		if (!*label)
++	for (state = 0; state < all_children; state++) {
++		if (!*labels[state])
+ 			continue;
+ 
+-		ret = mux_configure_channel(dev, mux, state, label, i++);
++		ret = mux_configure_channel(dev, mux, state, labels[state], i++);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+-- 
+2.34.1
 

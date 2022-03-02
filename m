@@ -2,127 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6616F4CA9E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4014CA9E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241161AbiCBQMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S241181AbiCBQNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239458AbiCBQMi (ORCPT
+        with ESMTP id S237727AbiCBQNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:12:38 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5973CB92E;
-        Wed,  2 Mar 2022 08:11:54 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id p8so2328355pfh.8;
-        Wed, 02 Mar 2022 08:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rqjAwReHv4OR7mYsT5etlrN8Eh3Kjp+z7Ky+T2IUaEg=;
-        b=eFhR3U14smputqGxx6Caa7v19Ws9oHUcSIJYzxmxeUkughMnuMY5MxwjDBrj4nmzlR
-         gWkLzliBfmD3/bTvWXpsYcGf6kOMAzwWfXP85Wzr0djP+cHhqed3T6bm0iK74phKn2ZU
-         cwJpSmNmuYZST/IC6kmCYOdt8J+3AHapMOF7VApCf6YM/lIQQYeIgnfLLLe+ZcoDYQOO
-         U/9TG8Z0xs/I7F04jZwN9lS5QORQuJBgQl9K6ZN0aUQ/bd1MNK6IIc/jWW+JDNCsuofW
-         3hsYzsMRUcqZ5c5IYQqNp5mq0P9LnKl67wh0Ba2s9gcP0xqg7hEZdYw51yo706zqlw9y
-         cn0A==
+        Wed, 2 Mar 2022 11:13:08 -0500
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17529CD9
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:12:23 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id y1so989222uap.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:12:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rqjAwReHv4OR7mYsT5etlrN8Eh3Kjp+z7Ky+T2IUaEg=;
-        b=Q1ROz57ryXt5UYREaAdI+qJg6sPI3eGC+muU0EtgJaCKfnRVc1yZZA5sw53JzknHIP
-         Prve+gehNUPLJic0WFWOF6nZxISiWpQj3d0+9rSxf0ilgkS8M5F1FUXH/D2yS3zL5A8B
-         dEHpAoYb2lDmc+ZgxiEYB6MKLYBVoqQOTvaySLtl9pvYQoEuL/q3byMq7UFWDVsVYay7
-         MTIz4BOrBg3lxn+L8TRE7tCLm4ZRjxqCJaQCgleG7hRkWRU+lT5WC8wgCgnovphtdtt4
-         Ubf8xqnPPW/nA+SLygPJvfzfa80RUpUM1ij3bEc2xN9y3YoDwCeKTSaOXFk5zpJVfvVt
-         P7kA==
-X-Gm-Message-State: AOAM531xi7trdFnedRvNJd40k7fNcvOKPBbniVHpx7L5KXl4R0k6EhJP
-        p7vDaLadPRZ+gKJO5rg8ZDo=
-X-Google-Smtp-Source: ABdhPJxXfOvebzgkOzuyHmiHPzOUEp4mLCS8w+BcalJev3JX+XHkm9xHho5WVyg6E0fyjGmUtHvu2w==
-X-Received: by 2002:a63:1113:0:b0:378:deae:5840 with SMTP id g19-20020a631113000000b00378deae5840mr8381753pgl.87.1646237514175;
-        Wed, 02 Mar 2022 08:11:54 -0800 (PST)
-Received: from jxt.. ([103.150.185.227])
-        by smtp.gmail.com with ESMTPSA id d10-20020a63360a000000b0037947abe4bbsm2809382pga.34.2022.03.02.08.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:11:53 -0800 (PST)
-From:   YI <afctgo@gmail.com>
-X-Google-Original-From: YI <uuuuuu@protonmail.com>
-To:     trivial@kernel.org
-Cc:     YI <afctgo@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Colin Cross <ccross@google.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH] docs: proc.rst: fix wrong time unit
-Date:   Thu,  3 Mar 2022 00:11:16 +0800
-Message-Id: <20220302161122.3984304-1-uuuuuu@protonmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/qRg/Mm/97zJFeWgtUsYDDaU5xcw69+jJupgj9B3Thk=;
+        b=igKYxARf2kVHH+A/qGCAYoDftmK3ScJWuPlTpGxEGTO4pc8B+Ji6e/wo1MliVS5HbJ
+         Rwsy8oTb7u7jkvsYbJOEVGFjSH3rTsf+zKO5sd3GhigK3QWhPAvSpesj1XTVW5W7O07E
+         gdZbOMrOHWeIv6PGKDiN7OlH1wih8JSrSIkAnt3RxNbCJhZUmrQYbGtzvWYXH90GmXrD
+         1XKZlkHJc24KQQs9NfyK8iY7AZwPEfTxLL30q4LF8ugFPc/yGkAUbnfRxjMEaOuAjQE8
+         6fYHr7SQv0met7K2PJ75eEwZfKwWNxDrvk5WFkVzTlclO9zpw+2+l9HncbPfR5SPkx4q
+         wb6w==
+X-Gm-Message-State: AOAM532yFLPy9jHE5Eo8j39uFCmOys1WE887vtOxTyswFmZgyTh14KGe
+        zVj0QWjVdddC/VF0dnLHJT7SUn4u5VoJ+w==
+X-Google-Smtp-Source: ABdhPJxn97amtGJSdQX7NaxHzymPjvm7M2zeavVebRa86ef9DzNny9GodKIGgcGkaDPMgaSrrrNbIQ==
+X-Received: by 2002:ab0:7602:0:b0:347:b460:72c2 with SMTP id o2-20020ab07602000000b00347b46072c2mr3682579uap.12.1646237542062;
+        Wed, 02 Mar 2022 08:12:22 -0800 (PST)
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
+        by smtp.gmail.com with ESMTPSA id m6-20020a0561023e8600b0031bb1803345sm2130363vsv.6.2022.03.02.08.12.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 08:12:21 -0800 (PST)
+Received: by mail-vk1-f176.google.com with SMTP id j9so1155959vkj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:12:21 -0800 (PST)
+X-Received: by 2002:a1f:9f82:0:b0:336:8f32:eb24 with SMTP id
+ i124-20020a1f9f82000000b003368f32eb24mr1457974vke.0.1646237541363; Wed, 02
+ Mar 2022 08:12:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 2 Mar 2022 17:12:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXAMwmfLoaGnKhgfOEWY+O2Ek6J3nM-5mQThUnJFxhA3Q@mail.gmail.com>
+Message-ID: <CAMuHMdXAMwmfLoaGnKhgfOEWY+O2Ek6J3nM-5mQThUnJFxhA3Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] auxdisplay: lcd2s: Fix lcd2s_redefine_char() feature
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Lars Poeschel <poeschel@lemonage.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YI <afctgo@gmail.com>
+On Thu, Feb 24, 2022 at 2:03 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> It seems that the lcd2s_redefine_char() has never been properly
+> tested. The buffer is filled by DEF_CUSTOM_CHAR command followed
+> by the character number (from 0 to 7), but immediately after that
+> these bytes are got rewritten by the decoded hex stream.
+>
+> Fix the index to fill the buffer after the command and number.
+>
+> Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
+> Cc: Lars Poeschel <poeschel@lemonage.de>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Dear Trivial Patch Monkey, 
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-This commit fixes a small documentaion problem reported in
-https://bugzilla.kernel.org/show_bug.cgi?id=194593.
+Gr{oetje,eeting}s,
 
-Some fields in the file /proc/$pid/stat represent time.
-Their units are clock_t, not jiffies as stated in the documentation.
-This commit fixes https://bugzilla.kernel.org/show_bug.cgi?id=194593.
+                        Geert
 
-Reported-by: hujunjie
-Signed-off-by: YI <afctgo@gmail.com>
----
- Documentation/filesystems/proc.rst | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 061744c436d9..433ad4623630 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -340,10 +340,10 @@ It's slow but very precise.
-   cmin_flt      number of minor faults with child's
-   maj_flt       number of major faults
-   cmaj_flt      number of major faults with child's
--  utime         user mode jiffies
--  stime         kernel mode jiffies
--  cutime        user mode jiffies with child's
--  cstime        kernel mode jiffies with child's
-+  utime         user mode processor time (clock_t)
-+  stime         kernel mode processor time (clock_t)
-+  cutime        user mode processor time (clock_t) with child's
-+  cstime        kernel mode processor time (clock_t) with child's
-   priority      priority level
-   nice          nice level
-   num_threads   number of threads
-@@ -370,8 +370,8 @@ It's slow but very precise.
-   rt_priority   realtime priority
-   policy        scheduling policy (man sched_setscheduler)
-   blkio_ticks   time spent waiting for block IO
--  gtime         guest time of the task in jiffies
--  cgtime        guest time of the task children in jiffies
-+  gtime         guest time of the task in processor time (clock_t)
-+  cgtime        guest time of the task children in processor time (clock_t)
-   start_data    address above which program data+bss is placed
-   end_data      address below which program data+bss is placed
-   start_brk     address above which program heap can be expanded with brk()
--- 
-2.34.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

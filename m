@@ -2,278 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AAF4C9C9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3CF4C9CA0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiCBEm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 23:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S237908AbiCBEoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 23:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238133AbiCBEmz (ORCPT
+        with ESMTP id S234229AbiCBEob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 23:42:55 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC34B0D01
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 20:42:12 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id l12so569081ljh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 20:42:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ARb9aZbZYQidMZDix9fUW3Av4Mah2x7ZZrBUNsk6at4=;
-        b=Ui0F+FwAxNQGCcr+MK8Tnq1KQ0qaMmHuzF6LZXTr3eztgnjoUXPYcMGt+AqlOmZTsD
-         1ISV7oisWR8C2GeMPmPqXCuUj660uH5dlRCxpcz1Wa70xPdFO25i07S14grHOUO/jg/y
-         J+rigqiZwwhTGOpv0VG03paDhLmFpnTKBDE7/G4rcsQEWDD7rq3/OyCYm9dOnkQsA+t1
-         9Oo0JK6/cOq183AjJxL+GAXbGDvCh63EibNA+5XE/a9clc7vt+YRzBexNKS98Dobncwv
-         qrK5dZkbB78Hs9sRyzugSLmBq5nGNvkE8p9IwtlWQ9IEPPwPsjD7XCvkpifm1B8Thp1W
-         m4DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ARb9aZbZYQidMZDix9fUW3Av4Mah2x7ZZrBUNsk6at4=;
-        b=3cQ9U3ADZ3OVK5xbs13l+pnL4ePs/+2+D1ihczpZNVQujd/Eq936iTxaWoaWyWhRuA
-         OgayIhazpDFl6glyt7nmfv0MDsVdhOfE7CkWlfO57AFhXT8lV130zHWXBTEUNvH7CVio
-         VWwIW5KQGMG8xp03Pvk5VrHYh39CHMZTIFIU4fYSaECGIPmRUeTsKoS23VAHUwbryn4Q
-         /8niR1DuwHQY2P6gI6IU5b8Z1KIy1W2/G9pb8ISN+yZoxNDvkD9TirLxlzqMp0e6kEJb
-         AE3OaGvR6RgIyVglRO34CeLTA3JVYjZyaVDRq/2Q7RgXJn/HfaygTCZrMyImj7Eiwrmp
-         +cLQ==
-X-Gm-Message-State: AOAM532SS/NNn4bN5xtc/x7NV+sDb+eqd79cKQQBJeVTgHKLdj/slvhf
-        N5N1gjAOtrzDl0jFXu4K4HFT+w==
-X-Google-Smtp-Source: ABdhPJzGqSVw9ionhPrDsFLgT7RWE3koUXv8w8EmA7YxIS9JBdPF35KMr2+UEyOsDQ5faKxMYNI/yg==
-X-Received: by 2002:a2e:b52f:0:b0:23e:2fe6:af10 with SMTP id z15-20020a2eb52f000000b0023e2fe6af10mr18517670ljm.46.1646196130359;
-        Tue, 01 Mar 2022 20:42:10 -0800 (PST)
-Received: from ?IPV6:2001:470:dd84:abc0:5258:5528:7624:3edd? ([2001:470:dd84:abc0:5258:5528:7624:3edd])
-        by smtp.gmail.com with ESMTPSA id k7-20020a0565123d8700b00443cec880e5sm1838432lfv.4.2022.03.01.20.42.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 20:42:09 -0800 (PST)
-Message-ID: <ea6d7b5b-04e5-9333-cb9e-34c230bf1cbc@linaro.org>
-Date:   Wed, 2 Mar 2022 07:42:08 +0300
+        Tue, 1 Mar 2022 23:44:31 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140075.outbound.protection.outlook.com [40.107.14.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D03B10A4;
+        Tue,  1 Mar 2022 20:43:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iuOEwbsvhSnI6oOumxzWmu7OYKSqtijZs/6CZPDqk1nHeAjGbrwuFIvyz9cBybrTofxNJMgfPUaN+ZEZK4YU6kjhVbQTPlj8Up0TcorHKvGwTY1z9447jHJTiA8T6vTy1aRC3ymOlZJR4aRRiIaf16eltvu32nE/hKEeId2hyhT/fFzm6tG3Y0L21crvbCKeFE2bcAKXlSHmlKfVWgUOJYUki09Cx0xSFvCgyPYqIMMZceU0uWX+x5ihY2V/GaqaWmbI0Yc37SvimUqCdsd0OCKAd+GWrAYRTYVqzTG04sva5rP1kb+TkyLESmBvmVkDMEA78Cc028eyg2AEF3+cfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hiJPBHbQARh83A4Mh9hgcoF8TKdRGDn4epVJw7FWapk=;
+ b=J4CRF0/F/DUd+uIkiGylNQ8vHbYhGcU+b4POfcbLR27dq/f8kRt3CXyaIUwcwr1Gor+0HLGoOle3WnkOcWeMPkopTFOT3bAdb5yL7PmLDCpIwrvfKwEtD2xdHtUOyQxwDn35HhIWDcpRCfv1XwYKf4FnbDySt0M5GICkWdzI23N/4U6rfGIR/RGHu8KW7ktYUJePreLrLdyD3uoUPbpwQKVqSpMYvNHzBh322AgmcM/gPV/FSwD0gAJAOK+MN57uCN9eDQOLxD2XsijxBmBfZDRVj1+XEFqyQtYS96dLS4reCqnNLw3b1c0gHEPgp+nlcRMPqeNeTGIPrAaSL6uFxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hiJPBHbQARh83A4Mh9hgcoF8TKdRGDn4epVJw7FWapk=;
+ b=bnkzUZNyvnuuR9jjxj93VRAQSVd8wB31S75INlIgToa6YMElWqUoRbt1l5tjjH5iLiOuSELSGMxNA4M3lU9tWahO3OqWXAlz6L4wcnbk5QNhx5kGNw1Og9nWjIl1Z57GH5hMWFy3jwSq6ewvVQdUZ398WRRmJldiALPc+YJJb1I=
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
+ by DB6PR04MB3174.eurprd04.prod.outlook.com (2603:10a6:6:c::30) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Wed, 2 Mar 2022 04:43:42 +0000
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::f92e:7648:49d2:d017]) by DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::f92e:7648:49d2:d017%5]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 04:43:42 +0000
+From:   Pankaj Gupta <pankaj.gupta@nxp.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: [EXT] Re: [PATCH v5 3/5] KEYS: trusted: allow trust sources to
+ use kernel RNG for key material
+Thread-Topic: [EXT] Re: [PATCH v5 3/5] KEYS: trusted: allow trust sources to
+ use kernel RNG for key material
+Thread-Index: AQHYKNGtB/drzUl2a02HqOqaymkrp6yriiew
+Date:   Wed, 2 Mar 2022 04:43:42 +0000
+Message-ID: <DU2PR04MB8630747D195F49D56A5D7E2195039@DU2PR04MB8630.eurprd04.prod.outlook.com>
+References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+ <20220222195819.2313913-4-a.fatoum@pengutronix.de>
+ <994a4d49-b1d3-a7ab-d7b3-33405b13c125@pengutronix.de>
+In-Reply-To: <994a4d49-b1d3-a7ab-d7b3-33405b13c125@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e9fb6b91-d4df-4623-7c66-08d9fc073a47
+x-ms-traffictypediagnostic: DB6PR04MB3174:EE_
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-microsoft-antispam-prvs: <DB6PR04MB3174A189B17DDE7A5882ADF795039@DB6PR04MB3174.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LaEnl/HxUGhM62TRVCMUl1NAwjcM+23Rdn7en8tuuCrQQ+o8kcekONGvPKtscDSoQQM/29wRXKvOon6F8c/4cqteftFypTDBiIvFnXhaLx/oViTwSotuKa1R7Gh+zLQ1GpRfxATa/OOdfVgFw+rZC9DOuw4QZpDH3ftRAMfdWo/JT9Zx2fdSMnn+vuZRjtjZhRo5rxzYrOG2dxD7018qXTvpegmCwjP18CUoDUCD0dhruJEikgAKugfslwhXIXj0PmE+CKagllQ4QsHXzVMsjGt03YvxKCtaXpUfteaju4ZzLKljtd6q0m4otH8wtXh9+ilnYKBnwfbfwnx+Pg09cA8HnsD+piaaD4h1NMBNenmhW0cju/9DjbqOzBtoN80kLuKBVtDsqCRLPDU5ytKJyZUQPUhU+FUaY519iQQlL22T5reWqonZU0pU6OEHaOyB9Sv69NaiO3k2zyx6xW+cCrm81iM6DgECvTNuxOZyYVOt8FGH/w18dRPd1D9ndfEeuL/k8VJHMKWyLHufU+myjFmmpOIpc++E1XLY2AnB0VkW5J2uwc6k8fHCpNALJVmxYsqSVLkhamjpyaJquoyl0w05XNHXK9W5sWD3yLCtI2gfZ4kLrtJ2m3FwBkH+HHKq6iOJOS7Ce6ZNqKI76UMRSjF70l4+hyIWo83leVAa4636O13Cs2j0xwsJvvK2M7YMLUKzZBuapzm5bRGWTEp86NPmzLClm61bBHk/Zj3NXz+k4W7Bd07LNavOugWdVJcYekopQsjXFs7Ho1DkB4zOwsVVBItcftoTRiOshR5yfKM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(38100700002)(86362001)(122000001)(186003)(966005)(26005)(83380400001)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(38070700005)(55016003)(7696005)(45080400002)(6506007)(53546011)(55236004)(9686003)(71200400001)(54906003)(110136005)(316002)(33656002)(4326008)(5660300002)(2906002)(7416002)(8676002)(8936002)(52536014)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?Y0aK7YP0HfCbx1lPBuO+ecXh0iKYYFaIdUMSFm8IM+o3U8WzCo3TNqA4sR?=
+ =?iso-8859-2?Q?JQKL1ToGueN4qkSrShUo3LWGlT1Cf9uU6nW5MRbIccN9b+J3REIc5ycYuJ?=
+ =?iso-8859-2?Q?fJf6rz+9pywmSEdci7K4V8GO0XebqcAHpm/31xczcwHLFgOFaaY+DvF0eS?=
+ =?iso-8859-2?Q?TTlVqEDEkADohyhwixSrN7IjXK9kZl0ZXmAfvYIuqB851nisL0dejgw5Fx?=
+ =?iso-8859-2?Q?Hjsli3zceKkcq3kPFnx/5V8aBG2r7GNivYs1iA4DIP5WVfbtO3f7+8X5yv?=
+ =?iso-8859-2?Q?9N3QsJOH+H+azz8pO95w8OZTo96H2kgaXxE217HLzEWaQhhHrwRSCqupQI?=
+ =?iso-8859-2?Q?7KSGoYT2Xm4mYNWDiRClF0Sz5bRdRhD1nyye13wNucqkB1iDco4nhhxVcz?=
+ =?iso-8859-2?Q?PNkNI4NvjSbP1ccYby56Y+alZMPhUuQjkykpxKFuW7KbBnHnLPQKjJlnXB?=
+ =?iso-8859-2?Q?eqA6vyV1oWNoxtCCsOPUR3EkCyiQqfQ2CAEVjfwFapzYW/seQe/6Wdpl92?=
+ =?iso-8859-2?Q?2pk7TRIMFw0XtjdBGeg9zuu3PrIQ3fTCyhXvoWKlFx2ijosheYzCU+RFt/?=
+ =?iso-8859-2?Q?yQ/YSn5luVD945PmPnmGEJEo/4ggogdQPlx3w/DEpgvelH3tt+S3Dbk2jg?=
+ =?iso-8859-2?Q?hWm2Thli9bpsPEq3YPU5JfB1btc8dHWfCZeggT8f7c8SD1q5b18qO6eWsY?=
+ =?iso-8859-2?Q?5m/z3jZ5Fv+8sNcwd8P5K+1CwxbH752RKW3kGaOF7EqgFKxFRXEK6XT7qO?=
+ =?iso-8859-2?Q?k0961RNJ7EeSGt+uP4CnZ3yDwcAxl17R6tUAcq2+o1xm+6KxP69FVGuMmp?=
+ =?iso-8859-2?Q?cnUm9AeKccyr1WeMZ4/r+UOXQYgQ4hEFBuT0CyvYRojdP5G6ZhH5/kK0xM?=
+ =?iso-8859-2?Q?qcYJwtvHXh4bY+bq2VsNuyjC9wVR5f3+PF5xhlMNEZzCGUtLDfRg3c4+Yj?=
+ =?iso-8859-2?Q?9CL0JOvhvJR2HF0kH47y5Ukhf5g1lcmp82eWLHjRpHE/n7xZJtRVZ2yiEN?=
+ =?iso-8859-2?Q?ACkvsFC2k9eKvouYSimbgDntnBPOeLMdKuetQpikzgDBCKrcrar1kV1c0I?=
+ =?iso-8859-2?Q?RDhmDkcc0wuZCs8FswEazlktr8NRJy6iFRitjMMA5Uv5GClaAnvbjbFLYw?=
+ =?iso-8859-2?Q?2NAdZjMcTF7xWLS/dHHfW+Y9MjdcWGV2ViDedWtK6SPyMKCHLKE3uINiJ8?=
+ =?iso-8859-2?Q?TK1SCXzgtKebL1FTu4sWYqYX8p3m06ZSaF/tyGFP74I7F2sS67u7/79v/d?=
+ =?iso-8859-2?Q?7QHjxO5fQpZUVlYe2Z0Htd/3vgu6AM1SyYgVDIO1qaC0bj0ejFRMmtMI0C?=
+ =?iso-8859-2?Q?80c/3di97bkHnFbcWDro2ozYTvIyUiZ2Sly8Gc/sdISleS7nx0PIkjmCAN?=
+ =?iso-8859-2?Q?eUKzSBZ/OKLcO01HsfeGX5uxB8YM7ab5iz9HbUDi9OHWkcnqlbVoQHlSSk?=
+ =?iso-8859-2?Q?iq9+mcE756Fdo7om48oimKfybd/t2uL8CXZIxDYHYDSWWPLLCXZ5uRy+N8?=
+ =?iso-8859-2?Q?/PrkkKB2rcs+txoxeWvvsflW2ADElvStQocuQRWBjjajFhX6XhEcBaf/wx?=
+ =?iso-8859-2?Q?f+PHsrDcDBurt+GTcwfvKHcQVr9Faietd+0LrpXNPOTSd4B9hSgcMCE0Ay?=
+ =?iso-8859-2?Q?FrLQr2VLl8CX7+RPOKQEUoEzos6Ixd14RHZnnWoxrJkLt97rRGPJjh1Inf?=
+ =?iso-8859-2?Q?N9nSEp//i3jTVeEjNWg=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Issue MDSS reset during
- initialization
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220302012931.4107196-1-bjorn.andersson@linaro.org>
- <20220302012931.4107196-2-bjorn.andersson@linaro.org>
- <CAA8EJppiNbJhrdFgJ0sESBM5m3oyazS-8dG8919xdZu50fZ8aQ@mail.gmail.com>
- <Yh7aAMZWJPjAeC1V@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Yh7aAMZWJPjAeC1V@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9fb6b91-d4df-4623-7c66-08d9fc073a47
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2022 04:43:42.1901
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3SjktrL2/dCBw3OFvp0DMSHJD5vUKx2B9hXJk/dRkWXhnoUvcNxdPIZZCK8htv9Qf+UxZN61WdjXbWTKCS1w9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3174
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 05:44, Bjorn Andersson wrote:
-> On Tue 01 Mar 17:47 PST 2022, Dmitry Baryshkov wrote:
-> 
->> On Wed, 2 Mar 2022 at 04:27, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->>>
->>> It's typical for the bootloader to bring up the display for showing a
->>> boot splash or efi framebuffer. But in some cases the kernel driver ends
->>> up only partially configuring (in particular) the DPU, which might
->>> result in e.g. that two different data paths attempts to push data to
->>> the interface - with resulting graphical artifacts.
->>>
->>> Naturally the end goal would be to inherit the bootloader's
->>> configuration and provide the user with a glitch free handover from the
->>> boot configuration to a running DPU.
->>>
->>> But as implementing seamless transition from the bootloader
->>> configuration to the running OS will be a considerable effort, start by
->>> simply resetting the entire MDSS to its power-on state, to avoid the
->>> partial configuration.
->>>
->>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> ---
->>>
->>> Changes since v1:
->>> - Rather than trying to deconfigure individual pieces of the DPU, reset the
->>>    entire block.
->>>
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c | 18 ++++++++++++++++++
->>>   drivers/gpu/drm/msm/msm_drv.c            |  4 ++++
->>>   drivers/gpu/drm/msm/msm_kms.h            |  1 +
->>>   3 files changed, 23 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
->>> index b10ca505f9ac..419eaaefe606 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
->>> @@ -7,6 +7,7 @@
->>>   #include <linux/irqchip.h>
->>>   #include <linux/irqdesc.h>
->>>   #include <linux/irqchip/chained_irq.h>
->>> +#include <linux/reset.h>
->>>   #include "dpu_kms.h"
->>>
->>>   #define to_dpu_mdss(x) container_of(x, struct dpu_mdss, base)
->>> @@ -31,6 +32,7 @@ struct dpu_mdss {
->>>          void __iomem *mmio;
->>>          struct clk_bulk_data *clocks;
->>>          size_t num_clocks;
->>> +       struct reset_control *reset;
->>>          struct dpu_irq_controller irq_controller;
->>>   };
->>>
->>> @@ -197,10 +199,18 @@ static void dpu_mdss_destroy(struct msm_mdss *mdss)
->>>          dpu_mdss->mmio = NULL;
->>>   }
->>>
->>> +static int dpu_mdss_reset(struct msm_mdss *mdss)
->>> +{
->>> +       struct dpu_mdss *dpu_mdss = to_dpu_mdss(mdss);
->>> +
->>> +       return reset_control_reset(dpu_mdss->reset);
->>> +}
->>> +
->>>   static const struct msm_mdss_funcs mdss_funcs = {
->>>          .enable = dpu_mdss_enable,
->>>          .disable = dpu_mdss_disable,
->>>          .destroy = dpu_mdss_destroy,
->>> +       .reset = dpu_mdss_reset,
->>>   };
->>>
->>>   int dpu_mdss_init(struct platform_device *pdev)
->>> @@ -227,6 +237,13 @@ int dpu_mdss_init(struct platform_device *pdev)
->>>          }
->>>          dpu_mdss->num_clocks = ret;
->>>
->>> +       dpu_mdss->reset = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
->>> +       if (IS_ERR(dpu_mdss->reset)) {
->>> +               ret = PTR_ERR(dpu_mdss->reset);
->>> +               DPU_ERROR("failed to acquire mdss reset, ret=%d", ret);
->>> +               goto reset_parse_err;
->>> +       }
->>> +
->>>          dpu_mdss->base.dev = &pdev->dev;
->>>          dpu_mdss->base.funcs = &mdss_funcs;
->>>
->>> @@ -252,6 +269,7 @@ int dpu_mdss_init(struct platform_device *pdev)
->>>   irq_error:
->>>          _dpu_mdss_irq_domain_fini(dpu_mdss);
->>>   irq_domain_error:
->>> +reset_parse_err:
->>>   clk_parse_err:
->>>          if (dpu_mdss->mmio)
->>>                  devm_iounmap(&pdev->dev, dpu_mdss->mmio);
->>> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
->>> index 129fa841ac22..7595f83da3f1 100644
->>> --- a/drivers/gpu/drm/msm/msm_drv.c
->>> +++ b/drivers/gpu/drm/msm/msm_drv.c
->>> @@ -388,6 +388,10 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
->>>          if (ret)
->>>                  return ret;
->>>
->>> +       /* Issue a reset of the entire MDSS */
->>> +       if (priv->mdss && priv->mdss->funcs->reset)
->>> +               priv->mdss->funcs->reset(priv->mdss);
->>> +
->>
->> I think this is incorrect. In this way reset happens after all
->> subdevice are probed. They might have programmed some state of the
->> corresponding block. The clocks are already registered, so the clock
->> framework will be out of sync.
-> 
-> I went back and forth through the drivers and I believe at least the
-> idea is that we probe all the drivers, which will acquire some
-> resources.
-> 
-> Then in bind() we actually start to access the hardware (and acquire
-> more resources, for some reason).
+Acked-by: Pankaj Gupta <pankaj.gupta@nxp.com>
 
-DSI clock init happens in the dsi_clk_init(), called from 
-msm_dsi_host_inti(), dsi_init(), dsi_dev_probe(). But it's not the major 
-problem.
+Regards
+Pankaj
 
-All the PHYs do not use component framework, be it the DSI PHY or HDMI 
-PHY. So at the time you call MDSS reset, the PHYs are already 
-initialized, the clocks are registered in the clock subsystem, etc.
-Performing a reset will put the hardware out of sync with the Linux kernel.
-
-So, if you'd like to perform a reset in the msm_drm_init(), we'd have to 
-modify DSI to perform some parts of init later. And to move PHYs to also 
-use the component framework. And I'm not sure if that won't break the 
-dispcc, the way it gets the DSI clocks.
-
-> 
->> I think the reset should happen before calling of_platform_populate(),
->> so the device state is consistent with the driver.
->>
-> 
-> Perhaps I'm misunderstanding the component framework, but I was under
-> the impression that if any of the subcomponents fails to probe because
-> of lacking resources, this could be printed on the efifb before we reset
-> the hardware. Making errors slightly more user friendly.
-
-Yes, I understand why did you place the call in msm_drm_init().
-
-> 
-> I.e. in the timeframe between of_platform_populate() and
-> component_bind_all() below...
-> 
-> 
-> But if you believe I'm incorrect on the assumptions about the hardware
-> not being accessed before this point, I can move the reset before
-> of_platform_populate() - this is the last piece needed to have
-> functional eDP on sc8180x.
-> 
->> Also see the https://git.linaro.org/people/dmitry.baryshkov/kernel.git/log/?h=dpu-mdss-rework,
->> which reworks the mdss driver and mdss probing.
->>
-> 
-> There seems to be some room for reducing duplication between the two
-> drivers, so this seems reasonable.
-> 
-> Regards,
-> Bjorn
-> 
->>>          /* Bind all our sub-components: */
->>>          ret = component_bind_all(dev, ddev);
->>>          if (ret)
->>> diff --git a/drivers/gpu/drm/msm/msm_kms.h b/drivers/gpu/drm/msm/msm_kms.h
->>> index 2a4f0526cb98..716a34fca1cd 100644
->>> --- a/drivers/gpu/drm/msm/msm_kms.h
->>> +++ b/drivers/gpu/drm/msm/msm_kms.h
->>> @@ -205,6 +205,7 @@ struct msm_mdss_funcs {
->>>          int (*enable)(struct msm_mdss *mdss);
->>>          int (*disable)(struct msm_mdss *mdss);
->>>          void (*destroy)(struct msm_mdss *mdss);
->>> +       int (*reset)(struct msm_mdss *mdss);
->>>   };
->>>
->>>   struct msm_mdss {
->>> --
->>> 2.33.1
->>>
->>
->>
->> -- 
->> With best wishes
->> Dmitry
-
-
--- 
-With best wishes
-Dmitry
+> -----Original Message-----
+> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> Sent: Wednesday, February 23, 2022 9:53 PM
+> To: James Bottomley <jejb@linux.ibm.com>; Jarkko Sakkinen
+> <jarkko@kernel.org>; Mimi Zohar <zohar@linux.ibm.com>; David Howells
+> <dhowells@redhat.com>
+> Cc: kernel@pengutronix.de; Sumit Garg <sumit.garg@linaro.org>; David Gsti=
+r
+> <david@sigma-star.at>; tharvey@gateworks.com; James Morris
+> <jmorris@namei.org>; Serge E. Hallyn <serge@hallyn.com>; Horia Geanta
+> <horia.geanta@nxp.com>; Aymen Sghaier <aymen.sghaier@nxp.com>;
+> Herbert Xu <herbert@gondor.apana.org.au>; David S. Miller
+> <davem@davemloft.net>; Eric Biggers <ebiggers@kernel.org>; Jan Luebbe
+> <j.luebbe@pengutronix.de>; Richard Weinberger <richard@nod.at>; Franck
+> Lenormand <franck.lenormand@nxp.com>; Matthias Schiffer
+> <matthias.schiffer@ew.tq-group.com>; Pankaj Gupta
+> <pankaj.gupta@nxp.com>; keyrings@vger.kernel.org; linux-
+> crypto@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-security-module@vger.kernel.org
+> Subject: [EXT] Re: [PATCH v5 3/5] KEYS: trusted: allow trust sources to u=
+se
+> kernel RNG for key material
+>=20
+> Caution: EXT Email
+>=20
+> On 22.02.22 20:58, Ahmad Fatoum wrote:
+> > The two existing trusted key sources don't make use of the kernel RNG,
+> > but instead let the hardware that does the sealing/unsealing also
+> > generate the random key material. While a previous change offers users
+> > the choice to use the kernel RNG instead for both, new trust sources
+> > may want to unconditionally use the kernel RNG for generating key
+> > material, like it's done elsewhere in the kernel.
+> >
+> > This is especially prudent for hardware that has proven-in-production
+> > HWRNG drivers implemented, as otherwise code would have to be
+> > duplicated only to arrive at a possibly worse result.
+> >
+> > Make this possible by turning struct trusted_key_ops::get_random into
+> > an optional member. If a driver leaves it NULL, kernel RNG will be
+> > used instead.
+>=20
+> The rebase on the change in scope of the previous commit made this one
+> here quite small. I would squash it into the previous commit for v6, unle=
+ss
+> there are objections.
+>=20
+>=20
+> >
+> > Acked-by: Sumit Garg <sumit.garg@linaro.org>
+> > Reviewed-by: David Gstir <david@sigma-star.at>
+> > Tested-By: Tim Harvey <tharvey@gateworks.com>
+> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> > ---
+> > To: James Bottomley <jejb@linux.ibm.com>
+> > To: Jarkko Sakkinen <jarkko@kernel.org>
+> > To: Mimi Zohar <zohar@linux.ibm.com>
+> > To: David Howells <dhowells@redhat.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: "Horia Geant=E3" <horia.geanta@nxp.com>
+> > Cc: Aymen Sghaier <aymen.sghaier@nxp.com>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Biggers <ebiggers@kernel.org>
+> > Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> > Cc: David Gstir <david@sigma-star.at>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> > Cc: Sumit Garg <sumit.garg@linaro.org>
+> > Cc: Tim Harvey <tharvey@gateworks.com>
+> > Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> > Cc: keyrings@vger.kernel.org
+> > Cc: linux-crypto@vger.kernel.org
+> > Cc: linux-integrity@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-security-module@vger.kernel.org
+> > ---
+> >  include/keys/trusted-type.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+> > index d89fa2579ac0..4eb64548a74f 100644
+> > --- a/include/keys/trusted-type.h
+> > +++ b/include/keys/trusted-type.h
+> > @@ -64,7 +64,7 @@ struct trusted_key_ops {
+> >       /* Unseal a key. */
+> >       int (*unseal)(struct trusted_key_payload *p, char *datablob);
+> >
+> > -     /* Get a randomized key. */
+> > +     /* Optional: Get a randomized key. */
+> >       int (*get_random)(unsigned char *key, size_t key_len);
+> >
+> >       /* Exit key interface. */
+>=20
+>=20
+> --
+> Pengutronix e.K.                           |                             =
+|
+> Steuerwalder Str. 21                       |
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.
+> pengutronix.de%2F&amp;data=3D04%7C01%7Cpankaj.gupta%40nxp.com%7Cd
+> 6143a1791a8494849f208d9f6e8cef8%7C686ea1d3bc2b4c6fa92cd99c5c301635
+> %7C0%7C0%7C637812302026139014%7CUnknown%7CTWFpbGZsb3d8eyJWIj
+> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3
+> 000&amp;sdata=3D2QRFygy%2BVafXrLIkF1BOHtDiwP%2Fz9kwU9ovtG1WJBTY
+> %3D&amp;reserved=3D0  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|

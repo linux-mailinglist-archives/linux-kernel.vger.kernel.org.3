@@ -2,49 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A314CB292
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFFA4CB29F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiCBWvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S229598AbiCBW5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiCBWvr (ORCPT
+        with ESMTP id S229508AbiCBW5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:51:47 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B11029D6;
-        Wed,  2 Mar 2022 14:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cA/im1dmXrUD82WWJsDC0s7CUiOhwfEqA+Dub8QQkec=; b=zAd5g+LdzL45SyO0HIcd9iun5W
-        VgrSAbIUAYOTkevd8vRxwz005p7+xxZyOq0L6EPqCtROxfRcUXCdRuwsCSuLXTdoZ2vwPai7uoAwP
-        k3y2seROOh7zl1VvKLgP40kSRqteL9FyhA5YL3fui299PIX5p/IWFTO3sxuxBYGFaggaGZsimlWRU
-        hxCbylspbhoBc43fu5k0NaWB2Kp1Wq3POByJsMwxmibqiAOiWvjp8lLdIeEEZqTh8u3yDGvMt/jEa
-        wjph19ZVoEh1GChk4TUunJsiyujzuqQ9Q6CT1Gjnb07PhP1cgXLy6cPUxsLBpZ8gR6fg9xhglAHmi
-        bT1EGwQA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPXnB-004dAP-N4; Wed, 02 Mar 2022 22:49:57 +0000
-Date:   Wed, 2 Mar 2022 14:49:57 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
-        willy@infradead.org, nixiaoming@huawei.com, nizhen@uniontech.com,
-        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] fs/proc: optimize exactly register one ctl_table
-Message-ID: <Yh/0lYpuaYyXEq9u@bombadil.infradead.org>
-References: <20220302025511.20374-1-tangmeng@uniontech.com>
+        Wed, 2 Mar 2022 17:57:41 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A8313CEE5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:56:47 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id x18so3203373pfh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 14:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x9wMKym9S9fXqEpB7R7eZDSTX7z54wGdD8KBKn9vuvI=;
+        b=EgHj1lPuwxxF7nT8U4wKaQR+RaYO9IipnSX48Gc/qLTii8qz4a6RlGCPMChRxH6QdR
+         MiGQ4u3fOj6GLOfPtYyUVGCIQWox9k2+UNT/zY2BzqTpiCsB8mIdQXe+Zo5ICbusEpna
+         YzJnp/92tZ23nkB/aufnwSe1JUu9dkb9ClKI867FycqPuhmDpC+W7Wis3c5Jy8Q59V/W
+         BCl7QPyx0YCdKs6jU9BT5ja1Icf7uA11O1lMBc4leN+MsVZ5XLDH8OVLrGFHmYerMfRX
+         84hbGQYB4qBseyAn/01vvvxpz2OOSANZJJhoLx5HsyjHYt7Sl3a/5NaThrjHlSnauAnx
+         PYmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x9wMKym9S9fXqEpB7R7eZDSTX7z54wGdD8KBKn9vuvI=;
+        b=rtDF7dCuWldSDTqmODvywtGxo0SiwMzTUWRun/7ghdHgTXcZm4xH+nVoR0aXYFyms4
+         GUPHLMjsWKUq5yy/7lEiG7rgKOF+LL3J56kjLD8Z6gDmwZHvZ+2gZADx/D/MPVjRaS4e
+         mDC7s3TZbKisgSyz5BOkd1dJ2aWY3LHGcwkMIN+mD4mqEvQtdfLzj7VKdajZEmuZkFiN
+         ziNMHNN3kN+4JU9gzPAvsnyyY/Q1UASSmBrHJlr8m5GmPTQi1eDbsFxI8+GVheF59rxn
+         Ce2ltJFrCQy4+OK44yiFYFDQv58//agL6asMIM5ZVDrhs67eo7Hfqir/BoKe+TLDBd5i
+         SW+Q==
+X-Gm-Message-State: AOAM533cY/6WPb9Ear+ZszF9mbcfOsRkBJdUTbrJb4NyqqDxirOSsylJ
+        KrWGKoeKf5rf9Nzm+3O/L0e0vw==
+X-Google-Smtp-Source: ABdhPJxZJO0b6xynoVXwPfQ0Dg+QdrERgWdHdWjhBdS87LJkX73MUHodq13VvntY/QyAQPgmiXnHkg==
+X-Received: by 2002:a05:6a00:d4c:b0:4e0:27dd:37c1 with SMTP id n12-20020a056a000d4c00b004e027dd37c1mr35550899pfv.86.1646261640293;
+        Wed, 02 Mar 2022 14:54:00 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s2-20020a056a001c4200b004f41e1196fasm221880pfw.17.2022.03.02.14.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:53:59 -0800 (PST)
+Date:   Wed, 2 Mar 2022 22:53:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
+ shadow page is zapped
+Message-ID: <Yh/1hPMhqeFKO0ih@google.com>
+References: <20220225182248.3812651-1-seanjc@google.com>
+ <20220225182248.3812651-5-seanjc@google.com>
+ <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
+ <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
+ <Yh/JdHphCLOm4evG@google.com>
+ <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302025511.20374-1-tangmeng@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,31 +85,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:55:10AM +0800, Meng Tang wrote:
-> Sysctls are being moved out of kernel/sysctl.c and out to
-> their own respective subsystems / users to help with easier
-> maintance and avoid merge conflicts. But when we move just
-> one entry and to its own new file the last entry for this
-> new file must be empty, so we are essentialy bloating the
-> kernel one extra empty entry per each newly moved sysctl.
+On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> On 3/2/22 20:45, Sean Christopherson wrote:
+> > AMD NPT is hosed because KVM's awful ASID scheme doesn't assign an ASID per root
+> > and doesn't force a new ASID.  IMO, this is an SVM mess and not a TDP MMU bug.
 > 
-> To help with this, this adds support for registering just
-> one ctl_table, therefore not bloating the kernel when we
-> move a single ctl_table to its own file.
+> I agree.
 > 
-> Since the process of registering just one single table is the
-> same as that of registering an array table, so the code is
-> similar to registering an array table. The difference between
-> registering just one table and registering an array table is
-> that we no longer traversal through pointers when registering
-> a single table. These lead to that we have to add a complete
-> implementation process for register just one ctl_table, so we
-> have to add so much code.
+> > In the short term, I think something like the following would suffice.  Long term,
+> > we really need to redo SVM ASID management so that ASIDs are tied to a KVM root.
 > 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index c5e3f219803e..7899ca4748c7 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3857,6 +3857,9 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu,
+> hpa_t root_hpa,
+>         unsigned long cr3;
+> 
+>         if (npt_enabled) {
+> +               if (is_tdp_mmu_root(root_hpa))
+> +                       svm->current_vmcb->asid_generation = 0;
+> +
+>                 svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
+>                 vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
+> 
+> Why not just new_asid
 
-Is there really no helpers which you can add to share code?
-Now that you did this work, look carefully.
+My mental coin flip came up tails?  new_asid() is definitely more intuitive.
 
-  Luis
+> (even unconditionally, who cares)?
+
+Heh, I was going to say we do care to some extent for nested transitions, then
+I remembered we flush on every nested transition anyways, in no small part because
+the ASID handling is a mess.

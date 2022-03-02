@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEC24CABC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EDF4CABB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbiCBRaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S243945AbiCBR3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243917AbiCBR3J (ORCPT
+        with ESMTP id S239351AbiCBR3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:29:09 -0500
-Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 740E64BFCB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:28:07 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1646242087; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=2lluEkC2IYldaISdqe06rNauGzvoaf++UFPThwQahFY=; b=epNbTqWfdlUaHxn4ZvCBzGZN2OaOKoF+2fwrhSteCNl0Hg0QjAopa3vg4KYs/BaE2KbTHgvW
- NPQRWLWfGCAgWIDWkuUjgEuIkg50qRQ8iauGUJA9qNp3bvH7u+tN+ViI7lsO+pi7Sz7PE4QP
- oAwptlfgmEcMeNqVBptwivYOv80=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 621fa9260f85aa2ea38aa026 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Mar 2022 17:28:06
- GMT
-Sender: quic_akhilpo=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 660C9C43637; Wed,  2 Mar 2022 17:28:06 +0000 (UTC)
+        Wed, 2 Mar 2022 12:29:40 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785A24D601
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:28:08 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2dbfe58670cso26331747b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uuao6LtPoxz+SwUeDa6xzf7SfiyP8QP18hPPHG47BUc=;
+        b=q3XRXLhSkdzfXMPqmPGrtL5qKLDaaanmRsuY1OlB+gywhyfQ3P0k2Ty/lLBIx9hngr
+         bIE3qAL4ikUxI5IPrvBeSteXA23/TUiOhOXlNzpa2gQtUgeyGl8Sv+On2Q2+b/ioPLVK
+         y6mGgX6AYdM5qc4LpFsHD+JseMxCAPR3H5Cc4VnjOZ7eV1ADHbYrVBbr9AL8ZR5ElxMn
+         onL1EgPo/RmTTVYw9otAeEqlQaXOudGa8wKxOcCtR9oLm0BoPskgY4WBR6I9166lo/cT
+         W+PbTD8Xdk6xgUjKZon509MUJZNIphLafkMUrZ8a/ku3GC4bjTQpoQ7Ua0dreHWIDPif
+         i76A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uuao6LtPoxz+SwUeDa6xzf7SfiyP8QP18hPPHG47BUc=;
+        b=q7SzyoTCNiEKiH4Dv7j9enkZOK+cpRjE0vK8rrygf3b/VkhmIfb7160pojBK8jd8Fr
+         lk2p0cpOO/7jr66U35OaoiJI9x8qQU67mYcneNojhtS4t8rWjjp9QR7YvUjdcm5/k4Kd
+         0kc5EK9Y3VUDT0wRE81/ELSZ2HwdUkWq7jjgydhKfHAnzBGrOIwKQaPb8PZZbN6OJ/GS
+         ZHMa1Z3q3SJ6C0VbYwbKqOD4ekj6r05ej+Fy5nUXqZI7Kto3+0v7Qa8RH+fOAUocUt/o
+         zKE9Y0gmxy5Zd17ia8H2udlZq9mqw6NNcS88HOblOSjyqaGOmcwlnQ5V27k9cuveSh0T
+         Mr4Q==
+X-Gm-Message-State: AOAM530Rm3CniJZzq7fHjk9ONNk3OH926qTZrdRo8fDNMQmQNgPwlOXd
+        kcCOpgfRJkHmwwITscYxQPRhQixw+3hfwErFkIi64Q==
+X-Google-Smtp-Source: ABdhPJwm2ZWFQ7qE2nk58NylCSEqbiMe0zCq2KvKucwX8DnqEWD9OpvdoQUD/JGXnJ1oLd0rtBKUTnEU1/3Qg3jDPlI=
+X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
+ w199-20020a8149d0000000b002dbdc6d445dmr9596217ywa.512.1646242087255; Wed, 02
+ Mar 2022 09:28:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20220225180318.20594-1-vbabka@suse.cz> <YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <f194f876-1c46-f3ae-573e-d3ddd6dcf4cc@suse.cz> <Yh0+Jld+sDy1Hkdb@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <Yh8szz+UxqddwK7j@linux.ibm.com> <024aacf5-ac49-7d04-7293-1e1451ff9029@suse.cz>
+ <Yh9jgGOocmU3WsES@linux.ibm.com> <Yh+jJC8JofHx28K+@ip-172-31-19-208.ap-northeast-1.compute.internal>
+In-Reply-To: <Yh+jJC8JofHx28K+@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 2 Mar 2022 18:27:30 +0100
+Message-ID: <CANpmjNMMu5-fvmmx4SidWFdbAnsJJhqTd1bfyxJtvJV3d3q_fg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] SLUB debugfs improvements based on stackdepot
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-Received: from hyd-lnxbld559.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akhilpo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7B66AC4338F;
-        Wed,  2 Mar 2022 17:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 7B66AC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 03/10] drm/msm/a6xx: Avoid gmu lock in pm ops
-Date:   Wed,  2 Mar 2022 22:57:29 +0530
-Message-Id: <20220302225551.v1.3.Ic49018db022d364e899a9fba8baa869d88a54b7f@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646242056-2456-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1646242056-2456-1-git-send-email-quic_akhilpo@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't really need gmu lock in runtime pm ops because these operations
-are serialized anyway and also with other paths where we take this lock.
-This patch will help to simplify the locking order when we introduce
-crashstate_lock in the upcoming patch.
+On Wed, 2 Mar 2022 at 18:02, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+[...]
+> So IMO we have two solutions.
+>
+> First solution is only allowing early init and avoiding late init.
+> (setting a global variable that is visible to stack depot would do this)
+>
+> And second solution is to make caller allocate and manage its own hash
+> table. All of this complexity is because we're trying to make stack_table
+> global.
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+I think this would be a mistake, because then we have to continuously
+audit all users of stackdepot and make sure that allocation stack
+traces don't end up in duplicate hash tables. It's global for a
+reason.
 
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 4 ----
- 1 file changed, 4 deletions(-)
+> First solution looks ok if we have few users of stack depot.
+> But I think we should use second approach if stack depot is growing
+> more and more callers?
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 3faf551..8c3cb31 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1530,9 +1530,7 @@ static int a6xx_pm_resume(struct msm_gpu *gpu)
- 
- 	trace_msm_gpu_resume(0);
- 
--	mutex_lock(&a6xx_gpu->gmu.lock);
- 	ret = a6xx_gmu_resume(a6xx_gpu);
--	mutex_unlock(&a6xx_gpu->gmu.lock);
- 	if (ret)
- 		return ret;
- 
-@@ -1555,9 +1553,7 @@ static int a6xx_pm_suspend(struct msm_gpu *gpu)
- 
- 	msm_devfreq_suspend(gpu);
- 
--	mutex_lock(&a6xx_gpu->gmu.lock);
- 	ret = a6xx_gmu_stop(a6xx_gpu);
--	mutex_unlock(&a6xx_gpu->gmu.lock);
- 	if (ret)
- 		return ret;
- 
--- 
-2.7.4
+The problem here really is just that initialization of stackdepot and
+slabs can have a cyclic dependency with the changes you're making. I
+very much doubt there'll be other cases (beyond the allocator itself
+used by stackdepot) which can introduce such a cyclic dependency.
 
+The easiest way to break the cyclic dependency is to initialize
+stackdepot earlier, assuming it can be determined it is required (in
+this case it can because the command line is parsed before slab
+creation). The suggestion with the stack_depot_needed_early variable
+(like Mike's suggested code) would solve all that.
+
+I don't understand the concern about multiple contexts. The problem is
+just about a cyclic dependency during early init, and I doubt we'll
+have more of that.
+
+Thanks,
+-- Marco

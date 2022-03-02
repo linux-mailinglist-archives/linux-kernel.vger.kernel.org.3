@@ -2,191 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECCD4CAF63
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8091E4CAF76
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbiCBUIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S239390AbiCBUPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiCBUHx (ORCPT
+        with ESMTP id S229603AbiCBUPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:07:53 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403ADCB91A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:07:06 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id e13so2538321plh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9llME+iRL2iH9L07jwvbWbmbHLr47Rbz7WJ4fOgTlZc=;
-        b=IvpJRwG7ynxkReEE85KaN5rJUYtD4xKNHA+hy6TwBmoQ8B3uYeJI+QViQcnaGiWq86
-         F88M3HTERkoil1v4VBpPtCvYuei+/tfueI2kCXzM7ddvcotxLyWZwiewhTHLUCy28lRK
-         BraqPBOXvwYRthhpbxTgJWS9pGCc3zSZJBqHk=
+        Wed, 2 Mar 2022 15:15:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71909CD5E6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646252074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hVPJAaQMiU/UUVUed6uCDuKTMuf559KPWfX+wu4fTKk=;
+        b=JLyr3XVRdF+iNO2pTKCk5TZJk8vHcFRgOUaAr5KontrZHrury0+9V5KoS7TUunmjQkAJLq
+        J7wNnPwzhupsfEU+HruG/8iXxtIx6zVMAKtGleYhS5U6lr9Ij8A00wUR05R23ZvUwFV0MT
+        F4nosfsFq0nFobw3gvMir7Kuaaor8t8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-SyPjmeHkPo-aCibTrLHFvw-1; Wed, 02 Mar 2022 15:14:33 -0500
+X-MC-Unique: SyPjmeHkPo-aCibTrLHFvw-1
+Received: by mail-wr1-f70.google.com with SMTP id ay18-20020a5d6f12000000b001efe36eb038so1032621wrb.17
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:14:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9llME+iRL2iH9L07jwvbWbmbHLr47Rbz7WJ4fOgTlZc=;
-        b=V/kUvXM5ANzNg6xeA3woTqyTwYdwoxLDyEWS/w9+2noF91WRWprNoONMGeg2vk+nh1
-         1i0AAfXMNNeQl4z3pFjaZ2BArLoaH9zryvg6pl3C0fomuDOfLUNOdaazjxyWMGv/uolf
-         hTzZv5vDVTJheLBO7UyOxuyMPFYqW6KJV2ecw3+paLNGzplh2cTloMxIBDF6QfUhj8Uz
-         DVInIgjYHeKJiwjYafmqXPIKi/L5/2Wm8BtJ0iCMTVF9CdtZaA0z3K6rnoalKpo+TJqW
-         rhwMXqlQKXRDUI+r2RGilB55dHbnn/aXKMh5Y4DkK5mSl7FsEETTEKhnbs12BrudsHlk
-         6lSA==
-X-Gm-Message-State: AOAM533yIbH9L6a4LvkNlEtiSCmAfFwn7le6hR79IElSA9zXwZVGZiDP
-        8/osC5Xkpa9sIEPN23hKOPSh3w==
-X-Google-Smtp-Source: ABdhPJyalZw/yElDAQSdRYusWOxjkvZUrvn+e5j/jboS/+hXUtUpvVb6mMnbBbqlv1j/a0ygzQBPkQ==
-X-Received: by 2002:a17:90b:94e:b0:1bc:c99f:ede1 with SMTP id dw14-20020a17090b094e00b001bcc99fede1mr1518926pjb.49.1646251625762;
-        Wed, 02 Mar 2022 12:07:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d25-20020a637359000000b0037843afb785sm6664pgn.25.2022.03.02.12.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:07:05 -0800 (PST)
-Date:   Wed, 2 Mar 2022 12:07:04 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Laight <David.Laight@aculab.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        KVM list <kvm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Message-ID: <202203021158.DB5204A0@keescook>
-References: <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
- <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
- <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
- <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
- <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
- <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
- <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
- <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
- <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
- <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hVPJAaQMiU/UUVUed6uCDuKTMuf559KPWfX+wu4fTKk=;
+        b=bwiNlFghp/E8R4xMs2NX+MYcvK81A5mEU1Sagv1l5ho7yXAEdgFz0PUyG66+chYb/4
+         t5tLVYh/lc6ildtUgOfkjWog+ZH31wWe5U9h9LlDS8SRVnyavjPmF/1Vq84B+0kJ0OQ/
+         hxcIsZd4cDRnVZBw6D6zdKfruKQ52zAu3+r/ceSwa/9g8JUUFUz4pStN9VhKyrAC3sUp
+         ydo0xTzOw0c9jNshxukjm00yVHtquTgMuDnAhdDDZusM3NM1Ipq9zQkgLfiwWZ2YSiyv
+         SI6lvIl5YcKa+1FqEiLeXmGoxahqVyIqjNzQJY2rD9UJPHYQHCc2LXuOqlSyVlP0MIfe
+         D+Gg==
+X-Gm-Message-State: AOAM531i/qrs6aeKeqpHgIC/hGZMFIgSmL+2Jq1NHi+AZZfyfx14vZS5
+        0PlQckcuZS8kbZ/GQVpr3rOU76ab9KDBl1F9TOd5fYp+sUyejpHvPLLc/wXgKBJ8CkRQ0JalOqk
+        LuyC/GWYn6l8vPTIlBVx9nxFJ
+X-Received: by 2002:adf:f201:0:b0:1ed:c254:c1a2 with SMTP id p1-20020adff201000000b001edc254c1a2mr23961958wro.106.1646252072321;
+        Wed, 02 Mar 2022 12:14:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx1zw1C/i+VIT8MtTcEQD8KuDJhh889JvGLZ/u+ULO+AHhA9U6wjqYo14xKshNpXSJG0n0dqw==
+X-Received: by 2002:adf:f201:0:b0:1ed:c254:c1a2 with SMTP id p1-20020adff201000000b001edc254c1a2mr23961947wro.106.1646252072075;
+        Wed, 02 Mar 2022 12:14:32 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id g7-20020a5d5407000000b001e2628b6490sm17993wrv.17.2022.03.02.12.14.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 12:14:31 -0800 (PST)
+Message-ID: <442859af-6454-b15e-b2ad-0fc7c4e22909@redhat.com>
+Date:   Wed, 2 Mar 2022 21:14:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous
+ worker
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-23-seanjc@google.com>
+ <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+ <Yh+xA31FrfGoxXLB@google.com>
+ <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
+ <Yh/GoUPxMRyFqFc5@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yh/GoUPxMRyFqFc5@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:29:31AM +0100, Rasmus Villemoes wrote:
-> This won't help the current issue (because it doesn't exist and might
-> never), but just in case some compiler people are listening, I'd like to
-> have some sort of way to tell the compiler "treat this variable as
-> uninitialized from here on". So one could do
-> 
-> #define kfree(p) do { __kfree(p); __magic_uninit(p); } while (0)
-> 
-> with __magic_uninit being a magic no-op that doesn't affect the
-> semantics of the code, but could be used by the compiler's "[is/may be]
-> used uninitialized" machinery to flag e.g. double frees on some odd
-> error path etc. It would probably only work for local automatic
-> variables, but it should be possible to just ignore the hint if p is
-> some expression like foo->bar or has side effects. If we had that, the
-> end-of-loop test could include that to "uninitialize" the iterator.
+On 3/2/22 20:33, Sean Christopherson wrote:
+> What about that idea?  Put roots invalidated by "fast zap" on_another_  list?
+> My very original idea of moving the roots to a separate list didn't work because
+> the roots needed to be reachable by the mmu_notifier.  But we could just add
+> another list_head (inside the unsync_child_bitmap union) and add the roots to
+> _that_  list.
 
-I've long wanted to change kfree() to explicitly set pointers to NULL on
-free. https://github.com/KSPP/linux/issues/87
+Perhaps the "separate list" idea could be extended to have a single 
+worker for all kvm_tdp_mmu_put_root() work, and then indeed replace 
+kvm_tdp_mmu_zap_invalidated_roots() with a flush of _that_ worker.  The 
+disadvantage is a little less parallelism in zapping invalidated roots; 
+but what is good for kvm_tdp_mmu_zap_invalidated_roots() is just as good 
+for kvm_tdp_mmu_put_root(), I suppose.  If one wants separate work 
+items, KVM could have its own workqueue, and then you flush that workqueue.
 
-The thing stopping a trivial transformation of kfree() is:
+For now let's do it the simple but ugly way.  Keeping 
+next_invalidated_root() does not make things worse than the status quo, 
+and further work will be easier to review if it's kept separate from 
+this already-complex work.
 
-	kfree(get_some_pointer());
+Paolo
 
-I would argue, though, that the above is poor form: the thing holding
-the pointer should be the thing freeing it, so these cases should be
-refactored and kfree() could do the NULLing by default.
-
-Quoting myself in the above issue:
-
-
-Without doing massive tree-wide changes, I think we need compiler
-support. If we had something like __builtin_is_lvalue(), we could
-distinguish function returns from lvalues. For example, right now a
-common case are things like:
-
-	kfree(get_some_ptr());
-
-But if we could at least gain coverage of the lvalue cases, and detect
-them statically at compile-time, we could do:
-
-#define __kfree_and_null(x) do { __kfree(*x); *x = NULL; } while (0)
-#define kfree(x) __builtin_choose_expr(__builtin_is_lvalue(x),
-			__kfree_and_null(&(x)), __kfree(x))
-
-Alternatively, we could do a tree-wide change of the former case (findable
-with Coccinelle) and change them into something like kfree_no_null()
-and redefine kfree() itself:
-
-#define kfree_no_null(x) do { void *__ptr = (x); __kfree(__ptr); } while (0)
-#define kfree(x) do { __kfree(x); x = NULL; } while (0)
-
--- 
-Kees Cook

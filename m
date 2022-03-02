@@ -2,193 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AFA4CAEF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512754CAEF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240659AbiCBTpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S241654AbiCBTqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiCBTpJ (ORCPT
+        with ESMTP id S230189AbiCBTqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:45:09 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7302CA0DD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:44:24 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Mar 2022 14:46:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345AD1994
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:45:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 96F9B3F609
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646250263;
-        bh=CXgP08C1PuFq4bqpjNjFmw31qLuU1W2/XX2cgUb+4wc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ReaNoNkZPHpbDnlCJb8wdbhj7vA9g0We8sf6i4wYTFmJTehsAlJVK+utKO2MNZ8wu
-         MSIYT2JiVykvc2YU85iB/59PF2lRDxmpcbJ8xSiNJ/DOGt/HA6scoKRrlb53/l5V8O
-         KR11Ix7mvZSFjv05Wa94kvaAxFkTZRIssVapA31snbA9jgZ3NICwnzcuDFlTxZI+FN
-         wI0bESjkQPdD0Uogase46Vg9u2O7Q1bWK2MwP9bMu9G9JEdfrGLbIrIXntcIo3pGxF
-         Plcfjg26f/tPhteP5ElSI0qzF/9XWR8kmt7kednP+HI3vYEbVmf0kEuBe3DnBIGeL2
-         VjnPcnbeUxabw==
-Received: by mail-ej1-f72.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so1504595ejk.16
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:44:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CXgP08C1PuFq4bqpjNjFmw31qLuU1W2/XX2cgUb+4wc=;
-        b=1cu3RDWC/smkbMGNrtGrVYFDoRcKchupPNspY60LFLdo0a0j7tkWPCrRF2ax0DNaXI
-         qvqYrJ2Zmz28UMsGfz3g0XGLMh56KaledAUsuwPwm7PCFVa36iHXtL+sYpHsr7BK7BTI
-         vA9x/ByRyU/XwhI+If7tSZG5J8A5kbSphJskUqn5w493OwUuo/SgWF5LUydx4HPJGbkO
-         h08w9Od1qAhNhBMu0GsoCsZoT1Mh2uuOiuE7xpuEylZ35Kn/iAHfTJI62pj1MQ/A3rOp
-         jQJAAujzPY9p/TpJAUl2jG96jF7eET77E+M4D6hiCOdjzeeP7xUUbGf++v0g7h+bwJ9T
-         tZAg==
-X-Gm-Message-State: AOAM531UjPQdyujo0wEGe71glNJPXWTy+jDqRbejXfKnrA9FkVVgy6fo
-        64+/UZKLa6T+ISmv087ASVkmISDprN8a65QBjjiujDLYIp+yJpHTRuxAqJrEl1ihTifZJlbLBUL
-        PMCnlugTriwMT7P/aFVRjSnJvP2ZfziWs4o6JT9NI4A==
-X-Received: by 2002:a17:906:7056:b0:6d6:dd99:f2a4 with SMTP id r22-20020a170906705600b006d6dd99f2a4mr9253741ejj.43.1646250263270;
-        Wed, 02 Mar 2022 11:44:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxeddp5OV+Flh+0Pd77oYKfgd5Yl2rsTAbN/GiVUOQXPIPUCAJzYFwH4LA4d4WjKVxsccE4rQ==
-X-Received: by 2002:a17:906:7056:b0:6d6:dd99:f2a4 with SMTP id r22-20020a170906705600b006d6dd99f2a4mr9253733ejj.43.1646250263033;
-        Wed, 02 Mar 2022 11:44:23 -0800 (PST)
-Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id y12-20020a50eb8c000000b00410f02e577esm9138825edr.7.2022.03.02.11.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 11:44:22 -0800 (PST)
-Message-ID: <72fafc84-4986-926f-67ae-155f4fced88b@canonical.com>
-Date:   Wed, 2 Mar 2022 20:44:21 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83329B82157
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:45:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06090C340ED;
+        Wed,  2 Mar 2022 19:45:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646250316;
+        bh=hETAxvTljSSwJ5OXPM0CCfq1GwnQ4dsqfLkAh1duLGk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OMQ9fysgQzC03Vuc2Lnv4krnv1NeQwKYX3oiFUZMIJNqz+V4hHeiklJsJqCv3ydC1
+         oyZXJhKXhnPYDH/+P7rI/IEFGeEV7hS+yFqT+8HPIyLvkqpdSJC06cacIb9GvVf58g
+         KjoyC2pNHu7Rs6pOQGZpxmheQhzZTeF6ExwPd6u61+bi+qnJQ1htJ4GfAemgc+/UU1
+         Haibh/8n7/7OLfkouoRZEDQutRE5Tes/RpZx8dKyPYx/kP152A4vJtNc6K95G2ibUj
+         DdMxMwctQQAl0urnuD0TiShlrl61/sDMSCUQj6/iV9l6EZhbhxaLegPl/XpZe/+jZE
+         oTbak9ebwk3RQ==
+Date:   Wed, 2 Mar 2022 11:45:14 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Jing Xia <jing.xia@unisoc.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to avoid potential deadlock
+Message-ID: <Yh/JSlaIw49gV+15@google.com>
+References: <YfMVxzdhat01ca7m@google.com>
+ <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+ <YfSMMpj2GrYXAJK2@google.com>
+ <51be77f1-6e85-d46d-d0d3-c06d2055a190@kernel.org>
+ <Yfs1KRgwgzSOvocR@google.com>
+ <86a175d3-c438-505b-1dbc-4ef6e8b5adcb@kernel.org>
+ <5b5e20d1-877f-b321-b341-c0f233ee976c@kernel.org>
+ <51826b5f-e480-994a-4a72-39ff4572bb3f@kernel.org>
+ <Yh8AAOjxTItKTwPQ@google.com>
+ <c0d3528b-e6b4-8557-4c2b-e26a972d8aaa@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Patch v4 4/4] memory: tegra: Add MC error logging on tegra186
- onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, digetx@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <1646210609-21943-1-git-send-email-amhetre@nvidia.com>
- <1646210609-21943-5-git-send-email-amhetre@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1646210609-21943-5-git-send-email-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c0d3528b-e6b4-8557-4c2b-e26a972d8aaa@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 09:43, Ashish Mhetre wrote:
-> Add new function 'get_int_channel' in tegra_mc_soc struture which is
-> implemented by tegra SOCs which support multiple MC channels. This
-> function returns the channel which should be used to get the information
-> of interrupts.
-> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
-> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
-> Add error specific MC status and address register bits and use them on
-> tegra186, tegra194 and tegra234.
-> Add error logging for generalized carveout interrupt on tegra186, tegra194
-> and tegra234.
-> Add error logging for route sanity interrupt on tegra194 an tegra234.
-> Add register for higher bits of error address which is available on
-> tegra194 and tegra234.
-> Add a boolean variable 'has_addr_hi_reg' in tegra_mc_soc struture which
-> will be true if soc has register for higher bits of memory controller
-> error address. Set it true for tegra194 and tegra234.
+On 03/02, Chao Yu wrote:
+> On 2022/3/2 13:26, Jaegeuk Kim wrote:
+> > On 03/02, Chao Yu wrote:
+> > > ping,
+> > > 
+> > > On 2022/2/25 11:02, Chao Yu wrote:
+> > > > On 2022/2/3 22:57, Chao Yu wrote:
+> > > > > On 2022/2/3 9:51, Jaegeuk Kim wrote:
+> > > > > > On 01/29, Chao Yu wrote:
+> > > > > > > On 2022/1/29 8:37, Jaegeuk Kim wrote:
+> > > > > > > > On 01/28, Chao Yu wrote:
+> > > > > > > > > On 2022/1/28 5:59, Jaegeuk Kim wrote:
+> > > > > > > > > > On 01/27, Chao Yu wrote:
+> > > > > > > > > > > Quoted from Jing Xia's report, there is a potential deadlock may happen
+> > > > > > > > > > > between kworker and checkpoint as below:
+> > > > > > > > > > > 
+> > > > > > > > > > > [T:writeback]                [T:checkpoint]
+> > > > > > > > > > > - wb_writeback
+> > > > > > > > > > >      - blk_start_plug
+> > > > > > > > > > > bio contains NodeA was plugged in writeback threads
+> > > > > > > > > > 
+> > > > > > > > > > I'm still trying to understand more precisely. So, how is it possible to
+> > > > > > > > > > have bio having node write in this current context?
+> > > > > > > > > 
+> > > > > > > > > IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
+> > > > > > > > > during writebacking node_inode's data page (which should be node page)?
+> > > > > > > > 
+> > > > > > > > Wasn't that added into a different task->plug?
+> > > > > > > 
+> > > > > > > I'm not sure I've got your concern correctly...
+> > > > > > > 
+> > > > > > > Do you mean NodeA and other IOs from do_writepages() were plugged in
+> > > > > > > different local plug variables?
+> > > > > > 
+> > > > > > I think so.
+> > > > > 
+> > > > > I guess block plug helper says it doesn't allow to use nested plug, so there
+> > > > > is only one plug in kworker thread?
+> > 
+> > Is there only one kworker thread that flushes node and inode pages?
 > 
-> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
-> ---
->  drivers/memory/tegra/mc.c       | 102 ++++++++++++++++++++++++++++++++++------
->  drivers/memory/tegra/mc.h       |  37 ++++++++++++++-
->  drivers/memory/tegra/tegra186.c |  45 ++++++++++++++++++
->  drivers/memory/tegra/tegra194.c |  44 +++++++++++++++++
->  drivers/memory/tegra/tegra234.c |  59 +++++++++++++++++++++++
->  include/soc/tegra/mc.h          |   4 ++
->  6 files changed, 275 insertions(+), 16 deletions(-)
+> IIRC, =one kworker per block device?
+
+If there's one kworker only, f2fs_write_node_pages() should have flushed its
+plug?
+
 > 
-
-(...)
-
->  
-> +static int tegra186_mc_get_channel(struct tegra_mc *mc, int *mc_channel)
-> +{
-> +	u32 g_intstatus;
-> +
-> +	g_intstatus = mc_ch_readl(mc, MC_BROADCAST_CHANNEL,
-> +				  MC_GLOBAL_INTSTATUS);
-> +
-> +	switch (g_intstatus & mc->soc->int_channel_mask) {
-> +	case BIT(0):
-> +		*mc_channel = 0;
-> +		break;
-> +
-> +	case BIT(1):
-> +		*mc_channel = 1;
-> +		break;
-> +
-> +	case BIT(2):
-> +		*mc_channel = 2;
-> +		break;
-> +
-> +	case BIT(3):
-> +		*mc_channel = 3;
-> +		break;
-> +
-> +	case BIT(24):
-> +		*mc_channel = MC_BROADCAST_CHANNEL;
-> +		break;
-> +
-> +	default:
-> +		pr_err("Unknown interrupt source\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  const struct tegra_mc_soc tegra186_mc_soc = {
->  	.num_clients = ARRAY_SIZE(tegra186_mc_clients),
->  	.clients = tegra186_mc_clients,
->  	.num_address_bits = 40,
->  	.num_channels = 4,
-> +	.client_id_mask = 0xff,
-> +	.intmask = MC_INT_DECERR_GENERALIZED_CARVEOUT | MC_INT_DECERR_MTS |
-> +		   MC_INT_SECERR_SEC | MC_INT_DECERR_VPR |
-> +		   MC_INT_SECURITY_VIOLATION | MC_INT_DECERR_EMEM,
->  	.ops = &tegra186_mc_ops,
-> +	.int_channel_mask = 0x100000f,
-> +	.get_int_channel = tegra186_mc_get_channel,
->  };
->  #endif
-> diff --git a/drivers/memory/tegra/tegra194.c b/drivers/memory/tegra/tegra194.c
-> index 9400117..bc16567 100644
-> --- a/drivers/memory/tegra/tegra194.c
-> +++ b/drivers/memory/tegra/tegra194.c
-> @@ -1343,10 +1343,54 @@ static const struct tegra_mc_client tegra194_mc_clients[] = {
->  	},
->  };
->  
-> +static int tegra194_mc_get_channel(struct tegra_mc *mc, int *mc_channel)
-
-Looks like 'mc' could be a pointer to const.
-
-> +{
-> +	u32 g_intstatus;
-
-Variable name just "status" because it looks like some
-hungarian-notation-style...
-
-The same in other places like this.
-
-
-Best regards,
-Krzysztof
+> Thanks,
+> 
+> > 
+> > > > > 
+> > > > > void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
+> > > > > {
+> > > > >       struct task_struct *tsk = current;
+> > > > > 
+> > > > >       /*
+> > > > >        * If this is a nested plug, don't actually assign it.
+> > > > >        */
+> > > > >       if (tsk->plug)
+> > > > >           return;
+> > > > > ...
+> > > > > }
+> > > > 
+> > > > Any further comments?
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > > 
+> > > > > Thanks,
+> > > > > 
+> > > > > > 
+> > > > > > > 
+> > > > > > > Thanks,
+> > > > > > > 
+> > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > Thanks,
+> > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > >                      - do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+> > > > > > > > > > >                       - f2fs_write_data_pages
+> > > > > > > > > > >                        - f2fs_write_single_data_page -- write last dirty page
+> > > > > > > > > > >                         - f2fs_do_write_data_page
+> > > > > > > > > > >                          - set_page_writeback  -- clear page dirty flag and
+> > > > > > > > > > >                          PAGECACHE_TAG_DIRTY tag in radix tree
+> > > > > > > > > > >                          - f2fs_outplace_write_data
+> > > > > > > > > > >                           - f2fs_update_data_blkaddr
+> > > > > > > > > > >                            - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+> > > > > > > > > > >                         - inode_dec_dirty_pages
+> > > > > > > > > > >      - writeback_sb_inodes
+> > > > > > > > > > >       - writeback_single_inode
+> > > > > > > > > > >        - do_writepages
+> > > > > > > > > > >         - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+> > > > > > > > > > >          - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+> > > > > > > > > > >       - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+> > > > > > > > > > >      - blk_finish_plug
+> > > > > > > > > > > 
+> > > > > > > > > > > Let's try to avoid deadlock condition by forcing unplugging previous bio via
+> > > > > > > > > > > blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+> > > > > > > > > > > due to valid sbi->wb_sync_req[DATA/NODE].
+> > > > > > > > > > > 
+> > > > > > > > > > > Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+> > > > > > > > > > > Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > > > > > > > > > Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+> > > > > > > > > > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > > > > > > > > > ---
+> > > > > > > > > > >      fs/f2fs/data.c | 6 +++++-
+> > > > > > > > > > >      fs/f2fs/node.c | 6 +++++-
+> > > > > > > > > > >      2 files changed, 10 insertions(+), 2 deletions(-)
+> > > > > > > > > > > 
+> > > > > > > > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > > > > > > > > index 76d6fe7b0c8f..932a4c81acaf 100644
+> > > > > > > > > > > --- a/fs/f2fs/data.c
+> > > > > > > > > > > +++ b/fs/f2fs/data.c
+> > > > > > > > > > > @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+> > > > > > > > > > >          /* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+> > > > > > > > > > >          if (wbc->sync_mode == WB_SYNC_ALL)
+> > > > > > > > > > >              atomic_inc(&sbi->wb_sync_req[DATA]);
+> > > > > > > > > > > -    else if (atomic_read(&sbi->wb_sync_req[DATA]))
+> > > > > > > > > > > +    else if (atomic_read(&sbi->wb_sync_req[DATA])) {
+> > > > > > > > > > > +        /* to avoid potential deadlock */
+> > > > > > > > > > > +        if (current->plug)
+> > > > > > > > > > > +            blk_finish_plug(current->plug);
+> > > > > > > > > > >              goto skip_write;
+> > > > > > > > > > > +    }
+> > > > > > > > > > >          if (__should_serialize_io(inode, wbc)) {
+> > > > > > > > > > >              mutex_lock(&sbi->writepages);
+> > > > > > > > > > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> > > > > > > > > > > index 556fcd8457f3..69c6bcaf5aae 100644
+> > > > > > > > > > > --- a/fs/f2fs/node.c
+> > > > > > > > > > > +++ b/fs/f2fs/node.c
+> > > > > > > > > > > @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
+> > > > > > > > > > >          if (wbc->sync_mode == WB_SYNC_ALL)
+> > > > > > > > > > >              atomic_inc(&sbi->wb_sync_req[NODE]);
+> > > > > > > > > > > -    else if (atomic_read(&sbi->wb_sync_req[NODE]))
+> > > > > > > > > > > +    else if (atomic_read(&sbi->wb_sync_req[NODE])) {
+> > > > > > > > > > > +        /* to avoid potential deadlock */
+> > > > > > > > > > > +        if (current->plug)
+> > > > > > > > > > > +            blk_finish_plug(current->plug);
+> > > > > > > > > > >              goto skip_write;
+> > > > > > > > > > > +    }
+> > > > > > > > > > >          trace_f2fs_writepages(mapping->host, wbc, NODE);
+> > > > > > > > > > > -- 
+> > > > > > > > > > > 2.32.0
+> > > > > 
+> > > > > 
+> > > > > _______________________________________________
+> > > > > Linux-f2fs-devel mailing list
+> > > > > Linux-f2fs-devel@lists.sourceforge.net
+> > > > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> > > > 
+> > > > 
+> > > > _______________________________________________
+> > > > Linux-f2fs-devel mailing list
+> > > > Linux-f2fs-devel@lists.sourceforge.net
+> > > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

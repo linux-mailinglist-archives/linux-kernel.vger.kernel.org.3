@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB114CADA4
+	by mail.lfdr.de (Postfix) with ESMTP id 877394CADA5
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244633AbiCBSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S244652AbiCBSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiCBSfj (ORCPT
+        with ESMTP id S244615AbiCBSfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:35:39 -0500
+        Wed, 2 Mar 2022 13:35:42 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83571D64ED
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:34:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 538C0D5DD2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:34:58 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 405871480;
-        Wed,  2 Mar 2022 10:34:55 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E5CF1509;
+        Wed,  2 Mar 2022 10:34:58 -0800 (PST)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A30463F73D;
-        Wed,  2 Mar 2022 10:34:52 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9F08F3F73D;
+        Wed,  2 Mar 2022 10:34:55 -0800 (PST)
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -31,9 +31,9 @@ Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
         Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
         Luca Abeni <luca.abeni@santannapisa.it>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] sched/deadline: Move bandwidth mgmt and reclaim functions into sched class source file
-Date:   Wed,  2 Mar 2022 19:34:29 +0100
-Message-Id: <20220302183433.333029-3-dietmar.eggemann@arm.com>
+Subject: [PATCH 3/6] sched/deadline: Merge dl_task_can_attach() and dl_cpu_busy()
+Date:   Wed,  2 Mar 2022 19:34:30 +0100
+Message-Id: <20220302183433.333029-4-dietmar.eggemann@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220302183433.333029-1-dietmar.eggemann@arm.com>
 References: <20220302183433.333029-1-dietmar.eggemann@arm.com>
@@ -48,150 +48,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the deadline bandwidth management (admission control) functions
-__dl_add(), __dl_sub() and __dl_overflow() as well as the bandwidth
-reclaim function __dl_update() from private task scheduler header file
-to the deadline sched class source file.
-The functions are only used internally so they don't have to be
-exported.
+Both functions are doing almost the same, that is checking if admission
+control is still respected.
+
+With exclusive cpusets, dl_task_can_attach() checks if the destination
+cpuset (i.e. its root domain) has enough CPU capacity to accommodate the
+task.
+dl_cpu_busy() checks if there is enough CPU capacity in the cpuset in
+case the CPU is hot-plugged out.
+
+dl_task_can_attach() is used to check if a task can be admitted while
+dl_cpu_busy() is used to check if a CPU can be hotplugged out.
+
+Make dl_cpu_busy() able to deal with a task and use it instead of
+dl_task_can_attach() in task_can_attach().
 
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
- kernel/sched/deadline.c | 44 ++++++++++++++++++++++++++++++++++++
- kernel/sched/sched.h    | 49 -----------------------------------------
- 2 files changed, 44 insertions(+), 49 deletions(-)
+ kernel/sched/core.c     | 13 +++++++----
+ kernel/sched/deadline.c | 52 +++++++++++------------------------------
+ kernel/sched/sched.h    |  3 +--
+ 3 files changed, 24 insertions(+), 44 deletions(-)
 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d342c4c779f7..68736d1dc0f4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8805,8 +8805,11 @@ int task_can_attach(struct task_struct *p,
+ 	}
+ 
+ 	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
+-					      cs_cpus_allowed))
+-		ret = dl_task_can_attach(p, cs_cpus_allowed);
++					      cs_cpus_allowed)) {
++		int cpu = cpumask_any_and(cpu_active_mask, cs_cpus_allowed);
++
++		ret = dl_cpu_busy(cpu, p);
++	}
+ 
+ out:
+ 	return ret;
+@@ -9090,8 +9093,10 @@ static void cpuset_cpu_active(void)
+ static int cpuset_cpu_inactive(unsigned int cpu)
+ {
+ 	if (!cpuhp_tasks_frozen) {
+-		if (dl_cpu_busy(cpu))
+-			return -EBUSY;
++		int ret = dl_cpu_busy(cpu, NULL);
++
++		if (ret)
++			return ret;
+ 		cpuset_update_active_cpus();
+ 	} else {
+ 		num_cpus_frozen++;
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index ed4251fa87c7..81bf97648e42 100644
+index 81bf97648e42..de677b1e3767 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -128,6 +128,21 @@ static inline bool dl_bw_visited(int cpu, u64 gen)
- 	rd->visit_gen = gen;
- 	return false;
+@@ -2992,41 +2992,6 @@ bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr)
  }
+ 
+ #ifdef CONFIG_SMP
+-int dl_task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed)
+-{
+-	unsigned long flags, cap;
+-	unsigned int dest_cpu;
+-	struct dl_bw *dl_b;
+-	bool overflow;
+-	int ret;
+-
+-	dest_cpu = cpumask_any_and(cpu_active_mask, cs_cpus_allowed);
+-
+-	rcu_read_lock_sched();
+-	dl_b = dl_bw_of(dest_cpu);
+-	raw_spin_lock_irqsave(&dl_b->lock, flags);
+-	cap = dl_bw_capacity(dest_cpu);
+-	overflow = __dl_overflow(dl_b, cap, 0, p->dl.dl_bw);
+-	if (overflow) {
+-		ret = -EBUSY;
+-	} else {
+-		/*
+-		 * We reserve space for this task in the destination
+-		 * root_domain, as we can't fail after this point.
+-		 * We will free resources in the source root_domain
+-		 * later on (see set_cpus_allowed_dl()).
+-		 */
+-		int cpus = dl_bw_cpus(dest_cpu);
+-
+-		__dl_add(dl_b, p->dl.dl_bw, cpus);
+-		ret = 0;
+-	}
+-	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
+-	rcu_read_unlock_sched();
+-
+-	return ret;
+-}
+-
+ int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
+ 				 const struct cpumask *trial)
+ {
+@@ -3048,7 +3013,7 @@ int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
+ 	return ret;
+ }
+ 
+-bool dl_cpu_busy(unsigned int cpu)
++int dl_cpu_busy(int cpu, struct task_struct *p)
+ {
+ 	unsigned long flags, cap;
+ 	struct dl_bw *dl_b;
+@@ -3058,11 +3023,22 @@ bool dl_cpu_busy(unsigned int cpu)
+ 	dl_b = dl_bw_of(cpu);
+ 	raw_spin_lock_irqsave(&dl_b->lock, flags);
+ 	cap = dl_bw_capacity(cpu);
+-	overflow = __dl_overflow(dl_b, cap, 0, 0);
++	overflow = __dl_overflow(dl_b, cap, 0, p ? p->dl.dl_bw : 0);
 +
-+static inline
-+void __dl_update(struct dl_bw *dl_b, s64 bw)
-+{
-+	struct root_domain *rd = container_of(dl_b, struct root_domain, dl_bw);
-+	int i;
-+
-+	RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
-+			 "sched RCU must be held");
-+	for_each_cpu_and(i, rd->span, cpu_active_mask) {
-+		struct rq *rq = cpu_rq(i);
-+
-+		rq->dl.extra_bw += bw;
++	if (!overflow && p) {
++		/*
++		 * We reserve space for this task in the destination
++		 * root_domain, as we can't fail after this point.
++		 * We will free resources in the source root_domain
++		 * later on (see set_cpus_allowed_dl()).
++		 */
++		__dl_add(dl_b, p->dl.dl_bw, dl_bw_cpus(cpu));
 +	}
-+}
- #else
- static inline struct dl_bw *dl_bw_of(int i)
- {
-@@ -148,8 +163,37 @@ static inline bool dl_bw_visited(int cpu, u64 gen)
- {
- 	return false;
++
+ 	raw_spin_unlock_irqrestore(&dl_b->lock, flags);
+ 	rcu_read_unlock_sched();
+ 
+-	return overflow;
++	return overflow ? -EBUSY : 0;
  }
-+
-+static inline
-+void __dl_update(struct dl_bw *dl_b, s64 bw)
-+{
-+	struct dl_rq *dl = container_of(dl_b, struct dl_rq, dl_bw);
-+
-+	dl->extra_bw += bw;
-+}
  #endif
  
-+static inline
-+void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
-+{
-+	dl_b->total_bw -= tsk_bw;
-+	__dl_update(dl_b, (s32)tsk_bw / cpus);
-+}
-+
-+static inline
-+void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
-+{
-+	dl_b->total_bw += tsk_bw;
-+	__dl_update(dl_b, -((s32)tsk_bw / cpus));
-+}
-+
-+static inline bool
-+__dl_overflow(struct dl_bw *dl_b, unsigned long cap, u64 old_bw, u64 new_bw)
-+{
-+	return dl_b->bw != -1 &&
-+	       cap_scale(dl_b->bw, cap) < dl_b->total_bw - old_bw + new_bw;
-+}
-+
- static inline
- void __add_running_bw(u64 dl_bw, struct dl_rq *dl_rq)
- {
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index a8b8516b8452..4dfc3b02df61 100644
+index 4dfc3b02df61..0720cf0c7df1 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -301,29 +301,6 @@ struct dl_bw {
- 	u64			total_bw;
- };
+@@ -324,9 +324,8 @@ extern void __setparam_dl(struct task_struct *p, const struct sched_attr *attr);
+ extern void __getparam_dl(struct task_struct *p, struct sched_attr *attr);
+ extern bool __checkparam_dl(const struct sched_attr *attr);
+ extern bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr);
+-extern int  dl_task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed);
+ extern int  dl_cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+-extern bool dl_cpu_busy(unsigned int cpu);
++extern int  dl_cpu_busy(int cpu, struct task_struct *p);
  
--static inline void __dl_update(struct dl_bw *dl_b, s64 bw);
--
--static inline
--void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
--{
--	dl_b->total_bw -= tsk_bw;
--	__dl_update(dl_b, (s32)tsk_bw / cpus);
--}
--
--static inline
--void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
--{
--	dl_b->total_bw += tsk_bw;
--	__dl_update(dl_b, -((s32)tsk_bw / cpus));
--}
--
--static inline bool __dl_overflow(struct dl_bw *dl_b, unsigned long cap,
--				 u64 old_bw, u64 new_bw)
--{
--	return dl_b->bw != -1 &&
--	       cap_scale(dl_b->bw, cap) < dl_b->total_bw - old_bw + new_bw;
--}
--
- /*
-  * Verify the fitness of task @p to run on @cpu taking into account the
-  * CPU original capacity and the runtime/deadline ratio of the task.
-@@ -2748,32 +2725,6 @@ extern void nohz_run_idle_balance(int cpu);
- static inline void nohz_run_idle_balance(int cpu) { }
- #endif
+ #ifdef CONFIG_CGROUP_SCHED
  
--#ifdef CONFIG_SMP
--static inline
--void __dl_update(struct dl_bw *dl_b, s64 bw)
--{
--	struct root_domain *rd = container_of(dl_b, struct root_domain, dl_bw);
--	int i;
--
--	RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
--			 "sched RCU must be held");
--	for_each_cpu_and(i, rd->span, cpu_active_mask) {
--		struct rq *rq = cpu_rq(i);
--
--		rq->dl.extra_bw += bw;
--	}
--}
--#else
--static inline
--void __dl_update(struct dl_bw *dl_b, s64 bw)
--{
--	struct dl_rq *dl = container_of(dl_b, struct dl_rq, dl_bw);
--
--	dl->extra_bw += bw;
--}
--#endif
--
--
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- struct irqtime {
- 	u64			total;
 -- 
 2.25.1
 

@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7CB4CA3E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBD54CA3EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241531AbiCBLhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S241546AbiCBLjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiCBLhF (ORCPT
+        with ESMTP id S233173AbiCBLjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:37:05 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB60A9F6D1;
-        Wed,  2 Mar 2022 03:36:17 -0800 (PST)
-X-UUID: 0f3a01100a1b4e30b64a55122de259cc-20220302
-X-UUID: 0f3a01100a1b4e30b64a55122de259cc-20220302
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1991867892; Wed, 02 Mar 2022 19:36:07 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 2 Mar 2022 19:36:07 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 2 Mar
- 2022 19:36:07 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 2 Mar 2022 19:36:06 +0800
-Message-ID: <0f4b304e8244310648543d0b1ea4788b2c760f3f.camel@mediatek.com>
-Subject: Re: [PATCH] i2c: busses: i2c-mt65xx: Simplify with clk-bulk
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
-Date:   Wed, 2 Mar 2022 19:36:06 +0800
-In-Reply-To: <Yh6T3RSfvcXCi4sb@ninjato>
-References: <20220118133358.111886-1-angelogioacchino.delregno@collabora.com>
-         <8725a111-0ee2-8935-86b5-01c61774a628@collabora.com>
-         <Yh6T3RSfvcXCi4sb@ninjato>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 2 Mar 2022 06:39:04 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F4786E1A;
+        Wed,  2 Mar 2022 03:38:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7sZ03Cqlz4xRC;
+        Wed,  2 Mar 2022 22:38:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646221097;
+        bh=nURFT4BwINNuaZBIGhlpDRAhChHsiLBhqSzamPvBvFY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NKtT73kEVkxHnkZeG7lAbaEGxz8HzOBYNbZLz5aPS08t9R6t0vpOlOHloKo+p2WPG
+         dslXTCEigXwW9BQd+BIi/I7xN4N7GQYmBmV0UvqyH3zEG6pWt2Ww3thQeTZ4VU40CD
+         HwoYgfY3/k7cprSsA3aI8WHELdkXXcZikYDh9aGan8+xtSeQtmLjan1Pi0q5cfYvmS
+         sUR7EOJtClg2GVmIEcz5wSDH5svD3RxVuoUyKKZmXseNKIJ365OoEJrMYTutsZOhT3
+         9MUJWnkPPochZ9/TtVYaAQUMtWe5Xmknf8ESMcS8UgaocWOAY/5/go8c0GDiDK278Q
+         gn+kVNVKfdGqw==
+Date:   Wed, 2 Mar 2022 22:38:15 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20220302223815.5e754608@canb.auug.org.au>
+In-Reply-To: <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
+References: <20220202150201.290c7d3d@canb.auug.org.au>
+        <20220202150320.3e9bdd62@canb.auug.org.au>
+        <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+        <20220302123417.2c84200b@canb.auug.org.au>
+        <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/53y/7Qan=BK7CnutoMfuzyc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 22:45 +0100, Wolfram Sang wrote:
-> On Mon, Feb 14, 2022 at 12:26:30PM +0100, AngeloGioacchino Del Regno
-> wrote:
-> > Il 18/01/22 14:33, AngeloGioacchino Del Regno ha scritto:
-> > > Since depending on the SoC or specific bus functionality some
-> > > clocks
-> > > may be optional, we cannot get the benefit of using
-> > > devm_clk_bulk_get()
-> > > but, by migrating to clk-bulk, we are able to remove the custom
-> > > functions
-> > > mtk_i2c_clock_enable() and mtk_i2c_clock_disable(), increasing
-> > > common
-> > > APIs usage, hence (lightly) decreasing kernel footprint.
-> > > 
-> > > Signed-off-by: AngeloGioacchino Del Regno <
-> > > angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   drivers/i2c/busses/i2c-mt65xx.c | 127 +++++++++++++----------
-> > > ---------
-> > >   1 file changed, 51 insertions(+), 76 deletions(-)
-> > > 
-> > 
-> > Hello,
-> > this is a friendly ping to request review on this patch as to avoid
-> > forgetting it.
-> > 
-> > Adding context, I have tested this patch on multiple (older/newer)
-> > MediaTek
-> > platforms.
-> 
-> Qii Wang, what do you think about this patch?
-> 
+--Sig_/53y/7Qan=BK7CnutoMfuzyc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for the late reply, I think it's ok.
+Hi Hans,
 
+On Wed, 2 Mar 2022 11:32:37 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> On 3/2/22 02:34, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > On Wed, 2 Feb 2022 09:38:37 +0100 Hans de Goede <hdegoede@redhat.com> w=
+rote: =20
+> >>
+> >> On 2/2/22 05:03, Stephen Rothwell wrote: =20
+> >>>
+> >>> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:   =20
+> >>>>
+> >>>> After merging the drm tree, today's linux-next build (htmldocs) prod=
+uced
+> >>>> this warning:
+> >>>>
+> >>>> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter =
+or member 'data' not described in 'drm_privacy_screen_register'   =20
+> >>>
+> >>> Actually:
+> >>>
+> >>> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter=
+ or member 'data' not described in 'drm_privacy_screen_register'   =20
+> >>
+> >> Thank you for reporting this, I will prepare a patch fixing this. =20
+> >=20
+> > I am still seeing this warning. =20
+>=20
+> Weird, this should be fixed by:
+>=20
+> https://cgit.freedesktop.org/drm-misc/commit/?id=3Dccbeca4ca04302d1296020=
+93c8d611065e3f7958
+>=20
+> Which was added to the "drm-misc-next-2022-02-23" drm-misc tag/pull-req 7=
+ days ago,
+> which was merged into drm-next 6 days ago ?
+>=20
+> I just reverted that did a make htmldocs and got the warning, then re-app=
+lied and
+> the warning was gone...
+
+As I said in my other reply, the drm tree has had build problems until
+today and so it has been only partly included in linux-next.  I can
+confirm that the warning is gone in today's tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/53y/7Qan=BK7CnutoMfuzyc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIfVycACgkQAVBC80lX
+0GwJeAf9EIcnkMX/Lw+MJdJSCmYIW+MI/ue4ttLHaFIkTgNERrtrorqDSlezWoFD
+g4/ipek3XK/jPX3SLK0qmKFv88/bOmLOu41N9jEQhx8NjTNCmJLrg1LrwXlDvRnH
+QR6s0dBk190WVgGxLOH7ra9M2x5Xg/Y1Oyo7IcFe5q4FRzNrbTs7BRBIf99wTeFV
+lkjcZwTmcQrzgPKEIya6xl/V9LWMyaFnvv8XejyQoQ+0+ar5bmzX/Nu+Pq4UqrUz
+j28dTRUtDBP8M3N8hM5LFSwQI0x7hpsxWyoOPOo0xlSihM576eI2ujFZ4crUYyBj
+vKe2vKPYOs54LZQy1epRumuQy1v+vg==
+=9VyO
+-----END PGP SIGNATURE-----
+
+--Sig_/53y/7Qan=BK7CnutoMfuzyc--

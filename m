@@ -2,210 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE764CB3B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCDB4CB2DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 00:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiCCAJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S229543AbiCBXqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 18:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiCCAJO (ORCPT
+        with ESMTP id S229480AbiCBXqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:09:14 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E045BD005F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646266103; x=1677802103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ow/G1HUyZJQjbP2PDwC7GvXViqED8DqmZrdYtb6x7pA=;
-  b=QkKOpCok3poebLqOcSZ3NiBQl32sE0zjOMl0U/8g2Nblp1SvnfSik6W6
-   azurWJ0BehzCjWwFQcP58vkYMT9cj+UJ7akdXw3u0TngqOLrP2YxM0sgm
-   bDNaAbkRmuNBd5tt2b2gOcUEomzl32RkaKtQqM8U+lsI6SxcghnrADMJD
-   BmecHzkNAlyRXTsJtdInh5976iC6jtwu+vMkD0nhpSi3laBmNjyxIMih3
-   14cICDUeIQUm4oDbFxMgvdzGC4giUBSsNQIbiOdMBBMCNp5xbMLkEgAlX
-   ecXWITE9vb0Q/hgtuzWfi/3XIAOJltO6C9iMS85maCL8HKEAWzwqFQjDm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253254891"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253254891"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:01:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="511181734"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 15:00:58 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPXxp-00022P-TT; Wed, 02 Mar 2022 23:00:57 +0000
-Date:   Thu, 3 Mar 2022 07:00:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Badhri Jagan Sridharan <Badhri@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.14-p-release
- 75/6167] drivers/md/dm-linear.c:104:5: warning: no previous declaration for
- 'dm_linear_end_io'
-Message-ID: <202203030654.25RQedXH-lkp@intel.com>
+        Wed, 2 Mar 2022 18:46:02 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15902399C4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:43:42 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso3104568oti.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 15:43:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z0rddFreBeaOz0mWCXtjsYyNHQxD469iCzkybKp8Hm4=;
+        b=bdi2mdZmdBDwK297etVaiiS8i1rpVOwfXtd/fBrC04gnu0rrm0SZ9UCxypGt0fpQ1m
+         oAP5zfe3a65bhCfaaccs8YI3gxSurH2G1z79A0DiFf5cjyKmPa++VfW5PTTqGiDtUAIz
+         VlctI3JTQDbkpACRlq32cwavCiWf/bEDJi6tZ2fb6ApO6tQ07+5wMjL7rMTbXjzxmcEE
+         CJJmnVDRqeOdAH28SHojDMJtMWFPqvnX8vq727Y9gVS4ha4uH/FjG9LgJqUN7GewXWQT
+         HAoUs9gxSZOHizcBLYlnhL6776op2npl5RaGAbzGuZEtCABIHE3CcaXS3pRuIeoLLAh5
+         NgbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z0rddFreBeaOz0mWCXtjsYyNHQxD469iCzkybKp8Hm4=;
+        b=fcti6NR6RyQdB+X33p4lGWAL9mz5Aq71aZkn2N/VWQzQcNa6jwJURhPQb0E7L/EobV
+         I01hoIzfvuvnmtxfY6+FlZYyuegYlzeGEbp4+A8SJ1E8CoTbgZ2du6KJcfU2d9T9eJOz
+         /7Yuwo43zAPrjoI7yzgG0275dE7vgzZtxlq+dqnjCdfXPjZCwAQk4LJbKMDaLYEhQ+OJ
+         +GNyXM4F5v9CVzhSH8dB6sTEpiVvMp2uL9hKhm64Rrwoq/be4hwaeYomga3wuS0QCVoO
+         6nraIc5a6dJmCGi75W6pYnQOqdi1kC39NhqXoIrMYd3Uu3sbLq8SxTbho++S2LgHbd7V
+         PVfg==
+X-Gm-Message-State: AOAM531zqilp9ENNxJQCj3NC7quRY5LF/nlA7a2HpHnJfcwlceSV1s07
+        IcP9cgCU9t6AbDBxjFr8k4DskGVuZ7lA8JZ8OmzPUjf07Uy8Dw==
+X-Google-Smtp-Source: ABdhPJyF5F9gcr/OgOWt8689+mzsTtT8hB6ASSZynYgU83Bi35DZ52yS6TuxOUB8M9HnuKkmLaaKNcwSMjOijtK5ofg=
+X-Received: by 2002:a25:1906:0:b0:61d:9576:754e with SMTP id
+ 6-20020a251906000000b0061d9576754emr30690643ybz.426.1646262395276; Wed, 02
+ Mar 2022 15:06:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220225012819.1807147-1-surenb@google.com> <20220302002150.2113-1-hdanton@sina.com>
+In-Reply-To: <20220302002150.2113-1-hdanton@sina.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 2 Mar 2022 15:06:24 -0800
+Message-ID: <CAJuCfpG3TRgs8fA5kpkhrFRcDF=C9VyqLTCz42sxOyKZ0pRaNQ@mail.gmail.com>
+Subject: Re: [RFC 1/1] mm: page_alloc: replace mm_percpu_wq with kthreads in drain_all_pages
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Tim Murray <timmurray@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Badhri,
+On Tue, Mar 1, 2022 at 4:22 PM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Thu, 24 Feb 2022 17:28:19 -0800 Suren Baghdasaryan wrote:
+> > Sending as an RFC to confirm if this is the right direction and to
+> > clarify if other tasks currently executed on mm_percpu_wq should be
+> > also moved to kthreads. The patch seems stable in testing but I want
+> > to collect more performance data before submitting a non-RFC version.
+> >
+> >
+> > Currently drain_all_pages uses mm_percpu_wq to drain pages from pcp
+> > list during direct reclaim. The tasks on a workqueue can be delayed
+> > by other tasks in the workqueues using the same per-cpu worker pool.
+>
+> The pending works may be freeing a couple of slabs/pages each. Who knows?
 
-FYI, the error/warning still remains.
+If we are talking about work specifically scheduled on mm_percpu_wq
+then apart from drain_all_pages, mm_percpu_wq is used to execute
+vmstat_update and lru_add_drain_cpu for drainig pagevecs. If OTOH what
+you mean is that the work might be blocked by say kswapd, which is
+freeing memory, then sure, who knows...
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.14-p-release
-head:   0ca5d5ac9152d01b3494fb2efb5390319eb9904a
-commit: 539de6b39dcce96f93d6bb19439d00f870f8fa3a [75/6167] ANDROID: dm: android-verity: rebase for 4.9
-config: i386-randconfig-r024-20211019 (https://download.01.org/0day-ci/archive/20220303/202203030654.25RQedXH-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/539de6b39dcce96f93d6bb19439d00f870f8fa3a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.14-p-release
-        git checkout 539de6b39dcce96f93d6bb19439d00f870f8fa3a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/ kernel/cgroup/ kernel/sched/ kernel/trace/
+>
+> > This results in sizable delays in drain_all_pages when cpus are highly
+> > contended.
+> > Memory management operations designed to relieve memory pressure should
+> > not be allowed to block by other tasks, especially if the task in direct
+> > reclaim has higher priority than the blocking tasks.
+>
+> Wonder why priority is the right cure to tight memory - otherwise it was
+> not a problem given a direct reclaimer of higher priority.
+>
+> Off topic question - why is it making sense from begining for a task of
+> lower priority to peel pages off from another of higher priority if
+> priority is considered in direct reclaim?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The way I understood your question is that you are asking why we have
+to use workqueues of potentially lower priority to drain pages for a
+potentially higher priority process in direct reclaim (which is
+blocked waiting for workqueues to complete draining)?
+If so, IIUC this mechanism was introduced in
+https://lore.kernel.org/all/20170117092954.15413-4-mgorman@techsingularity.net
+to avoid draining from IPI context (CC'ing Mel Gorman to correct me if
+I'm wrong).
+I think the issue here is that in the process we are losing
+information about the priority of the process in direct reclaim, which
+might lead to priority inversion.
 
-All warnings (new ones prefixed by >>):
+I'm not sure at all if this is the right solution here, hence sending
+this as RFC to gather more feedback.
+The discussion that lead to this patch starts here:
+https://lore.kernel.org/all/YhNTcM9XtqA1zUUi@dhcp22.suse.cz (CC'ing
+people who were involved in that discussion)
 
-   drivers/md/dm-linear.c:29:5: warning: no previous declaration for 'dm_linear_ctr' [-Wmissing-declarations]
-    int dm_linear_ctr(struct dm_target *ti, unsigned int argc, char **argv)
-        ^~~~~~~~~~~~~
-   drivers/md/dm-linear.c:72:6: warning: no previous declaration for 'dm_linear_dtr' [-Wmissing-declarations]
-    void dm_linear_dtr(struct dm_target *ti)
-         ^~~~~~~~~~~~~
-   drivers/md/dm-linear.c:97:5: warning: no previous declaration for 'dm_linear_map' [-Wmissing-declarations]
-    int dm_linear_map(struct dm_target *ti, struct bio *bio)
-        ^~~~~~~~~~~~~
->> drivers/md/dm-linear.c:104:5: warning: no previous declaration for 'dm_linear_end_io' [-Wmissing-declarations]
-    int dm_linear_end_io(struct dm_target *ti, struct bio *bio,
-        ^~~~~~~~~~~~~~~~
-   drivers/md/dm-linear.c:116:6: warning: no previous declaration for 'dm_linear_status' [-Wmissing-declarations]
-    void dm_linear_status(struct dm_target *ti, status_type_t type,
-         ^~~~~~~~~~~~~~~~
-   drivers/md/dm-linear.c:133:5: warning: no previous declaration for 'dm_linear_prepare_ioctl' [-Wmissing-declarations]
-    int dm_linear_prepare_ioctl(struct dm_target *ti,
-        ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/dm-linear.c:150:5: warning: no previous declaration for 'dm_linear_iterate_devices' [-Wmissing-declarations]
-    int dm_linear_iterate_devices(struct dm_target *ti,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/md/dm-linear.c:158:6: warning: no previous declaration for 'dm_linear_dax_direct_access' [-Wmissing-declarations]
-    long dm_linear_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/md/dm-linear.c:175:8: warning: no previous declaration for 'dm_linear_dax_copy_from_iter' [-Wmissing-declarations]
-    size_t dm_linear_dax_copy_from_iter(struct dm_target *ti, pgoff_t pgoff,
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> > Replace the usage of mm_percpu_wq with per-cpu low priority FIFO
+> > kthreads to execute draining tasks.
+> >
+> > Suggested-by: Petr Mladek <pmladek@suse.com>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/page_alloc.c | 84 ++++++++++++++++++++++++++++++++++++++++---------
+> >  1 file changed, 70 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 3589febc6d31..c9ab2cf4b05b 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -153,7 +153,8 @@ EXPORT_PER_CPU_SYMBOL(_numa_mem_);
+> >  /* work_structs for global per-cpu drains */
+> >  struct pcpu_drain {
+> >       struct zone *zone;
+> > -     struct work_struct work;
+> > +     struct kthread_work work;
+> > +     struct kthread_worker *worker;
+> >  };
+> >  static DEFINE_MUTEX(pcpu_drain_mutex);
+> >  static DEFINE_PER_CPU(struct pcpu_drain, pcpu_drain);
+> > @@ -2209,6 +2210,58 @@ _deferred_grow_zone(struct zone *zone, unsigned int order)
+> >
+> >  #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
+> >
+> > +static void drain_local_pages_func(struct kthread_work *work);
+> > +
+> > +static int alloc_drain_worker(unsigned int cpu)
+> > +{
+> > +     struct pcpu_drain *drain;
+> > +
+> > +     mutex_lock(&pcpu_drain_mutex);
+>
+> Nit, see below.
+>
+> > +     drain = per_cpu_ptr(&pcpu_drain, cpu);
+> > +     drain->worker = kthread_create_worker_on_cpu(cpu, 0, "pg_drain/%u", cpu);
+> > +     if (IS_ERR(drain->worker)) {
+> > +             drain->worker = NULL;
+> > +             pr_err("Failed to create pg_drain/%u\n", cpu);
+> > +             goto out;
+> > +     }
+> > +     /* Ensure the thread is not blocked by normal priority tasks */
+> > +     sched_set_fifo_low(drain->worker->task);
+> > +     kthread_init_work(&drain->work, drain_local_pages_func);
+> > +out:
+> > +     mutex_unlock(&pcpu_drain_mutex);
+> > +
+> > +     return 0;
+> > +}
+>
+> alloc_drain_worker(unsigned int cpu)
+>   mutex_lock(&pcpu_drain_mutex);
+>   drain->worker = kthread_create_worker_on_cpu(cpu, 0, "pg_drain/%u", cpu);
+>     __kthread_create_worker(cpu, flags, namefmt, args);
+>       kzalloc(sizeof(*worker), GFP_KERNEL);
+>         kmalloc
+>           slab_alloc
+>             new_slab
+>               alloc_pages
+>                 __alloc_pages_slowpath
+>                   __alloc_pages_direct_reclaim
+>                     drain_all_pages(NULL);
+>                       __drain_all_pages(zone, false);
+>                       if (unlikely(!mutex_trylock(&pcpu_drain_mutex))) {
+>                                 if (!zone)
+>                                         return;
+>                                 mutex_lock(&pcpu_drain_mutex);
+>                       }
+>
+> Either deadlock or no page drained wrt pcpu_drain_mutex if nothing missed.
 
+Thanks for noticing it! I think this can be easily fixed by calling
+kthread_create_worker_on_cpu outside of the pcpu_drain_mutex
+protection and then assigning the result to drain->worker after taking
+pcpu_drain_mutex.
+Thanks,
+Suren.
 
-vim +/dm_linear_end_io +104 drivers/md/dm-linear.c
-
-   103	
- > 104	int dm_linear_end_io(struct dm_target *ti, struct bio *bio,
-   105				 blk_status_t *error)
-   106	{
-   107		struct linear_c *lc = ti->private;
-   108	
-   109		if (!*error && bio_op(bio) == REQ_OP_ZONE_REPORT)
-   110			dm_remap_zone_report(ti, bio, lc->start);
-   111	
-   112		return DM_ENDIO_DONE;
-   113	}
-   114	EXPORT_SYMBOL_GPL(dm_linear_end_io);
-   115	
-   116	void dm_linear_status(struct dm_target *ti, status_type_t type,
-   117				  unsigned status_flags, char *result, unsigned maxlen)
-   118	{
-   119		struct linear_c *lc = (struct linear_c *) ti->private;
-   120	
-   121		switch (type) {
-   122		case STATUSTYPE_INFO:
-   123			result[0] = '\0';
-   124			break;
-   125	
-   126		case STATUSTYPE_TABLE:
-   127			snprintf(result, maxlen, "%s %llu", lc->dev->name,
-   128					(unsigned long long)lc->start);
-   129			break;
-   130		}
-   131	}
-   132	
-   133	int dm_linear_prepare_ioctl(struct dm_target *ti,
-   134			struct block_device **bdev, fmode_t *mode)
-   135	{
-   136		struct linear_c *lc = (struct linear_c *) ti->private;
-   137		struct dm_dev *dev = lc->dev;
-   138	
-   139		*bdev = dev->bdev;
-   140	
-   141		/*
-   142		 * Only pass ioctls through if the device sizes match exactly.
-   143		 */
-   144		if (lc->start ||
-   145		    ti->len != i_size_read(dev->bdev->bd_inode) >> SECTOR_SHIFT)
-   146			return 1;
-   147		return 0;
-   148	}
-   149	
-   150	int dm_linear_iterate_devices(struct dm_target *ti,
-   151					  iterate_devices_callout_fn fn, void *data)
-   152	{
-   153		struct linear_c *lc = ti->private;
-   154	
-   155		return fn(ti, lc->dev, lc->start, ti->len, data);
-   156	}
-   157	
- > 158	long dm_linear_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
-   159			long nr_pages, void **kaddr, pfn_t *pfn)
-   160	{
-   161		long ret;
-   162		struct linear_c *lc = ti->private;
-   163		struct block_device *bdev = lc->dev->bdev;
-   164		struct dax_device *dax_dev = lc->dev->dax_dev;
-   165		sector_t dev_sector, sector = pgoff * PAGE_SECTORS;
-   166	
-   167		dev_sector = linear_map_sector(ti, sector);
-   168		ret = bdev_dax_pgoff(bdev, dev_sector, nr_pages * PAGE_SIZE, &pgoff);
-   169		if (ret)
-   170			return ret;
-   171		return dax_direct_access(dax_dev, pgoff, nr_pages, kaddr, pfn);
-   172	}
-   173	EXPORT_SYMBOL_GPL(dm_linear_dax_direct_access);
-   174	
- > 175	size_t dm_linear_dax_copy_from_iter(struct dm_target *ti, pgoff_t pgoff,
-   176			void *addr, size_t bytes, struct iov_iter *i)
-   177	{
-   178		struct linear_c *lc = ti->private;
-   179		struct block_device *bdev = lc->dev->bdev;
-   180		struct dax_device *dax_dev = lc->dev->dax_dev;
-   181		sector_t dev_sector, sector = pgoff * PAGE_SECTORS;
-   182	
-   183		dev_sector = linear_map_sector(ti, sector);
-   184		if (bdev_dax_pgoff(bdev, dev_sector, ALIGN(bytes, PAGE_SIZE), &pgoff))
-   185			return 0;
-   186		return dax_copy_from_iter(dax_dev, pgoff, addr, bytes, i);
-   187	}
-   188	EXPORT_SYMBOL_GPL(dm_linear_dax_copy_from_iter);
-   189	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> > +
+> > +static int free_drain_worker(unsigned int cpu)
+> > +{
+> > +     struct pcpu_drain *drain;
+> > +
+> > +     mutex_lock(&pcpu_drain_mutex);
+> > +     drain = per_cpu_ptr(&pcpu_drain, cpu);
+> > +     kthread_cancel_work_sync(&drain->work);
+> > +     kthread_destroy_worker(drain->worker);
+> > +     drain->worker = NULL;
+> > +     mutex_unlock(&pcpu_drain_mutex);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void __init init_drain_workers(void)
+> > +{
+> > +     unsigned int cpu;
+> > +
+> > +     for_each_online_cpu(cpu)
+> > +             alloc_drain_worker(cpu);
+> > +
+> > +     if (cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> > +                                     "page_alloc/drain:online",
+> > +                                     alloc_drain_worker,
+> > +                                     free_drain_worker)) {
+> > +             pr_err("page_alloc_drain: Failed to allocate a hotplug state\n");
+> > +     }
+> > +}
+> > +
+> >  void __init page_alloc_init_late(void)
+> >  {
+> >       struct zone *zone;
+> > @@ -2245,6 +2298,8 @@ void __init page_alloc_init_late(void)
+> >
+> >       for_each_populated_zone(zone)
+> >               set_zone_contiguous(zone);
+> > +
+> > +     init_drain_workers();
+> >  }
+> >
+> >  #ifdef CONFIG_CMA
+> > @@ -3144,7 +3199,7 @@ void drain_local_pages(struct zone *zone)
+> >               drain_pages(cpu);
+> >  }
+> >
+> > -static void drain_local_pages_wq(struct work_struct *work)
+> > +static void drain_local_pages_func(struct kthread_work *work)
+> >  {
+> >       struct pcpu_drain *drain;
+> >
+> > @@ -3175,6 +3230,7 @@ static void drain_local_pages_wq(struct work_struct *work)
+> >  static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+> >  {
+> >       int cpu;
+> > +     struct pcpu_drain *drain;
+> >
+> >       /*
+> >        * Allocate in the BSS so we won't require allocation in
+> > @@ -3182,13 +3238,6 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+> >        */
+> >       static cpumask_t cpus_with_pcps;
+> >
+> > -     /*
+> > -      * Make sure nobody triggers this path before mm_percpu_wq is fully
+> > -      * initialized.
+> > -      */
+> > -     if (WARN_ON_ONCE(!mm_percpu_wq))
+> > -             return;
+> > -
+> >       /*
+> >        * Do not drain if one is already in progress unless it's specific to
+> >        * a zone. Such callers are primarily CMA and memory hotplug and need
+> > @@ -3238,14 +3287,21 @@ static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+> >       }
+> >
+> >       for_each_cpu(cpu, &cpus_with_pcps) {
+> > -             struct pcpu_drain *drain = per_cpu_ptr(&pcpu_drain, cpu);
+> > +             drain = per_cpu_ptr(&pcpu_drain, cpu);
+> >
+> >               drain->zone = zone;
+> > -             INIT_WORK(&drain->work, drain_local_pages_wq);
+> > -             queue_work_on(cpu, mm_percpu_wq, &drain->work);
+> > +             if (likely(drain->worker))
+> > +                     kthread_queue_work(drain->worker, &drain->work);
+> > +     }
+> > +     /* Wait for kthreads to finish or drain itself */
+> > +     for_each_cpu(cpu, &cpus_with_pcps) {
+> > +             drain = per_cpu_ptr(&pcpu_drain, cpu);
+> > +
+> > +             if (likely(drain->worker))
+> > +                     kthread_flush_work(&drain->work);
+> > +             else
+> > +                     drain_local_pages_func(&drain->work);
+> >       }
+> > -     for_each_cpu(cpu, &cpus_with_pcps)
+> > -             flush_work(&per_cpu_ptr(&pcpu_drain, cpu)->work);
+> >
+> >       mutex_unlock(&pcpu_drain_mutex);
+> >  }
+> > --
+> > 2.35.1.574.g5d30c73bfb-goog
+> >
+> >
+>

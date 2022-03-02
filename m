@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001EE4CA802
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7CE4CA80E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242934AbiCBO2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S243058AbiCBO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242911AbiCBO2o (ORCPT
+        with ESMTP id S242955AbiCBO27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:28:44 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27091FCE3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:00 -0800 (PST)
+        Wed, 2 Mar 2022 09:28:59 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A194483A7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:28:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646231280; x=1677767280;
+  t=1646231291; x=1677767291;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=USnPnlZ3slI1kkN96paVu2K2/7x4Up8RvHDtzRavBng=;
-  b=QpM8Bk89WORhBJEOu63PHHzDDqu0HQJQuD45aYR1Vt+hJiFb2h1L3AzY
-   vruvnhmbFBEZ2BiOb63Kf6I0aiau34qASK+jwansvU2KeW+4BrTm8vOXU
-   eVhzVuAqeZHHCHGje5e22Lk3HCEnag0s0NskUcFOTHEG4HQKij/tIWJGL
-   t8/KwP1HlRsbq6Czh5dLi7YdgexGuPO3gyyIut471hdj0VcJNPgb0y3wm
-   iMDGbaWfybzrJEqpLjamOF5kTTw29pUXuZ4xOurffIU+Xl0bjac+YX7Z3
-   52HEswaAP1DyJB7+WxMLduWTgHlFuBEH92V4nqLEp5o4UAc7DDe1uy5Fn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="252239385"
+  bh=Cs1O3jc79lKYHvKE5ahlqFfc0nRRD1WchEXtv88HMEU=;
+  b=THBvIn/2Ok8fNLY7lt879xhR1quREmQ7kICNLluFNk+KDRgRaChssMLp
+   BvGeboJGHJEgS7O0sUJF5CMFyFNDvDrp6/D5koZ94O4YJaT/2s4gHhwSV
+   KkZoqI9Ol1xs6CpOiVxSoVioysj+4b7MN+v7beeFugeDHG97Ru7b6mDIN
+   ECqmRYKaL1EYpsx+HP9Ff22S77R7u5WpWXGczQd1I/gp+x/fpMf23QoJT
+   /d005eVaYQlI2Qo19/afYi7sQOzQYHbWRmdOHrjwHFdPIaD6rHPv+Z7/2
+   1fpPobWqtMTKEfq9qieg8jbgoKxdEmPX+pct1tlyCsJR6p7Kwx0GQr20V
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="240824342"
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="252239385"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:00 -0800
+   d="scan'208";a="240824342"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 06:28:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="609215402"
+   d="scan'208";a="551270223"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Mar 2022 06:27:54 -0800
+  by orsmga008.jf.intel.com with ESMTP; 02 Mar 2022 06:28:01 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id EDC1024C; Wed,  2 Mar 2022 16:28:11 +0200 (EET)
+        id 07B6024D; Wed,  2 Mar 2022 16:28:12 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -52,144 +52,80 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv5 04/30] x86/tdx: Extend the confidential computing API to support TDX guests
-Date:   Wed,  2 Mar 2022 17:27:40 +0300
-Message-Id: <20220302142806.51844-5-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv5 05/30] x86/tdx: Exclude shared bit from __PHYSICAL_MASK
+Date:   Wed,  2 Mar 2022 17:27:41 +0300
+Message-Id: <20220302142806.51844-6-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Confidential Computing (CC) features (like string I/O unroll support,
-memory encryption/decryption support, etc) are conditionally enabled
-in the kernel using cc_platform_has() API. Since TDX guests also need
-to use these CC features, extend cc_platform_has() API and add TDX
-guest-specific CC attributes support.
+In TDX guests, by default memory is protected from host access. If a
+guest needs to communicate with the VMM (like the I/O use case), it uses
+a single bit in the physical address to communicate the protected/shared
+attribute of the given page.
 
-Like AMD SME/SEV, TDX uses a bit in the page table entry to indicate
-encryption status of the page, but the polarity of the mask is
-opposite to AMD: if the bit is set the page is accessible to VMM.
+In the x86 ARCH code, __PHYSICAL_MASK macro represents the width of the
+physical address in the given architecture. It is used in creating
+physical PAGE_MASK for address bits in the kernel. Since in TDX guest,
+a single bit is used as metadata, it needs to be excluded from valid
+physical address bits to avoid using incorrect addresses bits in the
+kernel.
 
-Details about which bit in the page table entry to be used to indicate
-shared/private state can be determined by using the TDINFO TDCALL.
+Enable DYNAMIC_PHYSICAL_MASK to support updating the __PHYSICAL_MASK.
 
+Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/Kconfig     |  1 +
- arch/x86/coco/core.c |  4 ++++
- arch/x86/coco/tdx.c  | 38 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
+ arch/x86/Kconfig    | 1 +
+ arch/x86/coco/tdx.c | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index c346d66b51fc..93e67842e369 100644
+index 93e67842e369..d2f45e58e846 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -884,6 +884,7 @@ config INTEL_TDX_GUEST
- 	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+@@ -885,6 +885,7 @@ config INTEL_TDX_GUEST
  	depends on X86_64 && CPU_SUP_INTEL
  	depends on X86_X2APIC
-+	select ARCH_HAS_CC_PLATFORM
+ 	select ARCH_HAS_CC_PLATFORM
++	select DYNAMIC_PHYSICAL_MASK
  	help
  	  Support running as a guest under Intel TDX.  Without this support,
  	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index fc1365dd927e..9113baebbfd2 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -90,6 +90,8 @@ u64 cc_mkenc(u64 val)
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val | cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val & ~cc_mask;
- 	default:
- 		return val;
- 	}
-@@ -100,6 +102,8 @@ u64 cc_mkdec(u64 val)
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val & ~cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val | cc_mask;
- 	default:
- 		return val;
- 	}
 diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index 17365fd40ba2..912ef12e434e 100644
+index 912ef12e434e..34818dc31248 100644
 --- a/arch/x86/coco/tdx.c
 +++ b/arch/x86/coco/tdx.c
-@@ -5,8 +5,12 @@
- #define pr_fmt(fmt)     "tdx: " fmt
+@@ -69,6 +69,14 @@ void __init tdx_early_init(void)
  
- #include <linux/cpufeature.h>
-+#include <asm/coco.h>
- #include <asm/tdx.h>
+ 	cc_set_vendor(CC_VENDOR_INTEL);
  
-+/* TDX module Call Leaf IDs */
-+#define TDX_GET_INFO			1
-+
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-  * return code.
-@@ -25,8 +29,32 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
- 	return __tdx_hypercall(&args, 0);
- }
- 
-+static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-+				   struct tdx_module_output *out)
-+{
-+	if (__tdx_module_call(fn, rcx, rdx, r8, r9, out))
-+		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
-+}
-+
-+static void get_info(unsigned int *gpa_width)
-+{
-+	struct tdx_module_output out;
-+
 +	/*
-+	 * TDINFO TDX module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
++	 * All bits above GPA width are reserved and kernel treats shared bit
++	 * as flag, not as part of physical address.
++	 *
++	 * Adjust physical mask to only cover valid GPA bits.
 +	 */
-+	tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
++	physical_mask &= GENMASK_ULL(gpa_width - 2, 0);
 +
-+	*gpa_width = out.rcx & GENMASK(5, 0);
-+}
-+
- void __init tdx_early_init(void)
- {
-+	unsigned int gpa_width;
- 	u32 eax, sig[3];
- 
- 	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-@@ -37,5 +65,15 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
-+	get_info(&gpa_width);
-+
-+	cc_set_vendor(CC_VENDOR_INTEL);
-+
-+	/*
-+	 * The highest bit of a guest physical address is the "sharing" bit.
-+	 * Set it for shared pages and clear it for private pages.
-+	 */
-+	cc_set_mask(BIT_ULL(gpa_width - 1));
-+
- 	pr_info("Guest detected\n");
- }
+ 	/*
+ 	 * The highest bit of a guest physical address is the "sharing" bit.
+ 	 * Set it for shared pages and clear it for private pages.
 -- 
 2.34.1
 

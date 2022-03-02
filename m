@@ -2,184 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F004CA351
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7664CA303
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbiCBLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S241385AbiCBLPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241739AbiCBLSf (ORCPT
+        with ESMTP id S241337AbiCBLOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:18:35 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FDFC4B7B;
-        Wed,  2 Mar 2022 03:16:05 -0800 (PST)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K7s2l3lsFz67xDf;
-        Wed,  2 Mar 2022 19:14:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 12:15:51 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <shuah@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <yhs@fb.com>,
-        <kpsingh@kernel.org>, <revest@chromium.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 8/9] selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+        Wed, 2 Mar 2022 06:14:51 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CAC606ED
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:14:07 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0E4DF3F5F3
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646219646;
+        bh=c/HrBEq7VXD/vzB2plWQqXVKzKIhpuLhlwaapBvCoq4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ZZvYRDF/TkkrYLNl3TiNcu+DN92urcmu0P7BgYyvNvSRA/KAQuj0+hbSgwOakKROo
+         O1F0AbDAy6rsHiBpJL2UPgxo2ILfehkBEzPZFZSlhSdKGbc72dV1+/gCl5frakWkpY
+         uyZDAt86+K4VaKSZHLty4FtVShq5tmihkIWPsr0s4vKYbYtj/XgSdf8fU0VBFn7f6l
+         4cP9lD4XKZPWakf1WJMr2ldMA1DtZ3QTaNbz5Ek3EtHBCkgacI1eYg8nK8i7RwORoB
+         v5QnDLow7gVyZNbZSSGOetk6GdIpxLCrVnCiQZ4lq7EQJy2QIDmLgTawkmzznz1p6a
+         RiCrgHLE4Rr/Q==
+Received: by mail-ed1-f69.google.com with SMTP id f9-20020a0564021e8900b00412d0a6ef0dso806036edf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 03:14:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c/HrBEq7VXD/vzB2plWQqXVKzKIhpuLhlwaapBvCoq4=;
+        b=AjvZfLTzlucnzDZkS7tEPx+XllnuBEv8zaamY67w7dtKLX3tCKnszdKkdzC1fAoUiI
+         sPaLzQ61nX451pX+l/x50yF6DdTunhpcZoHR8Hb9j5bJhXsy5YLvTBfQ7B+XGlY7TOO9
+         4J/Ox++ZFF4fK5BMqQ0/Y1fF7p6J1ly6+t9IMJxvEGvZgqpfKaYy29e/5XbpCc4S2za8
+         u9L6fl6zIM1l8Q1xJzATViXCGOZQOP3YoBCWFytawjejES/MWAneK6W3e2f0d+FQdqmr
+         nevs0fMBAI/EfPrxbjyCvlLshw8sR31ECiMYW8NVaNeHlwFCRETkHSJY8GdQ0qOfSGZ5
+         VrlA==
+X-Gm-Message-State: AOAM533JLmcPpjDFGTD/1ki6LEZ4pb8KIFJjw4XghZxW+EBOqs7bHU30
+        U4CqruC+BPGS8LpU83ZqydGrG4ZN9kELa4J9poHoEQQ5W0AR97tSI53Fve6VN8b1nTlFe6KB46j
+        hNY9ZeLQczmP1BYyVfROBK5xo5fn7IbqFjgK2qW0MuA==
+X-Received: by 2002:a17:907:a41f:b0:6d6:f925:1696 with SMTP id sg31-20020a170907a41f00b006d6f9251696mr4947753ejc.62.1646219645739;
+        Wed, 02 Mar 2022 03:14:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4eItwRYHbFhHJecp/z62mEUFQa+5CGvwbfF4FEcKbfj5pKDOx0k/F7sIT5mVv7fPze2379A==
+X-Received: by 2002:a17:907:a41f:b0:6d6:f925:1696 with SMTP id sg31-20020a170907a41f00b006d6f9251696mr4947744ejc.62.1646219645563;
+        Wed, 02 Mar 2022 03:14:05 -0800 (PST)
+Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id vl11-20020a17090730cb00b006d8121d0fc4sm857414ejb.138.2022.03.02.03.14.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 03:14:04 -0800 (PST)
+Message-ID: <c13930a5-85ab-5a2c-54e5-15fc5bc87b17@canonical.com>
 Date:   Wed, 2 Mar 2022 12:14:03 +0100
-Message-ID: <20220302111404.193900-9-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] serial: samsung: Add samsung_early_read to support early
+ kgdboc
+Content-Language: en-US
+To:     Woody Lin <woodylin@google.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, markcheng@google.com
+References: <20220302101925.210810-1-woodylin@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220302101925.210810-1-woodylin@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test the ability of bpf_lsm_kernel_read_file() to call the sleepable
-functions bpf_ima_inode_hash() or bpf_ima_file_hash() to obtain a
-measurement of a loaded IMA policy.
+On 02/03/2022 11:19, Woody Lin wrote:
+> The 'kgdboc_earlycon_init' looks for boot console that has both .read
+> and .write callbacks. Adds 'samsung_early_read' to samsung_tty.c's early
+> console to support kgdboc.
+> 
+> Signed-off-by: Woody Lin <woodylin@google.com>
+> ---
+>  drivers/tty/serial/samsung_tty.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index d002a4e48ed9..eeb30d016ff1 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -2949,6 +2949,7 @@ static void wr_reg_barrier(struct uart_port *port, u32 reg, u32 val)
+>  
+>  struct samsung_early_console_data {
+>  	u32 txfull_mask;
+> +	u32 rxfifo_mask;
+>  };
+>  
+>  static void samsung_early_busyuart(struct uart_port *port)
+> @@ -2983,6 +2984,26 @@ static void samsung_early_write(struct console *con, const char *s,
+>  	uart_console_write(&dev->port, s, n, samsung_early_putc);
+>  }
+>  
+> +static int samsung_early_read(struct console *con, char *s, unsigned int n)
+> +{
+> +	struct earlycon_device *dev = con->data;
+> +	struct samsung_early_console_data *data = dev->port.private_data;
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/testing/selftests/bpf/ima_setup.sh      | 13 ++++++++++++-
- .../selftests/bpf/prog_tests/test_ima.c       | 19 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/ima.c       | 18 ++++++++++++++++++
- 3 files changed, 49 insertions(+), 1 deletion(-)
+This can be const.
 
-diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
-index a3de1cd43ba0..8ecead4ccad0 100755
---- a/tools/testing/selftests/bpf/ima_setup.sh
-+++ b/tools/testing/selftests/bpf/ima_setup.sh
-@@ -12,7 +12,7 @@ LOG_FILE="$(mktemp /tmp/ima_setup.XXXX.log)"
- 
- usage()
- {
--	echo "Usage: $0 <setup|cleanup|run|modify-bin|restore-bin> <existing_tmp_dir>"
-+	echo "Usage: $0 <setup|cleanup|run|modify-bin|restore-bin|load-policy> <existing_tmp_dir>"
- 	exit 1
- }
- 
-@@ -51,6 +51,7 @@ setup()
- 
- 	ensure_mount_securityfs
- 	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
-+	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${mount_dir}/policy_test
- }
- 
- cleanup() {
-@@ -95,6 +96,14 @@ restore_bin()
- 	truncate -s -4 "${copied_bin_path}"
- }
- 
-+load_policy()
-+{
-+	local tmp_dir="$1"
-+	local mount_dir="${tmp_dir}/mnt"
-+
-+	echo ${mount_dir}/policy_test > ${IMA_POLICY_FILE} 2> /dev/null
-+}
-+
- catch()
- {
- 	local exit_code="$1"
-@@ -127,6 +136,8 @@ main()
- 		modify_bin "${tmp_dir}"
- 	elif [[ "${action}" == "restore-bin" ]]; then
- 		restore_bin "${tmp_dir}"
-+	elif [[ "${action}" == "load-policy" ]]; then
-+		load_policy "${tmp_dir}"
- 	else
- 		echo "Unknown action: ${action}"
- 		exit 1
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-index a0cfba0b4273..b13a141c4220 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-@@ -58,6 +58,7 @@ static void test_init(struct ima__bss *bss)
- 
- 	bss->use_ima_file_hash = false;
- 	bss->enable_bprm_creds_for_exec = false;
-+	bss->enable_kernel_read_file = false;
- }
- 
- void test_test_ima(void)
-@@ -181,6 +182,24 @@ void test_test_ima(void)
- 	if (CHECK(err, "restore-bin #3", "err = %d\n", err))
- 		goto close_clean;
- 
-+	/*
-+	 * Test #5
-+	 * - Goal: obtain a sample from the kernel_read_file hook
-+	 * - Expected result: 2 samples (./ima_setup.sh, policy_test)
-+	 */
-+	test_init(skel->bss);
-+	skel->bss->use_ima_file_hash = true;
-+	skel->bss->enable_kernel_read_file = true;
-+	err = _run_measured_process(measured_dir, &skel->bss->monitored_pid,
-+				    "load-policy");
-+	if (CHECK(err, "run_measured_process #5", "err = %d\n", err))
-+		goto close_clean;
-+
-+	err = ring_buffer__consume(ringbuf);
-+	ASSERT_EQ(err, 2, "num_samples_or_err");
-+	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-+	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
-+
- close_clean:
- 	snprintf(cmd, sizeof(cmd), "./ima_setup.sh cleanup %s", measured_dir);
- 	err = system(cmd);
-diff --git a/tools/testing/selftests/bpf/progs/ima.c b/tools/testing/selftests/bpf/progs/ima.c
-index 9633e5f2453d..e3ce943c5c3d 100644
---- a/tools/testing/selftests/bpf/progs/ima.c
-+++ b/tools/testing/selftests/bpf/progs/ima.c
-@@ -20,6 +20,7 @@ char _license[] SEC("license") = "GPL";
- 
- bool use_ima_file_hash;
- bool enable_bprm_creds_for_exec;
-+bool enable_kernel_read_file;
- 
- static void ima_test_common(struct file *file)
- {
-@@ -65,3 +66,20 @@ int BPF_PROG(bprm_creds_for_exec, struct linux_binprm *bprm)
- 	ima_test_common(bprm->file);
- 	return 0;
- }
-+
-+SEC("lsm.s/kernel_read_file")
-+int BPF_PROG(kernel_read_file, struct file *file, enum kernel_read_file_id id,
-+	     bool contents)
-+{
-+	if (!enable_kernel_read_file)
-+		return 0;
-+
-+	if (!contents)
-+		return 0;
-+
-+	if (id != READING_POLICY)
-+		return 0;
-+
-+	ima_test_common(file);
-+	return 0;
-+}
--- 
-2.32.0
+Rest looks ok.
 
+
+Best regards,
+Krzysztof

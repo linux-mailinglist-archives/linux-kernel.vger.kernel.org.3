@@ -2,82 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5DD4CA223
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9EF4CA222
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241011AbiCBK0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S240983AbiCBK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240979AbiCBK0k (ORCPT
+        with ESMTP id S240979AbiCBK0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:26:40 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECECAD122
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GJ2BhPTfVAxkP4FcHPOJE11vP5WKDPDbfIXXkA1bkvQ=; b=v34sa9cOoRhiCgFv6PAn5chOli
-        bf3v6w2iR3antJq4oO9ETRdLX8YnN2RsO/KhSNP+rjoK9HFnHmg42G1QHASBoxKsQRFCJTGycdpcE
-        w+sxMImLufEnUFD4zvYdgc6visCeWclv8SWhtPHYT4MklQY8aJr8A6lUXZLTL/BFZDUp8SIUkpA/u
-        KIBybGXLlKdgHP32fWOr9XAMGehiG34aufidEGK4XfnpdZXQD1RW/ZTMtW6/QydMAck7PfeQ1X16s
-        tcYAZNjCF2zdfKOwzbI/heQ6YAB3PLitLdlwPgR7ToFKuObkp1F2Imc9Z3OaNXYUud7zOJ6bZy+Ne
-        o/mKE23g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPMAj-00AUKf-V5; Wed, 02 Mar 2022 10:25:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66E0530018E;
-        Wed,  2 Mar 2022 11:25:29 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2872F321EE6E0; Wed,  2 Mar 2022 11:25:29 +0100 (CET)
-Date:   Wed, 2 Mar 2022 11:25:29 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, alexei.starovoitov@gmail.com,
-        naveen.n.rao@linux.vnet.ibm.com
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-ID: <Yh9GGY0tT/Wwkg8d@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.892372059@infradead.org>
- <20220228150705.aab2d654b973109bab070ffe@kernel.org>
- <20220228232513.GH11184@worktop.programming.kicks-ass.net>
- <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
- <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
- <20220302091150.21daa1b3f153a98206ee8d9a@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302091150.21daa1b3f153a98206ee8d9a@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 2 Mar 2022 05:26:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D614BE1E1;
+        Wed,  2 Mar 2022 02:25:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0D5FB81F61;
+        Wed,  2 Mar 2022 10:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8667AC004E1;
+        Wed,  2 Mar 2022 10:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646216748;
+        bh=Rx6BK3yEyjhunkFOjdoBpPskNNZoXkPwCC5NrzfuBVI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=boMjGCPXsNFGILP20rRGUBff+Ww8a79Y1VcW2gc8PbsskhnE3Yrub3QjSQO0uhLjq
+         ssneieFqCHD6C44q3Sok9DgbpFBBvU8DBFwXCanOeR6a6eAwuuh2YKaB0kiDUi7j1y
+         YLDNIDWy31YSMb2nu5PMALi8MI9755iEVV2uinYMkFg1QqeQtRi1OZJPynybl9fSih
+         WQ4mgjpWHIOwGeqaj/YUKfsoa+Y8asWj+js+fU2A7EUaio4WT0EQC8myIebvmCrYTD
+         PF/rs3OANJgAGT62tLHxcWvvZJbp5HVE26ftMpx0bjdBCbwLuGntlR/7XLAey2j7BS
+         Q7OlyOwcC2GPg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nPMB0-00Be3p-50; Wed, 02 Mar 2022 10:25:46 +0000
+Date:   Wed, 02 Mar 2022 10:25:45 +0000
+Message-ID: <877d9c3b2u.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20220302084028.GL269879@dragon>
+References: <20220301062414.2987591-1-shawn.guo@linaro.org>
+        <20220301062414.2987591-3-shawn.guo@linaro.org>
+        <87ee3m2aed.wl-maz@kernel.org>
+        <20220302084028.GL269879@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, sudeep.holla@arm.com, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 09:11:50AM +0900, Masami Hiramatsu wrote:
-
-> > But if you really want/need to retain that, then yes, we need that
-> > else branch unconditionally :/
+On Wed, 02 Mar 2022 08:40:28 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
 > 
-> Thank you,
+> Hi Marc,
+> 
+> On Tue, Mar 01, 2022 at 11:13:30AM +0000, Marc Zyngier wrote:
+> > Hi Shawn,
 
-That's what I ended up doing in the latest version; I realized that
-irrespective of symbol size, it is required when symbols overlap, as per
-the case mentioned by Naveen.
+[...]
 
-  https://lkml.kernel.org/r/20220301200547.GK11184@worktop.programming.kicks-ass.net
+> > 
+> > > +static int qcom_mpm_set_type(struct irq_data *d, unsigned int type)
+> > > +{
+> > > +	struct qcom_mpm_priv *priv = d->chip_data;
+> > > +	int pin = d->hwirq;
+> > > +	unsigned int index = pin / 32;
+> > > +	unsigned int shift = pin % 32;
+> > > +
+> > > +	switch (type & IRQ_TYPE_SENSE_MASK) {
+> > > +	case IRQ_TYPE_EDGE_RISING:
+> > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_RISING),
+> > > +			     MPM_REG_RISING_EDGE, index, shift);
+> > > +		break;
+> > > +	case IRQ_TYPE_EDGE_FALLING:
+> > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_FALLING),
+> > > +			     MPM_REG_FALLING_EDGE, index, shift);
+> > > +		break;
+> > > +	case IRQ_TYPE_LEVEL_HIGH:
+> > > +		mpm_set_type(priv, !!(type & IRQ_TYPE_LEVEL_HIGH),
+> > > +			     MPM_REG_POLARITY, index, shift);
+> > > +		break;
+> > > +	}
+> > 
+> > All these '!!(type & BLAH)' are totally superfluous, as they all expand
+> > to 'true' by construction.
+> 
+> Yes, you are right!
+> 
+> > And this leads to a few questions:
+> > 
+> > - Shouldn't a rising interrupt clear the falling detection?
+> > - Shouldn't a level-low clear the polarity?
+> > - How do you handle IRQ_TYPE_EDGE_BOTH?
+> > - How is MPM_REG_POLARITY evaluated for edge interrupts (resp the EDGE
+> >   registers for level interrupts), as you never seem to be configuring
+> >   a type here?
+> 
+> Honestly, qcom_mpm_set_type() was mostly taken from downstream without
+> too much thinking.  I trusted it as a "good" reference as I have no
+> document to verify the code.  These questions are great and resulted the
+> code changes are pretty sensible to me.
+
+I don't think these changes are enough. For example, an interrupt
+being switched from level to edge is likely to misbehave (how do you
+distinguish the two?). If that's what the downstream driver does, then
+it is terminally broken.
+
+As I asked before, we need some actual specs, or at least someone to
+paraphrase it for us. There are a number of QC folks on Cc, and I
+expect them to chime in and explain how MPM works here.
+
+> 
+> > - What initialises the MPM trigger types at boot time?
+> 
+> I dumped the vMPM region and it's all zeros.  My understanding is if
+> vMPM needs any sort of initialization, it should be done by RPM firmware
+> before APSS gets booting.
+
+What about kexec? We can't rely on this memory region to always be
+0-initialised, nor do we know what that means.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

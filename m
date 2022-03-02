@@ -2,111 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0354C9E12
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E518B4C9E15
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbiCBG5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 01:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S239792AbiCBG7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 01:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbiCBG53 (ORCPT
+        with ESMTP id S235475AbiCBG7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 01:57:29 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2116.outbound.protection.outlook.com [40.107.255.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41ADB16D5
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 22:56:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k+UfqNshhrvWYElJzpZptLfqwuSHR04m37Re3aD4jSmahFOqrRrgphcWdPaZuxzzY2gtFRuwjhF5fUoWDes7HFhESeYBGoII8HM4inmwj7fyaq7BtCfPmCpyeT/v0BqeZLaBYWa0soK3Le8u5QxyuABlno2N6T4Nt9aIDZdE0mJopUzggTomspVw3hyVysb/N+SmZ1CAEX/aCeXheHvCaN4psCNNiXO/yvz+oDhwnKeFtr6U0/chtVKWbR/kL0rQzvzV4L3ofvJqJuD6a5wvRqv4nPzvC/0GXPtQp7etp15TnwGHT6SXmXkAhc8zT9kPaPNzAdGhKNmSwmrKw5/jgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3iTORNleBZAKsU+Gf2U9xbWgNiNybeer8DJnX+1a7e8=;
- b=IjTvbz+Bc6hBOB4R7knaPgK531bXxs0JLwCQfhOgJEnIU/OeMPJMEwPMB1SLhrifASwsZF4nSnpTrSfT8C4u8qdWz4MDwIuBgHGpsqi94gkRFN1HKw2qmxLZeag5j7nw6OT75PGQPKnsRdIeONQGcHXHXia6VrIK9VWfwOP/eAE8Toas113MYobnOfRKMQqOWgIEX3W50F0/NL163MXz8+eCnT0mZGNitlyrBOZxHG1cIIatuDL3whGnoU8STt7Q9fPIK5LwE1+aDTKMKwL28fRxb07yDPycZaWnUBv2yGl5fQ0Mx5T0eFZcurc5arfxLRvj3tVQU3toh9kjQFGiDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3iTORNleBZAKsU+Gf2U9xbWgNiNybeer8DJnX+1a7e8=;
- b=CaqZ9aLGtprXWocY13Ab4RTuebqeDZ3n0gZCcLduLrMCGMl63+YnOuq27Wc8ayDzGiscoiy1sVDEZR1aRryxtA1RCbY5RnWNnPTiCnNcalLtEkjqNbouGkSaslnHUeraJhcwidJIZ8fSRPvFaNO9eMZkHYmw/nK0F5Nzzbv1xQ0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by TYAPR06MB2365.apcprd06.prod.outlook.com (2603:1096:404:26::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 06:56:42 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
- 06:56:42 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH] mfd: hi6421-spmi-pmic: fix platform_get_irq.cocci warning
-Date:   Tue,  1 Mar 2022 22:56:29 -0800
-Message-Id: <20220302065629.6855-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0091.apcprd03.prod.outlook.com
- (2603:1096:4:7c::19) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        Wed, 2 Mar 2022 01:59:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7ADB0A5A;
+        Tue,  1 Mar 2022 22:58:20 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nPIwD-0002nj-TX; Wed, 02 Mar 2022 07:58:17 +0100
+Message-ID: <fe156bb6-c6d2-57da-7f62-57d2972bf1ae@leemhuis.info>
+Date:   Wed, 2 Mar 2022 07:58:17 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 05ee9e56-8522-40e6-4634-08d9fc19ced3
-X-MS-TrafficTypeDiagnostic: TYAPR06MB2365:EE_
-X-Microsoft-Antispam-PRVS: <TYAPR06MB2365D85E005BC9DCCCBB8086A2039@TYAPR06MB2365.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZJyhYXk1Pib1ZAHAFPGL10DIquasIYlNiA+JmaNA1fEq7ZnLNlC7cNoMdsoMcroknbnRTXf1MEAtts/T7VkGIosdVmLqx5Q2z/YvfnHvbTEShDVjf93C6V2JZMdWd6ZB/fW8FzXwE4BMpUmvfuiM5ldtBfc0hA3wM3xdSFrje0NJT50CxAkzq0GwysFSDt/sgc7pGbAIKZ3MaEKXYvjII7h4PNkFtpnGOMucXr7pwzzpfIhyohsCTvJCXx0GW0yTGAMxoX+p/7TaIseQ6UKFEusNmSHDYSl3op7hyn/qA666RLeAqLPWz97/iS7JvcxKvHSsnlDsYBYxpCuBEZUnCO3Cd8HfxI7lrwUMgunVYMC8VKtKMVbjwE1t4Uaq/3mQ+SjgP9IjRua1OICSCkOEb/5A99MVnG6s+47NcaHsjvWj6HmmN+O/k1tXHnrluu8UJ935OMzbaB4AzhAfv7+2FouwyFNPTLY2YpskazRyAuquOwTYTmVx7cbTRdQA5TsNTVn52pHvaBcH5nlruA05zbvozrgXqO9h5CuzCoBDd7VGE7miC52DV8JrRm3NXWy9o7NgHY6fnZjvkH+D8nJq4bSFQ56GWuhsTKXEWFEE9WmBt3A92/ixwl2+vY9e3iMZDOuHYr/NFdm8fN9ct6HYVTIiFYxyz8saS5w7LswggJaDdtZTvyocgB9iSH0qxY8hpqatKm4XqsjRoAzEXwg8/g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(8936002)(5660300002)(2906002)(38100700002)(38350700002)(4744005)(26005)(186003)(2616005)(1076003)(107886003)(110136005)(508600001)(6666004)(6512007)(6506007)(6486002)(52116002)(36756003)(66476007)(66556008)(66946007)(4326008)(8676002)(316002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UlV/A3nkXt7Jmue3ZpdOWjlNezxs4s9q4GOHMPLEI8t5VbolU39n7rsEzU7f?=
- =?us-ascii?Q?Qu6ao9/t/ufWoz0qE1686nAYlOjDS1Qlal4H/gkMsJU8SE+9DW5PKdhd+/Gs?=
- =?us-ascii?Q?aYIlbA5TCH8FRx5B1Svr05XKys/HouV0AAPy23H5tlih+vyulKFdn8cvr1fh?=
- =?us-ascii?Q?PY5dkcwf/HCYgCNf+kQ64t96Qt5uqQhq0BggnSt1rWfcrXCNE2bZXbX/YQGf?=
- =?us-ascii?Q?T3vwqnJmFzJhWPthT9U+d4IzD0MPVnCGQ+REt5QVorAaxusfSIYqtEVpjC66?=
- =?us-ascii?Q?uGm2gH5FoNHEc6hqVtMNiWPox+hLdqaCcu8F8gIlevBSJKtO3gmvZxvPvtEY?=
- =?us-ascii?Q?EGvvl6rlz2cbVJum3xJJ1RRxxgWaSd8p+MA/AcQ5WoxhLiknjYdtt8FbVF/x?=
- =?us-ascii?Q?3Cr0zpB3OBDROB87/ZC/y2no49fG5Nsd/KSld6WKoOJ91Wbnfl4yH0/oJq+s?=
- =?us-ascii?Q?FsZ25ASSRrBBgUNgj/6Gmq9Wry2HG6MzFGoncT9mNte3yupOaOvCwrUUixt8?=
- =?us-ascii?Q?mdioYvqeFT2Q0gR7ukntS42ZOj0sH1+ZJOh+XozPUfrsQ6FhaNNl3AiBdbvi?=
- =?us-ascii?Q?pXE5K5SpjsvuAq2617URt07Za/vDCT0MfX/M47hV2Eo0PDzTRyIwyzwcaeOy?=
- =?us-ascii?Q?jxr0lIgv/6sfX3yUJmkhXujL9LNA0YNdFzPGzK7xtmPZBm9n27culmWeHAc+?=
- =?us-ascii?Q?SKcE2dSHUTQ+SCLEPFkeSK7MyIOEEgPKozO122OcBUL/x6b46lkgQ1YGgOWV?=
- =?us-ascii?Q?CmIgZIOCefwhOqcFkb+vEVHdD9yiJTDb4hUwAgydiRz8+4GRD9WWoi1xBllu?=
- =?us-ascii?Q?7eNh4Yxu+rJv5MKVWQR/qWbOKGoepPi92YxdSzgF74wwXI01vNjEKTbEtBh5?=
- =?us-ascii?Q?MBpM1z5CzokVmnjO1C3bkgTsDTzZK2vWk+xT/2AsmYUqeGsK/PbBuGIfGL5T?=
- =?us-ascii?Q?4bFmmC+UR2helLJ5OYBniRUnar+waA8PFM2jCBCgjOygCtxGnInGIysGDkHr?=
- =?us-ascii?Q?pMNM7cPXWz8ErP9CmhvkFPZuC1jz0tjNVn6UEjS6EEMJRNdo2APMtxodBQ3o?=
- =?us-ascii?Q?NGTmcSfP5enOd2l3LD/kVTrjt3qrNf6ejJpgIgU8uxo8bMFw0TV3KyKZ0SD7?=
- =?us-ascii?Q?JCiHUlj03At02JpC4JWNE8Kc8xYe9cijEIzxfTPwoRsamSdNkr8exAwwlwKm?=
- =?us-ascii?Q?n5QzFO0EgDrto8qNXGol3q7hOlMjXo5/FZnhgQpbO16c46AgDRMgGKVsrF3M?=
- =?us-ascii?Q?h9PREUP3kUYC6qIAh+xEw5eoAq5XmeRh9T0Rpc38koRnfYq3k0PA7HKq1xS9?=
- =?us-ascii?Q?m0Y/hqkv/DTZ79235UK5C1yAvqMWYM1xG7eyR+DtW4MeskMeHNBlIqtjHxN9?=
- =?us-ascii?Q?ej7N+cCoQZJZosntsJDB2kNJNFnWlKdW/AIfB8QMpiTujURbEwM5MwraCEOq?=
- =?us-ascii?Q?dA6ckpj8SsBlHO6Tg17+ed5CQjVCHM9MhJkhGB4baaU48c6mdDK1p7bsqgdO?=
- =?us-ascii?Q?zPaua+UVX/497xSWBYGpW0DDUSjXxYShnzRNwJe9xavN/AMMaVPBrEwVS1gk?=
- =?us-ascii?Q?CyYXZnojRmnixnx/oHnkpuaTtySP/6OoIY306wvjdWjLPLbwCIIOnBTidCNp?=
- =?us-ascii?Q?obBKz64Fxxyp+tHMVI7SsDo=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05ee9e56-8522-40e6-4634-08d9fc19ced3
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 06:56:42.5845
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FdEEhkn7eZJAliIqV1JLPMgXn8zzIruRxISPZz6SreaqF/qkCdudLho154ubdH+47r1VXDsXFSJIZWl8qI2xOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR06MB2365
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+Content-Language: en-US
+To:     Davyd McColl <davydm@gmail.com>, Steve French <smfrench@gmail.com>
+Cc:     ronnie sahlberg <ronniesahlberg@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+ <CAH2r5mt_2f==5reyc0HmMLvYJVmP4Enykwauo+LQoFGFbVFeRQ@mail.gmail.com>
+ <CAJjP=BvNVOj3KRnhFgk6xiwnxVhxE-sN98-pr6e1Kzc5Xg5EvQ@mail.gmail.com>
+ <CAH2r5mvsetx5G+c=8ePh+X8ng7FvMrnuM9+FJ4Sid4b3E+T41Q@mail.gmail.com>
+ <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com>
+ <CAN05THSGwCKckQoeB6D91iBv0Sed+ethK7tde7GSc1UzS-0OYg@mail.gmail.com>
+ <CAJjP=BvcWrF-k_sFxak1mgHAHVVS7_JZow+h_47XB1VzG2+Drw@mail.gmail.com>
+ <ebf8c487-0377-834e-fbb7-725cceae1fbb@leemhuis.info>
+ <CAN05THRJJj48ueb34t18Yj=JYuhiwZ8hTvOssX4D6XhNpjx-bg@mail.gmail.com>
+ <f7eb4a3e-9799-3fe4-d464-d84dd9e64510@leemhuis.info>
+ <CAJjP=Bus1_ce4vbHXpiou1WrSe8a61U1NzGm4XvN5fYCPGNikA@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAJjP=Bus1_ce4vbHXpiou1WrSe8a61U1NzGm4XvN5fYCPGNikA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646204300;4c65dc37;
+X-HE-SMSGID: 1nPIwD-0002nj-TX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,32 +58,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove dev_err() messages after platform_get_irq*() failures.
-platform_get_irq() already prints an error.
+Hi, this is your Linux kernel regression tracker, once again...
 
-Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+On 18.02.22 14:30, Davyd McColl wrote:
+> Apologies for the late response - I didn't see the last bit of the
+> mail asking for more info.
+> 
+> Thorsten: the only group policy modification I have on my win11
+> machine (which was
+> loaded fresh not too long ago) is to enable insecure guest logins,
+> which is obviously
+> required for samba shares where the share allows a guest login without
+> any password.
+> I have to enable this to browse the shares on my Gentoo machine from the win11
+> machine anyway.
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- drivers/misc/hi6421v600-irq.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thx for the update. I pointed Linus towards this thread two times now,
+but he didn't comment on it afaics. CCing him now, maybe that will to
+the trick. If not, it'll leave me with two options:
 
-diff --git a/drivers/misc/hi6421v600-irq.c b/drivers/misc/hi6421v600-irq.c
-index 1c763796cf1f..babb85364aa9 100644
---- a/drivers/misc/hi6421v600-irq.c
-+++ b/drivers/misc/hi6421v600-irq.c
-@@ -244,10 +244,8 @@ static int hi6421v600_irq_probe(struct platform_device *pdev)
- 	pmic_pdev = container_of(pmic_dev, struct platform_device, dev);
- 
- 	priv->irq = platform_get_irq(pmic_pdev, 0);
--	if (priv->irq < 0) {
--		dev_err(dev, "Error %d when getting IRQs\n", priv->irq);
-+	if (priv->irq < 0)
- 		return priv->irq;
--	}
- 
- 	platform_set_drvdata(pdev, priv);
- 
--- 
-2.17.1
+a) give up
+b) submit a revert for 5.18 to force a discussion of the issue
+
+I currently tend to do the latter due to the fact that it's something
+that still works on Win11 with a simple change in the registry. But
+before that:
+
+@Steve: what's your option on this? Do you basically agree with what
+Ronnie stated in
+https://lore.kernel.org/lkml/CAN05THQbR4d55kx6MEHGcn-iLZKJG1C0vhq19wfo=NrB6q1Apg@mail.gmail.com/
+To quote:
+```
+> Right now you can likely just revert it. Maybe in the next kernel too.
+> But in a kernel not too far into the future some of the crypto primitives that
+> this depended on will simply not exist any more in the linux kernel
+> and will not be
+> available through the standard api.
+> 
+> At that point it is no longer a matter of just reverting the patch but
+> a matter of
+> re-importing an equivalent crypto replacement and port cifs.ko to its new api.
+> 
+> That is a lot of work and maintenance for something that is obsolete.
+```
+
+And Davyd: if you have a minute, could you maybe try running 5.17-rc6
+(or Linus mainline from git) with
+76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c reverted and check if
+everything wrt to cifs continues to work?
+
+Ciao, Thorsten
+
+> On Fri, 28 Jan 2022 at 16:02, Thorsten Leemhuis
+> <regressions@leemhuis.info> wrote:
+>>
+>> On 28.01.22 14:50, ronnie sahlberg wrote:
+>>> On Fri, Jan 28, 2022 at 11:30 PM Thorsten Leemhuis
+>>> <regressions@leemhuis.info> wrote:
+>>>>
+>>>> Hi, this is your Linux kernel regression tracker speaking.
+>>>>
+>>>> Top-posting for once, to make this easy accessible to everyone.
+>>>>
+>>>> Davyd, Ronnie, and/or Steve: What the status here? It seems after some
+>>>> productive debugging back and forth it seems everyone forgot about this.
+>>>> Or was progress made somewhere and I just missed it?
+>>>
+>>> I tried but can not find a system old enough to reproduce.
+>>> Remember, this is an authentication mechanism that Microsoft begged
+>>> people to stop using and migrate away from over 20 years ago.
+>>> Win2k works just fine, as does samba3.0.
+>>> I have no idea if Samba 2.0 works with current cifs.ko   but then
+>>> again  I seriously doubt you can even get samba 2.0 to even compile on
+>>> a modern
+>>> machine as so many APIs have changed or just gone away since the late 90s.
+>>>
+>>> I tried, but there is just so much time you can spend on something
+>>> that was declared obsolete 20 years ago.
+>>
+>> I can fully understand that -- otoh then I'd normally say "well, then
+>> let's just revert the commit that causes this". But in this case I can
+>> understand that it might not be wise.
+>>
+>> There is one thing that would help me to judge this situation better:
+>>
+>> Davyd, did a default Win11 install connect fine with standard settings
+>> or did you have to modify something in the registry to make it work
+>> there (which you might have done years ago in case you updated the
+>> machine!), as Ronnie suspected? Or was this already clarified in this
+>> thread somewhere and I just missed that (in that case: sorry!)?
+>>
+>> Ciao, Thorsten
+>>
+>>>> Ciao, Thorsten
+>>>>
+>>>> #regzbot poke
+>>>>
+>>>>
+>>>> On 12.01.22 06:49, Davyd McColl wrote:
+>>>>> Hi Ronnie
+>>>>>
+>>>>> The regular fstab line for this mount is:
+>>>>>
+>>>>> //mede8er/mede8er  /mnt/mede8er-smb  cifs
+>>>>> noauto,guest,users,uid=daf,gid=daf,iocharset=utf8,vers=1.0,nobrl,sec=none
+>>>>>  0  0
+>>>>>
+>>>>> Altering the end of the options from "sec=none" to
+>>>>> "username=guest,sec=ntlmssp" or "guest,sec=ntlmssp" results in failure
+>>>>> to mount
+>>>>> (tested on my patched kernel, which still supports the original fstab
+>>>>> line), with dmesg containing:
+>>>>>
+>>>>> [45753.525219] CIFS: VFS: Use of the less secure dialect vers=1.0 is
+>>>>> not recommended unless required for acc
+>>>>> ess to very old servers
+>>>>> [45753.525222] CIFS: Attempting to mount \\mede8er\mede8er
+>>>>> [45756.861351] CIFS: VFS: Unable to select appropriate authentication method!
+>>>>> [45756.861361] CIFS: VFS: \\mede8er Send error in SessSetup = -22
+>>>>> [45756.861395] CIFS: VFS: cifs_mount failed w/return code = -22
+>>>>>
+>>>>> There is no way that I know of to set up users for smb auth on this
+>>>>> device - it only supports guest connections.
+>>>>>
+>>>>> -d
+>>>>>
+>>>>>
+>>>>> On Wed, 12 Jan 2022 at 04:32, ronnie sahlberg <ronniesahlberg@gmail.com> wrote:
+>>>>>>
+>>>>>> Thanks for the network traces.
+>>>>>>
+>>>>>> In the traces, both win11 and linux are not using even NTLM but the
+>>>>>> even older "share password" authentication mode where you specify a
+>>>>>> password for the share in the TreeConnect command.
+>>>>>> That is something I think we should not support at all.
+>>>>>>
+>>>>>> What is the exact mount command line you use?
+>>>>>> Can you try mounting the share using a username and ntlmssp ?
+>>>>>> I.e. username=your-user,sec=ntlmssp  on the mount command
+>>>>>>
+>>>>>> regards
+>>>>>> ronnie sahlberg
+>>>>>>
+>>>>>> On Wed, Jan 12, 2022 at 6:57 AM Davyd McColl <davydm@gmail.com> wrote:
+>>>>>>>
+>>>>>>> Hi Steve
+>>>>>>>
+>>>>>>> As requested, wireshark captures to the device in question, as well as
+>>>>>>> the fstab entry I have for the device:
+>>>>>>> - win11, browsing with explorer
+>>>>>>> - win11, net use
+>>>>>>> - unpatched linux 5.16.0 attempt to mount
+>>>>>>> - patched linux 5.16.0 successful mount
+>>>>>>> - fstab entry - note that I have to specify samba version 1.0 as the
+>>>>>>> default has changed and the mount fails otherwise. Explicitly
+>>>>>>> specifying 2.0 errors and suggests that I should select a different
+>>>>>>> version.
+>>>>>>>
+>>>>>>> -d
+>>>>>>>
+>>>>>>> On Tue, 11 Jan 2022 at 00:13, Steve French <smfrench@gmail.com> wrote:
+>>>>>>>>
+>>>>>>>> I would be surprised if Windows 11 still negotiates (with default
+>>>>>>>> registry settings) SMB1 much less NTLMv1 in SMB1, but I have not tried
+>>>>>>>> Windows 11 with an NTLMv1 only server (they are hard to find - I may
+>>>>>>>> have an original NT4 and an NT3.5 CD somewhere - might be possible to
+>>>>>>>> install a VM with NT3.5 but that is really really old and not sure I
+>>>>>>>> can find those CDs).
+>>>>>>>>
+>>>>>>>> Is it possible to send me the wireshark trace (or other network trace)
+>>>>>>>> of the failing mount from Linux and also the one with the succeeding
+>>>>>>>> NET USE from Windows 11 to the same server?
+>>>>>>>>
+>>>>>>>> Hopefully it is something unrelated to NTLMv1, there has been a LOT of
+>>>>>>>> pushback across the world, across products in making sure no one uses
+>>>>>>>> SMB1 anymore.  See e.g.
+>>>>>>>> https://techcommunity.microsoft.com/t5/storage-at-microsoft/stop-using-smb1/ba-p/425858
+>>>>>>>> and https://twitter.com/nerdpyle/status/776900804712148993
+>>>>>>>>
+>>>>>>>> On Mon, Jan 10, 2022 at 2:30 PM Davyd McColl <davydm@gmail.com> wrote:
+>>>>>>>>>
+>>>>>>>>> I don't understand. I tracked down the exact commit where the issue
+>>>>>>>>> occurs with a 2 hour git bisect. This was after first confirming that
+>>>>>>>>> my older 5.14 kernel did not display the symptoms. I can still connect
+>>>>>>>>> to the share via windows 11 explorer. I don't know what else I need to
+>>>>>>>>> do here to show where the issue was introduced?
+>>>>>>>>>
+>>>>>>>>> Apologies for bouncing mails - literally no email client I have seems
+>>>>>>>>> to be capable of plaintext emails, so every time I forget, I have to
+>>>>>>>>> find a browser with the gmail web interface to reply.
+>>>>>>>>>
+>>>>>>>>> -d
+>>>>>>>>>
+>>>>>>>>> On Mon, 10 Jan 2022 at 19:31, Steve French <smfrench@gmail.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> I want to make sure that we don't have an unrelated regression
+>>>>>>>>>> involved here since NTLMv2 replaced NTLMv1 over 20 years ago (googling
+>>>>>>>>>> this e.g. I see "NTLMv2, introduced in Windows NT 4.0 SP4 and natively
+>>>>>>>>>> supported in Windows 2000")  and should be the default for Windows
+>>>>>>>>>> NT4, Windows 2000 etc. as well as any version of Samba from the last
+>>>>>>>>>> 15 years+.  I have significant concerns with adding mechanisms that
+>>>>>>>>>> were asked to be disabled ~19 years ago e.g. see
+>>>>>>>>>> https://support.microsoft.com/en-us/topic/security-guidance-for-ntlmv1-and-lm-network-authentication-da2168b6-4a31-0088-fb03-f081acde6e73
+>>>>>>>>>> due to security concerns.
+>>>>>>>>>>
+>>>>>>>>>> Can we double check that there are not other issues involved in your example?
+>>>>>>>>>>
+>>>>>>>>>> The concerns about NTLMv1 security concerns (and why it should never
+>>>>>>>>>> be used) are very persuasive e.g. many articles like
+>>>>>>>>>> https://miriamxyra.com/2017/11/08/stop-using-lan-manager-and-ntlmv1/
+>>>>>>>>>>
+>>>>>>>>>> On Mon, Jan 10, 2022 at 7:48 AM Davyd McColl <davydm@gmail.com> wrote:
+>>>>>>>>>>>
+>>>>>>>>>>> Good day
+>>>>>>>>>>>
+>>>>>>>>>>> I'm following advice from the thread at
+>>>>>>>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=215375 as to how to report
+>>>>>>>>>>> this, so please bear with me and redirect me as necessary.
+>>>>>>>>>>>
+>>>>>>>>>>> Since commit 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c, I'm unable to
+>>>>>>>>>>> mount a CIFS 1.0 share ( from a media player: mede8er med600x3d, which
+>>>>>>>>>>> runs some older linux). Apparently I'm not the only one, according to
+>>>>>>>>>>> that thread, though the other affected party there is windows-based.
+>>>>>>>>>>>
+>>>>>>>>>>> I first logged this in the Gentoo bugtracker
+>>>>>>>>>>> (https://bugs.gentoo.org/821895) and a reversion patch is available
+>>>>>>>>>>> there for the time being.
+>>>>>>>>>>>
+>>>>>>>>>>> I understand that some of the encryption methods upon which the
+>>>>>>>>>>> original feature relied are to be removed and, as such, the ability to
+>>>>>>>>>>> mount these older shares was removed. This is sure to affect anyone
+>>>>>>>>>>> running older Windows virtual machines (or older, internally-visible
+>>>>>>>>>>> windows hosts) in addition to anyone attempting to connect to shares
+>>>>>>>>>>> from esoteric devices like mine.
+>>>>>>>>>>>
+>>>>>>>>>>> Whilst I understand the desire to clean up code and remove dead
+>>>>>>>>>>> branches, I'd really appreciate it if this particular feature remains
+>>>>>>>>>>> available either by kernel configuration (which suits me fine, but is
+>>>>>>>>>>> likely to be a hassle for anyone running a binary distribution) or via
+>>>>>>>>>>> boot parameters. In the mean-time, I'm updating my own sync software
+>>>>>>>>>>> to support this older device because if I can't sync media to the
+>>>>>>>>>>> player, the device is not very useful to me.
+>>>>>>>>>>>
+>>>>>>>>>>> Thanks
+>>>>>>>>>>> -d
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> --
+>>>>>>>>>> Thanks,
+>>>>>>>>>>
+>>>>>>>>>> Steve
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> --
+>>>>>>>>> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+>>>>>>>>> If you say that getting the money is the most important thing
+>>>>>>>>> You will spend your life completely wasting your time
+>>>>>>>>> You will be doing things you don't like doing
+>>>>>>>>> In order to go on living
+>>>>>>>>> That is, to go on doing things you don't like doing
+>>>>>>>>>
+>>>>>>>>> Which is stupid.
+>>>>>>>>>
+>>>>>>>>> - Alan Watts
+>>>>>>>>> https://www.youtube.com/watch?v=-gXTZM_uPMY
+>>>>>>>>>
+>>>>>>>>> Quidquid latine dictum sit, altum sonatur.
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> --
+>>>>>>>> Thanks,
+>>>>>>>>
+>>>>>>>> Steve
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> --
+>>>>>>> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+>>>>>>> If you say that getting the money is the most important thing
+>>>>>>> You will spend your life completely wasting your time
+>>>>>>> You will be doing things you don't like doing
+>>>>>>> In order to go on living
+>>>>>>> That is, to go on doing things you don't like doing
+>>>>>>>
+>>>>>>> Which is stupid.
+>>>>>>>
+>>>>>>> - Alan Watts
+>>>>>>> https://www.youtube.com/watch?v=-gXTZM_uPMY
+>>>>>>>
+>>>>>>> Quidquid latine dictum sit, altum sonatur.
+>>>>>
+>>>>>
+>>>>>
+>>>>
+>>>
+> 
+> 
+> 
 

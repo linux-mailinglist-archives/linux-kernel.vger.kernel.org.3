@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE524C9B59
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D4F4C9B61
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239150AbiCBCqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 21:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S239087AbiCBCst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 21:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbiCBCqt (ORCPT
+        with ESMTP id S232091AbiCBCss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:46:49 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDDEA9E07
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 18:46:06 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so434044oos.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=LN9nnhqICRhttXAVr1od9T1t/Ymtpxhtz4tHsjH3dYjcd3Rkq9C9wMhSXlkrlSYC1A
-         DlJ/JptFxg1yVABD2c1AkWjsPC7Du3KLmBhl0PmcAe7J/mlUk1cp6g/yIWvbZRRK/ixo
-         +bm5IDVzJdC4fxWuoEI4G5CHndK46TO9kW9KbAaQI641rdN+rU1dvb6VBLEpmuuVwgUt
-         80QLDod/jgV5iicQ0WoUYh+G5NUspA9Y6GZrYqrOz6zP3KBF8+B00J/JX/kKtJbsLcZw
-         Nn9Y0EtKII81vB9nbqmK7v/AXIDRsz2QxYS4EGE2oGDGOXpVkmABqBHnLwBv01oaAEdI
-         u6og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=R2M4QELWtIradVq7Ia5RlmRG4at7ZQVBqgnZINNrL/w1MwlRE0hTN1czKGyKY7195X
-         s51wznTnRnaDmBktdCyt/L2gg80gkyvFf2H6kMy+lSSWoUctHnYnuV3EH1Qnv5Dc0VJ4
-         muY78K/j7QMYegN9bZX3Q2E9n1EAlBL9xuQGyhRlaHWFJ8pnKZDUMvN9Y4sPyoDVvXr8
-         VU03psAUeOLDIqdfl38WC6movHf4t9njCjZuxJ5wcWXtPl1w4af6SJU72uiqWRrXD9SJ
-         MdpRwIgkWYFgIXeYRJDQyC5pJtK0ZD8HAlZZ5B0AmJmbntI7p2LAoAEIhLlyUZQ6p81W
-         oZZQ==
-X-Gm-Message-State: AOAM533hQ6NzIV2PjyfIjxsAYv6KWgfo98pEnvCsxAWyvd3etJmfsGRr
-        p5r3I6+oz2HCz51iTQDyoC7pOw==
-X-Google-Smtp-Source: ABdhPJyABJwssvqzs0MiuFje5MNOUuD4BXQpc8Bd2B6R1kdb3joprE0iJZUcrLXMN5kygRaNyqLzdA==
-X-Received: by 2002:a05:6820:1396:b0:31c:59f4:2fe4 with SMTP id i22-20020a056820139600b0031c59f42fe4mr13722344oow.10.1646189166017;
-        Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 23-20020a9d0b97000000b005ad33994e93sm7196700oth.31.2022.03.01.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 18:46:05 -0800 (PST)
-Date:   Tue, 1 Mar 2022 18:47:56 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh7a3Gl6PPamTjY5@ripper>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        Tue, 1 Mar 2022 21:48:48 -0500
+Received: from mg.sunplus.com (unknown [113.196.136.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B57B506D5;
+        Tue,  1 Mar 2022 18:48:05 -0800 (PST)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(10053:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Wed, 02 Mar 2022 10:48:15 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Wed, 2 Mar 2022 10:48:15 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Wed, 2 Mar 2022 10:48:15 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v9 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Topic: [PATCH v9 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Index: AQHYJsjgtEqSV/WirUaNKgOQ/NhSWaydE0+AgA5UZIA=
+Date:   Wed, 2 Mar 2022 02:48:14 +0000
+Message-ID: <5c7e4c014858485a8b0eb120f85e98de@sphcmbx02.sunplus.com.tw>
+References: <cover.1645407997.git.tonyhuang.sunplus@gmail.com>
+ <20f858dfe999816cb05dfde5f89db48f3416358e.1645407997.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a1FZQ2LQco8D263+YXjcSQvzU6RHAL8SKcKy8hiLnHY8g@mail.gmail.com>
+In-Reply-To: <CAK8P3a1FZQ2LQco8D263+YXjcSQvzU6RHAL8SKcKy8hiLnHY8g@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 28 Feb 13:38 PST 2022, Rob Herring wrote:
-
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
-> 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
-> 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
->  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
-
-For the remoteproc binding:
-
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks,
-Bjorn
+RGVhciBBcm5kLCBHcmVna2g6DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJv
+bTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4gU2VudDogTW9uZGF5LCBGZWJydWFy
+eSAyMSwgMjAyMiAzOjIwIFBNDQo+IFRvOiBUb255IEh1YW5nIDx0b255aHVhbmcuc3VucGx1c0Bn
+bWFpbC5jb20+DQo+IENjOiBSb2IgSGVycmluZyA8cm9iaCtkdEBrZXJuZWwub3JnPjsgRFRNTCA8
+ZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc+Ow0KPiBMaW51eCBLZXJuZWwgTWFpbGluZyBMaXN0
+IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgRGVyZWsgS2llcm5hbg0KPiA8ZGVyZWsu
+a2llcm5hbkB4aWxpbnguY29tPjsgRHJhZ2FuIEN2ZXRpYyA8ZHJhZ2FuLmN2ZXRpY0B4aWxpbngu
+Y29tPjsgQXJuZA0KPiBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT47IGdyZWdraCA8Z3JlZ2toQGxp
+bnV4Zm91bmRhdGlvbi5vcmc+OyBXZWxscyBMdQ0KPiDlkYLoirPpqLAgPHdlbGxzLmx1QHN1bnBs
+dXMuY29tPjsgVG9ueSBIdWFuZyDpu4Pmh7fljpoNCj4gPHRvbnkuaHVhbmdAc3VucGx1cy5jb20+
+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjkgMi8yXSBtaXNjOiBBZGQgaW9wIGRyaXZlciBmb3Ig
+U3VucGx1cyBTUDcwMjENCj4gDQo+IE9uIE1vbiwgRmViIDIxLCAyMDIyIGF0IDM6MTQgQU0gVG9u
+eSBIdWFuZw0KPiA8dG9ueWh1YW5nLnN1bnBsdXNAZ21haWwuY29tPiB3cm90ZToNCj4gPg0KPiA+
+IElPUCg4MDUxKSBlbWJlZGRlZCBpbnNpZGUgU1A3MDIxIHdoaWNoIGlzIHVzZWQgYXMgUHJvY2Vz
+c29yIGZvciBJL08NCj4gPiBjb250cm9sLCBtb25pdG9yIFJUQyBpbnRlcnJ1cHQgYW5kIGNvb3Bl
+cmF0aW9uIHdpdGggQ1BVICYgUE1DIGluIHBvd2VyDQo+ID4gbWFuYWdlbWVudCBwdXJwb3NlLg0K
+PiA+IFRoZSBJT1AgY29yZSBpcyBEUTgwNTEsIHNvIGFsc28gbmFtZWQgSU9QODA1MSwgaXQgc3Vw
+cG9ydHMgZGVkaWNhdGVkDQo+ID4gSlRBRyBkZWJ1ZyBwaW5zIHdoaWNoIHNoYXJlIHdpdGggU1A3
+MDIxLg0KPiA+IEluIHN0YW5kYnkgbW9kZSBvcGVyYXRpb24sIHRoZSBwb3dlciBzcGVjIHJlYWNo
+IDQwMHVBLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogVG9ueSBIdWFuZyA8dG9ueWh1YW5nLnN1
+bnBsdXNAZ21haWwuY29tPg0KPiA+IC0tLQ0KPiA+IENoYW5nZXMgaW4gdjk6DQo+ID4gIC0gUmVt
+b3ZlIGN1c3RvbSBhdHRyaWJ1dGVzIHN5c2ZzLg0KPiANCj4gWW91IGFyZSBub3cgYmFjayB0byBh
+IGRyaXZlciB0aGF0IGRvZXMgbm90aGluZyBhdCBhbGwsIHBsZWFzZSBtYWtlIGl0IHVzZSBhdA0K
+PiBsZWFzdCBvbmUga2VybmVsIHN1YnN5c3RlbSB0aGF0IGl0IGNhbiBob29rIHVwIHRvIGJlZm9y
+ZSB5b3Ugc2VuZCBpdCBhZ2Fpbi4NCj4gDQptb25pdG9yIFJUQyBpbnRlcnJ1cHQ6DQpTUDcwMjEg
+c3lzdGVtIGhhcyBpdHMgb3duIFJUQyBkZXZpY2UgZHJpdmVyIChydGMtc3VucGx1cy5jKS4JCQkJ
+CQkJCQkNClRoZSB1c2VyIGNhbiBzZXQgdGhlIFJUQyB3YWtlLXVwIHRpbWUgdGhyb3VnaCBydGMt
+c3VucGx1cy5jLgkJCQkJCQkJCQ0KVGhlIElPUCBjb2RlIGRvZXMgbm90IG5lZWQgdG8gaW5jcmVh
+c2UgdGhlIFJUQyBzdWJzeXN0ZW0gZnVuY3Rpb24sIHNldCB0aGUgUlRDIHJlZ2lzdGVyLgkJCQkJ
+CQkJCQ0KV2hlbiB0aGUgbGludXgga2VybmVsIHN5c3RlbS4gT25seSB0aGUgODA1MSBDUFUgaGFz
+IHBvd2VyIGFuZCBjYW4gbW9uaXRvciB0aGUgUlRDIHdha2UtdXAgaW50ZXJydXB0LgkJCQkJCQkJ
+CQ0KDQo+IEFsc28sIHdoZW4gbGlzdGluZyB0aGUgZnVuY3Rpb25hbGl0eSBhYm92ZSwgZGVzY3Jp
+YmUgd2hpY2ggc3Vic3lzdGVtcyB5b3Ugd2FudA0KPiB0byB1c2UgZm9yIHRob3NlIGluIHRoZSBs
+b25nIHJ1biwgdGhpcyB3b3VsZCBtYWtlIGl0IGNsZWFyZXIgdG8gc2VlIHdoaWNoDQo+IGRpcmVj
+dGlvbiB5b3Ugd2FudCB0byB0YWtlIHRoaXMgZHJpdmVyIHdoZW4geW91IGFkZCBiYWNrIHRoZSBm
+ZWF0dXJlcy4NCj4gDQo+ICAgICAgICAgIEFybmQNCg==

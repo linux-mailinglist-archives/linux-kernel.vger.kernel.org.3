@@ -2,133 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBD54CA3EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DE34CA3FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbiCBLjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S241553AbiCBLmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233173AbiCBLjE (ORCPT
+        with ESMTP id S239015AbiCBLmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:39:04 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F4786E1A;
-        Wed,  2 Mar 2022 03:38:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7sZ03Cqlz4xRC;
-        Wed,  2 Mar 2022 22:38:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646221097;
-        bh=nURFT4BwINNuaZBIGhlpDRAhChHsiLBhqSzamPvBvFY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NKtT73kEVkxHnkZeG7lAbaEGxz8HzOBYNbZLz5aPS08t9R6t0vpOlOHloKo+p2WPG
-         dslXTCEigXwW9BQd+BIi/I7xN4N7GQYmBmV0UvqyH3zEG6pWt2Ww3thQeTZ4VU40CD
-         HwoYgfY3/k7cprSsA3aI8WHELdkXXcZikYDh9aGan8+xtSeQtmLjan1Pi0q5cfYvmS
-         sUR7EOJtClg2GVmIEcz5wSDH5svD3RxVuoUyKKZmXseNKIJ365OoEJrMYTutsZOhT3
-         9MUJWnkPPochZ9/TtVYaAQUMtWe5Xmknf8ESMcS8UgaocWOAY/5/go8c0GDiDK278Q
-         gn+kVNVKfdGqw==
-Date:   Wed, 2 Mar 2022 22:38:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Message-ID: <20220302223815.5e754608@canb.auug.org.au>
-In-Reply-To: <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
-References: <20220202150201.290c7d3d@canb.auug.org.au>
-        <20220202150320.3e9bdd62@canb.auug.org.au>
-        <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
-        <20220302123417.2c84200b@canb.auug.org.au>
-        <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
+        Wed, 2 Mar 2022 06:42:37 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B4890261;
+        Wed,  2 Mar 2022 03:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646221314; x=1677757314;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PoYR7AGVv9IFUckNtTemdvQeFRkA7Uei4+Soa/AJfn0=;
+  b=11DGOTlKyxLSkiehqolmDpznW5jv4gJVBJzgSOXzXf26mic/IjFQkxhj
+   YTT53mrSEGpGMHth8VW3V33YJfBXjuAfmxQ+D7PzYaQWWlUI7UsQfqDQL
+   X2sSfceMVWaVywtX26JEstBBT7kbSa/fpLTkUYJamQROSkLzZwn/CiuBO
+   sxJesd+aF6yCW5LDHG+8zrSfbR6QsmiSDERTpvGLxPwl6Wl0yiYWXnJdr
+   aDD2idwsLV6lpNl+SbsUTTzTxh1F1WqsRfG74L40DmHL0HHqCB9l1/+T3
+   Po5+Y/g3psqaXs1W4HmNzRaN99SHYcp/7Wy06mUTzK6egQx31YMObEwHB
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,148,1643698800"; 
+   d="scan'208";a="87532775"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Mar 2022 04:41:53 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 2 Mar 2022 04:41:52 -0700
+Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 2 Mar 2022 04:41:46 -0700
+Message-ID: <1300f84832ef1c43ecb9edb311fb817e3aab5420.camel@microchip.com>
+Subject: Re: [PATCH v8 net-next 01/10] dt-bindings: net: dsa: dt bindings
+ for microchip lan937x
+From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>, <robh+dt@kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <woojung.huh@microchip.com>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        <andrew@lunn.ch>, <netdev@vger.kernel.org>, <olteanv@gmail.com>
+Date:   Wed, 2 Mar 2022 17:11:43 +0530
+In-Reply-To: <d8e5f6a8-a7e1-dabd-f4b4-ea8ea21d0a1d@gmail.com>
+References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
+         <20220207172204.589190-2-prasanna.vengateshan@microchip.com>
+         <88caec5c-c509-124e-5f6b-22b94f968aea@gmail.com>
+         <ebf1b233da821e2cd3586f403a1cdc2509671cde.camel@microchip.com>
+         <d8e5f6a8-a7e1-dabd-f4b4-ea8ea21d0a1d@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/53y/7Qan=BK7CnutoMfuzyc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/53y/7Qan=BK7CnutoMfuzyc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Rob and Florian,
 
-Hi Hans,
+On Fri, 2022-02-11 at 19:56 -0800, Florian Fainelli wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> content is safe
+> 
+> On 2/9/2022 3:58 AM, Prasanna Vengateshan wrote:
+> > On Mon, 2022-02-07 at 18:53 -0800, Florian Fainelli wrote:
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> > > content is safe
+> > > 
+> > > On 2/7/2022 9:21 AM, Prasanna Vengateshan wrote:
+> > > > Documentation in .yaml format and updates to the MAINTAINERS
+> > > > Also 'make dt_binding_check' is passed.
+> > > > 
+> > > > RGMII internal delay values for the mac is retrieved from
+> > > > rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
+> > > > v3 patch series.
+> > > > https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
+> > > > 
+> > > > It supports only the delay value of 0ns and 2ns.
+> > > > 
+> > > > Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > ---
+> > > >    .../bindings/net/dsa/microchip,lan937x.yaml   | 179 ++++++++++++++++++
+> > > >    MAINTAINERS                                   |   1 +
+> > > >    2 files changed, 180 insertions(+)
+> > > >    create mode 100644
+> > > > Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml
+> > > > 
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  mdio:
+> > > > +    $ref: /schemas/net/mdio.yaml#
+> > > > +    unevaluatedProperties: false
+> > > 
+> > > This should be moved to dsa.yaml since this is about describing the
+> > > switch's internal MDIO bus controller. This is applicable to any switch,
+> > > really.
+> > 
+> > Thanks for your review and feedback. Do you mean that 'mdio' to be added in
+> > dsa.yaml instead adding here?
+> 
+> Yes indeed, since this is a common property of all DSA switches, it can
+> be defined or not depending on whether the switch does have an internal
+> MDIO bus controller or not.
+> 
+> > 
+> > > 
+> > > > +
+> > > > +patternProperties:
+> > > > +  "^(ethernet-)?ports$":
+> > > > +    patternProperties:
+> > > > +      "^(ethernet-)?port@[0-7]+$":
+> > > > +        allOf:
+> > > > +          - if:
+> > > > +              properties:
+> > > > +                phy-mode:
+> > > > +                  contains:
+> > > > +                    enum:
+> > > > +                      - rgmii
+> > > > +                      - rgmii-rxid
+> > > > +                      - rgmii-txid
+> > > > +                      - rgmii-id
+> > > > +            then:
+> > > > +              properties:
+> > > > +                rx-internal-delay-ps:
+> > > > +                  $ref: "#/$defs/internal-delay-ps"
+> > > > +                tx-internal-delay-ps:
+> > > > +                  $ref: "#/$defs/internal-delay-ps"
+> > > 
+> > > Likewise, this should actually be changed in ethernet-controller.yaml
+> > 
+> > There is *-internal-delay-ps property defined for mac in ethernet-
+> > controller.yaml. Should that be changed like above?
+> 
+> It seems to me that these properties override whatever 'phy-mode'
+> property is defined, but in premise you are right that this is largely
+> applicable to RGMII only. I seem to recall that the QCA8K driver had
+> some sort of similar delay being applied even in SGMII mode but I am not
+> sure if we got to the bottom of this.
+> 
+> Please make sure that this does not create regressions for other DTS in
+> the tree before going with that change in ethernet-controller.yaml.
+> 
 
-On Wed, 2 Mar 2022 11:32:37 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
->
-> On 3/2/22 02:34, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > On Wed, 2 Feb 2022 09:38:37 +0100 Hans de Goede <hdegoede@redhat.com> w=
-rote: =20
-> >>
-> >> On 2/2/22 05:03, Stephen Rothwell wrote: =20
-> >>>
-> >>> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:   =20
-> >>>>
-> >>>> After merging the drm tree, today's linux-next build (htmldocs) prod=
-uced
-> >>>> this warning:
-> >>>>
-> >>>> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter =
-or member 'data' not described in 'drm_privacy_screen_register'   =20
-> >>>
-> >>> Actually:
-> >>>
-> >>> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter=
- or member 'data' not described in 'drm_privacy_screen_register'   =20
-> >>
-> >> Thank you for reporting this, I will prepare a patch fixing this. =20
-> >=20
-> > I am still seeing this warning. =20
->=20
-> Weird, this should be fixed by:
->=20
-> https://cgit.freedesktop.org/drm-misc/commit/?id=3Dccbeca4ca04302d1296020=
-93c8d611065e3f7958
->=20
-> Which was added to the "drm-misc-next-2022-02-23" drm-misc tag/pull-req 7=
- days ago,
-> which was merged into drm-next 6 days ago ?
->=20
-> I just reverted that did a make htmldocs and got the warning, then re-app=
-lied and
-> the warning was gone...
+I just tried changing rx-internal-delay-ps & tx-internal-delay-ps on conditional
+basis like above in the ethernet-controller.yaml and it passed 'make
+dt_binding_check' as well. 
 
-As I said in my other reply, the drm tree has had build problems until
-today and so it has been only partly included in linux-next.  I can
-confirm that the warning is gone in today's tree.
+It would be like below if existing *-internal-delay-ps are removed from
+ethernet-controller.yaml.
 
---=20
-Cheers,
-Stephen Rothwell
+allOf:
+  - if:
+      properties:
+        phy-mode:
+          contains:
+            enum:
+              - rgmii
+              - rgmii-rxid
+              - rgmii-txid
+              - rgmii-id
+            then:
+              properties:
+                rx-internal-delay-ps:
+                  description:
+                    RGMII Receive Clock Delay defined in pico seconds.This is 
+                    used for controllers that have configurable RX internal 
+                    delays. If this property is present then the MAC applies 
+                    the RX delay.
+                tx-internal-delay-ps:
+                  description:
+                    RGMII Transmit Clock Delay defined in pico seconds.This is
+                    used for controllers that have configurable TX internal
+                    delays. If this property is present then the MAC applies
+                    the TX delay.   
 
---Sig_/53y/7Qan=BK7CnutoMfuzyc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+After the above changes, these two properties descriptions are different compare
+to other properties. So i just wanted to know whether i am following the right
+approach or are there any other proposal available? Thanks.
 
------BEGIN PGP SIGNATURE-----
+Prasanna V
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIfVycACgkQAVBC80lX
-0GwJeAf9EIcnkMX/Lw+MJdJSCmYIW+MI/ue4ttLHaFIkTgNERrtrorqDSlezWoFD
-g4/ipek3XK/jPX3SLK0qmKFv88/bOmLOu41N9jEQhx8NjTNCmJLrg1LrwXlDvRnH
-QR6s0dBk190WVgGxLOH7ra9M2x5Xg/Y1Oyo7IcFe5q4FRzNrbTs7BRBIf99wTeFV
-lkjcZwTmcQrzgPKEIya6xl/V9LWMyaFnvv8XejyQoQ+0+ar5bmzX/Nu+Pq4UqrUz
-j28dTRUtDBP8M3N8hM5LFSwQI0x7hpsxWyoOPOo0xlSihM576eI2ujFZ4crUYyBj
-vKe2vKPYOs54LZQy1epRumuQy1v+vg==
-=9VyO
------END PGP SIGNATURE-----
-
---Sig_/53y/7Qan=BK7CnutoMfuzyc--

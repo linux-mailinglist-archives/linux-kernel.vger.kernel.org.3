@@ -2,227 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2504C9F45
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA8C4C9F47
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240201AbiCBIbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S233115AbiCBIc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbiCBIa7 (ORCPT
+        with ESMTP id S232678AbiCBIcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:30:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84BDABB091
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646209812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ju3TXslkK4ikbzwJYtvQpU2DB+d0S/w2MnovYNUeUk=;
-        b=LSDk0QzDGFTMZo8ie3l84Q8M5k37KeUt7+akkIqbjXt+JAaP9BAXHH5SbpOvlI01PrH+mX
-        uUo4HY55LRvCq05WZZmjm7DFQesBwmZG+2Xo+OFTFjXSDjH5DEGLfcgJINxEPZof9KDhRk
-        2aiEzMKzYzseINDxBJTLyA6LS6DJEgA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-265-BJWJmFMzOvqqzocvxGAWPg-1; Wed, 02 Mar 2022 03:30:11 -0500
-X-MC-Unique: BJWJmFMzOvqqzocvxGAWPg-1
-Received: by mail-wm1-f72.google.com with SMTP id h19-20020a05600c351300b0038141cf26deso568942wmq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:30:11 -0800 (PST)
+        Wed, 2 Mar 2022 03:32:48 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20CB3916F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:32:04 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id bt13so1875563ybb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oJjGiYGO2BQbY6e8zA+uuD343aWYzkhY2GO9yRgddAU=;
+        b=HeXKLCbV+zEEElSIJaicHHBO6ietIy1g13cnBEXlj/GULI2mjzLmjMXwL3wih8miHY
+         WMc3285miFFmAmBebl3yehdDHjqzfJcYtTzu8SYEF5nkrjBMKA//gax/CAarz4DL4d9l
+         Ksp5+d0CKBKacJGu40l7EK6baEkjEVTypMaQU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4ju3TXslkK4ikbzwJYtvQpU2DB+d0S/w2MnovYNUeUk=;
-        b=T1fjvu0G+WoQWIqdavJcoNbizg2P7Nal9pVi/P7Oxmj+BngQ/2I3yflUiKMGMh8CyT
-         eb50HS3H/6hEO3u7mT5e0e15BVBgFMHolqsBZXpcKV7KK7l+QPzCFdnZFHji24sHlgaP
-         k+YhSF7JsQ1rZX61+JSzRGSSBrkr4MF4Ayj48Kw0Naan3q4V8QVLxH19grehy6DCuaXB
-         EirsyhPjitbqpNFTYH/OCf5D0rAU/IJkWWR4+cLaXxjkrLnfkA4gssmqKEwdcVaPmbRJ
-         FrYd2kgPZtdhpKXApdU3mA4cG8OIa79bxKvZkJpMFPts04+jrizUdcLzt4iuTt+Lagjp
-         n/AQ==
-X-Gm-Message-State: AOAM533FLHhEaK4zvGphOyzhCPOxiGAMgQxwNILBSL5ya3gVp6iDN29k
-        LE3oxVqoCEmSYHSgL9n15Szl53WyM7+PAznagw4f30yyFQXjFIvhsYZa1LdhxPnncbzGKrTltIi
-        0QIRia2Fx6mtJZ7by0Sa0rN29
-X-Received: by 2002:a05:600c:587:b0:381:b2:89b0 with SMTP id o7-20020a05600c058700b0038100b289b0mr20467125wmd.114.1646209810405;
-        Wed, 02 Mar 2022 00:30:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyUFCa8ddS38oq9IT6e/yWdwiarFYl14hc8Iyy/vjPTuHZpDyCAzWiVC6dCDT5EWZ3tUieAJg==
-X-Received: by 2002:a05:600c:587:b0:381:b2:89b0 with SMTP id o7-20020a05600c058700b0038100b289b0mr20467105wmd.114.1646209810176;
-        Wed, 02 Mar 2022 00:30:10 -0800 (PST)
-Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
-        by smtp.gmail.com with ESMTPSA id f4-20020a5d4dc4000000b001d8e67e5214sm16454314wru.48.2022.03.02.00.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 00:30:09 -0800 (PST)
-Date:   Wed, 2 Mar 2022 03:30:06 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laszlo Ersek <lersek@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220302031738-mutt-send-email-mst@kernel.org>
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
- <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
- <Yh5JwK6toc/zBNL7@zx2c4.com>
- <20220301121419-mutt-send-email-mst@kernel.org>
- <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oJjGiYGO2BQbY6e8zA+uuD343aWYzkhY2GO9yRgddAU=;
+        b=XorP8jGLtXieE9SDmBgVlrOtFzoB7PLX7+5hpYMJ5zch8GEUYW/ILQrew8y9n9eWav
+         UUEUY7aGH+ALJ6FotxoimneZYbrdikfu4nE4xJ5q7WyquOIhZR86QmfUzTgQo4J99Ft7
+         RTt4rafAb3VCA+SXiPYUmUqEvmxw9JQdo4zmitf3LgXS2puH5YCJurBk122sc+xh3Pce
+         wVrnwZYocd9hJ7HdPgeCzDLw3JJO7sWLEkBM1wasfLY2eGsCLRiepueg0ijPqZ99VrnI
+         IMi5TxHJffqOMsLrRt5r1zGW9mnjOK/UlhUe98U6a9iqKm7l4UgmSAsx0J1rYUV1CPet
+         M7Fw==
+X-Gm-Message-State: AOAM533zthGZ8GihRjns1FpOSc9PljLquGkQsu5fKl81Wg78+sBfjlzb
+        5lsJa487UnM8EZqOGHnZqBQfzqWtg9CbIweqDMWFEw==
+X-Google-Smtp-Source: ABdhPJwABkQl64VjPqgFU6ptaeQD3mtBCWNeQsqrtz1w5pOSgI9ATpW57DynzvRa2DqajF1JjzMf8Tjg/MHswdIkejE=
+X-Received: by 2002:a25:1181:0:b0:624:6c32:e341 with SMTP id
+ 123-20020a251181000000b006246c32e341mr27631504ybr.437.1646209924139; Wed, 02
+ Mar 2022 00:32:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220219092533.12596-1-linmiaohe@huawei.com> <20220219092533.12596-7-linmiaohe@huawei.com>
+ <dba43259e1fe4e36a0bdbe97efaaca2f@AcuMS.aculab.com> <baeab92c-d966-2dc2-d952-c7f3faf2a229@huawei.com>
+ <03647389a32045f38ec18b090548a26d@AcuMS.aculab.com>
+In-Reply-To: <03647389a32045f38ec18b090548a26d@AcuMS.aculab.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Wed, 2 Mar 2022 09:31:53 +0100
+Message-ID: <CAM4kBBLoaESLRr28kZ901e-nikDbnQnUu9h47OsA2phxp-pvuA@mail.gmail.com>
+Subject: Re: [PATCH 6/9] mm/z3fold: move decrement of pool->pages_nr into __release_z3fold_page()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 07:37:06PM +0100, Jason A. Donenfeld wrote:
-> Hi Michael,
-> 
-> On Tue, Mar 1, 2022 at 6:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > Hmm okay, so it's a performance optimization... some batching then? Do
-> > you really need to worry about every packet? Every 64 packets not
-> > enough?  Packets are after all queued at NICs etc, and VM fork can
-> > happen after they leave wireguard ...
-> 
-> Unfortunately, yes, this is an "every packet" sort of thing -- if the
-> race is to be avoided in a meaningful way. It's really extra bad:
-> ChaCha20 and AES-CTR work by xoring a secret stream of bytes with
-> plaintext to produce a ciphertext. If you use that same secret stream
-> and xor it with a second plaintext and transmit that too, an attacker
-> can combine the two different ciphertexts to learn things about the
-> original plaintext.
-> 
-> But, anyway, it seems like the race is here to stay given what we have
-> _currently_ available with the virtual hardware. That's why I'm
-> focused on trying to get something going that's the least bad with
-> what we've currently got, which is racy by design. How vitally
-> important is it to have something that doesn't race in the far future?
-> I don't know, really. It seems plausible that that ACPI notifier
-> triggers so early that nothing else really even has a chance, so the
-> race concern is purely theoretical. But I haven't tried to measure
-> that so I'm not sure.
-> 
-> Jason
+On Mon, Feb 21, 2022 at 6:17 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Miaohe Lin <linmiaohe@huawei.com>
+> > Sent: 21 February 2022 02:53
+> >
+> > On 2022/2/20 0:33, David Laight wrote:
+> > > From: Miaohe Lin
+> > >> Sent: 19 February 2022 09:26
+> > >>
+> > >> The z3fold will always do atomic64_dec(&pool->pages_nr) when the
+> > >> __release_z3fold_page() is called. Thus we can move decrement of
+> > >> pool->pages_nr into __release_z3fold_page() to simplify the code.
+> > >> Also we can reduce the size of z3fold.o ~1k.
+> > >> Without this patch:
+> > >>    text       data     bss     dec     hex filename
+> > >>   15444       1376       8   16828    41bc mm/z3fold.o
+> > >> With this patch:
+> > >>    text       data     bss     dec     hex filename
+> > >>   15044       1248       8   16300    3fac mm/z3fold.o
+> > >
+> > > I can't see anything obvious in this patch that would reduce the size much.
+> > > OTOH there are some large functions that are pointlessly marked 'inline'.
+> > > Maybe the compiler made a better choice?
+> >
+> > I think so too.
+> >
+> > > Although it isn't al all obvious why the 'data' size changes.
+> >
+> > I checked the header of z3fold.o. The size of .data is unchanged while
+> > align is changed from 00003818 to 00003688. Maybe this is the reason
+> > .data size changes.
+>
+> You are misreading the double line header.
+> If is Offset that is changing, Align in 8 (as expected).
+>
+> It will be another section that gets added to the 'data' size
+> reported by 'size'.
+>
+> >
+> > Section Headers:
+> >   [Nr] Name              Type             Address           Offset
+> >        Size              EntSize          Flags  Link  Info  Align
+> >
+> > with this patch:
+> > [ 3] .data             PROGBITS         0000000000000000  00003688
+> >        00000000000000c0  0000000000000000  WA       0     0     8
+> >
+> > without this patch:
+> > [ 3] .data             PROGBITS         0000000000000000  00003818
+> >        00000000000000c0  0000000000000000  WA       0     0     8
+> >
+> > >
+> > >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > >> ---
+> > >>  mm/z3fold.c | 41 ++++++++++++-----------------------------
+> > >>  1 file changed, 12 insertions(+), 29 deletions(-)
+> > >>
+> > >> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> > >> index adc0b3fa4906..18a697f6fe32 100644
+> > >> --- a/mm/z3fold.c
+> > >> +++ b/mm/z3fold.c
+> > >> @@ -520,6 +520,8 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+> > >>    list_add(&zhdr->buddy, &pool->stale);
+> > >>    queue_work(pool->release_wq, &pool->work);
+> > >>    spin_unlock(&pool->stale_lock);
+> > >> +
+> > >> +  atomic64_dec(&pool->pages_nr);
+> > >
+> > > Looks like you can move the decrement inside the lock.
+> > > If you can do the same for the increment you can avoid the
+> > > expensive locked bus cycle.
+> > >
+> >
+> > atomic64_inc(&pool->pages_nr); is only done when init a new or reused z3fold_page.
+> > There is no lock around. If we hold pool->lock there, this potential gain might be
+> > nullified. Or am I miss something ?
+>
+> Atomic operations aren't magic.
+> Atomic operations are (at best) one slow locked bus cycle.
+> Acquiring a lock is the same.
+> Releasing a lock might be cheaper, but is probably a locked bus cycle.
+>
+> So if you use state_lock to protect pages_nr then you lose an atomic
+> operation for the decrement and gain one (for the unlock) in the increment.
+> That is even or maybe a slight gain.
+> OTOH a 64bit atomic is a PITA on some 32bit systems.
+> (In fact any atomic is a PITA on sparc32.)
 
+It's actually *stale_lock* and it's very misleading to use it for this.
+I would actually like to keep atomics but I have no problem with
+making it 32-bit for 32-bit systems. Would that work for you guys?
 
-I got curious, and wrote a dumb benchmark:
+~Vitaly
 
-
-#include <stdio.h>
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
-
-struct lng {
-	unsigned long long l1;
-	unsigned long long l2;
-};
-
-struct shrt {
-	unsigned long s;
-};
-
-
-struct lng l = { 1, 2 };
-struct shrt s = { 3 };
-
-static void test1(volatile struct shrt *sp)
-{
-	if (sp->s != s.s) {
-		printf("short mismatch!\n");
-		s.s = sp->s;
-	}
-}
-static void test2(volatile struct lng *lp)
-{
-	if (lp->l1 != l.l1 || lp->l2 != l.l2) {
-		printf("long mismatch!\n");
-		l.l1 = lp->l1;
-		l.l2 = lp->l2;
-	}
-}
-
-int main(int argc, char **argv)
-{
-	volatile struct shrt sv = { 4 };
-	volatile struct lng lv = { 5, 6 };
-
-	if (argc > 1) {
-		printf("test 1\n");
-		for (int i = 0; i < 10000000; ++i) 
-			test1(&sv);
-	} else {
-		printf("test 2\n");
-		for (int i = 0; i < 10000000; ++i)
-			test2(&lv);
-	}
-	return 0;
-}
-
-
-Results (built with -O2, nothing fancy):
-
-[mst@tuck ~]$ perf stat -r 1000 ./a.out 1 > /dev/null
-
- Performance counter stats for './a.out 1' (1000 runs):
-
-              5.12 msec task-clock:u              #    0.945 CPUs utilized            ( +-  0.07% )
-                 0      context-switches:u        #    0.000 /sec                   
-                 0      cpu-migrations:u          #    0.000 /sec                   
-                52      page-faults:u             #   10.016 K/sec                    ( +-  0.07% )
-        20,190,800      cycles:u                  #    3.889 GHz                      ( +-  0.01% )
-        50,147,371      instructions:u            #    2.48  insn per cycle           ( +-  0.00% )
-        20,032,224      branches:u                #    3.858 G/sec                    ( +-  0.00% )
-             1,604      branch-misses:u           #    0.01% of all branches          ( +-  0.26% )
-
-        0.00541882 +- 0.00000847 seconds time elapsed  ( +-  0.16% )
-
-[mst@tuck ~]$ perf stat -r 1000 ./a.out > /dev/null
-
- Performance counter stats for './a.out' (1000 runs):
-
-              7.75 msec task-clock:u              #    0.947 CPUs utilized            ( +-  0.12% )
-                 0      context-switches:u        #    0.000 /sec                   
-                 0      cpu-migrations:u          #    0.000 /sec                   
-                52      page-faults:u             #    6.539 K/sec                    ( +-  0.07% )
-        30,205,916      cycles:u                  #    3.798 GHz                      ( +-  0.01% )
-        80,147,373      instructions:u            #    2.65  insn per cycle           ( +-  0.00% )
-        30,032,227      branches:u                #    3.776 G/sec                    ( +-  0.00% )
-             1,621      branch-misses:u           #    0.01% of all branches          ( +-  0.23% )
-
-        0.00817982 +- 0.00000965 seconds time elapsed  ( +-  0.12% )
-
-
-So yes, the overhead is higher by 50% which seems a lot but it's from a
-very small number, so I don't see why it's a show stopper, it's not by a
-factor of 10 such that we should sacrifice safety by default. Maybe a
-kernel flag that removes the read replacing it with an interrupt will
-do.
-
-In other words, premature optimization is the root of all evil.
-
--- 
-MST
-
+> Actually does this even need to be 64bit, should it just be 'long'.
+> That will mean that any 'read' just needs a simple single memory read.
+>
+> I've just looked at the code.
+> Some of the one line wrapper functions don't make the code any
+> easier to read.
+> There is no point having inline wrappers to acquire locks if you
+> only use them some of the time.
+>
+>         David
+>
+>
+> >
+> > Many thanks for your review and reply.
+> >
+> > >     David
+> > >
+> > >>  }
+> > >>
+> > >>  static void release_z3fold_page(struct kref *ref)
+> > >> @@ -737,13 +739,9 @@ static struct z3fold_header *compact_single_buddy(struct z3fold_header *zhdr)
+> > >>    return new_zhdr;
+> > >>
+> > >>  out_fail:
+> > >> -  if (new_zhdr) {
+> > >> -          if (kref_put(&new_zhdr->refcount, release_z3fold_page_locked))
+> > >> -                  atomic64_dec(&pool->pages_nr);
+> > >> -          else {
+> > >> -                  add_to_unbuddied(pool, new_zhdr);
+> > >> -                  z3fold_page_unlock(new_zhdr);
+> > >> -          }
+> > >> +  if (new_zhdr && !kref_put(&new_zhdr->refcount, release_z3fold_page_locked)) {
+> > >> +          add_to_unbuddied(pool, new_zhdr);
+> > >> +          z3fold_page_unlock(new_zhdr);
+> > >>    }
+> > >>    return NULL;
+> > >>
+> > >> @@ -816,10 +814,8 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+> > >>    list_del_init(&zhdr->buddy);
+> > >>    spin_unlock(&pool->lock);
+> > >>
+> > >> -  if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+> > >> -          atomic64_dec(&pool->pages_nr);
+> > >> +  if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+> > >>            return;
+> > >> -  }
+> > >>
+> > >>    if (test_bit(PAGE_STALE, &page->private) ||
+> > >>        test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+> > >> @@ -829,9 +825,7 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+> > >>
+> > >>    if (!zhdr->foreign_handles && buddy_single(zhdr) &&
+> > >>        zhdr->mapped_count == 0 && compact_single_buddy(zhdr)) {
+> > >> -          if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+> > >> -                  atomic64_dec(&pool->pages_nr);
+> > >> -          else {
+> > >> +          if (!kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+> > >>                    clear_bit(PAGE_CLAIMED, &page->private);
+> > >>                    z3fold_page_unlock(zhdr);
+> > >>            }
+> > >> @@ -1089,10 +1083,8 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+> > >>            if (zhdr) {
+> > >>                    bud = get_free_buddy(zhdr, chunks);
+> > >>                    if (bud == HEADLESS) {
+> > >> -                          if (kref_put(&zhdr->refcount,
+> > >> +                          if (!kref_put(&zhdr->refcount,
+> > >>                                         release_z3fold_page_locked))
+> > >> -                                  atomic64_dec(&pool->pages_nr);
+> > >> -                          else
+> > >>                                    z3fold_page_unlock(zhdr);
+> > >>                            pr_err("No free chunks in unbuddied\n");
+> > >>                            WARN_ON(1);
+> > >> @@ -1239,10 +1231,8 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+> > >>
+> > >>    if (!page_claimed)
+> > >>            free_handle(handle, zhdr);
+> > >> -  if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list)) {
+> > >> -          atomic64_dec(&pool->pages_nr);
+> > >> +  if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list))
+> > >>            return;
+> > >> -  }
+> > >>    if (page_claimed) {
+> > >>            /* the page has not been claimed by us */
+> > >>            put_z3fold_header(zhdr);
+> > >> @@ -1353,9 +1343,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+> > retries)
+> > >>                            break;
+> > >>                    }
+> > >>                    if (!z3fold_page_trylock(zhdr)) {
+> > >> -                          if (kref_put(&zhdr->refcount,
+> > >> -                                          release_z3fold_page))
+> > >> -                                  atomic64_dec(&pool->pages_nr);
+> > >> +                          kref_put(&zhdr->refcount, release_z3fold_page);
+> > >>                            zhdr = NULL;
+> > >>                            continue; /* can't evict at this point */
+> > >>                    }
+> > >> @@ -1366,10 +1354,8 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+> > retries)
+> > >>                     */
+> > >>                    if (zhdr->foreign_handles ||
+> > >>                        test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+> > >> -                          if (kref_put(&zhdr->refcount,
+> > >> +                          if (!kref_put(&zhdr->refcount,
+> > >>                                            release_z3fold_page_locked))
+> > >> -                                  atomic64_dec(&pool->pages_nr);
+> > >> -                          else
+> > >>                                    z3fold_page_unlock(zhdr);
+> > >>                            zhdr = NULL;
+> > >>                            continue; /* can't evict such page */
+> > >> @@ -1447,7 +1433,6 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+> > retries)
+> > >>                    if (kref_put(&zhdr->refcount,
+> > >>                                    release_z3fold_page_locked)) {
+> > >>                            kmem_cache_free(pool->c_handle, slots);
+> > >> -                          atomic64_dec(&pool->pages_nr);
+> > >>                            return 0;
+> > >>                    }
+> > >>                    /*
+> > >> @@ -1669,10 +1654,8 @@ static void z3fold_page_putback(struct page *page)
+> > >>    if (!list_empty(&zhdr->buddy))
+> > >>            list_del_init(&zhdr->buddy);
+> > >>    INIT_LIST_HEAD(&page->lru);
+> > >> -  if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+> > >> -          atomic64_dec(&pool->pages_nr);
+> > >> +  if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+> > >>            return;
+> > >> -  }
+> > >>    spin_lock(&pool->lock);
+> > >>    list_add(&page->lru, &pool->lru);
+> > >>    spin_unlock(&pool->lock);
+> > >> --
+> > >> 2.23.0
+> > >
+> > > -
+> > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> > > Registration No: 1397386 (Wales)
+> > >
+> > > .
+> > >
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)

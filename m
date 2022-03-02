@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814214CA15B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0F74CA160
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240707AbiCBJwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S240711AbiCBJxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiCBJwQ (ORCPT
+        with ESMTP id S236809AbiCBJxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:52:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7094EBA75C;
-        Wed,  2 Mar 2022 01:51:32 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 146371042;
-        Wed,  2 Mar 2022 01:51:32 -0800 (PST)
-Received: from [10.163.49.202] (unknown [10.163.49.202])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE96F3F66F;
-        Wed,  2 Mar 2022 01:51:24 -0800 (PST)
-Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
- <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
- <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
- <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
- <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
- <dc3c95a4-de06-9889-ce1e-f660fc9fbb95@csgroup.eu>
- <c3b60de0-38cd-160a-aa15-831349e07e23@arm.com>
- <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
-Date:   Wed, 2 Mar 2022 15:21:22 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 2 Mar 2022 04:53:21 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B1D647D;
+        Wed,  2 Mar 2022 01:52:38 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id c14so1104861ioa.12;
+        Wed, 02 Mar 2022 01:52:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=I2o/pswz8CsOqeDuAgZ3eqxvNrxBejX6LZSzFbSCbBI=;
+        b=abAWMduWTWfXPuvZrFhTxtXcEPYwnj6f4Ci3G04BEBi+KJl8ExHkzPtTRFq+47JkDQ
+         5z0/nK7IoBhR3UkQDlA2XFmYaNx/ysabtceP5FE/7Y2OIq5Sc53pFN1WxZcA1obFvdCB
+         7mrXffryFR+ro5wY2W1T4ol+p5vCNze0gHUVwCkSy0WbrWX4ft3E9WBYRu/LQ8i5kcbY
+         ry/4wpzVF5kPO8No4mialbJXofkLN4pFyDWm3eILEpJHclOSuHBvD1LnSdG5EtBPQS12
+         cSweC8SUpH0b2xOyPcJjmosm28l5ehtjN8QHj/u4Wg1wZxGhZnsJaFiIUcu5HeHUtnP+
+         9Qfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I2o/pswz8CsOqeDuAgZ3eqxvNrxBejX6LZSzFbSCbBI=;
+        b=fMsOiYQ2ULpkymIIo8rlBdrfGkxWt4mXbQ0TgoyldsHLSQarBywnUGq1OOxK2yKQEq
+         Qxu0KCZr33geAdGOzww8tE1SfsU6D8SBnuS2GKSXMRIblE23vnhnnkRLeX/74LtGQaN5
+         KYJ4KWMzp8i2m1aXkcpVEAFwQJbhHo00K+ivzbZFrw3PkR12XhWQK1F3moKwEHYEqFni
+         5yZvGkfbLQ926nG1gyaLlWC+0Ei65NqNSNmNH1j4UhRls7u2TqqFCHzvD4ID2H7/Z6j4
+         O/as4Q6P776Vbr7EO3eFJT2rbbF0He5zECxhhXlYvkJZo+zPKpC1UAl3R725/Wr5FnGN
+         eh/A==
+X-Gm-Message-State: AOAM533ns7sedgOVFDevXt1Z3IreSnyX/MTzHv1w3a+6rLNeAmLZ8DXH
+        p2loiFX11ZSkVfxWnoO910E=
+X-Google-Smtp-Source: ABdhPJxFUXHHlld8SYitQpMlLWzDb6yrh0+mgCsz4nYJ4ZwRLkJ46kYwKsSY3aR4w/38eHCPUL69vQ==
+X-Received: by 2002:a02:cb5b:0:b0:311:c0a0:9e1c with SMTP id k27-20020a02cb5b000000b00311c0a09e1cmr25177577jap.5.1646214757768;
+        Wed, 02 Mar 2022 01:52:37 -0800 (PST)
+Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
+        by smtp.gmail.com with ESMTPSA id v11-20020a056e02164b00b002c4a2d3d080sm1721804ilu.28.2022.03.02.01.52.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 01:52:37 -0800 (PST)
+Message-ID: <33a65b94-9e99-2cf8-0b62-95127916ce79@gmail.com>
+Date:   Wed, 2 Mar 2022 10:52:34 +0100
 MIME-Version: 1.0
-In-Reply-To: <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: build failure after merge of the arm-soc tree
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220302095008.27b6c6a9@canb.auug.org.au>
+ <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,144 +79,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnd,
 
-
-On 3/2/22 12:35 PM, Christophe Leroy wrote:
-> 
-> 
-> Le 02/03/2022 à 04:22, Anshuman Khandual a écrit :
+On 02/03/2022 08:45, Arnd Bergmann wrote:
+> On Tue, Mar 1, 2022 at 11:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >>
+>> Hi all,
 >>
->> On 3/1/22 1:46 PM, Christophe Leroy wrote:
->>>
->>>
->>> Le 01/03/2022 à 01:31, Russell King (Oracle) a écrit :
->>>> On Tue, Mar 01, 2022 at 05:30:41AM +0530, Anshuman Khandual wrote:
->>>>> On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
->>>>>> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
->>>>>>> This defines and exports a platform specific custom vm_get_page_prot() via
->>>>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->>>>>>> macros can be dropped which are no longer needed.
->>>>>>
->>>>>> What I would really like to know is why having to run _code_ to work out
->>>>>> what the page protections need to be is better than looking it up in a
->>>>>> table.
->>>>>>
->>>>>> Not only is this more expensive in terms of CPU cycles, it also brings
->>>>>> additional code size with it.
->>>>>>
->>>>>> I'm struggling to see what the benefit is.
->>>>>
->>>>> Currently vm_get_page_prot() is also being _run_ to fetch required page
->>>>> protection values. Although that is being run in the core MM and from a
->>>>> platform perspective __SXXX, __PXXX are just being exported for a table.
->>>>> Looking it up in a table (and applying more constructs there after) is
->>>>> not much different than a clean switch case statement in terms of CPU
->>>>> usage. So this is not more expensive in terms of CPU cycles.
->>>>
->>>> I disagree.
->>>
->>> So do I.
->>>
->>>>
->>>> However, let's base this disagreement on some evidence. Here is the
->>>> present 32-bit ARM implementation:
->>>>
->>>> 00000048 <vm_get_page_prot>:
->>>>         48:       e200000f        and     r0, r0, #15
->>>>         4c:       e3003000        movw    r3, #0
->>>>                           4c: R_ARM_MOVW_ABS_NC   .LANCHOR1
->>>>         50:       e3403000        movt    r3, #0
->>>>                           50: R_ARM_MOVT_ABS      .LANCHOR1
->>>>         54:       e7930100        ldr     r0, [r3, r0, lsl #2]
->>>>         58:       e12fff1e        bx      lr
->>>>
->>>> That is five instructions long.
->>>
->>> On ppc32 I get:
->>>
->>> 00000094 <vm_get_page_prot>:
->>>         94:	3d 20 00 00 	lis     r9,0
->>> 			96: R_PPC_ADDR16_HA	.data..ro_after_init
->>>         98:	54 84 16 ba 	rlwinm  r4,r4,2,26,29
->>>         9c:	39 29 00 00 	addi    r9,r9,0
->>> 			9e: R_PPC_ADDR16_LO	.data..ro_after_init
->>>         a0:	7d 29 20 2e 	lwzx    r9,r9,r4
->>>         a4:	91 23 00 00 	stw     r9,0(r3)
->>>         a8:	4e 80 00 20 	blr
->>>
->>>
->>>>
->>>> Please show that your new implementation is not more expensive on
->>>> 32-bit ARM. Please do so by building a 32-bit kernel, and providing
->>>> the disassembly.
->>>
->>> With your series I get:
->>>
->>> 00000000 <vm_get_page_prot>:
->>>      0:	3d 20 00 00 	lis     r9,0
->>> 			2: R_PPC_ADDR16_HA	.rodata
->>>      4:	39 29 00 00 	addi    r9,r9,0
->>> 			6: R_PPC_ADDR16_LO	.rodata
->>>      8:	54 84 16 ba 	rlwinm  r4,r4,2,26,29
->>>      c:	7d 49 20 2e 	lwzx    r10,r9,r4
->>>     10:	7d 4a 4a 14 	add     r10,r10,r9
->>>     14:	7d 49 03 a6 	mtctr   r10
->>>     18:	4e 80 04 20 	bctr
->>>     1c:	39 20 03 15 	li      r9,789
->>>     20:	91 23 00 00 	stw     r9,0(r3)
->>>     24:	4e 80 00 20 	blr
->>>     28:	39 20 01 15 	li      r9,277
->>>     2c:	91 23 00 00 	stw     r9,0(r3)
->>>     30:	4e 80 00 20 	blr
->>>     34:	39 20 07 15 	li      r9,1813
->>>     38:	91 23 00 00 	stw     r9,0(r3)
->>>     3c:	4e 80 00 20 	blr
->>>     40:	39 20 05 15 	li      r9,1301
->>>     44:	91 23 00 00 	stw     r9,0(r3)
->>>     48:	4e 80 00 20 	blr
->>>     4c:	39 20 01 11 	li      r9,273
->>>     50:	4b ff ff d0 	b       20 <vm_get_page_prot+0x20>
->>>
->>>
->>> That is definitely more expensive, it implements a table of branches.
+>> After merging the arm-soc tree, today's linux-next build (arm
+>> multi_v7_defconfig) failed like this:
 >>
->> Okay, will split out the PPC32 implementation that retains existing
->> table look up method. Also planning to keep that inside same file
->> (arch/powerpc/mm/mmap.c), unless you have a difference preference.
+>> drivers/soc/mediatek/mtk-mmsys.c:64:10: error: 'const struct mtk_mmsys_driver_data' has no member named 'sw0_rst_offset'
+>>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>>        |          ^~~~~~~~~~~~~~
+>> In file included from drivers/soc/mediatek/mtk-mmsys.c:18:
+>> drivers/soc/mediatek/mt8186-mmsys.h:55:57: warning: excess elements in struct initializer
+>>     55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
+>>        |                                                         ^~~~~
+>> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
+>>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>>        |                           ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/mediatek/mt8186-mmsys.h:55:57: note: (near initialization for 'mt8186_mmsys_driver_data')
+>>     55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
+>>        |                                                         ^~~~~
+>> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
+>>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+>>        |                           ^~~~~~~~~~~~~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>    831785f0e5b9 ("soc: mediatek: mmsys: add mmsys reset control for MT8186")
+>>
+>> I have used the arm-soc tree from next-20220301 for today.
 > 
-> My point was not to get something specific for PPC32, but to amplify on 
-> Russell's objection.
+> I'm going on vacation right now, did a quick revert of that commit to fix the
+> build. Rex-BC Chen, Matthias: please send a proper fix that I can apply next
+> week when I get back, to replace my revert.
 > 
-> As this is bad for ARM and bad for PPC32, do we have any evidence that 
-> your change is good for any other architecture ?
-> 
-> I checked PPC64 and there is exactly the same drawback. With the current 
-> implementation it is a small function performing table read then a few 
-> adjustment. After your change it is a bigger function implementing a 
-> table of branches.
 
-I am wondering if this would not be the case for any other switch case
-statement on the platform ? Is there something specific/different just
-on vm_get_page_prot() implementation ? Are you suggesting that switch
-case statements should just be avoided instead ?
+I send a new pull request with the missing commit included. Please let me know 
+if you prefer the commit on top of the old pull request. This would break 
+git-bisecting, but the window of commits is rather small.
 
-> 
-> So, as requested by Russell, could you look at the disassembly for other 
-> architectures and show us that ARM and POWERPC are the only ones for 
-> which your change is not optimal ?
+I fixed my for-next branch yesterday already.
 
-But the primary purpose of this series is not to guarantee optimized
-code on platform by platform basis, while migrating from a table based
-look up method into a switch case statement.
+Sorry for the inconvenience.
 
-But instead, the purposes is to remove current levels of unnecessary
-abstraction while converting a vm_flags access combination into page
-protection. The switch case statement for platform implementation of
-vm_get_page_prot() just seemed logical enough. Christoph's original
-suggestion patch for x86 had the same implementation as well.
-
-But if the table look up is still better/preferred method on certain
-platforms like arm or ppc32, will be happy to preserve that.
-
-- Anshuman
+Matthias

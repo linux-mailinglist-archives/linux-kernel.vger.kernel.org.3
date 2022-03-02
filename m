@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494624CAA92
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C584CAAA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242205AbiCBQkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S243528AbiCBQlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243133AbiCBQkK (ORCPT
+        with ESMTP id S243299AbiCBQlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:40:10 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414F2CFB83
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XEgUZ8A7MHTeA20Di9wn/WKEKRg/ap9UlmNyUR7U1MY=; b=bouIvFr98E+ye7BCxEdZ7dQSCi
-        QrdH+h9i1Fwe9mV0xC0/o1RfMlOBCWMrxD5k86PRAJPB0pPtXq4II7N6wmBmJoeqa1JD4mwfAIR12
-        /nJTRT+hUaAWGL7z7N7dm91bBrGlfgRHT7oUU73X253yIaK/ZJahQsaBehVEP1mXcdOD0C4pIqDnx
-        yZ8Scqcx63NsxaV03n5Lea62AEBi5xg3eZALwBktv1qVZus5F1WLSaGlsfPmxGcCjmPLmyU3nBrMk
-        vxOgT0NkygIlnA8BTUEdpQJuiDdiq0oNpE1LiSw/eYWOQCyBKXnapsjt11Y1/N4/fXgGgpSbP33RB
-        sevcz/Pg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPS08-00EeDS-SG; Wed, 02 Mar 2022 16:38:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52D2830018E;
-        Wed,  2 Mar 2022 17:38:54 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2CB1F323174FE; Wed,  2 Mar 2022 17:38:54 +0100 (CET)
-Date:   Wed, 2 Mar 2022 17:38:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ndesaulniers@google.com, rostedt@goodmis.org,
-        samitolvanen@google.com, x86@kernel.org
-Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
-Message-ID: <Yh+dnkcX6+Vdpwjs@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.892372059@infradead.org>
- <20220228150705.aab2d654b973109bab070ffe@kernel.org>
- <20220228232513.GH11184@worktop.programming.kicks-ass.net>
- <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
- <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
- <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
- <20220301191245.GI11184@worktop.programming.kicks-ass.net>
- <20220301200547.GK11184@worktop.programming.kicks-ass.net>
- <1646236571.m56yc0kmzw.naveen@linux.ibm.com>
+        Wed, 2 Mar 2022 11:41:22 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785EBCA0E5;
+        Wed,  2 Mar 2022 08:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646239237; x=1677775237;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=WYdj9HsqlR6mD7UuAQBB90fXgHWVIMAG8azr7wg+GKA=;
+  b=Xc1MICeFkY54mnnvgi1/7t2Hum902GFPZrtHLsZ1stEP6DXbmDHFrlEV
+   2D81WfzWgVo5WofsNW3CiG61fQbD/lNd3xoeDqt3BzDRBDksLdC4z6vN8
+   KPWCHV+AjlRG/2gMXAcZch11GTM81W/rbK10cSKiCWbUm15G/c5LYUQH8
+   GoeOVpIYwji2336S412QOZ4WWdyDQSwNMYPNitu0RsiDy9Jmd9/P2I8BE
+   3kV7dHWShOugbYBzDyJ0oPA5G6iugIvjPB1EnsKWhXJVs9sLL6bfVT0Fr
+   kVdc7kRMO6V2sSSxwkMrxHVhJK8hgZr3sZVUhbuL2EFEoIodZ6FQLt63a
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251018458"
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="251018458"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 08:40:36 -0800
+X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
+   d="scan'208";a="511067040"
+Received: from nagana-mobl.amr.corp.intel.com (HELO [10.252.142.107]) ([10.252.142.107])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 08:40:35 -0800
+Message-ID: <1f06eb77-1c08-33f6-d784-8eeee25f6f6a@intel.com>
+Date:   Wed, 2 Mar 2022 08:40:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646236571.m56yc0kmzw.naveen@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-sgx@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+References: <20220301125836.3430-1-jarkko@kernel.org>
+ <3a083b4d-9645-dec6-8cdc-481429dd0a1f@intel.com> <Yh7LUU401weiq0ew@iki.fi>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v5] x86/sgx: Free backing memory after faulting the
+ enclave page
+In-Reply-To: <Yh7LUU401weiq0ew@iki.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 09:29:04PM +0530, Naveen N. Rao wrote:
-> Peter Zijlstra wrote:
-> > 
-> > How does this look?
+On 3/1/22 17:41, Jarkko Sakkinen wrote:
+> On Tue, Mar 01, 2022 at 09:54:14AM -0800, Dave Hansen wrote:
+>> On 3/1/22 04:58, Jarkko Sakkinen wrote:
+>>> @@ -32,14 +58,16 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+>>>  	else
+>>>  		page_index = PFN_DOWN(encl->size);
+>>>  
+>>> +	page_pcmd_off = sgx_encl_get_backing_page_pcmd_offset(encl, page_index);
+>>> +
+>>>  	ret = sgx_encl_lookup_backing(encl, page_index, &b);
+>>>  	if (ret)
+>>>  		return ret;
+>> What tree is this against?  It looks like it might be on top of
+>> Kristen's overcommit series.
+>>
+>> It would be best if you could test this on top of tip/sgx.  Kristen
+>> changed code in this area as well.
+> I rebased this against latest stuff and now I did a sanity check:
 > 
-> I gave this a quick test on powerpc and this looks good to me.
-
-Thanks!
-
-> > --- a/include/linux/kprobes.h
-> > +++ b/include/linux/kprobes.h
-> > @@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
-> >  extern void kprobes_inc_nmissed_count(struct kprobe *p);
-> >  extern bool arch_within_kprobe_blacklist(unsigned long addr);
-> >  extern int arch_populate_kprobe_blacklist(void);
-> > -extern bool arch_kprobe_on_func_entry(unsigned long offset);
+> $ git fetch tip
+> remote: Enumerating objects: 75, done.
+> remote: Counting objects: 100% (75/75), done.
+> remote: Compressing objects: 100% (12/12), done.
+> remote: Total 77 (delta 65), reused 65 (delta 63), pack-reused 2
+> Unpacking objects: 100% (77/77), 34.07 KiB | 157.00 KiB/s, done.
+>>From git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>    161a9a33702a..cedd3614e5d9  perf/core  -> tip/perf/core
+>    6255b48aebfd..25795ef6299f  sched/core -> tip/sched/core
 > 
-> There is a __weak definition of this function in kernel/kprobes.c which
-> should also be removed.
+> $ git rebase tip/x86/sgx 
+> Current branch master is up to date.
 
-*poof*, gone.
+Are you sure you didn't also rebase all of Kristen's work along with
+your one patch?  How many patches did you rebase?
+
+You might want to do:
+
+	git log tip/x86/sgx..

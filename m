@@ -2,245 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B424CAE7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45204CAE7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240406AbiCBTSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S244664AbiCBTS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241448AbiCBTSf (ORCPT
+        with ESMTP id S240096AbiCBTSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:18:35 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1EF1704B;
-        Wed,  2 Mar 2022 11:17:41 -0800 (PST)
+        Wed, 2 Mar 2022 14:18:18 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE0D25E8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646248662; x=1677784662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W5bF9lrLsIRpfJsYdIa+ZYl/EKN3Jruw12F438PMPI0=;
-  b=eZ8/nmRJqr6WyQXWFXqnKEUrVCreIMtwOOv5Oxpwf+nq2cFZ15o0fA+B
-   0yAHKKuaaoyaeSv1pRDlO0sYN8Nn4f/ZjB0/JHYR+JcPwYvPM2q6STCC9
-   MAPWx9/xUsz3FwDowSYARo2syU1lV+MbLazuTEAbSPBuX7g6f9JtqKjxD
-   so4pd8eeT+mQyiQDARavOFJtsxQNVWxtLkR8RFQXac7aiSuYVBL/qeQkF
-   nAQ8dRBDghqoET1TRWdMYAI8p1yX8s3eqps9tOlC6Nd9EjLXdzLq3Uhu0
-   Zjv/h+P8a22r/olYp+Zkw4tUs+2rSSCB0kTk8BMoJG0PSE+Y54rXA2TmL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251059895"
+  t=1646248653; x=1677784653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gPj7MvWo8UszOjBjUPqRuH9Y8l5KgFcyHPQGUBxuQzo=;
+  b=d8PZks5KOw4kJB1EnmXT602zPmZb/TgyTJeZRJ9phnJT3kMlHRA4bdi2
+   4NZQH3NYJPL45TItsYYJtflAe8ml6IrWpVsCG1kkRilm3y0Y8O+HjcA1B
+   L9U951WotTAxYMxkRw9bGqYTSpZ24h8ep8I6WoBXT34597UCkWAZcOJEP
+   2nElnbfJWAxUIBsHlnH5pfUx4a8yE5wasKLbx7hXd3NPFzevKy/42TJiS
+   VEa0IXiUvWmhFq+oDfk5+Nu/KY8/3c5X9BboUkz/Z2ztOuQWgh70nwa3Y
+   Ga5WPxmwjpX2PJbOzr2AINsilPdhJKZdhTJs5lr9AYV6+4AWrsHxyjVmh
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="314205402"
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="251059895"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 11:17:41 -0800
+   d="scan'208";a="314205402"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 11:17:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="630515739"
+   d="scan'208";a="609314140"
 Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Mar 2022 11:17:36 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 02 Mar 2022 11:17:31 -0800
 Received: from kbuild by e9605edfa585 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nPUTa-0001ni-Fw; Wed, 02 Mar 2022 19:17:30 +0000
-Date:   Thu, 3 Mar 2022 03:16:45 +0800
+        id 1nPUTb-0001nq-3w; Wed, 02 Mar 2022 19:17:31 +0000
+Date:   Thu, 3 Mar 2022 03:16:48 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v11 23/27] ima: Introduce securityfs file to activate an
- IMA namespace
-Message-ID: <202203030340.kolQS5ma-lkp@intel.com>
-References: <20220302134703.1273041-24-stefanb@linux.ibm.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.14-p-release
+ 137/6167] security/commoncap.c:75:5: warning: no previous declaration for
+ '__cap_capable'
+Message-ID: <202203030333.1rYTj1jB-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302134703.1273041-24-stefanb@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Hi John,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc6]
-[cannot apply to zohar-integrity/next-integrity linux/master jmorris-security/next-testing next-20220302]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fb184c4af9b9f4563e7a126219389986a71d5b5b
-config: arm64-randconfig-r006-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030340.kolQS5ma-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.14-p-release
+head:   0ca5d5ac9152d01b3494fb2efb5390319eb9904a
+commit: 2b02b4ab89b9cba5aec936046d8538962c5142fc [137/6167] ANDROID: net: paranoid: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants
+config: arm-zeus_defconfig (https://download.01.org/0day-ci/archive/20220303/202203030333.1rYTj1jB-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 7.5.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/59a9ba1130510d6693a61c6eb84c29983fa696df
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
-        git checkout 59a9ba1130510d6693a61c6eb84c29983fa696df
+        # https://github.com/ammarfaizi2/linux-block/commit/2b02b4ab89b9cba5aec936046d8538962c5142fc
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.14-p-release
+        git checkout 2b02b4ab89b9cba5aec936046d8538962c5142fc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash security/integrity/ima/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> security/integrity/ima/ima_fs.c:591:3: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (IS_ERR(active))
-                   ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   security/integrity/ima/ima_fs.c:608:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   security/integrity/ima/ima_fs.c:591:3: note: remove the 'if' if its condition is always false
-                   if (IS_ERR(active))
-                   ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   security/integrity/ima/ima_fs.c:516:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+>> security/commoncap.c:75:5: warning: no previous declaration for '__cap_capable' [-Wmissing-declarations]
+    int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+        ^~~~~~~~~~~~~
+   In file included from include/linux/capability.h:16:0,
+                    from security/commoncap.c:10:
+   security/commoncap.c: In function 'cap_prctl_drop':
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1112:7: note: in expansion of macro 'cap_valid'
+     if (!cap_valid(cap))
+          ^~~~~~~~~
+   security/commoncap.c: In function 'cap_task_prctl':
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1142:8: note: in expansion of macro 'cap_valid'
+      if (!cap_valid(arg2))
+           ^~~~~~~~~
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1226:10: note: in expansion of macro 'cap_valid'
+      if (((!cap_valid(arg3)) | arg4 | arg5))
+             ^~~~~~~~~
 
 
-vim +591 security/integrity/ima/ima_fs.c
+vim +/__cap_capable +75 security/commoncap.c
 
-   504	
-   505	int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-   506	{
-   507		struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
-   508		struct dentry *int_dir;
-   509		struct dentry *ima_dir = NULL;
-   510		struct dentry *ima_symlink = NULL;
-   511		struct dentry *binary_runtime_measurements = NULL;
-   512		struct dentry *ascii_runtime_measurements = NULL;
-   513		struct dentry *runtime_measurements_count = NULL;
-   514		struct dentry *violations = NULL;
-   515		struct dentry *active = NULL;
-   516		int ret;
-   517	
-   518		/* FIXME: update when evm and integrity are namespaced */
-   519		if (user_ns != &init_user_ns) {
-   520			int_dir = securityfs_create_dir("integrity", root);
-   521			if (IS_ERR(int_dir))
-   522				return PTR_ERR(int_dir);
-   523		} else {
-   524			int_dir = integrity_dir;
-   525		}
-   526	
-   527		ima_dir = securityfs_create_dir("ima", int_dir);
-   528		if (IS_ERR(ima_dir)) {
-   529			ret = PTR_ERR(ima_dir);
-   530			goto out;
-   531		}
-   532	
-   533		ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
-   534							NULL);
-   535		if (IS_ERR(ima_symlink)) {
-   536			ret = PTR_ERR(ima_symlink);
-   537			goto out;
-   538		}
-   539	
-   540		binary_runtime_measurements =
-   541		    securityfs_create_file("binary_runtime_measurements",
-   542					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   543					   &ima_measurements_ops);
-   544		if (IS_ERR(binary_runtime_measurements)) {
-   545			ret = PTR_ERR(binary_runtime_measurements);
-   546			goto out;
-   547		}
-   548	
-   549		ascii_runtime_measurements =
-   550		    securityfs_create_file("ascii_runtime_measurements",
-   551					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   552					   &ima_ascii_measurements_ops);
-   553		if (IS_ERR(ascii_runtime_measurements)) {
-   554			ret = PTR_ERR(ascii_runtime_measurements);
-   555			goto out;
-   556		}
-   557	
-   558		runtime_measurements_count =
-   559		    securityfs_create_file("runtime_measurements_count",
-   560					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   561					   &ima_measurements_count_ops);
-   562		if (IS_ERR(runtime_measurements_count)) {
-   563			ret = PTR_ERR(runtime_measurements_count);
-   564			goto out;
-   565		}
-   566	
-   567		violations =
-   568		    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
-   569					   ima_dir, NULL, &ima_htable_violations_ops);
-   570		if (IS_ERR(violations)) {
-   571			ret = PTR_ERR(violations);
-   572			goto out;
-   573		}
-   574	
-   575		if (!ns->ima_policy_removed) {
-   576			ns->ima_policy =
-   577			    securityfs_create_file("policy", POLICY_FILE_FLAGS,
-   578						   ima_dir, NULL,
-   579						   &ima_measure_policy_ops);
-   580			if (IS_ERR(ns->ima_policy)) {
-   581				ret = PTR_ERR(ns->ima_policy);
-   582				goto out;
-   583			}
-   584		}
-   585	
-   586		if (ns != &init_ima_ns) {
-   587			active =
-   588			    securityfs_create_file("active",
-   589						   S_IRUSR | S_IWUSR | S_IRGRP, ima_dir,
-   590						   NULL, &ima_active_ops);
- > 591			if (IS_ERR(active))
-   592				goto out;
-   593		}
-   594	
-   595		return 0;
-   596	out:
-   597		securityfs_remove(active);
-   598		securityfs_remove(ns->ima_policy);
-   599		securityfs_remove(violations);
-   600		securityfs_remove(runtime_measurements_count);
-   601		securityfs_remove(ascii_runtime_measurements);
-   602		securityfs_remove(binary_runtime_measurements);
-   603		securityfs_remove(ima_symlink);
-   604		securityfs_remove(ima_dir);
-   605		if (user_ns != &init_user_ns)
-   606			securityfs_remove(int_dir);
-   607	
-   608		return ret;
-   609	}
-   610	
+    59	
+    60	/**
+    61	 * __cap_capable - Determine whether a task has a particular effective capability
+    62	 * @cred: The credentials to use
+    63	 * @ns:  The user namespace in which we need the capability
+    64	 * @cap: The capability to check for
+    65	 * @audit: Whether to write an audit message or not
+    66	 *
+    67	 * Determine whether the nominated task has the specified capability amongst
+    68	 * its effective set, returning 0 if it does, -ve if it does not.
+    69	 *
+    70	 * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+    71	 * and has_capability() functions.  That is, it has the reverse semantics:
+    72	 * cap_has_capability() returns 0 when a task has a capability, but the
+    73	 * kernel's capable() and has_capability() returns 1 for this case.
+    74	 */
+  > 75	int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+    76			int cap, int audit)
+    77	{
+    78		struct user_namespace *ns = targ_ns;
+    79	
+    80		/* See if cred has the capability in the target user namespace
+    81		 * by examining the target user namespace and all of the target
+    82		 * user namespace's parents.
+    83		 */
+    84		for (;;) {
+    85			/* Do we have the necessary capabilities? */
+    86			if (ns == cred->user_ns)
+    87				return cap_raised(cred->cap_effective, cap) ? 0 : -EPERM;
+    88	
+    89			/*
+    90			 * If we're already at a lower level than we're looking for,
+    91			 * we're done searching.
+    92			 */
+    93			if (ns->level <= cred->user_ns->level)
+    94				return -EPERM;
+    95	
+    96			/* 
+    97			 * The owner of the user namespace in the parent of the
+    98			 * user namespace has all caps.
+    99			 */
+   100			if ((ns->parent == cred->user_ns) && uid_eq(ns->owner, cred->euid))
+   101				return 0;
+   102	
+   103			/*
+   104			 * If you have a capability in a parent user ns, then you have
+   105			 * it over all children user namespaces as well.
+   106			 */
+   107			ns = ns->parent;
+   108		}
+   109	
+   110		/* We never get here */
+   111	}
+   112	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

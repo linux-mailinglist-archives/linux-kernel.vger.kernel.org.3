@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE744C9C7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745A14C9C87
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239434AbiCBEge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 23:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S239486AbiCBEhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 23:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239472AbiCBEg3 (ORCPT
+        with ESMTP id S239468AbiCBEgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 23:36:29 -0500
+        Tue, 1 Mar 2022 23:36:31 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E86B0D20
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 20:35:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2A3B10B5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 20:35:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=6pfakOYBTAGJXApeYSyam4vpJGARHkHxx5lbo6BGMVE=; b=UF5ZSlSqlDI0WKc+mMtKr8oUie
-        5+Hxa6DGeOUccncsZpvQWXYItY5B+ni2rC+wMyjyTUOKAf5MD7MQW7s7/tpgqP6XeKM8OQ6q49Igq
-        M7Qk5Pb9N6xXSqDCxr+RxknZgaMt6LfNYHSJ+T89bXM0MIIJOJkKep6wq8oDR28zbuUMrwYOjXiZ3
-        wYmRW80MHJ1jMt6swQQeomvDz+swEstJXJckx9IOQxnijnbqdGZiWtnO/rGD/SRwyudfhDeCY8Sil
-        tFvqimQ6+2uEFoJN13XB75JLPO8PyDrMj7yMSkVxjtYF4WmqCQnBeNm29O9rReeSe/VyNky5gsDOL
-        5HPx1wfA==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=htOLwXcWZTxG7nXFiizBJOGaxR9Ho6WfdNcwubCBDjY=; b=KxRDwT29VbtCxmuS+PerwBqn6S
+        ei29uy6P9VGDk/iOLyDy8EgHKe6YPkbvt7b7rPbBJAxtGH+8QoSIylYL6tpxC5MRnYXxgLxYVIwJ0
+        +MHvcPpnlsU1CbLCUPXMJniwgQJalRKvimofFNX1bDxbNjnF73RtYFewCRsZbfAkNwoch79K69SDA
+        aTlkyN8Jh/R7okDQuW2hG+5y23bBEPHUX4hXrRMU3y1pqpmAV9MPVTh95V24FJuMfmxzfWjSx31bv
+        AMXZviQGz+5dp1EuREHDMqL1vPj9Tx8Q4rWVMSm15pXXjRHNTxxYvmZrVDh/SLioiGOenRE1xFTUE
+        1ymo5rzw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPGhR-00AF6x-Ns; Wed, 02 Mar 2022 04:34:53 +0000
+        id 1nPGhR-00AF6z-QV; Wed, 02 Mar 2022 04:34:53 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -39,10 +39,12 @@ To:     Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 00/19] Enable -Wshadow=local for kernel/sched
-Date:   Wed,  2 Mar 2022 04:34:32 +0000
-Message-Id: <20220302043451.2441320-1-willy@infradead.org>
+Subject: [PATCH 01/19] wait: Parameterize the return variable to ___wait_event()
+Date:   Wed,  2 Mar 2022 04:34:33 +0000
+Message-Id: <20220302043451.2441320-2-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220302043451.2441320-1-willy@infradead.org>
+References: <20220302043451.2441320-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,60 +57,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I thought I'd choose one of the more core parts of the kernel to
-demonstrate the value of -Wshadow.  It found two places where there are
-shadowed variables that are at least confusing.  For all I know they're
-buggy and my resolution of these warnings is wrong.
+Macros should not refer to variables which aren't in their arguments.
+Pass the name from its callers.
 
-The first 12 patches just untangle the unclean uses of __ret in wait.h
-& friends.  Then 4 patches to fix problems in headers that are noticed
-by kernel/sched.  Two patches fix the two places in kernel/sched/
-with shadowed variables and the final patch adds -Wshadow=local to
-the Makefile.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/swait.h    | 12 ++++++------
+ include/linux/wait.h     | 32 ++++++++++++++++----------------
+ include/linux/wait_bit.h |  4 ++--
+ 3 files changed, 24 insertions(+), 24 deletions(-)
 
-I'm quite certain this patch series isn't going in as-is.  But maybe
-it'll inspire some patches that can go in.
-
-Matthew Wilcox (Oracle) (19):
-  wait: Parameterize the return variable to ___wait_event()
-  swait: Parameterize the return variable to __swait_event_timeout()
-  swait: Parameterize the return variable to
-    __swait_event_interruptible_timeout()
-  swait: Parameterize the return variable to
-    __swait_event_idle_timeout()
-  wait: Parameterize the return variable to __wait_event_timeout()
-  wait: Parameterize the return variable to
-    __wait_event_freezable_timeout()
-  wait: Parameterize the return variable to
-    __wait_event_interruptible_timeout()
-  wait: Parameterize the return variable to __wait_event_idle_timeout()
-  wait: Parameterize the return variable to
-    __wait_event_idle_exclusive_timeout()
-  wait: Parameterize the return variable to
-    __wait_event_killable_timeout()
-  wait: Parameterize the return variable to
-    __wait_event_lock_irq_timeout()
-  wait_bit: Parameterize the return variable to
-    __wait_var_event_timeout()
-  Add UNIQUE_ID
-  wait: Add a unique identifier to ___wait_event()
-  x86: Use a unique identifier in __WARN_FLAGS()
-  x86: Pass a unique identifier to __xchg_op()
-  sched/rt: Rename a shadowed variable
-  sched/topology: Rename the cpu parameter
-  sched: Enable -Wshadow=local
-
- arch/x86/include/asm/bug.h     |   4 +-
- arch/x86/include/asm/cmpxchg.h |   6 +-
- include/linux/compiler.h       |   1 +
- include/linux/swait.h          |  24 ++--
- include/linux/wait.h           | 223 ++++++++++++++++-----------------
- include/linux/wait_bit.h       |   9 +-
- kernel/sched/Makefile          |   1 +
- kernel/sched/rt.c              |   4 +-
- kernel/sched/topology.c        |   6 +-
- 9 files changed, 138 insertions(+), 140 deletions(-)
-
+diff --git a/include/linux/swait.h b/include/linux/swait.h
+index 6a8c22b8c2a5..5e8e9b13be2d 100644
+--- a/include/linux/swait.h
++++ b/include/linux/swait.h
+@@ -191,14 +191,14 @@ do {									\
+ } while (0)
+ 
+ #define __swait_event_timeout(wq, condition, timeout)			\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		      TASK_UNINTERRUPTIBLE, timeout,			\
+ 		      __ret = schedule_timeout(__ret))
+ 
+ #define swait_event_timeout_exclusive(wq, condition, timeout)		\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_timeout(wq, condition, timeout);	\
+ 	__ret;								\
+ })
+@@ -216,14 +216,14 @@ do {									\
+ })
+ 
+ #define __swait_event_interruptible_timeout(wq, condition, timeout)	\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		      TASK_INTERRUPTIBLE, timeout,			\
+ 		      __ret = schedule_timeout(__ret))
+ 
+ #define swait_event_interruptible_timeout_exclusive(wq, condition, timeout)\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_interruptible_timeout(wq,		\
+ 						condition, timeout);	\
+ 	__ret;								\
+@@ -252,7 +252,7 @@ do {									\
+ } while (0)
+ 
+ #define __swait_event_idle_timeout(wq, condition, timeout)		\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		       TASK_IDLE, timeout,				\
+ 		       __ret = schedule_timeout(__ret))
+ 
+@@ -278,7 +278,7 @@ do {									\
+ #define swait_event_idle_timeout_exclusive(wq, condition, timeout)	\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_idle_timeout(wq,			\
+ 						   condition, timeout);	\
+ 	__ret;								\
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 851e07da2583..890cce3c0f2e 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -271,7 +271,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 		__wake_up_pollfree(wq_head);
+ }
+ 
+-#define ___wait_cond_timeout(condition)						\
++#define ___wait_cond_timeout(condition, __ret)					\
+ ({										\
+ 	bool __cond = (condition);						\
+ 	if (__cond && !__ret)							\
+@@ -386,7 +386,7 @@ do {										\
+ })
+ 
+ #define __wait_event_timeout(wq_head, condition, timeout)			\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_UNINTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -413,13 +413,13 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_timeout(wq_head, condition, timeout);	\
+ 	__ret;									\
+ })
+ 
+ #define __wait_event_freezable_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_INTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = freezable_schedule_timeout(__ret))
+ 
+@@ -431,7 +431,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_freezable_timeout(wq_head, condition, timeout); \
+ 	__ret;									\
+ })
+@@ -503,7 +503,7 @@ do {										\
+ })
+ 
+ #define __wait_event_interruptible_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_INTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -531,7 +531,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_interruptible_timeout(wq_head,		\
+ 						condition, timeout);		\
+ 	__ret;									\
+@@ -698,7 +698,7 @@ do {										\
+ } while (0)
+ 
+ #define __wait_event_idle_timeout(wq_head, condition, timeout)			\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_IDLE, 0, timeout,					\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -725,13 +725,13 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_idle_timeout(wq_head, condition, timeout);	\
+ 	__ret;									\
+ })
+ 
+ #define __wait_event_idle_exclusive_timeout(wq_head, condition, timeout)	\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_IDLE, 1, timeout,					\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -762,7 +762,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_idle_exclusive_timeout(wq_head, condition, timeout);\
+ 	__ret;									\
+ })
+@@ -932,7 +932,7 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
+ })
+ 
+ #define __wait_event_killable_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_KILLABLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -962,7 +962,7 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_killable_timeout(wq_head,			\
+ 						condition, timeout);		\
+ 	__ret;									\
+@@ -1107,7 +1107,7 @@ do {										\
+ })
+ 
+ #define __wait_event_lock_irq_timeout(wq_head, condition, lock, timeout, state)	\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      state, 0, timeout,					\
+ 		      spin_unlock_irq(&lock);					\
+ 		      __ret = schedule_timeout(__ret);				\
+@@ -1141,7 +1141,7 @@ do {										\
+ 						  timeout)			\
+ ({										\
+ 	long __ret = timeout;							\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_lock_irq_timeout(				\
+ 					wq_head, condition, lock, timeout,	\
+ 					TASK_INTERRUPTIBLE);			\
+@@ -1151,7 +1151,7 @@ do {										\
+ #define wait_event_lock_irq_timeout(wq_head, condition, lock, timeout)		\
+ ({										\
+ 	long __ret = timeout;							\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_lock_irq_timeout(				\
+ 					wq_head, condition, lock, timeout,	\
+ 					TASK_UNINTERRUPTIBLE);			\
+diff --git a/include/linux/wait_bit.h b/include/linux/wait_bit.h
+index 7dec36aecbd9..227e6a20a978 100644
+--- a/include/linux/wait_bit.h
++++ b/include/linux/wait_bit.h
+@@ -292,7 +292,7 @@ do {									\
+ })
+ 
+ #define __wait_var_event_timeout(var, condition, timeout)		\
+-	___wait_var_event(var, ___wait_cond_timeout(condition),		\
++	___wait_var_event(var, ___wait_cond_timeout(condition, __ret),	\
+ 			  TASK_UNINTERRUPTIBLE, 0, timeout,		\
+ 			  __ret = schedule_timeout(__ret))
+ 
+@@ -300,7 +300,7 @@ do {									\
+ ({									\
+ 	long __ret = timeout;						\
+ 	might_sleep();							\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __wait_var_event_timeout(var, condition, timeout); \
+ 	__ret;								\
+ })
 -- 
 2.34.1
 

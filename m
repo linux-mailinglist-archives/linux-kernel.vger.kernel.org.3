@@ -2,217 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E4F4CB22B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82694CB232
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245404AbiCBWVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S245442AbiCBWVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbiCBWVh (ORCPT
+        with ESMTP id S245427AbiCBWVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:21:37 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44C1D21E7;
-        Wed,  2 Mar 2022 14:20:52 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id f21so2513849qke.13;
-        Wed, 02 Mar 2022 14:20:52 -0800 (PST)
+        Wed, 2 Mar 2022 17:21:45 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A5D64C7;
+        Wed,  2 Mar 2022 14:21:00 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p17so2801272plo.9;
+        Wed, 02 Mar 2022 14:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IwOBwMpi2OwEzG0VtigJWsM6dutoMlGx5jRzY5Yz/Vc=;
-        b=MtnSgvQxlGt5TGIFQMfRkRf4KK1L85s9MA4ZXLuK105X6YoXUOfkr173xoepXU0fiu
-         UuhHi/gN1IKGbUa02Oi4DiEVaJZ/yqhWE6k0hILSueUBtPjBk8tj7hvZICj1J1mOVdmZ
-         oUIkmayyOSwIO+lHl6kgMI1DLJJXj1VZG2GzU=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
+        b=Yx2Tu1pyRlHwyWfAJpaPEYBK7U9Xa99I7npuIMQDOm1nT+bKEWdz9xuk9vvQiYr6J8
+         m1U1geFt2wL4cHfRXI9KOdoZNY51YM8PgOUStDGYaT8EXuRMtYZw20kOBukG/tLik6lf
+         I0+G0WYqOLGTVWbD+OP460WGiCHhUe2jIN76eywXx51y/KwDNyJGRD4pp7pwjc/wJiaI
+         vVbW1C767aYo5MU1Swv6OSimECLQ2Z0f+iBvSA6zIGTnAxQxOcDShEQS1e4HdBUH4EDX
+         r9S5UNIPWTXY9ud/6RiFoDm39kjo7s8VJhjQxeP4QymVnd8IOBYOvCBQHc3pIKgFQZBN
+         uf8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IwOBwMpi2OwEzG0VtigJWsM6dutoMlGx5jRzY5Yz/Vc=;
-        b=e1Oi98LtqavbdZN9J/P/BBEVEuhKCC3x9KXZn/7/8jciqZZ3iikr86U/CIFo80Tm+3
-         DLTANobBbBDwzmGMOiAHNzDcTvyExDpdmfth4IKVYLdnOMkbUl+9yW2hFzLLM8X/5ryu
-         1qXho148uVBPtMlIEGh1trkE/4NQQf4L9Waqc3LTvtGgHdqoodakIUeSN7ieMFQtMKJm
-         A+UNvftx7ugznortQszmn1dBwUCPUn8maPoPajRo50+hR110ygt9rDBaT6wSYF2S8QFB
-         m5qgqlYQYHOik1W1FDSE/3xUwCzLINtkgCy3XrEuHOCtopQytNxvUBYxgV+bdAe6FiRc
-         JwpA==
-X-Gm-Message-State: AOAM533Y6zJPoTccfdMiNtSNmCpBODAOdPTyky86bAYwtbAv0CCLQblb
-        wqodjceF4DPv7W9kOAYI52UG6qtFMyPYjcgQr88=
-X-Google-Smtp-Source: ABdhPJxvmmE3gaxqf1AN8AAcq15J2+/3h1dIbI7rXUBxAE1ecVlQbf15Jy/H6IC8/REhnKs2t2BL89C3wdGw7Mg0B6A=
-X-Received: by 2002:a05:620a:2fc:b0:649:a4e:c430 with SMTP id
- a28-20020a05620a02fc00b006490a4ec430mr17818002qko.347.1646259651990; Wed, 02
- Mar 2022 14:20:51 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
+        b=Iq2JiWqmC/iD+Xk6YKx9kpodTGpfEQTgSi4IhwVkW+R0jdM+nxS8GnLu6LUSZyCo7p
+         jQoJDwBLoLmpddyimWTJWveVVgQS/h6DG5QJPHpZNQsJpedW+Xol2g0NRFmX36My3tTy
+         rxBEb/BpWuBi+2GOlYwz5xCmBxPUdF41qWFES8y170ZQxQ6Ho0gXfYvPkNCcCU3A8mQB
+         jBMXTr3llKq5CZicr0upJhgbo7PCBNm9taa6JaVwLwwujVDgxzOouzSXCmh6pgTrMJNG
+         Hew3rzKRAamBfV4VZl2JPfsmwmuhZG7bIgotVXEr4c7OvXSgqPOpLF14xfiw9ESZ0qGA
+         K+Vw==
+X-Gm-Message-State: AOAM533av3EAY7GNKuCJEI/t5BXJWFGs+IQyQMRnXVkiAQYo2NEZhVCf
+        zdSyeNM3gwENdnLJeGYkjFk=
+X-Google-Smtp-Source: ABdhPJw3LwqNN9faD/CN8tV5gcaPOEskQM2Wni+pDcj4Vlrbq+CBge0QXPo1hghH4Dd+dIkl+666fQ==
+X-Received: by 2002:a17:902:7786:b0:14d:51c6:21a8 with SMTP id o6-20020a170902778600b0014d51c621a8mr33480455pll.75.1646259659674;
+        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
+        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm151118pgc.8.2022.03.02.14.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
+Date:   Wed, 2 Mar 2022 14:20:56 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, revest@chromium.org,
+        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+Message-ID: <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-4-clg@kaod.org>
-In-Reply-To: <20220302173114.927476-4-clg@kaod.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Mar 2022 22:20:40 +0000
-Message-ID: <CACPK8XcWZ6jQEo4-78fMrSxqZW5Cc8ecsNf+j5X7av-HbJwMKg@mail.gmail.com>
-Subject: Re: [PATCH v2 03/10] dt-bindings: spi: Add Aspeed SMC controllers
- device tree binding
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 17:31, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
->
-> The "interrupt" property is optional because it is only necessary for
-> controllers supporting DMAs (Not implemented yet in the new driver).
->
-> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
+On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
+> Extend the interoperability with IMA, to give wider flexibility for the
+> implementation of integrity-focused LSMs based on eBPF.
+> 
+> Patch 1 fixes some style issues.
+> 
+> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
+> measurement capability of IMA without needing to setup a policy in IMA
+> (those LSMs might implement the policy capability themselves).
+> 
+> Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
+> 
+> Changelog
+> 
+> v2:
+> - Add better description to patch 1 (suggested by Shuah)
+> - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
+> - Move declaration of bpf_ima_file_hash() at the end (suggested by
+>   Yonghong)
+> - Add tests to check if the digest has been recalculated
+> - Add deny test for bpf_kernel_read_file()
+> - Add description to tests
+> 
+> v1:
+> - Modify ima_file_hash() only and allow the usage of the function with the
+>   modified behavior by eBPF-based LSMs through the new function
+>   bpf_ima_file_hash() (suggested by Mimi)
+> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
+>   and bpf_ima_file_hash() can be called inside the implementation of
+>   eBPF-based LSMs for this hook
+> 
+> Roberto Sassu (9):
+>   ima: Fix documentation-related warnings in ima_main.c
+>   ima: Always return a file measurement in ima_file_hash()
+>   bpf-lsm: Introduce new helper bpf_ima_file_hash()
+>   selftests/bpf: Move sample generation code to ima_test_common()
+>   selftests/bpf: Add test for bpf_ima_file_hash()
+>   selftests/bpf: Check if the digest is refreshed after a file write
+>   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
+>   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+>   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
+>     policy
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-> ---
->  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 90 +++++++++++++++++++
->  MAINTAINERS                                   |  9 ++
->  2 files changed, 99 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-=
-fmc.yaml
->
-> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yam=
-l b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> new file mode 100644
-> index 000000000000..0289a4f52196
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> @@ -0,0 +1,90 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Aspeed SMC controllers bindings
-> +
-> +maintainers:
-> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> +  - C=C3=A9dric Le Goater <clg@kaod.org>
-> +
-> +description: |
-> +  This binding describes the Aspeed Static Memory Controllers (FMC and
-> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-fmc
-> +      - aspeed,ast2600-spi
-> +      - aspeed,ast2500-fmc
-> +      - aspeed,ast2500-spi
-> +      - aspeed,ast2400-fmc
-> +      - aspeed,ast2400-spi
-> +
-> +  reg:
-> +    items:
-> +      - description: registers
-> +      - description: memory mapping
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+":
-> +    type: object
-> +
-> +    properties:
-> +      spi-rx-bus-width:
-> +        enum: [1, 2, 4]
-> +
-> +    required:
-> +      - reg
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
-> +    #include <dt-bindings/clock/ast2600-clock.h>
-> +
-> +    spi@1e620000 {
-> +        reg =3D <0x1e620000 0xc4>, <0x20000000 0x10000000>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +        compatible =3D "aspeed,ast2600-fmc";
-> +        clocks =3D <&syscon ASPEED_CLK_AHB>;
-> +        interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +        flash@0 {
-> +                reg =3D < 0 >;
-> +                compatible =3D "jedec,spi-nor";
-> +                spi-max-frequency =3D <50000000>;
-> +                spi-rx-bus-width =3D <2>;
-> +        };
-> +        flash@1 {
-> +                reg =3D < 1 >;
-> +                compatible =3D "jedec,spi-nor";
-> +                spi-max-frequency =3D <50000000>;
-> +                spi-rx-bus-width =3D <2>;
-> +        };
-> +        flash@2 {
-> +                reg =3D < 2 >;
-> +                compatible =3D "jedec,spi-nor";
-> +                spi-max-frequency =3D <50000000>;
-> +                spi-rx-bus-width =3D <2>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4175103e928d..f5ab77548ef6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2925,6 +2925,15 @@ S:       Maintained
->  F:     Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
->  F:     drivers/mmc/host/sdhci-of-aspeed*
->
-> +ASPEED SMC SPI DRIVER
-> +M:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> +M:     C=C3=A9dric Le Goater <clg@kaod.org>
-> +L:     linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
-> +L:     openbmc@lists.ozlabs.org (moderated for non-subscribers)
-> +L:     linux-spi@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> +
->  ASPEED VIDEO ENGINE DRIVER
->  M:     Eddie James <eajames@linux.ibm.com>
->  L:     linux-media@vger.kernel.org
-> --
-> 2.34.1
->
+We have to land this set through bpf-next.
+Please get the Acks for patches 1 and 2, so we can proceed.

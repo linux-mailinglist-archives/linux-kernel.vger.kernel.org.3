@@ -2,181 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587B4CA083
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DE84CA097
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbiCBJVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S240422AbiCBJYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiCBJVr (ORCPT
+        with ESMTP id S235129AbiCBJYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:21:47 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC007BB56E;
-        Wed,  2 Mar 2022 01:21:04 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id l45so515556uad.1;
-        Wed, 02 Mar 2022 01:21:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wS/4vUPXRYVqIGA3oZCkB12D/JLXUJDmy57hV8s4aLk=;
-        b=jfxy4e3b7tvL4FubDYhKLeFBCXnNgn7ZkIvZ7G6Ju1whiXXeKffe9kqLGDhACXK8rd
-         wmVresVL6k2wakjfk5MY0MUCwcilUrr3rppfSnjXIDcAU4ZQjTvXPCAkuGKo7vH8/pBR
-         h1LDbG56PfkGM48Z8VvlzemcDciMYJ0pVCI4Z8SUbmuFrh0nfSEGROzepQPJBzEtJY99
-         rnQyPAiufVJgxUffMXNqHfRNOhYuSv+xVPGZ6FgzhXfgMMsdpUKrE60wI44s35MyYbVr
-         iym250wu1uxjesqc3Vc9ACnAEWu1weRPETdBzURsv9TD5N5BquiZZ4BP7hLKTpD5sNKD
-         MMJQ==
+        Wed, 2 Mar 2022 04:24:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 806DCBF65
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:23:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646213009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=foExQQknn5+ykqqTjNflz4MN/o7z8a5WlPaDeSuniwY=;
+        b=gY+U/zbS5+BSbpai/wKQWnCSZ/Ts7KfaAmlZCnn0JEI5exDNHu7Yk6t9JHDywxcXR8vSLS
+        4PpISRc5cF7XScvZ6ZI8/UosJfmQAAx5IIzmzYpSGPcaFHSSQMkcazLdYofj+Qg0aYcjPE
+        2xeI2WT+LdSIquCyPu+iokgJkuF1IEw=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-WedU-qLhOmWuacgm0LgtUg-1; Wed, 02 Mar 2022 04:23:28 -0500
+X-MC-Unique: WedU-qLhOmWuacgm0LgtUg-1
+Received: by mail-qk1-f200.google.com with SMTP id c19-20020a05620a11b300b00648cdeae21aso678827qkk.17
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:23:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wS/4vUPXRYVqIGA3oZCkB12D/JLXUJDmy57hV8s4aLk=;
-        b=6UmJ1SMSbyIvLa8Y6uaSb3K7ftxMwUP41negb+m6x3etL9gPb4RhNHpp0vlg4oUxRO
-         yNFECYRdVf3D9uTP2ADF3JuSemsptdUXk7z3c9R89xESmTkNjgoqs96jpAVOi+99m4V1
-         RQIBXUMZX8ScrtllJqTOXLCBXdBhdn5m8PVBRYM6+FxnToTLnWlfghyGM15Gm6hw8elj
-         Wxy1tK7m7+UZqsVugmHUJ3CR6tCbTfMwmSTF/BbB+9m7xqWK+dfooyo1B4p+XqSxgmBC
-         fJcK0PknaRnq0+AOc6ct8cQO4abEYQIlN4zoTN5PRKuoSgj8jizEsxL6/6sXRFEOnHnH
-         HSwA==
-X-Gm-Message-State: AOAM533gRvFunJHdvQeyZ23A0s/rrblVVqa7cuZlP5TVagdifG+r3N5S
-        pdYPb2xzL2ieytIg5zwLeDzvFuaaiJkALMvNdiBmDmG8xRw=
-X-Google-Smtp-Source: ABdhPJxHP3Lkxre1yQfztsk1TwZkqkSIi0l0AWufxuHEMHFZtgfhdjTQwz5BrajdKfCpYGxjJm8xAiHds54zc6RLTGI=
-X-Received: by 2002:ab0:654d:0:b0:347:27e5:cb4a with SMTP id
- x13-20020ab0654d000000b0034727e5cb4amr5995264uap.67.1646212863772; Wed, 02
- Mar 2022 01:21:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=foExQQknn5+ykqqTjNflz4MN/o7z8a5WlPaDeSuniwY=;
+        b=4pbTNF8pBynvFh+g2yC8Um931YyAt6vpNcMvqIbSZ7TyCIjcbo/ARLOyTwjPBdROaC
+         2XLUYVq1sYeIT8ft0yti0iUS9rxHBpr0+pm29adApvxwI2q7RsJS5L+Coar3PqfVLW4Z
+         09jl97qPSTCPbyQh5hJz9tvutOFocNeVDLMMDL7Em2e2/0qvRn3uLNGfbV9/4ntUyMTE
+         9ZeTm5SbLfQujpaqHJ6Grs7x5IhL0bpMMRGrApTD948Wc+kfSkpiN3E9Q4U0+Z1ukJlL
+         jxkxg4alHxoOt8/yqr0GaPNRs5lwEq37FQOKh/qrcg6clYxauFvdfr5HCcShhweGGBNq
+         OAxw==
+X-Gm-Message-State: AOAM530EGzlX8kGG832ndbVcxcVj8OMeir/cGChk7kur02womOAL7Fcg
+        3vhnZtAHMXXurVcka8eksp7KrcJCtEGH6EmWSL9B83qbJW2631YUg5CuJwByYQWwaRf0105piu7
+        VK3sPi3TKSIxYW0ZrPS/oorM9
+X-Received: by 2002:a05:622a:1714:b0:2de:755c:2c81 with SMTP id h20-20020a05622a171400b002de755c2c81mr22707084qtk.685.1646213008239;
+        Wed, 02 Mar 2022 01:23:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqqlqDsysgnT4+ZcaC5E/HrMnr0i5bndO6omkJInksarmdfs77V4QCgirdVpSITO1M/a7bLA==
+X-Received: by 2002:a05:622a:1714:b0:2de:755c:2c81 with SMTP id h20-20020a05622a171400b002de755c2c81mr22707073qtk.685.1646213008009;
+        Wed, 02 Mar 2022 01:23:28 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id b17-20020ae9eb11000000b0064917bda713sm7733701qkg.85.2022.03.02.01.23.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 01:23:27 -0800 (PST)
+Date:   Wed, 2 Mar 2022 10:23:21 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+Message-ID: <20220302092321.rfyht3xhyybpohkw@sgarzare-redhat>
+References: <00000000000070ac6505d7d9f7a8@google.com>
+ <0000000000003b07b305d840b30f@google.com>
+ <20220218063352-mutt-send-email-mst@kernel.org>
+ <Yh8q9fzCQHW2qtIG@google.com>
+ <20220302091807.uyo7ycd6yw6cx7hd@sgarzare-redhat>
 MIME-Version: 1.0
-References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
- <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
- <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
- <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
- <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
- <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
- <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
- <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
- <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
- <CAK8P3a2wF2XA8wCFtP9RNTNQf3W9D8fKOuQ704yE+dRSS5aCVw@mail.gmail.com>
- <CAAhV-H65PeK8w0U2DSbQ0eSWzAR-zjhPz8swSgZhbtKKJAYAKg@mail.gmail.com> <CAMj1kXFgCu659zGuZPpRLYPzFemtBv0jsOt1Yz0U0-R4DucqTw@mail.gmail.com>
-In-Reply-To: <CAMj1kXFgCu659zGuZPpRLYPzFemtBv0jsOt1Yz0U0-R4DucqTw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Wed, 2 Mar 2022 17:20:53 +0800
-Message-ID: <CAAhV-H6GrAH_HGehqernowaTyZjQRNOyp=O8QNE3_7RHfarUFQ@mail.gmail.com>
-Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220302091807.uyo7ycd6yw6cx7hd@sgarzare-redhat>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ard,
+On Wed, Mar 02, 2022 at 10:18:07AM +0100, Stefano Garzarella wrote:
+>On Wed, Mar 02, 2022 at 08:29:41AM +0000, Lee Jones wrote:
+>>On Fri, 18 Feb 2022, Michael S. Tsirkin wrote:
+>>
+>>>On Thu, Feb 17, 2022 at 05:21:20PM -0800, syzbot wrote:
+>>>> syzbot has found a reproducer for the following issue on:
+>>>>
+>>>> HEAD commit:    f71077a4d84b Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+>>>> git tree:       upstream
+>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=104c04ca700000
+>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+>>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1362e232700000
+>>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11373a6c700000
+>>>>
+>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>>> Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+>>>>
+>>>> ------------[ cut here ]------------
+>>>> kernel BUG at drivers/vhost/vhost.c:2335!
+>>>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+>>>> CPU: 1 PID: 3597 Comm: vhost-3596 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b #0
+>>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>>>> RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+>>>> Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+>>>> RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
+>>>> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+>>>> RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
+>>>> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+>>>> R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
+>>>> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
+>>>> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
+>>>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>>> Call Trace:
+>>>>  <TASK>
+>>>>  vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
+>>>>  vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+>>>>  kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>>>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>>>
+>>>I don't see how this can trigger normally so I'm assuming
+>>>another case of use after free.
+>>
+>>Yes, exactly.
+>
+>I think this issue is related to the issue fixed by this patch merged 
+>some days ago upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+>
+>>
+>>I patched it.  Please see:
+>>
+>>https://lore.kernel.org/all/20220302075421.2131221-1-lee.jones@linaro.org/T/#t
+>>
+>
+>I'm not sure that patch is avoiding the issue. I'll reply to it.
 
-On Wed, Mar 2, 2022 at 4:58 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Wed, 2 Mar 2022 at 09:56, Huacai Chen <chenhuacai@gmail.com> wrote:
-> >
-> > Hi, Arnd & Ard,
-> >
-> > On Tue, Mar 1, 2022 at 6:19 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Tue, Mar 1, 2022 at 5:17 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > > On Mon, Feb 28, 2022 at 7:35 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > > On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > > > > Can't you just use the UEFI protocol for kernel entry regardless
-> > > > > > of the bootloader? It seems odd to use a different protocol for loading
-> > > > > > grub and the kernel, especially if that means you end up having to
-> > > > > > support both protocols inside of u-boot and grub, in order to chain-load
-> > > > > > a uefi application like grub.
-> > > > > >
-> > > > >
-> > > > > I think this would make sense. Now that the EFI stub has generic
-> > > > > support for loading the initrd via a UEFI specific protocol (of which
-> > > > > u-boot already carries an implementation), booting via UEFI only would
-> > > > > mean that no Linux boot protocol would need to be defined outside of
-> > > > > the kernel at all (i.e., where to load the kernel, where to put the
-> > > > > command line, where to put the initrd, other arch specific rules etc
-> > > > > etc) UEFI already supports both ACPI and DT boot
-> > > >
-> > > > After one night thinking, I agree with Ard that we can use RISCV-style
-> > > > fdt to support the raw elf kernel at present, and add efistub support
-> > > > after new UEFI SPEC released.
-> > >
-> > > I think that is the opposite of what Ard and I discussed above.
-> > Hmm, I thought that new UEFI SPEC is a requirement of efistub, maybe I'm wrong?
-> >
-> > >
-> > > > If I'm right, it seems that RISC-V passes a0 (hartid) and a1 (fdt
-> > > > pointer, which contains cmdline, initrd, etc.) to the raw elf kernel.
-> > > > And in my opinion, the main drawback of current LoongArch method
-> > > > (a0=argc a1=argv a2=bootparamsinterface pointer) is it uses a
-> > > > non-standard method to pass kernel args and initrd. So, can the below
-> > > > new solution be acceptable?
-> > > >
-> > > > a0=bootparamsinterface pointer (the same as a2 in current method)
-> > > > a1=fdt pointer (contains cmdline, initrd, etc., like RISC-V, I think
-> > > > this is the standard method)
-> > >
-> > > It would seem more logical to me to keep those details as part of the
-> > > interface between the EFI stub and the kernel, rather than the
-> > > documented boot interface.
-> > >
-> > > You said that there is already grub support using the UEFI
-> > > loader, so I assume you have a working draft of the boot
-> > > protocol. Are there still open questions about the interface
-> > > definition for that preventing you from using it as the only
-> > > way to enter the kernel from a bootloader?
-> > Things become simple if we only consider efistub rather than raw elf.
-> > But there are still some problems:
-> > 1, We want the first patch series as minimal as possible, efistub
-> > support will add a lot of code.
-> > 2, EFISTUB hides the interface between bootloader and raw kernel, but
-> > the interface does actually exist (efistub itself is also a
-> > bootloader, though it binds with the raw kernel). In the current
-> > implementation (a0=argc a1=argv a2=bootparaminterface), we should
-> > select EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER which is marked as
-> > deprecated. Is this acceptable? If not, we still need to change the
-> > bootloader-kernel interface, maybe use the method in my previous
-> > email?
->
-> Why do you need this?
-Because in the current implementation (a0=argc a1=argv
-a2=bootparaminterface), initrd should be passed by cmdline
-(initrd=xxxx). If without that option, efi_load_initrd_cmdline() will
-not call handle_cmdline_files().
+My bad, I think it should be fine, because vhost_vq_reset() set 
+vq->private_data to NULL and avoids the worker to run.
 
-Huacai
->
-> > 3, I know things without upstream means "nothing" for the community,
-> > but if we can provide raw elf kernel support to be compatible with
-> > existing products (not just a working draft, they are widely used
-> > now), it also seems reasonable.
-> >
-> > Huacai
-> >
-> > >
-> > >         Arnd
+Thanks,
+Stefano
+

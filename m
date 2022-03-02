@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0704CB023
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B284CB028
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244228AbiCBUoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
+        id S244230AbiCBUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiCBUoV (ORCPT
+        with ESMTP id S231127AbiCBUqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:44:21 -0500
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BFA36B6A;
-        Wed,  2 Mar 2022 12:43:37 -0800 (PST)
-Received: by mail-pj1-f41.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so2753935pjb.3;
-        Wed, 02 Mar 2022 12:43:37 -0800 (PST)
+        Wed, 2 Mar 2022 15:46:16 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0780B38789;
+        Wed,  2 Mar 2022 12:45:33 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id f5so5861601ybg.9;
+        Wed, 02 Mar 2022 12:45:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y6qqvHc/+bg7logl0Wqx5hN0gsT9pLtg+9GuBdEyV/s=;
+        b=N6mzMrvWJ3NnD3ZyiJjMdVcsCSd17WTZeB6K7pfo5O4CTlaCF/zVdybZv+jhlTrmxe
+         uPhSjCcemXAPPjSrv6Mt5HWt3iMD5ymv09MAlL+oTjIdHYCdg/0ssExCUuNBW85SJtyL
+         6OeZi79DSlqdlABdL8kngO2BoTutu+xJFXugejEjTOelpI2a+1M4P6YxOlDkDUJyF29p
+         PgdD7Ic+/VgjKaC6I7tmOHYd0tLr5EfPZX9OcETMEavgE8GzKwipHdx6ClJQBP2rXN9f
+         EGUY3EVA/3aCTBVmeMF2lzsoXWVLoxju/7BmHfIIowzLDvJ2L+u3IWbGBpTNizOgCwuq
+         xi8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lgYOR0NAjV43r8oYaHMPMronWC+T+uvO+TYbc9ZRf2U=;
-        b=Do7KuqMBP/y4oIXCc27REEmmeyXsQ6BpAC2gB6U/LVB2ZNfh4Nh9GmKMZPuFes/YLC
-         pHO8uQOYa/PKUaJhi3WDoHy8KcCkLkLZgvHOBnNnqfRzrGEz20DRVGbHUkIIRZWGQeu8
-         fzyZDAGiKgkuRZ2dtHZaLS6JzPV4zMF/sygEzbeF+6zvqGtxSzRIEZTFhRfQBIlE7RJF
-         9F9iFyjiuHKY1F/mE/XWWByHSumXeQHnLjkI2CPFr/t/5PwZpfOtCNX2x1/qW/0/t33L
-         A8k649uAPfZ972Tlr0KQCNp6qHYmmsl+UT0hXzwKmpD7N/O9s7bQ4EvEGLeMaLL2z9NI
-         jZIw==
-X-Gm-Message-State: AOAM532wr43A/92deLW2TbooI5zAFm1jwDp3LLIoYzl5q46w9sHMXH0W
-        tTkJFtYz6r/mm07TRtQWbFcqdUTLcF4=
-X-Google-Smtp-Source: ABdhPJyaNbmqlyYCF0pLP/kU5mYs6ZZtG6sJ6Lt4AcJ3790H8g6EdnWM4bXzhCMZArL+GVOyY1Rd0w==
-X-Received: by 2002:a17:902:d50b:b0:151:94d9:eeaf with SMTP id b11-20020a170902d50b00b0015194d9eeafmr5879371plg.133.1646253816786;
-        Wed, 02 Mar 2022 12:43:36 -0800 (PST)
-Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
-        by smtp.gmail.com with ESMTPSA id k4-20020a17090a910400b001bd171c7fd4sm5933510pjo.25.2022.03.02.12.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:43:35 -0800 (PST)
-Date:   Wed, 2 Mar 2022 12:43:32 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "hch@infradead.org" <hch@infradead.org>
-Cc:     Kanchan Joshi <joshiiitr@gmail.com>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "bcrl@kvack.org" <bcrl@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        SelvaKumar S <selvakuma.s1@samsung.com>,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Naohiro Aota <Naohiro.Aota@wdc.com>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "Remzi H. Arpaci-Dusseau" <remzi@cs.wisc.edu>
-Subject: Re: [PATCH v4 6/6] io_uring: add support for zone-append
-Message-ID: <20220302204332.dgstbjcpzgiurn5t@garbanzo>
-References: <MWHPR04MB375863C20C1EF2CB27E62703E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
- <20200731091416.GA29634@infradead.org>
- <MWHPR04MB37586D39CA389296CE0252A4E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
- <20200731094135.GA4104@infradead.org>
- <MWHPR04MB3758A4B2967DB1FABAAD9265E74E0@MWHPR04MB3758.namprd04.prod.outlook.com>
- <20200731125110.GA11500@infradead.org>
- <CY4PR04MB37517D633920E4D31AC6EA0DE74B0@CY4PR04MB3751.namprd04.prod.outlook.com>
- <20200814081411.GA16943@infradead.org>
- <CA+1E3r+WXC_MK5Zf2OZEv17ddJDjtXbhpRFoeDns4F341xMhow@mail.gmail.com>
- <20200908151801.GA16742@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y6qqvHc/+bg7logl0Wqx5hN0gsT9pLtg+9GuBdEyV/s=;
+        b=MqTU/7efOxboHWpzNtbPuUYy5P3UtEZkdXGobys3I+yE4NONEoIYDh2OMaAtgEXsto
+         0etjCrSBMc0cfPzYeUmqZVIFiPWatz6xYCBLAMVlSurHao+yl7p0kFLVCoG5iQuPz7Ir
+         oNnA7Jl4Odo0KYnHkXYXUVNC7AeamPH9BaJstB3x4ZJZ3tcikMFUvlkzcMIPFKzs7zYi
+         iax6xJPG9IgJCb1METWlCUbtyk8Cb0JQSKPm8+rcnPrPRx9pVMmMExlSCORysR5mmncl
+         evi/IKZurk3WxnGJCtChu8jqCRaIyPl30DgrD1wALp5wtH/LODB1QhepuGYVwPufVb8S
+         cs+g==
+X-Gm-Message-State: AOAM5302zMnxAGgWroUQhPc5HYFLcZAvoLm4RBOH7/RakyzxosXy/4eG
+        3uDEi+NsIXfD/Mx4CCUJfsXYgvL7wr8BtVJvGcg=
+X-Google-Smtp-Source: ABdhPJzRUMWLpsd+tQeqMe+lON1YrQZx9JkRO/Ga9/nynwkkheUILhBEVszCKkAbAE9UfTyjpoKk7tOUpMQSERi2HWM=
+X-Received: by 2002:a25:23d2:0:b0:628:771a:9d3 with SMTP id
+ j201-20020a2523d2000000b00628771a09d3mr10191498ybj.215.1646253932161; Wed, 02
+ Mar 2022 12:45:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200908151801.GA16742@infradead.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 2 Mar 2022 20:44:56 +0000
+Message-ID: <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
+Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 04:18:01PM +0100, hch@infradead.org wrote:
-> On Mon, Sep 07, 2020 at 12:31:42PM +0530, Kanchan Joshi wrote:
-> > But there are use-cases which benefit from supporting zone-append on
-> > raw block-dev path.
-> > Certain user-space log-structured/cow FS/DB will use the device that
-> > way. Aerospike is one example.
-> > Pass-through is synchronous, and we lose the ability to use io-uring.
-> 
-> So use zonefs, which is designed exactly for that use case.
+On Mon, Feb 14, 2022 at 8:16 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> Nowadays PC-style parallel ports come in the form of PCI and PCIe option
+> cards and there are some combined parallel/serial option cards as well
+> that we handle in the parport subsystem.  There is nothing in particular
+> that would prevent them from being used in any system equipped with PCI
+> or PCIe connectivity, except that we do not permit the PARPORT_PC config
+> option to be selected for platforms for which ARCH_MIGHT_HAVE_PC_PARPORT
+> has not been set for.
+>
+> The only PCI platforms that actually can't make use of PC-style parallel
+> port hardware are those newer PCIe systems that have no support for I/O
+> cycles in the host bridge, required by such parallel ports.  Notably,
+> this includes the s390 arch, which has port I/O accessors that cause
+> compilation warnings (promoted to errors with `-Werror'), and there are
+> other cases such as the POWER9 PHB4 device, though this one has variable
+> port I/O accessors that depend on the particular system.  Also it is not
+> clear whether the serial port side of devices enabled by PARPORT_SERIAL
+> uses port I/O or MMIO.  Finally Super I/O solutions are always either
+> ISA or platform devices.
+>
+> Make the PARPORT_PC option selectable also for PCI systems then, except
+> for the s390 arch, however limit the availability of PARPORT_PC_SUPERIO
+> to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update platforms
+> accordingly for the required <asm/parport.h> header.
+>
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-Using zonefs to test append alone can introduce a slight overhead with
-the VFS if we want to do something such as just testing any hot path
-with append and the block layer. If we want to live with that, that's
-fine!
+Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-Just saying.
+Usually parport patches goes via Greg's tree. Adding Greg.
 
-  Luis
+-- 
+Regards
+Sudip

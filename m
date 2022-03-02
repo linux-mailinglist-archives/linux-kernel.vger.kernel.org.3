@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D70A4CB037
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E1B4CB03C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 21:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiCBUt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 15:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S244743AbiCBUtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 15:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbiCBUtE (ORCPT
+        with ESMTP id S244658AbiCBUtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:49:04 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52438C3C2C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:19 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so2763274pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:19 -0800 (PST)
+        Wed, 2 Mar 2022 15:49:09 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0304DBD13
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 12:48:22 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id e15so1383084pfv.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 12:48:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/diaxepVKqVQthgHB5ZLX1zYhY6vcKwtc5iIGOs+iuI=;
-        b=A1Yjo71UWe6hgMcsjR1IWM8cQzcCoNwnu9VyLeQfWccND1GYPHMr1BLDSI/IRqRAGQ
-         U8ZLhb+5Od8F9sMchKYbf3aSZwWZRdziYGSwj9mXhA3gKez76HoFixasTJZVfMxXZH/Q
-         bPHBa4YoRvMOQ/KaNBRB7rVk+mS0EBLg+K77qz4TXgOUNlHiQGkbUlVQj4X1YLtyvIWm
-         1Z8JU3xAyiQmmJ9H1Eb+2TQXlzFygu0Q3QJyBktA7M/XL8rCzA7bSYgdoG9eLgxXOKKR
-         PckgyFRHWKpmLuK9CbmrIaMcRFioOBexKYHfUcAJFyA2joghqk07g/ldKCBd0eCc/+qY
-         /XEA==
+        bh=V0ZCMWePvJWkfOaUYdtCCn0PNNFVE21F+X8kdTmqORE=;
+        b=pzsp+pBzqQL+0QvCtG8ypnkN/n0BNwjPIriFBCtZAHJmLPfg3upixN4PFYXQeaWaxV
+         G4UuVsJa0ppmHRlYLUmBEqOShDo3FiHLjF9yMMibMzphTcC+iPcGXZD77EimH7+zJeH8
+         HiK/WBC/DtZJ1zan6ABbn8rI105DIrFET98//kYnYtgh6a77/ZZTcpELL3q1/era3Hcr
+         MgeFM5E4aVHE8ApW3Z0lCZiRXiDM21B/PhiT9W1fGfL1xBn69PGTX+vqOMeA3lM/CM/j
+         x9Sa9UonZIqrdLnkZeCbza2jNexkmP/tEkAdrUEg0GTr0TL066EctYwZuHPrL41wFS3K
+         mOEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/diaxepVKqVQthgHB5ZLX1zYhY6vcKwtc5iIGOs+iuI=;
-        b=3u9HV2i9U2JurI0nqgT02J42zEsXeEgQesiBimR46GPssLndHyl/2rxxr8EVU/kyPN
-         0AldAw8bsSzVj5hKjzqwfMkP2rqkGcx2MkVqV6FSZt/UzVM9U6fwieX8cpwVDAh5BlQ1
-         rOlj5+4JQMs00cAVv3QEtv4a2GGCaQeWsEjDKt9QEjRJuT1eD419N0yOPAxCuq5gg9Vn
-         cZt+BX2G6BWSbxeBMMu6ZozY2kSqWAgqDi4uxfGnbmZzloENUlYXBMk1IMqDfDwM26Ew
-         4OsHCyYHJAeVYy/PjJg0liUgvffJHyZHc8g+uBm0pSuv1TtWShEgzI+amy/woQn9q5zU
-         KC9g==
-X-Gm-Message-State: AOAM531MYbQaYxZ6p/KpsBDgDC0rSBHUNgmoPJqNOcLU0st0pXkHFu9d
-        9iGqErriG1cM9nKAhiT8E5o=
-X-Google-Smtp-Source: ABdhPJyi78ocWvndFMAaXGfhKdoPgJOWrt/C4izHFWGzfu72ny+IMV83ShOjCTfF5iEdZx2eqoRxHg==
-X-Received: by 2002:a17:90a:b00d:b0:1bc:5d68:e7a8 with SMTP id x13-20020a17090ab00d00b001bc5d68e7a8mr1657182pjq.59.1646254098817;
-        Wed, 02 Mar 2022 12:48:18 -0800 (PST)
+        bh=V0ZCMWePvJWkfOaUYdtCCn0PNNFVE21F+X8kdTmqORE=;
+        b=6cM0OkS2HQ//IXvQ6j5Tn/SgaE70Mk2phoL4vftIp0X61VLh8Grtv0cZp2YqLlOBqE
+         V4XBS8M/Lz4I79zHkHoWbjLI0weMP1gTbXdlB+yoTNiBXN/56fxU7Of+dRe+UPFP/pyo
+         +6EtGGBZmtjamjSs/gEaXVU2UX20ChOKwxJILlx+oEX2iZCQGZZg3aCuOKfqqd0JdMK1
+         m+QxDDo9IJ87e1hXoEntlYHhRldfhg/qhwfsXnCAnt938YWf8BidEzXjTdP8C1w7sgg8
+         qNoj+FIlbGSX9VEcbz66gAewSnXPEraFd5VCMckp/JUv+XsYasAoytOAYK7SdPQzR5kG
+         8Vog==
+X-Gm-Message-State: AOAM530Zkcrjpj28/4e5WU+I6hgIlXTOlaP8X3iCPeJVTu2icQDrINC6
+        xxMBvVl2NyAcxeszCBS8F44=
+X-Google-Smtp-Source: ABdhPJweatSHsVHPJW9ClTDZdjweAKbKiBQafT6qQMNuAHR5zJPzuPIpy/HlwmfrAK0E3TlvXWyl7Q==
+X-Received: by 2002:a05:6a00:2348:b0:4f3:bfcd:8365 with SMTP id j8-20020a056a00234800b004f3bfcd8365mr34678709pfj.38.1646254101986;
+        Wed, 02 Mar 2022 12:48:21 -0800 (PST)
 Received: from localhost.localdomain ([103.161.98.179])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.15
+        by smtp.gmail.com with ESMTPSA id bh11-20020a056a00308b00b004f40144cf76sm50905pfb.142.2022.03.02.12.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:48:18 -0800 (PST)
+        Wed, 02 Mar 2022 12:48:21 -0800 (PST)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -56,9 +56,9 @@ To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Martin Kaiser <martin@kaiser.cx>
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 05/16] staging: r8188eu: mark check_indicate_seq as bool
-Date:   Thu,  3 Mar 2022 02:17:26 +0530
-Message-Id: <20220302204737.49056-6-makvihas@gmail.com>
+Subject: [PATCH 06/16] staging: r8188eu: mark enqueue_reorder_recvframe as bool
+Date:   Thu,  3 Mar 2022 02:17:27 +0530
+Message-Id: <20220302204737.49056-7-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220302204737.49056-1-makvihas@gmail.com>
 References: <20220302204737.49056-1-makvihas@gmail.com>
@@ -74,26 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark check_indicate_seq as bool as it returns true/false.
+Mark enqueue_reorder_recvframe as bool as it returns true/false.
+Also, make it static as it's only used in rtw_recv.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_recv.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index d77d98351..402b58a02 100644
+index 402b58a02..81ff22d0e 100644
 --- a/drivers/staging/r8188eu/core/rtw_recv.c
 +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1466,7 +1466,7 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
- 	return ret;
+@@ -1496,8 +1496,7 @@ static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_
+ 	return true;
  }
  
--static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
-+static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
+-int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, struct recv_frame *prframe);
+-int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, struct recv_frame *prframe)
++static bool enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, struct recv_frame *prframe)
  {
- 	u8	wsize = preorder_ctrl->wsize_b;
- 	u16	wend = (preorder_ctrl->indicate_seq + wsize - 1) & 0xFFF;/*  4096; */
+ 	struct rx_pkt_attrib *pattrib = &prframe->attrib;
+ 	struct __queue *ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
 -- 
 2.30.2
 

@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567D24CAD7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C244CAD73
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244516AbiCBS0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S244132AbiCBSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiCBS0C (ORCPT
+        with ESMTP id S229606AbiCBSZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:26:02 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6A1BDE56
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:25:18 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id pj17so1151069ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:25:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zru33MOIq9u6j5okLf6Dq+iG+dSjlj1psboOqbx3Ln8=;
-        b=Adyt4zxOk04oIJ+Y/gJBinkf33Hoz0xYu9/G8cP+FDRCLqM4hb2Bvn4XF4xX43pmfr
-         xmXrTYN9UmaB0OXxxICbzV9gmpJoQtwiJCMaCiH6orPb5Lh2Vcu0tflFnwPk90CxQ87G
-         f3LRTLVHvUjMYWBeYTM0HworoahgmUvv0NYt/yILtjWKJ+vEA46yn0ZztHGxfgMDT2mK
-         uya2xo1KfEW32bBq9FPe9fsnEA6WwNTCLsy2vOhD73js0hH8EUpQDCckkFLcCuvC1cD/
-         0QsnYrrk2z1QBZ7pFHwu1pC+Eta1oQ8dfZKU9o3TpOAiTPB/SfQkWwqY4sAtcWCpwyiN
-         8x4w==
+        Wed, 2 Mar 2022 13:25:01 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140ED939A2;
+        Wed,  2 Mar 2022 10:24:18 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so2866278ooa.10;
+        Wed, 02 Mar 2022 10:24:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zru33MOIq9u6j5okLf6Dq+iG+dSjlj1psboOqbx3Ln8=;
-        b=PPx1AhaFizQ1ltiupONEc6SF0Zl9h7YS7FbJvttqW2p1lP1DZ4yCq43HMojkaLFEG0
-         56Tfq5nZ5Yrsh7AiQAQoegXR6LDoTead5gKBfcdry+u6iJVZgmq4G+YLBKO9t3b4+8i+
-         FlNiZclatJ8MWXDw+KvpyajMNTlzIs0gfNXpkV0tRfTwnRBhjTsbdLh11TUxk+ikYIlI
-         qtVjSKTgmomxpzLtwKqO/b/8lKPjFInIyd8Vpc7tKkod7cUlW5ayoz2AcsryLqmLDn42
-         kIfoF8syfrRpFpPp9srFX2Cqhv0SlazIi8EcA1f30kEv+6WkWaRVBNjUIdku2m4jd+Qb
-         Ay5A==
-X-Gm-Message-State: AOAM533vThqBv6LfBtWmGxRXUtfI7yMKxIGQZOug4L1dBZCaIH8wJ4lo
-        VTxjBrc+GRep2wFQTrEYg285OUO7y/Se5w==
-X-Google-Smtp-Source: ABdhPJwa5yyy5dN0BrPZBSZVSzlqjTHHsdlaU7eir7KpsB4BimR1iMy0VYyo36DjkWerqXUGrGEKTg==
-X-Received: by 2002:a17:906:1e0c:b0:6cf:d014:e454 with SMTP id g12-20020a1709061e0c00b006cfd014e454mr24821370ejj.583.1646245517075;
-        Wed, 02 Mar 2022 10:25:17 -0800 (PST)
-Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
-        by smtp.gmail.com with ESMTPSA id eo8-20020a1709069b0800b006ce6eef6836sm6569297ejc.131.2022.03.02.10.25.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MSJbtF7R3/d/j8mjl9nalZaN2tSNCiNLZKQMPUsm00A=;
+        b=AR9woadp/IjI0xcDaeol3IKHJAe62M0tu1fwrx44V3RXG6RPBuo0pYefTa5ObZXMVx
+         pXa0yOxShb3HWIAYD5lciIceKT75lYFymio1pJR5SUS2naiZyCo9uC5BalL81D+EQSVh
+         DAZdwZZQfuoZvoCfMTiD+F2Gj6sMRXm8/9GtC8BNSgufJQn6cjRniYHiWh6ERCG3C0Xg
+         2B+u8ky8gz7JdhFetZqyyy1nwOHg7xqu1o4CSnr33Z2XfI7YPcLrTNn04ndHFMdY3Tab
+         jADxhCw3nXrvm2TvZeXQhUMAUJ0SzlnCXrfzsAFth6T/cBLqbiEgYwDI587bdaFxwH6r
+         KZow==
+X-Gm-Message-State: AOAM533Tkzjzi+Pfe5/i2SP7xbXnSdum3QrN5TfKz7Rcrp7Quveuy7Aw
+        vDgHwXbDsjZgdaWqqBJBCw==
+X-Google-Smtp-Source: ABdhPJy7Mt26nWBw1w05aNEdWwb5DUxTy93UkULsXG4lm8r9WLxlw9l8jBBWUlYgV2EdElxo/l9zXQ==
+X-Received: by 2002:a05:6870:f713:b0:d2:8adb:aaeb with SMTP id ej19-20020a056870f71300b000d28adbaaebmr891645oab.111.1646245457425;
+        Wed, 02 Mar 2022 10:24:17 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i28-20020a056808055c00b002d51e377248sm9656272oig.33.2022.03.02.10.24.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:25:16 -0800 (PST)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] bluetooth: hci_event: don't print an error on vendor events
-Date:   Wed,  2 Mar 2022 18:23:52 +0000
-Message-Id: <20220302182352.441352-1-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 02 Mar 2022 10:24:16 -0800 (PST)
+Received: (nullmailer pid 4003574 invoked by uid 1000);
+        Wed, 02 Mar 2022 18:24:15 -0000
+Date:   Wed, 2 Mar 2022 12:24:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
+Message-ID: <Yh+2T/Mny15X+pOq@robh.at.kernel.org>
+References: <20220301125046.17737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301125046.17737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events"),
-some devices see errors being printed for vendor events, e.g.
+On Tue, Mar 01, 2022 at 12:50:46PM +0000, Lad Prabhakar wrote:
+> Document RZ/V2L I2C bindings. RZ/V2L I2C is identical to one found on the
+> RZ/G2L and RZ/A SoC's. No driver changes are required as the generic
+> compatible string "renesas,riic-rz" will be used as a fallback.
+> 
+> While at it, drop the comment "# RZ/A or RZ/G2L" for "renesas,riic-rz"
+> compatible string as this will avoid changing the line for every new
+> SoC addition.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v1->v2
+> * Included Ack and RB tags
+> * Dropped the comment from generic string as suggested by Geert.
+> 
+> v1:
+> https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+> 20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> ---
+>  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-[   75.806141] Bluetooth: hci0: setting up wcn399x
-[   75.948311] Bluetooth: hci0: unexpected event 0xff length: 14 > 0
-[   75.955552] Bluetooth: hci0: QCA Product ID   :0x0000000a
-[   75.961369] Bluetooth: hci0: QCA SOC Version  :0x40010214
-[   75.967417] Bluetooth: hci0: QCA ROM Version  :0x00000201
-[   75.973363] Bluetooth: hci0: QCA Patch Version:0x00000001
-[   76.000289] Bluetooth: hci0: QCA controller version 0x02140201
-[   76.006727] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-[   76.986850] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.013574] Bluetooth: hci0: QCA Downloading qca/oneplus6/crnv21.bin
-[   77.024302] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.032681] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.040674] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.049251] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.057997] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.066320] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.075065] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.083073] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.091250] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.099417] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.110166] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.118672] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.127449] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.137190] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.146192] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.154242] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.163183] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.171202] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.179364] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.187259] Bluetooth: hci0: unexpected event 0xff length: 3 > 0
-[   77.198451] Bluetooth: hci0: QCA setup on UART is completed
+I already applied v1. I may have missed this because PW stopped getting 
+mail the last 2 days.
 
-Use the quick-return path in hci_event_func() to avoid printing this
-message for vendor events, this reverts to the previous behaviour which
-didn't print an error for vendor events.
-
-Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
----
- net/bluetooth/hci_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index fc30f4c03d29..56cc41ea9f31 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -6809,7 +6809,7 @@ static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
- 	const struct hci_ev *ev = &hci_ev_table[event];
- 	void *data;
- 
--	if (!ev->func)
-+	if (!ev->func || event == HCI_EV_VENDOR)
- 		return;
- 
- 	if (skb->len < ev->min_len) {
--- 
-2.35.1
-
+Rob

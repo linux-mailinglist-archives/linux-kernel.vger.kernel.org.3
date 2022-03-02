@@ -2,109 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2E84C9E58
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1284C9E62
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239863AbiCBH2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S239874AbiCBHa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239862AbiCBH2o (ORCPT
+        with ESMTP id S229546AbiCBHaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:28:44 -0500
-Received: from mailrelay.tugraz.at (mailrelay.tugraz.at [129.27.2.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AC752B0E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:27:58 -0800 (PST)
-Received: from [192.168.0.150] (84-115-212-199.cable.dynamic.surfer.at [84.115.212.199])
-        by mailrelay.tugraz.at (Postfix) with ESMTPSA id 4K7m171FMpz3wVn;
-        Wed,  2 Mar 2022 08:27:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tugraz.at;
-        s=mailrelay; t=1646206075;
-        bh=CSBe8QRZn5GvXNmzs06Yc+jiDmyDjWPUZ9dGv3OVnaQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=DvqqYEggAgtWgYT0S+1TzzZp9lmGRGxBNBAaf1NBzBH0Gs+/+gaKyAeUwwF+achHs
-         P3uktwRlmMueBOdi8II0LQuomPYSMRQ0oZAQNSy3FqFwIx5yyptImm5YnrZPW+yjkO
-         0yZ1m9V/ISVXIbrcVTMRXdtGkoxpLdxA6L2vb5iU=
-Message-ID: <9472f9dc97beb069e3dbcc0ab6c8e9b5c6976a33.camel@tugraz.at>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-From:   Martin Uecker <uecker@tugraz.at>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 02 Mar 2022 08:27:54 +0100
-In-Reply-To: <CAHk-=wi+sjd8FT_FeJ2UOU2Ti7ws1i7hDweAW2gp8a-JpO-Tbg@mail.gmail.com>
-References: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
-         <bd43bd47c8eaa4c22c1a1549cee66f7ef960b1fc.camel@med.uni-goettingen.de>
-         <CAHk-=whFMxks63sfMQ-0_YO1GsTmoLfsO4ciMtoiCHNgaG_+GA@mail.gmail.com>
-         <979af7ae9b7e8baf080ef6f8d42d48d7f5d2c5b4.camel@tugraz.at>
-         <CANiq72k_PUBPVL1Fx4HLm_WO66RuSsi0oSsKRhssCYRNGbY84Q@mail.gmail.com>
-         <dc52af7ebc044c94337e138f6e1ae807559b4825.camel@tugraz.at>
-         <CANiq72mcuXDRM-xMDPuL7uDLUfXDhARTBJJsVj4fnR15T1v=TA@mail.gmail.com>
-         <CAHk-=wi+sjd8FT_FeJ2UOU2Ti7ws1i7hDweAW2gp8a-JpO-Tbg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        Wed, 2 Mar 2022 02:30:25 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D164C51E51;
+        Tue,  1 Mar 2022 23:29:41 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso672027pjb.0;
+        Tue, 01 Mar 2022 23:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n+PhcwQqRo/8Gtd1tkNC+jMPxT5Ks6cVlUrXMWN3ik4=;
+        b=F6UPPFKKVPcVZFUnTLysi8DeM5ZnNxSinx5W+BPBY7bn2dEiwrb6hCi089Ohyc+Cff
+         cvg3M53iTmASMInR4kjsGHw1gn7Dd6zJO2kE8gMLqeMvCHHM/LYyjSPj7WLRThz0L+or
+         k38oIlwayvHk2meozkmSsvQaf9j9tvKF/L8mc1IN/9lKN5BoLL2aBxWBRvCH69kwwAx5
+         /icdl3iEe1skXX6TNmTzhhbYQOaNUKemUTWz4hJ9OgG7s83PUqyYqS2xmQvxXA7KFXmz
+         jFOlZoqeSZmjtGmHGzhM8W3K38HuU3/poHlovgvPK43HgLmql5ssgppHzD7lsZuRMiJp
+         ft+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n+PhcwQqRo/8Gtd1tkNC+jMPxT5Ks6cVlUrXMWN3ik4=;
+        b=X33iFavQoHySuwEesQgUE0zM7E81GWwwwpo+aevTRXRCVqB+JAPvRW6yCZ2UAfQWC8
+         fKXnBqkAUimErXlAkTZFhkKWdUf0XNcJ6rOePpZoo0JFdbtGeg4Mx09Hp+RLN6DR+7Qc
+         aXjrWcUo/GSXSIDhD/TKevKP5azNvzJMNVq/jr2YGtiek7rRo6aBd+7dQMx+yLimDsDl
+         XOvliNr+SoaV8s2mBRIlNAfnPL1DF5E6qLzSiukY0EOXvfcEWtp+e47gPXbmmgsrJ7oz
+         +YMS/fsL5MOYe8+Vz/qK7k+4dFlLinHsR7BF+6b3sp3W1cdt0F2lKCVA+Rkj2l8Hp90/
+         eh8g==
+X-Gm-Message-State: AOAM530MaF2GQ0hXKi5jIgetBGcspjdyx8GIiukV5+Lj0c/7ud4eNM4O
+        TcEJLulVZqwHNTG6SMJC1W+sfKjGnJYYsYzTnvM=
+X-Google-Smtp-Source: ABdhPJySOpWhvU0ZuNChoueITcvmjAVZyd/O+WwyWQ60m7KIRAB1X8qddJpHis7ybnBVGu3Gd8GMplPU0zKFl7lEgug=
+X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id
+ d7-20020a17090ab30700b001bd37f3f0fcmr16405568pjr.132.1646206181283; Tue, 01
+ Mar 2022 23:29:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TUG-Backscatter-control: G/VXY7/6zeyuAY/PU2/0qw
-X-Spam-Scanner: SpamAssassin 3.003001 
-X-Spam-Score-relay: -1.9
-X-Scanned-By: MIMEDefang 2.74 on 129.27.10.116
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220301132623.GA19995@vscode.7~>
+In-Reply-To: <20220301132623.GA19995@vscode.7~>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Wed, 2 Mar 2022 08:29:30 +0100
+Message-ID: <CAJ8uoz2y2r1wS3_sSgZ8jC2fkiyNCW_q4oQdc_JYe2bKO4NoJA@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: unmap rings when umem deleted
+To:     lic121 <lic121@chinatelecom.cn>
+Cc:     bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, den 01.03.2022, 12:26 -0800 schrieb Linus Torvalds:
-> On Mon, Feb 28, 2022 at 5:50 AM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> > But making it non-UB in the standard does not force a project to
-> > consider it "not an error", which is what actually matters for being
-> > able to use UBSan effectively or not.
-> 
-> Absolutely.
+On Tue, Mar 1, 2022 at 6:57 PM lic121 <lic121@chinatelecom.cn> wrote:
 >
-> I think people should treat UBsan and friends a bit like "runtime lint".
-> 
-> "lint" traditionally doesn't necessarily check for just *incorrect* C.
-> 
-> It checks for things that can be confusing to humans, even if they are
-> 100% completely conforming standard C.
+> xsk_umem__create() does mmap for fill/comp rings, but xsk_umem__delete()
+> doesn't do the unmap. This works fine for regular cases, because
+> xsk_socket__delete() does unmap for the rings. But for the case that
+> xsk_socket__create_shared() fails, umem rings are not unmapped.
 >
-> Classic example: indentation. Having the wrong indentation is not in
-> any shape of form "undefined behavior" from a C standpoint, but it
-> sure is something that makes sense checking for anyway.
+> fill_save/comp_save are checked to determine if rings have already be
+> unmapped by xsk. If fill_save and comp_save are NULL, it means that the
+> rings have already been used by xsk. Then they are supposed to be
+> unmapped by xsk_socket__delete(). Otherwise, xsk_umem__delete() does the
+> unmap.
 
-You can automatically re-indent code form
-other sources without breaking it. Assume you
-have code that relis on signed integer wrapping,
-but you want to use UBSan to screen for possible
-signed arithmetic errors  and/or have it trap
-in production to protect against exploits. You
-would then have to carefully analyze each
-individual case of signed arithmetic whether
-it makes sense, and then somehow add an
-annotation that it is actually ok (or rewrite
-it which introduces new risks). This does not
-seem comparable to indentation at all.
+Thanks for the fix. Please note that the AF_XDP support in libbpf has
+been deprecated and moved to libxdp
+(https://github.com/xdp-project/xdp-tools). The code will be
+completely removed in the libbpf 1.0 release. Could I take your patch
+and apply it to libxdp instead and fix the bug there? I have not
+checked, but it is likely present there as well. And that is the code
+base we will be using going forward.
 
-On the other hand, if you have a self-contained
-code base and like wrapping signed integer, you
-can now use a compiler flag and also get what
-you want.
-
-So I am still not yet convinced that the
-standard was wrong making it undefined. 
-
-Whether it is wise for compilers to use it
-aggressively for optimization is a different
-question...
-
-
-Martin
-
+> Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+> Signed-off-by: lic121 <lic121@chinatelecom.cn>
+> ---
+>  tools/lib/bpf/xsk.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index edafe56..32a2f57 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -1193,12 +1193,23 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+>
+>  int xsk_umem__delete(struct xsk_umem *umem)
+>  {
+> +       struct xdp_mmap_offsets off;
+> +       int err;
+> +
+>         if (!umem)
+>                 return 0;
+>
+>         if (umem->refcount)
+>                 return -EBUSY;
+>
+> +       err = xsk_get_mmap_offsets(umem->fd, &off);
+> +       if (!err && umem->fill_save && umem->comp_save) {
+> +               munmap(umem->fill_save->ring - off.fr.desc,
+> +                      off.fr.desc + umem->config.fill_size * sizeof(__u64));
+> +               munmap(umem->comp_save->ring - off.cr.desc,
+> +                      off.cr.desc + umem->config.comp_size * sizeof(__u64));
+> +       }
+> +
+>         close(umem->fd);
+>         free(umem);
+>
+> --
+> 1.8.3.1
+>

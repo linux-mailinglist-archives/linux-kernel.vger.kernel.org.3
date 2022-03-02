@@ -2,104 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311604CAC6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC914CAC76
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiCBRtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S244260AbiCBRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiCBRtQ (ORCPT
+        with ESMTP id S236917AbiCBRu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:49:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93BCB220D3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646243312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ish057kHJjR2Es3o2X8vkZcDc0WMwyYLfwxQbeB+OyA=;
-        b=ImDlJoPOtqovLFnHqnimP+6BB1odVbUHYf89A8qLVhNKNRx5qxM93pmelgsUozFHYwyj0+
-        pjqbomGdKZh6lBKkcuek5L5MQBbj2+ZZutdudwmYVyymNl4Jbwx2kYshaug15HAuvMb+xw
-        PmI7MbTvOQdPq3P9GfBfBAmPGTM9GfM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-fRZH69syPpGlhEzkN1kqlw-1; Wed, 02 Mar 2022 12:48:31 -0500
-X-MC-Unique: fRZH69syPpGlhEzkN1kqlw-1
-Received: by mail-wm1-f69.google.com with SMTP id s129-20020a1ca987000000b0038707017dd7so92428wme.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:48:31 -0800 (PST)
+        Wed, 2 Mar 2022 12:50:59 -0500
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE462C121;
+        Wed,  2 Mar 2022 09:50:16 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id o7-20020a056820040700b003205d5eae6eso2240202oou.5;
+        Wed, 02 Mar 2022 09:50:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ish057kHJjR2Es3o2X8vkZcDc0WMwyYLfwxQbeB+OyA=;
-        b=nA7SRZeNlWJLBjKkLpWpp88EvB9e4xTZsqu0TUf70xeMUqCzYNvqxy+FGM+p+dAVdh
-         pqZop5XV+GocxT/nc7Wfh1oYGKjD8IQq5FaPopDtkT9Jb0PEp+ei/3iCR9H6WDlWWCyL
-         Bz6okDjcb0yAUNKUO7L1VE7FsCe79zVjpvGDGl0aXGn0aZ+kaEuhq1bvfElRqEzDZQNI
-         q+U70pTcIF5ar9H0Fm+MVmOeG1jzqVVnXbn6LF02cUQz/XX7JAZxEY43j+AlwvLdR7yG
-         citsl3pze+Vq6IGVy0XjLlxbe/ymxjMAXLPYrQNzAFWW9+Vv09DGwTL4aTEc4rBqifhk
-         95Ow==
-X-Gm-Message-State: AOAM533CJbucuLiKU7yXcKGWCIlFNf+ydVIhjlLzyKnd/DuueQPldAUZ
-        lJIgdOyF9Opw6+x2jCHcs0xZUC8F3ORSfyJ75ATWZO+Ze8V/RYqeel4tJzjcGAlj8yFak+sPjq/
-        zQa8ByLASaqz5sZqNuGIhrnMg
-X-Received: by 2002:a5d:4a8f:0:b0:1f0:4af2:4e29 with SMTP id o15-20020a5d4a8f000000b001f04af24e29mr292229wrq.519.1646243310196;
-        Wed, 02 Mar 2022 09:48:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJykaH1cjF8Bel4wvi23J3mDvwOhoDqUEVzkDqVEnsn90rg5c2+5PKw3CzHay2FDBT8xLhmG5g==
-X-Received: by 2002:a5d:4a8f:0:b0:1f0:4af2:4e29 with SMTP id o15-20020a5d4a8f000000b001f04af24e29mr292213wrq.519.1646243309890;
-        Wed, 02 Mar 2022 09:48:29 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id r20-20020adfa154000000b001f0326a23e1sm2583118wrr.88.2022.03.02.09.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 09:48:29 -0800 (PST)
-Message-ID: <a0eee64e-763a-0db3-29d1-e19ee80ba1ee@redhat.com>
-Date:   Wed, 2 Mar 2022 18:48:16 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iaHBmL19/aGsObKDNYAKvkBrYFk5c1tAvLVtd0VRmtM=;
+        b=vrQWmFmrG+gdoMwEZXAtPPI0+9gucvFk2eka5lgZzf1LImUDR2TTDGVAd9v9mfqjRO
+         pF6X32sPhal3PmG5+iAeAO9rP0YTkppRgwUbIaHqYKongJIX0SnpnJ6QKolZPOXVHaCL
+         WdPJMjp6kC1RXaPI1jCz5qF3W6hbCOO3CdCeYkYhktbPT3btGqPq1RZvFm+tcf422EjK
+         0cEt0GkheB5QK15jyBCuOHrtOXrgvp4yDR1LPH+U4mcXUY3RLEJxrYlbeDKLSwIjDof8
+         6/TkRqZu7/Gvwl8eWhVo/VW66ugGv2Dmtfy8eh+F1X/8a9oPZ56ejtXwZWCIZzirjpo9
+         Mc1w==
+X-Gm-Message-State: AOAM531kYxDuq/wzOBxZMPfxnva2G0YzIspdHg69GCyGRO7YL6cKWkqM
+        3ml/TOUXMJGlcQsLynEz7ZfojzPiNg==
+X-Google-Smtp-Source: ABdhPJzUSrz4rx3I2XeOi33guW/PnNOyNKyG6Hw6f5iggsUNXdmqsv4Cp2y6zU1f0m8KB9v/1tlNhw==
+X-Received: by 2002:a4a:7601:0:b0:2e0:3c62:4787 with SMTP id t1-20020a4a7601000000b002e03c624787mr15642954ooc.11.1646243415969;
+        Wed, 02 Mar 2022 09:50:15 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l1-20020a4aa781000000b0031cf8e00738sm7916823oom.1.2022.03.02.09.50.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 09:50:15 -0800 (PST)
+Received: (nullmailer pid 3953295 invoked by uid 1000);
+        Wed, 02 Mar 2022 17:50:13 -0000
+Date:   Wed, 2 Mar 2022 11:50:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Medad CChien <ctcchien@nuvoton.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: edac: npcm-edac.yaml
+Message-ID: <Yh+uVYzaXdfEaW7R@robh.at.kernel.org>
+References: <20220302092434.16625-1-ctcchien@nuvoton.com>
+ <20220302092434.16625-3-ctcchien@nuvoton.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: allow struct kvm to outlive the file descriptors
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-References: <20220302174321.326189-1-pbonzini@redhat.com>
- <Yh+trXegvWs+e5l3@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yh+trXegvWs+e5l3@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302092434.16625-3-ctcchien@nuvoton.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 18:47, Sean Christopherson wrote:
->> +	/* This is safe, since we have a reference from open(). */
->> +	__module_get(THIS_MODULE);
-> This isn't sufficient.  For x86, it only grabs a reference to kvm.ko, not the
-> vendor module.  Instead, we can do:
+On Wed, Mar 02, 2022 at 05:24:33PM +0800, Medad CChien wrote:
+> Add the device tree bindings for the EDAC driver npcm-edac.
 > 
-> 	if (!try_module_get(kvm_chardev_ops.owner))
-> 		return ERR_PTR(-EINVAL);
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> ---
+>  .../devicetree/bindings/edac/npcm-edac.yaml   | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/npcm-edac.yaml
 > 
-> And then on top, revert commit revert ("KVM: set owner of cpu and vm file operations").
-> vCPUs file descriptors hold reference to the VM, which means they indirectly hold a
-> reference to the module. So once the "real" bug of struct kvm not holding a reference
-> to the module is fixed, grabbing a reference when a VM/vCPU inode is opened becomes
-> unnecessary.
+> diff --git a/Documentation/devicetree/bindings/edac/npcm-edac.yaml b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
+> new file mode 100644
+> index 000000000000..936e9787ec80
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/npcm-edac.yaml
+
+nuvoton,npcm-memory-controller.yaml
+
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/npcm-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Memory Controller EDAC
+
+Drop 'EDAC'
+
+> +
+> +maintainers:
+> +  - Medad CChien <ctcchien@nuvoton.com>
+> +
+> +description: |
+> +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
+> +  correction check).
+> +
+> +  The memory controller supports single bit error correction, double bit
+> +  error detection (in-line ECC in which a section (1/8th) of the
+> +  memory device used to store data is used for ECC storage).
+> +
+> +  Note, the bootloader must configure ECC mode for the memory controller.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm8xx-memory-controller
+> +      - nuvoton,npcm7xx-memory-controller
+
+Don't use wildcards in compatible strings. Use specific SoC.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: uncorrectable error interrupt
+> +      - description: correctable error interrupt
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: ue
+> +      - const: ce
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    ahb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        mc: memory-controller@f0824000 {
+> +            compatible = "nuvoton,npcm7xx-memory-controller";
+> +            reg = <0x0 0xf0824000 0x0 0x1000>;
+> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +        };
+> +    };
+> +
+> -- 
+> 2.17.1
 > 
-
-Got it, I'll wait for David to post the right thing. :)
-
-Paolo
-

@@ -2,158 +2,466 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716054CAAE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9974CAAEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243279AbiCBQ4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S243575AbiCBQ6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235475AbiCBQ4s (ORCPT
+        with ESMTP id S243595AbiCBQ6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:56:48 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A355BDD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:56:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iYvJmM4GE0Vmnk/vM9B9Uvt2Vys05/zx7KedrC/OttA1bxntg34nMLY4g8XErfrJm3E8rH9rZCaDOwGcTJoxEaL75cxjJhqj3P06iJKIzr0bcon3wS53Jakrau8sHWeuAq935UZdjEME9PbvA2Z4KdRFJ+suaG65RrfSZetvpcPlnSBJHo11Fzn9uZE1U5eDxCxttnstbwZDK5ILpZqWQTqabhqA/JmUTbLTXzxRPhg4yFEjRmCFd8y96kIp9LVIAUQIwcooyYsnG6ELI93ysfmEPUXxs1TvfiLnZXyqMVrgNMn20FvcHr5CVPCuuUlmgekDiIgtvJR+/X3ZqxmfpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D3Gxvrl2nAYrnSi4OIcaJuTcFNV6uIW8oT7cONq8pnM=;
- b=WcZB0aKoOZOGRQps3dPh1KCLzt3zvTeDugGniXoHpPVXgP0i01vAzHsr6EgVT1Dnqa7TZNr1ERJOUyoXKCXE31rtJcYStVGPuIEkYpapm2HmBVlkHl+1k7hN577YLG+ZdLvIzmTWADYETBOR9EwVNJAZlV5jRiHX7rFxNtfrU11lbjcAbAuvDszmJrmjg+jUWCa88r3JMC15fHYoUb7bicCynxZOWaKe31AQgrX3SnuniPDk/q/Q8/eNpbEgrXB0/9YL9VlKXMJzRanvaEf0JmyHgQdFU2Bu1ZObVqWSEeJCVc/6+cgb83CucOzUxOAOZ3FhWRYnVhBXJAJQ5pCpPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D3Gxvrl2nAYrnSi4OIcaJuTcFNV6uIW8oT7cONq8pnM=;
- b=emcgUdGwj3Q7MEyD4Cw83zpeAE6IAn9SZFRLWhwcvWhWfYg+mQzGlZhlOsLpfBwdKbqECnGf/nmQcff6TqaGrMyH7mgVuZH5w4uzX8cgOYXjqU/PlTl6p5VR6X0xt5yrYjbbtr51FXMgPQS2P9mlVr55j1qYCL2ix3bwXnfzbrtcoe+1amXprf8eeW+oYPfcGZTh+nyj1zYAwm5UluS7G/XL1SDf/DgdnLrHIxuD4x4Sqhkjq9fGdkclCslC1MwaMzKw/L1PnOgpvYEI/Y1LyqPEMFYf7hqtQoho8ltSODvlV536DLIqCV4v2OSvXPvwcVk3IUlQXr8mfg+3T4Uwlg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BL1PR12MB5802.namprd12.prod.outlook.com (2603:10b6:208:392::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 16:56:01 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5038.015; Wed, 2 Mar 2022
- 16:56:01 +0000
-Date:   Wed, 2 Mar 2022 12:55:59 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH RFC 12/13] mm/gup: trigger FAULT_FLAG_UNSHARE when
- R/O-pinning a possibly shared anonymous page
-Message-ID: <20220302165559.GU219866@nvidia.com>
-References: <20220224122614.94921-1-david@redhat.com>
- <20220224122614.94921-13-david@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224122614.94921-13-david@redhat.com>
-X-ClientProxiedBy: BL1PR13CA0111.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::26) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 2 Mar 2022 11:58:01 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149AB58380
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:57:17 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id bt3so2223445qtb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=profian-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lDgfXVCBj5NCHWxZKv7iGAFS+RAinlgiSzL/8RxMDV4=;
+        b=JHWCGfShRd4cr04CNZivUhRUer938+dOv1ZN4WFwnS5tlcSkbUO6s5k1vDPK0R3FK9
+         V1iTCygj4AGBEluhHpk1igzQeGCDNPAhbUN1bht92A90hITQFS57pCS/Ca2cM0gLFr+/
+         eEqvPyBHjaItOk+8bvw9h4xS69TaeBb1Z+uU2sJOEHM2Os9irdoKpDVq/tTEP0jnRSrG
+         xiq8kSXNv+dynzJX7LuPHGQdHqPROkL1dyGwqDPj7KrNLHxUQCPuC1FoEwLqriRkawEN
+         EQWesvxuYAoJlInUbr2VOLlzip6MSqkKvXiuOE2zGuf0RBCZOb2lOofwDIL6ou4gw9CE
+         m2aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lDgfXVCBj5NCHWxZKv7iGAFS+RAinlgiSzL/8RxMDV4=;
+        b=hT/MrZuVs+uip4e+JfSdiNW64J6VC/9EpFlLCGKiTBbv1LxnmuTB8imRQRifN0b/on
+         FV6NwOw81gg8iFiHSawNDP14d1WrCGjVPXR0zl9PX5RpKO84RaO166Mg7AeyR7NsrDZx
+         nOEQVQiQcOsNRGzrxtGJgOnJUA3sqOLVt1Ujhgwe/a2tHl2JIPeKr3zHwxnrpigm4Df3
+         6RwbyK+3Dix04HvdiybyIV39DSauh7KuYx/qnPWHNaQLUZuJAUHsm/gDmNyk+Xbakvaw
+         1GyoiEBQX/uGnT6f1tkN5/B9bJAPZHE/0x/kxB/6wzRGCfEXCKN20g/aK1GS+3kADUhU
+         y78Q==
+X-Gm-Message-State: AOAM533f9/jyWzW21g4cXrNLyUUIOMJJMdXZllTO0xRoED8MWtEm5pvK
+        vcRQuPVoZnYs5E9M+pG/Ivo5h3FQqKkd53YvqHXF9HbqVhRgOeOL
+X-Google-Smtp-Source: ABdhPJyPhJEZN6nVPNhspUEhnNS8/39I1gAsmu4rPS5EjG6zK0cW2r6S1mTeLsjyH2UrsfuMHFG+pxHW0w95ObJzNxo=
+X-Received: by 2002:a05:622a:589:b0:2de:9437:a380 with SMTP id
+ c9-20020a05622a058900b002de9437a380mr24092117qtb.593.1646240235931; Wed, 02
+ Mar 2022 08:57:15 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d8e84b5-aa7d-48e3-acf4-08d9fc6d87a1
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5802:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB580281DBFEF060A4E59BF153C2039@BL1PR12MB5802.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5XzcdjVRWnhnLIxhzKrznjiSLV55HSEFwQu+vGH0+hRI9amPG5RHQamLsgmdQ3/1F1uI7g7fVQPn4CT2VRVD95d6djZoPWL0+PACEJLP0MYP1Rpdoe2+fRfm+Opkn9q3CXJWx3GNTQBoRcAFAE3OahFi3j5JT6u3gh61KT4mw0soH91yIM++DJw/z+yKANKwaOT6enX63IXiupj0pqJ6lA+YSxPNjN0ZV/5200uioE0sNzpY6QyJiTuPjL7ZbunanM8QYqXDcveNwqfnwJrhZFComLiGtRECDzHzwdedY9O+LZvAKnRfkVVXcBH6Ec4LMevR0nHp2VAKIMSN1KMlZ6d1RpbXI6CDfU3/kDMo1a1rz30ISEsW6DhwCbXaV/iVP29H0bTImjoHGecsvAiGJ8WNBmiPYSHtpQqQS8NyDiz9k0/szSnW608P/zEykpwclfsCf7jrl/7fzaS6VTO1WAlwx3RrEPb1QF/veCnhRa+J5DY6yuM8hQsp4mkRkh+bIBB0ZFxT3lr+2rrC8lKmT3EpGA8jXQDDevx5E+v9k7ANptErLCyUtK2JoTRqnOMTEK/nnk261LO5AkNZuK3R9AHafm1EsaPXpi+jJ31OzLxutj2WdLXcpuTNn2tP1wyqFfCMf5LmtJA0kEWX2IAok+YuWImPaMjUbaynN9ratzvbH1HoNGFNKTm8fBDSTPfCa9mvzsoICkUOjvsl32wayA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(33656002)(6512007)(2906002)(2616005)(6506007)(1076003)(86362001)(38100700002)(83380400001)(54906003)(6916009)(4744005)(5660300002)(4326008)(8936002)(508600001)(6486002)(66556008)(316002)(66946007)(66476007)(36756003)(8676002)(7416002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7IxB3Y2X62mvld8wBfa3dL83y0B0Ljmeo4p4s5QBVvqMSODfQErjkDB7jD3m?=
- =?us-ascii?Q?oewDzo5v1rvcl+GhF9HErPhikgcMsng5gXpdwPyE2Uj3AWC9Lry+G3xZNJND?=
- =?us-ascii?Q?vxUpOugA7c4wBEF4SdEvmMHhE+hTKGHpzpUnx1q4+6JJ1LwNFdivtWhfOqQQ?=
- =?us-ascii?Q?v5xCUZMJ8L3+6g/A267/YTGEU5iVEsS3YxT3T1wjS6yaeOs1lym80M9/2c3C?=
- =?us-ascii?Q?SmH1ucvL+VWFDcVhMTpNOgwdXhhjW6TT8cfVXRKW59Rn5mfHgyPsCem6LYcj?=
- =?us-ascii?Q?Eju+360ugl4z6a5e9vWZEmRTxoL6kdRHS+UKukIl/rVntdC84xI7Y2aJT2zA?=
- =?us-ascii?Q?Soo1ZaXQZuKiZ3hoWAu319IsZLvvc7vABAWgUt1xBiawbUE2A9ya5NGDEBZk?=
- =?us-ascii?Q?mirDV8i5KZLtOEmnGVeOosenH3s8Pd8l7FWCbJ6hkQwsdZVuGSPt5Nla5iOh?=
- =?us-ascii?Q?fDGyiNut06scJSQw0w8JnqRRzOWN5QRB0rD+HvhJ1RoNbKGBvIu5E4vo3Y+k?=
- =?us-ascii?Q?gJq8wPxwdvd0NbN7UKPHZlOfUFFP5Ge2dI8a+kestwlF343n2jHsRi52RlV7?=
- =?us-ascii?Q?jRAVWkVF2b03mwQyAy/oECABh79rgnaS4TzjLj628+k5XRggOUmew0Y1xg3g?=
- =?us-ascii?Q?SxPBKGXo0erwUmShllVXM/ZTjRifHZSmYqLXJ9Z6tZPZoDMRRnm/3j5vCfjk?=
- =?us-ascii?Q?8i+c2bRRl8Tme1vk4miBOJE0GMdJvBuJ1URjVFivaRG5xeYcuOiHerHCHy9F?=
- =?us-ascii?Q?rR9Nzwus2s2pu7m62HQDmBT1ZIFytofg3Bm9RGRaXpyLjt+7lXYppXJHBm2D?=
- =?us-ascii?Q?zJRKuoicOSoalXRc7277OtBvVlgcGTpgL8lKH/+s1BuvkylyMmV1/iCana7a?=
- =?us-ascii?Q?x0I5fCPvYmCKA2Nv+wkQZp8UFee7iaVRFwZ6tUqAsNM27aYmDmK1iL+3Atgw?=
- =?us-ascii?Q?yQEITfmKaSS60qesdwm6C5ngeycPnLMeTvErpdfuDKVWxeYMm7YHe/JctLl2?=
- =?us-ascii?Q?mRStlBBIWAjiFH/wwENedOBXPjt4TM1M+YCKhh4sorGEK5HI+1CX/RamzWeJ?=
- =?us-ascii?Q?6jtF7RmjTd8jIlH7V2c/3Aqynqw1PaTzsNE0a1WsKKAep9pI0jB3ZiYI0YzQ?=
- =?us-ascii?Q?cSFBz/dH8/Y3a7bsiciEKjGyzJl5wQXPSxdyR2rJrtHTq7elYBlENWfG9sz0?=
- =?us-ascii?Q?hOWbM/eIg8rB5kSvk2j8+YyuTXByTVCu2BTiU/Fu2fRxUDZajEu2FYlhOgkA?=
- =?us-ascii?Q?tlfH929ejLcezVyI0r8FYGsfUlinXXcfvv7+hVHpX3PXO896FIRtu11Nks0q?=
- =?us-ascii?Q?OMRG7pQvjDSZZ9P47qPyqj1diKXlmG97eFlJUogOUgUnzJpssEFS91vmN9q4?=
- =?us-ascii?Q?6PeYRiax/XS0wd/E+8dJenSeBQw/JeFlDx0K9aGeQuhoq6VkWsM8Ww0HCsz4?=
- =?us-ascii?Q?6TiG1Nd6lGZtOGOoxiFRBETUM+KCEUT83XmpbKVp5/xH41zZ79nRE3D5iZBZ?=
- =?us-ascii?Q?qHlu3BSNFi9Cq8JMyjDpSlP0Qcr87nvIRbuTrdzlncdG0OTp+jnHcYhE1wcW?=
- =?us-ascii?Q?s2W387ioOc5TZAke1x0=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d8e84b5-aa7d-48e3-acf4-08d9fc6d87a1
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 16:56:01.0084
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M8FD0XXZ12c5nsSGB1g8h/3w2jkKtKIOfJRMsrTe2QV7hnC4ZVp6qybWvIW+ndnE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5802
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <CAHAy0tR-64vxtFo4KXiJP_va2=WF++Q6gDaPksNxiaSB5wWvhA@mail.gmail.com>
+ <86495779-a9c5-45d5-0017-c491bf6354ab@intel.com> <CAHAy0tQYBD2b0jdim=6Zv+hwskyd1FhpycyGF+1FBHDih9TP3g@mail.gmail.com>
+ <e746026c-33f3-fd15-5303-563b3eb761d3@intel.com>
+In-Reply-To: <e746026c-33f3-fd15-5303-563b3eb761d3@intel.com>
+From:   Nathaniel McCallum <nathaniel@profian.com>
+Date:   Wed, 2 Mar 2022 11:57:05 -0500
+Message-ID: <CAHAy0tRXxDQSuBVoEW9jzpFaWns4DzWqmFASFNGgGb5vjnYuPw@mail.gmail.com>
+Subject: Re: [PATCH V2 00/32] x86/sgx and selftests/sgx: Support SGX2
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, Jarkko Sakkinen <jarkko@kernel.org>,
+        tglx@linutronix.de, bp@alien8.de,
+        Andy Lutomirski <luto@kernel.org>, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 01:26:13PM +0100, David Hildenbrand wrote:
-> Whenever GUP currently ends up taking a R/O pin on an anonymous page that
-> might be shared -- mapped R/O and !PageAnonExclusive() -- any write fault
-> on the page table entry will end up replacing the mapped anonymous page
-> due to COW, resulting in the GUP pin no longer being consistent with the
-> page actually mapped into the page table.
-> 
-> The possible ways to deal with this situation are:
->  (1) Ignore and pin -- what we do right now.
->  (2) Fail to pin -- which would be rather surprising to callers and
->      could break user space.
->  (3) Trigger unsharing and pin the now exclusive page -- reliable R/O
->      pins.
+Reinette,
 
-How does this mesh with the common FOLL_FORCE|FOLL_WRITE|FOLL_PIN
-pattern used for requesting read access? Can they be converted to
-just FOLL_WRITE|FOLL_PIN after this?
+Perhaps it would be better for us to have a shared understanding on
+how the patches as posted are supposed to work in the most common
+cases? I'm thinking here of projects such as Enarx, Gramine and
+Occulum, which all have a similar process. Namely they execute an
+executable (called exec in the below chart) which has things like
+syscalls handled by a shim. These two components (shim and exec) are
+supported by a non-enclave userspace runtime. Given this common
+architectural pattern, this is how I understand adding pages via an
+exec call to mmap() to work.
 
-Jason
+https://mermaid.live/edit#pako:eNp1k81qwzAQhF9F6NRCAu1Vh0BIRemhoeSHBuIettYm=
+FpElVZZLQ8i7144sJ8aOT2bmY3d2vT7R1AikjBb4U6JO8UXC3kGeaFI9FpyXqbSgPTmg06j6uiu=
+1lzn2jSKTA2XwD9NEB31uPBLzi-6iMpLnYB8Wn4-kOBYpKBW52iXj8WQSmzEy5Zvt01ewG5HUQN=
+2UEc7nK77YPjdALd64GWih8NpkALGwR_JtzOGAaKXexyTKGEt2pgoMaXahgj5Qgk9nM_6xGvDDJ=
+psmOyiVv0LB62B8un4dBDrLiLPeWciCL9fvvKVQizhSG6stFz9Df7sxUpcYitR-SodFO2A_Vw-7=
+l4nzzduqjX9bKJxOHDDeBB3RHF0OUlS3faq1hPoMqzulrHoVGPZOE32u0NIK8MiF9MZRtgNV4Ih=
+C6c3yqFPKvCsxQs3_0VDnfzf-CPg
+
+This only covers adding RW pages. I haven't even tackled permission
+changes yet. Is that understanding correct? If not, please provide an
+alternative sequence diagram to explain how you expect this to be
+used.
+
+On Wed, Feb 23, 2022 at 1:25 PM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+>
+> Hi Nathaniel,
+>
+> On 2/23/2022 5:24 AM, Nathaniel McCallum wrote:
+> > On Tue, Feb 22, 2022 at 5:39 PM Reinette Chatre
+> > <reinette.chatre@intel.com> wrote:
+> >>
+> >> Hi Nathaniel,
+> >>
+> >> On 2/22/2022 12:27 PM, Nathaniel McCallum wrote:
+> >>> 1. This interface looks very odd to me. mmap() is the kernel interfac=
+e
+> >>> for changing user space memory maps. Why are we introducing a new
+> >>> interface for this?
+> >>
+> >> mmap() is the kernel interface used to create new mappings in the
+> >> virtual address space of the calling process. This is different from
+> >> the permissions and properties of the underlying file/memory being map=
+ped.
+> >>
+> >> A new interface is introduced because changes need to be made to the
+> >> permissions and properties of the underlying enclave. A new virtual
+> >> address space is not needed nor should existing VMAs be impacted.
+> >>
+> >> This is similar to how mmap() is not used to change file permissions.
+> >>
+> >> VMA permissions are separate from enclave page permissions as found in
+> >> the EPCM (Enclave Page Cache Map). The current implementation (SGX1) a=
+lready
+> >> distinguishes between the VMA and EPCM permissions - for example, it i=
+s
+> >> already possible to create a read-only VMA from enclave pages that hav=
+e
+> >> RW EPCM permissions. mmap() of a portion of EPC memory with a particul=
+ar
+> >> permission does not imply that the underlying EPCM permissions (should=
+)have
+> >> that permission.
+> >
+> > Yes. BUT... unlike the file permissions, this leaks an implementation d=
+etail.
+>
+> Not really - just like a RW file can be mapped read-only or RW, RW enclav=
+e
+> memory can be mapped read-only or RW.
+>
+> >
+> > The user process is governed by VMA permissions. And during enclave
+> > creation, it had to mmap() all the enclave regions to their final VMA
+> > permissions. So during enclave creation you have to use mmap() but
+> > after enclave creation you use custom APIs? That's inconsistent at
+> > best.
+>
+> No. ioctl()s are consistently used to manage enclave memory.
+>
+> The existing ioctls() SGX_IOC_ENCLAVE_CREATE, SGX_IOC_ENCLAVE_ADD_PAGES,
+> and SGX_IOC_ENCLAVE_INIT are used to set up to initialize the enclave mem=
+ory.
+>
+> The new ioctls() are used to manage enclave memory after enclave initiali=
+zation.
+>
+> The enclave memory is thus managed with a consistent interface.
+>
+> mmap() is required before SGX_IOC_ENCLAVE_CREATE to obtain a base address
+> for the enclave that is required by the ioctl(). The rest of the ioctl()s=
+,
+> existing and new, are consistent in interface by not requiring a memory
+> mapping but instead work from an offset from the base address.
+>
+> > Forcing userspace to worry about the (mostly undocumented!)
+> > interactions between EPC, PTE and VMA permissions makes these APIs
+> > hard to use and difficult to reason about.
+>
+> This is not new. The current SGX1 user space is already prevented from
+> creating a mapping of enclave memory that is more relaxed than the enclav=
+e
+> memory. For example, if the enclave memory has RW EPCM permissions then i=
+t
+> is not possible to mmap() that memory as RWX.
+>
+> >
+> > When I call SGX_IOC_ENCLAVE_RELAX_PERMISSIONS, do I also have to call
+> > mmap() to update the VMA permissions to match? It isn't clear. Nor is
+>
+> mprotect() may be the better call to use.
+>
+> > it really clear why I'm calling completely separate APIs.
+> >
+> >>> You can just simply add a new mmap flag (i.e.
+> >>> MAP_SGX_TCS*) and then figure out which SGX instructions to execute
+> >>> based on the desired state of the memory maps. If you do this, none o=
+f
+> >>> the following ioctls are needed:
+> >>>
+> >>> * SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
+> >>> * SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS
+> >>> * SGX_IOC_ENCLAVE_REMOVE_PAGES
+> >>> * SGX_IOC_ENCLAVE_MODIFY_TYPE
+> >>>
+> >>> It also means that languages don't have to grow support for all these
+> >>> ioctls. Instead, they can just reuse the existing mmap() bindings wit=
+h
+> >>> the new flag. Also, multiple operations can be combined into a single
+> >>> mmap() call, amortizing the changes over a single context switch.
+> >>>
+> >>> 2. Automatically adding pages with hard-coded permissions in a fault
+> >>> handler seems like a really bad idea.
+> >>
+> >> Could you please elaborate why this is a bad idea?
+> >
+> > Because implementations that miss this subtlety suddenly have pages
+> > with magic permissions. Magic is bad. Explicit is good.
+> >
+>
+> There is no magic. Any new pages have to be accepted by the enclave.
+> The enclave will not be able to access these pages unless explicitly
+> accepted, ENCLU[EACCEPT], from within the enclave.
+>
+> >>> How do you distinguish between
+> >>> accesses which should result in an updated mapping and accesses that
+> >>> should result in a fault?
+> >>
+> >> Accesses that should result in an updated mapping have two requirement=
+s:
+> >> (a) address accessed belongs to the enclave based on the address
+> >>     range specified during enclave create
+> >> (b) there is no backing enclave page for the address
+> >
+> > What happens if the enclave is buggy? Or has been compromised. In both
+> > of those cases, there should be a userspace visible fault and pages
+> > should not be added.
+>
+> If user space accesses a memory address with a regular read/write that
+> results in a new page added then there is indeed a user space visible
+> fault. You can see this flow in action in the "augment" test case in
+> https://lore.kernel.org/linux-sgx/32c1116934a588bd3e6c174684e3e36a05c0a4d=
+4.1644274683.git.reinette.chatre@intel.com/
+>
+> If user space indeed wants the page after encountering such a fault then
+> it needs to enter the enclave again, from a different entry point, to
+> run ENCLU[EACCEPT], before it can return to the original entry point to
+> continue execution from the instruction that triggered the original read/=
+write.
+>
+> The only flow where a page is added without a user space visible fault
+> is when user space explicitly runs the ENCLU[EACCEPT] to do so.
+>
+> >
+> >>> IMHO, all unmapped page accesses should
+> >>> result in a page fault. mmap() should be called first to identify the
+> >>> correct permissions for these pages.
+> >>> Then the page handler should be
+> >>> updated to use the permissions from the mapping when backfilling
+> >>> physical pages. If I understand correctly, this should also obviate
+> >>
+> >> Regular enclave pages can _only_ be dynamically added with RW permissi=
+on.
+> >>
+> >> SGX2's support for adding regular pages to an enclave via the EAUG
+> >> instruction is architecturally set at RW. The OS cannot change those p=
+ermissions
+> >> via the EAUG instruction nor can the OS do so with a different/additio=
+nal
+> >> instruction because:
+> >> * the OS is not able to relax permissions since that can only be done =
+from
+> >> within the enclave with ENCLU[EMODPE], thus it is not possible for the=
+ OS to
+> >> dynamically add pages via EAUG as RW and then relax permissions to RWX=
+.
+> >> * the OS is not able to EAUG a page and immediately attempt an EMODPR =
+either
+> >> as Jarkko also recently inquired about:
+> >> https://lore.kernel.org/linux-sgx/80f3d7b9-e3d5-b2c0-7707-710bf6f5081e=
+@intel.com/
+> >
+> > This design looks... unfinished. EAUG takes a PAGEINFO in RBX, but
+> > PAGEINFO.SECINFO must be zeroed and EAUG instead sets magic hard-coded
+> > permissions. Why doesn't EAUG just respect the permissions in
+> > PAGEINFO.SECINFO? We aren't told.
+>
+> This design is finished and respects the hardware specification. You can =
+find
+> the details in the SDM's documentation of the EAUG function.
+>
+> If the SECINFO field has a value then the hardware requires it to indicat=
+e
+> that it is a new shadow stack page being added, not a regular page. Suppo=
+rt for
+> shadow stack pages is not in scope for this work. Attempting to dynamical=
+ly
+> add a regular page with explicit permissions will result in a #GP(0).
+>
+> The only way to add a regular enclave page is to make the SECINFO field e=
+mpty
+> and doing so forces the page type to be a regular page and the permission=
+s to
+> be RW.
+>
+> >
+> > Further, if the enclave can do EMODPE, why does
+> > SGX_IOC_ENCLAVE_RELAX_PERMISSIONS even exist? None of the
+> > documentation explains what this ioctl even does. Does it update PTE
+> > permissions? VMA permissions? Nobody knows without reading the source
+> > code.
+>
+> Build the documentation (after applying this series) and it should
+> contain all the information you are searching for. As is the current cust=
+om
+> in the SGX documentation the built documentation pulls its content from
+> the kernel doc of the functions that implement the core of the
+> user space interactions.
+>
+> >
+> > Userspace should not be bothered with the subtle details of the
+> > interaction between EPC, PTE and VMA permissions. But this API does
+> > everything it can do to expose all these details to userspace. And it
+> > doesn't bother to document them (probably because it is hard). It
+> > would be much better to avoid exposing these details to userspace.
+> >
+> > IMHO, there should be a simple flow like this (if EAUG respects
+> > PAGEINFO.SECINFO):
+>
+> EAUG does not respect PAGEINFO.SECINFO for regular pages.
+>
+> >
+> > 1. Non-enclave calls mmap()/munmap().
+> > 2. Enclave issues EACCEPT, if necessary.
+> > 3. Enclave issues EMODPE, if necessary.
+> >
+> > Notice that in the second step above, during the mmap() call, the
+> > kernel ensures that EPC, PTE and VMA are in sync and fails if they
+> > cannot be made to be compatible. Also note that in the above flow EAUG
+> > instructions can be efficiently batched.
+> >
+> > Given the current poor state of the EAUG instruction, we might need to
+> > do this flow instead:
+> >
+> > 1. Enclave issues EACCEPT, if necessary. (Add RW pages...)
+> > 2. Non-enclave calls mmap()/munmap().
+> > 3. Enclave issues EACCEPT, if necessary.
+> > 4. Enclave issues EMODPE, if necessary.
+> >
+> > However, doing EAUG only via the page access handler means that there
+> > is no way to batch EAUG instructions and this forces a context switch
+> > for every page you want to add. This has to be terrible for
+> > performance. Note specifically that the SDM calls out batching, which
+> > is currently impossible under this patch set. 35.5.7 - "Page
+> > allocation operations may be batched to improve efficiency."
+>
+> These page functions are all per-page so it is not possible to add multip=
+le
+> pages with a single instruction. It is indeed possible to pre-fault pages=
+.
+>
+> > As it stands today, if I want to add 256MiB of pages to an enclave,
+> > I'll have to do 2^16 context switches. That doesn't seem scalable.
+>
+> No. Running ENCLU[EACCEPT] on each of the pages within that range should =
+not
+> need any explicit context switch out of the enclave. See the "augment_via=
+_eaccept"
+> test case in:
+> https://lore.kernel.org/linux-sgx/32c1116934a588bd3e6c174684e3e36a05c0a4d=
+4.1644274683.git.reinette.chatre@intel.com/
+>
+>
+> >>> the need for the weird userspace callback to allow for execute
+> >>> permissions.
+> >>
+> >> User policy integration would always be required to allow execute
+> >> permissions on a writable page. This is not expected to be a userspace
+> >> callback but instead integration with existing user policy subsystem(s=
+).
+> >
+> > Why? This isn't documented.
+>
+> This is similar to the existing policies involved in managing the permiss=
+ions
+> of mapped memory. When user space calls mprotect() to change permissions
+> of a mapped region then the kernel will not blindly allow the permissions=
+ but
+> instead ensure that it is allowed based on user policy by calling the LSM
+> (Linux Security Module) hooks.
+>
+> You can learn more about LSM and various security modules at:
+> Documentation/security/lsm.rst
+> Documentation/admin-guide/LSM/*
+>
+> You can compare what is needed here to what is currently done when user s=
+pace
+> attempts to make some memory executable (see:
+> mm/mprotect.c:do_mprotect_key()->security_file_mprotect()). User policy n=
+eeds
+> to help the kernel determine if this is allowed. For example, when SELinu=
+x is
+> the security module of choice then the process or file (depending on what=
+ type
+> of memory is being changed) needs to have a special permission (PROCESS__=
+EXECHEAP,
+> PROCESS__EXECSTACK, or FILE__EXECMOD) assigned by user space to allow thi=
+s.
+>
+> Integration with user space policy is required for RWX of dynamically add=
+ed pages
+> to be supported. In this series dynamically added pages will not be allow=
+ed to
+> be made executable, a follow-up series will add support for user policy
+> integration to support RWX permissions of dynamically added pages.
+>
+> >>> 3. Implementing as I've suggested also means that we can lock down an
+> >>> enclave, for example - after code has been JITed, by closing the file
+> >>> descriptor. Once the file descriptor used to create the enclave is
+> >>> closed, no further mmap() can be performed on the enclave. Attempting
+> >>> to do EACCEPT on an unmapped page will generate a page fault.
+> >>
+> >> This is not clear to me. If the file descriptor is closed and no furth=
+er
+> >> mmap() is allowed then how would a process be able to enter the enclav=
+e
+> >> to execute code within it?
+> >
+> > EENTER (or the vdso function) with the address of a TCS page, like
+> > normal. In Enarx, we don't retain the enclave fd after the final
+> > mmap() following EINIT. Everything works just fine.
+>
+> The OS fault handler is responsible for managing the PTEs that is require=
+d
+> for the enclave to be able to access the memory within the enclave.
+> The OS fault handler is attached to a VMA that is created with mmap().
+>
+> >
+> >> This series does indeed lock down the address range to ensure that it =
+is
+> >> not possible to map memory that does not belong to the enclave after t=
+he
+> >> enclave is created. Please see:
+> >> https://lore.kernel.org/linux-sgx/1b833dbce6c937f71523f4aaf4b2181b9673=
+519f.1644274683.git.reinette.chatre@intel.com/
+> >
+> > That's not what I'm talking about. I'm talking about a workflow like th=
+is:
+> >
+> > 1. Enclave initialization: ECREATE ... EINIT
+> > 2. EENTER
+> > 3. Enclave JITs some code (changes page permissions)
+> > 4. EEXIT
+> > 5. Close enclave fd.
+> > 6. EENTER
+> > 7. If an enclave attempts page modifications, a fault occurs.
+>
+> The original fd that was created to obtain the enclave base address
+> may be closed at (5) but the executable and data portions of the enclave
+> still needs to be mapped afterwards to be able to have OS support for
+> managing the PTEs that the enclave depends on to access those pages.
+>
+> >
+> > Think of this similar to seccomp(). The enclave wants to do some
+> > dynamic page table manipulation. But then it wants to lock down page
+> > table modification so that, if compromised, attackers have no ability
+> > to obtain RWX permissions.
+>
+> Reinette

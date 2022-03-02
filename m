@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026854CA6BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2C54CA6BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbiCBN41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S242596AbiCBN4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242658AbiCBN4S (ORCPT
+        with ESMTP id S234460AbiCBN4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:56:18 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002125F78;
-        Wed,  2 Mar 2022 05:55:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646229335; x=1677765335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/S7MkHzGN31vU2aDn4zLMW/e/z4TdWeBwxC5Duf+3PY=;
-  b=Bykq6cXwA0qQFKv+ALKd00hs7CIOo4lqZqTbzKJok1JkEB0sLQmr9Jcs
-   7FD/9UK9uHyv5veBVem1+uq9DIzWTxn3S9HOOBo3uH2sTvKMw/SKwa/Oa
-   KlULIfcHGSreu/PqUweDAT4X4ue8TqrXXV9mdDFBrdwPHGLwCLo7Sh+Wv
-   8xYyVz69J0d5bm3ZscSAqTctbBtXzP0gs5joWcGLNMU/cC7cEJNc+4Bsw
-   7gFhlsy0Qt1uEwg70aiuMr562jelaIeWnlsfBC8pO9Dmwwu7Uut8wgnKv
-   N20DqjgXxpvRCeqvPisCEA6Frx3yArFIUlBvZcLiV//624lxgOANRbkuV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253329214"
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="253329214"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 05:55:34 -0800
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="630417622"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 05:55:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nPPRE-00AJcu-UK;
-        Wed, 02 Mar 2022 15:54:44 +0200
-Date:   Wed, 2 Mar 2022 15:54:44 +0200
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     "Sanil, Shruthi" <shruthi.sanil@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
-        "Raja Subramanian, Lakshmi Bai" 
-        <lakshmi.bai.raja.subramanian@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>
-Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
-Message-ID: <Yh93JNYc/BcTquCC@smile.fi.intel.com>
-References: <20220222095654.9097-1-shruthi.sanil@intel.com>
- <20220222095654.9097-3-shruthi.sanil@intel.com>
- <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
- <BN9PR11MB55451DB929086919F8D06390F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+        Wed, 2 Mar 2022 08:56:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DF2B18E;
+        Wed,  2 Mar 2022 05:55:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEF560B13;
+        Wed,  2 Mar 2022 13:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB550C004E1;
+        Wed,  2 Mar 2022 13:55:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kpzYHDtU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646229339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SpVcuA/WXuSF2VylmDTidLRP/fq6dnIG3IJK6i0yAko=;
+        b=kpzYHDtUAlCnEdVEte//Tt36NxH+/Ez0o+kl3YdWmtGk9TZCjSHm6oGL/AbSTrC8Y1PuRg
+        jZ3NV3d2m9tjm6vre8HArSM79be/kQc4jqSkH3qUrcSXgTDy8VV6MN3iqBxSC6PUytw5x2
+        eJFYg/LLjTsXb0gq+k1Xln0G4fDjTNE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd2dbd60 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Mar 2022 13:55:38 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 14:55:29 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh93UZMQSYCe2LQ7@zx2c4.com>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
+ <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+ <20220302031738-mutt-send-email-mst@kernel.org>
+ <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+ <20220302074503-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB55451DB929086919F8D06390F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220302074503-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:12:49AM +0000, Sanil, Shruthi wrote:
-> > From: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Sent: Wednesday, March 2, 2022 2:39 AM
-> > Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
-> > On 22/02/2022 10:56, shruthi.sanil@intel.com wrote:
+Hi Michael,
 
-...
-
-> > One line comment format is usually for the network subsystem
+On Wed, Mar 02, 2022 at 07:58:33AM -0500, Michael S. Tsirkin wrote:
+> > There's also the atomicity aspect, which I think makes your benchmark
+> > not quite accurate. Those 16 bytes could change between the first and
+> > second word (or between the Nth and N+1th word for N<=3 on 32-bit).
+> > What if in that case the word you read second doesn't change, but the
+> > word you read first did? So then you find yourself having to do a
+> > hi-lo-hi dance.
+> > And then consider the 32-bit case, where that's even
+> > more annoying. This is just one of those things that comes up when you
+> > compare the semantics of a "large unique ID" and "word-sized counter",
+> > as general topics. (My suggestion is that vmgenid provide both.)
 > 
-> OK. I'll update the comment format.
+> I don't see how this matters for any applications at all. Feel free to
+> present a case that would be race free with a word but not a 16
+> byte value, I could not imagine one. It's human to err of course.
 
-Hold on, we need a proof from documentation.
+Word-size reads happen all at once on systems that Linux supports,
+whereas this is not the case for 16 bytes (with a few niche exceptions
+like cmpxchg16b and such). If you read the counter atomically, you can
+check to see whether it's changed just after encrypting but before
+transmitting and not transmit if it has changed, and voila, no race.
+With 16 bytes, synchronization of that read is pretty tricky (though
+maybe not all together impossible), because, as I mentioned, the first
+word might have changed by the time you read a matching second word. I'm
+sure you're familiar with the use of seqlocks in the kernel for solving
+a somewhat related problem.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jason

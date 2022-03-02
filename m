@@ -2,95 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640D24CAA2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2972F4CAA32
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiCBQ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S242008AbiCBQbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241726AbiCBQ3y (ORCPT
+        with ESMTP id S233923AbiCBQbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:29:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF17B40E63
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:29:09 -0800 (PST)
+        Wed, 2 Mar 2022 11:31:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3C9BC6242
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:30:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646238548;
+        s=mimecast20190719; t=1646238638;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4JYBVP71dm6qwHu1wwd1S6iPhE9b42/h7o81Qtmexmg=;
-        b=SwVehJPL31yFdAh2MMoLz/v8nHvs2H48IBFxaNoXUO4qQtazu0igoeH4fFgIdDZGr9Dcvp
-        d73PKZwVhNjVtzYNvlk5Z4ZowsVmcxIs7oPedPzo3UWPcJ/D0runLsoR6Bg1LZ7qvqXAN9
-        xUX9tF5UqN6EB5czkXFp7RY9QjechII=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=kMa9v1xtxt05GLfYOo70TOSVE9rMZc+g01ANVJtihbg=;
+        b=MaacKvHkNsLjWoCPZa8mLq/AT11yQo0qyhd/KFR1apt1uZiQCf77Hi1ARS/Pf7+X2nU3/0
+        yU3554Y6sr4y7ldl4qnc4P84HE+6tpA+WMLLfxBmpwrNDddrcIvbihjYvDW6Y3zadPJoea
+        vfZNGZY0/UC446Wh8hm8oXEEMsqu7ac=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-mZJDr5uTMjqMkNZ2dc737w-1; Wed, 02 Mar 2022 11:29:07 -0500
-X-MC-Unique: mZJDr5uTMjqMkNZ2dc737w-1
-Received: by mail-wr1-f69.google.com with SMTP id z16-20020adff1d0000000b001ef7dc78b23so821345wro.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:29:07 -0800 (PST)
+ us-mta-314-w4Kl6DqTMh-Uz_4l1mtgAQ-1; Wed, 02 Mar 2022 11:30:36 -0500
+X-MC-Unique: w4Kl6DqTMh-Uz_4l1mtgAQ-1
+Received: by mail-wm1-f70.google.com with SMTP id m34-20020a05600c3b2200b0038115c73361so703837wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:30:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4JYBVP71dm6qwHu1wwd1S6iPhE9b42/h7o81Qtmexmg=;
-        b=fEpiOGvQ6iXPi3fsnktlWTC54M+k6bTTEXvcvlR/kf/nllERC6hfUVTsCaZ1KbupH9
-         lqNaKsfydHYQgZUYIFUwm9SQ3Wx7C0hpd3cheCc+ehtSNhaZhuGg7uIcu7K3PWrGxW3e
-         yqzqy4QxIcWJUZU/QWn6UJyGJ2npkovVPib7Y+ky0awgis1n5qHzVCsbR1fHr24DqfAF
-         HiexwueZboBrRer9474bNFV3R+e+KFtb++q0y9Fdb7EKallZ8/I6OZ2T/XlUi0FrZhxK
-         spj+B6KhHb5bbRoRYLkbpqbSdmTtpZtfZiE1+P77mKJzG33Ejdp+Xan3YFIdrzZY0/XG
-         la1Q==
-X-Gm-Message-State: AOAM530JLVdyk5CvMCr8ZjFOFGSnr+M8dZEYUMwF4JFBtFiXWsQby3lE
-        d4CJMql4AcufCf9RjuEsRBbaNaGQK8b7Efr7l+7VVmlLmQ17BmuTods0H0WtqKFDIBCa+5RIoAY
-        B1mSvUiqkJe4OqfOOpw+puMZ7
-X-Received: by 2002:a5d:56cd:0:b0:1ee:3248:525b with SMTP id m13-20020a5d56cd000000b001ee3248525bmr21677351wrw.124.1646238546598;
-        Wed, 02 Mar 2022 08:29:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwnuzpoqkxUXsedIQ3mO7DVJwgzjOmZC8iKKjQtEy+lCllqu+K+PPeU8AEGxPiyGzG6Giw9Sw==
-X-Received: by 2002:a5d:56cd:0:b0:1ee:3248:525b with SMTP id m13-20020a5d56cd000000b001ee3248525bmr21677329wrw.124.1646238546364;
-        Wed, 02 Mar 2022 08:29:06 -0800 (PST)
+        bh=kMa9v1xtxt05GLfYOo70TOSVE9rMZc+g01ANVJtihbg=;
+        b=XnMkuY3+MOBcFiwutdxWReEvRrwQB5/mgGqg8HbktgByskn9Skh06y/0fSfI7gGlk2
+         ZehWbZZGwh6kqZAj+HaHZjuWr/gxb9kknTG4Piar4qivo3IMyOs1Yo5PxJTQcDoLsaPy
+         BIHEMbhF3VULaDYK+G//1Wy83ItEfNNhHF9XOoE6TxZuLU6jl2o9+JzSpiXFzghtzLK9
+         HidmVKA8QwQiRwCFKOdas/wqJh6G7U76AY09PpE9d/V6c610r37cj/PLKXJzTgjB9taM
+         ce2xY42TF39Kc64onxeoqdaNBoD4dKtYSKEQZpeRMs4fSdf4jTP0dsd2s5uZLUuq4Kdj
+         c2KA==
+X-Gm-Message-State: AOAM531z7m7UcIX3wVJ5XkC1RyHl/kf2RLXHHqXbZBntL+fmdYc9+OjS
+        XTwCGru25KGgKSBUCSvFIUOCGXNZSX5d5kuf3dQKkLNlkuZlaGS4M0sgF5AQohJK26Xo5TAUEP9
+        4qZsHzf30wasNEQFIR2QTVN9w
+X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr489121wmi.116.1646238634137;
+        Wed, 02 Mar 2022 08:30:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPFSyJJ3cuBRpkY9KOm5MVNCqPvFnh7F/Ims38I9cMHs0dlB6ZbjMEGiiJX+VRcZzNYFLg0w==
+X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr489104wmi.116.1646238633941;
+        Wed, 02 Mar 2022 08:30:33 -0800 (PST)
 Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
-        by smtp.gmail.com with ESMTPSA id m18-20020a5d56d2000000b001edc00dbeeasm16594955wrw.69.2022.03.02.08.29.04
+        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm5972902wre.22.2022.03.02.08.30.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:29:05 -0800 (PST)
-Date:   Wed, 2 Mar 2022 11:29:02 -0500
+        Wed, 02 Mar 2022 08:30:33 -0800 (PST)
+Date:   Wed, 2 Mar 2022 11:30:30 -0500
 From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laszlo Ersek <lersek@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220302112258-mutt-send-email-mst@kernel.org>
-References: <20220301121419-mutt-send-email-mst@kernel.org>
- <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
- <20220302031738-mutt-send-email-mst@kernel.org>
- <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
- <20220302074503-mutt-send-email-mst@kernel.org>
- <Yh93UZMQSYCe2LQ7@zx2c4.com>
- <20220302092149-mutt-send-email-mst@kernel.org>
- <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
- <20220302101602-mutt-send-email-mst@kernel.org>
- <Yh+PET49oHNpxn+H@zx2c4.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Jason Wang <jasowang@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220302112945-mutt-send-email-mst@kernel.org>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302082021-mutt-send-email-mst@kernel.org>
+ <Yh93k2ZKJBIYQJjp@google.com>
+ <20220302095045-mutt-send-email-mst@kernel.org>
+ <Yh+F1gkCGoYF2lMV@google.com>
+ <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh+PET49oHNpxn+H@zx2c4.com>
+In-Reply-To: <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -102,128 +87,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:36:49PM +0100, Jason A. Donenfeld wrote:
-> Hi Michael,
+On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
+> On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> >
+> > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
+> > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > > >
+> > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > > > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > > > >
+> > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > > > >
+> > > > > > Cc: <stable@vger.kernel.org>
+> > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > ---
+> > > > > >  drivers/vhost/vhost.c | 2 ++
+> > > > > >  1 file changed, 2 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
+> > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > >         int i;
+> > > > > >
+> > > > > >         for (i = 0; i < dev->nvqs; ++i) {
+> > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
+> > > > > >                 if (dev->vqs[i]->error_ctx)
+> > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+> > > > > >                 if (dev->vqs[i]->kick)
+> > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
+> > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+> > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
+> > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
+> > > > > >         }
+> > > > >
+> > > > > So this is a mitigation plan but the bug is still there though
+> > > > > we don't know exactly what it is.  I would prefer adding something like
+> > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
+> > > >
+> > > > As a rework to this, or as a subsequent patch?
+> > >
+> > > Can be a separate patch.
+> > >
+> > > > Just before the first lock I assume?
+> > >
+> > > I guess so, yes.
+> >
+> > No problem.  Patch to follow.
+> >
+> > I'm also going to attempt to debug the root cause, but I'm new to this
+> > subsystem to it might take a while for me to get my head around.
 > 
-> On Wed, Mar 02, 2022 at 10:20:25AM -0500, Michael S. Tsirkin wrote:
-> > So writing some code:
-> > 
-> > 1:
-> > 	put plaintext in a buffer
-> > 	put a key in a buffer
-> > 	put the nonce for that encryption in a buffer
-> > 
-> > 	if vm gen id != stored vm gen id
-> > 		stored vm gen id = vm gen id
-> > 		goto 1
-> > 
-> > I think this is race free, but I don't see why does it matter whether we
-> > read gen id atomically or not.
+> IIUC the root cause should be the same as the one we solved here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
 > 
-> Because that 16 byte read of vmgenid is not atomic. Let's say you read
-> the first 8 bytes, and then the VM is forked. In the forked VM, the next
-> 8 bytes are the same as last time, but the first 8 bytes, which you
-> already read, have changed. In that case, your != becomes a ==, and the
-> test fails.
+> The worker was not stopped before calling vhost_dev_cleanup(). So while 
+> the worker was still running we were going to free memory or initialize 
+> fields while it was still using virtqueue.
 > 
-> This is one of those fundamental things of "unique ID" vs "generation
-> counter word".
-> 
-> Anyway, per your request in your last email, I wrote some code for this,
-> which may or may not be totally broken, and only works on 64-bit x86,
-> which is really the best possible case in terms of performance. And even
-> so, it's not great.
-> 
-> Jason
-> 
-> --------8<------------------------
-> 
-> diff --git a/drivers/net/wireguard/noise.c b/drivers/net/wireguard/noise.c
-> index 720952b92e78..250b8973007d 100644
-> --- a/drivers/net/wireguard/noise.c
-> +++ b/drivers/net/wireguard/noise.c
-> @@ -106,6 +106,7 @@ static struct noise_keypair *keypair_create(struct wg_peer *peer)
->  	keypair->entry.type = INDEX_HASHTABLE_KEYPAIR;
->  	keypair->entry.peer = peer;
->  	kref_init(&keypair->refcount);
-> +	keypair->vmgenid = vmgenid_read_atomic();
->  	return keypair;
->  }
-> 
-> diff --git a/drivers/net/wireguard/noise.h b/drivers/net/wireguard/noise.h
-> index c527253dba80..0add240a14a0 100644
-> --- a/drivers/net/wireguard/noise.h
-> +++ b/drivers/net/wireguard/noise.h
-> @@ -27,10 +27,13 @@ struct noise_symmetric_key {
->  	bool is_valid;
->  };
-> 
-> +extern __uint128_t vmgenid_read_atomic(void);
-> +
->  struct noise_keypair {
->  	struct index_hashtable_entry entry;
->  	struct noise_symmetric_key sending;
->  	atomic64_t sending_counter;
-> +	__uint128_t vmgenid;
->  	struct noise_symmetric_key receiving;
->  	struct noise_replay_counter receiving_counter;
->  	__le32 remote_index;
-> diff --git a/drivers/net/wireguard/send.c b/drivers/net/wireguard/send.c
-> index 5368f7c35b4b..40d016be59e3 100644
-> --- a/drivers/net/wireguard/send.c
-> +++ b/drivers/net/wireguard/send.c
-> @@ -381,6 +381,9 @@ void wg_packet_send_staged_packets(struct wg_peer *peer)
->  			goto out_invalid;
->  	}
-> 
-> +	if (keypair->vmgenid != vmgenid_read_atomic())
-> +		goto out_invalid;
-> +
->  	packets.prev->next = NULL;
->  	wg_peer_get(keypair->entry.peer);
->  	PACKET_CB(packets.next)->keypair = keypair;
+> Cheers,
+> Stefano
 
-I don't think we care about an atomic read here.  All data is in buffer
-by this point, if it did not fork before that then we are ok, even
-if it forks during the read.
+Right, and I agree but it's not the root though, we do attempt to stop all workers.
 
-We probably do need a memory barrier to make sure all writes complete
-before the read of vmgenid, I'm not sure which kind - I think hypervisor
-can be trusted to do a full CPU barrier on fork so probably just a
-compiler barrier.
-
-> diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-> index 0ae1a39f2e28..c122fae1d494 100644
-> --- a/drivers/virt/vmgenid.c
-> +++ b/drivers/virt/vmgenid.c
-> @@ -21,6 +21,21 @@ struct vmgenid_state {
->  	u8 this_id[VMGENID_SIZE];
->  };
-> 
-> +static __uint128_t *val;
-> +
-> +__uint128_t vmgenid_read_atomic(void)
-> +{
-> +	__uint128_t ret = 0;
-> +	if (!val)
-> +		return 0;
-> +	asm volatile("lock cmpxchg16b %1"
-> +		     : "+A"(ret)
-> +		     : "m"(*val), "b"(0), "c"(0)
-> +		     : "cc");
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(vmgenid_read_atomic);
-> +
->  static int vmgenid_add(struct acpi_device *device)
->  {
->  	struct acpi_buffer parsed = { ACPI_ALLOCATE_BUFFER };
-> @@ -50,6 +65,7 @@ static int vmgenid_add(struct acpi_device *device)
->  	phys_addr = (obj->package.elements[0].integer.value << 0) |
->  		    (obj->package.elements[1].integer.value << 32);
->  	state->next_id = devm_memremap(&device->dev, phys_addr, VMGENID_SIZE, MEMREMAP_WB);
-> +	val = (__uint128_t *)state->next_id;
->  	if (IS_ERR(state->next_id)) {
->  		ret = PTR_ERR(state->next_id);
->  		goto out;
+-- 
+MST
 

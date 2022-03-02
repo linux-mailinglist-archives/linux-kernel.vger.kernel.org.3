@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1134CAA1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E7E4CAA1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240229AbiCBQ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S240879AbiCBQ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiCBQ1X (ORCPT
+        with ESMTP id S241220AbiCBQ1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:27:23 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A2BCD313
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:39 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222GJ9qN012351;
-        Wed, 2 Mar 2022 16:26:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=RcSH3mtdEpdXRg0L6aPSqeiO4AoEs5HLm3q9XVTMxrM=;
- b=d8wiG2blvPNoRBBELdrPbZePAKfogIi+SRTb2El7CV8oJMN6zlHmUo6ETQSX6DNc/YCD
- Y7XmG3ug0Sc1uZRq+QazE04kQPnEhqor6JXSYg0KjNQt62gCsSZKLhIANlW1TVMFwMWU
- gPeR0Xl4yNCIUd3FJ6FXl92zXAmKph0P3Xj5gpCZ2bPgla0ZOdsboDi+e5XLh/OxSrTD
- EK/UaecgK3X7bu/wf74WbgJD9h31G3ii6x4V7WRJzB9ax2lloH12vKrKCeXPeSHsnH/h
- mIZjeFqXc8QtoFq2Mc3r5p8Op1gVr96ANdhUHqf1JBQfo1OaNmmhshgT65VHCyvGhx1Q hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc0384dy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 16:26:06 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222GKRDN016088;
-        Wed, 2 Mar 2022 16:26:06 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc0384cu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 16:26:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222GH9lM018544;
-        Wed, 2 Mar 2022 16:26:03 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3egbj1afhd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 16:26:03 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222GQ1Uj55902570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Mar 2022 16:26:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 448DAAE045;
-        Wed,  2 Mar 2022 16:26:01 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9EF24AE04D;
-        Wed,  2 Mar 2022 16:26:00 +0000 (GMT)
-Received: from localhost (unknown [9.43.109.149])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Mar 2022 16:26:00 +0000 (GMT)
-Date:   Wed, 02 Mar 2022 21:55:58 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-To:     andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Cc:     alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz, mhiramat@kernel.org,
-        ndesaulniers@google.com, rostedt@goodmis.org,
-        samitolvanen@google.com
-References: <20220224145138.952963315@infradead.org>
-        <20220224151322.714815604@infradead.org>
-In-Reply-To: <20220224151322.714815604@infradead.org>
+        Wed, 2 Mar 2022 11:27:10 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83FA9E9E6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:26 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id ay10so3628615wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
+        b=zNY/A3DvXSSHSOLKYTxwjW4mjiSxKTe2DFTa9drWsknJ9Gobo/rAHMhdkBLLnUF8it
+         qObkZaPUtzMcW0vv80UyqbGn/5SqEJm5CWtnqtNf416LbLOH03IHCDcalJaCaNnQqmxa
+         n7JOmOog5D44bHsXOE9UR4UELZJ0fyDRKRw2sg464T2pSOZ/8YSImYpJ3+7w/18AZrm/
+         QVjeS2JlyxOhcZTWDhqbC0p+x8FcyzIDVLtpp9OSPqij50FzVjYaVMJ8SxAgdZHfT7RG
+         faSL3/PPKB61LMyU9PIhxtaqQqPnmwi8mqwaM9f4L8E7gFTt3Hft0K5TWhEtuzuGZbds
+         unrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
+        b=dvic50vgM3kGDC2TAkQbf2LCK343TQ4Yzc3uusScqWBhjMppZ3O09he1ZTa2KrzzTK
+         buKalzgDLkjGhTmjriYutFoEeUajASx8mT8o01KDMzKPSzJuYHzYWDLCNE6ECbPYIy7I
+         2yI3oKy0ceAK+Qy0VAItRZ171q1F6yQbH1NbVuIaoH/sjfjiLf2Q9CYuWcECWkdFxS4F
+         VL/eJcS9VNDf1rmsjdlMeKzSK9j3aCdkT9BntVk3wT2evWa6ng1K0HUOe2VR8W8sDFpC
+         b+ZrwTgamAo+dsOGDTF9trUaVgIk2Pun06IBF3DaNL0mMugwaFG1eOHp8Jcyr5EgaKo4
+         dy4A==
+X-Gm-Message-State: AOAM5330UsDwhUbJOH9Am/vW7plzuXRgo+2qMl3dkhSqoA19VShCrKq5
+        TFgOZ7FPcJ9dpL5mKY/WQ4NtKw==
+X-Google-Smtp-Source: ABdhPJxbCsWQrJHmYbdS8sJGQSK+IN5/SW7XDx1ANefT8UUiw7YoiSlpX6p5XW4Wc6Ducn8hIA0qbA==
+X-Received: by 2002:a5d:52d2:0:b0:1ef:e22d:18ba with SMTP id r18-20020a5d52d2000000b001efe22d18bamr10036216wrv.30.1646238385454;
+        Wed, 02 Mar 2022 08:26:25 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id g22-20020a1c4e16000000b003817614d4adsm6068399wmh.12.2022.03.02.08.26.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 08:26:24 -0800 (PST)
+Date:   Wed, 2 Mar 2022 16:26:22 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com
+Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
+Message-ID: <20220302162622.z5wxbdmxh2pqh6cb@maple.lan>
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <20220228234322.2073104-14-atomlin@redhat.com>
+ <20220302161917.gx5icfszakoye4uh@maple.lan>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1646238087.afjf09xr2j.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SkRKCoQCZ7dl2feNbEMk1eRAkiPwxr4U
-X-Proofpoint-ORIG-GUID: ZSVhR5uNO1x7LtpaBXolgpK0ciyj9Ej8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=862 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203020071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302161917.gx5icfszakoye4uh@maple.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,139 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
-> Have ftrace_location() search the symbol for the __fentry__ location
-> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
->=20
-> This avoids a whole bunch of assumptions about __fentry__ being at
-> func+0.
->=20
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/trace/ftrace.c |   30 ++++++++++++++++++++++++++++--
->  1 file changed, 28 insertions(+), 2 deletions(-)
->=20
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -1578,7 +1578,24 @@ unsigned long ftrace_location_range(unsi
->   */
->  unsigned long ftrace_location(unsigned long ip)
->  {
-> -	return ftrace_location_range(ip, ip);
-> +	struct dyn_ftrace *rec;
-> +	unsigned long offset;
-> +	unsigned long size;
-> +
-> +	rec =3D lookup_rec(ip, ip);
-> +	if (!rec) {
-> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
-> +			goto out;
-> +
-> +		if (!offset)
-> +			rec =3D lookup_rec(ip - offset, (ip - offset) + size);
-> +	}
-> +
-> +	if (rec)
-> +		return rec->ip;
-> +
-> +out:
-> +	return 0;
->  }
-> =20
->  /**
-> @@ -5110,11 +5127,16 @@ int register_ftrace_direct(unsigned long
->  	struct ftrace_func_entry *entry;
->  	struct ftrace_hash *free_hash =3D NULL;
->  	struct dyn_ftrace *rec;
-> -	int ret =3D -EBUSY;
-> +	int ret =3D -ENODEV;
-> =20
->  	mutex_lock(&direct_mutex);
-> =20
-> +	ip =3D ftrace_location(ip);
-> +	if (!ip)
-> +		goto out_unlock;
-> +
->  	/* See if there's a direct function at @ip already */
-> +	ret =3D -EBUSY;
->  	if (ftrace_find_rec_direct(ip))
->  		goto out_unlock;
+On Wed, Mar 02, 2022 at 04:19:17PM +0000, Daniel Thompson wrote:
+> On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
+> > No functional change.
+> > 
+> > This patch migrates kdb_modules list to core kdb code
+> > since the list of added/or loaded modules is no longer
+> > private.
+> > 
+> > Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> > ---
+> >  kernel/debug/kdb/kdb_main.c    | 5 +++++
+> >  kernel/debug/kdb/kdb_private.h | 4 ----
+> >  kernel/module/main.c           | 4 ----
+> >  3 files changed, 5 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+> > index 0852a537dad4..5369bf45c5d4 100644
+> > --- a/kernel/debug/kdb/kdb_main.c
+> > +++ b/kernel/debug/kdb/kdb_main.c
+> > @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
+> >  int kdb_grep_leading;
+> >  int kdb_grep_trailing;
+> >  
+> > +#ifdef CONFIG_MODULES
+> > +extern struct list_head modules;
 
-I think some of the validation at this point can be removed (diff below).
-
-> =20
-> @@ -5222,6 +5244,10 @@ int unregister_ftrace_direct(unsigned lo
-> =20
->  	mutex_lock(&direct_mutex);
-> =20
-> +	ip =3D ftrace_location(ip);
-> +	if (!ip)
-> +		goto out_unlock;
-> +
->  	entry =3D find_direct_entry(&ip, NULL);
->  	if (!entry)
->  		goto out_unlock;
-
-We should also update modify_ftrace_direct(). An incremental diff below.
+Actually thinking a bit harder and trying
+`git grep '#include .*[.][.]' kernel/` (which finds some prior art) I
+wonder if we even want the extern or whether
+`#include "../../module/internal.h"` would be more robust.
 
 
-- Naveen
+Daniel.
 
 
----
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 65d7553668ca3d..17ce4751a2051a 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5126,7 +5126,6 @@ int register_ftrace_direct(unsigned long ip, unsigned=
- long addr)
- 	struct ftrace_direct_func *direct;
- 	struct ftrace_func_entry *entry;
- 	struct ftrace_hash *free_hash =3D NULL;
--	struct dyn_ftrace *rec;
- 	int ret =3D -ENODEV;
-=20
- 	mutex_lock(&direct_mutex);
-@@ -5140,26 +5139,6 @@ int register_ftrace_direct(unsigned long ip, unsigne=
-d long addr)
- 	if (ftrace_find_rec_direct(ip))
- 		goto out_unlock;
-=20
--	ret =3D -ENODEV;
--	rec =3D lookup_rec(ip, ip);
--	if (!rec)
--		goto out_unlock;
--
--	/*
--	 * Check if the rec says it has a direct call but we didn't
--	 * find one earlier?
--	 */
--	if (WARN_ON(rec->flags & FTRACE_FL_DIRECT))
--		goto out_unlock;
--
--	/* Make sure the ip points to the exact record */
--	if (ip !=3D rec->ip) {
--		ip =3D rec->ip;
--		/* Need to check this ip for a direct. */
--		if (ftrace_find_rec_direct(ip))
--			goto out_unlock;
--	}
--
- 	ret =3D -ENOMEM;
- 	direct =3D ftrace_find_direct_func(addr);
- 	if (!direct) {
-@@ -5380,6 +5359,10 @@ int modify_ftrace_direct(unsigned long ip,
- 	mutex_lock(&direct_mutex);
-=20
- 	mutex_lock(&ftrace_lock);
-+	ip =3D ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	entry =3D find_direct_entry(&ip, &rec);
- 	if (!entry)
- 		goto out_unlock;
---=20
-2.35.1
-
+> > +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+> 
+> If modules is no longer static then why do we kdb_modules at all?
+> kdb_modules is used exactly once and it can now simply be replaced
+> with &modules.
+> 
+> 
+> Daniel.

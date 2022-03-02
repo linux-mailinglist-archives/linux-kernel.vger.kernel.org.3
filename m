@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A524CAD22
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968C74CAD30
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244448AbiCBSM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S244315AbiCBSNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiCBSMX (ORCPT
+        with ESMTP id S244475AbiCBSMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:12:23 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECFA83019
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:11:40 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id e6so2322638pgn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:11:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jX9Ygm07gpI/LOKtGMYfTzPsOzaiXplFsoXYxsUxE0c=;
-        b=jERTxde9sNvasEDJ0Kh6Ei4s4HhlqkGn9rEeZeASuYEev9lcA5QCXo1nlwZ+NY4L2C
-         mxNXsnLLInA+xnc3jwi7tdAQHXUd4evZ/Ka1fPGRfshgFlTK4JGcw+7YU3tJoee1jJ9o
-         QiKbZCaR8BRP1sSXwS5h9cVY/lrdhHImsHb+OcjQGTn3Vy+uLDy0HW0sXYoXbuVvAHDD
-         C+W+8dWlpKaPhhJGnbUaFhrYDTySZiNPI0wCwk+8ipkgzW4CBrbh2OAUjBc+fbM2iMsb
-         TzdIxpsmSjK6RJl3n3wsbhTGpj4/u6o1Uyn3Urn4FDmTJL1pIDg5J62py9MWHAITtL/c
-         wu4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jX9Ygm07gpI/LOKtGMYfTzPsOzaiXplFsoXYxsUxE0c=;
-        b=SBka11rpJtmdnYyeUPn+UwsdYgq27YqVEw0dYODQo2LIq5eNr1eKwU40N5V7Wm69Xe
-         wCUn5ffgP906xPdRtibqs8KgfeGqbLzI5mXb+BHpkFflCGZ0RNi1PIn1G1yGaEWrRnoj
-         qxzC7w/466lUj+FhSCaKP8PTkwbEP/BVNH1A4ASD7oF5aURJxh+3HqtMHcPC701eweU5
-         c1j10IVS+gzdZUKmH3coPBPu+qFE5ynMG7A8bNjx85yoa5Lldv3CaIJK8oitJnQFVN9D
-         fIeo4IlrTVaNzleqorNA2siJzkX4YnJzN0fxLDnV+Yzizt5swtIUpGhMV+Ob8b+IBnpP
-         GjMg==
-X-Gm-Message-State: AOAM531aXteSwV99Vyg0wrQaMbkf8rCm5uaXEI3J7BEuwtiUCFDgNBCT
-        FqvOAK1Kxp7AJgm/ZV3s9ULSESL3eHibyw==
-X-Google-Smtp-Source: ABdhPJyNBnFWxzQbhiFeBIZsXYMfQInob1tX+wLmEODFINRafKCwNE9GLMsB5ynaoGduy3gqgMeS+w==
-X-Received: by 2002:a05:6a00:1d8b:b0:4f1:bd8:811 with SMTP id z11-20020a056a001d8b00b004f10bd80811mr34475082pfw.25.1646244699894;
-        Wed, 02 Mar 2022 10:11:39 -0800 (PST)
-Received: from [192.168.1.46] (bb42-60-144-185.singnet.com.sg. [42.60.144.185])
-        by smtp.gmail.com with ESMTPSA id u8-20020a056a00098800b004f36335ecf0sm22473571pfg.146.2022.03.02.10.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 10:11:39 -0800 (PST)
-Message-ID: <32164620-9ba6-db62-bc61-95c7f255d087@gmail.com>
-Date:   Thu, 3 Mar 2022 02:11:36 +0800
+        Wed, 2 Mar 2022 13:12:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91FFCA71E;
+        Wed,  2 Mar 2022 10:11:56 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222GO63V021075;
+        Wed, 2 Mar 2022 18:11:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=2zLdKaE85V+2qiG6JE8eqhAObTmnsmKJ0bLt2qUlZn8=;
+ b=gH3BgdV1q8sGFT1gSdLDv+pzcrmi4dwmOoqXlNRkP48XsznHFvD9AFw3wh5kXLugY7Lj
+ 8iQFdSssV/1OYw+gsdAnz350kDTv8SSOT+X3M1XiN7umTw+qk2qdOOXexnivN+R7RW0Q
+ oowvME6hOVQSJzYaUus6cPSK476FpuYFgAJuQ5S7NPchyHQYO9ZxgZR95Noplli1YRdb
+ pnBHh+k/dYxdRQvs3k7fA3HJtg9sxMp9/qB7kURdBxXzJPYYZMlKq1uTfbUg8auiEbRV
+ cKyX3MUix6PMfkFEsu2eKfnadnsm8HP26JF+n2S01rzCudCYIguH8BjVvQpoQdAmeQJc MQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejc2rt621-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 18:11:55 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222I2KCw029773;
+        Wed, 2 Mar 2022 18:11:55 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejc2rt61h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 18:11:55 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222I9BQf022241;
+        Wed, 2 Mar 2022 18:11:53 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3efbfjqm2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 18:11:53 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222IBokj30015946
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 18:11:50 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 986625204E;
+        Wed,  2 Mar 2022 18:11:50 +0000 (GMT)
+Received: from p-imbrenda.ibmuc.com (unknown [9.145.5.37])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 19F4C52052;
+        Wed,  2 Mar 2022 18:11:50 +0000 (GMT)
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+Subject: [PATCH v8 11/17] s390/mm: KVM: pv: when tearing down, try to destroy protected pages
+Date:   Wed,  2 Mar 2022 19:11:37 +0100
+Message-Id: <20220302181143.188283-12-imbrenda@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220302181143.188283-1-imbrenda@linux.ibm.com>
+References: <20220302181143.188283-1-imbrenda@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RESEND] samples/kobject: Use sysfs_emit instead of
- snprintf
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220302120759.380932-1-phind.uet@gmail.com>
- <Yh+EdGcsoF+lBjfX@kroah.com>
-From:   Phi Nguyen <phind.uet@gmail.com>
-In-Reply-To: <Yh+EdGcsoF+lBjfX@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: L240aPVdy4fF3dFbR7sNv5fUBvUBYEup
+X-Proofpoint-ORIG-GUID: HVRN17ENyDmsC00TJAL5g5AT8C7VDV0G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 mlxscore=0 mlxlogscore=953 spamscore=0 phishscore=0
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203020078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/2022 10:51 PM, Greg KH wrote:
-> On Wed, Mar 02, 2022 at 08:07:59PM +0800, Nguyen Dinh Phi wrote:
->> Convert sprintf() to sysfs_emit() in order to check buffer overrun on sysfs
->> outputs.
-> 
-> There are no such buffer overruns on these sysfs files.
->
-I don't want to duplicate the title so I use the description of 
-sysfs_emit() as the patch message. I have just realized that the title 
-is also incorrect, sorry for my mistake.
+When ptep_get_and_clear_full is called for a mm teardown, we will now
+attempt to destroy the secure pages. This will be faster than export.
 
->>
->> Signed-off-by: Nguyen Dinh Phi <phind.uet@gmail.com>
->> ---
->>   samples/kobject/kobject-example.c | 4 ++--
->>   samples/kobject/kset-example.c    | 4 ++--
->>   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> Why is this a resend?  What happened to the first version?
-> 
-> thanks,
-> 
-> greg k-h
+In case it was not a teardown, or if for some reason the destroy page
+UVC failed, we try with an export page, like before.
 
-There is no response for the first version. Actually, there is no 
-Maintainer is associated with these two files (in MAINTAINERS files), 
-hence, my first patch was only sent to the linux-kernel mailing list.
+Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Acked-by: Janosch Frank <frankja@linux.ibm.com>
+---
+ arch/s390/include/asm/pgtable.h | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-BR,
-Phi.
+diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+index 23ca0d8e058a..72544a1b4a68 100644
+--- a/arch/s390/include/asm/pgtable.h
++++ b/arch/s390/include/asm/pgtable.h
+@@ -1118,9 +1118,21 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+ 	} else {
+ 		res = ptep_xchg_lazy(mm, addr, ptep, __pte(_PAGE_INVALID));
+ 	}
+-	/* At this point the reference through the mapping is still present */
+-	if (mm_is_protected(mm) && pte_present(res))
+-		uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
++	/* Nothing to do */
++	if (!mm_is_protected(mm) || !pte_present(res))
++		return res;
++	/*
++	 * At this point the reference through the mapping is still present.
++	 * The notifier should have destroyed all protected vCPUs at this
++	 * point, so the destroy should be successful.
++	 */
++	if (full && !uv_destroy_owned_page(pte_val(res) & PAGE_MASK))
++		return res;
++	/*
++	 * But if something went wrong and the pages could not be destroyed,
++	 * the slower export is used as fallback instead.
++	 */
++	uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
+ 	return res;
+ }
+ 
+-- 
+2.34.1
+

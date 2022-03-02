@@ -2,121 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFFA4CB29F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1234CB35C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiCBW5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S230042AbiCCAD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiCBW5l (ORCPT
+        with ESMTP id S229982AbiCCADW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:57:41 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A8313CEE5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:56:47 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id x18so3203373pfh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 14:56:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x9wMKym9S9fXqEpB7R7eZDSTX7z54wGdD8KBKn9vuvI=;
-        b=EgHj1lPuwxxF7nT8U4wKaQR+RaYO9IipnSX48Gc/qLTii8qz4a6RlGCPMChRxH6QdR
-         MiGQ4u3fOj6GLOfPtYyUVGCIQWox9k2+UNT/zY2BzqTpiCsB8mIdQXe+Zo5ICbusEpna
-         YzJnp/92tZ23nkB/aufnwSe1JUu9dkb9ClKI867FycqPuhmDpC+W7Wis3c5Jy8Q59V/W
-         BCl7QPyx0YCdKs6jU9BT5ja1Icf7uA11O1lMBc4leN+MsVZ5XLDH8OVLrGFHmYerMfRX
-         84hbGQYB4qBseyAn/01vvvxpz2OOSANZJJhoLx5HsyjHYt7Sl3a/5NaThrjHlSnauAnx
-         PYmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x9wMKym9S9fXqEpB7R7eZDSTX7z54wGdD8KBKn9vuvI=;
-        b=rtDF7dCuWldSDTqmODvywtGxo0SiwMzTUWRun/7ghdHgTXcZm4xH+nVoR0aXYFyms4
-         GUPHLMjsWKUq5yy/7lEiG7rgKOF+LL3J56kjLD8Z6gDmwZHvZ+2gZADx/D/MPVjRaS4e
-         mDC7s3TZbKisgSyz5BOkd1dJ2aWY3LHGcwkMIN+mD4mqEvQtdfLzj7VKdajZEmuZkFiN
-         ziNMHNN3kN+4JU9gzPAvsnyyY/Q1UASSmBrHJlr8m5GmPTQi1eDbsFxI8+GVheF59rxn
-         Ce2ltJFrCQy4+OK44yiFYFDQv58//agL6asMIM5ZVDrhs67eo7Hfqir/BoKe+TLDBd5i
-         SW+Q==
-X-Gm-Message-State: AOAM533cY/6WPb9Ear+ZszF9mbcfOsRkBJdUTbrJb4NyqqDxirOSsylJ
-        KrWGKoeKf5rf9Nzm+3O/L0e0vw==
-X-Google-Smtp-Source: ABdhPJxZJO0b6xynoVXwPfQ0Dg+QdrERgWdHdWjhBdS87LJkX73MUHodq13VvntY/QyAQPgmiXnHkg==
-X-Received: by 2002:a05:6a00:d4c:b0:4e0:27dd:37c1 with SMTP id n12-20020a056a000d4c00b004e027dd37c1mr35550899pfv.86.1646261640293;
-        Wed, 02 Mar 2022 14:54:00 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s2-20020a056a001c4200b004f41e1196fasm221880pfw.17.2022.03.02.14.53.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 14:53:59 -0800 (PST)
-Date:   Wed, 2 Mar 2022 22:53:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
- shadow page is zapped
-Message-ID: <Yh/1hPMhqeFKO0ih@google.com>
-References: <20220225182248.3812651-1-seanjc@google.com>
- <20220225182248.3812651-5-seanjc@google.com>
- <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
- <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
- <Yh/JdHphCLOm4evG@google.com>
- <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
+        Wed, 2 Mar 2022 19:03:22 -0500
+X-Greylist: delayed 5810 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 16:02:37 PST
+Received: from smtprelay07.ispgateway.de (smtprelay07.ispgateway.de [134.119.228.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF3B193F5;
+        Wed,  2 Mar 2022 16:02:36 -0800 (PST)
+Received: from [92.206.166.137] (helo=note-book.lan)
+        by smtprelay07.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1nPWIw-0003tE-09; Wed, 02 Mar 2022 22:14:38 +0100
+From:   =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+To:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+Subject: [PATCH] ath6kl: add device ID for WLU5150-D81
+Date:   Wed,  2 Mar 2022 22:14:36 +0100
+Message-Id: <20220302211436.8746-1-git@apitzsch.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022, Paolo Bonzini wrote:
-> On 3/2/22 20:45, Sean Christopherson wrote:
-> > AMD NPT is hosed because KVM's awful ASID scheme doesn't assign an ASID per root
-> > and doesn't force a new ASID.  IMO, this is an SVM mess and not a TDP MMU bug.
-> 
-> I agree.
-> 
-> > In the short term, I think something like the following would suffice.  Long term,
-> > we really need to redo SVM ASID management so that ASIDs are tied to a KVM root.
-> 
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index c5e3f219803e..7899ca4748c7 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3857,6 +3857,9 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu,
-> hpa_t root_hpa,
->         unsigned long cr3;
-> 
->         if (npt_enabled) {
-> +               if (is_tdp_mmu_root(root_hpa))
-> +                       svm->current_vmcb->asid_generation = 0;
-> +
->                 svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
->                 vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
-> 
-> Why not just new_asid
+This device with a male Mini-B USB connector is part of Panasonic TVs.
 
-My mental coin flip came up tails?  new_asid() is definitely more intuitive.
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
+---
+ drivers/net/wireless/ath/ath6kl/usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> (even unconditionally, who cares)?
+diff --git a/drivers/net/wireless/ath/ath6kl/usb.c b/drivers/net/wireless/ath/ath6kl/usb.c
+index aba70f35e574..65e683effdcb 100644
+--- a/drivers/net/wireless/ath/ath6kl/usb.c
++++ b/drivers/net/wireless/ath/ath6kl/usb.c
+@@ -1217,6 +1217,7 @@ static int ath6kl_usb_pm_resume(struct usb_interface *interface)
+ static const struct usb_device_id ath6kl_usb_ids[] = {
+ 	{USB_DEVICE(0x0cf3, 0x9375)},
+ 	{USB_DEVICE(0x0cf3, 0x9374)},
++	{USB_DEVICE(0x04da, 0x390d)},
+ 	{ /* Terminating entry */ },
+ };
+ 
+-- 
+2.35.1
 
-Heh, I was going to say we do care to some extent for nested transitions, then
-I remembered we flush on every nested transition anyways, in no small part because
-the ASID handling is a mess.

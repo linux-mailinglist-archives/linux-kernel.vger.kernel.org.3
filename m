@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE7E4CA89F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9E94CA8A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238635AbiCBO6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S237630AbiCBO6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243292AbiCBO6F (ORCPT
+        with ESMTP id S243298AbiCBO6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:58:05 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D8CBDA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:57:22 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K7xzh52Gqz9sSR;
-        Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EeZi9sqhFvtu; Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K7xzh47VQz9sSN;
-        Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7CE5B8B76D;
-        Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Y9Nv-TJ4vYTB; Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-Received: from [172.25.230.108] (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 17FEF8B763;
-        Wed,  2 Mar 2022 15:57:20 +0100 (CET)
-Message-ID: <cfdf8627-8ede-871b-138c-e256fa4b67ee@csgroup.eu>
-Date:   Wed, 2 Mar 2022 15:57:19 +0100
+        Wed, 2 Mar 2022 09:58:18 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628D513DD7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:57:33 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id bg16-20020a05600c3c9000b00380f6f473b0so3456427wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:57:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wGGyr8F/4yesRnDkleDkSeBi9/XbD7YGJTcIBLykmxo=;
+        b=YAWW5HKlB7Eey/hbn/tEyKoY+Ej9P8bjmKwFJpG4WIH2K/pus2hP+RvzIjDv6V3z5p
+         k6x5v3LHFzzK0yNYVc3/6rqsj7QQzSFP9PqTvboq8Gd2h2U5akBPL3gjR8Gis5rXW7a5
+         f5Wj0QWjydNWVbiao3cyHkss6w5fRltrK3+kbwT6yAe/CdOFs42vPOp9Mksavp1FhfDg
+         b+8kmdCZBXU7N1sbqbnIx9h7JeO+bMDEWXRboAhQXSO6FrQS9Y2kIONVMIQBVPZeWrO0
+         GsIgMsxoTCsl6Mtqj6TTCwunX0DqqFgLwCazwzkBeT0HF1oYRmofMt0ZOyXz8dF5vh/a
+         nxAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wGGyr8F/4yesRnDkleDkSeBi9/XbD7YGJTcIBLykmxo=;
+        b=kLC/Hp0XIRzKdXLioTbCC4YPEzxAXyLz3cKvnBlH2j5UH2gaAhkpGYyI+UEH0qMrz5
+         a/gB4dF+qtxh/SF0sMT+YlJvfsEWZ4dpbjhT8t0vmekcAl2kVw3/Qm+gm1hwptrZ1CKO
+         QNpJmDK6yE7yR2wSXWD4A8GzAaZPfTrNT4pfHdGEcjZRqlAOYzf5GU4g+zUh9U4QD2w4
+         KkMDLqLkC3YEjydTRvckIgd8KrJMVRxEELjuAAbi/+EFz/x+Sd3wlqO7D+GpLUdrE+0L
+         TZ6qqUfVThJ2nvv4E9Csdv36zJxxz/DKgemchumYLG/kQycnZZ/fF6VWW9fimwwuhuyV
+         6gsA==
+X-Gm-Message-State: AOAM531/IL2JUuSiVRVrnF7ifw3jm+VlnL825tDRo+n2GEkPX5BH9tog
+        6FH7H1rZQDYIDVjVJLqdjKC1MA==
+X-Google-Smtp-Source: ABdhPJxDjgY35zlNFNM4bX0OTXrJd0JfiswPqCzf7heVkctOxPWyBqq7cmIrMgVAjnLfYiYdzW+RlQ==
+X-Received: by 2002:a05:600c:40cf:b0:381:1f87:84c4 with SMTP id m15-20020a05600c40cf00b003811f8784c4mr102404wmh.181.1646233051757;
+        Wed, 02 Mar 2022 06:57:31 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o204-20020a1ca5d5000000b0038331f2f951sm4751221wme.0.2022.03.02.06.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 06:57:31 -0800 (PST)
+Date:   Wed, 2 Mar 2022 14:57:26 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <Yh+F1gkCGoYF2lMV@google.com>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302082021-mutt-send-email-mst@kernel.org>
+ <Yh93k2ZKJBIYQJjp@google.com>
+ <20220302095045-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] macintosh/therm_adt746x: Replaced simple_strtol()
- with kstrtoint()
-Content-Language: fr-FR
-To:     Liu Shixin <liushixin2@huawei.com>, Colin Leroy <colin@colino.net>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20210524120835.1580420-1-liushixin2@huawei.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20210524120835.1580420-1-liushixin2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220302095045-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,127 +78,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
 
-
-Le 24/05/2021 à 14:08, Liu Shixin a écrit :
-> The simple_strtol() function is deprecated in some situation since
-> it does not check for the range overflow. Use kstrtoint() instead.
+> On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
+> > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > 
+> > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > > 
+> > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > > 
+> > > > Cc: <stable@vger.kernel.org>
+> > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > ---
+> > > >  drivers/vhost/vhost.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
+> > > > --- a/drivers/vhost/vhost.c
+> > > > +++ b/drivers/vhost/vhost.c
+> > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > >  	int i;
+> > > >  
+> > > >  	for (i = 0; i < dev->nvqs; ++i) {
+> > > > +		mutex_lock(&dev->vqs[i]->mutex);
+> > > >  		if (dev->vqs[i]->error_ctx)
+> > > >  			eventfd_ctx_put(dev->vqs[i]->error_ctx);
+> > > >  		if (dev->vqs[i]->kick)
+> > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > >  		if (dev->vqs[i]->call_ctx.ctx)
+> > > >  			eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+> > > >  		vhost_vq_reset(dev, dev->vqs[i]);
+> > > > +		mutex_unlock(&dev->vqs[i]->mutex);
+> > > >  	}
+> > > 
+> > > So this is a mitigation plan but the bug is still there though
+> > > we don't know exactly what it is.  I would prefer adding something like
+> > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
+> > 
+> > As a rework to this, or as a subsequent patch?
 > 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->   drivers/macintosh/therm_adt746x.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+> Can be a separate patch.
 > 
-> diff --git a/drivers/macintosh/therm_adt746x.c b/drivers/macintosh/therm_adt746x.c
-> index 7e218437730c..0d7ef55126ce 100644
-> --- a/drivers/macintosh/therm_adt746x.c
-> +++ b/drivers/macintosh/therm_adt746x.c
-> @@ -352,7 +352,8 @@ static ssize_t store_##name(struct device *dev, struct device_attribute *attr, c
->   	struct thermostat *th = dev_get_drvdata(dev);		\
->   	int val;						\
->   	int i;							\
-> -	val = simple_strtol(buf, NULL, 10);			\
-> +	if (unlikely(kstrtoint(buf, 10, &val))			\
-> +		return -EINVAL;					\
->   	printk(KERN_INFO "Adjusting limits by %d degrees\n", val);	\
->   	limit_adjust = val;					\
->   	for (i=0; i < 3; i++)					\
-> @@ -364,7 +365,8 @@ static ssize_t store_##name(struct device *dev, struct device_attribute *attr, c
->   static ssize_t store_##name(struct device *dev, struct device_attribute *attr, const char *buf, size_t n) \
->   {								\
->   	int val;						\
-> -	val = simple_strtol(buf, NULL, 10);			\
-> +	if (unlikely(kstrtoint(buf, 10, &val))			\
-> +		return -EINVAL;					\
->   	if (val < 0 || val > 255)				\
->   		return -EINVAL;					\
->   	printk(KERN_INFO "Setting specified fan speed to %d\n", val);	\
+> > Just before the first lock I assume?
+> 
+> I guess so, yes.
 
-Obviously no build test has been performed:
+No problem.  Patch to follow.
 
-   CC [M]  drivers/macintosh/therm_adt746x.o
-drivers/macintosh/therm_adt746x.c: In function 'store_specified_fan_speed':
-drivers/macintosh/therm_adt746x.c:369:17: error: expected ')' before 
-'return'
-   369 |                 return -EINVAL;                                 \
-       |                 ^~~~~~
-drivers/macintosh/therm_adt746x.c:385:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_INT'
-   385 | BUILD_STORE_FUNC_INT(specified_fan_speed,fan_speed)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:368:12: note: to match this '('
-   368 |         if (unlikely(kstrtoint(buf, 10, &val))                  \
-       |            ^
-drivers/macintosh/therm_adt746x.c:385:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_INT'
-   385 | BUILD_STORE_FUNC_INT(specified_fan_speed,fan_speed)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:375:1: error: expected expression 
-before '}' token
-   375 | }
-       | ^
-drivers/macintosh/therm_adt746x.c:385:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_INT'
-   385 | BUILD_STORE_FUNC_INT(specified_fan_speed,fan_speed)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:375:1: error: no return statement in 
-function returning non-void [-Werror=return-type]
-   375 | }
-       | ^
-drivers/macintosh/therm_adt746x.c:385:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_INT'
-   385 | BUILD_STORE_FUNC_INT(specified_fan_speed,fan_speed)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c: In function 'store_limit_adjust':
-drivers/macintosh/therm_adt746x.c:356:17: error: expected ')' before 
-'return'
-   356 |                 return -EINVAL;                                 \
-       |                 ^~~~~~
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:355:12: note: to match this '('
-   355 |         if (unlikely(kstrtoint(buf, 10, &val))                  \
-       |            ^
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:362:1: error: expected expression 
-before '}' token
-   362 | }
-       | ^
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:354:13: warning: unused variable 'i' 
-[-Wunused-variable]
-   354 |         int i;                                                  \
-       |             ^
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:352:28: warning: unused variable 'th' 
-[-Wunused-variable]
-   352 |         struct thermostat *th = dev_get_drvdata(dev);           \
-       |                            ^~
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/therm_adt746x.c:362:1: error: no return statement in 
-function returning non-void [-Werror=return-type]
-   362 | }
-       | ^
-drivers/macintosh/therm_adt746x.c:391:1: note: in expansion of macro 
-'BUILD_STORE_FUNC_DEG'
-   391 | BUILD_STORE_FUNC_DEG(limit_adjust,       th)
-       | ^~~~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
-make[2]: *** [scripts/Makefile.build:288: 
-drivers/macintosh/therm_adt746x.o] Error 1
+I'm also going to attempt to debug the root cause, but I'm new to this
+subsystem to it might take a while for me to get my head around.
 
-Christophe
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

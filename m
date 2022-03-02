@@ -2,161 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2972F4CAA32
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1635E4CAA42
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242008AbiCBQbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S242671AbiCBQdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbiCBQbV (ORCPT
+        with ESMTP id S242215AbiCBQcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:31:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3C9BC6242
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646238638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kMa9v1xtxt05GLfYOo70TOSVE9rMZc+g01ANVJtihbg=;
-        b=MaacKvHkNsLjWoCPZa8mLq/AT11yQo0qyhd/KFR1apt1uZiQCf77Hi1ARS/Pf7+X2nU3/0
-        yU3554Y6sr4y7ldl4qnc4P84HE+6tpA+WMLLfxBmpwrNDddrcIvbihjYvDW6Y3zadPJoea
-        vfZNGZY0/UC446Wh8hm8oXEEMsqu7ac=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-w4Kl6DqTMh-Uz_4l1mtgAQ-1; Wed, 02 Mar 2022 11:30:36 -0500
-X-MC-Unique: w4Kl6DqTMh-Uz_4l1mtgAQ-1
-Received: by mail-wm1-f70.google.com with SMTP id m34-20020a05600c3b2200b0038115c73361so703837wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:30:36 -0800 (PST)
+        Wed, 2 Mar 2022 11:32:55 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B948CD5C3
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:32:11 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2db2add4516so24369847b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:32:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LO5WlNvmvZK+Oe3F8SgCWtBRKkuwTSqsf3nKZO8NpGw=;
+        b=rQ+xoLWBOrUuyyiRpsDclceteFY2IhtdY3S1QgAphXs7eZGBhLd7cqJOWgfohTuywI
+         6EtERWFWDRyGoCVOtYlaxp8MvdjrcUEp8Y2ETlw0L/o1L9kh644xH+DMZGJ4Fjv11kla
+         lmUdvoHa2QAxTShxhU76evBZUqKBsRHYgntNvBbF2xzbYqOp5/UtdcOAwHiRMpdwnZEH
+         HvpQdBSAWpBLOwKhr3NAU1H7eCTNvYh66GHVAyksh9YQmUIF/WJbCtMU32HNCezQFE2K
+         P60R4IKI3I8xGibc7EXp+012/DjlxAtFEjY0LOCaO2zB4uRM0d6bxrn2gLN69sZhJmnL
+         1qdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kMa9v1xtxt05GLfYOo70TOSVE9rMZc+g01ANVJtihbg=;
-        b=XnMkuY3+MOBcFiwutdxWReEvRrwQB5/mgGqg8HbktgByskn9Skh06y/0fSfI7gGlk2
-         ZehWbZZGwh6kqZAj+HaHZjuWr/gxb9kknTG4Piar4qivo3IMyOs1Yo5PxJTQcDoLsaPy
-         BIHEMbhF3VULaDYK+G//1Wy83ItEfNNhHF9XOoE6TxZuLU6jl2o9+JzSpiXFzghtzLK9
-         HidmVKA8QwQiRwCFKOdas/wqJh6G7U76AY09PpE9d/V6c610r37cj/PLKXJzTgjB9taM
-         ce2xY42TF39Kc64onxeoqdaNBoD4dKtYSKEQZpeRMs4fSdf4jTP0dsd2s5uZLUuq4Kdj
-         c2KA==
-X-Gm-Message-State: AOAM531z7m7UcIX3wVJ5XkC1RyHl/kf2RLXHHqXbZBntL+fmdYc9+OjS
-        XTwCGru25KGgKSBUCSvFIUOCGXNZSX5d5kuf3dQKkLNlkuZlaGS4M0sgF5AQohJK26Xo5TAUEP9
-        4qZsHzf30wasNEQFIR2QTVN9w
-X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr489121wmi.116.1646238634137;
-        Wed, 02 Mar 2022 08:30:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxPFSyJJ3cuBRpkY9KOm5MVNCqPvFnh7F/Ims38I9cMHs0dlB6ZbjMEGiiJX+VRcZzNYFLg0w==
-X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr489104wmi.116.1646238633941;
-        Wed, 02 Mar 2022 08:30:33 -0800 (PST)
-Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
-        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm5972902wre.22.2022.03.02.08.30.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:30:33 -0800 (PST)
-Date:   Wed, 2 Mar 2022 11:30:30 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Jason Wang <jasowang@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <20220302112945-mutt-send-email-mst@kernel.org>
-References: <20220302075421.2131221-1-lee.jones@linaro.org>
- <20220302082021-mutt-send-email-mst@kernel.org>
- <Yh93k2ZKJBIYQJjp@google.com>
- <20220302095045-mutt-send-email-mst@kernel.org>
- <Yh+F1gkCGoYF2lMV@google.com>
- <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LO5WlNvmvZK+Oe3F8SgCWtBRKkuwTSqsf3nKZO8NpGw=;
+        b=5/JDBTNWZKuE3lhIWANxDznwmDdO8AjiagybQMDLx9qurHm98ywk2I9LUsUxXKkv/8
+         lOFYTbSyOsp9DXaZzF4vbzdQkRQ2nHx1nZnb4c+qoe2S8OfEUVlk6ep5r62Q5G1nKfFM
+         nnytgFllqKQmnLh4a4uyw1aYFLm8ZbIgpX4vBmuhMRZSKOdUdQiF+x9JyrzDOEWgcLCi
+         MU4b5MWppMoyLRkuY2Kz9DONf0RhS5lnd+EGMNaIjI1Y85RJGQUk8bPetNILX728GHr7
+         hWAPrLl+lMMS/eQCyE58mQwe8NIneavDzPajS9bzrXzD+yOzPEm0A7e1RE15AAOvUlVo
+         mNhg==
+X-Gm-Message-State: AOAM530HrUZws6idYhWk1FVO8D9v+DY6m6NbDqtRSEPnHQEMhBQKV8hK
+        h6o7Hi9uixL+wjXvnhQyXtR5cb8LINhMuPOHedrmuQ==
+X-Google-Smtp-Source: ABdhPJy20CqTfg/b4Kwe/+MSKeEIl2hwemy2gJAakPTfyyyh1giylFzAN+jri1ofxNxyLIjhIrUI9y2yUAVa1c7Mua8=
+X-Received: by 2002:a81:188b:0:b0:2db:d9d0:d19 with SMTP id
+ 133-20020a81188b000000b002dbd9d00d19mr9728621ywy.309.1646238730504; Wed, 02
+ Mar 2022 08:32:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220225125553.1185108-1-benchuanggli@gmail.com>
+ <20220225125553.1185108-2-benchuanggli@gmail.com> <CAPDyKFq5MdGWefVW6Uwe74Ef5giW+68qRS2hmXNmHLqpfqav8A@mail.gmail.com>
+ <4b35e465-626a-7218-ed9a-4e5cf28c1ccc@intel.com> <CACT4zj9AxpOuDn-1fFAgY7Y-X_w+OHisASpa6tUBHQZuSExjFQ@mail.gmail.com>
+ <CAPDyKFp-XrLOSUAbsW5JGNCs6aO8Gp1YgmkqiwVpN5byO1XXCQ@mail.gmail.com> <CACT4zj_6k=0gNRw=EFHR=9-7fWJ=bT4Q1VsPMWrkVPftjLb=Hw@mail.gmail.com>
+In-Reply-To: <CACT4zj_6k=0gNRw=EFHR=9-7fWJ=bT4Q1VsPMWrkVPftjLb=Hw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 2 Mar 2022 17:31:33 +0100
+Message-ID: <CAPDyKFoe1BmQBzmd0uXYTdOEZU21wFtUDyU0vAq8+yzqJhKpzA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+To:     Ben Chuang <benchuanggli@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        greg.tu@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        SeanHY.Chen@genesyslogic.com.tw,
+        Kevin Chang <kevin.chang@lcfuturecenter.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
-> On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
+On Wed, 2 Mar 2022 at 12:56, Ben Chuang <benchuanggli@gmail.com> wrote:
+>
+> Hi,
+>
+> On Wed, Mar 2, 2022 at 6:04 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > >
-> > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
-> >
-> > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
-> > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > On Wed, 2 Mar 2022 at 03:10, Ben Chuang <benchuanggli@gmail.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Tue, Mar 1, 2022 at 6:05 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
 > > > >
-> > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
-> > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
-> > > > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > > >
-> > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > > >
-> > > > > > Cc: <stable@vger.kernel.org>
-> > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > > > ---
-> > > > > >  drivers/vhost/vhost.c | 2 ++
-> > > > > >  1 file changed, 2 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
-> > > > > > --- a/drivers/vhost/vhost.c
-> > > > > > +++ b/drivers/vhost/vhost.c
-> > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > > > >         int i;
-> > > > > >
-> > > > > >         for (i = 0; i < dev->nvqs; ++i) {
-> > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
-> > > > > >                 if (dev->vqs[i]->error_ctx)
-> > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
-> > > > > >                 if (dev->vqs[i]->kick)
-> > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
-> > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
-> > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
-> > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
-> > > > > >         }
+> > > > On 28/02/2022 19:03, Ulf Hansson wrote:
+> > > > > On Fri, 25 Feb 2022 at 13:56, Ben Chuang <benchuanggli@gmail.com> wrote:
+> > > > >>
+> > > > >> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> > > > >>
+> > > > >> Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
+> > > > >> gated of upstream port can be enabled.
+> > > > >>
+> > > > >> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> > > > >> Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
+> > > > >> ---
+> > > > >>  drivers/mmc/host/sdhci-pci-gli.c | 54 ++++++++++++++++++++++++++++++++
+> > > > >>  1 file changed, 54 insertions(+)
+> > > > >>
+> > > > >> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> > > > >> index 97035d77c18c..cf99b6af792d 100644
+> > > > >> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> > > > >> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> > > > >> @@ -873,6 +873,55 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+> > > > >>         pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
+> > > > >>  }
+> > > > >>
+> > > > >> +#ifdef CONFIG_PM
+> > > > >> +static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
+> > > > >> +{
+> > > > >> +       struct sdhci_pci_slot *slot = chip->slots[0];
+> > > > >> +       struct sdhci_host *host = slot->host;
+> > > > >> +       u16 clock;
+> > > > >> +
+> > > > >> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> > > > >> +       clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
+> > > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> > > > >> +
+> > > > >> +       return 0;
+> > > > >> +}
+> > > > >> +
+> > > > >> +static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
+> > > > >> +{
+> > > > >> +       struct sdhci_pci_slot *slot = chip->slots[0];
+> > > > >> +       struct sdhci_host *host = slot->host;
+> > > > >> +       ktime_t timeout;
+> > > > >> +       u16 clock;
+> > > > >> +
+> > > > >> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> > > > >> +
+> > > > >> +       clock |= SDHCI_CLOCK_PLL_EN;
+> > > > >> +       clock &= ~SDHCI_CLOCK_INT_STABLE;
+> > > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> > > > >> +
+> > > > >> +       timeout = ktime_add_ms(ktime_get(), 150);
+> > > > >> +       while (1) {
+> > > > >> +               bool timedout = ktime_after(ktime_get(), timeout);
+> > > > >> +
+> > > > >> +               clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> > > > >> +               if (clock & SDHCI_CLOCK_INT_STABLE)
+> > > > >> +                       break;
+> > > > >> +               if (timedout) {
+> > > > >> +                       pr_err("%s: PLL clock never stabilised.\n",
+> > > > >> +                              mmc_hostname(host->mmc));
+> > > > >> +                       sdhci_dumpregs(host);
+> > > > >> +                       break;
+> > > > >> +               }
+> > > > >> +               udelay(10);
+> > > > >> +       }
+> > > >
+> > > > Could use something like read_poll_timeout() here e.g.
+> > > >
+> > > >         if (read_poll_timeout(sdhci_readw, clk, (clk & SDHCI_CLOCK_INT_STABLE),
+> > > >                               1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
+> > > >                 pr_err("%s: PLL clock never stabilised.\n",
+> > > >                        mmc_hostname(host->mmc));
+> > > >                 sdhci_dumpregs(host);
+> > > >         }
+> > > >
+> > > >
+> > >
+> > > Thanks for the tip. I will prepare the next patch.
+> > >
+> > > > >> +       clock |= SDHCI_CLOCK_CARD_EN;
+> > > > >> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> > > > >> +
+> > > > >> +       return 0;
+> > > > >> +}
 > > > > >
-> > > > > So this is a mitigation plan but the bug is still there though
-> > > > > we don't know exactly what it is.  I would prefer adding something like
-> > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
-> > > >
-> > > > As a rework to this, or as a subsequent patch?
+> > > > > Both functions above look very similar to what sdhci_set_clock() does.
+> > > > > Can you use that, rather than open coding the above?
+> > > > >
 > > >
-> > > Can be a separate patch.
-> > >
-> > > > Just before the first lock I assume?
-> > >
-> > > I guess so, yes.
+> > > The codes turn on/off the clock but it doesn't change the clock.
+> > > Using sdhci_set_clock()  needs to store the clock value because it
+> > > clears the clock.
 > >
-> > No problem.  Patch to follow.
+> > Well, in that case at least you can call sdhci_enable_clk() from
+> > gl9763e_runtime_resume(), rather than open coding it (the code looks
+> > like a direct copy of that code). All you need is to give the
+> > sdhci_enable_clk() the correct "clk" as in-parameter.
 > >
-> > I'm also going to attempt to debug the root cause, but I'm new to this
-> > subsystem to it might take a while for me to get my head around.
-> 
-> IIUC the root cause should be the same as the one we solved here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
-> 
-> The worker was not stopped before calling vhost_dev_cleanup(). So while 
-> the worker was still running we were going to free memory or initialize 
-> fields while it was still using virtqueue.
-> 
-> Cheers,
-> Stefano
+>
+> I want to explain a little more,
+> gl9763e is used as a boot disk controller.
+> In gl9763e_runtime_suspend(), gl9763e still needs the internal clock to keep states.
+> So gl9763e_runtime_suspend() only clears SDHCI_CLOCK_PLL_EN and SDHCI_CLOCK_CARD_EN.
+> The SDHCI_CLOCK_INT_EN is still one (1) In runtime suspend,
+>
+> If using sdhci_enable_clk()  in gl9763e_runtime_resume(), sdhci_enable_clk()
+> only fills one (1) to this bit (SDHCI_CLOCK_INT_EN) again, it cannot cause internal stable bit
+> (SDHCI_CLOCK_INT_STABLE) to one for gl9763e in the first while loop.
 
-Right, and I agree but it's not the root though, we do attempt to stop all workers.
+Okay, I get it now, thanks for clarifying.
 
--- 
-MST
+In any case, the loop in sdhci_enable_clk() that polls the
+SDHCI_CLOCK_CONTROL register to see if the SDHCI_CLOCK_INT_STABLE is
+set, could perhaps be split out to a function that you can use here as
+well.
 
+[...]
+
+Kind regards
+Uffe

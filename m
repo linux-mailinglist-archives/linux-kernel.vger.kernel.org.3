@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468574CA235
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224F64CA237
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240985AbiCBKdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        id S241001AbiCBKdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235971AbiCBKc7 (ORCPT
+        with ESMTP id S240992AbiCBKdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:32:59 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0A7A652F;
-        Wed,  2 Mar 2022 02:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646217098;
-        bh=4bdmMEQw8spR517oJ7qXxXX+uJRFnQKrfHpGnboGiZ0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=bZEva4y7ths00ttdO/UooBif6ALksHiAnjBWdqeGUJVbz8jQrDvYJuEHvXrvqxfyR
-         YcIgyCblkbuQvqmiJUTfBHI1qLBy21rvqMddhh7LqvFgPlO7NjYE0/N76lRWgmIBr2
-         ixMZNaAS5ZwQxLj3wPmNzQdRrqEjyD385c3tQ2Lk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.190] ([80.245.77.190]) by web-mail.gmx.net
- (3c-app-gmx-bap21.server.lan [172.19.172.91]) (via HTTP); Wed, 2 Mar 2022
- 11:31:38 +0100
+        Wed, 2 Mar 2022 05:33:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E3238B9
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:32:29 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nPMHP-0004fM-BT; Wed, 02 Mar 2022 11:32:23 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-5c51-3418-45e9-21d0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5c51:3418:45e9:21d0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D8D2340B54;
+        Wed,  2 Mar 2022 10:32:19 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 11:32:19 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Subject: Re: drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning:
+ Uninitialized variable: rx_event_msg [uninitvar]
+Message-ID: <20220302103219.kvpfhc6qz42t3pvv@pengutronix.de>
+References: <202203021333.mMJpWPzx-lkp@intel.com>
+ <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
 MIME-Version: 1.0
-Message-ID: <trinity-80a229fb-42dd-4705-9c55-fe6f3a381a40-1646217098213@3c-app-gmx-bap21>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Aw: Re: [PATCH v4 1/5] dt-bindings: Convert ahci-platform DT
- bindings to yaml
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 2 Mar 2022 11:31:38 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <6dae47c3-6083-782e-ecab-7be3f0bca0e1@canonical.com>
-References: <20220301152421.57281-1-linux@fw-web.de>
- <20220301152421.57281-2-linux@fw-web.de>
- <6dae47c3-6083-782e-ecab-7be3f0bca0e1@canonical.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:4Gpe9DnEZg6/2Us5ng4Vs+x+BJ+VcCuxFPt0OY8/cpI1KL2/NW731L08yXZA2/TTVVk6+
- uDr9F1YWWrAbLuR8Q9PYkpsqbOQSINIMeUd4Jjrgsb/AskZtRQRC8/7tE8fCWyFPpxGKkEQr+IDK
- TQdDJN+At+27aKoUuUxKjxTBfyuyYCuR6Afn4+j+9KUCBuYuu+ALvG33VVtjzO+3ltdwL+EZcJKt
- WhQB2bCv0KWTdWvXFZFD0Na2LQoB07OyyTaxmTl+iAFgEPgCi6m5w/NA5dpzbHsuItcmeX+SnezL
- Fw=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vk4EW4SvWFo=:EpZrOPPl+6CuL2emR4Il5R
- BGbiJ6qZyF4TofkTyyy82OQSw6sHIkaRLVog7OvuuarvArgeogT42vK3ewTSki4nA0o3Y6e7u
- c2rQyEtFpbDmmynGWA79SB6rULKKTfW1rREKEtRRbkl45RPIk5cdUTt3yPEZg1PgBlZ6cC1Zi
- a9Z8zyCSZccjMF8qEq5bGhhe6FXLORRPnphPybhvdR+4uBfsDf43PMptW+7cA7aHU9RcUZxf2
- L9czc6SXo5GxXruLZ0sPiYV0oVXE7lgXHREjYZl2H7VRFGjGA7T/7rE44MWBxCCyz3EKMxcQJ
- iYU0mIsfbDI6aro468K3IE0yIy8zgCbgEaj89mPq11vTGQIv2TQRMXCqUh6JO+HkURxpza6DR
- EaWBo228M78BGsV/8/GMVQpaNGLUGJMuVQXy4O4kn1I5oPI/UleDpcrl4vGFFTzflUdlV7OnH
- 5PqmDWpFVOc9SjrDEdWUiK6NpMqGcQymVjhk9IU3NKF4heVWRVg7M0EFpllim3TxIIjpCZhF/
- mQ2SJQH0lnkcHerWGlofe0xJnnGEP43rjFZwmMwi4k36V7mpb8/gbZevht+ndg5fAHM9NRTbW
- 5dHdOX/R2abeVpDw+16McJfSQ7qoEKIeU+Tb4g0sPjFvnhCsUaXJNLXKXdehoa8WXRJngIbLo
- xO9m4Xzf7ToIscjeIgvux6YUX5JqzTWMxKvWBMsREufhXpKWwI8eGKJ+OHotuhFkyJHJJV9iA
- CjStIoCuT7D1w6FSVK/GB85hqTTUJAyVHF85xGb89/rjb86Gm7kp++JuNPKagdzL1di3D2rjq
- xcz2wmi
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="es7shakc2uxqunjk"
+Content-Disposition: inline
+In-Reply-To: <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,122 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-> Gesendet: Mittwoch, 02=2E M=C3=A4rz 2022 um 10:46 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof=2Ekozlowski@canonical=2Ecom>
+--es7shakc2uxqunjk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On 01/03/2022 16:24, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files=2Ede>
-
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +        - enum:
-> > +          - brcm,iproc-ahci
-> > +          - marvell,armada-8k-ahci
-> > +          - marvell,berlin2q-ahci
-> > +        - const: generic-ahci
-> > +      - enum:
-> > +        - brcm,iproc-ahci
+On 02.03.2022 17:47:08, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   575115360652e9920cc56a028a286ebe9bf82694
+> commit: c664e2137a27680922d8aeb64fb10313416b254f can: etas_es58x: add sup=
+port for the ETAS ES58X_FD CAN USB interfaces
+> date:   11 months ago
+> compiler: powerpc64-linux-gcc (GCC) 11.2.0
 >=20
-> This one is already earlier in generic-ahci, so you can skip him here=2E
-
-OK, i drop it
-
-> > +        - cavium,octeon-7130-ahci
-> > +        - hisilicon,hisi-ahci
-> > +        - ibm,476gtr-ahci
-> > +        - marvell,armada-3700-ahci
-> > +        - marvell,armada-380-ahci
-> > +        - snps,dwc-ahci
-> > +        - snps,spear-ahci
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      Clock IDs array as required by the controller=2E
-> > +    minItems: 1
-> > +    maxItems: 3
-> > +
-> > +  interrupts:
-> > +    description:
-> > +      specifies the interrupt number for the controller=2E
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <yujie.liu@intel.com>
 >=20
-> Skip description, it's obvious=2E
-
-OK
-
-> > +    maxItems: 1
-> > +
-> > +  ahci-supply:
-> > +    description:
-> > +      regulator for AHCI controller
-> > +
-> > +  clock-names:
-> > +    description:
-> > +      Names of clocks corresponding to IDs in the clock property=2E
-> > +    minItems: 1
-> > +    maxItems: 3
 >=20
-> Put the clock-names next to clocks=2E
-
-had moved them down as they are optional, but ok, i move up
-
-> > +
-> > +  dma-coherent:
-> > +    true
+> cppcheck possible warnings: (new ones prefixed by >>, may not be real pro=
+blems)
 >=20
-> New line not needed=2E "dma-coherent: true"
-
-OK
-
-> > +  ports-implemented:
-> > +    $ref: '/schemas/types=2Eyaml#/definitions/uint32'
-> > +    description:
-> > +      Mask that indicates which ports that the HBA supports
-> > +      are available for software to use=2E Useful if PORTS_IMPL
-> > +      is not programmed by the BIOS, which is true with
-> > +      some embedded SoCs=2E
-> > +    maxItems: 1
+>    In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
+> >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialize=
+d variable: rx_event_msg [uninitvar]
+>     ret =3D es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
+>           ^
 >=20
-> maxItems are incorrect here, this is not an array=2E
-
-right, i'll change it
-
-> > +patternProperties:
-> > +  "^sata-port@[0-9a-f]+$":
-> > +    type: object
-> > +    description:
-> > +      Subnode with configuration of the Ports=2E
-> > +
-> > +    properties:
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      phys:
-> > +        minItems: 1
+> vim +174 drivers/net/can/usb/etas_es58x/es58x_fd.c
 >=20
-> maxItems: 1
+> c664e2137a2768 Vincent Mailhol 2021-04-10  165
+> c664e2137a2768 Vincent Mailhol 2021-04-10  166  static int es58x_fd_rx_ev=
+ent_msg(struct net_device *netdev,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  167  				 const struct es58x_f=
+d_urb_cmd *es58x_fd_urb_cmd)
+> c664e2137a2768 Vincent Mailhol 2021-04-10  168  {
+> c664e2137a2768 Vincent Mailhol 2021-04-10  169  	struct es58x_device *es5=
+8x_dev =3D es58x_priv(netdev)->es58x_dev;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  170  	u16 msg_len =3D get_unal=
+igned_le16(&es58x_fd_urb_cmd->msg_len);
+> c664e2137a2768 Vincent Mailhol 2021-04-10 @171  	const struct es58x_fd_rx=
+_event_msg *rx_event_msg;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  172  	int ret;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  173
+> c664e2137a2768 Vincent Mailhol 2021-04-10 @174  	ret =3D es58x_check_msg_=
+len(es58x_dev->dev, *rx_event_msg, msg_len);
+> c664e2137a2768 Vincent Mailhol 2021-04-10  175  	if (ret)
+> c664e2137a2768 Vincent Mailhol 2021-04-10  176  		return ret;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  177
+> c664e2137a2768 Vincent Mailhol 2021-04-10  178  	rx_event_msg =3D &es58x_=
+fd_urb_cmd->rx_event_msg;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  179
+> c664e2137a2768 Vincent Mailhol 2021-04-10  180  	return es58x_rx_err_msg(=
+netdev, rx_event_msg->error_code,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  181  				rx_event_msg->event_c=
+ode,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  182  				get_unaligned_le64(&r=
+x_event_msg->timestamp));
+> c664e2137a2768 Vincent Mailhol 2021-04-10  183  }
+> c664e2137a2768 Vincent Mailhol 2021-04-10  184
 
-oh, missed that
+Thanks for the report.
 
-> > +    #include <dt-bindings/interrupt-controller/arm-gic=2Eh>
-> > +    #include <dt-bindings/clock/berlin2q=2Eh>
-> > +    sata@f7e90000 {
-> > +            compatible =3D "marvell,berlin2q-ahci", "generic-ahci";
-> > +            reg =3D <0xe90000 0x1000>;
->=20
-> You still have wrong address=2E
+This looks like a false positive to me, as es58x_check_msg_len() is not
+a function, but a macro:
 
-only took the example from the txt, but i guess reg should be <0xf7e90000 =
-0x1000>; ?
+| #define es58x_check_msg_len(dev, msg, actual_len)			\
+| 	__es58x_check_msg_len(dev, __stringify(msg),			\
+| 			      actual_len, sizeof(msg))
 
-will also fix all subjects to
+__es58x_check_msg_len() don't use "rx_event_msg" directly, but only a
+string representation of it and a "sizeof()".
 
-"dt-bindings: ata: ahci-platform: =2E=2E=2E"
+I think it's possible to assign rx_event_msg before the
+es58x_check_msg_len(). I think (hope?) the compiler will not optimize
+anything away. :)
 
-Thanks
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--es7shakc2uxqunjk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIfR7AACgkQrX5LkNig
+013QCQgAqK9CFYzDpArq0c7Bm8GbARd+F9DP/5Ir6bmH34+nSEvwBXvIB2bqDlLS
+5O6vzlP32gdyQTiUj7wZE9urPrtXkRcxrewMeoezOVuTNVfH32hwWANBYeyfP0g+
+8h1ePZHny0wbhGuGMzR7GRyEwtAfDQMpkfnzwrsY0AA6T5tshvWE/ToMVjtR6iqz
+kIyok2Q01jbLYyqoFjHMYDXhyLIS3kKxt8tUYiUKmxeqvdMW9Azw1eUuBWCRoJ9z
+feAmwJS6+BXnmOAvX9CLIlFo1asRCZKikRgPjDiEkcX8/Kc5OLeItu4+bYZx5cEk
+UdTZSPc0DW5omA7gnaBoOQiufTPk+Q==
+=t9ZQ
+-----END PGP SIGNATURE-----
+
+--es7shakc2uxqunjk--

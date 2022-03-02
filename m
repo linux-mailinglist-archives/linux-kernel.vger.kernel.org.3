@@ -2,99 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C244CAD73
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0417A4CAD75
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244132AbiCBSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S244364AbiCBSZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiCBSZB (ORCPT
+        with ESMTP id S229606AbiCBSZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:25:01 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140ED939A2;
-        Wed,  2 Mar 2022 10:24:18 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so2866278ooa.10;
-        Wed, 02 Mar 2022 10:24:18 -0800 (PST)
+        Wed, 2 Mar 2022 13:25:20 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E061B939A2;
+        Wed,  2 Mar 2022 10:24:36 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id g26so5108572ybj.10;
+        Wed, 02 Mar 2022 10:24:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k8trmR3Q/wKgFOlN56Zfs9MLMD2hMa6/k0WKIWBkMmM=;
+        b=EI7PKbxWvSqGp9xJmAzLPWSp5Tf1E04s3YrH5kSS7z6m+CKHqqpxsF1gSsptgTcOcP
+         s92pTtvsM1mPJlvaG7OtmwhLVLwZj/9riUWO8vLV72/BDvSjj+rvsO4KlqLXBNUW4Wsa
+         jbDq62016TJkK8q8iZwUdEaU8qe40kqrghh1GqvbX7Gq9mSUMvDVyO2JYFjrLH+dgaWW
+         Y5We2GXHWVHPyr3pLLn9QNykj6paKj5xfYDElWRybIvDGi28yatztI44TWmZoRTGxIOm
+         KD8BRSfnehZMnzHlXWDkmeocicXx0K2iD3tCxtfS7nu6euo1LBpEkcv4z7KEzBURG8od
+         fj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MSJbtF7R3/d/j8mjl9nalZaN2tSNCiNLZKQMPUsm00A=;
-        b=AR9woadp/IjI0xcDaeol3IKHJAe62M0tu1fwrx44V3RXG6RPBuo0pYefTa5ObZXMVx
-         pXa0yOxShb3HWIAYD5lciIceKT75lYFymio1pJR5SUS2naiZyCo9uC5BalL81D+EQSVh
-         DAZdwZZQfuoZvoCfMTiD+F2Gj6sMRXm8/9GtC8BNSgufJQn6cjRniYHiWh6ERCG3C0Xg
-         2B+u8ky8gz7JdhFetZqyyy1nwOHg7xqu1o4CSnr33Z2XfI7YPcLrTNn04ndHFMdY3Tab
-         jADxhCw3nXrvm2TvZeXQhUMAUJ0SzlnCXrfzsAFth6T/cBLqbiEgYwDI587bdaFxwH6r
-         KZow==
-X-Gm-Message-State: AOAM533Tkzjzi+Pfe5/i2SP7xbXnSdum3QrN5TfKz7Rcrp7Quveuy7Aw
-        vDgHwXbDsjZgdaWqqBJBCw==
-X-Google-Smtp-Source: ABdhPJy7Mt26nWBw1w05aNEdWwb5DUxTy93UkULsXG4lm8r9WLxlw9l8jBBWUlYgV2EdElxo/l9zXQ==
-X-Received: by 2002:a05:6870:f713:b0:d2:8adb:aaeb with SMTP id ej19-20020a056870f71300b000d28adbaaebmr891645oab.111.1646245457425;
-        Wed, 02 Mar 2022 10:24:17 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i28-20020a056808055c00b002d51e377248sm9656272oig.33.2022.03.02.10.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:24:16 -0800 (PST)
-Received: (nullmailer pid 4003574 invoked by uid 1000);
-        Wed, 02 Mar 2022 18:24:15 -0000
-Date:   Wed, 2 Mar 2022 12:24:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: i2c: renesas,riic: Document RZ/V2L SoC
-Message-ID: <Yh+2T/Mny15X+pOq@robh.at.kernel.org>
-References: <20220301125046.17737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k8trmR3Q/wKgFOlN56Zfs9MLMD2hMa6/k0WKIWBkMmM=;
+        b=daJorFwjgxktax5gKKTbXn2lQEQSsLM/+gBcWMQshs5uCXjk2oEcrgOKwwK7cLkDrl
+         vukbkgMFoi2yEgW/oPJh1CBTzEfn+P7qMeItVmqIag1BjcK0BtFrHvEYq+vb+6NwbvCn
+         PAxFjNrP7Qb/oQlhKg6iqw7YHKy2o5uHwYLFVAIV7rPMBmC22LrhypF4XSrZaOBsjp9d
+         1c6rBaRjLlJO0GYQIrjbvwnHTIdFyj9CJUlroKUL0efGJqQohPzIVlQYLVCSdCNxeHFV
+         WVGOOxQVoP0iFR0hsgDseca6jOH/Z9vxoll3fuG8R2wOTsOefwnwWQ2dSESq6YppcRlO
+         SdBQ==
+X-Gm-Message-State: AOAM531hM0BF0h5FvkukP1MqPtZPV0TPeu4cvYRrO6WQhA2Mm1i9jX9R
+        KzX3lY1bUt5rYYhiE5EebiL1V7CNIJBByBn7iO4=
+X-Google-Smtp-Source: ABdhPJztt2OEDdgAGfUkeMuakEtvQlotuosKn6RGHzjaJ0yQIJbh4vJafHCFX3KRfLld0T8niouzFGhLQs3ATA6lq9o=
+X-Received: by 2002:a5b:dc8:0:b0:624:a898:dea6 with SMTP id
+ t8-20020a5b0dc8000000b00624a898dea6mr29475925ybr.600.1646245476111; Wed, 02
+ Mar 2022 10:24:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301125046.17737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220302143427.447748-1-vkoul@kernel.org> <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+ <Yh+l7+7zDvI/9e6n@matsya> <CAMdYzYoVz4wk-EhfxQdwu9FqRg8Vj-HGMFG+CFjfsHeM8HcnNQ@mail.gmail.com>
+ <CAL_JsqL1cYyU=LCmEn=dEk712CECpxj8sUWrwpi8_XpoaXEQig@mail.gmail.com>
+In-Reply-To: <CAL_JsqL1cYyU=LCmEn=dEk712CECpxj8sUWrwpi8_XpoaXEQig@mail.gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 2 Mar 2022 13:24:24 -0500
+Message-ID: <CAMdYzYqMgoOKuBw9gKuybcoGxiGYtwf3aA07C9Mqvq2gjB47rw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
+ combo phy register compatible"
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 12:50:46PM +0000, Lad Prabhakar wrote:
-> Document RZ/V2L I2C bindings. RZ/V2L I2C is identical to one found on the
-> RZ/G2L and RZ/A SoC's. No driver changes are required as the generic
-> compatible string "renesas,riic-rz" will be used as a fallback.
-> 
-> While at it, drop the comment "# RZ/A or RZ/G2L" for "renesas,riic-rz"
-> compatible string as this will avoid changing the line for every new
-> SoC addition.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v1->v2
-> * Included Ack and RB tags
-> * Dropped the comment from generic string as suggested by Geert.
-> 
-> v1:
-> https://patchwork.kernel.org/project/linux-renesas-soc/patch/
-> 20220227214747.24819-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> ---
->  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On Wed, Mar 2, 2022 at 12:34 PM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Wed, Mar 2, 2022 at 11:25 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> >
+> > On Wed, Mar 2, 2022 at 12:14 PM Vinod Koul <vkoul@kernel.org> wrote:
+> > >
+> > > On 02-03-22, 11:04, Rob Herring wrote:
+> > > > On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > > > >
+> > > > > This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
+> > > > > combo phy register compatible") as that was wrongly merged, so better to
+> > > > > drop the wrong patch
+> > > > >
+> > > > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > > > ---
+> > > > > I am applying this to phy-next to fix the issue
+> > > >
+> > > > Reverting will just cause a different warning that it is undocumented.
+> > >
+> > > Right, but a patch for that would fix that
+> > >
+> > > > The fix in the other thread won't apply either if you revert.
+> > >
+> > > It is not applying for me, so that needs to be updated anyways..
+> >
+> > It seems phy-next has fallen out of sync with -next.
+> > It's missing this patch:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/devicetree/bindings/soc/rockchip/grf.yaml?h=next-20220302&id=7dbb47d64acf4aac131a2aaade726913aa62abe7
+>
+> That is not how things work. linux-next is a tree that no one can
+> apply patches to (in the worst case like this one). It's useful for
+> integration testing and a shortcut for getting a maintainer's tree,
+> but should not be the basis for patches to the lists. You should
+> generally use the last rc1 or a maintainer's tree when there is a
+> known dependency. Using a stable base means 'git am -3' works and the
+> merge tools work rather than git just failing to apply anything.
 
-I already applied v1. I may have missed this because PW stopped getting 
-mail the last 2 days.
+I apologize, as I'm not the progenitor of the original patch or the
+merge conflict I'm missing insight here.
+My series is dependent on patches that were pulled in several trees
+and the only place they are all currently available is in -next.
+I attempted to correct the merge issue in my series, but I don't know
+how I would do so when it needs to be based on multiple trees to be
+correct.
 
-Rob
+I will wait until this all settles down and resubmit based on 5.18-rc1
+
+Respectfully,
+Peter
+
+>
+> Rob

@@ -2,160 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4AC4CA269
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AE64CA270
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 11:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241074AbiCBKrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 05:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S241107AbiCBKrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 05:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiCBKq6 (ORCPT
+        with ESMTP id S235248AbiCBKrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:46:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8CEABE1E8
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:46:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646217975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcgSVhR3v1Q4DF91nNA8Ox25JFwZZ/xXnD/Xr8Ohi4E=;
-        b=WLIdgg9zpWt3AX/SjhX2h5cQTvHHc/GHOh2TqIE8L1WD5Y7ctkTaSFjJnUpR7gJ4lZ0SRl
-        0eSVCiL5afwhej8ker4hz6K+CjuYVdQYP+kgW+UjYLTNwTYVASeluAYU/FD+yEPtM85ySc
-        od1ZA6nVD5KhMtmv0OdfxAxoY6Ujs0s=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-j7Eue7GyNMKjTruZ6B2ucw-1; Wed, 02 Mar 2022 05:46:13 -0500
-X-MC-Unique: j7Eue7GyNMKjTruZ6B2ucw-1
-Received: by mail-wm1-f69.google.com with SMTP id h19-20020a05600c351300b0038141cf26deso675178wmq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 02:46:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=CcgSVhR3v1Q4DF91nNA8Ox25JFwZZ/xXnD/Xr8Ohi4E=;
-        b=k+qQRxRi/A0/PRQnfi+WVFmmjTTLf5z0Jo8c4DDv2PvJ5qW3n+uXRvtIJMVNQS924u
-         VCYdSkqVBqrOGkCFDF1TmJURy8fz7KgcwHhrpD6YjbG0t0h6cMKgP1VtqzWLzluQ7W+R
-         udRAZkMta+Y+fU3TIh5QrnxljwZHcfjiYJPRBVCovDm9fL16E6Qur1W1oTuBr+SsKBqd
-         DDjQ0NdkgibUP3hHT+Z6/oCXGdu2t+Eo77XExviY75d66Zct0VoNrH4iX9Jd74ss7Iu7
-         j7FMSqi6AM6zgM6DPm+nySI5xDssGQ/33W277gOgg8sWjOKSmHJLWqkFRZIUCM37E4gy
-         c8LQ==
-X-Gm-Message-State: AOAM532CCXc5NNXhvLSmKUO2F4J+wRsvmXtkbBFhUGhFzaJe9T3gXKq0
-        6bG20kvIqhX7rnYY2uXSVbYXKRN9jFOZTvscbLyRfgyHMqonJ9ou88vUL+KKdEzWORE6tygzEGf
-        dMS+L+oWHppEFOjLMEjpg+ipu
-X-Received: by 2002:adf:e108:0:b0:1ef:97ad:5372 with SMTP id t8-20020adfe108000000b001ef97ad5372mr12301270wrz.658.1646217972728;
-        Wed, 02 Mar 2022 02:46:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy3eTCKEw4hLbypwFmYuE8h4jh5anSTEP5pUVs2vPgZ5BptjSvDyAQv8Wkzla2u3AER8KBvjw==
-X-Received: by 2002:adf:e108:0:b0:1ef:97ad:5372 with SMTP id t8-20020adfe108000000b001ef97ad5372mr12301255wrz.658.1646217972426;
-        Wed, 02 Mar 2022 02:46:12 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8? ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id x15-20020adfdd8f000000b001f0473a0a3fsm616371wrl.14.2022.03.02.02.46.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 02:46:12 -0800 (PST)
-Message-ID: <14775dadbf47ce3bcc8c375be82028ef4dcdba87.camel@redhat.com>
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     paulmck@kernel.org
-Cc:     rostedt@goodmis.org, bristot@kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mtosatti@redhat.com
-Date:   Wed, 02 Mar 2022 11:46:11 +0100
-In-Reply-To: <20220301175621.GP4285@paulmck-ThinkPad-P17-Gen-1>
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
-         <20220228221154.GN4285@paulmck-ThinkPad-P17-Gen-1>
-         <1b388cdc409fdfae75ef2280674d8211e5b6194e.camel@redhat.com>
-         <20220301175621.GP4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 2 Mar 2022 05:47:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC9CBECD9;
+        Wed,  2 Mar 2022 02:46:49 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2229rrsd007841;
+        Wed, 2 Mar 2022 10:46:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=R/c1L+XnDZeU+pqemOA1d/0xhmMdRl79pBFJwINA7Ug=;
+ b=hp8phhNnrxPiX6zTkoOec+aEfuIurokLmT02O2qMiPl8Ziu70z6GyFKJNmZlJmV3v3X6
+ WAQOssFql09Ou9V5BTsxzq6AsmqvXVgoqCKmSyNAzisWlYoK3vhWCOkRM6TxRFbraywm
+ HibgvDw66vO8hsnf0p22TeXVyuai3nn1AIm8lDOnoasCAUs7N4Bx7X8T89MccLsV9TRG
+ d6/phmHO0J5KkSGClzIHyCjn/HG3K91BJeJnPx/bEN8rg9Y3Kx3Wj58FTur1LTpYjYR5
+ 5yACrPGG/BMqkhchcIJGYT3RH4ryFOyJrY05sMgVKn21UyimNOAXr7D2G2iPEyK1OTlz UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej6bt0yf4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 10:46:47 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222AQI9M035647;
+        Wed, 2 Mar 2022 10:46:46 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej6bt0yeg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 10:46:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222AgdBD001503;
+        Wed, 2 Mar 2022 10:46:44 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3efbu9edbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 10:46:44 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Akc7M52429234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 10:46:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB2C9A404D;
+        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 56A92A4040;
+        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
+Received: from [9.145.41.193] (unknown [9.145.41.193])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
+Message-ID: <3bf9c7c4-4475-ad12-d146-a97b33d1e4ba@linux.ibm.com>
+Date:   Wed, 2 Mar 2022 11:46:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 1/3] drivers/s390/char: Add Ultravisor io device
+Content-Language: en-US
+To:     Janosch Frank <frankja@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20220223144830.44039-1-seiden@linux.ibm.com>
+ <20220223144830.44039-2-seiden@linux.ibm.com>
+ <7058948f-5514-4f8f-c974-f1ac624d67c3@linux.ibm.com>
+From:   Steffen Eiden <seiden@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <7058948f-5514-4f8f-c974-f1ac624d67c3@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R4lSi8PuL08S3V5pOrTWqVLz_RM67ugJ
+X-Proofpoint-ORIG-GUID: W8UryUt5yXhPz5sBjhTtd8XoOKiTBPNf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_01,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203020043
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 09:56 -0800, Paul E. McKenney wrote:
-> On Tue, Mar 01, 2022 at 11:00:08AM +0100, Nicolas Saenz Julienne wrote:
-> > On Mon, 2022-02-28 at 14:11 -0800, Paul E. McKenney wrote:
-> > > On Mon, Feb 28, 2022 at 03:14:23PM +0100, Nicolas Saenz Julienne wrote:
-> > > > At the moment running osnoise on an isolated CPU and a PREEMPT_RCU
-> > > > kernel might have the side effect of extending grace periods too much.
-> > > > This will eventually entice RCU to schedule a task on the isolated CPU
-> > > > to end the overly extended grace period, adding unwarranted noise to the
-> > > > CPU being traced in the process.
-> 
-> Ah, I misread the above paragraph.  Apologies!
-> 
-> Nevertheless, could you please add something explicit to the effect that
-> RCU is completing grace periods as required?
 
-Yes, of course.
 
+On 3/2/22 11:34, Janosch Frank wrote:
+> On 2/23/22 15:48, Steffen Eiden wrote:
+>> This patch adds a new miscdevice to expose some Ultravisor functions
+>> to userspace. Userspace can send IOCTLs to the uvdevice that will then
+>> emit a corresponding Ultravisor Call and hands the result over to
+>> userspace. The uvdevice is available if the Ultravisor Call facility is
+>> present.
+>>
+>> Userspace is now able to call the Query Ultravisor Information
+>> Ultravisor Command through the uvdevice.
+>>
+>> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+>> ---
 [...]
-> > > o	At about 30 milliseconds into the grace period, RCU forces an
-> > > 	explicit context switch on the wayward CPU.  This should get
-> > > 	the CPU's attention even in CONFIG_PREEMPT=y kernels.
-> > > 
-> > > So what is happening for you instead?
-> > 
-> > Well, that's exactly what I'm seeing, but it doesn't play well with osnoise.
+>> +
+>> +config S390_UV_UAPI
+>> +    def_tristate y
+>> +    prompt "Ultravisor userspace API"
+>> +    depends on PROTECTED_VIRTUALIZATION_GUEST
 > 
-> Whew!!!  ;-)
+> Please drop the dependency.
+> We want this to be available to both guest and host as QUI is available 
+> in both environments and more calls like this could follow.
 > 
-> > Here's a simplified view of what the tracer does:
-> > 
-> > 	time1 = get_time();
-> > 	while(1) {
-> > 		time2 = get_time();
-> > 		if (time2 - time1 > threshold)
-> > 			trace_noise();
-> > 		cond_resched();
-> > 		time1 = time2;
-> > 	}
-> > 
-> > This is pinned to a specific CPU, and in the most extreme cases is expected to
-> > take 100% of CPU time. Eventually, some SMI, NMI/interrupt, or process
-> > execution will trigger the threshold, and osnoise will provide some nice traces
-> > explaining what happened.
-> > 
-> > RCU forcing a context switch on the wayward CPU is introducing unwarranted
-> > noise as it's triggered by the fact we're measuring and wouldn't happen
-> > otherwise.
-> > 
-> > If this were user-space, we'd be in an EQS, which would make this problem go
-> > away. An option would be mimicking this behaviour (assuming irq entry/exit code
-> > did the right thing):
-> > 
-> > 	rcu_eqs_enter(); <--
-> > 	time1 = get_time();
-> > 	while(1) {
-> > 		time2 = get_time();
-> > 		if (time2 - time1 > threshold)
-> > 			trace_noise();
-> > 		rcu_eqs_exit(); <--
-> > 		cond_resched();
-> > 		rcu_eqs_enter(); <--
-> > 		time1 = time2;
-> > 	}
-> > 
-> > But given the tight loop this isn't much different than what I'm proposing at
-> > the moment, isn't it? rcu_momentary_dyntick_idle() just emulates a really fast
-> > EQS entry/exit.
-> 
-> And that is in fact exactly what rcu_momentary_dyntick_idle() was
-> intended for:
-> 
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
+> We could put an option around the attestation but the savings are not 
+> worth the effort.
 
-Thanks!
+Makes sense. I will drop the dependency in v3.
 
--- 
-Nicolás Sáenz
-
+Steffen

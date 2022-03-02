@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACCB4C9A6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D589F4C9A6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237034AbiCBBdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S236152AbiCBBcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238531AbiCBBc5 (ORCPT
+        with ESMTP id S230351AbiCBBcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:32:57 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE8939B86;
-        Tue,  1 Mar 2022 17:32:15 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id q8so235991iod.2;
-        Tue, 01 Mar 2022 17:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ztWi/UNJL/XxaHXFhvfP5PfT1ItALyADT54uwPwC7eo=;
-        b=PGM87wOxTmfpOaGHHAolyktHMBPxeSumtGmiieXiZGPf0I8OXt6ND6Uy7FuADWXAey
-         oX0oJPzWALxW8eczzKkaZu3gWr63cywTmUh0b4nsqrnZFFKFVKZIECbrNx/Fi/yn6iAU
-         XB0Oh/7ef9erOig7u/Em9rdMdUcCdoJ1NuE3WpkJc3FLGHutrmEOCkgGXj3KxoQpeDZb
-         PwDz3JuJa/lNtkUQoLbLhQN2tF7dpL0u+kbs5zH0l9m3sjvsPtsDbBJ10KDLzQLo/2lm
-         P9EPvASNt5QZlI/Yn3x+IjI/l2IG1ASU/s8PU+Us52vjeZ59slnxWxJ9Uh7b7jqVfVr4
-         r+Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ztWi/UNJL/XxaHXFhvfP5PfT1ItALyADT54uwPwC7eo=;
-        b=MbQERa6TiO6oya3LL6EZRQZiGpOFv4jTN/LfciqJ8ypukPEfm+un91tG0PYwxxCQcG
-         ozw1X72nathxNQBwR2R37NyDgEJfrFr1qsc4BVJFfaldv/LkJyjBOX+AAbEvGIKGAO4m
-         IJmPdSM5F04QJz4aQAsoS4y9t8LSx8EMVW+hgGaMfd3MSpVZT9q7y2joqbyKqYjxiami
-         PSJ1HTThwAzw/pP6BQelLbl99gt+i+KseURxBKUG3aPSLruDVG82PJ38zT2sNU6Fr4x7
-         O7OcdRkj/X0OqmRCHWdRLqHfqJqWngzi3Nr8N/URrgIzY8IGhwIfBUOztN1P7kmEy92H
-         UVwg==
-X-Gm-Message-State: AOAM530yp7Df4YzIpG1Q873IeDW6Jr4ox2ThSeLfufXVN8PL+JBB8QNw
-        14Vp9eym6Fx+pXFnx6VPVtdJM7OWWdtWFvYb0Is=
-X-Google-Smtp-Source: ABdhPJwyXY3CX8OBAglFpo4/v3dN5UstC8l3gL09iftRxZ1bgsCXXoKgRduiqva7nZKtN792g+r5eFaXf4z/HSPq0Oc=
-X-Received: by 2002:a02:a804:0:b0:30e:4778:559a with SMTP id
- f4-20020a02a804000000b0030e4778559amr22835066jaj.291.1646184735094; Tue, 01
- Mar 2022 17:32:15 -0800 (PST)
+        Tue, 1 Mar 2022 20:32:16 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B6C2F018;
+        Tue,  1 Mar 2022 17:31:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7c5q44W8z4xcq;
+        Wed,  2 Mar 2022 12:31:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646184689;
+        bh=AvxIclA+HfdtF6uRf9ReUyXIXfyCHwRpdXWQn0y/1Iw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sxkcZ2xh/RJo6wV2bcrx94cmsk3Yx1Z8BEbYrfX+lRd8lcHQ3bPZcoNLUYjPgonUa
+         IjYal6WhTHU+q3xm8JCSUsJ4JjjDlqQZLkmLduVxoaVgmgCK8i6hxv5fogKeVCZrfx
+         e1tnWvlcWbdgnqyZ9xC7F/INBMbW5/HfEkSwVMkBjUZCTK8qJmkjOlLWBxg8QEOud4
+         WvlQlGer9RnbB9+0QdWn0ia77P3Cr/xe9EzoM/f3GIFEuuZFBdgcQw2o3w1RnRj9Kl
+         jLTLuuqsVIxCC5YN4fBl9mW/QQGPMUKnMpsWt17h4uwmgihyqult7cnJrG6VVcaajR
+         UhrPUSgBp4BVA==
+Date:   Wed, 2 Mar 2022 12:31:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20220302123126.65bcbc82@canb.auug.org.au>
+In-Reply-To: <20220120142639.02c54ae9@canb.auug.org.au>
+References: <20211117134926.1d339d71@canb.auug.org.au>
+        <20220120142639.02c54ae9@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220301063756.16817-1-flyingpeng@tencent.com> <Yh5d7XBD9D4FhEe3@google.com>
-In-Reply-To: <Yh5d7XBD9D4FhEe3@google.com>
-From:   Hao Peng <flyingpenghao@gmail.com>
-Date:   Wed, 2 Mar 2022 09:30:44 +0800
-Message-ID: <CAPm50a+p2pSjExDwPmGpZ_aTuxs=x6RZ4-AAD19RDQx2o-=NCw@mail.gmail.com>
-Subject: Re: [PATCH] kvm: x86: Improve virtual machine startup performance
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/vMoEJP4dGQ_c=PVNw9nf/n2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 1:54 AM Sean Christopherson <seanjc@google.com> wrote:
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Thu, 20 Jan 2022 14:26:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On Tue, Mar 01, 2022, Peng Hao wrote:
-> >  From: Peng Hao <flyingpeng@tencent.com>
-> >
-> > vcpu 0 will repeatedly enter/exit the smm state during the startup
-> > phase, and kvm_init_mmu will be called repeatedly during this process.
-> > There are parts of the mmu initialization code that do not need to be
-> > modified after the first initialization.
-> >
-> > Statistics on my server, vcpu0 when starting the virtual machine
-> > Calling kvm_init_mmu more than 600 times (due to smm state switching).
-> > The patch can save about 36 microseconds in total.
-> >
-> > Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> > ---
-> > @@ -5054,7 +5059,7 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> >  void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
-> >  {
-> >       kvm_mmu_unload(vcpu);
-> > -     kvm_init_mmu(vcpu);
-> > +     kvm_init_mmu(vcpu, false);
->
-> This is wrong, kvm_mmu_reset_context() is the "big hammer" and is expected to
-> unconditionally get the MMU to a known good state.  E.g. failure to initialize
-> means this code:
->
->         context->shadow_root_level = kvm_mmu_get_tdp_level(vcpu);
->
-> will not update the shadow_root_level as expected in response to userspace changing
-> guest.MAXPHYADDR in such a way that KVM enables/disables 5-level paging.
->
-Thanks for pointing this out. However, other than shadow_root_level,
-other fields of context will not
-change during the entire operation, such as
-page_fault/sync_page/direct_map and so on under
-the condition of tdp_mmu.
-Is this patch still viable after careful confirmation of the fields
-that won't be modified?
-thanks.
-> The SMM transitions definitely need to be fixed, and we're slowly getting there,
-> but sadly there's no quick fix.
+> On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >=20
+> > After merging the drm-misc tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > include/drm/gpu_scheduler.h:316: warning: Function parameter or member =
+'work' not described in 'drm_sched_job'
+> >=20
+> > Introduced by commit
+> >=20
+> >   542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes"=
+) =20
+>=20
+> I am still seeing this warning.
+
+I am still seeing this warning.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeyO4ACgkQAVBC80lX
+0Gx+ygf/U77Kq82vqHGRevDhByIucjbzp7gjA4KTD9HMV6uB7l37GEj5jXu/LC84
+KypgkQv8xxmX4ZNmwAZ3Yi591KGJx56QeEZCnXbprkXlHWq3gRPkDIlhMC6vXlNx
+uspG1ZL9Z2miNhb15n8MmyUTQ7sTYYXsvdOUFwYL/WdFC/Hc0ouS1dBBfe/nOAqi
+d92adK6DOWSB31N6XBEAAms//XgzULph/+QjK8NRujQqYNUmVQndOeGq/E+cwU7u
+iq+Bcf5s1sWiHQ/7LWCd5ZklhYlQTdorqLSB7b/0A1ls+rxH6NmnOcyas98sr06+
+GeMSeIjC9qxw3QUIDOYIcylU9FbYGw==
+=Yq//
+-----END PGP SIGNATURE-----
+
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2--

@@ -2,98 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF6E4CACDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5894CACEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiCBSDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S244398AbiCBSFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244398AbiCBSDi (ORCPT
+        with ESMTP id S244365AbiCBSFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:03:38 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36B81D32A;
-        Wed,  2 Mar 2022 10:02:54 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id b5so4065747wrr.2;
-        Wed, 02 Mar 2022 10:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SLLfjD749xSnL6xg2oAyC7SKFLVc/brW6p/9hUhDG8k=;
-        b=YzBwb+1Gi/Isd4K6+XoKfHngkObvdDjfOMeTAf9cbaKPpz/n9eGDMAufz7dq4Q8Wlf
-         uCJebMTuBQJnRvgFsS0ByF72owbw9eSp1477MHGZRq7Up3jkkfHVWhIrxbNK+6sbvf/Y
-         SbbNQ3arejFoEpc0YyexG0QgJ9jEkrY5qUumnx/KJt9nrJR+E87NT5eaNkDUZ5/428eI
-         nTgLenBBT7H9nYdMdKDDrB1p71yuLqAGNtiv5M12lokHmGrbNaDIdrd/sZ1Pxn/56+5/
-         Vp3hR0R2vgIeV/CdNBG6xsvLOHFmU9bnMtYlq8lefHRs/zx+Sh5KdSv262if3fo7H8eD
-         y9sQ==
+        Wed, 2 Mar 2022 13:05:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04F5D5132B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:04:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646244289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TppJCGmipLpFSIwLputLq7WRzf+Iq52WdMq4YxQrcGM=;
+        b=ibHBTl99QGqzudHFaVdyEU2X1W4lckRHQ+ZkEOt1IMR/4eK+aaH4K5TmT3eDa8SzzDjKxl
+        WwMAHRzDQBuDLXvwBgu4t+QuGf9QlcEewWW4vS+33eVzLYNLmiLNlqStZ9ObhfeIxAW+1Y
+        F01aphvDBqZZHFPHF0xFW9EiJYwQlcE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-139-WIAbeX79NzqLyp-ZzHOsXA-1; Wed, 02 Mar 2022 13:04:48 -0500
+X-MC-Unique: WIAbeX79NzqLyp-ZzHOsXA-1
+Received: by mail-wm1-f70.google.com with SMTP id 3-20020a05600c230300b00384e15ceae4so750617wmo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:04:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=SLLfjD749xSnL6xg2oAyC7SKFLVc/brW6p/9hUhDG8k=;
-        b=UdlrS/Rv87cHELpCtYN0JZa/co+xsb6Rn9xp65cGRDaB7393+ojZd7258/Nu/WzlUN
-         e27AtwWaadh+HcNXegDCWA/NCWM8A4zFzykT6dIV59A/NGqWPGLmfRmIdvPKyTI+mWdC
-         gcCMSz63Zi36rYedhNJRUlnqXJbIW2S8Kumd/vA05Oeoq5T0CLkrwlawvZCvbyovZbeJ
-         EGR6D7wabQY+VtSczb59GVuccM9W/FPmMG1plSpFf5qEQdEQLTQ/aoYIAAmxmnskJmCP
-         unmmlwHuamkH/MLQsQ5/QL5Z7CHHq1J0MxDBfdntGJ7NbpFuIuIdUyaSwnHtKpzNGdG8
-         XnLg==
-X-Gm-Message-State: AOAM532VDZIY/3B4ZY7yeMKJPTi0ZkrnbegQpcLLPTgWp2s6k0Aq8Ig6
-        ZGthjhLKS+9yHItcr0rRhnlyqZm/0DeCRQ==
-X-Google-Smtp-Source: ABdhPJxHQ7Py2A1/Xrj9k1ikIUZwbzyE7O+78XWO4g23mCyJzGBqZytwDf8Rr/KkRHc+5rXedOYG1w==
-X-Received: by 2002:adf:eb44:0:b0:1f0:483c:f015 with SMTP id u4-20020adfeb44000000b001f0483cf015mr1334771wrn.397.1646244173507;
-        Wed, 02 Mar 2022 10:02:53 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k17-20020a05600c1c9100b00386bb6e9c50sm1068631wms.45.2022.03.02.10.02.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:02:53 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, linux-mm@kvack.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/damon/sysfs: Fix an array out-of-bounds read error due
-Date:   Wed,  2 Mar 2022 18:02:52 +0000
-Message-Id: <20220302180252.1099406-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=TppJCGmipLpFSIwLputLq7WRzf+Iq52WdMq4YxQrcGM=;
+        b=M1PmTaDTtLBrHZyOsmyxWduFgPccK/wne80XCJiG9BHuUtxR3KETAPCzIj1T/bntdq
+         loooDEOZDWYpTyZQEPII2E99NWAEeEBfUsnrb6OudSptMktUcVPiQzqf0u8Grg8NGPa5
+         HTPqxzlUJbK6TfG0BLWZHUtB5vjWO70MAdUzOaTKckYNPP19cf8v/Ll2FJq4gosaMM3A
+         Aa2zMb6ttX6HXt8GkuWj/vLYZSSMxf0wavuDu3B3n6IP0clXq0bzhKDpu4QGTrVfihmt
+         BXmQWu5zRg6VDOZk5+xM8+94Iq0BseVxUUKVx1ZhkOrd5XxctYSEhIhWaooxqzPwuyU3
+         SMFA==
+X-Gm-Message-State: AOAM530g59KQWJsXkmB1BVK8t7wNTrUD0VH1IovmB3TnSIlv9uNNweLq
+        yeh6hpS25S8T6nlDnOJLkb1xoz/8dvFxYZvgMD4R5MN+j3a1TLti2BFZqFjW4A53ofd/L1ofty5
+        0phroWEnjg+g8QSww0KMLM/NM
+X-Received: by 2002:adf:eb87:0:b0:1ef:85f5:6ab4 with SMTP id t7-20020adfeb87000000b001ef85f56ab4mr17459857wrn.158.1646244286908;
+        Wed, 02 Mar 2022 10:04:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyWoswIXfFEgH0D5HMWiu8TDJQRQlM+OO4a41LM49zRdYWHoGQcZbXKGjU8uP0ioPgQ1HYS5Q==
+X-Received: by 2002:adf:eb87:0:b0:1ef:85f5:6ab4 with SMTP id t7-20020adfeb87000000b001ef85f56ab4mr17459838wrn.158.1646244286615;
+        Wed, 02 Mar 2022 10:04:46 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id j27-20020adfd21b000000b001e519f3e0d0sm17269490wrh.7.2022.03.02.10.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 10:04:45 -0800 (PST)
+Message-ID: <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
+Date:   Wed, 2 Mar 2022 19:04:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
+ shadow page is zapped
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20220225182248.3812651-1-seanjc@google.com>
+ <20220225182248.3812651-5-seanjc@google.com>
+ <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
+In-Reply-To: <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an off-by-one error in the upper limit to a for-loop that
-causes an out-of-bounds read error on the array
-damon_sysfs_wmark_metric_strs. Fix the comparison by replacing
-the <= operator with <.
+On 3/1/22 18:55, Paolo Bonzini wrote:
+> On 2/25/22 19:22, Sean Christopherson wrote:
+>> @@ -5656,7 +5707,7 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+>>        * Note: we need to do this under the protection of mmu_lock,
+>>        * otherwise, vcpu would purge shadow page but miss tlb flush.
+>>        */
+>> -    kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_RELOAD);
+>> +    kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+> 
+> I was going to squash in this:
+> 
+>        * invalidating TDP MMU roots must be done while holding mmu_lock for
+> -     * write and in the same critical section as making the reload 
+> request,
+> +     * write and in the same critical section as making the free request,
+>        * e.g. before kvm_zap_obsolete_pages() could drop mmu_lock and 
+> yield.
+> 
+> But then I realized that this needs better comments and that my 
+> knowledge of
+> this has serious holes.  Regarding this comment, this is my proposal:
+> 
+>          /*
+>           * Invalidated TDP MMU roots are zapped within MMU read_lock to be
+>           * able to walk the list of roots, but with the expectation of no
+>           * concurrent change to the pages themselves.  There cannot be
+>           * any yield between kvm_tdp_mmu_invalidate_all_roots and the free
+>           * request, otherwise somebody could grab a reference to the root
+>       * and break that assumption.
+>           */
+>          if (is_tdp_mmu_enabled(kvm))
+>                  kvm_tdp_mmu_invalidate_all_roots(kvm);
+> 
+> However, for the second comment (the one in the context above), there's 
+> much
+> more.  From easier to harder:
+> 
+> 1) I'm basically clueless about the TLB flush "note" above.
+> 
+> 2) It's not clear to me what needs to use for_each_tdp_mmu_root; for
+> example, why would anything but the MMU notifiers use 
+> for_each_tdp_mmu_root?
+> It is used in kvm_tdp_mmu_write_protect_gfn, 
+> kvm_tdp_mmu_try_split_huge_pages
+> and kvm_tdp_mmu_clear_dirty_pt_masked.
+> 
+> 3) Does it make sense that yielding users of for_each_tdp_mmu_root must
+> either look at valid roots only, or take MMU lock for write?  If so, can
+> this be enforced in tdp_mmu_next_root?
 
-Fixes: 8f614da9d987 ("mm/damon/sysfs: support DAMOS watermarks")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- mm/damon/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ok, I could understand this a little better now, but please correct me
+if this is incorrect:
 
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 32a9d21c0db5..fda2506c676f 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -266,7 +266,7 @@ static ssize_t metric_store(struct kobject *kobj, struct kobj_attribute *attr,
- 			struct damon_sysfs_watermarks, kobj);
- 	enum damos_wmark_metric metric;
- 
--	for (metric = 0; metric <= NR_DAMOS_WMARK_METRICS; metric++) {
-+	for (metric = 0; metric < NR_DAMOS_WMARK_METRICS; metric++) {
- 		if (sysfs_streq(buf, damon_sysfs_wmark_metric_strs[metric])) {
- 			watermarks->metric = metric;
- 			return count;
--- 
-2.34.1
+2) if I'm not wrong, kvm_tdp_mmu_try_split_huge_pages indeed does not
+need to walk invalid  roots.  The others do because the TDP MMU does
+not necessarily kick vCPUs after marking roots as invalid.  But
+because TDP MMU roots are gone for good once their refcount hits 0,
+I wonder if we could do something like
+
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 7e3d1f985811..a4a6dfee27f9 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -164,6 +164,7 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+  	 */
+  	if (!kvm_tdp_root_mark_invalid(root)) {
+  		refcount_set(&root->tdp_mmu_root_count, 1);
++		kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+  
+  		/*
+  		 * If the struct kvm is alive, we might as well zap the root
+@@ -1099,12 +1100,16 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
+  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+  {
+  	struct kvm_mmu_page *root;
++	bool invalidated_root = false
+  
+  	lockdep_assert_held_write(&kvm->mmu_lock);
+  	list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+  		if (!WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root)))
+-			root->role.invalid = true;
++			invalidated_root |= !kvm_tdp_root_mark_invalid(root);
+  	}
++
++	if (invalidated_root)
++		kvm_make_all_cpus_request(kvm, KVM_REQ_MMU_FREE_OBSOLETE_ROOTS);
+  }
+  
+  /*
+
+(based on my own version of Sean's patches) and stop walking invalid roots
+in kvm_tdp_mmu_write_protect_gfn and kvm_tdp_mmu_clear_dirty_pt_masked.
+
+
+3) Yes, it makes sense that yielding users of for_each_tdp_mmu_root must
+either look at valid roots only, or take MMU lock for write.  The only
+exception is kvm_tdp_mmu_try_split_huge_pages, which does not need to
+walk invalid roots.  And kvm_tdp_mmu_zap_invalidated_pages(), but that
+one is basically an asynchronous worker [and this is where I had the
+inspiration to get rid of the function altogether]
+
+Paolo
 

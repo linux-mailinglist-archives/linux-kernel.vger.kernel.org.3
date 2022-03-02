@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8721A4CAD47
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806294CAD4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiCBSOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S244634AbiCBSPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244679AbiCBSOl (ORCPT
+        with ESMTP id S244540AbiCBSPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:14:41 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64E2BD880;
-        Wed,  2 Mar 2022 10:13:29 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id p9so4054191wra.12;
-        Wed, 02 Mar 2022 10:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5L8Hwj3FIl0Xgnzes+JlfSkI7X/LRJVH+HAy2sV4IVM=;
-        b=d5/4UL6UMw316oSWqEZCJq6fg77tBeU8ISJBAxeIFcSC3BBv2nxqdU3g/z4BTYns9l
-         GA3zbNzD/ILhdQimnFxGx7pwdKeZ0ONMAyv5RsoFU6FKgAycB0VA8N6wVJHZhCBFvzR4
-         fck4wJ6i3ALJGQfS4n858fp8cq2sKf26c4iki1R85ABS6N3VsPMYJUm0oGphl5Qk2HNA
-         emxtYBzW2ZG378Svaajz0q5MT4u/pywP8S8XZF3gnCkFQHTPYQmq4OuLPM0nXqtGugvD
-         qqPmQ0ERFoPbjtuURk2T4q9TeoPKFyJ9b9Lis8vR13B3Lz/eSYHThwm89hunzUzBp26M
-         PWmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5L8Hwj3FIl0Xgnzes+JlfSkI7X/LRJVH+HAy2sV4IVM=;
-        b=cw+8A0A3O2nY9cUsCYfkItVMxi4FA4h4sBEhlYLnDRXHtgfGSon+lRX4emGr+F1k8m
-         NbMZRYRWBG+7uU46f8OEiScFkS7T8rc1PUGcuCTedk/nOPSvXYOJ3vhRUCWRyDVStwdM
-         OZv5L6PdS/FGvcmtGg5M7l8AZnxFk8MWCpnCqGhgshKswi+4vpcxEsRQZct++ID2PL+4
-         RmiOb0CAYmKsZ1tq/7+rU/d1jYtiGasOeh5Rc9RvjYX04XPUUPpKIyuDfSof9mZnLJiL
-         uWvFO6BUyk8dtr/1PANFl4meukjMM2qIxjQ0j1d0MTyTqbILVXFVeh8STatgdbV34kzl
-         oW0w==
-X-Gm-Message-State: AOAM532g+573Ln5AefVr5YcsYhnSTUuac1d05CfZOywCyuWo/4TuW/Z6
-        fhxsyGwG4ALEHM3AfEMPYFxt4dOVMEi6aw==
-X-Google-Smtp-Source: ABdhPJylJfs5FBTbZvwKyYefm3ujs/kNK9gAIiH6yzqV5F+X+vOMfFby1thaHMNqsJuWpe9CoEzDJw==
-X-Received: by 2002:adf:80a4:0:b0:1e6:db9f:a8c4 with SMTP id 33-20020adf80a4000000b001e6db9fa8c4mr23857226wrl.345.1646244805070;
-        Wed, 02 Mar 2022 10:13:25 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c020700b003862bfb550fsm1225138wmi.46.2022.03.02.10.13.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:13:24 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH][next] HID: core: Remove redundant assignment to pointer field
-Date:   Wed,  2 Mar 2022 18:13:23 +0000
-Message-Id: <20220302181323.1100490-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 2 Mar 2022 13:15:43 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33F701EC65;
+        Wed,  2 Mar 2022 10:14:21 -0800 (PST)
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id DBD1920B7188;
+        Wed,  2 Mar 2022 10:13:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DBD1920B7188
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646244815;
+        bh=W0k6fnWr5oI0rAQaMmKdArqS57ZUM8/CkCSD+7Svluo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EAds+gLJ59BMV3kBez18kp1WdcHxqdhuTQKattNMuUsh8CcEIrGhcV/7hIp0SsZy2
+         dza9qGxBp/hY+Z4a63mKT6Lg0YDY9MHVS3TZTsGQrS2S0Zj+UtRnOPBE+xnCk1vRJl
+         pftZWmCw9AwDZaVYB5EvWeG3BNabipBpLl3+MtS0=
+Message-ID: <fe018236-35b5-3bc1-6984-fca9537e47c7@linux.microsoft.com>
+Date:   Wed, 2 Mar 2022 10:13:34 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 26/30] drivers: hv: dxgkrnl: Offer and reclaim
+ allocations
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com,
+        gregkh@linuxfoundation.org
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <3a6779567438b02566012679f01ebb065e3761db.1646163379.git.iourit@linux.microsoft.com>
+ <20220302142517.kgc5o7ufj2yf4cif@liuwe-devbox-debian-v2>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <20220302142517.kgc5o7ufj2yf4cif@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer fields is being assigned a value that is never read, the
-pointer is re-assigned a new value in for-loops that occur later on.
-The assignment is redundant and can be removed.
 
-Clean up clang scan build warning:
-drivers/hid/hid-core.c:1665:30: warning: Although the value stored
-to 'field' is used in the enclosing expression, the value is never
-actually read from 'field' [deadcode.DeadStores]
+On 3/2/2022 6:25 AM, Wei Liu wrote:
+> On Tue, Mar 01, 2022 at 11:46:13AM -0800, Iouri Tarassov wrote:
+> > Implement ioctls to offer and reclaim compute device allocations:
+> >   - LX_DXOFFERALLOCATIONS,
+> >   - LX_DXRECLAIMALLOCATIONS2
+> > 
+> > When a user mode driver (UMD) does not need to access an allocation,
+>
+> What is a "user mode driver" in this context? Is that something that
+> runs inside the guest?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/hid/hid-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Wei,
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index db925794fbe6..6579f4724bbb 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
- 
- 	/* first retrieve all incoming values in data */
- 	for (a = 0; a < report->maxfield; a++)
--		hid_input_fetch_field(hid, field = report->field[a], data);
-+		hid_input_fetch_field(hid, report->field[a], data);
- 
- 	if (!list_empty(&report->field_entry_list)) {
- 		/* INPUT_REPORT, we have a priority list of fields */
--- 
-2.34.1
+The user mode driver runs inside the guest. This driver is written by
+hardware vendors.
+For example, the NVIDIA's Cuda runtime is considered a user mode driver.
+The driver
+provides a specific API to applications (like the Cuda API).
+
+The cover letter explains the design of the virtual compute device
+paravirtualization
+model and describes all components, which are involved. I feel that I do
+not need to
+include explanation to every patch.
+
+Thanks
+Iouri
 

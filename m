@@ -2,100 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D876D4CA396
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2734CA3A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbiCBL1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S238368AbiCBL1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiCBL1M (ORCPT
+        with ESMTP id S241297AbiCBL1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:27:12 -0500
+        Wed, 2 Mar 2022 06:27:30 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECBC606E0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:26:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BA66622D;
+        Wed,  2 Mar 2022 03:26:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF0C61804
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF105C004E1;
-        Wed,  2 Mar 2022 11:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646220388;
-        bh=6W7SfMZEcKBurppT4JmTriEQYTHDDhDDMD4bmaPdRXU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=O06KienHdNP5Xzvk47c9xmfX43LzwPGlQvZ8akIT/CrIDqq3tNwDG+kmhBfu20MFE
-         uBYbaRInWh4e8h+HU97a27Xz4F1ha3v13aE982AeNHcxRHD4iNsBZLK1/de+CVPby8
-         JD+R3mvxh6e1CQs7muMNzo9Pp5ceM9yKomo2EsawBc3cmolWj9JagufFykzktHl878
-         qXBohdjUgDY/huPfaWb7VXIctUQu/mDdJyLxIFz2Zw8lS47v67rvHRIkQ1dF6+wPlK
-         jWk3DnD6Fd4XXa8MuMsUN2kB1XPzOk7SP6DczoKcs3uhqATUPAAMS7/qc9toQg0qtJ
-         zAPcHSW1YhciA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] mm/damon/sysfs: Fix missing error code in damon_sysfs_attrs_add_dirs()
-Date:   Wed,  2 Mar 2022 11:26:25 +0000
-Message-Id: <20220302112625.7345-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220302111120.24984-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2419161804;
+        Wed,  2 Mar 2022 11:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16F9C340F1;
+        Wed,  2 Mar 2022 11:26:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FLziEXpf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646220402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fufxSPRIOrmbnPbDC6hJ7ttxshIW5aGS9pJhSWhnCM4=;
+        b=FLziEXpf2l0WTAhzSsctWfFPyoNczuf0yET5OvrmfeoHkbQdJJUnS5q+NI+vrChRlkMr3x
+        174jqFOO+Z3Pr5c79Gii5Ryw0Vd9q9Ey0Hlr2keq9mQvPlFbNmRp37DUVNhIihEZDWJZG5
+        HjPNCU02XchGOwdc6y1fEsx970Bts6c=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a4166dc6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Mar 2022 11:26:41 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2dbc48104beso13440867b3.5;
+        Wed, 02 Mar 2022 03:26:40 -0800 (PST)
+X-Gm-Message-State: AOAM531CCPFcEGKBbRNRGtYXkH9nqJ+pu4T+FHrfbpHSC9V4hrNo0nv0
+        rosp0lWDaH02FtNz1efiEeJ2262x3AcFLqhgPQc=
+X-Google-Smtp-Source: ABdhPJxbaslGOWNMYlqRkibxJ2ICArMnaBOXMWHprS75pC5WtpgRWsCTpsPEORMZE4FcmdBod69a3hNDLa7CXaxndsk=
+X-Received: by 2002:a81:1143:0:b0:2db:ccb4:b0a1 with SMTP id
+ 64-20020a811143000000b002dbccb4b0a1mr9951120ywr.499.1646220398624; Wed, 02
+ Mar 2022 03:26:38 -0800 (PST)
+MIME-Version: 1.0
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com> <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com> <20220302031738-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220302031738-mutt-send-email-mst@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 2 Mar 2022 12:26:27 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+Message-ID: <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+Subject: Re: propagating vmgenid outward and upward
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 19:11:20 +0800 Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
+Hey Michael,
 
-> The error code is missing in this code scenario, add the error code
-> '-ENOMEM' to the return value 'err'.
-> 
-> Eliminate the follow smatch warning:
-> 
-> mm/damon/sysfs.c:1647 damon_sysfs_attrs_add_dirs() warn: missing error
-> code 'err'.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Thanks for the benchmark.
 
-Good eye, thank you!
+On Wed, Mar 2, 2022 at 9:30 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> So yes, the overhead is higher by 50% which seems a lot but it's from a
+> very small number, so I don't see why it's a show stopper, it's not by a
+> factor of 10 such that we should sacrifice safety by default. Maybe a
+> kernel flag that removes the read replacing it with an interrupt will
+> do.
+>
+> In other words, premature optimization is the root of all evil.
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Unfortunately I don't think it's as simple as that for several reasons.
 
-Andrew, please fold this patch into
-mm-damon-implement-a-minimal-stub-for-sysfs-based-damon-interface.patch[1].
+First, I'm pretty confident a beefy Intel machine can mostly hide
+non-dependent comparisons in the memory access and have the problem
+mostly go away. But this is much less the case on, say, an in-order
+MIPS32r2, which isn't just "some crappy ISA I'm using for the sake of
+argument," but actually the platform on which a lot of networking and
+WireGuard stuff runs, so I do care about it. There, we have 4
+reads/comparisons which can't pipeline nearly as well.
 
-[1] https://www.ozlabs.org/~akpm/mmotm/broken-out/mm-damon-implement-a-minimal-stub-for-sysfs-based-damon-interface.patch
+There's also the atomicity aspect, which I think makes your benchmark
+not quite accurate. Those 16 bytes could change between the first and
+second word (or between the Nth and N+1th word for N<=3 on 32-bit).
+What if in that case the word you read second doesn't change, but the
+word you read first did? So then you find yourself having to do a
+hi-lo-hi dance. And then consider the 32-bit case, where that's even
+more annoying. This is just one of those things that comes up when you
+compare the semantics of a "large unique ID" and "word-sized counter",
+as general topics. (My suggestion is that vmgenid provide both.)
 
+Finally, there's a slightly storage aspect, where adding 16 bytes to a
+per-key struct is a little bit heavier than adding 4 bytes and might
+bust a cache line without sufficient care, care which always has some
+cost in one way or another.
 
-Thanks,
-SJ
+So I just don't know if it's realistic to impose a 16-byte per-packet
+comparison all the time like that. I'm familiar with WireGuard
+obviously, but there's also cifs and maybe even wifi and bluetooth,
+and who knows what else, to care about too. Then there's the userspace
+discussion. I can't imagine a 16-byte hotpath comparison being
+accepted as implementable.
 
-> ---
->  mm/damon/sysfs.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index 32a9d21c0db5..0eca71163924 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -1643,8 +1643,10 @@ static int damon_sysfs_attrs_add_dirs(struct damon_sysfs_attrs *attrs)
->  	attrs->intervals = intervals;
->  
->  	nr_regions_range = damon_sysfs_ul_range_alloc(10, 1000);
-> -	if (!nr_regions_range)
-> +	if (!nr_regions_range) {
-> +		err = -ENOMEM;
->  		goto put_intervals_out;
-> +	}
->  
->  	err = kobject_init_and_add(&nr_regions_range->kobj,
->  			&damon_sysfs_ul_range_ktype, &attrs->kobj,
-> -- 
-> 2.20.1.7.g153144c
+> And I feel if linux
+> DTRT and reads the 16 bytes then hypervisor vendors will be motivated to
+> improve and add a 4 byte unique one. As long as linux is interrupt
+> driven there's no motivation for change.
+
+I reeeeeally don't want to get pulled into the politics of this on the
+hypervisor side. I assume an improved thing would begin with QEMU and
+Firecracker or something collaborating because they're both open
+source and Amazon people seem interested. And then pressure builds for
+Microsoft and VMware to do it on their side. And then we get this all
+nicely implemented in the kernel. In the meantime, though, I'm not
+going to refuse to address the problem entirely just because the
+virtual hardware is less than perfect; I'd rather make the most with
+what we've got while still being somewhat reasonable from an
+implementation perspective.
+
+Jason

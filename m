@@ -2,158 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81D54CA860
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1080F4CA86A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243196AbiCBOpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S236928AbiCBOqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243187AbiCBOpE (ORCPT
+        with ESMTP id S229971AbiCBOqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:45:04 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4680366AD5;
-        Wed,  2 Mar 2022 06:44:20 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:50778)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nPQDA-00GF8C-Sd; Wed, 02 Mar 2022 07:44:17 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:55716 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nPQD8-005Eiy-SW; Wed, 02 Mar 2022 07:44:16 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        NeilBrown <neilb@suse.de>, Vasily Averin <vvs@virtuozzo.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Linux MM <linux-mm@kvack.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel@openvz.org
-References: <a5e09e93-106d-0527-5b1e-48dbf3b48b4e@virtuozzo.com>
-        <YhzeCkXEvga7+o/A@bombadil.infradead.org>
-        <20220301180917.tkibx7zpcz2faoxy@google.com>
-        <Yh5lyr8dJXmEoFG6@bombadil.infradead.org>
-        <87wnhdwg75.fsf@email.froward.int.ebiederm.org>
-        <Yh6PPPqgPxJy+Jvx@bombadil.infradead.org>
-Date:   Wed, 02 Mar 2022 08:43:54 -0600
-In-Reply-To: <Yh6PPPqgPxJy+Jvx@bombadil.infradead.org> (Luis Chamberlain's
-        message of "Tue, 1 Mar 2022 13:25:16 -0800")
-Message-ID: <87ilswwh1x.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 2 Mar 2022 09:46:39 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFD1C625D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:45:56 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id f8so2567314edf.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=/+L2bZn7FnbIIrc4xC4DNyFnX/h+6EZYJnbtj5bZqaA=;
+        b=fGjaVmN75ZZ7sA1ZXhOG66i5chKR/xTTcWZT/g9KPyJMt+e2OJbVO2MBdJMivdmv+l
+         lAfnoo5m8yMN8QoAC78mlKrHhBcIXExq/pC0bjBA1szNZVCIcH09lDrLlgjfYYBq9gQY
+         ZAPciVsWFLcyRXGDZ16RAFNqedSIQQsvjdNqMKDKq9uiuFO3b6qK99vyg8ZigkZQuHaz
+         1qSdXE+STZifh7lsO7E0Cn5bJVgaldjgDWDnZZZciKFJzh3e6qSafybuC4YuHVNNDQ99
+         tNEQqbTwh1brCQ3Xq9RQiLSOWfXk+XFYEb0Y1cqW/sEc79waHjinhM6SFgsMhJUAt3dW
+         6JIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=/+L2bZn7FnbIIrc4xC4DNyFnX/h+6EZYJnbtj5bZqaA=;
+        b=dVaHsjbLkfRonMdTc+IKVtizVmY1BAShZK9I8FykvyuexQZ5mHiHI/zNM0SCDYSYTm
+         8HExUEEmtN8u2huY0v1UUcEIJugeR7Fpq7yvYe8LqdAG5lu/eB82FbQuRKdM9Jw8q6SR
+         nKDUMXnzjjRon/WgGbCsxguGmQldamN/W6X4usKAN2jyS90ij+5LiHCIB+116oVSrE4Y
+         9jERRyt4UC2Q8Nt7H+E3/TwH2NeTZXN2QygV0XLd9I+V4oD49l0c2Wmz314uoV93t3/d
+         PaEILGasmtEdRVl3IpgY4sulxVxd+6SjdmBO7qD2qppdavAeI2HsEEjzjP90jWBMShdv
+         MSJA==
+X-Gm-Message-State: AOAM533khMogLHlDYOn3XUsLlJyl4lgMbBL0fDnWtnV6yTrJbfChUyPN
+        BFLukHet0HQc5jRgDNFDoxvkoG/MykLWByT53wA=
+X-Google-Smtp-Source: ABdhPJxHdbLBLmNLeNmMv1+HKBMZTWhofHfYote/VqLA47MgiLFEisaNAt068V04KLcgz1aok4lMVwge1kMS3O/4F90=
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id
+ h20-20020a05640250d400b004132a276b56mr30000802edb.228.1646232354574; Wed, 02
+ Mar 2022 06:45:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nPQD8-005Eiy-SW;;;mid=<87ilswwh1x.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19DnP/IlE2D3X8Ono4RyFyPR6RjJvwkeTc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Sender: elizabeth.hoisington1@gmail.com
+Received: by 2002:a50:3ac4:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 06:45:53 -0800 (PST)
+From:   Mrs Elizabeth Balkiwala <elizabeth.balkiwala1@gmail.com>
+Date:   Wed, 2 Mar 2022 06:45:53 -0800
+X-Google-Sender-Auth: Xlq5Uljr3TF0nMaW9i3nQ7jILs4
+Message-ID: <CANhm-9v+jf=kbAQ9UZx=Y=g0FSgHLcsyWprUSXmva_S9pDBXSA@mail.gmail.com>
+Subject: I AM SGT ELIZABETH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Luis Chamberlain <mcgrof@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1409 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 11 (0.8%), b_tie_ro: 9 (0.7%), parse: 1.04 (0.1%),
-         extract_message_metadata: 3.4 (0.2%), get_uri_detail_list: 1.23
-        (0.1%), tests_pri_-1000: 4.5 (0.3%), tests_pri_-950: 1.12 (0.1%),
-        tests_pri_-900: 0.89 (0.1%), tests_pri_-90: 61 (4.4%), check_bayes: 60
-        (4.3%), b_tokenize: 8 (0.5%), b_tok_get_all: 9 (0.6%), b_comp_prob:
-        2.2 (0.2%), b_tok_touch_all: 39 (2.8%), b_finish: 0.67 (0.0%),
-        tests_pri_0: 1299 (92.2%), check_dkim_signature: 0.59 (0.0%),
-        check_dkim_adsp: 2.3 (0.2%), poll_dns_idle: 0.65 (0.0%), tests_pri_10:
-        3.6 (0.3%), tests_pri_500: 16 (1.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH RFC] net: memcg accounting for veth devices
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Luis Chamberlain <mcgrof@kernel.org> writes:
+Hello, Dearest Friend,
 
-> On Tue, Mar 01, 2022 at 02:50:06PM -0600, Eric W. Biederman wrote:
->> I really have not looked at this pids controller.
->> 
->> So I am not certain I understand your example here but I hope I have
->> answered your question.
->
-> During experimentation with the above stress-ng test case, I saw tons
-> of thread just waiting to do exit:
+I Am Sgt Elizabeth Balkiwala, I have something important discussion
+for you, please reply
+urgently for more details give you further information. And I hereby
+advice to contact me by this email address   elizabeth.balkiwala1@gmail.com
 
-You increment the count of concurrent threads after a no return function
-in do_exit.  Since the increment is never reached the count always goes
-down and eventually the warning prints.
-
-> diff --git a/kernel/exit.c b/kernel/exit.c
-> index 80c4a67d2770..653ca7ebfb58 100644
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -730,11 +730,24 @@ static void check_stack_usage(void)
->  static inline void check_stack_usage(void) {}
->  #endif
->  
-> +/* Approx more than twice max_threads */
-> +#define MAX_EXIT_CONCURRENT (1<<17)
-> +static atomic_t exit_concurrent_max = ATOMIC_INIT(MAX_EXIT_CONCURRENT);
-> +static DECLARE_WAIT_QUEUE_HEAD(exit_wq);
-> +
->  void __noreturn do_exit(long code)
->  {
->  	struct task_struct *tsk = current;
->  	int group_dead;
->  
-> +	if (atomic_dec_if_positive(&exit_concurrent_max) < 0) {
-> +		pr_warn_ratelimited("exit: exit_concurrent_max (%u) close to 0 (max : %u), throttling...",
-> +				    atomic_read(&exit_concurrent_max),
-> +				    MAX_EXIT_CONCURRENT);
-> +		wait_event(exit_wq,
-> +			   atomic_dec_if_positive(&exit_concurrent_max) >= 0);
-> +	}
-> +
->  	/*
->  	 * We can get here from a kernel oops, sometimes with preemption off.
->  	 * Start by checking for critical errors.
-> @@ -881,6 +894,9 @@ void __noreturn do_exit(long code)
->  
->  	lockdep_free_task(tsk);
->  	do_task_dead();
-
-The function do_task_dead never returns.
-
-> +
-> +	atomic_inc(&exit_concurrent_max);
-> +	wake_up(&exit_wq);
->  }
->  EXPORT_SYMBOL_GPL(do_exit);
->  
-> diff --git a/kernel/ucount.c b/kernel/ucount.c
-> index 4f5613dac227..980ffaba1ac5 100644
-> --- a/kernel/ucount.c
-> +++ b/kernel/ucount.c
-> @@ -238,6 +238,8 @@ struct ucounts *inc_ucount(struct user_namespace *ns, kuid_t uid,
->  		long max;
->  		tns = iter->ns;
->  		max = READ_ONCE(tns->ucount_max[type]);
-> +		if (atomic_long_read(&iter->ucount[type]) > max/16)
-> +			cond_resched();
->  		if (!atomic_long_inc_below(&iter->ucount[type], max))
->  			goto fail;
->  	}
-
-Eric
+REDARDS
+Sgt. Elizabeth Balkiwala

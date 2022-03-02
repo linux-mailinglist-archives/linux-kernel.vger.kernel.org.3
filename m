@@ -2,237 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020954C9C59
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A734C9C5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiCBEIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 23:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S239394AbiCBEJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 23:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiCBEIg (ORCPT
+        with ESMTP id S229980AbiCBEJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 23:08:36 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F8E13DD0;
-        Tue,  1 Mar 2022 20:07:48 -0800 (PST)
-X-UUID: c5bbf587611e40539296222f6d93108a-20220302
-X-UUID: c5bbf587611e40539296222f6d93108a-20220302
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1851172525; Wed, 02 Mar 2022 12:07:41 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 2 Mar 2022 12:07:40 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 2 Mar 2022 12:07:39 +0800
-Message-ID: <0b8a5c22acb87b49de0380c7cb4e49030f93d715.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] ASoC: mediatek: mt8192: support rt1015p_rt5682s
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-CC:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
-Date:   Wed, 2 Mar 2022 12:07:39 +0800
-In-Reply-To: <Yh3hcQpLngg8Pnd4@google.com>
-References: <20220301072924.24814-1-jiaxin.yu@mediatek.com>
-         <20220301072924.24814-3-jiaxin.yu@mediatek.com>
-         <Yh3hcQpLngg8Pnd4@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 1 Mar 2022 23:09:55 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C71D3BA50;
+        Tue,  1 Mar 2022 20:09:11 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7F522580135;
+        Tue,  1 Mar 2022 23:09:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 01 Mar 2022 23:09:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yotsuba.nl; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; bh=ZPLV2jqAeH65KycreS1nxk1J+/tPHQWJCXOf2WrHUzE=; b=IPimP
+        JQa1EyYNtMQMZWlrOK+OvIapkwCxrplbQ2z6qIgTYaPBiQETpCjJwzmslFjTy5Jl
+        UvL04YRs1MKm+oFacw8iOHGFr1WyasBL5Iew0Z03LF3cQAHXKqVKdiZjTBc8mKNn
+        DCr1SicWBCTbfHD64yISNf9EuhwOJFn09bXPjN2LtNdx+ghL4Z22w4sGKVOgGbNO
+        gGoxo2a6UowlfAj9tnLbxjC1IpW4flIUHVGQnszCHALY27avifp2mG6QPcgMLo36
+        buZ89TglRYV77G1yAAK4qNpYCXAFEoZzPAmOjMPwrcFxF7PyiTWGdRzu3HRkAuCM
+        mDEYKCWRTpWWWMpcQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=ZPLV2jqAeH65KycreS1nxk1J+/tPH
+        QWJCXOf2WrHUzE=; b=TCsjVPYFOn/dsuejo4rHXMcnE+vlw0/wHEq1YnFUq0pBs
+        JrxEuz/5C0bMozhVu3jdyCNg9/ape5aAYk8hsmWBt67d6qEAWP5inuB2uLdf4oSE
+        SVeqv34wqfCFjoE38Az/ZWgEUrUyFFi4bTuaUDPvN846u0wfnrIErP58Kq8xGERf
+        VdECNCJOebpjr7t5DXvJFSCS7tbEPGxSaqbrWSTetKe8QSJMzgEPxS9guCk1QPI1
+        NXh+M06eawxbhAsLh9Jwc+fpxiJWjUXN9zGXaQCYE+dSXHMqU+K0nezqmhQjtnEi
+        gwoMNAB8qsIuh/t3DcSDlyUmi8j/6ykv5Q6TC+42Q==
+X-ME-Sender: <xms:4u0eYkQwNC43VIoFVj5op_uSrhhDHa1eJmqPj8jwDculkDcc4TY8Sg>
+    <xme:4u0eYhzBO05DkxJ2qAajWKklSDdF5v1a0cG-UgMQYHE52MUn2tqFdBNLhDB4xxSgq
+    4EU5-B1epOJvffad2c>
+X-ME-Received: <xmr:4u0eYh25IERg4hxn5Q_T7Ij1yFY_XeDEuP-_3zk-ENVZ98RbsmGECmuTTZKWovMQ8lDbw8nxbNDlGd_2xq87-Klm1386GrogFkifayPCH-spUqQMlBV0xxI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtfedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcuvehi
+    lhhishhsvghnuceomhgrrhhkseihohhtshhusggrrdhnlheqnecuggftrfgrthhtvghrnh
+    epheduveehtdelfeekgfejudevhffghfehvdetffehgfelteelheelgefftdffudehnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhkse
+    ihohhtshhusggrrdhnlh
+X-ME-Proxy: <xmx:4-0eYoBL3nmekOAnfmiSGYuxFYRJOqjZ__YETxkY_2NzHbFmDdIzqw>
+    <xmx:4-0eYtjpvnHvhiFwrBeos2D4AKLcTSHxapq6ArA3CeK8hHCZGHS6sA>
+    <xmx:4-0eYko9aFiTK_frG-cn87j-GKDG1EeU0g_RwxUy3RrOvfwdrjJx7g>
+    <xmx:5O0eYoo2EAfyzqmdD0zkVTZZfy1eBjkAkZB3dqRCMpSovcSR5v3i9A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 1 Mar 2022 23:09:05 -0500 (EST)
+From:   Mark Cilissen <mark@yotsuba.nl>
+To:     linux-acpi@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mark Cilissen <mark@yotsuba.nl>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
+Date:   Wed,  2 Mar 2022 05:08:00 +0100
+Message-Id: <20220302040800.10355-1-mark@yotsuba.nl>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 17:03 +0800, Tzung-Bi Shih wrote:
-> On Tue, Mar 01, 2022 at 03:29:24PM +0800, Jiaxin Yu wrote:
-> > From: Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
-> 
-> The environment didn't configure properly so that the header showed
-> up.
-> See [1].
-> 
-> [1]: 
-> https://git-scm.com/docs/git-send-email#Documentation/git-send-email.txt---fromltaddressgt
-> 
-Ok, I will take a look at the "from: " header.
+On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
+but the XSDT points to a truncated FADT. This causes all sorts of trouble
+and usually a complete failure to boot after the following error occurs:
 
-> > diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-
-> > rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-> 
-> [...]
-> > +static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682s_card = {
-> > +	.name = "mt8192_mt6359_rt1015p_rt5682s",
-> > +	.owner = THIS_MODULE,
-> > +	.dai_link = mt8192_mt6359_dai_links,
-> > +	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
-> > +	.controls = mt8192_mt6359_rt1015p_rt5682_controls,
-> > +	.num_controls =
-> > ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_controls),
-> > +	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682_widgets,
-> > +	.num_dapm_widgets =
-> > ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_widgets),
-> > +	.dapm_routes = mt8192_mt6359_rt1015p_rt5682_routes,
-> > +	.num_dapm_routes =
-> > ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
-> > +};
-> 
-> Are the two cards only different from names
-> (mt8192_mt6359_rt1015p_rt5682_card vs.
-> mt8192_mt6359_rt1015p_rt5682s_card)?
-> 
-Yes, they are only different form names.
+  ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
+  ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
+  ACPI: Unable to start ACPI Interpreter
 
-> > @@ -1150,6 +1177,52 @@ static int mt8192_mt6359_dev_probe(struct
-> > platform_device *pdev)
-> >  				dai_link->num_platforms =
-> >  					ARRAY_SIZE(i2s3_rt1015p_platfor
-> > ms);
-> >  			}
-> > +		} else if (strcmp(dai_link->name, "I2S8") == 0) {
-> > +			if (card == &mt8192_mt6359_rt1015_rt5682_card
-> > ||
-> > +			    card == &mt8192_mt6359_rt1015p_rt5682_card)
-> > {
-> > +				dai_link->cpus = i2s8_rt5682_cpus;
-> > +				dai_link->num_cpus =
-> > +					ARRAY_SIZE(i2s8_rt5682_cpus);
-> > +				dai_link->codecs = i2s8_rt5682_codecs;
-> > +				dai_link->num_codecs =
-> > +					ARRAY_SIZE(i2s8_rt5682_codecs);
-> > +				dai_link->platforms =
-> > i2s8_rt5682_platforms;
-> > +				dai_link->num_platforms =
-> > +					ARRAY_SIZE(i2s8_rt5682_platform
-> > s);
-> > +			} else if (card ==
-> > &mt8192_mt6359_rt1015p_rt5682s_card) {
-> > +				dai_link->cpus = i2s8_rt5682s_cpus;
-> > +				dai_link->num_cpus =
-> > +					ARRAY_SIZE(i2s8_rt5682s_cpus);
-> > +				dai_link->codecs = i2s8_rt5682s_codecs;
-> > +				dai_link->num_codecs =
-> > +					ARRAY_SIZE(i2s8_rt5682s_codecs)
-> > ;
-> > +				dai_link->platforms =
-> > i2s8_rt5682s_platforms;
-> > +				dai_link->num_platforms =
-> > +					ARRAY_SIZE(i2s8_rt5682s_platfor
-> > ms);
-> > +			}
-> > +		} else if (strcmp(dai_link->name, "I2S9") == 0) {
-> > +			if (card == &mt8192_mt6359_rt1015_rt5682_card
-> > ||
-> > +			    card == &mt8192_mt6359_rt1015p_rt5682_card)
-> > {
-> > +				dai_link->cpus = i2s9_rt5682_cpus;
-> > +				dai_link->num_cpus =
-> > +					ARRAY_SIZE(i2s9_rt5682_cpus);
-> > +				dai_link->codecs = i2s9_rt5682_codecs;
-> > +				dai_link->num_codecs =
-> > +					ARRAY_SIZE(i2s9_rt5682_codecs);
-> > +				dai_link->platforms =
-> > i2s9_rt5682_platforms;
-> > +				dai_link->num_platforms =
-> > +					ARRAY_SIZE(i2s9_rt5682_platform
-> > s);
-> > +			} else if (card ==
-> > &mt8192_mt6359_rt1015p_rt5682s_card) {
-> > +				dai_link->cpus = i2s9_rt5682s_cpus;
-> > +				dai_link->num_cpus =
-> > +					ARRAY_SIZE(i2s9_rt5682s_cpus);
-> > +				dai_link->codecs = i2s9_rt5682s_codecs;
-> > +				dai_link->num_codecs =
-> > +					ARRAY_SIZE(i2s9_rt5682s_codecs)
-> > ;
-> > +				dai_link->platforms =
-> > i2s9_rt5682s_platforms;
-> > +				dai_link->num_platforms =
-> > +					ARRAY_SIZE(i2s9_rt5682s_platfor
-> > ms);
-> > +			}
-> 
-> After seeing the code, I am starting to wonder if the reuse is
-> overkill.  If
-> they (RT5682 vs. RT5682S) only have some minor differences, probably
-> it could
-> reuse more by:
-> 
-> SND_SOC_DAILINK_DEFS(i2s8, ...
-> SND_SOC_DAILINK_DEFS(i2s9, ...
-> 
-> ...
-> 
-> if (card == &mt8192_mt6359_rt1015p_rt5682s_card) {
->         i2s8_codecs.name = RT5682S_DEV0_NAME;
->         i2s8_codecs.dai_name = RT5682S_CODEC_DAI;
->         ...
-> }
-> 
-> Or even uses of_device_is_compatible() if it would like to reuse the
-> struct
-> snd_soc_card.
-If we reuse the struct snd_soc_card, the card .name will be same.
-Should I change the card .name through of_device_is_compatible()?
+This leaves the ACPI implementation in such a broken state that subsequent
+kernel subsystem initialisations go wrong, resulting in among others
+mismapped PCI memory, SATA and USB enumeration failures, and freezes.
 
-Maybe like below:
+As this is an older embedded platform that will likely never see any BIOS
+updates to address this issue and its default shipping OS only complies to
+ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
+top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
 
-Remove rt5682x related words for snd_soc_card.
-static struct snd_soc_card mt8192_mt6359_rt1015p_card = {
-	.owner = THIS_MODULE,
-	.dai_link = mt8192_mt6359_dai_links,
-	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
-	.controls = mt8192_mt6359_rt1015p_controls,
-	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_controls),
-	.dapm_widgets = mt8192_mt6359_rt1015p_widgets,
-	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_widgets),
-	.dapm_routes = mt8192_mt6359_rt1015p_routes,
-	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_routes),
-};
+Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
+Cc: stable@vger.kernel.org
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+---
+v2:
+- Reduce DMI match count to 4 to not overflow dmi_system_id structure
+Reported-by: kernel test robot <lkp@intel.com>
+- Change board ident to correct name
+- Fix small style issue
+- Fix up subject as per Rafael's changes
 
-static const struct of_device_id mt8192_mt6359_dt_match[] = {
-	{
-		.compatible = "mediatek,mt8192_mt6359_rt1015_rt5682",
-		.data = &mt8192_mt6359_rt1015_rt5682_card,
-	},
-	{
-		.compatible = "mediatek,mt8192_mt6359_rt1015p_rt5682",
-		.data = &mt8192_mt6359_rt1015p_card,
-	},
-	{
-		.compatible = "mediatek,mt8192_mt6359_rt1015p_rt5682s",
-		.data = &mt8192_mt6359_rt1015p_card,
-	},
-	{}
-};
+As this patch is CC'd to stable, it seemed wiser to submit a V2 rather
+than an additional fixup patch to process.
+---
+ arch/x86/kernel/acpi/boot.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-if (of_device_is_compatible(np, "mediatek,
-mt8192_mt6359_rt1015p_rt5682")) {
-	card.name = "mt8192_mt6359_rt1015p_rt5682";
-	...
-} else if (of_device_is_compatible(np, "mediatek,
-mt8192_mt6359_rt1015p_rt5682s")) {
-	card.name = "mt8192_mt6359_rt1015p_rt5682s";
-	...
-}
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 5b6d1a95776f..b47338cd579d 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -1328,6 +1328,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
+ 	return 0;
+ }
+ 
++static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
++{
++	if (!acpi_force) {
++		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
++		acpi_gbl_do_not_use_xsdt = TRUE;
++	} else {
++		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
++	}
++	return 0;
++}
++
+ static int __init dmi_disable_acpi(const struct dmi_system_id *d)
+ {
+ 	if (!acpi_force) {
+@@ -1451,6 +1462,19 @@ static const struct dmi_system_id acpi_dmi_table[] __initconst = {
+ 		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
+ 		     },
+ 	 },
++	/*
++	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
++	 */
++	{
++	 .callback = disable_acpi_xsdt,
++	 .ident = "Advantech DAC-BJ01",
++	 .matches = {
++		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
++		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
++		     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
++		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
++		     },
++	 },
+ 	{}
+ };
+ 
 
-
-
-
-
+base-commit: 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
+-- 
+2.28.0
 

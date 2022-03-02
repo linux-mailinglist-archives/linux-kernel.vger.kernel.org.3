@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057E24CA648
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7294CA64B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242340AbiCBNsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S242347AbiCBNuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236210AbiCBNsf (ORCPT
+        with ESMTP id S235666AbiCBNuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:48:35 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A31A3914E;
-        Wed,  2 Mar 2022 05:47:49 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id h15so2325964edv.7;
-        Wed, 02 Mar 2022 05:47:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AcALeRLgruJraoqYkSDWeD6cogilR50XrL0fln3VffM=;
-        b=Zt/DO+Bq20//tVb2JU+hu8hHyEkmNc1bCqbD+5AM+Cc5TzPLsHYHf8Ecjg2JQ2TAcM
-         xdLnPGzSZJIlB1Etlp6Q8H28Ft7xBv0kRPV6MnqFKPDPxcQG4gLWXfEW/g6/SeQq5Jq0
-         cJWyIcE6vBvTq9qMxPUnLbJrj3uwx9PWJGEjabaN/Z+6E9Hk4ocbuSDmcpuxF7l/TcbR
-         6Joh9pPAYeBCTZx4QJ/s9RPN5QKF9EYoyfFSxxJLxBNhw0ngP7oR7eze2+blMf9RHpDa
-         mwcwewOu0RXHn3pTlW+EuvImKy5LfoaK1ND3JETVwDX5QeYKBi/Ak7dvHUqKT5VMhn72
-         xBIg==
-X-Gm-Message-State: AOAM530wSp+qQftMjLT2l/+oX1MLFIxVnIsf+qt9L/wv+IkWjVpm3cI9
-        tje5s2moolIG/7FeFG6rIb1RFQgwYBQ=
-X-Google-Smtp-Source: ABdhPJyLon6u9lLsCunawYR20XfDf0xqCgLlH9uQfjZDDHBev+/9Kxx+h6PWJ1DRu4mFMN+J2Sl/Iw==
-X-Received: by 2002:a05:6402:520c:b0:412:7f7d:b06b with SMTP id s12-20020a056402520c00b004127f7db06bmr29985652edd.91.1646228867527;
-        Wed, 02 Mar 2022 05:47:47 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id l5-20020a170906644500b006ce6b73ffd2sm6364627ejn.84.2022.03.02.05.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 05:47:46 -0800 (PST)
-Message-ID: <5476022d-6cac-82b4-b17e-23160689ea38@kernel.org>
-Date:   Wed, 2 Mar 2022 14:47:45 +0100
+        Wed, 2 Mar 2022 08:50:17 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE193BF9E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EFiW5epXAvMj3+Y4RhnOy43XObQbRYk+KnNyIX9yPps=; b=ZKYRDQpNY7oifdr6jJAlqDAVIa
+        z8Cl5Wpt6WrMAj3zRivui5pjc0f2lnaJG1iCcmMeO2kuZMHITh/DJJcfPYDZQcwpLCeW45XR+NEjZ
+        ZsGdW/gY6tXE3hXjSJAojECEpnMs1cTh2y6838hvjPKmq0PTgdR6td1GJ7Lr3kwapg6U01aLKfcke
+        8kRdaQjH9I5XBDWQsZpNAQz51+30rzS0xFwfF6dkrxpTE6+XSizZ00upUqqsDG5hxVbsWTVDvrG7L
+        ncler03mZZEGOjAlZ9Gm0M5pqFLnk0VMJhcRIL1tsd/qL/A5fgFTfhPwYqHsnf6VV0A2JFwgfMAAb
+        2JIxOgBw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPPLp-00AeJG-3i; Wed, 02 Mar 2022 13:49:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5BA6530021B;
+        Wed,  2 Mar 2022 14:49:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3F5DC32201D61; Wed,  2 Mar 2022 14:49:08 +0100 (CET)
+Date:   Wed, 2 Mar 2022 14:49:08 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "keescook@chromium.org" <keescook@chromium.org>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>,
+        "Milburn, Alyssa" <alyssa.milburn@intel.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+Subject: Re: [PATCH v2 18/39] x86/ibt: Add IBT feature, MSR and #CP handling
+Message-ID: <Yh911I6Oh9RbCQz1@hirez.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151323.069205370@infradead.org>
+ <eed8902f21ba9e5f93562432f6b5920137860a98.camel@intel.com>
+ <Yh44YsW8viBscBD0@hirez.programming.kicks-ass.net>
+ <20220301210245.GM11184@worktop.programming.kicks-ass.net>
+ <20220301231303.pqexbxkpte6yjiww@treble>
+ <c5e53502274a29e39c996627a35a7aa8e0795ca9.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: Add sample averaging
- properties for ADM1275
-Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220302123817.27025-1-potin.lai@quantatw.com>
- <20220302123817.27025-3-potin.lai@quantatw.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220302123817.27025-3-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5e53502274a29e39c996627a35a7aa8e0795ca9.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,23 +77,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 13:38, Potin Lai wrote:
-> Add documentation of new properties for sample averaging in PMON_CONFIG
-> register.
+On Wed, Mar 02, 2022 at 01:59:46AM +0000, Edgecombe, Rick P wrote:
+> As for pinning strength, I'm not understanding this kexec asm enough to
+> say for sure how much better it is than just removing the bit from the
+> pinning mask. I think some future hardening around preventing turning
+> off IBT might still be worthwhile.
 > 
-> New properties:
-> - adi,volt-curr-sample-average
-> - adi,power-sample-average
-> 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->  .../bindings/hwmon/adi,adm1275.yaml           | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
+> Kees, I think you brought up the pinning, what do you think of this?
 
+IIRC the whole purpose of that was to ensure that the
+cr4_update_irqsoff() function itself isn't a useful gadget to manipulate
+CR4 with.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof

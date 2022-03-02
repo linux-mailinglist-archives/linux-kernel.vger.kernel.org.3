@@ -2,527 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10144CB272
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6714CB275
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbiCBWpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S229730AbiCBWp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiCBWpU (ORCPT
+        with ESMTP id S229453AbiCBWp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:45:20 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525E0120E80;
-        Wed,  2 Mar 2022 14:44:33 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id d3so2740786qvb.5;
-        Wed, 02 Mar 2022 14:44:33 -0800 (PST)
+        Wed, 2 Mar 2022 17:45:56 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F538D82;
+        Wed,  2 Mar 2022 14:45:10 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id a5so3170577pfv.9;
+        Wed, 02 Mar 2022 14:45:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Lu/jPg14h52ilfsaK3yG7n7UKRxXPoFKOGDtMJ0a0Vg=;
-        b=eB4eRPC3bipDoafgs6UsA52p/R1atWU/iZDgbuFKq1xIt0fzUCKoz2wIOa+zygDCld
-         e9czImxJS+ynFlerMQirnU/TCQoe7I1KQrK4TptaRxH+l/r4zGYQW5rksdZKYMGIYz9W
-         uL647uy0ftQaeK1mydDtF0lGjkPMemxGobKwI=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bu1m8QE7xycjxrnGexY9vNyLC1cQoJ9MRpYoO3qPQyQ=;
+        b=avOlyqO0PsKAkdGgIHP0gTDxTLboi2RcrN+BJNxNMCIerAZFFa81WUrORROdz7/omO
+         nNzPM/rPve/tNk0ap4tR7su31RvrA9WKmBLhhBTQrYmBnnglQnbUMw9IhZZxYQLj7ESF
+         QLXQ+dfnTQr9JJ6rjQgyjJ/cwDBB7K3PEB3F0/CMF75Mt9Rc+PNNT2Uebenqey020OP0
+         A/+9Aqz6Xy7RRC4P+lN6tKKzlQ5uEtN1P693aNxkCa0iz4dEie/y8nHgXMkoL3B5WXl/
+         XVgq4uw+IcMsKcH0KifSP6hCZkgt7jjU5DFbRB/ZFOENQTgttPUNt5U+A20Ee8zn4Crz
+         HXTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Lu/jPg14h52ilfsaK3yG7n7UKRxXPoFKOGDtMJ0a0Vg=;
-        b=iVyWjmJnStqHofSU93df6fgAPzPRW4vwvqI3ddbK7hhG4jQExMExVcCexWqld6zGIc
-         cXdMdiRZdc8VlYa7uwkAl1xelLaCagLdmRxZQy4r7y/MaTp0WUnGwVi5j7PLziIMXHdd
-         snpz9UQ1o98iUxVpNbpfnVdAlDsZZAwLeEW66ZY4wNR4aoAUYJNz1RZRbIPeZV4XvWze
-         1r6Vs7GKd+QiOAvt+AU2j0flVfHl1i90UQ+FIGa1Czc1EyexFZJrBJQEXxUqOdH7h5oR
-         wkMSwtX84RC5sDrzNHUC+6Pep9kaVhTRPbRf+ZAOvfIwhiorE0SdOSd/A4a5wIOFP9xC
-         e49A==
-X-Gm-Message-State: AOAM530AL+FvS2NQ8MjOlgOq2IpBS2/n0+ucVnQNUVhSpV8QV9rFPzG7
-        uMqNyerlVCvUs+GYzbRIh6Q27L5FBh8P2ROwDMA=
-X-Google-Smtp-Source: ABdhPJwqfoYT7pF2cOO/yiSsEgYYAbjBfWP1b9cOYkEckOMVg36ijfEH6wOIRrgEJgrs074eMJuTyiRA4d1DsHDEVzk=
-X-Received: by 2002:a05:6214:19c4:b0:432:8bd1:d8d7 with SMTP id
- j4-20020a05621419c400b004328bd1d8d7mr22503520qvc.65.1646261072217; Wed, 02
- Mar 2022 14:44:32 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bu1m8QE7xycjxrnGexY9vNyLC1cQoJ9MRpYoO3qPQyQ=;
+        b=svGa9fNADuYTd3m2i4lrp8cNUf7WxCQCLehEdHg4zvK/isHJi8VED8pGo+QrXRw8x3
+         VP7wDE0SqUCmwsfUtqDhihU2WjaGMZM9N8dS9mDkuolWzObK5oSM+ia2FR4u++5nS+1O
+         rGx3KG5wZ7Uq+j4kD8zKrpwHD3onGYhO0MoiEdaORBR2N+4QD70IWSNk4Xm8qLNdEOB3
+         iUfYwyMryn7fPTyAN3v5bIvhk61DlQwHWBiesRpst+RIvQYGv9v+bDLvRyoOWRtKtOCx
+         Qu84nWOAFHFh1wRcouON/seiTqpCmIKmQVJ/BaWZcIHGPjxkvfM3u1QemDZQgL6U2FHn
+         GgvA==
+X-Gm-Message-State: AOAM5302cC/iy7/t/15p4bDjlK7FAcUPZgjL4S8Bmt3syiXYF+xxk9zT
+        TEQHOqOmm0dPaZSnc9PmaJY=
+X-Google-Smtp-Source: ABdhPJwnD7avpCpK886IAUGLL7iydkYwBRettoU9e5I3A5GQJFV2Z+hQTHbDRrIy0M3ZL53jolzRGQ==
+X-Received: by 2002:a05:6a00:b49:b0:4cf:432f:9cd9 with SMTP id p9-20020a056a000b4900b004cf432f9cd9mr35426442pfo.10.1646261109563;
+        Wed, 02 Mar 2022 14:45:09 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id 17-20020a056a00071100b004f0f941d1e8sm201102pfl.24.2022.03.02.14.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:45:09 -0800 (PST)
+Date:   Thu, 3 Mar 2022 04:15:06 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+Message-ID: <20220302224506.jc7jwkdaatukicik@apollo.legion>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-9-haoluo@google.com>
 MIME-Version: 1.0
-References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-10-clg@kaod.org>
-In-Reply-To: <20220302173114.927476-10-clg@kaod.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Mar 2022 22:44:20 +0000
-Message-ID: <CACPK8Xe8wc-z5ntfAfe96tMmq8eEvk0x60GG6jjc=F7BbU5xRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] spi: aspeed: Calibrate read timings
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225234339.2386398-9-haoluo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 17:32, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
+On Sat, Feb 26, 2022 at 05:13:38AM IST, Hao Luo wrote:
+> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> be parameterized by a cgroup id and prints only that cgroup. So one
+> needs to specify a target cgroup id when attaching this iter.
 >
-> To accommodate the different response time of SPI transfers on different
-> boards and different SPI NOR devices, the Aspeed controllers provide a
-> set of Read Timing Compensation registers to tune the timing delays
-> depending on the frequency being used. The AST2600 SoC has one of
-> these registers per device. On the AST2500 and AST2400 SoCs, the
-> timing register is shared by all devices which is a bit problematic to
-> get good results other than for one device.
+> The target cgroup's state can be read out via a link of this iter.
+> Typically, we can monitor cgroup creation and deletion using sleepable
+> tracing and use it to create corresponding directories in bpffs and pin
+> a cgroup id parameterized link in the directory. Then we can read the
+> auto-pinned iter link to get cgroup's state. The output of the iter link
+> is determined by the program. See the selftest test_cgroup_stats.c for
+> an example.
 >
-> The algorithm first reads a golden buffer at low speed and then performs
-> reads with different clocks and delay cycle settings to find a breaking
-> point. This selects a default good frequency for the CEx control register=
-.
-> The current settings are bit optimistic as we pick the first delay giving
-
-typo: are a bit
-
-> good results. A safer approach would be to determine an interval and
-> choose the middle value.
->
-> Calibration is performed when the direct mapping for reads is created.
-> Since the underlying spi-nor object needs to be initialized to create
-> the spi_mem operation for direct mapping, we should be fine. Having a
-> specific API would clarify the requirements though.
->
-> Cc: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
-
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
+> Signed-off-by: Hao Luo <haoluo@google.com>
 > ---
->  drivers/spi/spi-aspeed-smc.c | 281 +++++++++++++++++++++++++++++++++++
->  1 file changed, 281 insertions(+)
+>  include/linux/bpf.h            |   1 +
+>  include/uapi/linux/bpf.h       |   6 ++
+>  kernel/bpf/Makefile            |   2 +-
+>  kernel/bpf/cgroup_iter.c       | 141 +++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |   6 ++
+>  5 files changed, 155 insertions(+), 1 deletion(-)
+>  create mode 100644 kernel/bpf/cgroup_iter.c
 >
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index 8c6d7f79d97f..dce25dfe6913 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -35,6 +35,8 @@
->  #define   CTRL_IO_ADDRESS_4B           BIT(13) /* AST2400 SPI only */
->  #define   CTRL_IO_DUMMY_SET(dummy)                                     \
->         (((((dummy) >> 2) & 0x1) << 14) | (((dummy) & 0x3) << 6))
-> +#define   CTRL_FREQ_SEL_SHIFT          8
-> +#define   CTRL_FREQ_SEL_MASK           GENMASK(11, CTRL_FREQ_SEL_SHIFT)
->  #define   CTRL_CE_STOP_ACTIVE          BIT(2)
->  #define   CTRL_IO_MODE_CMD_MASK                GENMASK(1, 0)
->  #define   CTRL_IO_MODE_NORMAL          0x0
-> @@ -47,6 +49,9 @@
->  /* CEx Address Decoding Range Register */
->  #define CE0_SEGMENT_ADDR_REG           0x30
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 759ade7b24b3..3ce9b0b7ed89 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1595,6 +1595,7 @@ int bpf_obj_get_path(bpfptr_t pathname, int flags);
 >
-> +/* CEx Read timing compensation register */
-> +#define CE0_TIMING_COMPENSATION_REG    0x94
-> +
->  enum aspeed_spi_ctl_reg_value {
->         ASPEED_SPI_BASE,
->         ASPEED_SPI_READ,
-> @@ -72,10 +77,15 @@ struct aspeed_spi_data {
->         bool    hastype;
->         u32     mode_bits;
->         u32     we0;
-> +       u32     timing;
-> +       u32     hclk_mask;
-> +       u32     hdiv_max;
->
->         u32 (*segment_start)(struct aspeed_spi *aspi, u32 reg);
->         u32 (*segment_end)(struct aspeed_spi *aspi, u32 reg);
->         u32 (*segment_reg)(struct aspeed_spi *aspi, u32 start, u32 end);
-> +       int (*calibrate)(struct aspeed_spi_chip *chip, u32 hdiv,
-> +                        const u8 *golden_buf, u8 *test_buf);
+>  struct bpf_iter_aux_info {
+>  	struct bpf_map *map;
+> +	u64 cgroup_id;
 >  };
 >
->  #define ASPEED_SPI_MAX_NUM_CS  5
-> @@ -519,6 +529,8 @@ static int aspeed_spi_chip_adjust_window(struct aspee=
-d_spi_chip *chip,
->         return 0;
->  }
+>  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index a5dbc794403d..855ad80d9983 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -91,6 +91,9 @@ union bpf_iter_link_info {
+>  	struct {
+>  		__u32	map_fd;
+>  	} map;
+> +	struct {
+> +		__u64	cgroup_id;
+> +	} cgroup;
+>  };
 >
-> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
-> +
->  static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
->  {
->         struct aspeed_spi *aspi =3D spi_controller_get_devdata(desc->mem-=
->spi->master);
-> @@ -567,6 +579,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_di=
-rmap_desc *desc)
->         chip->ctl_val[ASPEED_SPI_READ] =3D ctl_val;
->         writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> @@ -5887,6 +5890,9 @@ struct bpf_link_info {
+>  				struct {
+>  					__u32 map_id;
+>  				} map;
+> +				struct {
+> +					__u64 cgroup_id;
+> +				} cgroup;
+>  			};
+>  		} iter;
+>  		struct  {
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index c1a9be6a4b9f..52a0e4c6e96e 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
+> @@ -8,7 +8,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
 >
-> +       ret =3D aspeed_spi_do_calibration(chip);
+>  obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+>  obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+> -obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
+> +obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o cgroup_iter.o
+>  obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+>  obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+>  obj-$(CONFIG_BPF_SYSCALL) += disasm.o
+> diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
+> new file mode 100644
+> index 000000000000..011d9dcd1d51
+> --- /dev/null
+> +++ b/kernel/bpf/cgroup_iter.c
+> @@ -0,0 +1,141 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2022 Google */
+> +#include <linux/bpf.h>
+> +#include <linux/btf_ids.h>
+> +#include <linux/cgroup.h>
+> +#include <linux/kernel.h>
+> +#include <linux/seq_file.h>
 > +
->         dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
->                  chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_RE=
-AD]);
->
-> @@ -814,6 +828,249 @@ static u32 aspeed_spi_segment_ast2600_reg(struct as=
-peed_spi *aspi,
->                 ((end - 1) & AST2600_SEG_ADDR_MASK);
->  }
->
-> +/*
-> + * Read timing compensation sequences
-> + */
-> +
-> +#define CALIBRATE_BUF_SIZE SZ_16K
-> +
-> +static bool aspeed_spi_check_reads(struct aspeed_spi_chip *chip,
-> +                                  const u8 *golden_buf, u8 *test_buf)
-> +{
-> +       int i;
-> +
-> +       for (i =3D 0; i < 10; i++) {
-> +               memcpy_fromio(test_buf, chip->ahb_base, CALIBRATE_BUF_SIZ=
-E);
-> +               if (memcmp(test_buf, golden_buf, CALIBRATE_BUF_SIZE) !=3D=
- 0) {
-> +#if defined(VERBOSE_DEBUG)
-> +                       print_hex_dump_bytes(DEVICE_NAME "  fail: ", DUMP=
-_PREFIX_NONE,
-> +                                            test_buf, 0x100);
-> +#endif
-> +                       return false;
-> +               }
-> +       }
-> +       return true;
-> +}
-> +
-> +#define FREAD_TPASS(i) (((i) / 2) | (((i) & 1) ? 0 : 8))
-> +
-> +/*
-> + * The timing register is shared by all devices. Only update for CE0.
-> + */
-> +static int aspeed_spi_calibrate(struct aspeed_spi_chip *chip, u32 hdiv,
-> +                               const u8 *golden_buf, u8 *test_buf)
-> +{
-> +       struct aspeed_spi *aspi =3D chip->aspi;
-> +       const struct aspeed_spi_data *data =3D aspi->data;
-> +       int i;
-> +       int good_pass =3D -1, pass_count =3D 0;
-> +       u32 shift =3D (hdiv - 1) << 2;
-> +       u32 mask =3D ~(0xfu << shift);
-> +       u32 fread_timing_val =3D 0;
-> +
-> +       /* Try HCLK delay 0..5, each one with/without delay and look for =
-a
-> +        * good pair.
-> +        */
-> +       for (i =3D 0; i < 12; i++) {
-> +               bool pass;
-> +
-> +               if (chip->cs =3D=3D 0) {
-> +                       fread_timing_val &=3D mask;
-> +                       fread_timing_val |=3D FREAD_TPASS(i) << shift;
-> +                       writel(fread_timing_val, aspi->regs + data->timin=
-g);
-> +               }
-> +               pass =3D aspeed_spi_check_reads(chip, golden_buf, test_bu=
-f);
-> +               dev_dbg(aspi->dev,
-> +                       "  * [%08x] %d HCLK delay, %dns DI delay : %s",
-> +                       fread_timing_val, i / 2, (i & 1) ? 0 : 4,
-> +                       pass ? "PASS" : "FAIL");
-> +               if (pass) {
-> +                       pass_count++;
-> +                       if (pass_count =3D=3D 3) {
-> +                               good_pass =3D i - 1;
-> +                               break;
-> +                       }
-> +               } else {
-> +                       pass_count =3D 0;
-> +               }
-> +       }
-> +
-> +       /* No good setting for this frequency */
-> +       if (good_pass < 0)
-> +               return -1;
-> +
-> +       /* We have at least one pass of margin, let's use first pass */
-> +       if (chip->cs =3D=3D 0) {
-> +               fread_timing_val &=3D mask;
-> +               fread_timing_val |=3D FREAD_TPASS(good_pass) << shift;
-> +               writel(fread_timing_val, aspi->regs + data->timing);
-> +       }
-> +       dev_dbg(aspi->dev, " * -> good is pass %d [0x%08x]",
-> +               good_pass, fread_timing_val);
-> +       return 0;
-> +}
-> +
-> +static bool aspeed_spi_check_calib_data(const u8 *test_buf, u32 size)
-> +{
-> +       const u32 *tb32 =3D (const u32 *)test_buf;
-> +       u32 i, cnt =3D 0;
-> +
-> +       /* We check if we have enough words that are neither all 0
-> +        * nor all 1's so the calibration can be considered valid.
-> +        *
-> +        * I use an arbitrary threshold for now of 64
-> +        */
-> +       size >>=3D 2;
-> +       for (i =3D 0; i < size; i++) {
-> +               if (tb32[i] !=3D 0 && tb32[i] !=3D 0xffffffff)
-> +                       cnt++;
-> +       }
-> +       return cnt >=3D 64;
-> +}
-> +
-> +static const u32 aspeed_spi_hclk_divs[] =3D {
-> +       0xf, /* HCLK */
-> +       0x7, /* HCLK/2 */
-> +       0xe, /* HCLK/3 */
-> +       0x6, /* HCLK/4 */
-> +       0xd, /* HCLK/5 */
+> +struct bpf_iter__cgroup {
+> +	__bpf_md_ptr(struct bpf_iter_meta *, meta);
+> +	__bpf_md_ptr(struct cgroup *, cgroup);
 > +};
 > +
-> +#define ASPEED_SPI_HCLK_DIV(i) \
-> +       (aspeed_spi_hclk_divs[(i) - 1] << CTRL_FREQ_SEL_SHIFT)
-> +
-> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip)
+> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
 > +{
-> +       struct aspeed_spi *aspi =3D chip->aspi;
-> +       const struct aspeed_spi_data *data =3D aspi->data;
-> +       u32 ahb_freq =3D aspi->clk_freq;
-> +       u32 max_freq =3D chip->clk_freq;
-> +       u32 ctl_val;
-> +       u8 *golden_buf =3D NULL;
-> +       u8 *test_buf =3D NULL;
-> +       int i, rc, best_div =3D -1;
+> +	struct cgroup *cgroup;
+> +	u64 cgroup_id;
 > +
-> +       dev_dbg(aspi->dev, "calculate timing compensation - AHB freq: %d =
-MHz",
-> +               ahb_freq / 1000000);
+> +	/* Only one session is supported. */
+> +	if (*pos > 0)
+> +		return NULL;
 > +
-> +       /*
-> +        * use the related low frequency to get check calibration data
-> +        * and get golden data.
-> +        */
-> +       ctl_val =3D chip->ctl_val[ASPEED_SPI_READ] & data->hclk_mask;
-> +       writel(ctl_val, chip->ctl);
+> +	cgroup_id = *(u64 *)seq->private;
+> +	cgroup = cgroup_get_from_id(cgroup_id);
+> +	if (!cgroup)
+> +		return NULL;
 > +
-> +       test_buf =3D kzalloc(CALIBRATE_BUF_SIZE * 2, GFP_KERNEL);
-> +       if (!test_buf)
-> +               return -ENOMEM;
+> +	if (*pos == 0)
+> +		++*pos;
 > +
-> +       golden_buf =3D test_buf + CALIBRATE_BUF_SIZE;
-> +
-> +       memcpy_fromio(golden_buf, chip->ahb_base, CALIBRATE_BUF_SIZE);
-> +       if (!aspeed_spi_check_calib_data(golden_buf, CALIBRATE_BUF_SIZE))=
- {
-> +               dev_info(aspi->dev, "Calibration area too uniform, using =
-low speed");
-> +               goto no_calib;
-> +       }
-> +
-> +#if defined(VERBOSE_DEBUG)
-> +       print_hex_dump_bytes(DEVICE_NAME "  good: ", DUMP_PREFIX_NONE,
-> +                            golden_buf, 0x100);
-> +#endif
-> +
-> +       /* Now we iterate the HCLK dividers until we find our breaking po=
-int */
-> +       for (i =3D ARRAY_SIZE(aspeed_spi_hclk_divs); i > data->hdiv_max -=
- 1; i--) {
-> +               u32 tv, freq;
-> +
-> +               freq =3D ahb_freq / i;
-> +               if (freq > max_freq)
-> +                       continue;
-> +
-> +               /* Set the timing */
-> +               tv =3D chip->ctl_val[ASPEED_SPI_READ] | ASPEED_SPI_HCLK_D=
-IV(i);
-> +               writel(tv, chip->ctl);
-> +               dev_dbg(aspi->dev, "Trying HCLK/%d [%08x] ...", i, tv);
-> +               rc =3D data->calibrate(chip, i, golden_buf, test_buf);
-> +               if (rc =3D=3D 0)
-> +                       best_div =3D i;
-> +       }
-> +
-> +       /* Nothing found ? */
-> +       if (best_div < 0) {
-> +               dev_warn(aspi->dev, "No good frequency, using dumb slow")=
-;
-> +       } else {
-> +               dev_dbg(aspi->dev, "Found good read timings at HCLK/%d", =
-best_div);
-> +
-> +               /* Record the freq */
-> +               for (i =3D 0; i < ASPEED_SPI_MAX; i++)
-> +                       chip->ctl_val[i] =3D (chip->ctl_val[i] & data->hc=
-lk_mask) |
-> +                               ASPEED_SPI_HCLK_DIV(best_div);
-> +       }
-> +
-> +no_calib:
-> +       writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
-> +       kfree(test_buf);
-> +       return 0;
+> +	return cgroup;
 > +}
 > +
-> +#define TIMING_DELAY_DI                BIT(3)
-> +#define TIMING_DELAY_HCYCLE_MAX        5
-> +#define TIMING_REG_AST2600(chip)                               \
-> +       ((chip)->aspi->regs + (chip)->aspi->data->timing +      \
-> +        (chip)->cs * 4)
-> +
-> +static int aspeed_spi_ast2600_calibrate(struct aspeed_spi_chip *chip, u3=
-2 hdiv,
-> +                                       const u8 *golden_buf, u8 *test_bu=
-f)
+> +static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
 > +{
-> +       struct aspeed_spi *aspi =3D chip->aspi;
-> +       int hcycle;
-> +       u32 shift =3D (hdiv - 2) << 3;
-> +       u32 mask =3D ~(0xfu << shift);
-> +       u32 fread_timing_val =3D 0;
-> +
-> +       for (hcycle =3D 0; hcycle <=3D TIMING_DELAY_HCYCLE_MAX; hcycle++)=
- {
-> +               int delay_ns;
-> +               bool pass =3D false;
-> +
-> +               fread_timing_val &=3D mask;
-> +               fread_timing_val |=3D hcycle << shift;
-> +
-> +               /* no DI input delay first  */
-> +               writel(fread_timing_val, TIMING_REG_AST2600(chip));
-> +               pass =3D aspeed_spi_check_reads(chip, golden_buf, test_bu=
-f);
-> +               dev_dbg(aspi->dev,
-> +                       "  * [%08x] %d HCLK delay, DI delay none : %s",
-> +                       fread_timing_val, hcycle, pass ? "PASS" : "FAIL")=
-;
-> +               if (pass)
-> +                       return 0;
-> +
-> +               /* Add DI input delays  */
-> +               fread_timing_val &=3D mask;
-> +               fread_timing_val |=3D (TIMING_DELAY_DI | hcycle) << shift=
-;
-> +
-> +               for (delay_ns =3D 0; delay_ns < 0x10; delay_ns++) {
-> +                       fread_timing_val &=3D ~(0xf << (4 + shift));
-> +                       fread_timing_val |=3D delay_ns << (4 + shift);
-> +
-> +                       writel(fread_timing_val, TIMING_REG_AST2600(chip)=
-);
-> +                       pass =3D aspeed_spi_check_reads(chip, golden_buf,=
- test_buf);
-> +                       dev_dbg(aspi->dev,
-> +                               "  * [%08x] %d HCLK delay, DI delay %d.%d=
-ns : %s",
-> +                               fread_timing_val, hcycle, (delay_ns + 1) =
-/ 2,
-> +                               (delay_ns + 1) & 1 ? 5 : 5, pass ? "PASS"=
- : "FAIL");
-> +                       /*
-> +                        * TODO: This is optimistic. We should look
-> +                        * for a working interval and save the middle
-> +                        * value in the read timing register.
-> +                        */
-> +                       if (pass)
-> +                               return 0;
-> +               }
-> +       }
-> +
-> +       /* No good setting for this frequency */
-> +       return -1;
+> +	++*pos;
+> +	return NULL;
 > +}
 > +
->  /*
->   * Platform definitions
->   */
-> @@ -822,6 +1079,10 @@ static const struct aspeed_spi_data ast2400_fmc_dat=
-a =3D {
->         .hastype       =3D true,
->         .we0           =3D 16,
->         .ctl0          =3D CE0_CTRL_REG,
-> +       .timing        =3D CE0_TIMING_COMPENSATION_REG,
-> +       .hclk_mask     =3D 0xfffff0ff,
-> +       .hdiv_max      =3D 1,
-> +       .calibrate     =3D aspeed_spi_calibrate,
->         .segment_start =3D aspeed_spi_segment_start,
->         .segment_end   =3D aspeed_spi_segment_end,
->         .segment_reg   =3D aspeed_spi_segment_reg,
-> @@ -832,6 +1093,10 @@ static const struct aspeed_spi_data ast2400_spi_dat=
-a =3D {
->         .hastype       =3D false,
->         .we0           =3D 0,
->         .ctl0          =3D 0x04,
-> +       .timing        =3D 0x14,
-> +       .hclk_mask     =3D 0xfffff0ff,
-> +       .hdiv_max      =3D 1,
-> +       .calibrate     =3D aspeed_spi_calibrate,
->         /* No segment registers */
+> +static int cgroup_iter_seq_show(struct seq_file *seq, void *v)
+> +{
+> +	struct bpf_iter__cgroup ctx;
+> +	struct bpf_iter_meta meta;
+> +	struct bpf_prog *prog;
+> +	int ret = 0;
+> +
+> +	ctx.meta = &meta;
+> +	ctx.cgroup = v;
+> +	meta.seq = seq;
+> +	prog = bpf_iter_get_info(&meta, false);
+> +	if (prog)
+> +		ret = bpf_iter_run_prog(prog, &ctx);
+> +
+> +	return ret;
+> +}
+> +
+> +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
+> +{
+> +	if (v)
+> +		cgroup_put(v);
+> +}
+
+I think in existing iterators, we make a final call to seq_show, with v as NULL,
+is there a specific reason to do it differently for this? There is logic in
+bpf_iter.c to trigger ->stop() callback again when ->start() or ->next() returns
+NULL, to execute BPF program with NULL p, see the comment above stop label.
+
+If you do add the seq_show call with NULL, you'd also need to change the
+ctx_arg_info PTR_TO_BTF_ID to PTR_TO_BTF_ID_OR_NULL.
+
+> +
+> +static const struct seq_operations cgroup_iter_seq_ops = {
+> +	.start  = cgroup_iter_seq_start,
+> +	.next   = cgroup_iter_seq_next,
+> +	.stop   = cgroup_iter_seq_stop,
+> +	.show   = cgroup_iter_seq_show,
+> +};
+> +
+> +BTF_ID_LIST_SINGLE(bpf_cgroup_btf_id, struct, cgroup)
+> +
+> +static int cgroup_iter_seq_init(void *priv_data, struct bpf_iter_aux_info *aux)
+> +{
+> +	*(u64 *)priv_data = aux->cgroup_id;
+> +	return 0;
+> +}
+> +
+> +static void cgroup_iter_seq_fini(void *priv_data)
+> +{
+> +}
+> +
+> +static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
+> +	.seq_ops                = &cgroup_iter_seq_ops,
+> +	.init_seq_private       = cgroup_iter_seq_init,
+> +	.fini_seq_private       = cgroup_iter_seq_fini,
+> +	.seq_priv_size          = sizeof(u64),
+> +};
+> +
+> +static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
+> +				  union bpf_iter_link_info *linfo,
+> +				  struct bpf_iter_aux_info *aux)
+> +{
+> +	aux->cgroup_id = linfo->cgroup.cgroup_id;
+> +	return 0;
+> +}
+> +
+> +static void bpf_iter_detach_cgroup(struct bpf_iter_aux_info *aux)
+> +{
+> +}
+> +
+> +void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> +				 struct seq_file *seq)
+> +{
+> +	char buf[64] = {0};
+> +
+> +	cgroup_path_from_kernfs_id(aux->cgroup_id, buf, sizeof(buf));
+> +	seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
+> +	seq_printf(seq, "cgroup_path:\t%s\n", buf);
+> +}
+> +
+> +int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+> +				   struct bpf_link_info *info)
+> +{
+> +	info->iter.cgroup.cgroup_id = aux->cgroup_id;
+> +	return 0;
+> +}
+> +
+> +DEFINE_BPF_ITER_FUNC(cgroup, struct bpf_iter_meta *meta,
+> +		     struct cgroup *cgroup)
+> +
+> +static struct bpf_iter_reg bpf_cgroup_reg_info = {
+> +	.target			= "cgroup",
+> +	.attach_target		= bpf_iter_attach_cgroup,
+> +	.detach_target		= bpf_iter_detach_cgroup,
+> +	.show_fdinfo		= bpf_iter_cgroup_show_fdinfo,
+> +	.fill_link_info		= bpf_iter_cgroup_fill_link_info,
+> +	.ctx_arg_info_size	= 1,
+> +	.ctx_arg_info		= {
+> +		{ offsetof(struct bpf_iter__cgroup, cgroup),
+> +		  PTR_TO_BTF_ID },
+> +	},
+> +	.seq_info		= &cgroup_iter_seq_info,
+> +};
+> +
+> +static int __init bpf_cgroup_iter_init(void)
+> +{
+> +	bpf_cgroup_reg_info.ctx_arg_info[0].btf_id = bpf_cgroup_btf_id[0];
+> +	return bpf_iter_reg_target(&bpf_cgroup_reg_info);
+> +}
+> +
+> +late_initcall(bpf_cgroup_iter_init);
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index a5dbc794403d..855ad80d9983 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -91,6 +91,9 @@ union bpf_iter_link_info {
+>  	struct {
+>  		__u32	map_fd;
+>  	} map;
+> +	struct {
+> +		__u64	cgroup_id;
+> +	} cgroup;
 >  };
 >
-> @@ -840,6 +1105,10 @@ static const struct aspeed_spi_data ast2500_fmc_dat=
-a =3D {
->         .hastype       =3D true,
->         .we0           =3D 16,
->         .ctl0          =3D CE0_CTRL_REG,
-> +       .timing        =3D CE0_TIMING_COMPENSATION_REG,
-> +       .hclk_mask     =3D 0xfffff0ff,
-> +       .hdiv_max      =3D 1,
-> +       .calibrate     =3D aspeed_spi_calibrate,
->         .segment_start =3D aspeed_spi_segment_start,
->         .segment_end   =3D aspeed_spi_segment_end,
->         .segment_reg   =3D aspeed_spi_segment_reg,
-> @@ -850,6 +1119,10 @@ static const struct aspeed_spi_data ast2500_spi_dat=
-a =3D {
->         .hastype       =3D false,
->         .we0           =3D 16,
->         .ctl0          =3D CE0_CTRL_REG,
-> +       .timing        =3D CE0_TIMING_COMPENSATION_REG,
-> +       .hclk_mask     =3D 0xfffff0ff,
-> +       .hdiv_max      =3D 1,
-> +       .calibrate     =3D aspeed_spi_calibrate,
->         .segment_start =3D aspeed_spi_segment_start,
->         .segment_end   =3D aspeed_spi_segment_end,
->         .segment_reg   =3D aspeed_spi_segment_reg,
-> @@ -861,6 +1134,10 @@ static const struct aspeed_spi_data ast2600_fmc_dat=
-a =3D {
->         .mode_bits     =3D SPI_RX_QUAD | SPI_RX_QUAD,
->         .we0           =3D 16,
->         .ctl0          =3D CE0_CTRL_REG,
-> +       .timing        =3D CE0_TIMING_COMPENSATION_REG,
-> +       .hclk_mask     =3D 0xf0fff0ff,
-> +       .hdiv_max      =3D 2,
-> +       .calibrate     =3D aspeed_spi_ast2600_calibrate,
->         .segment_start =3D aspeed_spi_segment_ast2600_start,
->         .segment_end   =3D aspeed_spi_segment_ast2600_end,
->         .segment_reg   =3D aspeed_spi_segment_ast2600_reg,
-> @@ -872,6 +1149,10 @@ static const struct aspeed_spi_data ast2600_spi_dat=
-a =3D {
->         .mode_bits     =3D SPI_RX_QUAD | SPI_RX_QUAD,
->         .we0           =3D 16,
->         .ctl0          =3D CE0_CTRL_REG,
-> +       .timing        =3D CE0_TIMING_COMPENSATION_REG,
-> +       .hclk_mask     =3D 0xf0fff0ff,
-> +       .hdiv_max      =3D 2,
-> +       .calibrate     =3D aspeed_spi_ast2600_calibrate,
->         .segment_start =3D aspeed_spi_segment_ast2600_start,
->         .segment_end   =3D aspeed_spi_segment_ast2600_end,
->         .segment_reg   =3D aspeed_spi_segment_ast2600_reg,
+>  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> @@ -5887,6 +5890,9 @@ struct bpf_link_info {
+>  				struct {
+>  					__u32 map_id;
+>  				} map;
+> +				struct {
+> +					__u64 cgroup_id;
+> +				} cgroup;
+>  			};
+>  		} iter;
+>  		struct  {
 > --
-> 2.34.1
+> 2.35.1.574.g5d30c73bfb-goog
 >
+
+--
+Kartikeya

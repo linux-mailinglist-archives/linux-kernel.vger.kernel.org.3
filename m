@@ -2,131 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAE14CAA11
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD314CAA17
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241849AbiCBQY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S241918AbiCBQ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiCBQYY (ORCPT
+        with ESMTP id S234241AbiCBQ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:24:24 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A653CFDE;
-        Wed,  2 Mar 2022 08:23:41 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K7zvH3rXNz9sSR;
-        Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id g3_V2IdfLWdQ; Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K7zvH2zcrz9sSN;
-        Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5597B8B76D;
-        Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id jM4um5h1j013; Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-Received: from [172.25.230.108] (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 241D08B763;
-        Wed,  2 Mar 2022 17:23:39 +0100 (CET)
-Message-ID: <d67e43a5-a654-e622-bab8-d2f55a7013f3@csgroup.eu>
-Date:   Wed, 2 Mar 2022 17:23:38 +0100
+        Wed, 2 Mar 2022 11:26:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C413B76E33
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:00 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646238359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7NOla583Dkc2hPJm4Geje9sBORuvB2xZD1bf3QcRf0=;
+        b=Qy+3zIMLj+7Rr1DQ41rQCdAwVFuQGyDYXVmWIRf0EIDo24k2KHuegBQEmHY2ThGiOo4vu1
+        e3rpbuhWvBbdDs0yxbaH+AsfAPXlSyeBNI3vXBNsVLeHYiPygQTRblS1kfadDSayLZ8i1P
+        u5HXrFIy1r81I3DR+0OnBRpqb193e3JVoWUEGiYa9xKzI7UtyFvH5HDYdV2kNaDYbFRTkl
+        +y9Roxk/TB1cT56WkNYGkhKlOvp4Vtez0c/EyUSSdZobpnA0rv5ed+rTNb/GP9e2mk4aeq
+        DflBSwptsNJfrgfENNEo1YUin+gsrsPh9V+RdJaN31E/37y5fRucynfba7iccw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646238359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7NOla583Dkc2hPJm4Geje9sBORuvB2xZD1bf3QcRf0=;
+        b=Du14RPYMtbTfQ/71wH5f9Vcj+4qABQOtVVN3bp1MLQnAY4J+MVhvu0+jU7nITIiFh5tGx+
+        LCxAyEp1paHscgBg==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v1 07/13] printk: move buffer definitions into
+ console_emit_next_record() caller
+In-Reply-To: <Yg0iA/McHYWK6d4D@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-8-john.ogness@linutronix.de>
+ <Yg0iA/McHYWK6d4D@alley>
+Date:   Wed, 02 Mar 2022 17:31:58 +0106
+Message-ID: <87pmn4gw2x.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Reoprt] Some compile warning on ppc dts
-Content-Language: fr-FR
-To:     "chenjun (AM)" <chenjun102@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "Xiangrui (Euler)" <rui.xiang@huawei.com>
-References: <CE1E7D7EFA066443B6454A6A5063B50220CCBBE4@dggeml509-mbx.china.huawei.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <CE1E7D7EFA066443B6454A6A5063B50220CCBBE4@dggeml509-mbx.china.huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-02-16, Petr Mladek <pmladek@suse.com> wrote:
+>> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+>> index 822b7b6ad6d1..02bde45c1149 100644
+>> --- a/kernel/printk/printk.c
+>> +++ b/kernel/printk/printk.c
+>> @@ -2597,13 +2611,13 @@ static bool console_emit_next_record(struct console *con, bool *handover)
+>>  		goto skip;
+>>  	}
+>>  
+>> -	if (con->flags & CON_EXTENDED) {
+>> -		write_text = &ext_text[0];
+>> -		len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
+>> -		len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
+>> +	if (ext_text) {
+>> +		write_text = ext_text;
+>> +		len = info_print_ext_header(ext_text, CONSOLE_EXT_LOG_MAX, r.info);
+>> +		len += msg_print_ext_body(ext_text + len, CONSOLE_EXT_LOG_MAX - len,
+>>  					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+>>  	} else {
+>> -		write_text = &text[0];
+>> +		write_text = text;
+>>  		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+>
+> @text and @ext_text buffers are never used at the same time. It might
+> be enough to use a single text[CONSOLE_EXT_LOG_MAX] buffer. It would
+> even slightly simplify the code.
 
+No, they _are_ used at the same time.
 
-Le 01/03/2021 à 03:16, chenjun (AM) a écrit :
-> Hi
-> 
-> After run the following commands
-> make distclean
-> make allmodconfig ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu-
-> make oldconfig ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu-
-> make -j64 ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu-
-> 
-> I get some warning:
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge):
-> /pci@f0000d00: missing ranges for PCI bridg
-> e (or not a bridge)
-> arch/powerpc/boot/dts/o2dnt2.dtb: Warning (pci_device_bus_num): Failed
-> prerequisite 'pci_bridge'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning
-> (spi_bus_bridge): /soc5200@f0000000/psc@2000: node name f
-> or SPI buses should be 'spi'
->     also defined at arch/powerpc/boot/dts/o2d.dtsi:32.12-43.5
-> arch/powerpc/boot/dts/o2dnt2.dtb: Warning (spi_bus_reg): Failed
-> prerequisite 'spi_bus_bridge'
-> ...
-> 
-> For the problem about "node name for SPI buses should be 'spi'":
-> Rename the psc@2000 to spi@2000 in arch/powerpc/boot/dts/o2d.dtsi can
-> fix it.
-> diff --git a/arch/powerpc/boot/dts/o2d.dtsi b/arch/powerpc/boot/dts/o2d.dtsi
-> index 6661955a2be4..cd3dc70cd72e 100644
-> --- a/arch/powerpc/boot/dts/o2d.dtsi
-> +++ b/arch/powerpc/boot/dts/o2d.dtsi
-> @@ -29,7 +29,7 @@ rtc@800 {
->    >------>------->-------status = "disabled";
->    >------>-------};
-> -
-> ->------>-------psc@2000 {>----->-------// PSC1
-> +>------>-------spi@2000 {>----->-------// PSC1
->    >------>------->-------compatible =
-> "fsl,mpc5200b-psc-spi","fsl,mpc5200-psc-spi";
->    >------>------->-------#address-cells = <1>;
->    >------>------->-------#size-cells = <0>;
-> ---
-> 
-> For the problem about "missing ranges for PCI bridge (or not a bridge)":
-> Ranges should be add in arch/powerpc/boot/dts/mpc5200b.dtsi.
->   >-------pci: pci@f0000d00 {
->   >------->-------#interrupt-cells = <1>;
->   >------->-------#size-cells = <2>;
->   >------->-------#address-cells = <3>;
->   >------->-------device_type = "pci";
->   >------->-------compatible = "fsl,mpc5200b-pci","fsl,mpc5200-pci";
->   >------->-------reg = <0xf0000d00 0x100>;
->   >------->-------// interrupt-map-mask = need to add
->   >------->-------// interrupt-map = need to add
->   >------->-------clock-frequency = <0>; // From boot loader
->   >------->-------interrupts = <2 8 0 2 9 0 2 10 0>;
->   >------->-------bus-range = <0 0>;
->   >------->-------// ranges = need to add
->   >-------};
-> I think the ranges should be add by someone who knows the mpc5200 better.
-> 
+r.text_buf is @text. msg_print_ext_body() takes @ext_text and
+&r.text_buf[0]. Unfortunately msg_print_ext_body() does not work "in
+place" like record_print_text() does.
 
+>> @@ -2650,6 +2664,9 @@ static bool console_emit_next_record(struct console *con, bool *handover)
+>>   */
+>>  static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handover)
+>>  {
+>> +	static char dropped_text[DROPPED_TEXT_MAX];
+>> +	static char ext_text[CONSOLE_EXT_LOG_MAX];
+>> +	static char text[CONSOLE_LOG_MAX];
+>
+> These buffers are for printing from console_unlock(). The same buffers
+> will need to be allocated for each console in the kthreads.
+>
+> It might make sense to allocate these buffers in register_console()
+> and store the pointers in struct console.
+>
+> Well, we might need extra buffers for atomic console drivers and
+> diffent contexts that would be used during panic. But maybe
+> they can be allocated in register_console() as well.
 
-This patch has garbage instead of tabs, it doesn't apply
+register_console() happens quite early. But my plan for v2 is to make
+them global static variables and allocate them on the first
+register_console().
+
+>>  	bool any_usable = false;
+>>  	struct console *con;
+>>  	bool any_progress;
+>> @@ -2667,7 +2684,16 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
+>>  				continue;
+>>  			any_usable = true;
+>>  
+>> -			progress = console_emit_next_record(con, handover);
+>> +			if (con->flags & CON_EXTENDED) {
+>> +				/* Extended consoles do not print "dropped messages". */
+>> +				progress = console_emit_next_record(con, &text[0],
+>
+> IMHO, &text[0] buffer is not used for extended consoles.
+
+Yes. msg_print_ext_body() needs it.
+
+>> +								    &ext_text[0], NULL,
+>> +								    handover);
+>> +			} else {
+>> +				progress = console_emit_next_record(con, &text[0],
+>> +								    NULL, &dropped_text[0],
+>> +								    handover);
+>> +			}
+>>  			if (*handover)
+>>  				return true;
+>
+> I do not resist on allocating the buffers in register_console(). I am
+> not sure if it would really makes things easier.
+
+I'll give it a try for v2.
+
+John

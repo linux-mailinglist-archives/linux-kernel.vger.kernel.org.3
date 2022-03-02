@@ -2,213 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1906A4CAD84
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D434CAD8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244543AbiCBS1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S244557AbiCBS3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbiCBS1v (ORCPT
+        with ESMTP id S234009AbiCBS3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:27:51 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD8CBDE56;
-        Wed,  2 Mar 2022 10:27:08 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222HQ3fa024511;
-        Wed, 2 Mar 2022 18:26:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=iiwDqj7VGQBS2Vezt01YmeaYOskh0GYHaiVDBBiEBOo=;
- b=X0XZtkZA1VFPrfSj6FQCYHx2+mqeS1kfkyWTouShgquMr6nU5XBHSf9N/HO7BeXuSBU+
- 4mdZ2MBYNPHjXaR0N83q5YZtffeo8NVPnNCY690947Xoe+ao7edvhsP0aiIvpKmVxoMI
- zUXkVKunx2pmoRhC6jgHSFfl0EHEY9/nP47mNlOnloKtUmltOC9W88862YQfWkdMwl0E
- 57/KutXnVlwDVp1W/lwgF0rmbbjM811dRt/TXNhxm7wXyY+XbAiVc/ZTLnGuWIftgMEH
- 83z9rMaToOdd0QzTRNPBY6VQt+6crJLIYl6vakPuhs/HodOfasS4J+6eQafp9qjcPSCi pQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh1k46nrp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Mar 2022 18:26:12 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 222I6riJ172573;
-        Wed, 2 Mar 2022 18:26:11 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
-        by aserp3020.oracle.com with ESMTP id 3efc17336f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Mar 2022 18:26:11 +0000
+        Wed, 2 Mar 2022 13:29:43 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70051.outbound.protection.outlook.com [40.107.7.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E3C7D62;
+        Wed,  2 Mar 2022 10:28:57 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NhcLbVHQnbBMgswV9fuAbL/Uk1b8A1hpvcRLwyLQwOzaWVUpBOqzBT1iXf2ApRAFfxf82vEVxUQM8bvtDPSoeg/chOaIWm9/vc6jHEfsVm9aEYlw2aGSpv3qGSHQ6DaQyEL7zMAKt4rx669m3TvlJC8ZoW4r/1RleXLA02uUJ8CsxjurYgDXi06TZuUj9Ohi9IGbvcG/KYYVqoURs/n3BUXNxGFq8ts/V7rSRAXNhbVdBt9izLYimcopWFDdf7NQ3tkNn+41G9fgdZPjUAYwO65d2vESoqzrC2/HSNOL5P+fpX+t1FCOXna9wQwp59Ive8TJhn3k8axd4ibziRVp1w==
+ b=FJVypxw/Cet4dnH6kPx2sHQP7jVGxADoxi1XCjbUmtXfVGbcLSqaCHLY6oQ76KZ9Z8OdEwaZSLT/IVFhH1eJ7dKVjRC8UxbIag4gtimiBxBmAKuja5C8fivwtWbtFbeK8w2mW8T56myGImqdq4nEudGt4bCxVHfgv/anRRpvEdTAfv1+RtEhpaVEzElmEJwl0pzrXFVYeXB87GeKN+9bN9jYNIMM5MUP8Ntha5gpzidAcdxabbo7EeaKfQ9Nyjg/+bbdoQFo1pXe+Ixv2zt6NO8VOHfPlw1x4AZfZofF25b4qrVk2+2xtmrOfNtI4rtexyBSkT5baXQ/xynXbBYoWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iiwDqj7VGQBS2Vezt01YmeaYOskh0GYHaiVDBBiEBOo=;
- b=fkATsFmcpvVIj+2N++Q6H/jsSdD3+00+J//CM2G2h5l7ci++9pRulG3dv/iTzedlQt+ZVTaDpWUI0O66BAgda05xarD5CZW3eOM3oxKSnqwvJesClhnEyn+uyh1BKbHnqSuxkkFv/jTNVvcr5Cx0mOPxtsSt7bXS3cAUpAona9suW/OqXXtZurYPK7dILBwr2q/P1ovjy1klUVwAB1CRwp6P5vGzV3mFfefrnmCX9FCKDvMe7IWndJMu93Nl8i1Pi31/EvgJjX6hP7pzn/kaVbLbXIpfOHrurfernbrev+EzMpt2lmATQPFYTuZfuMD3yUvF2eb7WUQOw6nWRJrZHQ==
+ bh=p4y/VJB1SCEfFH90j3mEFLogliA1vFVbIkhQAxdeQLY=;
+ b=f+vz5HN353OSq3aDmM3ijSMBdwnQSoaHwWliY+2homFm82+Up7LBm0Cbtdc0wjz63Ud5P2+gsOoV6XboFasl3qo691rZQAraZ7Cs7Y6IK8ud1+WSjQHAOuLZvKU4/3VsBtDkUr1SZid2gflBQ8nDMQmpOjE+kuuK5X1vH43Coe0yeWaehRr55EaNXLoy2qGxQQjz5N87X+Sorg76v8wC2qp53CkKDQxKeYFtJr49Pc4/+Eu977OvsqSXSvbLcC/0tdtFeNaBElngNEZYIashVSgi9i4P+e7/rqR3kM2qVU8YB49C0yKILj5RV2W9o0NONxbHUnuHAVvIc4eV+U0aZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iiwDqj7VGQBS2Vezt01YmeaYOskh0GYHaiVDBBiEBOo=;
- b=j1sA/Z2JwqVHahqS4qk8R5xYKKry+vJ2wZK23PKc0GV3yG8KFnn0MrtdItLh4nOd8vwPeI0RsndZLHwpM0Hmaa6zdELX9eG4f7L++Bic5EvI+eTcvYywbRaT2pzSMqmeZn8+7NoQw2wWzvVoawtn4vMEqMOUkCq4vaSItJPTkVs=
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
- by DM5PR10MB1627.namprd10.prod.outlook.com (2603:10b6:4:4::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5017.26; Wed, 2 Mar 2022 18:26:08 +0000
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
- 18:26:08 +0000
-Subject: Re: [Internet]Re: [PATCH net-next v4 4/4] net: tun: track dropped skb
- via kfree_skb_reason()
-To:     =?UTF-8?B?aW1hZ2Vkb25nKOiRo+aipum+mSk=?= <imagedong@tencent.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-        "joe.jin@oracle.com" <joe.jin@oracle.com>,
-        "edumazet@google.com" <edumazet@google.com>
-References: <20220226084929.6417-1-dongli.zhang@oracle.com>
- <20220226084929.6417-5-dongli.zhang@oracle.com>
- <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <2071f8a0-148d-96fa-75b9-8277c2f87287@gmail.com>
- <7991329A-DC69-4A6D-925D-33866EF5FB7E@tencent.com>
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-Message-ID: <9ce6ca48-9199-dc9c-296a-7ad61fd1ac31@oracle.com>
-Date:   Wed, 2 Mar 2022 10:26:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-In-Reply-To: <7991329A-DC69-4A6D-925D-33866EF5FB7E@tencent.com>
-Content-Type: text/plain; charset=utf-8
+ bh=p4y/VJB1SCEfFH90j3mEFLogliA1vFVbIkhQAxdeQLY=;
+ b=jtc05mo4xhMhU8F9uTfNKcP4jiBFs35hqkzmX6Jn5h3krAf8cz66MyNOonIuFTk2f64mWY952NGPHZoei49SG0xwe//qICwSCdnCnMBmtm1MroX8PFIWxqNPFIxXq3pIsvSpKg1uyecj2+otYcOaLSIiVuRmtco9Ribk2l+qBuo=
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com (2603:10a6:102:232::18)
+ by VI1PR0402MB3472.eurprd04.prod.outlook.com (2603:10a6:803:a::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 18:28:53 +0000
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::c897:1bdf:e643:aef8]) by PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::c897:1bdf:e643:aef8%6]) with mapi id 15.20.5017.028; Wed, 2 Mar 2022
+ 18:28:53 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+CC:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: RE: [EXT] Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC
+ handling and driver update for R-Car PCIe EP to support DMAC
+Thread-Topic: [EXT] Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC
+ handling and driver update for R-Car PCIe EP to support DMAC
+Thread-Index: AdguS7LYnJjb3WdWSa+29EVG6gHCPgADcQaAAAIaqDA=
+Date:   Wed, 2 Mar 2022 18:28:53 +0000
+Message-ID: <PAXPR04MB91866AB1474C9F9F2CB15B7A88039@PAXPR04MB9186.eurprd04.prod.outlook.com>
+References: <PAXPR04MB9186D7B361F9FFE56A0AE69C88039@PAXPR04MB9186.eurprd04.prod.outlook.com>
+ <CA+V-a8t2=MRObzdjHM9OUE8LzQXqoiLo-T+D3i1fLAOaneESpw@mail.gmail.com>
+In-Reply-To: <CA+V-a8t2=MRObzdjHM9OUE8LzQXqoiLo-T+D3i1fLAOaneESpw@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR04CA0008.namprd04.prod.outlook.com
- (2603:10b6:a03:40::21) To BYAPR10MB2663.namprd10.prod.outlook.com
- (2603:10b6:a02:a9::20)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 86e52fab-b56b-4f9a-eddf-08d9fc7a813d
+x-ms-traffictypediagnostic: VI1PR0402MB3472:EE_
+x-microsoft-antispam-prvs: <VI1PR0402MB34727F697D87C86C73E6B81188039@VI1PR0402MB3472.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /o3j/3+0u7EBbS7wW2pw6ZW/shZJjQcuIv6P0vtOKoiWZp9knzWCBEsiejHqjyTHhesYQrPnP6vrY1JCkwcnbioPkX7REBpUFxIYmlcetosiHX4PV18ao9/qmOs7mhih0VRLL35s1JzuLuZ+OET/P/psaJ4fh/XtGWoLxJ9aiDBz9pekF1LiZuQPcYc1ukZLI9aeh4y7ImpXCA6l6r/GG8VSbIiiB5f1R4GSwjVLYnXKt4rrvN3BRRmAVATAm9hDedF9737uiBU/gULGl55eh4B1NigCvlPBs+VUIvsmbqzoRk0Jzz5K5wJoyF5e/tDgSPZJvZLh/9dFrtqc47T6jglIg9FpypHsUpSt8nfXja50pYaMSP/irlLaOZAqOxGNTyXQ13eartIbJ0C9/ZRFgY6WMBeADL1pQQl5ey62iIgRlRTMLNPMNv/IAgUdHkcR6GbVeVhOzF1oLwi8mY25+v+wFce5XYM9Kpamfm/VeqiXf9H0KQTd/eIBoOtNSxEudmsLytCsk0zbR0VqYNXcQ7vKrAUFbFnHGGhdYMNqpLXm1QReDvSqFaB4LKjKd5k62gq/Z3H3aVjUa9hyhCHTW14VPtIwtVqI1WyO1tFvg8pEaE10pWE1Ss5/JtweOU0p6OYoKlrYQVxTChnPm2RuGonot5Ds89ioWo7OQS4k7fRcFr7+aXymYMoP/7zB5SNPcsim0InhfVEhbgCVXC49foIJap/141WQ9PXKS1MU04Nn8a8q7Jzk/AaIBJeuDiCadwoN0NP1U6o6FSeZduvV/5UK45jcykNvOml+uNfmXU0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9186.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8676002)(64756008)(55016003)(71200400001)(38070700005)(15650500001)(66476007)(26005)(66446008)(66946007)(186003)(66556008)(86362001)(122000001)(966005)(33656002)(45080400002)(498600001)(9686003)(52536014)(6916009)(5660300002)(54906003)(7416002)(8936002)(53546011)(55236004)(83380400001)(44832011)(2906002)(66574015)(7696005)(6506007)(38100700002)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?g127Dl6aVsL2jNW/VVvrQ0oNBpESGa5qs5nzsY5qy9WfrhzxHemXLcocZy?=
+ =?iso-8859-2?Q?q3MetmB/bNXIVhuWqKWzz5xaYK6qtJeynYkApJYdF+KPkbRQf8mFjUHfcY?=
+ =?iso-8859-2?Q?Gpl0FVp6f3IxbGC9/CZo+ofLPZGowIXhdYS7QCFqj3Xhw36LW6uo2ZcZDr?=
+ =?iso-8859-2?Q?eDHaP+hQ5TDfvbThqRm4lSDZM3d6QcLRnpwo4b5JzY1wPsav2GPYWwIGLd?=
+ =?iso-8859-2?Q?ZssD6JisZ0xcImFtqOqKffzvjYv8mQR+VbeE96OCVwjsGAldChoPC+8V8Z?=
+ =?iso-8859-2?Q?hKNYzPcSMsyPWdWYVikicD6fCK08G289L/EzvF/u95GOL+P8k4BtxOfCr0?=
+ =?iso-8859-2?Q?oC2syGgCSCbwmfXWT7UUDn+t5eHHXOBioAMHkpboVOF2ufu37iYJ8apbrs?=
+ =?iso-8859-2?Q?qlnjimzxkf2yYRxo90b55P0/cBmswBVwUy1YAHU4ndgXq+kpJeYDpn+DxU?=
+ =?iso-8859-2?Q?XXOhJaTGFIacTvmtYG7+riWZkgay9WA/Ak5fzry4j6yBwWobWCc+uTPef1?=
+ =?iso-8859-2?Q?Tss6J3kkyxFX3BXSyhc0jTe6NoDDymuWCHJjOFGr7exRlfPqt7SYa/Ws1z?=
+ =?iso-8859-2?Q?yqoDzN/LnK5POWY5o/DSxVQLR0UZ3EsNYo+b971zCBDF5GDtH+DW7TzQzN?=
+ =?iso-8859-2?Q?Wo+X5j6xPXb1PEHGFAsWVaXdxDDA1uM7TxM1fn/ckmpSAd7HKD+gSC/g8f?=
+ =?iso-8859-2?Q?d0et5fFVtv92jLMfgtUroox5Ao3FzSRG+WJOXhsSLQ0l8sj4Pi0de+xcMg?=
+ =?iso-8859-2?Q?X5os2Ei2usMoBfRhqOM3nhddj3BVHsbpzkcEMO6ynlpE+wEfLyb9sL6d4p?=
+ =?iso-8859-2?Q?TgOWECFVjFqxr+QfJ1One4TwxcTqgRnTKwfE8Imxv1yzv+poP+wXesJqHg?=
+ =?iso-8859-2?Q?7b7lFWDNWUR3fbSUZ/TcJXj+yZfpDmiLF9I+EzRiHe35QagvvZ0xfauegw?=
+ =?iso-8859-2?Q?7nwJ3gQZ9kOkpXmJHLaXDUKirV/j9v2HX2/VkuoFWvUwKMbBJ6IxQAfCjo?=
+ =?iso-8859-2?Q?lZ/QAAOY/3IyDDjpyld85P8bAVqgKT5e/CCQ0MEQWHPoHX1YV/Yyzpxjv6?=
+ =?iso-8859-2?Q?eYCJmfK949OSxPDCJXxLCV0pWndGZAcLhKr88vqRX+l2fIsA2wBHvEeVBG?=
+ =?iso-8859-2?Q?Lw46D6VlmrYCtI4+ke7gFN3OF8Gk0m2Cc3xL6qg8SrrDbyTpJ4pxrpk/WA?=
+ =?iso-8859-2?Q?8AnN9j7f6uKCGbqUyYYr49gNrCpmp306x4+mqqAp0p9kNOLTmZp1mbEBjb?=
+ =?iso-8859-2?Q?KABSxmTZEMZ4xsttFMAmsiTJzd5MlWXO+a5WjD0UTeCtpBydi6opzZGDQW?=
+ =?iso-8859-2?Q?Wk6Al2i4lziwrxx8D96I4jI6jYFYdLXZpxgJmXDnoYJ63mfsDLbxcLe/IE?=
+ =?iso-8859-2?Q?5HYleEJMHpAqrntPlZY+3DslU/YhAp0kvNMhnaWD7Rtz7Pvhb4whrU4BvP?=
+ =?iso-8859-2?Q?szTaA7fWljfimHNWtTqR8fWAZXDl8g0HM//ixxHPynxxSu0tuzt6+voAGF?=
+ =?iso-8859-2?Q?FP1TTgoPtkBAenz0i343ePSu5d1hnb0YrinUfIqf6+XI2bdRY5alM6iCdW?=
+ =?iso-8859-2?Q?/vaLECD7Yw/SbBjcP0kw2sVHii6E/8RjLCM9YdkAKBRgUBDuIhJRFiHqPm?=
+ =?iso-8859-2?Q?3KTqAkX1hIFx/CD7EWjd1sdyfIvCbCDQ7KIByQ3vv6zlqPvSutJGofIiuA?=
+ =?iso-8859-2?Q?Eff0VhudTnPwXy90hoY=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f131afd8-016c-414d-2b8d-08d9fc7a1ebb
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1627:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB162786688C92D7957C4EE6C1F0039@DM5PR10MB1627.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e/OGyPQ0dqdU/0/P2J/+aGT7SjzJF4EuLoJ9a38Mi343pSaB/kfvrdlKu4Dse90ehw/z9jRMYbBCFQlhI3lmQhUhA4knldW9xht16D3v58M5/2gA+2ZEX8OI8bNyRQnkVGIOmtJWeNjIfJxVZudfD1T6jcPrnLVZsk7pYmobBjglRwHjHD1rC3Bcl/Ds9SZ/oy6ybylfAWGeLaGCuoldIRumsw6V6mTygbyvvkyC5oVXzkNPx5rZJW5Q5G9lsEgN/61ABzPhEbkJ1+RiEWxTU5iaiM8KoJUYaDW6BMBwXaH4iG6pBGar0LGT3bWdJd8kEsmMKdcXAgqzFbAsf1VV806q7q8B3sWy1UDmolBckC/Pn3mUdEnX+C4ZO+KV+hC9idWVnrASbASHD/blRBuJMpC8YDLIhPNaLLlsk8u2q5DpzuzcAWs/XZfRGRO9vLeLmcShxtY4wjTOlZ+8Sv576vNq5fivIwNBahXok/4fQcFOncxfQLPtsYTvqFg5PdSKa8td/L9T7SuPBzBnCvRbEwVBhH/bjnkOS4SmooxMOuaHew1Hf3yXZu9/mBvM+D0mlNwPJ5JcSie6/15io1DyMKuMX6VBEm9fGCfTbxx0fZqKkTCyfhSK/5piHBwPkcaWcJQG0Eress3rYldCrZq/OMRN00EHCVj4YumMyKDx/FgrrTOurrfcpSu/sQoWwjEfEypBthYp4BiWd8TUs+1OsQLHbrXG5xGjk7jw/38ezroBu01HPhokhXlT5GAp4UlR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(54906003)(5660300002)(110136005)(186003)(66556008)(66476007)(66946007)(6486002)(36756003)(31686004)(508600001)(6506007)(2616005)(6666004)(7416002)(53546011)(38100700002)(44832011)(4326008)(316002)(8676002)(2906002)(6512007)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bkFpOGZTamhkYlRzZFJuMU56ajk0blFFSzRCT3Zra3AzNXFvMVBQSzJhaU9i?=
- =?utf-8?B?Y3NOQ3R6amlkOUtCKzhHeEt6SXhzZXVxZHoydjZ5WVViSlJWczVHNEVaa2p0?=
- =?utf-8?B?TklQbGZ1Y0hrS3ltQnl5djNHVHR1NjhaU2F6RnNPYW1QRS9ELzJpMVVNcDdT?=
- =?utf-8?B?RkNTTWw4eXhWT2lCRkxUMUkrM2xCS3ovbDNPSktmUUptWXNwM3N0ODFBYmN5?=
- =?utf-8?B?NVpDbmo1NGJCeWEvcTVpdE9pd1VoUXZjRjU2Qm9nZVc0dDNwS2MxZERJV3A4?=
- =?utf-8?B?Sko1YUlpaDUrdmZZRGtIT2IwdlAyb21uODBET2xmRUNNOW1NdnhPT0o0WFhB?=
- =?utf-8?B?TFJQOTkvaWRBcE1RTzdPVnFyOUExSnNPRTdZMjVBSGMvd3d6Wk13Nk9jTkx0?=
- =?utf-8?B?VUg4YUYveGE2YkRaSjhZQWRPWENtK2JRelFjWTJLTVNZaXdXTU5qVC9JQ2dK?=
- =?utf-8?B?VFpZSE05R0g0QWErcnBaV0l4VEwvUzJ3cXdlUDlYWmlvVUxaZUYwdC9BdlNH?=
- =?utf-8?B?MUtWVXJrNHFPYUNxQ2Z3WHVmVkZwY0JFclhXdWJpNjBvTlJneCttYVhzSzQ4?=
- =?utf-8?B?MjhGR2hDeGQ4dWVsRzdHYlVnSEhISE5IaUxGTlB3aEVidFhtdCtnL0piVHp3?=
- =?utf-8?B?YTNaNHY0T0FuWXFCTFExS3J4b0QyVEFVSWFyTi80SDBpcnFneW1ZTGxMbGNi?=
- =?utf-8?B?ZndjdnBFalBHMmx4Wmc2L1BaQVdBYXNSUXR1NXRWeDhZL1E2OEk3RjN4OGJX?=
- =?utf-8?B?dXhFZE1sY21kWUpzMlhQVDRFa2orSWQ1U1IxOWcxb0IxNUhvNlk3WGtjUlVw?=
- =?utf-8?B?OXBWbDJxTk4yWTdtektGZ2gwZlMyVDFRWmdnVFZ6VnluR3RFUkJZbzl6UG41?=
- =?utf-8?B?b3I3ZTFTZ0wvTWcyWUdPaG92YzJNVzlkM3N0ajFIYmhFYlVtZXRBeTJIcHVE?=
- =?utf-8?B?dUhTeXVpeU80V3lpOW8xMDZYempXdm5GSm5LV1lKbTdNNklDd0wyaXZjRWhw?=
- =?utf-8?B?cHc2c1RjNWYxQTJ3M1RCQUxSZlYrTG9VeDVqT09jYkxneEovM3EwT0JyelNG?=
- =?utf-8?B?QTJhbUJNajFKUXgyakpmbi9HMVhyNUxQdllUVTZrZzVLajgxZ2pPckpKWHgv?=
- =?utf-8?B?TWFLeVVSRjdhZHBVdVNxRC9Kem5aZzBrazlOZzJMb1Y3bzlhV21HSjArcGUx?=
- =?utf-8?B?dUN4SUdPSFlIbmtiMldBQmZxRlFudFNPUkUwRk9zU3F4MmY0OUx0dU5ZRW55?=
- =?utf-8?B?VERhV0trNWYwb3Y5VDZHcDJVWWNDNjVleUJ5UElmeTU1MEJESTVRUkJFekVE?=
- =?utf-8?B?K2lqbEs2QkR4dysrMWZ0WW13YnJib3hRRXU5L3FWcGphWmNRaTBnZmMvL0RB?=
- =?utf-8?B?cDJqaGhJZDE1RW1vVDhpUEJ0VFI0SjN2dWVCVW9LTzRhT25oNmkxZm40dVdw?=
- =?utf-8?B?SEN0Yk12eUR1ZDF1aktqMmk4UkNiM2k5SW1Zay8yYkZrcjVMT0k5b29udVNI?=
- =?utf-8?B?bWN6alQ4T0tlbFdieWlsODJuTHlGOFp0Y0VwYklyWlREekRqMFFlemhDVXlJ?=
- =?utf-8?B?Z2NIYjlDckl4T29nek9YNUcvcVV1YVl2VWdqWWt0V2syWEJMVVJjVmw5Q2ZI?=
- =?utf-8?B?ZjBGVEkyWWFIZmlEYytKRHJORkJ1ZHhpSC8rMVNpTFBobHNrbEExRTMzVC9N?=
- =?utf-8?B?TW9MY3RvMTBVTjhzcURaTlF0UXg0UlV2NW9mY09PVmlSVFl2L2JMUk9ERkJs?=
- =?utf-8?B?ZnpvYmR0aVpndFZFdkc1dVFJbUJQbkZ3ejlUeXBiRWZCQnJuZmdGa2FIK3l4?=
- =?utf-8?B?OSt6L1VhbUFaRkhGT25ESlZVeWNrTUFGS3dOVFdXT2xBZ0pwT3htN1VpekVU?=
- =?utf-8?B?K3c1WDUwMVU5NXcxWUVOaTBmcjZtSkl4UGZSN3BMQXhybWRRRHFZdmNXcWlr?=
- =?utf-8?B?dGM1MDk0UWQxY2FxUy9RVHB0TGxXRHRFblBGSXBrOGt3N1BFd1hDTktDZm43?=
- =?utf-8?B?S1lRbG0yb1NHZTZiRnpSbHR4WmFTTEtVeTdxQytoa2hwVFIzd3RRbW5ZamhY?=
- =?utf-8?B?b0FycUd4WDg0alVQR01ocWZnV3MrMFZsOHNFSUtzSXY0ZDVEbUlRT0lwVUE5?=
- =?utf-8?B?bDZZQkZPWXFFdStyUXAyeWZNaEV6Um1vNXRFMWl6S0hlYy96VVFzMWxmc3cz?=
- =?utf-8?B?eG9Oa2djUldGNGZPNzFJVlhONE94MnBKUlFkYktPcEsvSVdOQ3JkRUwvTi9h?=
- =?utf-8?B?S001MjVQT3FnM1cwby8yaGFWZGl3PT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f131afd8-016c-414d-2b8d-08d9fc7a1ebb
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 18:26:08.2834
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9186.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86e52fab-b56b-4f9a-eddf-08d9fc7a813d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2022 18:28:53.3227
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MvjmkI1NQHi2C19nTvdn+Q528sVdNDud3hE6ihrl2vxTUtWFnKQNbkiwRnoOdgr7RRcSnzaiqBafAbawVHC8xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1627
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203020078
-X-Proofpoint-ORIG-GUID: pB_LNCTY9bphtef4HtKzYX1n8ysX4a9Z
-X-Proofpoint-GUID: pB_LNCTY9bphtef4HtKzYX1n8ysX4a9Z
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hZxorkoKOLFNgzLS0nE6XOrszsuX6F0RGvFCG6/1kSR5jPylTh54tBNXqI/Me8Z2qAIjaloA5AXdRaD71/jwaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3472
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Menglong,
 
-On 3/1/22 8:16 PM, imagedong(董梦龙) wrote:
-> 
-> 
-> On 2022/3/2 AM 11:29，“David Ahern”<dsahern@gmail.com> write:
-> 
->> On 3/1/22 7:50 PM, Jakub Kicinski wrote:
->>> On Sat, 26 Feb 2022 00:49:29 -0800 Dongli Zhang wrote:
->>>> +	SKB_DROP_REASON_SKB_PULL,	/* failed to pull sk_buff data */
->>>> +	SKB_DROP_REASON_SKB_TRIM,	/* failed to trim sk_buff data */
->>>
-> [...]
->>>>  	SKB_DROP_REASON_DEV_HDR,	/* there is something wrong with
->>>>  					 * device driver specific header
->>>>  					 */
->>>> +	SKB_DROP_REASON_DEV_READY,	/* device is not ready */
->>>
->>> What is ready? link is not up? peer not connected? can we expand?
->>
->> As I recall in this case it is the tfile for a tun device disappeared -
->> ie., a race condition.
-> 
-> This seems is that tun is not attached to a file (the tun device file
-> is not opened?) Maybe TAP_UNATTACHED is more suitable :)
-> 
-> 
 
-Thank you very much for the suggestions! TAP_UNATTACHED is more suitable.
+> -----Original Message-----
+> From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
+> Sent: Wednesday, March 2, 2022 11:18 AM
+> To: Frank Li <frank.li@nxp.com>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>; Lad Prabhak=
+ar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com>; Kishon Vijay Abraham I
+> <kishon@ti.com>; Bjorn Helgaas <bhelgaas@google.com>; Lorenzo Pieralisi
+> <lorenzo.pieralisi@arm.com>; Krzysztof Wilczy=F1ski <kw@linux.com>; Arnd
+> Bergmann <arnd@arndb.de>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>=
+;
+> Marek Vasut <marek.vasut+renesas@gmail.com>; Yoshihiro Shimoda
+> <yoshihiro.shimoda.uh@renesas.com>; Rob Herring <robh@kernel.org>; linux-
+> pci <linux-pci@vger.kernel.org>; Linux-Renesas <linux-renesas-
+> soc@vger.kernel.org>; LKML <linux-kernel@vger.kernel.org>; Biju Das
+> <biju.das.jz@bp.renesas.com>
+> Subject: [EXT] Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC
+> handling and driver update for R-Car PCIe EP to support DMAC
+>=20
+> Caution: EXT Email
+>=20
+> Hi Frank,
+>=20
+> On Wed, Mar 2, 2022 at 3:42 PM Frank Li <frank.li@nxp.com> wrote:
+> >
+> >
+> >
+> > > -----Original Message-----
+> > > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
+> > > Sent: Thursday, February 10, 2022 3:24 AM
+> > > To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>; Kishon
+> Vijay
+> > > Abraham I <kishon@ti.com>; Bjorn Helgaas <bhelgaas@google.com>; Loren=
+zo
+> > > Pieralisi <lorenzo.pieralisi@arm.com>; Krzysztof Wilczy=F1ski
+> <kw@linux.com>;
+> > > Arnd Bergmann <arnd@arndb.de>; Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org>; Marek Vasut
+> <marek.vasut+renesas@gmail.com>;
+> > > Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>; Rob Herring
+> > > <robh@kernel.org>; linux-pci <linux-pci@vger.kernel.org>; Linux-Renes=
+as
+> > > <linux-renesas-soc@vger.kernel.org>; LKML <linux-
+> kernel@vger.kernel.org>;
+> > > Biju Das <biju.das.jz@bp.renesas.com>
+> > > Subject: [EXT] Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC
+> > > handling and driver update for R-Car PCIe EP to support DMAC
+> >
+> > I use standard DMA engine API to implement Designware PCIE EP embedded
+> DMA support.
+> > Please check
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
+kern
+> el.org%2Fall%2F20220302032646.3793-3-
+> Frank.Li%40nxp.com%2FT%2F&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C0e2e5=
+fe8f
+> d224076afb208d9fc70aa16%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378=
+18
+> 383096028914%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIi=
+LC
+> JBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DDCDX%2BYEVFsPOE6ZWzwrMxk1=
+Fjlk
+> ZA%2FEPGmhQSHuPB2c%3D&amp;reserved=3D0
+> >
+> Thank you for the link. The Designware PCIE EP is implemented as a DMA
+> engine driver so it's convenient to use the DMA engine API, whereas
+> the R-Car PCIe-EP is implemented as an actual PCIe EP [0].
 
-The tap/tun are only two of drivers in linux kernel. We have already introduced
-another two tap/tun specific reasons.
+My means, needn't add new interface pci_epf_internal_dmac_xfr at epc/epf.
+Your R-Car PCI-EP DMA part can implement as a dma engine driver like design=
+ware.
 
-My concern is we may finally have too many reasons. That's why I am always
-trying to define the reason as generic as possible so that they will be re-used
-by most networking drivers.
+So EP functional driver use the same method to operate DMA regardless
+EP controller type.=20
 
-We may expand the reason if it is fine to have too many reasons for skb_drop_reason.
+Best regards
+Frank Li=20
 
-Dongli Zhang
+>=20
+> [0]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+erne
+> l.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fnext%2Flinux-
+> next.git%2Ftree%2FDocumentation%2Fdevicetree%2Fbindings%2Fpci%2Frcar-pci-
+> ep.yaml%3Fh%3Dnext-
+> 20220302&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C0e2e5fe8fd224076afb208=
+d9fc
+> 70aa16%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637818383096028914%7C=
+Un
+> known%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiL=
+CJ
+> XVCI6Mn0%3D%7C3000&amp;sdata=3Dv96I5m%2BsjozpFVLHgY4VE5H59r9cyG%2F%2FVDUX=
+PHKT
+> 2Sw%3D&amp;reserved=3D0
+>=20
+> Cheers,
+> Prabhakar
+>=20
+>=20
+> > Best regards
+> > Frank Li
+> >
+> > >
+> > > Caution: EXT Email
+> > >
+> > > Hi,
+> > >
+> > > On Thu, Feb 10, 2022 at 8:40 AM Manivannan Sadhasivam
+> > > <manivannan.sadhasivam@linaro.org> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Wed, Jan 26, 2022 at 07:50:38PM +0000, Lad Prabhakar wrote:
+> > > > > Hi All,
+> > > > >
+> > > > > The current PCIe EPF framework supports DMA data transfers using
+> > > external
+> > > > > DMA only, this patch series aims to add support for platforms
+> > > supporting
+> > > > > internal DMAC on PCIe for data transfers.
+> > > > >
+> > > > > R-Car PCIe supports internal DMAC to transfer data between Intern=
+al
+> Bus
+> > > to
+> > > > > PCI Express and vice versa. Last patch fills up the required flag=
+s
+> and
+> > > ops
+> > > > > to support internal DMAC.
+> > > > >
+> > > > > Patches 1-3 are for PCIe EPF core to support internal DMAC handli=
+ng,
+> > > patch
+> > > > > 4/5 is to fix test cases based on the conversation [1].
+> > > > >
+> > > >
+> > > > This looks similar to the Synopsys eDMA IP [1] that goes with the
+> > > Synopsys PCIe
+> > > > endpoint IP. Why can't you represent it as a dmaengine driver and u=
+se
+> the
+> > > > existing DMA support?
+> > > >
+> > > Let me have a look. Could you please share a link to the Synopsys PCI=
+e
+> > > endpoint HW manual (the driver doesn't have a binding doc).
+> > >
+> > > Cheers,
+> > > Prabhakar
+> > >
+> > > > [1]
+> > >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+erne
+> %2F&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C0e2e5fe8fd224076afb208d9fc7=
+0aa1
+> 6%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637818383096028914%7CUnkno=
+wn
+> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVC=
+I6
+> Mn0%3D%7C3000&amp;sdata=3D7OMZZxDki3KkquGWF7B7PFDDciohJOEUFuDXSd50avc%3D&=
+amp;
+> reserved=3D0
+> > >
+> l.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Ftree%2F=
+dr
+> > > ivers%2Fdma%2Fdw-
+> > >
+> edma&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C95a5831aac544de2211508d9ec=
+772f
+> > >
+> 9a%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637800819106821404%7CUnkn=
+ow
+> > >
+> n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV=
+CI
+> > >
+> 6Mn0%3D%7C3000&amp;sdata=3DyG39L2YBN9blGxTcXyVQwIXol8%2FCo%2FZ3GbGPIlqz6M=
+g%3D
+> > > &amp;reserved=3D0
+> > > >
+> > > > > Patches are based on top of [1] next branch.
+> > > > >
+> > > > > [0]
+> > >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fwww.s=
+pini
+> %2F&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C0e2e5fe8fd224076afb208d9fc7=
+0aa1
+> 6%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637818383096028914%7CUnkno=
+wn
+> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVC=
+I6
+> Mn0%3D%7C3000&amp;sdata=3DjlSMhNop8XtntmY%2FwySkwQDUd02i3ihhMtOmEesnwyg%3=
+D&am
+> p;reserved=3D0
+> > > cs.net%2Flists%2Flinux-
+> > >
+> pci%2Fmsg92385.html&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C95a5831aac5=
+44de
+> > >
+> 2211508d9ec772f9a%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378008191=
+06
+> > >
+> 821404%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTi=
+I6
+> > >
+> Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DieX2gSSHFDumc1k2iWoOfMyHg236aJT=
+E7UZ
+> > > 5D74D9KM%3D&amp;reserved=3D0
+> > > > > [1]
+> > >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+erne
+> %2F&amp;data=3D04%7C01%7Cfrank.li%40nxp.com%7C0e2e5fe8fd224076afb208d9fc7=
+0aa1
+> 6%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637818383096028914%7CUnkno=
+wn
+> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVC=
+I6
+> Mn0%3D%7C3000&amp;sdata=3D7OMZZxDki3KkquGWF7B7PFDDciohJOEUFuDXSd50avc%3D&=
+amp;
+> reserved=3D0
+> > >
+> l.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fhelgaas%2Fpci.git&amp;data=3D0=
+4%7C
+> > >
+> 01%7Cfrank.li%40nxp.com%7C95a5831aac544de2211508d9ec772f9a%7C686ea1d3bc2b=
+4c
+> > >
+> 6fa92cd99c5c301635%7C0%7C0%7C637800819106821404%7CUnknown%7CTWFpbGZsb3d8e=
+yJ
+> > >
+> WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am=
+p;
+> > > sdata=3DQc5cW6y5OrxprDjFQ1dNMZ4ZUc656I3FZqClaUMLx%2FM%3D&amp;reserved=
+=3D0
+> > > > >
+> > > > > Cheers,
+> > > > > Prabhakar
+> > > > >
+> > > > > Lad Prabhakar (5):
+> > > > >   PCI: endpoint: Add ops and flag to support internal DMAC
+> > > > >   PCI: endpoint: Add support to data transfer using internal dmac
+> > > > >   misc: pci_endpoint_test: Add driver data for Renesas RZ/G2{EHMN=
+}
+> > > > >   misc: pci_endpoint_test: Add support to pass flags for buffer
+> > > > >     allocation
+> > > > >   PCI: rcar-ep: Add support for DMAC
+> > > > >
+> > > > >  drivers/misc/pci_endpoint_test.c              |  56 ++++-
+> > > > >  drivers/pci/controller/pcie-rcar-ep.c         | 227
+> ++++++++++++++++++
+> > > > >  drivers/pci/controller/pcie-rcar.h            |  23 ++
+> > > > >  drivers/pci/endpoint/functions/pci-epf-test.c | 184 ++++++++++--=
+--
+> > > > >  drivers/pci/endpoint/pci-epf-core.c           |  32 +++
+> > > > >  include/linux/pci-epc.h                       |   8 +
+> > > > >  include/linux/pci-epf.h                       |   7 +
+> > > > >  7 files changed, 483 insertions(+), 54 deletions(-)
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > > >

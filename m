@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8797E4CB0FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535284CB0C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245176AbiCBVMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S245105AbiCBVMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiCBVMK (ORCPT
+        with ESMTP id S245063AbiCBVL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:12:10 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C439DCE2B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:11:23 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so1229511wmf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E4ln3wZSFy5ygWivBAZ51NJDAFnU2GvQHlM0R2GzsJk=;
-        b=bJIL0p9pOk2OYxkv4MgssHYy583tVP3qI9kh5i+J6fdhzIZaUQ6qV4dRNmXg2nOoAV
-         xGSU6184/6Papd9QxDjUVh2EMscFRMunogHDJshyMBup66uO0h5hs7IC5zmLDZhfDRVz
-         u6jvoIYBvzLyRZ9Pd89jakr/6bSunhJdg+6Msfz/2kbIOIjmQ3281yto6xsdt/h1k1w5
-         zvwxgHvW3BzdVIi2abn69Ple0W+TStSeOSdyRVYxOjxZvmlT0YVbGPsLq0tH98fmrEmY
-         gwKLmyNEPJVwBI+CR/4UeH9aFBn09hn35MDX8HI3/mPBpEW+jJD+dry/n78x1rZ+YD+v
-         9eGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E4ln3wZSFy5ygWivBAZ51NJDAFnU2GvQHlM0R2GzsJk=;
-        b=SeJGlmIR8otujSjhC8xixi2PRb0avuJm8cp/PssNlgP8xqHXrdylsJ3mfQexGdnvsy
-         iIB6xS9Z0WILa8jYazgxycLyFid7LdlEDvbe4cFcAe0UKe37A4AZvMNyHYwMrqBTrDb8
-         CNsjPAIF/b6mVlxpX1/x0YafRB8TFyiLMFnEjY2r05z3GdmIbgwNqK8PSh/v3SkQB6q8
-         r1wOgXUJopZ2uSbfInNY7HxTfOMoZE4ZBvmRheLQlEkEheCrChh8oGebTO+rSrk1ijLV
-         3oCzOKTmS93VBtquf31aB6Q8U70UNEHB0aq9Z2PibwLsKfLOK1f8xc1MCTGfTqtjTxa7
-         gRKg==
-X-Gm-Message-State: AOAM533zILHCCh/WDfHL/Ll2bw4dUJJC4p8Ndhd2cOEcTwkeZwjruEGM
-        HuTL51AqXL1BHdQWq+IF4eYgIA==
-X-Google-Smtp-Source: ABdhPJwJBTQ00m+t9wxyzB1cXj8n/0LaZCqu4MpcCdI94b0Fd6Skv6Vca/UH6uS9c3TZZ8GgpF704w==
-X-Received: by 2002:a7b:c455:0:b0:380:a646:eb0e with SMTP id l21-20020a7bc455000000b00380a646eb0emr1350654wmi.170.1646255481699;
-        Wed, 02 Mar 2022 13:11:21 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm145776wmp.44.2022.03.02.13.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 13:11:21 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, john@metanate.com,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 00/18] crypto: rockchip: permit to pass self-tests
-Date:   Wed,  2 Mar 2022 21:10:55 +0000
-Message-Id: <20220302211113.4003816-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 2 Mar 2022 16:11:57 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E0BD5F7B;
+        Wed,  2 Mar 2022 13:11:13 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9B9A31C0006;
+        Wed,  2 Mar 2022 21:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646255471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R3mfQJsTKwIzhZ33j4hFLjtUpRVeDi7Z2kzbSMbPQqU=;
+        b=JwChI3+JnOYvJDzPok50uwsOA10hRN5vxxa0d3epDac5mJl08CpZE9eCKerCAjJONdO9DL
+        x7zs4yiQLwrkFZ97VSiRhi8x0Zsw6lEhcs+aMJTejcLVGp4d8IoDTp0My+eGLeIxB9va+/
+        7Og1MBhr5Y1pq/FmzIL6cv2b8zE+5MS5V3u1W2euYuy8/RftcsUisyVE7maUkMsHNdgCBQ
+        m5lqlhwqz+7JE1W17BSTMvqb2suKJTVv+Kg0fzWz9QLfdSUpb3X+C/yrJ44fkFg/RXXmvs
+        OmhL8geZ8v9Sms2MugpV/E/wxST58cV2U8PKKaFPjHw6SJuu7XQlyt/NEzPCIA==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 4/8] ARM: dts: sun8i: v3s: Add mbus node to represent the interconnect
+Date:   Wed,  2 Mar 2022 22:10:56 +0100
+Message-Id: <20220302211100.65264-5-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,56 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+The V3s uses the mbus interconnect to provide DRAM access for a
+number of blocks. The SoC can only map 2 GiB of DRAM, which is
+reflected in the dma-ranges property.
 
-The rockchip crypto driver is broken and do not pass self-tests.
-This serie's goal is to permit to become usable and pass self-tests.
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-This whole serie is tested on a rk3328-rock64 with selftests (with
-CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
-
-Regards
-
-Changes since v1:
-- select CRYPTO_ENGINE
-- forgot to free fallbacks TFMs
-- fixed kernel test robots warning
-- add the PM patch
-
-Corentin Labbe (18):
-  crypto: rockchip: use dev_err for error message about interrupt
-  crypto: rockchip: do not use uninit variable
-  crypto: rockchip: do not do custom power management
-  crypto: rockchip: fix privete/private typo
-  crypto: rockchip: do not store mode globally
-  crypto: rockchip: add fallback for cipher
-  crypto: rockchip: add fallback for ahash
-  crypto: rockchip: better handle cipher key
-  crypto: rockchip: remove non-aligned handling
-  crypto: rockchip: rework by using crypto_engine
-  crypto: rockhip: do not handle dma clock
-  ARM: dts: rk3288: crypto do not need dma clock
-  crypto: rockchip: rewrite type
-  crypto: rockchip: add debugfs
-  crypto: rockchip: introduce PM
-  arm64: dts: rockchip: add rk3328 crypto node
-  dt-bindings: crypto: convert rockchip-crypto to yaml
-  crypto: rockchip: add myself as maintainer
-
- .../crypto/rockchip,rk3288-crypto.yaml        |  64 +++
- .../bindings/crypto/rockchip-crypto.txt       |  28 --
- MAINTAINERS                                   |   6 +
- arch/arm/boot/dts/rk3288.dtsi                 |   4 +-
- arch/arm64/boot/dts/rockchip/rk3328.dtsi      |  11 +
- drivers/crypto/Kconfig                        |  12 +
- drivers/crypto/rockchip/rk3288_crypto.c       | 307 +++++-------
- drivers/crypto/rockchip/rk3288_crypto.h       |  69 ++-
- drivers/crypto/rockchip/rk3288_crypto_ahash.c | 222 +++++----
- .../crypto/rockchip/rk3288_crypto_skcipher.c  | 452 +++++++++++-------
- 10 files changed, 648 insertions(+), 527 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
- delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
-
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 084323d5c61c..a966b6a9acf5 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -577,6 +577,21 @@ int_mii_phy: ethernet-phy@1 {
+ 			};
+ 		};
+ 
++		mbus: dram-controller@1c62000 {
++			compatible = "allwinner,sun8i-v3s-mbus";
++			reg = <0x01c62000 0x1000>,
++			      <0x01c63000 0x1000>;
++			reg-names = "mbus", "dram";
++			clocks = <&ccu CLK_MBUS>,
++				 <&ccu CLK_DRAM>,
++				 <&ccu CLK_BUS_DRAM>;
++			clock-names = "mbus", "dram", "bus";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			dma-ranges = <0x00000000 0x40000000 0x80000000>;
++			#interconnect-cells = <1>;
++		};
++
+ 		spi0: spi@1c68000 {
+ 			compatible = "allwinner,sun8i-h3-spi";
+ 			reg = <0x01c68000 0x1000>;
 -- 
-2.34.1
+2.35.1
 

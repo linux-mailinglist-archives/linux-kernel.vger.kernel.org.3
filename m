@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9E94CA8A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD024CA8A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237630AbiCBO6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S243314AbiCBO6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiCBO6S (ORCPT
+        with ESMTP id S237870AbiCBO6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:58:18 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628D513DD7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:57:33 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id bg16-20020a05600c3c9000b00380f6f473b0so3456427wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:57:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wGGyr8F/4yesRnDkleDkSeBi9/XbD7YGJTcIBLykmxo=;
-        b=YAWW5HKlB7Eey/hbn/tEyKoY+Ej9P8bjmKwFJpG4WIH2K/pus2hP+RvzIjDv6V3z5p
-         k6x5v3LHFzzK0yNYVc3/6rqsj7QQzSFP9PqTvboq8Gd2h2U5akBPL3gjR8Gis5rXW7a5
-         f5Wj0QWjydNWVbiao3cyHkss6w5fRltrK3+kbwT6yAe/CdOFs42vPOp9Mksavp1FhfDg
-         b+8kmdCZBXU7N1sbqbnIx9h7JeO+bMDEWXRboAhQXSO6FrQS9Y2kIONVMIQBVPZeWrO0
-         GsIgMsxoTCsl6Mtqj6TTCwunX0DqqFgLwCazwzkBeT0HF1oYRmofMt0ZOyXz8dF5vh/a
-         nxAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wGGyr8F/4yesRnDkleDkSeBi9/XbD7YGJTcIBLykmxo=;
-        b=kLC/Hp0XIRzKdXLioTbCC4YPEzxAXyLz3cKvnBlH2j5UH2gaAhkpGYyI+UEH0qMrz5
-         a/gB4dF+qtxh/SF0sMT+YlJvfsEWZ4dpbjhT8t0vmekcAl2kVw3/Qm+gm1hwptrZ1CKO
-         QNpJmDK6yE7yR2wSXWD4A8GzAaZPfTrNT4pfHdGEcjZRqlAOYzf5GU4g+zUh9U4QD2w4
-         KkMDLqLkC3YEjydTRvckIgd8KrJMVRxEELjuAAbi/+EFz/x+Sd3wlqO7D+GpLUdrE+0L
-         TZ6qqUfVThJ2nvv4E9Csdv36zJxxz/DKgemchumYLG/kQycnZZ/fF6VWW9fimwwuhuyV
-         6gsA==
-X-Gm-Message-State: AOAM531/IL2JUuSiVRVrnF7ifw3jm+VlnL825tDRo+n2GEkPX5BH9tog
-        6FH7H1rZQDYIDVjVJLqdjKC1MA==
-X-Google-Smtp-Source: ABdhPJxDjgY35zlNFNM4bX0OTXrJd0JfiswPqCzf7heVkctOxPWyBqq7cmIrMgVAjnLfYiYdzW+RlQ==
-X-Received: by 2002:a05:600c:40cf:b0:381:1f87:84c4 with SMTP id m15-20020a05600c40cf00b003811f8784c4mr102404wmh.181.1646233051757;
-        Wed, 02 Mar 2022 06:57:31 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id o204-20020a1ca5d5000000b0038331f2f951sm4751221wme.0.2022.03.02.06.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 06:57:31 -0800 (PST)
-Date:   Wed, 2 Mar 2022 14:57:26 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     jasowang@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <Yh+F1gkCGoYF2lMV@google.com>
-References: <20220302075421.2131221-1-lee.jones@linaro.org>
- <20220302082021-mutt-send-email-mst@kernel.org>
- <Yh93k2ZKJBIYQJjp@google.com>
- <20220302095045-mutt-send-email-mst@kernel.org>
+        Wed, 2 Mar 2022 09:58:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0062AC5C;
+        Wed,  2 Mar 2022 06:57:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ACF161681;
+        Wed,  2 Mar 2022 14:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABA7C004E1;
+        Wed,  2 Mar 2022 14:57:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646233070;
+        bh=HJ9UOZ8Pda2J5esQVLz0rDdDpMg6S97CEjZqU1QUEgg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JDFNBYKm5iyiz514HuoZO8pnX5BtyJdM4oKs88W7tr/Ouxqnx2+s3tUCfp9pyekig
+         UVlEDj67L5MtnhLnVL55rJArrulfZNrpryXR7NFxhzGFCfSgqh84euSnRao1f2mo/5
+         gVhDDHsUH91OnVc2j931CSRbzs6ecVrNQxlnXzJxv2AvEj6+u6CFmJUr2cvGSXWl+6
+         uJ0yI9sECkULgPdK9SuMbJxEFH9ye1hEsXc+TuaMyVKFEYrJW25INCCwvnbRfLg+OM
+         g/lp20w2jr+QNfrCekejtWyhr2t1ieMtGv/Yq/8oTJbReXPcFG4sY/uU0h/ioJnge3
+         odEUKzT3DyHRw==
+Received: by pali.im (Postfix)
+        id EE8DB677; Wed,  2 Mar 2022 15:57:46 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] PCI: mvebu: Slot support
+Date:   Wed,  2 Mar 2022 15:57:29 +0100
+Message-Id: <20220302145733.12606-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220302095045-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,63 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+This patch series add slot support to pci-mvebu.c driver.
 
-> On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
-> > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
-> > 
-> > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
-> > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > to vhost_get_vq_desc().  All we have to do is take the same lock
-> > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > 
-> > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > 
-> > > > Cc: <stable@vger.kernel.org>
-> > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > ---
-> > > >  drivers/vhost/vhost.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
-> > > > --- a/drivers/vhost/vhost.c
-> > > > +++ b/drivers/vhost/vhost.c
-> > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > >  	int i;
-> > > >  
-> > > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > > +		mutex_lock(&dev->vqs[i]->mutex);
-> > > >  		if (dev->vqs[i]->error_ctx)
-> > > >  			eventfd_ctx_put(dev->vqs[i]->error_ctx);
-> > > >  		if (dev->vqs[i]->kick)
-> > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > >  		if (dev->vqs[i]->call_ctx.ctx)
-> > > >  			eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
-> > > >  		vhost_vq_reset(dev, dev->vqs[i]);
-> > > > +		mutex_unlock(&dev->vqs[i]->mutex);
-> > > >  	}
-> > > 
-> > > So this is a mitigation plan but the bug is still there though
-> > > we don't know exactly what it is.  I would prefer adding something like
-> > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
-> > 
-> > As a rework to this, or as a subsequent patch?
-> 
-> Can be a separate patch.
-> 
-> > Just before the first lock I assume?
-> 
-> I guess so, yes.
+It is based on branch pci/mvebu of git repository:
+https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
 
-No problem.  Patch to follow.
+Changes in v2:
+* Dropped patch with PCI_EXP_SLTCAP_*_SHIFT macros as it is not needed anymore
+* Dropped patch "ARM: dts: turris-omnia: Set PCIe slot-power-limit-milliwatt properties" which was applied
+* Added support for PCIe 6.0 slot power limit encodings
+* Round down slot power limit value
+* Fix handling of slot power limit with scale x1.0 (0x00 value)
+* Use FIELD_PREP instead of _SHIFT macros
+* Changed commit message to Bjorn's suggestion
+* Changed comments in the code to match PCIe spec
+* Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
 
-I'm also going to attempt to debug the root cause, but I'm new to this
-subsystem to it might take a while for me to get my head around.
+Pali Rohár (4):
+  PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+  dt-bindings: Add 'slot-power-limit-milliwatt' PCIe port property
+  PCI: Add function for parsing 'slot-power-limit-milliwatt' DT property
+  PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
+
+ Documentation/devicetree/bindings/pci/pci.txt |  6 ++
+ drivers/pci/controller/pci-mvebu.c            | 96 ++++++++++++++++++-
+ drivers/pci/of.c                              | 64 +++++++++++++
+ drivers/pci/pci.h                             | 15 +++
+ include/uapi/linux/pci_regs.h                 |  1 +
+ 5 files changed, 177 insertions(+), 5 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.20.1
+

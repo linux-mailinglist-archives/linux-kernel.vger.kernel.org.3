@@ -2,138 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733E64CB2DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 00:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D744CB307
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 00:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiCBXqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 18:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S229464AbiCBXpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 18:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiCBXqu (ORCPT
+        with ESMTP id S229450AbiCBXpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:46:50 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1390A16E7F2;
-        Wed,  2 Mar 2022 15:45:44 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id a1so3171246qta.13;
-        Wed, 02 Mar 2022 15:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0UHeOvGnIMNoM6NqeyF78xFos6+YD8GiFF2O+NX+I08=;
-        b=A/8uC4OLZK85x/RsG6wFgeWjAayUjjUSlMWGVzfPxubGvRVyL6+UqPMrijz8hBNBae
-         7+Xma0aYf2Wnr1goOeR8vCpaBIDCURIghfyk8+CPkPm8Wjlh4XrVXzXMmlU7y9LZ5llU
-         Ra7+w69qG+z5lQmzrnsv6xktbsN0B2rEgy1R4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0UHeOvGnIMNoM6NqeyF78xFos6+YD8GiFF2O+NX+I08=;
-        b=eTNnHi78Vt+iU6Ij6novjktAoN44QgzszsL7ET+iLVyojI/f68yJcXPYtWi7daVZpA
-         o3LEMPTtvt2FgyoYxKwd8zj5GbQsRvD0+7ONQzq0ULIunrZw6vAz0EXdRMpW8XAUs6w0
-         /oA5pE0vRbEhfeX5WolzyE4FYnZxCuHfjs7rTEK4SVM3HAkAuGv3jynVfkZ6f/lP+zRD
-         kgF2iLMa8z5XdV30JhYHLVnO1vR+YbtEwWDaKOQzVd9snbXxxbzi0EGWUMVHp+2lEg7O
-         gq1eR3Q7j+rDGjauX5jjuuFK9ZmAmsSigW04aD9t/WybS9qt6gHVOX/Wm3S9NcEnLvTT
-         vi3A==
-X-Gm-Message-State: AOAM5330Lwcrva3gcH/t8S6ULw0iAWHlQ2mqELjtkTgvhnJjI8njb2qG
-        qSarEF4BTsBKveM/FFgSVG7fjWakKC/rjei4/Nv/FShvD2PzUw==
-X-Google-Smtp-Source: ABdhPJwCs5BS/vb/0Gnia8sBd/4fwz2M9pisx/6g/jEojI9HtPhU1m7xtnkyYUd9xlwgdUsE3xPO2rpi1UAXpFZPYeE=
-X-Received: by 2002:a05:622a:1b8d:b0:2c6:59a9:360e with SMTP id
- bp13-20020a05622a1b8d00b002c659a9360emr25551831qtb.678.1646264303744; Wed, 02
- Mar 2022 15:38:23 -0800 (PST)
+        Wed, 2 Mar 2022 18:45:47 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8A73E5C5;
+        Wed,  2 Mar 2022 15:43:33 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222Mnb7N008466;
+        Wed, 2 Mar 2022 23:43:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=i5BWb3tqsZ4eoh82ODgmPwJgY+o4LlIyFrdu6rEg8Ak=;
+ b=pJtwsLeTgC1Ub+ayC8j8aUk3FRTc3evGdqJgL6RzT6j8vs5Gk7vvIFTpli27VUngJ23w
+ eZ5Qg/Z8wY5bRs0zhXtJ7PB8k3dSaByBOe6VYH/aMIWSyIZ4mzhljrZggZdiGnD08ksZ
+ SHkJJXclmN4W9woqvwtNK4E0P+Ddpoe4PmysCr5475b+ziDDt/QiPP9SEHrQas7YqJk9
+ AoK0lRQdVGPpgDHLzj+MWLB3uFIyoqWYjirNTi8pAdADBoNe8AzQjMmPNtsWfzQI0FDQ
+ v5haQDeFLs8gv0fKVJqSr2lBaMQEEdpR885+NPUrEjHlDHJu6blQfvZtBHo+b+XRRaQv Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc03g1pr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 23:43:08 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222NWN4R024561;
+        Wed, 2 Mar 2022 23:43:08 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejc03g1ph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 23:43:08 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222Nb81Y025228;
+        Wed, 2 Mar 2022 23:43:06 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma05wdc.us.ibm.com with ESMTP id 3ej75rmnmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 23:43:06 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Nh5tf34603432
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 23:43:05 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85205AE066;
+        Wed,  2 Mar 2022 23:43:05 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3AD3DAE05F;
+        Wed,  2 Mar 2022 23:43:04 +0000 (GMT)
+Received: from [9.160.116.147] (unknown [9.160.116.147])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Mar 2022 23:43:04 +0000 (GMT)
+Message-ID: <11ab9dfa-494b-5103-5f26-aa6c29567f52@linux.ibm.com>
+Date:   Wed, 2 Mar 2022 18:43:03 -0500
 MIME-Version: 1.0
-References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-5-clg@kaod.org>
-In-Reply-To: <20220302173114.927476-5-clg@kaod.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Mar 2022 23:38:10 +0000
-Message-ID: <CACPK8Xc5DMeBnQnVWk4YUsiN7YFsujYh9Qs9okrc8vFvaF28Fw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/10] spi: spi-mem: Add driver for Aspeed SMC controllers
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v18 07/18] s390/vfio-ap: refresh guest's APCB by filtering
+ APQNs assigned to mdev
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-8-akrowiak@linux.ibm.com>
+ <2b1f788b-5197-f5e8-52cf-58995d758ef7@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <2b1f788b-5197-f5e8-52cf-58995d758ef7@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qwP7h1CS1yQLyuuEgo_Weg01A1yRzyDt
+X-Proofpoint-ORIG-GUID: zPYtVih04kZnTT8H_SA9_2e3W9lyBqk4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203020098
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 17:31, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
->
-> This SPI driver adds support for the Aspeed static memory controllers
-> of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
->
->  * AST2600 Firmware SPI Memory Controller (FMC)
->    . BMC firmware
->    . 3 chip select pins (CE0 ~ CE2)
->    . Only supports SPI type flash memory
->    . different segment register interface
->    . single, dual and quad mode.
->
->  * AST2600 SPI Flash Controller (SPI1 and SPI2)
->    . host firmware
->    . 2 chip select pins (CE0 ~ CE1)
->    . different segment register interface
->    . single, dual and quad mode.
->
->  * AST2500 Firmware SPI Memory Controller (FMC)
->    . BMC firmware
->    . 3 chip select pins (CE0 ~ CE2)
->    . supports SPI type flash memory (CE0-CE1)
->    . CE2 can be of NOR type flash but this is not supported by the driver
->    . single, dual mode.
->
->  * AST2500 SPI Flash Controller (SPI1 and SPI2)
->    . host firmware
->    . 2 chip select pins (CE0 ~ CE1)
->    . single, dual mode.
->
->  * AST2400 New Static Memory Controller (also referred as FMC)
->    . BMC firmware
->    . New register set
->    . 5 chip select pins (CE0 =E2=88=BC CE4)
->    . supports NOR flash, NAND flash and SPI flash memory.
->    . single, dual and quad mode.
->
-> Each controller has a memory range on which flash devices contents are
-> mapped. Each device is assigned a window that can be changed at bootime
-> with the Segment Address Registers.
->
-> Each SPI flash device can then be accessed in two modes: Command and
-> User. When in User mode, SPI transfers are initiated with accesses to
-> the memory segment of a device. When in Command mode, memory
-> operations on the memory segment of a device generate SPI commands
-> automatically using a Control Register for the settings.
->
-> This initial patch adds support for User mode. Command mode needs a littl=
-e
-> more work to check that the memory window on the AHB bus fits the device
-> size. It will come later when support for direct mapping is added.
->
-> Single and dual mode RX transfers are supported. Other types than SPI
-> are not supported.
->
-> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+On 3/2/22 14:35, Jason J. Herne wrote:
+> On 2/14/22 19:50, Tony Krowiak wrote:
+>> Refresh the guest's APCB by filtering the APQNs assigned to the 
+>> matrix mdev
+>> that do not reference an AP queue device bound to the vfio_ap device
+>> driver. The mdev's APQNs will be filtered according to the following 
+>> rules:
+>>
+>> * The APID of each adapter and the APQI of each domain that is not in 
+>> the
+>> host's AP configuration is filtered out.
+>>
+>> * The APID of each adapter comprising an APQN that does not reference a
+>> queue device bound to the vfio_ap device driver is filtered. The APQNs
+>> are derived from the Cartesian product of the APID of each adapter and
+>> APQI of each domain assigned to the mdev.
+>>
+>> The control domains that are not assigned to the host's AP configuration
+>> will also be filtered before assigning them to the guest's APCB.
+>>
+>> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+>> ---
+>>   drivers/s390/crypto/vfio_ap_ops.c | 96 ++++++++++++++++++++++++++++++-
+>>   1 file changed, 93 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/s390/crypto/vfio_ap_ops.c 
+>> b/drivers/s390/crypto/vfio_ap_ops.c
+>> index 4b676a55f203..b67b2f0faeea 100644
+>> --- a/drivers/s390/crypto/vfio_ap_ops.c
+>> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+>> @@ -317,6 +317,63 @@ static void vfio_ap_matrix_init(struct 
+>> ap_config_info *info,
+>>       matrix->adm_max = info->apxa ? info->Nd : 15;
+>>   }
+>>   +static void vfio_ap_mdev_filter_cdoms(struct ap_matrix_mdev 
+>> *matrix_mdev)
+>> +{
+>> +    bitmap_and(matrix_mdev->shadow_apcb.adm, matrix_mdev->matrix.adm,
+>> +           (unsigned long *)matrix_dev->info.adm, AP_DOMAINS);
+>> +}
+>> +
+>> +/*
+>> + * vfio_ap_mdev_filter_matrix - copy the mdev's AP configuration to 
+>> the KVM
+>> + *                guest's APCB then filter the APIDs that do not
+>> + *                comprise at least one APQN that references a
+>> + *                queue device bound to the vfio_ap device driver.
+>> + *
+>> + * @matrix_mdev: the mdev whose AP configuration is to be filtered.
+>> + */
+>> +static void vfio_ap_mdev_filter_matrix(unsigned long *apm, unsigned 
+>> long *aqm,
+>> +                       struct ap_matrix_mdev *matrix_mdev)
+>> +{
+>> +    int ret;
+>> +    unsigned long apid, apqi, apqn;
+>> +
+>> +    ret = ap_qci(&matrix_dev->info);
+>> +    if (ret)
+>> +        return;
+>> +
+>> +    vfio_ap_matrix_init(&matrix_dev->info, &matrix_mdev->shadow_apcb);
+>
+> Do you need to call vfio_ap_matrix_init here? It seems to me like this 
+> would
+> only be necesarry if apxa could be dynamically added or removed. Here 
+> is a
+> copy of vfio_ap_matrix_init, for reference:
+>
+> static void vfio_ap_matrix_init(struct ap_config_info *info,
+>                 struct ap_matrix *matrix)
+> {
+>     matrix->apm_max = info->apxa ? info->Na : 63;
+>     matrix->aqm_max = info->apxa ? info->Nd : 15;
+>     matrix->adm_max = info->apxa ? info->Nd : 15;
+> }
+>
+> It seems like this should be figured out once and stored when the
+> ap_matrix_mdev struct is first created. Unless I'm wrong, and the 
+> status of
+> apxa can change dynamically, in which case the maximums would need to be
+> updated somewhere.
+
+It's an interesting question to which I don't have a definitive answer. 
+I'll run it
+by our architects. On the other hand, making this call here is not entirely
+unreasonable and merely superfluous at worst, but I'll look into it.
+
+Tony K
+
+>
+>
+

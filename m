@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E7E4CAA1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DC64CAA1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240879AbiCBQ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S241203AbiCBQ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241220AbiCBQ1K (ORCPT
+        with ESMTP id S240340AbiCBQ11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:27:10 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83FA9E9E6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:26 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id ay10so3628615wrb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:26:26 -0800 (PST)
+        Wed, 2 Mar 2022 11:27:27 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82DCCB92E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:26:43 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk29so3644846wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:26:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
-        b=zNY/A3DvXSSHSOLKYTxwjW4mjiSxKTe2DFTa9drWsknJ9Gobo/rAHMhdkBLLnUF8it
-         qObkZaPUtzMcW0vv80UyqbGn/5SqEJm5CWtnqtNf416LbLOH03IHCDcalJaCaNnQqmxa
-         n7JOmOog5D44bHsXOE9UR4UELZJ0fyDRKRw2sg464T2pSOZ/8YSImYpJ3+7w/18AZrm/
-         QVjeS2JlyxOhcZTWDhqbC0p+x8FcyzIDVLtpp9OSPqij50FzVjYaVMJ8SxAgdZHfT7RG
-         faSL3/PPKB61LMyU9PIhxtaqQqPnmwi8mqwaM9f4L8E7gFTt3Hft0K5TWhEtuzuGZbds
-         unrw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XjaeiEY8a1tH5c2j9KNmVI9SB++cezD6KFaef4Xjcac=;
+        b=zP0BA6qB3rPhTnq8Fj9Z87v5Om3r3lpqiDAIoP2yPgV+O441mHTr7Ur1NOl002un1B
+         CVZvsGx2tkNU6Uj24hNt0x2YU/ZVLnFBGj9cg7O8bGuozsHa888HLGJ6C88/M0XpnS4O
+         umjN75al8ea5bXZ53+cG1qUxOZDEHfI1U7OC0nDYWYG/XoQfNi0tGXVP3IN/vngQi15O
+         6GwdlyVjx7Q0LE+q03Zv7WDqsXarq6VoZxG0DMKwtHOanwWAx1QYggVsqKYT2gobrI0A
+         rXKq0rnmMVduqpklvtted93fzbsSmbHEhVzt2m8NAVbd0L5v336bhFvvNZVc4qdB5FyK
+         +VGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
-        b=dvic50vgM3kGDC2TAkQbf2LCK343TQ4Yzc3uusScqWBhjMppZ3O09he1ZTa2KrzzTK
-         buKalzgDLkjGhTmjriYutFoEeUajASx8mT8o01KDMzKPSzJuYHzYWDLCNE6ECbPYIy7I
-         2yI3oKy0ceAK+Qy0VAItRZ171q1F6yQbH1NbVuIaoH/sjfjiLf2Q9CYuWcECWkdFxS4F
-         VL/eJcS9VNDf1rmsjdlMeKzSK9j3aCdkT9BntVk3wT2evWa6ng1K0HUOe2VR8W8sDFpC
-         b+ZrwTgamAo+dsOGDTF9trUaVgIk2Pun06IBF3DaNL0mMugwaFG1eOHp8Jcyr5EgaKo4
-         dy4A==
-X-Gm-Message-State: AOAM5330UsDwhUbJOH9Am/vW7plzuXRgo+2qMl3dkhSqoA19VShCrKq5
-        TFgOZ7FPcJ9dpL5mKY/WQ4NtKw==
-X-Google-Smtp-Source: ABdhPJxbCsWQrJHmYbdS8sJGQSK+IN5/SW7XDx1ANefT8UUiw7YoiSlpX6p5XW4Wc6Ducn8hIA0qbA==
-X-Received: by 2002:a5d:52d2:0:b0:1ef:e22d:18ba with SMTP id r18-20020a5d52d2000000b001efe22d18bamr10036216wrv.30.1646238385454;
-        Wed, 02 Mar 2022 08:26:25 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id g22-20020a1c4e16000000b003817614d4adsm6068399wmh.12.2022.03.02.08.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:26:24 -0800 (PST)
-Date:   Wed, 2 Mar 2022 16:26:22 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220302162622.z5wxbdmxh2pqh6cb@maple.lan>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
- <20220302161917.gx5icfszakoye4uh@maple.lan>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XjaeiEY8a1tH5c2j9KNmVI9SB++cezD6KFaef4Xjcac=;
+        b=TAjcCdcjjZ6J7a76KIDs6C47k8pfInyN4eAkCUNE4/xns/ykDAlT3roOjRgL211nDa
+         onNtZmWCP79S3lo96vwo2ObIgDtraaXgZ+cgFyl2vuS5E3LZxb19lekVaOMzoinuIKsk
+         y9haf8meoqSP+efDOk58gDOFd976WljYvpRo97fTvnE2lRwZqgXK7ILEdcUvsnz11m3r
+         t9g9E2+x/WCpjwD+waNHj8r+Ld4TlnbvQdpAstgOtzio+M9RBx1+/HiMTJAyYrn5A5fK
+         /jhPvFS3BaW/tcuaEG/lQEERu2IGfb0ZdbYCpB5M3OYCoUczi8CMEsnRhONqFUYchc3U
+         o/9w==
+X-Gm-Message-State: AOAM530XL6Wx1w69dS1y+LfvfjRYwEUckWy5TTawtK5psMdy6X9OG3Qi
+        FdWx8LRFJYIq+1RKZbA7IaWkSjynZ23J0g==
+X-Google-Smtp-Source: ABdhPJzKY+/eMiZPibbAsxw/NaB6uXT2sK3X5WA4cVQHSoWusKxMSFLA03cK79cL79Q1DUIlIf+R9A==
+X-Received: by 2002:adf:f849:0:b0:1ef:5d80:c68a with SMTP id d9-20020adff849000000b001ef5d80c68amr19686368wrq.280.1646238402267;
+        Wed, 02 Mar 2022 08:26:42 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98? ([2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98])
+        by smtp.googlemail.com with ESMTPSA id i9-20020adffdc9000000b001f046861795sm1588244wrs.19.2022.03.02.08.26.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 08:26:41 -0800 (PST)
+Message-ID: <3ff11b85-249f-2f47-cbc4-41d2ab6d168f@linaro.org>
+Date:   Wed, 2 Mar 2022 17:26:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302161917.gx5icfszakoye4uh@maple.lan>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
+Content-Language: en-US
+To:     "Sanil, Shruthi" <shruthi.sanil@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Cc:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
+        "Raja Subramanian, Lakshmi Bai" 
+        <lakshmi.bai.raja.subramanian@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-3-shruthi.sanil@intel.com>
+ <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
+ <BN9PR11MB55451DB929086919F8D06390F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+ <23f86de0-3869-ee22-812d-ba610bac48b3@linaro.org>
+ <BN9PR11MB55458A882EB4A681C4A63B26F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <BN9PR11MB55458A882EB4A681C4A63B26F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,47 +89,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:19:17PM +0000, Daniel Thompson wrote:
-> On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
-> > No functional change.
-> > 
-> > This patch migrates kdb_modules list to core kdb code
-> > since the list of added/or loaded modules is no longer
-> > private.
-> > 
-> > Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> > ---
-> >  kernel/debug/kdb/kdb_main.c    | 5 +++++
-> >  kernel/debug/kdb/kdb_private.h | 4 ----
-> >  kernel/module/main.c           | 4 ----
-> >  3 files changed, 5 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> > index 0852a537dad4..5369bf45c5d4 100644
-> > --- a/kernel/debug/kdb/kdb_main.c
-> > +++ b/kernel/debug/kdb/kdb_main.c
-> > @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
-> >  int kdb_grep_leading;
-> >  int kdb_grep_trailing;
-> >  
-> > +#ifdef CONFIG_MODULES
-> > +extern struct list_head modules;
-
-Actually thinking a bit harder and trying
-`git grep '#include .*[.][.]' kernel/` (which finds some prior art) I
-wonder if we even want the extern or whether
-`#include "../../module/internal.h"` would be more robust.
-
-
-Daniel.
-
-
-> > +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+On 02/03/2022 17:07, Sanil, Shruthi wrote:
+>> -----Original Message----- From: Daniel Lezcano
+>> <daniel.lezcano@linaro.org> Sent: Wednesday, March 2, 2022 3:54 PM 
+>> To: Sanil, Shruthi <shruthi.sanil@intel.com>; tglx@linutronix.de; 
+>> robh+dt@kernel.org; linux-kernel@vger.kernel.org; 
+>> devicetree@vger.kernel.org Cc: andriy.shevchenko@linux.intel.com;
+>> mgross@linux.intel.com; Thokala, Srikanth
+>> <srikanth.thokala@intel.com>; Raja Subramanian, Lakshmi Bai 
+>> <lakshmi.bai.raja.subramanian@intel.com>; Sangannavar,
+>> Mallikarjunappa <mallikarjunappa.sangannavar@intel.com> Subject:
+>> Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
+>> 
+>> On 02/03/2022 11:12, Sanil, Shruthi wrote:
+>> 
+>> [ ... ]
+>> 
+>>>>> +	if (!(val & TIM_CONFIG_PRESCALER_ENABLE)) { +
+>>>>> pr_err("%pOF: Prescaler is not enabled\n", np); +		ret =
+>>>>> -ENODEV; +	}
+>>>> 
+>>>> Why bail out instead of enabling the prescalar ?
+>>> 
+>>> Because it is a secure register and it would be updated by the
+>>> bootloader.
+>> Should it be considered as a firmware bug ?
 > 
-> If modules is no longer static then why do we kdb_modules at all?
-> kdb_modules is used exactly once and it can now simply be replaced
-> with &modules.
-> 
-> 
-> Daniel.
+> No. This is a common driver across products in the series and
+> enablement of this bit depends on the project requirements. Hence to
+> be sure from driver, we added this check to avoid initialization of
+> the driver in the case where it cannot be functional.
+
+I'm not sure to get the meaning of 'project requirements' but (for my 
+understanding) why not describe the timer in the DT for such projects?
+
+
+>> -- <http://www.linaro.org/> Linaro.org │ Open source software for
+>> ARM SoCs
+>> 
+>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook | 
+>> <http://twitter.com/#!/linaroorg> Twitter |
+>> <http://www.linaro.org/linaro- blog/> Blog
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,170 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CC74CB0D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFB94CB0D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245117AbiCBVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S245250AbiCBVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbiCBVL7 (ORCPT
+        with ESMTP id S245127AbiCBVMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:11:59 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F069B2E02;
-        Wed,  2 Mar 2022 13:11:14 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EF1961C0009;
-        Wed,  2 Mar 2022 21:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646255473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LUbNmgb63x3cIGTdu5P3uOsUdM3KE6j4EYbbzrT4oek=;
-        b=HNkImmM0F9jHusXvAg9Ba0BoeYJOmyXuqZ2GzWGs2vcwLlAH9Pj2feUrwTLHdHICqSVm6q
-        xkDtly0t6oYeUT2qfEiq0YQdqKkAIQLYCtgWlrQuDsJVj3Ut9vkfBVvrIjhtKzxkBGn/2b
-        H0nlI5Fz+YsQ53/vYTZoxGBCo+HUSvJxXq5LTbNbcQh3wlBIlNLxUhYCjyH47kw+PBh3GC
-        L59YJJ+sOMmjjIN4URJNbh4+N7JPt1yHw5Rc1HbdYeok+9hJ+S/h/tGHEG4wPqJtzFLjWS
-        sRTX28A2GXMPYIlN361r2ggD7StVnBu2wgydUJgZY9NAs31hL98c2QmOrf/Bmw==
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v3 5/8] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
-Date:   Wed,  2 Mar 2022 22:10:57 +0100
-Message-Id: <20220302211100.65264-6-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
-References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+        Wed, 2 Mar 2022 16:12:14 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168D9DCE34
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:11:26 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id r65so1980693wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:11:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5/nH1g76OJr2xP0kEzxoO9d69o0mEYaKTMfwjCEna4k=;
+        b=s/I0Z2y4z8YB6ZgpjPwn9fMiOpI90kwAS3l0VUO3xvtkNUJzA9qE3bhuyGk/bXfQyX
+         CaLoMUsM5bZeyiAJNnSt1vQiKqvQNMOlvbItUvclxl441XuqepRsZyfpgjMSmtGF0A7P
+         3ULeQDYSW5jYhYhSUYI7a4jRSa8K6qHGn6hfgQdyAe+kHzeGqB+o1h8CvJPeuNtMyXlF
+         1iDb3yANtGm4wZMsOQf3ULA5P0y4XIkn8TZ3l/zpcuTro47K9g+PBA1L47uSICN0lUJR
+         bl/w5MqNWNLcDwJ54KJC2eF3jCXaEWg0ziruH6Z6kIgIjPNUyHy+ESBVMKQPJLHOhaOL
+         9B4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5/nH1g76OJr2xP0kEzxoO9d69o0mEYaKTMfwjCEna4k=;
+        b=6ZhfRDARKslahrudjTIpKrUOhjLM8zS6dWSN7jplx4XLWo5hLn9m3WnBhXxnEOJxF+
+         qB+pe2AahUVhh1n4UyQHTDrM/2kFyHPrmzx98G8Plj+6uUnT88+9G6nVqlfpc/Kh03jF
+         h3dlhOdUKWA/myEx+DtGpD5ar+ePQo2LAFMTGXnl2nSiHXMDP56CrznO9vxL9BCLhNoc
+         Ty8Fy54LqnHs6iS3h3xApq97zeVH6rx/LkdhDtGyrB5UErS32V5PtOR2h/Xnuev0ffXe
+         VaalPMNW5+xDHMcaRHypav6Oqpnm9/KrArehA1bYu8oYqc+wjf28KDu03d20jlrTgytW
+         34Cw==
+X-Gm-Message-State: AOAM530dHl7ch2Q/L8vLfWL5IUGlpXTw4s4kMFV0wroXAXLzjvRDeDyv
+        p7JDazFhoMrZqtpPdmNCYgU4BA==
+X-Google-Smtp-Source: ABdhPJwPZwmrufp36YqMiXKGpIU+QwG7owyQ8MQP9+2rxoDOdGiEo9TNglb3MQRuVp+z7hOzJXjONQ==
+X-Received: by 2002:a05:600c:1990:b0:381:1806:1d9 with SMTP id t16-20020a05600c199000b00381180601d9mr1365346wmq.93.1646255484689;
+        Wed, 02 Mar 2022 13:11:24 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm145776wmp.44.2022.03.02.13.11.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 13:11:24 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, john@metanate.com,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v2 02/18] crypto: rockchip: do not use uninit variable
+Date:   Wed,  2 Mar 2022 21:10:57 +0000
+Message-Id: <20220302211113.4003816-3-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220302211113.4003816-1-clabbe@baylibre.com>
+References: <20220302211113.4003816-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MIPI CSI-2 is supported on the V3s with an A31-based MIPI CSI-2 bridge
-controller. The controller uses a separate D-PHY, which is the same
-that is otherwise used for MIPI DSI, but used in Rx mode.
+crypto_info->dev is not yet set, so use pdev-dev instead.
 
-On the V3s, the CSI0 controller is dedicated to MIPI CSI-2 as it does
-not have access to any parallel interface pins.
-
-Add all the necessary nodes (CSI0, MIPI CSI-2 bridge and D-PHY) to
-support the MIPI CSI-2 interface.
-
-Note that a fwnode graph link is created between CSI0 and MIPI CSI-2
-even when no sensor is connected. This will result in a probe failure
-for the controller as long as no sensor is connected but this is fine
-since no other interface is available.
-
-The interconnects property is used to inherit the proper DMA offset.
-
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 71 ++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ drivers/crypto/rockchip/rk3288_crypto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index a966b6a9acf5..a9405e011f3e 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -619,6 +619,77 @@ gic: interrupt-controller@1c81000 {
- 			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
- 		};
+diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
+index 45cc5f766788..21d3f1458584 100644
+--- a/drivers/crypto/rockchip/rk3288_crypto.c
++++ b/drivers/crypto/rockchip/rk3288_crypto.c
+@@ -381,7 +381,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
+ 			       "rk-crypto", pdev);
  
-+		csi0: camera@1cb0000 {
-+			compatible = "allwinner,sun8i-v3s-csi";
-+			reg = <0x01cb0000 0x1000>;
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>,
-+				 <&ccu CLK_DRAM_CSI>;
-+			clock-names = "bus", "mod", "ram";
-+			resets = <&ccu RST_BUS_CSI>;
-+			interconnects = <&mbus 5>;
-+			interconnect-names = "dma-mem";
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					csi0_in_mipi_csi2: endpoint {
-+						remote-endpoint = <&mipi_csi2_out_csi0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		mipi_csi2: csi@1cb1000 {
-+			compatible = "allwinner,sun8i-v3s-mipi-csi2",
-+				     "allwinner,sun6i-a31-mipi-csi2";
-+			reg = <0x01cb1000 0x1000>;
-+			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_CSI1_SCLK>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			status = "disabled";
-+
-+			phys = <&dphy>;
-+			phy-names = "dphy";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				mipi_csi2_in: port@0 {
-+					reg = <0>;
-+				};
-+
-+				mipi_csi2_out: port@1 {
-+					reg = <1>;
-+
-+					mipi_csi2_out_csi0: endpoint {
-+						remote-endpoint = <&csi0_in_mipi_csi2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		dphy: d-phy@1cb2000 {
-+			compatible = "allwinner,sun6i-a31-mipi-dphy";
-+			reg = <0x01cb2000 0x1000>;
-+			clocks = <&ccu CLK_BUS_CSI>,
-+				 <&ccu CLK_MIPI_CSI>;
-+			clock-names = "bus", "mod";
-+			resets = <&ccu RST_BUS_CSI>;
-+			allwinner,direction = "rx";
-+			status = "disabled";
-+			#phy-cells = <0>;
-+		};
-+
- 		csi1: camera@1cb4000 {
- 			compatible = "allwinner,sun8i-v3s-csi";
- 			reg = <0x01cb4000 0x3000>;
+ 	if (err) {
+-		dev_err(crypto_info->dev, "irq request failed.\n");
++		dev_err(&pdev->dev, "irq request failed.\n");
+ 		goto err_crypto;
+ 	}
+ 
 -- 
-2.35.1
+2.34.1
 

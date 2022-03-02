@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3F54CA7E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4277E4CA7E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242877AbiCBOXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S242868AbiCBOX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240145AbiCBOXY (ORCPT
+        with ESMTP id S235102AbiCBOXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Mar 2022 09:23:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF373CA47;
-        Wed,  2 Mar 2022 06:22:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135B72DAB0;
+        Wed,  2 Mar 2022 06:22:39 -0800 (PST)
+Received: from nazgul.tnic (nat0.nue.suse.com [IPv6:2001:67c:2178:4000::1111])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBB06B81F16;
-        Wed,  2 Mar 2022 14:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A177AC004E1;
-        Wed,  2 Mar 2022 14:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646230958;
-        bh=gtQk75T3qKDxWoDQiGWygKCOzdyAYhEBNXZLCyqiv0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i22xKKX0SQD3c2kRTiVGhQmy0lDN0stgowJAclW1NmZbMgrB2gX93GGnFGrD33HtO
-         zAEXtNZBtM5wIau9y191ZpsXONrZTMg+aIeZZ+7vf6gYmqGCVyZL0rkC0JTgntPscu
-         bah6ZdaB0gk+YEraw4R4Lc0cZxCc2KGz4cSeVxeIGwpICfNCsk9omrVMdIVHn7impW
-         5AdCPag9H2wQN+O6s8I+bBqaZ4jPzSfz2jFD/xUGbDSUZ4ajriXJU9hrMYAIi/29sO
-         07K9ejfdoVFMIV7jCet3zH9iVRaof0i1hM5BS1CtiOBdUdMXihT5bZsWNDF/EqXqRj
-         LEynYA0zgVaIw==
-Date:   Wed, 2 Mar 2022 19:52:33 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Rob Herring <robh@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/8] dt-bindings: soc: grf: fix rk3568 usb definitions
-Message-ID: <Yh99qVeALFN3X9te@matsya>
-References: <20220228135700.1089526-1-pgwipeout@gmail.com>
- <20220228135700.1089526-2-pgwipeout@gmail.com>
- <CAMdYzYqs=iRY6uNzVSkHrrhPYFixXdbZjtwSpPOjf-6f8TXutw@mail.gmail.com>
- <Yh8n7XiJbaT4pZGD@matsya>
- <CAMdYzYrkDbr5mHYmAbqBoJJEKH8A5xXfRNuTiTn8q40vRJeCgA@mail.gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 993501EC0453;
+        Wed,  2 Mar 2022 15:22:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646230954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vJEkCazrMcPoOSxI/0Ze1Djvt4zsLNPDBppShZrTSgQ=;
+        b=a3ZH0Evy3RtHAUwtKADzuX5mZgyZBVJYsrBt+JubGTRjYPV+efHF88cpCIb2k/KhkIxLSV
+        EwxJXKhQ3VskqwdSa1gqd7TgC2Mc6iefLfAdQK9efJC66w1fYbbuTPe428fAY6/a1628sl
+        LcyZR4Mi2HsTj5WV6FF+fn4J5buZ+/g=
+Date:   Wed, 2 Mar 2022 15:22:39 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v11 00/45] Add AMD Secure Nested Paging (SEV-SNP) Guest
+ Support
+Message-ID: <Yh99pBI/RwZY1yf7@nazgul.tnic>
+References: <20220224165625.2175020-1-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMdYzYrkDbr5mHYmAbqBoJJEKH8A5xXfRNuTiTn8q40vRJeCgA@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220224165625.2175020-1-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02-03-22, 07:18, Peter Geis wrote:
-> On Wed, Mar 2, 2022 at 3:16 AM Vinod Koul <vkoul@kernel.org> wrote:
-> >
-> > On 01-03-22, 09:52, Peter Geis wrote:
-> > > Good Morning,
-> > >
-> > > Would it be possible to pull this patch individually, to fix the
-> > > current error reported by Rob?
-> >
-> > This does not apply for me on phy-next. What was this based on..?
-> 
-> This is based on linux-next, which the applicable patch was accepted on 24 Feb.
-> The original patch was correct, but it seems a merge error happened
-> and these two lines were moved into an incorrect location.
-> This patch corrects that, but I see on the original patch chain you
-> are discussing reverting and reapplying to fix it.
+On Thu, Feb 24, 2022 at 10:55:40AM -0600, Brijesh Singh wrote:
+> This part of Secure Encrypted Paging (SEV-SNP) series focuses on the changes
+> required in a guest OS for SEV-SNP support.
 
-Ok let me revert than so that it is easy for everyone to fix up
+So the first 4 are KVM material.
 
-Thanks
+Paolo, what's the story here, are you gonna take them and give me an
+immutable branch or do you have another idea?
+
+Thx.
 
 -- 
-~Vinod
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

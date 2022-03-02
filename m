@@ -2,166 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0224CA054
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08E04CA053
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240334AbiCBJIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S240345AbiCBJIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237615AbiCBJI3 (ORCPT
+        with ESMTP id S237615AbiCBJIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:08:29 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671B33EA0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:07:44 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9E1911F44B8D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646212063;
-        bh=Ztnm82SiYGhB+IIBhUFDj5KSeiwqthDaJ6+SaFW7jDc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KUqKDdi13sQCl89F9qY+zjLPxgs5aT4gvYm7hQTXhX6TFcjaXTQIejpmoLInjKlKA
-         1lze8Z9sdtK/kXRrpL4WgcxMkKmQ6jh06gyczXHxKFlD7nci9SKb2zUs8vUNvu0TlX
-         pjOank8TIJwP8xfwXQcpWdKYWulNOfHAVel6b+EnHQiYhkmjvgxO+dNN2YrYSxRF29
-         1Zfnp4baunep0BjAasY4ZGsC4KivL339GlTHSRq/UX97qfW3/oYGX/Qi7b1WDUmPhk
-         DnD9adkT3EOWlj0VrhKOe1/gBzEiWV3G/SIRWkEeh7gGOQ7bOXT6lphhTRCv/KnsqK
-         /29lgW0vzuN0A==
-Message-ID: <6db20053-71dc-d0e3-aac9-de5da1d7ba9e@collabora.com>
-Date:   Wed, 2 Mar 2022 10:07:40 +0100
+        Wed, 2 Mar 2022 04:08:40 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EED3C4A6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 01:07:57 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id e6so1111706pgn.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 01:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1PWpW0/h9OxoVQDD4bcapW45oUiOIoSzLo/G9Alzs/Y=;
+        b=pgS/2ILaQVPmaJz+WJHQzLFwqqv+8A1VadcG0oZ7PYnR5ejErAfMdQ5WhphVNL2nfG
+         lsP2YTYOxLGMh8377eApzdWoRnp55gO6JSE89klyaPmv7Q8mHMbIHjX9kMdTanImTj8t
+         v77fCB3vizLHenOLuW18U8W6si/XmbW8ZiV0TGgj64tAEfpxtGSy2gIDiYXXtJYBxeyl
+         HXrHCrNgFcm1iE96pQk0OtbVR97Bp+km2WP9Ek4huCSRuHUAx7cNLjmnnqmcALEJOOVm
+         E+JsmRlIsZsnLzBN0FXKWwPP1HtR+Ork+Ff1J9HfjbOnjyJKtF1GSbQmQi/27xdH5BPv
+         +Cfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1PWpW0/h9OxoVQDD4bcapW45oUiOIoSzLo/G9Alzs/Y=;
+        b=EiwdAfA3rlzyM4XjTJfb4ssh2qlt+w2+QtBwN/m1Iqjve3+J5gEmEaBRjlCYgcPfEV
+         Z2tNLfrevrdKFoFIRqOQeiPfMYt6Uu0P6Ldc/S8jz7jSlEai7wrNgP69xJkFFnrwBLNA
+         0+N8pAmJVfyJeP+ZkzmMtRdEC00gjGrhw8r57bkSCqTUHYGEd7U8NncoHQ4xRWvETp+t
+         jXrtb2D2E2t4TOv5TMN2K44kkksGm5ikBXYipr8kKI0YTyHZ4uhiNN9JAXQe8puu+aVF
+         1f566cyc7OJTS4GgShho03eAtxE9ve3c+MFgRj2cizR9hObJgY8K/EKgmurI2vUybFep
+         y+kA==
+X-Gm-Message-State: AOAM532FR5FQmq+6lWbHiJ3iOObqTbrPOzEVMiR8lDF2xSgne0zDteiA
+        VdNWctyQy3z8+9fXpFUerCY=
+X-Google-Smtp-Source: ABdhPJxrQCSZtHY8+DQpXNBiO/RuiHOgAmhGZKQi+kRGtC01oBdy94Jbjub5iSh501Tf4U7hUpg5RA==
+X-Received: by 2002:a05:6a00:198b:b0:4f4:22f3:2fbb with SMTP id d11-20020a056a00198b00b004f422f32fbbmr10755169pfl.20.1646212077441;
+        Wed, 02 Mar 2022 01:07:57 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id g7-20020a056a000b8700b004e1bed5c3bfsm20339062pfj.68.2022.03.02.01.07.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 01:07:56 -0800 (PST)
+Date:   Wed, 2 Mar 2022 22:07:51 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     gregkh@linuxfoundation.org, realwakka@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: pi433: remove rf69_get_flag function resolving
+ enum conflict
+Message-ID: <Yh8z5zWfpVKWNYpQ@mail.google.com>
+References: <Yhla4a1Clpguoo2h@mail.google.com>
+ <20220228063238.GA2794@kadam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v1,2/3] drm/mediatek: Add TOPCKGEN select mux control
- dpi_clk
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        matthias.bgg@gmail.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jitao.shi@mediatek.com, allen-kh.cheng@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <1645782833-27875-1-git-send-email-xinlei.lee@mediatek.com>
- <1645782833-27875-3-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1645782833-27875-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228063238.GA2794@kadam>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/02/22 10:53, xinlei.lee@mediatek.com ha scritto:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Mon, Feb 28, 2022 at 09:32:38AM +0300, Dan Carpenter wrote:
+> Looks good.
 > 
-> Dpi_clk is controlled by the mux selected
-> by TOPCKGEN and APMIXEDSYS can support small resolution.
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 > 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 
-Hello Xinlei,
+Thanks for reviewing my patch Dan.
 
-as it was pointed out by reviewers in the MT8195 DisplayPort series, that is
-adding the same logic that you are proposing in this patch, the clock parent
-selection should be performed by the clock drivers, I'd say in the callback
-.set_rate_and_parent(), and not by the mtk_dpi driver.
-
-Please fix this in the proper drivers (clocks!) instead.
-
-Thanks,
-Angelo
-
-> ---
->   drivers/gpu/drm/mediatek/mtk_dpi.c | 38 ++++++++++++++++++++++++++----
->   1 file changed, 34 insertions(+), 4 deletions(-)
+> >  4 files changed, 4 insertions(+), 69 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 4554e2de1430..bad686817e29 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -63,6 +63,14 @@ enum mtk_dpi_out_color_format {
->   	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
->   };
->   
-> +enum TVDPLL_CLK {
-> +	TVDPLL_PLL = 0,
-> +	TVDPLL_D2 = 2,
-> +	TVDPLL_D4 = 4,
-> +	TVDPLL_D8 = 8,
-> +	TVDPLL_D16 = 16,
-> +};
-> +
->   struct mtk_dpi {
->   	struct drm_encoder encoder;
->   	struct drm_bridge bridge;
-> @@ -73,6 +81,7 @@ struct mtk_dpi {
->   	struct clk *engine_clk;
->   	struct clk *pixel_clk;
->   	struct clk *tvd_clk;
-> +	struct clk *pclk_src[5];
->   	int irq;
->   	struct drm_display_mode mode;
->   	const struct mtk_dpi_conf *conf;
-> @@ -459,6 +468,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
->   	struct videomode vm = { 0 };
->   	unsigned long pll_rate;
->   	unsigned int factor;
-> +	struct clk *clksrc = NULL;
->   
->   	/* let pll_rate can fix the valid range of tvdpll (1G~2GHz) */
->   	factor = dpi->conf->cal_factor(mode->clock);
-> @@ -473,11 +483,26 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
->   
->   	vm.pixelclock = pll_rate / factor;
->   	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
-> -	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
-> -		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
-> -	else
-> -		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
-> +	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE)) {
-> +		if (factor == 8)
-> +			clksrc = dpi->pclk_src[2];
-> +		else if (factor == 4)
-> +			clksrc = dpi->pclk_src[1];
-> +		else
-> +			clksrc = dpi->pclk_src[1];
-> +		}
-> +	else {
-> +		if (factor == 8)
-> +			clksrc = dpi->pclk_src[3];
-> +		else if (factor == 4)
-> +			clksrc = dpi->pclk_src[2];
-> +		else
-> +			clksrc = dpi->pclk_src[2];
-> +	}
->   
-> +	clk_prepare_enable(dpi->pixel_clk);
-> +	clk_set_parent(dpi->pixel_clk, clksrc);
-> +	clk_disable_unprepare(dpi->pixel_clk);
->   
->   	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
->   
-> @@ -893,6 +918,11 @@ static int mtk_dpi_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	dpi->pclk_src[1] = devm_clk_get_optional(dev, "tvdpll_d2");
-> +	dpi->pclk_src[2] = devm_clk_get_optional(dev, "tvdpll_d4");
-> +	dpi->pclk_src[3] = devm_clk_get_optional(dev, "tvdpll_d8");
-> +	dpi->pclk_src[4] = devm_clk_get_optional(dev, "tvdpll_d16");
-> +
->   	dpi->irq = platform_get_irq(pdev, 0);
->   	if (dpi->irq <= 0)
->   		return -EINVAL;
+> You don't really need to write a long commit message for a commit which
+> deletes 69 - 4 = 65 lines.  Just say "Remove pointless rf69_get_flag()
+> function and call rf69_read_reg() directly.  This cleanup removes 65
+> lines of code and it more obvious to read."
+>
 
+Thanks for the feedback. I swear I don't do that on purpose ... I have always
+struggled to be succint tbh. It's just something I'm actively working on...
+
+> > -						  rf69_get_flag(dev->spi,
+> > -								rssi_exceeded_threshold));
+> > +						  rf69_read_reg(spi, REG_IRQFLAGS1)
+> > +						  & MASK_IRQFLAGS1_RSSI);
+> 
+> The & character should go on the first line.
+> 
+> 						  rf69_read_reg(spi, REG_IRQFLAGS1) &
+> 						  MASK_IRQFLAGS1_RSSI);
+> 
+> But that can be done in a follow on patch if you want.  Or you can
+> leave it as-is.
+> 
+
+Noted. this patch was already merged into the staging-testing. I will
+send another one fixing it.
+
+Best regards,
+
+Paulo Almeida

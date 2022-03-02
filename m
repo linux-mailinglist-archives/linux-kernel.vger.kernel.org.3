@@ -2,128 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA34A4CA5D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2B84CA5DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiCBNYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S242174AbiCBNYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242182AbiCBNX6 (ORCPT
+        with ESMTP id S242152AbiCBNY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:23:58 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90087.outbound.protection.outlook.com [40.107.9.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0542A16
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:23:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ITnadHyDdamdHxPmDKBMKAOVIwI4lgER+wZh/Q2WEWLWoTq69/07JgmCwWdC9w638KRU/oBTZLHZMbm6TSFHvHXEpcrmBMpfcTBBQ8nt6spLs/g8DbPmxlc9Fvxs1+0I3hjHTsqhrJ6dyqZN1+aYq9CR7trliuY4WRwAYa9pEfsHuqr1W/mN2qsA+vtVV9l5l5Wrswb50dcn93AXt/VnsHCImORrMT8VwXdfhlI5qRJ73jt7D648MSMcrhVSY2BXos6qBlqDPmT1kMBOpjSrFGpMkKb3qDQ2LGTYX8hd/bWpdRL6au5afnEmQjAG4f918MI6Wwtb0bRwWK1+Sc+Bnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RukMqGxAyiX0nw0c8ba/WTubefOiZx2YgwQruGdL3PQ=;
- b=mqlisALQ9AgwsEHGwJ4UradcmBsioC0LrGxpI1RH/+2wMRSNG0IvNloddrUoBwbkVvfLwseYZc6mbrqWRE1YXstO1VyykDhXzdub8FSqENPb9P6QwPY0Usgvu/di81lZJDGnMcXR3CN+k3UR/vvbkAHKth/o6HzoQeLv168xsrum4aq94f2IDjJ3Q76xcN6BGYo0NXqHSUJBL+b4vpQKX6TtmDqlEoTkeBB0feMKde49wcTSA99IBUxlPRtbztrhJ/J5U1yVSSDK5EQauKmroIKgTsKLffQMafIL3fR2Ixf+0lxbcXcE4AzhQYwoUpeDvWXHNoqih/CpvD5JUTvCqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB4268.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:25f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 13:23:08 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
- 13:23:08 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Zucheng Zheng <zhengzucheng@huawei.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "oohall@gmail.com" <oohall@gmail.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] powerpc/pmac: Make some symbols static
-Thread-Topic: [PATCH -next] powerpc/pmac: Make some symbols static
-Thread-Index: AQHYLjio4DY57a4TcUKGZXMuIM/f+w==
-Date:   Wed, 2 Mar 2022 13:23:08 +0000
-Message-ID: <8055476e-b7f9-f4b5-92f9-48d21eebba14@csgroup.eu>
-References: <20210409093815.118619-1-zhengzucheng@huawei.com>
-In-Reply-To: <20210409093815.118619-1-zhengzucheng@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4b7aaeb0-348d-46d2-630f-08d9fc4fcb0f
-x-ms-traffictypediagnostic: PR0P264MB4268:EE_
-x-microsoft-antispam-prvs: <PR0P264MB42683FDCA81F68A412489223ED039@PR0P264MB4268.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QuDnnHK4q+2yNQN+qZOzllHdoK4oKjaWw0uyn2kspcXSrNx1GLpnkZyM3oqtx+BfMVLwX81NWycq3+E16xx8nthQZWzFvXCfmaWiaQrx8NGFwRknRqA2EmrGgK6Db8dHQDjwhfaALjJVCEiLTnxgP6OfXxEB9rTMhaOm9u8k7POTFVfrrtrINSmYjdEpUsuh7xUcWKIk8jlCgsbvsF6e6CXi1nPTx2QKg2VGG/UBetseATUCrgpmSZm0hkeZ3VTFyZkgq0kSB7qwBxiauYYZSUVIJ/nN60Fi0ZycyMq/uU9rP/PGnPzvfcUWagxRLXqYUZpgx/COVN2TD2NEKRaXxsKCCsruwLALDL4nzNl5LdZ39HuLw6e+fpP6n/mV3UNkg7Wpnpd/I3WNn+On62voZdXEbhKcOKtrzLcwHmbJtbzOpxKapS7y1JW5yb5OhYt1NOmce2LJWaC9voVsWXHYd77V4JsDLzHlPxExjvT/IW0BOcabjK2ojevYT7WIjxKLFwDqCCYnq/tBcQymKwoFMp8kEmn2zEKbtNj9TkrbXWH4zrtG/d1ZNrTysHeoKW7O1YWiF1QGdaWxX/F19f6IaMBdRRWoomZaV8SV5WZ/c18C08e0eqx593ct9yWagvLK6P1X5wOfIOhdOLRPVmFJgVWKU4VAjZjla8gvRuTkeeZbRYzxGkBP+ql0hn287YsZ380bleFEGpRzwRh/dEPJ+XE9qUNjP0ITyiNTmfSM77ZCoUj/qGGsIuHhnYufqtaSIIWqg/77ZIYbWv0Zv7zvBw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(38070700005)(2616005)(36756003)(44832011)(8936002)(6512007)(31686004)(316002)(76116006)(8676002)(6506007)(122000001)(5660300002)(66946007)(91956017)(2906002)(66556008)(66446008)(64756008)(66476007)(4326008)(71200400001)(38100700002)(508600001)(86362001)(31696002)(6486002)(83380400001)(54906003)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RFcvZVgvdDRNSlZvdDZGbHNhREZFYm5lbytFOWFhaUJ4TEVqdHFyQzJQU3pT?=
- =?utf-8?B?WUhqQThjZTBsNkRUVUkvQ2NlZy9CUCs2R0xWQy82V0RHWmVjZURWMFNqQ2RN?=
- =?utf-8?B?K0tOOXdheUVBMnhYb1ErbTZGTWJGVk9zaW5BUXAwVlIyMys2TVR4cGl5VUJa?=
- =?utf-8?B?by8wZVJoZXhtN2VLcHZvR2x2YmxwYWNHSWVwWWxjdlA1N0lkQ01yM2JBRzMv?=
- =?utf-8?B?Vm1SU2p1Q1lKNXBPcmF3ZVY2ZlViU3diR2Z3UVdJK0Q0Z3RhUUZtY1d1d2Zl?=
- =?utf-8?B?OWR4Z3c5cUNxOGtIMHF6cE42bkFtREU1Qmd2V2hBUW9FNG0wZ0FFSFpwYlpJ?=
- =?utf-8?B?ZVM1YXVIRzlFSi80cm1XVlQzT094NGJETUxsL3plRXpZYkJEeXpreUZtRFNP?=
- =?utf-8?B?WGpFRzdBM2NIUXhGMFFJS21UYlVmdHgyTkpDSU1QRTN3S0Z2TU1pSjVka2lz?=
- =?utf-8?B?NUpRSW9lKzNXQXArcVRWbm5tL241TXRWNXhYay9SVjMrSUkyYjYya0JiS0JF?=
- =?utf-8?B?cDFZMU9TOTNMdHY5NkpmRzVCUGJNeU81dHUyY0h2TG1kMGJzTnlidk8rNGVG?=
- =?utf-8?B?OWdicHBSUWd3QnErNVQxTis2cHpPbms1aDRSSWVOaXlocjZNT2VwcUN1MHVS?=
- =?utf-8?B?OGdVMzg4U0hoVE4xYmVJVWNiWEN2REp4L0dVbXlybjFXeVVNMzZSSEVzeUJ3?=
- =?utf-8?B?REFJT3k1UnR6NE9CS0l1SGFMbzQxVXRDakN5ejBraXRmMmRNSi9OcGJTd2NN?=
- =?utf-8?B?elV2WGdTNVlBczNYd1grUWcwUUZFbmNCak5vZkxnMXVFNTF3TjJTazloR1I5?=
- =?utf-8?B?NDNPN0JGa3RBZjMzTW5vd094OTdIalFKY2Y5NGdiS3g2NEZ6OVZ4TnZPVWVU?=
- =?utf-8?B?L2JLUStETm9uSHc1VFQzb2FSei9XQkxJMEJyZERmOW9NM2Fma3NWRXQ3VUZx?=
- =?utf-8?B?R0l4aGJtaWxRcDhsVVA5QXQyaHNEaUF3eUduSld1ckw3YlQ1SFVNZWRQZFB4?=
- =?utf-8?B?eU02SkhPUjlDT2dGZzFYL0NBWkdEa0E1dXdGQmtjLzFEekpPdEtEdVdnRlNq?=
- =?utf-8?B?RWYyRXBRT2xNczg3czZ3bUZJeFRIa1UrVm1SUi9rM2tKYnFFTmhtazEwdSsr?=
- =?utf-8?B?dks2YW9VVnBCNU1LTHkvSHREdkNsREFyelhlcjJJMi9udWNlN3NKbGNNclFM?=
- =?utf-8?B?cTIyUXNVTUY0SmJYZ2xtM0hSdnNOTC8wcHY1cVRvbmFjYUZOc0FZWHJXUzJp?=
- =?utf-8?B?NWdPZ01iQ04xMlpZc1BYVHJwK29ucnFkU3Nyayt2TEptNk5HT2V1UytJcGFx?=
- =?utf-8?B?b1VzazV1RkM4WWVqejMvdDdnRFFzcFh5WWF2NVo1cXdkNTF3S2RNdWhnbmNZ?=
- =?utf-8?B?U1c3aHFpSU5DcXhQVXZHbW5HNXFocGIwK0xDYktJR3lPSjFLalJKSzNCeWQz?=
- =?utf-8?B?dno5NngveXIyU2dEK0g4WjJwSkVxY1V4OUVNZkRvZTJUR2JnU3BYWUJ0d2Z5?=
- =?utf-8?B?Vk9ranBTUlc2WGdFbFhxeENuOGZweGNzc3FQKzFyRHU0SkFxRGl4WlpZMzJM?=
- =?utf-8?B?TlZ6RkV1K25JNGI3OUt6a1JSVHdDZ2VqUzVOS3JLWUNFU1Q5M0pBWjdiNHg2?=
- =?utf-8?B?aDlQSndwbWQ1T2xLTjVVd0hEdnhTbjJibldXcTdHUkkzbjdoMmx4WjRxU1E3?=
- =?utf-8?B?UVAwWnpwR1BQT0VGRDdzeStEYkFCYmRNaGRCQ3owS0ZWeWliWDVsaS9PWEs3?=
- =?utf-8?B?QksrejFXM1cydUgxRVAzUlgyODRCQTk2TGNza29zd2lCY3pWbU1PdDhLcXVx?=
- =?utf-8?B?dGhTSlBNNzI1OVpOV0owZnZwTy96VFdHMklocUw0MS9INGN6aHNLMzA1b3lN?=
- =?utf-8?B?ZjhlSXRRUE0xSTNTT3d6NmxrcjArT0QrQ2JEVWJUSmxHRTZLL1k2MWtHUW9k?=
- =?utf-8?B?cVp0MWZGN1REOG93eE80K0FzRCtGY2Vhb0dueGVHVkg3N1R3NGp3cWp3L251?=
- =?utf-8?B?OTd5cEpHT0RnK1FTaVAzV3grR1MrdWxUdDNUbCtsMGlOSk56ZWpGS09aN1pu?=
- =?utf-8?B?TkpOMjM5Ymtpa1I5Y3ZPMWJJVjlYdXMxUWx0SGhleTBCSnFPeFNlUVNLMDFO?=
- =?utf-8?B?dlJ6QXhYaXBiZzdqbUh1MWprRG16UVNsT0RDYU9jcTdTdDBYUzVGcVRTY25o?=
- =?utf-8?B?b0JuVW4xQXhNdXV4SjE5b2NhZXVsL3A2OTdGK0pYRmROTnVpYXJHa2JyYXFn?=
- =?utf-8?Q?usdYCJyB7b2RVBHIQvDgteI9anaL67wERc2A5pS96o=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <76D6EEC62F87864686A4FD14F8AB91D3@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 2 Mar 2022 08:24:28 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1109140AD;
+        Wed,  2 Mar 2022 05:23:43 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2772BE000B;
+        Wed,  2 Mar 2022 13:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646227422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3lWTG0gcGGbb63Q514N2waqyjTzAQQv9mi2bl0IjFZU=;
+        b=D6ASxIIXcd7UuceF+qoJdzdfOmYnKNQ7frw3t21QBWafjG5DUfUkq+Wzaig6BAFhIo9v5p
+        CeB7J7lUWrcBidvO1oRCgNSbjXJzk5QkSQaPDnRhLop/9uf/rSGBWB6cj3skn644PYKCMW
+        /vOa1tokbeD9ijeuAgPKF4bch6zFZdW3qhR7WmylDGWvKT9X9Iwc6Gguy2Zb1ybHFjyjWT
+        JJjL2EjyQ5Vr+F5jEKByXnD6u3Wajg+LC9eVip0a8IUfZGgzw/8HWaFrALduJWc5elfpqZ
+        ra8BdH8YMw5pz5iiAREfbGKR3kjRp25U63MjAPK3z0P942qaExkcUtAhMoqpcQ==
+Date:   Wed, 2 Mar 2022 14:23:37 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 63/66] staging: media: Add support for the Allwinner
+ A31 ISP
+Message-ID: <Yh9v2Tez3x6rwhB3@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
+ <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
+ <Yh5CuyEJ+WhIAzYm@aptenodytes>
+ <Yh8wD8lF2Hs+cxD7@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b7aaeb0-348d-46d2-630f-08d9fc4fcb0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2022 13:23:08.8097
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9+e5QTjF7FyHZYdlDZlYkQpa2hcUgTwZiJfvYR8D1dADfc4gL9whbIhjrK2+r7zyqqBg34Jkgrv8bGym76KG6g5JPIUkLaoUQITgC+/4tE0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB4268
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="K5/ovBA9OpV1w3Z2"
+Content-Disposition: inline
+In-Reply-To: <Yh8wD8lF2Hs+cxD7@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,33 +70,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzA0LzIwMjEgw6AgMTE6MzgsIFp1Y2hlbmcgWmhlbmcgYSDDqWNyaXTCoDoNCj4g
-cHBjX292ZXJyaWRlX2wyY3IvcHBjX292ZXJyaWRlX2wyY3JfdmFsdWUvaGFzX2wyY2FjaGUgc3lt
-Ym9sIGlzIG5vdCB1c2VkDQo+IG91dHNpZGUgb2Ygc2V0dXAuYywgc28gY29tbWl0IG1hcmtzIGl0
-IHN0YXRpYy4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBIdWxrIFJvYm90IDxodWxrY2lAaHVhd2VpLmNv
-bT4NCj4gU2lnbmVkLW9mZi1ieTogWnVjaGVuZyBaaGVuZyA8emhlbmd6dWNoZW5nQGh1YXdlaS5j
-b20+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvcG93ZXJtYWMvc2V0dXAuYyB8
-IDYgKysrLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
-bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybWFj
-L3NldHVwLmMgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybWFjL3NldHVwLmMNCj4gaW5k
-ZXggODZhZWUzZjI0ODNmLi5kYjUxMDdjODA0ODUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJw
-Yy9wbGF0Zm9ybXMvcG93ZXJtYWMvc2V0dXAuYw0KPiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZv
-cm1zL3Bvd2VybWFjL3NldHVwLmMNCj4gQEAgLTcxLDkgKzcxLDkgQEANCj4gICANCj4gICAjdW5k
-ZWYgU0hPV19HQVRXSUNLX0lSUVMNCj4gICANCj4gLWludCBwcGNfb3ZlcnJpZGVfbDJjciA9IDA7
-DQo+IC1pbnQgcHBjX292ZXJyaWRlX2wyY3JfdmFsdWU7DQo+IC1pbnQgaGFzX2wyY2FjaGUgPSAw
-Ow0KPiArc3RhdGljIGludCBwcGNfb3ZlcnJpZGVfbDJjcjsNCj4gK3N0YXRpYyBpbnQgcHBjX292
-ZXJyaWRlX2wyY3JfdmFsdWU7DQo+ICtzdGF0aWMgaW50IGhhc19sMmNhY2hlOw0KPiAgIA0KPiAg
-IGludCBwbWFjX25ld3dvcmxkOw0KPiAgIA0KDQpXaXRoIHBwYzY0X2RlZmNvbmZpZywNCg0KICAg
-Q0MgICAgICBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zL3Bvd2VybWFjL3NldHVwLm8NCmFyY2gvcG93
-ZXJwYy9wbGF0Zm9ybXMvcG93ZXJtYWMvc2V0dXAuYzo3NToxMjogZXJyb3I6IA0KJ3BwY19vdmVy
-cmlkZV9sMmNyX3ZhbHVlJyBkZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVdlcnJvcj11bnVzZWQtdmFy
-aWFibGVdDQogICAgNzUgfCBzdGF0aWMgaW50IHBwY19vdmVycmlkZV9sMmNyX3ZhbHVlOw0KICAg
-ICAgIHwgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KYXJjaC9wb3dlcnBjL3Bs
-YXRmb3Jtcy9wb3dlcm1hYy9zZXR1cC5jOjc0OjEyOiBlcnJvcjogDQoncHBjX292ZXJyaWRlX2wy
-Y3InIGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV2Vycm9yPXVudXNlZC12YXJpYWJsZV0NCiAgICA3
-NCB8IHN0YXRpYyBpbnQgcHBjX292ZXJyaWRlX2wyY3I7DQogICAgICAgfCAgICAgICAgICAgIF5+
-fn5+fn5+fn5+fn5+fn5+DQpjYzE6IGFsbCB3YXJuaW5ncyBiZWluZyB0cmVhdGVkIGFzIGVycm9y
-cw0KbWFrZVszXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjI4ODogDQphcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zL3Bvd2VybWFjL3NldHVwLm9dIEVycm9yIDENCg0KDQpZb3UgaGF2ZSB0byBt
-b3ZlIGl0IGluc2lkZSB0aGUgI2lmZGVmIENPTkZJR19QUEMzMiBibG9jayB0aGF0IHVzZXMgaXQu
-DQoNCkNocmlzdG9waGU=
+
+--K5/ovBA9OpV1w3Z2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Laurent,
+
+On Wed 02 Mar 22, 10:51, Laurent Pinchart wrote:
+> Hi Paul,
+>=20
+> On Tue, Mar 01, 2022 at 04:58:51PM +0100, Paul Kocialkowski wrote:
+> > On Mon 07 Feb 22, 18:16, Laurent Pinchart wrote:
+> > > On Sat, Feb 05, 2022 at 07:54:26PM +0100, Paul Kocialkowski wrote:
+> > > > Some Allwinner platforms come with an Image Signal Processor, which
+> > > > supports various features in order to enhance and transform data
+> > > > received by image sensors into good-looking pictures. In most cases,
+> > > > the data is raw bayer, which gets internally converted to RGB and
+> > > > finally YUV, which is what the hardware produces.
+> > > >=20
+> > > > This driver supports ISPs that are similar to the A31 ISP, which was
+> > > > the first standalone ISP found in Allwinner platforms. Simpler ISP
+> > > > blocks were found in the A10 and A20, where they are tied to a CSI
+> > > > controller. Newer generations of Allwinner SoCs (starting with the
+> > > > H6, H616, etc) come with a new camera subsystem and revised ISP.
+> > > > Even though these previous and next-generation ISPs are somewhat
+> > > > similar to the A31 ISP, they have enough significant differences to
+> > > > be out of the scope of this driver.
+> > > >=20
+> > > > While the ISP supports many features, including 3A and many
+> > > > enhancement blocks, this implementation is limited to the following:
+> > > > - V3s (V3/S3) platform support;
+> > > > - Bayer media bus formats as input;
+> > >=20
+> > > Greyscale formats would also be nice to have, if the hardware can
+> > > support that (it mostly just requires the ability to disable the CFA
+> > > interpolation).
+> >=20
+> > As far as I know there's no support for grayscale, only bayer formats
+> > and YUV.
+> >=20
+> > > > - Semi-planar YUV (NV12/NV21) as output;
+> > >=20
+> > > Packed YUV would also be useful if the hardware supports it.
+> >=20
+> > Same here, it only supports planar and semi-planar YUV as output.
+> >=20
+> > > > - Debayering with per-component gain and offset configuration;
+> > > > - 2D noise filtering with configurable coefficients.
+> > > >=20
+> > > > Since many features are missing from the associated uAPI, the driver
+> > > > is aimed to integrate staging until all features are properly
+> > > > described.
+> > > >=20
+> > > > On the technical side, it uses the v4l2 and media controller APIs,
+> > > > with a video node for capture, a processor subdev and a video node
+> > > > for parameters submission. A specific uAPI structure and associated
+> > > > v4l2 meta format are used to configure parameters of the supported
+> > > > modules.
+> > > >=20
+> > > > One particular thing about the hardware is that configuration for
+> > > > module registers needs to be stored in a DMA buffer and gets copied
+> > > > to actual registers by the hardware at the next vsync, when instruc=
+ted
+> > > > by a flag. This is handled by the "state" mechanism in the driver.
+> > > >=20
+> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > ---
+> > > >  drivers/staging/media/sunxi/Kconfig           |   1 +
+> > > >  drivers/staging/media/sunxi/Makefile          |   1 +
+> > > >  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  13 +
+> > > >  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
+> > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 572 +++++++++++++
+> > > >  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  86 ++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 751 ++++++++++++++=
+++++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 +++++++++++++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 599 ++++++++++++++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  61 ++
+> > > >  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
+> > > >  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
+> > >=20
+> > > Could you add a TODO file to list the issues that need to be fixed for
+> > > the driver to move out of staging ? I'll already propose one entry:
+> > >=20
+> > > - Add support in libcamera
+> >=20
+> > Maybe it would be good to narrow down what level of support you have in=
+ mind
+> > here. Just adding basic support fort the pipeline is probably doable, b=
+ut
+> > developing complex 3A algorithms would require very significant effort =
+and
+> > it would be a shame that this prevents the driver from leaving staging.
+> >=20
+> > I think another obvious task would be to have a complete uAPI that refl=
+ects
+> > all modules that are part of the ISP.
+> >=20
+> > What do you think?
+>=20
+> The reason why I'd like to see libcamera support for the ISP driver is
+> to ensure that the kernel API is adequate for real use cases. The API
+> can be split in three parts:
+>=20
+> - Pipeline configuration (this includes the media controller topology,
+>   link setting, subdev pad format/selection rectangle configuration,
+>   ...)
+> - ISP parameters
+> - ISP statistics
+>=20
+> A pipeline handler implementation will cover the first parts. The second
+> and third parts need to be tested too, but we don't need to implement
+> every single feature. A very simple algorithm that demonstrates
+> statistics can be captured and ISP parameters can be set should be
+> enough to test and exercise the API in real scenarios. We're working on
+> making basic AE and AWB algorithm implementations generic (or at least
+> creating generic building blocks that can easily be assembled to create
+> those algorithms, as the ISP statistics and parameters are specific to
+> the ISP and thus require some ISP-specific code), so that should become
+> a fairly easy task soon. I expect most of the work to go in the pipeline
+> handler.
+>=20
+> Does this sound fair to you ?
+
+Yes I understand that these aspects need to be tested too, but I feel like
+having an implementation with a feedback look (even rudimentary and using
+some generic helpers) would be quite a stretch.
+
+It would probably be sufficient to have some demo code that can receive sta=
+ts
+and set parameters, but without necessarily any connection between the two.
+As such it's also my feeling that a standalone demo program could be easier
+to manage for that purpose than libcamera support.
+
+So how about making the requirement that a (free software) userspace
+implementration must demonstrate ability to read relevant statistics
+=66rom the ISP and (independently) control parameters that affect the outpu=
+t?
+
+Paul
+
+> > > This isn't required to merge the driver in staging as long as ABI
+> > > compatibility doesn't need to be preserved until the driver is moved =
+out
+> > > of staging.
+> > >
+> > > >  14 files changed, 3109 insertions(+)
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+=2Ec
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+=2Eh
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_capture.c
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_capture.h
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_params.c
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_params.h
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_proc.c
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_proc.h
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp=
+_reg.h
+> > > >  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6=
+i-isp-config.h
+> > >=20
+> > > [snip]
+>=20
+> --=20
+> Regards,
+>=20
+> Laurent Pinchart
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--K5/ovBA9OpV1w3Z2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIfb9kACgkQ3cLmz3+f
+v9HLxgf7BVSjJJaoUtt14ZCC2KEHslFkkaoYKWqbTuYs7HZKbshhkU08H1x98kan
+j6GLaOTw7UDo8sGQPXTfJzmNnOH/nN4mGMjn+C8L5TfRHZ3IKk+JHjBpDXSPJzAN
+Du4q7ZZumbRtI1thugIkLiqere3R2XWQiR3EdtrwfphlAfFsZYWD4TvZyp3F1keQ
+x+rPg016fDfxqrgDrIVub5jLqxp4oTkqf7iyZxotB1mLEI/jwUsZEGSzT6i2dV1H
+nl5PKhXlzFcH5MpquyNEaOH6GQXej6Z4CzVo/YQP8wsA/EzcOpKqPXyaJ0BTuGYt
+Kj1aXtVJx9oiqB+RsZ4vOMg1Q5QffA==
+=W9up
+-----END PGP SIGNATURE-----
+
+--K5/ovBA9OpV1w3Z2--

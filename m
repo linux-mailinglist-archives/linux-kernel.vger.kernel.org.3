@@ -2,108 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2804CA438
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBAA4CA440
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241629AbiCBLwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S241613AbiCBLxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241613AbiCBLwt (ORCPT
+        with ESMTP id S237334AbiCBLxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:52:49 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48FDBAB8C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:52:06 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Mar 2022 06:53:41 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5E49274
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:52:57 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id AD2281F37E;
+        Wed,  2 Mar 2022 11:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646221975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=17Yx87zcUkbxgqjZC6j2RKiiBVRCwqSfkoMpziNTDNM=;
+        b=nXIttdMYoc1ALis0aYUH0cDJw8pOnFSjZ7x9GMK6AF3pTLTf9rb7mXrDkRqGV/gCepIuGd
+        Dqs4jXuWKFa1ihM5BrGLxKiwgD4hUchct6XQuu26F7UGjR5cxrUXHJnhaZgN4y1YQ5O0O7
+        8fy/2eoT9zP6RrnbySW5W5Yt0Fv7rYM=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8359E3F5FC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646221925;
-        bh=GZ+2gRpwKiQW36vuEeC1R6O1z6W6FXlkVCMt+nuuy1c=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=VT+rVZNfBj+nKfYmg/tutfP0Nv3y4RtQh/4j7iTWQF0yQLOY1urUfFI/M3Qr6OG/M
-         AI+kuPW8MliFePZThcX3JJnJL28GeiW0FTRfVeKZzoQ1XaT22RZ9kF83Hmyfh5TggA
-         /0cx8MMLMBmUdGi3dwaj8JUhEdjRjBpUH9+IoFeve9JkFuGCpJc2FwzB2nAVduaIV0
-         MWPOBwFtGpwtPxi1XJuygI/SbcZ1Qv/S1ROpdWkoBx10utXiFlRwdu8WDOyH5O6G4x
-         7mhsitO56pPUCAgBvf5mRCfkcqoSOxP0eJ19jQkGgwWpscpZSTRON6UlwXP97I4YYF
-         Cc//H9guDzCUA==
-Received: by mail-ed1-f72.google.com with SMTP id r11-20020a508d8b000000b00410a4fa4768so845955edh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 03:52:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GZ+2gRpwKiQW36vuEeC1R6O1z6W6FXlkVCMt+nuuy1c=;
-        b=nC9d2LMAva73vYpjjOBx+le0ZZdQUX1jrq44m8q7H0rFW5Jl6S4c9Zluk5baN07d6q
-         aLOY+Mw9rSHHeMxbf9HFf9y3p/TLlRpaFBJXfuCMUwE7duFA4pQlnLfoH4Acns9u7GT4
-         QtDt42pww3zP44OSvHjn1NVLkhL7ElFQzgsDYz95CJY3c7KonZKdAJawNds9tX3+8vd8
-         SVE2vspS60M6hM57FB+4gRxWyQjEo7IwslTYn0YhWjk61C4QFk2uTe70iHIuts2Gutym
-         ZsUgpvk+cQGFmohaqz3++TjymegbBTq4+UhkRN5I2aCNfIqsaMzX7L1nC7Wo3ykl+H1M
-         AfZQ==
-X-Gm-Message-State: AOAM530+hfADbqKOd+wBwTWQQUk+5cJYFmtPXy4Jy844FTHJagrJLNWo
-        6H1Fkshr+ARAufGGWBG25xYgtgv3uXtPVu7FhKM3bGYfExOYg3obv6AVXW1OonLOQsgIPhzNq4V
-        f7ac6HnMKaUwttWRkWLPODGUtSzrU6ApwiwkgMCdZ5Q==
-X-Received: by 2002:a05:6402:372:b0:40a:bbf4:7973 with SMTP id s18-20020a056402037200b0040abbf47973mr28811633edw.399.1646221925299;
-        Wed, 02 Mar 2022 03:52:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyHlgE9lrc9DIKhd5HEEpVRbPqfpkzxaQ24qbVi00bwUH6CL9gHM16wriclt0C6f0bHFRgaaw==
-X-Received: by 2002:a05:6402:372:b0:40a:bbf4:7973 with SMTP id s18-20020a056402037200b0040abbf47973mr28811606edw.399.1646221925129;
-        Wed, 02 Mar 2022 03:52:05 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170906340400b006d077e850b5sm6286439ejb.23.2022.03.02.03.52.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 03:52:04 -0800 (PST)
-Message-ID: <6f17b476-0bba-5820-5cf2-7c888750ce31@canonical.com>
-Date:   Wed, 2 Mar 2022 12:52:03 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 18019A3B83;
+        Wed,  2 Mar 2022 11:52:55 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 12:52:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>,
+        Maninder Singh <maninder1.s@samsung.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vaneet Narang <v.narang@samsung.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [hnaz-mm:master 272/379] lib/vsprintf.c:991:13: warning:
+ variable 'modbuildid' set but not used
+Message-ID: <Yh9alvkQhbbgppW0@alley>
+References: <202203012040.uFWGm3My-lkp@intel.com>
+ <20220301102448.ff9bf910213d705842a2dd45@linux-foundation.org>
+ <Yh5yhoW+y9qcn1RM@casper.infradead.org>
+ <8735k0isum.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] serial: samsung: Add samsung_early_read to support
- early kgdboc
-Content-Language: en-US
-To:     Woody Lin <woodylin@google.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, markcheng@google.com
-References: <20220302114923.144523-1-woodylin@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220302114923.144523-1-woodylin@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735k0isum.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 12:49, Woody Lin wrote:
-> The 'kgdboc_earlycon_init' looks for boot console that has both .read
-> and .write callbacks. Adds 'samsung_early_read' to samsung_tty.c's early
-> console to support kgdboc.
+On Wed 2022-03-02 10:58:49, John Ogness wrote:
+> On 2022-03-01, Matthew Wilcox <willy@infradead.org> wrote:
+> >> >    lib/vsprintf.c: In function 'va_format':
+> >> >    lib/vsprintf.c:1759:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> >> >     1759 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+> >> >          |         ^~~
+> >> 
+> >> I wonder what this means.
+> >
+> > It means the compiler thinks we might want to add:
+> >
+> > __attribute__((format(gnu_printf, x, y))) to the function declaration so it
+> > can type-check the arguments.
+> >
+> > 'format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK)'
+> >      The 'format' attribute specifies that a function takes 'printf',
+> >      'scanf', 'strftime' or 'strfmon' style arguments that should be
+> >      type-checked against a format string.  For example, the
+> >      declaration:
+> >
+> >           extern int
+> >           my_printf (void *my_object, const char *my_format, ...)
+> >                 __attribute__ ((format (printf, 2, 3)));
+> >
+> >      causes the compiler to check the arguments in calls to 'my_printf'
+> >      for consistency with the 'printf' style format string argument
+> >      'my_format'.
+> >
+> >
+> > I haven't looked into this at all and have no idea if we should.
 > 
-> Signed-off-by: Woody Lin <woodylin@google.com>
-> ---
-> v2:
-> add 'const' to 'struct samsung_early_console_data *data'
-> ---
->  drivers/tty/serial/samsung_tty.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
+> AFAICT it is not possible to use the gnu_printf format attribute for
+> this because the va_list to check is a field within the passed in struct
+> pointer @va_fmt.
+
+My understanding is that it can be handled by passing '0' as the
+FIRST-TO-CHECK parameter:
+
+<paste>
+format (archetype, string-index, first-to-check)
+The format attribute specifies that a function takes printf, scanf,
+strftime or strfmon style arguments that should be type-checked
+against a format string. For example, the declaration:
+
+[...]
+
+"For functions where the arguments are not available to be checked
+(such as vprintf), specify the third parameter as zero."
+<paste>
+
+, cut&pasted from
+https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Well, this particular function va_format() is never used with
+open-coded @arg parameter. It always just passes @arg from
+the caller. So that the check is not important.
 
-
-Best regards,
-Krzysztof
+Best Regards,
+Petr

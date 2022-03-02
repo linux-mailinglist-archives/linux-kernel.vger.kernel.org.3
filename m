@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85234CA3D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CD94CA3DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241391AbiCBLfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S241487AbiCBLgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239210AbiCBLfd (ORCPT
+        with ESMTP id S232130AbiCBLgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:35:33 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA50F9AE5A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:34:50 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id y24so1811633ljh.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 03:34:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jk/kyV1GLxWOeF6Q9fh0NKxfKT7911e8jRHc7/h85W8=;
-        b=pyLW304YtYPCtMvRo2/e1WNmsRPQvhp2e1XDgqMPZlRnwdOc6UJufV599LDH1IXlKZ
-         BfE0B7r8teLF1tIoJshUoYVOOzKG/oK6uyOLRm/WZ4Z49/VVQK/G680A8ADN3P6vXS8V
-         0SMgE2WqihcpiU14qL/wFXteGveVRQ6U6EMXY0Sd7j4r90SLkEFtw3DtjDMvdvCcduVg
-         jEsrJX8p9iuemmRkcsZAEtTln9noZl3eLaX88r4RPyoof28AR1yxg7oCH+6m14Jfek12
-         2ldG2moeAgKrMhkGzLYmqSOrjbZMMKDUXjSM1cPjdid0x9sYUjqdte6e02gxvfsG7LxA
-         kFxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jk/kyV1GLxWOeF6Q9fh0NKxfKT7911e8jRHc7/h85W8=;
-        b=NExRkjuj8ijVCYbiFqYKzCWZwXZT5vctq+a7TuokkGGKM4iuoMDUv9C/t15S1h8p3I
-         RbKslruveXvv2EMBJyZR0KWrBQJ4CF7dIMjZhudgMXIinJBpcNWwjU3tEOjGKZxJ64+X
-         KHv/53E62otEWi3afQAU/gxmI7pTiQMtHoVFEsbQ2kItX3UMxe9zY8J9sKskKt2L/QDG
-         hHeFJEVjk2Y20cwAbqAJwoO+irqqMODe8mKCwT8hFBpTlHF/8CEoC8GbU6+q4DTJnqj0
-         2v5qNyq8NAWuSZ6/0Xmx/kIXqOtr7AYpC7ek49bqyZg7GmAYstFLQ3Z5ZFb7RhSdBkYu
-         es3g==
-X-Gm-Message-State: AOAM530nMFKzwgKHfu7MOXjbi9tcgX2irQ2e7vf2G5NoBLNnrNx6bhvO
-        kY5POsc84jnk+q0Rc/9XgveruXJVEvOCfe4pTQU1gw==
-X-Google-Smtp-Source: ABdhPJz6V1qwnDI6lZX9QgPe+WFHQPCPir7L0W08RpKrIxDAoCdDoWNUsQw7hLQyKs5Va9bM6ldL5n0zYBJ1B4A7LZs=
-X-Received: by 2002:a2e:9c94:0:b0:233:82df:a3b8 with SMTP id
- x20-20020a2e9c94000000b0023382dfa3b8mr20356385lji.229.1646220889153; Wed, 02
- Mar 2022 03:34:49 -0800 (PST)
+        Wed, 2 Mar 2022 06:36:09 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2926291AF5;
+        Wed,  2 Mar 2022 03:35:26 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 222BYpZp131003;
+        Wed, 2 Mar 2022 05:34:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646220891;
+        bh=E9j0NK/VmfnFkMOV8pLbTLOgsBJtiJoVuBixHrWCTRU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=p1+Unx+uM4aeD3lYRLhxLrdTQCBvdRZigt0piDuZIW1fW96P/R6hqt0BYY2uXDmk3
+         uNTDVzRPnrE3lFi3rT4rd/Y/V8YIJ/3rea1oQUjjKyRp2lI2ewqClsit1EWLeIS5Xo
+         bMfs05JBkBJrjfEcDs40u4v6KvY+OP6byTlUQxsI=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 222BYpDq009159
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Mar 2022 05:34:51 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Mar 2022 05:34:50 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Mar 2022 05:34:50 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 222BYnwD101160;
+        Wed, 2 Mar 2022 05:34:50 -0600
+Date:   Wed, 2 Mar 2022 17:04:49 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <michael@walle.cc>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 2/4] mtd: spi-nor: core: Allow specifying the byte order
+ in DTR mode
+Message-ID: <20220302113449.tc2iipvwtaxavfec@ti.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <20220218145900.1440045-3-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-References: <1badf10aba764191a1a752edcbf90389@realtek.com>
-In-Reply-To: <1badf10aba764191a1a752edcbf90389@realtek.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 2 Mar 2022 12:34:12 +0100
-Message-ID: <CAPDyKFoa6d8_8VXp1QcTguuq3d9kX=g8H3yJo-ZJmF9neE_JKQ@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: rtsx: add 74 Clocks in power on flow
-To:     Ricky WU <ricky_wu@realtek.com>
-Cc:     "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220218145900.1440045-3-tudor.ambarus@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,132 +68,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 10:43, Ricky WU <ricky_wu@realtek.com> wrote:
->
-> SD spec definition:
-> "Host provides at least 74 Clocks before issuing first command"
-> After 1ms for the voltage stable then start issuing the Clock signals
->
-> if POWER STATE is
-> MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
-> MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
->
-> Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
+Hi Tudor,
 
-Applied for next, thanks!
-
-Greg, I verified that this shouldn't conflict with the changes you
-have picked up already for the rtsx mmc driver.
-
-Kind regards
-Uffe
-
+On 18/02/22 04:58PM, Tudor Ambarus wrote:
+> Macronix swaps bytes on a 16-bit boundary when configured in Octal DTR.
+> The byte order of 16-bit words is swapped when read or write written in
+> 8D-8D-8D mode compared to STR modes. Swapping the bytes is a bad design
+> decision because this may affect the boot sequence if the entire boot
+> sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode. Allow
+> operations to specify the byte order in DTR mode, so that controllers can
+> swap the bytes back at run-time to fix the endianness, if they are capable.
+> 
+> The byte order in 8D-8D-8D mode can be retrieved at run-time by checking
+> BFPT[DWORD(18)] BIT(31). When set to one, the "Byte order of 16-bit words
+> is swapped when read in 8D-8D-8D mode compared to 1-1-1 mode.". It doesn't
+> specify if this applies to both register and data operations. Macronix is
+> the single user of this byte swap and it doesn't have clear rules, as it
+> contains register operations that require data swap (RDPASS, WRPASS,
+> PASSULK, RDSFDP) and register operations that don't require data swap
+> (WRFBR). All these are not common and can be handled in 1-1-1 mode, so we
+> can ignore them for now. All the other register operations are done on one
+> byte length. The read register operations are actually in 8D-8D-8S mode,
+> as they send the data value twice, on each half of the clock cycle. In case
+> of a register write of one byte, the memory supports receiving the register
+> value only on the first byte, thus it discards the value of the byte on the
+> second half of the clock cycle. Swapping the bytes for one byte register
+> writes is not required, and for one byte register reads it doesn't matter.
+> Thus swap the bytes only for read or page program operations.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 > ---
-> v2:
-> modify commit message
-> move mdelay(5) to host->power_delay_ms
-> replace host->power_state with host->prev_power_state
-> ---
->  drivers/mmc/host/rtsx_pci_sdmmc.c | 29 +++++++++++++++++++----------
->  1 file changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> index 2a3f14afe9f8..d26803d3f4ca 100644
-> --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> @@ -38,10 +38,7 @@ struct realtek_pci_sdmmc {
->         bool                    double_clk;
->         bool                    eject;
->         bool                    initial_mode;
-> -       int                     power_state;
-> -#define SDMMC_POWER_ON         1
-> -#define SDMMC_POWER_OFF                0
-> -
-> +       int                     prev_power_state;
->         int                     sg_count;
->         s32                     cookie;
->         int                     cookie_sg_count;
-> @@ -909,7 +906,7 @@ static int sd_set_bus_width(struct realtek_pci_sdmmc *host,
->         return err;
->  }
->
-> -static int sd_power_on(struct realtek_pci_sdmmc *host)
-> +static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
+>  drivers/mtd/spi-nor/core.c  | 31 +++++++++++++++++++++++++------
+>  drivers/mtd/spi-nor/core.h  |  1 +
+>  include/linux/mtd/spi-nor.h | 17 +++++++++++++++++
+>  3 files changed, 43 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 04ea180118e3..453d8c54d062 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -106,6 +106,9 @@ void spi_nor_spimem_setup_op(const struct spi_nor *nor,
+>  		op->dummy.dtr = true;
+>  		op->data.dtr = true;
+>  
+> +		if (spi_nor_protocol_is_dtr_bswap16(proto))
+> +			op->data.dtr_bswap16 = true;
+> +
+>  		/* 2 bytes per clock cycle in DTR mode. */
+>  		op->dummy.nbytes *= 2;
+>  
+> @@ -388,7 +391,7 @@ int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_DATA_IN(1, sr, 0));
+>  
+> -		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
+> +		if (spi_nor_protocol_is_octal_dtr(nor->reg_proto)) {
+>  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
+>  			op.dummy.nbytes = nor->params->rdsr_dummy;
+>  			/*
+> @@ -432,7 +435,7 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_DATA_IN(1, fsr, 0));
+>  
+> -		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
+> +		if (spi_nor_protocol_is_octal_dtr(nor->reg_proto)) {
+>  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
+>  			op.dummy.nbytes = nor->params->rdsr_dummy;
+>  			/*
+> @@ -2488,7 +2491,7 @@ static int spi_nor_set_addr_width(struct spi_nor *nor)
 >  {
->         struct rtsx_pcr *pcr = host->pcr;
->         struct mmc_host *mmc = host->mmc;
-> @@ -917,9 +914,14 @@ static int sd_power_on(struct realtek_pci_sdmmc *host)
->         u32 val;
->         u8 test_mode;
->
-> -       if (host->power_state == SDMMC_POWER_ON)
-> +       if (host->prev_power_state == MMC_POWER_ON)
->                 return 0;
->
-> +       if (host->prev_power_state == MMC_POWER_UP) {
-> +               rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
-> +               goto finish;
-> +       }
-> +
->         msleep(100);
->
->         rtsx_pci_init_cmd(pcr);
-> @@ -940,10 +942,15 @@ static int sd_power_on(struct realtek_pci_sdmmc *host)
->         if (err < 0)
->                 return err;
->
-> +       mdelay(1);
-> +
->         err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
->         if (err < 0)
->                 return err;
->
-> +       /* send at least 74 clocks */
-> +       rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
-> +
->         if (PCI_PID(pcr) == PID_5261) {
->                 /*
->                  * If test mode is set switch to SD Express mandatorily,
-> @@ -968,7 +975,8 @@ static int sd_power_on(struct realtek_pci_sdmmc *host)
->                 }
->         }
->
-> -       host->power_state = SDMMC_POWER_ON;
-> +finish:
-> +       host->prev_power_state = power_mode;
->         return 0;
+>  	if (nor->addr_width) {
+>  		/* already configured from SFDP */
+> -	} else if (nor->read_proto == SNOR_PROTO_8_8_8_DTR) {
+> +	} else if (spi_nor_protocol_is_octal_dtr(nor->read_proto)) {
+>  		/*
+>  		 * In 8D-8D-8D mode, one byte takes half a cycle to transfer. So
+>  		 * in this protocol an odd address width cannot be used because
+> @@ -2701,6 +2704,19 @@ static void spi_nor_init_fixup_flags(struct spi_nor *nor)
+>  		nor->flags |= SNOR_F_IO_MODE_EN_VOLATILE;
 >  }
->
-> @@ -977,7 +985,7 @@ static int sd_power_off(struct realtek_pci_sdmmc *host)
->         struct rtsx_pcr *pcr = host->pcr;
->         int err;
->
-> -       host->power_state = SDMMC_POWER_OFF;
-> +       host->prev_power_state = MMC_POWER_OFF;
->
->         rtsx_pci_init_cmd(pcr);
->
-> @@ -1003,7 +1011,7 @@ static int sd_set_power_mode(struct realtek_pci_sdmmc *host,
->         if (power_mode == MMC_POWER_OFF)
->                 err = sd_power_off(host);
->         else
-> -               err = sd_power_on(host);
-> +               err = sd_power_on(host, power_mode);
->
->         return err;
+>  
+> +static void spi_nor_set_dtr_bswap16_ops(struct spi_nor *nor)
+> +{
+> +	struct spi_nor_flash_parameter *params = nor->params;
+> +	u32 mask = SNOR_HWCAPS_READ_8_8_8_DTR | SNOR_HWCAPS_PP_8_8_8_DTR;
+> +
+> +	if ((params->hwcaps.mask & mask) == mask) {
+> +		params->reads[SNOR_CMD_READ_8_8_8_DTR].proto |=
+> +			SNOR_PROTO_IS_DTR_BSWAP16;
+> +		params->page_programs[SNOR_CMD_PP_8_8_8_DTR].proto |=
+> +			SNOR_PROTO_IS_DTR_BSWAP16;
+> +	}
+> +}
+> +
+>  /**
+>   * spi_nor_late_init_params() - Late initialization of default flash parameters.
+>   * @nor:	pointer to a 'struct spi_nor'
+> @@ -2721,6 +2737,9 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
+>  	spi_nor_init_flags(nor);
+>  	spi_nor_init_fixup_flags(nor);
+>  
+> +	if (nor->flags & SNOR_F_DTR_BSWAP16)
+> +		spi_nor_set_dtr_bswap16_ops(nor);
+> +
+>  	/*
+>  	 * NOR protection support. When locking_ops are not provided, we pick
+>  	 * the default ones.
+> @@ -2899,8 +2918,8 @@ static int spi_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
+>  	if (!nor->params->octal_dtr_enable)
+>  		return 0;
+>  
+> -	if (!(nor->read_proto == SNOR_PROTO_8_8_8_DTR &&
+> -	      nor->write_proto == SNOR_PROTO_8_8_8_DTR))
+> +	if (!(spi_nor_protocol_is_octal_dtr(nor->read_proto) &&
+> +	      spi_nor_protocol_is_octal_dtr(nor->write_proto)))
+>  		return 0;
+>  
+>  	if (!(nor->flags & SNOR_F_IO_MODE_EN_VOLATILE))
+> @@ -2968,7 +2987,7 @@ static int spi_nor_init(struct spi_nor *nor)
+>  		spi_nor_try_unlock_all(nor);
+>  
+>  	if (nor->addr_width == 4 &&
+> -	    nor->read_proto != SNOR_PROTO_8_8_8_DTR &&
+> +	    !spi_nor_protocol_is_octal_dtr(nor->read_proto) &&
+>  	    !(nor->flags & SNOR_F_4B_OPCODES)) {
+>  		/*
+>  		 * If the RESET# pin isn't hooked up properly, or the system
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index 2afb610853a9..7c077d41c335 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -29,6 +29,7 @@ enum spi_nor_option_flags {
+>  	SNOR_F_IO_MODE_EN_VOLATILE = BIT(14),
+>  	SNOR_F_SOFT_RESET	= BIT(15),
+>  	SNOR_F_SWP_IS_VOLATILE	= BIT(16),
+> +	SNOR_F_DTR_BSWAP16	= BIT(17),
+>  };
+>  
+>  struct spi_nor_read_command {
+> diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+> index fc90fce26e33..6e9660475c5b 100644
+> --- a/include/linux/mtd/spi-nor.h
+> +++ b/include/linux/mtd/spi-nor.h
+> @@ -168,6 +168,11 @@
+>  	 SNOR_PROTO_DATA_MASK)
+>  
+>  #define SNOR_PROTO_IS_DTR	BIT(24)	/* Double Transfer Rate */
+> +/*
+> + * Byte order of 16-bit words is swapped when read or written in DTR mode
+> + * compared to STR mode.
+> + */
+> +#define SNOR_PROTO_IS_DTR_BSWAP16	BIT(25)
+
+I am not so sure if the protocol is the best place to encode this. The 
+protocol stays the same regardless of the data organisation. Maybe all 
+we need to do is add something like
+
+static inline bool
+spi_nor_needs_bswap16(struct spi_nor *nor, enum spi_nor_protocol proto)
+{
+	return (proto == SNOR_PROTO_8_8_8_DTR) && (nor->flags & SNOR_F_DTR_BSWAP16);
+}
+
+And then call it from spi_nor_spimem_setup_op(). Thoughts?
+
+>  
+>  #define SNOR_PROTO_STR(_inst_nbits, _addr_nbits, _data_nbits)	\
+>  	(SNOR_PROTO_INST(_inst_nbits) |				\
+> @@ -201,6 +206,18 @@ static inline bool spi_nor_protocol_is_dtr(enum spi_nor_protocol proto)
+>  	return !!(proto & SNOR_PROTO_IS_DTR);
 >  }
-> @@ -1506,10 +1514,11 @@ static int rtsx_pci_sdmmc_drv_probe(struct platform_device *pdev)
->
->         host = mmc_priv(mmc);
->         host->pcr = pcr;
-> +       mmc->ios.power_delay_ms = 5;
->         host->mmc = mmc;
->         host->pdev = pdev;
->         host->cookie = -1;
-> -       host->power_state = SDMMC_POWER_OFF;
-> +       host->prev_power_state = MMC_POWER_OFF;
->         INIT_WORK(&host->work, sd_request);
->         platform_set_drvdata(pdev, host);
->         pcr->slots[RTSX_SD_CARD].p_dev = pdev;
-> --
+>  
+> +static inline bool spi_nor_protocol_is_octal_dtr(enum spi_nor_protocol proto)
+> +{
+> +	return ((proto & SNOR_PROTO_8_8_8_DTR) == SNOR_PROTO_8_8_8_DTR);
+> +}
+> +
+> +static inline bool spi_nor_protocol_is_dtr_bswap16(enum spi_nor_protocol proto)
+> +{
+> +	u32 mask = SNOR_PROTO_IS_DTR | SNOR_PROTO_IS_DTR_BSWAP16;
+> +
+> +	return ((proto & mask) == mask);
+> +}
+> +
+>  static inline u8 spi_nor_get_protocol_inst_nbits(enum spi_nor_protocol proto)
+>  {
+>  	return ((unsigned long)(proto & SNOR_PROTO_INST_MASK)) >>
+> -- 
 > 2.25.1
+> 
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

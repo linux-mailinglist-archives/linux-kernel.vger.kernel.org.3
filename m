@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8E34CA9E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88B44CA9ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241220AbiCBQOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S241289AbiCBQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237727AbiCBQOD (ORCPT
+        with ESMTP id S230254AbiCBQPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:14:03 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB47CCC5B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:13:17 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 132so2034963pga.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n1sj86b59iu9bNEKeM9TJNWPtdaS8+JumVKQjHmv3eA=;
-        b=VWjgRI5lBrSTdoy6GdW6JXhgIDzq9FlKFxNwvF7m95RNXP439RhBdJYvjWJ6DD292P
-         xFMuGvkHVhQVE/f8bIsjpcKkakU0m/tknZtH+BUst+W7Vmfjc4pp1dMq29RE9cCHi9tJ
-         JMzWzErO2G3z3FgM3+D/GSfYWUt8iUzNuekmpnSNjrW9CFpWHyoMdIwkK7buxbF3Egph
-         5demaYzOQx59dNv4FeF32mmi2xvC6Lhi8EZSodLGgLUDvnIPKpwDK7j9rvTZTkdsQVa+
-         1imTP83PkikIDrwncEunCvypcav5RgtIAZTuP3L8qEyNYL3oYL9FJWCQyN74IC+hZjyB
-         yXSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n1sj86b59iu9bNEKeM9TJNWPtdaS8+JumVKQjHmv3eA=;
-        b=BNTluZdbFThdCiqBVgnBHuf3HLTN9Oj1rlmCx/MUFwXWP1xg9Zh/4vqOR/SAD9bSC8
-         WRXmdUH+px1+RLyOma55JI78c/BkMfE7BJU8P4rk0A2ulMrKPn1ip+GodblHbyt9OiLs
-         TzuEyJ1djmlWrepQjUcH5GESA6vTsxwtO2FE5Y1nw++K9aDyuNvx3HrkwkBF2y2suFaV
-         WQ2jU2CvFmf0kAxrO4UhsqX6zcd8Wdu68uo7ZLWSjfBVqQWtM5quQnk/CBSnBqb+CWOo
-         JchSGco2RpyggMDPl5zPQxqtzepqcKLf2uCutT3Zl9i05j61GwaXdU+EAuK2u9zjgme3
-         tBnw==
-X-Gm-Message-State: AOAM531QEmA+CmcNc3He16II+1B+xj6Le/bWQ17kx+2Yu4dLRxvPHEEO
-        sqPPq/EyizXPGAagzHb6hMHq1jC/ekBA6ml5Fa0bvA==
-X-Google-Smtp-Source: ABdhPJwQd5Cizg2aDLx093iBkzUoSzIjhzGF6B+14pI6HOErfkISahucNl96Q9cPDTvaIcQL25XgBd1FLaxEG7Qnn7U=
-X-Received: by 2002:a05:6a00:b52:b0:4f0:ff67:413 with SMTP id
- p18-20020a056a000b5200b004f0ff670413mr33650623pfo.61.1646237596578; Wed, 02
- Mar 2022 08:13:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com> <20220302142806.51844-30-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220302142806.51844-30-kirill.shutemov@linux.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 2 Mar 2022 08:13:05 -0800
-Message-ID: <CAPcyv4gpCY5PW04T78M-0rkiGfXZGQTSdv31mV4LRXpxvWabeg@mail.gmail.com>
-Subject: Re: [PATCHv5 29/30] ACPICA: Avoid cache flush inside virtual machines
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, sdeep@vmware.com,
-        Sean Christopherson <seanjc@google.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+        Wed, 2 Mar 2022 11:15:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D984CCCC5B;
+        Wed,  2 Mar 2022 08:14:57 -0800 (PST)
+Received: from nazgul.tnic (nat0.nue.suse.com [IPv6:2001:67c:2178:4000::1111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 765761EC03AD;
+        Wed,  2 Mar 2022 17:14:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646237692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=awylhfIR8fI0vfB+Q4tGaWL6X/Z9qgE2EUHkemQv5MY=;
+        b=fvEIawZRy1ItnJXYqlVf415zSrdtK2Tt/7zQyoUxd71Lzc/DXKG+G31uKqqugg+TVr1B84
+        DvvCmJccsylPfqGkz1z2eNFkIxtZITxjPP2y3eMK+pHEq16soA5qz0IECP9042vAqkl3Ww
+        d2v50azdyWX5Dx+ruad9aYUz4bWprcs=
+Date:   Wed, 2 Mar 2022 17:14:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
         Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>, X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v11 00/45] Add AMD Secure Nested Paging (SEV-SNP) Guest
+ Support
+Message-ID: <Yh+YAWu3K4xBillV@nazgul.tnic>
+References: <20220224165625.2175020-1-brijesh.singh@amd.com>
+ <Yh99pBI/RwZY1yf7@nazgul.tnic>
+ <519f5e8e-18d1-43ac-ef90-0320d21c3a55@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <519f5e8e-18d1-43ac-ef90-0320d21c3a55@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,19 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 6:28 AM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> WBINVD is not supported in TDX guest and triggers #VE. There's no robust
-> way to emulate it. The kernel has to avoid it.
->
-> ACPI_FLUSH_CPU_CACHE() flushes caches usign WBINVD on entering sleep
-> states. It is required to prevent data loss.
->
-> While running inside virtual machine, the kernel can bypass cache
-> flushing. Changing sleep state in a virtual machine doesn't affect the
-> host system sleep state and cannot lead to data loss.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+On Wed, Mar 02, 2022 at 05:09:34PM +0100, Paolo Bonzini wrote:
+> Sure: https://git.kernel.org/pub/scm/virt/kvm/kvm.git, branch svm-for-snp.
+> 
+> $ git log -4 --oneline --reverse
+> 3c95d3fab229 KVM: SVM: Define sev_features and vmpl field in the VMSA
+> 0c86f9cf27f7 KVM: SVM: Create a separate mapping for the SEV-ES save area
+> c5e0ec4c742d KVM: SVM: Create a separate mapping for the GHCB save area
+> 88c955d1fc93 (HEAD -> kvm/svm-for-snp) KVM: SVM: Update the SEV-ES save area mapping
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Thanks!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

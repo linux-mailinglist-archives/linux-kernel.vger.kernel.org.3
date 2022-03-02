@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDF04CA550
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AF64CA555
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241984AbiCBMzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S241972AbiCBM54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241972AbiCBMzG (ORCPT
+        with ESMTP id S242014AbiCBM5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:55:06 -0500
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BE2A66D2;
-        Wed,  2 Mar 2022 04:54:21 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 773963F817;
-        Wed,  2 Mar 2022 13:54:18 +0100 (CET)
-Date:   Wed, 2 Mar 2022 13:54:17 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add QCOM SM6125 display clock
- bindings
-Message-ID: <20220302125417.iu52rvdxrmo25wwt@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220226200911.230030-1-marijn.suijten@somainline.org>
- <20220226200911.230030-3-marijn.suijten@somainline.org>
- <ea5d34c6-fe75-c096-d5b2-6a327c9d0ae5@canonical.com>
- <62ebb074-b8de-0dc3-2bbc-e43dca9d2ced@linaro.org>
- <05310308-b0ff-56a0-83ac-855b1b795936@canonical.com>
+        Wed, 2 Mar 2022 07:57:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A27BC24A9
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 04:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646225829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4tvH7/UPfOujZY4vvMaOBTun4bBist9qqxPve17cRH0=;
+        b=PXsoNd1FyhdPPq9GiLEoXkGdBasgBcJDYaSfjSdTBq/8Eo1IYSQuVMcBZP96cMNE6WcLt0
+        H3WwBmpwXKMNxwlmaOLCBPLyANNXtL36KACmpNxG8geJ02tndGwqaYjspUBSWtA6322wME
+        d8y46ZT6fMwhy9h3REah6YnwLbev7Qo=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-YaY96u8HMDO5njmse178dA-1; Wed, 02 Mar 2022 07:57:08 -0500
+X-MC-Unique: YaY96u8HMDO5njmse178dA-1
+Received: by mail-ot1-f72.google.com with SMTP id q2-20020a9d5782000000b005ad0c39a8b5so1243783oth.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 04:57:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4tvH7/UPfOujZY4vvMaOBTun4bBist9qqxPve17cRH0=;
+        b=tLbmQle8wKS5QSe6m75OSJscoUN/l78ICttjiOIlG50kbUEBNhSyAPrLDV869JFxB/
+         dbczpmjqs4UbjI0g8lwWUhLAwzAKeaUwNeDiNnHN58voOxq6eVaxYmOMrIQU2GeOUz60
+         0v0iT7a/RJ1L6RJb2+0C922NO1KvNkknl5SjQ8iW4fY8aTpNCEVWhJLICXNr8SxXuDZh
+         MUFfo3VMyraPOElGr0+dqddE4PgO4kB5wOxCGWSMFmv1M54lnryo0abd6GWNgs4yoIQz
+         gGLKSoV16BoAhvFp2C+3AQRG7Loy+k1/01WFelZHZYgDcyxmyIpRVudVKZpPNOLF+lXl
+         HhOQ==
+X-Gm-Message-State: AOAM532FGLD1PwD8nKqKNDApn1AdpYObuQtsMlIsoyI3FVei18YWcuh2
+        HdJXfm8Jx+9CPtoAoOtIdTjNSpJpxAWiN6s1ZTIE2HtDUSZzDGbM/hN1OS64x5/DkqjY4TDZY14
+        ea9BBDEnTFwoh7Rkub/Hqqoh8
+X-Received: by 2002:a05:6870:238c:b0:d6:f796:c98e with SMTP id e12-20020a056870238c00b000d6f796c98emr7520498oap.82.1646225827388;
+        Wed, 02 Mar 2022 04:57:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx+HJAWOIaiYoffWdK1JHVICQZFHgy9ZPQ2SGyYS6IGnckQm6gVc5ccom6k+N2+elbCInqJoA==
+X-Received: by 2002:a05:6870:238c:b0:d6:f796:c98e with SMTP id e12-20020a056870238c00b000d6f796c98emr7520491oap.82.1646225827239;
+        Wed, 02 Mar 2022 04:57:07 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id e199-20020a4a55d0000000b0031ca56292bbsm2816774oob.46.2022.03.02.04.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 04:57:06 -0800 (PST)
+From:   trix@redhat.com
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] i40e: little endian only valid checksums
+Date:   Wed,  2 Mar 2022 04:57:02 -0800
+Message-Id: <20220302125702.358999-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05310308-b0ff-56a0-83ac-855b1b795936@canonical.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,129 +76,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-28 10:23:19, Krzysztof Kozlowski wrote:
-> On 27/02/2022 22:43, Dmitry Baryshkov wrote:
-> > On 27/02/2022 13:03, Krzysztof Kozlowski wrote:
-> >> On 26/02/2022 21:09, Marijn Suijten wrote:
-> >>> From: Martin Botka <martin.botka@somainline.org>
-> >>>
-> >>> Add device tree bindings for display clock controller for
-> >>> Qualcomm Technology Inc's SM6125 SoC.
-> >>>
-> >>> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> >>> ---
-> >>>   .../bindings/clock/qcom,dispcc-sm6125.yaml    | 87 +++++++++++++++++++
-> >>>   .../dt-bindings/clock/qcom,dispcc-sm6125.h    | 41 +++++++++
-> >>>   2 files changed, 128 insertions(+)
-> >>>   create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
-> >>>   create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm6125.h
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..3465042d0d9f
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
-> >>> @@ -0,0 +1,87 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6125.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Qualcomm Display Clock Controller Binding for SM6125
-> >>> +
-> >>> +maintainers:
-> >>> +  - Martin Botka <martin.botka@somainline.org>
-> >>> +
-> >>> +description: |
-> >>> +  Qualcomm display clock control module which supports the clocks and
-> >>> +  power domains on SM6125.
-> >>> +
-> >>> +  See also:
-> >>> +    dt-bindings/clock/qcom,dispcc-sm6125.h
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - qcom,sm6125-dispcc
-> >>> +
-> >>> +  clocks:
-> >>> +    items:
-> >>> +      - description: Board XO source
-> >>> +      - description: Byte clock from DSI PHY0
-> >>> +      - description: Pixel clock from DSI PHY0
-> >>> +      - description: Pixel clock from DSI PHY1
-> >>> +      - description: Link clock from DP PHY
-> >>> +      - description: VCO DIV clock from DP PHY
-> >>> +      - description: AHB config clock from GCC
-> >>> +
-> >>> +  clock-names:
-> >>> +    items:
-> >>> +      - const: bi_tcxo
-> >>> +      - const: dsi0_phy_pll_out_byteclk
-> >>> +      - const: dsi0_phy_pll_out_dsiclk
-> >>> +      - const: dsi1_phy_pll_out_dsiclk
-> >>> +      - const: dp_phy_pll_link_clk
-> >>> +      - const: dp_phy_pll_vco_div_clk
-> >>> +      - const: cfg_ahb_clk
-> >>> +
-> >>> +  '#clock-cells':
-> >>> +    const: 1
-> >>> +
-> >>> +  '#power-domain-cells':
-> >>> +    const: 1
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +required:
-> >>> +  - compatible
-> >>> +  - reg
-> >>> +  - clocks
-> >>> +  - clock-names
-> >>> +  - '#clock-cells'
-> >>> +  - '#power-domain-cells'
-> >>> +
-> >>> +additionalProperties: false
-> >>> +
-> >>> +examples:
-> >>> +  - |
-> >>> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> >>> +    #include <dt-bindings/clock/qcom,gcc-sm6125.h>
-> >>> +    clock-controller@5f00000 {
-> >>> +      compatible = "qcom,sm6125-dispcc";
-> >>> +      reg = <0x5f00000 0x20000>;
-> >>> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-> >>> +               <&dsi0_phy 0>,
-> >>> +               <&dsi0_phy 1>,
-> >>> +               <0>,
-> >>
-> >> This does not look like a valid phandle. This clock is required, isn't it?
+From: Tom Rix <trix@redhat.com>
 
-I remember it being used like this before, though upon closer inspection
-only qcom,gcc-msm8998.yaml uses it as example.
+The calculation of the checksum can fail.
+So move converting the checksum to little endian
+to inside the return status check.
 
-The clock should be optional, in that case it is perhaps desired to omit
-it from clock-names instead, or pretend there's a `dsi1_phy 1`?
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_nvm.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> > 
-> > Not, it's not required for general dispcc support.
-> > dispcc uses DSI and DP PHY clocks to provide respective pixel/byte/etc 
-> > clocks. However if support for DP is not enabled, the dispcc can work 
-> > w/o DP phy clock. Thus we typically add 0 phandles as placeholders for 
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_nvm.c b/drivers/net/ethernet/intel/i40e/i40e_nvm.c
+index fe6dca846028f..3a38bf8bcde7e 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_nvm.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_nvm.c
+@@ -682,10 +682,11 @@ i40e_status i40e_update_nvm_checksum(struct i40e_hw *hw)
+ 	__le16 le_sum;
+ 
+ 	ret_code = i40e_calc_nvm_checksum(hw, &checksum);
+-	le_sum = cpu_to_le16(checksum);
+-	if (!ret_code)
++	if (!ret_code) {
++		le_sum = cpu_to_le16(checksum);
+ 		ret_code = i40e_write_nvm_aq(hw, 0x00, I40E_SR_SW_CHECKSUM_WORD,
+ 					     1, &le_sum, true);
++	}
+ 
+ 	return ret_code;
+ }
+-- 
+2.26.3
 
-Is there any semantic difference between omitting the clock from DT (in
-clocks= /and/ clock-names=) or setting it to a 0 phandle?
-
-> > DSI/DP clock sources and populate them as support for respective 
-> > interfaces gets implemented.
-> > 
-> 
-> Then the clock is optional, isn't it? While not modeling it as optional?
-
-It looks like this should be modelled using minItems: then, and
-"optional" text/comment? Other clocks are optional as well, we don't
-have DSI 1 in downstream SM6125 DT sources and haven't added the DP PLL
-in our to-be-upstreamed mainline tree yet.
-
-- Marijn

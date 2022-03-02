@@ -2,96 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52B84CADE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A444CADF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244747AbiCBSu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S244759AbiCBS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbiCBSuZ (ORCPT
+        with ESMTP id S237134AbiCBS4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:50:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B658B0E8C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646246980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LIqgahNWKBFxqAEMAXmZwl+PaaeTRoms/jZ1LE6sQe4=;
-        b=RSxkiAU+MMiCJDUljFiF0Jzho6yvLADFAwkp97UyPB04UJrNzxyxZ6UKWP5oK8O6lMBGj3
-        XUI046E7EXdP6SCsORd0G3JN84iDTkyOLYob2UPG+trkQ3BDYkTRutb1hPV+rnlZHSF/U6
-        GTSuJrcDgWtcFsOkB43VXqqnKkYD7Wo=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-34-ZaipU5mkO42SKSQvedamvw-1; Wed, 02 Mar 2022 13:49:37 -0500
-X-MC-Unique: ZaipU5mkO42SKSQvedamvw-1
-Received: by mail-lj1-f200.google.com with SMTP id v5-20020a2ea605000000b00246322afc8cso828800ljp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:49:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LIqgahNWKBFxqAEMAXmZwl+PaaeTRoms/jZ1LE6sQe4=;
-        b=Q+Iy8Ypz1hzLEOBdUxbM8xnwLTyI0LdXQf9SW4f5Tz33OcPe/Wvv69hDdrW51o3uxw
-         cZMn07kG+tZ7v6E69dbrDuf2kdMmDKQFcLZWITdAEPdh3opiSbGA3oy7OW38X2tCT798
-         DIdNUUXfW17d5LrclzRCktgekkJxgaumlHvfmQwKZ9HMjopxtBcNPLHF/l4n7xTv0ghv
-         IypBxayaac2eUfaLdc+sPXDqGDhXMKdC1z9zhqKbKJKCLIKpTSGi7n115agovbamN5yp
-         gpgBi1KufRoExrNnalleJcsAKXfVf32tJu4k3yNravUzV6O+bmBGumeie3J9yCDYDBNf
-         qsdQ==
-X-Gm-Message-State: AOAM530s/ZRRSX8XCOVdS4iepXh7Ysixy/9Et6EDgiyC6M3Mac/jWXWX
-        0cv9egWuH0jCJJ3/rEXsWRfR47sQVLAARse2wphiKopH5wDJ6hrMoqR2DwcwK2tAQ1T0fmrrcTQ
-        1jIlo0mpRx/+8Gl9kCXStokPIpSGzQzPMbMinJqje
-X-Received: by 2002:a2e:b0fb:0:b0:245:f4a9:3b5 with SMTP id h27-20020a2eb0fb000000b00245f4a903b5mr22018437ljl.92.1646246975780;
-        Wed, 02 Mar 2022 10:49:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLI9Xtv8VVJRyoM8xP1vr/fEEcNyaG/k8jSqHBEy3b8mc2kotblpgoKshBbshYQGFcAx0aUenO7GaBIImvT3U=
-X-Received: by 2002:a2e:b0fb:0:b0:245:f4a9:3b5 with SMTP id
- h27-20020a2eb0fb000000b00245f4a903b5mr22018430ljl.92.1646246975603; Wed, 02
- Mar 2022 10:49:35 -0800 (PST)
+        Wed, 2 Mar 2022 13:56:06 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7917C6205;
+        Wed,  2 Mar 2022 10:55:21 -0800 (PST)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K83G72lBhz67xQL;
+        Thu,  3 Mar 2022 02:55:11 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Mar 2022 19:55:20 +0100
+Received: from [10.47.84.129] (10.47.84.129) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 2 Mar
+ 2022 18:55:18 +0000
+Message-ID: <fb7d9ad2-9767-3f6a-2859-4262c992cc76@huawei.com>
+Date:   Wed, 2 Mar 2022 18:55:17 +0000
 MIME-Version: 1.0
-References: <20220224230035.36547137@gandalf.local.home> <Yhhh730RX1HpdXp2@google.com>
- <Yhhj9MLZTrhjSWUE@google.com> <20220225083209.24bafe2c@gandalf.local.home>
- <20220225084256.071dcf82@gandalf.local.home> <YhmOifZcbbxVHPr9@google.com>
- <CAAq0SUkUAMyCoLt=n9X7+QH93zZ00ZpXNjG-gv7xUzL3YGtaPQ@mail.gmail.com> <20220228110559.2a8e0b32@gandalf.local.home>
-In-Reply-To: <20220228110559.2a8e0b32@gandalf.local.home>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Wed, 2 Mar 2022 15:49:24 -0300
-Message-ID: <CAAq0SU=Ydb6_85jLADLbc7E1XuoEgGLMmQG1pXduEyBu5awApA@mail.gmail.com>
-Subject: Re: Strange output on the console
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Willy Tarreau <w@1wt.eu>,
-        David Laight <David.Laight@aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 02/10] crypto: hisilicon/qm: Move few definitions to
+ common header
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
+        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
+        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
+        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
+References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
+ <20220302172903.1995-3-shameerali.kolothum.thodi@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220302172903.1995-3-shameerali.kolothum.thodi@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.84.129]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 1:11 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Sat, 26 Feb 2022 08:49:45 -0300
-> Wander Costa <wcosta@redhat.com> wrote:
->
+On 02/03/2022 17:28, Shameer Kolothum wrote:
+> From: Longfang Liu <liulongfang@huawei.com>
+> 
+> Move Doorbell and Mailbox definitions to common header
+> file. Also export QM mailbox functions.
+> 
+> This will be useful when we introduce VFIO PCI HiSilicon
+> ACC live migration driver.
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> ---
+>   drivers/crypto/hisilicon/qm.c | 32 +++++------------------------
+>   include/linux/hisi_acc_qm.h   | 38 +++++++++++++++++++++++++++++++++++
+>   2 files changed, 43 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index ed23e1d3fa27..8c29f9fba573 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -33,23 +33,6 @@
+>   #define QM_ABNORMAL_EVENT_IRQ_VECTOR	3
+>   
+>   /* mailbox */
+> -#define QM_MB_CMD_SQC			0x0
+> -#define QM_MB_CMD_CQC			0x1
+> -#define QM_MB_CMD_EQC			0x2
+> -#define QM_MB_CMD_AEQC			0x3
+> -#define QM_MB_CMD_SQC_BT		0x4
+> -#define QM_MB_CMD_CQC_BT		0x5
+> -#define QM_MB_CMD_SQC_VFT_V2		0x6
+> -#define QM_MB_CMD_STOP_QP		0x8
+> -#define QM_MB_CMD_SRC			0xc
+> -#define QM_MB_CMD_DST			0xd
+> -
+> -#define QM_MB_CMD_SEND_BASE		0x300
+> -#define QM_MB_EVENT_SHIFT		8
+> -#define QM_MB_BUSY_SHIFT		13
+> -#define QM_MB_OP_SHIFT			14
+> -#define QM_MB_CMD_DATA_ADDR_L		0x304
+> -#define QM_MB_CMD_DATA_ADDR_H		0x308
+>   #define QM_MB_PING_ALL_VFS		0xffff
+>   #define QM_MB_CMD_DATA_SHIFT		32
+>   #define QM_MB_CMD_DATA_MASK		GENMASK(31, 0)
+> @@ -103,19 +86,12 @@
+>   #define QM_DB_CMD_SHIFT_V1		16
+>   #define QM_DB_INDEX_SHIFT_V1		32
+>   #define QM_DB_PRIORITY_SHIFT_V1		48
+> -#define QM_DOORBELL_SQ_CQ_BASE_V2	0x1000
+> -#define QM_DOORBELL_EQ_AEQ_BASE_V2	0x2000
+>   #define QM_QUE_ISO_CFG_V		0x0030
+>   #define QM_PAGE_SIZE			0x0034
+>   #define QM_QUE_ISO_EN			0x100154
+>   #define QM_CAPBILITY			0x100158
+>   #define QM_QP_NUN_MASK			GENMASK(10, 0)
+>   #define QM_QP_DB_INTERVAL		0x10000
+> -#define QM_QP_MAX_NUM_SHIFT		11
+> -#define QM_DB_CMD_SHIFT_V2		12
+> -#define QM_DB_RAND_SHIFT_V2		16
+> -#define QM_DB_INDEX_SHIFT_V2		32
+> -#define QM_DB_PRIORITY_SHIFT_V2		48
+>   
+>   #define QM_MEM_START_INIT		0x100040
+>   #define QM_MEM_INIT_DONE		0x100044
+> @@ -693,7 +669,7 @@ static void qm_mb_pre_init(struct qm_mailbox *mailbox, u8 cmd,
+>   }
+>   
+>   /* return 0 mailbox ready, -ETIMEDOUT hardware timeout */
+> -static int qm_wait_mb_ready(struct hisi_qm *qm)
+> +int qm_wait_mb_ready(struct hisi_qm *qm)
+>   {
+>   	u32 val;
+>   
+> @@ -701,6 +677,7 @@ static int qm_wait_mb_ready(struct hisi_qm *qm)
+>   					  val, !((val >> QM_MB_BUSY_SHIFT) &
+>   					  0x1), POLL_PERIOD, POLL_TIMEOUT);
+>   }
+> +EXPORT_SYMBOL_GPL(qm_wait_mb_ready);
 
-[snip]
+Since these will be public they require a more distinctive name, like 
+hisi_qm_wait_mb_ready or hisi_acc_qm_wait_mb_ready
 
->
-> Anything else I could do to find out more?
->
+>   
+>   /* 128 bit should be written to hardware at one time to trigger a mailbox */
+>   static void qm_mb_write(struct hisi_qm *qm, const void *src)
+> @@ -745,8 +722,8 @@ static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
+>   	return -EBUSY;
+>   }
+>   
+> -static int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
+> -		 bool op)
+> +int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
+> +	  bool op)
+>   {
+>   	struct qm_mailbox mailbox;
+>   	int ret;
+> @@ -762,6 +739,7 @@ static int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
+>   
+>   	return ret;
+>   }
+> +EXPORT_SYMBOL_GPL(qm_mb);
+>   
+>   static void qm_db_v1(struct hisi_qm *qm, u16 qn, u8 cmd, u16 index, u8 priority)
+>   {
+> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
+> index 3068093229a5..8befb59c6fb3 100644
+> --- a/include/linux/hisi_acc_qm.h
+> +++ b/include/linux/hisi_acc_qm.h
+> @@ -34,6 +34,40 @@
+>   #define QM_WUSER_M_CFG_ENABLE		0x1000a8
+>   #define WUSER_M_CFG_ENABLE		0xffffffff
+>   
+> +/* mailbox */
+> +#define QM_MB_CMD_SQC                   0x0
+> +#define QM_MB_CMD_CQC                   0x1
+> +#define QM_MB_CMD_EQC                   0x2
+> +#define QM_MB_CMD_AEQC                  0x3
+> +#define QM_MB_CMD_SQC_BT                0x4
+> +#define QM_MB_CMD_CQC_BT                0x5
+> +#define QM_MB_CMD_SQC_VFT_V2            0x6
+> +#define QM_MB_CMD_STOP_QP               0x8
+> +#define QM_MB_CMD_SRC                   0xc
+> +#define QM_MB_CMD_DST                   0xd
+> +
+> +#define QM_MB_CMD_SEND_BASE		0x300
+> +#define QM_MB_EVENT_SHIFT               8
+> +#define QM_MB_BUSY_SHIFT		13
+> +#define QM_MB_OP_SHIFT			14
+> +#define QM_MB_CMD_DATA_ADDR_L		0x304
+> +#define QM_MB_CMD_DATA_ADDR_H		0x308
+> +#define QM_MB_MAX_WAIT_CNT		6000
+> +
+> +/* doorbell */
+> +#define QM_DOORBELL_CMD_SQ              0
+> +#define QM_DOORBELL_CMD_CQ              1
+> +#define QM_DOORBELL_CMD_EQ              2
+> +#define QM_DOORBELL_CMD_AEQ             3
+> +
+> +#define QM_DOORBELL_SQ_CQ_BASE_V2	0x1000
+> +#define QM_DOORBELL_EQ_AEQ_BASE_V2	0x2000
+> +#define QM_QP_MAX_NUM_SHIFT             11
+> +#define QM_DB_CMD_SHIFT_V2		12
+> +#define QM_DB_RAND_SHIFT_V2		16
+> +#define QM_DB_INDEX_SHIFT_V2		32
+> +#define QM_DB_PRIORITY_SHIFT_V2		48
+> +
+>   /* qm cache */
+>   #define QM_CACHE_CTL			0x100050
+>   #define SQC_CACHE_ENABLE		BIT(0)
+> @@ -414,6 +448,10 @@ pci_ers_result_t hisi_qm_dev_slot_reset(struct pci_dev *pdev);
+>   void hisi_qm_reset_prepare(struct pci_dev *pdev);
+>   void hisi_qm_reset_done(struct pci_dev *pdev);
+>   
+> +int qm_wait_mb_ready(struct hisi_qm *qm);
+> +int qm_mb(struct hisi_qm *qm, u8 cmd, dma_addr_t dma_addr, u16 queue,
+> +	  bool op);
 
-I think I have everything I need, thank you.
+As above, please notice how everything else has a "hisi" prefix
+
+> +
+>   struct hisi_acc_sgl_pool;
+>   struct hisi_acc_hw_sgl *hisi_acc_sg_buf_map_to_hw_sgl(struct device *dev,
+>   	struct scatterlist *sgl, struct hisi_acc_sgl_pool *pool,
 

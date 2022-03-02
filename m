@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EA24CAB8F
+	by mail.lfdr.de (Postfix) with ESMTP id 930014CAB90
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243824AbiCBR1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S240168AbiCBR2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241805AbiCBR1m (ORCPT
+        with ESMTP id S243908AbiCBR2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:27:42 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC69CA33B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:26:59 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id x3so2040078qvd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5g4e3FoDZ04w3yN9r9/DrAhXMgzBOA3m1TJsZRCqpfs=;
-        b=LB74V1s71KJAopRug7ZclBoN6D00aUe7NnQmke84eYdl0Oc86XRIy1BL2LWnNtOmCJ
-         HcvHbKy8hzchOyqDZqAvLS0dMntrTFjlSUxNiQg25Rfo2kOC67yheiJNKUU/tYTBORgF
-         alRny5RwvS9ly3kDB0FiQ0Gibo3BCkZ71jC47/q5CRmWGD7aSk1KQbYPMMldIzPBVH9W
-         VVd6iLn6uRtnLh4/HjVJ7ksuilf7iGldDvbW9C/RDErjBZDMFI9O6JDNQBzVCKECewRv
-         jGFSZtsxN4LF6R665EKdbA3tvYb044LZbOgwpe6BbJCIjkjgBv9sbEQYy8iOqC4kOnTZ
-         cZHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5g4e3FoDZ04w3yN9r9/DrAhXMgzBOA3m1TJsZRCqpfs=;
-        b=iVPYPOcqLgeCBBxQHEEA0g8rsINMwG3ubvwxML6qNpLzle8vkzTOGA4IWWPBtP9RPH
-         M38JXT3lR8w4TluDdMeBKUgrznSccZ4ZrVy+nAWBHK0d4Q8U3inIqUUd74zrc75xfJkR
-         ut/r0yji9/EGLn+iF4St1skPyvLYlHjEp2Q/j8xA+9C44JaYzwLLlxbrHYZ1H/L5ttfC
-         1YBYZb29rVVRtZo3S0DtUfHyZ29lHNA6dWQ0zou5IzJWcq+uH4OS+9VGHKDauq7mA6+v
-         YGTV4ZZyhU86l6BU8Ywj2sWnZFmnoUJat45aztDl8tguexlXibkZ9ovDO+FPgHNPKGT3
-         THkg==
-X-Gm-Message-State: AOAM533M2AiYhrzyC93gSXLIPm69a2sIzpBHyWXp0xOA0SfSEzQEeDti
-        zLKIQOsz3UZUP8f4oBUAkcot16nobJF3YxOk5SQ=
-X-Google-Smtp-Source: ABdhPJyCD0GZMhmbwW2CTTlmI4eJC4c5yH/eFxWGq0joUGcdKm6BWwdUcQIHhkjO0L/HO5SgNnYOfevJgw9sZiWoMdE=
-X-Received: by 2002:ad4:5fcb:0:b0:432:d049:c6d with SMTP id
- jq11-20020ad45fcb000000b00432d0490c6dmr17509351qvb.39.1646242018249; Wed, 02
- Mar 2022 09:26:58 -0800 (PST)
+        Wed, 2 Mar 2022 12:28:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5185DCA33B;
+        Wed,  2 Mar 2022 09:27:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 051AFB820DD;
+        Wed,  2 Mar 2022 17:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02EF6C004E1;
+        Wed,  2 Mar 2022 17:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646242035;
+        bh=XX+gbWN6d/khISVOWirF+epY3OmJ0EbDPOgJ5dqOVDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N8aGkykE+wQjURHstd0nScvLq8LPy77ZrjSFnVf+lF80AE6XC02uex2sTI348BTE5
+         y608MdYjz4A2HvtzFxrJi3pDwfL58AGLvoRCLHyzFlAZ3A5BSr2ob8PhCC0JkkGfSi
+         1H6uGKXMak+XL9qEh59sRwZrHwik0fFXLXHx4ueV4CUwMAFbzZ3StOM0ciVB/ACHKc
+         5Fc1tLapf64ahl1VZQJKUoAQOmQrRuydoDkR6TU4xIw5GZCyhIoJYD5OgsEynMIH5v
+         f4871jWWDv6fR1FSYKTHX07XXbUZqNCzdHpwTIsFJi9ctB6LSVQgVomnoEeR/yFH3S
+         FBgAENBJ4C8wg==
+Date:   Wed, 2 Mar 2022 22:57:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
+ combo phy register compatible"
+Message-ID: <Yh+o7/D0QqJypHga@matsya>
+References: <20220302143427.447748-1-vkoul@kernel.org>
+ <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+ <CAMdYzYoCeSKPQjUqigtP7GiAB8iDre9BRwVTqvmq_OA-N06NQw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ad4:5f4b:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 09:26:57 -0800 (PST)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <michellegoodman358@gmail.com>
-Date:   Wed, 2 Mar 2022 17:26:57 +0000
-Message-ID: <CAAnwc9u5Wxo9fB-=Eg9dEXQrnzkWV7Sa2CtLrxPvQKfj3G12RQ@mail.gmail.com>
-Subject: Halo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f2b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4992]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [michellegoodman358[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [michellegoodman358[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMdYzYoCeSKPQjUqigtP7GiAB8iDre9BRwVTqvmq_OA-N06NQw@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht erhalten.
-Ich brauche schnelle Antworten
+On 02-03-22, 12:12, Peter Geis wrote:
+> On Wed, Mar 2, 2022 at 12:04 PM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > >
+> > > This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
+> > > combo phy register compatible") as that was wrongly merged, so better to
+> > > drop the wrong patch
+> > >
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > ---
+> > > I am applying this to phy-next to fix the issue
+> >
+> > Reverting will just cause a different warning that it is undocumented.
+> > The fix in the other thread won't apply either if you revert.
+> 
+> Reverting and reapplying the original patch would work.
+> https://patchwork.kernel.org/project/linux-rockchip/patch/20220208091326.12495-2-yifeng.zhao@rock-chips.com/
 
-Danke.
-Michelle
+It does not apply to phy-next!
+
+-- 
+~Vinod

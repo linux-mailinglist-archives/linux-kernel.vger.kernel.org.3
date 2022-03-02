@@ -2,42 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347A24C9F09
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D614C9F0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiCBITJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 03:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S240057AbiCBITo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:19:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbiCBITE (ORCPT
+        with ESMTP id S235476AbiCBITm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 03:19:04 -0500
-Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9142B185;
-        Wed,  2 Mar 2022 00:18:21 -0800 (PST)
-Received: from [167.98.27.226] (helo=[10.35.6.178])
-        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nPKBe-0005Nk-TK; Wed, 02 Mar 2022 08:18:18 +0000
-Message-ID: <3b29f372-bfe4-2527-d074-0e589442c3da@codethink.co.uk>
-Date:   Wed, 2 Mar 2022 08:18:18 +0000
+        Wed, 2 Mar 2022 03:19:42 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455B637BF2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:19:00 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2db2add4516so8403817b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 00:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=atOhUCKt1iNHeGULDxxyHd5Ye93aTurT561sTor+wwk=;
+        b=UfpqrlNeV8QfcsKl+6EUXinBdkP8H6zxJRyw+c9ua2pryonEjbDZZqNXIyYcCPkdpL
+         lu0/qLKih9YBlC3e4V4WvNw3i9uuZLx/vMPFdaXewq9kiQzhV/R40LpFbnV6RUZcYN25
+         L2rM/kU7c3YUFgI6hiKKRWKTuQ1CriE843acY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=atOhUCKt1iNHeGULDxxyHd5Ye93aTurT561sTor+wwk=;
+        b=YHLh0rVOA9mi/aiDvOtWoaJB1NhYG3Gy0KwRyE9RxkmYq2a9owvLoR0rrHSbOaiW27
+         Kpcg+at3zWRcroSnYeQpfv7dVF1068BViWtY87JZI/23WHcK7dR2/eBh5RrQBZZC92fi
+         U18Q1LyOpiis8ERJSKzq8Zp1r1Bnlw+mkS2qPgb1YfbVf/7z4F2Y7o9NcLB9OuOrr9W7
+         G/GGUZ7L+uOr1kV95IfRwfEid08c2Dm05ymMf9mR0bPcWfUZ6oUASPQ+hhXfbiKpy81P
+         63y0gpj12/2vzuMPPGk265I/hKx7gCCke2R5DIwz+lfN/AtYD3FQMUBZQWOVBOeEmWUc
+         ZauA==
+X-Gm-Message-State: AOAM533USD9N9XWhZRQIKitgNCDTLwP7xYAj+p6UhO9fV1abUepfvW2q
+        uT6ej7EPC4GxVb8kkbTyaOqALUmdf8vuEPJQSTkRbycs19o=
+X-Google-Smtp-Source: ABdhPJzvda6h0GVBzSzY9PX/SwfJGHPvt6tyXw3+GbJKops158/VF3L6GKAtZE93eje4ejQpI5LRumtLevq8N4uK7Lk=
+X-Received: by 2002:a81:6e44:0:b0:2d0:b675:a0 with SMTP id j65-20020a816e44000000b002d0b67500a0mr28364295ywc.352.1646209139543;
+ Wed, 02 Mar 2022 00:18:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on
- some boards
-Content-Language: en-GB
-To:     helgaas@kernel.org, linux-pci@vger.kernel.org
-Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220219092533.12596-1-linmiaohe@huawei.com> <20220219092533.12596-3-linmiaohe@huawei.com>
+In-Reply-To: <20220219092533.12596-3-linmiaohe@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Wed, 2 Mar 2022 09:18:48 +0100
+Message-ID: <CAM4kBB+PGgRqmkXOVCv+Cvv8CAE_apK5n9asL6JSfuxeS5-RcQ@mail.gmail.com>
+Subject: Re: [PATCH 2/9] mm/z3fold: remove obsolete comment in z3fold_alloc
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,114 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/02/2022 23:22, Ben Dooks wrote:
-> The fu740 PCIe core does not probe any devices on the SiFive Unmatched
-> board without this fix (or having U-Boot explicitly start the PCIe via
-> either boot-script or user command). The fix is to start the link at
-> Gen1 speeds and once the link is up then change the speed back.
-> 
-> The U-Boot driver claims to set the link-speed to Gen1 to get the probe
-> to work (and U-Boot does print link up at Gen1) in the following code:
-> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> --
-> Note, this patch has had significant re-work since the previous 4
-> sets, including trying to fix style, message, reliance on the U-Boot
-> fix and the comments about usage of LINK_CAP and reserved fields.
+On Sat, Feb 19, 2022 at 10:26 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> The highmem pages are supported since commit f1549cb5ab2b ("mm/z3fold.c:
+> allow __GFP_HIGHMEM in z3fold_alloc"). Remove the residual comment.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-So the pci-imx6.c driver does wait after the setting of
-PCIE_LINK_WIDTH_SPEED_CONTROL for the PCIE_LINK_WIDTH_SPEED_CONTROL
-to show PORT_LOGIC_SPEED_CHANGE. Not sure if this is needed in this
-case.
-
-I have put this driver in to our CI and it so far seems to be working
-in our case. I'm not sure if there's anything we could do better to
-detect already initialised values from U-Boot and avoid this. Also I
-am questioning if we need some sort of hardware property to control
-the behaviour.
-
-Does anyone at SiFive have any more information about whether this fix
-is now correct? It is very annoying for us as we network boot and thus
-the PCIe does not come up without this fix in.
-
-Note, it is possible the pci-imx6.c driver does not build, could not
-find a field called linl in the struct dw_pcie. I will try and see if
-this driver is being built or not.
+Reviewed-by: Vitaly Wool <vitaly.wool@konsulko.com>
 
 > ---
->   drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
->   1 file changed, 50 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
-> index 842b7202b96e..16ad52f53490 100644
-> --- a/drivers/pci/controller/dwc/pcie-fu740.c
-> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
-> @@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
->   {
->   	struct device *dev = pci->dev;
->   	struct fu740_pcie *afp = dev_get_drvdata(dev);
-> +	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> +	int ret;
-> +	u32 orig, tmp;
-> +
-> +	/*
-> +	 * Force Gen1 when starting link, due to some devices not
-> +	 * probing at higher speeds. This happens with the PCIe switch
-> +	 * on the Unmatched board. The fix in U-Boot is to force Gen1
-> +	 * and hope later resets will clear this capaility.
-> +	 */
-> +
-> +	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
-> +	dw_pcie_dbi_ro_wr_en(pci);
-> +
-> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-> +	orig = tmp & PCI_EXP_LNKCAP_SLS;
-> +	tmp &= ~PCI_EXP_LNKCAP_SLS;
-> +	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
-> +	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
->   
->   	/* Enable LTSSM */
->   	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
-> -	return 0;
-> +
-> +	ret = dw_pcie_wait_for_link(pci);
-> +	if (ret) {
-> +		dev_err(dev, "error: link did not start\n");
-> +		goto err;
-> +	}
-> +
-> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-> +	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
-> +		dev_dbg(dev, "changing speed back to original\n");
-> +
-> +		tmp &= ~PCI_EXP_LNKCAP_SLS;
-> +		tmp |= orig;
-> +		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
-> +
-> +		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
-> +		tmp |= PORT_LOGIC_SPEED_CHANGE;
-> +		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
-> +
-> +		ret = dw_pcie_wait_for_link(pci);
-> +		if (ret) {
-> +			dev_err(dev, "error: link did not start at new speed\n");
-> +			goto err;
-> +		}
-> +	}
-> +
-> +	ret = 0;
-> +err:
-> +	// todo - if we do have an unliekly error, what do we do here?
-> +	dw_pcie_dbi_ro_wr_dis(pci);
-> +	return ret;
->   }
->   
->   static int fu740_pcie_host_init(struct pcie_port *pp)
-
-
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
+>  mm/z3fold.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> index e86aafea6599..87689f50f709 100644
+> --- a/mm/z3fold.c
+> +++ b/mm/z3fold.c
+> @@ -1064,9 +1064,6 @@ static void z3fold_destroy_pool(struct z3fold_pool *pool)
+>   * performed first. If no suitable free region is found, then a new page is
+>   * allocated and added to the pool to satisfy the request.
+>   *
+> - * gfp should not set __GFP_HIGHMEM as highmem pages cannot be used
+> - * as z3fold pool pages.
+> - *
+>   * Return: 0 if success and handle is set, otherwise -EINVAL if the size or
+>   * gfp arguments are invalid or -ENOMEM if the pool was unable to allocate
+>   * a new page.
+> --
+> 2.23.0
+>

@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B124CA6DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750754CA6E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241548AbiCBOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S241651AbiCBOCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240897AbiCBOBJ (ORCPT
+        with ESMTP id S241595AbiCBOCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:01:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3197C148;
-        Wed,  2 Mar 2022 06:00:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Mar 2022 09:02:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7507A75C0F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:01:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646229716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YlcWSKsMSqzT5IWdAWxPtZ91Z1EQmkshn5gNRXkAO+8=;
+        b=Al3dpEVCdxiWxDEM3Y9HwV070XkqLrtONOjL/7lWpcsUSF20R1veBZ9r7jN9wZG7+qESBw
+        CQkIW1AITtXHC0jXRMXDSReK9C8jZ5mcvvES1P2RVyP+75TaASHHbJZKPRCBAAt5WF01x9
+        rrsk3VV7JD469E9hIE9DWbO8Q1JzDc8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-WIqtmVZ-P761tN5Xi_VAVw-1; Wed, 02 Mar 2022 09:01:51 -0500
+X-MC-Unique: WIqtmVZ-P761tN5Xi_VAVw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EAD6B81FEC;
-        Wed,  2 Mar 2022 14:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7301DC340F1;
-        Wed,  2 Mar 2022 14:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646229623;
-        bh=JIzJgdja99gaS0mVD7G0oF0YG123mLDRGSr0/UKFBY8=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Oyvc2LCtHuYPoFjcL5M8fI1RSTHr6U47iRjuhzOIY2yyBFmfeLhy1UdfepnP8EOBA
-         jyfBZ8akpF4nNhJd72EJmiKCuscf0oPUiawa/Yw85AybTi+KQK5XJ/2+vJpyFVJdBO
-         DQbY8OFx4xY5QcFEq1V0ekMLw9lefiJZKk6akTAFaw2Z0yzr90TbO37oYKW27mtwsa
-         C4sJvTZv1WH2inFpAl8NjZ53MBai5+MaH1eRt37cDnJBpMKqjqVvZAR8qEep1cm7qs
-         KQrLrJSqDhTAMxVZ39TNNHUIeOTmic67b9Oqu9pehoq9ZiI+CRdp3amu6deR4QABoG
-         TZjxly3pvbtcQ==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0AEB627C005B;
-        Wed,  2 Mar 2022 09:00:20 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Wed, 02 Mar 2022 09:00:21 -0500
-X-ME-Sender: <xms:c3gfYlJApHOxbxXXVZkJ7-wOP_8jNSzmT5CRY2W1uLgU75SJ0EoHWQ>
-    <xme:c3gfYhIrR34AvJoz4dnUDY8NtkAAaqb13smpvByKEMSy48dAmf_Wnz2olEBzoAcwF
-    V5GjHUzFmbvvEdRLUo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtgedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
-    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
-    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
-    drlhhuthhordhush
-X-ME-Proxy: <xmx:c3gfYtva9_xsK0Y0-8xy2xczyzGJ6FMkaecx0S-_VWAmFlh732Quhw>
-    <xmx:c3gfYmZd8FTx0ve2eQEgHlXS08flnULGDUuAdknZQtOzbH-uk7LxbQ>
-    <xmx:c3gfYsYsjejDFL4psgWiRUGEU1lpkC8dKlc-p3eWmWng5_ZeDdX29g>
-    <xmx:dHgfYmtrKbSDiBae5ya_UVTnLzmSIdIokF669pN5Dlh0d9eiNKuKZ4XJkeg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B0E8F21E0073; Wed,  2 Mar 2022 09:00:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <1b793ead-a47c-4719-b7b5-cba7d49633f2@www.fastmail.com>
-In-Reply-To: <20220301195457.21152-1-jithu.joseph@intel.com>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
-Date:   Wed, 02 Mar 2022 05:59:59 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Jithu Joseph" <jithu.joseph@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Raj Ashok" <ashok.raj@intel.com>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [RFC 00/10] Introduce In Field Scan driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 144DF801DDB;
+        Wed,  2 Mar 2022 14:01:49 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 754841009655;
+        Wed,  2 Mar 2022 14:01:42 +0000 (UTC)
+Subject: [PATCH 00/19] netfs: Prep for write helpers
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@redhat.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 02 Mar 2022 14:01:41 +0000
+Message-ID: <164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,139 +74,163 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Having had a go at implementing write helpers and content encryption
+support in netfslib, it seems that the netfs_read_{,sub}request structs and
+the equivalent write request structs were almost the same and so should be
+merged, thereby requiring only one set of alloc/get/put functions and a
+common set of tracepoints.
 
-On Tue, Mar 1, 2022, at 11:54 AM, Jithu Joseph wrote:
-> Note to Maintainers:
-> Requesting x86 Maintainers to take a look at patch01 as it
-> touches arch/x86 portion of the kernel. Also would like to guide them
-> to patch07 which sets up hotplug notifiers and creates kthreads.
->
-> Patch 2/10 - Adds Documentation. Requesting Documentation maintainer to 
-> review it.
->
-> Requesting Greg KH to review the sysfs changes added by patch08.
->
-> Patch10 adds tracing support, requesting Steven Rostedt to review that.
->
-> Rest of the patches adds the IFS platform driver, requesting Platform 
-> driver maintainers
-> to review them.
->
->
-> In Field Scan (IFS) is a hardware feature to run circuit level tests on
-> a CPU core to detect problems that are not caught by parity or ECC checks.
->
-> Intel will provide a firmware file containing the scan tests.  Similar to
-> microcode there is a separate file for each family-model-stepping. The
-> tests in the file are divided into some number of "chunks" that can be
-> run individually.
->
-> The driver loads the tests into memory reserved BIOS local to each CPU
-> socket in a two step process using writes to MSRs to first load the
-> SHA hashes for the test. Then the tests themselves. Status MSRs provide
-> feedback on the success/failure of these steps.
->
-> Tests are run by synchronizing execution of all threads on a core and
-> then writing to the ACTIVATE_SCAN MSR on all threads. Instruction
-> execution continues when:
->
-> 1) all tests have completed
-> 2) execution was interrupted
-> 3) a test detected a problem
->
-> In all cases reading the SCAN_STATUS MSR provides details on what
-> happened. Interrupted tests may be restarted.
->
-> The IFS driver provides interfaces from /sys to reload tests and to
-> control execution:
->
-> /sys/devices/system/cpu/ifs/reload
->   Writing "1" to this file will reload the tests from
->   /lib/firmware/intel/ifs/{ff-mm-ss}.scan
+Merging the structs also has the advantage that if a bounce buffer is added
+to the request struct, a read operation can be performed to fill the bounce
+buffer, the contents of the buffer can be modified and then a write
+operation can be performed on it to send the data wherever it needs to go
+using the same request structure all the way through.  The I/O handlers
+would then transparently perform any required crypto.  This should make it
+easy to perform RMW cycles if needed.
 
-IMO this interface is wrong.  /lib/firmware is for firmware (or ucode, etc) files that should be provided by a distribution and loaded, as needed, by a driver so the hardware can function.  This is not at all what IFS does. For IFS, an administrator wants to run a specific test, and the test blob is part of the instruction to run the test.  The distribution should not be involved, and this should work even on systems where /lib/firmware is immutable.
+The potentially common functions and structs, however, by their names all
+proclaim themselves to be associated with the read side of things.  The
+bulk of these changes alter this in the following ways:
 
-So either the blob should be written to a file in sysfs or it should be supplied by write or ioctl to a device node.
+ (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
 
->
-> /sys/devices/system/cpu/ifs/run_test
->   Writing "1" to this file will trigger a scan on each core
->   sequentially by logical CPU number (when HT is enabled this only
->   runs the tests once for each core)
->
-> /sys/devices/system/cpu/cpu#/ifs/run_test
->   Writing "1" to one of these files will trigger a scan on just
->   that core.
->
-> Results of the tests are also provided in /sys:
->
-> /sys/devices/system/cpu/ifs/status
->   Global status. Will show the most serious status across
->   all cores (fail > untested > pass)
->
-> /sys/devices/system/cpu/ifs/cpu_fail_list
-> /sys/devices/system/cpu/ifs/cpu_pass_list
-> /sys/devices/system/cpu/ifs/cpu_untested_list
->   CPU lists showing which CPUs have which test status
->
-> /sys/devices/system/cpu/cpu#/ifs/status
->   Status (pass/fail/untested) of each core
->
-> /sys/devices/system/cpu/cpu#/ifs/details
->   Hex value of the SCAN_STATUS MSR for the most recent test on
->   this core. Note that the error_code field may contain driver
->   defined software code not defined in the Intel SDM.
->
-> Current driver limitations:
->
-> 1) The ACTIVATE_SCAN MSR allows for running any consecutive subrange or
-> available tests. But the driver always tries to run all tests and only
-> uses the subrange feature to restart an interrupted test.
->
-> 2) Hardware allows for some number of cores to be tested in parallel.
-> The driver does not make use of this, it only tests one core at a time.
->
->
-> Jithu Joseph (8):
->   x86/microcode/intel: expose collect_cpu_info_early() for IFS
->   platform/x86/intel/ifs: Add driver for In-Field Scan
->   platform/x86/intel/ifs: Load IFS Image
->   platform/x86/intel/ifs: Check IFS Image sanity
->   platform/x86/intel/ifs: Authenticate and copy to secured memory
->   platform/x86/intel/ifs: Create kthreads for online cpus for scan test
->   platform/x86/intel/ifs: Add IFS sysfs interface
->   platform/x86/intel/ifs: add ABI documentation for IFS
->
-> Tony Luck (2):
->   Documentation: In-Field Scan
->   trace: platform/x86/intel/ifs: Add trace point to track Intel IFS
->     operations
->
->  Documentation/ABI/stable/sysfs-driver-ifs |  85 +++++
->  Documentation/x86/ifs.rst                 | 108 ++++++
->  Documentation/x86/index.rst               |   1 +
->  MAINTAINERS                               |   7 +
->  arch/x86/include/asm/microcode_intel.h    |   6 +
->  arch/x86/kernel/cpu/microcode/intel.c     |   8 +-
->  drivers/platform/x86/intel/Kconfig        |   1 +
->  drivers/platform/x86/intel/Makefile       |   1 +
->  drivers/platform/x86/intel/ifs/Kconfig    |   9 +
->  drivers/platform/x86/intel/ifs/Makefile   |   7 +
->  drivers/platform/x86/intel/ifs/core.c     | 387 +++++++++++++++++++++
->  drivers/platform/x86/intel/ifs/ifs.h      | 155 +++++++++
->  drivers/platform/x86/intel/ifs/load.c     | 299 ++++++++++++++++
->  drivers/platform/x86/intel/ifs/sysfs.c    | 394 ++++++++++++++++++++++
->  include/trace/events/ifs.h                |  38 +++
->  15 files changed, 1503 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/ABI/stable/sysfs-driver-ifs
->  create mode 100644 Documentation/x86/ifs.rst
->  create mode 100644 drivers/platform/x86/intel/ifs/Kconfig
->  create mode 100644 drivers/platform/x86/intel/ifs/Makefile
->  create mode 100644 drivers/platform/x86/intel/ifs/core.c
->  create mode 100644 drivers/platform/x86/intel/ifs/ifs.h
->  create mode 100644 drivers/platform/x86/intel/ifs/load.c
->  create mode 100644 drivers/platform/x86/intel/ifs/sysfs.c
->  create mode 100644 include/trace/events/ifs.h
->
-> -- 
-> 2.17.1
+ (2) Rename some enums, members and flags to make them more appropriate.
+
+ (3) Adjust some comments to match.
+
+ (4) Drop "read"/"rreq" from the names of common functions.  For instance,
+     netfs_get_read_request() becomes netfs_get_request().
+
+ (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
+     ->issue_read().  I've kept the latter as a read-specific function and
+     in another branch added an ->issue_write() method.
+
+The driver source is then reorganised into a number of files:
+
+	fs/netfs/buffered_read.c	Create read reqs to the pagecache
+	fs/netfs/io.c			Dispatchers for read and write reqs
+	fs/netfs/main.c			Some general miscellaneous bits
+	fs/netfs/objects.c		Alloc, get and put functions
+	fs/netfs/stats.c		Optional procfs statistics.
+
+and future development can be fitted into this scheme, e.g.:
+
+	fs/netfs/buffered_write.c	Modify the pagecache
+	fs/netfs/buffered_flush.c	Writeback from the pagecache
+	fs/netfs/direct_read.c		DIO read support
+	fs/netfs/direct_write.c		DIO write support
+	fs/netfs/unbuffered_write.c	Write modifications directly back
+
+Beyond the above changes, there are also some changes that affect how
+things work:
+
+ (1) Make fscache_end_operation() generally available.
+
+ (2) In the netfs tracing header, generate enums from the symbol -> string
+     mapping tables rather than manually coding them.
+
+ (3) Add a struct for filesystems that uses netfslib to put into their
+     inode wrapper structs to hold extra state that netfslib is interested
+     in, such as the fscache cookie.  This allows netfslib functions to be
+     set in filesystem operation tables and jumped to directly without
+     having to have a filesystem wrapper.
+
+ (4) Add a member to the struct added in (3) to track the remote inode
+     length as that may differ if local modifications are buffered.  We may
+     need to supply an appropriate EOF pointer when storing data (in AFS
+     for example).
+
+ (5) Pass extra information to netfs_alloc_request() so that the
+     ->init_request() hook can access it and retain information to indicate
+     the origin of the operation.
+
+ (6) Make the ->init_request() hook return an error, thereby allowing a
+     filesystem that isn't allowed to cache an inode (ceph or cifs, for
+     example) to skip readahead.
+
+ (7) Switch to using refcount_t for subrequests and add tracepoints to log
+     refcount changes for the request and subrequest structs.
+
+ (8) Add a function to consolidate dispatching a read request.  Similar
+     code is used in three places and another couple are likely to be added
+     in the future.
+
+
+The patches can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
+
+This is based on top of ceph's master branch as some of the patches
+conflict.
+
+David
+---
+David Howells (17):
+      netfs: Generate enums from trace symbol mapping lists
+      netfs: Add a netfs inode context
+      netfs: Rename netfs_read_*request to netfs_io_*request
+      netfs: Finish off rename of netfs_read_request to netfs_io_request
+      netfs: Split netfs_io_* object handling out
+      netfs: Adjust the netfs_rreq tracepoint slightly
+      netfs: Trace refcounting on the netfs_io_request struct
+      netfs: Trace refcounting on the netfs_io_subrequest struct
+      netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
+      netfs: Prepare to split read_helper.c
+      netfs: Add a function to consolidate beginning a read
+      netfs: Split fs/netfs/read_helper.c
+      netfs: Split some core bits out into their own file
+      netfs: Rename rename read_helper.c to io.c
+      netfs: Change ->init_rreq() to return an error code
+      netfs: Keep track of the actual remote file size
+      afs: Maintain netfs_i_context::remote_i_size
+
+Jeff Layton (1):
+      netfs: Refactor arguments for netfs_alloc_read_request
+
+Jeffle Xu (1):
+      fscache: export fscache_end_operation()
+
+
+ Documentation/filesystems/netfs_library.rst |   38 +-
+ fs/9p/cache.c                               |   10 +-
+ fs/9p/v9fs.c                                |    4 +-
+ fs/9p/v9fs.h                                |   12 +-
+ fs/9p/vfs_addr.c                            |   60 +-
+ fs/9p/vfs_inode.c                           |   13 +-
+ fs/afs/dynroot.c                            |    1 +
+ fs/afs/file.c                               |   41 +-
+ fs/afs/inode.c                              |   32 +-
+ fs/afs/internal.h                           |   23 +-
+ fs/afs/super.c                              |    4 +-
+ fs/afs/write.c                              |   10 +-
+ fs/cachefiles/io.c                          |   10 +-
+ fs/ceph/addr.c                              |   45 +-
+ fs/ceph/cache.c                             |   28 +-
+ fs/ceph/cache.h                             |   15 +-
+ fs/ceph/inode.c                             |    6 +-
+ fs/ceph/super.h                             |   16 +-
+ fs/cifs/cifsglob.h                          |   10 +-
+ fs/cifs/fscache.c                           |   19 +-
+ fs/cifs/fscache.h                           |    2 +-
+ fs/fscache/internal.h                       |   11 -
+ fs/netfs/Makefile                           |    8 +-
+ fs/netfs/buffered_read.c                    |  429 +++++++
+ fs/netfs/internal.h                         |   49 +-
+ fs/netfs/io.c                               |  656 ++++++++++
+ fs/netfs/main.c                             |   20 +
+ fs/netfs/objects.c                          |  161 +++
+ fs/netfs/read_helper.c                      | 1205 -------------------
+ fs/netfs/stats.c                            |    1 -
+ fs/nfs/fscache.c                            |    8 -
+ include/linux/fscache.h                     |   14 +
+ include/linux/netfs.h                       |  162 ++-
+ include/trace/events/cachefiles.h           |    6 +-
+ include/trace/events/netfs.h                |  188 ++-
+ 35 files changed, 1750 insertions(+), 1567 deletions(-)
+ create mode 100644 fs/netfs/buffered_read.c
+ create mode 100644 fs/netfs/io.c
+ create mode 100644 fs/netfs/main.c
+ create mode 100644 fs/netfs/objects.c
+ delete mode 100644 fs/netfs/read_helper.c
+
+

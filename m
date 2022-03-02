@@ -2,126 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A93E4CA53C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E864CA546
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241948AbiCBMvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S241968AbiCBMy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234357AbiCBMvt (ORCPT
+        with ESMTP id S234165AbiCBMy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:51:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D238E1A8;
-        Wed,  2 Mar 2022 04:51:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C396195A;
-        Wed,  2 Mar 2022 12:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781E7C004E1;
-        Wed,  2 Mar 2022 12:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646225465;
-        bh=VhKOfxRbM46UzbAFZL42T2QOSs+Z6JUQ7yUbXR1FvoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ROemNp7UHfj7Tgx9Ocr+KK716iO5wqcr/0dnPXKaznA6R3rXINpK1f8ejcx5IAHDb
-         hh2ceBje5GRG8MVEtKtFxKfbqc9xCus1B9RRHxcd3m3xekZ2juvb6xaA27iGn3Ut8G
-         fnZaFezGf7f7pht+KwMXgpVez02TTiEtinh05nqPmLucnSmI/AqIkWLnyOfBujS0M2
-         9GyNfMpVM43Dy4aNN6GTCnzEcHZ7oTnpLx0CEh0OrPKlBT26C/jsSixlDR7WoKxi0w
-         3crGG1XMuu4Nrq1lQjDlAumaK1sr9PzOdfDdsi2EApw7Dx+ds9TtA7klW5RH72TCZN
-         fl/bwD79lYqRg==
-Date:   Wed, 2 Mar 2022 14:50:57 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-Message-ID: <Yh9oMdvPYtbzjxlV@kernel.org>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
- <Yh3tgr+g/6IElq0P@kernel.org>
- <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
- <Yh4uUoYT+YS5Jxsv@kernel.org>
- <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
- <Yh8kzK7TM7EhaKEQ@kernel.org>
- <ab104917-d370-cbf3-6017-6e8e40221860@loongson.cn>
+        Wed, 2 Mar 2022 07:54:26 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38C590CC4;
+        Wed,  2 Mar 2022 04:53:42 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id e5so1701455vsg.12;
+        Wed, 02 Mar 2022 04:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=+Ikj6nSRW/83wAf8afXGAgsjyXlLyHwdFoow7ohi4CA=;
+        b=UeBgR12APOHtLPpa0zXQWvvdUaqMRKijI8g5p/mpjKyeBdqZhOu1GBuyNOXylcM96T
+         oLFjeniEtxytH8/srESWhLAZ6OXjOezrU9mERuY/yg4Dtebs19wic9MKE0+Gw5d6uuOG
+         MssH5VSOIoTqvuJt4WbIxARibIBRaD2HK+r7IfFmjgKTvnrTdvNrqDMFn6n5Rnvb+dEL
+         NmIS3UXbjaIyNXsQgJ54FsGwPR4qyzezC/y+L7LKyPXCfYwrYVdZAl15nvOqPldnkotx
+         5GebsW5IVElNnfHg2jvccyAYg5YsDdy8wnEcTJWfdeWUODcuGRI1tCBHruxCwAmpRZrO
+         faww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=+Ikj6nSRW/83wAf8afXGAgsjyXlLyHwdFoow7ohi4CA=;
+        b=qquHognyG7ZLtsNd774MEq7ng2KrsC2rrkk6I2jC/oMizNGUsLILCXocb1I6/6B8Er
+         pwENKQ7I38a5gkzezLczYdauO0ZsNwpMziyuwKZyKI8kmxqA9iSyitjwG1cgJYoeshKO
+         /rd/X6B9F3taGSi1/kp97ljC4B2td0ynkjTyouWBFSQepD0X4LNIUJsHHrOkSwAXtTy5
+         I/O3cXQJ41dr9gAKoel3W6Ge03mlzqnrGYz22dn9KxJ9RhY6pNzLe2+NLGvxy3za+Ge0
+         ac1rTIJtkSF9eAUN1jGvmk0BjFh8cswNd3TuxQYXOXBQTdo0sKzX3dUpipg2IBwzj1Mt
+         E9kg==
+X-Gm-Message-State: AOAM533vMALZvTbgF/jKfHeoL06RDLcv1Xn20McuzR74zk/TqwNk+SuM
+        OAGXY0/9LchtN1/lEzcMhXK0dfN+/iP8j2yBLg==
+X-Google-Smtp-Source: ABdhPJwTl6o4n3ZiUFNOKRW+dr9GCbZ5z70Ms3ll+1CcGAyZvwH9YO0ObjYUMZbhQ1TBIqRqsT6qzfnRwllIuoAuHMc=
+X-Received: by 2002:a67:d319:0:b0:31e:98fd:31b0 with SMTP id
+ a25-20020a67d319000000b0031e98fd31b0mr6452889vsj.47.1646225621566; Wed, 02
+ Mar 2022 04:53:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab104917-d370-cbf3-6017-6e8e40221860@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220220035321.3870-1-warp5tw@gmail.com> <5d507fda-525e-4064-3add-0bb0cc23d016@canonical.com>
+ <CACD3sJaXeWLu6=oLgxJcU9R+A1J+jB7xKaGcDFwYxof33yj17Q@mail.gmail.com>
+ <5ce0f6a6-4a5f-4f25-3cc6-ab0f24bf15cf@canonical.com> <CACD3sJaWJMFgwzQgrHFV0KkkbJXzhgFx=umywxSrLszwP+hO2w@mail.gmail.com>
+ <Yh536s/7bm6Xt6o3@ninjato>
+In-Reply-To: <Yh536s/7bm6Xt6o3@ninjato>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Wed, 2 Mar 2022 20:53:29 +0800
+Message-ID: <CACD3sJboyA_wV_eiivfbHR527Y3E6z3NRmhiDzegk=fcw+nZ9w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] i2c: npcm: Bug fixes timeout, spurious interrupts
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:28:27PM +0800, Tiezhu Yang wrote:
-> 
-> On 03/02/2022 04:03 PM, Mike Rapoport wrote:
-> > On Wed, Mar 02, 2022 at 09:50:49AM +0800, Tiezhu Yang wrote:
-> 
-> [    0.000000] Linux version 5.17.0-rc3+ (loongson@linux) (gcc (GCC) 7.3.1
-> 20180303 (Red Hat 7.3.1-6), GNU ld version 2.28-13.fc21.loongson.6) #1 SMP
-> PREEMPT Wed Mar 2 09:07:39 CST 2022
-> [    0.000000] CpuClock = 1800000000
-> [    0.000000] The bridge chip is LS7A
-> [    0.000000] CP0_Config3: CP0 16.3 (0xdc8030a0)
-> [    0.000000] CP0_PageGrain: CP0 5.1 (0x28000000)
-> [    0.000000] NUMA: Discovered 4 cpus on 1 nodes
-> [    0.000000] Node0: mem_type:1, mem_start:0x200000, mem_size:0xee MB
-> [    0.000000]        start_pfn:0x80, end_pfn:0x3c00, num_physpages:0x3b80
-> [    0.000000] Node0: mem_type:2, mem_start:0x90200000, mem_size:0x6fe MB
-> [    0.000000]        start_pfn:0x24080, end_pfn:0x40000,
-> num_physpages:0x1fb00
-> [    0.000000] Node0: mem_type:2, mem_start:0x120000000, mem_size:0x1600 MB
-> [    0.000000]        start_pfn:0x48000, end_pfn:0xa0000,
-> num_physpages:0x77b00
-> [    0.000000] Node0's addrspace_offset is 0x0
-> [    0.000000] Node0: start_pfn=0x80, end_pfn=0xa0000
-> [    0.000000] NUMA: set cpumask cpu 0 on node 0
-> [    0.000000] NUMA: set cpumask cpu 1 on node 0
-> [    0.000000] NUMA: set cpumask cpu 2 on node 0
-> [    0.000000] NUMA: set cpumask cpu 3 on node 0
-> [    0.000000] printk: bootconsole [early0] enabled
-> [    0.000000] CPU0 revision is: 0014c001 (ICT Loongson-3)
-> [    0.000000] FPU revision is: 00f70501
-> [    0.000000] MSA revision is: 00060140
-> [    0.000000] OF: fdt: No chosen node found, continuing without
-> [    0.000000] MIPS: machine is loongson,loongson64g-4core-ls7a
-> [    0.000000] User-defined physical RAM map overwrite
-> [    0.000000] Kernel sections are not in the memory maps
-> [    0.000000] memblock_add: [0x0000000000200000-0x000000000231185f]
-> setup_arch+0x140/0x794
-> [    0.000000] memblock_reserve: [0x0000000001260520-0x0000000001262560]
-> setup_arch+0x148/0x794
-> [    0.000000] Initrd not found or empty - disabling initrd
-> [    0.000000] memblock_alloc_try_nid: 8257 bytes align=0x40 nid=-1
-> from=0x0000000000000000 max_addr=0x0000000000000000
-> early_init_dt_alloc_memory_arch+0x30/0x60
-> [    0.000000] memblock_reserve: [0x0000000004000000-0x0000000004002040]
-> memblock_alloc_range_nid+0xf0/0x178
-> [    0.000000] memblock_alloc_try_nid: 37972 bytes align=0x8 nid=-1
-> from=0x0000000000000000 max_addr=0x0000000000000000
-> early_init_dt_alloc_memory_arch+0x30/0x60
-> [    0.000000] memblock_reserve: [0x0000000004002048-0x000000000400b49b]
-> memblock_alloc_range_nid+0xf0/0x178
- 
-As far as I can tell, the kernel lives in 0x200000 and using mem=3G@64M
-removes the memory with the kernel and also makes the kernel think there is
-memory between 0x400000 and 0xf000000 while there seem to be a hole up to
-0x90200000.
+Hi Wolfram:
 
-This definitely can be reason for the hangs.
+Thank you for your comment and it'll be addressed.
 
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=882=E6=97=A5 =
+=E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=883:45=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+>
+> > I'll keep old code as fallback, if getting nuvoton,sys-mgr fails as
+> > you point out.
+>
+> Yeah, fallback is much needed. And if you implement it, then you can
+> also split the series into two. One for the DTS changes and one for the
+> I2C changes. That would make upstreaming a lot easier.
+>
 
-
--- 
-Sincerely yours,
-Mike.
+Regards,
+Tyrone

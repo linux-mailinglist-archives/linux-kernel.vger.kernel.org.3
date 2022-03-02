@@ -2,139 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2814CA5ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E827B4CA5F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242189AbiCBN0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S242200AbiCBN0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242190AbiCBN0P (ORCPT
+        with ESMTP id S235127AbiCBN0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:26:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C312458F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:25:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 68AFACE21A9
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8265CC004E1;
-        Wed,  2 Mar 2022 13:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646227528;
-        bh=rb6OGp6luwsYjaP0ulEc9FqmXK4fUkMStzFbsE0sajE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QY0/5d5WZQEmZ752BWWsTyYg6k8GimK363AzDispI/fhVAcMjhjvIPZKkwn9axaHw
-         vK4t+I/NpuWn2h82LvtVDOUpsDbEncmR0haVI7mKnRgaNWEI50B0kqIEAsCUp0nzET
-         eHypbLA6hdebxckKjQiF82zANHc0YAPAzsFkB8VxV8audF3PEBRou18wqe+/X6R8KP
-         j613qK5wWpLj7XJBnvcz3Ekln71KxORQM1KZ5sFN8vlHTLMu3lf+2LBj/RXfWJH+F5
-         HZJiq7s5G9JhsmOJexQXdo+buBfLqnWOd1u0LD2u4uqai79CF5aMCAO5Z9sSfDxtnT
-         FBk9/PX9z/TCw==
-Received: by pali.im (Postfix)
-        id ADC24677; Wed,  2 Mar 2022 14:25:25 +0100 (CET)
-Date:   Wed, 2 Mar 2022 14:25:25 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Remap IO space to bus
- address 0x0
-Message-ID: <20220302132525.lg5ko5s2smti5pbt@pali>
-References: <20220218212526.16021-1-pali@kernel.org>
- <87o82r0zjh.fsf@BL-laptop>
- <875yoz0wpw.fsf@BL-laptop>
- <20220301092539.lru7hsaqxrjqz32r@pali>
- <Yh9ruVkK1gikOuA1@lunn.ch>
+        Wed, 2 Mar 2022 08:26:39 -0500
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566B2DE7;
+        Wed,  2 Mar 2022 05:25:56 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id u10so1157923wra.9;
+        Wed, 02 Mar 2022 05:25:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yfk2Zok3t0Vw4DfsAGuxBuROVgr+WDNIArMCRZveyF4=;
+        b=38RULZBLzeLYqBQseMsdtz8ClmrRKdoqGLLgIiTprzgnckHdp4K3LJy6n7VPi0A6fG
+         Y09RXooWOc2hACNCqRMGgxeO3QBUie5R5GWxOp7HsPIdj4Fm5TnLjQrkPqXbBaFJPcEc
+         N6yOdS6/ot6x0/Edg/1+mg1hvFKU6a0yHCuIas7TEBQAeAU8+xXi4Ji3JvnYLFFLGxtq
+         qUBvoJrvrazi1Z044wv7lPpWm3D3j9jIbelttejp1CGcMw0Jl0llbl5/eit8vfl7qRBr
+         LChWPRTfx/F9hT+Fh4RgzVK4y+bQCdfrL6AA0IdZPAraE/MJn24WIwCH/ycZp6URqlAm
+         KvqA==
+X-Gm-Message-State: AOAM531AG4yIpPIT93jxpCc34y3+WP7/jkBdo7uIdz0Gk0/auLMty+P4
+        h5f630N/6U9KFcmrBjvTFNF+2Bvq39Q=
+X-Google-Smtp-Source: ABdhPJwh+jnexT1ewqtomhIDD5TRreNmf8JL5VMmDuWYmP84nMrp+zK782JTOHJcbL1hSCDEHsRjXg==
+X-Received: by 2002:a5d:6488:0:b0:1ea:7ff1:93e with SMTP id o8-20020a5d6488000000b001ea7ff1093emr24307485wri.284.1646227554586;
+        Wed, 02 Mar 2022 05:25:54 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id d18-20020adff2d2000000b001f025ea3a20sm3657228wrp.0.2022.03.02.05.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 05:25:54 -0800 (PST)
+Date:   Wed, 2 Mar 2022 13:25:52 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        spronovo@linux.microsoft.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v3 10/30] drivers: hv: dxgkrnl: Creation of compute
+ device sync objects
+Message-ID: <20220302132552.bssianizq25c3fu4@liuwe-devbox-debian-v2>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <438c7537f0b5b8f6f5afc35f968a3cf38047d290.1646163378.git.iourit@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh9ruVkK1gikOuA1@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <438c7537f0b5b8f6f5afc35f968a3cf38047d290.1646163378.git.iourit@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 02 March 2022 14:06:01 Andrew Lunn wrote:
-> On Tue, Mar 01, 2022 at 10:25:39AM +0100, Pali Rohár wrote:
-> > On Monday 28 February 2022 17:42:03 Gregory CLEMENT wrote:
-> > > > Hello Pali,
-> > > >
-> > > >> Remap PCI I/O space to the bus address 0x0 in the Armada 37xx
-> > > >> device-tree in order to support legacy I/O port based cards which have
-> > > >> hardcoded I/O ports in low address space.
-> > > >>
-> > > >> Some legacy PCI I/O based cards do not support 32-bit I/O addressing.
-> > > >>
-> > > >> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
-> > > >> 'ranges' DT property") this driver can work with I/O windows which
-> > > >> have
-> > > >
-> > > > Should we add a "Fixes: 64f160e19e92 ("PCI: aardvark: Configure PCIe
-> > > > resources from 'ranges' DT property")" tag ?
-> > > 
-> > > Waiting for your confirmation I tried to applied it but it failed.
-> > > 
-> > > Did you base this patch on v5.17-rc1 ?
-> > > 
-> > > Gregory
-> > 
-> > Hello! This change is breaking booting of Turris Mox kernel with older
-> > bootloader due to bugs in bootloader.
-> 
-> Do you know what actually goes wrong?
+On Tue, Mar 01, 2022 at 11:45:57AM -0800, Iouri Tarassov wrote:
+[...]
+> +void dxgadapter_remove_syncobj(struct dxgsyncobject *object)
+> +{
+> +	down_write(&object->adapter->shared_resource_list_lock);
+> +	if (object->syncobj_list_entry.next) {
+> +		list_del(&object->syncobj_list_entry);
+> +		object->syncobj_list_entry.next = NULL;
+> +	}
 
-Yes! There is already pending fix for U-Boot which will fix this bug:
-https://patchwork.ozlabs.org/project/uboot/patch/20220223125232.7974-1-kabel@kernel.org/
+Just use list_del here.
 
-But because older U-Boot version is already in production we cannot
-change this.
-
-> I've not been involved in the discussion, but looking at the comments
-> above, not changing the space can result in non-working cards.
-
-And changing it would result in non-bootable kernels or crashing
-kernels... So possible non-working card is better choice.
-
-Note that non-working cards are only those which do not support 32-bit
-I/O ports, which is probably only some ancient PCI or ISA cards. I have
-checked 3 random mPCIe SATA controllers which use I/O ports and they
-support 32-bit I/O addressing, so I guess these cards should not be
-affected at all.
-
-> So it
-> does sound like something which in general we want to do. Does the
-> current code assume the bootloader has initialized some registers with
-> specific values? Can that be moved into the driver so it also works
-> with older bootloaders?
-> 
->      Andrew
-
-Yes, by converting DTS to board platform data, stop using DTS and
-dynamically fill board platform data by kernel code... hehe :D nothing
-which we want.
-
-Probably it could be possible to write drivers which would ignore
-address resources in DTS and fill kernel structured dynamically from HW
-registers, in similar way how old platform data on arm32 worked in the
-past. But this is too much work for which I do not see real usage. I'm
-really not going to use ISA card connected to PCI-to-ISA bridge
-connected itself to PCIe-to-PCI bridge and this connected to A3720 SoC.
-
-If somebody is really want to use this setup, then it is easier to
-upgrade bootloader (patch is already pending) and manually edit DTS file
-to remap I/O space to bus address 0x0. This edit can be automated by
-U-Boot script (or U-Boot driver).
-
-It is really easier to do upgrade+fix bootloader and modify DTB on the
-fly than hacking kernel to support older bootloaders which are already
-in use.
+Thanks,
+Wei.

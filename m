@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287BF4CA4D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067C04CA4D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbiCBMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S241782AbiCBMbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235226AbiCBMbT (ORCPT
+        with ESMTP id S235226AbiCBMbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:31:19 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8184A606EA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 04:30:33 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id e2so1379365qte.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 04:30:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZK7Z8l0uzHhCLdOEVA+CCXXbkpSYVOIEoN9UnQuldQY=;
-        b=MpxUDic94okaoHal13gk9BII8USunlqaMdkNSrB0QGQrijiXWYykhXCb+JIjhw6zkO
-         +o0YkuYstuzArZgnuqOhwmW6VAOn+AiYG2FGbL9AzRCMrquA4nt5jJUBJBNyDfeeyv5C
-         QsicRn/5wX4x/tCj3lRuT174ONe7Ah46O5DasSRrXG+fluCKZWcwemqx1/Ye+x9OKwLd
-         QqiGO2TSzkkURi79A5Ja1ktHq/4CMZE+EuFb2V/5QypBKw2gipTMm+afaAGL98awHXrI
-         9zfFFosn6/2314DXJ7ZQFhvejiyFPg2QoPrYCTVX5mvFNEHOempgmf4uujdgb9ljTMiy
-         iWJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZK7Z8l0uzHhCLdOEVA+CCXXbkpSYVOIEoN9UnQuldQY=;
-        b=SXGrvrVZPKnOWKYzI9h4Nacq2XxO93htyRHlKruo6FPfm4pqKbBC8b2m+cxyVaOtWu
-         somll0dy4PlxQcDh8pyt0fR7NHTSXrxbWMngQE+CMt21zLeDwxsH9JpqpyRyE6xUhs9p
-         Q/ztjTBP+MWvrkvjdk4LsxFEHzyB/wQvLyf+xgoaeVl3DybSsvypN0KfpHxvj1OpzkJp
-         1xM5cyW4apZKqKiaAeUjSbLt00rOJfN87Li9IKrMNovcfbuNoqSmHGy3MajpC+drZBMn
-         Mh+/Jjhp8nt82/JDvX93Z0U94uTkqfM70iuYfnsM1Qarw6+KrkYtPIaIR73lbslcy/GF
-         +KkA==
-X-Gm-Message-State: AOAM531IY1PYkk60c6IHhnpyVtVeAvUcfYkrqTcRY5lC+RDc2aHVXNEo
-        fVAeOxlypry5ciz3aAphtmLmcwWdjICS32xfc+iz2g==
-X-Google-Smtp-Source: ABdhPJzqzgidzn/D62pa5oX+t3VEO1+8ysQGiMvWP4mSLU3vJCie+tJInrTXIxm/YFgfmEaFmPxvfoWbIHGXNnnU5RU=
-X-Received: by 2002:ac8:5713:0:b0:2de:4e16:5b25 with SMTP id
- 19-20020ac85713000000b002de4e165b25mr23187953qtw.682.1646224232667; Wed, 02
- Mar 2022 04:30:32 -0800 (PST)
+        Wed, 2 Mar 2022 07:31:36 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B87F606EA;
+        Wed,  2 Mar 2022 04:30:53 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 222CUdSD008743;
+        Wed, 2 Mar 2022 06:30:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646224240;
+        bh=rtFipknxeYo1v4cJrenh1bkttKuv3UnZgO67uv1f29A=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ogUHR4vLrj75nCD6UJHB+sbkwKzKm9l3OiDn+6sZyY7MDMJUdQJVprUsD/+7qW2CP
+         5EZdRGhQKaaCgt5S9IXusnBchvVlcqn4v0l3AbENai8H+msDSwu3816e5DF8q6zgZM
+         pQhomww8w9Hrlr5CugIIvyX+7SmaUH/z4hheu0W4=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 222CUd12045049
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Mar 2022 06:30:39 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Mar 2022 06:30:39 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Mar 2022 06:30:39 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 222CUcPc062807;
+        Wed, 2 Mar 2022 06:30:39 -0600
+Date:   Wed, 2 Mar 2022 18:00:38 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <michael@walle.cc>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 4/4] mtd: spi-nor: core: Introduce SPI_NOR_DTR_BSWAP16
+ no_sfdp_flag
+Message-ID: <20220302123038.fe5bk3akyovihxem@ti.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <20220218145900.1440045-5-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-References: <20220302110508.69053-1-bhupesh.sharma@linaro.org> <20220302110508.69053-3-bhupesh.sharma@linaro.org>
-In-Reply-To: <20220302110508.69053-3-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 2 Mar 2022 15:30:21 +0300
-Message-ID: <CAA8EJprTiGfEnkPOeDPyobdRGkyzyC6=vHivfQ9zsk22JPjM3w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] clk: qcom: gcc: Add emac GDSC support for SM8150
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220218145900.1440045-5-tudor.ambarus@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,93 +68,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 14:05, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
-> Add the EMAC GDSC defines and driver structures for SM8150.
->
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On 18/02/22 04:59PM, Tudor Ambarus wrote:
+> Introduce SPI_NOR_DTR_BSWAP16 flag for flashes that don't define the
+> mandatory BFPT table. When set it indicates that the byte order of 16-bit
+> words is swapped when read in 8D-8D-8D mode compared to 1-1-1 mode.
+
+Is there any flash that currently needs this flag but does not define 
+BFPT? If there is no user, let's not add it. It can always be added 
+later.
+
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 > ---
->  drivers/clk/qcom/gcc-sm8150.c               | 34 +++++++++++++--------
->  include/dt-bindings/clock/qcom,gcc-sm8150.h |  1 +
->  2 files changed, 23 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> index 245794485719..08ba29e3a835 100644
-> --- a/drivers/clk/qcom/gcc-sm8150.c
-> +++ b/drivers/clk/qcom/gcc-sm8150.c
-> @@ -3448,22 +3448,31 @@ static struct clk_branch gcc_video_xo_clk = {
->         },
->  };
->
-> +static struct gdsc emac_gdsc = {
-> +       .gdscr = 0x6004,
-> +       .pd = {
-> +               .name = "emac_gdsc",
-> +       },
-> +       .pwrsts = PWRSTS_OFF_ON,
-> +       .flags = POLL_CFG_GDSCR,
-> +};
+>  drivers/mtd/spi-nor/core.c | 5 ++++-
+>  drivers/mtd/spi-nor/core.h | 5 ++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 453d8c54d062..c3128a8e1544 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2572,7 +2572,7 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
+>  {
+>  	struct spi_nor_flash_parameter *params = nor->params;
+>  	struct spi_nor_erase_map *map = &params->erase_map;
+> -	const u8 no_sfdp_flags = nor->info->no_sfdp_flags;
+> +	const u16 no_sfdp_flags = nor->info->no_sfdp_flags;
+>  	u8 i, erase_mask;
+>  
+>  	if (no_sfdp_flags & SPI_NOR_DUAL_READ) {
+> @@ -2613,6 +2613,9 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
+>  					SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
+>  	}
+>  
+> +	if (no_sfdp_flags & SPI_NOR_DTR_BSWAP16)
+> +		nor->flags |= SNOR_F_DTR_BSWAP16;
 > +
->  static struct gdsc usb30_prim_gdsc = {
-> -               .gdscr = 0xf004,
-> -               .pd = {
-> -                       .name = "usb30_prim_gdsc",
-> -               },
-> -               .pwrsts = PWRSTS_OFF_ON,
-> -               .flags = POLL_CFG_GDSCR,
-> +       .gdscr = 0xf004,
-> +       .pd = {
-> +               .name = "usb30_prim_gdsc",
-> +       },
-> +       .pwrsts = PWRSTS_OFF_ON,
-> +       .flags = POLL_CFG_GDSCR,
-
-Please move alignment changes to a separate patch
-
->  };
->
->  static struct gdsc usb30_sec_gdsc = {
-> -               .gdscr = 0x10004,
-> -               .pd = {
-> -                       .name = "usb30_sec_gdsc",
-> -               },
-> -               .pwrsts = PWRSTS_OFF_ON,
-> -               .flags = POLL_CFG_GDSCR,
-> +       .gdscr = 0x10004,
-> +       .pd = {
-> +               .name = "usb30_sec_gdsc",
-> +       },
-> +       .pwrsts = PWRSTS_OFF_ON,
-> +       .flags = POLL_CFG_GDSCR,
->  };
->
->  static struct clk_regmap *gcc_sm8150_clocks[] = {
-> @@ -3714,6 +3723,7 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
->  };
->
->  static struct gdsc *gcc_sm8150_gdscs[] = {
-> +       [EMAC_GDSC] = &emac_gdsc,
->         [USB30_PRIM_GDSC] = &usb30_prim_gdsc,
->         [USB30_SEC_GDSC] = &usb30_sec_gdsc,
->  };
-> diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> index 3e1a91876610..40596b9ded06 100644
-> --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> @@ -243,5 +243,6 @@
->  /* GCC GDSCRs */
->  #define USB30_PRIM_GDSC                     4
->  #define USB30_SEC_GDSC                                         5
-> +#define EMAC_GDSC                                              6
->
->  #endif
-> --
-> 2.35.1
->
-
+>  	/*
+>  	 * Sector Erase settings. Sort Erase Types in ascending order, with the
+>  	 * smallest erase size starting at BIT(0).
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index 7c077d41c335..1cb887437193 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -362,6 +362,8 @@ struct spi_nor_fixups {
+>   *   SPI_NOR_OCTAL_READ:      flash supports Octal Read.
+>   *   SPI_NOR_OCTAL_DTR_READ:  flash supports octal DTR Read.
+>   *   SPI_NOR_OCTAL_DTR_PP:    flash supports Octal DTR Page Program.
+> + *   SPI_NOR_DTR_BSWAP16:     the byte order of 16-bit words is swapped when
+> + *			      read or written in DTR mode compared to STR mode.
+>   *
+>   * @fixup_flags:    flags that indicate support that can be discovered via SFDP
+>   *                  ideally, but can not be discovered for this particular flash
+> @@ -404,7 +406,7 @@ struct flash_info {
+>  #define USE_FSR				BIT(10)
+>  #define SPI_NOR_XSR_RDY			BIT(11)
+>  
+> -	u8 no_sfdp_flags;
+> +	u16 no_sfdp_flags;
+>  #define SPI_NOR_SKIP_SFDP		BIT(0)
+>  #define SECT_4K				BIT(1)
+>  #define SECT_4K_PMC			BIT(2)
+> @@ -413,6 +415,7 @@ struct flash_info {
+>  #define SPI_NOR_OCTAL_READ		BIT(5)
+>  #define SPI_NOR_OCTAL_DTR_READ		BIT(6)
+>  #define SPI_NOR_OCTAL_DTR_PP		BIT(7)
+> +#define SPI_NOR_DTR_BSWAP16		BIT(8)
+>  
+>  	u8 fixup_flags;
+>  #define SPI_NOR_4B_OPCODES		BIT(0)
+> -- 
+> 2.25.1
+> 
 
 -- 
-With best wishes
-Dmitry
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

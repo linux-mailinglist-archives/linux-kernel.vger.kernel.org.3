@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0F24CB0D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4148E4CB0D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243774AbiCBVNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S245153AbiCBVMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbiCBVMQ (ORCPT
+        with ESMTP id S245086AbiCBVMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:12:16 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F40DD952
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:11:27 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bk29so4749701wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:11:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mEFtl1Tv/8nxJX+EKBZcS0Lbq1ln6/kUirDV/Y73Tsk=;
-        b=BGC8nrmMzBNASLXkYa2JNo0/+8z6t4pK8iDFZsnFwNbRNywY9MSW+in1XAfzhpduHG
-         M90eCf634zQDtoqa+KxYP+4Q/F9NrnUwkV0Hq71kfygDD9iDFhDTHeVYM8n8ancu8Wro
-         q9/ekreyuQmJOIiEAHj2lugGcj8qN6donBz7TnBgMRMjnxKurRav02a5XZt0s7bdm37f
-         jOPee5RfiLPG/58Cp4IT85T9UADV/4UDPF/HI21FDDDpr6paXJoX+WUysCA/MpY9mPG4
-         ow3IXPTXuH8j0L7sjRZWe+DrZywMI/VqaQ9slo4SDoglDlfHEfFdESIhiJ1pYZCEv+VJ
-         JhYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mEFtl1Tv/8nxJX+EKBZcS0Lbq1ln6/kUirDV/Y73Tsk=;
-        b=pJXW2uzxN8bWu9261nKO4aLvX9JroFkZT6wuyF8nM/X9oXxPMj3rzl9pLPBqKED53g
-         fNaHluIA7M3CxlOBg5g1Uqt8pTVzC2pBBz051hiXAUkzaNk77oVFe5rjQFKBgSeV2uuQ
-         ayC+8aRFbQkgL+xu28uAG/EVIji/QqulG4ZR86HOso00B5ySTgAKj+cFPhU3sosFwXn5
-         1udXkEVj3rXjs2nRa0YA+qluYxg5HdbX1bMTsRp06ZBmZ9k9Co9QTFGkljt/DGfK7bQ5
-         KatelKHOd1YsWvaJSFz2Eyo5ZoVLZTVpnYd1gCSBrjPnm9DHcmwLXVx89ozLMhjeH/K3
-         XErA==
-X-Gm-Message-State: AOAM531wGenUjg0Qd1lRA/IxYUPPmNi9mJgGAvHs7aE9esciCaJqmyfI
-        8UiBBOBLkLaRZLAz0pH2l0rSwQ==
-X-Google-Smtp-Source: ABdhPJy3A1W9tLBSCIWiQnLMKAnn7XqQUscUgC/xxLeQMr8lptDLl6mme9vRIINzoq6iIM5uwmaMFg==
-X-Received: by 2002:a5d:64c4:0:b0:1f0:36ee:15c with SMTP id f4-20020a5d64c4000000b001f036ee015cmr3143058wri.126.1646255486175;
-        Wed, 02 Mar 2022 13:11:26 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm145776wmp.44.2022.03.02.13.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 13:11:25 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, john@metanate.com,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 04/18] crypto: rockchip: fix privete/private typo
-Date:   Wed,  2 Mar 2022 21:10:59 +0000
-Message-Id: <20220302211113.4003816-5-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220302211113.4003816-1-clabbe@baylibre.com>
-References: <20220302211113.4003816-1-clabbe@baylibre.com>
+        Wed, 2 Mar 2022 16:12:01 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CC5D205D;
+        Wed,  2 Mar 2022 13:11:16 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9E5DF1C0005;
+        Wed,  2 Mar 2022 21:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646255475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/5n7yQVFkjHDumXqMtthmB2QZa/t3eGn8kkUaHEXQi8=;
+        b=ef+bo92JNW3E4zIiSiFG9rkh+TlNLP8VEd7bM6+CCWgR11oCbiHsncfD9J5bDKk860FbOG
+        mPWVG9oSt6xPAgOXNg+rI4PZIqxviSOoa2I257jlq5PBreFnUZSo4F16VcZpII2keidsPu
+        txZCnXP9PQxtP7LM0JzNaZS0bujV54regO/tNlgEey4DLZ61cB7wcrIgkCR5UlY+NJTrX8
+        gGRrYdAdeJrZLK2/ojaUthx9k+7x+IBQLmrWqJBBwF/WKZ+3MFT4BlvLePsoPhARDEBI7x
+        q6wG4bd9OeAQBaPIlXJfPU46mIlG1BSc+ftXKTxvo1mlHWAmq3qGhk/yIvxi0w==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 7/8] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+Date:   Wed,  2 Mar 2022 22:10:59 +0100
+Message-Id: <20220302211100.65264-8-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fix a simple typo on private word.
+MIPI CSI-2 is supported on the A83T with a dedicated controller that
+covers both the protocol and D-PHY. It can be connected to the CSI
+interface as a V4L2 subdev through the fwnode graph.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+This is not done by default since connecting the bridge without a
+subdev attached to it will cause a failure on the CSI driver.
+
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/crypto/rockchip/rk3288_crypto.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-index 2fa7131e4060..656d6795d400 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.h
-+++ b/drivers/crypto/rockchip/rk3288_crypto.h
-@@ -235,7 +235,7 @@ struct rk_ahash_ctx {
- 	struct crypto_ahash		*fallback_tfm;
- };
+diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+index 82fdb04122ca..ecf9f3b2c0c0 100644
+--- a/arch/arm/boot/dts/sun8i-a83t.dtsi
++++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+@@ -1064,6 +1064,32 @@ csi: camera@1cb0000 {
+ 			status = "disabled";
+ 		};
  
--/* the privete variable of hash for fallback */
-+/* the private variable of hash for fallback */
- struct rk_ahash_rctx {
- 	struct ahash_request		fallback_req;
- 	u32				mode;
++		mipi_csi2: csi@1cb1000 {
++			compatible = "allwinner,sun8i-a83t-mipi-csi2";
++			reg = <0x01cb1000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI_SCLK>,
++				 <&ccu CLK_MIPI_CSI>,
++				 <&ccu CLK_CSI_MISC>;
++			clock-names = "bus", "mod", "mipi", "misc";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				mipi_csi2_in: port@0 {
++					reg = <0>;
++				};
++
++				mipi_csi2_out: port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
+ 		hdmi: hdmi@1ee0000 {
+ 			compatible = "allwinner,sun8i-a83t-dw-hdmi";
+ 			reg = <0x01ee0000 0x10000>;
 -- 
-2.34.1
+2.35.1
 

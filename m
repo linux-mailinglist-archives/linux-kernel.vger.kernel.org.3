@@ -2,90 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7294CA64B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7504B4CA64D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 14:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242347AbiCBNuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 08:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S242354AbiCBNur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 08:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235666AbiCBNuR (ORCPT
+        with ESMTP id S235666AbiCBNuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 08:50:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE193BF9E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EFiW5epXAvMj3+Y4RhnOy43XObQbRYk+KnNyIX9yPps=; b=ZKYRDQpNY7oifdr6jJAlqDAVIa
-        z8Cl5Wpt6WrMAj3zRivui5pjc0f2lnaJG1iCcmMeO2kuZMHITh/DJJcfPYDZQcwpLCeW45XR+NEjZ
-        ZsGdW/gY6tXE3hXjSJAojECEpnMs1cTh2y6838hvjPKmq0PTgdR6td1GJ7Lr3kwapg6U01aLKfcke
-        8kRdaQjH9I5XBDWQsZpNAQz51+30rzS0xFwfF6dkrxpTE6+XSizZ00upUqqsDG5hxVbsWTVDvrG7L
-        ncler03mZZEGOjAlZ9Gm0M5pqFLnk0VMJhcRIL1tsd/qL/A5fgFTfhPwYqHsnf6VV0A2JFwgfMAAb
-        2JIxOgBw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPPLp-00AeJG-3i; Wed, 02 Mar 2022 13:49:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5BA6530021B;
-        Wed,  2 Mar 2022 14:49:08 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3F5DC32201D61; Wed,  2 Mar 2022 14:49:08 +0100 (CET)
-Date:   Wed, 2 Mar 2022 14:49:08 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "keescook@chromium.org" <keescook@chromium.org>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>,
-        "Milburn, Alyssa" <alyssa.milburn@intel.com>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 18/39] x86/ibt: Add IBT feature, MSR and #CP handling
-Message-ID: <Yh911I6Oh9RbCQz1@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151323.069205370@infradead.org>
- <eed8902f21ba9e5f93562432f6b5920137860a98.camel@intel.com>
- <Yh44YsW8viBscBD0@hirez.programming.kicks-ass.net>
- <20220301210245.GM11184@worktop.programming.kicks-ass.net>
- <20220301231303.pqexbxkpte6yjiww@treble>
- <c5e53502274a29e39c996627a35a7aa8e0795ca9.camel@intel.com>
+        Wed, 2 Mar 2022 08:50:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BA446EB0C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 05:50:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 636CB13D5;
+        Wed,  2 Mar 2022 05:50:02 -0800 (PST)
+Received: from [10.57.37.244] (unknown [10.57.37.244])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E8743F73D;
+        Wed,  2 Mar 2022 05:50:01 -0800 (PST)
+Message-ID: <6929cf3f-31a4-8ba5-cb5a-e2f1c9dcabbe@arm.com>
+Date:   Wed, 2 Mar 2022 13:49:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5e53502274a29e39c996627a35a7aa8e0795ca9.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] drm/panfrost: cleanup comments
+Content-Language: en-GB
+To:     trix@redhat.com, robh@kernel.org, tomeu.vizoso@collabora.com,
+        alyssa.rosenzweig@collabora.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220302124535.358060-1-trix@redhat.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20220302124535.358060-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 01:59:46AM +0000, Edgecombe, Rick P wrote:
-> As for pinning strength, I'm not understanding this kexec asm enough to
-> say for sure how much better it is than just removing the bit from the
-> pinning mask. I think some future hardening around preventing turning
-> off IBT might still be worthwhile.
+On 02/03/2022 12:45, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> Kees, I think you brought up the pinning, what do you think of this?
+> For spdx
+> change tab to space delimiter
+> Use // for *.c
+> 
+> Replacements
+> commited to committed
+> regsiters to registers
+> initialze to initialize
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-IIRC the whole purpose of that was to ensure that the
-cr4_update_irqsoff() function itself isn't a useful gadget to manipulate
-CR4 with.
+Reviewed-by: Steven Price <steven.price@arm.com>
+
+> ---
+> v2: remove multiline comment change
+
+Thanks for the update. I'll push this to drm-misc-next.
+
+Steve
+
+> 
+>  drivers/gpu/drm/panfrost/panfrost_drv.c          | 2 +-
+>  drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c | 2 +-
+>  drivers/gpu/drm/panfrost/panfrost_issues.h       | 2 +-
+>  drivers/gpu/drm/panfrost/panfrost_mmu.c          | 2 +-
+>  drivers/gpu/drm/panfrost/panfrost_regs.h         | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 96bb5a4656278..94b6f0a19c83a 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -562,7 +562,7 @@ static int panfrost_probe(struct platform_device *pdev)
+>  
+>  	pfdev->coherent = device_get_dma_attr(&pdev->dev) == DEV_DMA_COHERENT;
+>  
+> -	/* Allocate and initialze the DRM device. */
+> +	/* Allocate and initialize the DRM device. */
+>  	ddev = drm_dev_alloc(&panfrost_drm_driver, &pdev->dev);
+>  	if (IS_ERR(ddev))
+>  		return PTR_ERR(ddev);
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> index b0142341e2235..77e7cb6d1ae3b 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> @@ -1,4 +1,4 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +// SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (C) 2019 Arm Ltd.
+>   *
+>   * Based on msm_gem_freedreno.c:
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_issues.h b/drivers/gpu/drm/panfrost/panfrost_issues.h
+> index 8e59d765bf19f..501a76c5e95ff 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_issues.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_issues.h
+> @@ -14,7 +14,7 @@
+>   */
+>  enum panfrost_hw_issue {
+>  	/* Need way to guarantee that all previously-translated memory accesses
+> -	 * are commited */
+> +	 * are committed */
+>  	HW_ISSUE_6367,
+>  
+>  	/* On job complete with non-done the cache is not flushed */
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.c b/drivers/gpu/drm/panfrost/panfrost_mmu.c
+> index 39562f2d11a47..d3f82b26a631d 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_mmu.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_mmu.c
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier:	GPL-2.0
+> +// SPDX-License-Identifier: GPL-2.0
+>  /* Copyright 2019 Linaro, Ltd, Rob Herring <robh@kernel.org> */
+>  
+>  #include <drm/panfrost_drm.h>
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_regs.h b/drivers/gpu/drm/panfrost/panfrost_regs.h
+> index 6c5a11ef1ee87..efe4b75149d35 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_regs.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_regs.h
+> @@ -292,7 +292,7 @@
+>  #define AS_FAULTADDRESS_LO(as)		(MMU_AS(as) + 0x20) /* (RO) Fault Address for address space n, low word */
+>  #define AS_FAULTADDRESS_HI(as)		(MMU_AS(as) + 0x24) /* (RO) Fault Address for address space n, high word */
+>  #define AS_STATUS(as)			(MMU_AS(as) + 0x28) /* (RO) Status flags for address space n */
+> -/* Additional Bifrost AS regsiters */
+> +/* Additional Bifrost AS registers */
+>  #define AS_TRANSCFG_LO(as)		(MMU_AS(as) + 0x30) /* (RW) Translation table configuration for address space n, low word */
+>  #define AS_TRANSCFG_HI(as)		(MMU_AS(as) + 0x34) /* (RW) Translation table configuration for address space n, high word */
+>  #define AS_FAULTEXTRA_LO(as)		(MMU_AS(as) + 0x38) /* (RO) Secondary fault address for address space n, low word */
 

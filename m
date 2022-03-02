@@ -2,75 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746584C9B90
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD274C9B91
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 03:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237752AbiCBCzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 21:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S238189AbiCBC4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 21:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiCBCzu (ORCPT
+        with ESMTP id S229618AbiCBC4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:55:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FC3403D9;
-        Tue,  1 Mar 2022 18:55:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B2CF61686;
-        Wed,  2 Mar 2022 02:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E21EC340EE;
-        Wed,  2 Mar 2022 02:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646189707;
-        bh=ddZiuRfG/pCjWbi6WqOWsXn5TumLyIc1oQDqNkZnoB0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ImFQjPN9wpJveDl0gLQK9UlifidI2fSbkxhse8a5XqFIP2287QhESbvoVvBSwufIA
-         kBYxSH1vCxcSFkqLyStRP0TGdIxu8ZmdH3nqn1e0T9/9h46LiqPFxoUWjJSUzWk4di
-         66nCxsRIZnroz8+LnkEME85egnmSrehRx8Zuc4Ff/dKRddXCQdNv3d/2bi1wrldQoP
-         V3ajxyLCYza/EvwgrEKwBko2I8ZBn/jgbUtcB3emn6KrGK4mL4Mz+s6dlN7ga0COWv
-         lUg7H3KnjfMep7Rnq7KBf2T1Bn3vLP/BkCFsG5QlHhYX7D8DWiV19UH7umDEmvJyZV
-         iDEociZLdne3A==
-Date:   Tue, 1 Mar 2022 18:55:06 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Joerg Reuter <jreuter@yaina.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 RESEND] net: hamradio: use time_is_after_jiffies()
- instead of open coding it
-Message-ID: <20220301185506.64c3aa0a@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <1646188174-81401-1-git-send-email-wangqing@vivo.com>
-References: <1646188174-81401-1-git-send-email-wangqing@vivo.com>
+        Tue, 1 Mar 2022 21:56:12 -0500
+X-Greylist: delayed 165134 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 18:55:28 PST
+Received: from smtpbg152.qq.com (smtpbg152.qq.com [13.245.186.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1910AC058
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 18:55:27 -0800 (PST)
+X-QQ-mid: bizesmtp79t1646189720t1a5vrwx
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 02 Mar 2022 10:55:13 +0800 (CST)
+X-QQ-SSF: 01400000002000C0G000B00A0000000
+X-QQ-FEAT: eTtJes0duVsOQsQJ+4M0d7Ho8po3Y03mueR2iIIyjSX/4m2oaFzsAtnECTtJ8
+        C9u2f0TCsJN1N+VyJGLTCGMRItjc/sE46bBGXR8sHKaI9UUEX3stGX64Z2D8rqu79+MeNCN
+        k9u5AIWg30EeMG8jixf/sv4sn3IYF0lYY11e0QE8zUKE9MDv5sZ/ECUresMSro5yw0vEtve
+        hhKaMdT+mNLNz9yBZRPNAS8iokgwFhcQbAfXY2WOFS9zdaETiFEzjgzU/cjOdwVgTb27N5F
+        OrcaWWKeklRS3Wh6q9yquH4nJ0uOf8kY5hAJLiqDSyv+z8k9BcZ6ipmAGk2o9bOXXvgZMPh
+        bWXcQ4RwuEkHvnvjaWKqdqWfDZBz0nOQgLEIDOKrC6vyqFl2AKgUoqPTdd1IQ==
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        ebiederm@xmission.com, willy@infradead.org
+Cc:     nixiaoming@huawei.com, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH v3 1/2] fs/proc: optimize exactly register one ctl_table
+Date:   Wed,  2 Mar 2022 10:55:10 +0800
+Message-Id: <20220302025511.20374-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Mar 2022 18:29:31 -0800 Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> Use the helper function time_is_{before,after}_jiffies() to improve
-> code readability.
-> 
-> V2:
-> add missing ")" at line 1357 which will cause compliation error.
+Sysctls are being moved out of kernel/sysctl.c and out to
+their own respective subsystems / users to help with easier
+maintance and avoid merge conflicts. But when we move just
+one entry and to its own new file the last entry for this
+new file must be empty, so we are essentialy bloating the
+kernel one extra empty entry per each newly moved sysctl.
 
-I see :S  So since the v1 was already applied could you please send 
-a patch that only adds the missing bracket based on this tree:
+To help with this, this adds support for registering just
+one ctl_table, therefore not bloating the kernel when we
+move a single ctl_table to its own file.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/
+Since the process of registering just one single table is the
+same as that of registering an array table, so the code is
+similar to registering an array table. The difference between
+registering just one table and registering an array table is
+that we no longer traversal through pointers when registering
+a single table. These lead to that we have to add a complete
+implementation process for register just one ctl_table, so we
+have to add so much code.
 
-? We can't discard the old patch, we need an incremental fix.
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ fs/proc/proc_sysctl.c  | 313 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/sysctl.h |   6 +
+ 2 files changed, 319 insertions(+)
 
-Thanks!
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 6c87c99f0856..5eb6ddf9dfd7 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -101,7 +101,9 @@ static void drop_sysctl_table(struct ctl_table_header *header);
+ static int sysctl_follow_link(struct ctl_table_header **phead,
+ 	struct ctl_table **pentry);
+ static int insert_links(struct ctl_table_header *head);
++static int insert_links_single(struct ctl_table_header *head);
+ static void put_links(struct ctl_table_header *header);
++static void put_links_single(struct ctl_table_header *header);
+ 
+ static void sysctl_print_dir(struct ctl_dir *dir)
+ {
+@@ -198,6 +200,25 @@ static void erase_entry(struct ctl_table_header *head, struct ctl_table *entry)
+ 	rb_erase(node, &head->parent->root);
+ }
+ 
++static void init_header_single(struct ctl_table_header *head,
++	struct ctl_table_root *root, struct ctl_table_set *set,
++	struct ctl_node *node, struct ctl_table *table)
++{
++	head->ctl_table = table;
++	head->ctl_table_arg = table;
++	head->used = 0;
++	head->count = 1;
++	head->nreg = 1;
++	head->unregistering = NULL;
++	head->root = root;
++	head->set = set;
++	head->parent = NULL;
++	head->node = node;
++	INIT_HLIST_HEAD(&head->inodes);
++	if (node)
++		node->header = head;
++}
++
+ static void init_header(struct ctl_table_header *head,
+ 	struct ctl_table_root *root, struct ctl_table_set *set,
+ 	struct ctl_node *node, struct ctl_table *table)
+@@ -227,6 +248,42 @@ static void erase_header(struct ctl_table_header *head)
+ 		erase_entry(head, entry);
+ }
+ 
++static int insert_header_single(struct ctl_dir *dir, struct ctl_table_header *header)
++{
++	int err;
++
++	/* Is this a permanently empty directory? */
++	if (is_empty_dir(&dir->header))
++		return -EROFS;
++
++	/* Am I creating a permanently empty directory? */
++	if (header->ctl_table == sysctl_mount_point) {
++		if (!RB_EMPTY_ROOT(&dir->root))
++			return -EINVAL;
++		set_empty_dir(dir);
++	}
++
++	dir->header.nreg++;
++	header->parent = dir;
++	err = insert_links_single(header);
++	if (err)
++		goto fail_links;
++
++	err = insert_entry(header, header->ctl_table);
++	if (err)
++		goto fail;
++
++	return 0;
++fail:
++	erase_entry(header, header->ctl_table);
++	put_links_single(header);
++fail_links:
++	if (header->ctl_table == sysctl_mount_point)
++		clear_empty_dir(dir);
++	header->parent = NULL;
++	drop_sysctl_table(&dir->header);
++	return err;
++}
+ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ {
+ 	struct ctl_table *entry;
+@@ -1128,6 +1185,40 @@ static int sysctl_check_table_array(const char *path, struct ctl_table *table)
+ 	return err;
+ }
+ 
++static int sysctl_check_table_single(const char *path, struct ctl_table *table)
++{
++	int err = 0;
++
++	if (table->child)
++		err |= sysctl_err(path, table, "Not a file");
++
++	if ((table->proc_handler == proc_dostring) ||
++	    (table->proc_handler == proc_dointvec) ||
++	    (table->proc_handler == proc_douintvec) ||
++	    (table->proc_handler == proc_douintvec_minmax) ||
++	    (table->proc_handler == proc_dointvec_minmax) ||
++	    (table->proc_handler == proc_dou8vec_minmax) ||
++	    (table->proc_handler == proc_dointvec_jiffies) ||
++	    (table->proc_handler == proc_dointvec_userhz_jiffies) ||
++	    (table->proc_handler == proc_dointvec_ms_jiffies) ||
++	    (table->proc_handler == proc_doulongvec_minmax) ||
++	    (table->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
++		if (!table->data)
++			err |= sysctl_err(path, table, "No data");
++		if (!table->maxlen)
++			err |= sysctl_err(path, table, "No maxlen");
++		else
++			err |= sysctl_check_table_array(path, table);
++	}
++	if (!table->proc_handler)
++		err |= sysctl_err(path, table, "No proc_handler");
++
++	if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
++		err |= sysctl_err(path, table, "bogus .mode 0%o",
++			table->mode);
++	return err;
++}
++
+ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ {
+ 	int err = 0;
+@@ -1163,6 +1254,41 @@ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ 	return err;
+ }
+ 
++static struct ctl_table_header *new_links_single(struct ctl_dir *dir, struct ctl_table *table,
++	struct ctl_table_root *link_root)
++{
++	struct ctl_table *link_table;
++	struct ctl_table_header *links;
++	struct ctl_node *node;
++	char *link_name;
++	int name_bytes = 0;
++
++	name_bytes += strlen(table->procname) + 1;
++
++	links = kzalloc(sizeof(struct ctl_table_header) +
++			sizeof(struct ctl_node) +
++			sizeof(struct ctl_table)*2 +
++			name_bytes,
++			GFP_KERNEL);
++
++	if (!links)
++		return NULL;
++
++	node = (struct ctl_node *)(links + 1);
++	link_table = (struct ctl_table *)(node + 1);
++	link_name = (char *)&link_table[2];
++
++	memcpy(link_name, table->procname, strlen(table->procname) + 1);
++	link_table->procname = link_name;
++	link_table->mode = S_IFLNK|S_IRWXUGO;
++	link_table->data = link_root;
++	link_name += strlen(table->procname) + 1;
++
++	init_header_single(links, dir->header.root, dir->header.set, node, link_table);
++	links->nreg = 1;
++
++	return links;
++}
+ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table *table,
+ 	struct ctl_table_root *link_root)
+ {
+@@ -1206,6 +1332,27 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 	return links;
+ }
+ 
++static bool get_links_single(struct ctl_dir *dir,
++	struct ctl_table *table, struct ctl_table_root *link_root)
++{
++	struct ctl_table_header *head;
++	struct ctl_table *link;
++
++	/* Is there link available for table? */
++	const char *procname = table->procname;
++
++	link = find_entry(&head, dir, procname, strlen(procname));
++	if (!link)
++		return false;
++	if ((S_ISDIR(link->mode) && S_ISDIR(table->mode)) ||
++	    (S_ISLNK(link->mode) && (link->data == link_root))) {
++		head->nreg++;
++		return true;
++	}
++
++	return false;
++}
++
+ static bool get_links(struct ctl_dir *dir,
+ 	struct ctl_table *table, struct ctl_table_root *link_root)
+ {
+@@ -1234,6 +1381,47 @@ static bool get_links(struct ctl_dir *dir,
+ 	return true;
+ }
+ 
++static int insert_links_single(struct ctl_table_header *head)
++{
++	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
++	struct ctl_dir *core_parent = NULL;
++	struct ctl_table_header *links;
++	int err;
++
++	if (head->set == root_set)
++		return 0;
++
++	core_parent = xlate_dir(root_set, head->parent);
++	if (IS_ERR(core_parent))
++		return 0;
++
++	if (get_links_single(core_parent, head->ctl_table, head->root))
++		return 0;
++
++	core_parent->header.nreg++;
++	spin_unlock(&sysctl_lock);
++
++	links = new_links_single(core_parent, head->ctl_table, head->root);
++
++	spin_lock(&sysctl_lock);
++	err = -ENOMEM;
++	if (!links)
++		goto out;
++
++	err = 0;
++	if (get_links_single(core_parent, head->ctl_table, head->root)) {
++		kfree(links);
++		goto out;
++	}
++
++	err = insert_header_single(core_parent, links);
++	if (err)
++		kfree(links);
++out:
++	drop_sysctl_table(&core_parent->header);
++	return err;
++}
++
+ static int insert_links(struct ctl_table_header *head)
+ {
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+@@ -1401,6 +1589,102 @@ struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *tab
+ }
+ EXPORT_SYMBOL(register_sysctl);
+ 
++/**
++ * __register_sysctl_table_single - register a leaf sysctl table
++ * @set: Sysctl tree to register on
++ * @path: The path to the directory the sysctl table is in.
++ * @table: the top-level table structure
++ *
++ * Register extraly one sysctl table. @table should be a filled in extraly one
++ * ctl_table. If ctl_table which need to register have child or is not single,
++ * we should use register_sysctl_init or register_sysctl instead of
++ * register_sysctl_single.
++ *
++ * The members of the &struct ctl_table structure are used refer to
++ * __register_sysctl_table.
++ */
++struct ctl_table_header *__register_sysctl_table_single(
++	struct ctl_table_set *set,
++	const char *path, struct ctl_table *table)
++{
++	struct ctl_table_root *root = set->dir.header.root;
++	struct ctl_table_header *header;
++	const char *name, *nextname;
++	struct ctl_dir *dir;
++	struct ctl_node *node;
++
++	header = kzalloc(sizeof(struct ctl_table_header) +
++			 sizeof(struct ctl_node), GFP_KERNEL);
++	if (!header)
++		return NULL;
++
++	node = (struct ctl_node *)(header + 1);
++	init_header_single(header, root, set, node, table);
++	if (sysctl_check_table_single(path, table))
++		goto fail;
++
++	spin_lock(&sysctl_lock);
++	dir = &set->dir;
++	/* Reference moved down the diretory tree get_subdir */
++	dir->header.nreg++;
++	spin_unlock(&sysctl_lock);
++
++	/* Find the directory for the ctl_table */
++	for (name = path; name; name = nextname) {
++		int namelen;
++
++		nextname = strchr(name, '/');
++		if (nextname) {
++			namelen = nextname - name;
++			nextname++;
++		} else {
++			namelen = strlen(name);
++		}
++		if (namelen == 0)
++			continue;
++
++		dir = get_subdir(dir, name, namelen);
++		if (IS_ERR(dir))
++			goto fail;
++	}
++
++	spin_lock(&sysctl_lock);
++	if (insert_header_single(dir, header))
++		goto fail_put_dir_locked;
++
++	drop_sysctl_table(&dir->header);
++	spin_unlock(&sysctl_lock);
++
++	return header;
++
++fail_put_dir_locked:
++	drop_sysctl_table(&dir->header);
++	spin_unlock(&sysctl_lock);
++fail:
++	kfree(header);
++	dump_stack();
++	return NULL;
++}
++
++/**
++ * __register_sysctl_single - register extraly one sysctl table
++ * @path: The path to the directory the sysctl table is in.
++ * @table: the table structure
++ *
++ * Register extraly one sysctl table. @table should be a filled in extraly one
++ * ctl_table. If ctl_table which need to register have child or is not single,
++ * we should use register_sysctl_init or register_sysctl instead of
++ * register_sysctl_single.
++ *
++ * See __register_sysctl_table_single for more details.
++ */
++struct ctl_table_header *__register_sysctl_single(const char *path, struct ctl_table *table)
++{
++	return __register_sysctl_table_single(&sysctl_table_root.default_set,
++					path, table);
++}
++EXPORT_SYMBOL(__register_sysctl_single);
++
+ /**
+  * __register_sysctl_init() - register sysctl table to path
+  * @path: path name for sysctl base
+@@ -1655,6 +1939,35 @@ int __register_sysctl_base(struct ctl_table *base_table)
+ 	return 0;
+ }
+ 
++static void put_links_single(struct ctl_table_header *header)
++{
++	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
++	struct ctl_table_root *root = header->root;
++	struct ctl_dir *parent = header->parent;
++	struct ctl_dir *core_parent;
++	struct ctl_table_header *link_head;
++	struct ctl_table *link;
++
++	if (header->set == root_set)
++		return;
++
++	core_parent = xlate_dir(root_set, parent);
++	if (IS_ERR(core_parent))
++		return;
++
++	link = find_entry(&link_head, core_parent, header->ctl_table->procname,
++			   strlen(header->ctl_table->procname));
++	if (link &&
++	    ((S_ISDIR(link->mode) && S_ISDIR(header->ctl_table->mode)) ||
++	     (S_ISLNK(link->mode) && (link->data == root)))) {
++		drop_sysctl_table(link_head);
++	} else {
++		pr_err("sysctl link missing during unregister: ");
++		sysctl_print_dir(parent);
++		pr_cont("%s\n", header->ctl_table->procname);
++	}
++}
++
+ static void put_links(struct ctl_table_header *header)
+ {
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 644fd53ad5f1..2f1754aad68c 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -218,6 +218,9 @@ extern void setup_sysctl_set(struct ctl_table_set *p,
+ 	int (*is_seen)(struct ctl_table_set *));
+ extern void retire_sysctl_set(struct ctl_table_set *set);
+ 
++struct ctl_table_header *__register_sysctl_table_single(
++	struct ctl_table_set *set,
++	const char *path, struct ctl_table *table);
+ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table_set *set,
+ 	const char *path, struct ctl_table *table);
+@@ -235,6 +238,9 @@ extern int sysctl_init_bases(void);
+ extern void __register_sysctl_init(const char *path, struct ctl_table *table,
+ 				 const char *table_name);
+ #define register_sysctl_init(path, table) __register_sysctl_init(path, table, #table)
++extern struct ctl_table_header *__register_sysctl_single(const char *path,
++		struct ctl_table *table);
++#define register_sysctl_single(path, table) __register_sysctl_single(path, table)
+ extern struct ctl_table_header *register_sysctl_mount_point(const char *path);
+ 
+ void do_sysctl_args(void);
+-- 
+2.20.1
+
+
+

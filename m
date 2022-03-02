@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971EA4CB152
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B1E4CB16A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245305AbiCBVb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S245315AbiCBVgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbiCBVbY (ORCPT
+        with ESMTP id S234583AbiCBVgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:31:24 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1205C12F4;
-        Wed,  2 Mar 2022 13:30:40 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id em10-20020a17090b014a00b001bc3071f921so5916725pjb.5;
-        Wed, 02 Mar 2022 13:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nyusHpS8EmL1VoCHpGz/00LI2WKioPnqvVUuwj+fb94=;
-        b=bCIPC+IGt237jnLACRmj4g3rZLB6nirJw+6cX9ZdxeUVtQq1hD3iEhzdPM7VS3351W
-         S/uwkeKqkhxUWBZuJuq1N+Uwhupzuxc+wz2/YaSFK8nTsFsTlYLjJPe7y/RyBmcx+XH9
-         RKK4crAnQLdX6by3X9bWGpD4H6KctF5i+/vPxo7zxYcLpa4AAiDLDYglyaAVziC1Jm1O
-         nn++D8xKXFFH1PcqydXYHCZl3C+q5pz7r5T6JS0Qh80Y6Pv/oyJee8VlhGFuAuvN1A+T
-         yf7ZiPwx9k7wKJDoynJJft9iYkjlB1us/UPNAUNr4XUUqZBGcuHyD3V73mg8agYJpxn7
-         lSCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nyusHpS8EmL1VoCHpGz/00LI2WKioPnqvVUuwj+fb94=;
-        b=minvKuBSMqXgK/+N36nb/j9XENIPpllZhjjRaqCyTQF4amKO6ttuHPmfiEVLnXWNT1
-         vmBGcJ5LPxUcZEytqLjQoLN0nlL7kGcV+u4PTlQjTEwRKuce1SVd4U/t6MI/S1Y+O4Cm
-         MyJHwxYBMv3kSa8OdaXG34CNmSROeZQNASe1QtT4Q1+w9yx4WnZzV8+SsAVDoTU2ae7l
-         veXWnzxr1S43Un0Qhl4fJw/kDb16vm2rUW8QoOVOw3zDnCxEEz5LW14HeW+H47fYMc76
-         9Q8jtqZw85mIJFqwSn4/4cTA0U65/JFXvrCpbBE4Fz2uNawNsZWVIzveDMw3e4Tp+lNf
-         6o7w==
-X-Gm-Message-State: AOAM532dURwXayOwK9/D9v5WpWX4E4BbzLkW29kH0k9rx4UOuFzkF/Mm
-        MkQh9IdabZlWNncsveW+jhB3QU4+RILKwt9UIV4jJyTO
-X-Google-Smtp-Source: ABdhPJxb0WmJSWX+kj8ZQe0C71q4wm97dExymAGgXb1TROVss43903mrcR+0YFfKcZHgdY0feLuDga0xZ/2rbclEl1E=
-X-Received: by 2002:a17:903:32c1:b0:14f:8ba2:2326 with SMTP id
- i1-20020a17090332c100b0014f8ba22326mr32606268plr.34.1646256640328; Wed, 02
- Mar 2022 13:30:40 -0800 (PST)
+        Wed, 2 Mar 2022 16:36:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBEA52E53;
+        Wed,  2 Mar 2022 13:35:36 -0800 (PST)
+Date:   Wed, 02 Mar 2022 21:35:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646256935;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hOkbEA4jhlu4JFXzeCxXHoci/YJ8SQWQno1K5M/rivM=;
+        b=yz0nyGJFthSuz/tCQqmlMgjMJ2YdlUE2YRWLZDo/MS8PHWgWt0+3Tzmis4hvYKyUZzQPUe
+        SXu82GD3DQBw+LSScOdBgwa2nAtkPzs3K+IMg3yQD8+lRrqMzP24yOoQ9J5xdWiPo234i/
+        NKW/aSsrgd4IgsrLmz0AImG+jtEnbc/MJRwEnxmYYtVnklpDrhzqTrBgctWuOujUFfh8qq
+        iLyAjRj5OCH2f5Fp8Sei42jL0V7Q0BgTUN9F7x1DiLThJwnsH/KJWvvK5VMDlqdTEA+mzb
+        AofKEWiO2XD31rY2mRCSNxw1rzFvqwKNkszWlKMA80RKNFMvqSEGTEx+UfzEzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646256935;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hOkbEA4jhlu4JFXzeCxXHoci/YJ8SQWQno1K5M/rivM=;
+        b=uUXhMDpYmHIcYLKMUYIBReVrEXmkUJs7uHcl2RASQlPtbFvHZb2dYR223vIwUPqFLQFRG+
+        1/Ggie8ARQNQLEAg==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] staging: greybus: gpio: Use generic_handle_irq_safe().
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20220211181500.1856198-8-bigeasy@linutronix.de>
+References: <20220211181500.1856198-8-bigeasy@linutronix.de>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
- <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com>
-In-Reply-To: <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 2 Mar 2022 13:30:28 -0800
-Message-ID: <CAADnVQ+q0vF03cH8w0c50XMZU1yf_0UjZ+ZarQ_RqMQrVpOFPA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164625693367.16921.13135679559727131804.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 1:23 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/25/22 3:43 PM, Hao Luo wrote:
-> > Add a new type of bpf tracepoints: sleepable tracepoints, which allows
-> > the handler to make calls that may sleep. With sleepable tracepoints, a
-> > set of syscall helpers (which may sleep) may also be called from
-> > sleepable tracepoints.
->
-> There are some old discussions on sleepable tracepoints, maybe
-> worthwhile to take a look.
->
-> https://lore.kernel.org/bpf/20210218222125.46565-5-mjeanson@efficios.com/T/
+The following commit has been merged into the irq/core branch of tip:
 
-Right. It's very much related, but obsolete too.
-We don't need any of that for sleeptable _raw_ tps.
-I prefer to stay with "sleepable" name as well to
-match the rest of the bpf sleepable code.
-In all cases it's faultable.
+Commit-ID:     ff8dcfebe08dfb2524041116d4afce53ffe0b015
+Gitweb:        https://git.kernel.org/tip/ff8dcfebe08dfb2524041116d4afce53ffe0b015
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Fri, 11 Feb 2022 19:15:00 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 02 Mar 2022 22:28:51 +01:00
+
+staging: greybus: gpio: Use generic_handle_irq_safe().
+
+Instead of manually disabling interrupts before invoking use
+generic_handle_irq_safe() which can be invoked with enabled and disabled
+interrupts.
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Johan Hovold <johan@kernel.org>
+Cc: Alex Elder <elder@kernel.org>
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+Link: https://lore.kernel.org/r/20220211181500.1856198-8-bigeasy@linutronix.de
+
+---
+ drivers/staging/greybus/gpio.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/staging/greybus/gpio.c b/drivers/staging/greybus/gpio.c
+index 7e6347f..8a7cf1d 100644
+--- a/drivers/staging/greybus/gpio.c
++++ b/drivers/staging/greybus/gpio.c
+@@ -391,10 +391,7 @@ static int gb_gpio_request_handler(struct gb_operation *op)
+ 		return -EINVAL;
+ 	}
+ 
+-	local_irq_disable();
+-	ret = generic_handle_irq(irq);
+-	local_irq_enable();
+-
++	ret = generic_handle_irq_safe(irq);
+ 	if (ret)
+ 		dev_err(dev, "failed to invoke irq handler\n");
+ 

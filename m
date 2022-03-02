@@ -2,75 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1080F4CA86A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEDE4CA86F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236928AbiCBOqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S243213AbiCBOrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiCBOqj (ORCPT
+        with ESMTP id S240374AbiCBOrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:46:39 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFD1C625D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:45:56 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id f8so2567314edf.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=/+L2bZn7FnbIIrc4xC4DNyFnX/h+6EZYJnbtj5bZqaA=;
-        b=fGjaVmN75ZZ7sA1ZXhOG66i5chKR/xTTcWZT/g9KPyJMt+e2OJbVO2MBdJMivdmv+l
-         lAfnoo5m8yMN8QoAC78mlKrHhBcIXExq/pC0bjBA1szNZVCIcH09lDrLlgjfYYBq9gQY
-         ZAPciVsWFLcyRXGDZ16RAFNqedSIQQsvjdNqMKDKq9uiuFO3b6qK99vyg8ZigkZQuHaz
-         1qSdXE+STZifh7lsO7E0Cn5bJVgaldjgDWDnZZZciKFJzh3e6qSafybuC4YuHVNNDQ99
-         tNEQqbTwh1brCQ3Xq9RQiLSOWfXk+XFYEb0Y1cqW/sEc79waHjinhM6SFgsMhJUAt3dW
-         6JIA==
+        Wed, 2 Mar 2022 09:47:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB695C7C14
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:46:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646232383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w205eOqOdxeAZdCILUJdCHi/CnhyFtZESdwZqehxcdc=;
+        b=GZYZDlyesE/pp8ODtAnWwaaMpSkl4SvEc6dt0M86vxmzS1/uc47uZlz4cbmfgdl3u9lwNh
+        x+P1Ha9uRcrDyYOVF3mtB1owRJLN1rofnHhn6iiJvwDmyld8JuZMUrIGYXEcPzzs6bPyI0
+        FA+GTAJrcZ/nryT2VGbhRpqlZbeUuCQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-pHytAdYXNvSX_cw_wJJNDQ-1; Wed, 02 Mar 2022 09:46:21 -0500
+X-MC-Unique: pHytAdYXNvSX_cw_wJJNDQ-1
+Received: by mail-wm1-f69.google.com with SMTP id j42-20020a05600c1c2a00b00381febe402eso1572173wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 06:46:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=/+L2bZn7FnbIIrc4xC4DNyFnX/h+6EZYJnbtj5bZqaA=;
-        b=dVaHsjbLkfRonMdTc+IKVtizVmY1BAShZK9I8FykvyuexQZ5mHiHI/zNM0SCDYSYTm
-         8HExUEEmtN8u2huY0v1UUcEIJugeR7Fpq7yvYe8LqdAG5lu/eB82FbQuRKdM9Jw8q6SR
-         nKDUMXnzjjRon/WgGbCsxguGmQldamN/W6X4usKAN2jyS90ij+5LiHCIB+116oVSrE4Y
-         9jERRyt4UC2Q8Nt7H+E3/TwH2NeTZXN2QygV0XLd9I+V4oD49l0c2Wmz314uoV93t3/d
-         PaEILGasmtEdRVl3IpgY4sulxVxd+6SjdmBO7qD2qppdavAeI2HsEEjzjP90jWBMShdv
-         MSJA==
-X-Gm-Message-State: AOAM533khMogLHlDYOn3XUsLlJyl4lgMbBL0fDnWtnV6yTrJbfChUyPN
-        BFLukHet0HQc5jRgDNFDoxvkoG/MykLWByT53wA=
-X-Google-Smtp-Source: ABdhPJxHdbLBLmNLeNmMv1+HKBMZTWhofHfYote/VqLA47MgiLFEisaNAt068V04KLcgz1aok4lMVwge1kMS3O/4F90=
-X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id
- h20-20020a05640250d400b004132a276b56mr30000802edb.228.1646232354574; Wed, 02
- Mar 2022 06:45:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w205eOqOdxeAZdCILUJdCHi/CnhyFtZESdwZqehxcdc=;
+        b=cwFJAkQdiUILyMgGfzFcApF3Hu1baIVUgaNXiB7LQdNznyQtNSWWtbLK2ENzZujRjV
+         m536FTjBCvciFbpAotXWLk/WgP8PzpDNOaP8rSVUrHE++VNWpPPu2DfC1DG+AS9bg2q1
+         MLv7CjQRMi0rMZFbYJ9E1SW5GfdlwNJ80cv39IYUKuNoghrjkSufR1fPj66irgSsJFOZ
+         tZhXv+R22LOjnVw7Vqy8Pyw/On6phS0SkZwZIGSwmaffnw887zL8iO2hdHhKIVZP9uqo
+         AT2fdrSfj7eldaAXjWpUqSR0cXqadljdGh6TzdLVnqufIrQYIyok714VeZtssVRtNJ2I
+         IZ1w==
+X-Gm-Message-State: AOAM530yHfVaCYrDAjhQjcbJ9gjQeMxUcOwApOw6PpXMhRMI/3VzjBcW
+        gpoWrTqRUfhGGnUgX4dWmdfdnAqvcqrwnuOZZWuXAjGWDj8VTBB8gIADne/Aa6uGqWBcFq9RAOV
+        7Lh2huE6+FSWUd7jT/54Tram0
+X-Received: by 2002:adf:eb45:0:b0:1ef:6070:7641 with SMTP id u5-20020adfeb45000000b001ef60707641mr20390147wrn.301.1646232380698;
+        Wed, 02 Mar 2022 06:46:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJza4Ib8iRQhbK5h23mGl00nx8utPjoauWdru+z6xmj8vBVgS9w4ICFHCPrxOEOgLj/22uh95g==
+X-Received: by 2002:adf:eb45:0:b0:1ef:6070:7641 with SMTP id u5-20020adfeb45000000b001ef60707641mr20390128wrn.301.1646232380470;
+        Wed, 02 Mar 2022 06:46:20 -0800 (PST)
+Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
+        by smtp.gmail.com with ESMTPSA id z16-20020a7bc7d0000000b00381004c643asm5677773wmk.30.2022.03.02.06.46.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 06:46:19 -0800 (PST)
+Date:   Wed, 2 Mar 2022 09:46:16 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220302092149-mutt-send-email-mst@kernel.org>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
+ <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+ <20220302031738-mutt-send-email-mst@kernel.org>
+ <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+ <20220302074503-mutt-send-email-mst@kernel.org>
+ <Yh93UZMQSYCe2LQ7@zx2c4.com>
 MIME-Version: 1.0
-Sender: elizabeth.hoisington1@gmail.com
-Received: by 2002:a50:3ac4:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 06:45:53 -0800 (PST)
-From:   Mrs Elizabeth Balkiwala <elizabeth.balkiwala1@gmail.com>
-Date:   Wed, 2 Mar 2022 06:45:53 -0800
-X-Google-Sender-Auth: Xlq5Uljr3TF0nMaW9i3nQ7jILs4
-Message-ID: <CANhm-9v+jf=kbAQ9UZx=Y=g0FSgHLcsyWprUSXmva_S9pDBXSA@mail.gmail.com>
-Subject: I AM SGT ELIZABETH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh93UZMQSYCe2LQ7@zx2c4.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Dearest Friend,
+On Wed, Mar 02, 2022 at 02:55:29PM +0100, Jason A. Donenfeld wrote:
+> Hi Michael,
+> 
+> On Wed, Mar 02, 2022 at 07:58:33AM -0500, Michael S. Tsirkin wrote:
+> > > There's also the atomicity aspect, which I think makes your benchmark
+> > > not quite accurate. Those 16 bytes could change between the first and
+> > > second word (or between the Nth and N+1th word for N<=3 on 32-bit).
+> > > What if in that case the word you read second doesn't change, but the
+> > > word you read first did? So then you find yourself having to do a
+> > > hi-lo-hi dance.
+> > > And then consider the 32-bit case, where that's even
+> > > more annoying. This is just one of those things that comes up when you
+> > > compare the semantics of a "large unique ID" and "word-sized counter",
+> > > as general topics. (My suggestion is that vmgenid provide both.)
+> > 
+> > I don't see how this matters for any applications at all. Feel free to
+> > present a case that would be race free with a word but not a 16
+> > byte value, I could not imagine one. It's human to err of course.
+> 
+> Word-size reads happen all at once on systems that Linux supports,
+> whereas this is not the case for 16 bytes (with a few niche exceptions
+> like cmpxchg16b and such). If you read the counter atomically, you can
+> check to see whether it's changed just after encrypting but before
+> transmitting and not transmit if it has changed, and voila, no race.
+> With 16 bytes, synchronization of that read is pretty tricky (though
+> maybe not all together impossible), because, as I mentioned, the first
+> word might have changed by the time you read a matching second word. I'm
+> sure you're familiar with the use of seqlocks in the kernel for solving
+> a somewhat related problem.
+> 
+> Jason
 
-I Am Sgt Elizabeth Balkiwala, I have something important discussion
-for you, please reply
-urgently for more details give you further information. And I hereby
-advice to contact me by this email address   elizabeth.balkiwala1@gmail.com
+I just don't see how "value changed while it was read" is so different
+from "value changed one clock after it was read".  Since we don't detect
+the latter I don't see why we should worry about the former.  What I
+don't have here is how would a code reading the value look.  It might
+help to write some pseudo code to show that, but I'd say it makes more
+sense to just code the read up even just so the overhead of the current
+interface can be roughtly measured.
 
-REDARDS
-Sgt. Elizabeth Balkiwala
+-- 
+MST
+

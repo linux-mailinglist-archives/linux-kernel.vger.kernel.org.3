@@ -2,127 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0207C4CB281
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A114CB285
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiCBWrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S230127AbiCBWrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiCBWrE (ORCPT
+        with ESMTP id S229965AbiCBWru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:47:04 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2127.outbound.protection.outlook.com [40.107.20.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF7E128DCC;
-        Wed,  2 Mar 2022 14:46:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FjavvG37Bz/cwUnOoElqCwpwC7NGdIZSwIM36rSHKdRr04qQAHxQy5GINyy1MpKvG7Dz8C+L4GODM6TJyEnioUZgTEr2K7SYR8+oFa8qdqgUhkdoXd9uoHuus5s9Gp3LFwtFtnnAVU01xaRcEYFXuRq8roP1719pYxBia8dJRZw2EPfXTixXYmjgfJ/hzATNuqmyR9gNxsjGk6xr1sRLfPi0UGygXbv5Jy9NdyyhTBaiRhxrySSimB+oTd4R1E1gpeCbeD+0n067FOLjKqhrBn38qC8lV185oA+SKwppt8tUCGzzvd1SewAMtIQ13djEGaD1yBK4eyFoe++e9GW/9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=//8Yxp9KrFGQ+fG77AiBHXLFmCZeaPaoMQNicwJhLZM=;
- b=jZq1PPUHOA3BA2Y7A/QyZ+2hgCTTaCzvTVhIshP534DLM6YANrooMN9oZJdbHvZtNeRg4nwCLvaYLoeuSSGPAkKsMvKox3Du02dRliZgghE01zef1M+aXchai08RI3e7B8wjFCCQj8XrC/i1CIDi/Yws2HjXbPtGJTr8VRPvAw3GsFHmKdYxWx7BiELteXzCT1rJEfGhrFKax/tAyv6Kp/GTg492zImajQy6nudxqOAnPxZkc0D9l1KiFmmaxWGTAV4BLIW7SpN8rHef8DLBdDADbIN7ds5U4aQvOWks6GosG6KxFjgwIkmpkpXEsljY+6K10gVgDXfMoR93tab3+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=//8Yxp9KrFGQ+fG77AiBHXLFmCZeaPaoMQNicwJhLZM=;
- b=bJ0pSLugB9JW1pdPzMYvt1M7HwCaQ32FZEqyOAeV5IM/BzjUaXxAWXhpysRR3QfJ8qW+xkDcxQixn/yV+lSjicipTxwEsT2Iw7FcoJO6Rk83AsysMVwDnmcjzlFe79vQaBuZ9QuZApmNBjNXlViBjzgNPYJzNSffcUAWzZ1e87k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by VI1PR02MB6109.eurprd02.prod.outlook.com (2603:10a6:800:18c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
- 2022 22:46:02 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::7d29:dd84:d2bf:a1a0]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::7d29:dd84:d2bf:a1a0%4]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
- 22:46:01 +0000
-Message-ID: <c916d9a9-fa9f-104e-8078-083d96f74343@axentia.se>
-Date:   Wed, 2 Mar 2022 23:45:57 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] i2c: mux: demux-pinctrl: do not deactivate a master that
- is not active
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <eca2bf56-7abd-55c0-a423-dce47c38fd66@axentia.se>
- <Yh/e4OzQ/hYSb+dg@ninjato> <Yh/gHSaRNs9Z8La2@ninjato>
-From:   Peter Rosin <peda@axentia.se>
-Organization: Axentia Technologies AB
-In-Reply-To: <Yh/gHSaRNs9Z8La2@ninjato>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3P280CA0061.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:a::28) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+        Wed, 2 Mar 2022 17:47:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0436B63BFA;
+        Wed,  2 Mar 2022 14:46:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=YpoXbNwGd74sARUBgU0icVwfVtOCrhnGXNM0uycbuX4=; b=VhacDt1WEv2jM0wnL7S8nhK0y/
+        siBenRqh3Mh/ShtDsB2uOlU7qA98ylm1NkDyARwZnUe0BINy1amON1dndIip+u5y3uzNmlN1RWncH
+        /PgdO5hmYWs496mlYymREKFgKFbZ+u9z6ccsT2kIQ+CWyjMcdhfaUG0pp6a7l/tfbul+sdXIJFnBm
+        gn1y3CaRiOzYjt76elqG5nDH2rFBVP3x0GDfjGYFTEkVuz97xery2pBGYmSXgzbqlj7PhE2PirX/q
+        NKaJgxV5q/ozQv8qAaJuxIJViF07dYcCrFWsXbRicDR+3QDYiref+Cwu0G/jk9Yim4y5tNLZ/HY5+
+        s4PPpbxw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPXjv-004cD8-Q2; Wed, 02 Mar 2022 22:46:35 +0000
+Date:   Wed, 2 Mar 2022 14:46:35 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
+Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
+Message-ID: <Yh/zy7FCcDmIdAn8@bombadil.infradead.org>
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <20220228234322.2073104-14-atomlin@redhat.com>
+ <20220302161917.gx5icfszakoye4uh@maple.lan>
+ <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
+ <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f04baf2-e81c-41ef-8cbf-08d9fc9e6d10
-X-MS-TrafficTypeDiagnostic: VI1PR02MB6109:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR02MB61098B7572914637591EC8C0BC039@VI1PR02MB6109.eurprd02.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ArcIbXfCOjZHUat8veWlQDsWCEvTD1XwOwgpPXEWM5rVVHUeZqA+Fb8CqZ6fkmDyFvUu/Nf0KiTid4rCV7cziE7AvkNJLiVNucdusPP3NKekmJkui6bxfU5qjG1152NZfbJIv8ksXQC+Y4IumyQQkH3KZE9i7kXyt4diN6AjQ8uIJtxOqhFCP+5WbM07iUAi1VxbH58flFykq3c2yCYfBXHDKLyvbcz7faNTN9bGGoguiLI5MWQPSj1WnSjO19UZIMZnsKtmjXZgqNIQWro+iuDwrKG90boB/RWI/MMeCq1mRqcd59ru4A3QLZnnMGIvv6JPp9u97r2p2OklWpRjwMlD/17nVgge6w8NlO+HDuyX4wGw6Ekbh+V5UPS/8oEkBe6v7PtEA7DzEGXwvY+bHEbkbEJfH2hxSxq6WtC5SBny3w2C4NytYSbwfjuWWvl6VxNOVYO5webcdh4ZZ7NuqGIj0H4utq1wSbWuyy6+MVTLPkk0OzqLRSumo4ISc1cn4Lnjrx/N596VK86k/qNfZzYOMy9b5IAdiGRob6+KKyl+FaGvdB5SIf6kaBuSIkBJ+L5fl7x+EYp8v/0vVvCPpM3CH91wljjnHzn7gbtn8tRgFhsC1clJ9HKg+XpV42AkVWsUOLXY5o4GsZKtZ+ZZrusAu5H4Kf+K8CXXmofjVQfjno/h+WbBQLzsJ8PX6UDltpay31SwJwAcUuFr1eBHq7UTvNrxp9YRE1Lw7QfRX48=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(136003)(366004)(396003)(346002)(39830400003)(5660300002)(66556008)(66476007)(6486002)(38100700002)(316002)(66946007)(36756003)(6506007)(8676002)(31696002)(31686004)(86362001)(36916002)(186003)(26005)(2616005)(8936002)(53546011)(83380400001)(508600001)(110136005)(6512007)(6666004)(4744005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RWlMbys1cG5YdXJmZzBJSFUwM1FDMm13TjI1M2EvZjYrSkI1RFdsNnZtY0Z3?=
- =?utf-8?B?TWwwelI4SUJZeWYxR09BRnZmRXJpUHVLa2d6Z00rWVZMZ203dkdhOXVKZXZn?=
- =?utf-8?B?Q3IwNklmRzdqTkdLV2hFcDJtYlB1MzlIbHJPOFRGUUdKMDM5RnlUSUxXNHFS?=
- =?utf-8?B?dzJLT283U2NnVHIzWG4vMHZDdjE4Z3gxS0FvcnRqSkZMUDBsTUQxVzdVSkxv?=
- =?utf-8?B?OTJZYzByTTBGVHFnQ21UalJjZXB1MENBMC9kZTRxbXY0SGQ5VjZFOHhCcjZQ?=
- =?utf-8?B?b1paQnVmZHc5MjA5Z1BQUXZxS3p6Z2dUMk5qbGp2R1NicWtwRTRRcTRyY0Er?=
- =?utf-8?B?KzVuWFM0MTZqY2NnNmFHUitGNjRLM2lWL0VRdTJyZWhZQmRHMmZxQjBPdkNI?=
- =?utf-8?B?b1VUMkd3YW5JOEFaT2VhRVVYdk96a1J0aUloYWFSWmdURE5OVjlNZWFpejhG?=
- =?utf-8?B?RTZZS1VrUTIyeHJEYlVqZW5USlViUVA1eEhwb0hlRTJHdkdaNkoyUUZneUxO?=
- =?utf-8?B?eS9XeDhWV1AvS29FZTA0aDczN20zZ1hsRG1WNkc4aUsvMzZxSzJDTUJrTDI0?=
- =?utf-8?B?eHF4dE5ocEV5anNXaCs2a3dYSm9SNkEzTE9FQmpLdzdwc2xRSVhpQjArME1G?=
- =?utf-8?B?SFdlNmViR0xCeS8rNm96YW5QTERvd3V0Q0xoY3owZERRK0VBMGhMUEdsTE5X?=
- =?utf-8?B?Z1dzaE5jOGNNcW1nSFZrUWtqVFN1bVBQMk9QS3B6Qkl1YXhnZXZuNDhmY1lB?=
- =?utf-8?B?ZEVnVk9Ya2M3a2s1ZkxjVWlWWENUMEFrdE9IN2EvTEtkWDgwaFFjdmkvMUQ5?=
- =?utf-8?B?QjJxNjJ1ZVJhWjVKMXZkSEdQdHRCSWxPMWVGaUhqdUo5eU5ma1EyUXd5VnRB?=
- =?utf-8?B?ZEZWUEZTNFFqVVVIcSsrZnN3OEZ6ZXFrOXNhVllLMG82RVdGaWhjRDRSQStN?=
- =?utf-8?B?YzBzNnRCRE4zNmlaUTljcW1uK05TV1dtVDJPNm5salNIRDI1RGxlV3VsZjZV?=
- =?utf-8?B?aEVscnJQYVdjTDROTkswLzJjZEdWdm5xbTB1UE1FdnJCcHp6ODNqMmEyamk3?=
- =?utf-8?B?dWliNkI5UWtvS29rQ2dvMTF3eWFPb2gxUkZZbVlLOEJjdXNmdHFXWkdhNEls?=
- =?utf-8?B?NXRUYUJqUlBwOTRBREZ4eVFXR0pmS0hSUlhRTm9naHNHRnNWbXpndnJ4elV6?=
- =?utf-8?B?cFlGWVdia3kzMmt6SjgwTVV1OFJhSkIvalZZcHRNalhuYkNoanp1WnVreWZT?=
- =?utf-8?B?Tm4wS3BjS3pxR1ZpM1dpT3Fld0h1RVY1elFYOEQ5U0U4SlEzUThOb3VnMVpX?=
- =?utf-8?B?eE8xUVEzZHJHWjU4YzlEUE9iRzVjNzlqNVlJc3hOYWk5Qm1RVS84Q3FzajJM?=
- =?utf-8?B?ZXZ4T0hLY1FMRGFDeEVhdjRicnRCUDVyMzBNVWhUMGNKQVlXOWt3MDRJUmtq?=
- =?utf-8?B?ZVRVK2xEbk9Icnp6UU5mOVJudjFubUsrMnlMbWEySGx4Unp1dnNLMHRGWjly?=
- =?utf-8?B?MDZrZWdRY09ya3JMK0dEcFJWNFcrWk9CQkZJN01haDQ0ZWZRZ3dQMXpPd0dD?=
- =?utf-8?B?VkVReDY4WTJGcVRTZVhGTzc2MmdQTUtrT25HeWRYamI3d2VLN0JZRDFQVUJX?=
- =?utf-8?B?WnR5QS9Nazl6QVh3Qit5b1l2NWExNDZkWU00bUx1OHk5WXZINktZZHE0VkxV?=
- =?utf-8?B?eUF3R0pvZXRvaVFYTmd1OGRpRUhVZEx6VXhoRy8ydEU0YWs1ZW43aExVMUd6?=
- =?utf-8?B?WktuZmtqQUpleUVQeEllZmMwZHEvbkpYeFZlVXRDMXg2cEpkNjkrZEF1M3lG?=
- =?utf-8?B?bnV5MSt2V1h0SmFweWpEc0MzRVdyZFlCNHVGVzFPbngrb2c5ZEU0SHdzYjRk?=
- =?utf-8?B?bGNzR2ppcjU4OHVwSkpDMEhXVERQMFlvSVVIQUtiN2xBYldGdmd5OGdpZW9a?=
- =?utf-8?B?VlpHWEgwRGFYUExqazlGZUZOb0N0NWh5ODB6S0s3OFpLamJsa2NHUGlnOEh1?=
- =?utf-8?B?N1BLK2NTWkNOR1RBSGR2RlB3aXJpMGZNS1JDTzlIY2NFTEJzNGdlUUVBSzZW?=
- =?utf-8?B?akdkcHF4TEVmMTZXN3VVYXdYQnYrdU53UzhrdnMrbzNDdmZXVjN5UEsydDlM?=
- =?utf-8?Q?P2ig=3D?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f04baf2-e81c-41ef-8cbf-08d9fc9e6d10
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 22:46:01.8687
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dIBqVc/Th25f9/94dbW5lNmbeSQ0khyPBnOx4sNgd9LbpO+H+RMRZ177og2qnABR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB6109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,30 +68,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-02 22:22, Wolfram Sang wrote:
-> On Wed, Mar 02, 2022 at 10:17:20PM +0100, Wolfram Sang wrote:
->>
->>> Attempting to rollback the activation of the current master when
->>> the current master has not been activated is bad. priv->cur_chan
->>
->> But the master is activated?
->>
->> 259         /* switch to first parent as active master */
->> 260         i2c_demux_activate_master(priv, 0);
->>
->> Or am I missing something? :)
+On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
 > 
-> But _this_ code is affected by the problem you describe, or?
 > 
-> 237                 if (!adap_np) {
-> 238                         dev_err(&pdev->dev, "can't get phandle for parent %d\n", i);
-> 239                         err = -ENOENT;
-> 240                         goto err_rollback;
-> 241                 }
+> Le 02/03/2022 à 21:31, Aaron Tomlin a écrit :
+> > On Wed 2022-03-02 16:19 +0000, Daniel Thompson wrote:
+> >> On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
+> >>> No functional change.
+> >>>
+> >>> This patch migrates kdb_modules list to core kdb code
+> >>> since the list of added/or loaded modules is no longer
+> >>> private.
+> >>>
+> >>> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >>> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> >>> ---
+> >>>   kernel/debug/kdb/kdb_main.c    | 5 +++++
+> >>>   kernel/debug/kdb/kdb_private.h | 4 ----
+> >>>   kernel/module/main.c           | 4 ----
+> >>>   3 files changed, 5 insertions(+), 8 deletions(-)
+> >>>
+> >>> diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+> >>> index 0852a537dad4..5369bf45c5d4 100644
+> >>> --- a/kernel/debug/kdb/kdb_main.c
+> >>> +++ b/kernel/debug/kdb/kdb_main.c
+> >>> @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
+> >>>   int kdb_grep_leading;
+> >>>   int kdb_grep_trailing;
+> >>>   
+> >>> +#ifdef CONFIG_MODULES
+> >>> +extern struct list_head modules;
+> >>> +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+> > 
+> > Hi Daniel,
+> > 
+> >> If modules is no longer static then why do we kdb_modules at all?
+> >> kdb_modules is used exactly once and it can now simply be replaced
+> >> with &modules.
+> > 
+> > In my opinion, I would prefer to avoid an explicit include of "internal.h"
+> > in kernel/module. By definition it should be reserved for internal use to
+> > kernel/module only. Please keep to the above logic.
+> > 
+> > Christophe, Luis,
+> > 
+> > Thoughts?
+> > 
 > 
+> Do we really want to hide the 'struct list_head modules' from external 
+> world ?
 
-Yes. That is the error path that, if taken, results in the faulty
-deactivation. Sorry for not spelling it out...
+> Otherwise we could declare it in include/linux/module.h ?
 
-Cheers,
-Peter
+Since we are doing this to help with the cleaning this crap up
+the natural thing to do is have the code be a helper which only
+built-in code can use, so writing a helper starting with
+list_for_each_entry() which prints the modules out. I'm
+surprised we have no other users of this. There is nothing
+kdb specific about the functionality in that code. So it should
+just be moved.
+
+Exposing just the list_head was a bad idea to begin with. So
+let's do away with that. This can be a preamble change to the
+series.
+
+  Luis

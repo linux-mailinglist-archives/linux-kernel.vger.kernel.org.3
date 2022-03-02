@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD6E4CA16B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6334CA171
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 10:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240733AbiCBJzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 04:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S240756AbiCBJ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 04:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240708AbiCBJzv (ORCPT
+        with ESMTP id S231764AbiCBJ5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:55:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9B77DA99;
-        Wed,  2 Mar 2022 01:55:08 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 550321F37E;
-        Wed,  2 Mar 2022 09:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646214907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UtRZPjqIyVkuTFVbEmS/q8EKiRdjfv+NaX4GERhTHdg=;
-        b=Fn3DS5eY0YV0orabtu1sCEcvykpbOfOv3x3y24XDH+5qb0g7A1hig+ae49mwfOvRGXC8yk
-        VECpoHF2NCIqhS+Yi1LHhfq4vH9LWHz9SMRniUguGsluNfyLVusH8lfWeaIuh9krbjo2+p
-        YL0D4rmJ/fj9fgjD6Y2dcL6bwm9lahY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646214907;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UtRZPjqIyVkuTFVbEmS/q8EKiRdjfv+NaX4GERhTHdg=;
-        b=lmELUlNgrXAZ8D+eX/tvlYd3+KAgpoqJ/VaBvY1cJlo0KQDB4lRlMdbFkciQeUeOS4plIu
-        MqRXehx0wr7xkRBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3CFE9A3B81;
-        Wed,  2 Mar 2022 09:55:06 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 10:55:06 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        qirui.001@bytedance.com
-Subject: Re: [PATCH] livepatch: Only block the removal of KLP_UNPATCHED forced
- transition patch
-In-Reply-To: <20220301140840.29345-1-zhouchengming@bytedance.com>
-Message-ID: <alpine.LSU.2.21.2203021052470.5895@pobox.suse.cz>
-References: <20220301140840.29345-1-zhouchengming@bytedance.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 2 Mar 2022 04:57:42 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962A49E559;
+        Wed,  2 Mar 2022 01:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646215019; x=1677751019;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FY6wwev4tVzVQLPJp8tN5rXAxWrMHWCGBFvKrS5tF/8=;
+  b=WiDDT/9suQH4dXrC/CEbJa/UA7Tuz0ZgEF7FZM72JeHtBaJ583TS5yqH
+   Fxb8142JGTvFzPQhL/tHQ2GYa8oRYRtIH5u9Y01i0Tdo+m09OhPphV+9L
+   tMdKyefwLK4DFTdb610/mfUvVbppBYH1CTH9D+kx5j0noRKn0HjexTTTp
+   ZpQbajJO9Bq7wl1m951WrdYlNtSfbWMX0pOq+jY1iaud+XIOB4+mj0zFt
+   xDeMUrZIf7f6eupWUL8r7uRBUaMXKRLkXLZMoKGOftzozjVcmO7i24ck8
+   ouqLs40ktOMihaYgNdhdL3e6ec2XGtbd4p2E/eMpmK6j32QZsVyVdXUv7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="250939211"
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="250939211"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:56:49 -0800
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="551181972"
+Received: from abotoi-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.218.48])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:56:46 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/7] Add RS485 support to DW UART
+Date:   Wed,  2 Mar 2022 11:55:59 +0200
+Message-Id: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patchset adds RS-485 support to the DW UART driver. The patchset
+has two main parts. The first part adds HW support for RS-485 itself
+in various modes of operation and the second part focuses on enabling
+9th bit addressing mode that can be used on a multipoint RS-485
+communications line.
 
-On Tue, 1 Mar 2022, Chengming Zhou wrote:
+SW half-duplex patch (3/7) depends on UART_CAP_NOTEMT for which there
+is existing work from others:
+  https://marc.info/?l=linux-kernel&m=161245538311420&w=2
+That patchset is not yet applied (and requires revision from its
+author).
 
-> module_put() is currently never called for a patch with forced flag, to block
-> the removal of that patch module that might still be in use after a forced
-> transition.
-> 
-> But klp_force_transition() will flag all patches on the list to be forced, since
-> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
-> has removed stack ordering of the livepatches, it will cause all other patches can't
-> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
-> 
-> In fact, we don't need to flag a patch to forced if it's a KLP_PATCHED forced
-> transition. It can still be unloaded only if it has passed through the consistency
-> model in KLP_UNPATCHED transition.
-> 
-> So this patch only set forced flag and block the removal of a KLP_UNPATCHED forced
-> transition livepatch.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/livepatch/transition.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 5683ac0d2566..8b296ad9e407 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -641,6 +641,6 @@ void klp_force_transition(void)
->  	for_each_possible_cpu(cpu)
->  		klp_update_patch_state(idle_task(cpu));
->  
-> -	klp_for_each_patch(patch)
-> -		patch->forced = true;
-> +	if (klp_target_state == KLP_UNPATCHED)
-> +		klp_transition_patch->forced = true;
+To configure multipoint addressing, ADDRB flag is added to termios
+and two new IOCTLs are added into serial core. On the driver side,
+I looked into using mux subsystem but its model didn't seem to match
+well enough to how RS-485 multipoint can be operated.
 
-I do not think this would interact nicely with the atomic replace feature. 
-If you force the transition of a patch with ->replace set to true, no 
-existing patch would get ->forced set with this change, which means all 
-patches will be removed at the end of klp_try_complete_transition(). And 
-that is something we want to prevent.
+I'm aware of the RS485 changes Lino Sanfilippo recently posted
+which will make one assignment in the patchset redundant. I'll make
+the adjustment if those get applied.
 
-Miroslav
+Ilpo Järvinen (7):
+  serial: 8250_dwlib: RS485 HW half duplex support
+  serial: 8250_dwlib: RS485 HW full duplex support
+  serial: 8250_dwlib: Implement SW half duplex support
+  dt_bindings: snps-dw-apb-uart: Add RS485
+  serial: termbits: ADDRB to indicate 9th bit addressing mode
+  serial: General support for multipoint addresses
+  serial: 8250_dwlib: Support for 9th bit multipoint addressing
+
+ .../bindings/serial/snps-dw-apb-uart.yaml     |  17 ++
+ .../driver-api/serial/serial-rs485.rst        |  23 +-
+ arch/alpha/include/uapi/asm/ioctls.h          |   3 +
+ arch/alpha/include/uapi/asm/termbits.h        |   1 +
+ arch/mips/include/uapi/asm/ioctls.h           |   3 +
+ arch/mips/include/uapi/asm/termbits.h         |   1 +
+ arch/parisc/include/uapi/asm/ioctls.h         |   3 +
+ arch/parisc/include/uapi/asm/termbits.h       |   1 +
+ arch/powerpc/include/uapi/asm/ioctls.h        |   3 +
+ arch/powerpc/include/uapi/asm/termbits.h      |   1 +
+ arch/sh/include/uapi/asm/ioctls.h             |   3 +
+ arch/sparc/include/uapi/asm/ioctls.h          |   3 +
+ arch/sparc/include/uapi/asm/termbits.h        |   1 +
+ arch/xtensa/include/uapi/asm/ioctls.h         |   3 +
+ drivers/tty/amiserial.c                       |   6 +-
+ drivers/tty/moxa.c                            |   1 +
+ drivers/tty/mxser.c                           |   1 +
+ drivers/tty/serial/8250/8250_core.c           |   2 +
+ drivers/tty/serial/8250/8250_dwlib.c          | 246 +++++++++++++++++-
+ drivers/tty/serial/8250/8250_dwlib.h          |   6 +
+ drivers/tty/serial/serial_core.c              |  62 +++++
+ drivers/tty/tty_ioctl.c                       |   2 +
+ drivers/usb/serial/usb-serial.c               |   5 +-
+ include/linux/serial_core.h                   |   6 +
+ include/uapi/asm-generic/ioctls.h             |   3 +
+ include/uapi/asm-generic/termbits.h           |   1 +
+ include/uapi/linux/serial.h                   |  10 +
+ 27 files changed, 410 insertions(+), 7 deletions(-)
+
+-- 
+2.30.2
+

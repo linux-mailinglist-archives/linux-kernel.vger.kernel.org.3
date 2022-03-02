@@ -2,68 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368884C9C47
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8302F4C9C4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiCBDnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S237954AbiCBDpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239416AbiCBDnY (ORCPT
+        with ESMTP id S231517AbiCBDpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:43:24 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3649D403E8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:42:38 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id c1so509328pgk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 19:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RJ7SOmE24IN5voTxxb2GBU71dQmksuFM00064oAmHe4=;
-        b=U7ZqznmS1op+/KaI2hpBxG57ustImo02BzrQj6bgBtLI8dvn9ffPKtDqawnldGXy9E
-         Kl3PxV0jFgg/djxjJEqT/Ur7W3AUNDaPJUvE2JVUFiw4/6KAj86VT4KXCxXLITt8l2jx
-         2FsYXq1az2IeMkiiVAasVL/N72wMWKLtKpFIEQCgT0EvPFw5GAHBBlzGolPcEP6AMI4Z
-         WvG8vGvL+iNA1Iw9QwJLpIvYpjrE7IqTwoDV7iIm+A7/3nvJ4GRAt+bK+CSLP7FxYEjL
-         9UGsJBeIR/v1W3JogivT3jMSg7/JiN7kFOoFh8Bg9W76tRspJpWOa0Of7yTzWBhLJCP+
-         zfKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RJ7SOmE24IN5voTxxb2GBU71dQmksuFM00064oAmHe4=;
-        b=qhuB5zS1/b0d9FMa2KsD7uzVBaF8Qr02nmeRUcWv7VWMMWhfBPTgO/ykXW8vyFiWhL
-         QCzbp4Vbv3WxIeJUnm6UFgfXFMQhmXBz2Sdd8dMmsN5Av3xq9uLpBYOF13aOj/a3tRlX
-         Yi2Mdb5qg1VhlMTYYgNyOk/oKu+e3F79h0eETIJSI7bCd+9ltn4mW26G0Gp+YhDYhPZV
-         WZZYsTeN9rU31kItfPeYDQHu3MLwT/YYsCG4GEVK/HFzcvk9+JD8jVkKbyl7c6X+m4zD
-         Ka/xjfwRFWdlZEWS0yFFNI/3SzzdOe6nyY6EpTwkA1LuR97+7n2qbjtFIXhyndd9JES0
-         0bfg==
-X-Gm-Message-State: AOAM5313x3f7+q8mT4C/aSqhhCwFLJgwN6RxpX99eTBNIktsH77byH5d
-        vxVMJaYEuIvR85JEQM7hfLJTbA==
-X-Google-Smtp-Source: ABdhPJxEiW+ipwY11l3oml3I3IyQ/Fiktw3i7sAbvQ0T7S0UNpox+jSv/i+WgAhLOq6UadZzmRl5ZA==
-X-Received: by 2002:a63:2786:0:b0:365:8a2d:327b with SMTP id n128-20020a632786000000b003658a2d327bmr24312602pgn.16.1646192558251;
-        Tue, 01 Mar 2022 19:42:38 -0800 (PST)
-Received: from always-x1.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id gz13-20020a17090b0ecd00b001bc5defa657sm3358585pjb.11.2022.03.01.19.42.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 19:42:37 -0800 (PST)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     arei.gonglei@huawei.com, mst@redhat.com
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        herbert@gondor.apana.org.au, helei.sig11@bytedance.com,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH v3 4/4] virtio-crypto: rename skcipher algs
-Date:   Wed,  2 Mar 2022 11:39:17 +0800
-Message-Id: <20220302033917.1295334-5-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220302033917.1295334-1-pizhenwei@bytedance.com>
-References: <20220302033917.1295334-1-pizhenwei@bytedance.com>
+        Tue, 1 Mar 2022 22:45:09 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300124.outbound.protection.outlook.com [40.107.130.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9874D628;
+        Tue,  1 Mar 2022 19:44:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ck2pIdQSyZq9TRiYnSstEP2Osxnib/sdMs8dYQrtPGtfDlTA0QhMGe2i20LfDuygyFnGK/9o68vmpgRbmd8z/4/vTA03vLwVijW5PEBr1cCh+KIacqefSMSw3V74l3ePV44+R1RSY+oYc0aDXB0t+VSk+WSBSph39iBL+594GDelJl3O4/U4/T9VL3Du+gKAGCKE9gSDJ+6BQ8QpWvmgS7KgEN+5hHYI3BlG1MWplyOYUPTJPGQA3c3jn2ao0CUXjfDeyPe9LR+5aABv5MMzXTcY09D38Knv6/BlKTPrzYDhS6Fo3tWSsYZ3EE0oYhcxngNYiTU3lyMpBl37qBnJHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IV+OL3vzi6rIEDvi8v40fpd2Zvt22IpdTp/OWFlkbHY=;
+ b=AcLV7OOsxGSwBb+kMuwj4aCiu/bExKV2SO/OG1GuY8YE8lgibL0/B7CbbgZBbPYcC0CpUdw0iGGuspoo+RIPRXqTxMNmJqW7bseZnQ7vGTTnn3im7NYWdD7E7rHp5IbODAfg7q+jxqlxF7PGaKVi32kkXM2KAbu94qf5hbnGtYHlBObY0tvwAeIz3YWvklk3wQtXAXNHOQykTBPmUhiwTfWU+rKbLwroTJLUOGyJ5BhayiIA6rhU661BzntRz02rgE2lYOeWgynSc65PV47NF3Rb9GwyAwGY9GuCvwhPcPoAYeqRlnD9bSiN3cJLbS1VhCWmQ/NEADeAuYTjt2il9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IV+OL3vzi6rIEDvi8v40fpd2Zvt22IpdTp/OWFlkbHY=;
+ b=BIXAPFOeSdZEu5YcK6pMlQEouDviMC6QACMe1qIVRNMnV+zLBSsBaNIAfape2hFzap2TL40fcRgwK4WyzjEUHRuzXc9eA237X2NGykbhFmPPzrRNCMCKx1g3Bevw5jH7meDaOJapPGZ2XRjzPZQQGx9C+SzfQ4oEj/fBqIBsKSY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by SI2PR06MB4058.apcprd06.prod.outlook.com (2603:1096:4:fa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Wed, 2 Mar
+ 2022 03:44:22 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
+ 03:44:22 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] video: fbdev: s3c-fb: fix platform_get_irq.cocci warning
+Date:   Tue,  1 Mar 2022 19:44:08 -0800
+Message-Id: <20220302034408.5990-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0143.apcprd02.prod.outlook.com
+ (2603:1096:202:16::27) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 71a777d3-d2f2-402a-7a9f-08d9fbfef057
+X-MS-TrafficTypeDiagnostic: SI2PR06MB4058:EE_
+X-Microsoft-Antispam-PRVS: <SI2PR06MB40584D2A147640CA6039821FA2039@SI2PR06MB4058.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M34YJa3Zso2XCYipJnJhERXrGOYOwKPMSqazCtnLjXvqW3eD+qyL91VtOSGCInW3yGd95VPF5cIw7bTgP72WAgyzL2qNI/1i68xnhZB3bnL/2zqSrbl5wrHwcbQuiYHRIKzOEqAbtLFbVD/3ezbKjske6GuhDarAY5zcoF1VYFMcCxqvzbyJPZG05To5UTAXqzwaZ687m9pvyc/jTk5RjJP0CL3m37l8bYj4yKa1fGz4+XpLOnB4GhIcTiDKWCH3OJins7ilyYnpnp3Xjl0tdVeg/hz1SvrZw1p0/eLdPvM5EqX0T6ee0KEeO7ECqzjDs67C/kg1B7SW7JeyPpPIdXt64vO5uftvtEuttSjzrY/g+xrwFCcesra+YUvSWALFFE+IkfYEzN99IHhXtLcJ0Okm2wxOlwIYjSmove8AbdbEV9F2h3krpOwPNWgXnI2jphd3IE8M6ScO5DYq49aI9Bjx09auJm8tfeOi/jHspgfpy6kCCZhe9xsfmVVcO7TtAx/97Izi/kexOSMwPjc1/oUAqNkOR10C92SJ3Yqc7wUn+4ahsbfuDzpSMy3lucN0+Mp43PIvEFPQAGaYV+x0ukMdn7YYLNMbQeAdQ05I4ryhoSCOq0yE8DkgojzFZS2kxgpaQGE38BBI2PZOrrq9ZQi4UDjaErP18Xwp/6P+xONtMGZ3t1pSqIVTFap305sGfTXSRO8jEsSzp0o8BR1e9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2616005)(1076003)(26005)(107886003)(8936002)(4744005)(52116002)(6506007)(6666004)(6512007)(36756003)(508600001)(83380400001)(6486002)(66556008)(38100700002)(38350700002)(86362001)(110136005)(4326008)(5660300002)(316002)(8676002)(66946007)(66476007)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UH6dRLZ+Y1TPjk3cZRl1uoDevTmh46C9svXGjjVl7sGLdFrnBG6Qwz04qVVA?=
+ =?us-ascii?Q?q/CCbDs+08ShCQX10Nncr5OgptgtyvJguq1LmZ5RsWjjahkgWgDtcpIn8MRq?=
+ =?us-ascii?Q?/lW7zUvtSVrvMLglDhUBX4/tMyLya1eJs56K2QoR2ruZt5ownMEAPkMzHQU3?=
+ =?us-ascii?Q?dCjOHjbZXVmD4vNHVA40qf/JfLLcAsQIN4kaZ/+UURU6ogek8kvxR0d2VarK?=
+ =?us-ascii?Q?YnI4zwW96Aq+Uoe9uJXsXp7XgBAJWT/MW2SFSu/m0GKL2XVnkZiDLb9/lpeO?=
+ =?us-ascii?Q?8ck2YIrZnsaCkOBOCPuGajCLI3yBZ/72zLAljrQQFk3VOmnyvWio1Bs7/EWN?=
+ =?us-ascii?Q?wqhzeWGzrSIqoWGm7ISHXcS0/aoy74S2frjEoxvCA5VBo5PlcCsLnV+Tb5Yx?=
+ =?us-ascii?Q?6qbNN/kAOyFHXisS2iucVMZZ+b7BAUYUqWRg5STryHBI4WwunD+j09/avOgL?=
+ =?us-ascii?Q?4VhvSKMRU9Dm8hl2z3rSjUe+pWPPB+HUN2VBwrg4iZzMQ1RrkBJmpckqpJZC?=
+ =?us-ascii?Q?46dT0CTCUcdwWTmc9QniWgk/ffSdKXmU8oWaTIXW4g97LQnYQEmMKwNIH8LP?=
+ =?us-ascii?Q?8BSzJi/roiNGQO4hiQ1bEruSadEbeFTAYLwsTeVGUGpY7827c7W04TmmYUCm?=
+ =?us-ascii?Q?iPqp/Fmv9YISDN1XaPtLhBSTazIV2YP8Xmsd8HwL1F6hb5h3JZPqeRmo1lsc?=
+ =?us-ascii?Q?or9L1bHtZibrpw4dzQ0IXqh4TVokOMM40rIdU0845Gy3dgeevAwOMvex523Z?=
+ =?us-ascii?Q?qitMnvLlNLsPQ8p6myifMNiWo4pPbfWUOX9MScKhLUNeAm1NbVZSm7zdaT9d?=
+ =?us-ascii?Q?jBPC5lVwCukVJ+wZ2EOckwP4r8GaZHZElDq73UgJSHkq7y32qhBq8zgf2C7M?=
+ =?us-ascii?Q?XMCHw2BJrEwuORPCSvppzcDKfBtB87B609H/OvkB3kjTKgaqCoKGER1OYpcb?=
+ =?us-ascii?Q?Vg+0fzZgIMTJMyIOR1eL5qaZvntFZ5vkF6Vp3cpRlAJIiov7Uh2ani4oKMYI?=
+ =?us-ascii?Q?PktDTVXPafC5CFjupLguaJ+8eb6DNbcw6EgZeuBQfvTjF4jJylXHchSX3L/t?=
+ =?us-ascii?Q?hRWgb2QvDkJniWv/2Pkv2oixrBcZDYxxHjy5BvDQw9HtT5l3KPrnlRJBLdXf?=
+ =?us-ascii?Q?OvdxhDPIJ5A6ApNNmO2HLwahaIb4ofRxY/WH3gh/wF4v34MybBGR3WNwNpnL?=
+ =?us-ascii?Q?D295HE/bsgfyXrU5ikFNOzwd9DuajfjkfZjd6fEJFIN5YRvw87HbRAXt+UVR?=
+ =?us-ascii?Q?JlBD9EIeKC6M7cckMxUsc9vDgYx6dc74NORIt8J9pZjYyisxtX3CO8YMBPUI?=
+ =?us-ascii?Q?1iWbGD8MODpwozo1ONoTVVGXfcrBbiaM8geTbyPWguFZ+GmApAav6/keiEK8?=
+ =?us-ascii?Q?Vfm/7I683XzXXUD0RyzoRsYkLdM7oNYGPRqZmbds+kqdDe8CTRUuww6wWkc1?=
+ =?us-ascii?Q?ZdhskKXdPsIQLr8B/DpvMahbpML7AuXWDezsMovJBtQUrSV3TSgWtW6vBZ8N?=
+ =?us-ascii?Q?xrcEL8m9K5s9lu5ENidocFnVy2uMUcPjvcJghhD4RBXVEhG9PDq59I7j9VWN?=
+ =?us-ascii?Q?NtP/lpAQCrEI/VxebfeeCCuW8FLlf7iezOawmOHJ+LbbIVNsK6SPbuYrfpVH?=
+ =?us-ascii?Q?/lNC6FCHDVuzr6nCQk3XV9M=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71a777d3-d2f2-402a-7a9f-08d9fbfef057
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 03:44:22.4018
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N9Bh/gloQ0NQ8KK+M/9eSR7eXkrolm8jv6QudQVAxM7+l8RJx4vrXq5ExpCp6sSvaLKH8iQM1rM4YKwbtoK2gA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4058
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,105 +113,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suggested by Gonglei, rename virtio_crypto_algs.c to
-virtio_crypto_skcipher_algs.c. Also minor changes for function name.
-Thus the function of source files get clear: skcipher services in
-virtio_crypto_skcipher_algs.c and akcipher services in
-virtio_crypto_akcipher_algs.c.
+Remove dev_err() messages after platform_get_irq*() failures.
+platform_get_irq() already prints an error.
 
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
- drivers/crypto/virtio/Makefile                            | 2 +-
- drivers/crypto/virtio/virtio_crypto_common.h              | 4 ++--
- drivers/crypto/virtio/virtio_crypto_mgr.c                 | 8 ++++----
- ...virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c} | 4 ++--
- 4 files changed, 9 insertions(+), 9 deletions(-)
- rename drivers/crypto/virtio/{virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c} (99%)
+ drivers/video/fbdev/s3c-fb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/crypto/virtio/Makefile b/drivers/crypto/virtio/Makefile
-index f2b839473d61..bfa6cbae342e 100644
---- a/drivers/crypto/virtio/Makefile
-+++ b/drivers/crypto/virtio/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_CRYPTO_DEV_VIRTIO) += virtio_crypto.o
- virtio_crypto-objs := \
--	virtio_crypto_algs.o \
-+	virtio_crypto_skcipher_algs.o \
- 	virtio_crypto_akcipher_algs.o \
- 	virtio_crypto_mgr.o \
- 	virtio_crypto_core.o
-diff --git a/drivers/crypto/virtio/virtio_crypto_common.h b/drivers/crypto/virtio/virtio_crypto_common.h
-index 214f9a6fcf84..e693d4ee83a6 100644
---- a/drivers/crypto/virtio/virtio_crypto_common.h
-+++ b/drivers/crypto/virtio/virtio_crypto_common.h
-@@ -130,8 +130,8 @@ static inline int virtio_crypto_get_current_node(void)
- 	return node;
- }
+diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
+index 208514054c23..3abbc5737c3b 100644
+--- a/drivers/video/fbdev/s3c-fb.c
++++ b/drivers/video/fbdev/s3c-fb.c
+@@ -1418,7 +1418,6 @@ static int s3c_fb_probe(struct platform_device *pdev)
  
--int virtio_crypto_algs_register(struct virtio_crypto *vcrypto);
--void virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto);
-+int virtio_crypto_skcipher_algs_register(struct virtio_crypto *vcrypto);
-+void virtio_crypto_skcipher_algs_unregister(struct virtio_crypto *vcrypto);
- int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto);
- void virtio_crypto_akcipher_algs_unregister(struct virtio_crypto *vcrypto);
- 
-diff --git a/drivers/crypto/virtio/virtio_crypto_mgr.c b/drivers/crypto/virtio/virtio_crypto_mgr.c
-index 1cb92418b321..70e778aac0f2 100644
---- a/drivers/crypto/virtio/virtio_crypto_mgr.c
-+++ b/drivers/crypto/virtio/virtio_crypto_mgr.c
-@@ -237,14 +237,14 @@ struct virtio_crypto *virtcrypto_get_dev_node(int node, uint32_t service,
-  */
- int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
- {
--	if (virtio_crypto_algs_register(vcrypto)) {
--		pr_err("virtio_crypto: Failed to register crypto algs\n");
-+	if (virtio_crypto_skcipher_algs_register(vcrypto)) {
-+		pr_err("virtio_crypto: Failed to register crypto skcipher algs\n");
- 		return -EFAULT;
+ 	sfb->irq_no = platform_get_irq(pdev, 0);
+ 	if (sfb->irq_no < 0) {
+-		dev_err(dev, "failed to acquire irq resource\n");
+ 		ret = -ENOENT;
+ 		goto err_lcd_clk;
  	}
- 
- 	if (virtio_crypto_akcipher_algs_register(vcrypto)) {
- 		pr_err("virtio_crypto: Failed to register crypto akcipher algs\n");
--		virtio_crypto_algs_unregister(vcrypto);
-+		virtio_crypto_skcipher_algs_unregister(vcrypto);
- 		return -EFAULT;
- 	}
- 
-@@ -263,7 +263,7 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
-  */
- void virtcrypto_dev_stop(struct virtio_crypto *vcrypto)
- {
--	virtio_crypto_algs_unregister(vcrypto);
-+	virtio_crypto_skcipher_algs_unregister(vcrypto);
- 	virtio_crypto_akcipher_algs_unregister(vcrypto);
- }
- 
-diff --git a/drivers/crypto/virtio/virtio_crypto_algs.c b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-similarity index 99%
-rename from drivers/crypto/virtio/virtio_crypto_algs.c
-rename to drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-index 583c0b535d13..a618c46a52b8 100644
---- a/drivers/crypto/virtio/virtio_crypto_algs.c
-+++ b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-@@ -613,7 +613,7 @@ static struct virtio_crypto_algo virtio_crypto_algs[] = { {
- 	},
- } };
- 
--int virtio_crypto_algs_register(struct virtio_crypto *vcrypto)
-+int virtio_crypto_skcipher_algs_register(struct virtio_crypto *vcrypto)
- {
- 	int ret = 0;
- 	int i = 0;
-@@ -644,7 +644,7 @@ int virtio_crypto_algs_register(struct virtio_crypto *vcrypto)
- 	return ret;
- }
- 
--void virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto)
-+void virtio_crypto_skcipher_algs_unregister(struct virtio_crypto *vcrypto)
- {
- 	int i = 0;
- 
 -- 
-2.20.1
+2.17.1
 

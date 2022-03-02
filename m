@@ -2,142 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7216F4CA4AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5285F4CA4B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 13:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241748AbiCBMUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 07:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S241742AbiCBMUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 07:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241733AbiCBMTz (ORCPT
+        with ESMTP id S241744AbiCBMUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 07:19:55 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11D4BFD6;
-        Wed,  2 Mar 2022 04:19:11 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d07c4a0d06so14729607b3.13;
-        Wed, 02 Mar 2022 04:19:11 -0800 (PST)
+        Wed, 2 Mar 2022 07:20:05 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B610657168
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 04:19:20 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id x6-20020a4a4106000000b003193022319cso1668265ooa.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 04:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3vb72GLr6Ee3U6cMdODTkV43DodSF/shfmMcds/5VIw=;
-        b=kFIn83UQPNp2YQXGZ6vUBxp7pFT0bb/xiZD2h4HzwgeUvSva8rIMT4RES8AoEseVZS
-         z11uYAJWsZCNwLtvizkaW8BNUgAl9lc/YI77qMY71vcixUzHbqZKrRTt1srRqMEQe18D
-         DwokZ2XEpylFiXxtb7qiRP2Spd6gTq/sXCe8NuBOdZKOrJMBxi5Pdv9Ck7ufOUb6ak2m
-         4cxA+QQRVEFEXzHDftRH5CCTkFqcFgQrdRSpRCmvLDG0BlY+a9A3OX7BTqMRg7X4GN1P
-         eKtm5xsZkmagztN4HKnSeq41DoOzeVah6F1q/ZtXBkJcgFcyg+ucOXKj+S7BKJ8Ya2MC
-         lVxw==
+        bh=n2AHBorZms8YAGoG9GhF+kfihvE43wMRpP4hUA+7xto=;
+        b=r4fh2zx+7V9cjuHBtWdTH+AuC8ckxuv3eEjvJg2jgDKfSSAKj2ATaKGBVZMKjnkHqf
+         HgcJoT9GYZUogc7cmeUiNUy28YO1+8JNBTdXoqYeqPqWWDbfr+XTQwEW8uRyTW4u4m0i
+         p3yZH/6ARzIxhZ6KEnS00wlZFdLvd7EDxldDgKHDvbrux95w+RY1ZPlCWsrYS104b7P5
+         7Fz8jTM9orYw2DZEaNRdeH12F4eysoZRdsbU7FCWGzPqa84E0Ca8a2uuDEsjFDO/hqvK
+         FQlFtx6ntGzjq+KwsakdXWEQxMXIGbCfjIIK73MUVFBJ0WHSZGPe23km98T+SgmmmEP6
+         smwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3vb72GLr6Ee3U6cMdODTkV43DodSF/shfmMcds/5VIw=;
-        b=v9l+qFUhvcNtwy+vCiJWM6myywCCZiRNR5zYnKVC62FpVwRdeyOYUqGIiowr3l3t9H
-         //O+rPnJbknoEEeInnWo4b8/GyxDGx4+lbqH6xfvNGBXbsO3oBVIeIrLvZZ8sbdG4g9o
-         8v0DRnYb+2R3/yi2KD47JkuBkiFKlCjRl31dU46brYaNQsKjETUUzXeMi8HsYpnReoU8
-         SCcy/ts7QkqUFvcgdcVqUPk/69HLBPfULH80sk2rTZbAnpuElwJOps3U9wzkOY0ZT7I0
-         cQrxzYbBN8m5ZTz78ne4zMaG/pp7PYUwDpQnWRjzyleBICf+ISNKfMZipv3cf5PrWP2d
-         EkGQ==
-X-Gm-Message-State: AOAM532CB8WMdnSgZwEuRXBPqS28M8jpwSZVQpDPy2Bs64oz9a/JD4ZB
-        cOw2COpFvr2F+g4Efs7QIQ+ezKMQylV4nU+kuhw=
-X-Google-Smtp-Source: ABdhPJyL+HJILY3xOuTeZtNsYtJCOluQWPYN2HDUEDAElMZ5+oMd9++QKvgOqwUj6bvXHy1XbsXeSiDguuBkqf4S4rM=
-X-Received: by 2002:a81:1c47:0:b0:2d7:5822:1739 with SMTP id
- c68-20020a811c47000000b002d758221739mr30015911ywc.502.1646223551058; Wed, 02
- Mar 2022 04:19:11 -0800 (PST)
+        bh=n2AHBorZms8YAGoG9GhF+kfihvE43wMRpP4hUA+7xto=;
+        b=SDTvdTvmVBv36VI8y8MKrbmSD/v7hFPBQ45u8zg8Lt46r/YSWk68db10KZ7Cdt4OKX
+         h+HFBjlIFGlO6huKrhINgFqCh9f4Maf0PIeRHSuBwx3dHAkza008wPTomCoc/TNbt+2/
+         VJnM53ztbbq0wbGIgynb3NMIWIEeOdnxKiqFzjn/3sv1ozq4wCvPSOycE0JA1NrUw1CT
+         ZT+WLWEV/ccVT16gWaTtiXtjvWiZsnBozfYNmQxSMk2hWhEJssZydZzmczXHXP4+LFuc
+         196cCrqQsSZqWQ//pBtTBycYKj3nhILZxGab2xDkvr+JzTvFTP4mH+7FO/bWaZwqfIFy
+         o/aw==
+X-Gm-Message-State: AOAM53015XPS4ch8RC92yj+U3vHgTlUamQq2Wz0rcs+JdlApUIppnqnV
+        OuPhvtaWqjd82FVpvI1QwRuvypvDttaU+PpP3lsRFQ==
+X-Google-Smtp-Source: ABdhPJzRsnGNx1fdPAqwBzv9n93Ob+rDaO5Q/Mm9UetP4uvFOGd1t9zNatKQ5mno6z4JPqg2SO/qtToGVI/930EUBFc=
+X-Received: by 2002:a05:6870:434f:b0:bf:9f2a:26f0 with SMTP id
+ x15-20020a056870434f00b000bf9f2a26f0mr7372412oah.40.1646223560034; Wed, 02
+ Mar 2022 04:19:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228135700.1089526-1-pgwipeout@gmail.com> <20220228135700.1089526-2-pgwipeout@gmail.com>
- <CAMdYzYqs=iRY6uNzVSkHrrhPYFixXdbZjtwSpPOjf-6f8TXutw@mail.gmail.com> <Yh8n7XiJbaT4pZGD@matsya>
-In-Reply-To: <Yh8n7XiJbaT4pZGD@matsya>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 2 Mar 2022 07:18:59 -0500
-Message-ID: <CAMdYzYrkDbr5mHYmAbqBoJJEKH8A5xXfRNuTiTn8q40vRJeCgA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] dt-bindings: soc: grf: fix rk3568 usb definitions
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Rob Herring <robh@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220301072511.117818-1-bhupesh.sharma@linaro.org>
+ <20220301072511.117818-6-bhupesh.sharma@linaro.org> <d51717a2-0a50-f2fb-0d2d-e233c6e75d4b@linaro.org>
+In-Reply-To: <d51717a2-0a50-f2fb-0d2d-e233c6e75d4b@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 2 Mar 2022 17:49:09 +0530
+Message-ID: <CAH=2NtwGzDCACt16YfMCys+qBF+peTCyJo+WTsEk5CfPUpE2sw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] PCI: qcom: Add SM8150 SoC support
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
+        lorenzo.pieralisi@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 3:16 AM Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 01-03-22, 09:52, Peter Geis wrote:
-> > Good Morning,
-> >
-> > Would it be possible to pull this patch individually, to fix the
-> > current error reported by Rob?
->
-> This does not apply for me on phy-next. What was this based on..?
+Hi Dmitry,
 
-This is based on linux-next, which the applicable patch was accepted on 24 Feb.
-The original patch was correct, but it seems a merge error happened
-and these two lines were moved into an incorrect location.
-This patch corrects that, but I see on the original patch chain you
-are discussing reverting and reapplying to fix it.
-
+On Tue, 1 Mar 2022 at 17:13, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
+> On 01/03/2022 10:25, Bhupesh Sharma wrote:
+> > The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
+> > SM8250. Hence the support is added reusing the members of ops_2_7_0.
 > >
-> > Thanks,
-> > Peter
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >   drivers/pci/controller/dwc/pcie-qcom.c | 16 ++++++++++++++++
+> >   1 file changed, 16 insertions(+)
 > >
-> > On Mon, Feb 28, 2022 at 8:57 AM Peter Geis <pgwipeout@gmail.com> wrote:
-> > >
-> > > The rockchip,rk3568-pipe-grf and rockchip,rk3568-pipe-phy-grf
-> > > compatibles were incorrectly assigned to the syscon, simple-mfd
-> > > enumeration, vice only the syscon enumeration.
-> > > This leads a dtbs_check failure.
-> > >
-> > > Move these to the syscon enumeration.
-> > >
-> > > Fixes: b3df807e1fb0 ("dt-bindings: soc: grf: add naneng combo phy register compatible")
-> > >
-> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> > > index 072318fcd57b..5079e9d24af6 100644
-> > > --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> > > +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> > > @@ -15,6 +15,8 @@ properties:
-> > >        - items:
-> > >            - enum:
-> > >                - rockchip,rk3288-sgrf
-> > > +              - rockchip,rk3568-pipe-grf
-> > > +              - rockchip,rk3568-pipe-phy-grf
-> > >                - rockchip,rk3568-usb2phy-grf
-> > >                - rockchip,rv1108-usbgrf
-> > >            - const: syscon
-> > > @@ -39,8 +41,6 @@ properties:
-> > >                - rockchip,rk3399-grf
-> > >                - rockchip,rk3399-pmugrf
-> > >                - rockchip,rk3568-grf
-> > > -              - rockchip,rk3568-pipe-grf
-> > > -              - rockchip,rk3568-pipe-phy-grf
-> > >                - rockchip,rk3568-pmugrf
-> > >                - rockchip,rv1108-grf
-> > >                - rockchip,rv1108-pmugrf
-> > > --
-> > > 2.25.1
-> > >
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index c19cd506ed3f..66fbc0234888 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1487,6 +1487,17 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
+> >       .config_sid = qcom_pcie_config_sid_sm8250,
+> >   };
+> >
+> > +/* Qcom IP rev.: 1.5.0 */
+> > +static const struct qcom_pcie_ops ops_1_5_0 = {
+> > +     .get_resources = qcom_pcie_get_resources_2_7_0,
+> > +     .init = qcom_pcie_init_2_7_0,
+> > +     .deinit = qcom_pcie_deinit_2_7_0,
+> > +     .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> > +     .post_init = qcom_pcie_post_init_2_7_0,
+> > +     .post_deinit = qcom_pcie_post_deinit_2_7_0,
+> > +     .config_sid = qcom_pcie_config_sid_sm8250,
+> > +};
+> > +
+>
+> This duplicates the ops_1_9_0, doesn't it?
+> I'd suggest to reuse 1.9.0 structure and add a comment that it's also
+> used for 1.5.0.
+
+Ack. I will fix this in v3.
+
+Regards,
+Bhupesh
+
+> >   static const struct qcom_pcie_cfg apq8084_cfg = {
+> >       .ops = &ops_1_0_0,
+> >   };
+> > @@ -1511,6 +1522,10 @@ static const struct qcom_pcie_cfg sdm845_cfg = {
+> >       .ops = &ops_2_7_0,
+> >   };
+> >
+> > +static const struct qcom_pcie_cfg sm8150_cfg = {
+> > +     .ops = &ops_1_5_0,
+> > +};
+> > +
+> >   static const struct qcom_pcie_cfg sm8250_cfg = {
+> >       .ops = &ops_1_9_0,
+> >   };
+> > @@ -1626,6 +1641,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+> >       { .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
+> >       { .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
+> >       { .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
+> > +     { .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
+> >       { .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+> >       { .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
+> >       { .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+>
 >
 > --
-> ~Vinod
+> With best wishes
+> Dmitry

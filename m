@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CFE4C9EA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558D14C9EA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239930AbiCBHyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S239937AbiCBHyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 02:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiCBHyE (ORCPT
+        with ESMTP id S233208AbiCBHyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:54:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4593E2DA91;
-        Tue,  1 Mar 2022 23:53:22 -0800 (PST)
+        Wed, 2 Mar 2022 02:54:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA85F8FD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:53:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4A4160B16;
-        Wed,  2 Mar 2022 07:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE13C004E1;
-        Wed,  2 Mar 2022 07:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646207601;
-        bh=JVHovSPSHmzrBSKXU+wJ0xDWPI/HbFUs+B+kw6xf6nw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wBVZee/M87vYeOpWbXi7DSVcc18hKvXjFM7GrB5sGUjuFAsbANfuQgyNFigpum1vU
-         J2HRYPBcS8JDFOy8snCKtx5Kv9xkCtskeApBjz+vo7G20vkVv1j6njYhhuuqk1OqMF
-         Sjn1TmAgBJ1zBtAjyA39L18m/bjtwwqn0o5/Ziww=
-Date:   Wed, 2 Mar 2022 08:53:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Iouri Tarassov <iourit@linux.microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, spronovo@linux.microsoft.com
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Message-ID: <Yh8ia7nJNN7ISR1l@kroah.com>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C17D3B81F1F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:53:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E911C004E1;
+        Wed,  2 Mar 2022 07:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646207629;
+        bh=9NSP4DT8lrHgNHqaiQ/w0hWpRVSiCZAEBVQEdkPu8lI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hov9VTF9WXhCSj2BQLi5h9lU7A51DYWpLNtK0P8Y28T7E9oQFFCOfYjstpxILTIqN
+         14HUaLurhRfaeK8GpLPw7RYtdW7lgcQ+Mi7xv8b+WMPgGnqXYQ5diNfeFTkhfzcldy
+         +S27YnzWtNsT//Lk4UWxGAYytrOK7EOmR9+sQsJqWzbRhBLb5LiBWlTVH3k/7SHEDD
+         Nf0+lZXVS9n+UU7B5R+6tzBQhqI6CBClMLXNFg+Qh2BjFSXuqQrNwmtT7srYvhqbvy
+         X2swTfAwhwwDzv7Y3yb+BWcLvr4Cjdv1q/I4qR8FZ+qLmOUHPrYdoV5t0Dx3+cYyCm
+         +VYBQQG/zRCkg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nPJnu-00BbmA-P4; Wed, 02 Mar 2022 07:53:47 +0000
+Date:   Wed, 02 Mar 2022 07:53:40 +0000
+Message-ID: <87tucg6b97.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/8] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
+In-Reply-To: <20220225033548.1912117-4-kaleshsingh@google.com>
+References: <20220225033548.1912117-1-kaleshsingh@google.com>
+        <20220225033548.1912117-4-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, broonie@kernel.org, mhiramat@kernel.org, pcc@google.com, madvenka@linux.microsoft.com, qwandor@google.com, ascull@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,50 +79,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
-> > > +struct dxgglobal *dxgglobal;
-> > 
-> > No, make this per-device, NEVER have a single device for your driver.
-> > The Linux driver model makes it harder to do it this way than to do it
-> > correctly.  Do it correctly please and have no global structures like
-> > this.
-> > 
+On Fri, 25 Feb 2022 03:34:48 +0000,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> This may not be as big an issue as you thought. The device discovery is
-> still done via the normal VMBus probing routine. For all intents and
-> purposes the dxgglobal structure can be broken down into per device
-> fields and a global structure which contains the protocol versioning
-> information -- my understanding is there will always be a global
-> structure to hold information related to the backend, regardless of how
-> many devices there are.
-
-Then that is wrong and needs to be fixed.  Drivers should almost never
-have any global data, that is not how Linux drivers work.  What happens
-when you get a second device in your system for this?  Major rework
-would have to happen and the code will break.  Handle that all now as it
-takes less work to make this per-device than it does to have a global
-variable.
-
-> I definitely think splitting is doable, but I also understand why Iouri
-> does not want to do it _now_ given there is no such a model for multiple
-> devices yet, so anything we put into the per-device structure could be
-> incomplete and it requires further changing when such a model arrives
-> later.
+> Maps the stack pages in the flexible private VA range and allocates
+> guard pages below the stack as unbacked VA space. The stack is aligned
+> to twice its size to aid overflow detection (implemented in a subsequent
+> patch in the series).
 > 
-> Iouri, please correct me if I have the wrong mental model here.
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
 > 
-> All in all, I hope this is not going to be a deal breaker for the
-> acceptance of this driver.
+> Changes in v4:
+>   - Replace IS_ERR_OR_NULL check with IS_ERR check now that
+>     hyp_alloc_private_va_range() returns an error for null
+>     pointer, per Fuad
+>   - Format comments to < 80 cols, per Fuad
+> 
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+> 
+>  arch/arm64/include/asm/kvm_asm.h |  1 +
+>  arch/arm64/kvm/arm.c             | 32 +++++++++++++++++++++++++++++---
+>  2 files changed, 30 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index d5b0386ef765..2e277f2ed671 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -169,6 +169,7 @@ struct kvm_nvhe_init_params {
+>  	unsigned long tcr_el2;
+>  	unsigned long tpidr_el2;
+>  	unsigned long stack_hyp_va;
+> +	unsigned long stack_pa;
+>  	phys_addr_t pgd_pa;
+>  	unsigned long hcr_el2;
+>  	unsigned long vttbr;
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index ecc5958e27fe..0a83c0e7f838 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1541,7 +1541,6 @@ static void cpu_prepare_hyp_mode(int cpu)
+>  	tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
+>  	params->tcr_el2 = tcr;
+>  
+> -	params->stack_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stack_page, cpu) + PAGE_SIZE);
+>  	params->pgd_pa = kvm_mmu_get_httbr();
+>  	if (is_protected_kvm_enabled())
+>  		params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
+> @@ -1990,14 +1989,41 @@ static int init_hyp_mode(void)
+>  	 * Map the Hyp stack pages
+>  	 */
+>  	for_each_possible_cpu(cpu) {
+> +		struct kvm_nvhe_init_params *params = per_cpu_ptr_nvhe_sym(kvm_init_params, cpu);
+>  		char *stack_page = (char *)per_cpu(kvm_arm_hyp_stack_page, cpu);
+> -		err = create_hyp_mappings(stack_page, stack_page + PAGE_SIZE,
+> -					  PAGE_HYP);
+> +		unsigned long stack_hyp_va, guard_hyp_va;
+>  
+> +		/*
+> +		 * Private mappings are allocated downwards from io_map_base
+> +		 * so allocate the stack first then the guard page.
+> +		 *
+> +		 * The stack is aligned to twice its size to facilitate overflow
+> +		 * detection.
+> +		 */
+> +		err = __create_hyp_private_mapping(__pa(stack_page), PAGE_SIZE,
+> +						PAGE_SIZE * 2, &stack_hyp_va, PAGE_HYP);
 
-For my reviews, yes it will be.
+Right, I guess that's where my earlier ask breaks, as you want an
+alignment that is *larger* than the allocation.
 
-Again, it should be easier to keep things in a per-device state than
-not as the proper lifetime rules and the like are automatically handled
-for you.  If you have global data, you have to manage that all on your
-own and it is _MUCH_ harder to review that you got it correct.
+>  		if (err) {
+>  			kvm_err("Cannot map hyp stack\n");
+>  			goto out_err;
+>  		}
+> +
+> +		/* Allocate unbacked private VA range for stack guard page */
+> +		guard_hyp_va = hyp_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
 
-Please fix, it will make your life easier as well.
+Huh. You are implicitly relying on the VA allocator handing you an
+address contiguous with the previous mapping. That's... brave. I'd
+rather you allocate the VA space upfront with the correct alignment
+and then map the single page where it should be in the VA region.
 
-thanks,
+That'd be a lot less fragile.
 
-greg k-h
+> +		if (IS_ERR((void *)guard_hyp_va)) {
+> +			err = PTR_ERR((void *)guard_hyp_va);
+> +			kvm_err("Cannot allocate hyp stack guard page\n");
+> +			goto out_err;
+> +		}
+> +
+> +		/*
+> +		 * Save the stack PA in nvhe_init_params. This will be needed
+> +		 * to recreate the stack mapping in protected nVHE mode.
+> +		 * __hyp_pa() won't do the right thing there, since the stack
+> +		 * has been mapped in the flexible private VA space.
+> +		 */
+> +		params->stack_pa = __pa(stack_page) + PAGE_SIZE;
+> +
+> +		params->stack_hyp_va = stack_hyp_va + PAGE_SIZE;
+>  	}
+>  
+>  	for_each_possible_cpu(cpu) {
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

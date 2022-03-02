@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF29E4C9C29
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C362A4C9C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239353AbiCBDaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S239337AbiCBDdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiCBDaX (ORCPT
+        with ESMTP id S229911AbiCBDdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:30:23 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DFFB0D17;
-        Tue,  1 Mar 2022 19:29:40 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id o7-20020a056820040700b003205d5eae6eso12644oou.5;
-        Tue, 01 Mar 2022 19:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6Q0bxE67I8y0tNyscEgKpcVLyNoRx4Y38uQCKmsrJXs=;
-        b=Y947JocD2+sMdok3nZr8cn9CnXm1HJHtBdilWI7XGsiHzz0gnVNoW6s9GlC6DCPo8f
-         Hs3+xo9n5QzmKwx5UOu6jbuBvVKgaIU3IhRp1TzH8GXoPgxc/s4KMu4HP/nhYi3apncQ
-         zu1Cd7RJbcX1Jh9Kq4Dw/CMTQj7hvtBi/A/ags+MJPqUdzC2yREUAe73YJIy4Ir1H+/n
-         kwv9pmdrPZtlff3xH41ULkhMu4ZWblUt2VDr37uoq0gVboVn8LE//4Qwily7fjxzhlkC
-         vSGnK+i4ktzKLhZ93hsvIEitS0vDTkgD5mmRr3i3cJkYp126CL78a0tUShM2xg5HLb4f
-         0wDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6Q0bxE67I8y0tNyscEgKpcVLyNoRx4Y38uQCKmsrJXs=;
-        b=A38/NL5lbkPEOH9Bd80aq66uLBk8Is3f/3lAsqXYw36WubMLcJnWLX90HPUlwLLCqt
-         cOFaGAVwYGxghNANTi09VSiX+xLM/t1qVIhJGgNjGuHfsPvc+Vo9i9cV8obzj2UMH73D
-         /4FLWwlyTzI4Z5UiVH4kGclHqUFU89XQEQWUnvlUspvHDLMoNvMYxlPFFUs1QdogrSQN
-         kDb/5JCj4H4QHH0Hr1c1+Qrd9uSZEeRLlGJiVFynrC0yzOGJ9MoQ3gZodN+aOXSitiv/
-         OETgWp79WC5kVpngaovw+JnDl7TH4XAPabBpXaBJMkaK78B1Aw75ME1gmzeRfGCByH+8
-         WpzA==
-X-Gm-Message-State: AOAM531eBlOKwH4SP1yHW8lM+xYJl40qs7lFT24mdIqUYKbLvrl8rNfJ
-        6prMhxoXkdHwtAFH1p0rmtA=
-X-Google-Smtp-Source: ABdhPJy17OB73gebQWHaD3DcjnRxBmx0KdCe+tnIIJ0DXj+s62oFSr9rFn+6UqsMBVq99jXvVqMUKA==
-X-Received: by 2002:a4a:e865:0:b0:318:4b66:ffe0 with SMTP id m5-20020a4ae865000000b003184b66ffe0mr13923364oom.80.1646191780103;
-        Tue, 01 Mar 2022 19:29:40 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.59])
-        by smtp.googlemail.com with ESMTPSA id kw10-20020a056870ac0a00b000d75f1d9b87sm1061411oab.52.2022.03.01.19.29.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 19:29:39 -0800 (PST)
-Message-ID: <2071f8a0-148d-96fa-75b9-8277c2f87287@gmail.com>
-Date:   Tue, 1 Mar 2022 20:29:37 -0700
+        Tue, 1 Mar 2022 22:33:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34D114096
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:32:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF1761763
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744ACC340EE;
+        Wed,  2 Mar 2022 03:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646191950;
+        bh=tw2FLwUKv/LJosyP7l26hDKZUXqpREWG4hH9qMm6hVQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=HekcxkIT5USwEq4gDBMDMEHvLjLfpBwrolf7gAibCI46vKz0PpqfZOHrUcLfARs8c
+         q5z1nFCueunfJa2qs2TFVeff/FFiRQm970lTHm5oaOl1p+GdNA2YVBPkyRAv7Jx6gS
+         nYPRnPrkZQzr7YTaxIcyj3Vdo6EmPr5q8Kp5eKWG6ULadFpGX9G7z4M/e0uBsXEoHI
+         W2PwNFe9eeREdY8oV/d4ujh54DpjXYa+GBZiXGpsWlImQ2vNU6L9E6qg7Yp2AhUkz2
+         ltF0xoSQZssaAt2ztY4vBI/2hlzHDDeNKSdANoi/3PDStXpibyjRZFsU5/p4ZxU/bs
+         fw4kh31K0RhJg==
+Message-ID: <51826b5f-e480-994a-4a72-39ff4572bb3f@kernel.org>
+Date:   Wed, 2 Mar 2022 11:32:27 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH net-next v4 4/4] net: tun: track dropped skb via
- kfree_skb_reason()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to avoid potential deadlock
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220226084929.6417-1-dongli.zhang@oracle.com>
- <20220226084929.6417-5-dongli.zhang@oracle.com>
- <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Jing Xia <jing.xia@unisoc.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        linux-kernel@vger.kernel.org
+References: <20220127054449.24711-1-chao@kernel.org>
+ <YfMVxzdhat01ca7m@google.com>
+ <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+ <YfSMMpj2GrYXAJK2@google.com>
+ <51be77f1-6e85-d46d-d0d3-c06d2055a190@kernel.org>
+ <Yfs1KRgwgzSOvocR@google.com>
+ <86a175d3-c438-505b-1dbc-4ef6e8b5adcb@kernel.org>
+ <5b5e20d1-877f-b321-b341-c0f233ee976c@kernel.org>
+In-Reply-To: <5b5e20d1-877f-b321-b341-c0f233ee976c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +66,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 7:50 PM, Jakub Kicinski wrote:
-> On Sat, 26 Feb 2022 00:49:29 -0800 Dongli Zhang wrote:
->> +	SKB_DROP_REASON_SKB_PULL,	/* failed to pull sk_buff data */
->> +	SKB_DROP_REASON_SKB_TRIM,	/* failed to trim sk_buff data */
-> 
-> IDK if these are not too low level and therefore lacking meaning.
-> 
-> What are your thoughts David?
+ping,
 
-I agree. Not every kfree_skb is worthy of a reason. "Internal
-housekeeping" errors are random and nothing a user / admin can do about
-drops.
-
-IMHO, the value of the reason code is when it aligns with SNMP counters
-(original motivation for this direction) and relevant details like TCP
-or UDP checksum mismatch, packets for a socket that is not open, socket
-is full, ring buffer is full, packets for "other host", etc.
-
+On 2022/2/25 11:02, Chao Yu wrote:
+> On 2022/2/3 22:57, Chao Yu wrote:
+>> On 2022/2/3 9:51, Jaegeuk Kim wrote:
+>>> On 01/29, Chao Yu wrote:
+>>>> On 2022/1/29 8:37, Jaegeuk Kim wrote:
+>>>>> On 01/28, Chao Yu wrote:
+>>>>>> On 2022/1/28 5:59, Jaegeuk Kim wrote:
+>>>>>>> On 01/27, Chao Yu wrote:
+>>>>>>>> Quoted from Jing Xia's report, there is a potential deadlock may happen
+>>>>>>>> between kworker and checkpoint as below:
+>>>>>>>>
+>>>>>>>> [T:writeback]                [T:checkpoint]
+>>>>>>>> - wb_writeback
+>>>>>>>>     - blk_start_plug
+>>>>>>>> bio contains NodeA was plugged in writeback threads
+>>>>>>>
+>>>>>>> I'm still trying to understand more precisely. So, how is it possible to
+>>>>>>> have bio having node write in this current context?
+>>>>>>
+>>>>>> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
+>>>>>> during writebacking node_inode's data page (which should be node page)?
+>>>>>
+>>>>> Wasn't that added into a different task->plug?
+>>>>
+>>>> I'm not sure I've got your concern correctly...
+>>>>
+>>>> Do you mean NodeA and other IOs from do_writepages() were plugged in
+>>>> different local plug variables?
+>>>
+>>> I think so.
+>>
+>> I guess block plug helper says it doesn't allow to use nested plug, so there
+>> is only one plug in kworker thread?
+>>
+>> void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
+>> {
+>>      struct task_struct *tsk = current;
+>>
+>>      /*
+>>       * If this is a nested plug, don't actually assign it.
+>>       */
+>>      if (tsk->plug)
+>>          return;
+>> ...
+>> }
 > 
-> Would it be better to up level the names a little bit and call SKB_PULL
-> something like "HDR_TRUNC" or "HDR_INV" or "HDR_ERR" etc or maybe
-> "L2_HDR_ERR" since in this case we seem to be pulling off ETH_HLEN?
+> Any further comments?
 > 
-> For SKB_TRIM the error comes from allocation failures, there may be
-> a whole bunch of skb helpers which will fail only under mem pressure,
-> would it be better to identify them and return some ENOMEM related
-> reason, since, most likely, those will be noise to whoever is tracking
-> real errors?
+> Thanks,
 > 
->>  	SKB_DROP_REASON_DEV_HDR,	/* there is something wrong with
->>  					 * device driver specific header
->>  					 */
->> +	SKB_DROP_REASON_DEV_READY,	/* device is not ready */
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>>>
+>>>>>> Thanks,
+>>>>>>
+>>>>>>>
+>>>>>>>>                     - do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+>>>>>>>>                      - f2fs_write_data_pages
+>>>>>>>>                       - f2fs_write_single_data_page -- write last dirty page
+>>>>>>>>                        - f2fs_do_write_data_page
+>>>>>>>>                         - set_page_writeback  -- clear page dirty flag and
+>>>>>>>>                         PAGECACHE_TAG_DIRTY tag in radix tree
+>>>>>>>>                         - f2fs_outplace_write_data
+>>>>>>>>                          - f2fs_update_data_blkaddr
+>>>>>>>>                           - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+>>>>>>>>                        - inode_dec_dirty_pages
+>>>>>>>>     - writeback_sb_inodes
+>>>>>>>>      - writeback_single_inode
+>>>>>>>>       - do_writepages
+>>>>>>>>        - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+>>>>>>>>         - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+>>>>>>>>      - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+>>>>>>>>     - blk_finish_plug
+>>>>>>>>
+>>>>>>>> Let's try to avoid deadlock condition by forcing unplugging previous bio via
+>>>>>>>> blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+>>>>>>>> due to valid sbi->wb_sync_req[DATA/NODE].
+>>>>>>>>
+>>>>>>>> Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+>>>>>>>> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+>>>>>>>> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+>>>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>>>>> ---
+>>>>>>>>     fs/f2fs/data.c | 6 +++++-
+>>>>>>>>     fs/f2fs/node.c | 6 +++++-
+>>>>>>>>     2 files changed, 10 insertions(+), 2 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>>>>> index 76d6fe7b0c8f..932a4c81acaf 100644
+>>>>>>>> --- a/fs/f2fs/data.c
+>>>>>>>> +++ b/fs/f2fs/data.c
+>>>>>>>> @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+>>>>>>>>         /* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+>>>>>>>>         if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>>>             atomic_inc(&sbi->wb_sync_req[DATA]);
+>>>>>>>> -    else if (atomic_read(&sbi->wb_sync_req[DATA]))
+>>>>>>>> +    else if (atomic_read(&sbi->wb_sync_req[DATA])) {
+>>>>>>>> +        /* to avoid potential deadlock */
+>>>>>>>> +        if (current->plug)
+>>>>>>>> +            blk_finish_plug(current->plug);
+>>>>>>>>             goto skip_write;
+>>>>>>>> +    }
+>>>>>>>>         if (__should_serialize_io(inode, wbc)) {
+>>>>>>>>             mutex_lock(&sbi->writepages);
+>>>>>>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+>>>>>>>> index 556fcd8457f3..69c6bcaf5aae 100644
+>>>>>>>> --- a/fs/f2fs/node.c
+>>>>>>>> +++ b/fs/f2fs/node.c
+>>>>>>>> @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
+>>>>>>>>         if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>>>             atomic_inc(&sbi->wb_sync_req[NODE]);
+>>>>>>>> -    else if (atomic_read(&sbi->wb_sync_req[NODE]))
+>>>>>>>> +    else if (atomic_read(&sbi->wb_sync_req[NODE])) {
+>>>>>>>> +        /* to avoid potential deadlock */
+>>>>>>>> +        if (current->plug)
+>>>>>>>> +            blk_finish_plug(current->plug);
+>>>>>>>>             goto skip_write;
+>>>>>>>> +    }
+>>>>>>>>         trace_f2fs_writepages(mapping->host, wbc, NODE);
+>>>>>>>> -- 
+>>>>>>>> 2.32.0
+>>
+>>
+>> _______________________________________________
+>> Linux-f2fs-devel mailing list
+>> Linux-f2fs-devel@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
 > 
-> What is ready? link is not up? peer not connected? can we expand?
-
-As I recall in this case it is the tfile for a tun device disappeared -
-ie., a race condition.
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

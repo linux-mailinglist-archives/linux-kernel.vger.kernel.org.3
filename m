@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F304CA85B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9284CA857
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 15:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243182AbiCBOok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 09:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S243166AbiCBOnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 09:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243179AbiCBOog (ORCPT
+        with ESMTP id S233150AbiCBOnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 09:44:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF1D60CE3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:43:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30ECCB81FFC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:43:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C6BC340F1;
-        Wed,  2 Mar 2022 14:41:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646232231;
-        bh=nhXXBu0cF26IikhGW2po8nwE/w5P96Wega5gfKm7YOA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Py8eyPMi0Wm4CGiB2MKL+k90uui5vlOSEdCFxzxbywpMz+us1a2rZBE6YMXBO8ZwR
-         TPitOwvYSpRrGKgkXSC5xw2iEHiZOo5trPq9XGIqIL2z8vu8UIAVf0GEKyc3TXQ2RK
-         8JbyEt99+CMo3tcytUcWRNgvCw/+ri7bkLxZVE2icKzwKbY5QiIOvALtnbSZT6TnKV
-         HJx0TiVDHCJep9ltAM6GaE0zsMe1vE6YSsdGHVX2xwwT8qMeXeDmCc497y9mRMTpDS
-         kK2KDPgher4woqro+R9ujI6wM8r3Ze9krSHsUqBLDoaKt2sCeQXhQZjWU/BP3uLBp1
-         uJ/r3XqCiFaTA==
-Date:   Wed, 2 Mar 2022 22:41:14 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>
-Subject: [GIT PULL] erofs fix for 5.17-rc7
-Message-ID: <Yh+CCr04nTTappWl@hsiangkao-PC>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>
+        Wed, 2 Mar 2022 09:43:49 -0500
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145CB237E4;
+        Wed,  2 Mar 2022 06:43:05 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id u3so3790772ybh.5;
+        Wed, 02 Mar 2022 06:43:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zT1WYVi7FiTrFh9BxoZLrpJe/d9oI6uiEDFzQMsQ1v4=;
+        b=K8TxerCD7Lq10y0WP7lIRIQnSEOZfabhQH6TVVspYmwIgoIcIHv+r+cO6JrbysFoTo
+         9HEYODxnXV45NPMddVGwanF5f4EoTiync47nY3rkfIyePn8U2nfzuYobhn5fd1nkPlmS
+         FPCqBFE8zBDF5Ji5dHQWgQsxq1zqGg4eLFuGcmPD9GuKkjPIPiHdLoV0MY3aDCUtEYby
+         3e+MHInfgw9I98sRPgVCzimSXNZCNvEzKE0rZ0zOgVmW5NLhJpymdDLb7taSq86uSpQ0
+         XTHIYZ/3tlxv0uWDxlmnMi+F3tveeq/MQCWOcR5mFVn7NdFMD/FJu4E9mcNNuc8Rx7vx
+         R6mg==
+X-Gm-Message-State: AOAM531BFasKCIkhUKeHFTRzp98YW5pYHfO7LsY3m4QADEpnkyUqomSW
+        ThOi/Wc3Tjr1mQXjM4t7KPlPloxul32yt0YDQt0=
+X-Google-Smtp-Source: ABdhPJwJ67QHLv2xSeCevuPfdTWfyApFUjE2xansxkQn4G6yH1b6O8qHELEGKlLhgZ1Sy1rMQBALdCOXn7EHDj3WHs4=
+X-Received: by 2002:a25:d2d0:0:b0:628:7d69:b598 with SMTP id
+ j199-20020a25d2d0000000b006287d69b598mr7554145ybg.381.1646232184272; Wed, 02
+ Mar 2022 06:43:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202203021333.mMJpWPzx-lkp@intel.com> <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
+ <20220302103219.kvpfhc6qz42t3pvv@pengutronix.de> <CAMZ6Rq+HR=j2mD97etTgSapOix96P=pK70bTr9HeJu2Mjkn3+g@mail.gmail.com>
+ <20220302130423.ddd2ulldffpo5lb2@pengutronix.de>
+In-Reply-To: <20220302130423.ddd2ulldffpo5lb2@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 2 Mar 2022 23:42:53 +0900
+Message-ID: <CAMZ6Rq+J0CH_HvK1ax=VcWKqih+B_0Nfoc9jZMiq7OtuXL06hw@mail.gmail.com>
+Subject: Re: drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning:
+ Uninitialized variable: rx_event_msg [uninitvar]
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     kernel test robot <yujie.liu@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arunachalam Santhanam <Arunachalam.Santhanam@in.bosch.com>,
+        linux-can <linux-can@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed. 2 Mar 2022 at 22:04, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> I was thinking of this:
+>
+> | void *foo = bar->baz;
+> |
+> | if (!bar)
+> |         return;
+> |
+> | printf("%p", foo);
+>
+> There were/are compilers that optimize the bar NULL pointer check away,
+> because bar has already been de-referenced.
 
-Could you consider this pull request for 5.17-rc7?
+Sorry, I do not get your example. If bar is NULL,
+| void *foo = bar->baz;
+would segfault and thus the check is not reached.
 
-It's a one-line patch to fix the new ztailpacking feature on > 4GiB
-filesystems because z_idataoff can get trimmed improperly.
+If bar is not NULL, the check succeeds.
 
-Even if ztailpacking is still a brand new EXPERIMENTAL feature, it'd
-be better to fix the issue as soon as possible to avoid backporting
-unnecessary..
+In both cases, the return statement of the if branch is never
+executed making this some dead code. So I do not see why this is
+an issue if the compiler removes it.
 
-The original patch has been in linux-next for a week and no merge
-conflicts. Except that I added a new RVB tag from Chao today.
 
-Thanks,
-Gao Xiang
-
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
-
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.17-rc7-fixes
-
-for you to fetch changes up to 22ba5e99b96f1c0dbdfa4f4e1d9751b4c8348541:
-
-  erofs: fix ztailpacking on > 4GiB filesystems (2022-03-02 21:58:45 +0800)
-
-----------------------------------------------------------------
-Change since last update:
-
- - Fix ztailpacking z_idataoff getting trimmed on > 4GiB filesystems.
-
-----------------------------------------------------------------
-Gao Xiang (1):
-      erofs: fix ztailpacking on > 4GiB filesystems
-
- fs/erofs/internal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yours sincerely,
+Vincent Mailhol

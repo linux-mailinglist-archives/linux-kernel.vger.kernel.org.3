@@ -2,545 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B155F4C9C69
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC7B4C9C68
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 05:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239414AbiCBEYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 23:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S239421AbiCBEXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 23:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbiCBEYQ (ORCPT
+        with ESMTP id S233030AbiCBEXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 23:24:16 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A8729807
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 20:23:32 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id a5so786979pfv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Mar 2022 20:23:32 -0800 (PST)
+        Tue, 1 Mar 2022 23:23:14 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E945FAE;
+        Tue,  1 Mar 2022 20:22:30 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222acwJ001848;
+        Wed, 2 Mar 2022 04:22:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=lRfqt23968NaeLy54gpWa7Qcgr6/LoKev19x13OfQWY=;
+ b=XXoGxHbzWuZW246W2ctJgiKztUL9Fa8L0SBnseSLfCrq6oye5RYHMDKp1n9WdXDV9e08
+ iJpO/lpbWyom42Ay9VayTgfoiLW/WVVDjQhn5qAggdrZk31vUWa+IU89Os5GrEgzOWTy
+ a8FkpjzVAKKTwepJoCKMUszMz7p8TQcgCSdDpggwv+yquwQN2efxRwabmcrMIE8QTCXQ
+ u0YgiM4kbW5JXIQ8fcaPcwK5rWtvFMppwBr22AK1B43ynXxfGABUCrCOw7MnxgozhvEM
+ MypXM74/2vQ7+/dc2AnaG2fIL0k8wjlMdkSLTEwTc1hKa/L5GT6nYpVOqhAOgiKXeDlU Cg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh1k44r5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 04:22:28 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2224G1DH080552;
+        Wed, 2 Mar 2022 04:22:27 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by userp3030.oracle.com with ESMTP id 3ef9ayun48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 04:22:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tlqj8kg2WYESFpV96uE19xjVgVcScAMJy+JwMhnvOo38zlWXLMGAYgabYgdqoel9TtzihFbYdi8K+6sCWepbIDCwCrUXkmX/oGo5MjqS1IdTyvd8ZcPnoxRzP64/S6u+sNhYojWFyJK9xPlaq3JbpTeyKZY3LHakh3aowIfQ+p84e+C/oMRO6FKsj0Dp+F2eDpcOS8yIaTa3WTn3H5LJO6v3S9JsDsGEX9uMikVCoM/9WjvvWjjwaeun7F8tLQTZthdMqR3ixI4ZNTjWoYrgJ0uS1t3aZG3cLo90+4QDWD7eACxSufwTE0g/AhX9Ua+8uThjiTbdeVirDfyPp73yyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lRfqt23968NaeLy54gpWa7Qcgr6/LoKev19x13OfQWY=;
+ b=eYTG1v+FhlZvRChgCkOfEzg4HkPZbWuVz2FxYbA27P2lOqjKOlhHgqbBg2ZrzC9xtF1e7atRjjrPliasmoGLoVLWW5ygJBSqq9heQzjLs6tAfeNLHeOIMiWWFbdbv74eyz0BqnYF/vUzorBREwEAn+cnWzyf0Ljv9Z6WWRygUp8C+NMCCWtpXrmDyjpiYCQdFIs8OYF6H9NtwCy8nBaTa7PCj1f8BZ9+AWpuRCMDZYUQhBvXkV0ihF82CCsZw36zKZf7ztH0yVANlIM5YgiJNY+dUIxeseJ/pgwglcJ9ZFmynMesJyZh/zIvNBX+P8mUaqK3PYynPbLkWPzx++PDQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iNy7mBzqUByEcsJ4CF9ICjC++ci7G3gLkp1DxoEMzC0=;
-        b=Ih6fUwjCG/9r2VJ2iMfM0j59eUgNSer2O4xnE1bg36epVIRhA4bTtNOqSKM7lc/w3M
-         VMDgPDH+FnGn+HwrIBNj9f67F3tFOOdYM4MXuwrTy8NGOrZBIc7vbPl026sX8oQ9A77w
-         ye7reA2BpyW0pSO3TdevZJVxrzZDDUAZiuaxubq9HhPNlyQ7L3MSyafcqwt34BchYAiZ
-         C/ttfXwGGlFYXd2UpyWa/uzsdZWbbNRvpJaIOP4lLaq9MiB8/rPXhmqFYj8kOMDokBSj
-         H8QEljowyNHttyc2BfxLceZrW6jVqhzzPgD/BGKI1speSNgpCWcU4br64IsXaTMyKamu
-         szXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iNy7mBzqUByEcsJ4CF9ICjC++ci7G3gLkp1DxoEMzC0=;
-        b=TSQxy6WnNHaeHlVYhnknmcQeGq3dl2h5EZUyESOho8PsoTekD7mlUBE45GKmShI2cz
-         13mY/N2e1SzZC6naitXGCjLtJmSkqwI6MjiuG9VvGvHMfB2rSavIFSb4Yz2pmcqnTL0+
-         CFeBXq7CZ8XXQFsJF602/GAWPc5Ne/+tKqMdLTkGJQbr07JqMBp0EUBDsjL3axL11zUm
-         bsitqARQk/mjwBUgaLO5mSURRpz61chUxrCocjzYx5jBTKc8NnoJWXiQoGC93av1Z59S
-         AhJaz7j3kPcfRiPudVyGRn8+VohiofzJrK0KLhnuQFse/haKKLnxC+nD1vXfxuhKB1On
-         403g==
-X-Gm-Message-State: AOAM53300A/McWrAX9tdfGBG9oRhTUM9Sg3jLrqs82KrfUmP4sWkC+9J
-        ZqqaXT2jjWmWRVOtaNzPmW7g1WA5IdA=
-X-Google-Smtp-Source: ABdhPJzJ8LHY5J9lykEw+r2TkfZI1aqV7fnrEV3lGN6Rs9XQZQriCK4VW/lRdAhfQGGEs4QaMxnL3Q==
-X-Received: by 2002:a63:10a:0:b0:372:e458:e707 with SMTP id 10-20020a63010a000000b00372e458e707mr24349909pgb.39.1646195011692;
-        Tue, 01 Mar 2022 20:23:31 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id o5-20020a056a00214500b004bd7036b50asm18290653pfk.172.2022.03.01.20.23.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 01 Mar 2022 20:23:31 -0800 (PST)
-Date:   Wed, 2 Mar 2022 12:22:03 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-Subject: Re: [PATCH 1/2] erofs: get rid of `struct z_erofs_collector'
-Message-ID: <20220302122203.000046f5.zbestahu@gmail.com>
-In-Reply-To: <20220301194951.106227-1-hsiangkao@linux.alibaba.com>
-References: <20220301194951.106227-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lRfqt23968NaeLy54gpWa7Qcgr6/LoKev19x13OfQWY=;
+ b=a5B+oE+hkB9KFNMAydRegCroQywqKXU8WkhjgyjWvhdExi4M3KdLz5M6RcZxRb167luZS38ByncYaPzX5DIxBBYzhe73JrJcbrbFi/JA/CsApl6NMmGETNs+g3wF7uE7cu8xrH/j7NrVGvbWl0Il98pOk1XRb6hfTktBX6mulq8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CH2PR10MB4295.namprd10.prod.outlook.com (2603:10b6:610:a6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 04:22:24 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::180:b394:7d46:e1c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::180:b394:7d46:e1c0%8]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
+ 04:22:24 +0000
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: wd719x: Return proper error code when
+ dma_set_mask() fails
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq14k4h0yrv.fsf@ca-mkp.ca.oracle.com>
+References: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
+Date:   Tue, 01 Mar 2022 23:22:21 -0500
+In-Reply-To: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com> (Zheyu
+        Ma's message of "Mon, 28 Feb 2022 14:54:15 +0000")
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR20CA0003.namprd20.prod.outlook.com
+ (2603:10b6:a03:1f4::16) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c068ea91-8221-48e0-df0a-08d9fc04405a
+X-MS-TrafficTypeDiagnostic: CH2PR10MB4295:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR10MB42952F38EBA49752007319C38E039@CH2PR10MB4295.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HJ9aAMzVIfR6NFshib/lxpNH0nz6zGVRRHmsD/USmW3SG+zI+QX7jJ4AS4xCMflJwJnYbnsIqrSY0zbBi+b5cCp5X7Y6u5Toghm3Om+wSpKqHyvRrHv60TNAvuw8k8JxILnfbIEPxGPDWXMRKwIKcQ4I3TjccPDR3KjNN6680M1cSwv+qOOpXPY9Gqpzr4meyIUwRzf/lLbEmbfru7+kyIuIrH6qcmF7ESyTQnJI3doWEzjkI/K+mlTsC8BaOJbibhjKZmXcZDu8Vpm4wXQkgcyYqRip9iUfw38IJMGVSGPFpRaATg+W7mcuIF++cSthYhqbhaj0Td1qjuav9vlVl/PoHx5YZjhcw6Y2AUsPB+cB63KxyVJ8D482jZDPg48EB0YmV9si/jfYYbl3Ltlrvf7RS1a0X+N1Np8Yf0vI5jBBPNsj2oMI49g3UvroVyANBAt37jDmIwSy2ACTOmYVEKVVzm3UdRgbYV+seXefTz1M4bPS/oTNpF2q20xTnumKxQBzni3+DE3ojQfXX8voQB/lHZVFHg1k4rHCJCOd3MKVlo0KTNNLGT+axip3tGFFqLVl2LmG2ZPd0eiHXX2uy0RmzOYvWyFB42Hq6Yw6FUw4gqgPUeT66e5nmmnRxM4EpQzgEjAV27UlqWLbAXj15KWPBanWXxf2QekC8o6i1qL/wxPEUg8sNY8WHHqD1FXcjaedUL+Ljivw81wPG8/HdQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(558084003)(6486002)(8936002)(38350700002)(86362001)(38100700002)(5660300002)(4326008)(316002)(6916009)(8676002)(83380400001)(26005)(186003)(2906002)(66556008)(66946007)(66476007)(6666004)(6512007)(52116002)(36916002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vQPlDNnqeMWKJjcZykJW5sEaJpy6f99N7JQhJrXu1qToytndITG1MTQ24d9x?=
+ =?us-ascii?Q?wwmT7O0ZsqoyR3FfuGDXcAcS6yJU/MteEWDB/GTBSKJnugNyFMKFS7EQnZbC?=
+ =?us-ascii?Q?QzhVltH9gHnCWVtwV2XalqyA2/F9qSuFUt6FCRY0ihdpeWWkPTVnWmNFXpOI?=
+ =?us-ascii?Q?rrM0zVuPtucQGRrVpibc/0AYz4EfZjXubEJedFJikJoOT6QktByf9VirAyp0?=
+ =?us-ascii?Q?2TbFw6IIB1rBlVd+XLD5hkEM4DDEo7aEEA+GHF6Ftq4ZtIe901WUnAu+vK5e?=
+ =?us-ascii?Q?wraaDSSSnVRXIinpEbIfSFLvfum5kTdSI2fF5C3O9nnChcvp/fN/6bBncRol?=
+ =?us-ascii?Q?Ok9teGzbXGKYaafTiUWEcIt+S9UTEkDjBdDRqNv22I5efO84XsweL+ldHy2p?=
+ =?us-ascii?Q?6RoE1v5uqO6p/gBYAb6hEot/+YmETl44lQ9ZMxcTk7zntYd95H3rRRIJJ2M1?=
+ =?us-ascii?Q?fHf7StW7hh1vVU/GcLgqD1HAsoJtJMUKB884oUyJ+pYw6TfoljFP+In4NPcS?=
+ =?us-ascii?Q?qtxCriNrPpLhDgluSSQmUnREyUF3EK6p+j7OUsQRgOjfrgihrv7oyPmf+2Qa?=
+ =?us-ascii?Q?GJ1O2nDKQVUkuLvaKgjFmWUa5dXmb6y+mBJxqscnKv2SI6zUP/b/FTRNflOQ?=
+ =?us-ascii?Q?RNPed5q2zwI3ptznc2C9kjaw1JZwip+dloV1ue8hHwhMXmOO5riWiCnPbrKQ?=
+ =?us-ascii?Q?O8JdKimkq9GIKnFbwxwhNVoKqbli4+pDJjOG5KfztWlhcY48EUssfE317TZr?=
+ =?us-ascii?Q?TpDUFL320AY23IgMqrgXSEu03IAwzmgghRROT2ieP6hiNKMdMURO3ceJD4eu?=
+ =?us-ascii?Q?/o+1aUBnHG36RObDWwmdplkxNUw6a1EzViqt5EIhT+N5vnmkoJ71vVWWsZxg?=
+ =?us-ascii?Q?zvj/cki3XX5/DPTkND/AoHE7h5+nEBDNLZ1nXo1yJLdFDGOI9npnq/xv6Fne?=
+ =?us-ascii?Q?fF2qjtw3XMGHUqQYfQvuGDCJq69uDjUBixPBRiPjmBnJWEJ8oj40KTRy4etX?=
+ =?us-ascii?Q?uP7Rt4J3yXQyNjI84lQQImcArMG3++kCYbDgeVyvtJ1JI1t0/sHw0OfShL8+?=
+ =?us-ascii?Q?px4PZ5/+RZ/JogLBbsAmARGdrF0XXeE034EBC75XIviH8nFui0EnLkGQz/wP?=
+ =?us-ascii?Q?rQI2N8sF4mCF9INLp3KjdL6D4gkj5KLH+OPIUGHklIcFJ64ku2fx6HBW+zid?=
+ =?us-ascii?Q?BnWp1g7uDneqvOtmS+LNUQFftwUmUsF/q2ivZ1lcBAe4HOZ7u9ekaN8vTV0F?=
+ =?us-ascii?Q?nVeVV86Vgq2pdAMto10UGuUWQXvAFBojy+4gkzqM2tqdbXSH5l6xqfbjQWwG?=
+ =?us-ascii?Q?mC3znPczmbI6umHOYfMfYKvc98jzLP8Te6NT3FOXWkN095Gp6WqIInDkrnG7?=
+ =?us-ascii?Q?r7yhVxwkUgOl8hq2XlfPM9AmotBk94rkQA0HKxBHMz7zEVYFiGSQLDgNKVXs?=
+ =?us-ascii?Q?nofwnBRQG90fUCghBl7eTyGTS6Sr66sSes+wYeY2NF1i/fImdJOXnvjIUVBW?=
+ =?us-ascii?Q?4xLqsS9ibf3iyvYCEp2/lN8hBIC5Pz1sLwAS5+eIdotQ/3858miNY9iN8sbt?=
+ =?us-ascii?Q?K+mFRXNCI+oZil0Dp/q3vxZBhWh7jJJJyfXJtVaQEGH42z5gOADZI93ycJtP?=
+ =?us-ascii?Q?UqQ2kHfmPrQDk7+Wkf1qQmifHDGeFgsDMejYBRcdOmHwMre3xfnsKl/9ltQt?=
+ =?us-ascii?Q?6eCdUg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c068ea91-8221-48e0-df0a-08d9fc04405a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 04:22:24.0651
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y2WFlB8bIwyQb4lu/mQbZpKS0AZlP4ZTcD7sBt1kjkn7CZNkQXMBTGuG4HgydmwBrbOTy0l1uUrfLnvCvlvk5lYg5eykBXj81DA+DE8l0k4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4295
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10273 signatures=685966
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=809
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203020018
+X-Proofpoint-ORIG-GUID: OzMsC3ZUe4HFzeWM_u1Xol_Y0ksnnSsX
+X-Proofpoint-GUID: OzMsC3ZUe4HFzeWM_u1Xol_Y0ksnnSsX
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang,
 
-On Wed,  2 Mar 2022 03:49:50 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+Zheyu,
 
-> Avoid `struct z_erofs_collector' since there is another context
-> structure called "struct z_erofs_decompress_frontend".
-> 
-> No logic changes.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/zdata.c | 163 ++++++++++++++++++++++-------------------------
->  1 file changed, 77 insertions(+), 86 deletions(-)
-> 
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index 423bc1a61da5..2673fc105861 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -192,7 +192,10 @@ enum z_erofs_collectmode {
->  	COLLECT_PRIMARY_FOLLOWED,
->  };
->  
-> -struct z_erofs_collector {
-> +struct z_erofs_decompress_frontend {
-> +	struct inode *const inode;
-> +	struct erofs_map_blocks map;
-> +
->  	struct z_erofs_pagevec_ctor vector;
->  
->  	struct z_erofs_pcluster *pcl, *tailpcl;
-> @@ -202,13 +205,6 @@ struct z_erofs_collector {
->  	z_erofs_next_pcluster_t owned_head;
->  
->  	enum z_erofs_collectmode mode;
-> -};
-> -
-> -struct z_erofs_decompress_frontend {
-> -	struct inode *const inode;
-> -
-> -	struct z_erofs_collector clt;
-> -	struct erofs_map_blocks map;
->  
->  	bool readahead;
->  	/* used for applying cache strategy on the fly */
-> @@ -216,30 +212,26 @@ struct z_erofs_decompress_frontend {
->  	erofs_off_t headoffset;
->  };
->  
-> -#define COLLECTOR_INIT() { \
-> -	.owned_head = Z_EROFS_PCLUSTER_TAIL, \
-> -	.mode = COLLECT_PRIMARY_FOLLOWED }
-> -
->  #define DECOMPRESS_FRONTEND_INIT(__i) { \
-> -	.inode = __i, .clt = COLLECTOR_INIT(), \
-> -	.backmost = true, }
-> +	.inode = __i, .owned_head = Z_EROFS_PCLUSTER_TAIL, \
-> +	.mode = COLLECT_PRIMARY_FOLLOWED }
->  
->  static struct page *z_pagemap_global[Z_EROFS_VMAP_GLOBAL_PAGES];
->  static DEFINE_MUTEX(z_pagemap_global_lock);
->  
-> -static void preload_compressed_pages(struct z_erofs_collector *clt,
-> +static void preload_compressed_pages(struct z_erofs_decompress_frontend *fe,
->  				     struct address_space *mc,
->  				     enum z_erofs_cache_alloctype type,
->  				     struct page **pagepool)
->  {
-> -	struct z_erofs_pcluster *pcl = clt->pcl;
-> +	struct z_erofs_pcluster *pcl = fe->pcl;
->  	bool standalone = true;
->  	gfp_t gfp = (mapping_gfp_mask(mc) & ~__GFP_DIRECT_RECLAIM) |
->  			__GFP_NOMEMALLOC | __GFP_NORETRY | __GFP_NOWARN;
->  	struct page **pages;
->  	pgoff_t index;
->  
-> -	if (clt->mode < COLLECT_PRIMARY_FOLLOWED)
-> +	if (fe->mode < COLLECT_PRIMARY_FOLLOWED)
->  		return;
->  
->  	pages = pcl->compressed_pages;
-> @@ -288,7 +280,7 @@ static void preload_compressed_pages(struct z_erofs_collector *clt,
->  	 * managed cache since it can be moved to the bypass queue instead.
->  	 */
->  	if (standalone)
-> -		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
-> +		fe->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
->  }
->  
->  /* called by erofs_shrinker to get rid of all compressed_pages */
-> @@ -350,47 +342,47 @@ int erofs_try_to_free_cached_page(struct page *page)
->  }
->  
->  /* page_type must be Z_EROFS_PAGE_TYPE_EXCLUSIVE */
-> -static bool z_erofs_try_inplace_io(struct z_erofs_collector *clt,
-> +static bool z_erofs_try_inplace_io(struct z_erofs_decompress_frontend *fe,
->  				   struct page *page)
->  {
-> -	struct z_erofs_pcluster *const pcl = clt->pcl;
-> +	struct z_erofs_pcluster *const pcl = fe->pcl;
->  
-> -	while (clt->icpage_ptr > pcl->compressed_pages)
-> -		if (!cmpxchg(--clt->icpage_ptr, NULL, page))
-> +	while (fe->icpage_ptr > pcl->compressed_pages)
-> +		if (!cmpxchg(--fe->icpage_ptr, NULL, page))
->  			return true;
->  	return false;
->  }
->  
->  /* callers must be with collection lock held */
-> -static int z_erofs_attach_page(struct z_erofs_collector *clt,
-> +static int z_erofs_attach_page(struct z_erofs_decompress_frontend *fe,
->  			       struct page *page, enum z_erofs_page_type type,
->  			       bool pvec_safereuse)
->  {
->  	int ret;
->  
->  	/* give priority for inplaceio */
-> -	if (clt->mode >= COLLECT_PRIMARY &&
-> +	if (fe->mode >= COLLECT_PRIMARY &&
->  	    type == Z_EROFS_PAGE_TYPE_EXCLUSIVE &&
-> -	    z_erofs_try_inplace_io(clt, page))
-> +	    z_erofs_try_inplace_io(fe, page))
->  		return 0;
->  
-> -	ret = z_erofs_pagevec_enqueue(&clt->vector, page, type,
-> +	ret = z_erofs_pagevec_enqueue(&fe->vector, page, type,
->  				      pvec_safereuse);
-> -	clt->cl->vcnt += (unsigned int)ret;
-> +	fe->cl->vcnt += (unsigned int)ret;
->  	return ret ? 0 : -EAGAIN;
->  }
->  
-> -static void z_erofs_try_to_claim_pcluster(struct z_erofs_collector *clt)
-> +static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
->  {
-> -	struct z_erofs_pcluster *pcl = clt->pcl;
-> -	z_erofs_next_pcluster_t *owned_head = &clt->owned_head;
-> +	struct z_erofs_pcluster *pcl = f->pcl;
-> +	z_erofs_next_pcluster_t *owned_head = &f->owned_head;
->  
->  	/* type 1, nil pcluster (this pcluster doesn't belong to any chain.) */
->  	if (cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_NIL,
->  		    *owned_head) == Z_EROFS_PCLUSTER_NIL) {
->  		*owned_head = &pcl->next;
->  		/* so we can attach this pcluster to our submission chain. */
-> -		clt->mode = COLLECT_PRIMARY_FOLLOWED;
-> +		f->mode = COLLECT_PRIMARY_FOLLOWED;
->  		return;
->  	}
->  
-> @@ -401,24 +393,24 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_collector *clt)
->  	if (cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
->  		    *owned_head) == Z_EROFS_PCLUSTER_TAIL) {
->  		*owned_head = Z_EROFS_PCLUSTER_TAIL;
-> -		clt->mode = COLLECT_PRIMARY_HOOKED;
-> -		clt->tailpcl = NULL;
-> +		f->mode = COLLECT_PRIMARY_HOOKED;
-> +		f->tailpcl = NULL;
->  		return;
->  	}
->  	/* type 3, it belongs to a chain, but it isn't the end of the chain */
-> -	clt->mode = COLLECT_PRIMARY;
-> +	f->mode = COLLECT_PRIMARY;
->  }
->  
-> -static int z_erofs_lookup_collection(struct z_erofs_collector *clt,
-> +static int z_erofs_lookup_collection(struct z_erofs_decompress_frontend *fe,
->  				     struct inode *inode,
->  				     struct erofs_map_blocks *map)
->  {
-> -	struct z_erofs_pcluster *pcl = clt->pcl;
-> +	struct z_erofs_pcluster *pcl = fe->pcl;
->  	struct z_erofs_collection *cl;
->  	unsigned int length;
->  
->  	/* to avoid unexpected loop formed by corrupted images */
-> -	if (clt->owned_head == &pcl->next || pcl == clt->tailpcl) {
-> +	if (fe->owned_head == &pcl->next || pcl == fe->tailpcl) {
->  		DBG_BUGON(1);
->  		return -EFSCORRUPTED;
->  	}
-> @@ -449,15 +441,15 @@ static int z_erofs_lookup_collection(struct z_erofs_collector *clt,
->  	}
->  	mutex_lock(&cl->lock);
->  	/* used to check tail merging loop due to corrupted images */
-> -	if (clt->owned_head == Z_EROFS_PCLUSTER_TAIL)
-> -		clt->tailpcl = pcl;
-> +	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
-> +		fe->tailpcl = pcl;
->  
-> -	z_erofs_try_to_claim_pcluster(clt);
-> -	clt->cl = cl;
-> +	z_erofs_try_to_claim_pcluster(fe);
-> +	fe->cl = cl;
->  	return 0;
->  }
->  
-> -static int z_erofs_register_collection(struct z_erofs_collector *clt,
-> +static int z_erofs_register_collection(struct z_erofs_decompress_frontend *fe,
->  				       struct inode *inode,
->  				       struct erofs_map_blocks *map)
->  {
-> @@ -485,8 +477,8 @@ static int z_erofs_register_collection(struct z_erofs_collector *clt,
->  			Z_EROFS_PCLUSTER_FULL_LENGTH : 0);
->  
->  	/* new pclusters should be claimed as type 1, primary and followed */
-> -	pcl->next = clt->owned_head;
-> -	clt->mode = COLLECT_PRIMARY_FOLLOWED;
-> +	pcl->next = fe->owned_head;
-> +	fe->mode = COLLECT_PRIMARY_FOLLOWED;
->  
->  	cl = z_erofs_primarycollection(pcl);
->  	cl->pageofs = map->m_la & ~PAGE_MASK;
-> @@ -512,18 +504,18 @@ static int z_erofs_register_collection(struct z_erofs_collector *clt,
->  		}
->  
->  		if (grp != &pcl->obj) {
-> -			clt->pcl = container_of(grp,
-> +			fe->pcl = container_of(grp,
->  					struct z_erofs_pcluster, obj);
->  			err = -EEXIST;
->  			goto err_out;
->  		}
->  	}
->  	/* used to check tail merging loop due to corrupted images */
-> -	if (clt->owned_head == Z_EROFS_PCLUSTER_TAIL)
-> -		clt->tailpcl = pcl;
-> -	clt->owned_head = &pcl->next;
-> -	clt->pcl = pcl;
-> -	clt->cl = cl;
-> +	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
-> +		fe->tailpcl = pcl;
-> +	fe->owned_head = &pcl->next;
-> +	fe->pcl = pcl;
-> +	fe->cl = cl;
->  	return 0;
->  
->  err_out:
-> @@ -532,18 +524,18 @@ static int z_erofs_register_collection(struct z_erofs_collector *clt,
->  	return err;
->  }
->  
-> -static int z_erofs_collector_begin(struct z_erofs_collector *clt,
-> +static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe,
->  				   struct inode *inode,
->  				   struct erofs_map_blocks *map)
->  {
->  	struct erofs_workgroup *grp;
->  	int ret;
->  
-> -	DBG_BUGON(clt->cl);
-> +	DBG_BUGON(fe->cl);
->  
->  	/* must be Z_EROFS_PCLUSTER_TAIL or pointed to previous collection */
-> -	DBG_BUGON(clt->owned_head == Z_EROFS_PCLUSTER_NIL);
-> -	DBG_BUGON(clt->owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
-> +	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_NIL);
-> +	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
->  
->  	if (map->m_flags & EROFS_MAP_META) {
->  		if ((map->m_pa & ~PAGE_MASK) + map->m_plen > PAGE_SIZE) {
-> @@ -555,28 +547,28 @@ static int z_erofs_collector_begin(struct z_erofs_collector *clt,
->  
->  	grp = erofs_find_workgroup(inode->i_sb, map->m_pa >> PAGE_SHIFT);
->  	if (grp) {
-> -		clt->pcl = container_of(grp, struct z_erofs_pcluster, obj);
-> +		fe->pcl = container_of(grp, struct z_erofs_pcluster, obj);
->  	} else {
->  tailpacking:
-> -		ret = z_erofs_register_collection(clt, inode, map);
-> +		ret = z_erofs_register_collection(fe, inode, map);
->  		if (!ret)
->  			goto out;
->  		if (ret != -EEXIST)
->  			return ret;
->  	}
->  
-> -	ret = z_erofs_lookup_collection(clt, inode, map);
-> +	ret = z_erofs_lookup_collection(fe, inode, map);
->  	if (ret) {
-> -		erofs_workgroup_put(&clt->pcl->obj);
-> +		erofs_workgroup_put(&fe->pcl->obj);
->  		return ret;
->  	}
->  
->  out:
-> -	z_erofs_pagevec_ctor_init(&clt->vector, Z_EROFS_NR_INLINE_PAGEVECS,
-> -				  clt->cl->pagevec, clt->cl->vcnt);
-> +	z_erofs_pagevec_ctor_init(&fe->vector, Z_EROFS_NR_INLINE_PAGEVECS,
-> +				  fe->cl->pagevec, fe->cl->vcnt);
->  	/* since file-backed online pages are traversed in reverse order */
-> -	clt->icpage_ptr = clt->pcl->compressed_pages +
-> -			z_erofs_pclusterpages(clt->pcl);
-> +	fe->icpage_ptr = fe->pcl->compressed_pages +
-> +			z_erofs_pclusterpages(fe->pcl);
->  	return 0;
->  }
->  
-> @@ -610,24 +602,24 @@ static void z_erofs_collection_put(struct z_erofs_collection *cl)
->  	erofs_workgroup_put(&pcl->obj);
->  }
->  
-> -static bool z_erofs_collector_end(struct z_erofs_collector *clt)
-> +static bool z_erofs_collector_end(struct z_erofs_decompress_frontend *fe)
->  {
-> -	struct z_erofs_collection *cl = clt->cl;
-> +	struct z_erofs_collection *cl = fe->cl;
->  
->  	if (!cl)
->  		return false;
->  
-> -	z_erofs_pagevec_ctor_exit(&clt->vector, false);
-> +	z_erofs_pagevec_ctor_exit(&fe->vector, false);
->  	mutex_unlock(&cl->lock);
->  
->  	/*
->  	 * if all pending pages are added, don't hold its reference
->  	 * any longer if the pcluster isn't hosted by ourselves.
->  	 */
-> -	if (clt->mode < COLLECT_PRIMARY_FOLLOWED_NOINPLACE)
-> +	if (fe->mode < COLLECT_PRIMARY_FOLLOWED_NOINPLACE)
->  		z_erofs_collection_put(cl);
->  
-> -	clt->cl = NULL;
-> +	fe->cl = NULL;
->  	return true;
->  }
->  
-> @@ -651,7 +643,6 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	struct inode *const inode = fe->inode;
->  	struct erofs_sb_info *const sbi = EROFS_I_SB(inode);
->  	struct erofs_map_blocks *const map = &fe->map;
-> -	struct z_erofs_collector *const clt = &fe->clt;
->  	const loff_t offset = page_offset(page);
->  	bool tight = true;
->  
-> @@ -672,7 +663,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	if (offset + cur >= map->m_la &&
->  	    offset + cur < map->m_la + map->m_llen) {
->  		/* didn't get a valid collection previously (very rare) */
-> -		if (!clt->cl)
-> +		if (!fe->cl)
->  			goto restart_now;
->  		goto hitted;
->  	}
-> @@ -680,7 +671,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	/* go ahead the next map_blocks */
->  	erofs_dbg("%s: [out-of-range] pos %llu", __func__, offset + cur);
->  
-> -	if (z_erofs_collector_end(clt))
-> +	if (z_erofs_collector_end(fe))
->  		fe->backmost = false;
->  
->  	map->m_la = offset + cur;
-> @@ -693,11 +684,11 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	if (!(map->m_flags & EROFS_MAP_MAPPED))
->  		goto hitted;
->  
-> -	err = z_erofs_collector_begin(clt, inode, map);
-> +	err = z_erofs_collector_begin(fe, inode, map);
+> During the process of driver probing, the probe function should return
+> < 0 for failure, otherwise, the kernel will treat value >= 0 as
+> success.
 
-now, we can get 'inode' and 'map' from 'fe'. so, it should be z_erofs_collector_begin(fe)?
-if it's, need to change z_erofs_{register | lookup}_collection() correspondingly. 
+Applied to 5.18/scsi-staging, thanks!
 
->  	if (err)
->  		goto err_out;
->  
-> -	if (z_erofs_is_inline_pcluster(clt->pcl)) {
-> +	if (z_erofs_is_inline_pcluster(fe->pcl)) {
->  		void *mp;
->  
->  		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
-> @@ -709,8 +700,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  			goto err_out;
->  		}
->  		get_page(fe->map.buf.page);
-> -		WRITE_ONCE(clt->pcl->compressed_pages[0], fe->map.buf.page);
-> -		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
-> +		WRITE_ONCE(fe->pcl->compressed_pages[0], fe->map.buf.page);
-> +		fe->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
->  	} else {
->  		/* preload all compressed pages (can change mode if needed) */
->  		if (should_alloc_managed_pages(fe, sbi->opt.cache_strategy,
-> @@ -719,7 +710,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  		else
->  			cache_strategy = DONTALLOC;
->  
-> -		preload_compressed_pages(clt, MNGD_MAPPING(sbi),
-> +		preload_compressed_pages(fe, MNGD_MAPPING(sbi),
->  					 cache_strategy, pagepool);
->  	}
->  
-> @@ -730,8 +721,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	 * those chains are handled asynchronously thus the page cannot be used
->  	 * for inplace I/O or pagevec (should be processed in strict order.)
->  	 */
-> -	tight &= (clt->mode >= COLLECT_PRIMARY_HOOKED &&
-> -		  clt->mode != COLLECT_PRIMARY_FOLLOWED_NOINPLACE);
-> +	tight &= (fe->mode >= COLLECT_PRIMARY_HOOKED &&
-> +		  fe->mode != COLLECT_PRIMARY_FOLLOWED_NOINPLACE);
->  
->  	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
->  	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
-> @@ -746,18 +737,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  				Z_EROFS_VLE_PAGE_TYPE_TAIL_SHARED));
->  
->  	if (cur)
-> -		tight &= (clt->mode >= COLLECT_PRIMARY_FOLLOWED);
-> +		tight &= (fe->mode >= COLLECT_PRIMARY_FOLLOWED);
->  
->  retry:
-> -	err = z_erofs_attach_page(clt, page, page_type,
-> -				  clt->mode >= COLLECT_PRIMARY_FOLLOWED);
-> +	err = z_erofs_attach_page(fe, page, page_type,
-> +				  fe->mode >= COLLECT_PRIMARY_FOLLOWED);
->  	/* should allocate an additional short-lived page for pagevec */
->  	if (err == -EAGAIN) {
->  		struct page *const newpage =
->  				alloc_page(GFP_NOFS | __GFP_NOFAIL);
->  
->  		set_page_private(newpage, Z_EROFS_SHORTLIVED_PAGE);
-> -		err = z_erofs_attach_page(clt, newpage,
-> +		err = z_erofs_attach_page(fe, newpage,
->  					  Z_EROFS_PAGE_TYPE_EXCLUSIVE, true);
->  		if (!err)
->  			goto retry;
-> @@ -773,7 +764,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
->  	/* bump up the number of spiltted parts of a page */
->  	++spiltted;
->  	/* also update nr_pages */
-> -	clt->cl->nr_pages = max_t(pgoff_t, clt->cl->nr_pages, index + 1);
-> +	fe->cl->nr_pages = max_t(pgoff_t, fe->cl->nr_pages, index + 1);
->  next_part:
->  	/* can be used for verification */
->  	map->m_llen = offset + cur - map->m_la;
-> @@ -1309,7 +1300,7 @@ static void z_erofs_submit_queue(struct super_block *sb,
->  	z_erofs_next_pcluster_t qtail[NR_JOBQUEUES];
->  	struct z_erofs_decompressqueue *q[NR_JOBQUEUES];
->  	void *bi_private;
-> -	z_erofs_next_pcluster_t owned_head = f->clt.owned_head;
-> +	z_erofs_next_pcluster_t owned_head = f->owned_head;
->  	/* bio is NULL initially, so no need to initialize last_{index,bdev} */
->  	pgoff_t last_index;
->  	struct block_device *last_bdev;
-> @@ -1417,7 +1408,7 @@ static void z_erofs_runqueue(struct super_block *sb,
->  {
->  	struct z_erofs_decompressqueue io[NR_JOBQUEUES];
->  
-> -	if (f->clt.owned_head == Z_EROFS_PCLUSTER_TAIL)
-> +	if (f->owned_head == Z_EROFS_PCLUSTER_TAIL)
->  		return;
->  	z_erofs_submit_queue(sb, f, pagepool, io, &force_fg);
->  
-> @@ -1517,7 +1508,7 @@ static int z_erofs_readpage(struct file *file, struct page *page)
->  	err = z_erofs_do_read_page(&f, page, &pagepool);
->  	z_erofs_pcluster_readmore(&f, NULL, 0, &pagepool, false);
->  
-> -	(void)z_erofs_collector_end(&f.clt);
-> +	(void)z_erofs_collector_end(&f);
->  
->  	/* if some compressed cluster ready, need submit them anyway */
->  	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
-> @@ -1567,7 +1558,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
->  		put_page(page);
->  	}
->  	z_erofs_pcluster_readmore(&f, rac, 0, &pagepool, false);
-> -	(void)z_erofs_collector_end(&f.clt);
-> +	(void)z_erofs_collector_end(&f);
->  
->  	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
->  			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
+-- 
+Martin K. Petersen	Oracle Linux Engineering

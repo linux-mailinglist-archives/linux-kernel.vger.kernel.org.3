@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948C64CAEC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945D34CAEC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239621AbiCBTeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S241367AbiCBTfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239026AbiCBTeo (ORCPT
+        with ESMTP id S240776AbiCBTfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:34:44 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481874FC76
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:33:58 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id w37so2486618pga.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:33:58 -0800 (PST)
+        Wed, 2 Mar 2022 14:35:00 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291A5C1C8B;
+        Wed,  2 Mar 2022 11:34:16 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id k1so2813448pfu.2;
+        Wed, 02 Mar 2022 11:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=2/7TR1czOlrni5ve6cjMiYf0huddF9ZUrXfqRqxvxSU=;
-        b=pNibpYwhsyhSu1HqTGYjGU8JzPqNoU7cHvFkSUbu2sCsHp/EphxSSJEocYDVhiRdM+
-         sKAwbSV5PWyHRpki7EvohvnWo+tEJuU3QZG+Yz0rjwShV+zWoIb8tajePwQ3VpDJPXrb
-         fD5MEZ46OSpAXyy7oxCWEzYKtEJ/4OViaC5xr7Zd5LD/OrekyQKFTJNVjdUPNfise/mh
-         iyHXCgYoE58om7RG7g9nQvvwRDDF9eDk6pHoesWyu9rUPY95PlSf/k3wKea2uCz6R8Nt
-         1d8fhx9zcbJkcBrcxpf0sOfLVAmBus/9UPtMl+KdSTn0bCiPuZEn5CiywtLeKb/15KrI
-         l2UA==
+        bh=UtUIqChNwIGiM6BzTSKzlQEWchWVUYsbZYtiHQAXLaI=;
+        b=Sj4Eeu+nBBfoMN1uavFkIabMJjbhxcWY9UzBPUg71hSA25R0GL0CeZN8G8q8DK/jbZ
+         82Wgr/wLyWX/Fuvgxu1z+dahLEw/4ZyAhdE9PX0gX91IaiTOa1Q/eEXInk3Ws63FLMxP
+         mOQpXgYlF0P2WMkp2vG7HhrLbz76tlGQ4TiVlepaZLLVbzjAEzyBY/Bne0LiSYRVv/OI
+         eh5CIFWUYth0qkfFgKZp/oYgFFGTJnbEmol6t9Jx5Yzj7wKxcYWsS8b6aAYMNyPkhM9o
+         Ym6u6z3n8GSnEBHhYJYzkLiZ9IrUz/6IQ3CBH45Z16VDXcNSGWcLQw8+M0IeogQQNsgH
+         QPfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=2/7TR1czOlrni5ve6cjMiYf0huddF9ZUrXfqRqxvxSU=;
-        b=5+x2TrR4o1V/xJWWIslmt2/Dnhrxg8TP4rNpO/dI92iP61f0I16x1ZDS3TzEolExns
-         XxCiix38HVSpTgZeMkoCBV1xOQXw+J+9r/UyywwfqCxImAb9gTIfgkMzGLIrhNDe4Cxa
-         x6zzUVYyW4nEQnLd/G3ohVaIgICihRj1qQNxusLyL0y1fAZgoqsRjw+z2TwQmKJdiBpO
-         2qKXsYm9YZXFvDuTQC3Ddo+mKPWxA5RSMGMlRfv9h1ztyylPt+DEtP0B+hI0F0l2MMNG
-         458Hz+chYe9qJm8nXx7ZH51OrVlv3isfQ2Onggxs4k+TDsDoOEV2izbGYC1oc4vyELti
-         OnZg==
-X-Gm-Message-State: AOAM5337tZfZJNRQHzoaCPyJsVRhNkKtnNBids3xJssVKdxiUPPRZXBs
-        du9tyOhmb9gRWppSClh56839QQ==
-X-Google-Smtp-Source: ABdhPJxMm2HhuXip/+Ypn78NGQSL9LpS8YyhU3LOl2tsaeVF9uBhm+MuFsRaTN46IJajehuRwXWqhA==
-X-Received: by 2002:a63:6b07:0:b0:37c:52b4:60fb with SMTP id g7-20020a636b07000000b0037c52b460fbmr276254pgc.381.1646249637296;
-        Wed, 02 Mar 2022 11:33:57 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k7-20020a63ff07000000b00372dc67e854sm16352520pgi.14.2022.03.02.11.33.56
+        bh=UtUIqChNwIGiM6BzTSKzlQEWchWVUYsbZYtiHQAXLaI=;
+        b=OpFckQnrijzhw9r4o199MfpCeSISIDTbhamH0oNPUQu5t8lXoUfQ4iyT0vRK7ufH/p
+         4htJ5F11sGbc1q5iuy1dtiWxfKyDrnqsBMvzunI1aXlwEMq+V0ojiFTB8eEy5bTaNzHR
+         OZlRUaf2qEY7234Y62A01ejkm/WJhSl/x3Q2ahRznr1Xgs6VnMDzWUVeL1CeuekTRUoH
+         vo7sL76mXK91ZhuxsTd8wXgi037npQ8ZP8uZGJLTkyEhR5WhTRxmMtz3HqbuwqCZmyln
+         /nVrwLcMpPJh9iuWLwOOUI3bKh3PSy9bjdMIypavDRNfZ52vcl6bTfPvkWy6SJBIO5fk
+         iqYg==
+X-Gm-Message-State: AOAM533dOccnLZrR0SKv8wicL93yJHfR0FwmpHzassoY4YxLqjSm1ZhD
+        C79NiUTe1V774kVmwnKWpNU=
+X-Google-Smtp-Source: ABdhPJzQlWf7mMBYOZ5bO2uklD2VXAdI3sKQf9qb/biLCDQ5fHBF8fvZxPrTckH9bkE37eRy7vCfnA==
+X-Received: by 2002:a63:4005:0:b0:373:9ac7:fec1 with SMTP id n5-20020a634005000000b003739ac7fec1mr26990808pga.12.1646249655409;
+        Wed, 02 Mar 2022 11:34:15 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
+        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm5861616pju.44.2022.03.02.11.34.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 11:33:56 -0800 (PST)
-Date:   Wed, 2 Mar 2022 19:33:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
- asynchronous worker
-Message-ID: <Yh/GoUPxMRyFqFc5@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-23-seanjc@google.com>
- <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
- <Yh+xA31FrfGoxXLB@google.com>
- <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
+        Wed, 02 Mar 2022 11:34:15 -0800 (PST)
+Date:   Wed, 2 Mar 2022 11:34:11 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+Message-ID: <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-2-haoluo@google.com>
+ <20220227051821.fwrmeu7r6bab6tio@apollo.legion>
+ <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,32 +83,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022, Paolo Bonzini wrote:
-> On 3/2/22 19:01, Sean Christopherson wrote:
-> > > It passes a smoke test, and also resolves the debate on the fate of patch 1.
-> > +1000, I love this approach.  Do you want me to work on a v3, or shall I let you
-> > have the honors?
+On Mon, Feb 28, 2022 at 02:10:39PM -0800, Hao Luo wrote:
+> Hi Kumar,
 > 
-> I'm already running the usual battery of tests, so I should be able to post
-> it either tomorrow (early in my evening) or Friday morning.
+> On Sat, Feb 26, 2022 at 9:18 PM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > On Sat, Feb 26, 2022 at 05:13:31AM IST, Hao Luo wrote:
+> > > This patch allows bpf_syscall prog to perform some basic filesystem
+> > > operations: create, remove directories and unlink files. Three bpf
+> > > helpers are added for this purpose. When combined with the following
+> > > patches that allow pinning and getting bpf objects from bpf prog,
+> > > this feature can be used to create directory hierarchy in bpffs that
+> > > help manage bpf objects purely using bpf progs.
+> > >
+> > > The added helpers subject to the same permission checks as their syscall
+> > > version. For example, one can not write to a read-only file system;
+> > > The identity of the current process is checked to see whether it has
+> > > sufficient permission to perform the operations.
+> > >
+> > > Only directories and files in bpffs can be created or removed by these
+> > > helpers. But it won't be too hard to allow these helpers to operate
+> > > on files in other filesystems, if we want.
+> > >
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > > + *
+> > > + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
+> > > + *   Description
+> > > + *           Attempts to create a directory name *pathname*. The argument
+> > > + *           *pathname_sz* specifies the length of the string *pathname*.
+> > > + *           The argument *mode* specifies the mode for the new directory. It
+> > > + *           is modified by the process's umask. It has the same semantic as
+> > > + *           the syscall mkdir(2).
+> > > + *   Return
+> > > + *           0 on success, or a negative error in case of failure.
+> > > + *
+> > > + * long bpf_rmdir(const char *pathname, int pathname_sz)
+> > > + *   Description
+> > > + *           Deletes a directory, which must be empty.
+> > > + *   Return
+> > > + *           0 on sucess, or a negative error in case of failure.
+> > > + *
+> > > + * long bpf_unlink(const char *pathname, int pathname_sz)
+> > > + *   Description
+> > > + *           Deletes a name and possibly the file it refers to. It has the
+> > > + *           same semantic as the syscall unlink(2).
+> > > + *   Return
+> > > + *           0 on success, or a negative error in case of failure.
+> > >   */
+> > >
+> >
+> > How about only introducing bpf_sys_mkdirat and bpf_sys_unlinkat? That would be
+> > more useful for other cases in future, and when AT_FDCWD is passed, has the same
+> > functionality as these, but when openat/fget is supported, it would work
+> > relative to other dirfds as well. It can also allow using dirfd of the process
+> > calling read for a iterator (e.g. if it sets the fd number using skel->bss).
+> > unlinkat's AT_REMOVEDIR flag also removes the need for a bpf_rmdir.
+> >
+> > WDYT?
+> >
+> 
+> The idea sounds good to me, more flexible. But I don't have a real use
+> case for using the added 'dirfd' at this moment. For all the use cases
+> I can think of, absolute paths will suffice, I think. Unless other
+> reviewers have opposition, I will try switching to mkdirat and
+> unlinkat in v2.
 
-Gah, now I remember why I didn't use an async worker.  kvm_mmu_zap_all_fast()
-must ensure all SPTEs are zapped and their dirty/accessed data written back to
-the primary MMU prior to returning.  Once the memslot update completes, the old
-deleted/moved memslot is no longer reachable by the mmu_notifier.  If an mmu_notifier
-zaps pfns reachable via the root, KVM will do nothing because there's no relevant
-memslot.
+I'm surprised you don't need "at" variants.
+I thought your production setup has a top level cgroup controller and
+then inner tasks inside containers manage cgroups on their own.
+Since containers are involved they likely run inside their own mountns.
+cgroupfs mount is single. So you probably don't even need to bind mount it
+inside containers, but bpffs is not a single mount. You need
+to bind mount top bpffs inside containers for tasks to access it.
+Now for cgroupfs the abs path is not an issue, but for bpffs
+the AT_FDCWD becomes a problem. AT_FDCWD is using current mount ns.
+Inside container that will be different. Unless you bind mount into exact
+same path the full path has different meanings inside and outside of the container.
+It seems to me the bpf progs attached to cgroup sleepable events should
+be using FD of bpffs. Then when these tracepoints are triggered from
+different containers in different mountns they will get the right dir prefix.
+What am I missing?
 
-So we can use workers, but kvm_mmu_zap_all_fast() would need to flush all workers
-before returning, which ends up being no different than putting the invalid roots
-on a different list.
-
-What about that idea?  Put roots invalidated by "fast zap" on _another_ list?
-My very original idea of moving the roots to a separate list didn't work because
-the roots needed to be reachable by the mmu_notifier.  But we could just add
-another list_head (inside the unsync_child_bitmap union) and add the roots to
-_that_ list.
-
-Let me go resurrect that patch from v1 and tweak it to keep the roots on the old
-list, but add them to a new list as well.  That would get rid of the invalid
-root iterator stuff.
+I think non-AT variants are not needed. The prog can always pass AT_FDCWD
+if it's really the intent, but passing actual FD seems more error-proof.

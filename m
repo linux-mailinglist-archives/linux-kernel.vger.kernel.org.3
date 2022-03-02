@@ -2,166 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B594CAB75
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E2D4CAB76
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243764AbiCBRXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S243769AbiCBRX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233163AbiCBRXk (ORCPT
+        with ESMTP id S243767AbiCBRX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:23:40 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217E4BBAB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:22:55 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id bx5so2359387pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:22:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jklf8XPuym2PP8A66P9TwV3A0pOKZ2tfA0gEcqm6VHU=;
-        b=JCnfVceXbb7gtnysgddHpYe+fZSK1mwYXlQ9n8cgZmLcjIvEAEax475FB2bAKmLvYm
-         7ld6i+2lkqVHygprODVZpZg8RaTihov8S5A6HJUnOQDHQbaNjlObmzqxVIHLLCG1PsMh
-         7MUw6VDSYcUG2Hrs3gkHPqu3r6RslxC4gm+UOIy+ItO1o5s8loyFtrIn3Lhno9r8AIa0
-         H8jY0REOsHbJF8dBleSo9CLHklTHHv+lpWzoC2YtNjG2t9Y1zjyn5SEwR+50l676Z5Gf
-         E8iZkOnZbtV/P0PbHahihueRwEWd4PwK+PCzcCTvi2KFjLZx4QxHaw4elUwYxwbnjiyt
-         zmUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jklf8XPuym2PP8A66P9TwV3A0pOKZ2tfA0gEcqm6VHU=;
-        b=P7SPweHoN+1djW81gyLXapyS/8fGbHIbb92kARFVQV15nFosQ9f576ng+cZ+1Gg4lp
-         O+mZLmQoFrU9PiMRNXUxtICrrOGRVmgkQmKw02NwfSjfHg9mpGA7b/luUSdxcxvjXMiM
-         AXzr6U2xD1B9MNbtW0bt34V0XHEtU5+4G1VupaUrE+ZmnKPkirDiVRoNrsCr23jQ+i8f
-         PMbveqHDXP1LcA7Lb10gYVDWzC3fL3y5loT5pxaRRgkJGgYOg4lgXRAE28BXtajaKfmI
-         QLu6nSVS0x9GMpkJvzEkriFEzp6YbxrF1JiGciChMbqtD9/d8KJMYph1HBQOtvh2nZlz
-         esAA==
-X-Gm-Message-State: AOAM531WmwDLmt9NoW7bi6Xh4Lb0NX3N9HTEIq3BCSQYyErzw8Q+Q0hy
-        f0ubSe/AAy7KanmbIjlqr4g=
-X-Google-Smtp-Source: ABdhPJzhAaDYo23YzK1/SpdmOHYrat1lErBtR/w0fcviW8SQM2/DBGIsAiPQFsF/IgQn1wI6MMu4kg==
-X-Received: by 2002:a17:90a:528b:b0:1bc:c5f9:82a with SMTP id w11-20020a17090a528b00b001bcc5f9082amr852446pjh.210.1646241774169;
-        Wed, 02 Mar 2022 09:22:54 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090ad81300b001bc447c2c91sm5661748pjv.31.2022.03.02.09.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:22:53 -0800 (PST)
-Date:   Wed, 2 Mar 2022 17:22:48 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>
-Subject: Re: [PATCH 2/5] mm/slub: use stackdepot to save stack trace in
- objects
-Message-ID: <Yh+n6MmSkjYM43iQ@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220225180318.20594-1-vbabka@suse.cz>
- <20220225180318.20594-3-vbabka@suse.cz>
- <YhtH5o2+7r85THg1@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <4b6e9dbb-ba3e-f33c-956e-07b5f81deee8@suse.cz>
+        Wed, 2 Mar 2022 12:23:57 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1A9C9A24
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:23:12 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646241790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6P8ltwVCQmRjuFn0TcABJufxoqYaGROP2gDiaqaYdfI=;
+        b=sppZoKYESo+VZhpQZtLd7AsvCKYI6ATnhgG632g3AD0Bg4HKJA/nd5gSZ0kOm3aLd+YSM7
+        cB/I0EnEIYFFX2MGVg0zAhHn3m4hwKfE6z7a+U+2h3BPNYqnJ75YivX+Z5z3c/EfAlK6Le
+        IaR1RuqBNEL94uK5hqgEtIGewIuv7uZeeYEFQkxvV98a/Qw76EzKiy5+j5hs04Nlb0NjnN
+        tY2V6dAlha58Qio09j5m6LXU01FdP6kYmmDXmCq6y7/R8DIqYWJPJY/imrxY3FrscegNwI
+        n/3TnEN+shb3EEsM+O5ie0PoelXjc6bJsVymdkF8Lbr2b8j32lPm5vQhAHu9Mg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646241790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6P8ltwVCQmRjuFn0TcABJufxoqYaGROP2gDiaqaYdfI=;
+        b=ct8B318MmEQpkOLvLr+tacQgeRBqgitaKH7wwGzFem7VEMg8BsxnVlfwZKC2yh/I6byP96
+        R4tjo4BGQH0lJDBQ==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v1 08/13] printk: add pr_flush()
+In-Reply-To: <Yg4fQHlli5L/zLQ6@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-9-john.ogness@linutronix.de>
+ <Yg4fQHlli5L/zLQ6@alley>
+Date:   Wed, 02 Mar 2022 18:29:09 +0106
+Message-ID: <87mti8gtfm.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b6e9dbb-ba3e-f33c-956e-07b5f81deee8@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:51:32PM +0100, Vlastimil Babka wrote:
-> On 2/27/22 10:44, Hyeonggon Yoo wrote:
-> > On Fri, Feb 25, 2022 at 07:03:15PM +0100, Vlastimil Babka wrote:
-> >> From: Oliver Glitta <glittao@gmail.com>
-> >> 
-> >> Many stack traces are similar so there are many similar arrays.
-> >> Stackdepot saves each unique stack only once.
-> >>
-> >> Replace field addrs in struct track with depot_stack_handle_t handle.  Use
-> >> stackdepot to save stack trace.
-> >>
-> > 
-> > I think it's not a replacement?
-> 
-> It is, for the array 'addrs':
-> 
-> -#ifdef CONFIG_STACKTRACE
-> -	unsigned long addrs[TRACK_ADDRS_COUNT];	/* Called from address */
-> +#ifdef CONFIG_STACKDEPOT
-> +	depot_stack_handle_t handle;
-> 
-> Not confuse with 'addr' which is the immediate caller and indeed stays
-> for redundancy/kernels without stack trace enabled.
+On 2022-02-17, Petr Mladek <pmladek@suse.com> wrote:
+>> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+>> index 02bde45c1149..1e80fd052bd5 100644
+>> --- a/kernel/printk/printk.c
+>> +++ b/kernel/printk/printk.c
+>> @@ -2802,8 +2804,10 @@ void console_unblank(void)
+>>  	if (oops_in_progress) {
+>>  		if (down_trylock_console_sem() != 0)
+>>  			return;
+>> -	} else
+>> +	} else {
+>> +		pr_flush(1000, true);
 >
+> It would make more sense to flush the consoles after they are
+> unblanked. I mean to move this to the end of the function.
 
-Oh, my fault. Right. I was confused.
-I should read it again.
+Agreed.
 
-> >> The benefits are smaller memory overhead and possibility to aggregate
-> >> per-cache statistics in the following patch using the stackdepot handle
-> >> instead of matching stacks manually.
-> >> 
-> >> [ vbabka@suse.cz: rebase to 5.17-rc1 and adjust accordingly ]
-> >> 
-> >> This was initially merged as commit 788691464c29 and reverted by commit
-> >> ae14c63a9f20 due to several issues, that should now be fixed.
-> >> The problem of unconditional memory overhead by stackdepot has been
-> >> addressed by commit 2dba5eb1c73b ("lib/stackdepot: allow optional init
-> >> and stack_table allocation by kvmalloc()"), so the dependency on
-> >> stackdepot will result in extra memory usage only when a slab cache
-> >> tracking is actually enabled, and not for all CONFIG_SLUB_DEBUG builds.
-> >> The build failures on some architectures were also addressed, and the
-> >> reported issue with xfs/433 test did not reproduce on 5.17-rc1 with this
-> >> patch.
-> > 
-> > This is just an idea and beyond this patch.
-> > 
-> > After this patch, now we have external storage that records stack traces.
-> 
-> Well, we had it before this patch too.
+> Also it is not obvious why this is not called when oops_in_progress
+> is set. I guess that it is because trylock is needed in this case.
+> It should be handled inside pr_flush().
 >
-> > It's possible that some rare stack traces are in stack depot, but
-> > not reachable because track is overwritten.
-> 
-> Yes.
-> 
-> > I think it's worth implementing a way to iterate through stacks in stack depot?
-> 
-> The question is for what use case? We might even not know who stored
-> them - could have been page_owner, or other stack depot users.
+> I mean that pr_flush() should internally use trylock when
+> @oops_in_progress is set. It will make it safe even in this
+> mode.
 
-> But the point is usually not to learn about all existing traces, but to
-> determine which ones cause an object lifetime bug, or memory leak.
+pr_flush() is a might_sleep() function. We agreed on this at
+LPC2019.
 
-Yeah, this is exactly what I misunderstood.
-I thought purpose of free_traces is to show all existing traces.
-But I realized today that free trace without alloc trace is not useful.
+Creating a pr_flush() that will directly push out the messages (or
+busy-wait) in non-preemptible contexts is complicated. It might be
+something to attempt for the future, but I would prefer to avoid it at
+this stage.
 
-I'll review v2 with these in mind.
-Thank you.
+>>  		console_lock();
+>> +	}
+>>  
+>>  	console_locked = 1;
+>>  	console_may_schedule = 0;
+>> @@ -2869,6 +2873,7 @@ struct tty_driver *console_device(int *index)
+>>   */
+>>  void console_stop(struct console *console)
+>>  {
+>> +	pr_flush(1000, true);
+>
+> It would be enough to flush just the given @console.
 
-> >> 
-> >> Signed-off-by: Oliver Glitta <glittao@gmail.com>
-> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> >> Cc: David Rientjes <rientjes@google.com>
-> >> Cc: Christoph Lameter <cl@linux.com>
-> >> Cc: Pekka Enberg <penberg@kernel.org>
-> >> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > 
-> 
+For v2 I will create an internal __pr_flush() to allow specifying that
+only a single console is flushed. The high level pr_flush() will then
+call __pr_flush() specifying all consoles.
 
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
+> It might be possible to take over the job from the related
+> kthread and flush it in this context. Well, I am not sure if
+> it is a good idea.
+
+I agree that it might not be a good idea. Let's keep things simple for
+now.
+
+>>  	console_lock();
+>>  	console->flags &= ~CON_ENABLED;
+>>  	console_unlock();
+>> @@ -2880,6 +2885,7 @@ void console_start(struct console *console)
+>>  	console_lock();
+>>  	console->flags |= CON_ENABLED;
+>>  	console_unlock();
+>> +	pr_flush(1000, true);
+>
+> Same here.
+
+OK.
+
+>>  }
+>>  EXPORT_SYMBOL(console_start);
+>>  
+>> @@ -3249,6 +3255,71 @@ static int __init printk_late_init(void)
+>>  late_initcall(printk_late_init);
+>>  
+>>  #if defined CONFIG_PRINTK
+>> +/**
+>> + * pr_flush() - Wait for printing threads to catch up.
+>> + *
+>
+> Alternative solution would be to take over the job from the kthreads
+> and flush the consoles in this context. Well, I am not sure
+> if it is a good idea or not.
+
+Since pr_flush() is might_sleep() this would be relatively simple. Just
+grab the console mutex and go. My concern is that this task may have
+different scheduling parameters that could negatively affect the
+system. For normal operation, I really would prefer that the designated
+kthreads do the work. If "waiting for the kthreads" turns out to be
+problematic, then maybe we could go down this path.
+
+>> + * @timeout_ms:        The maximum time (in ms) to wait.
+>> + * @reset_on_progress: Reset the timeout if forward progress is seen.
+>> + *
+>> + * A value of 0 for @timeout_ms means no waiting will occur. A value of -1
+>> + * represents infinite waiting.
+>> + *
+>> + * If @reset_on_progress is true, the timeout will be reset whenever any
+>> + * printer has been seen to make some forward progress.
+>> + *
+>> + * Context: Process context. May sleep while acquiring console lock.
+>> + * Return: true if all enabled printers are caught up.
+>> + */
+>> +bool pr_flush(int timeout_ms, bool reset_on_progress)
+>> +{
+>> +	int remaining = timeout_ms;
+>> +	struct console *con;
+>> +	u64 last_diff = 0;
+>> +	u64 printk_seq;
+>> +	u64 diff;
+>> +	u64 seq;
+>> +
+>> +	might_sleep();
+>> +
+>> +	seq = prb_next_seq(prb);
+>> +
+>> +	for (;;) {
+>> +		diff = 0;
+>> +
+>> +		console_lock();
+>> +		for_each_console(con) {
+>> +			if (!console_is_usable(con))
+>> +				continue;
+>> +			printk_seq = con->seq;
+>> +			if (printk_seq < seq)
+>> +				diff += seq - printk_seq;
+>> +		}
+>> +		console_unlock();
+>> +
+>> +		if (diff != last_diff && reset_on_progress)
+>> +			remaining = timeout_ms;
+>> +
+>> +		if (diff == 0 || remaining == 0)
+>> +			break;
+>> +
+>> +		if (remaining < 0) {
+>> +			/* no timeout limit */
+>> +			msleep(100);
+>> +		} else if (remaining < 100) {
+>> +			msleep(remaining);
+>> +			remaining = 0;
+>> +		} else {
+>> +			msleep(100);
+>> +			remaining -= 100;
+>> +		}
+>> +
+>> +		last_diff = diff;
+>> +	}
+>> +
+>> +	return (diff == 0);
+>> +}
+>> +EXPORT_SYMBOL(pr_flush);
+>
+> Summary:
+>
+> The pr_flush() API and the optional timeout look reasonable to me.
+>
+> Please, handle oops_in_progress in pr_flush() and make it safe in this
+> mode. It will allow to move it at the end of console_unblank() where
+> it makes more sense.
+
+I will add another oops_in_progress check at the end. pr_flush() will
+not be made safe for oops_in_progress. Keep in mind that when
+oops_in_progress is set, direct printing will be active, so there should
+be no need for pr_flush() anyway.
+
+> I do not resist on flushing only the given consoles in console_stop()
+> and console_start(). It is nice to have and can be done later.
+
+It is a simple change. I will do it for v2.
+
+> Also I do not resist on doing the flush in the context of the caller.
+> I am not even sure if it is a good idea. We could play with it
+> later when there are some problems with the current approach
+> in practice.
+
+For now, let's keep it as a waiting function.
+
+John

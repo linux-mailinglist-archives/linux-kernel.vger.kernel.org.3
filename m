@@ -2,323 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBAD4C9AB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B0D4C9AB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiCBBtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S236266AbiCBBvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236108AbiCBBtF (ORCPT
+        with ESMTP id S229784AbiCBBvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:49:05 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603531B7A1;
-        Tue,  1 Mar 2022 17:48:21 -0800 (PST)
-X-UUID: eba753c38ca04e56b82a3090a29072f8-20220302
-X-UUID: eba753c38ca04e56b82a3090a29072f8-20220302
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 446460884; Wed, 02 Mar 2022 09:48:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 2 Mar 2022 09:47:59 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 2 Mar 2022 09:47:57 +0800
-Message-ID: <9b619f41abdae2ad4246a4cf63c6561a493b93c8.camel@mediatek.com>
-Subject: Re: [PATCH v7, 04/15] media: mtk-vcodec: Read max resolution from
- dec_capability
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 2 Mar 2022 09:47:57 +0800
-In-Reply-To: <cb7cf296bc7df7334f55cc51ef11b671572559ac.camel@ndufresne.ca>
-References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
-         <20220223034008.15781-5-yunfei.dong@mediatek.com>
-         <cb7cf296bc7df7334f55cc51ef11b671572559ac.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 1 Mar 2022 20:51:39 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01810A2531;
+        Tue,  1 Mar 2022 17:50:55 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSs15zR5iIvgAAA--.3690S3;
+        Wed, 02 Mar 2022 09:50:50 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+To:     Mike Rapoport <rppt@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+ <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+ <Yh4uUoYT+YS5Jxsv@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+Date:   Wed, 2 Mar 2022 09:50:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=0.7 required=5.0 tests=APP_DEVELOPMENT_NORDNS,
-        BAYES_00,RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yh4uUoYT+YS5Jxsv@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxSs15zR5iIvgAAA--.3690S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyxZw43Zw1DAr4rZr1rtFb_yoWrCw4fpr
+        WSqa4Igr4kJryUZr1xtw1xJr9Iy395CF1vqry2yrn3u3Z0yr1xJr18Ja1j9asrA345Ja4q
+        vr48tF9F93WUA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUFVyIUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
 
-Thanks for your comments, I will fix this patch according your
-suggestion.
 
-On Mon, 2022-02-28 at 16:29 -0500, Nicolas Dufresne wrote:
-> Hi Yunfei,
-> 
-> this patch does not work unless userland calls enum_framesizes, which
-> is
-> completely optional. See comment and suggestion below.
-> 
-> Le mercredi 23 février 2022 à 11:39 +0800, Yunfei Dong a écrit :
-> > Supported max resolution for different platforms are not the same:
-> > 2K
-> > or 4K, getting it according to dec_capability.
-> > 
-> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> > Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
-> > ---
-> >  .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 29 +++++++++++--
-> > ------
-> >  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  4 +++
-> >  2 files changed, 21 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > index 130ecef2e766..304f5afbd419 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > @@ -152,13 +152,15 @@ void mtk_vcodec_dec_set_default_params(struct
-> > mtk_vcodec_ctx *ctx)
-> >  	q_data->coded_height = DFT_CFG_HEIGHT;
-> >  	q_data->fmt = ctx->dev->vdec_pdata->default_cap_fmt;
-> >  	q_data->field = V4L2_FIELD_NONE;
-> > +	ctx->max_width = MTK_VDEC_MAX_W;
-> > +	ctx->max_height = MTK_VDEC_MAX_H;
-> >  
-> >  	v4l_bound_align_image(&q_data->coded_width,
-> >  				MTK_VDEC_MIN_W,
-> > -				MTK_VDEC_MAX_W, 4,
-> > +				ctx->max_width, 4,
-> >  				&q_data->coded_height,
-> >  				MTK_VDEC_MIN_H,
-> > -				MTK_VDEC_MAX_H, 5, 6);
-> > +				ctx->max_height, 5, 6);
-> >  
-> >  	q_data->sizeimage[0] = q_data->coded_width * q_data-
-> > >coded_height;
-> >  	q_data->bytesperline[0] = q_data->coded_width;
-> > @@ -217,7 +219,7 @@ static int vidioc_vdec_subscribe_evt(struct
-> > v4l2_fh *fh,
-> >  	}
-> >  }
-> >  
-> > -static int vidioc_try_fmt(struct v4l2_format *f,
-> > +static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx, struct
-> > v4l2_format *f,
-> >  			  const struct mtk_video_fmt *fmt)
-> >  {
-> >  	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
-> > @@ -225,9 +227,9 @@ static int vidioc_try_fmt(struct v4l2_format
-> > *f,
-> >  	pix_fmt_mp->field = V4L2_FIELD_NONE;
-> >  
-> >  	pix_fmt_mp->width =
-> > -		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W,
-> > MTK_VDEC_MAX_W);
-> > +		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, ctx-
-> > >max_width);
-> >  	pix_fmt_mp->height =
-> > -		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H,
-> > MTK_VDEC_MAX_H);
-> > +		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, ctx-
-> > >max_height);
-> >  
-> >  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-> >  		pix_fmt_mp->num_planes = 1;
-> > @@ -245,16 +247,16 @@ static int vidioc_try_fmt(struct v4l2_format
-> > *f,
-> >  		tmp_h = pix_fmt_mp->height;
-> >  		v4l_bound_align_image(&pix_fmt_mp->width,
-> >  					MTK_VDEC_MIN_W,
-> > -					MTK_VDEC_MAX_W, 6,
-> > +					ctx->max_width, 6,
-> >  					&pix_fmt_mp->height,
-> >  					MTK_VDEC_MIN_H,
-> > -					MTK_VDEC_MAX_H, 6, 9);
-> > +					ctx->max_height, 6, 9);
-> >  
-> >  		if (pix_fmt_mp->width < tmp_w &&
-> > -			(pix_fmt_mp->width + 64) <= MTK_VDEC_MAX_W)
-> > +			(pix_fmt_mp->width + 64) <= ctx->max_width)
-> >  			pix_fmt_mp->width += 64;
-> >  		if (pix_fmt_mp->height < tmp_h &&
-> > -			(pix_fmt_mp->height + 64) <= MTK_VDEC_MAX_H)
-> > +			(pix_fmt_mp->height + 64) <= ctx->max_height)
-> >  			pix_fmt_mp->height += 64;
-> >  
-> >  		mtk_v4l2_debug(0,
-> > @@ -294,7 +296,7 @@ static int vidioc_try_fmt_vid_cap_mplane(struct
-> > file *file, void *priv,
-> >  		fmt = mtk_vdec_find_format(f, dec_pdata);
-> >  	}
-> >  
-> > -	return vidioc_try_fmt(f, fmt);
-> > +	return vidioc_try_fmt(ctx, f, fmt);
-> >  }
-> >  
-> >  static int vidioc_try_fmt_vid_out_mplane(struct file *file, void
-> > *priv,
-> > @@ -317,7 +319,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct
-> > file *file, void *priv,
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > -	return vidioc_try_fmt(f, fmt);
-> > +	return vidioc_try_fmt(ctx, f, fmt);
-> >  }
-> >  
-> >  static int vidioc_vdec_g_selection(struct file *file, void *priv,
-> > @@ -445,7 +447,7 @@ static int vidioc_vdec_s_fmt(struct file *file,
-> > void *priv,
-> >  		return -EINVAL;
-> >  
-> >  	q_data->fmt = fmt;
-> > -	vidioc_try_fmt(f, q_data->fmt);
-> > +	vidioc_try_fmt(ctx, f, q_data->fmt);
-> >  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-> >  		q_data->sizeimage[0] = pix_mp->plane_fmt[0].sizeimage;
-> >  		q_data->coded_width = pix_mp->width;
-> > @@ -545,6 +547,9 @@ static int vidioc_enum_framesizes(struct file
-> > *file, void *priv,
-> >  				fsize->stepwise.min_height,
-> >  				fsize->stepwise.max_height,
-> >  				fsize->stepwise.step_height);
-> > +
-> > +		ctx->max_width = fsize->stepwise.max_width;
-> > +		ctx->max_height = fsize->stepwise.max_height;
-> 
-> The spec does not require calling enum_fmt, so changing the maximum
-> here is
-> incorrect (and fail with GStreamer). If userland never enum the
-> framesizes, the
-> resolution get limited to 1080p.
-> 
-> As this only depends and the OUTPUT format and the device being
-> open()
-> (condition being dev_capability being set and OUTPUT format being
-> known / not
-> VP8), you could initialize the cxt max inside s_fmt(OUTPUT) instead,
-> which is a
-> mandatory call. I have tested this change to verify this:
-> 
-I will fix it in your suggestion, thanks.
+On 03/01/2022 10:31 PM, Mike Rapoport wrote:
+> On Tue, Mar 01, 2022 at 07:51:23PM +0800, Tiezhu Yang wrote:
+>>
+>>
+>> On 03/01/2022 05:55 PM, Mike Rapoport wrote:
+>>> Hi,
+>>>
+>>> On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
+>>>> In the current code, the kernel command-line parameter mem= and memmap=
+>>>> can not work well on MIPS, this patchset refactors the related code to
+>>>> fix them.
+>>>>
+>>>> For kdump on MIPS, if the users want to limit the memory region for the
+>>>> capture kernel to avoid corrupting the memory image of the panic kernel,
+>>>> use the parameter memmap=limit@base is the proper way, I will submit a
+>>>> patch to use memmap=limit@base for kexec-tools after this patchset is
+>>>> applied.
+>>>
+>>> Sorry, apparently I misread the prevoius version.
+>>> What's wrong with the current implementation of mem=limit@base for the
+>>> kdump case?
+>>
+>> In the current code, without this patchset, kernel boot hangs when add
+>> mem=3G, mem=3G@64M or memmap=3G@64M to the command-line, it means that
+>> the parameter mem= and memmap= have bug on mips.
+>
+> I can see how mem=3G may be wrong when the memory does not start at 0, but
+> it seems to do the right thing of mem=3G@64M.
+>
+> Do you see system hangs with mem=3G@64M?
 
-Best Regards,
-Yunfei Dong
-> 
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> index 044e3dfbdd8c..3e7c571526a4 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> @@ -484,6 +484,14 @@ static int vidioc_vdec_s_fmt(struct file *file,
-> void *priv,
->  	if (fmt == NULL)
->  		return -EINVAL;
->  
-> +	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
-> +	    !(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DISABLED)
-> &&
-> +	    fmt->fourcc != V4L2_PIX_FMT_VP8_FRAME) {
-> +		mtk_v4l2_debug(3, "4K is enabled");
-> +		ctx->max_width = VCODEC_DEC_4K_CODED_WIDTH;
-> +		ctx->max_height = VCODEC_DEC_4K_CODED_HEIGHT;
-> +	}
-> +
->  	q_data->fmt = fmt;
->  	vidioc_try_fmt(ctx, f, q_data->fmt);
->  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-> @@ -574,15 +582,9 @@ static int vidioc_enum_framesizes(struct file
-> *file, void *priv,
->  
->  		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
->  		fsize->stepwise = dec_pdata-
-> >vdec_framesizes[i].stepwise;
-> -		if (!(ctx->dev->dec_capability &
-> -				VCODEC_CAPABILITY_4K_DISABLED) &&
-> -				fsize->pixel_format !=
-> V4L2_PIX_FMT_VP8_FRAME) {
-> -			mtk_v4l2_debug(3, "4K is enabled");
-> -			fsize->stepwise.max_width =
-> -					VCODEC_DEC_4K_CODED_WIDTH;
-> -			fsize->stepwise.max_height =
-> -					VCODEC_DEC_4K_CODED_HEIGHT;
-> -		}
-> +		fsize->stepwise.max_width = ctx->max_width;
-> +		fsize->stepwise.max_height = ctx->max_height;
-> +
->  		mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
->  				ctx->dev->dec_capability,
->  				fsize->stepwise.min_width,
-> @@ -592,8 +594,6 @@ static int vidioc_enum_framesizes(struct file
-> *file, void *priv,
->  				fsize->stepwise.max_height,
->  				fsize->stepwise.step_height);
->  
-> -		ctx->max_width = fsize->stepwise.max_width;
-> -		ctx->max_height = fsize->stepwise.max_height;
->  		return 0;
->  	}
->  
-> 
-> 
-> >  		return 0;
-> >  	}
-> >  
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > index bb7b8e914d24..6d27e4d41ede 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > @@ -284,6 +284,8 @@ struct vdec_pic_info {
-> >   *	  mtk_video_dec_buf.
-> >   * @hw_id: hardware index used to identify different hardware.
-> >   *
-> > + * @max_width: hardware supported max width
-> > + * @max_height: hardware supported max height
-> >   * @msg_queue: msg queue used to store lat buffer information.
-> >   */
-> >  struct mtk_vcodec_ctx {
-> > @@ -329,6 +331,8 @@ struct mtk_vcodec_ctx {
-> >  	struct mutex lock;
-> >  	int hw_id;
-> >  
-> > +	unsigned int max_width;
-> > +	unsigned int max_height;
-> >  	struct vdec_msg_queue msg_queue;
-> >  };
-> >  
-> 
-> 
+Yes.
+
+>
+> Do you have the logs before the hang?
+
+Here are the logs:
+
+[    0.000000] Linux version 5.17.0-rc3+ (loongson@linux) (gcc (GCC) 
+7.3.1 20180303 (Red Hat 7.3.1-6), GNU ld version 
+2.28-13.fc21.loongson.6) #1 SMP PREEMPT Wed Mar 2 09:07:39 CST 2022
+[    0.000000] CpuClock = 1800000000
+[    0.000000] The bridge chip is LS7A
+[    0.000000] CP0_Config3: CP0 16.3 (0xdc8030a0)
+[    0.000000] CP0_PageGrain: CP0 5.1 (0x28000000)
+[    0.000000] NUMA: Discovered 4 cpus on 1 nodes
+[    0.000000] Node0: mem_type:1, mem_start:0x200000, mem_size:0xee MB
+[    0.000000]        start_pfn:0x80, end_pfn:0x3c00, num_physpages:0x3b80
+[    0.000000] Node0: mem_type:2, mem_start:0x90200000, mem_size:0x6fe MB
+[    0.000000]        start_pfn:0x24080, end_pfn:0x40000, 
+num_physpages:0x1fb00
+[    0.000000] Node0: mem_type:2, mem_start:0x120000000, mem_size:0x1600 MB
+[    0.000000]        start_pfn:0x48000, end_pfn:0xa0000, 
+num_physpages:0x77b00
+[    0.000000] Node0's addrspace_offset is 0x0
+[    0.000000] Node0: start_pfn=0x80, end_pfn=0xa0000
+[    0.000000] NUMA: set cpumask cpu 0 on node 0
+[    0.000000] NUMA: set cpumask cpu 1 on node 0
+[    0.000000] NUMA: set cpumask cpu 2 on node 0
+[    0.000000] NUMA: set cpumask cpu 3 on node 0
+[    0.000000] printk: bootconsole [early0] enabled
+[    0.000000] CPU0 revision is: 0014c001 (ICT Loongson-3)
+[    0.000000] FPU revision is: 00f70501
+[    0.000000] MSA revision is: 00060140
+[    0.000000] OF: fdt: No chosen node found, continuing without
+[    0.000000] MIPS: machine is loongson,loongson64g-4core-ls7a
+[    0.000000] User-defined physical RAM map overwrite
+[    0.000000] Kernel sections are not in the memory maps
+[    0.000000] Initrd not found or empty - disabling initrd
+
+
+>
+> As for memmap= option, it does not specify the memory map but rather alters
+> the memory map passed by the firmware. Particularity in MIPS implementation
+> it allows to add a single range of available or reserved memory.
+>
+> AFAIU, for the kdump use-case mem=X@Y should suffice.
+
+We can modify some code to make mem=X@Y work well,
+but according to Documentation/admin-guide/kernel-parameters.txt,
+the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
+odd, the intention of this patchset is to make mem= and memmap=
+work well and consistent with the other archs.
+
+Thanks,
+Tiezhu
+
+>
+>> Thanks,
+>> Tiezhu
+>>
+>>>
+>>>> v4: Fix some build warnings reported by kernel test robot
+>>>>
+>>>> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+>>>>     commented by Mike Rapoport, thank you
+>>>>
+>>>> v2: Add some new patches to support memmap=limit@base
+>>>>
+>>>> Tiezhu Yang (4):
+>>>>   MIPS: Refactor early_parse_mem() to fix mem= parameter
+>>>>   memblock: Introduce memblock_mem_range_remove_map()
+>>>>   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+>>>>   MIPS: Remove not used variable usermem
+>>>>
+>>>>  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+>>>>  include/linux/memblock.h |  1 +
+>>>>  mm/memblock.c            |  9 +++++--
+>>>>  3 files changed, 40 insertions(+), 39 deletions(-)
+>>>>
+>>>> --
+>>>> 2.1.0
+>>>>
+>>>
+>>
+>
 

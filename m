@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3E84CAA8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E384CAA94
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbiCBQjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S241703AbiCBQjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbiCBQjn (ORCPT
+        with ESMTP id S236919AbiCBQjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Mar 2022 11:39:43 -0500
 Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B163BCB
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5431369
         for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:38:59 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646239137;
+        t=1646239138;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GA4CzC5kQCyt9Q46WjPbGlANWaRE9EWTbe6SrvYEjAk=;
-        b=aaBHXo5y2T1+Vm+RNaREb41iINBlTfgGfciO9VaNYAxyxUoq7gYiXaDkPdMoxsduX3sA9g
-        TzAIUkekbB8xhUA3Qo3mXL+z0ndkfEB2sBoCKWQJ2d3hO4mxiEgs5KkR9zFLzvL95BCF95
-        U/IBKTxSoTLvCJszTBkqfdNgKa1YG4o=
+        bh=M062mhOVYVf9bJIp01ZOeX3qpFJNVUV/wAEZA8I272E=;
+        b=lH9wtAh7UDSWF/e9AczfTV9enN4uq/JJvUnkvS3JD5lO39CTU8KgFlOa8XuaMRO5OBz/Rk
+        +Gte5syiG2TrYhFZ5NuL2BGI/f9VgTmWVR+r0hvmFWvNp9TqUusWNQXJrSNdKo9w9VVizH
+        pDmUp3Zb0WD+KB7MoptfkaUEEtwc450=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -36,9 +36,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm 13/22] kasan: restructure kasan_report
-Date:   Wed,  2 Mar 2022 17:36:33 +0100
-Message-Id: <ca28042889858b8cc4724d3d4378387f90d7a59d.1646237226.git.andreyknvl@google.com>
+Subject: [PATCH mm 14/22] kasan: merge __kasan_report into kasan_report
+Date:   Wed,  2 Mar 2022 17:36:34 +0100
+Message-Id: <c8a125497ef82f7042b3795918dffb81a85a878e.1646237226.git.andreyknvl@google.com>
 In-Reply-To: <cover.1646237226.git.andreyknvl@google.com>
 References: <cover.1646237226.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -57,43 +57,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Restructure kasan_report() to make reviewing the subsequent patches
-easier.
+Merge __kasan_report() into kasan_report(). The code is simple enough
+to be readable without the __kasan_report() helper.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/report.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ mm/kasan/report.c | 36 +++++++++++++++---------------------
+ 1 file changed, 15 insertions(+), 21 deletions(-)
 
 diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index a0d4a9d3f933..41c7966451e3 100644
+index 41c7966451e3..56d5ba235542 100644
 --- a/mm/kasan/report.c
 +++ b/mm/kasan/report.c
-@@ -457,15 +457,18 @@ static void __kasan_report(void *addr, size_t size, bool is_write,
+@@ -435,37 +435,31 @@ static void print_report(struct kasan_access_info *info)
+ 	}
+ }
+ 
+-static void __kasan_report(void *addr, size_t size, bool is_write,
+-				unsigned long ip)
+-{
+-	struct kasan_access_info info;
+-	unsigned long flags;
+-
+-	start_report(&flags, true);
+-
+-	info.access_addr = addr;
+-	info.first_bad_addr = kasan_find_first_bad_addr(addr, size);
+-	info.access_size = size;
+-	info.is_write = is_write;
+-	info.ip = ip;
+-
+-	print_report(&info);
+-
+-	end_report(&flags, addr);
+-}
+-
  bool kasan_report(unsigned long addr, size_t size, bool is_write,
  			unsigned long ip)
  {
--	unsigned long flags = user_access_save();
--	bool ret = false;
+-	unsigned long ua_flags = user_access_save();
+ 	bool ret = true;
++	void *ptr = (void *)addr;
 +	unsigned long ua_flags = user_access_save();
-+	bool ret = true;
++	unsigned long irq_flags;
++	struct kasan_access_info info;
  
--	if (likely(report_enabled())) {
--		__kasan_report((void *)addr, size, is_write, ip);
--		ret = true;
-+	if (unlikely(!report_enabled())) {
-+		ret = false;
-+		goto out;
+ 	if (unlikely(!report_enabled())) {
+ 		ret = false;
+ 		goto out;
  	}
  
--	user_access_restore(flags);
-+	__kasan_report((void *)addr, size, is_write, ip);
+-	__kasan_report((void *)addr, size, is_write, ip);
++	start_report(&irq_flags, true);
 +
-+out:
-+	user_access_restore(ua_flags);
++	info.access_addr = ptr;
++	info.first_bad_addr = kasan_find_first_bad_addr(ptr, size);
++	info.access_size = size;
++	info.is_write = is_write;
++	info.ip = ip;
++
++	print_report(&info);
++
++	end_report(&irq_flags, ptr);
  
- 	return ret;
- }
+ out:
+ 	user_access_restore(ua_flags);
 -- 
 2.25.1
 

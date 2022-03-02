@@ -2,150 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E59C4C9E08
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0354C9E12
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 07:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbiCBGwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 01:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S239787AbiCBG5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 01:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiCBGwc (ORCPT
+        with ESMTP id S235576AbiCBG53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 01:52:32 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2078.outbound.protection.outlook.com [40.107.92.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183BFB2D6A;
-        Tue,  1 Mar 2022 22:51:50 -0800 (PST)
+        Wed, 2 Mar 2022 01:57:29 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2116.outbound.protection.outlook.com [40.107.255.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41ADB16D5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 22:56:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MV+Y7k58OyyR1fKQf3ixrKSbSg1jE+ZsO5AZlWt/rxS0Bwnddxrz2qVCENVf7OcEuwhosUv9cS65qqQRq2zuVICdDTXTznY90k3reBEOqPjRllYlgDOlbrOQh50WRqysoUaK1NEvhwiMiFJMjrSIUFVmDqXOy8jiv0pBVZii03f5iuIqw8Uv5oCDu29n1SHSpuQQoWmOWAxjlsJURp5OIOHDEjCVr3gPOfv5eby+DYkdph5eDE8pyRq4IpszUw4psiC1BUrdCSy9PQi3V+mDs7lkh8KU+dMMEF6HZxfwf/T/vKz5WJTXUQ2+tFBFzmtJVPUdJC8pbHGwtJGvpk5QpQ==
+ b=k+UfqNshhrvWYElJzpZptLfqwuSHR04m37Re3aD4jSmahFOqrRrgphcWdPaZuxzzY2gtFRuwjhF5fUoWDes7HFhESeYBGoII8HM4inmwj7fyaq7BtCfPmCpyeT/v0BqeZLaBYWa0soK3Le8u5QxyuABlno2N6T4Nt9aIDZdE0mJopUzggTomspVw3hyVysb/N+SmZ1CAEX/aCeXheHvCaN4psCNNiXO/yvz+oDhwnKeFtr6U0/chtVKWbR/kL0rQzvzV4L3ofvJqJuD6a5wvRqv4nPzvC/0GXPtQp7etp15TnwGHT6SXmXkAhc8zT9kPaPNzAdGhKNmSwmrKw5/jgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xxRfNa7ufEglBa4hLoflld9PtFpbCrt0CWWgNoAo+jw=;
- b=IZad8ZxgQePeTEZQnAKLw7J37QqK9s6IAEMo7i5ZnjMFuZOJOIPchf2sTLercVcSYzAOMAeEBASDtpD8mpL36Xhl9vLHjn5rPyoyOPGam+ZLlJFndQPa3l8VwckBgr0J7UEBpBukGFJG7SMC7mh4Y8awcVy1GXSY8tzcEwbto3q2b6HIuOQ/ITRYXkMoTxJcmF3XTEVlfLbgbOQc9H+2QVfjno050kaaZPrq0tRTUitL5rKErdr9A0mLWjglZ+E33Qv28kj60DSQdf9xMb2MotK+4x/chjzd11p54/Z0OYqaNpCKi7NQ03h8f3E/vKY9rRKm8LYGE9N/d7v58UM5uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=3iTORNleBZAKsU+Gf2U9xbWgNiNybeer8DJnX+1a7e8=;
+ b=IjTvbz+Bc6hBOB4R7knaPgK531bXxs0JLwCQfhOgJEnIU/OeMPJMEwPMB1SLhrifASwsZF4nSnpTrSfT8C4u8qdWz4MDwIuBgHGpsqi94gkRFN1HKw2qmxLZeag5j7nw6OT75PGQPKnsRdIeONQGcHXHXia6VrIK9VWfwOP/eAE8Toas113MYobnOfRKMQqOWgIEX3W50F0/NL163MXz8+eCnT0mZGNitlyrBOZxHG1cIIatuDL3whGnoU8STt7Q9fPIK5LwE1+aDTKMKwL28fRxb07yDPycZaWnUBv2yGl5fQ0Mx5T0eFZcurc5arfxLRvj3tVQU3toh9kjQFGiDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xxRfNa7ufEglBa4hLoflld9PtFpbCrt0CWWgNoAo+jw=;
- b=b/gkNRBMe5vuiW+36Ez7Z3EYYkMwUrCmqqXqiuwQfzlHGcrClCUXnuk013QyycdNUtk5ALCOYcU6cocaaS34/fU+TobhHxE24sjNwVx8ljQjtSsKUr/rZdOaU7zgC/nX2MhNHiGPC6N1FxzPA4vwAUBE7n4Ftg/APaQkd2ONUcH2umIkGFkK3X1PdEenUtNjh5N1yRke0USwsKFBTzU+qzMyDKJu2FKlE/1Wc7A4TRe1gMpE235mhpieyJVWd7gtySR5dmCr10PNzkeEgiwMQE1X1QlhnUxBMWKfgkI9zUGCHE8R/BKgslO9GcZ5EjToqfKMoYCwwBj4yKY9y4foqA==
-Received: from DM5PR21CA0028.namprd21.prod.outlook.com (2603:10b6:3:ed::14) by
- MWHPR12MB1648.namprd12.prod.outlook.com (2603:10b6:301:11::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5017.24; Wed, 2 Mar 2022 06:51:47 +0000
-Received: from DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:ed:cafe::76) by DM5PR21CA0028.outlook.office365.com
- (2603:10b6:3:ed::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.1 via Frontend
- Transport; Wed, 2 Mar 2022 06:51:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT015.mail.protection.outlook.com (10.13.172.133) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5038.14 via Frontend Transport; Wed, 2 Mar 2022 06:51:46 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 2 Mar
- 2022 06:51:45 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 1 Mar 2022
- 22:51:44 -0800
-Received: from henryl-vm.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Tue, 1 Mar 2022 22:51:42 -0800
-From:   Henry Lin <henryl@nvidia.com>
-To:     <mathias.nyman@linux.intel.com>
-CC:     Henry Lin <henryl@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+ bh=3iTORNleBZAKsU+Gf2U9xbWgNiNybeer8DJnX+1a7e8=;
+ b=CaqZ9aLGtprXWocY13Ab4RTuebqeDZ3n0gZCcLduLrMCGMl63+YnOuq27Wc8ayDzGiscoiy1sVDEZR1aRryxtA1RCbY5RnWNnPTiCnNcalLtEkjqNbouGkSaslnHUeraJhcwidJIZ8fSRPvFaNO9eMZkHYmw/nK0F5Nzzbv1xQ0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TYAPR06MB2365.apcprd06.prod.outlook.com (2603:1096:404:26::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 06:56:42 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.014; Wed, 2 Mar 2022
+ 06:56:42 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] xhci: fix runtime PM imbalance in USB2 resume
-Date:   Wed, 2 Mar 2022 14:51:06 +0800
-Message-ID: <20220302065106.85021-1-henryl@nvidia.com>
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] mfd: hi6421-spmi-pmic: fix platform_get_irq.cocci warning
+Date:   Tue,  1 Mar 2022 22:56:29 -0800
+Message-Id: <20220302065629.6855-1-hanyihao@vivo.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <2e5f4998-71bc-1fd5-8a82-b7392e4f7615@linux.intel.com>
-References: <2e5f4998-71bc-1fd5-8a82-b7392e4f7615@linux.intel.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: SG2PR03CA0091.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::19) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff1da8f0-7cfa-490b-534b-08d9fc191e85
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1648:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB16485D43988CBDE6829FAF03AC039@MWHPR12MB1648.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 05ee9e56-8522-40e6-4634-08d9fc19ced3
+X-MS-TrafficTypeDiagnostic: TYAPR06MB2365:EE_
+X-Microsoft-Antispam-PRVS: <TYAPR06MB2365D85E005BC9DCCCBB8086A2039@TYAPR06MB2365.apcprd06.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: onD+pv7IC19cx7LHxEoL20FtnKGYllN4u6Qz9tMs4ldIRuSrloLtwA6Ra3Ysz72NwjNYQ9TXs9Mnoc9gM3lHcg76bl0aVx6eUwqdI6lpCOwQEKZBPl/Dir8h9KJu0RMm3XhSai88VKG6LUas/RzIC6+P32UarlBPXuqdzJ6JJ7tUryqXpMauXivuWjX/7Vr4tbUZO6h7KnXzP0DcIBdoiioihybVWYmStt/sbeEI93fmdb/X5xcO7gWOrMh6yoWDwldbjbnw45toaOUO49jew4S/UcmacO2eD5IzlIFUlzifucBrkVJVdYycjR2FiC85VQ2JppzrgxnlUinQr4DiYTU86cOTOimiue/obVN94j6fBv8HohgYrWZGBcf5tszluAUngZeRukiAERGsLLdVhoEKmQokdO5DY78wDd6i6VYyozSBF07pK1EN7WAPhk28GtggB4srSnkhcOFwFXlLVXxKMZ99uI3m+UEPXB4PqGv+rST97nwtn5K4JTJB+3IJqI9/nyCBy37hlEK2loJweFtkIbH9k3887MgO3KPuy4SeQw1G4bNOitW8+A79BJL09zF6W8cboKlOdkxB94nn+B/05UtpRnRiKKEcS0diGYt72Sczmo5hjTNQ1mcMsfcakbu9Peef2ZfUe6FSL4A8UwypW8voR3gK3Ie86xV7ZQESK77R/Gii+4nHlMoziF71X51HM3Hst6lufPKC88WrfHKYDI+4urcVn5pxbYoAU9cuMZhgpPFffzl0rMrebf6fcXggIWVaSAYfl+bYp6YJL16ev2YL0o2DCwoXhuzi5hDLVPOwwSRFRGweOpAVNoWTh6ojuV1O19e00uqMPC9EAA==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(36860700001)(47076005)(86362001)(54906003)(82310400004)(6916009)(508600001)(316002)(70586007)(70206006)(6666004)(40460700003)(7696005)(4326008)(8676002)(26005)(186003)(1076003)(426003)(336012)(356005)(81166007)(5660300002)(2906002)(2616005)(83380400001)(36756003)(966005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 06:51:46.4665
+X-Microsoft-Antispam-Message-Info: ZJyhYXk1Pib1ZAHAFPGL10DIquasIYlNiA+JmaNA1fEq7ZnLNlC7cNoMdsoMcroknbnRTXf1MEAtts/T7VkGIosdVmLqx5Q2z/YvfnHvbTEShDVjf93C6V2JZMdWd6ZB/fW8FzXwE4BMpUmvfuiM5ldtBfc0hA3wM3xdSFrje0NJT50CxAkzq0GwysFSDt/sgc7pGbAIKZ3MaEKXYvjII7h4PNkFtpnGOMucXr7pwzzpfIhyohsCTvJCXx0GW0yTGAMxoX+p/7TaIseQ6UKFEusNmSHDYSl3op7hyn/qA666RLeAqLPWz97/iS7JvcxKvHSsnlDsYBYxpCuBEZUnCO3Cd8HfxI7lrwUMgunVYMC8VKtKMVbjwE1t4Uaq/3mQ+SjgP9IjRua1OICSCkOEb/5A99MVnG6s+47NcaHsjvWj6HmmN+O/k1tXHnrluu8UJ935OMzbaB4AzhAfv7+2FouwyFNPTLY2YpskazRyAuquOwTYTmVx7cbTRdQA5TsNTVn52pHvaBcH5nlruA05zbvozrgXqO9h5CuzCoBDd7VGE7miC52DV8JrRm3NXWy9o7NgHY6fnZjvkH+D8nJq4bSFQ56GWuhsTKXEWFEE9WmBt3A92/ixwl2+vY9e3iMZDOuHYr/NFdm8fN9ct6HYVTIiFYxyz8saS5w7LswggJaDdtZTvyocgB9iSH0qxY8hpqatKm4XqsjRoAzEXwg8/g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(8936002)(5660300002)(2906002)(38100700002)(38350700002)(4744005)(26005)(186003)(2616005)(1076003)(107886003)(110136005)(508600001)(6666004)(6512007)(6506007)(6486002)(52116002)(36756003)(66476007)(66556008)(66946007)(4326008)(8676002)(316002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UlV/A3nkXt7Jmue3ZpdOWjlNezxs4s9q4GOHMPLEI8t5VbolU39n7rsEzU7f?=
+ =?us-ascii?Q?Qu6ao9/t/ufWoz0qE1686nAYlOjDS1Qlal4H/gkMsJU8SE+9DW5PKdhd+/Gs?=
+ =?us-ascii?Q?aYIlbA5TCH8FRx5B1Svr05XKys/HouV0AAPy23H5tlih+vyulKFdn8cvr1fh?=
+ =?us-ascii?Q?PY5dkcwf/HCYgCNf+kQ64t96Qt5uqQhq0BggnSt1rWfcrXCNE2bZXbX/YQGf?=
+ =?us-ascii?Q?T3vwqnJmFzJhWPthT9U+d4IzD0MPVnCGQ+REt5QVorAaxusfSIYqtEVpjC66?=
+ =?us-ascii?Q?uGm2gH5FoNHEc6hqVtMNiWPox+hLdqaCcu8F8gIlevBSJKtO3gmvZxvPvtEY?=
+ =?us-ascii?Q?EGvvl6rlz2cbVJum3xJJ1RRxxgWaSd8p+MA/AcQ5WoxhLiknjYdtt8FbVF/x?=
+ =?us-ascii?Q?3Cr0zpB3OBDROB87/ZC/y2no49fG5Nsd/KSld6WKoOJ91Wbnfl4yH0/oJq+s?=
+ =?us-ascii?Q?FsZ25ASSRrBBgUNgj/6Gmq9Wry2HG6MzFGoncT9mNte3yupOaOvCwrUUixt8?=
+ =?us-ascii?Q?mdioYvqeFT2Q0gR7ukntS42ZOj0sH1+ZJOh+XozPUfrsQ6FhaNNl3AiBdbvi?=
+ =?us-ascii?Q?pXE5K5SpjsvuAq2617URt07Za/vDCT0MfX/M47hV2Eo0PDzTRyIwyzwcaeOy?=
+ =?us-ascii?Q?jxr0lIgv/6sfX3yUJmkhXujL9LNA0YNdFzPGzK7xtmPZBm9n27culmWeHAc+?=
+ =?us-ascii?Q?SKcE2dSHUTQ+SCLEPFkeSK7MyIOEEgPKozO122OcBUL/x6b46lkgQ1YGgOWV?=
+ =?us-ascii?Q?CmIgZIOCefwhOqcFkb+vEVHdD9yiJTDb4hUwAgydiRz8+4GRD9WWoi1xBllu?=
+ =?us-ascii?Q?7eNh4Yxu+rJv5MKVWQR/qWbOKGoepPi92YxdSzgF74wwXI01vNjEKTbEtBh5?=
+ =?us-ascii?Q?MBpM1z5CzokVmnjO1C3bkgTsDTzZK2vWk+xT/2AsmYUqeGsK/PbBuGIfGL5T?=
+ =?us-ascii?Q?4bFmmC+UR2helLJ5OYBniRUnar+waA8PFM2jCBCgjOygCtxGnInGIysGDkHr?=
+ =?us-ascii?Q?pMNM7cPXWz8ErP9CmhvkFPZuC1jz0tjNVn6UEjS6EEMJRNdo2APMtxodBQ3o?=
+ =?us-ascii?Q?NGTmcSfP5enOd2l3LD/kVTrjt3qrNf6ejJpgIgU8uxo8bMFw0TV3KyKZ0SD7?=
+ =?us-ascii?Q?JCiHUlj03At02JpC4JWNE8Kc8xYe9cijEIzxfTPwoRsamSdNkr8exAwwlwKm?=
+ =?us-ascii?Q?n5QzFO0EgDrto8qNXGol3q7hOlMjXo5/FZnhgQpbO16c46AgDRMgGKVsrF3M?=
+ =?us-ascii?Q?h9PREUP3kUYC6qIAh+xEw5eoAq5XmeRh9T0Rpc38koRnfYq3k0PA7HKq1xS9?=
+ =?us-ascii?Q?m0Y/hqkv/DTZ79235UK5C1yAvqMWYM1xG7eyR+DtW4MeskMeHNBlIqtjHxN9?=
+ =?us-ascii?Q?ej7N+cCoQZJZosntsJDB2kNJNFnWlKdW/AIfB8QMpiTujURbEwM5MwraCEOq?=
+ =?us-ascii?Q?dA6ckpj8SsBlHO6Tg17+ed5CQjVCHM9MhJkhGB4baaU48c6mdDK1p7bsqgdO?=
+ =?us-ascii?Q?zPaua+UVX/497xSWBYGpW0DDUSjXxYShnzRNwJe9xavN/AMMaVPBrEwVS1gk?=
+ =?us-ascii?Q?CyYXZnojRmnixnx/oHnkpuaTtySP/6OoIY306wvjdWjLPLbwCIIOnBTidCNp?=
+ =?us-ascii?Q?obBKz64Fxxyp+tHMVI7SsDo=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05ee9e56-8522-40e6-4634-08d9fc19ced3
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 06:56:42.5845
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff1da8f0-7cfa-490b-534b-08d9fc191e85
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1648
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FdEEhkn7eZJAliIqV1JLPMgXn8zzIruRxISPZz6SreaqF/qkCdudLho154ubdH+47r1VXDsXFSJIZWl8qI2xOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR06MB2365
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race between system resume and device-initiated resume may result in
-runtime PM imbalance on USB2 root hub. If a device-initiated resume
-starts and system resume xhci_bus_resume() directs U0 before hub driver
-sees the resuming device in RESUME state, device-initiated resume will
-not be finished in xhci_handle_usb2_port_link_resume(). In this case,
-usb_hcd_end_port_resume() call is missing.
+Remove dev_err() messages after platform_get_irq*() failures.
+platform_get_irq() already prints an error.
 
-This changes calls usb_hcd_end_port_resume() if resuming device reaches
-U0 to keep runtime PM balance.
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 
-Fixes: a231ec41e6f6 ("xhci: refactor U0 link state handling in get_port_status")
-Signed-off-by: Henry Lin <henryl@nvidia.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
+ drivers/misc/hi6421v600-irq.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Changes in v2:
-- Add Fixes tag in change log
-
-Changes in v3:
-- Revise changelog
-- Only call usb_hcd_end_port_resume() if xhci_irq() detected the device-initiated resume
-
-[v2] https://lore.kernel.org/all/20220225071506.22012-1-henryl@nvidia.com/
-[v1] https://lore.kernel.org/all/20220225055311.92447-1-henryl@nvidia.com/
+diff --git a/drivers/misc/hi6421v600-irq.c b/drivers/misc/hi6421v600-irq.c
+index 1c763796cf1f..babb85364aa9 100644
+--- a/drivers/misc/hi6421v600-irq.c
++++ b/drivers/misc/hi6421v600-irq.c
+@@ -244,10 +244,8 @@ static int hi6421v600_irq_probe(struct platform_device *pdev)
+ 	pmic_pdev = container_of(pmic_dev, struct platform_device, dev);
  
- drivers/usb/host/xhci-hub.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index df3522dab31b..5e7a4dfc59d2 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1088,6 +1088,9 @@ static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
- 		if (link_state == XDEV_U2)
- 			*status |= USB_PORT_STAT_L1;
- 		if (link_state == XDEV_U0) {
-+			if (bus_state->resume_done[portnum])
-+				usb_hcd_end_port_resume(&port->rhub->hcd->self,
-+							portnum);
- 			bus_state->resume_done[portnum] = 0;
- 			clear_bit(portnum, &bus_state->resuming_ports);
- 			if (bus_state->suspended_ports & (1 << portnum)) {
+ 	priv->irq = platform_get_irq(pmic_pdev, 0);
+-	if (priv->irq < 0) {
+-		dev_err(dev, "Error %d when getting IRQs\n", priv->irq);
++	if (priv->irq < 0)
+ 		return priv->irq;
+-	}
+ 
+ 	platform_set_drvdata(pdev, priv);
+ 
 -- 
 2.17.1
 

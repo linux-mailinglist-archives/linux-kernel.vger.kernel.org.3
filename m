@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343D34CA37E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFBF4CA383
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 12:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiCBLWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 06:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S237568AbiCBLXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 06:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiCBLWg (ORCPT
+        with ESMTP id S240017AbiCBLXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 06:22:36 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C079555B9;
-        Wed,  2 Mar 2022 03:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646220113; x=1677756113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1Htwp0cn4iD5IqoVEZ/IBuMOc0hHGYYNClu//F4PQ/o=;
-  b=ZJFwG1MvaxZmk7M7JlkSt07QQ1VQ3/aXV3+HL5yrc2G1Pq7o43H694uP
-   JdZtO1+0ivbWaKKEPfI8mMZl4Q7HxWe3CtsBAkvK+gry4pEJTJHS2fEke
-   TRTlxc/trSYz4D5PZZLU+mtP6RpeCqLVmWFHnVhZRRrpxoLubydWBpIko
-   3v3gB8+habxpeZvzFaHTLs6spLakHBwr2CMkXKM35663eAMCtTAvuiui8
-   NYOSQxbo67fq1oxJIbO52c7a+jBRuxi3XXd6wO9bbqrb4ASb+OuEO9VLg
-   +TFbjTXoTVILHqev0wVl51Y+hFrQYOK49T6aI0F2HU/yE9pTyY++9eia6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="240790596"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="240790596"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 03:21:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="686106327"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Mar 2022 03:21:50 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 02 Mar 2022 13:21:49 +0200
-Date:   Wed, 2 Mar 2022 13:21:49 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] ACPI: bus: Introduce acpi_bus_for_each_dev()
-Message-ID: <Yh9TTb6rBeTAw0iB@kuha.fi.intel.com>
-References: <11943345.O9o76ZdvQC@kreacher>
+        Wed, 2 Mar 2022 06:23:18 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883005F95
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:22:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Kf8zKjx1jpB6ExufZ+QyMPsC6cuJG3089w5+njs1G5A=; b=c0DkrTda2xpKvQodJagOfOc7VD
+        zppk1RxeyrxfqxPf0iJ7eKwJA+LospYsjRd4+ztXiOUqoneCxHUTde1uzopU1eB+5rLv7lOVM0UMs
+        5jYG+L2Fs2NcOE3ezqsXzF8ZSVI2DxJg0ctPT24oKasn0WrIbtm9yBXNtJhsO+wf48tQv7yR25H1w
+        A2E/e8g3cKImvO47diCQ2ggxChcYbFiEu+caxvSb4jHhPYhUgB0cijR4449MA9iJEmO2SsWjzvA65
+        PWdlg+T7sZ30+mfYOqrMpdi15sXunojfvBIpw2MZ5t83JJVKiI1ufAF3C4riJ9DOujMSGzgU/F9kt
+        qUYrhaIg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57594)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nPN3u-0002Kq-9x; Wed, 02 Mar 2022 11:22:30 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nPN3t-00085p-8J; Wed, 02 Mar 2022 11:22:29 +0000
+Date:   Wed, 2 Mar 2022 11:22:29 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: boot flooded with unwind: Index not found
+Message-ID: <Yh9TdbWwHX/5Bhmt@shell.armlinux.org.uk>
+References: <Yh5AlfprVAZvJDJA@shell.armlinux.org.uk>
+ <CAMj1kXGRTM99F_Q29Q4G2Q4L6WSHn2YY+_QZCXQGmw=yWPe1mQ@mail.gmail.com>
+ <CAMj1kXEy6n3zZ8Z51kP=tTuOU0xCXLLfC-b6BMpdsjMoM7zGBg@mail.gmail.com>
+ <Yh8tWdiWPgZLyQtx@Red>
+ <CAMj1kXGRtdftpoqmd7HBonBBS67jO=YWzoESPAagGfQBZUDQWg@mail.gmail.com>
+ <Yh8w7ldudhmbYv4N@Red>
+ <CAMj1kXHri2_tnYhu2gE9xTUOxLY9v1=zODCo1BGfjFTKukiedA@mail.gmail.com>
+ <Yh9CbcrfDvN2Z9Y9@Red>
+ <Yh9RI64fThQfnJgS@shell.armlinux.org.uk>
+ <CAMj1kXGVwXzAAyDeJqAi+eK1hOB3uShiBb_LORL-_YNvikbsAw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11943345.O9o76ZdvQC@kreacher>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <CAMj1kXGVwXzAAyDeJqAi+eK1hOB3uShiBb_LORL-_YNvikbsAw@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,76 +69,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:51:42PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Mar 02, 2022 at 12:19:40PM +0100, Ard Biesheuvel wrote:
+> On Wed, 2 Mar 2022 at 12:12, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 02, 2022 at 11:09:49AM +0100, Corentin Labbe wrote:
+> > > The crash disappeared (but the suspicious RCU usage is still here).
+> >
+> > As the trace on those is:
+> >
+> > [    0.239629]  unwind_backtrace from show_stack+0x10/0x14
+> > [    0.239654]  show_stack from init_stack+0x1c54/0x2000
+> >
+> > unwind_backtrace() and show_stack() are both C code, the compiler will
+> > emit the unwind information for it. show_stack() isn't called from
+> > assembly code, only from C code, so the next function's unwind
+> > information should also be generated by the compiler.
+> >
+> > However, init_stack is not a function - it's an array of unsigned long.
+> > There is no way this should appear in the trace, and this suggests that
+> > the unwind of show_stack() has gone wrong.
+> >
+> > I don't see anything obvious in Ard's changes that would cause that
+> > though.
+> >
+> > Did it used to work fine with previous versions of linux-next - those
+> > versions where we had Ard's "arm-vmap-stacks-v6" tag merged in
+> > (commit 2fa394824493) and did this only appear when I merged
+> > "arm-ftrace-for-rmk" (commit 74aaaa1e9bba) ? Did merging
+> > "arm-ftrace-for-rmk" cause any change in your .config?
+> >
 > 
-> In order to avoid exposing acpi_bus_type to modules, introduce an
-> acpi_bus_for_each_dev() helper for iterating over all ACPI device
-> objects and make typec_link_ports() use it instead of the raw
-> bus_for_each_dev() along with acpi_bus_type.
+> I can reproduce the RCU warnings, and I have tracked this down to the
+> change I made to return_address() for the graph tracer, which I
+> thought was justified after removing the call to
+> kernel_text_address():
 > 
-> Having done that, drop the acpi_bus_type export.
+> --- a/arch/arm/include/asm/ftrace.h
+> +++ b/arch/arm/include/asm/ftrace.h
+> @@ -35,26 +35,8 @@ static inline unsigned long
+> ftrace_call_adjust(unsigned long addr)
 > 
-> No intentional functional impact.
+>  #ifndef __ASSEMBLY__
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> -#if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND)
+> -/*
+> - * return_address uses walk_stackframe to do it's work.  If both
+> - * CONFIG_FRAME_POINTER=y and CONFIG_ARM_UNWIND=y walk_stackframe uses unwind
+> - * information.  For this to work in the function tracer many functions would
+> - * have to be marked with __notrace.  So for now just depend on
+> - * !CONFIG_ARM_UNWIND.
+> - */
+> -
+>  void *return_address(unsigned int);
+> 
+> -#else
+> -
+> -static inline void *return_address(unsigned int level)
+> -{
+> -       return NULL;
+> -}
+> -
+> -#endif
+> -
+>  #define ftrace_return_address(n) return_address(n)
+> 
+>  #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
+> 
+> However, the function graph tracer works happily with this bit
+> reverted, and so that is probably the best course of action here.
+> 
+> I have already sent the patch that reintroduces the
+> kernel_text_address() check - would you prefer a v2 of that one with
+> this change incorporated? Or a second patch that just reverts the
+> above? (Given that the bogus dereference was invoked from
+> return_address() as well, I suspect that this change would make the
+> get_kernel_nofault() change I proposed in this thread redundant)
 
-FWIW:
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/acpi/bus.c              |    7 ++++++-
->  drivers/usb/typec/port-mapper.c |    2 +-
->  include/acpi/acpi_bus.h         |    2 ++
->  3 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/drivers/acpi/bus.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/bus.c
-> +++ linux-pm/drivers/acpi/bus.c
-> @@ -1043,7 +1043,12 @@ struct bus_type acpi_bus_type = {
->  	.remove		= acpi_device_remove,
->  	.uevent		= acpi_device_uevent,
->  };
-> -EXPORT_SYMBOL_GPL(acpi_bus_type);
-> +
-> +int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data)
-> +{
-> +	return bus_for_each_dev(&acpi_bus_type, NULL, data, fn);
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
->  
->  /* --------------------------------------------------------------------------
->                               Initialization/Cleanup
-> Index: linux-pm/include/acpi/acpi_bus.h
-> ===================================================================
-> --- linux-pm.orig/include/acpi/acpi_bus.h
-> +++ linux-pm/include/acpi/acpi_bus.h
-> @@ -480,6 +480,8 @@ void acpi_initialize_hp_context(struct a
->  /* acpi_device.dev.bus == &acpi_bus_type */
->  extern struct bus_type acpi_bus_type;
->  
-> +int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data);
-> +
->  /*
->   * Events
->   * ------
-> Index: linux-pm/drivers/usb/typec/port-mapper.c
-> ===================================================================
-> --- linux-pm.orig/drivers/usb/typec/port-mapper.c
-> +++ linux-pm/drivers/usb/typec/port-mapper.c
-> @@ -59,7 +59,7 @@ int typec_link_ports(struct typec_port *
->  	if (!has_acpi_companion(&con->dev))
->  		return 0;
->  
-> -	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
-> +	acpi_bus_for_each_dev(typec_port_match, &arg);
->  	if (!arg.match)
->  		return 0;
->  
-> 
-> 
+I'd prefer patches on top of my devel-stable branch, thanks.
 
 -- 
-heikki
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

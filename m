@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45B34CAB7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EC14CAB81
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243776AbiCBRZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S243786AbiCBR0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239849AbiCBRZw (ORCPT
+        with ESMTP id S239849AbiCBRZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:25:52 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFC3CA31A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:25:06 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bk29so3903028wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:25:06 -0800 (PST)
+        Wed, 2 Mar 2022 12:25:59 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22B2CA31A;
+        Wed,  2 Mar 2022 09:25:15 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2dbc48104beso26251917b3.5;
+        Wed, 02 Mar 2022 09:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bz7qotst5wZ2RH1Ycd9IIg729giMypmnjudyWeu+UwU=;
-        b=lvmC6OwysBVJcR6sJCUrR+wOrgbPj+ANTmN1KXU72r/93w/a8+Hdqgb8MfLsG43iYE
-         zYMxmv0GrzTjXS2FAs2VhCWlRf5n+pYIN590AcBgJ36WqobqzS6erQN+QMF2T+8TDk33
-         DPCZ7tKakr8buBALDa2Iv8OIsfNJbvTneuAs7N5W9Rex4CrI4onp2LZYLTghetUf4JCc
-         tR/VEWRSHJwl243How9otm9mr2PKSNztegqbAjdO5gWLxDRvIXKUZnCP2HdYtIdflf/g
-         Cmffy3GqwRa/C+Ycx0agEajPx9vlD3SIWg6+9NoAkyTlAE+ItKPy3tly4uLagG267KHe
-         xupw==
+        bh=WHLK0rZoZwvLk407H3I3AQl9EwHKDQ8Qn/KJVxCEprA=;
+        b=Mpa9yuqvsgiPWU7E5zDlY7qrZ7YkH/oJgAwF0bkUoBZTiKb5A4QoOJmxH5ADLmgE0L
+         WrHX6Gcsj2UNIAUowILtqQAe5yzF3jnRbxGuuojrdZPkmEnf4tGFqcfyXq1C/nrKLsXN
+         daRlwC/rUv+SrgitsXZmEvTrc+73PV6zDsjEDAWT4Iv43QDXuNzvJvR9/K3YVNcxNIqp
+         KKXIN6+IXkSawy5mHmKIhiCdpYBfu/gVlaGjwcDarFGZC6JeX7/zQJnzeePylIsc/Ekb
+         nVq7ojdJ7f8X9+DsKlF2ongMaze3of8LvrhLF8zp2DkAkpFU/nRKPra2CjjKxXwxint2
+         SdMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bz7qotst5wZ2RH1Ycd9IIg729giMypmnjudyWeu+UwU=;
-        b=UU/tDsiBjKP2Lu42FEuyIXeaHREW4/DAq6kh1sVYD1kWAHKd1tZ+M1lgWYZjXJwQgc
-         pXe7Dc7uVCwCZnd53UMssL28X8RfJl5orcZzkcZ/GyyTMGnp3VtrLFkJgBTu8oANS/Zz
-         IWH+AUg/WuNAKlUlMsA2htAjV+0NoCPOqPCqh5jZ+Qaak6bb7kO6UumB4uQ6WOPCOEJ+
-         5vBVyKK0WLHLx+yfPKuxzGgy6/dSIUrV8ZjP0Z/PXFCB+VrN4krNCpvVZc/ooLoiPTDd
-         p4XGsdZ8L8H2/89kUbALuIwdBbzCpDAnRV9uL2w5RmeyKRaKPRAa9gWdlos3Dhug14Xo
-         REWw==
-X-Gm-Message-State: AOAM531SOSb996h54XxZNaoZE/nGbHU8lEBUQIK6pm7RWxBaeC5XvuJM
-        K2XeLMEF14uimxkyPzvRnkSX8+4Niy1V7yCRlQjVdg==
-X-Google-Smtp-Source: ABdhPJyvAVYsK6bS1ULRzdVEwTranzJPFva6nkK9r8cZMojwnXMSs7MamfTIXIP3rnb2zflw1aKln/RKLG3YyPjdHWc=
-X-Received: by 2002:adf:ca08:0:b0:1ed:c0bc:c212 with SMTP id
- o8-20020adfca08000000b001edc0bcc212mr23553444wrh.577.1646241904615; Wed, 02
- Mar 2022 09:25:04 -0800 (PST)
+        bh=WHLK0rZoZwvLk407H3I3AQl9EwHKDQ8Qn/KJVxCEprA=;
+        b=BM+bwcIcL4cDLMCpC3J3bargKUpDecQ+cd0ogrp6TK83HVoHWLTnk579OaBV7zJ+Lq
+         aaZG74jVFgrfehU0VEgUeAVlK5RO6sFAB4LGsZ9koUu72exBnwSI2pfOl946M4ZvVpXL
+         k4lqA15ZqKVPlVUvApDwTQ6lMB/ldXXqsyHn+X6f4fZ2X9O9O65QGYyRX6BxmtmLHsqI
+         qeIAbTeOOJ7uKEuDs8n4c+LAvXUGpcxkym0Qe+igb+22V5pTvuCLiZPKpdYbCyAM1JpD
+         1NNGao+cAZHIuvxEXHKpvYpCksC4rLvjoY3FGpju6KPRoFCG5EG8GLDQLZpziNJ5iqLW
+         NQRg==
+X-Gm-Message-State: AOAM530MshHyBczYWFqa7u0d9FNBYCCb1E13NXhsasTcuF2inoaMAAqt
+        TAR++joHqLkU6B7vOXT4QLYMFrYWARvFeUi065s=
+X-Google-Smtp-Source: ABdhPJwQX66RmntT4aJExWpWltr3suaoJxs4GWL9aqZqibeCHhZOncYjov5VmoDhhvP6zgQnYaeSQWcDLbeK6o/LHao=
+X-Received: by 2002:a81:3807:0:b0:2d8:2ed:1d19 with SMTP id
+ f7-20020a813807000000b002d802ed1d19mr30671490ywa.519.1646241915023; Wed, 02
+ Mar 2022 09:25:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225033548.1912117-1-kaleshsingh@google.com>
- <20220225033548.1912117-3-kaleshsingh@google.com> <87v8ww6bl0.wl-maz@kernel.org>
-In-Reply-To: <87v8ww6bl0.wl-maz@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 2 Mar 2022 09:24:53 -0800
-Message-ID: <CAC_TJvfTZP9+EKFFXQUeGOWJb=WK2Wkd53bPOX2gaz0Gh5o8OA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/8] KVM: arm64: Introduce pkvm_alloc_private_va_range()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220302143427.447748-1-vkoul@kernel.org> <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
+ <Yh+l7+7zDvI/9e6n@matsya>
+In-Reply-To: <Yh+l7+7zDvI/9e6n@matsya>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 2 Mar 2022 12:25:03 -0500
+Message-ID: <CAMdYzYoVz4wk-EhfxQdwu9FqRg8Vj-HGMFG+CFjfsHeM8HcnNQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
+ combo phy register compatible"
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,62 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 11:46 PM Marc Zyngier <maz@kernel.org> wrote:
+On Wed, Mar 2, 2022 at 12:14 PM Vinod Koul <vkoul@kernel.org> wrote:
 >
-> On Fri, 25 Feb 2022 03:34:47 +0000,
-> Kalesh Singh <kaleshsingh@google.com> wrote:
+> On 02-03-22, 11:04, Rob Herring wrote:
+> > On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > >
+> > > This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
+> > > combo phy register compatible") as that was wrongly merged, so better to
+> > > drop the wrong patch
+> > >
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > ---
+> > > I am applying this to phy-next to fix the issue
 > >
-> > pkvm_hyp_alloc_private_va_range() can be used to reserve private VA ranges
-> > in the pKVM nVHE hypervisor (). Also update __pkvm_create_private_mapping()
-> > to allow specifying an alignment for the private VA mapping.
-> >
-> > These will be used to implement stack guard pages for pKVM nVHE hypervisor
-> > (in a subsequent patch in the series).
-> >
-> > Credits to Quentin Perret <qperret@google.com> for the idea of moving
-> > private VA allocation out of __pkvm_create_private_mapping()
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >
-> > Changes in v4:
-> >   - Handle null ptr in pkvm_alloc_private_va_range() and replace
-> >     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
-> >   - Fix kernel-doc comments format, per Fuad
-> >   - Format __pkvm_create_private_mapping() prototype args (< 80 col), per Fuad
-> >
-> > Changes in v3:
-> >   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
-> >
-> > Changes in v2:
-> >   - Allow specifying an alignment for the private VA allocations, per Marc
+> > Reverting will just cause a different warning that it is undocumented.
 >
-> I probably badly expressed my earlier concern.
+> Right, but a patch for that would fix that
 >
-> Yes, an alignment is necessary. But how often do we want an alignment
-> that isn't naturally aligned to the size of the allocation (i.e. the
-> power of 2 >= the size of the allocation)? This is what the rest of
-> the kernel does (get_order() and co), and I thing we should follow
-> this.
+> > The fix in the other thread won't apply either if you revert.
+>
+> It is not applying for me, so that needs to be updated anyways..
 
-Hi Marc,
+It seems phy-next has fallen out of sync with -next.
+It's missing this patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/devicetree/bindings/soc/rockchip/grf.yaml?h=next-20220302&id=7dbb47d64acf4aac131a2aaade726913aa62abe7
 
-Thanks for clarifying. I think making the alignment implicitly based
-on the size here will create unnecessary holes where PAGE_SIZE
-alignment would be ok and potentially overflow the private VA space
-earlier. Is it not a concern?
-
-- Kalesh
->
-> This applies to both this patch and the previous one.
->
-> Thanks,
->
->         M.
 >
 > --
-> Without deviation from the norm, progress is not possible.
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+> ~Vinod

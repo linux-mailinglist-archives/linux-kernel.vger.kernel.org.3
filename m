@@ -2,124 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69674CAD5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB16B4CADDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241543AbiCBSVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S244739AbiCBSsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiCBSVA (ORCPT
+        with ESMTP id S244726AbiCBSsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:21:00 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA223BCE;
-        Wed,  2 Mar 2022 10:20:16 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id i66so1684131wma.5;
-        Wed, 02 Mar 2022 10:20:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jCur8YrGp6z/NuQt4H+X/uS6Re1ZqnHb48KX+hfu53o=;
-        b=C4GUs40MfOQrW5sBrilqDYxQOs2FYm8f9QxL3hMm+zTP7aTJkzPLfOPhs1lzQD3CVV
-         m377cAUO0oZ53mdaNqMWRt8gPsuU0ovUZNlwnvn08ITFVdVy73fb7u4ZK3l7YEeD3ibj
-         Nr0sbRwJxI0AewRuDPljZiBP8Rs0uhhv5z2CHj3WgN20jslaIky90KJcGHpqmC59fdS2
-         Qa8nmDnuvVenMEGxLwDdlcdtqQpK9jfBGpuqs9iNzQwxXGLrJTfnLFdc9UOpYspXUFb1
-         YXTgzNtPfCqnJ+gr1HToZfiOJWVjSxoyE1x2VWPtIUfNECWYDubH4bGdqlIkT+Aovoja
-         wBHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jCur8YrGp6z/NuQt4H+X/uS6Re1ZqnHb48KX+hfu53o=;
-        b=kiKMeovu8BWc1cFXOco+x2pGcgXzjrh3CGexFM9Oh2FW77WS2g7DePtT/+wo4++TLD
-         fKpK+2jKKLAZ1N5fL29wNX4jppccCFfZ4m3qcVaOh1DEfapPOoUd6ppPUWI7Sq4cGnYM
-         Igt9L0zo0hcTm53hmi0d0ndjvCmZ5TcQlA1+WOzcsSumu38a2+HAhAPd2M3ndGneWihg
-         ihleKMItHuvCJx8rYS0FHYoUwMmqHA/sdeDKsqrLA97Rr0NmHdWFNN9XqSyfZy9tfLjG
-         MQ9mBOdNQ9Z5K7zSzcAWbJ7INOSFTT9lsN5dUgCfyJNFHCp/FFfEVJR3fYZY+wd/bleI
-         5FKw==
-X-Gm-Message-State: AOAM533+R5aIanKciLGby/g2CeIC//xrCr9mTqJ6LBHhz3LxT6694Xdh
-        HqHvAL9R4Zy9xM7fa6dA5fqzE68SA7U=
-X-Google-Smtp-Source: ABdhPJxtYGh4kFJILKrTt8o6mKhCSuHsw4oW6NwL5OtdhqpgfcLuYtQySmgMW7m0aLTyZuA1mYoFpQ==
-X-Received: by 2002:a7b:c94e:0:b0:386:3694:3e78 with SMTP id i14-20020a7bc94e000000b0038636943e78mr935222wml.22.1646245215294;
-        Wed, 02 Mar 2022 10:20:15 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id n21-20020a05600c3b9500b003830cbe90c3sm3808590wms.11.2022.03.02.10.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 10:20:14 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
-Date:   Wed, 2 Mar 2022 19:20:13 +0100
+        Wed, 2 Mar 2022 13:48:04 -0500
+X-Greylist: delayed 899 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 10:47:20 PST
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565ADD5571;
+        Wed,  2 Mar 2022 10:47:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1646245282; bh=r/KWBCXbgbUsx0MROHM9/eZLCf5PfDdjQ920as27D3k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=D2nwKwiYcjfQ8oI3lQewTctuUi8U4oh8bNo2fgLFtdJlnEEKPqbSl/4HCVSEanMn4
+         3RTuUSTz/1dEi3fgmH0m2GCM16EQNrmAUzX6Vla+Dpc0F7l792PeVNRR/UvsyTUsso
+         fojz0nHmJamBDGby1t7rqGhtVFt8K4DBvXpB8oJKcBu2PlmqUMFBoXUApvB4dNrzaR
+         Y5v4yFqHW07zhDlJnzE1XFZX0IElyreDBbxTF6tncpceXn6DUlqp+Bp5e8TuBukRkS
+         OMABrntTimVnol9CcvJIurAztzqKq5d6vXpigNoE7OfhCX0stZ2hPYVlzZwTKivbp3
+         AWQCNqKfDfS+g==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 293C039B89A;
+        Wed,  2 Mar 2022 18:21:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1646245282; bh=r/KWBCXbgbUsx0MROHM9/eZLCf5PfDdjQ920as27D3k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=D2nwKwiYcjfQ8oI3lQewTctuUi8U4oh8bNo2fgLFtdJlnEEKPqbSl/4HCVSEanMn4
+         3RTuUSTz/1dEi3fgmH0m2GCM16EQNrmAUzX6Vla+Dpc0F7l792PeVNRR/UvsyTUsso
+         fojz0nHmJamBDGby1t7rqGhtVFt8K4DBvXpB8oJKcBu2PlmqUMFBoXUApvB4dNrzaR
+         Y5v4yFqHW07zhDlJnzE1XFZX0IElyreDBbxTF6tncpceXn6DUlqp+Bp5e8TuBukRkS
+         OMABrntTimVnol9CcvJIurAztzqKq5d6vXpigNoE7OfhCX0stZ2hPYVlzZwTKivbp3
+         AWQCNqKfDfS+g==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id 16A0B39B811;
+        Wed,  2 Mar 2022 18:21:19 +0000 (UTC)
+Subject: Re: [PATCH v3] serial: make uart_console_write->putchar()'s character
+ an unsigned char
+To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20220302072732.1916-1-jslaby@suse.cz>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <9f1f4434-56cb-e8e7-b947-6630752a74c3@mleia.com>
+Date:   Wed, 2 Mar 2022 20:21:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous
- worker
+In-Reply-To: <20220302072732.1916-1-jslaby@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-23-seanjc@google.com>
- <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
- <Yh+xA31FrfGoxXLB@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yh+xA31FrfGoxXLB@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220302_182122_201121_FC62FFD6 
+X-CRM114-Status: GOOD (  26.46  )
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 19:01, Sean Christopherson wrote:
->> +	 */
->> +	if (!refcount_read(&kvm->users_count)) {
->> +		kvm_mmu_zap_all(kvm);
->> +		return;
->> +	}
+On 3/2/22 9:27 AM, Jiri Slaby wrote:
+> Currently, uart_console_write->putchar's second parameter (the
+> character) is of type int. It makes little sense, provided uart_console_write()
+> accepts the input string as "const char *s" and passes its content -- the
+> characters -- to putchar(). So switch the character's type to unsigned
+> char.
 > 
-> I'd prefer we make this an assertion and shove this logic to set_nx_huge_pages(),
-> because in that case there's no need to zap anything, the guest can never run
-> again.  E.g. (I'm trying to remember why I didn't do this before...)
+> We don't use char as that is signed on some platforms. That would cause
+> troubles for drivers which (implicitly) cast the char to u16 when
+> writing to the device. Sign extension would happen in that case and the
+> value written would be completely different to the provided char. DZ is
+> an example of such a driver -- on MIPS, it uses u16 for dz_out in
+> dz_console_putchar().
+> 
+> Note we do the char -> uchar conversion implicitly in
+> uart_console_write(). Provided we do not change size of the data type,
+> sign extension does not happen there, so the problem is void.
+> 
+> This makes the types consistent and unified with the rest of the uart
+> layer, which uses unsigned char in most places already. One exception is
+> xmit_buf, but that is going to be converted later.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Acked-by: Richard Genoud <richard.genoud@gmail.com> [atmel_serial]
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com> [bcm63xx_uart]
+> Acked-by: Tobias Klauser <tklauser@distanz.ch> [altera_*]
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Vineet Gupta <vgupta@kernel.org>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: Alexander Shiyan <shc_work@mail.ru>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: Karol Gugala <kgugala@antmicro.com>
+> Cc: Mateusz Holenko <mholenko@antmicro.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
+> Cc: Takao Orito <orito.takao@socionext.com>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: "Andreas Färber" <afaerber@suse.de>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> ---
 
-I did it this way because it seemed like a reasonable fallback for any 
-present or future caller.
+[snip]
 
-> One thing that keeps tripping me up is the "readers" verbiage.  I get confused
-> because taking mmu_lock for read vs. write doesn't really have anything to do with
-> reading or writing state, e.g. "readers" still write SPTEs, and so I keep thinking
-> "readers" means anything iterating over the set of roots.  Not sure if there's a
-> shorthand that won't be confusing.
+> diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
+> index 54437a087aa0..93140cac1ca1 100644
+> --- a/drivers/tty/serial/lpc32xx_hs.c
+> +++ b/drivers/tty/serial/lpc32xx_hs.c
+> @@ -122,7 +122,7 @@ static void wait_for_xmit_ready(struct uart_port *port)
+>   	}
+>   }
+>   
+> -static void lpc32xx_hsuart_console_putchar(struct uart_port *port, int ch)
+> +static void lpc32xx_hsuart_console_putchar(struct uart_port *port, unsigned char ch)
+>   {
+>   	wait_for_xmit_ready(port);
+>   	writel((u32)ch, LPC32XX_HSUART_FIFO(port->membase));
 
-Not that I know of.  You really need to know that the rwlock is been 
-used for its shared/exclusive locking behavior.  But even on ther OSes 
-use shared/exclusive instead of read/write, there are no analogous nouns 
-and people end up using readers/writers anyway.
+for NXP LPC32xx HS UART:
 
->> It passes a smoke test, and also resolves the debate on the fate of patch 1.
-> +1000, I love this approach.  Do you want me to work on a v3, or shall I let you
-> have the honors?
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
-I'm already running the usual battery of tests, so I should be able to 
-post it either tomorrow (early in my evening) or Friday morning.
-
-Paolo
+--
+Best wishes,
+Vladimir

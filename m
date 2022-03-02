@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA9C4C9ECC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 08:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21434C9ECD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 09:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239991AbiCBH67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 02:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S239987AbiCBIBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 03:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbiCBH65 (ORCPT
+        with ESMTP id S236101AbiCBIBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 02:58:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685577EA31
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 23:58:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17A00B81F1E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:58:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CA6C004E1;
-        Wed,  2 Mar 2022 07:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646207891;
-        bh=fHrv4m4CZ1D4uxW2jCaTRj1I7ej4PPHZOGKkWlysm4g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dUnB2XUTnE5vK5JzLbAgEW50QvwE2+UBfxSaTeoskrlX9XDeXehPnrq/P5UhtMEEM
-         OoCqfowmWiTr5JGkwnZVzxEaRU9L+sGHxYpQMgJ0Qo5zapzgyFjulVDuGyh5GO/4Eq
-         ANmbKiA/vjEudisECe7n+T9xOkvg8i7U6oAHkxWipuvQdAL/BOOMRV7cXTvDhnAG/9
-         O+Grnr6iOYd0+SWrN0ZIRjoz+ITdwY73Yy6L4SnKASL2kpaQuGJ+lRHlfBRFea7MRA
-         Dvzg8izETb1AKQ34OQjdA6QuTEGc0GY8yhJHOU7BrZ7KtU436+0jYXgGFXWt/+vDc3
-         3RVNzJL6IfQsQ==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Wed, 2 Mar 2022 03:01:15 -0500
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD810B6D08
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 00:00:32 -0800 (PST)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id DCCD013DD4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 02:00:31 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id PJuQnHwPldx86PJuRnZRCn; Wed, 02 Mar 2022 02:00:31 -0600
+X-Authority-Reason: nr=8
+Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:40076 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nPJs9-00BbrE-2m; Wed, 02 Mar 2022 07:58:09 +0000
-Date:   Wed, 02 Mar 2022 07:58:05 +0000
-Message-ID: <87sfs06b1u.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
-        surenb@google.com, kernel-team@android.com,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Walbran <qwandor@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
-In-Reply-To: <20220225033548.1912117-5-kaleshsingh@google.com>
-References: <20220225033548.1912117-1-kaleshsingh@google.com>
-        <20220225033548.1912117-5-kaleshsingh@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, broonie@kernel.org, mhiramat@kernel.org, pcc@google.com, madvenka@linux.microsoft.com, qwandor@google.com, ascull@google.com, ardb@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        (envelope-from <bristot@kernel.org>)
+        id 1nPJuQ-000ywp-8X; Wed, 02 Mar 2022 02:00:30 -0600
+Message-ID: <fc5793b2-e4f7-8639-3bbb-c934cd909c5c@kernel.org>
+Date:   Wed, 2 Mar 2022 09:00:27 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] tracing/histogram: Fix sorting on old "cpu" value
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>
+References: <20220301225728.100f17af@gandalf.local.home>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220301225728.100f17af@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 95.232.30.176
+X-Source-L: No
+X-Exim-ID: 1nPJuQ-000ywp-8X
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:40076
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 4
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 03:34:49 +0000,
-Kalesh Singh <kaleshsingh@google.com> wrote:
+On 3/2/22 04:57, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Maps the stack pages in the flexible private VA range and allocates
-> guard pages below the stack as unbacked VA space. The stack is aligned
-> to twice its size to aid overflow detection (implemented in a subsequent
-> patch in the series).
+> When trying to add a histogram against an event with the "cpu" field, it
+> was impossible due to "cpu" being a keyword to key off of the running CPU.
+> So to fix this, it was changed to "common_cpu" to match the other generic
+> fields (like "common_pid"). But since some scripts used "cpu" for keying
+> off of the CPU (for events that did not have "cpu" as a field, which is
+> most of them), a backward compatibility trick was added such that if "cpu"
+> was used as a key, and the event did not have "cpu" as a field name, then
+> it would fallback and switch over to "common_cpu".
 > 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> ---
+> This fix has a couple of subtle bugs. One was that when switching over to
+> "common_cpu", it did not change the field name, it just set a flag. But
+> the code still found a "cpu" field. The "cpu" field is used for filtering
+> and is returned when the event does not have a "cpu" field.
 > 
-> Changes in v4:
->   - Replace IS_ERR_OR_NULL check with IS_ERR check now that
->     pkvm_alloc_private_va_range() returns an error for null
->     pointer, per Fuad
+> This was found by:
 > 
-> Changes in v3:
->   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+>   # cd /sys/kernel/tracing
+>   # echo hist:key=cpu,pid:sort=cpu > events/sched/sched_wakeup/trigger
+>   # cat events/sched/sched_wakeup/hist
 > 
->  arch/arm64/kvm/hyp/nvhe/setup.c | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
+> Which showed the histogram unsorted:
 > 
-> diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
-> index 27af337f9fea..1b69a25c1861 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/setup.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
-> @@ -105,11 +105,28 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
->  		if (ret)
->  			return ret;
->  
-> -		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
-> +		/*
-> +		 * Private mappings are allocated upwards from __io_map_base
-> +		 * so allocate the guard page first then the stack.
-> +		 */
-> +		start = (void *)pkvm_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
-> +		if (IS_ERR(start))
-> +			return PTR_ERR(start);
-> +
-> +		/*
-> +		 * The stack is aligned to twice its size to facilitate overflow
-> +		 * detection.
-> +		 */
-> +		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_pa;
->  		start = end - PAGE_SIZE;
-> -		ret = pkvm_create_mappings(start, end, PAGE_HYP);
-> -		if (ret)
-> -			return ret;
-> +		start = (void *)__pkvm_create_private_mapping((phys_addr_t)start,
-> +					PAGE_SIZE, PAGE_SIZE * 2, PAGE_HYP);
+> { cpu:         19, pid:       1175 } hitcount:          1
+> { cpu:          6, pid:        239 } hitcount:          2
+> { cpu:         23, pid:       1186 } hitcount:         14
+> { cpu:         12, pid:        249 } hitcount:          2
+> { cpu:          3, pid:        994 } hitcount:          5
+> 
+> Instead of hard coding the "cpu" checks, take advantage of the fact that
+> trace_event_field_field() returns a special field for "cpu" and "CPU" if
+> the event does not have "cpu" as a field. This special field has the
+> "filter_type" of "FILTER_CPU". Check that to test if the returned field is
+> of the CPU type instead of doing the string compare.
+> 
+> Also, fix the sorting bug by testing for the hist_field flag of
+> HIST_FIELD_FL_CPU when setting up the sort routine. Otherwise it will use
+> the special CPU field to know what compare routine to use, and since that
+> special field does not have a size, it returns tracing_map_cmp_none.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1e3bac71c505 ("tracing/histogram: Rename "cpu" to "common_cpu"")
+> Reported-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Similar comments as the previous patch. I'd rather you treat each
-stack as a two-page VA, populated by a single page. It would be a lot
-clearer, and less fragile.
+It works!
 
-> +		if (IS_ERR(start))
-> +			return PTR_ERR(start);
-> +		end = start + PAGE_SIZE;
-> +
-> +		/* Update stack_hyp_va to end of the stack's private VA range */
-> +		per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va = (unsigned long) end;
->  	}
->  
->  	/*
+Tested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+-- Daniel

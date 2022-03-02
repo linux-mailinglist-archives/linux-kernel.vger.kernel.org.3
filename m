@@ -2,220 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244314CB24B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7EE4CB24E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiCBW14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S233373AbiCBW2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiCBW1w (ORCPT
+        with ESMTP id S229831AbiCBW2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:27:52 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A311E686F;
-        Wed,  2 Mar 2022 14:27:07 -0800 (PST)
-Received: from [192.168.1.17] (unknown [192.182.151.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AA9F020B7178;
-        Wed,  2 Mar 2022 14:27:06 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AA9F020B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646260026;
-        bh=bZ99YO6zuQH4/j369PIclhSB2RK/e1v5SRNGWRV8xGw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JtD0w+tgrDHO3HW13HVeNFLILxO+UMB4pqLcC+agYcu2JTvbIxMRSbqF2MGntDqxi
-         JQyA90UmSC3xBoQeOeTSagYERupQ+m1P/wBVRx89eps8dKVxBS0kTcNMU1Gal88VxP
-         3/zIydXeccen8tNvQZOArq7RFzEIeaiPZ07osNQc=
-Message-ID: <78df3646-4df6-5e2b-2f6e-e14824b08d85@linux.microsoft.com>
-Date:   Wed, 2 Mar 2022 14:27:05 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Content-Language: en-US
+        Wed, 2 Mar 2022 17:28:44 -0500
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF96E6D90;
+        Wed,  2 Mar 2022 14:27:59 -0800 (PST)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nPXRj-0005os-MI; Thu, 03 Mar 2022 09:27:48 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 03 Mar 2022 10:27:47 +1200
+Date:   Thu, 3 Mar 2022 10:27:47 +1200
+From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, spronovo@linux.microsoft.com
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
- <Yh8ia7nJNN7ISR1l@kroah.com>
- <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
- <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
- <Yh/Rq9PwWZAN8Mu2@kroah.com>
-From:   Iouri Tarassov <iourit@linux.microsoft.com>
-In-Reply-To: <Yh/Rq9PwWZAN8Mu2@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kyle Sanderson <kyle.leet@gmail.com>,
+        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        device-mapper development <dm-devel@redhat.com>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+Message-ID: <Yh/vY4t3xnuoCW3Q@gondor.apana.org.au>
+References: <YhN76/ONC9qgIKQc@silpixa00400314>
+ <CACsaVZJFane88cXxG_E1VkcMcJm8YVN+GDqQ2+tRYNpCf+m8zA@mail.gmail.com>
+ <CAHk-=whVT2GcwiJM8m-XzgJj8CjytTHi_pmgmOnSpzvGWzZM1A@mail.gmail.com>
+ <Yh0y75aegqS4jIP7@silpixa00400314>
+ <Yh1aLfy/oBawCJIg@gondor.apana.org.au>
+ <CAHk-=wi+xewHz=BH7LcZAxrj9JXi66s9rp+kBqRchVG3a-b2BA@mail.gmail.com>
+ <Yh2c4Vwu61s51d6N@gondor.apana.org.au>
+ <Yh9G7FyCLtsm2mFA@kroah.com>
+ <Yh9ZvLHuztwQCu0d@silpixa00400314>
+ <Yh+FpKuoyj3G16lK@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh+FpKuoyj3G16lK@kroah.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/2/2022 12:20 PM, Greg KH wrote:
-> On Wed, Mar 02, 2022 at 10:49:15AM -0800, Iouri Tarassov wrote:
-> > On 3/2/2022 3:53 AM, Wei Liu wrote:
-> > > On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
-> > > > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
-> > > > > > > +struct dxgglobal *dxgglobal;
-> > > > > > 
-> > > > > > No, make this per-device, NEVER have a single device for your driver.
-> > > > > > The Linux driver model makes it harder to do it this way than to do it
-> > > > > > correctly.  Do it correctly please and have no global structures like
-> > > > > > this.
-> > > > > > 
-> > > > > 
-> > > > > This may not be as big an issue as you thought. The device discovery is
-> > > > > still done via the normal VMBus probing routine. For all intents and
-> > > > > purposes the dxgglobal structure can be broken down into per device
-> > > > > fields and a global structure which contains the protocol versioning
-> > > > > information -- my understanding is there will always be a global
-> > > > > structure to hold information related to the backend, regardless of how
-> > > > > many devices there are.
-> > > > 
-> > > > Then that is wrong and needs to be fixed.  Drivers should almost never
-> > > > have any global data, that is not how Linux drivers work.  What happens
-> > > > when you get a second device in your system for this?  Major rework
-> > > > would have to happen and the code will break.  Handle that all now as it
-> > > > takes less work to make this per-device than it does to have a global
-> > > > variable.
-> > > > 
-> > >
-> > > It is perhaps easier to draw parallel from an existing driver. I feel
-> > > like we're talking past each other.
-> > >
-> > > Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
-> > > like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
-> > > units will be added to the list. I this the current code is following
-> > > this model. dxgglobal fulfills the role of a list.
-> > >
-> > > Setting aside the question of whether it makes sense to keep a copy of
-> > > the per-VM state in each device instance, I can see the code be changed
-> > > to:
-> > >
-> > >     struct mutex device_mutex; /* split out from dxgglobal */
-> > >     static LIST_HEAD(dxglist);
-> > >     
-> > >     /* Rename struct dxgglobal to struct dxgstate */
-> > >     struct dxgstate {
-> > >        struct list_head dxglist; /* link for dxglist */
-> > >        /* ... original fields sans device_mutex */
-> > >     }
-> > >
-> > >     /*
-> > >      * Provide a bunch of helpers manipulate the list. Called in probe /
-> > >      * remove etc.
-> > >      */
-> > >     struct dxgstate *find_dxgstate(...);
-> > >     void remove_dxgstate(...);
-> > >     int add_dxgstate(...);
-> > >
-> > > This model is well understood and used in tree. It is just that it
-> > > doesn't provide much value in doing this now since the list will only
-> > > contain one element. I hope that you're not saying we cannot even use a
-> > > per-module pointer to quickly get the data structure we want to use,
-> > > right?
-> > >
-> > > Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
-> > > into the device object? I think that can be done too.
-> > >
-> > > The code can be changed as:
-> > >
-> > >     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
-> > >     struct dxgstate { ... };
-> > >
-> > >     static int dxg_probe_vmbus(...) {
-> > >
-> > >         /* probe successfully */
-> > >
-> > > 	struct dxgstate *state = kmalloc(...);
-> > > 	/* Fill in dxgstate with information from backend */
-> > >
-> > > 	/* hdev->dev is the device object from the core driver framework */
-> > > 	dev_set_drvdata(&hdev->dev, state);
-> > >     }
-> > >
-> > >     static int dxg_remove_vmbus(...) {
-> > >         /* Normal stuff here ...*/
-> > >
-> > > 	struct dxgstate *state = dev_get_drvdata(...);
-> > > 	dev_set_drvdata(..., NULL);
-> > > 	kfree(state);
-> > >     }
-> > >
-> > >     /* In all other functions */
-> > >     void do_things(...) {
-> > >         struct dxgstate *state = dev_get_drvdata(...);
-> > >
-> > > 	/* Use state in place of where dxgglobal was needed */
-> > >
-> > >     }
-> > >
-> > > Iouri, notice this doesn't change anything regarding how userspace is
-> > > designed. This is about how kernel organises its data.
-> > >
-> > > I hope what I wrote above can bring our understanding closer.
-> > >
-> > > Thanks,
-> > > Wei.
-> > 
-> > 
-> > I can certainly remove dxgglobal and keep the  pointer to the global
-> > state in the device object.
-> > 
-> > This will require passing of the global pointer to all functions, which
-> > need to access it.
-> > 
-> > 
-> > Maybe my understanding of the Greg's suggestion was not correct. I
-> > thought the suggestion was
-> > 
-> > to have multiple /dev/dxgN devices (one per virtual compute device).
+On Wed, Mar 02, 2022 at 03:56:36PM +0100, Greg KH wrote:
 >
-> You have one device per HV device, as the bus already provides you.
-> That's all you really need, right?  Who would be opening the same device
-> node multiple times?
-> > This would change how the user mode
-> > clients enumerate and communicate with compute devices.
->
-> What does userspace have to do here?  It should just open the device
-> node that is present when needed.  How will there be multiple userspace
-> clients for a single HV device?
+> > If not, then these are the patches that should be backported:
+> >     7bcb2c99f8ed crypto: algapi - use common mechanism for inheriting flags
+> >     2eb27c11937e crypto: algapi - add NEED_FALLBACK to INHERITED_FLAGS
+> >     fbb6cda44190 crypto: algapi - introduce the flag CRYPTO_ALG_ALLOCATES_MEMORY
+> >     b8aa7dc5c753 crypto: drivers - set the flag CRYPTO_ALG_ALLOCATES_MEMORY
+> >     cd74693870fb dm crypt: don't use drivers that have CRYPTO_ALG_ALLOCATES_MEMORY
+> > Herbert, correct me if I'm wrong here.
+> 
+> These need to be manually backported as they do not apply cleanly.  Can
+> you provide such a set?  Or should I just disable a specific driver here
+> instead which would be easier overall?
 
+I think the safest thing is to disable qat in stable (possibly only
+when DM_CRYPT is enabled/modular).  The patches in question while
+good may have too wide an effect for the stable kernel series.
 
-Dxgkrnl creates a single user mode visible device node /dev/dxg. It has
-nothing to do with a specific hardware compute device on the host. Its
-purpose is to provide services (IOCTLs) to enumerate and manage virtual
-compute devices, which represent hardware devices on the host. The VMBus
-devices are not used directly by user mode clients in the current design.
+Giovanni, could you send Greg a Kconfig patch to do that?
 
-Virtual compute devices are shared between processes. There could be a
-Cuda application, Gimp and a Direct3D12 application working at the same
-time.This is what I mean by saying that there are multiple user mode
-clients who use the /dev/dxg driver interface. Each of this applications
-will open the /dev/dxg device node and enumerate/use virtual compute
-devices.
-
-If we change the way how the virtual compute devices are visible to user
-mode, the Cuda runtime, Direct3D runtime would need to be changed.
-
-I think we agreed that I will keep the global driver state in the device
-object as Wei suggested and remove global variables. There still will be
-a single /dev/dxg device node. Correct?
-
-
-Thanks
-
-Iouri
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

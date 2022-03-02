@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C168F4CA981
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C174CA984
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbiCBPte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:49:34 -0500
+        id S241001AbiCBPtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:49:42 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240842AbiCBPtS (ORCPT
+        with ESMTP id S240947AbiCBPtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:49:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F8F29819
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:48:31 -0800 (PST)
+        Wed, 2 Mar 2022 10:49:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20172AE2C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:48:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C705AB82084
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:48:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AEEC340F2;
-        Wed,  2 Mar 2022 15:48:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7112EB81F2D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5583C340F9;
+        Wed,  2 Mar 2022 15:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646236108;
-        bh=b9g+mN/ZAtwltAyMV/mSLAV7goZAk3S3vfRPncmJ4xY=;
+        s=k20201202; t=1646236112;
+        bh=sghz13J/8bJAY7L5jSCMCXvKJR3AKRsJVjaLCKwNr+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=onbUAlHDET9OqsvCzKqWXGdJlDrv9JTIL4U3pvQYJQkiVlADwu27jENpZWXlQqODi
-         /4cCMKP9vE5KUAptZajfQBDlmw0xcuqNnb6keCvxn8Er89Jm7+4usCI6gs57s1hLyx
-         kPnmSnbIIX+naKTgcKdwON0quUBIZbrau6MJjLM8Yq8yDIcnsBP0fhTYyEde7bBBDy
-         1If4G6fVpiHl81o8EJKWdPJl03O9HVFzglQ+IMBcYW9JzgeNtKcQ2DQgH0fu2mQIvk
-         cS5vjnmMUKgZVMry5iI2jU7KlUbOJRD92PUZLuaOYytJ8NhucRukb5bIXwNAymVE8Q
-         9TjlWKevj6Z9w==
+        b=qOf5HNzu1268TOts63/QhT6/WYeL1qBrOajum/6T8DLGBuwyrJrDT6yIW3H/ChBxJ
+         ry6brVwSWJ+Cf6OUqEuXyxDzyB5pvAJ0/WcpfsyLdTjEnzHykYONVFvnrY36FRLFPH
+         FoyI6Pt/dB7m6wzpHu6v8zZk/WCSCqDC/EKbF0NeJ4RxrBfA1JAyNl1BXJZblkQQMc
+         dotLufc4/OAcdcdRTyyy3jIl0+bN5v8zVDaJiiUjqoZix27oIezjM4oj1HURcz932R
+         n+yyRgRn61FeGycIXj8Q1Zb/zyw0+jaBhC6zY9Ij+72W8a056lFzdNw5kAWZSF9NYH
+         smDARTytc7zYQ==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 03/19] context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
-Date:   Wed,  2 Mar 2022 16:47:54 +0100
-Message-Id: <20220302154810.42308-4-frederic@kernel.org>
+Subject: [PATCH 04/19] context_tracking: Rename context_tracking_cpu_set() to context_tracking_cpu_track_user()
+Date:   Wed,  2 Mar 2022 16:47:55 +0100
+Message-Id: <20220302154810.42308-5-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220302154810.42308-1-frederic@kernel.org>
 References: <20220302154810.42308-1-frederic@kernel.org>
@@ -67,11 +67,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-context_tracking_enter() and context_tracking_exit() have confusing
-names that don't explain the fact they are referring to user/guest state.
-
-Use more self-explanatory names and shrink to the new context tracking
-prefix instead.
+context_tracking_cpu_set() is called in order to tell a CPU to track
+user/kernel transitions. Since context tracking is going to expand in
+to also track transitions from/to idle/IRQ/NMIs, the scope
+of this function name becomes too broad and needs to be made more
+specific.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Paul E. McKenney <paulmck@kernel.org>
@@ -89,103 +89,58 @@ Cc: Phil Auld <pauld@redhat.com>
 Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
 Cc: Alex Belits <abelits@marvell.com>
 ---
- include/linux/context_tracking.h | 13 +++++++------
- kernel/context_tracking.c        | 12 ++++++------
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ include/linux/context_tracking.h | 2 +-
+ kernel/context_tracking.c        | 4 ++--
+ kernel/time/tick-sched.c         | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index 69532cd18f72..7a5f04ae1758 100644
+index 7a5f04ae1758..40badd62ad56 100644
 --- a/include/linux/context_tracking.h
 +++ b/include/linux/context_tracking.h
-@@ -17,21 +17,22 @@ extern void context_tracking_cpu_set(int cpu);
- extern void __ct_user_enter(enum ctx_state state);
- extern void __ct_user_exit(enum ctx_state state);
+@@ -11,7 +11,7 @@
  
--extern void context_tracking_enter(enum ctx_state state);
--extern void context_tracking_exit(enum ctx_state state);
-+extern void ct_user_enter(enum ctx_state state);
-+extern void ct_user_exit(enum ctx_state state);
-+
- extern void user_enter_callable(void);
- extern void user_exit_callable(void);
  
- static inline void user_enter(void)
- {
- 	if (context_tracking_enabled())
--		context_tracking_enter(CONTEXT_USER);
-+		ct_user_enter(CONTEXT_USER);
- 
- }
- static inline void user_exit(void)
- {
- 	if (context_tracking_enabled())
--		context_tracking_exit(CONTEXT_USER);
-+		ct_user_exit(CONTEXT_USER);
- }
+ #ifdef CONFIG_CONTEXT_TRACKING
+-extern void context_tracking_cpu_set(int cpu);
++extern void context_tracking_cpu_track_user(int cpu);
  
  /* Called with interrupts disabled.  */
-@@ -57,7 +58,7 @@ static inline enum ctx_state exception_enter(void)
- 
- 	prev_ctx = this_cpu_read(context_tracking.state);
- 	if (prev_ctx != CONTEXT_KERNEL)
--		context_tracking_exit(prev_ctx);
-+		ct_user_exit(prev_ctx);
- 
- 	return prev_ctx;
- }
-@@ -67,7 +68,7 @@ static inline void exception_exit(enum ctx_state prev_ctx)
- 	if (!IS_ENABLED(CONFIG_HAVE_CONTEXT_TRACKING_OFFSTACK) &&
- 	    context_tracking_enabled()) {
- 		if (prev_ctx != CONTEXT_KERNEL)
--			context_tracking_enter(prev_ctx);
-+			ct_user_enter(prev_ctx);
- 	}
- }
- 
+ extern void __ct_user_enter(enum ctx_state state);
 diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index 83e050675b23..e8e58c10f135 100644
+index e8e58c10f135..7b6643d2075d 100644
 --- a/kernel/context_tracking.c
 +++ b/kernel/context_tracking.c
-@@ -103,7 +103,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
+@@ -198,7 +198,7 @@ void user_exit_callable(void)
  }
- EXPORT_SYMBOL_GPL(__ct_user_enter);
+ NOKPROBE_SYMBOL(user_exit_callable);
  
--void context_tracking_enter(enum ctx_state state)
-+void ct_user_enter(enum ctx_state state)
+-void __init context_tracking_cpu_set(int cpu)
++void __init context_tracking_cpu_track_user(int cpu)
  {
- 	unsigned long flags;
+ 	static __initdata bool initialized = false;
  
-@@ -122,8 +122,8 @@ void context_tracking_enter(enum ctx_state state)
- 	__ct_user_enter(state);
- 	local_irq_restore(flags);
+@@ -228,6 +228,6 @@ void __init context_tracking_init(void)
+ 	int cpu;
+ 
+ 	for_each_possible_cpu(cpu)
+-		context_tracking_cpu_set(cpu);
++		context_tracking_cpu_track_user(cpu);
  }
--NOKPROBE_SYMBOL(context_tracking_enter);
--EXPORT_SYMBOL_GPL(context_tracking_enter);
-+NOKPROBE_SYMBOL(ct_user_enter);
-+EXPORT_SYMBOL_GPL(ct_user_enter);
+ #endif
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 2d76c91b85de..794410da3ee1 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -571,7 +571,7 @@ void __init tick_nohz_init(void)
+ 	}
  
- /**
-  * user_enter_callable() - Unfortunate ASM callable version of user_enter() for
-@@ -173,7 +173,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
- }
- EXPORT_SYMBOL_GPL(__ct_user_exit);
+ 	for_each_cpu(cpu, tick_nohz_full_mask)
+-		context_tracking_cpu_set(cpu);
++		context_tracking_cpu_track_user(cpu);
  
--void context_tracking_exit(enum ctx_state state)
-+void ct_user_exit(enum ctx_state state)
- {
- 	unsigned long flags;
- 
-@@ -184,8 +184,8 @@ void context_tracking_exit(enum ctx_state state)
- 	__ct_user_exit(state);
- 	local_irq_restore(flags);
- }
--NOKPROBE_SYMBOL(context_tracking_exit);
--EXPORT_SYMBOL_GPL(context_tracking_exit);
-+NOKPROBE_SYMBOL(ct_user_exit);
-+EXPORT_SYMBOL_GPL(ct_user_exit);
- 
- /**
-  * user_exit_callable() - Unfortunate ASM callable version of user_exit() for
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+ 					"kernel/nohz:predown", NULL,
 -- 
 2.25.1
 

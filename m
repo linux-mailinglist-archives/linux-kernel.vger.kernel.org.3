@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5719F4C9C17
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A37C4C9C25
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiCBDXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S239344AbiCBD3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234858AbiCBDXg (ORCPT
+        with ESMTP id S239330AbiCBD3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:23:36 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AEB4969C;
-        Tue,  1 Mar 2022 19:22:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BkUj0PjMdur0v9TShaniW/taG/R/Ra3dZF1SMMnxUms=; b=k0YSg7uXy1fj0hfP0jlFXcKxtR
-        11zYwyIbh2N0zCDO0ChQtXVFrgmoKpGvYZCv6dbqbgDSZXMHeaAD+j5PU2MbPVeDC2GvixAXC5Ibk
-        YDPa/NAZOIRj9XAmraCi19MiT51CGeyqHOfGi+1dsZYUmIy32V2mURxwZpObR+mgRQSU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nPFZk-008raJ-Mc; Wed, 02 Mar 2022 04:22:52 +0100
-Date:   Wed, 2 Mar 2022 04:22:52 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH net-next 3/4] net: phy: added the LAN937x phy support
-Message-ID: <Yh7jDF5CITerGkfF@lunn.ch>
-References: <20220228140510.20883-1-arun.ramadoss@microchip.com>
- <20220228140510.20883-4-arun.ramadoss@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228140510.20883-4-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        Tue, 1 Mar 2022 22:29:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA52DB0C74
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:28:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30991B81D71
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 03:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F48C340F0;
+        Wed,  2 Mar 2022 03:28:21 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1nPFf2-00DBie-LW;
+        Tue, 01 Mar 2022 22:28:20 -0500
+Message-ID: <20220302032414.503960863@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 01 Mar 2022 22:24:14 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH 0/2] tracing: Add a way to have custom events in the tracefs directory
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,29 +47,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 07:35:09PM +0530, Arun Ramadoss wrote:
-> LAN937x T1 Phy is based on LAN87xx Phy, so reusing the init script of
-> the Lan87xx. There is a workaround in accessing the DSP bank register
-> for Lan937x Phy. Whenever there is a bank switch to DSP registers, then
-> we need a dummy read access before proceeding to the actual register
-> access.
-> 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
->  drivers/net/phy/microchip_t1.c | 47 +++++++++++++++++++++++++++++++---
->  1 file changed, 44 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
-> index 33325e5bd884..634a1423182a 100644
-> --- a/drivers/net/phy/microchip_t1.c
-> +++ b/drivers/net/phy/microchip_t1.c
-> @@ -10,6 +10,7 @@
->  #include <linux/ethtool_netlink.h>
->  
->  #define LAN87XX_PHY_ID			0x0007c150
-> +#define LAN937X_T1_PHY_ID		0x0007c181
+We would like to have in production a way to record sched wakeups and
+sched switch, and be able to save the information in a small file
+with as much available as possible. Currently the wake up and sched switch
+events are 36 and 64 bytes each (plus a 4 byte ring buffer event header).
 
-I guess the last 1 is meaningless, given the mask?
+By having a custom module tap into the sched switch and waking trace points
+we can bring those events down to 16 and 14 bytes respectively.
 
-  Andrew
+Steven Rostedt (Google) (2):
+      tracing: Allow custom events to be added to the tracefs directory
+      tracing: Add sample code for custom trace events
+
+----
+ kernel/trace/trace_events.c               |   2 +
+ samples/Kconfig                           |   8 +-
+ samples/Makefile                          |   1 +
+ samples/trace_events/Makefile             |   2 +
+ samples/trace_events/trace_custom_sched.c | 280 ++++++++++++++++++++++++++++++
+ 5 files changed, 292 insertions(+), 1 deletion(-)
+ create mode 100644 samples/trace_events/trace_custom_sched.c

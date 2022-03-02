@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DD74CAF05
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3540C4CAF0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 20:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiCBTsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 14:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S229490AbiCBTsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 14:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241759AbiCBTsU (ORCPT
+        with ESMTP id S242430AbiCBTsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 14:48:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EEB11158
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:47:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646250455; x=1677786455;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TXrrJddB4SOQCFhrejLi5KP1GkQ56qVMjaTRt8qYBPc=;
-  b=NvE0iGCPtYqDtG5rsnJPyFVcBh8tA2waSsdpkCJG2/bh84GfiVF8auPM
-   FuyLoPttG0U3QunMKNaItcfQCD1SbjjUPOSGReA3l7s2C4+v2L2ur6B8q
-   Y/o2OiQ+GgVCGYGmZjdK9k+pX2mpQGwXOCT7Jjg6DSQS2NkHJa75+pl6f
-   pMjnEtp45zS0ybt1eX6wQhfkRCzmH+mp/ojT+Cvk5S7XUU6p+oRkS70qA
-   FgkaEkmY+wemgYBfw94/sUtaeUx24YrhU/76lawEo/YRino5pDl0s+aFQ
-   8+zO+grI0hPywRiECEB3kN88W5MrKZ6al8oS+TCv454/xE6YEFfT816Ra
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="252321161"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="252321161"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 11:47:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="511130508"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 11:47:33 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPUwf-0001qn-6Y; Wed, 02 Mar 2022 19:47:33 +0000
-Date:   Thu, 3 Mar 2022 03:47:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Ott <sebott@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: com90xx.c:undefined reference to `iounmap'
-Message-ID: <202203030347.uFXSRjNB-lkp@intel.com>
+        Wed, 2 Mar 2022 14:48:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E0D3A718
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 11:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646250469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ndR+qkKf8IiCmXwP6/0TLhJyNK+iAc9DAT0Oa/pgpY=;
+        b=bEQu/eDpX2c1362jIYKSMea7mUpwv4MazescCBcIAqXlJacy8FV8okttZfNbEle8fO/zKd
+        +9oBTyudOcFqQtKznL8qGWJSt8JwvuUqaUCoaZl4QqM4A7x3KhzLxW5seam0eFqFZZePZX
+        tsC5nLZSrIoCl5Y5atg+2VwrBXQYFHY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-WbOJVkcBMIi9ejUU8YJ7zg-1; Wed, 02 Mar 2022 14:47:44 -0500
+X-MC-Unique: WbOJVkcBMIi9ejUU8YJ7zg-1
+Received: by mail-wm1-f71.google.com with SMTP id p35-20020a05600c1da300b0038151176781so1219751wms.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 11:47:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9ndR+qkKf8IiCmXwP6/0TLhJyNK+iAc9DAT0Oa/pgpY=;
+        b=R+J5HZfeib0gUhbHYvg5Lx9Zf8BdAbrV1HFFmxUZ2KGzfetmBvRcwRoAouri9mlNSp
+         7SI0Y2cabn4NjH2WwHpOTEPXsLUKurJKBvSMGJWzUuRzaywVrk1twWUbPZMYMg4skfHs
+         5kI9oeU4CCyBh5wNVTV7cSe/wTyvvmDevuWBprv9pYPlwhFsvlTt8uE4Ni95FUQT0hyI
+         kYteciqMJgx8qqAkjatooHDe60Xz6zr+oOz+HqYnlnO4YlfyvxUvtMv/ryQ4eSRKh5wf
+         n8xBOlWhtPUZZk/xPFndEmZmk8jDzGlKT6eAC0CilHwcDvLTAU2zCQodRjILexWWKj09
+         pvAw==
+X-Gm-Message-State: AOAM531X/sJ78Sli6HWt/YiOOrrsyMl88k+5QRHi970oITQnscoRTmDQ
+        yGhckpPMXrUYE/KWise9HA5zx+iA1Cpk5+Cz9u+P7fGLH7Fw5RWp5j2NvZk0klGMzRSjoZ0UkW/
+        zrQHbWFeJuPHk36xW0mkWGMhe
+X-Received: by 2002:adf:a749:0:b0:1ef:7d81:f4cd with SMTP id e9-20020adfa749000000b001ef7d81f4cdmr17935829wrd.133.1646250463116;
+        Wed, 02 Mar 2022 11:47:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytQkVIbt3RjmxG7srv9p6KdE7ADQdJ/WVQfRQmhaoGILBPTLLpENUyF/E4HqcmI+2MYZN+gw==
+X-Received: by 2002:adf:a749:0:b0:1ef:7d81:f4cd with SMTP id e9-20020adfa749000000b001ef7d81f4cdmr17935812wrd.133.1646250462893;
+        Wed, 02 Mar 2022 11:47:42 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm8935824wmp.44.2022.03.02.11.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 11:47:42 -0800 (PST)
+Message-ID: <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
+Date:   Wed, 2 Mar 2022 20:47:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-fbdev@vger.kernel.org, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-video@atrey.karlin.mff.cuni.cz,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Mack <daniel@zonque.org>
+References: <20220218093334.24830-1-msuchanek@suse.de>
+ <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+ <20220302193846.GT3113@kunlun.suse.cz>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220302193846.GT3113@kunlun.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+Hello,
 
-FYI, the error/warning still remains.
+On 3/2/22 20:38, Michal Suchánek wrote:
+> Hello,
+> 
+> On Wed, Mar 02, 2022 at 08:31:25PM +0100, Thomas Zimmermann wrote:
+>> Hi,
+>>
+>> is this ready to be merged?
+> 
+> The objections raised so far have been addressed in v4.
+>
+> I think this is good to merge.
+>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fb184c4af9b9f4563e7a126219389986a71d5b5b
-commit: 71ba41c9b1d91042960e9d92a5c8f52dc8531eda s390/pci: provide support for MIO instructions
-date:   2 years, 10 months ago
-config: s390-randconfig-r044-20220109 (https://download.01.org/0day-ci/archive/20220303/202203030347.uFXSRjNB-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+The v4 patches looks good to me and have provided my Reviewed-by to all of them.
+ 
+> Thanks
+> 
+> Michal
+> 
+>>
+-- 
+Best regards,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-   hidma.c:(.text+0x128a): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: hidma.c:(.text+0x12bc): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
-   edma.c:(.text+0x1472): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
-   omap-dma.c:(.text+0x52): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x23a): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o:meson-rng.c:(.text+0x7c): more undefined references to `devm_ioremap_resource' follow
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_exit':
->> com90xx.c:(.exit.text+0x5a): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `check_mirror':
->> com90xx.c:(.init.text+0x4c): undefined reference to `ioremap'
->> s390-linux-ld: com90xx.c:(.init.text+0x6e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_found':
->> com90xx.c:(.init.text+0xe6): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x1ba): undefined reference to `iounmap'
->> s390-linux-ld: com90xx.c:(.init.text+0x2d4): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x3a2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_probe':
-   com90xx.c:(.init.text+0x652): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x6ae): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x8d4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
->> arc-rimi.c:(.exit.text+0x2e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
->> arc-rimi.c:(.init.text+0xb6): undefined reference to `ioremap'
->> s390-linux-ld: arc-rimi.c:(.init.text+0x136): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x29e): undefined reference to `iounmap'
->> s390-linux-ld: arc-rimi.c:(.init.text+0x326): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x3e4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
->> arc-rimi.c:(.text.unlikely+0x4c): undefined reference to `ioremap'
->> s390-linux-ld: arc-rimi.c:(.text.unlikely+0x6e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x220): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x232): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x288): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x29e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0xce4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
-   sirfsoc_wdt.c:(.text+0x116): undefined reference to `devm_ioremap_resource'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

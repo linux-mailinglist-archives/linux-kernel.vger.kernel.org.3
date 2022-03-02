@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C1D4CAB65
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB764CAB67
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiCBRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S243754AbiCBRT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243764AbiCBRTa (ORCPT
+        with ESMTP id S243740AbiCBRTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:19:30 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78338CCC6E;
-        Wed,  2 Mar 2022 09:18:44 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so2263518pjb.3;
-        Wed, 02 Mar 2022 09:18:44 -0800 (PST)
+        Wed, 2 Mar 2022 12:19:22 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA4AC7E9D;
+        Wed,  2 Mar 2022 09:18:38 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso2628486ooc.12;
+        Wed, 02 Mar 2022 09:18:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gLz+dn3sEqx6HUS+1nLd4ttPK5v9DscXSXbYEOAfAtM=;
-        b=GdqgcQdzmBwJL9T5mPH7O9UBvQvH+jpyaIWKT/0WxFiLppgbDQrdxKGa42ERl5uR6l
-         RIuXRcB8hf9MFxbqOd7I7q5UiVgIjAdlgzpJEAWUYa4sz/MUWzWboQhty1USWTMY2ERF
-         9x74dw0HtR5vfKnxxqz/rX96GGONM5Bb8hhQAKryXuQQxItfx+35KgZ43u6cgjyb9St3
-         TO/QZGUMY0Oi5V9g0h3Gs4IItw3CwsWhd+lOwAp8kqQSbj8vwl916k4VG5bgb3up0mL7
-         yNGyglq4SCkbWXIIVrMMRtX3oNJIVjn5prT/C92LOlwgOdP61Igwi4siWNNHMVl7fSas
-         p0RQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cwLG9kTnhX2GqkeQf8KU8q/jw+pGFKDaUnw1ajiL6WA=;
+        b=Ph+RbvL6FanSOSwQxZUf26lIJLD1mcS3h0APBOTmjL0rL8sL58KJLFAGiWptkhBp5f
+         z5ZgRL+10UyFNfksj//XcL9pJCGCD6qYN9UCdiS8SIRssuw3151XtoQsw11ASk+hEEQs
+         7UWDCkB2pqpxxqJssBKAq8izDqfQt3z4hlBl78kUt3xIc/snzVPeNxjkge/VZOSWHaLR
+         40GJ26I2rx8DmUJSGIItZ1LqEOGI32dpoM2HZZb4qQv4d7UgQ4MF7I8MHghj3+jwXqm8
+         sv+M1n5AKMMjPdnNP0hgHgFXQ8GowrimHS7zngUz0tPwpAWrZaH9Fx1B11OQPzUNAcML
+         C9vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gLz+dn3sEqx6HUS+1nLd4ttPK5v9DscXSXbYEOAfAtM=;
-        b=nyQ6/yPskVln+deeitRblepCBusq0n2sqc5C38GN0bJOnc7TwxNTR2SEfXVhCjiXJU
-         5hBo11ccNqzOfrncXo15pi1w+pQVmSYg0NXZS9odJ/RRfb3p7UHI13mXmJHnotR1gDHy
-         HRu+I/g0J06ph8O04V84GxjTBxjWIAmglopon6Eum8/6Hf0StU3pNahi7K8Xnat2rm9W
-         71Q4X3VVRa/8e3pqlSTp3H6fWtRjGLoOJbXftyNhgsCpBIFbcuCh9Orm2V0rS5udrNwF
-         d0PoqTgwqBguDesjIH804u8k6pGojY+7BcecMFwIRVxX6Ty0c4eDMOAAS+1MzAHSiqBU
-         O6wA==
-X-Gm-Message-State: AOAM531cz+waoafqomNXMv1NgiIp1vjmlHPCSEs2v77NG686A9v+js1r
-        0na9m0cvRTjXPi9QnqG/wNHKwmzyZkCqlF63
-X-Google-Smtp-Source: ABdhPJyg+01RxgPCsirAMYtoF8etJupvDy3nF7hxoKHMwqsW73bcl/n6nLrHEySpG6rDkqDIT7XPsw==
-X-Received: by 2002:a17:902:cec9:b0:151:9b2c:338 with SMTP id d9-20020a170902cec900b001519b2c0338mr2823044plg.164.1646241523931;
-        Wed, 02 Mar 2022 09:18:43 -0800 (PST)
-Received: from kvigor-fedora-PF399REY.thefacebook.com ([2620:10d:c090:400::5:d6ec])
-        by smtp.gmail.com with ESMTPSA id c63-20020a624e42000000b004f414f0a391sm10339965pfb.79.2022.03.02.09.18.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cwLG9kTnhX2GqkeQf8KU8q/jw+pGFKDaUnw1ajiL6WA=;
+        b=LNvUgFBFAZzAONYCafiqBWiLhv+0lmjkf3GptQLDrnFHQsCRQ+yln6WR4wYH10xY15
+         8z/imfVYtVk+3+woCjA84ao9eqfzlM/+9oRiEzqgNcZK9FCA9kqoA8I1eoM/qIIt4RKW
+         AqxCCBt74+G3p4w9EZAQcqARZUf0rJrN2GanX8N19VjNTCOb/4AmneuE7tACvd6m49/U
+         OHwY2aHcnPkEyAFWa0+zWMRHyJMRO2jATngrdPb3vWd2FPdpiDeK3tlRjGVX9WZ9iI7H
+         RXb3auryrvuiAA/FHYquK9JSZaRk70hVYwdcAFcLOanPj0aC+sCXilLskJAl5/IuMOEX
+         4IDA==
+X-Gm-Message-State: AOAM533xeKufT9EOljbSplasytugfV5W+3mBj1iYIWtAnoI/qu5f+5uv
+        YVg1qi9UMwEqKgxD/SCS8uqTenpnSso=
+X-Google-Smtp-Source: ABdhPJzaTl0H10yq5ZoNdnQwMSeiQ6SyTqU2PuD1HxWe6SG7t/bXRnCfIG9yWUnPnd3RZp+WwWGEPA==
+X-Received: by 2002:a05:6870:c987:b0:d7:3d45:6692 with SMTP id hi7-20020a056870c98700b000d73d456692mr683349oab.34.1646241517676;
+        Wed, 02 Mar 2022 09:18:37 -0800 (PST)
+Received: from localhost ([98.200.8.69])
+        by smtp.gmail.com with ESMTPSA id m7-20020a9d6447000000b005acf7e4c507sm7983689otl.20.2022.03.02.09.18.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 09:18:43 -0800 (PST)
-From:   Kevin Vigor <kvigor@gmail.com>
-To:     miklos@szeredi.hu
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kevin Vigor <kvigor@gmail.com>
-Subject: [RFC PATCH 1/1] FUSE: Add FUSE_TRUST_MAX_RA flag enabling readahead settings >128KB.
-Date:   Wed,  2 Mar 2022 10:18:16 -0700
-Message-Id: <20220302171816.1170782-2-kvigor@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220302171816.1170782-1-kvigor@gmail.com>
-References: <20220302171816.1170782-1-kvigor@gmail.com>
+        Wed, 02 Mar 2022 09:18:37 -0800 (PST)
+Date:   Wed, 2 Mar 2022 09:18:35 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Michael Mueller <mimu@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
+Message-ID: <Yh+m65BSfQgaDFwi@yury-laptop>
+References: <20220223164420.45344-1-andriy.shevchenko@linux.intel.com>
+ <20220224123620.57fd6c8b@p-imbrenda>
+ <3640a910-60fe-0935-4dfc-55bb65a75ce5@linux.ibm.com>
+ <Yh+Qw6Pb+Cd9JDNa@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh+Qw6Pb+Cd9JDNa@smile.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,71 +82,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing process_init_reply() in fs/fuse/inode.c sets the ra_pages
-value to the minimum of the max_readahead value provided by the user
-and the pre-existing ra_pages value, which is initialized to
-VM_READAHEAD_PAGES. This makes it impossible to increase the readahead
-value to larger values.
+On Wed, Mar 02, 2022 at 05:44:03PM +0200, Andy Shevchenko wrote:
+> On Thu, Feb 24, 2022 at 01:10:34PM +0100, Michael Mueller wrote:
+> > On 24.02.22 12:36, Claudio Imbrenda wrote:
+> 
+> ...
+> 
+> > we do that at several places
+> 
+> Thanks for pointing out.
+> 
+> > arch/s390/kernel/processor.c:	for_each_set_bit_inv(bit, (long
+> > *)&stfle_fac_list, MAX_FACILITY_BIT)
+> 
+> This one requires a separate change, not related to this patch.
+> 
+> > arch/s390/kvm/interrupt.c:	set_bit_inv(IPM_BIT_OFFSET + gisc, (unsigned long
+> > *) gisa);
+> 
+> This is done in the patch. Not sure how it appears in your list.
+> 
+> > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
+> > sca->mcn);
+> > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
+> > &sca->mcn);
+> 
+> These two should be fixed in a separate change.
+> 
+> Also this kind of stuff:
+> 
+> 	bitmap_copy(kvm->arch.cpu_feat, (unsigned long *) data.feat,
+> 	            KVM_S390_VM_CPU_FEAT_NR_BITS);
+> 
+> might require a new API like
+> 
+> bitmap_from_u64_array()
+> bitmap_to_u64_array()
+> 
+> Yury?
 
-Add a new flag which causes us to blindly accept the user-provided
-value. Note that the existing read_ahead_kb sysfs entry for normal
-block devices does the same (simply accepts user-provided values
-directly with no checks).
-
-Signed-off-by: Kevin Vigor <kvigor@gmail.com>
----
- fs/fuse/inode.c           | 8 ++++++--
- include/uapi/linux/fuse.h | 3 +++
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 8b89e3ba7df3..81c96c404a76 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -1182,8 +1182,12 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
- 			fc->no_flock = 1;
- 		}
- 
--		fm->sb->s_bdi->ra_pages =
-+		if (arg->flags & FUSE_TRUST_MAX_RA) {
-+			fm->sb->s_bdi->ra_pages = ra_pages;
-+		} else {
-+			fm->sb->s_bdi->ra_pages =
- 				min(fm->sb->s_bdi->ra_pages, ra_pages);
-+		}
- 		fc->minor = arg->minor;
- 		fc->max_write = arg->minor < 5 ? 4096 : arg->max_write;
- 		fc->max_write = max_t(unsigned, 4096, fc->max_write);
-@@ -1219,7 +1223,7 @@ void fuse_send_init(struct fuse_mount *fm)
- 		FUSE_PARALLEL_DIROPS | FUSE_HANDLE_KILLPRIV | FUSE_POSIX_ACL |
- 		FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
- 		FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
--		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT;
-+		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_TRUST_MAX_RA;
- #ifdef CONFIG_FUSE_DAX
- 	if (fm->fc->dax)
- 		ia->in.flags |= FUSE_MAP_ALIGNMENT;
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index a1dc3ee1d17c..df9840f4642f 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -341,6 +341,8 @@ struct fuse_file_lock {
-  *			write/truncate sgid is killed only if file has group
-  *			execute permission. (Same as Linux VFS behavior).
-  * FUSE_SETXATTR_EXT:	Server supports extended struct fuse_setxattr_in
-+ * FUSE_TRUST_MAX_RA:	Accept the user-provided max_readahead value instead
-+ *			of clamping to <= VM_READAHEAD_PAGES.
-  */
- #define FUSE_ASYNC_READ		(1 << 0)
- #define FUSE_POSIX_LOCKS	(1 << 1)
-@@ -372,6 +374,7 @@ struct fuse_file_lock {
- #define FUSE_SUBMOUNTS		(1 << 27)
- #define FUSE_HANDLE_KILLPRIV_V2	(1 << 28)
- #define FUSE_SETXATTR_EXT	(1 << 29)
-+#define FUSE_TRUST_MAX_RA	(1 << 30)
- 
- /**
-  * CUSE INIT request/reply flags
--- 
-2.33.1
-
+If BE32 is still the case then yes.

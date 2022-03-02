@@ -2,70 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0ED4CB194
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2C74CB198
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245426AbiCBVtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
+        id S245406AbiCBVxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbiCBVtm (ORCPT
+        with ESMTP id S235341AbiCBVxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:49:42 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F5D32994
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:48:55 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id p20so4257569ljo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 13:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=t1Pb+V+SY3o/7hN4naxlbLDHV8QER277N4EQXLdstAE=;
-        b=fjoOTS2/How8KTj4ppEx0zCD6qTB3JekNscLsc+Auh6OOXPn/xTCqkRN2wBC/6xfH5
-         +qMEFGaqXrWxl/0wz7NJ1R8vALW90XpyrXSInWHgPzfduHiw6K2WQMyJfpIYxgzktC9O
-         lE+jT2ZKZ0sqE3wigrDfaxjMYCATaKmvKC9VIMoofSq3tUfwsoKfRw5zwED/M+VZx7lq
-         KASCRApzVMK0m3z8k4GFaHPaAZChnY0V9rpXb6mT/Jl/BDhaTGL3oSwWWgktLlEcpQHH
-         aEyqJi25xf31ZFjxfI7LdidBKoP9mJ1C+7ZKdmtLCsGybqHHYkW/ZbpBI1n9JoY4hKTQ
-         9qzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=t1Pb+V+SY3o/7hN4naxlbLDHV8QER277N4EQXLdstAE=;
-        b=PZZfax8LfbnuIH84cbiOM6uD4lMAKP3ZeqNquqkB5d4J09totLjuHzxusD9TV8bGDl
-         22Rj4eWDGbZoHiJKhwDJ45iUJzyxwFb2I79G95sgg7sas0Cdx/rzRT/5sGsOJtuZa+1D
-         vwyp7SRNWvlDUnn1R+EY/ShKmwoyPDHgrsy1MtHfzj95GBqMHxvFyhcYVn4C6bXGaNdI
-         CaAf5QoBMqzoUFOj6nFf8z9amM4RwijaCu52rhKpj5eFT2shTtJKR790QUGx2uxKJUS/
-         wC1l6zYQR1b7brc7hTTLNPY4rUJWUFLJNaatclI0QXZPXBgZpneG05U7NK+ULxRDGTKB
-         aisQ==
-X-Gm-Message-State: AOAM533DwoTb4uCvQaek/YZ3158UzUvP2vIik+gi6xXH0d8wZfu3MWpN
-        KXXzVXO9Ykb9TQCWElvnVDQMXZtZj3cEpWL5DYI=
-X-Google-Smtp-Source: ABdhPJwojXyEybYCHHUXKmMfHA3QiiIOO96xjrjGRYolNEYDDXUjWEaSRKbbG6NN9TIm9nVkdAsalWBofDbXD8h50UQ=
-X-Received: by 2002:a2e:731a:0:b0:246:4742:2c5b with SMTP id
- o26-20020a2e731a000000b0024647422c5bmr21753608ljc.13.1646257731219; Wed, 02
- Mar 2022 13:48:51 -0800 (PST)
+        Wed, 2 Mar 2022 16:53:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C462A8;
+        Wed,  2 Mar 2022 13:52:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TTmCl82JqLan3QsNgtCR8eCTt45Umy9DiqQwuLlp+nY=; b=KfoYwSU15wZdPny08l3cV8PBZu
+        suXZGirPexQrDgbQX5uGJbU7Df1yJ1ktmLv0jS0sAZKNx+pJdixfgD4R/TDEPqhbqI3BfNt42pheu
+        RjmWCL0DlPB+78SrZXIMGba7JmRb0PQyQQUHkbneh6Acx7Xd1qd6fXDaMXTTVqKiOH3qxy3tAQDOa
+        GvCaN0q6n5SXSqbjf6rmf5n5+sqFBgieDDlbNUI+aO5wXsxAJTiY1flBdSrbSaeah/4c62cT3Q8Hb
+        UXbPO8ixKuUhGo/2c7lCT4NM75T9VeG9xmm8CWBJ8Utbrwowego6iSKFJmRdAIxORzhTRN/ip1tN8
+        MLIdp1Fg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPWt7-004R35-C3; Wed, 02 Mar 2022 21:52:01 +0000
+Date:   Wed, 2 Mar 2022 13:52:01 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        NeilBrown <neilb@suse.de>, Vasily Averin <vvs@virtuozzo.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linux MM <linux-mm@kvack.org>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel@openvz.org
+Subject: Re: [PATCH RFC] net: memcg accounting for veth devices
+Message-ID: <Yh/nAUkt8iZlvQdc@bombadil.infradead.org>
+References: <a5e09e93-106d-0527-5b1e-48dbf3b48b4e@virtuozzo.com>
+ <YhzeCkXEvga7+o/A@bombadil.infradead.org>
+ <20220301180917.tkibx7zpcz2faoxy@google.com>
+ <Yh5lyr8dJXmEoFG6@bombadil.infradead.org>
+ <87wnhdwg75.fsf@email.froward.int.ebiederm.org>
+ <Yh6PPPqgPxJy+Jvx@bombadil.infradead.org>
+ <87ilswwh1x.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Received: by 2002:a2e:2283:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 13:48:50 -0800 (PST)
-Reply-To: hirokiarisawa@gmail.com
-From:   Hiroki Arisawa <amesata8@gmail.com>
-Date:   Wed, 2 Mar 2022 22:48:50 +0100
-Message-ID: <CAJR0EqOdDsZuWMyPj9S-z=HyAROmPGPy=VDZCLrsnOp6qdeQoQ@mail.gmail.com>
-Subject: Buna ziua
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilswwh1x.fsf@email.froward.int.ebiederm.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Vreau s=C4=83 vorbesc cu tine acum, mul=C8=9Bumesc
+On Wed, Mar 02, 2022 at 08:43:54AM -0600, Eric W. Biederman wrote:
+> Luis Chamberlain <mcgrof@kernel.org> writes:
+> 
+> > On Tue, Mar 01, 2022 at 02:50:06PM -0600, Eric W. Biederman wrote:
+> >> I really have not looked at this pids controller.
+> >> 
+> >> So I am not certain I understand your example here but I hope I have
+> >> answered your question.
+> >
+> > During experimentation with the above stress-ng test case, I saw tons
+> > of thread just waiting to do exit:
+> 
+> You increment the count of concurrent threads after a no return function
+> in do_exit.  Since the increment is never reached the count always goes
+> down and eventually the warning prints.
+> 
+> > diff --git a/kernel/exit.c b/kernel/exit.c
+> > index 80c4a67d2770..653ca7ebfb58 100644
+> > --- a/kernel/exit.c
+> > +++ b/kernel/exit.c
+> > @@ -881,6 +894,9 @@ void __noreturn do_exit(long code)
+> >  
+> >  	lockdep_free_task(tsk);
+> >  	do_task_dead();
+> 
+> The function do_task_dead never returns.
+> 
+> > +
+> > +	atomic_inc(&exit_concurrent_max);
+> > +	wake_up(&exit_wq);
+> >  }
+> >  EXPORT_SYMBOL_GPL(do_exit);
+
+Doh thanks!
+
+  Luis

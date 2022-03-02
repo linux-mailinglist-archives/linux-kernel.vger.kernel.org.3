@@ -2,133 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1224CA92D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9910F4CA947
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbiCBPiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S236699AbiCBPkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbiCBPiQ (ORCPT
+        with ESMTP id S233923AbiCBPkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:38:16 -0500
+        Wed, 2 Mar 2022 10:40:46 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C945B192AF;
-        Wed,  2 Mar 2022 07:37:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97CC0CB640;
+        Wed,  2 Mar 2022 07:40:02 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8823313D5;
-        Wed,  2 Mar 2022 07:37:30 -0800 (PST)
-Received: from lpieralisi (unknown [10.57.37.208])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A241E3F73D;
-        Wed,  2 Mar 2022 07:37:29 -0800 (PST)
-Date:   Wed, 2 Mar 2022 15:37:27 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhelgaas@google.com, michals@xilinx.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5
- Root Port
-Message-ID: <Yh+PN5ct8T87f6Ve@lpieralisi>
-References: <20220215124606.28627-1-bharat.kumar.gogada@xilinx.com>
- <20220215124606.28627-2-bharat.kumar.gogada@xilinx.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4857A13D5;
+        Wed,  2 Mar 2022 07:40:02 -0800 (PST)
+Received: from [10.1.26.154] (e127744.cambridge.arm.com [10.1.26.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ACAE3F73D;
+        Wed,  2 Mar 2022 07:39:58 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] perf mem: Support HITM for when mem_lvl_num is
+ used
+To:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, leo.yan@linaro.org
+Cc:     benh@kernel.crashing.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Li Huafei <lihuafei1@huawei.com>
+References: <20220221224807.18172-1-alisaidi@amazon.com>
+ <20220221224807.18172-2-alisaidi@amazon.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <d5f9bd40-1f32-9847-33b1-fe7304acf29b@arm.com>
+Date:   Wed, 2 Mar 2022 15:39:04 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215124606.28627-2-bharat.kumar.gogada@xilinx.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220221224807.18172-2-alisaidi@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 06:16:05PM +0530, Bharat Kumar Gogada wrote:
-> Xilinx Versal Premium series has CPM5 block which supports Root Port
-> functioning at Gen5 speed.
-> 
-> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+
+On 21/02/2022 22:48, Ali Saidi wrote:
+> Current code only support HITM statistics for last level cache (LLC)
+> when mem_lvl encodes the level. On existing Arm64 machines there are as
+> many as four levels cache and this change supports decoding l1, l2, and
+> llc hits from the mem_lvl_num data. Given that the mem_lvl namespace is
+> being deprecated take this opportunity to encode the neoverse data into
+> mem_lvl_num.
+
+Since Neoverse is mentioned in the commit message, I think there should be a comment somewhere in the code as well.
+
+>
+> For loads that hit in a the LLC snoop filter and are fullfilled from a
+> higher level cache, it's not usually clear what the true level of the
+> cache the data came from (i.e. a transfer from a core could come from
+> it's L1 or L2). Instead of making an assumption of where the line came
+> from, add support for incrementing HITM if the source is CACHE_ANY.
+>
+> Since other architectures don't seem to populate the mem_lvl_num field
+> here there shouldn't be a change in functionality.
+>
+> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
 > ---
->  .../bindings/pci/xilinx-versal-cpm.yaml       | 47 ++++++++++++++++---
->  1 file changed, 40 insertions(+), 7 deletions(-)
+>  tools/perf/util/mem-events.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> index ed0ab838bcc5..6c3fd4aac7ae 100644
+> --- a/tools/perf/util/mem-events.c
+> +++ b/tools/perf/util/mem-events.c
+> @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
+>  	u64 daddr  = mi->daddr.addr;
+>  	u64 op     = data_src->mem_op;
+>  	u64 lvl    = data_src->mem_lvl;
+> +	u64 lnum   = data_src->mem_lvl_num;
+>  	u64 snoop  = data_src->mem_snoop;
+>  	u64 lock   = data_src->mem_lock;
+>  	u64 blk    = data_src->mem_blk;
+> @@ -527,16 +528,18 @@ do {				\
+>  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
+>  			if (lvl & P(LVL, IO))  stats->ld_io++;
+>  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
+> -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
+> -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
+> -			if (lvl & P(LVL, L3 )) {
+> +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
+> +				stats->ld_l1hit++;
+> +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
+> +				stats->ld_l2hit++;
+> +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L4)) {
 
-https://docs.kernel.org/devicetree/bindings/submitting-patches.html
+According to a comment in the previous patch, using L4 is specific to Neoverse, right?
 
-You have to CC the devicetree ML and DT maintainers.
+Maybe we need to distinguish the Neoverse case from the generic one here as well
 
-Thanks,
-Lorenzo
+if (is_neoverse)
+// treat L4 as llc
+else
+// treat L3 as llc
 
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index 32f4641085bc..97c7229d7f91 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -14,17 +14,21 @@ allOf:
+>  				if (snoop & P(SNOOP, HITM))
+>  					HITM_INC(lcl_hitm);
+>  				else
+>  					stats->ld_llchit++;
+>  			}
 >  
->  properties:
->    compatible:
-> -    const: xlnx,versal-cpm-host-1.00
-> +    contains:
-> +      enum:
-> +        - xlnx,versal-cpm-host-1.00
-> +        - xlnx,versal-cpm5-host-1.00
+> -			if (lvl & P(LVL, LOC_RAM)) {
+> +			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
+>  				stats->lcl_dram++;
+>  				if (snoop & P(SNOOP, HIT))
+>  					stats->ld_shared++;
+> @@ -564,6 +567,9 @@ do {				\
+>  				HITM_INC(rmt_hitm);
+>  		}
 >  
->    reg:
-> -    items:
-> -      - description: Configuration space region and bridge registers.
-> -      - description: CPM system level control and status registers.
-> +    description: |
-> +      Should contain cpm_slcr, cfg registers location and length.
-> +      For xlnx,versal-cpm5-host-1.00, it should also contain cpm_csr.
-> +    minItems: 2
-> +    maxItems: 3
->  
->    reg-names:
-> -    items:
-> -      - const: cfg
-> -      - const: cpm_slcr
-> +    minItems: 2
-> +    maxItems: 3
->  
->    interrupts:
->      maxItems: 1
-> @@ -95,4 +99,33 @@ examples:
->                                 interrupt-controller;
->                         };
->                 };
+> +		if (lnum == P(LVLNUM, ANY_CACHE) && snoop & P(SNOOP, HITM))
+> +			HITM_INC(lcl_hitm);
 > +
-> +              cpm5_pcie: pcie@fcdd0000 {
-> +                       compatible = "xlnx,versal-cpm5-host-1.00";
-> +                       device_type = "pci";
-> +                       #address-cells = <3>;
-> +                       #interrupt-cells = <1>;
-> +                       #size-cells = <2>;
-> +                       interrupts = <0 72 4>;
-> +                       interrupt-parent = <&gic>;
-> +                       interrupt-map-mask = <0 0 0 7>;
-> +                       interrupt-map = <0 0 0 1 &pcie_intc_1 0>,
-> +                                       <0 0 0 2 &pcie_intc_1 1>,
-> +                                       <0 0 0 3 &pcie_intc_1 2>,
-> +                                       <0 0 0 4 &pcie_intc_1 3>;
-> +                       bus-range = <0x00 0xff>;
-> +                       ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
-> +                                <0x43000000 0x80 0x00000000 0x80 0x00000000 0x0 0x80000000>;
-> +                       msi-map = <0x0 &its_gic 0x0 0x10000>;
-> +                       reg = <0x00 0xfcdd0000 0x00 0x1000>,
-> +                             <0x06 0x00000000 0x00 0x1000000>,
-> +                             <0x00 0xfce20000 0x00 0x1000000>;
-> +                       reg-names = "cpm_slcr", "cfg", "cpm_csr";
-> +
-> +                       pcie_intc_1: interrupt-controller {
-> +                               #address-cells = <0>;
-> +                               #interrupt-cells = <1>;
-> +                               interrupt-controller;
-> +                       };
-> +               };
->      };
-> -- 
-> 2.17.1
-> 
+>  		if ((lvl & P(LVL, MISS)))
+>  			stats->ld_miss++;
+>  

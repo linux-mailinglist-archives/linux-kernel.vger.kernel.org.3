@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC744CADA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5234CADA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244543AbiCBSej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S244607AbiCBSfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiCBSei (ORCPT
+        with ESMTP id S236812AbiCBSfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:34:38 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14484C9A3C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:33:54 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 5so2353267lfz.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:33:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sd+QCgx6ejQtfJh0ZQLIdPUh9xzXsejItXGMffzQAc0=;
-        b=iDSC1AseNmMqk2BqO7yCgINbNSucW1S3mrbiOcArZvBpaghKwT9l5hvk22nxxddJU5
-         CVMLR9RINtqyWLOKbKAVHFgUwgywuLK4/rWM5ztyt8xGmslZfjnR4dqRSIiG1Fn2Gl3q
-         CS9mK5K2Te6lc2kqG9LCaKpItlJRuZxE8k+zB4CJAh0caTvns3dHKn0bXI/xhruG9XSP
-         veeOTiJl4mtTtQLfQs7kZrRjchr69XTyffiHes/ddzmbXoiYOWK7UbVIei2CjZc4x5Sw
-         grg4R67/MKJZq2tKoKpTdubCvAwswmSciBb7SoZvjE3nRMILTxfSWCtOMZIscWIGO6nw
-         mQug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sd+QCgx6ejQtfJh0ZQLIdPUh9xzXsejItXGMffzQAc0=;
-        b=w4hMCJUF4wxlX1G4cha3vl4e1rKnd2b7fI2Qym2di9n7UuENJPAruZWfOjrfChBu/p
-         W0nrE+VnALgnqYdKZw7RWWuvfyDucY3pItpA/pURWGWFEs8QW+4vM6DJ8RZRoV/7Wsc0
-         HfApjHd1JxDh/fMVWIvhQevsMKrcuLueB6a5cGwobCHid8furw8BQRKy2BmDrPt84Xbh
-         E2DM/PWWqax3fG81vbOoX2RmrCKWztzQgzNoorBSmTkPlyAidk4Bjqr2bMq7FO2EORIx
-         FCcSf0clZkl0sXbqwlU+WPMq7spCrmkHZAUfYk+6TOXpz9s43uosHDcoPcng0kub4iou
-         Jr0g==
-X-Gm-Message-State: AOAM532dkA8BguQBdUBmsONBRX/swduwMlEH8W9zyezchHcoqcarHoTt
-        toFg3l4RAk3tkut5zjoXd6JkAbSGcLtLK8hQa7j9UA==
-X-Google-Smtp-Source: ABdhPJz3IXcAFe58DPhtDWnyKmNPxGvamwOJoWEhrYKhfFZTY7ccoweBqSbYNkziQsARF2nCSN+vas2mfKXR3PaNjhE=
-X-Received: by 2002:ac2:5a5d:0:b0:444:26e0:3d6a with SMTP id
- r29-20020ac25a5d000000b0044426e03d6amr18336527lfn.537.1646246028875; Wed, 02
- Mar 2022 10:33:48 -0800 (PST)
+        Wed, 2 Mar 2022 13:35:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76C0FCA0E3
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:34:46 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E3D3139F;
+        Wed,  2 Mar 2022 10:34:46 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7A4383F73D;
+        Wed,  2 Mar 2022 10:34:43 -0800 (PST)
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] sched/deadline, (rt): Sched class cleanups
+Date:   Wed,  2 Mar 2022 19:34:27 +0100
+Message-Id: <20220302183433.333029-1-dietmar.eggemann@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220226001546.360188-1-seanjc@google.com> <20220226001546.360188-23-seanjc@google.com>
- <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com> <Yh+q59WsjgCdMcP7@google.com>
-In-Reply-To: <Yh+q59WsjgCdMcP7@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Wed, 2 Mar 2022 10:33:22 -0800
-Message-ID: <CALzav=dzqOp-css8kgqHhCLJnbUrUZt+e_YStCj2HFy0oD+vGg@mail.gmail.com>
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via asynchronous worker
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 9:35 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Mar 02, 2022, Paolo Bonzini wrote:
-> > However, I think we now need a module_get/module_put when creating/destroying
-> > a VM; the workers can outlive kvm_vm_release and therefore any reference
-> > automatically taken by VFS's fops_get/fops_put.
->
-> Haven't read the rest of the patch, but this caught my eye.  We _already_ need
-> to handle this scenario.  As you noted, any worker, i.e. anything that takes a
-> reference via kvm_get_kvm() without any additional guarantee that the module can't
-> be unloaded is suspect. x86 is mostly fine, though kvm_setup_async_pf() is likely
-> affected, and other architectures seem to have bugs.
->
-> Google has an internal patch that addresses this.  I believe David is going to post
-> the fix... David?
+While trying to improve the Deadline sched class behaviour for
+asymmetric CPU capacity systems I came across some possible
+cleanups for DL (and RT).
 
-This was towards the back of my queue but I can bump it to the front.
-I'll have the patches out this week.
+Overview:
+
+[PATCH 1/6] - Remove `struct dl_bandwidth def_dl_bandwidth`.
+
+[PATCH 2/6] - Move functions into DL sched class which don't have to
+              be exported.
+
+[PATCH 3/6] - Merge two DL admission control functions which provide
+              very similar functionality.
+
+[PATCH 4/6] - Use DL rb_entry() macros and cached rbtree wrapper
+              `rb_first_cached()` consistently.
+
+[PATCH 5/6] - Remove unused !CONFIG_SMP function definitions in DL/RT.
+
+[PATCH 6/6] - Remove redundant function parameter in DL/RT.
+
+Dietmar Eggemann (6):
+  sched/deadline: Remove unused def_dl_bandwidth
+  sched/deadline: Move bandwidth mgmt and reclaim functions into sched
+    class source file
+  sched/deadline: Merge dl_task_can_attach() and dl_cpu_busy()
+  sched/deadline: Use __node_2_[pdl|dle]() and rb_first_cached()
+    consistently
+  sched/deadline,rt: Remove unused functions for !CONFIG_SMP
+  sched/deadline,rt: Remove unused parameter from
+    pick_next_[rt|dl]_entity()
+
+ kernel/sched/core.c     |  14 ++--
+ kernel/sched/deadline.c | 141 ++++++++++++++++++++--------------------
+ kernel/sched/rt.c       |  16 +----
+ kernel/sched/sched.h    |  53 +--------------
+ 4 files changed, 84 insertions(+), 140 deletions(-)
+
+-- 
+2.25.1
+

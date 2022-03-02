@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED2D4CAA8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73C64CAA93
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243166AbiCBQjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S242177AbiCBQj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbiCBQjp (ORCPT
+        with ESMTP id S239208AbiCBQjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Mar 2022 11:39:45 -0500
 Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0E531369
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:39:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBE963BCB
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:39:01 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1646239139;
@@ -22,10 +22,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QsCdzSP/k33pOndnGnQGapEj7FynIvIpYn3S3i9tIEc=;
-        b=bWJzl9fxs9+Hc43oKBCqXMPfpYIMGnCyPHr9sDfvUzPlmnCwrFeFx7NDs4btAWRHiFZHKj
-        K3vqwcR91Lf9ARkARw3MfapJCPFw3OiKFT1v+6IGHBoUr7f9MTNW0FA6iat+mHcLbsIJG/
-        NlqxwlafTq+F9XbykzoviXQXCxoZN1A=
+        bh=9LoFBOx+41NuRW+TN1sbV0xBqJ4TCv0zuyZEci6w9hM=;
+        b=akh6ZCXAq6FQiLjzz0h/T1o90vGgV7kP6AJdUAegzuJcUmFmx91g40h8iMe6ExZqRMVg8R
+        8vORXjnqmTNanqHasHPqrgDKVLA2b5UP/6An2XkkoipMm/2RQn3mf4ibXNC/PyVtnaQaIe
+        NfFWVZDuiLbt7SARW7bRtOptFFXS3RE=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -36,9 +36,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm 15/22] kasan: call print_report from kasan_report_invalid_free
-Date:   Wed,  2 Mar 2022 17:36:35 +0100
-Message-Id: <9ea6f0604c5d2e1fb28d93dc6c44232c1f8017fe.1646237226.git.andreyknvl@google.com>
+Subject: [PATCH mm 16/22] kasan: move and simplify kasan_report_async
+Date:   Wed,  2 Mar 2022 17:36:36 +0100
+Message-Id: <52d942ef3ffd29bdfa225bbe8e327bc5bda7ab09.1646237226.git.andreyknvl@google.com>
 In-Reply-To: <cover.1646237226.git.andreyknvl@google.com>
 References: <cover.1646237226.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -57,115 +57,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Call print_report() in kasan_report_invalid_free() instead of calling
-printing functions directly. Compared to the existing implementation
-of kasan_report_invalid_free(), print_report() makes sure that the
-buggy address has metadata before printing it.
-
-The change requires adding a report type field into kasan_access_info
-and using it accordingly.
-
-kasan_report_async() is left as is, as using print_report() will only
-complicate the code.
+Place kasan_report_async() next to the other main reporting routines.
+Also simplify printed information.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/kasan.h  |  6 ++++++
- mm/kasan/report.c | 42 ++++++++++++++++++++++++++----------------
- 2 files changed, 32 insertions(+), 16 deletions(-)
+ mm/kasan/report.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 40b863e289ec..8c9a855152c2 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -127,7 +127,13 @@ static inline bool kasan_sync_fault_possible(void)
- #define META_MEM_BYTES_PER_ROW (META_BYTES_PER_ROW * KASAN_GRANULE_SIZE)
- #define META_ROWS_AROUND_ADDR 2
- 
-+enum kasan_report_type {
-+	KASAN_REPORT_ACCESS,
-+	KASAN_REPORT_INVALID_FREE,
-+};
-+
- struct kasan_access_info {
-+	enum kasan_report_type type;
- 	void *access_addr;
- 	void *first_bad_addr;
- 	size_t access_size;
 diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 56d5ba235542..73348f83b813 100644
+index 73348f83b813..162fd2d6209e 100644
 --- a/mm/kasan/report.c
 +++ b/mm/kasan/report.c
-@@ -86,6 +86,12 @@ __setup("kasan_multi_shot", kasan_set_multi_shot);
- 
- static void print_error_description(struct kasan_access_info *info)
- {
-+	if (info->type == KASAN_REPORT_INVALID_FREE) {
-+		pr_err("BUG: KASAN: double-free or invalid-free in %pS\n",
-+		       (void *)info->ip);
-+		return;
-+	}
-+
- 	pr_err("BUG: KASAN: %s in %pS\n",
- 		kasan_get_bug_type(info), (void *)info->ip);
- 	if (info->access_size)
-@@ -386,22 +392,6 @@ static bool report_enabled(void)
+@@ -392,20 +392,6 @@ static bool report_enabled(void)
  	return !test_and_set_bit(KASAN_BIT_REPORTED, &kasan_flags);
  }
  
--void kasan_report_invalid_free(void *object, unsigned long ip)
+-#ifdef CONFIG_KASAN_HW_TAGS
+-void kasan_report_async(void)
 -{
 -	unsigned long flags;
--	u8 tag = get_tag(object);
 -
--	object = kasan_reset_tag(object);
--
--	start_report(&flags, true);
--	pr_err("BUG: KASAN: double-free or invalid-free in %pS\n", (void *)ip);
--	kasan_print_tags(tag, object);
+-	start_report(&flags, false);
+-	pr_err("BUG: KASAN: invalid-access\n");
+-	pr_err("Asynchronous mode enabled: no access details available\n");
 -	pr_err("\n");
--	print_address_description(object, tag);
--	print_memory_metadata(object);
--	end_report(&flags, object);
+-	dump_stack_lvl(KERN_ERR);
+-	end_report(&flags, NULL);
 -}
+-#endif /* CONFIG_KASAN_HW_TAGS */
 -
- #ifdef CONFIG_KASAN_HW_TAGS
- void kasan_report_async(void)
+ static void print_report(struct kasan_access_info *info)
  {
-@@ -435,6 +425,25 @@ static void print_report(struct kasan_access_info *info)
- 	}
+ 	void *tagged_addr = info->access_addr;
+@@ -477,6 +463,20 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
+ 	return ret;
  }
  
-+void kasan_report_invalid_free(void *ptr, unsigned long ip)
++#ifdef CONFIG_KASAN_HW_TAGS
++void kasan_report_async(void)
 +{
 +	unsigned long flags;
-+	struct kasan_access_info info;
 +
-+	start_report(&flags, true);
-+
-+	info.type = KASAN_REPORT_INVALID_FREE;
-+	info.access_addr = ptr;
-+	info.first_bad_addr = kasan_reset_tag(ptr);
-+	info.access_size = 0;
-+	info.is_write = false;
-+	info.ip = ip;
-+
-+	print_report(&info);
-+
-+	end_report(&flags, ptr);
++	start_report(&flags, false);
++	pr_err("BUG: KASAN: invalid-access\n");
++	pr_err("Asynchronous fault: no details available\n");
++	pr_err("\n");
++	dump_stack_lvl(KERN_ERR);
++	end_report(&flags, NULL);
 +}
++#endif /* CONFIG_KASAN_HW_TAGS */
 +
- bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 			unsigned long ip)
- {
-@@ -451,6 +460,7 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 
- 	start_report(&irq_flags, true);
- 
-+	info.type = KASAN_REPORT_ACCESS;
- 	info.access_addr = ptr;
- 	info.first_bad_addr = kasan_find_first_bad_addr(ptr, size);
- 	info.access_size = size;
+ #ifdef CONFIG_KASAN_INLINE
+ /*
+  * With CONFIG_KASAN_INLINE, accesses to bogus pointers (outside the high
 -- 
 2.25.1
 

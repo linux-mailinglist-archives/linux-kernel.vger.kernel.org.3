@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227834C9C30
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FA44C9C37
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 04:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239365AbiCBDeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 22:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S239378AbiCBDif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 22:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiCBDd6 (ORCPT
+        with ESMTP id S229911AbiCBDi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 22:33:58 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FD38BF1E;
-        Tue,  1 Mar 2022 19:33:15 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id j5so546992qvs.13;
-        Tue, 01 Mar 2022 19:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9cnZV/yqSL4Et35xPbvGprEKId4yvGvmxh2X/V5hg4Q=;
-        b=d1PIC7Asf0dJRR7WzEu0YcygafYbaA129uZH8XQ/Sq/zQcSTvH6mxp3TS6wvFIDtMA
-         J73lwh7mf84VAZjNQ/yvb1pqin/ULoUBIyjMaSR1bTuOVgS0uqVAV8QedidVwgnhUOmz
-         +AOD9uicSAnZitQ6vF1FPEfZOWB5kLeElwzBOTgKXWVLNdNgxANM71ksKmcrPKzVzXrK
-         QYFU6xCKPr7NujA5fQT9qAUK1l32T0CP27H60kx6XlWjvV5hHu34HQ6PMxIqTO3cqabc
-         YlzAKxFfS1MiKuH96YSqLMyKufM8Y7TABQtuv47BSOPdX5oC3aStL5s/lUIdJ+0boIcA
-         Ijjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9cnZV/yqSL4Et35xPbvGprEKId4yvGvmxh2X/V5hg4Q=;
-        b=qkWnDEDUiyfsXlmO99GiGmyoHibZD9Z8MmSgAkxHaa0LGf1X9UU+ug86N1KeCwo81a
-         tMNGMnJ66b06Y3jyHNLJekgVQ/f3JG6NDFUQki45J6aovS5raTaWzcfaB8HcCn92GUCA
-         j2vVjnCayzxPwzouSveQB0cIPg9vWeUmgBfdhAVW3Ix8xKakKZgMUZF1I6o3UckcStGw
-         J+nGuG8zeDtECpiWnzAMyld4R2WhGkbGMRV2q4ljaHa9hgoBKlT4DueGFRkXx3ubaX+Z
-         +5NQPSOeQxHRso1aToc+zH+Gk9ydvwP2FVsSpQnz3N681pVcj1YrswiugwmUZPfNr18w
-         /HTw==
-X-Gm-Message-State: AOAM533mGE2LGn7eavZFqDLnGMauN52+C95ywcanTt9j6G3HZ3LrK7GS
-        cgO+mDzZNLrVd0+GTdEQP04=
-X-Google-Smtp-Source: ABdhPJxNxn1wQ/ZO1kE7oJWiuVmBywJBkwZdtLFcJdiL182h9QiclE84rdX5aaMOwSx5BUrOOvalww==
-X-Received: by 2002:a05:6214:1c84:b0:432:6dd5:ba71 with SMTP id ib4-20020a0562141c8400b004326dd5ba71mr19804822qvb.109.1646191994516;
-        Tue, 01 Mar 2022 19:33:14 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g7-20020a376b07000000b006492f19ae76sm7596971qkc.27.2022.03.01.19.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 19:33:13 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     krzysztof.kozlowski@canonical.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH V2] net/nfc/nci: fix infoleak in struct nci_set_config_param
-Date:   Wed,  2 Mar 2022 03:33:07 +0000
-Message-Id: <20220302033307.2054766-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 22:38:29 -0500
+Received: from smtpbg152.qq.com (smtpbg152.qq.com [13.245.186.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCC5201B6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 19:37:44 -0800 (PST)
+X-QQ-mid: bizesmtp65t1646192242t89gbo78
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 02 Mar 2022 11:37:18 +0800 (CST)
+X-QQ-SSF: 0140000000200060D000B00A0000000
+X-QQ-FEAT: dpyQmELDBxF9Prl52JgMRPjgodJe3WWVa84v1DaukhPHZqksTih2wpOdExClV
+        +7SFqNDhjW+FqQE5TPGdcnfwpkQDCWwVA5g6iS1mS1yOOzzImVFQqRCF8bApQXJnOX1/jpN
+        3xgpc2ogtaCj1Pxnd7a2fNjF0jv1OYicRF+iNmaDMUqnbSTnmBQIabJsSMVPcQsvPawY7Ut
+        XG8+DJkPyI73KXoIiWlozIdvvYkuB+D2H+PFoHCYYtfM1X8dWYZpdmCvXkIgnZpTUmU8OrX
+        TRsNWUqzPg/+G8oCSLJuQjoBwNq4TfE7DtD+EkA74KTT6bNoOn+jETXbv4RNxYJXQzJciIn
+        DW/3rBxedTmCBWIedM=
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     ok@artecdesign.ee, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH] USB: host: isp116x: check return value after calling platform_get_resource()
+Date:   Wed,  2 Mar 2022 11:37:16 +0800
+Message-Id: <20220302033716.31272-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-On 64-bit systems, struct nci_set_config_param has
-an added padding of 7 bytes between struct members
-id and len. Even though all struct members are initialized,
-the 7-byte hole will contain data from the kernel stack.
-This patch zeroes out struct nci_set_config_param before
-usage, preventing infoleaks to userspace.
-
-v1->v2:
-  -Modify the title.
-  -Add explanatory information.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 ---
- net/nfc/nci/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/isp116x-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
-index d2537383a3e8..32be42be1152 100644
---- a/net/nfc/nci/core.c
-+++ b/net/nfc/nci/core.c
-@@ -641,6 +641,7 @@ int nci_set_config(struct nci_dev *ndev, __u8 id, size_t len, const __u8 *val)
- 	if (!val || !len)
- 		return 0;
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 8835f6bd528e..8c7f0991c21b 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
  
-+	memset(&param, 0x0, sizeof(param));
- 	param.id = id;
- 	param.len = len;
- 	param.val = val;
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 
+ 	usb_put_hcd(hcd);
+ 	return 0;
 -- 
-2.25.1
+2.20.1
+
+
 

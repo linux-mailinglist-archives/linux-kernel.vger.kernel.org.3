@@ -2,224 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB75E4CACD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0724CACCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 19:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbiCBSDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 13:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S244365AbiCBSC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 13:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244432AbiCBSCx (ORCPT
+        with ESMTP id S244349AbiCBSC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:02:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A3ED64E8
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:02:10 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222FrVfu004476;
-        Wed, 2 Mar 2022 18:01:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=Ecfr1lWooPK7EFSXfaFaOgEiH/8IP3GWVaG5xGL9pQM=;
- b=qiAO4AmIiIvjOsAOkh2IINxxYs6u49xleBzu2/ytRer4ozbSvsyBHl7KyNqh1hcJAgKs
- bdgSWPE8WD+m/SmlZ0wmlphUWROp4Wg8ho5wLKzD+N8uSjWbTZh9Uz2R2gvEZmnQKhth
- JZ2ynnz5TjVejyqKwivJV+OlqzHpQEpNU7qh+Mou0/B7m9d3lVdRqAtpzaDfskuA+/Zm
- k9A8RqRlimgiw78YSRuzTSfNImoHlU6BG7rGQp4UUs6xYMzHR+ORKhwYfEjIQqWOzeBi
- fp1PzsHX/xVR9DghJjht21n8UliP1G1W9YVTBQmoND7tDET0TMnYM7EhbeLE0VPpAxHq EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejbmdtn9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 18:01:46 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222HsJhq019012;
-        Wed, 2 Mar 2022 18:01:45 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejbmdtn8j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 18:01:45 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222HhI7e005631;
-        Wed, 2 Mar 2022 18:01:42 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3efbu9618q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 18:01:42 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Hoi9E23593274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Mar 2022 17:50:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D4F9A405F;
-        Wed,  2 Mar 2022 18:01:40 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A709CA4064;
-        Wed,  2 Mar 2022 18:01:38 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.6.152])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  2 Mar 2022 18:01:38 +0000 (GMT)
-Date:   Wed, 2 Mar 2022 20:01:36 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Marco Elver <elver@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>
-Subject: Re: [PATCH v2 1/6] lib/stackdepot: allow requesting early
- initialization dynamically
-Message-ID: <Yh+xAGvzV6WQC5Q/@linux.ibm.com>
-References: <20220302173122.11939-1-vbabka@suse.cz>
- <20220302173122.11939-2-vbabka@suse.cz>
+        Wed, 2 Mar 2022 13:02:27 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C850ED5DF4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 10:01:43 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id e2so2225110pls.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 10:01:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ghxvLbBxxsI2q0Cumn+E+luGTHcGT5EcvSoKD1OR3J0=;
+        b=sbLwc5+sUDMIWQaaab5ASuqK4VJmVcHXfJzDA7SnzHIfpBy+SgPHkUhqad229M2hxH
+         uLlasaR5Y9jZsx0l1BfLCjnsWgm8ABD9vAwWuuR2RTBQCDksz9WzVu6MhqIfDhIqXbpb
+         Hcyvl37b2ZTxrF/rWsOGCVV79fWH+49MIEfFco92Ad+TmOPBceolsKrAFKJIjj6exGPk
+         7iuPehBZ7viSl9PzGFsCsm2f9PDDov++kJF0xh+BmSsKJRCfSvusFZr3067tkN0bvbYY
+         uXOar6+SPDePmTWCAEk/1R3R8dWoyRKxKpViH3zkuDJdatJ+P1lrzR+QkZ9OqhUph3zI
+         JenA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ghxvLbBxxsI2q0Cumn+E+luGTHcGT5EcvSoKD1OR3J0=;
+        b=tBWD1bgff2skw1OjF/QJWCfDgN1zlMHwxGrIuejjyPNIjFcP62qRgNkAX+ZJD0TCMN
+         NYp/f/tgp9PTFHTMpN8MaUuJ769atY0mkIbusH9yiKFozYf2ZXCX/00MYCYFCkftwQoj
+         USB2b51ioQtfWO9cOnw6pSHinoRqmjDVOGCD0CuBc1KtSTqcq4Lck/wucMyGJqTUiCDV
+         4LxjbjYgPNiMqZbQzPTxGYRk/2WOT6azCPuiYtaADGeoWjOmGOEe/xo7MDRk3uszlqw4
+         K2Rp9TAaDLcz8hITMPQwThIHj3y+VujPk4fFqKP/xCkgxbagoxBz5tX0ZZJ5yzStPcuy
+         24rg==
+X-Gm-Message-State: AOAM530wPiZNapBuCvFa5BqILbLndS+iF5i1M7T/wI4rPErRlAcK7Plk
+        Mc3gh3XCeqr8cl299gEaKoIDvA==
+X-Google-Smtp-Source: ABdhPJzz/d72FZYh+K2pIp31FS88zIIWQF1AKDPlKc2QSTZS5hbm3PiGLvfsb34ZAkubGz0R5FnCXA==
+X-Received: by 2002:a17:90b:4b0d:b0:1bc:4cdb:ebe3 with SMTP id lx13-20020a17090b4b0d00b001bc4cdbebe3mr1008662pjb.176.1646244103075;
+        Wed, 02 Mar 2022 10:01:43 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c72-20020a624e4b000000b004f3ff3a3fb2sm13157960pfb.118.2022.03.02.10.01.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 10:01:42 -0800 (PST)
+Date:   Wed, 2 Mar 2022 18:01:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
+ asynchronous worker
+Message-ID: <Yh+xA31FrfGoxXLB@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-23-seanjc@google.com>
+ <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302173122.11939-2-vbabka@suse.cz>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VzkmQiUA1xiDd9HfpIRConjGr6CA35-w
-X-Proofpoint-GUID: JOby3tPVJ_KbezTIQZTIpNpXBsUXVLW7
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203020077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 06:31:17PM +0100, Vlastimil Babka wrote:
-> In a later patch we want to add stackdepot support for object owner
-> tracking in slub caches, which is enabled by slub_debug boot parameter.
-> This creates a bootstrap problem as some caches are created early in
-> boot when slab_is_available() is false and thus stack_depot_init()
-> tries to use memblock. But, as reported by Hyeonggon Yoo [1] we are
-> already beyond memblock_free_all(). Ideally memblock allocation should
-> fail, yet it succeeds, but later the system crashes, which is a
-> separately handled issue.
+On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> On 2/26/22 01:15, Sean Christopherson wrote:
+> > Zap defunct roots, a.k.a. roots that have been invalidated after their
+> > last reference was initially dropped, asynchronously via the system work
+> > queue instead of forcing the work upon the unfortunate task that happened
+> > to drop the last reference.
+> > 
+> > If a vCPU task drops the last reference, the vCPU is effectively blocked
+> > by the host for the entire duration of the zap.  If the root being zapped
+> > happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
+> > being active, the zap can take several hundred seconds.  Unsurprisingly,
+> > most guests are unhappy if a vCPU disappears for hundreds of seconds.
+> > 
+> > E.g. running a synthetic selftest that triggers a vCPU root zap with
+> > ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
+> > Offloading the zap to a worker drops the block time to <100ms.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
 > 
-> To resolve this boostrap issue in a robust way, this patch adds another
-> way to request stack_depot_early_init(), which happens at a well-defined
-> point of time. In addition to build-time CONFIG_STACKDEPOT_ALWAYS_INIT,
-> code that's e.g. processing boot parmeters (which happens early enough)
-> can set a new variable stack_depot_want_early_init as true.
-> 
-> In this patch we also convert page_owner to this approach. While it
-> doesn't have the bootstrap issue as slub, it's also a functionality
-> enabled by a boot param and can thus request stack_depot_early_init()
-> with memblock allocation instead of later initialization with
-> kvmalloc().
-> 
-> [1] https://lore.kernel.org/all/YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal/
-> 
-> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  include/linux/stackdepot.h | 16 ++++++++++++++--
->  lib/stackdepot.c           |  2 ++
->  mm/page_owner.c            |  9 ++++++---
->  3 files changed, 22 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-> index 17f992fe6355..1217ba2b636e 100644
-> --- a/include/linux/stackdepot.h
-> +++ b/include/linux/stackdepot.h
-> @@ -15,6 +15,8 @@
->  
->  typedef u32 depot_stack_handle_t;
->  
-> +extern bool stack_depot_want_early_init;
-> +
->  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->  					unsigned int nr_entries,
->  					gfp_t gfp_flags, bool can_alloc);
-> @@ -26,11 +28,21 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->   * The alternative is to select STACKDEPOT_ALWAYS_INIT to have stack depot
->   * enabled as part of mm_init(), for subsystems where it's known at compile time
->   * that stack depot will be used.
-> + *
-> + * Another alternative is to set stack_depot_want_early_init as true, when the
-> + * decision to use stack depot is taken e.g. when evaluating kernel boot
-> + * parameters, which precedes the call to stack_depot_want_early_init().
->   */
->  int stack_depot_init(void);
->  
-> -#ifdef CONFIG_STACKDEPOT_ALWAYS_INIT
-> -static inline int stack_depot_early_init(void)	{ return stack_depot_init(); }
-> +#ifdef CONFIG_STACKDEPOT
-> +static inline int stack_depot_early_init(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_STACKDEPOT_ALWAYS_INIT)
-> +	    || stack_depot_want_early_init)
-> +		return stack_depot_init();
-> +	return 0;
-> +}
+> Do we even need kvm_tdp_mmu_zap_invalidated_roots() now?  That is,
+> something like the following:
 
-I'd also suggest splitting memblock allocation from stack_depot_init() to
-stack_depot_early_init().
+Nice!  I initially did something similar (moving invalidated roots to a separate
+list), but never circled back to idea after implementing the worker stuff.
 
->  #else
->  static inline int stack_depot_early_init(void)	{ return 0; }
->  #endif
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index bf5ba9af0500..02e2b5fcbf3b 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -66,6 +66,8 @@ struct stack_record {
->  	unsigned long entries[];	/* Variable-sized array of entries. */
->  };
->  
-> +bool stack_depot_want_early_init = false;
-> +
->  static void *stack_slabs[STACK_ALLOC_MAX_SLABS];
->  
->  static int depot_index;
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 99e360df9465..40dce2b81d13 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -42,7 +42,12 @@ static void init_early_allocated_pages(void);
->  
->  static int __init early_page_owner_param(char *buf)
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index bd3625a875ef..5fd8bc858c6f 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5698,6 +5698,16 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
 >  {
-> -	return kstrtobool(buf, &page_owner_enabled);
-> +	int ret = kstrtobool(buf, &page_owner_enabled);
-> +
-> +	if (page_owner_enabled)
-> +		stack_depot_want_early_init = true;
-> +
-> +	return ret;
->  }
->  early_param("page_owner", early_page_owner_param);
->  
-> @@ -80,8 +85,6 @@ static __init void init_page_owner(void)
->  	if (!page_owner_enabled)
->  		return;
->  
-> -	stack_depot_init();
-> -
->  	register_dummy_stack();
->  	register_failure_stack();
->  	register_early_stack();
-> -- 
-> 2.35.1
-> 
+>  	lockdep_assert_held(&kvm->slots_lock);
+> +	/*
+> +	 * kvm_tdp_mmu_invalidate_all_roots() needs a nonzero reference
+> +	 * count.  If we're dying, zap everything as it's going to happen
+> +	 * soon anyway.
+> +	 */
+> +	if (!refcount_read(&kvm->users_count)) {
+> +		kvm_mmu_zap_all(kvm);
+> +		return;
+> +	}
 
--- 
-Sincerely yours,
-Mike.
+I'd prefer we make this an assertion and shove this logic to set_nx_huge_pages(),
+because in that case there's no need to zap anything, the guest can never run
+again.  E.g. (I'm trying to remember why I didn't do this before...)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index b2c1c4eb6007..d4d25ab88ae7 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6132,7 +6132,8 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+ 
+                list_for_each_entry(kvm, &vm_list, vm_list) {
+                        mutex_lock(&kvm->slots_lock);
+-                       kvm_mmu_zap_all_fast(kvm);
++                       if (refcount_read(&kvm->users_count))
++                               kvm_mmu_zap_all_fast(kvm);
+                        mutex_unlock(&kvm->slots_lock);
+ 
+                        wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+
+
+> +
+>  	write_lock(&kvm->mmu_lock);
+>  	trace_kvm_mmu_zap_all_fast(kvm);
+> @@ -5732,20 +5742,6 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+>  	kvm_zap_obsolete_pages(kvm);
+>  	write_unlock(&kvm->mmu_lock);
+> -
+> -	/*
+> -	 * Zap the invalidated TDP MMU roots, all SPTEs must be dropped before
+> -	 * returning to the caller, e.g. if the zap is in response to a memslot
+> -	 * deletion, mmu_notifier callbacks will be unable to reach the SPTEs
+> -	 * associated with the deleted memslot once the update completes, and
+> -	 * Deferring the zap until the final reference to the root is put would
+> -	 * lead to use-after-free.
+> -	 */
+> -	if (is_tdp_mmu_enabled(kvm)) {
+> -		read_lock(&kvm->mmu_lock);
+> -		kvm_tdp_mmu_zap_invalidated_roots(kvm);
+> -		read_unlock(&kvm->mmu_lock);
+> -	}
+>  }
+>  static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index cd1bf68e7511..af9db5b8f713 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -142,10 +142,12 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  	WARN_ON(!root->tdp_mmu_page);
+>  	/*
+> -	 * The root now has refcount=0 and is valid.  Readers cannot acquire
+> -	 * a reference to it (they all visit valid roots only, except for
+> -	 * kvm_tdp_mmu_zap_invalidated_roots() which however does not acquire
+> -	 * any reference itself.
+> +	 * The root now has refcount=0.  It is valid, but readers already
+> +	 * cannot acquire a reference to it because kvm_tdp_mmu_get_root()
+> +	 * rejects it.  This remains true for the rest of the execution
+> +	 * of this function, because readers visit valid roots only
+
+One thing that keeps tripping me up is the "readers" verbiage.  I get confused
+because taking mmu_lock for read vs. write doesn't really have anything to do with
+reading or writing state, e.g. "readers" still write SPTEs, and so I keep thinking
+"readers" means anything iterating over the set of roots.  Not sure if there's a
+shorthand that won't be confusing.
+
+> +	 * (except for tdp_mmu_zap_root_work(), which however operates only
+> +	 * on one specific root and does not acquire any reference itself).
+> 
+>  	 *
+>  	 * Even though there are flows that need to visit all roots for
+>  	 * correctness, they all take mmu_lock for write, so they cannot yet
+
+...
+
+> It passes a smoke test, and also resolves the debate on the fate of patch 1.
+
++1000, I love this approach.  Do you want me to work on a v3, or shall I let you
+have the honors?

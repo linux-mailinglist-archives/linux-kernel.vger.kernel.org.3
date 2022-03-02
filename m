@@ -2,196 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3398D4CA9C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC8F4CA9C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241482AbiCBQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S241585AbiCBQB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiCBQBT (ORCPT
+        with ESMTP id S241512AbiCBQBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:01:19 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1552E2E;
-        Wed,  2 Mar 2022 08:00:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646236836; x=1677772836;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IlGvGhlzZw5Rk1Dvudqx76u6Ai1Xc9o+P12hHfydFOc=;
-  b=kNVXChhv8tp52f/nuckMlqUcAtR14F9YctgibfjqfpkPn8c2kqa1B/SS
-   SJDkIV301ojYGRvT5Mqt/TNGRQj3bdIkneWb8hsM9M/k3mZvoT0IK2qu7
-   aTaTgLYYNUWLUWkX/O1mLHUdiZ0Hs+BBrvdO1Xpo0IPwycHjDNopmoRka
-   xQ7dkytFFX+unxYSj4IyUI/xlkOAnpXrMCcR/X4pyxK+r7r/eo4d9n09A
-   t92dwVvt9sy6Z2qyhg1+FC3X/JvSlWIJnKTmjjtB9v6lYWLl2H/HR8D2q
-   /z6vOhFzWvf8IJFtyyAWFO/00aJ4bheJt131NfbKRDE3pImBYnVUYqjV6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="314153580"
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="314153580"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 08:00:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="778915064"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Mar 2022 08:00:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BD08B183; Wed,  2 Mar 2022 18:00:28 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Rosin <peda@axentia.se>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v3 1/1] iio: multiplexer: Make use of device properties
-Date:   Wed,  2 Mar 2022 18:00:25 +0200
-Message-Id: <20220302160025.54348-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 2 Mar 2022 11:01:23 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0785938B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:00:40 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id x14so1710668ill.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 08:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nk6Kahyrhb5yNQq5f9IHun18wXpxRfQnoxvt0M9WLOU=;
+        b=qv4JtwVzupacsXxFEA51XjQXQrapkBiIlNukwNNtiPz7kYYK+Jym2cZjsBbPe35OCk
+         8T+zGsiOD6jYNcPWjLLrFkWFCF8xbJo99C3vw08Xt46nRaZRl1d+eT1vAugHabb9NOF2
+         DiHyEBEkLbo0uDL4LqggDzGX3XvY3812/8sng=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nk6Kahyrhb5yNQq5f9IHun18wXpxRfQnoxvt0M9WLOU=;
+        b=VG+aRS+dpHw7FR84dJFF87+hcDa73oJ84/DTMpFGBgYXsJEL15KCamftkMBXKrOIrh
+         C7V79y88lR+rrBHbRSBDS1v6N7fKliGjY2aHqakG41xiLcpR6o0kHY6rsYaTaPrVUkHJ
+         mwqvcc8obHtVAKwuXvRX1xkShBO5n8wgSl2yjptzd2oBQdItyr28FwEaO0wX3AEMgaZP
+         F3yTjDGSUvV1R/nlzOClsBIWJVHfOJ53HaL4F9SPb6BtDrl/jlja2Y5XDHhnji8MY5S1
+         msHFKl6/WCjrlvSsXRbpC4RXfIhVNl3vgmDbW2vH8e9pog0nwagfnCWr2VIksAuMQnlI
+         BDIg==
+X-Gm-Message-State: AOAM530QvWPztxVophgbCvIHaQ5ZLRI3J3BBhW2/yh6FXtzzu3/cf1GY
+        LGsMRTtPzFGORrLcpvz91jSvuOvfYrr2PJfXgejk0cBfY/Y=
+X-Google-Smtp-Source: ABdhPJylDEw1JTxWMePaUsTyGP2rrN4hCFhUC/Xeh4vGlw2rVFsKqwhvTs42gW7hcczsQ7oOhIf0I3fsp7fhjjgY1hA=
+X-Received: by 2002:a92:d09:0:b0:2c3:f141:848b with SMTP id
+ 9-20020a920d09000000b002c3f141848bmr8295598iln.230.1646236839707; Wed, 02 Mar
+ 2022 08:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220302032414.503960863@goodmis.org>
+In-Reply-To: <20220302032414.503960863@goodmis.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 2 Mar 2022 11:00:27 -0500
+Message-ID: <CAEXW_YSZf2a=t=OGBsop8ZmzUhoJ3uaXu4KkEt991CDP0GHq1A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] tracing: Add a way to have custom events in the
+ tracefs directory
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+On Tue, Mar 1, 2022 at 10:28 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> We would like to have in production a way to record sched wakeups and
+> sched switch, and be able to save the information in a small file
+> with as much available as possible. Currently the wake up and sched switch
+> events are 36 and 64 bytes each (plus a 4 byte ring buffer event header).
+>
+> By having a custom module tap into the sched switch and waking trace points
+> we can bring those events down to 16 and 14 bytes respectively.
+>
+> Steven Rostedt (Google) (2):
+>       tracing: Allow custom events to be added to the tracefs directory
+>       tracing: Add sample code for custom trace events
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Peter Rosin <peda@axentia.se>
----
-v3: split variable definitions on 1 per line basis (Peter), fixed typo (Jonathan)
- drivers/iio/multiplexer/Kconfig   |  1 -
- drivers/iio/multiplexer/iio-mux.c | 49 +++++++++++++++----------------
- 2 files changed, 23 insertions(+), 27 deletions(-)
+Great! I will test these out / review it in the coming week or so.
 
-diff --git a/drivers/iio/multiplexer/Kconfig b/drivers/iio/multiplexer/Kconfig
-index a1e1332d1206..928f424a1ed3 100644
---- a/drivers/iio/multiplexer/Kconfig
-+++ b/drivers/iio/multiplexer/Kconfig
-@@ -9,7 +9,6 @@ menu "Multiplexers"
- config IIO_MUX
- 	tristate "IIO multiplexer driver"
- 	select MULTIPLEXER
--	depends on OF || COMPILE_TEST
- 	help
- 	  Say yes here to build support for the IIO multiplexer.
- 
-diff --git a/drivers/iio/multiplexer/iio-mux.c b/drivers/iio/multiplexer/iio-mux.c
-index f422d44377df..93558fddfa9b 100644
---- a/drivers/iio/multiplexer/iio-mux.c
-+++ b/drivers/iio/multiplexer/iio-mux.c
-@@ -10,11 +10,12 @@
- #include <linux/err.h>
- #include <linux/iio/consumer.h>
- #include <linux/iio/iio.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/mux/consumer.h>
--#include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- 
- struct mux_ext_info_cache {
- 	char *data;
-@@ -324,37 +325,21 @@ static int mux_configure_channel(struct device *dev, struct mux *mux,
- 	return 0;
- }
- 
--/*
-- * Same as of_property_for_each_string(), but also keeps track of the
-- * index of each string.
-- */
--#define of_property_for_each_string_index(np, propname, prop, s, i)	\
--	for (prop = of_find_property(np, propname, NULL),		\
--	     s = of_prop_next_string(prop, NULL),			\
--	     i = 0;							\
--	     s;								\
--	     s = of_prop_next_string(prop, s),				\
--	     i++)
--
- static int mux_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = pdev->dev.of_node;
- 	struct iio_dev *indio_dev;
- 	struct iio_channel *parent;
- 	struct mux *mux;
--	struct property *prop;
--	const char *label;
-+	const char **labels;
-+	int all_children;
-+	int children;
- 	u32 state;
- 	int sizeof_ext_info;
--	int children;
- 	int sizeof_priv;
- 	int i;
- 	int ret;
- 
--	if (!np)
--		return -ENODEV;
--
- 	parent = devm_iio_channel_get(dev, "parent");
- 	if (IS_ERR(parent))
- 		return dev_err_probe(dev, PTR_ERR(parent),
-@@ -366,9 +351,21 @@ static int mux_probe(struct platform_device *pdev)
- 		sizeof_ext_info *= sizeof(*mux->ext_info);
- 	}
- 
-+	all_children = device_property_string_array_count(dev, "channels");
-+	if (all_children < 0)
-+		return all_children;
-+
-+	labels = devm_kmalloc_array(dev, all_children, sizeof(*labels), GFP_KERNEL);
-+	if (!labels)
-+		return -ENOMEM;
-+
-+	ret = device_property_read_string_array(dev, "channels", labels, all_children);
-+	if (ret < 0)
-+		return ret;
-+
- 	children = 0;
--	of_property_for_each_string(np, "channels", prop, label) {
--		if (*label)
-+	for (state = 0; state < all_children; state++) {
-+		if (*labels[state])
- 			children++;
- 	}
- 	if (children <= 0) {
-@@ -395,7 +392,7 @@ static int mux_probe(struct platform_device *pdev)
- 	mux->cached_state = -1;
- 
- 	mux->delay_us = 0;
--	of_property_read_u32(np, "settle-time-us", &mux->delay_us);
-+	device_property_read_u32(dev, "settle-time-us", &mux->delay_us);
- 
- 	indio_dev->name = dev_name(dev);
- 	indio_dev->info = &mux_info;
-@@ -426,11 +423,11 @@ static int mux_probe(struct platform_device *pdev)
- 	}
- 
- 	i = 0;
--	of_property_for_each_string_index(np, "channels", prop, label, state) {
--		if (!*label)
-+	for (state = 0; state < all_children; state++) {
-+		if (!*labels[state])
- 			continue;
- 
--		ret = mux_configure_channel(dev, mux, state, label, i++);
-+		ret = mux_configure_channel(dev, mux, state, labels[state], i++);
- 		if (ret < 0)
- 			return ret;
- 	}
--- 
-2.34.1
+Thanks!
 
+- Joel
+
+>
+> ----
+>  kernel/trace/trace_events.c               |   2 +
+>  samples/Kconfig                           |   8 +-
+>  samples/Makefile                          |   1 +
+>  samples/trace_events/Makefile             |   2 +
+>  samples/trace_events/trace_custom_sched.c | 280 ++++++++++++++++++++++++++++++
+>  5 files changed, 292 insertions(+), 1 deletion(-)
+>  create mode 100644 samples/trace_events/trace_custom_sched.c

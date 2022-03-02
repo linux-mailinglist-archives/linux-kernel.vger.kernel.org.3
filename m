@@ -2,180 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A574CB33C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F1A4CB383
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiCCADJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S229950AbiCCABW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiCCADH (ORCPT
+        with ESMTP id S229869AbiCCABI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:03:07 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC0010FC3;
-        Wed,  2 Mar 2022 16:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646265741; x=1677801741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y6ExcioFqlJjDZQpSBxXHW53xAZe9Os27BCVKLck3NM=;
-  b=jPfE10oPlf9CFds7d6MCbvoSWyd/te2l7pfVFcH2jVgl0izWxAiGmThj
-   7rJZBRI8VoRs2mnbStWPoiwzvUcm2nL3sj76K13guOYxx4NrBnmpTwdCd
-   NOx4/drpsc0Z8TvCoROIkAYamAVR9csOXPrYptNpYOPlZZKZzzJ6aAeW+
-   44BlztYW/RTRKgPQ8vDAd0BLKnVNoKKFNb+cTleSChz8ahdBA1QRFxEi+
-   lT8OGuDyB50ocaB9tnp+GcUz4s+r/yyLxKIWw9Zzws6q20r3spVjpF3kP
-   oBScnOSt266DYNIZFTmqlhZhazX59IRVcc9FOpbmd2Pkcp+9jApChSpsT
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="278208534"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="278208534"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:39:16 -0800
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="641884850"
-Received: from otc-nc-03.jf.intel.com (HELO otc-nc-03) ([10.54.39.125])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:39:16 -0800
-Date:   Wed, 2 Mar 2022 15:31:00 -0800
-From:   "Raj, Ashok" <ashok.raj@intel.com>
-To:     "Williams, Dan J" <dan.j.williams@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [RFC 03/10] platform/x86/intel/ifs: Add driver for In-Field Scan
-Message-ID: <20220302233100.GE9351@otc-nc-03>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <20220301195457.21152-4-jithu.joseph@intel.com>
- <f0e958c612ac4dab30ba458a08a7681e1114668f.camel@intel.com>
+        Wed, 2 Mar 2022 19:01:08 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019444FC6E;
+        Wed,  2 Mar 2022 16:00:07 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id 185so2739074qkh.1;
+        Wed, 02 Mar 2022 16:00:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s2VoxRcgzayXC4zVf8d2bV7EKQmBNoz4BFBzN6+8sx8=;
+        b=irtUW00dYBE7kRhx89tLLgo+OiHCquwUTazjhPRpgra/Ng8ZdA8XxCmleB4NvxllKh
+         4pKE6dlj50+3l1NtV4o9/4ebYa6MzILugoiY6A7PIbHurAxsmGNDq+Azak/YPX7TvXqp
+         vWKgPbmVn8eSbnf0s0rlwVptu1i33O5KFWx6cgKlB1Iv/ADRAyqTCutf86BCCCum8X2/
+         Bf0AFz6Uc9OqJ9+suUpqFsrW1IvnGHcoqc6V2ESgWgVivWiJrGD9dv/iy4uRrGM+OgIG
+         JzhbU+mrHknnWfDH4bhT9zMXZNaDWIeBUzcbCDaaOTAZ4EeZTnnWYTbM3mDIlJ1KSgyy
+         PikQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s2VoxRcgzayXC4zVf8d2bV7EKQmBNoz4BFBzN6+8sx8=;
+        b=wCLGp7OUJp/fLsZela7DxIvXWMqB8fMTaKGEFbVYBpJVhW5arTt6ymEBh+LPLVEJoB
+         SBitD97j/9axjRTC5GzF8BYKe0LIwXvp+8KyFUx02QRApxCPyYgOy5yCJBzjSBDR6SEf
+         tzAUuLR/0Dxip33xVNuSNyqvSr4CLSpBewlV4bMI2y8CR3ALVHsIRgnBJrZhjrzDHY4L
+         4QQTfvAlGrKVe5C47SWMfAJBYoQzSMu+s4vXQRXGiG+futo0FRgWFpP5zX+uv9/EYBZv
+         PV9OvMQmw8H+4EplRUvT2mGrKM7g+0Nq+2sILaHvIgXScDwjnhp8el0sXeOJ+NszTQfJ
+         euow==
+X-Gm-Message-State: AOAM530/h/YHG3cvh0tVvANRZMBksuBNc9m19b9MQE+GzLwZzjR/NQWO
+        kfBELprPAxqy7sRyqyySHYOjoL5psvJ9dX7l2+qacind//ASHw==
+X-Google-Smtp-Source: ABdhPJxo/W0o2SxPKcSkXdGg8CN8B7z5+TwZFM+qdHIf07npd47aBOy5NLnFlh9FXRccJ7EOY1O/tmylybId+gaV5XE=
+X-Received: by 2002:a02:aa85:0:b0:314:c152:4c89 with SMTP id
+ u5-20020a02aa85000000b00314c1524c89mr26976369jai.93.1646263965076; Wed, 02
+ Mar 2022 15:32:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0e958c612ac4dab30ba458a08a7681e1114668f.camel@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220301165737.672007-1-ytcoode@gmail.com>
+In-Reply-To: <20220301165737.672007-1-ytcoode@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 2 Mar 2022 15:32:34 -0800
+Message-ID: <CAEf4BzYYaRyTh=W+ceb6V=Dj+SzoKNV_O24by4j8Fn4oG3gq2A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Add a check to ensure that page_cnt is non-zero
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 03:24:47PM -0800, Dan Williams wrote:
-> On Tue, 2022-03-01 at 11:54 -0800, Jithu Joseph wrote:
-> > In-Field Scan (IFS) provides hardware hooks to perform core tests and
-> > report failures for portions of silicon that lack error detection
-> > capabilities, which will be available in some server SKUs starting with
-> > Sapphire Rapids. It offers infrastructure to specific users such as cloud
-> > providers or OEMs to schedule tests and find in-field failures due to aging
-> > in silicon that might not necessarily be reported with normal machine
-> > checks.
-> >
-> > Add basic parts of the IFS module (initialization and check IFS capability
-> > support in a processor).
-> >
-> > MSR IA32_CORE_CAPABILITY is a feature-enumerating MSR, bit 2 of which
-> > reports MSR_INTEGRITY_CAPABILITIES. Processor that supports IFS
-> > should reports the MSR_INTEGRITY_CAPABILITIES enabled.
-> >
-> > Please check the latest Intel 64 and IA-32 Architectures Software
-> > Developer's Manual for more detailed information on the MSR and the
-> > MSR_INTEGRITY_CAPABILITIES.
-> >
-> > Originally-by: Kyung Min Park <kyung.min.park@intel.com>
-> > Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-> > Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-> > Reviewed-by: Tony Luck <tony.luck@intel.com>
-> > ---
-> >  MAINTAINERS                             |  7 ++++
-> >  drivers/platform/x86/intel/Kconfig      |  1 +
-> >  drivers/platform/x86/intel/Makefile     |  1 +
-> >  drivers/platform/x86/intel/ifs/Kconfig  |  9 +++++
-> >  drivers/platform/x86/intel/ifs/Makefile |  7 ++++
-> >  drivers/platform/x86/intel/ifs/core.c   | 49 +++++++++++++++++++++++++
-> >  drivers/platform/x86/intel/ifs/ifs.h    | 14 +++++++
-> >  7 files changed, 88 insertions(+)
-> >  create mode 100644 drivers/platform/x86/intel/ifs/Kconfig
-> >  create mode 100644 drivers/platform/x86/intel/ifs/Makefile
-> >  create mode 100644 drivers/platform/x86/intel/ifs/core.c
-> >  create mode 100644 drivers/platform/x86/intel/ifs/ifs.h
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 777cd6fa2b3d..4c9912c0d725 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -9685,6 +9685,13 @@ B:       https://bugzilla.kernel.org
-> >  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git
-> >  F:     drivers/idle/intel_idle.c
-> >
-> > +INTEL IN FIELD SCAN (IFS) DRIVER
-> > +M:     Jithu Joseph <jithu.joseph@intel.com>
-> > +R:     Ashok Raj <ashok.raj@intel.com>
-> > +R:     Tony Luck <tony.luck@intel.com>
-> > +S:     Maintained
-> > +F:     drivers/platform/x86/intel/ifs
-> > +
-> >  INTEL INTEGRATED SENSOR HUB DRIVER
-> >  M:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> >  M:     Jiri Kosina <jikos@kernel.org>
-> > diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
-> > index 8e65086bb6c8..7339e7daf0a1 100644
-> > --- a/drivers/platform/x86/intel/Kconfig
-> > +++ b/drivers/platform/x86/intel/Kconfig
-> > @@ -4,6 +4,7 @@
-> >  #
-> >
-> >  source "drivers/platform/x86/intel/atomisp2/Kconfig"
-> > +source "drivers/platform/x86/intel/ifs/Kconfig"
-> >  source "drivers/platform/x86/intel/int1092/Kconfig"
-> >  source "drivers/platform/x86/intel/int33fe/Kconfig"
-> >  source "drivers/platform/x86/intel/int3472/Kconfig"
-> > diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
-> > index 35f2066578b2..bd7f2ef5e767 100644
-> > --- a/drivers/platform/x86/intel/Makefile
-> > +++ b/drivers/platform/x86/intel/Makefile
-> > @@ -5,6 +5,7 @@
-> >  #
-> >
-> >  obj-$(CONFIG_INTEL_ATOMISP2_PDX86)     += atomisp2/
-> > +obj-$(CONFIG_INTEL_IFS)                        += ifs/
-> >  obj-$(CONFIG_INTEL_SAR_INT1092)                += int1092/
-> >  obj-$(CONFIG_INTEL_CHT_INT33FE)                += int33fe/
-> >  obj-$(CONFIG_INTEL_SKL_INT3472)                += int3472/
-> > diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
-> > new file mode 100644
-> > index 000000000000..88e3d4fa1759
-> > --- /dev/null
-> > +++ b/drivers/platform/x86/intel/ifs/Kconfig
-> > @@ -0,0 +1,9 @@
-> > +config INTEL_IFS
-> > +       tristate "Intel In Field Scan"
-> > +       depends on X86 && 64BIT && SMP
-> 
-> Are there actual CONFIG_SMP and CONFIG_64BIT compilation dependencies
-> in this driver? It looks like this could compile without those config
-> dependencies.
+On Tue, Mar 1, 2022 at 8:57 AM Yuntao Wang <ytcoode@gmail.com> wrote:
+>
+> The page_cnt parameter is used to specify the number of memory pages
+> allocated for each per-CPU buffer, it must be non-zero and a power of 2.
+>
+> Currently, the __perf_buffer__new() function attempts to validate that
+> the page_cnt is a power of 2 but forgets checking for the case where
+> page_cnt is zero, we can fix it by replacing 'page_cnt & (page_cnt - 1)'
+> with '!is_power_of_2(page_cnt)'.
+>
+> Thus we also don't need to add a check in perf_buffer__new_v0_6_0() to
+> make sure that page_cnt is non-zero and the check for zero in
+> perf_buffer__new_raw_v0_6_0() can also be removed.
+>
+> The code is cleaner and more readable.
+>
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index be6480e260c4..4dd1d82cd5b9 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/filter.h>
+>  #include <linux/list.h>
+>  #include <linux/limits.h>
+> +#include <linux/log2.h>
 
-Don't think this is anything specific to compile dependencies. 
+we don't have this header implemented in Github repo, so this will be
+unnecessary painful
 
-This is a server feature and only targetted and validated in those configs,
-untested and unsupported in 32bit configs. 
 
+>  #include <linux/perf_event.h>
+>  #include <linux/ring_buffer.h>
+>  #include <linux/version.h>
+> @@ -10951,7 +10952,7 @@ struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
+>  {
+>         struct perf_buffer_params p = {};
+>
+> -       if (page_cnt == 0 || !attr)
+> +       if (!attr)
+>                 return libbpf_err_ptr(-EINVAL);
+>
+>         if (!OPTS_VALID(opts, perf_buffer_raw_opts))
+> @@ -10992,7 +10993,7 @@ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
+>         __u32 map_info_len;
+>         int err, i, j, n;
+>
+> -       if (page_cnt & (page_cnt - 1)) {
+> +       if (!is_power_of_2(page_cnt)) {
+
+so let's instead just use `page_cnt == 0 || (page_cnt & (page_cnt -
+1))` here explicitly
+
+>                 pr_warn("page count should be power of two, but is %zu\n",
+>                         page_cnt);
+>                 return ERR_PTR(-EINVAL);
+> --
+> 2.35.1
+>

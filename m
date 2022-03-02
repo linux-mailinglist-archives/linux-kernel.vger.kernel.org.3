@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3144CAC37
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFAE4CAC35
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 18:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243537AbiCBRgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 12:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S244102AbiCBRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 12:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241848AbiCBRgI (ORCPT
+        with ESMTP id S244062AbiCBRgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 12:36:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013F4C6256;
-        Wed,  2 Mar 2022 09:35:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8ADE3CE228E;
-        Wed,  2 Mar 2022 17:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D7EC340F6;
-        Wed,  2 Mar 2022 17:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646242493;
-        bh=SlAmbk9/xjdnL8kM6WDsdNQeKwNX2M1bWU9YFjAU3aY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IFt60GuJkS5DtA8BfW7oaR7leouEyWKb5MaVoj7DZa59ZdmefXDrrStAVFmGNltYD
-         SFSxi7ZWv6/PATONAgfNe22iLQLcUIfn7pJS7HvagfIMhC//jGsSEd0Ft6NrRI9FaQ
-         mdlBFWAJ6LAWxpiel2Yc35VKEtYzjliaTRgTMBssqWhL5BWXIfnMK1xJLuVnz5Va7c
-         Iz8mP+Gjl0gSa8HYF07OiUllyuwCYPyhLjAOeDL8IRaQVq3jlVZqQCz36JsgM22OJP
-         FT1G2Mla2LLvIqgeIKHTlE40Vg7bFQp5grPNAKRpIKiLEhGt3FmxxGnIqsKmn8HglT
-         QTFR32LECgGvQ==
-Received: by mail-ej1-f41.google.com with SMTP id gb39so5286879ejc.1;
-        Wed, 02 Mar 2022 09:34:53 -0800 (PST)
-X-Gm-Message-State: AOAM5330HEjr2PlqMRZgjJgdOyfJQQNfTSKI5PHMErXhm7ZsZhQIuP06
-        chm6viRw/p3Y+7oshHdVVUnBPT/74lPDpblqHg==
-X-Google-Smtp-Source: ABdhPJwe7sM9TJHi5/SezdL3sY1rKQ5twC5kIxRpOAddVqrFJfvX+9QV36N3KqX/3JcFZ6Rl+bCUP9nRidljrHLN3aA=
-X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id
- w4-20020a170906d20400b006d6df17835emr8542760ejz.20.1646242491912; Wed, 02 Mar
- 2022 09:34:51 -0800 (PST)
+        Wed, 2 Mar 2022 12:36:24 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913164BFC1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 09:35:40 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id q11so2152100pln.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 09:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g31Q1biXQsUkqLM6OlMOKrciBnbcEHw187r7e5y/1nE=;
+        b=nfPeMMpreLlCLk6pctgBoE+lV6HQ28hwlJaIsDBe4v3XPZCakjX7ckna8IQeJPstiG
+         TNS6rcflcJ26IeNA6LAh4tu8lV0Ul6TuEzVVv8MlvDdx96b+NV5i5UKvOOXNuRDGjBjN
+         1A+o9Hf62ogU0BZ13H0YcnbLC0+eTVoQNZ9LAsu5srYNbI4pbcOmE85pss28cZv16UUJ
+         Eby3tXZOI3TdMJpBA8/9IjcIsz/GU+06F8ucm4MR/wJ/YUoqfOtqGJHsMoPU5xIan0u2
+         8QTmFxOGY/cBacGUBWArzsPGTQfbP/ntehlonC6oGAGix1jwmBSk846SX5CdcX4t40Df
+         qaDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g31Q1biXQsUkqLM6OlMOKrciBnbcEHw187r7e5y/1nE=;
+        b=6wvO9QTRlw9OMUUZcrt9Gv2IOKj36+gMq3JjoPYqbw9U1AXZO003ig0GK4yMOpigXS
+         4SA6kJxwdGB1/4xOiLdzyiVjbZRb9EDYL12n/LYoOW3OpXAgxlXJBI+rBjL+DX4BsNvD
+         QNy/9n7jBh6Pbuf1IPQuabkZwBWHWBIOALI895JUMD5Wf2O8PAtN3kZZQRXlYtWBGRh0
+         11DxxQzl+ritpGkInK9CDvYgmAwXh+jkbRnQ4+YatNYkqicugS79WWLtfTlE2yrqO4vk
+         5/66699PcUXzgYjUP3FqfFdHTTb7dxu+z7BMXhypPumYICkOd7YmCqeLsuEb+QYx21wI
+         P2cQ==
+X-Gm-Message-State: AOAM531nh7raPZhrwyMBrexX5Rmy9bmXIV19Pfpgbzja4ZC+21DptnRn
+        hJ3d2aoC9dUl02y9PJufyJmpCQ==
+X-Google-Smtp-Source: ABdhPJzqVWJHtTMQXF6rGskQwQUZiWh6fplF5iBfjKig7T5aE4fZFMmORsWOVa1RKZKF8NgHKAQzXQ==
+X-Received: by 2002:a17:902:8f94:b0:14f:d9b3:52c2 with SMTP id z20-20020a1709028f9400b0014fd9b352c2mr31616997plo.103.1646242539911;
+        Wed, 02 Mar 2022 09:35:39 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n22-20020a056a0007d600b004f3ba7c23e2sm21740956pfu.37.2022.03.02.09.35.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 09:35:39 -0800 (PST)
+Date:   Wed, 2 Mar 2022 17:35:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
+ asynchronous worker
+Message-ID: <Yh+q59WsjgCdMcP7@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-23-seanjc@google.com>
+ <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
 MIME-Version: 1.0
-References: <20220302143427.447748-1-vkoul@kernel.org> <CAL_JsqJMZ8PHqJk6drNbNHprmfeV9UvJzJnech7sz_JwcdbckA@mail.gmail.com>
- <Yh+l7+7zDvI/9e6n@matsya> <CAMdYzYoVz4wk-EhfxQdwu9FqRg8Vj-HGMFG+CFjfsHeM8HcnNQ@mail.gmail.com>
-In-Reply-To: <CAMdYzYoVz4wk-EhfxQdwu9FqRg8Vj-HGMFG+CFjfsHeM8HcnNQ@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 2 Mar 2022 11:34:39 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL1cYyU=LCmEn=dEk712CECpxj8sUWrwpi8_XpoaXEQig@mail.gmail.com>
-Message-ID: <CAL_JsqL1cYyU=LCmEn=dEk712CECpxj8sUWrwpi8_XpoaXEQig@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Revert "dt-bindings: soc: grf: add naneng
- combo phy register compatible"
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 11:25 AM Peter Geis <pgwipeout@gmail.com> wrote:
->
-> On Wed, Mar 2, 2022 at 12:14 PM Vinod Koul <vkoul@kernel.org> wrote:
-> >
-> > On 02-03-22, 11:04, Rob Herring wrote:
-> > > On Wed, Mar 2, 2022 at 8:34 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > > >
-> > > > This reverts commit b3df807e1fb0 ("dt-bindings: soc: grf: add naneng
-> > > > combo phy register compatible") as that was wrongly merged, so better to
-> > > > drop the wrong patch
-> > > >
-> > > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > > ---
-> > > > I am applying this to phy-next to fix the issue
-> > >
-> > > Reverting will just cause a different warning that it is undocumented.
-> >
-> > Right, but a patch for that would fix that
-> >
-> > > The fix in the other thread won't apply either if you revert.
-> >
-> > It is not applying for me, so that needs to be updated anyways..
->
-> It seems phy-next has fallen out of sync with -next.
-> It's missing this patch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/devicetree/bindings/soc/rockchip/grf.yaml?h=next-20220302&id=7dbb47d64acf4aac131a2aaade726913aa62abe7
+On Wed, Mar 02, 2022, Paolo Bonzini wrote:
+> However, I think we now need a module_get/module_put when creating/destroying
+> a VM; the workers can outlive kvm_vm_release and therefore any reference
+> automatically taken by VFS's fops_get/fops_put.
 
-That is not how things work. linux-next is a tree that no one can
-apply patches to (in the worst case like this one). It's useful for
-integration testing and a shortcut for getting a maintainer's tree,
-but should not be the basis for patches to the lists. You should
-generally use the last rc1 or a maintainer's tree when there is a
-known dependency. Using a stable base means 'git am -3' works and the
-merge tools work rather than git just failing to apply anything.
+Haven't read the rest of the patch, but this caught my eye.  We _already_ need
+to handle this scenario.  As you noted, any worker, i.e. anything that takes a
+reference via kvm_get_kvm() without any additional guarantee that the module can't
+be unloaded is suspect. x86 is mostly fine, though kvm_setup_async_pf() is likely
+affected, and other architectures seem to have bugs.
 
-Rob
+Google has an internal patch that addresses this.  I believe David is going to post
+the fix... David?

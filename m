@@ -2,134 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF09A4CB246
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244314CB24B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 23:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiCBW0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 17:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S235529AbiCBW14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 17:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiCBW0j (ORCPT
+        with ESMTP id S230163AbiCBW1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:26:39 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98B4E3C74
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 14:25:54 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id z2so2814050plg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 14:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=g7EzPTbKYLqO23m3ywH5y06sJN6hD3WoKEJqYdmdBo8=;
-        b=a9yHIBRHVnkkbeJTPV3c7G5nXhO7+BJASkO0lFCAY8yXyU+/uaBydkqUomDxsuecPC
-         b+DLOTNSKvcGdpbIcWKyXEMs939C8QZvZ67peRNpPBbJc/tWDaIlBFvMn6C4H76PxOpI
-         Tb+o/c/TYtDJYPyfJE+K4jkP72YTPt28V5ipJSdnOI/iSDZI4oT4ENpdNOUkfpx8DarH
-         YkiPc2l4g/2iXH2u7O/wZyJ0SfrGr7PDkS6CL0VgM/O74V3NG8CSPZqdfc7QgsR0f639
-         vQTihqM4qujlCo0NR3ubWH0Jl2hh5WhNmm3wUj8OglcB0xe51c+ubeRXs7rJCEGTZ+GT
-         K8vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g7EzPTbKYLqO23m3ywH5y06sJN6hD3WoKEJqYdmdBo8=;
-        b=n3ecxT8W/h+VkiXrwjo1llxRZCSJmQFFGNyPVQtZ42w41TaZvtFus3LkiXO621926l
-         4p1WRnjPGtR4OLY0s1y9oNVoomYQWoG0qdNaMHIdCt+oyTTqomzOZ+hd8qJaV+Z2VOQw
-         8SwbFIBeI/sTue4m66lg8Noe9LH3ZO0q6489ZmzToi7z/sTYVUCiTkxydZ8XuUqsFnYS
-         Y/vHtlppFLYku1nBH6JKizsBv90AA4GHJirPn8mr2/9jj88YjTv1vSKWUFw/WQkps7Tb
-         QZt1GNtc5XEYlpXtUhF2ifNVL2dn/yZ0YhVy/Sx6tMwNRPbiaGdjD5hwYDFc0Nsb8IG2
-         Z3tQ==
-X-Gm-Message-State: AOAM532rPMNxH+e7Qrhqv2RheBN1ZbIPEVip5rk0gVMSVrBw+Z1LoCbx
-        XPWCzv4f7ufmcgu18OA7vZYHMQ==
-X-Google-Smtp-Source: ABdhPJxh60e2JCqYRzDosRtR/WPg4G8rMpZ4yODgVrKuRP5vrYsN/D9bp4drrWD5DdfQRADr/oEbjw==
-X-Received: by 2002:a17:902:7109:b0:151:8311:d3b5 with SMTP id a9-20020a170902710900b001518311d3b5mr10511752pll.13.1646259954286;
-        Wed, 02 Mar 2022 14:25:54 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056a000b8100b004f111c21535sm181713pfj.80.2022.03.02.14.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 14:25:53 -0800 (PST)
-Date:   Wed, 2 Mar 2022 22:25:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v3 22/28] KVM: x86/mmu: Zap defunct roots via
- asynchronous worker
-Message-ID: <Yh/u7l+q2xZRx/KR@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-23-seanjc@google.com>
- <b9270432-4ee8-be8e-8aa1-4b09992f82b8@redhat.com>
- <Yh+xA31FrfGoxXLB@google.com>
- <f4189f26-eff9-9fd0-40a1-69ac7759dedf@redhat.com>
- <Yh/GoUPxMRyFqFc5@google.com>
- <442859af-6454-b15e-b2ad-0fc7c4e22909@redhat.com>
- <Yh/X3m1rjYaY2s0z@google.com>
- <94b5c78d-3878-1a6c-ab53-37daf3d6eb9c@redhat.com>
+        Wed, 2 Mar 2022 17:27:52 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A311E686F;
+        Wed,  2 Mar 2022 14:27:07 -0800 (PST)
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AA9F020B7178;
+        Wed,  2 Mar 2022 14:27:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AA9F020B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646260026;
+        bh=bZ99YO6zuQH4/j369PIclhSB2RK/e1v5SRNGWRV8xGw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JtD0w+tgrDHO3HW13HVeNFLILxO+UMB4pqLcC+agYcu2JTvbIxMRSbqF2MGntDqxi
+         JQyA90UmSC3xBoQeOeTSagYERupQ+m1P/wBVRx89eps8dKVxBS0kTcNMU1Gal88VxP
+         3/zIydXeccen8tNvQZOArq7RFzEIeaiPZ07osNQc=
+Message-ID: <78df3646-4df6-5e2b-2f6e-e14824b08d85@linux.microsoft.com>
+Date:   Wed, 2 Mar 2022 14:27:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94b5c78d-3878-1a6c-ab53-37daf3d6eb9c@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+ <Yh8ia7nJNN7ISR1l@kroah.com>
+ <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
+ <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
+ <Yh/Rq9PwWZAN8Mu2@kroah.com>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <Yh/Rq9PwWZAN8Mu2@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022, Paolo Bonzini wrote:
-> On 3/2/22 21:47, Sean Christopherson wrote:
-> > On Wed, Mar 02, 2022, Paolo Bonzini wrote:
-> > > For now let's do it the simple but ugly way.  Keeping
-> > > next_invalidated_root() does not make things worse than the status quo, and
-> > > further work will be easier to review if it's kept separate from this
-> > > already-complex work.
+
+On 3/2/2022 12:20 PM, Greg KH wrote:
+> On Wed, Mar 02, 2022 at 10:49:15AM -0800, Iouri Tarassov wrote:
+> > On 3/2/2022 3:53 AM, Wei Liu wrote:
+> > > On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
+> > > > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
+> > > > > > > +struct dxgglobal *dxgglobal;
+> > > > > > 
+> > > > > > No, make this per-device, NEVER have a single device for your driver.
+> > > > > > The Linux driver model makes it harder to do it this way than to do it
+> > > > > > correctly.  Do it correctly please and have no global structures like
+> > > > > > this.
+> > > > > > 
+> > > > > 
+> > > > > This may not be as big an issue as you thought. The device discovery is
+> > > > > still done via the normal VMBus probing routine. For all intents and
+> > > > > purposes the dxgglobal structure can be broken down into per device
+> > > > > fields and a global structure which contains the protocol versioning
+> > > > > information -- my understanding is there will always be a global
+> > > > > structure to hold information related to the backend, regardless of how
+> > > > > many devices there are.
+> > > > 
+> > > > Then that is wrong and needs to be fixed.  Drivers should almost never
+> > > > have any global data, that is not how Linux drivers work.  What happens
+> > > > when you get a second device in your system for this?  Major rework
+> > > > would have to happen and the code will break.  Handle that all now as it
+> > > > takes less work to make this per-device than it does to have a global
+> > > > variable.
+> > > > 
+> > >
+> > > It is perhaps easier to draw parallel from an existing driver. I feel
+> > > like we're talking past each other.
+> > >
+> > > Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
+> > > like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
+> > > units will be added to the list. I this the current code is following
+> > > this model. dxgglobal fulfills the role of a list.
+> > >
+> > > Setting aside the question of whether it makes sense to keep a copy of
+> > > the per-VM state in each device instance, I can see the code be changed
+> > > to:
+> > >
+> > >     struct mutex device_mutex; /* split out from dxgglobal */
+> > >     static LIST_HEAD(dxglist);
+> > >     
+> > >     /* Rename struct dxgglobal to struct dxgstate */
+> > >     struct dxgstate {
+> > >        struct list_head dxglist; /* link for dxglist */
+> > >        /* ... original fields sans device_mutex */
+> > >     }
+> > >
+> > >     /*
+> > >      * Provide a bunch of helpers manipulate the list. Called in probe /
+> > >      * remove etc.
+> > >      */
+> > >     struct dxgstate *find_dxgstate(...);
+> > >     void remove_dxgstate(...);
+> > >     int add_dxgstate(...);
+> > >
+> > > This model is well understood and used in tree. It is just that it
+> > > doesn't provide much value in doing this now since the list will only
+> > > contain one element. I hope that you're not saying we cannot even use a
+> > > per-module pointer to quickly get the data structure we want to use,
+> > > right?
+> > >
+> > > Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
+> > > into the device object? I think that can be done too.
+> > >
+> > > The code can be changed as:
+> > >
+> > >     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
+> > >     struct dxgstate { ... };
+> > >
+> > >     static int dxg_probe_vmbus(...) {
+> > >
+> > >         /* probe successfully */
+> > >
+> > > 	struct dxgstate *state = kmalloc(...);
+> > > 	/* Fill in dxgstate with information from backend */
+> > >
+> > > 	/* hdev->dev is the device object from the core driver framework */
+> > > 	dev_set_drvdata(&hdev->dev, state);
+> > >     }
+> > >
+> > >     static int dxg_remove_vmbus(...) {
+> > >         /* Normal stuff here ...*/
+> > >
+> > > 	struct dxgstate *state = dev_get_drvdata(...);
+> > > 	dev_set_drvdata(..., NULL);
+> > > 	kfree(state);
+> > >     }
+> > >
+> > >     /* In all other functions */
+> > >     void do_things(...) {
+> > >         struct dxgstate *state = dev_get_drvdata(...);
+> > >
+> > > 	/* Use state in place of where dxgglobal was needed */
+> > >
+> > >     }
+> > >
+> > > Iouri, notice this doesn't change anything regarding how userspace is
+> > > designed. This is about how kernel organises its data.
+> > >
+> > > I hope what I wrote above can bring our understanding closer.
+> > >
+> > > Thanks,
+> > > Wei.
 > > 
-> > Oof, that's not gonna work.  My approach here in v3 doesn't work either.  I finally
-> > remembered why I had the dedicated tdp_mmu_defunct_root flag and thus the smp_mb_*()
-> > dance.
 > > 
-> > kvm_tdp_mmu_zap_invalidated_roots() assumes that it was gifted a reference to
-> > _all_ invalid roots by kvm_tdp_mmu_invalidate_all_roots().  This works in the
-> > current code base only because kvm->slots_lock is held for the entire duration,
-> > i.e. roots can't become invalid between the end of kvm_tdp_mmu_invalidate_all_roots()
-> > and the end of kvm_tdp_mmu_zap_invalidated_roots().
-> 
-> Yeah, of course that doesn't work if kvm_tdp_mmu_zap_invalidated_roots()
-> calls kvm_tdp_mmu_put_root() and the worker also does the same
-> kvm_tdp_mmu_put_root().
-> 
-> But, it seems so me that we were so close to something that works and is
-> elegant with the worker idea.  It does avoid the possibility of two "puts",
-> because the work item is created on the valid->invalid transition.  What do
-> you think of having a separate workqueue for each struct kvm, so that
-> kvm_tdp_mmu_zap_invalidated_roots() can be replaced with a flush?
+> > I can certainly remove dxgglobal and keep the  pointer to the global
+> > state in the device object.
+> > 
+> > This will require passing of the global pointer to all functions, which
+> > need to access it.
+> > 
+> > 
+> > Maybe my understanding of the Greg's suggestion was not correct. I
+> > thought the suggestion was
+> > 
+> > to have multiple /dev/dxgN devices (one per virtual compute device).
+>
+> You have one device per HV device, as the bus already provides you.
+> That's all you really need, right?  Who would be opening the same device
+> node multiple times?
+> > This would change how the user mode
+> > clients enumerate and communicate with compute devices.
+>
+> What does userspace have to do here?  It should just open the device
+> node that is present when needed.  How will there be multiple userspace
+> clients for a single HV device?
 
-I definitely like the idea, but I'm getting another feeling of deja vu.  Ah, I
-think the mess I created was zapping via async worker without a dedicated workqueue,
-and so the flush became very annoying/painful.
 
-I have the "dedicated list" idea coded up.  If testing looks good, I'll post it as
-a v3.5 (without your xchg() magic or other kvm_tdp_mmu_put_root() changes).  That
-way we have a less-awful backup (and/or an intermediate step) if the workqueue
-idea is delayed or doesn't work.  Assuming it works, it's much prettier than having
-a defunct flag.
+Dxgkrnl creates a single user mode visible device node /dev/dxg. It has
+nothing to do with a specific hardware compute device on the host. Its
+purpose is to provide services (IOCTLs) to enumerate and manage virtual
+compute devices, which represent hardware devices on the host. The VMBus
+devices are not used directly by user mode clients in the current design.
 
-> I can probably do it next Friday.
+Virtual compute devices are shared between processes. There could be a
+Cuda application, Gimp and a Direct3D12 application working at the same
+time.This is what I mean by saying that there are multiple user mode
+clients who use the /dev/dxg driver interface. Each of this applications
+will open the /dev/dxg device node and enumerate/use virtual compute
+devices.
 
-Early-ish warning, I'll be offline March 11th - March 23rd inclusive.  
+If we change the way how the virtual compute devices are visible to user
+mode, the Cuda runtime, Direct3D runtime would need to be changed.
 
-FWIW, other than saving me from another painful rebase, there's no urgent need to
-get this series into 5.18.
+I think we agreed that I will keep the global driver state in the device
+object as Wei suggested and remove global variables. There still will be
+a single /dev/dxg device node. Correct?
+
+
+Thanks
+
+Iouri
+

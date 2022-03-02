@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3E94C9A7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E34C9A7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 02:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238916AbiCBBge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Mar 2022 20:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S237394AbiCBBjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Mar 2022 20:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiCBBgc (ORCPT
+        with ESMTP id S230148AbiCBBjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Mar 2022 20:36:32 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA31A580FC;
-        Tue,  1 Mar 2022 17:35:45 -0800 (PST)
-X-UUID: 66b5d979f953409ca628dad6f38cac4f-20220302
-X-UUID: 66b5d979f953409ca628dad6f38cac4f-20220302
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1145418492; Wed, 02 Mar 2022 09:35:37 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 2 Mar 2022 09:35:36 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 2 Mar
- 2022 09:35:36 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 2 Mar 2022 09:35:35 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>
-CC:     <perex@perex.cz>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [v2] ASoC: bt-sco: fix bt-sco-pcm-wb dai widget don't connect to the endpoint
-Date:   Wed, 2 Mar 2022 09:35:33 +0800
-Message-ID: <20220302013533.29068-1-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Mar 2022 20:39:17 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3D6F54F88
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Mar 2022 17:38:34 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWs2Tyh5iZ_UAAA--.3742S2;
+        Wed, 02 Mar 2022 09:38:32 +0800 (CST)
+From:   wangjianxing <wangjianxing@loongson.cn>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        wangjianxing <wangjianxing@loongson.cn>
+Subject: [PATCH 1/1] mm/page_alloc: add scheduling point to free_unref_page_list
+Date:   Tue,  1 Mar 2022 20:38:25 -0500
+Message-Id: <20220302013825.2290315-1-wangjianxing@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxWs2Tyh5iZ_UAAA--.3742S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr4UXrWfGFWUKF4UJr43Jrb_yoWDtFX_Z3
+        47uw1xCr15KrW3CF1qyan3Ww4S934rCw4UWwsruFy5Ja4UtF1vvayIy3Z3WF18WrWxWay3
+        G34kAFZxCw17JjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUUUUUUU
+X-CM-SenderInfo: pzdqwyxldq5xtqj6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fix the second dai driver's dai widget can't connect to the
-endpoint. Because "bt-sco-pcm" and "bt-sco-pcm-wb" dai driver have the
-same stream_name, so it will cause they have the same widget name.
-Therefor it will just create only one route when do snd_soc_dapm_add_route
-that only find the widget through the widget name.
+free a large list of pages maybe cause rcu_sched starved on
+non-preemptible kernels
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
+RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
+[...]
+Call Trace:
+  free_unref_page_list+0x19c/0x270
+  release_pages+0x3cc/0x498
+  tlb_flush_mmu_free+0x44/0x70
+  zap_pte_range+0x450/0x738
+  unmap_page_range+0x108/0x240
+  unmap_vmas+0x74/0xf0
+  unmap_region+0xb0/0x120
+  do_munmap+0x264/0x438
+  vm_munmap+0x58/0xa0
+  sys_munmap+0x10/0x20
+  syscall_common+0x24/0x38
+
+Signed-off-by: wangjianxing <wangjianxing@loongson.cn>
 ---
+ mm/page_alloc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Change from v1:
-   fix build error
-
-Hi maintainer,
-   Need your comments. The patch is the one that I think it makes the
-   most sense. Maybe we can define the new stream_name for
-   "bt-sco-pcm-wb" and add the new route.
-
- sound/soc/codecs/bt-sco.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/codecs/bt-sco.c b/sound/soc/codecs/bt-sco.c
-index 4d286844e3c8..cf17b9741bd8 100644
---- a/sound/soc/codecs/bt-sco.c
-+++ b/sound/soc/codecs/bt-sco.c
-@@ -13,11 +13,15 @@
- static const struct snd_soc_dapm_widget bt_sco_widgets[] = {
- 	SND_SOC_DAPM_INPUT("RX"),
- 	SND_SOC_DAPM_OUTPUT("TX"),
-+	SND_SOC_DAPM_AIF_IN("BT_SCO_RX", "Playback", 0,
-+			    SND_SOC_NOPM, 0, 0),
-+	SND_SOC_DAPM_AIF_OUT("BT_SCO_TX", "Capture", 0,
-+			     SND_SOC_NOPM, 0, 0),
- };
- 
- static const struct snd_soc_dapm_route bt_sco_routes[] = {
--	{ "Capture", NULL, "RX" },
--	{ "TX", NULL, "Playback" },
-+	{ "BT_SCO_TX", NULL, "RX" },
-+	{ "TX", NULL, "BT_SCO_RX" },
- };
- 
- static struct snd_soc_dai_driver bt_sco_dai[] = {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3589febc6..1b96421c8 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3479,6 +3479,9 @@ void free_unref_page_list(struct list_head *list)
+ 		 */
+ 		if (++batch_count == SWAP_CLUSTER_MAX) {
+ 			local_unlock_irqrestore(&pagesets.lock, flags);
++
++			cond_resched();
++
+ 			batch_count = 0;
+ 			local_lock_irqsave(&pagesets.lock, flags);
+ 		}
 -- 
-2.25.1
+2.27.0
 

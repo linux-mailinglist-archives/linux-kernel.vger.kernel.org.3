@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086AC4CA8CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326E34CA8FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 16:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243365AbiCBPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 10:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S243426AbiCBPXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 10:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbiCBPJA (ORCPT
+        with ESMTP id S233513AbiCBPXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 10:09:00 -0500
-X-Greylist: delayed 496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 07:08:15 PST
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9474A60AA6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:08:14 -0800 (PST)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4K7y2k2NJxzF74l
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:59:58 -0800 (PST)
-X-Riseup-User-ID: 45BFFCFB4AB6A46B24AA5A9D0C6FD4FD300E827376533DDFC5C9F0806F4E0E5A
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4K7y2k0h9kz5w0N
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 06:59:58 -0800 (PST)
-Message-ID: <2fb2902d-f844-d018-aa4c-94009886ad1d@torproject.org>
-Date:   Wed, 2 Mar 2022 08:59:56 -0600
+        Wed, 2 Mar 2022 10:23:22 -0500
+X-Greylist: delayed 1133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 07:22:36 PST
+Received: from ns6.inleed.net (mailout6.inleed.net [IPv6:2a0b:dc80:cafe:106::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DB136E05
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 07:22:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=samuelsjoberg.se; s=x; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xTC7NiZtkaPonWn5jFaFXV5sKCDXggznd8jr8HGYFbg=; b=pQ/dfaPcwq2koT+sFxBU7YNNVm
+        D43Nih7Il16Oh+DY8W1O+rG5fvh8PuJMzuM1FlloCyrw/+Mcenv2aq3STlHGSW/dwaN5ozp01Dnec
+        pAsnagL3DosrdXbLlCsESSZsP0nXghRrliBm4eMIr0Ow/DRj77cgloZjE4S1OpnlvZT5l6227w50I
+        K6W0MOY4CRZF155xwFpg06dA/I2v3lSk45QwqLoJSduTWDp3V4/LvCqNRrP3wt/iRO0rBlNsm32GX
+        Sm4IVrNkS+ac7zzHZMUH6FcizcbwzzPPFBH6NuiseOWYpq36gDNIBsWp0Qld+GJrgd/WoyNDfgOwX
+        1yqSpRzQ==;
+Received: from ua-85-224-113-194.bbcust.telenor.se ([85.224.113.194] helo=kernelws.localdomain)
+        by ns6.inleed.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <samuelsjoberg@samuelsjoberg.se>)
+        id 1nPQW2-007nAQ-Sn;
+        Wed, 02 Mar 2022 16:03:46 +0100
+Received: by kernelws.localdomain (Postfix, from userid 1000)
+        id AE5305EFA1; Wed,  2 Mar 2022 16:03:35 +0100 (CET)
+From:   =?UTF-8?q?Samuel=20Sj=C3=B6berg?= <info@samuelsjoberg.se>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        info@samuelsjoberg.se
+Subject: [PATCH] staging: rts5208: fix Lines should not end with a '('.
+Date:   Wed,  2 Mar 2022 16:03:28 +0100
+Message-Id: <20220302150328.2722-1-info@samuelsjoberg.se>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Language: en-US
-From:   Jim Newsome <jnewsome@torproject.org>
-Organization: The Tor Project, Inc
-To:     linux-kernel@vger.kernel.org
-Subject: sigaltstack from signal handler succeeds but is overwritten on
- sigreturn
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Id: info@samuelsjoberg.se
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,45 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Context: I recently came across this behavior while developing [shadow], 
-where we're using seccomp to trap syscalls to an LD_PRELOAD'd signal 
-handler, as a fallback for syscalls we weren't able to intercept more 
-efficiently at the libc API level via LD_PRELOAD. When a new thread is 
-created, we do some self-initialization on its first intercepted 
-syscall, including setting up a signal stack with sigaltstack. When the 
-first syscall is trapped via seccomp, this initialization happens in the 
-sigsys signal handler, and the sigaltstack configuration is lost on 
-return. We can work around this behavior by initializing explicitly 
-immediately after returning from clone in the child thread (which is 
-probably a better design anyway), but it took a while to figure out what 
-was going wrong.
+Fix the following check reported by checkpatch.pl:
 
-[shadow]: https://github.com/shadow/shadow
+CHECK: Lines should not end with a '('
+                                        retval = ms_transfer_tpc(
 
-Here is a simplified demonstration of the issue: 
-https://godbolt.org/z/Mrxe119oj
+Signed-off-by: Samuel Sjöberg <info@samuelsjoberg.se>
+---
+ drivers/staging/rts5208/ms.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
- From the [sigaltstack man page], I'd only expect sigreturn to restore 
-the sigaltstack configuration if there was already a sigaltstack 
-configured for the thread on entry to the handler, and it had 
-SS_AUTODISARM set.
-
-[sigaltstack man page]: 
-https://man7.org/linux/man-pages/man2/sigaltstack.2.html
-
-I discovered this on x86-64 Ubuntu and their modified kernel 
-5.13.0-30-generic and am not currently set up to try reproducing on a 
-vanilla kernel, but if I'm reading the source correctly, this behavior 
-exists in the latest kernel, at least on x86-64. The x86-64 [sigreturn] 
-always calls [restore_altstack], which always restores the old 
-sigaltstack config.
-
-[sigreturn]: 
-https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c173d3639d4772966/arch/x86/kernel/signal.c#L656
-
-[restore_altstack]: 
-https://github.com/torvalds/linux/blob/a4fd49cdb5495f36a35bd27b69b3806e383c719b/kernel/signal.c#L4246
-
-Is this unconditional restore intended? If so, maybe it could be 
-documented more explicitly in the sigaltstack and/or sigreturn man pages?
+diff --git a/drivers/staging/rts5208/ms.c b/drivers/staging/rts5208/ms.c
+index 2a6fab5c117a..14449f8afad5 100644
+--- a/drivers/staging/rts5208/ms.c
++++ b/drivers/staging/rts5208/ms.c
+@@ -1749,11 +1749,10 @@ static int ms_copy_page(struct rtsx_chip *chip, u16 old_blk, u16 new_blk,
+ 
+ 				for (rty_cnt = 0; rty_cnt < MS_MAX_RETRY_COUNT;
+ 				     rty_cnt++) {
+-					retval = ms_transfer_tpc(
+-						chip,
+-						MS_TM_NORMAL_WRITE,
+-						WRITE_PAGE_DATA,
+-						0, NO_WAIT_INT);
++					retval = ms_transfer_tpc(chip,
++								 MS_TM_NORMAL_WRITE,
++								 WRITE_PAGE_DATA,
++								 0, NO_WAIT_INT);
+ 					if (retval == STATUS_SUCCESS)
+ 						break;
+ 				}
+-- 
+2.35.1
 

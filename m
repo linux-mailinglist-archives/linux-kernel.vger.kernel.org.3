@@ -2,150 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B47C4CB178
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747D24CB17E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 22:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242559AbiCBVjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 16:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S245386AbiCBVkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 16:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245391AbiCBVi7 (ORCPT
+        with ESMTP id S238722AbiCBVkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 16:38:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707A23337E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:38:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 107C9B82259
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 21:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5451C004E1;
-        Wed,  2 Mar 2022 21:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646257092;
-        bh=g4DzPR2qSUJXqRfb/f7rxMQQp/kvG6FI0vWSvh2wP08=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=U4uKAxL0L8oPtTpxRl3k9qSWcmRgLrwDFlcFDQmVAIOIWukkufYPCAGM8vuY5K0oQ
-         D87WTw0C1wDlgPfbFZChCR31EbxgLKEY/mPb0+UDcSyv+dqF9B/+3AdVLfcyA+4j/C
-         VTHSoICeNaByN5glbRR2eoHUzvlB69ATNZYSIvtJpN6xghw6p8fkZcf2QT2NnoefYj
-         5PZ8POvwyxvlaw1Zu5gYBCEVyr4TyLpTyW/i2SKtqXlsXsLSfMyUKsZaOYrqRm3Bs4
-         y7bm5mk7qLNoCyQ9n2MEizsqkmmzxlyP2b3y2S0hgiVTQcpw08Ha6Xfm0/1ejSTKUJ
-         XRd3/BZXaC7CA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 57C555C08A0; Wed,  2 Mar 2022 13:38:12 -0800 (PST)
-Date:   Wed, 2 Mar 2022 13:38:12 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Chen, Rong A" <rong.a.chen@intel.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2022.02.17a 73/73] make[3]:
- *** No rule to make target 'kernel/rcu/typesafe.o', needed by
- 'kernel/rcu/built-in.a'.
-Message-ID: <20220302213812.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202202220308.TNib9D2v-lkp@intel.com>
- <20220221214736.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <b481fd02-7b4f-7752-8852-d1a61b4916f1@intel.com>
- <20220222145349.GH4285@paulmck-ThinkPad-P17-Gen-1>
- <19aa4b7f-d2ef-b94f-026e-1a0318f7f50c@intel.com>
+        Wed, 2 Mar 2022 16:40:32 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59170CA316
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 13:39:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646257188; x=1677793188;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=288nTnHU1heIoBqRJG2x5bM7aPN2dJSWejDk5g+kUiE=;
+  b=LdnL7WEnSEF4otlgvmOTEKG5E4GcYZ5tCLZu9JG12JfFADH/qL7r8qSO
+   /Bfsv10ko5w6Akzt0W4CHx5hkTP5mUDtSisRIfJ8ZUCW4aWXS4OtEgLbE
+   BBz6cN4qtaqc61Rv7oRuHtiZaUJDWMzpvzd/TwShGgyMoktumSTXv13qO
+   8c+nwVsFD+teNpHKPQrG8I3HBpF7k6ADMHRIc0rH8LyKzYRG0O3PLq3sp
+   kP7cacTKeYFMt6Hhix5KEvI7UniyWJzABx7VPQY72PylObjJPwBGIX6Ut
+   4QIQ51JxJBku+Xrs/kuKWX6Dra+H6R1MNmNbufV0pXWp6ctiupOa6oMOz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="252340385"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="252340385"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 13:39:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="641854042"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2022 13:39:45 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPWhF-0001wz-2c; Wed, 02 Mar 2022 21:39:45 +0000
+Date:   Thu, 3 Mar 2022 05:38:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Roman Kiryanov <rkir@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Lingfeng Yang <lfy@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.4-p-release
+ 8768/9922] drivers/platform/goldfish/goldfish_pipe_v2.c:814:21: warning:
+ format '%llx' expects argument of type 'long long unsigned int', but
+ argument 4 has type 'dma_addr_t {aka unsigned int}'
+Message-ID: <202203030511.uZ7gsNlS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <19aa4b7f-d2ef-b94f-026e-1a0318f7f50c@intel.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:14:52PM +0800, Chen, Rong A wrote:
-> 
-> 
-> On 2/22/2022 10:53 PM, Paul E. McKenney wrote:
-> > On Tue, Feb 22, 2022 at 04:30:40PM +0800, Chen, Rong A wrote:
-> > > 
-> > > 
-> > > On 2/22/2022 5:47 AM, Paul E. McKenney wrote:
-> > > > On Tue, Feb 22, 2022 at 03:05:27AM +0800, kernel test robot wrote:
-> > > > > Hi Paul,
-> > > > > 
-> > > > > First bad commit (maybe != root cause):
-> > > > > 
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.17a
-> > > > > head:   f5b2eaf791ebbd6af881947ab7c40ed70681e534
-> > > > > commit: f5b2eaf791ebbd6af881947ab7c40ed70681e534 [73/73] EXP torture: Add tests demoing SLAB_TYPESAFE_BY_RCU
-> > > > > config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220222/202202220308.TNib9D2v-lkp@intel.com/config)
-> > > > > compiler: arceb-elf-gcc (GCC) 11.2.0
-> > > > > reproduce (this is a W=1 build):
-> > > > >           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > > >           chmod +x ~/bin/make.cross
-> > > > >           # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=f5b2eaf791ebbd6af881947ab7c40ed70681e534
-> > > > >           git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > > > >           git fetch --no-tags paulmck-rcu dev.2022.02.17a
-> > > > >           git checkout f5b2eaf791ebbd6af881947ab7c40ed70681e534
-> > > > >           # save the config file to linux build tree
-> > > > >           mkdir build_dir
-> > > > >           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
-> > > > > 
-> > > > > If you fix the issue, kindly add following tag as appropriate
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > 
-> > > > > All errors (new ones prefixed by >>):
-> > > > > 
-> > > > > > > make[3]: *** No rule to make target 'kernel/rcu/typesafe.o', needed by 'kernel/rcu/built-in.a'.
-> > > > >      make[3]: Target '__build' not remade because of errors.
-> > > > 
-> > > > This is the only commit involving kernel/rcu/typesafe.o, so...
-> > > > 
-> > > > One the one hand, I do not plan to upstream this, so maybe it doesn't
-> > > > matter.
-> > > > 
-> > > > I have been building this using the rcutorture scripting for some time,
-> > > > same RCU-related .config as you are using.  But when I pulled it into
-> > > > a clone in a neighboring directory, it failed just as it did for you.
-> > > > The problem was that the update to kernel/rcu/Makefile somehow didn't
-> > > > come across, so this line was missing:
-> > > > 
-> > > > 	obj-$(CONFIG_RCU_TYPESAFE_TEST) += typesafe.o
-> > > > 
-> > > > Which of course explains the build failure.
-> > > > 
-> > > > I blew away that clone and re-cloned it.  And it still failed, both
-> > > > with "make" from the commandline and under rcutorture.
-> > > > 
-> > > > Hahahahahahaahaha!!!
-> > > > 
-> > > > I forgot "git add kernel/rcu/typesafe.c".
-> > > > 
-> > > > There is now a new typesafe.2022.02.21a tag with this file added.
-> > > > 
-> > > > Good catch!  That file happened to still be lying around.  The first
-> > > > "git reset --hard" would have destroyed.  Thank you!!!
-> > > > 
-> > > > And with that fixed, my clone now builds correctly.  Does this fix
-> > > > it for you?
-> > > 
-> > > Hi Paul,
-> > > 
-> > > I can't find the tag 'typesafe.2022.02.21a' from https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/refs/tags
-> > 
-> > That would be because I failed to push it out.  :-/
-> > 
-> > Which I just now did, apologies for my confusion.
-> > 
-> > 							Thanx, Paul
-> 
-> Hi Paul,
-> 
-> I have tested the tag, yes, it's fixed.
+Hi Roman,
 
-Very good, and thank you!
+FYI, the error/warning still remains.
 
-May I add your Tested-by?
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.4-p-release
+head:   c159ade87311501e4e4b40eb2f35aa5607732957
+commit: 3702e76fb6e907cc75887fe5780fe160946e7c68 [8768/9922] goldfish: pipe: ANDROID: Add DMA support
+config: i386-randconfig-a012-20211118 (https://download.01.org/0day-ci/archive/20220303/202203030511.uZ7gsNlS-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/3702e76fb6e907cc75887fe5780fe160946e7c68
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.4-p-release
+        git checkout 3702e76fb6e907cc75887fe5780fe160946e7c68
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/goldfish/
 
-							Thanx, Paul
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/printk.h:277:0,
+                    from drivers/platform/goldfish/goldfish_pipe_v2.c:49:
+   drivers/platform/goldfish/goldfish_pipe_v2.c: In function 'goldfish_pipe_dma_release_host':
+>> drivers/platform/goldfish/goldfish_pipe_v2.c:814:21: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+      dev_dbg(pdev_dev, "Last ref for dma region @ 0x%llx\n",
+                        ^
+       dma->phys_begin);
+       ~~~~~~            
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:814:3: note: in expansion of macro 'dev_dbg'
+      dev_dbg(pdev_dev, "Last ref for dma region @ 0x%llx\n",
+      ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:824:3: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+      "after delete of dma @ 0x%llx: alloc total %zu\n",
+      ^
+      dma->phys_begin, pipe->dev->dma_alloc_total);
+      ~~~~~~
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:823:2: note: in expansion of macro 'dev_dbg'
+     dev_dbg(pdev_dev,
+     ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c: In function 'goldfish_pipe_dma_release_guest':
+   drivers/platform/goldfish/goldfish_pipe_v2.c:847:4: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+       "after delete of dma @ 0x%llx: alloc total %zu\n",
+       ^
+       dma->phys_begin, pipe->dev->dma_alloc_total);
+       ~~~~~~
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:846:3: note: in expansion of macro 'dev_dbg'
+      dev_dbg(pdev_dev,
+      ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c: In function 'goldfish_pipe_dma_alloc_locked':
+   drivers/platform/goldfish/goldfish_pipe_v2.c:956:20: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 6 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+     dev_dbg(pdev_dev, "%s: got v/p addrs "
+                       ^
+   drivers/platform/goldfish/goldfish_pipe_v2.c:960:3:
+      dma->phys_begin,
+      ~~~~~~            
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:956:2: note: in expansion of macro 'dev_dbg'
+     dev_dbg(pdev_dev, "%s: got v/p addrs "
+     ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:957:12: note: format string is defined here
+      "%p 0x%llx sz %zu total alloc %zu\n",
+            ~~~^
+            %x
+   In file included from include/linux/printk.h:277:0,
+                    from drivers/platform/goldfish/goldfish_pipe_v2.c:49:
+   drivers/platform/goldfish/goldfish_pipe_v2.c: In function 'goldfish_dma_mmap_locked':
+   drivers/platform/goldfish/goldfish_pipe_v2.c:982:20: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+     dev_dbg(pdev_dev, "Mapping dma at 0x%llx\n", dma->phys_begin);
+                       ^                          ~~~~~~
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:982:2: note: in expansion of macro 'dev_dbg'
+     dev_dbg(pdev_dev, "Mapping dma at 0x%llx\n", dma->phys_begin);
+     ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:1003:20: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'dma_addr_t {aka unsigned int}' [-Wformat=]
+     dev_dbg(pdev_dev, "goldfish_dma_mmap for host vaddr 0x%llx succeeded\n",
+                       ^
+      dma->phys_begin);
+      ~~~~~~            
+   include/linux/dynamic_debug.h:86:39: note: in definition of macro 'dynamic_dev_dbg'
+      __dynamic_dev_dbg(&descriptor, dev, fmt, \
+                                          ^~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:1003:2: note: in expansion of macro 'dev_dbg'
+     dev_dbg(pdev_dev, "goldfish_dma_mmap for host vaddr 0x%llx succeeded\n",
+     ^~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c: At top level:
+   drivers/platform/goldfish/goldfish_pipe_v2.c:1059:6: warning: no previous declaration for 'goldfish_dma_ioctl_getoff' [-Wmissing-declarations]
+    long goldfish_dma_ioctl_getoff(struct goldfish_pipe *pipe, unsigned long arg)
+         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c:1096:6: warning: no previous declaration for 'goldfish_dma_ioctl_create_region' [-Wmissing-declarations]
+    long goldfish_dma_ioctl_create_region(struct goldfish_pipe *pipe,
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/goldfish/goldfish_pipe_v2.c: In function 'transfer_max_buffers':
+   drivers/platform/goldfish/goldfish_pipe_v2.c:407:1: warning: the frame size of 1384 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    }
+    ^
+   arch/x86/include/asm/bitops.h: Assembler messages:
+   arch/x86/include/asm/bitops.h:206: Warning: no instruction mnemonic suffix given and no register operands; using default for `bts'
+
+
+vim +814 drivers/platform/goldfish/goldfish_pipe_v2.c
+
+   802	
+   803	static void goldfish_pipe_dma_release_host(struct goldfish_pipe *pipe)
+   804	{
+   805		struct goldfish_dma_context *dma = pipe->dma;
+   806		struct device *pdev_dev;
+   807	
+   808		if (!dma)
+   809			return;
+   810	
+   811		pdev_dev = pipe->dev->pdev_dev;
+   812	
+   813		if (dma->dma_vaddr) {
+ > 814			dev_dbg(pdev_dev, "Last ref for dma region @ 0x%llx\n",
+   815				dma->phys_begin);
+   816	
+   817			pipe->command_buffer->dma_maphost_params.dma_paddr =
+   818				dma->phys_begin;
+   819			pipe->command_buffer->dma_maphost_params.sz = dma->dma_size;
+   820			goldfish_pipe_cmd(pipe, PIPE_CMD_DMA_HOST_UNMAP);
+   821		}
+   822	
+   823		dev_dbg(pdev_dev,
+   824			"after delete of dma @ 0x%llx: alloc total %zu\n",
+   825			dma->phys_begin, pipe->dev->dma_alloc_total);
+   826	}
+   827	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

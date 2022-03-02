@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22394CAAD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E6F4CAADE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Mar 2022 17:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243561AbiCBQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 11:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S240570AbiCBQ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 11:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiCBQwS (ORCPT
+        with ESMTP id S235475AbiCBQ4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:52:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E6FCFB99
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:51:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9EBE8219A6;
-        Wed,  2 Mar 2022 16:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646239893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCaIN4NRq1zNm/Cv/yO1rRvuzmntwatXQ6uVNZcnFSQ=;
-        b=ct4Xfp1snqnbqSKt3IQVOJVW0Qz+qWywPmqlDsL2R0w4GUZ9wvlXhFBx9Cj8EB8ArNvTbZ
-        vJ9JxeTlzExKyJpjolWvjpGLUJc+Q1qCzqaeqGi7UTDeC3EvCzCS051nd0olWD95SfE8ZC
-        ICX0koIkBuXpRdubK4/d6NHFH/zcxCA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646239893;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCaIN4NRq1zNm/Cv/yO1rRvuzmntwatXQ6uVNZcnFSQ=;
-        b=iq+rEXHUQ6n3ylidmsfBwzJ/htC6EI9nCjbwLfqx6sWlgkal4LTkrfGidnKiCJ8rgj5spz
-        2Y9Lmd+xHPrzPNBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2470613A93;
-        Wed,  2 Mar 2022 16:51:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FjUpCJWgH2KKPAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 02 Mar 2022 16:51:33 +0000
-Message-ID: <4b6e9dbb-ba3e-f33c-956e-07b5f81deee8@suse.cz>
-Date:   Wed, 2 Mar 2022 17:51:32 +0100
+        Wed, 2 Mar 2022 11:56:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE96855BDD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 08:55:26 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 222G5huS014880;
+        Wed, 2 Mar 2022 16:54:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=wZcFO3l5BBSXg5OAlIy4KWclhKZPcMQGArAc4jV5xnw=;
+ b=RczdICXoK3N8VBy8B3f4wrFHp7IyfDVSsNZAeijco2VegeIqtEkoetu9mnRdkre0EyLX
+ YcL8TrZu/uZcbGTMiPCJBNDMgfRSaYECmFQLKYo87Rtu+/yz+V24VDwyNHqlqNXBeBkk
+ ldxiRRhc3JI1+g4AqSp5PEhgxAYwC/3rRdsAURZSzDjXXrtibGrAZCcMQZyBAAEguCU9
+ aSck1pOw3iFSMAzU/uARH6VRiWPVMd4LUU0k96dTiXu8sOezyHukDuTM6lbs2zYFjDw1
+ es7dZBa1SjM2C1u90dgL8DNW/rZ4jyCTFWmNF0wlTkzXSnZs/vSTkQf+acF0mvtVHv2O EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej9ssccx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:54:59 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222GLPXs004308;
+        Wed, 2 Mar 2022 16:54:58 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej9ssccwg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:54:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222GnFwH017249;
+        Wed, 2 Mar 2022 16:54:56 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3egbj1ahbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 16:54:56 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Gsr0X51315046
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 16:54:53 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDD4552052;
+        Wed,  2 Mar 2022 16:54:53 +0000 (GMT)
+Received: from localhost (unknown [9.43.109.149])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 581725204E;
+        Wed,  2 Mar 2022 16:54:53 +0000 (GMT)
+Date:   Wed, 02 Mar 2022 22:24:51 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 1/7] ftrace: Expose flags used for
+ ftrace_replace_code()
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1561634177.git.naveen.n.rao@linux.vnet.ibm.com>
+        <51cba452b38ae55049bd15b0aeac6060cc1105f2.1561634177.git.naveen.n.rao@linux.vnet.ibm.com>
+        <2c2b0f65-38bd-d7b8-b146-0daf96b03559@csgroup.eu>
+In-Reply-To: <2c2b0f65-38bd-d7b8-b146-0daf96b03559@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1646239696.58yt3q00pj.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: f0Qx7Cf6q9MuJLS8P-Ofl7Efiwp8H6wI
+X-Proofpoint-ORIG-GUID: 28kmnPfeN3fYSxpSLPIW0JrwPj_BsVWz
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 2/5] mm/slub: use stackdepot to save stack trace in
- objects
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>
-References: <20220225180318.20594-1-vbabka@suse.cz>
- <20220225180318.20594-3-vbabka@suse.cz>
- <YhtH5o2+7r85THg1@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <YhtH5o2+7r85THg1@ip-172-31-19-208.ap-northeast-1.compute.internal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1011 suspectscore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203020073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,70 +97,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/22 10:44, Hyeonggon Yoo wrote:
-> On Fri, Feb 25, 2022 at 07:03:15PM +0100, Vlastimil Babka wrote:
->> From: Oliver Glitta <glittao@gmail.com>
->> 
->> Many stack traces are similar so there are many similar arrays.
->> Stackdepot saves each unique stack only once.
->>
->> Replace field addrs in struct track with depot_stack_handle_t handle.  Use
->> stackdepot to save stack trace.
->>
-> 
-> I think it's not a replacement?
+Christophe Leroy wrote:
+>=20
+>=20
+> Le 27/06/2019 =C3=A0 13:23, Naveen N. Rao a =C3=A9crit=C2=A0:
+>> Since ftrace_replace_code() is a __weak function and can be overridden,
+>> we need to expose the flags that can be set. So, move the flags enum to
+>> the header file.
+>>=20
+>> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+>> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>=20
+> This series does apply anymore.
+>=20
+> We have a link to it in https://github.com/linuxppc/issues/issues/386
+>=20
+> I'll flag it "change requested"
 
-It is, for the array 'addrs':
+There are a couple of changes being worked on as a prerequisite for this=20
+series. See:
+http://lkml.kernel.org/r/cover.1645096227.git.naveen.n.rao@linux.vnet.ibm.c=
+om
 
--#ifdef CONFIG_STACKTRACE
--	unsigned long addrs[TRACK_ADDRS_COUNT];	/* Called from address */
-+#ifdef CONFIG_STACKDEPOT
-+	depot_stack_handle_t handle;
 
-Not confuse with 'addr' which is the immediate caller and indeed stays
-for redundancy/kernels without stack trace enabled.
-
->> The benefits are smaller memory overhead and possibility to aggregate
->> per-cache statistics in the following patch using the stackdepot handle
->> instead of matching stacks manually.
->> 
->> [ vbabka@suse.cz: rebase to 5.17-rc1 and adjust accordingly ]
->> 
->> This was initially merged as commit 788691464c29 and reverted by commit
->> ae14c63a9f20 due to several issues, that should now be fixed.
->> The problem of unconditional memory overhead by stackdepot has been
->> addressed by commit 2dba5eb1c73b ("lib/stackdepot: allow optional init
->> and stack_table allocation by kvmalloc()"), so the dependency on
->> stackdepot will result in extra memory usage only when a slab cache
->> tracking is actually enabled, and not for all CONFIG_SLUB_DEBUG builds.
->> The build failures on some architectures were also addressed, and the
->> reported issue with xfs/433 test did not reproduce on 5.17-rc1 with this
->> patch.
-> 
-> This is just an idea and beyond this patch.
-> 
-> After this patch, now we have external storage that records stack traces.
-
-Well, we had it before this patch too.
-
-> It's possible that some rare stack traces are in stack depot, but
-> not reachable because track is overwritten.
-
-Yes.
-
-> I think it's worth implementing a way to iterate through stacks in stack depot?
-
-The question is for what use case? We might even not know who stored
-them - could have been page_owner, or other stack depot users. But the
-point is usually not to learn about all existing traces, but to
-determine which ones cause an object lifetime bug, or memory leak.
-
->> 
->> Signed-off-by: Oliver Glitta <glittao@gmail.com>
->> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->> Cc: David Rientjes <rientjes@google.com>
->> Cc: Christoph Lameter <cl@linux.com>
->> Cc: Pekka Enberg <penberg@kernel.org>
->> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> 
+- Naveen
 

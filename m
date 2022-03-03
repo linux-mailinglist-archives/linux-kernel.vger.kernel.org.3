@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077B24CC811
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3834CC813
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236536AbiCCVcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S236544AbiCCVdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiCCVcF (ORCPT
+        with ESMTP id S231290AbiCCVdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:32:05 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B86166E31;
-        Thu,  3 Mar 2022 13:31:18 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2dbfe58670cso71052327b3.3;
-        Thu, 03 Mar 2022 13:31:18 -0800 (PST)
+        Thu, 3 Mar 2022 16:33:03 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FBD166E39
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:32:17 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id e2so5929417pls.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:32:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QNfKZMMKziUoL1dbgKyTvgeSMX2xqKvBZZHesE5dGSE=;
-        b=ljCPXBT7kCLlCBtRr+GUEScUoSqwhmMm61CWTz4QuukXEximFyV+hlmC6jxR/xMquh
-         7GwHSDZxEMPpRYWlpYMPBj/pUX3uqkSLI22DaWjRNwMNcqh/VLo4ewSgfopRBsKUwKVL
-         ptPDGFR2dA3u5nGVRXyEhzKIYePQCkXZmpPfjbDomCMJO7SK5GEeTMTALoGGr3wdJt6a
-         aUg9zxwOpQniKud5eqc0RU4QuFtKrWKRKwoUTxkV6PU750t6hfqXURbiSIxfAcyr/FxD
-         7RXpjBPEh/eR7wNb6DO8Aj4sUObDEYNRPpAY503qMU2DpiMJJ0msBijlLh8YW4uKs9z+
-         Iv7g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kudP5fV+oewEgx+1iJMm74xzhJH7jghnvNdgCXLF87M=;
+        b=WU0AOsFRliB/v4AOfuttxKeRS4+tgI1q1XYePYec6mV3RzgqmI/+fYoZHt3D64DlPL
+         bs8fWMhYQdkWnhY67xF7DeexmT1emRNMgh/cuv8l7P0GMsBe54G/bX51p5uyNG3BLWeV
+         inxEO0L4eMxKSxG/R1vRiBXoxs9OTtbnkrEQjIrsmxbr5Awf6aRUFU2krCFkmtHr2Vek
+         rjLunkCaOS8Wg2ZZAP3m2fCuvhMgLXW5x5Fx17DBgSh3opC/MnSXbzR7mVF0NvRoL0Gx
+         So5JZNnyvC5lmQt0G37tqTAZ9SA+6gLYaxYPsmJTXtHzqJswloCGKs2z1tyTFLG6L5x3
+         huXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QNfKZMMKziUoL1dbgKyTvgeSMX2xqKvBZZHesE5dGSE=;
-        b=30BxnrTFxzLNVtrfkr33iNEkI7xs6VRgKEYwoav4DjsB+tiY72CHj4Bdna94PCxbNP
-         wOikBhhmt9AXQQqSn7bYVmGMJHD6Gs+QTTzXLnjtzUNd4PBBAFa3lOKHsQDe+kQq0euO
-         ARSKU+AYWGngAEBA3qrC2OEB7lblYl4VaMM4fv5jIx/Xg5p+OAiGxkz/lC0ocJfeCMWg
-         lCGeVV/mH5Qu6Rekj5gykPEZ3djVLNjWELrnn1q5hDeiSr6soj3geJnSCG1tKvBtm413
-         oFXqlxfO75T/yMXoeap6TnxlNZGLwdXD/Th+2fQac2izNDkikpOz9sUGs5nUK0VWrrLz
-         xR/A==
-X-Gm-Message-State: AOAM533Sk6fFFS+xnOGaBuChOfFhfxN+yNftArceuCwNEQwvqRQAGENL
-        Sfbmd9fRr+Y/0scUBu3EE74groYXqysFbgLbZTs=
-X-Google-Smtp-Source: ABdhPJxH4H8OaBQDItbgQF521yYplb1Gjv67ZCeHiqcOfboIqpFvQONrxrQNM0ENsmVMT0wfWjHo5NYbiu8nHSakp6w=
-X-Received: by 2002:a81:b147:0:b0:2d7:68b8:de55 with SMTP id
- p68-20020a81b147000000b002d768b8de55mr36338788ywh.281.1646343077491; Thu, 03
- Mar 2022 13:31:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kudP5fV+oewEgx+1iJMm74xzhJH7jghnvNdgCXLF87M=;
+        b=U3JXEe162G6clK/KkXieWKtJzeXzKMh9FkfjDGqgPZpYdcjgygubHtQBApuG0G+8KX
+         zPcsgAFNRr3O+ZRR6xoR0VM5CbfNes4gbgoc9EQZH4a4AURjW7BfF4gpVy6iyNzWnzQA
+         scGOVV/7w2DcynTx0K6OUfQKaH30ps7DUFnzQ8R2TpcLxgzW6rLq2/LEguyEcJxt4O5y
+         TycmegEy2mp1Ie6JMSIJQV02CydOG+x8rishrSFCaTZzm8sX3N8uGLkSYDK7VZmjBo+2
+         a+JhNsZOxK5UWaXH+S8VoCHVmWjn47VaNXW87sJaa/xPTVWvEoH/PHcQKQgFOesGPBz3
+         pmZA==
+X-Gm-Message-State: AOAM533kdSfI7e7apRBh2xNv+ehdxydA4O77RRdM0PYobFJZvZXMFpVi
+        NksE4JVc8dn0A7qcuifqeUPz/g==
+X-Google-Smtp-Source: ABdhPJxyEFfBgCewybrpfbsPNeL3x+7VOL/nwKb+mYI+/8GSTOWTK5HmfFVEseCW25SixBD7Kqa58w==
+X-Received: by 2002:a17:902:c94e:b0:151:a988:f3dd with SMTP id i14-20020a170902c94e00b00151a988f3ddmr4508675pla.142.1646343136215;
+        Thu, 03 Mar 2022 13:32:16 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id rm8-20020a17090b3ec800b001bcd57956desm2861035pjb.51.2022.03.03.13.32.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 13:32:15 -0800 (PST)
+Date:   Thu, 3 Mar 2022 21:32:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
+ asynchronous worker
+Message-ID: <YiEz3D18wEn8lcEq@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-22-pbonzini@redhat.com>
+ <YiExLB3O2byI4Xdu@google.com>
 MIME-Version: 1.0
-References: <20220303015151.1711860-1-pgwipeout@gmail.com> <CAPDyKFrk+HCbSZtB7uv6u9tjTgzFDjpB9oP9FYJUqNxcCzQ9iw@mail.gmail.com>
- <CAMdYzYrndAwWJELRRL4kP-BCdWuF6bLVwS2PUMVx_UcJZE=nsQ@mail.gmail.com>
- <CAPDyKFp8tZ-Ty0Wo2jkTjr6Jun83QczQfQRQ1zvFBBCOCWjtng@mail.gmail.com> <05ffc792-17cf-64f8-d3fd-4f7658aa6722@arm.com>
-In-Reply-To: <05ffc792-17cf-64f8-d3fd-4f7658aa6722@arm.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 3 Mar 2022 16:31:06 -0500
-Message-ID: <CAMdYzYpEhoU+0RVkDgoo3c49Pa8q-oeqd=sp7y8SYsvwDPOP0g@mail.gmail.com>
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Addy Ke <addy.ke@rock-chips.com>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-mmc@vger.kernel.org,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiExLB3O2byI4Xdu@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,88 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 10:19 AM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-03-03 10:21, Ulf Hansson wrote:
-> > On Thu, 3 Mar 2022 at 10:49, Peter Geis <pgwipeout@gmail.com> wrote:
-> >>
-> >> On Thu, Mar 3, 2022 at 2:53 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >>>
-> >>> On Thu, 3 Mar 2022 at 02:52, Peter Geis <pgwipeout@gmail.com> wrote:
-> >>>>
-> >>>> The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
-> >>>> supports. This leads to a situation during card initialization where the
-> >>>> ciu clock is set lower than the clock driver can support. The
-> >>>> dw-mmc-rockchip driver spews errors when this happens.
-> >>>> For normal operation this only happens a few times during boot, but when
-> >>>> cd-broken is enabled (in cases such as the SoQuartz module) this fires
-> >>>> multiple times each poll cycle.
-> >>>>
-> >>>> Fix this by testing the minimum frequency the clock driver can support
-> >>>> that is within the mmc specification, then divide that by the internal
-> >>>> clock divider. Set the f_min frequency to this value, or if it fails,
-> >>>> set f_min to the downstream driver's default.
-> >>>>
-> >>>> Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
-> >>>>
-> >>>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> >>>> ---
-> >>>>   drivers/mmc/host/dw_mmc-rockchip.c | 31 ++++++++++++++++++++++++++----
-> >>>>   1 file changed, 27 insertions(+), 4 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> >>>> index 95d0ec0f5f3a..c198590cd74a 100644
-> >>>> --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> >>>> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> >>>> @@ -15,7 +15,9 @@
-> >>>>   #include "dw_mmc.h"
-> >>>>   #include "dw_mmc-pltfm.h"
-> >>>>
-> >>>> -#define RK3288_CLKGEN_DIV       2
-> >>>> +#define RK3288_CLKGEN_DIV      2
-> >>>> +#define RK3288_MIN_INIT_FREQ   375000
-> >>>> +#define MMC_MAX_INIT_FREQ      400000
-> >>>>
-> >>>>   struct dw_mci_rockchip_priv_data {
-> >>>>          struct clk              *drv_clk;
-> >>>> @@ -27,6 +29,7 @@ struct dw_mci_rockchip_priv_data {
-> >>>>   static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> >>>>   {
-> >>>>          struct dw_mci_rockchip_priv_data *priv = host->priv;
-> >>>> +       struct mmc_host *mmc = mmc_from_priv(host);
-> >>>>          int ret;
-> >>>>          unsigned int cclkin;
-> >>>>          u32 bus_hz;
-> >>>> @@ -34,6 +37,10 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> >>>>          if (ios->clock == 0)
-> >>>>                  return;
-> >>>>
-> >>>> +       /* the clock will fail if below the f_min rate */
-> >>>> +       if (ios->clock < mmc->f_min)
-> >>>> +               ios->clock = mmc->f_min;
-> >>>> +
-> >>>
-> >>> You shouldn't need this. The mmc core should manage this already.
-> >>
-> >> I thought so too, but while setting f_min did reduce the number of
-> >> errors, it didn't stop them completely.
-> >> Each tick I was getting three failures, it turns out mmc core tries
-> >> anyways with 300000, 200000, and 100000.
-> >> Clamping it here was necessary to stop these.
-> >
-> > Ohh, that was certainly a surprise to me. Unless the dw_mmc driver
-> > invokes this path on it's own in some odd way, that means the mmc core
-> > has a bug that we need to fix.
-> >
-> > Would you mind taking a stack trace or debug this so we understand in
-> > what case the mmc core doesn't respect f_min? It really should.
->
-> I'm only armed with grep and a hunch, but is dw_mci_init_slot_caps()
-> stomping on the same f_min that we've set in the platform init hook?
+On Thu, Mar 03, 2022, Sean Christopherson wrote:
+> On Thu, Mar 03, 2022, Paolo Bonzini wrote:
+> > The only issue is that kvm_tdp_mmu_invalidate_all_roots() now assumes that
+> > there is at least one reference in kvm->users_count; so if the VM is dying
+> > just go through the slow path, as there is nothing to gain by using the fast
+> > zapping.
+> 
+> This isn't actually implemented. :-)
 
-I suspected this originally, but no, f_min remains intact, so it's
-something else.
-Also, this clamp wouldn't work if f_min got clobbered.
+Oh, and when you implement it (or copy paste), can you also add a lockdep and a
+comment about the check being racy, but that the race is benign?  It took me a
+second to realize why it's safe to use a work queue without holding a reference
+to @kvm.
 
->
-> Robin.
+static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+{
+	lockdep_assert_held(&kvm->slots_lock);
+
+	/*
+	 * Zap using the "slow" path if the VM is being destroyed.  The "slow"
+	 * path isn't actually slower, it just just doesn't block vCPUs for an
+	 * extended duration, which is irrelevant if the VM is dying.
+	 *
+	 * Note, this doesn't guarantee users_count won't go to '0' immediately
+	 * after this check, but that race is benign as callers that don't hold
+	 * a reference to @kvm must hold kvm_lock to prevent use-after-free.
+	 */
+	if (unlikely(refcount_read(&kvm->users_count)) {
+		lockdep_assert_held(&kvm_lock);
+		kvm_mmu_zap_all(kvm);
+		return;
+	}
+
+	write_lock(&kvm->mmu_lock);
+	trace_kvm_mmu_zap_all_fast(kvm);

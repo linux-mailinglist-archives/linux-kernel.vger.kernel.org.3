@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4914CC550
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4F44CC555
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbiCCSi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S235734AbiCCSkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiCCSiX (ORCPT
+        with ESMTP id S231376AbiCCSkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:38:23 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7EB63BF
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:37:30 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso5251145pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R+X4H7M+LG6xqrD1uLHkuUkSn555GPzR7bQZLtF1ork=;
-        b=LkS88C+V+Y/2YuBrjM1LK9lu3FTjB6y45JNMZ25CcyorbjadrcynBYaSgI2tYCEUPH
-         q0Ze9253duaJTDfVRq4tj57tERA6ThBweTLeqL0MwuEVJkTdHfVuAOXvbdYcTtqlcJ48
-         C5lnzNsvXzWFWr4LQfuVuoJYzStHyQwAU7OL+YGsp/hRQ1vA3ppCoVpFLLJZwjw2v1Zw
-         kJGSV9bkc/aGCFIRDoPJsKXCAmTfl3+mfVNMWnCp+T21zuV7HakRxXIw9V0WaWi9d2/7
-         /5BaX/7mKPhjyXrTDM4hyb3+zJJnKXQL+rB/IoyrUZwZM3S45gtH84wUogmLbrFvNHdk
-         Zw1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R+X4H7M+LG6xqrD1uLHkuUkSn555GPzR7bQZLtF1ork=;
-        b=Dnhgf9m073FqgDAOgsUqmHMXhSBe5s00ol+gqEkl1Qx4oBkGm7ZHYPmsuRLtppSF9n
-         S/Ilz3If4hNVuWegdQ54A2O2r5mKZRSIplFWgAQglIK21ntAfyDQORFe4NlgDUBPk8o7
-         Ktm4rM9qkkZZdvyYGUQNDwX9jaeTbOhYeYfZgIZRIj1bCHLBHOSsJXPCkco2xSF0bRmI
-         a2eMMvCCJOcyp+R3aYh/ySfXcFHQZf9DtOxk44rboA6t4Q/29lb4EmBe8i6l9d5kAfxJ
-         EDCI8rYVx2AkRHOiYyUnWOCZiEhNKO61YTqoSyt2YBj1kSYswWpNq6sD/j7rZnplsDcd
-         5tmg==
-X-Gm-Message-State: AOAM5315+UUbbPQdhSHhccBpU+a6U+SLBF8HOZ1Y/B+jeg4ALfMql3t7
-        S/zzCPVO+O7+OFxcmLMbkzEpmg==
-X-Google-Smtp-Source: ABdhPJy69duQeB7lBaf2hRDpiszGJmlFUP4Z9Vx4bUTzYJQDX1sdMzJYTqPRiKx/9YGFi7OB96TENw==
-X-Received: by 2002:a17:902:b201:b0:14d:66b5:5d69 with SMTP id t1-20020a170902b20100b0014d66b55d69mr36879757plr.95.1646332649551;
-        Thu, 03 Mar 2022 10:37:29 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id s21-20020a056a00195500b004f65b15b3a0sm3234216pfk.8.2022.03.03.10.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:37:29 -0800 (PST)
-Date:   Thu, 3 Mar 2022 18:37:25 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 11/28] KVM: x86/mmu: WARN if old _or_ new SPTE is
- REMOVED in non-atomic path
-Message-ID: <YiEK5RdxPnoGw/f0@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-12-seanjc@google.com>
+        Thu, 3 Mar 2022 13:40:11 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EC631500;
+        Thu,  3 Mar 2022 10:39:25 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id DB6361F45EF7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646332764;
+        bh=fqL4sRiIZuSw4D7lvMNNLB/CnfsldiP6MMuPIpLaqTY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=mzY1bNcNUw40RKsLg4UG8YXhJNN8dB3x5zuv2XO8p4fy6MqbgjuWMG/qZxPIgqM0+
+         6lMfCTL6UWRhwEMhpI+B7PObV7DsUlyOR4rPnXoOa3vqOxCaJwSa1IJjoaBPQSj7Td
+         ST5WHcS820F9XWEhMsEVw2oWAyWIq517fEJeM9/PWmptNfyWu8kTr08mUKpBZFjYCH
+         /1bCnuat6ZY3xGa7emC82dsVqe+22jaZnAczwAlVnttkRc6sX6lX/UyLOBUUXcdEt/
+         zE5wztNuR9OToiuR19n0L4I52QdnatmaMZSfcDGKNoGnHomdpvLTOZqyDrz4N0fp++
+         1BV04XeTUkf2A==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
+Organization: Collabora
+References: <20220224212335.3045905-1-usama.anjum@collabora.com>
+        <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
+        <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
+Date:   Thu, 03 Mar 2022 13:39:20 -0500
+In-Reply-To: <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org> (Shuah
+        Khan's message of "Thu, 3 Mar 2022 11:19:35 -0700")
+Message-ID: <87o82mkhif.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-12-seanjc@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> WARN if the new_spte being set by __tdp_mmu_set_spte() is a REMOVED_SPTE,
-> which is called out by the comment as being disallowed but not actually
-> checked.  Keep the WARN on the old_spte as well, because overwriting a
-> REMOVED_SPTE in the non-atomic path is also disallowed (as evidence by
-> lack of splats with the existing WARN).
-> 
-> Fixes: 08f07c800e9d ("KVM: x86/mmu: Flush TLBs after zap in TDP MMU PF handler")
-> Cc: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Ben Gardon <bgardon@google.com>
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> On 2/28/22 2:37 AM, David Hildenbrand wrote:
+>> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
+>>> This introduces three tests:
+>>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
+>>> check if the SD bit flipped.
+>>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
+>>> 3) Check soft-dirty on huge pages
+>>>
+>>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
+>>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
+>>> same issue that he fixed, and this test would have caught it.
+>>>
+>> A note that madv_populate.c already contains some SOFTDIRTY tests
+>> regarding MADV_POPULATE. Eventually we want to factor out
+>> softdirty/pagemap handling+checks for easier reuse.
+>> 
+>
+> Is this patch unnecessary then?
 
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 8fbf3364f116..1dcdf1a4fcc1 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -640,13 +640,13 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
->  	lockdep_assert_held_write(&kvm->mmu_lock);
->  
->  	/*
-> -	 * No thread should be using this function to set SPTEs to the
-> +	 * No thread should be using this function to set SPTEs to or from the
->  	 * temporary removed SPTE value.
->  	 * If operating under the MMU lock in read mode, tdp_mmu_set_spte_atomic
->  	 * should be used. If operating under the MMU lock in write mode, the
->  	 * use of the removed SPTE should not be necessary.
->  	 */
-> -	WARN_ON(is_removed_spte(iter->old_spte));
-> +	WARN_ON(is_removed_spte(iter->old_spte) || is_removed_spte(new_spte));
->  
->  	kvm_tdp_mmu_write_spte(iter->sptep, new_spte);
->  
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+It is not unnecessary since the madv test doesn't cover the bug tested
+here, afaik.  But, as mentioned when I originally submitted this patch,
+it should be merged into selftests/vm/madv_populate.c or, at least,
+reuse that existing infrastructure.
+
+https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
+
+-- 
+Gabriel Krisman Bertazi

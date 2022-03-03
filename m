@@ -2,146 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B68F4CC6C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01554CC6BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiCCUDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S232526AbiCCUDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbiCCUDV (ORCPT
+        with ESMTP id S235712AbiCCUDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:03:21 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFE9B9B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:02:35 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id u11so8252187lju.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:02:35 -0800 (PST)
+        Thu, 3 Mar 2022 15:03:20 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7961117E19
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:02:32 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id a1so5560019qta.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=F++KWIByQw15zKEln3xtCXqdyRaB/5lOWU6i+7W/zvU=;
-        b=PknX5RT2csG8YCPJJzeTThmKtWYz/gqBuB+ekT0aM3WjTZ3KKVFIpSIWfpfKVPM5Ki
-         o+9YfSG9Yy7saDcQotbBnEVnPMoCo7IhS9uKplbQdtuhfSP4iQ1IBYoIUnm3uY7DHZq3
-         5Xjkqbv8O1UbcN/o1GM/kFCbUdwyb65CjJdIs=
+        bh=MaScE8GyebyU6r3WCtmrMsrGmQSEIWA8j66ZS3wi93M=;
+        b=ej+018mnUowGx/lkTywzhkGAlos+1Ico9tU5gHKUYkppZqTFf0jh1jSvQV7VsAnOBk
+         7qS0JImypN6LJH07/0uooDW7qslSO+tifcorqA3ucIm/A8zX5U7f+Hf+sOhDRRAGp7qr
+         Xvzmf/OBKE96a0gZx+TYI8IZX2hJoFZbR8lrZWaorVh+qRORi385T2LurXm9WcGxAV63
+         B8pDf23gAyVADvzuI3yaQ0hWnys+9DhSxLq2DSQeC8du8ep+70QFQuiG5hDaUi9LSmMA
+         V/aWeK9pLc9uHCCNwaQP2eKGOUrgIs7wklIe7FWA8qMYNNK4AjXcnWUmdzGTj6Tkd7Vr
+         4ebg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=F++KWIByQw15zKEln3xtCXqdyRaB/5lOWU6i+7W/zvU=;
-        b=s2mAdYBw4lFyGaTI4zGKJk3Y3Nwytc3ouxNUeCq51ZCb2sR6V5aTU9r2CGPTW5+fJQ
-         udp4D2xsDg83MX7yHeWtRUU3LW9KCxO9hUBMZ9DsAxHgpoh448DG83vPy4Q3rpQ4U2jj
-         6ISC2cSL7LzJUx4BrHTxhFohb4F6bMv1My+fZ43iGK8uK1HnS4UGSdNo/o4gw9BEeven
-         7Qg2sOOQgIz2Aitsh2U2p09tyBMjxg5kL2m1EfS3YTsaMoi87uGlR4uhgZFi2ihQmH2V
-         2HHd2Sil0jin8gyNET8WZtOuwKCYj3YR8uphzJPd5kWHASCIrSAk4L/EYp0Df2bWBWXN
-         N3Ag==
-X-Gm-Message-State: AOAM532KUSkf6EtPwR/JbWtdmX30fK1gYUWdl8j77yXuPYTki/nZfjzJ
-        rryF9DTUN7nYmAB2cEnE7B8phqI5+Iy+OGtw2dA=
-X-Google-Smtp-Source: ABdhPJz1h/05Aei3Z2OljCDFMdJv5prGEHrHM9HV7eGOPI5E0P9lAKh9rbNULmgA+YcsWnXpizIMSQ==
-X-Received: by 2002:a05:651c:311:b0:246:1250:d6f with SMTP id a17-20020a05651c031100b0024612500d6fmr24245162ljp.455.1646337753375;
-        Thu, 03 Mar 2022 12:02:33 -0800 (PST)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id p23-20020a2e9ad7000000b00244b2ec2f88sm662133ljj.50.2022.03.03.12.02.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 12:02:32 -0800 (PST)
-Received: by mail-lf1-f51.google.com with SMTP id j7so10410471lfu.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:02:31 -0800 (PST)
-X-Received: by 2002:a05:6512:6c6:b0:447:ca34:b157 with SMTP id
- u6-20020a05651206c600b00447ca34b157mr75483lff.435.1646337750887; Thu, 03 Mar
- 2022 12:02:30 -0800 (PST)
+        bh=MaScE8GyebyU6r3WCtmrMsrGmQSEIWA8j66ZS3wi93M=;
+        b=ImakpIfqky4BwYF7u63qOxYwRXW2yQm561LcNnzpPzDsSsvDGb2/0a1qF/ab6VdOye
+         6/r7rPVrqJUvr/utfndkj4r0fkkWduiYYjrK3+PP0v2kdbvJKyg4nGbsePV5xcdZ4Gky
+         gtF6iH69JBsCorQ9VulPaPsJ1psJpBkRM+fBJQv7LN0vRC7L4z1Z1DlbdYAIfqKaImbX
+         biNp6wJEyArSntxxSzpdMJZOCmfu9TzVqjojUgy3mj1spTCqn3oj1p7GEK06MKZvZ4/H
+         BG92IvJPKH2OeunV+/tnHp7chL/1Z6pI9eu/xiVS0Zb1Ic1OXZ2sgqYGshdlazYS3rFP
+         Oohg==
+X-Gm-Message-State: AOAM531pbj4SjLBilNbJ2KFiykMikdl8dSGzubxqkxZwQZBZEBiZrz0t
+        xDdZdfgVhKTmUfy9Hv7muUx/q5Q7WhNQregu9lHAaQ==
+X-Google-Smtp-Source: ABdhPJyHxQpGbx5CYUvBHzuf9uDpy7o9cKCStiKEoT6uBEzSIyBq9PM2pDz7INHaEJmsYE0D9x4nKj1i8nVzHls4suo=
+X-Received: by 2002:a05:622a:170f:b0:2de:1b24:dc1f with SMTP id
+ h15-20020a05622a170f00b002de1b24dc1fmr28264061qtk.299.1646337751707; Thu, 03
+ Mar 2022 12:02:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220301075839.4156-1-xiam0nd.tong@gmail.com> <20220301075839.4156-3-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220301075839.4156-3-xiam0nd.tong@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 3 Mar 2022 12:02:14 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
-Message-ID: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
- outside the loop
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-9-haoluo@google.com>
+ <a4a23560-8a63-90f6-ad1c-c2d5c761e7e6@fb.com>
+In-Reply-To: <a4a23560-8a63-90f6-ad1c-c2d5c761e7e6@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 3 Mar 2022 12:02:20 -0800
+Message-ID: <CA+khW7iR4-D60TYJ0Ehz-XGz8S6sqf14nQa9WqyYLucCc-04iQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:59 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+Thanks Yonghong,
+
+On Wed, Mar 2, 2022 at 2:00 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> +#define list_for_each_entry_inside(pos, type, head, member)            \
+>
+>
+> On 2/25/22 3:43 PM, Hao Luo wrote:
+> > Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> > iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> > be parameterized by a cgroup id and prints only that cgroup. So one
+> > needs to specify a target cgroup id when attaching this iter.
+> >
+> > The target cgroup's state can be read out via a link of this iter.
+> > Typically, we can monitor cgroup creation and deletion using sleepable
+> > tracing and use it to create corresponding directories in bpffs and pin
+> > a cgroup id parameterized link in the directory. Then we can read the
+> > auto-pinned iter link to get cgroup's state. The output of the iter link
+> > is determined by the program. See the selftest test_cgroup_stats.c for
+> > an example.
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+> >   include/linux/bpf.h            |   1 +
+> >   include/uapi/linux/bpf.h       |   6 ++
+> >   kernel/bpf/Makefile            |   2 +-
+> >   kernel/bpf/cgroup_iter.c       | 141 +++++++++++++++++++++++++++++++++
+> >   tools/include/uapi/linux/bpf.h |   6 ++
+> >   5 files changed, 155 insertions(+), 1 deletion(-)
+> >   create mode 100644 kernel/bpf/cgroup_iter.c
+> >
+[...]
+> > +static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
+> > +     .seq_ops                = &cgroup_iter_seq_ops,
+> > +     .init_seq_private       = cgroup_iter_seq_init,
+> > +     .fini_seq_private       = cgroup_iter_seq_fini,
+>
+> Since cgroup_iter_seq_fini() is a nop, you can just have
+>         .fini_seq_private       = NULL,
+>
 
-So as mentioned in another thread, I actually tried exactly this.
+Sounds good. It looks weird to have .init without .fini. This may
+indicate a bug somewhere. .attach and .detach the same. I see that you
+pointed out a bug in a followed reply and the fix has paired attach
+and detach. That explains something. :)
 
-And it was horrendous.
+> > +void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> > +                              struct seq_file *seq)
+> > +{
+> > +     char buf[64] = {0};
+>
+> Is this 64 the maximum possible cgroup path length?
+> If there is a macro for that, I think it would be good to use it.
+>
 
-It's _technically_ probably a very nice solution, but
+64 is something I made up. There is a macro for path length. Let me
+use that in v2.
 
- - it means that the already *good* cases are the ones that are
-penalized by having to change
+> > +
+> > +     cgroup_path_from_kernfs_id(aux->cgroup_id, buf, sizeof(buf));
+>
+> cgroup_path_from_kernfs_id() might fail in which case, buf will be 0.
+> and cgroup_path will be nothing. I guess this might be the expected
+> result. I might be good to add a comment to clarify in the code.
+>
 
- - the syntax of the thing becomes absolutely nasty
+No problem.
 
-which means that _practially_ it's exactly the wrong thing to do.
-
-Just as an example, this is a random current "good user" in kernel/exit.c:
-
--       list_for_each_entry_safe(p, n, dead, ptrace_entry) {
-+       list_for_each_entry_safe_inside(p, n, struct task_struct,
-dead, ptrace_entry) {
-
-and while some of the effects are nice (no need to declare p/n ahead
-of time), just look at how nasty that line is.
-
-Basically every single use will result in an over-long line. The above
-example has minimal indentation, almost minimal variable names (to the
-point of not being very descriptive at all), and one of the most basic
-kernel structure types. And it still ended up 87 columns wide.
-
- And no, the answer to that is not "do it on multiple lines then".
-That is just even worse.
-
-So I really think this is a major step in the wrong direction.
-
-We should strive for the *bad* cases to have to do extra work, and
-even there we should really strive for legibility.
-
-Now, I think that "safe" version in particular can be simplified:
-there's no reason to give the "n" variable a name. Now that we can
-(with -stc=gnu11) just declare our own variables in the for-loop, the
-need for that externally visible 'next' declaration just goes away.
-
-So three of those 87 columns are pointless and should be removed. The
-macro can just internally decare 'n' like it always wanted (but
-couldn't do due to legacy C language syntax restrictions).
-
-But even with that fixed, it's still a very cumbersome line.
-
-Note how the old syntax was "only" 60 characters - long but still
-quite legible (and would have space for two more levels of indentation
-without even hitting 80 characters). And that was _despute_ having to
-have that 'n' declaration.
-
-And yes, the old syntax does require that
-
-        struct task_struct *p, *n;
-
-line to declare the types, but that really is not a huge burden, and
-is not complicated. It's just another "variables of the right type"
-line (and as mentioned, the 'n' part has always been a C syntax
-annoyance).
-
-              Linus
+>
+> > +     seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
+> > +     seq_printf(seq, "cgroup_path:\t%s\n", buf);
+> > +}
+> > +
+> > +int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+> > +                                struct bpf_link_info *info)
+> > +{
+> > +     info->iter.cgroup.cgroup_id = aux->cgroup_id;
+> > +     return 0;
+> > +}
+> > +
+> > +DEFINE_BPF_ITER_FUNC(cgroup, struct bpf_iter_meta *meta,
+> > +                  struct cgroup *cgroup)
+> > +
+> > +static struct bpf_iter_reg bpf_cgroup_reg_info = {
+> > +     .target                 = "cgroup",
+> > +     .attach_target          = bpf_iter_attach_cgroup,
+> > +     .detach_target          = bpf_iter_detach_cgroup,
+>
+> The same ehre, since bpf_iter_detach_cgroup() is a nop,
+> you can replace it with NULL in the above.
+>
+> > +     .show_fdinfo            = bpf_iter_cgroup_show_fdinfo,
+> > +     .fill_link_info         = bpf_iter_cgroup_fill_link_info,
+> > +     .ctx_arg_info_size      = 1,
+> > +     .ctx_arg_info           = {
+> > +             { offsetof(struct bpf_iter__cgroup, cgroup),
+> > +               PTR_TO_BTF_ID },
+> > +     },
+> > +     .seq_info               = &cgroup_iter_seq_info,
+> > +};
+> > +
+> > +static int __init bpf_cgroup_iter_init(void)
+> > +{
+> > +     bpf_cgroup_reg_info.ctx_arg_info[0].btf_id = bpf_cgroup_btf_id[0];
+> > +     return bpf_iter_reg_target(&bpf_cgroup_reg_info);
+> > +}
+> > +
+> [...]

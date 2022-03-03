@@ -2,122 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800F74CC48F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1D54CC490
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbiCCSDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:03:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S230055AbiCCSFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiCCSDq (ORCPT
+        with ESMTP id S229495AbiCCSFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:03:46 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5373155C00
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:03:00 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id t5so5357754pfg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:03:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wXD0lhGUV6Vx3hh95xkovDLgtCU6APmz+b2GdNRK/RE=;
-        b=FJGxFbCw7rR/LPeZm/NArRHGbcHesjph3Kn69m3nm4Ldw+bkSYNkB9UDLmP2cLig+3
-         0Cas7VySBXv/Qia8DpH6SN4hcCxp1d9oUaSqjwH7Bcpw/9WfqrQTMpJIlS8ay8nejHQI
-         aNvsrbWJzHi5lYbNkVPet7DtSxiWXOKRNNnEyEWmVz7H1eqXV5CR4TvD4rD6yg3V+2Q1
-         vaMxCup0T74m95+9RcrL3WxXlgtPKg/k+OqiNJ28BmNC7/3udEXINC60cK6h87hY6wdO
-         HmhLodYFKRjUokEQOLdujdsdQOBI7sVAEM26SmVbRejKhcUrDeBdpbZyRXJrel+Q+Iqm
-         Gm9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wXD0lhGUV6Vx3hh95xkovDLgtCU6APmz+b2GdNRK/RE=;
-        b=KuNPig0KZ7YGMiXmhsPEN+MZaNdrK3a2h6BJXT969npG2mQga8Z3MfeYfvvEBg0yv7
-         I7tYH6YVL7ovIcYIRe65B3nKBAbQqpNbMLcp0MxgUJvdyF8fT5CGEtCMr+soMfXhK32n
-         ZF6fbGLiBK2LKaL90SxUEwuAvWO8p/mgz2oKIynSrhypwCMsZPHf5pXre71uCmLa91fF
-         4CqyijX2ocNUfO6nFIooehvpEfClFVc4dV0WHMcuUZY6kXDwAf8HYXAHoAZoH39Du0yo
-         QRn0+AcEl7C7cSSVJwZpHbJMn58UqJfIazGt+Lq94cqWsNjVplcGWXl7wSEzmALT8sRH
-         fYgg==
-X-Gm-Message-State: AOAM532yNClDi/NyUIs3X0eLKN6NftrAmLb8sHV6jes+sspwAX09LnCx
-        B9EO8bRDzs1BjpmTSbdD5wwkbA==
-X-Google-Smtp-Source: ABdhPJwyyVoqEon5C25c9UJr9TiVongdLYU8rJ02W4Fdis8eick2r/9zAfe+AM1teTuAyCKBFX08lA==
-X-Received: by 2002:a63:5124:0:b0:375:9f87:f881 with SMTP id f36-20020a635124000000b003759f87f881mr28381432pgb.578.1646330579563;
-        Thu, 03 Mar 2022 10:02:59 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id h22-20020a056a001a5600b004f41a2a6cf9sm3060866pfv.134.2022.03.03.10.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:02:59 -0800 (PST)
-Date:   Thu, 3 Mar 2022 18:02:55 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 07/28] KVM: x86/mmu: Check for !leaf=>leaf, not PFN
- change, in TDP MMU SP removal
-Message-ID: <YiECz6ZB+wuzMomy@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-8-seanjc@google.com>
+        Thu, 3 Mar 2022 13:05:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4891D1598CC
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:04:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D44F3617C1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CE6C004E1;
+        Thu,  3 Mar 2022 18:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646330663;
+        bh=TG3MIWaf6XLuAoCM6TlS+dnpL5s9KCujEz3ummq0Tzo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qCAna2W13jLFUOetxlrKfIQF/WxJoYvqsp8yx0D6wRu851O5dmW0eOUFwes5qi2Uu
+         +g5ACxCvkG5Go2NTrWXcQHmIuvbVnEBEZNwTGuFgXcVVEtoR1HRXtpUvdBadGGVwMU
+         s5v+xn9tsfdcDekg2Jlf86W6T3FV1to+d+NsGZk0IPZRP0iDJ9RtJBk2HUPlsddj7I
+         viEXecDFIPWnGwG+9+HYy84X46WJ9dfAQH5QUrWXt2huhC/0asWkaSmBUoIxAr4g0R
+         WwWkL6T+WA4YYPmJPEE4kwdIb4+pRo/Uu/XjPJ14OmXI0FvJ57b13LtcTJShs1V0A1
+         ZzhsPMzCZCUXQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nPpoL-0000mb-NF; Thu, 03 Mar 2022 19:04:21 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH] x86/pmem: fix platform-device leak in error path
+Date:   Thu,  3 Mar 2022 19:04:06 +0100
+Message-Id: <20220303180406.2990-1-johan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-8-seanjc@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> Look for a !leaf=>leaf conversion instead of a PFN change when checking
-> if a SPTE change removed a TDP MMU shadow page.  Convert the PFN check
-> into a WARN, as KVM should never change the PFN of a shadow page (except
-> when its being zapped or replaced).
-> 
-> From a purely theoretical perspective, it's not illegal to replace a SP
-> with a hugepage pointing at the same PFN.  In practice, it's impossible
-> as that would require mapping guest memory overtop a kernel-allocated SP.
-> Either way, the check is odd.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 189f21e71c36..848448b65703 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -505,9 +505,12 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->  
->  	/*
->  	 * Recursively handle child PTs if the change removed a subtree from
-> -	 * the paging structure.
-> +	 * the paging structure.  Note the WARN on the PFN changing without the
-> +	 * SPTE being converted to a hugepage (leaf) or being zapped.  Shadow
-> +	 * pages are kernel allocations and should never be migrated.
->  	 */
-> -	if (was_present && !was_leaf && (pfn_changed || !is_present))
-> +	if (was_present && !was_leaf &&
-> +	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
->  		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
->  }
->  
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+Make sure to free the platform device in the unlikely event that
+registration fails.
+
+Fixes: 7a67832c7e44 ("libnvdimm, e820: make CONFIG_X86_PMEM_LEGACY a tristate option")
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ arch/x86/kernel/pmem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/pmem.c b/arch/x86/kernel/pmem.c
+index 6b07faaa1579..23154d24b117 100644
+--- a/arch/x86/kernel/pmem.c
++++ b/arch/x86/kernel/pmem.c
+@@ -27,6 +27,11 @@ static __init int register_e820_pmem(void)
+ 	 * simply here to trigger the module to load on demand.
+ 	 */
+ 	pdev = platform_device_alloc("e820_pmem", -1);
+-	return platform_device_add(pdev);
++
++	rc = platform_device_add(pdev);
++	if (rc)
++		platform_device_put(pdev);
++
++	return rc;
+ }
+ device_initcall(register_e820_pmem);
+-- 
+2.34.1
+

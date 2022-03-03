@@ -2,103 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF414CB4A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603F44CB4B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiCCCDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S231605AbiCCCEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiCCCDf (ORCPT
+        with ESMTP id S231580AbiCCCEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:03:35 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDC5638D93
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 18:02:48 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.20.42.95])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn8_FISBiuqsBAA--.8781S3;
-        Thu, 03 Mar 2022 10:02:46 +0800 (CST)
-Subject: Re: [PATCH 1/1] mm/page_alloc: add scheduling point to
- free_unref_page_list
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220302013825.2290315-1-wangjianxing@loongson.cn>
- <20220302153433.719caef31bd9e99319c5e6a2@linux-foundation.org>
-From:   wangjianxing <wangjianxing@loongson.cn>
-Message-ID: <fad38be0-967a-8772-07c8-cc26fa49a251@loongson.cn>
-Date:   Thu, 3 Mar 2022 10:02:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20220302153433.719caef31bd9e99319c5e6a2@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Wed, 2 Mar 2022 21:04:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3375113F93;
+        Wed,  2 Mar 2022 18:03:25 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2230RrMT031932;
+        Thu, 3 Mar 2022 02:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=T9C3xmYlT8DnXDMis629GMjvTaHYpaVaSTrwiCNNBUI=;
+ b=MRrK+1g+2hWRsc4lFRz3D6cvJdYsMUVTT/zrPVqZUZZ0mwA/9NpFKygo8c9vxbxQaTqc
+ gN0AvK62btQ0Ey35M+dUxagHc3GuG7TznCo4hJrsVyWH2WKJZPhe2dmeAh7WfpSqUW6G
+ V7vbaXGVupNyB74WEFkwLWTLYZrZXTFJB+82ImgKpeXvxaijDeQnzeYdmOi0qMJDIqTN
+ 4EhvRvro/h7rs6r4dhF4vh1Uy+RhCikeFeOPRehWWauFVt+Ol+Jn0IfSiP34zQTkxYuw
+ t1RmhOpvljBoduZnPi4oP3TpzM437e7MMvWpS1ptiMH6Bqex9FdtN92Oi6YQNeImgRV/ VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejd9wr61j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:20 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2231Zg3d017255;
+        Thu, 3 Mar 2022 02:03:19 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejd9wr619-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:19 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2231lTJf014593;
+        Thu, 3 Mar 2022 02:03:18 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 3ejjuw8qh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:18 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22323HSY18678100
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Mar 2022 02:03:17 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B955BE05B;
+        Thu,  3 Mar 2022 02:03:17 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B83DBE056;
+        Thu,  3 Mar 2022 02:03:16 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Mar 2022 02:03:16 +0000 (GMT)
+Message-ID: <45d5a510-eca8-f06f-8d6c-d8bbd41a4b23@linux.ibm.com>
+Date:   Wed, 2 Mar 2022 21:03:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] tpm: Fix crash on tmprm release
 Content-Language: en-US
-X-CM-TRANSID: AQAAf9Dxn8_FISBiuqsBAA--.8781S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr15WF4kCw1rJFy5Kr45Jrb_yoW8GrWkpr
-        n5Jw1Dtr1DJws5Jw4xtrn29rWrCanxKrn7Xry8tFW3JasxXrnIqFykKFZI9Fy7G3y8C3yS
-        q3y8Kw4rZa1qqFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y
-        6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU5PpnJUUUUU==
-X-CM-SenderInfo: pzdqwyxldq5xtqj6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     kernel@axis.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210615091410.17007-1-vincent.whitchurch@axis.com>
+ <20210615091410.17007-2-vincent.whitchurch@axis.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20210615091410.17007-2-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7jfS3NTJ8O0mqLwK46GFexoA3_U82CVy
+X-Proofpoint-GUID: WCP-pySGymS1pk_eDSaigx4BD1KLD6gC
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1011
+ bulkscore=0 malwarescore=0 suspectscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203030007
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 07:34 AM, Andrew Morton wrote:
-> On Tue,  1 Mar 2022 20:38:25 -0500 wangjianxing <wangjianxing@loongson.cn> wrote:
->
->> free a large list of pages maybe cause rcu_sched starved on
->> non-preemptible kernels
->>
->> rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
->> RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
->> [...]
->> Call Trace:
->>    free_unref_page_list+0x19c/0x270
->>    release_pages+0x3cc/0x498
->>    tlb_flush_mmu_free+0x44/0x70
->>    zap_pte_range+0x450/0x738
->>    unmap_page_range+0x108/0x240
->>    unmap_vmas+0x74/0xf0
->>    unmap_region+0xb0/0x120
->>    do_munmap+0x264/0x438
->>    vm_munmap+0x58/0xa0
->>    sys_munmap+0x10/0x20
->>    syscall_common+0x24/0x38
-> Thanks.
->
-> How did this large list of pages come about?
->
-> Will people be seeing this message in upstream kernels, or is it
-> specific to some caller code which you have added?
->
-> Please always include details such as this so that others can determine
-> whether the fix should be backported into -stable kernels.
-Thanks.
 
-I try to increase the overcommit ratio of cpu to 1:2~1:3 in KVM 
-hypervisor, per-vm has the same number of vcpu with host cpu, then setup 
-2 or 3 vm.
-Run ltpstress test in per vm, both host and guest is non-preemptiable 
-kernel, vm dmesg will throw some rcu_sched warning.
+On 6/15/21 05:14, Vincent Whitchurch wrote:
+> If the tpm_tis module is removed (or a system shutdown is triggered)
+> while the tpmrm device is use, the kernel crashes due to chip->ops being
+> NULL:
+>
+>   # exec 3<>/dev/tpmrm0
+>   # rmmod tpm_tis
+>   # exit
+>   ==================================================================
+>   BUG: KASAN: null-ptr-deref in tpm_chip_start+0x2d/0x120 [tpm]
+>   Read of size 8 at addr 0000000000000060 by task sh/994
+>
+>   Call Trace:
+>    kasan_report.cold.13+0x10f/0x111
+>    tpm_chip_start+0x2d/0x120 [tpm]
+>    tpm2_del_space+0x2c/0xa0 [tpm]
+>    tpmrm_release+0x3f/0x50 [tpm]
+>    __fput+0x110/0x3c0
+>    task_work_run+0x94/0xd0
+>    do_exit+0x683/0x13e0
+>    do_group_exit+0x8b/0x140
+>    do_syscall_64+0x3c/0x80
+>   ==================================================================
+>
+> Fix this by making tpm2_del_space() use tpm_try_get_ops().  The latter
+> already includes the calls to tpm_chip_start() and tpm_chip_stop().
+>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-ltp version is 20180926, but until now I didn't analysis ltpstress code 
-deeply.
 
+As a follow-up to this message here: https://lkml.org/lkml/2022/3/1/552
+
+
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+
+
+
+
+> ---
+>   drivers/char/tpm/tpm2-space.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 784b8b3cb903..e1111261021f 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -58,12 +58,10 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
+>   
+>   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+>   {
+> -	mutex_lock(&chip->tpm_mutex);
+> -	if (!tpm_chip_start(chip)) {
+> +	if (!tpm_try_get_ops(chip)) {
+>   		tpm2_flush_sessions(chip, space);
+> -		tpm_chip_stop(chip);
+> +		tpm_put_ops(chip);
+>   	}
+> -	mutex_unlock(&chip->tpm_mutex);
+>   	kfree(space->context_buf);
+>   	kfree(space->session_buf);
+>   }

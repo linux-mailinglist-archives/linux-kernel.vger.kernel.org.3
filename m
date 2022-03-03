@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6FC4CC942
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848104CC94A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiCCWko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        id S237045AbiCCWnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237021AbiCCWke (ORCPT
+        with ESMTP id S231782AbiCCWnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:40:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1CD154709;
-        Thu,  3 Mar 2022 14:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:References:To:From:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=8xS4vyGXrvaXNSOoyEcAyKtTk6VII0GHY+1sEXjj3ZU=; b=Rcw5rZDPcRxvOBX/MWRLhvjObC
-        TRLMEin0NOHkkJylcRVj4A3PpWkMgnYl4tavHCyPUssyKSe2djvNzofUU1gk8S2nz0GAFygh+nuwR
-        O31wvhqdWnRLnp+l8t2g4ddXWAIjh/2bJObFM2ICcgRTj/6DflgExi/wpPdSTp57TJ90O9sJjNSzC
-        T2WIKZ8VDxldgThha0UkE1k2V0Wcb/z2Bbbdb+GaGL36tnnV4De2KeBKtPDJhwnmFgzGoCaiyApow
-        5f/YUwfnY/HqoLJmT4240vVtk4VLwwlqr7vftKdCCg4MMJkBZQbcmB2jdPq6fUQ0v36toepHhAuYN
-        YWy4Iy5g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPu6m-00C3HB-VQ; Thu, 03 Mar 2022 22:39:41 +0000
-Message-ID: <f2b86182-97d1-4341-1b2c-9598a90fdecc@infradead.org>
-Date:   Thu, 3 Mar 2022 14:39:36 -0800
+        Thu, 3 Mar 2022 17:43:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609E4169384;
+        Thu,  3 Mar 2022 14:42:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECD39B82700;
+        Thu,  3 Mar 2022 22:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462FEC004E1;
+        Thu,  3 Mar 2022 22:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646347332;
+        bh=LlIfdRtUuZrzrB5nkf+T8cjTwpV1Lj/Ev0Wsq+zXmWw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nIDDxLwC8iVzhNcqhrx593nEo/1SqIyd6NsFMMFN8QU1o/wXosUZVt3R6KrEor1HP
+         7wzrSr5daJHtHNOpMbnCLYgAuO5I+GYHC5KJtxTZUE5+sE4OIfqCmi4HIYCLSUu1/L
+         85tUzCfmXSQoqrwzPmzqa4H9badwu5mgh+WdDAQrm/HdhK8ZHhh5GMHh0+csVkv3fh
+         KfMLt1PdolyFs/ZfBhasYB1KBLbx0AEKiPG1DLAGiG/NUlyifMYhD9JWbw5yRuWdTz
+         FkSr8p+B2k8AGo1pNrJ0sXV7bjmTEYpb4wx70u8wCVObg7Xl9oJVtgf7rdkQxNuj3w
+         AgwDxLRa7dyzA==
+Date:   Fri, 4 Mar 2022 00:41:32 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YiFEHCh+7Fm85yQK@iki.fi>
+References: <20220301022108.30310-1-LinoSanfilippo@gmx.de>
+ <20220301022108.30310-2-LinoSanfilippo@gmx.de>
+ <99eff469-3faf-1e9a-9ad9-e087aeafc301@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: mmotm 2022-02-23-21-20 uploaded (Kconfig warning:
- SND_SOC_WCD938X)
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20220224052137.BFB10C340E9@smtp.kernel.org>
- <6bd5ec04-dedc-5d1f-23d7-4fd6f4efb95f@infradead.org>
-In-Reply-To: <6bd5ec04-dedc-5d1f-23d7-4fd6f4efb95f@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99eff469-3faf-1e9a-9ad9-e087aeafc301@linux.ibm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,36 +61,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Still seeing this build (Kconfig) warning in
-mmotm of 20220322:
+On Tue, Mar 01, 2022 at 07:36:34AM -0500, Stefan Berger wrote:
+> 
+> On 2/28/22 21:21, Lino Sanfilippo wrote:
+> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > 
+> > The following sequence of operations results in a refcount warning:
+> > 
+> > 1. Open device /dev/tpmrm.
+> > 2. Remove module tpm_tis_spi.
+> > 3. Write a TPM command to the file descriptor opened at step 1.
+> > 
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
+> > refcount_t: addition on 0; use-after-free.
+> > Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
+> > sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
+> > brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
+> > raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
+> > snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
+> > CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
+> > Hardware name: BCM2711
+> > [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
+> > [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
+> > [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
+> > [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
+> > [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
+> > [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
+> > [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
+> > [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
+> > [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
+> > [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
+> > Exception stack(0xc226bfa8 to 0xc226bff0)
+> > bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
+> > bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
+> > bfe0: 0000006c beafe648 0001056c b6eb6944
+> > ---[ end trace d4b8409def9b8b1f ]---
+> > 
+> > The reason for this warning is the attempt to get the chip->dev reference
+> > in tpm_common_write() although the reference counter is already zero.
+> > 
+> > Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
+> > extra reference used to prevent a premature zero counter is never taken,
+> > because the required TPM_CHIP_FLAG_TPM2 flag is never set.
+> > 
+> > Fix this by moving the TPM 2 character device handling from
+> > tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
+> > in time when the flag has been set in case of TPM2.
+> > 
+> > Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> > already introduced function tpm_devs_release() to release the extra
+> > reference but did not implement the required put on chip->devs that results
+> > in the call of this function.
+> > 
+> > Fix this by putting chip->devs in tpm_chip_unregister().
+> > 
+> > Finally move the new implementation for the TPM 2 handling into a new
+> > function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
+> > good case and error cases.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> > Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
+> > Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
+> > Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
+> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 
-On 2/24/22 09:13, Randy Dunlap wrote:
-> 
-> 
-> On 2/23/22 21:21, Andrew Morton wrote:
->> The mm-of-the-moment snapshot 2022-02-23-21-20 has been uploaded to
->>
->>    https://www.ozlabs.org/~akpm/mmotm/
->>
->> mmotm-readme.txt says
->>
->> README for mm-of-the-moment:
->>
->> https://www.ozlabs.org/~akpm/mmotm/
->>
->> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->> more than once a week.
-> 
-> on x86_64:
-> 
-> WARNING: unmet direct dependencies detected for SND_SOC_WCD938X
->   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=m] && SND_SOC_WCD938X_SDW [=n] && (SOUNDWIRE [=n] || !SOUNDWIRE [=n])
->   Selected by [m]:
->   - SND_SOC_SC7280 [=m] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=m] && SND_SOC_QCOM [=m] && (I2C [=y] && SOUNDWIRE [=n] || COMPILE_TEST [=y])
-> 
-> 
-> Full randconfig file is attached.
-> 
+Thanks, would be it be possible to also check v9?
 
--- 
-~Randy
+BR, Jarkko

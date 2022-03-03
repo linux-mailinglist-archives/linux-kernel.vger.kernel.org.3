@@ -2,199 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668BE4CC4D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552924CC4DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbiCCSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S235654AbiCCSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiCCSPR (ORCPT
+        with ESMTP id S235648AbiCCSQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:15:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08AE1965EA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:14:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Mar 2022 13:16:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9FA91965EA
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646331357;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SBqCnWQ27WKHnjMxdvchXpc/aXYJejhGnK9iylW2jMI=;
+        b=WL0O318IXUuGF5mQT0n3UzvdzmEq7ossaGTtsdkvSAx1gqPngV+67fOjJgOdzKRpklbZsc
+        11DU5/kQdYE2wk5lyRQ93JpLmnlV8CR8UhhTn3Ev/NypP1nPkFQdTGj6mAs1gjW2ZXpxuf
+        SrWv7ny0oQqiRzxPvfKksKO48BR+alc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-306-50GVmhIzPbyjqd79N1b_mw-1; Thu, 03 Mar 2022 13:15:52 -0500
+X-MC-Unique: 50GVmhIzPbyjqd79N1b_mw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F73619EF
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:14:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3158C340F5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:14:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646331269;
-        bh=qFUOAEusKf5EqlT1leY+fpapk6uaLFy25npXakzaPOU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LgUz89MlyL2oMwnV+jl1CbkoV4FbjRYo0SlhXSUZ5hMQ4yb4Pb/zp+uPocsPFMlLo
-         +PAx6suDpzaP2faoPunZF/mEOn2MyJE+M/fwgFgk+f3BRfUub8yYBjEuyRaYnm+WR3
-         zRK4lTnWpb3wOnfBAI1+ZbMVeC9JaNL1vEsPfnFHgH804PMs+l+YfcnTECikPFhXMi
-         kelhjewrFDrVG2AdHUUmuJIl02+yTU70VqMCcPqOYv5ablzsxGe4RqxQd5AZq/QTIB
-         gaB9H+Let7QPiYMJNQm63Ac6YvnY8T11fAlrpmyHwftuwyttNrOPF5VZyz2CrSkndp
-         vFaQFnxldDTtA==
-Received: by mail-ej1-f46.google.com with SMTP id qa43so12368851ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:14:29 -0800 (PST)
-X-Gm-Message-State: AOAM530y/avUuL8KY43DoJGRtM8JLJhYUaVWrfrewc6m6INYYFfDvvXj
-        WZDcj4zAxYXlyt1t/ZZGyP5r2kLup9gM2+c1vQ0GDQ==
-X-Google-Smtp-Source: ABdhPJxnZKo6LX8xW1ggtkT/YnLsX1bDHLa/SMbYlFtKkMSZxzUgC3/QFBzNDtHaNzXIkRqX2USVwPgCqAewaig5tfo=
-X-Received: by 2002:a17:906:9814:b0:6da:a60b:f99b with SMTP id
- lm20-20020a170906981400b006daa60bf99bmr1287850ejb.496.1646331267646; Thu, 03
- Mar 2022 10:14:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
- <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
- <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
- <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com> <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
-In-Reply-To: <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 3 Mar 2022 19:14:16 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
-Message-ID: <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, revest@chromium.org, gregkh@linuxfoundation.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@google.com>,
-        Kees Cook <keescook@chromium.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E6D0051DC;
+        Thu,  3 Mar 2022 18:15:49 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AD4C28378A;
+        Thu,  3 Mar 2022 18:15:45 +0000 (UTC)
+Message-ID: <df1ed2b01c74310bd4918196ba632e906e4c78f1.camel@redhat.com>
+Subject: Re: [PATCH 4/4] KVM: x86: lapic: don't allow to set non default
+ apic id when not using x2apic api
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Date:   Thu, 03 Mar 2022 20:15:44 +0200
+In-Reply-To: <YiDx/uYAMSZDvobO@google.com>
+References: <20220301135526.136554-1-mlevitsk@redhat.com>
+         <20220301135526.136554-5-mlevitsk@redhat.com> <Yh5QJ4dJm63fC42n@google.com>
+         <6f4819b4169bd4e2ca9ab710388ebd44b7918eed.camel@redhat.com>
+         <Yh5b3eBYK/rGzFfj@google.com>
+         <297c8e41f512587230a54130a71ddfd9004c9507.camel@redhat.com>
+         <eae0b69fb8f5c47457fac853cc55b41a30762994.camel@redhat.com>
+         <YiDx/uYAMSZDvobO@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 5:30 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Thu, 2022-03-03 at 17:17 +0100, KP Singh wrote:
-> > On Thu, Mar 3, 2022 at 5:05 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > >
-> > > [Cc'ing Florent, Kees]
-> > >
-> > > Hi Alexei,
-> > >
-> > > On Wed, 2022-03-02 at 14:20 -0800, Alexei Starovoitov wrote:
-> > > > On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
-> > > > > Extend the interoperability with IMA, to give wider flexibility for the
-> > > > > implementation of integrity-focused LSMs based on eBPF.
-> > > > >
-> > > > > Patch 1 fixes some style issues.
-> > > > >
-> > > > > Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
-> > > > > measurement capability of IMA without needing to setup a policy in IMA
-> > > > > (those LSMs might implement the policy capability themselves).
-> > > > >
-> > > > > Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
-> > > > >
-> > > > > Changelog
-> > > > >
-> > > > > v2:
-> > > > > - Add better description to patch 1 (suggested by Shuah)
-> > > > > - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
-> > > > > - Move declaration of bpf_ima_file_hash() at the end (suggested by
-> > > > >   Yonghong)
-> > > > > - Add tests to check if the digest has been recalculated
-> > > > > - Add deny test for bpf_kernel_read_file()
-> > > > > - Add description to tests
-> > > > >
-> > > > > v1:
-> > > > > - Modify ima_file_hash() only and allow the usage of the function with the
-> > > > >   modified behavior by eBPF-based LSMs through the new function
-> > > > >   bpf_ima_file_hash() (suggested by Mimi)
-> > > > > - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
-> > > > >   and bpf_ima_file_hash() can be called inside the implementation of
-> > > > >   eBPF-based LSMs for this hook
-> > > > >
-> > > > > Roberto Sassu (9):
-> > > > >   ima: Fix documentation-related warnings in ima_main.c
-> > > > >   ima: Always return a file measurement in ima_file_hash()
-> > > > >   bpf-lsm: Introduce new helper bpf_ima_file_hash()
-> > > > >   selftests/bpf: Move sample generation code to ima_test_common()
-> > > > >   selftests/bpf: Add test for bpf_ima_file_hash()
-> > > > >   selftests/bpf: Check if the digest is refreshed after a file write
-> > > > >   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
-> > > > >   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
-> > > > >   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
-> > > > >     policy
-> > > >
-> > > > We have to land this set through bpf-next.
-> > > > Please get the Acks for patches 1 and 2, so we can proceed.
-> > >
-> >
-> > Hi Mimi,
-> >
-> > > Each year in the LSS integrity status update talk, I've mentioned the
-> > > eBPF integrity gaps.  I finally reached out to KP, Florent Revest, Kees
-> >
-> > Thanks for bringing this up and it's very timely because we have been
-> > having discussion around eBPF program signing and delineating that
-> > from eBPF program integrity use-cases.
-> >
-> > My plan is to travel to LSS (travel and visa permitting) and we can discuss
-> > it more there.
-> >
-> > If you prefer we can also discuss it before in one of the BPF office hours:
-> >
-> > https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
->
-> Sounds good.
->
-> >
-> > > and others, letting them know that I'm concerned about the eBPF module
-> > > integrity gaps.  True there is a difference between signing the eBPF
-> > > source modules versus the eBPF generated output, but IMA could at least
-> > > verify the integrity of the source eBPF modules making sure they are
-> > > measured, the module hash audited, and are properly signed.
-> > >
-> > > Before expanding the ima_file_hash() or ima_inode_hash() usage, I'd
-> > > appreciate someone adding the IMA support to measure, appraise, and
-> > > audit eBPF modules.  I realize that closing the eBPF integrity gaps is
-> > > orthogonal to this patch set, but this patch set is not only extending
-> >
-> > This really is orthogonal and IMHO it does not seem rational to block this
-> > patchset on it.
-> >
-> > > the ima_file_hash()/ima_inode_hash() usage, but will be used to
-> > > circumvent IMA.  As per usual, IMA is policy based, allowing those
-> >
-> > I don't think they are being used to circumvent IMA but for totally
-> > different use-cases (e.g. as a data point for detecting attacks).
-> >
-> >
-> > > interested in eBPF module integrity to define IMA policy rules.
->
-> That might be true for your usecase, but not Roberto's.  From the cover
-> letter above, Roberto was honest in saying:
->
-> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of
-> the measurement capability of IMA without needing to setup a policy in
-> IMA (those LSMs might implement the policy capability themselves).
+On Thu, 2022-03-03 at 16:51 +0000, Sean Christopherson wrote:
+> On Wed, Mar 02, 2022, Maxim Levitsky wrote:
+> > When APIC state is loading while APIC is in *x2apic* mode it does enforce that
+> > value in this 0x20 offset is initial apic id if KVM_CAP_X2APIC_API.
+> >  
+> > I think that it is fair to also enforce this when KVM_CAP_X2APIC_API is not used,
+> > especially if we make apic id read-only.
+> 
+> I don't disagree in principle.  But, (a) this loophole as existing for nearly 6
+> years, (b) closing the loophole could break userspace, (c) false positive are
+> possible due to truncation, and (d) KVM gains nothing meaningful by closing the
+> loophole.
+> 
+> (d) changes when we add a knob to make xAPIC ID read-only, but we can simply
+> require userspace to enable KVM_CAP_X2APIC_API (or force it).  That approach
+> avoids (c) by eliminating truncation, and avoids (b) by virtue of being opt-in.
+> 
 
-Currently to use the helper bpf_ima_inode_hash in LSM progs
-one needs to have a basic IMA policy in place just to get a hash,
-even if one does not need to use the whole feature-set provided by IMA.
-These patches would be quite beneficial for this user-journey.
+(a) - doesn't matter.
 
-Even Robert's use case is to implement IMA policies in BPF this is still
-fundamentally different from IMA doing integrity measurement for BPF
-and blocking this patch-set on the latter does not seem rational and
-I don't see how implementing integrity for BPF would avoid your
-concerns.
+(b) - if userspace wants to have non default apic id with x2apic mode,
+      which (*)can't even really be set from the guest - this is ridiculous.
+ 
+      (*) Yes I know that in *theory* user can change apic id in xapic mode
+      and then switch to x2apic mode - but I really doubt that KVM
+      would even honor this - there are already places which assume
+      that this is not the case. In fact it would be nice to audit KVM
+      on what happens when userspace does this, there might be a nice
+      CVE somewhere....
+ 
+(c) - without KVM_CAP_X2APIC_API, literally just call to KVM_GET_LAPIC/KVM_SET_LAPIC
+will truncate x2apic id if > 255 regardless of my patch - literally this cap
+was added to avoid this.
+What we should do is to avoid creating cpu with vcpu_id > 256 when this cap is not set…
+ 
+(d) - doesn't matter - again we are talking about x2apic mode in which apic id is read only.
+ 
 
+Don’t get me wrong - I understand your concerns about this, but I hope that you
+also understand mine - I still think that you just don't understand me.
 
+Best regards,
+	Maxim Levitsky
 
->
-> --
-> thanks,
->
-> Mimi
->

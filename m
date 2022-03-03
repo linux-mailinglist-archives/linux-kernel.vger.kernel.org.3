@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EBC4CC56C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0374CC571
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiCCSsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S235814AbiCCSvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbiCCSsu (ORCPT
+        with ESMTP id S233217AbiCCSvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:48:50 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D1D5E140
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:48:00 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id z11so5454539pla.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:48:00 -0800 (PST)
+        Thu, 3 Mar 2022 13:51:47 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751D519CCF0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:51:01 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id j78so4669526qke.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:51:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p7fhDS5lYFCTZC+D85sVdozKwDtg+g9RjPaejvj9554=;
-        b=dB8mtC6VM7kHHTyoxH5/QJKjVMIR277NeZ85hG44JH5v/jSPveyQlMXnFAYPTeYTE+
-         ru5G4JV6wDdcmKBn+lXnLb80ODe/fPvo7IUv8V652dQ9pDmcwshSm6WF4DlrMM+TUG6m
-         K25VJuCVmRJhJxpNV6RgHsJ1XrNuRy5u9xtSsAWRANJjUIf6clAsoKR7Ihkc/yyVfTCC
-         RzWOiLSmppt17Tpj6GkIU3wJgEBeLVsUIss+hlqeM384Y1MUHkRgro+yyTr5Ebc+LEYw
-         2XvoC87Dw3DYUxxA+Eoq4kstx+IhPRq9ilBEkvAYicr5zEqX4mZZuDosiAk+z8InzQv0
-         uVLw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OmjzlX5jm7yAuQTwyoKeVgQEjRjg2Q+W3Y3CU0H5AZg=;
+        b=ZvDjpQdk9BXTHFp/78l5h3k+//+41UyrWKaq7UFUkhveBR6xXXLaAUtWbXpJ4cM901
+         IXl7QhBOAOoYm4S37JOXlHDAWhZdLZ3IJ/61XuDz0GRk/esJ4b5hRfmG2EoHyZbqlf/a
+         Xgt4lBtTvI29xbon6PwZR5C4Whu3qOqwizVa6Tc1mr+DO5lG0FeVNliXD1JfkNAS8m9h
+         VwuwpCFyVsGFRDiHc0rEMg7lQ938xOmLImR3R5RdHt5c8+1FpZ9Bn9id4rqiDxvuMse3
+         7K6u78+zVfPRR+/MA7WoCzFpZ24D8pN1LPu8CshTEs7TYsbHFAV15E+l6SoX68zAMOcG
+         kHKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p7fhDS5lYFCTZC+D85sVdozKwDtg+g9RjPaejvj9554=;
-        b=NYtoSw2EOubBpRFeGCXvn/tI6XPTRDmi7Sc9/fH2Pj3xaqu4ucpPNqcxRAayS9JcVq
-         ZM2leFqkxUqnP/cHEsUdmdWo+Ngy2heebTxQ2Oq7+4De5cRK2AJGOHFsc7qOob7nGie7
-         1lcW9huGbImCT/G/h2OtMX4e9etkBBf8lAV61dN3Tx0lbZZS4FUygI5ER8XdeG8dT3KS
-         Oiz8/BJNa/ZfUmcPOduItF6kcN6hChVwN9wU8ytPNi5lEZOG8tnJXeyIOUkuP+nZSXrT
-         WQckDF21soBY7dqn7DdlwwH52KcKXj3f1tskfhL2UkXELDgXKlyePDAr/20WZ1/cF30s
-         gMtA==
-X-Gm-Message-State: AOAM5336eHfPxjyg5P4FM+BXPcOvj3vdnb6P1SRFRfgM4tl0IPeR/lfK
-        0hfQIBUpocyYsSnKOE3UrM7/6A==
-X-Google-Smtp-Source: ABdhPJymlZyWv19HlXRmNhb0DuWfd4UTVZi8t9hyR5Fg/bFTNpoepuiPPT4hR9BqH07InBiRmc61Bg==
-X-Received: by 2002:a17:902:a613:b0:151:7d6d:aa69 with SMTP id u19-20020a170902a61300b001517d6daa69mr16183298plq.89.1646333279704;
-        Thu, 03 Mar 2022 10:47:59 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b004f3f2929d7asm3095289pfc.217.2022.03.03.10.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:47:59 -0800 (PST)
-Date:   Thu, 3 Mar 2022 18:47:55 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 12/28] KVM: x86/mmu: Refactor low-level TDP MMU set
- SPTE helper to take raw vals
-Message-ID: <YiENWyDecwhlwJRi@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-13-seanjc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OmjzlX5jm7yAuQTwyoKeVgQEjRjg2Q+W3Y3CU0H5AZg=;
+        b=59e9jvXjXu1PC/XoZEktMWDAXSGxHV/JvYzPaeHlcoYifzsHsL0TRl/RrOye4YBt6c
+         BuKenb0OuExYpVFXb4p+JC2y2m9jIPNK03k/NNPmOx/MwILKYZsWtepUgVr31C5EEvqQ
+         A850idoB0o0Apt+3KZpafj/y8Tt0c0K5j8wJeigLavARXUAXXrIn9O00vwTdeTOtg8tf
+         WfkYjQV+eS2g8CFVhqBu1J2oof1HP0rPfx/14MaN9Q40+6mll8rMVaP4P44SVYEMOFrU
+         T6bED8Ps5rmbJCOWg0o6bLuo0KRopfDe9334lXenbjmPKgNlYAKnJZFiAvDPEpbVUMaV
+         FmFw==
+X-Gm-Message-State: AOAM532Ua1qtZTpUUMcjed/Y7MF/Fks8WpDwKAJF/pSFjEZXVWl2omyN
+        eO946JMDondL2AuNVuiK/1WemAAGovfTKzLaVd+dLQ==
+X-Google-Smtp-Source: ABdhPJxv5RvZfHXJjc4SavJZrs+AssKFtwAuXCIHtahDXfbZsSc+T7czxtBY5EfU8AzIXNt6KfhXIeFJmnwH0o1purk=
+X-Received: by 2002:ae9:c10c:0:b0:663:2047:2eed with SMTP id
+ z12-20020ae9c10c000000b0066320472eedmr362812qki.221.1646333460306; Thu, 03
+ Mar 2022 10:51:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-13-seanjc@google.com>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <20220227051821.fwrmeu7r6bab6tio@apollo.legion> <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
+ <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 3 Mar 2022 10:50:48 -0800
+Message-ID: <CA+khW7goNwmt2xJb8SMaagXcsZdquQha8kax-LF033wFexKCcA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -82,120 +79,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> Refactor __tdp_mmu_set_spte() to work with raw values instead of a
-> tdp_iter objects so that a future patch can modify SPTEs without doing a
-> walk, and without having to synthesize a tdp_iter.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Ben Gardon <bgardon@google.com>
+On Wed, Mar 2, 2022 at 11:34 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Feb 28, 2022 at 02:10:39PM -0800, Hao Luo wrote:
+> > Hi Kumar,
+> >
+> > On Sat, Feb 26, 2022 at 9:18 PM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > > On Sat, Feb 26, 2022 at 05:13:31AM IST, Hao Luo wrote:
+> > > > This patch allows bpf_syscall prog to perform some basic filesystem
+> > > > operations: create, remove directories and unlink files. Three bpf
+> > > > helpers are added for this purpose. When combined with the following
+> > > > patches that allow pinning and getting bpf objects from bpf prog,
+> > > > this feature can be used to create directory hierarchy in bpffs that
+> > > > help manage bpf objects purely using bpf progs.
+> > > >
+> > > > The added helpers subject to the same permission checks as their syscall
+> > > > version. For example, one can not write to a read-only file system;
+> > > > The identity of the current process is checked to see whether it has
+> > > > sufficient permission to perform the operations.
+> > > >
+> > > > Only directories and files in bpffs can be created or removed by these
+> > > > helpers. But it won't be too hard to allow these helpers to operate
+> > > > on files in other filesystems, if we want.
+> > > >
+> > > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > > ---
+> > > > + *
+> > > > + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
+> > > > + *   Description
+> > > > + *           Attempts to create a directory name *pathname*. The argument
+> > > > + *           *pathname_sz* specifies the length of the string *pathname*.
+> > > > + *           The argument *mode* specifies the mode for the new directory. It
+> > > > + *           is modified by the process's umask. It has the same semantic as
+> > > > + *           the syscall mkdir(2).
+> > > > + *   Return
+> > > > + *           0 on success, or a negative error in case of failure.
+> > > > + *
+> > > > + * long bpf_rmdir(const char *pathname, int pathname_sz)
+> > > > + *   Description
+> > > > + *           Deletes a directory, which must be empty.
+> > > > + *   Return
+> > > > + *           0 on sucess, or a negative error in case of failure.
+> > > > + *
+> > > > + * long bpf_unlink(const char *pathname, int pathname_sz)
+> > > > + *   Description
+> > > > + *           Deletes a name and possibly the file it refers to. It has the
+> > > > + *           same semantic as the syscall unlink(2).
+> > > > + *   Return
+> > > > + *           0 on success, or a negative error in case of failure.
+> > > >   */
+> > > >
+> > >
+> > > How about only introducing bpf_sys_mkdirat and bpf_sys_unlinkat? That would be
+> > > more useful for other cases in future, and when AT_FDCWD is passed, has the same
+> > > functionality as these, but when openat/fget is supported, it would work
+> > > relative to other dirfds as well. It can also allow using dirfd of the process
+> > > calling read for a iterator (e.g. if it sets the fd number using skel->bss).
+> > > unlinkat's AT_REMOVEDIR flag also removes the need for a bpf_rmdir.
+> > >
+> > > WDYT?
+> > >
+> >
+> > The idea sounds good to me, more flexible. But I don't have a real use
+> > case for using the added 'dirfd' at this moment. For all the use cases
+> > I can think of, absolute paths will suffice, I think. Unless other
+> > reviewers have opposition, I will try switching to mkdirat and
+> > unlinkat in v2.
+>
+> I'm surprised you don't need "at" variants.
+> I thought your production setup has a top level cgroup controller and
+> then inner tasks inside containers manage cgroups on their own.
+> Since containers are involved they likely run inside their own mountns.
+> cgroupfs mount is single. So you probably don't even need to bind mount it
+> inside containers, but bpffs is not a single mount. You need
+> to bind mount top bpffs inside containers for tasks to access it.
+> Now for cgroupfs the abs path is not an issue, but for bpffs
+> the AT_FDCWD becomes a problem. AT_FDCWD is using current mount ns.
+> Inside container that will be different. Unless you bind mount into exact
+> same path the full path has different meanings inside and outside of the container.
+> It seems to me the bpf progs attached to cgroup sleepable events should
+> be using FD of bpffs. Then when these tracepoints are triggered from
+> different containers in different mountns they will get the right dir prefix.
+> What am I missing?
+>
 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
+Alexei, you are perfectly right. To be honest, I failed to see the
+fact that the sleepable tp prog is in the container's mount ns. I
+think we can bind mount the top bpffs into exactly the same path
+inside container, right? But I haven't tested this idea. Passing FDs
+should be better.
 
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 51 +++++++++++++++++++++++---------------
->  1 file changed, 31 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 1dcdf1a4fcc1..9e8ba6f12ebf 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -617,9 +617,13 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
->  
->  /*
->   * __tdp_mmu_set_spte - Set a TDP MMU SPTE and handle the associated bookkeeping
-> - * @kvm: kvm instance
-> - * @iter: a tdp_iter instance currently on the SPTE that should be set
-> - * @new_spte: The value the SPTE should be set to
-> + * @kvm:	      KVM instance
-> + * @as_id:	      Address space ID, i.e. regular vs. SMM
-> + * @sptep:	      Pointer to the SPTE
-> + * @old_spte:	      The current value of the SPTE
-> + * @new_spte:	      The new value that will be set for the SPTE
-> + * @gfn:	      The base GFN that was (or will be) mapped by the SPTE
-> + * @level:	      The level _containing_ the SPTE (its parent PT's level)
->   * @record_acc_track: Notify the MM subsystem of changes to the accessed state
->   *		      of the page. Should be set unless handling an MMU
->   *		      notifier for access tracking. Leaving record_acc_track
-> @@ -631,12 +635,10 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
->   *		      Leaving record_dirty_log unset in that case prevents page
->   *		      writes from being double counted.
->   */
-> -static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
-> -				      u64 new_spte, bool record_acc_track,
-> -				      bool record_dirty_log)
-> +static void __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
-> +			       u64 old_spte, u64 new_spte, gfn_t gfn, int level,
-> +			       bool record_acc_track, bool record_dirty_log)
->  {
-> -	WARN_ON_ONCE(iter->yielded);
-> -
->  	lockdep_assert_held_write(&kvm->mmu_lock);
->  
->  	/*
-> @@ -646,39 +648,48 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
->  	 * should be used. If operating under the MMU lock in write mode, the
->  	 * use of the removed SPTE should not be necessary.
->  	 */
-> -	WARN_ON(is_removed_spte(iter->old_spte) || is_removed_spte(new_spte));
-> +	WARN_ON(is_removed_spte(old_spte) || is_removed_spte(new_spte));
->  
-> -	kvm_tdp_mmu_write_spte(iter->sptep, new_spte);
-> +	kvm_tdp_mmu_write_spte(sptep, new_spte);
-> +
-> +	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
->  
-> -	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-> -			      new_spte, iter->level, false);
->  	if (record_acc_track)
-> -		handle_changed_spte_acc_track(iter->old_spte, new_spte,
-> -					      iter->level);
-> +		handle_changed_spte_acc_track(old_spte, new_spte, level);
->  	if (record_dirty_log)
-> -		handle_changed_spte_dirty_log(kvm, iter->as_id, iter->gfn,
-> -					      iter->old_spte, new_spte,
-> -					      iter->level);
-> +		handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
-> +					      new_spte, level);
-> +}
-> +
-> +static inline void _tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
-> +				     u64 new_spte, bool record_acc_track,
-> +				     bool record_dirty_log)
-> +{
-> +	WARN_ON_ONCE(iter->yielded);
-> +
-> +	__tdp_mmu_set_spte(kvm, iter->as_id, iter->sptep, iter->old_spte,
-> +			   new_spte, iter->gfn, iter->level,
-> +			   record_acc_track, record_dirty_log);
->  }
->  
->  static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
->  				    u64 new_spte)
->  {
-> -	__tdp_mmu_set_spte(kvm, iter, new_spte, true, true);
-> +	_tdp_mmu_set_spte(kvm, iter, new_spte, true, true);
->  }
->  
->  static inline void tdp_mmu_set_spte_no_acc_track(struct kvm *kvm,
->  						 struct tdp_iter *iter,
->  						 u64 new_spte)
->  {
-> -	__tdp_mmu_set_spte(kvm, iter, new_spte, false, true);
-> +	_tdp_mmu_set_spte(kvm, iter, new_spte, false, true);
->  }
->  
->  static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
->  						 struct tdp_iter *iter,
->  						 u64 new_spte)
->  {
-> -	__tdp_mmu_set_spte(kvm, iter, new_spte, true, false);
-> +	_tdp_mmu_set_spte(kvm, iter, new_spte, true, false);
->  }
->  
->  #define tdp_root_for_each_pte(_iter, _root, _start, _end) \
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+> I think non-AT variants are not needed. The prog can always pass AT_FDCWD
+> if it's really the intent, but passing actual FD seems more error-proof.
+
+Let's have the AT version. Passing FD seems the right approach, when
+we use it in the context of container.

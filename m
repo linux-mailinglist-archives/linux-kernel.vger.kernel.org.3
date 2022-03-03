@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3F84CB369
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9317C4CB334
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiCCAIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
+        id S230103AbiCCAL2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 19:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiCCAHs (ORCPT
+        with ESMTP id S230081AbiCCALY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:07:48 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0878CB0EA2;
-        Wed,  2 Mar 2022 16:07:03 -0800 (PST)
-Received: from [192.168.43.69] (unknown [182.2.41.243])
-        by gnuweeb.org (Postfix) with ESMTPSA id E76197E29A;
-        Thu,  3 Mar 2022 00:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646266023;
-        bh=FXJ5RIO8Oqa50icw+tN38pTqQ1lL1MDXri2vESEbOg0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Qs9kOFlmA24f/j91hiJ5vZ3XiNoZkicH8EA217zJ1ThsXNvKfiiqjO7jYUumaa7bZ
-         8/H1DD9nGRCQUQtxXuWMDRO8pyV6jPga/5rXM6xOWVIfSdwY6xfzf3BPsDmR8bhJqj
-         r1vIt6IKpd4bg6BbOZmYLO+J2y+J+SPtJ6f6tA4CneYu8CmiviamL/qocX7V4NgVmK
-         T6HlKHPP7BApNnUeNaZJcy7aorzSN5XKQgcE1m3nGdxj1jgUJc3Pcc62v3lVZUFaPO
-         ulS5kViDcEBZDYlGNUCLG2i0PIWua8fPKz8gZ+m4wS15XdA6sysccIAUZHPAuVIvSV
-         Mf7KExPwK02Ew==
-Message-ID: <4f7d2b07-c5e5-33dc-f6a7-c62b1c5329b9@gnuweeb.org>
-Date:   Thu, 3 Mar 2022 07:06:52 +0700
+        Wed, 2 Mar 2022 19:11:24 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D0CC10A7D4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:10:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-9-TaJDYF8zPkim1JgaaMOOTA-1; Thu, 03 Mar 2022 00:10:37 +0000
+X-MC-Unique: TaJDYF8zPkim1JgaaMOOTA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 3 Mar 2022 00:10:36 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 3 Mar 2022 00:10:36 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Krzysztof Kozlowski' <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-nfc@lists.01.org" <linux-nfc@lists.01.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RESEND PATCH v2 4/6] nfc: llcp: use test_bit()
+Thread-Topic: [RESEND PATCH v2 4/6] nfc: llcp: use test_bit()
+Thread-Index: AQHYLmtWg0E/2bVm5kqjDz1/h/f2VKysyObA
+Date:   Thu, 3 Mar 2022 00:10:36 +0000
+Message-ID: <7fc4cb250bb8406cadf80649e366b249@AcuMS.aculab.com>
+References: <20220302192523.57444-1-krzysztof.kozlowski@canonical.com>
+ <20220302192523.57444-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220302192523.57444-5-krzysztof.kozlowski@canonical.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        x86@kernel.org, stable@vger.kernel.org,
-        Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Laight <David.Laight@ACULAB.COM>
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
- <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/22 6:33 PM, Alviro Iskandar Setiawan wrote:
-> hi sir, it might also be interesting to know that even if it never be
-> inlined, it's still potential to break.
+From: Krzysztof Kozlowski
+> Sent: 02 March 2022 19:25
 > 
-> for example this code (https://godbolt.org/z/xWMTxhTET)
-> 
->    __attribute__((__noinline__)) static void x(int a)
->    {
->        asm("xorl\t%%r8d, %%r8d"::"a"(a));
->    }
-> 
->    extern int p(void);
-> 
->    int f(void)
->    {
->        int ret = p();
->        x(ret);
->        return ret;
->    }
-> 
-> translates to this asm
-> 
->    x:
->            movl    %edi, %eax
->            xorl    %r8d, %r8d
->            ret
->    f:
->            subq    $8, %rsp
->            call    p
->            movl    %eax, %r8d
->            movl    %eax, %edi
->            call    x
->            movl    %r8d, %eax
->            addq    $8, %rsp
->            ret
-> 
-> See the %r8d? It should be clobbered by a function call too. But since
-> no one tells the compiler that we clobber %r8d, it assumes %r8d never
-> changes after that call. The compiler thinks x() is static and will
-> not clobber %r8d, even the ABI says %r8d will be clobbered by a
-> function call. So i think it should be backported to the stable
-> kernel, it's still a fix
+> Use test_bit() instead of open-coding it, just like in other places
+> touching the bitmap.
 
-Thanks. I will add CC stable in the v5.
+Except it isn't a bitmap, it is just a structure member that contains bits.
+So all the other places should be changes to use C shifts and masks (etc).
 
--- 
-Ammar Faizi
+	David
+
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  net/nfc/llcp_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/nfc/llcp_core.c b/net/nfc/llcp_core.c
+> index 5ad5157aa9c5..b70d5042bf74 100644
+> --- a/net/nfc/llcp_core.c
+> +++ b/net/nfc/llcp_core.c
+> @@ -383,7 +383,7 @@ u8 nfc_llcp_get_sdp_ssap(struct nfc_llcp_local *local,
+>  			pr_debug("WKS %d\n", ssap);
+> 
+>  			/* This is a WKS, let's check if it's free */
+> -			if (local->local_wks & BIT(ssap)) {
+> +			if (test_bit(ssap, &local->local_wks)) {
+>  				mutex_unlock(&local->sdp_lock);
+> 
+>  				return LLCP_SAP_MAX;
+> --
+> 2.32.0
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

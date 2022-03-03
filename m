@@ -2,186 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFCE4CBAAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9354CBAB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiCCJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
+        id S229833AbiCCJw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiCCJu2 (ORCPT
+        with ESMTP id S230262AbiCCJwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:50:28 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8691154720;
-        Thu,  3 Mar 2022 01:49:43 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id u3so9053578ybh.5;
-        Thu, 03 Mar 2022 01:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fHLfYquwZiNVbsELh+EpgmoGDweD9121DgLApka/QvA=;
-        b=CdVhSGZ57z8OqjTnZw+rvpuGupHXfRGgEfCpwr+lYtmnr3TATynK9+CMwj/OeC+QMm
-         KhsO7i/LAfKFYFaEt1bdTwTZqllc5bneHrtv1Ju5H40ysXE3UgH8TwR6hL3ebyAkQd2d
-         oVv+wqr+vNgFnATv75NEI17Wl74XEWKl0sD/wtEY/SEyUNXJNeBxKHY+PydYSgdPnDNP
-         AZO6P7sRLQGI+ftGwY+wFTw16OGoR58bRArhsNw0i15V4pF9GotphROcPVC/GkWT4gnC
-         ET7sZRwFjYE1+a9Bg9P0yXc1SRXWy218czvUqapXjd6MBBcxuHSfIWWQbG2foALeieC2
-         d8Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fHLfYquwZiNVbsELh+EpgmoGDweD9121DgLApka/QvA=;
-        b=IWRgDP7RykubpXbbmaphZE0mUANdy946T8gAJibPtnZmqbM+RJMtQFMLpn/WhJhJwV
-         z0oMdiU8ZUxtugWG2o1+61BTa6AIVjCJYuXFjyw+NF/3llDBSdL0KIo1pgbEPKPS7snH
-         g6AinynKbfsU2zWsc/oBSbPrsWETTePfz7KYIaVEgdoc+RT6Q326K9riPS/4K/DiCsqe
-         STLmN2vPL4inf7me9AWQcrc6OiajEkHYx/8X9hIaZccaqmBtd9ZUAwW+86VwvpfFr0M8
-         hHywz6Zph37E573EOAcBiDJUf2INZahPb2Qtk7StWSFu/H+G+EiOcJtAVW7Nq6gaZ8/v
-         0XEA==
-X-Gm-Message-State: AOAM533PABq5C0/eUPmi/hwSXJZelgltztA1dm/bf08OTKDsxjWPA28g
-        PuOh9+RkVpeHiAUc9RLrp8xluPcpRTNHvbi8Kbm2KmF+Y4M=
-X-Google-Smtp-Source: ABdhPJza2D81tFDK8SAUMbvNiCknXBEdiKulxW8TjzuF3mLcKyLOahi/NjYHGmzw12LY7sBIdX4o6XObqVU0Oue9kNc=
-X-Received: by 2002:a25:5145:0:b0:61d:ad99:6e5a with SMTP id
- f66-20020a255145000000b0061dad996e5amr32495636ybb.228.1646300982969; Thu, 03
- Mar 2022 01:49:42 -0800 (PST)
+        Thu, 3 Mar 2022 04:52:54 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E15179248
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1646301128; x=1677837128;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q8qxz42HaO+JR55NT5n/z+nUeTPKq/2B9ARU+jmiFTI=;
+  b=qY/FcimnuWBOb+s0wGwglAdoJg7R2sO05mdBB6qDTz15bcTBdhMOyD8r
+   aiNrpYh8QgHPfgLArlffCNh0hlB1E6LGVIE3o+v55V+nGRwvz6EEb9mRI
+   xEmCqZJdyrbKiUSD4tRRhr7v4vcPBeINIx5LcI1Nlxo+j8e2gV56g+3QS
+   kl2sopyKru9/OKLdDMu61iIAdfzLkHy5o7ipV+MUySET+WG3kTJcohheU
+   Pxa7dCwM+2xvwYTZ9pedw5Z3fcMHz2Os90DY5WctfYJroT2hEb/Rbyqor
+   3MXfbwJUXA+xhqJ6O8GuyYqvo8jNAxnLZjm2A9vZs6eInirKNgR06QVlk
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,151,1643644800"; 
+   d="scan'208";a="199215164"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2022 17:52:07 +0800
+IronPort-SDR: Y0C+5tsbV4LJZj6jlURG66g6iGtElKH4iHmnonMIttJvfE8jdkitMNZGemJs2dqyS01/JX4WHf
+ pCSIgoNV7nugFK4/kUjtLYhULi0PXXVGHyxXS3vhh58Rta9J6TbIkzrnuTsDcSYYrmAWGPCvmX
+ w73UEeHGu4J0AyWcdyY6EZrGCz8nHk+PYcQhiMCRpULKhG+T2NEF5L5K8NbjG3bPJUbT4FV4ud
+ HWd2bRVO+tDYcmAnk1+8OdQ+kUBnPA+JtJrJXqURIRS8+gjKGcupKO7paRpLalOihr01HJ2woO
+ uwjr9OUJHA8DjraUafwPHzn8
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 01:23:30 -0800
+IronPort-SDR: 0UeLeTFhBEP6nN1IiGQotSuBfOQYRBGm/4swLDgWFK5M4bzHXSDtGXmPvKja9XNKpctniGN/mz
+ xDxSohRHSnWm9jGKK51Oj+okLnVSsGDdAwWJeJRvXZhRBY3bjrqfcb0Y/SAJUmh2w1GJj3XEIn
+ 7NldDNZ7tNaAbeuydKF58DGcqgpi5oI9Zw0BgVK3n0aIdHUX4iWXAaiSazBTwTMraJTAdZDD+3
+ NUdC8znohdnizL1AiD6rZKip99PkISOeCu0jBGdZGUNEf/gcTI8yXKr07X3vRib6jV/YRRxTnV
+ P9s=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 01:52:08 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K8R932JBLz1SVny
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:52:07 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1646301126; x=1648893127; bh=q8qxz42HaO+JR55NT5n/z+nUeTPKq/2B9AR
+        U+jmiFTI=; b=V95OPQWNQJcum+7QVTyr3LqR0oYpKPCX0pH0GMuL9NEH5Y37bTf
+        yQ4BPBql5jyCK8tNMqh8nWSM0J9qDzhs9cCZu65O0N3R5biJIA7eq2x2skRlHMFx
+        6xXI4Lnc5IHpdfvw5Tc+ddFTrOE7DVmG2iArozgwq/dSCMaXWF4F+jUFKcFeruZa
+        MRkFiDujZkLJ0cDnB9BnUtFBM1bvQbLy2eXQ597ktlmXPEWEzf3zxSbhjQx9S4E+
+        M/wbvMKdpaMW5vUR0m2kx339uA3Dzd1DtM2MowSt48aHxZbyPNHA0wzppNJkiOe/
+        uYITJcr7NNTqArVrSTscAW4FF21QFGVDVSA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id csbWqRvD9k2O for <linux-kernel@vger.kernel.org>;
+        Thu,  3 Mar 2022 01:52:06 -0800 (PST)
+Received: from [10.225.33.67] (unknown [10.225.33.67])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K8R914Prlz1Rvlx;
+        Thu,  3 Mar 2022 01:52:05 -0800 (PST)
+Message-ID: <3a8c29c7-515f-6e0e-323c-b2b00a9f9d8c@opensource.wdc.com>
+Date:   Thu, 3 Mar 2022 11:52:02 +0200
 MIME-Version: 1.0
-References: <20220303015151.1711860-1-pgwipeout@gmail.com> <CAPDyKFrk+HCbSZtB7uv6u9tjTgzFDjpB9oP9FYJUqNxcCzQ9iw@mail.gmail.com>
-In-Reply-To: <CAPDyKFrk+HCbSZtB7uv6u9tjTgzFDjpB9oP9FYJUqNxcCzQ9iw@mail.gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 3 Mar 2022 04:49:30 -0500
-Message-ID: <CAMdYzYrndAwWJELRRL4kP-BCdWuF6bLVwS2PUMVx_UcJZE=nsQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Addy Ke <addy.ke@rock-chips.com>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-mmc@vger.kernel.org,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v2 2/2] ata: ahci: Protect users from setting policies
+ their drives don't support
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, hdegoede@redhat.com
+References: <20220303034912.3615390-1-mario.limonciello@amd.com>
+ <20220303034912.3615390-2-mario.limonciello@amd.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220303034912.3615390-2-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 2:53 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Thu, 3 Mar 2022 at 02:52, Peter Geis <pgwipeout@gmail.com> wrote:
-> >
-> > The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
-> > supports. This leads to a situation during card initialization where the
-> > ciu clock is set lower than the clock driver can support. The
-> > dw-mmc-rockchip driver spews errors when this happens.
-> > For normal operation this only happens a few times during boot, but when
-> > cd-broken is enabled (in cases such as the SoQuartz module) this fires
-> > multiple times each poll cycle.
-> >
-> > Fix this by testing the minimum frequency the clock driver can support
-> > that is within the mmc specification, then divide that by the internal
-> > clock divider. Set the f_min frequency to this value, or if it fails,
-> > set f_min to the downstream driver's default.
-> >
-> > Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  drivers/mmc/host/dw_mmc-rockchip.c | 31 ++++++++++++++++++++++++++----
-> >  1 file changed, 27 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> > index 95d0ec0f5f3a..c198590cd74a 100644
-> > --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> > +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> > @@ -15,7 +15,9 @@
-> >  #include "dw_mmc.h"
-> >  #include "dw_mmc-pltfm.h"
-> >
-> > -#define RK3288_CLKGEN_DIV       2
-> > +#define RK3288_CLKGEN_DIV      2
-> > +#define RK3288_MIN_INIT_FREQ   375000
-> > +#define MMC_MAX_INIT_FREQ      400000
-> >
-> >  struct dw_mci_rockchip_priv_data {
-> >         struct clk              *drv_clk;
-> > @@ -27,6 +29,7 @@ struct dw_mci_rockchip_priv_data {
-> >  static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> >  {
-> >         struct dw_mci_rockchip_priv_data *priv = host->priv;
-> > +       struct mmc_host *mmc = mmc_from_priv(host);
-> >         int ret;
-> >         unsigned int cclkin;
-> >         u32 bus_hz;
-> > @@ -34,6 +37,10 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> >         if (ios->clock == 0)
-> >                 return;
-> >
-> > +       /* the clock will fail if below the f_min rate */
-> > +       if (ios->clock < mmc->f_min)
-> > +               ios->clock = mmc->f_min;
-> > +
->
-> You shouldn't need this. The mmc core should manage this already.
+On 2022/03/03 5:49, Mario Limonciello wrote:
+> As the default low power policy applies to more chipsets and drives, it's
+> important to make sure that drives actually support the policy that a user
+> selected in their kernel configuration.
+> 
+> If the drive doesn't support slumber, don't let the default policies
+> dependent upon slumber (`min_power` or `min_power_with_partial`) affect the
+> disk.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> Changes from v1->v2:
+> * Move deeper into codepaths
+> * Reset to MED_POWER rather than ignore
+>  drivers/ata/libata-sata.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+> index 071158c0c44c..0dc03888c62b 100644
+> --- a/drivers/ata/libata-sata.c
+> +++ b/drivers/ata/libata-sata.c
+> @@ -13,6 +13,7 @@
+>  #include <scsi/scsi_device.h>
+>  #include <linux/libata.h>
+>  
+> +#include "ahci.h"
+>  #include "libata.h"
+>  #include "libata-transport.h"
+>  
+> @@ -368,10 +369,20 @@ int sata_link_scr_lpm(struct ata_link *link, enum ata_lpm_policy policy,
+>  		      bool spm_wakeup)
+>  {
+>  	struct ata_eh_context *ehc = &link->eh_context;
+> +	struct ata_port *ap = link->ap;
+> +	struct ahci_host_priv *hpriv;
+>  	bool woken_up = false;
+>  	u32 scontrol;
+>  	int rc;
+>  
+> +	hpriv = ap->host->private_data;
+> +	if (policy >= ATA_LPM_MIN_POWER_WITH_PARTIAL &&
+> +	  !(hpriv->cap & HOST_CAP_SSC)) {
 
-I thought so too, but while setting f_min did reduce the number of
-errors, it didn't stop them completely.
-Each tick I was getting three failures, it turns out mmc core tries
-anyways with 300000, 200000, and 100000.
-Clamping it here was necessary to stop these.
+Weird indentation.
 
->
-> >         /*
-> >          * cclkin: source clock of mmc controller
-> >          * bus_hz: card interface clock generated by CLKGEN
-> > @@ -51,7 +58,7 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> >
-> >         ret = clk_set_rate(host->ciu_clk, cclkin);
-> >         if (ret)
-> > -               dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
-> > +               dev_warn(host->dev, "failed to set rate %uHz err: %d\n", cclkin, ret);
-> >
-> >         bus_hz = clk_get_rate(host->ciu_clk) / RK3288_CLKGEN_DIV;
-> >         if (bus_hz != host->bus_hz) {
-> > @@ -290,13 +297,29 @@ static int dw_mci_rk3288_parse_dt(struct dw_mci *host)
-> >
-> >  static int dw_mci_rockchip_init(struct dw_mci *host)
-> >  {
-> > +       struct mmc_host *mmc = mmc_from_priv(host);
-> > +       int ret;
-> > +
-> >         /* It is slot 8 on Rockchip SoCs */
-> >         host->sdio_id0 = 8;
-> >
-> > -       if (of_device_is_compatible(host->dev->of_node,
-> > -                                   "rockchip,rk3288-dw-mshc"))
-> > +       if (of_device_is_compatible(host->dev->of_node, "rockchip,rk3288-dw-mshc")) {
-> >                 host->bus_hz /= RK3288_CLKGEN_DIV;
-> >
-> > +               /* clock driver will fail if the clock is less than the lowest source clock
-> > +                * divided by the internal clock divider. Test for the lowest available
-> > +                * clock and set the f_min freq to clock / clock divider. If we fail, set
-> > +                * it to the downstream hardcoded value.
-> > +                */
-> > +               ret = clk_round_rate(host->ciu_clk, MMC_MAX_INIT_FREQ * RK3288_CLKGEN_DIV);
-> > +               if (ret < 0) {
-> > +                       dev_warn(host->dev, "mmc safe rate failed: %d\n", ret);
-> > +                       mmc->f_min = RK3288_MIN_INIT_FREQ;
-> > +               } else {
-> > +                       mmc->f_min = ret / RK3288_CLKGEN_DIV;
-> > +               }
-> > +       }
-> > +
-> >         return 0;
-> >  }
-> >
->
-> Kind regards
-> Uffe
+> +		dev_warn(ap->host->dev,
+> +			"This drive doesn't support slumber; restting policy to MED_POWER\n");
+
+Typo. I would change this to:
+
+"This device does not support slumber; defaulting to MED_POWER policy\n"
+
+> +		policy = ATA_LPM_MED_POWER;
+> +	}
+> +
+>  	rc = sata_scr_read(link, SCR_CONTROL, &scontrol);
+>  	if (rc)
+>  		return rc;
+
+
+-- 
+Damien Le Moal
+Western Digital Research

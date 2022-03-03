@@ -2,286 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8C14CC7F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BF24CC7FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbiCCVZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S236524AbiCCVZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:25:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbiCCVZ0 (ORCPT
+        with ESMTP id S236516AbiCCVZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:25:26 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52F513D935
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:24:38 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 132so5790893pga.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ApQsY+bKh7gUIdhT04C/yae2KKiQpy59QhL4H8uXsYY=;
-        b=rTAjOhtEsjC6N0P3P2MGTu/F2I+JFWr0GgNapdgeGWLcD1zWJNBacQ9X7Fm0wbtcQ3
-         RZJTubSLqhZ5ZsCUvYOH4d5Uufqw9SnjiA/th3OgPbloBouu3+G4LuABXOo8t+kseUYs
-         ELXvF0SQI4OqAzd7+nolfzlEK7rWdUhDcyCQeAQwIR/hlns0QnHJKOieSSE8aK7HCBo4
-         aI3Y2IlE/yxhTSY8HfSd1d0jby3ZatDsjBqBVI1gHVFRSuZ2GQngoL83UQQueOVCaLT+
-         mgaiQwAEZKxHHAdLYUnbhuwrdsFbKapj0VX8Dr2o4vx1ka0brRiplnWeRTSnYBURPd57
-         NxSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ApQsY+bKh7gUIdhT04C/yae2KKiQpy59QhL4H8uXsYY=;
-        b=nCvC5diFNybe922EOJxEnBIXAagTRWk8BqK8LxR7pEubScRU0/O6BAdZ7WJpjjExpY
-         hxtIMuMR8XEctMw9qcneblK+Cl0I0AYZg8FLWGuMoBh8hgcDiu/Wgq0dYo0FsMueKGvX
-         KM/kPgiNxKApCAnwT3C9wArt/xJwl8KZyZhe3oZNJdfXIa+sfYNbLjvVtiMgMK1P2Fyg
-         7QZM9YHMw+JoXmlbVeHpjjQxhcy6ps+7l5CRTxMlEEKTgUzRm/JDtQ70YgafkDyejD5l
-         pZPDS4vgYA5VGJyrVAfwU3rlGBhyhPxAqDC0Vj5RUxfTExmO1buIN8zOh/Urd/xKsol4
-         ZWFA==
-X-Gm-Message-State: AOAM530Jd4JLQ3bgNcKajC09C3eb+Ca2BX+rFSfCjd9VzehCzYNqiA7H
-        svW1SdnA7caE2Ot52xXo10mXSg==
-X-Google-Smtp-Source: ABdhPJxncN3pzmGKgtKKWTYyIIQUSmVmtb3GUMdjLVdAhF5VAeLeBdqDTpRgfDvYCJmeFsYDvQNgXQ==
-X-Received: by 2002:a05:6a00:114e:b0:4c8:55f7:faad with SMTP id b14-20020a056a00114e00b004c855f7faadmr39865435pfm.86.1646342677883;
-        Thu, 03 Mar 2022 13:24:37 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a7f9100b001b9e4d62ed0sm9013209pjl.13.2022.03.03.13.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 13:24:37 -0800 (PST)
-Date:   Thu, 3 Mar 2022 21:24:33 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 15/28] KVM: x86/mmu: Add dedicated helper to zap TDP
- MMU root shadow page
-Message-ID: <YiEyEWDkNxNIAn/z@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-16-seanjc@google.com>
- <YiEw7z9TCQJl+udS@google.com>
+        Thu, 3 Mar 2022 16:25:37 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A18713DE03;
+        Thu,  3 Mar 2022 13:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646342691; x=1677878691;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cePptrGSsl2dfgN2SgrOoddSMEntTjj47nFxKZ1BSv8=;
+  b=TmzAhPPwm2oHd4RPA8TMIT91CeANV4gC0T8QIewXeMczVCqEkueO4lRo
+   khtxAIFHbOG/6ZB4iRiWAx2ZPNgWE4QdHqDaUT7k5UWEFoqg0FhJ0TcwE
+   nfjyoMrdIdEyZ/ZPVIBR3U8womyBU6xE8mRT8I3nlfIAxUMGHJAjIoYUO
+   nWCd7NA9HcKrQgQsnAywr/vYPi0T4V/ikoNkn4aQ/nRBBWGU9RqZAIhz8
+   E0ZHPY8xljFGs/F1PH2CkWlEy3c1AXkiSMH8nHPcP6d5CKxtB2JbrtXkj
+   08Xd73wRq6pp7rg0iCqB49psJCBa39ltNSA/d6xlAXSF8EDwHmPlYGRDy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="253747927"
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="253747927"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 13:24:51 -0800
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="536016037"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 13:24:48 -0800
+Date:   Thu, 3 Mar 2022 21:24:42 +0000
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kyle Sanderson <kyle.leet@gmail.com>,
+        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        device-mapper development <dm-devel@redhat.com>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+Message-ID: <YiEyGoHacN80FcOL@silpixa00400314>
+References: <CAHk-=wi+xewHz=BH7LcZAxrj9JXi66s9rp+kBqRchVG3a-b2BA@mail.gmail.com>
+ <Yh2c4Vwu61s51d6N@gondor.apana.org.au>
+ <Yh9G7FyCLtsm2mFA@kroah.com>
+ <Yh9ZvLHuztwQCu0d@silpixa00400314>
+ <Yh+FpKuoyj3G16lK@kroah.com>
+ <Yh/vY4t3xnuoCW3Q@gondor.apana.org.au>
+ <Yh/yr6oB5yeOUErL@silpixa00400314>
+ <Yh/znCnZzWaL49+o@gondor.apana.org.au>
+ <YiDHT31ujlGdQEe/@silpixa00400314>
+ <YiEVPc2cd38AnLZB@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiEw7z9TCQJl+udS@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YiEVPc2cd38AnLZB@gmail.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Mingwei Zhang wrote:
-> On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> > Add a dedicated helper for zapping a TDP MMU root, and use it in the three
-> > flows that do "zap_all" and intentionally do not do a TLB flush if SPTEs
-> > are zapped (zapping an entire root is safe if and only if it cannot be in
-> > use by any vCPU).  Because a TLB flush is never required, unconditionally
-> > pass "false" to tdp_mmu_iter_cond_resched() when potentially yielding.
-> > 
-> > Opportunistically document why KVM must not yield when zapping roots that
-> > are being zapped by kvm_tdp_mmu_put_root(), i.e. roots whose refcount has
-> > reached zero, and further harden the flow to detect improper KVM behavior
-> > with respect to roots that are supposed to be unreachable.
-> > 
-> > In addition to hardening zapping of roots, isolating zapping of roots
-> > will allow future simplification of zap_gfn_range() by having it zap only
-> > leaf SPTEs, and by removing its tricky "zap all" heuristic.  By having
-> > all paths that truly need to free _all_ SPs flow through the dedicated
-> > root zapper, the generic zapper can be freed of those concerns.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 98 +++++++++++++++++++++++++++++++-------
-> >  1 file changed, 82 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 87706e9cc6f3..c5df9a552470 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -56,10 +56,6 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
-> >  	rcu_barrier();
-> >  }
-> >  
-> > -static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
-> > -			  gfn_t start, gfn_t end, bool can_yield, bool flush,
-> > -			  bool shared);
-> > -
-> >  static void tdp_mmu_free_sp(struct kvm_mmu_page *sp)
-> >  {
-> >  	free_page((unsigned long)sp->spt);
-> > @@ -82,6 +78,9 @@ static void tdp_mmu_free_sp_rcu_callback(struct rcu_head *head)
-> >  	tdp_mmu_free_sp(sp);
-> >  }
-> >  
-> > +static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> > +			     bool shared);
-> > +
-> >  void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> >  			  bool shared)
-> >  {
-> > @@ -104,7 +103,7 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> >  	 * intermediate paging structures, that may be zapped, as such entries
-> >  	 * are associated with the ASID on both VMX and SVM.
-> >  	 */
-> > -	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> > +	tdp_mmu_zap_root(kvm, root, shared);
-> >  
-> >  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
-> >  }
-> > @@ -751,6 +750,76 @@ static inline bool __must_check tdp_mmu_iter_cond_resched(struct kvm *kvm,
-> >  	return iter->yielded;
-> >  }
-> >  
-> > +static inline gfn_t tdp_mmu_max_gfn_host(void)
-> > +{
-> > +	/*
-> > +	 * Bound TDP MMU walks at host.MAXPHYADDR, guest accesses beyond that
-> > +	 * will hit a #PF(RSVD) and never hit an EPT Violation/Misconfig / #NPF,
-> > +	 * and so KVM will never install a SPTE for such addresses.
-> > +	 */
-> > +	return 1ULL << (shadow_phys_bits - PAGE_SHIFT);
-> > +}
-> > +
-> > +static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> > +			     bool shared)
-> > +{
-> > +	bool root_is_unreachable = !refcount_read(&root->tdp_mmu_root_count);
-> > +	struct tdp_iter iter;
-> > +
-> > +	gfn_t end = tdp_mmu_max_gfn_host();
-> > +	gfn_t start = 0;
-> > +
-> > +	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
-> > +
-> > +	rcu_read_lock();
-> > +
-> > +	/*
-> > +	 * No need to try to step down in the iterator when zapping an entire
-> > +	 * root, zapping an upper-level SPTE will recurse on its children.
-> > +	 */
-> > +	for_each_tdp_pte_min_level(iter, root, root->role.level, start, end) {
-> > +retry:
-> > +		/*
-> > +		 * Yielding isn't allowed when zapping an unreachable root as
-> > +		 * the root won't be processed by mmu_notifier callbacks.  When
-> > +		 * handling an unmap/release mmu_notifier command, KVM must
-> > +		 * drop all references to relevant pages prior to completing
-> > +		 * the callback.  Dropping mmu_lock can result in zapping SPTEs
-> > +		 * for an unreachable root after a relevant callback completes,
-> > +		 * which leads to use-after-free as zapping a SPTE triggers
-> > +		 * "writeback" of dirty/accessed bits to the SPTE's associated
-> > +		 * struct page.
-> > +		 */
-> 
-> I have a quick question here: when the roots are unreachable, we can't
-> yield, understand that after reading the comments. However, what if
-> there are too many SPTEs that need to be zapped that requires yielding.
-> In this case, I guess we will have a RCU warning, which is unavoidable,
-> right?
+On Thu, Mar 03, 2022 at 07:21:33PM +0000, Eric Biggers wrote:
+> If these algorithms have critical bugs, which it appears they do, then IMO it
+> would be better to disable them (either stop registering them, or disable the
+> whole driver) than to leave them available with low cra_priority.  Low
+> cra_priority doesn't guarantee that they aren't used.
+Thanks for your feedback Eric.
 
-I will take that back. I think the subsequent patches solve the problem
-using two passes.
+Here is a patch that disables the registration of the algorithms in the
+QAT driver by setting, a config time, the number of HW queues (aka
+instances) to zero.
 
-> > +		if (!root_is_unreachable &&
-> > +		    tdp_mmu_iter_cond_resched(kvm, &iter, false, shared))
-> > +			continue;
-> > +
-> > +		if (!is_shadow_present_pte(iter.old_spte))
-> > +			continue;
-> > +
-> > +		if (!shared) {
-> > +			tdp_mmu_set_spte(kvm, &iter, 0);
-> > +		} else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0)) {
-> > +			/*
-> > +			 * cmpxchg() shouldn't fail if the root is unreachable.
-> > +			 * Retry so as not to leak the page and its children.
-> > +			 */
-> > +			WARN_ONCE(root_is_unreachable,
-> > +				  "Contended TDP MMU SPTE in unreachable root.");
-> > +			goto retry;
-> > +		}
-> > +
-> > +		/*
-> > +		 * WARN if the root is invalid and is unreachable, all SPTEs
-> > +		 * should've been zapped by kvm_tdp_mmu_zap_invalidated_roots(),
-> > +		 * and inserting new SPTEs under an invalid root is a KVM bug.
-> > +		 */
-> > +		WARN_ON_ONCE(root_is_unreachable && root->role.invalid);
-> > +	}
-> > +
-> > +	rcu_read_unlock();
-> > +}
-> > +
-> >  bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
-> >  {
-> >  	u64 old_spte;
-> > @@ -799,8 +868,7 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
-> >  			  gfn_t start, gfn_t end, bool can_yield, bool flush,
-> >  			  bool shared)
-> >  {
-> > -	gfn_t max_gfn_host = 1ULL << (shadow_phys_bits - PAGE_SHIFT);
-> > -	bool zap_all = (start == 0 && end >= max_gfn_host);
-> > +	bool zap_all = (start == 0 && end >= tdp_mmu_max_gfn_host());
-> >  	struct tdp_iter iter;
-> >  
-> >  	/*
-> > @@ -809,12 +877,7 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
-> >  	 */
-> >  	int min_level = zap_all ? root->role.level : PG_LEVEL_4K;
-> >  
-> > -	/*
-> > -	 * Bound the walk at host.MAXPHYADDR, guest accesses beyond that will
-> > -	 * hit a #PF(RSVD) and never get to an EPT Violation/Misconfig / #NPF,
-> > -	 * and so KVM will never install a SPTE for such addresses.
-> > -	 */
-> > -	end = min(end, max_gfn_host);
-> > +	end = min(end, tdp_mmu_max_gfn_host());
-> >  
-> >  	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
-> >  
-> > @@ -874,6 +937,7 @@ bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
-> >  
-> >  void kvm_tdp_mmu_zap_all(struct kvm *kvm)
-> >  {
-> > +	struct kvm_mmu_page *root;
-> >  	int i;
-> >  
-> >  	/*
-> > @@ -881,8 +945,10 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
-> >  	 * is being destroyed or the userspace VMM has exited.  In both cases,
-> >  	 * KVM_RUN is unreachable, i.e. no vCPUs will ever service the request.
-> >  	 */
-> > -	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
-> > -		(void)kvm_tdp_mmu_zap_gfn_range(kvm, i, 0, -1ull, false);
-> > +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> > +		for_each_tdp_mmu_root_yield_safe(kvm, root, i, false)
-> > +			tdp_mmu_zap_root(kvm, root, false);
-> > +	}
-> >  }
-> >  
-> >  /*
-> > @@ -908,7 +974,7 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
-> >  		 * will still flush on yield, but that's a minor performance
-> >  		 * blip and not a functional issue.
-> >  		 */
-> > -		(void)zap_gfn_range(kvm, root, 0, -1ull, true, false, true);
-> > +		tdp_mmu_zap_root(kvm, root, true);
-> >  
-> >  		/*
-> >  		 * Put the reference acquired in kvm_tdp_mmu_invalidate_roots().
-> > -- 
-> > 2.35.1.574.g5d30c73bfb-goog
-> > 
+---8<---
+From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Subject: [PATCH] crypto: qat - disable registration of algorithms
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+
+The implementations of aead and skcipher in the QAT driver do not
+support properly requests with the CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
+If the HW queue is full, the driver returns -EBUSY but does not enqueue
+the request.
+This can result in applications like dm-crypt waiting indefinitely for a
+completion of a request that was never submitted to the hardware.
+
+To avoid this problem, disable the registration of all skcipher and aead
+implementations in the QAT driver by setting the number of crypto
+instances to 0 at configuration time.
+
+This patch deviates from the original upstream solution, that prevents
+dm-crypt to use drivers registered with the flag
+CRYPTO_ALG_ALLOCATES_MEMORY, since a backport of that set to stable
+kernels may have a too wide effect.
+
+commit 7bcb2c99f8ed032cfb3f5596b4dccac6b1f501df upstream
+commit 2eb27c11937ee9984c04b75d213a737291c5f58c upstream
+commit fbb6cda44190d72aa5199d728797aabc6d2ed816 upstream
+commit b8aa7dc5c7535f9abfca4bceb0ade9ee10cf5f54 upstream
+commit cd74693870fb748d812867ba49af733d689a3604 upstream
+
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+---
+ drivers/crypto/qat/qat_common/qat_crypto.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/qat/qat_common/qat_crypto.c b/drivers/crypto/qat/qat_common/qat_crypto.c
+index 3852d31ce0a4..611d214d5198 100644
+--- a/drivers/crypto/qat/qat_common/qat_crypto.c
++++ b/drivers/crypto/qat/qat_common/qat_crypto.c
+@@ -159,9 +159,7 @@ struct qat_crypto_instance *qat_crypto_get_instance_node(int node)
+  */
+ int qat_crypto_dev_config(struct adf_accel_dev *accel_dev)
+ {
+-	int cpus = num_online_cpus();
+-	int banks = GET_MAX_BANKS(accel_dev);
+-	int instances = min(cpus, banks);
++	int instances = 0;
+ 	char key[ADF_CFG_MAX_KEY_LEN_IN_BYTES];
+ 	int i;
+ 	unsigned long val;
+
+base-commit: 866ae42cf4788c8b18de6bda0a522362702861d7
+-- 
+2.35.1

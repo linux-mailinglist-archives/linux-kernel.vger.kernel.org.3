@@ -2,156 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320414CC47E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2D34CC486
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiCCSA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S235584AbiCCSB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiCCSA5 (ORCPT
+        with ESMTP id S235559AbiCCSBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:00:57 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20987194A8F;
-        Thu,  3 Mar 2022 10:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646330388;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=S/Ajb9G7BzvTHaV25UD/SK5bUJk7mTLUkAHqeR66ezQ=;
-    b=aEgtHOoTY5bTpPc3idG57z1HEaIhVL42kWXPjObiI7C3E4s7WfRAzDGT0kAceCRp2R
-    E4SrJJaJoLyYy+Roupvo+vCYO1nSrQRSd8nuUXsZKtI4fDc/4tjal4KWHXyzBqU+XJ7o
-    n8uQazYNwx0uKDbZY3s0R7sxQRwtL2RDDdEaxg9wCBRt22o0ck6PSD0fYtBDkt/yLneU
-    OJHbA77pN49x9E1iBbXDRIuun/SAMwsLULf14HcR4uGARBVxDBSQD9cHPsq8VLQH8k1j
-    mDDoy6KMXYeCQWXQhKfSbKfrF5AnmUe4LXkzUaCn/odMmWCBf4VQS59l00O5dNu9S2pq
-    mL+g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47tT+k="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id n729cey23Hxl1Va
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 3 Mar 2022 18:59:47 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [Letux-kernel] [PATCH v16 1/4] drm/bridge: dw-hdmi: introduce
- dw_hdmi_enable_poll()
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <RUI68R.Z009SPJAAD8N1@crapouillou.net>
-Date:   Thu, 3 Mar 2022 18:59:47 +0100
-Cc:     Paul Boddie <paul@boddie.org.uk>, Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Maxime Ripard <maxime@cerno.tech>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F0F8F36B-3A0A-476C-8C7D-566255C629C6@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <e54838849f80454b863f9f5634dd10f79ef7bb8f.1645895582.git.hns@goldelico.com>
- <983e9064-17ad-e646-f37d-ca9173ba0967@baylibre.com>
- <C8AE9A7A-E288-4637-ACAD-40CD33CD5F8C@goldelico.com>
- <3E620AF4-402E-45EA-9D92-92EAEA9647F5@goldelico.com>
- <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
- <ABC1BD09-383B-4499-B034-340CE88725B3@goldelico.com>
- <RUI68R.Z009SPJAAD8N1@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 13:01:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298341A1C55;
+        Thu,  3 Mar 2022 10:01:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D897CB81E67;
+        Thu,  3 Mar 2022 18:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B491C340F0;
+        Thu,  3 Mar 2022 18:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646330463;
+        bh=HXB8WvVn38SLYE0M/BOlh6qLUFc7dMz6hOUpC59yqeg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P6mehJQ3pPdhqJNut2i/BbTPhTEEd42xS2ahyiToif24ccOqxud1KzsfZM5jJcY0H
+         f6F+WR3xvUXLRy5B/mQI1nVDbCm7ce6dJ8yA3ddmqdu2NKE/AZHGEaOwgKwc11SbEz
+         knaBGtKUUZxZ8e2iFkO9xSwfdb0w+ONk9Wbwn4EKRZmIr3lHaQJDbEPj9zkBrXjqnf
+         LjdV30nHCsb4Ntjb65t7ZyefwCcECYGmtOaT6Il9ixFrrw8NFTyUUXsRd/QD2wYxeg
+         5dKMrnOT17+P2eqV7kLgIlQY17iRB3b/foS20fS85Fw+8uVajKR/N7iv0dlJ2RctZR
+         j0ZoDN5BDcpxA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nPpl7-0000im-Dy; Thu, 03 Mar 2022 19:01:02 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] ARM: OMAP2+: omap-device cleanups
+Date:   Thu,  3 Mar 2022 19:00:12 +0100
+Message-Id: <20220303180014.2639-1-johan@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul, Neil,
+When fixing some platform-device leaks to due to missing error handling,
+I stumbled over the omap_device_register() helper which is no longer
+used and can be removed.
 
-> Am 03.03.2022 um 18:20 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> [snip]
->=20
->>> Well he said "the Ingenic DRM core" aka ingenic-drm-drv.c. You do =
-have access to the main drm_device in the ingenic_drm_bind() function, =
-so you can add it there (with a cleanup function calling =
-drm_kms_helper_poll_fini() registered with drmm_add_action_or_reset()).
->> Well, do you really want to mix HPD detection between connector, =
-Synopsys bridge and Ingenic DRM core? These are independent...
->> Or should be accessed only through the bridge chain pointers.
->> IMHO we should keep separate functions separate.
->=20
-> The drm_kms_helper_poll_init() just says "this DRM device may have =
-connectors that need to be polled" so it very well fits inside the main =
-driver, IMHO.
-
-As far as I understand, it has the side-effect to always set =
-dev->mode_config.poll_enabled and
-schedule_delayed_work() for all devices.
-I am not sure if this is intended for arbitrary ingenic-drm devices. But =
-you know better than me.
+Johan
 
 
-Hm. But wait, I think I now finally remember why I have proposed it the =
-way it is!
-It is always better to go back to requirements and find the least =
-invasive solution.
+Johan Hovold (2):
+  ARM: OMAP2+: drop omap_device_register() helper
+  ARM: OMAP2+: drop hwmod-clock helper comment
 
-- HPD IRQ works and calls dw_hdmi_irq() [as can be shown by adding =
-printk()]
-- it is just that the udevd is only notified if poll_enabled =3D true =
-(but no polling takes place!).
+ arch/arm/mach-omap2/omap_device.c | 20 --------------------
+ arch/arm/mach-omap2/omap_device.h |  1 -
+ 2 files changed, 21 deletions(-)
 
-An earlier version (v4) to fix this proposed to add an explicit call to =
-drm_kms_helper_hotplug_event()
-in dw_hdmi_irq() but that was rejected a while ago because =
-drm_helper_hpd_irq_event() will already call it:
+-- 
+2.34.1
 
-	https://www.spinics.net/lists/dri-devel/msg316846.html
-
-Since this did not take into account that dev->mode_config.poll_enabled =
-must be set true, I then proposed the
-enable_poll() mechanism just to set this bit for the ingenic-dw-hdmi =
-specialization.
-
-So a HPD event is delivered to the dw-hdmi driver as dw_hdmi_irq() and =
-that calls drm_helper_hpd_irq_event()
-but not drm_kms_helper_hotplug_event() and user-space is not getting =
-aware.
-
-It is all a hack because we mix the dw-hdmi driver which originally did =
-register its own connector
-with an explicit connector...
-
-In summary I now thing that the v4 patch is the simplest and least =
-invasive solution.
-
-We neither have to introduce a dw_hdmi_enable_poll() function or call =
-drm_kms_helper_poll_init() anywhere.
-
-It is just a single line to add to dw-hdmi. And neither touches =
-ingenic-dw-hdmi nor ingenic-drm-drv.
-
-So let's go back to v4 version (just modify commit message to better =
-describe why we have to call
-drm_kms_helper_hotplug_event() explicitly) and forget about =
-alternatives.
-
-BR,
-Nikolaus=

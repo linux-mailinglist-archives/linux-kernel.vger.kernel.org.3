@@ -2,225 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0AC4CBAD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECD54CBACC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiCCJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S231825AbiCCJzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiCCJ4B (ORCPT
+        with ESMTP id S231693AbiCCJzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:56:01 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AB415DB3F;
-        Thu,  3 Mar 2022 01:55:07 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2238SoZw013762;
-        Thu, 3 Mar 2022 09:54:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=tTlPnmqYrpNXn7f5ioY3LhcvcH7mo/9m3AOnmcvfXbg=;
- b=XBqT5YnzDNWKz/wd31a5Wro61LMjx9SG8GE8wpYdKMtPzJuAscirJ1LCeNtgyssXJf/g
- a78WAeakI62IYxGkBfKwbDxZl+dJKV7fqig4O9D/Ep5DKZrthEnBzpzYk27eoNDk6rE3
- LvxuJBo2inSPICG8Ga/zw5qsbApBgFBkagfo2K2XbMuT0ldo4vPwulYJag4KFW4X+Lcy
- ixqj6ijVdCsJ7yQrD18jEtMmsUIH11VALWNuUnWXs577HfjBsyV88A97t03/9Zf6tKer
- Z2sMHzp7WfUuvbHbQMhrJhpYd8nft6BHlZSwtkjqhEYttjigyCNEQuKEpYqwpiHZ8Cl7 3w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh1k48bsf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Mar 2022 09:54:48 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2239q6Hf057401;
-        Thu, 3 Mar 2022 09:54:47 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by userp3030.oracle.com with ESMTP id 3ef9b2y3su-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Mar 2022 09:54:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dvKZgsZKdInuSCHj+vmQPfhHc+krTtBoX21yQSxIDEZzeof4ocSNooX9vHsKKtoGpuBF5XEhYdbvtIqsL3PHEpJdJoEiFABkTcm4OL2R8PSBzxwF/AjFZb9uexMbsFfXJVqIjiw/dakbzW6MFD9JKjz/jsERl6JTck6+q/ODAyE2kqgRq8nfMWOKx1nk6GGfiZhG7S/c9PLB695Rr1ES6uTbVucvtx2K/Dot4Aj3Tidv3MrMc/Mmc6djowGgc7Riuw3Y6Y7Au9UTkT91U60P6hZ4XUwatt31EQR9Lhj0KO1SwktDMnpFtqnwJcgFZgZwM/3TvVrvwOm51cNR8w1mIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tTlPnmqYrpNXn7f5ioY3LhcvcH7mo/9m3AOnmcvfXbg=;
- b=StK/NN4/Uc64jfm8HYLQdQqvZtKbDqSTfURk6kCeLk3DY8ZSHZWqZzbkefemiSV3JW0VmCoc2SNEMsNBspg5gcschoy0qJGEmFZvyhVhpidOYIMCJ96hGVUgfpiZ7dzFf4UZayexD6AcydP//s5ePjcqEP9kXKt3FIkFjjBMH87rKT7Eu7WyQH0bX3P3kTVYtCKc9X5om8X9gu2q7wv8tOVp4yhoFzOz8g8UWQBdBDj6DI8Yv86IAEFZFH2TTlBGAGYGLdJnmYGfTtWW7dsuoeSlqIs+JdGDQLOhuqa7EXPVLz2mwc0jSUxzCKow/EqroRMwp4rf2fTPmGKVe2bGQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tTlPnmqYrpNXn7f5ioY3LhcvcH7mo/9m3AOnmcvfXbg=;
- b=ifte3lmrAByJJmTeUyfwQhxqp0DfJX6l1EBki1/kgFMnqiiKpXVC0cPXRlEBwQOLFpvL9xDjXOKaCI0ZICP2Y0xF8ay5KYzo/VLMr0W+SuYkWbHlGxVpO5zY10SVOxxE4delXf1AXRXjMea5GLcOp1LhFA00RPyW6WTXdXJzCIo=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by PH0PR10MB5481.namprd10.prod.outlook.com
- (2603:10b6:510:ea::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
- 2022 09:54:44 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
- 09:54:44 +0000
-Date:   Thu, 3 Mar 2022 12:54:32 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>, kbuild-all@lists.01.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Florian Eckert <fe@dev.tdt.de>
-Subject: Re: [PATCH v1 1/1] docs: process: submitting-patches: Clarify the
- Reported-by usage
-Message-ID: <20220303095432.GB9912@kili>
-References: <20220127155334.47154-1-andriy.shevchenko@linux.intel.com>
- <87o83xrwk9.fsf@meer.lwn.net>
- <YfPzNNvK8Sy8YmGW@casper.infradead.org>
- <Yff9xoh873aEikY4@hovoldconsulting.com>
- <YfgBi9dn8LI8d/bo@smile.fi.intel.com>
- <YfgSpArfoL9LUaBO@hovoldconsulting.com>
- <YfgninPOaJhq7dsZ@smile.fi.intel.com>
- <Yfj0lb50vS3ssrsn@hovoldconsulting.com>
+        Thu, 3 Mar 2022 04:55:43 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197F015DB21;
+        Thu,  3 Mar 2022 01:54:58 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C67C71F37E;
+        Thu,  3 Mar 2022 09:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646301296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KiLPRDgQGgCu2x95n4UY9Dv1EwVeQLnpZJzpbHdZ9dI=;
+        b=1mPxOqNUPjUuRYvM1Jpo88uvj7mHeU0BtX8fI9JJJRyDkVeAKsX335KbaBabw8d3WKe9mU
+        HuHiRKWaMepp0G+heG7qzF8nwvdSA7m1dmz7EoPucjPZWYPll95EJxKZn0hqiwT3u8aCta
+        gH+QFjpVR9+bskkk3c37kR52I+BOsWA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646301296;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KiLPRDgQGgCu2x95n4UY9Dv1EwVeQLnpZJzpbHdZ9dI=;
+        b=eSm/KdUai1TPHgQyeg2sJYQkesKT0CqEB9zHNh7ZllJwzw7iMPjlHqVf2VPb2/UGEWSCsY
+        8Lo2iLDGhVjto/Bw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5EF4CA3B81;
+        Thu,  3 Mar 2022 09:54:52 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5F3F6A0604; Thu,  3 Mar 2022 10:54:56 +0100 (CET)
+Date:   Thu, 3 Mar 2022 10:54:56 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     Jan Kara <jack@suse.cz>, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.com, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220303095456.kym32pxshwryescx@quack3.lan>
+References: <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
+ <20220221190204.q675gtsb6qhylywa@quack3.lan>
+ <20220223003534.GA26277@X58A-UD3R>
+ <20220223144859.na2gjgl5efgw5zhn@quack3.lan>
+ <20220224011102.GA29726@X58A-UD3R>
+ <20220224102239.n7nzyyekuacgpnzg@quack3.lan>
+ <20220228092826.GA5201@X58A-UD3R>
+ <20220228101444.6frl63dn5vmgycbp@quack3.lan>
+ <20220303010033.GB20752@X58A-UD3R>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yfj0lb50vS3ssrsn@hovoldconsulting.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0155.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:41::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 51fe4716-c233-4c2f-c903-08d9fcfbd7f0
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5481:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR10MB54813AF757CD11D35B0052728E049@PH0PR10MB5481.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: khaW8dYorQQcwr0ITt78PFjd6QjMdYvFt07V+PssiMiGf1vIjj7uzfuxUeJ3IdMoCd/yHBsEqoRqsemn6iz7d65eC8uHmajM3vUzMm1wk3iIEJMMCou3R+M+WTaik1NmZEbtSzdak/upqyiKWMLBq8DmqW/NuUjUNCSD3FkjCaiVtOU4IMuegZj4hRZmeM75ZHd5Pq9xk22KVTfsjESQy93DGiKMsV3yVjwCNJwH0OFDxyL1DzBpeI440uOFhAKGyUaEMD/Ceeu/DPNhWySvY4AY6hNoCgKbh+Bm/8yd1EMztjW3l6jX8cV2N8RbOcVPqtQQXyb9zce9m8SJiqgG8LV5b4dIC0ufK/lVqMhJM8wfYNNK+j/aH/mmzOHsClX3clmrAfQEVGN6sEcAXShhFNu0/R4iWY3FsIp2gdIHGReBfZ8lFGM5+Ve3up+Wn4TLeS23WUT+A+zye0O3ZGE8SEIg0Nz3PQFw1Ayauiu5b3vPcpYwqyhfETbxm0v2QMnltEn4DEgEde0WxFw76s8lJo8cWzgpJL5pdPd++7ePJ6uUEDu4BKYbafK3anQTo0L9nJYSuqZRfBQC4S1VqzWCGI7+qvHYrRcaHr3o2fqSv48UB/K2GD6s+hGcX7XDZb3X2pZhjbucDrJpS1052AG30lkzqWcpMraakw7Pp0se0gA/aXq6e60cDFnVGHjeGj4zfmla+t3lduwhJYmrQCcM6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(86362001)(6916009)(54906003)(316002)(6506007)(6666004)(6486002)(83380400001)(33656002)(6512007)(9686003)(508600001)(1076003)(33716001)(44832011)(52116002)(8936002)(5660300002)(2906002)(26005)(66476007)(66556008)(66946007)(186003)(38100700002)(38350700002)(4326008)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UY3pQI++Tiiu8n0rvs/BD8rvcbIiJeLvwTjLCltFvwEFrN4j3UNNdDfNCguX?=
- =?us-ascii?Q?hHyCtPeE40tQt8Ebc969D9KWGzt8RlF4wuzWftbDYLJ5mN4SaKaBplooCi55?=
- =?us-ascii?Q?4IWLFlZVpBRVOfbTLTVZRtbGb9elIgkU88/lg58ZxNyXz0QmEXtQCQGk9J1g?=
- =?us-ascii?Q?zZjSCd1eB6AwJtcWwHiMJdyslJ83jrFI8Yx4gsLFgcEqFDqRLhczX6Qte/eH?=
- =?us-ascii?Q?QZQf/dCVuzWH+GrXoYWCdORviJpN0+faVvCfdfruUFDy0reZUIYq42/xN0gF?=
- =?us-ascii?Q?UdDKHg+bsTVwz+qXMxzZfBjAYlDkCLJIepxB4IRQTi5p0W5/5mZswuoUdMRJ?=
- =?us-ascii?Q?YeshXYTNC0whex0cKPJdTHf71kn9eBdrXRI2vKOz1sseKilmNaYXQupqGppY?=
- =?us-ascii?Q?r0Ssgiff2A0wV3OfUeP/zygdyVefBRVWamTvUSd5Mtejnbael/ZLsvR9zcrY?=
- =?us-ascii?Q?fCktiM4soFewy10WR58t0frYwcoP7hLLxC/PnGNTtpSFNlsf2d9tNmZBNhom?=
- =?us-ascii?Q?SkLartGdqhT5Dg4dqBmWASM4c2BH8yIp4y8VXqMgj7Ebu0nEzYmNy7VNp3eO?=
- =?us-ascii?Q?gWkPsaQaZ4dr5DrUElnShKkoO2xmNQk9fdgyMMR0idL37TJVVwTLVnO3G79U?=
- =?us-ascii?Q?c5XWb1xpMunwlbJZX7AB7xHwGTAeRhNc6b1LMGmAlmydd9Pw4Aby//KL+gCS?=
- =?us-ascii?Q?4kMksbZLgcMjR2ilXidH7KxTL8SHT328wvGLQfenqlMAemsPAzXCDykZLsRg?=
- =?us-ascii?Q?QvWwUi1Co3zRz2Dxmx91vwHBwJXDo0FmJi3JoZ6+9uDo/KPEt5PpPaYdiBpA?=
- =?us-ascii?Q?xr2LNEy4QMK+88M8UDnIqTQAV4pdJWciqIHjTTlkkf6uCJNBK2FpRqplm/zv?=
- =?us-ascii?Q?vJd3MfyKQx25O3DDetGUwSdHnkciUCurcy5bwmEszdKfSFfdQLsMLMFjLrQD?=
- =?us-ascii?Q?94pkQmYPM7Gcu4ZrdWTAOTcQxASpkx5JDLCc+NxT1bcgEOQ6xNE+oVyV14lH?=
- =?us-ascii?Q?PL6LfayjKAQUl+E9YkOqLoHBX05WA0fMGVOMcCe1KgZ9zaAllR+8HPIanB3B?=
- =?us-ascii?Q?C/nBrIAHXlAuXzsC4G+7/9SfmJzBls+XCxIVKSW99u6nMwA8w0eonZHWn4Eo?=
- =?us-ascii?Q?S/lBl+3w7mUkm9lgaDgf+E2SYMQ+Tg7VKEpD9VLY8BWmKA5rVVUOhyM3E42H?=
- =?us-ascii?Q?Nfp25GBk6uSqs5TVEe82zI3LDw7OdgXThQ8ZNuJ3nnzuQrvRPpsuoYPsq7gI?=
- =?us-ascii?Q?l4P6/DhYxXFI08S5SnZ+ihJumMGGQHA3EAlk+hruYxOG2ZDU7KlOtZpP5VGU?=
- =?us-ascii?Q?uTtQYPr6TrowZZdaWJVHEfccbo+5lLsrA3lvBjU7QWCJpK3icZzcpePGt030?=
- =?us-ascii?Q?cn4uJIDAPufouKrVo8K/wWuFWyumJdUDb52vwXa7l9eD9/dQyzdJOvwtwJ4b?=
- =?us-ascii?Q?ZUzt3/aX6Iz3Z98UbjZlL3XvzBEQCtilQS8alJN2eu0AaAkJQ9rjR/AvjbhT?=
- =?us-ascii?Q?AMrD+5dN6h3BFD//7k1+YuPXf0vule8fA+Mm5MuW37nECAC7F1sDNEnbXxH2?=
- =?us-ascii?Q?L6SSOde9wrcrCz294V3QrFreM8loT6yJbRv5eQLMl4zCHVk84bE0QYrOOIXt?=
- =?us-ascii?Q?2J79n8yBndbOBsX22YbHKf7iRmIXHSfrb/Jr5W3SRrG94JNjeRQs2H1Lxrnv?=
- =?us-ascii?Q?7uuJGg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51fe4716-c233-4c2f-c903-08d9fcfbd7f0
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 09:54:44.1695
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jlaa2nBcJM0w9HkB63CCAK9uvpnXLcZT31vlLkCv59xuetZph3yFS1ehfnOSDcxsonR4A03dOV5UqVzeqpeSSns0j8SUtqSfwbxt7jykzDE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5481
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203030046
-X-Proofpoint-ORIG-GUID: uHPY-0y8uYqqFLOjMYXmwYYX4oeQGxi1
-X-Proofpoint-GUID: uHPY-0y8uYqqFLOjMYXmwYYX4oeQGxi1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220303010033.GB20752@X58A-UD3R>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 09:51:33AM +0100, Johan Hovold wrote:
-> On Mon, Jan 31, 2022 at 08:16:42PM +0200, Andy Shevchenko wrote:
-> > On Mon, Jan 31, 2022 at 05:47:32PM +0100, Johan Hovold wrote:
-> > > On Mon, Jan 31, 2022 at 05:34:35PM +0200, Andy Shevchenko wrote:
-> > > > On Mon, Jan 31, 2022 at 04:18:30PM +0100, Johan Hovold wrote:
-> > > > > On Fri, Jan 28, 2022 at 01:44:20PM +0000, Matthew Wilcox wrote:
+On Thu 03-03-22 10:00:33, Byungchul Park wrote:
+> On Mon, Feb 28, 2022 at 11:14:44AM +0100, Jan Kara wrote:
+> > On Mon 28-02-22 18:28:26, Byungchul Park wrote:
+> > > case 1. Code with an actual circular dependency, but not deadlock.
 > > > 
-> > > > > > I think this misunderstands the problem that Andy is trying to fix.
-> > > > > > 
-> > > > > > The situation: I write a patch.  I post it for review.  A bot does
-> > > > > > something and finds a bug (could be compile-error, could be boot
-> > > > > > problem).  That bot sends a bug report with a suggestion to add
-> > > > > > Reported-by:.  That suggestion is inappropriate because the bug never
-> > > > > > made it upstream, so it looks like the bot reported the "problem"
-> > > > > > that the patch "fixes".
-> > > > > > 
-> > > > > > It's not unique to "new feature" patches.  If I'm fixing a bug and
-> > > > > > my fix also contains a bug spotted by a bot, adding Reported-by
-> > > > > > makes it look like the bot spotted the original bug, rather than
-> > > > > > spotting a bug in the fix.
-> > > > > > 
-> > > > > > The best thing to do in this case is nothing.  Do not credit the bot.
-> > > > > > Maybe add a Checked-by:, but that would be a new trailer and I really
-> > > > > > don't think we need a new kind of trailer to get wrong.
-> > > > > 
-> > > > > It seems like the only way to fix this is to fix the bots. Adding more
-> > > > > documentation is unlikely to help in this case.
-> > > > 
-> > > > Links to the documentation at least may clarify the point in case of a
-> > > > review.
+> > >    A circular dependency can be broken by a rescue wakeup source e.g.
+> > >    timeout. It's not a deadlock. If it's okay that the contexts
+> > >    participating in the circular dependency and others waiting for the
+> > >    events in the circle are stuck until it gets broken. Otherwise, say,
+> > >    if it's not meant, then it's anyway problematic.
 > > > 
-> > > Sure.
+> > >    1-1. What if we judge this code is problematic?
+> > >    1-2. What if we judge this code is good?
 > > > 
-> > > > > Can't we file a bug to whoever is running the bots (Intel?) and ask them
-> > > > > to remove the suggestion to add a Reported-by when the bot is testing a
-> > > > > patch (as opposed to mainline or even -next)?
-> > > > 
-> > > > The granularity here is not a repo. It's a code itself and in some cases
-> > > > it might be easy to distinguish new feature from the code modifications,
-> > > > but when code is already there and feature is just an extension of the
-> > > > existing file(s), it's hard to tell. And it might be true or not.
+> > > case 2. Code with an actual circular dependency, and deadlock.
 > > > 
-> > > Not sure I understand what you're saying here. Perhaps you and Matthew
-> > > are talking about different things after all.
+> > >    There's no other wakeup source than those within the circular
+> > >    dependency. Literally deadlock. It's problematic and critical.
+> > > 
+> > >    2-1. What if we judge this code is problematic?
+> > >    2-2. What if we judge this code is good?
+> > > 
+> > > case 3. Code with no actual circular dependency, and not deadlock.
+> > > 
+> > >    Must be good.
+> > > 
+> > >    3-1. What if we judge this code is problematic?
+> > >    3-2. What if we judge this code is good?
+> > > 
+> > > ---
+> > > 
+> > > I call only 3-1 "false positive" circular dependency. And you call 1-1
+> > > and 3-1 "false positive" deadlock.
+> > > 
+> > > I've been wondering if the kernel guys esp. Linus considers code with
+> > > any circular dependency is problematic or not, even if it won't lead to
+> > > a deadlock, say, case 1. Even though I designed Dept based on what I
+> > > believe is right, of course, I'm willing to change the design according
+> > > to the majority opinion.
+> > > 
+> > > However, I would never allow case 1 if I were the owner of the kernel
+> > > for better stability, even though the code works anyway okay for now.
 > > 
-> > I'm talking about your suggestion to fix the bots. It's not easy.
-> > The problem is the same as Matthew explained.
+> > So yes, I call a report for the situation "There is circular dependency but
+> > deadlock is not possible." a false positive. And that is because in my
+> > opinion your definition of circular dependency includes schemes that are
+> > useful and used in the kernel.
+> > 
+> > Your example in case 1 is kind of borderline (I personally would consider
+> > that bug as well) but there are other more valid schemes with multiple
+> > wakeup sources like:
+> > 
+> > We have a queue of work to do Q protected by lock L. Consumer process has
+> > code like:
+> > 
+> > while (1) {
+> > 	lock L
+> > 	prepare_to_wait(work_queued);
+> > 	if (no work) {
+> > 		unlock L
+> > 		sleep
+> > 	} else {
+> > 		unlock L
+> > 		do work
+> > 		wake_up(work_done)
+> > 	}
+> > }
+> > 
+> > AFAIU Dept will create dependency here that 'wakeup work_done' is after
+> > 'wait for work_queued'. Producer has code like:
 > 
-> Perhaps I'm missing something, but if you re-read Mathews description
-> above, it still seems to me like the issue is that the bots are trying
-> to claim credit for finding things that haven't been merged yet.
+> First of all, thank you for this good example.
 > 
-> Your suggestion is to document that the bots should be ignored. My
-> suggestion is to fix the bots.
+> > while (1) {
+> > 	lock L
+> > 	prepare_to_wait(work_done)
+> > 	if (too much work queued) {
+> > 		unlock L
+> > 		sleep
+> > 	} else {
+> > 		queue work
+> > 		unlock L
+> > 		wake_up(work_queued)
+> > 	}
+> > }
+> > 
+> > And Dept will create dependency here that 'wakeup work_queued' is after
+> > 'wait for work_done'. And thus we have a trivial cycle in the dependencies
+> > despite the code being perfectly valid and safe.
+> 
+> Unfortunately, it's neither perfect nor safe without another wakeup
+> source - rescue wakeup source.
+> 
+>    consumer			producer
+> 
+> 				lock L
+> 				(too much work queued == true)
+> 				unlock L
+> 				--- preempted
+>    lock L
+>    unlock L
+>    do work
+>    lock L
+>    unlock L
+>    do work
+>    ...
+>    (no work == true)
+>    sleep
+> 				--- scheduled in
+> 				sleep
+> 
+> This code leads a deadlock without another wakeup source, say, not safe.
 
-Originally the kbuild bot used to not have that notice but adding it
-meant that kbuild bot got a lot more visibility.  The truth is that
-managers love metrics and it helps people get paid.
+So the scenario you describe above is indeed possible. But the trick is
+that the wakeup from 'consumer' as is doing work will remove 'producer'
+from the wait queue and change the 'producer' process state to
+'TASK_RUNNING'. So when 'producer' calls sleep (in fact schedule()), the
+scheduler will just treat this as another preemption point and the
+'producer' will immediately or soon continue to run. So indeed we can think
+of this as "another wakeup source" but the source is in the CPU scheduler
+itself. This is the standard way how waitqueues are used in the kernel...
 
-The whole point of kbuild-bot was to search the lists and test code
-before it gets merged.  If they just waited and tested linux-next they
-would get their reported by tags because most trees don't rebase.  But
-we're punishing them for being better at their job.  It's a perverse
-incentive.
+> Lastly, just for your information, I need to explain how Dept works a
+> little more for you not to misunderstand Dept.
+> 
+> Assuming the consumer and producer guarantee not to lead a deadlock like
+> the following, Dept won't report it a problem:
+> 
+>    consumer			producer
+> 
+> 				sleep
+>    wakeup work_done
+> 				queue work
+>    sleep
+> 				wakeup work_queued
+>    do work
+> 				sleep
+>    wakeup work_done
+> 				queue work
+>    sleep
+> 				wakeup work_queued
+>    do work
+> 				sleep
+>    ...				...
+> 
+> Dept does not consider all waits preceeding an event but only waits that
+> might lead a deadlock. In this case, Dept works with each region
+> independently.
+> 
+>    consumer			producer
+> 
+> 				sleep <- initiates region 1
+>    --- region 1 starts
+>    ...				...
+>    --- region 1 ends
+>    wakeup work_done
+>    ...				...
+> 				queue work
+>    ...				...
+>    sleep <- initiates region 2
+> 				--- region 2 starts
+>    ...				...
+> 				--- region 2 ends
+> 				wakeup work_queued
+>    ...				...
+>    do work
+>    ...				...
+> 				sleep <- initiates region 3
+>    --- region 3 starts
+>    ...				...
+>    --- region 3 ends
+>    wakeup work_done
+>    ...				...
+> 				queue work
+>    ...				...
+>    sleep <- initiates region 4
+> 				--- region 4 starts
+>    ...				...
+> 				--- region 4 ends
+> 				wakeup work_queued
+>    ...				...
+>    do work
+>    ...				...
+> 
+> That is, Dept does not build dependencies across different regions. So
+> you don't have to worry about unreasonable false positives that much.
+> 
+> Thoughts?
 
-We should create a new tag for finding bugs during review.
+Thanks for explanation! And what exactly defines the 'regions'? When some
+process goes to sleep on some waitqueue, this defines a start of a region
+at the place where all the other processes are at that moment and wakeup of
+the waitqueue is an end of the region?
 
-regards,
-dan carpenter
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

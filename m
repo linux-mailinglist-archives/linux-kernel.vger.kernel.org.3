@@ -2,85 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD304CC87A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B254CC892
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbiCCWEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S236778AbiCCWH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235784AbiCCWEy (ORCPT
+        with ESMTP id S236739AbiCCWHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:04:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2DF6148643
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646345046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6wGROgyYuQGjMhOFoWGJ+5bmZEJUNDacGYc0J6ktUME=;
-        b=OA2cvRkUgEUX361sLeF1kTZnuygjni7P1yPpTP32GO9MoQjiGgMSeflwq78/kk/ureZ1t4
-        FKEdfTPXSIUCVyFTZ1WV+xqlgtkzVgK1zSlVTv8h8y9oxzV14ZPc3YbS+UF1cyZXsP2e0B
-        du9jeggcmp6PYbxdJbKoYpd+dxnu6CA=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-RKjLFzSANJq-wQng3_50xw-1; Thu, 03 Mar 2022 17:04:05 -0500
-X-MC-Unique: RKjLFzSANJq-wQng3_50xw-1
-Received: by mail-oo1-f69.google.com with SMTP id s7-20020a4aeac7000000b0031d808633fbso4429605ooh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:04:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=6wGROgyYuQGjMhOFoWGJ+5bmZEJUNDacGYc0J6ktUME=;
-        b=Nlq/UktNYzKs+H5onEOEl/AqOkqlcBRwld5cQYjcmggFyPn/6yj9S4Fr291YSzcPmP
-         4p23VgZBuVdpNJiNVNmwBo+cn92XnnGK8C5VTa0iHejshw5aNd7/yuJAaGzY8XfbBY+g
-         LFjdc0QM0m74oJ9Z81UXl5Ss4VbAjONDxgTZezzCUq7oNxSFwKBxwfbPMHJuxF3vsEJ6
-         253z2mOS3NdlJOArdVfCCFPxOveQFZKf6znSZhaGNC3CltZih5jTXCBcUiXQZSrXmsU9
-         SjIu8ZKpqez6NghhtzlzHu70lAi3A7uaOJS9FFjuvOMK7G9Cy8YVVKj8EHiA7If3LoV2
-         fn3g==
-X-Gm-Message-State: AOAM533nFsNX00SUObsI5j7U5AIkMPgCf+dwbnvVf+7IDPKcpCu2X/jI
-        jLawhQv4JeTLUb/zsfudsoWyqfTg4dU2RAF5IpWAKIZ82q+8KoDAO/fgDcPpr/K9rYd3hkNsPoa
-        t5RnIyZHwJlRV9RZcs1a2bfvr
-X-Received: by 2002:aca:1a04:0:b0:2d4:f855:aad1 with SMTP id a4-20020aca1a04000000b002d4f855aad1mr6496536oia.63.1646345043704;
-        Thu, 03 Mar 2022 14:04:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKYRe1JYF3+Y9OgmsQmqUokJoxxr0aKd4vk81gnA67Q062qAtgyawzk9SpEORQGWaOqANqfA==
-X-Received: by 2002:aca:1a04:0:b0:2d4:f855:aad1 with SMTP id a4-20020aca1a04000000b002d4f855aad1mr6496506oia.63.1646345043499;
-        Thu, 03 Mar 2022 14:04:03 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q7-20020a9d6647000000b005af185bf273sm1582024otm.25.2022.03.03.14.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 14:04:02 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] Documentation: fpga: dfl: add PCI Identification
- documentation
-To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
-        yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.j.williams@intel.com,
-        ashok.raj@intel.com, tianfei.zhang@intel.com
-References: <20220303003534.3307971-1-matthew.gerlach@linux.intel.com>
- <20220303003534.3307971-2-matthew.gerlach@linux.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <6448f21f-7ce1-d9ce-1048-29aca14f9d3d@redhat.com>
-Date:   Thu, 3 Mar 2022 14:04:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20220303003534.3307971-2-matthew.gerlach@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 3 Mar 2022 17:07:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B3B16BCD1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:06:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF91B826F8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F020C004E1;
+        Thu,  3 Mar 2022 22:06:26 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1nPtab-00ESVk-54;
+        Thu, 03 Mar 2022 17:06:25 -0500
+Message-ID: <20220303220530.058538533@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Thu, 03 Mar 2022 17:05:30 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH 0/4 v3] tracing: Add a way to have custom events in the tracefs directory
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,65 +48,149 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 3/2/22 4:35 PM, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> Add documentation on identifying FPGA based PCI cards prompted
-> by discussion on the linux-fpga@vger.kernel.org mailing list.
->
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v2: Introduced in v2.
-> ---
->   Documentation/fpga/dfl.rst | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
->
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index ef9eec71f6f3..5fb2ca8e76d7 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -502,6 +502,26 @@ Developer only needs to provide a sub feature driver with matched feature id.
->   FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
->   could be a reference.
->   
-> +PCI Device Identification
-> +================================
-> +Since FPGA based PCI cards can be reconfigured to a perform a completely
-> +new function at runtime, properly identifying such cards and binding the
-> +correct driver can be challenging. In many use cases, deployed FPGA based
-> +PCI cards are essentially static and the PCI Product ID and Vendor ID pair
-> +is sufficient to identify the card.  The DFL framework helps with the
-> +dynamic case of deployed FPGA cards changing at run time by providing
-> +more detailed information about card discoverable at runtime.
-> +
-> +At one level, the DFL on a PCI card describes the function of the card.
-> +However, the same DFL could be instantiated on different physical cards.
-> +Conversely, different DFLs could be instantiated on the same physical card.
-> +Practical management of a cloud containing a heterogeneous set of such cards
-> +requires a PCI level of card identification. While the PCI Product ID and
-> +Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
-> +that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
-> +Vendor ID values. PCI Vital Product Data (VPD) can also be used for
-> +more granular information about the board.
+We would like to have in production a way to record sched wakeups and
+sched switch, and be able to save the information in a small file
+with as much available as possible. Currently the wake up and sched switch
+events are 36 and 64 bytes each (plus a 4 byte ring buffer event header).
 
-This describes a bit more of the problem, it should describe it wrt ofs 
-dev id. The introduction of the ofs dev should be explicitly called out 
-as a generic pci id.
+By having a custom module tap into the sched switch and waking trace points
+we can bring those events down to 16 and 14 bytes respectively.
 
-Why couldn't one of the old pci id's be reused ?
+This version adds the new TRACE_CUSTOM_EVENT() which makes creating
+a custom event as easy as creating a TRACE_EVENT()!
 
-How will the subvendor/subid be enforced ?
+The TRACE_CUSTOM_EVENT() macro does all the work to create the
+event, and has the same format as the TRACE_EVENT() does.
 
-Is the current security manager patchset smart enough to save the board 
-from being bricked when a user doesn't look beyond the pci id ?
+Note, currently perf and bpf do not hook to this, but we can add
+that later.
 
-What happens if a board uses this device id but doesn't have a max10 to 
-do the update ?
+I kept patch 2 that has the complex way of hand coding the custom
+event just to keep the histor of it.
 
-Tom
+But now, to add a custom event for sched_switch, all that needs to be
+done is:
 
-> +
->   Location of DFLs on a PCI Device
->   ================================
->   The original method for finding a DFL on a PCI device assumed the start of the
+trace_custom_sched.c:
+-------------------------%<-------------------------
+#include <linux/trace_events.h>
+#include <linux/version.h>
+#include <linux/module.h>
+#include <linux/sched.h>
 
+#include <trace/events/sched.h>
+
+#define CREATE_CUSTOM_TRACE_EVENTS
+
+#include "trace_custom_sched.h"
+
+static void fct(struct tracepoint *tp, void *priv)
+{
+	trace_custom_event_sched_switch_update(tp);
+}
+
+static int __init trace_sched_init(void)
+{
+	for_each_kernel_tracepoint(fct, NULL);
+	return 0;
+}
+
+static void __exit trace_sched_exit(void)
+{
+}
+
+module_init(trace_sched_init);
+module_exit(trace_sched_exit);
+------------------------->%-------------------------  
+
+
+-------------------------%<-------------------------
+#if !defined(_TRACE_CUSTOM_SCHED_H) || defined(TRACE_CUSTOM_MULTI_READ)
+#define _TRACE_CUSTOM_SCHED_H
+
+#include <linux/trace_events.h>
+
+TRACE_CUSTOM_EVENT(sched_switch,
+
+	/* The below must be the same as the original sched_switch */
+	TP_PROTO(bool preempt,
+		 struct task_struct *prev,
+		 struct task_struct *next),
+
+	TP_ARGS(preempt, prev, next),
+
+	/* The below is the customization */
+	TP_STRUCT__entry(
+		__field(	unsigned short,		prev_prio	)
+		__field(	unsigned short,		next_prio	)
+		__field(	pid_t,	next_pid			)
+	),
+
+	TP_fast_assign(
+		__entry->prev_prio	= prev->prio;
+		__entry->next_pid	= next->pid;
+		__entry->next_prio	= next->prio;
+	),
+
+	TP_printk("prev_prio=%d next_pid=%d next_prio=%d",
+		  __entry->prev_prio, __entry->next_pid, __entry->next_prio)
+)
+#endif
+#undef TRACE_INCLUDE_PATH
+#undef TRACE_INCLUDE_FILE
+#define TRACE_INCLUDE_PATH .
+
+#define TRACE_INCLUDE_FILE trace_custom_sched
+#include <trace/define_custom_trace.h>
+------------------------->%-------------------------  
+
+And update the Makefile to have:
+
+  CFLAGS_trace_custom_sched.o := -I$(src)
+
+
+Changes since v2: https://lore.kernel.org/all/20220303214832.031378059@goodmis.org/
+  Forgot to do a:
+    git add include/trace/trace_custom_events.h include/trace/define_custom_trace.h
+  in v2.
+
+Steven Rostedt (Google) (4):
+      tracing: Allow custom events to be added to the tracefs directory
+      tracing: Add sample code for custom trace events
+      tracing: Move the defines to create TRACE_EVENTS into their own files
+      tracing: Add TRACE_CUSTOM_EVENT() macro
+
+----
+ arch/x86/kernel/kprobes/core.c            |   4 +-
+ include/linux/trace_events.h              |  24 +-
+ include/trace/define_custom_trace.h       |  77 +++++
+ include/trace/stages/init.h               |  37 +++
+ include/trace/stages/stage1_defines.h     |  46 +++
+ include/trace/stages/stage2_defines.h     |  48 +++
+ include/trace/stages/stage3_defines.h     | 129 ++++++++
+ include/trace/stages/stage4_defines.h     |  57 ++++
+ include/trace/stages/stage5_defines.h     |  83 +++++
+ include/trace/stages/stage6_defines.h     |  86 +++++
+ include/trace/stages/stage7_defines.h     |  34 ++
+ include/trace/trace_custom_events.h       | 221 +++++++++++++
+ include/trace/trace_events.h              | 499 +-----------------------------
+ kernel/trace/ftrace.c                     |  33 +-
+ kernel/trace/trace_events.c               |   2 +
+ samples/Kconfig                           |   8 +-
+ samples/Makefile                          |   1 +
+ samples/trace_events/Makefile             |   2 +
+ samples/trace_events/trace_custom_sched.c |  60 ++++
+ samples/trace_events/trace_custom_sched.h |  95 ++++++
+ 20 files changed, 1049 insertions(+), 497 deletions(-)
+ create mode 100644 include/trace/define_custom_trace.h
+ create mode 100644 include/trace/stages/init.h
+ create mode 100644 include/trace/stages/stage1_defines.h
+ create mode 100644 include/trace/stages/stage2_defines.h
+ create mode 100644 include/trace/stages/stage3_defines.h
+ create mode 100644 include/trace/stages/stage4_defines.h
+ create mode 100644 include/trace/stages/stage5_defines.h
+ create mode 100644 include/trace/stages/stage6_defines.h
+ create mode 100644 include/trace/stages/stage7_defines.h
+ create mode 100644 include/trace/trace_custom_events.h
+ create mode 100644 samples/trace_events/trace_custom_sched.c
+ create mode 100644 samples/trace_events/trace_custom_sched.h

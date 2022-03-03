@@ -2,152 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38DA4CBB2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 001124CBB32
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiCCKWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S232284AbiCCKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiCCKWf (ORCPT
+        with ESMTP id S232272AbiCCKXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:22:35 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7341D488B5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:21:50 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b9so7572749lfv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 02:21:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YzVwY3mEdfiRjeh2nt8836txEmK+uEtk2JZC3Nb2yhk=;
-        b=j9gu4Mu0aHrDPXhX9fLc18SmXl5WKdNcVj8zUgG/jHfez5HDyr9OyMW5K/I1w4bV0n
-         3FyDjFem2mdqFd/HELZ7FQCZ16utQ2I5Z0/CDl4ifmZceSJL85dgADz05D3Fm0waPatR
-         gWtWwWZhpWz/BJZM6C8Vk92O4ir6gZk10aNCluzkdRMPkgM9508C/R22kC3AoF585IN4
-         0HNHImtsgHLkeAiz/Zsq8AzGJolAUFXeP7BQNP8+SKWXE7fF1UQvzGu4To+hAIA/d6GJ
-         DAfx7RMicH8qS89PmQS+1ClQmTMREGz68SNsPB0y1tuMaruAeBQ6AZVQXaEc+KsoeFS0
-         ab/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YzVwY3mEdfiRjeh2nt8836txEmK+uEtk2JZC3Nb2yhk=;
-        b=WlT6beAyh0e43JwyHOucNT1mettBlyVsrOUnA7H/aZ1deyDQ/WZOT4xtZd34Pnybz/
-         97QJLyIs2KbZVEisc47ohls2kk3Bg6hWMyZkjE/rJ8DbxR26KbXnT1SvxcNR9rVlQFHw
-         i7sUfGNoWi9Z58dRtlxNgRI5ZITF03QNQzD1/JZmLBi0aG0MwaZSRKRW5TSH3Ty03Hkb
-         h3gbil3F3rY3OWSHBft9tMKLSDHP6IEP5njJ56yYQr3O28hAvRC6oPGrzxIcVqwJMIBZ
-         zxubUZ5EKVESkDKqF2g/qlNl0L1Ews62lajxlB/nHbkYi9zW32cWgjxb/ROvAfIvBAOp
-         UxGg==
-X-Gm-Message-State: AOAM532qpXI4he7QXYPAWVc2Z5cX7GCLHOgtdbXVwMpGx/zzGTLD1lce
-        MmZeHKghQ1NBwCYtbzn+SajBGoXq98dM5h+Pp6w6Xw==
-X-Google-Smtp-Source: ABdhPJyRYePCBmySOF86+bHiB9xM/7SHonPiD0jMfoAj63fevUiSyjjk2EiJRi3fN0UWBQfOhYDVdoWgep3vWddYIPg=
-X-Received: by 2002:a05:6512:260b:b0:445:c54c:4157 with SMTP id
- bt11-20020a056512260b00b00445c54c4157mr1496331lfb.254.1646302908794; Thu, 03
- Mar 2022 02:21:48 -0800 (PST)
+        Thu, 3 Mar 2022 05:23:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F49B4C409
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646302982;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4RN1p0SsM5OZaMHo9INXVetvDn1q17jYp2UOPX5AC2A=;
+        b=KEYwDWx6bJ9jTXHPXpu6yzbF6NlLeEEdSaWR8MstGw5zwjutE6CVUeIlwby8DARmXTCGxm
+        VOTHHgJA/IK0Bxr6Yh6u8UIATA0nYgoILWxET0WffAS5DNsJdJYC4oNtODCBAQ4G7XsJCk
+        r4oJfwAYGB0o36UifZtzKErfyJ0IkQ4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-247-04Df3pK3MCmxNQVoEIh5PQ-1; Thu, 03 Mar 2022 05:23:01 -0500
+X-MC-Unique: 04Df3pK3MCmxNQVoEIh5PQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B7B3F1091DA1;
+        Thu,  3 Mar 2022 10:22:58 +0000 (UTC)
+Received: from localhost (ovpn-13-148.pek2.redhat.com [10.72.13.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A351A842AF;
+        Thu,  3 Mar 2022 10:22:44 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 18:22:42 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v4 02/10] crash hp: Introduce CRASH_HOTPLUG configuration
+ options
+Message-ID: <YiCW8gEb3n1CpI6x@MiWiFi-R3L-srv>
+References: <20220209195706.51522-1-eric.devolder@oracle.com>
+ <20220209195706.51522-3-eric.devolder@oracle.com>
+ <YhWpF/Cj/V+Cx6+d@MiWiFi-R3L-srv>
+ <10d67f14-c5fe-0a17-e8b5-97702823cc1c@oracle.com>
+ <f23efdc0-20c8-ccfd-f54d-69a9b4ee531f@redhat.com>
 MIME-Version: 1.0
-References: <20220303015151.1711860-1-pgwipeout@gmail.com> <CAPDyKFrk+HCbSZtB7uv6u9tjTgzFDjpB9oP9FYJUqNxcCzQ9iw@mail.gmail.com>
- <CAMdYzYrndAwWJELRRL4kP-BCdWuF6bLVwS2PUMVx_UcJZE=nsQ@mail.gmail.com>
-In-Reply-To: <CAMdYzYrndAwWJELRRL4kP-BCdWuF6bLVwS2PUMVx_UcJZE=nsQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 3 Mar 2022 11:21:12 +0100
-Message-ID: <CAPDyKFp8tZ-Ty0Wo2jkTjr6Jun83QczQfQRQ1zvFBBCOCWjtng@mail.gmail.com>
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Addy Ke <addy.ke@rock-chips.com>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-mmc@vger.kernel.org,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f23efdc0-20c8-ccfd-f54d-69a9b4ee531f@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 at 10:49, Peter Geis <pgwipeout@gmail.com> wrote:
->
-> On Thu, Mar 3, 2022 at 2:53 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Thu, 3 Mar 2022 at 02:52, Peter Geis <pgwipeout@gmail.com> wrote:
-> > >
-> > > The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
-> > > supports. This leads to a situation during card initialization where the
-> > > ciu clock is set lower than the clock driver can support. The
-> > > dw-mmc-rockchip driver spews errors when this happens.
-> > > For normal operation this only happens a few times during boot, but when
-> > > cd-broken is enabled (in cases such as the SoQuartz module) this fires
-> > > multiple times each poll cycle.
-> > >
-> > > Fix this by testing the minimum frequency the clock driver can support
-> > > that is within the mmc specification, then divide that by the internal
-> > > clock divider. Set the f_min frequency to this value, or if it fails,
-> > > set f_min to the downstream driver's default.
-> > >
-> > > Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
-> > >
-> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > > ---
-> > >  drivers/mmc/host/dw_mmc-rockchip.c | 31 ++++++++++++++++++++++++++----
-> > >  1 file changed, 27 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> > > index 95d0ec0f5f3a..c198590cd74a 100644
-> > > --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> > > +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> > > @@ -15,7 +15,9 @@
-> > >  #include "dw_mmc.h"
-> > >  #include "dw_mmc-pltfm.h"
-> > >
-> > > -#define RK3288_CLKGEN_DIV       2
-> > > +#define RK3288_CLKGEN_DIV      2
-> > > +#define RK3288_MIN_INIT_FREQ   375000
-> > > +#define MMC_MAX_INIT_FREQ      400000
-> > >
-> > >  struct dw_mci_rockchip_priv_data {
-> > >         struct clk              *drv_clk;
-> > > @@ -27,6 +29,7 @@ struct dw_mci_rockchip_priv_data {
-> > >  static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> > >  {
-> > >         struct dw_mci_rockchip_priv_data *priv = host->priv;
-> > > +       struct mmc_host *mmc = mmc_from_priv(host);
-> > >         int ret;
-> > >         unsigned int cclkin;
-> > >         u32 bus_hz;
-> > > @@ -34,6 +37,10 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
-> > >         if (ios->clock == 0)
-> > >                 return;
-> > >
-> > > +       /* the clock will fail if below the f_min rate */
-> > > +       if (ios->clock < mmc->f_min)
-> > > +               ios->clock = mmc->f_min;
-> > > +
-> >
-> > You shouldn't need this. The mmc core should manage this already.
->
-> I thought so too, but while setting f_min did reduce the number of
-> errors, it didn't stop them completely.
-> Each tick I was getting three failures, it turns out mmc core tries
-> anyways with 300000, 200000, and 100000.
-> Clamping it here was necessary to stop these.
+On 03/02/22 at 10:20am, David Hildenbrand wrote:
+> On 01.03.22 21:04, Eric DeVolder wrote:
+> > 
+> > 
+> > On 2/22/22 21:25, Baoquan He wrote:
+> >> On 02/09/22 at 02:56pm, Eric DeVolder wrote:
+> >>> Support for CPU and memory hotplug for crash is controlled by the
+> >>> CRASH_HOTPLUG configuration option, introduced by this patch.
+> >>>
+> >>> The CRASH_HOTPLUG_ELFCOREHDR_SZ related configuration option is
+> >>> also introduced with this patch.
+> >>>
+> >>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> >>> ---
+> >>>   arch/x86/Kconfig | 26 ++++++++++++++++++++++++++
+> >>>   1 file changed, 26 insertions(+)
+> >>>
+> >>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> >>> index ebe8fc76949a..4e3374edab02 100644
+> >>> --- a/arch/x86/Kconfig
+> >>> +++ b/arch/x86/Kconfig
+> >>> @@ -2060,6 +2060,32 @@ config CRASH_DUMP
+> >>>   	  (CONFIG_RELOCATABLE=y).
+> >>>   	  For more details see Documentation/admin-guide/kdump/kdump.rst
+> >>>   
+> >>> +config CRASH_HOTPLUG
+> >>> +	bool "kernel updates of crash elfcorehdr"
+> >>> +	depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG) && KEXEC_FILE
+> >>> +	help
+> >>> +	  Enable the kernel to update the crash elfcorehdr (which contains
+> >>> +	  the list of CPUs and memory regions) directly when hot plug/unplug
+> >>> +	  of CPUs or memory. Otherwise userspace must monitor these hot
+> >>> +	  plug/unplug change notifications via udev in order to
+> >>> +	  unload-then-reload the crash kernel so that the list of CPUs and
+> >>> +	  memory regions is kept up-to-date. Note that the udev CPU and
+> >>> +	  memory change notifications still occur (however, userspace is not
+> >>> +	  required to monitor for crash dump purposes).
+> >>> +
+> >>> +config CRASH_HOTPLUG_ELFCOREHDR_SZ
+> >>> +	depends on CRASH_HOTPLUG
+> >>> +	int
+> >>> +	default 131072
+> >>> +	help
+> >>> +	  Specify the maximum size of the elfcorehdr buffer/segment.
+> >>> +	  The 128KiB default is sized so that it can accommodate 2048
+> >>> +	  Elf64_Phdr, where each Phdr represents either a CPU or a
+> >>> +	  region of memory.
+> >>> +	  For example, this size can accommodate hotplugging a machine
+> >>> +	  with up to 1024 CPUs and up to 1024 memory regions (e.g. 1TiB
+> >>> +	  with 1024 1GiB memory DIMMs).
+> >>
+> >> This example of memory could be a little misleading. The memory regions
+> >> may not be related to memory DIMMs. System could split them into many
+> >> smaller regions during bootup.
+> > 
+> > I changed "with 1024 1GiB memory DIMMs" to "with 1024 1GiB hotplug memories".
+> > eric
+> 
+> It's still not quite precise. Essentially it's the individual "System
+> RAM" entries in /proc/iomem
+> 
+> Boot memory (i.e., a single DIMM) might be represented by multiple
+> entries due to rearranged holes (by the BIOS).
+> 
+> While hoplugged DIMMs (under virt!) are usually represented using a
+> single range, it can be different on physical machines. Last but not
+> least, dax/kmem and virtio-mem behave in a different way.
 
-Ohh, that was certainly a surprise to me. Unless the dw_mmc driver
-invokes this path on it's own in some odd way, that means the mmc core
-has a bug that we need to fix.
+Right. How about only mentioning the 'System RAM' entries in /proc/iomem
+as below? It's just giving an example, talking about the details of
+memory regions from each type may not be necessry here. People
+interested can refer to code or document related to get it.
 
-Would you mind taking a stack trace or debug this so we understand in
-what case the mmc core doesn't respect f_min? It really should.
 
-[...]
++ default 131072
++ help
++   Specify the maximum size of the elfcorehdr buffer/segment.
++   The 128KiB default is sized so that it can accommodate 2048
++   Elf64_Phdr, where each Phdr represents either a CPU or a
++   region of memory.
++   For example, this size can accommodate hotplugging a machine
++   with up to 1024 CPUs and up to 1024 memory regions which are
+    represented by 'System RAM' entries in /proc/iomem.
 
-Kind regards
-Uffe
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+

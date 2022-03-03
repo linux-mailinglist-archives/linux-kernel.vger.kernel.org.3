@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BE74CB9A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FF54CB9AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiCCIzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S231727AbiCCI7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiCCIzx (ORCPT
+        with ESMTP id S229609AbiCCI7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:55:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392421768F6;
-        Thu,  3 Mar 2022 00:55:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7472B82451;
-        Thu,  3 Mar 2022 08:55:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C85C004E1;
-        Thu,  3 Mar 2022 08:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646297706;
-        bh=kU5Q06pAx6Ke2pgUtQgshelxBuHKHAWI3QpSa9wC5UY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OvuGsYkKqyLhu4HoxbCPmS8D8ZmQHLQY5D4+dOgwVoidcT5Zg+gPqjBJNrykjeE/5
-         ZRroooUFFL1sK8UqRkSWlcH2WjnsUKpS6gNbaHTRew7U+hC/WtmD8t4getcCZvyeTG
-         B/JTk5f+9WRrYk9OceV7uvBE1/ocsiIYRt5JtklC0Un+YwMRvLsRuVmBM/nCqZChYH
-         pMpKXJIZYtUcRE8fIOOb0T9GTEkT0daYKeufiBdHpqEK3Ymj+yIN5oY28UgQsUdtxz
-         wemjxoJEdPHUD3bnbFzvhYrwxU1oTozoHSSGYequ5W10JV5+Y/lmcIKFp78b/QijPJ
-         6Fbk7R1nmxaig==
-Date:   Thu, 3 Mar 2022 16:55:02 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     broonie@kernel.org, perex@perex.cz, matthias.bgg@gmail.com,
-        trevor.wu@mediatek.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        aaronyu@google.com
-Subject: Re: [PATCH] ASoC: mediatek: mt8183: support wb bt audio
-Message-ID: <YiCCZoryo9LVQEGl@google.com>
-References: <20220303061147.5037-1-jiaxin.yu@mediatek.com>
+        Thu, 3 Mar 2022 03:59:13 -0500
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A281637C4
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:58:23 -0800 (PST)
+X-QQ-mid: bizesmtp88t1646297875tvknoqfu
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 03 Mar 2022 16:57:24 +0800 (CST)
+X-QQ-SSF: 01400000002000C0G000000A0000000
+X-QQ-FEAT: F3yR32iATbj+CDy6glGXK7CfKwYA2ck11zfxblzjk7VPDD0ZwURNsb75Ores6
+        6rmZ71mSIHAdegatBujGhJxy0iFB926mAyQ2lmoA14jrRIrn3iUD9iXdTxetPHrc9d5JD3L
+        z6ZojemhQP4AqkBacJgVKZuUQgUiST4zz1wnOyVdx9Wv0ipWFVSLSxlbh1lkp2T1abkEg3N
+        SKKJT2CKXEyUz+R3UXm4TkYEHjAZzVKOXUzRBorA8tJ4U4zTxhb193hrQR9DrbYt7hDzDOb
+        WlhGh7c+X8Uraz3hSKcLsDSDDsbwCStum9U2IJ4g1eurIUU9wmTBrtlZFcBej6C1FfAm7OS
+        vSe7mxK+HNbC0r+k9F4j6FWlMi91Lh+AstpyJHnIagKrEkkvdM=
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] scsi: sr: Simplify ptr_min_max_vals adjustment
+Date:   Thu,  3 Mar 2022 16:57:22 +0800
+Message-Id: <20220303085722.2400-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303061147.5037-1-jiaxin.yu@mediatek.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:11:47PM +0800, Jiaxin Yu wrote:
-> This patch use "bt-sco-pcm-wb" codec dai driver for wb bt audio.
+When the med->media_event_code value is equal to 2 or 3, the
+same value is returned, so it would be better to combine the
+implementation statements when the med->media_event_code value
+is equal to 2 or 3.
 
-If it could get chance for a respin, describe it in imperative mood.  See [1].
+Moreover, when a variable is equal to multiple values, it is
+better to use a switch judgment statement.
 
-[1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/scsi/sr.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-With some minor comments,
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index f925b1f1f9ad..610baa630067 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -222,12 +222,16 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
+ 	if (eh->nea || eh->notification_class != 0x4)
+ 		return 0;
+ 
+-	if (med->media_event_code == 1)
++	switch (med->media_event_code) {
++	case 1:
+ 		return DISK_EVENT_EJECT_REQUEST;
+-	else if (med->media_event_code == 2)
+-		return DISK_EVENT_MEDIA_CHANGE;
+-	else if (med->media_event_code == 3)
++	case 2:
++	case 3:
+ 		return DISK_EVENT_MEDIA_CHANGE;
++	default:
++		break;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
-> ---
-> 
-> This patch depends on:
-> https://patchwork.kernel.org/project/alsa-devel/patch/20220302013533.29068-1-jiaxin.yu@mediatek.com/
 
-Actually, it doesn't depend on the patch.  They are independent.
+

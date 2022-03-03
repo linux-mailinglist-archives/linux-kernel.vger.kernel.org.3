@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C954CB810
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195174CB814
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiCCHsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S230338AbiCCHs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHsM (ORCPT
+        with ESMTP id S230323AbiCCHs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:48:12 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD1231902;
-        Wed,  2 Mar 2022 23:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646293647; x=1677829647;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zuBLV0n7JURTuSzn8qbNt8uwizHW3bq1hZyOCBYUPq0=;
-  b=a/Ximz412s18uFnYkH9qxXxQeBMM+Lnx1EbBrBlw5PfT5VKjRubCBSRz
-   q0995Cws1bLA3DtPj3ncQlOnsY6XkU18pf2tlFbtdloPZIK53clMonFUN
-   G3Se8AN5jT0FRccFXsPk9/VwidMhzuAOtkQbipSMXWj3igeL8sY8XXV3d
-   PTJuW0kXeI1wCmhcVO/z9QJw73Arg2hW5InfTWPu5r3hVXUcUZ10Hhobn
-   oWK6qJKrU76XsQdZt+uTayx0WxGgcwFSpGc4yhNptde/IhCNAR7t6ZE34
-   T5ZIT9CuUJCezFtso4TN5507O6KXniw3WmIPobR1yPEOLisB+aOawe+bc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237114412"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="237114412"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:47:27 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="551637872"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:47:24 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:47:22 +0200
-Date:   Thu, 3 Mar 2022 09:47:22 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH 3/5] drivers/thunderbolt: Don't make DROM read success
- compulsory
-Message-ID: <YiByip/y6p68j6lP@lahna>
-References: <20220302220709.3138846-1-mario.limonciello@amd.com>
- <20220302220709.3138846-3-mario.limonciello@amd.com>
+        Thu, 3 Mar 2022 02:48:26 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8017E10;
+        Wed,  2 Mar 2022 23:47:40 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d3so6425947wrf.1;
+        Wed, 02 Mar 2022 23:47:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=41/Zcs1+rOZW1dlgnZYTE4qTncwsL/D5m4xA8Yd4cWs=;
+        b=fsM0WhwWB2VqHU2a0pOFBMHiAXveIYJ6iZ/ao0k9/9pOJWv8KeOuew9QBrGl2hlmg+
+         MeG6uQbF3WsdKSVuSOr974GMdG6PVOmJfW8J7olt9Vhi76OYazwRQotA353cmSauJf8c
+         1gqUh6dcpbNvE3Qo2/trb4jSsq5CoVgh4otpaEo3QqFZA1mI2Uxl7Fen2iVv+A1JDQtc
+         xAbS2fxgkKiKJx1iQaVI/3vx8BYL3i52XDiGTQyYmDUUZq34CKwpptnceRK3KTuTm1Iy
+         p0+yb8vtm4bigV7oBXCKpM9/b+T3DaYN4nAe7BBjmFJbf1W8aRoAQ7FYA4vSk/K9xaRq
+         scIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=41/Zcs1+rOZW1dlgnZYTE4qTncwsL/D5m4xA8Yd4cWs=;
+        b=2YeUUB6Qtw3JsAPrVbWreKAQAUT2nPZ1jUpdJVUv0du35vyJtg5ch+0xDWWXs2g5Vr
+         bsxmRFkUoiMfxqUQr7JEEEufebiIuwrqvrplcDhNzXVy6rm3cXknc3RX1eZYXv54rpPA
+         wJEnUs7lSQfVnsCciuJBvBQWf8eY4Y3HN8hM7V5r435oXa76uETEjCFGXrndTz0poEKy
+         D5RJh3QgECN3JlPgQJHuPPo7teeN11FQaPMMGP7fz1q1N+l61j1b22P4dH/pDeaNKBJb
+         Haouk1hMxN6GCjKgFmToYL2y/8FtQcH8df+eTTSgYxqK2RaO7Xh3O+ml0D2FVfrTXhjb
+         RI1Q==
+X-Gm-Message-State: AOAM532xk7xg2pYRDefU6fDXeg4fgvvCa43I1/yO8COAcDvc1HlHZeLk
+        3Pm8maVR47YBkUap92nQc1B+dICj7Dc/tQ==
+X-Google-Smtp-Source: ABdhPJz9owWDykpylw+0FTIyZNb3VL+0OsQaJG2j2e0ZHYOjNIaWcCIPIsGh9NHuRRdFqcWjXB9Lvg==
+X-Received: by 2002:adf:db43:0:b0:1ef:7195:43cd with SMTP id f3-20020adfdb43000000b001ef719543cdmr21447794wrj.495.1646293659195;
+        Wed, 02 Mar 2022 23:47:39 -0800 (PST)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05600c34c300b003884e826642sm841169wmq.12.2022.03.02.23.47.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 23:47:38 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH for-5.18/uclogic 0/4] DIGImend patches, part III
+Date:   Thu,  3 Mar 2022 08:47:30 +0100
+Message-Id: <20220303074734.7235-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220302220709.3138846-3-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,60 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Hi everyone,
 
-On Wed, Mar 02, 2022 at 04:07:07PM -0600, Mario Limonciello wrote:
-> The USB4 specification doesn't make any requirements that reading
-> a device router's DROM is needed for the operation of the device.
-> 
-> On page 207 of the USB4 1.0 spec it does mention that a CM may use
-> the DROM to make decision though:
-> ```
-> After enumerating a Router, the Connection Manager may read the
-> contents of the Router’s DROM. If, after reading the contents of
-> DROM, the Connection Manager decides that it does not want the
-> Router in its Domain...
-> ```
+This series is a follow up to [1] and [2], kindly reviewed and applied
+by Jiří in hid.git#for-5.18/uclogic.
 
-You don't need to quote the spec for Thunderbolt patches. I can read,
-and it's not like it is going to change anyway ;-)
+It adds support for touch rings in order handle the Huion HS610 tablet.
 
-> Other connection manager solutions don't necessarily read it or gate
-> the usability of the device on whether it was read.
+Thank you very much to Nikolai for the patches a to the maintaners for
+the quick reviews,
+José Expósito
 
-Indeed.
+[1] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2202161642180.11721@cbobk.fhfr.pm/T/
+[2] https://lore.kernel.org/linux-input/56454560-5f62-05b9-1a24-3f51a305140e@gmail.com/T/
 
-> So make failures when reading the DROM show warnings but not
-> fail the initialization of the switch.
-> 
-> Link: https://www.usb.org/sites/default/files/USB4%20Specification%2020211116.zip
+Nikolai Kondrashov (4):
+  HID: uclogic: Add support for touch ring reports
+  HID: uclogic: Support custom device suffix for frames
+  HID: uclogic: Allow three frame parameter sets
+  HID: uclogic: Add support for Huion touch ring reports
 
-Also no need to "link" the spec. I know where the spec can be
-downloaded.
+ drivers/hid/hid-uclogic-core.c   | 83 +++++++++++++++++++++--------
+ drivers/hid/hid-uclogic-params.c | 40 +++++++++++---
+ drivers/hid/hid-uclogic-params.h | 90 +++++++++++++++++++++++++++++---
+ drivers/hid/hid-uclogic-rdesc.c  | 65 ++++++++++++++++++++---
+ drivers/hid/hid-uclogic-rdesc.h  | 20 +++++--
+ 5 files changed, 250 insertions(+), 48 deletions(-)
 
-Ditto for all patches.
+-- 
+2.25.1
 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/thunderbolt/switch.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 294518af4ee4..ac87e8b50e52 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -2784,10 +2784,8 @@ int tb_switch_add(struct tb_switch *sw)
->  
->  		/* read drom */
->  		ret = tb_drom_read(sw);
-> -		if (ret) {
-> -			dev_err(&sw->dev, "reading DROM failed\n");
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			dev_warn(&sw->dev, "reading DROM failed: %d\n", ret);
->  		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
->  
->  		tb_check_quirks(sw);
-> -- 
-> 2.34.1

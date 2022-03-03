@@ -2,140 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00AD4CBCBB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A778A4CBCBF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbiCCLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S232535AbiCCLfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiCCLbo (ORCPT
+        with ESMTP id S233225AbiCCLdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:31:44 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F2717DBAF;
-        Thu,  3 Mar 2022 03:30:47 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2904692009C; Thu,  3 Mar 2022 12:30:46 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 224A792009B;
-        Thu,  3 Mar 2022 11:30:46 +0000 (GMT)
-Date:   Thu, 3 Mar 2022 11:30:46 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Paul Cercueil <paul@crapouillou.net>
-cc:     Jiri Slaby <jslaby@suse.cz>,
-        David Laight <David.Laight@ACULAB.COM>,
-        =?UTF-8?Q?'Uwe_Kleine-K=C3=B6nig'?= 
-        <u.kleine-koenig@pengutronix.de>, gregkh@linuxfoundation.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>, linux-kernel@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Andy Gross <agross@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Takao Orito <orito.takao@socionext.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>
-Subject: Re: [PATCH v3] serial: make uart_console_write->putchar()'s character
- an unsigned char
-In-Reply-To: <BIZ58R.9EXA9J3HVHS13@crapouillou.net>
-Message-ID: <alpine.DEB.2.21.2203031102570.50870@angie.orcam.me.uk>
-References: <20220302072732.1916-1-jslaby@suse.cz> <20220302175242.ejiaf36vszr4xvou@pengutronix.de> <5c7045c1910143e08ced432d938b5825@AcuMS.aculab.com> <84ad3854-28b9-e450-f0a2-f1448f32f137@suse.cz> <alpine.DEB.2.21.2203030738170.56670@angie.orcam.me.uk>
- <BIZ58R.9EXA9J3HVHS13@crapouillou.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 3 Mar 2022 06:33:40 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0751B17ED8A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:31:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646307117; x=1677843117;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wB/xcW1nQ+F/5VuuURAvhqvcyvdKsaPRyTepIQdzveE=;
+  b=ZiwMciSQfuFyZBBCSBzHY7W2I4qEAJjmaS/gH8X1+mECqhRlpV5PmKjg
+   RAEATrmtngR4T0aSA8M/Pw0jZSQFR7/t8mFX6F3t51BLKdyl8ekuZiHWt
+   QJl0sQCkTgnhLNhNTG0Q5tzIV9vbuM49c+VYo+D+p0CBUaXGA8Q7iFM41
+   3bMdfPTjT5DnIKDPnYoomvcjAvZzVr5bTdGpfgoPcY6aF7UAfJyhf+GgN
+   AWX1a2lOtiG0U9XA6UCtU63XPkqAzH4g428EsIOR//VO7gi5B4TmVAXwX
+   dxnR0vEIyMt+lxmJV5Dy+RNfs7PsxLymONxnjR23U89CWX7iFG88RvqYn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="340080865"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="340080865"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 03:31:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="576457390"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2022 03:31:52 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPjgV-0000Rf-1a; Thu, 03 Mar 2022 11:31:51 +0000
+Date:   Thu, 3 Mar 2022 19:31:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oliver Glitta <glittao@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [vbabka:slub-stackdepot-v2 3/6] slub.c:undefined reference to
+ `stack_depot_want_early_init'
+Message-ID: <202203031903.ZpsZPgv7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022, Paul Cercueil wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-stackdepot-v2
+head:   81001c54e58478cef57829b8b468f8d2865b7563
+commit: 80a4eec3b671b3f834d5357d4bf0027f325606c5 [3/6] mm/slub: use stackdepot to save stack trace in objects
+config: nios2-randconfig-r035-20220303 (https://download.01.org/0day-ci/archive/20220303/202203031903.ZpsZPgv7-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/commit/?id=80a4eec3b671b3f834d5357d4bf0027f325606c5
+        git remote add vbabka https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git
+        git fetch --no-tags vbabka slub-stackdepot-v2
+        git checkout 80a4eec3b671b3f834d5357d4bf0027f325606c5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-> >  We do have an issue, because we still have this:
-> > 
-> > void uart_console_write(struct uart_port *port, const char *s,
-> > 			unsigned int count,
-> > 			void (*putchar)(struct uart_port *, int))
-> > 
-> > and then:
-> > 
-> > 		putchar(port, *s);
-> > 
-> > there.  Consequently on targets where plain `char' type is signed the
-> > value retrieved from `*s' has to be truncated in the call to `putchar'.
-> > And indeed it happens with the MIPS target:
-> > 
-> > 803ae47c:	82050000 	lb	a1,0(s0)
-> > 803ae480:	26100001 	addiu	s0,s0,1
-> > 803ae484:	02402025 	move	a0,s2
-> > 803ae488:	0220f809 	jalr	s1
-> > 803ae48c:	30a500ff 	andi	a1,a1,0xff
-> > 
-> > vs current code:
-> > 
-> > 803ae47c:	82050000 	lb	a1,0(s0)
-> > 803ae480:	26100001 	addiu	s0,s0,1
-> > 803ae484:	0220f809 	jalr	s1
-> > 803ae488:	02402025 	move	a0,s2
-> 
-> And how is that at all a problem?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- It wastes an instruction.  An instruction wasted here, an instruction 
-wasted there, and suddenly we have grown bloatware. :(
+All errors (new ones prefixed by >>):
 
-> >  So I'd recommend changing `s' here to `const unsigned char *' or, as I
-> > previously suggested, maybe to `const u8 *' even.
-> 
-> Just cast the string to "const u8 *" within the function, while keeping a
-> "const char *s" argument. The compiler will then most likely generate LBUs.
+   nios2-linux-ld: mm/slub.o: in function `setup_slub_debug':
+>> slub.c:(.init.text+0x1c0): undefined reference to `stack_depot_want_early_init'
+>> nios2-linux-ld: slub.c:(.init.text+0x1c4): undefined reference to `stack_depot_want_early_init'
+   nios2-linux-ld: slub.c:(.init.text+0x218): undefined reference to `stack_depot_want_early_init'
+   nios2-linux-ld: slub.c:(.init.text+0x21c): undefined reference to `stack_depot_want_early_init'
+   nios2-linux-ld: net/core/sock.o: in function `sk_destruct':
+   sock.c:(.text+0x35d8): undefined reference to `__sk_defer_free_flush'
+   sock.c:(.text+0x35d8): relocation truncated to fit: R_NIOS2_CALL26 against `__sk_defer_free_flush'
 
- It does, but, oh dear, it's a "solution" to a problem we have created in 
-the first place.  Why do we ever want to have signed characters in the TTY 
-layer, and then to vary between platforms?  It's asking for portability 
-issues.
-
-  Maciej
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

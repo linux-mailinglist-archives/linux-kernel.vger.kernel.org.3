@@ -2,113 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35C74CC86A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6864CC86B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbiCCVxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S236653AbiCCVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbiCCVxK (ORCPT
+        with ESMTP id S232808AbiCCVxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:53:10 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932AE53B63
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:52:24 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id i11so8348115eda.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:52:24 -0800 (PST)
+        Thu, 3 Mar 2022 16:53:11 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40180EDF05
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:52:25 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id gm1so5220551qvb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:52:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GYiLJYYPJSjUhcXRGu1IuMA7OVQstg8mWS33iyknnRU=;
-        b=Zc/WF7ywL7MhnMKbU00JCToNkD/++ZgWE+Y89kS14vE0kJ93fDvXJU5KZ4j0/9sqRK
-         u9AjOEVVqB293uk/CyLW01XQKf8FgYoh55sm0DdlmYgEg1i9BkiLpKzZDXMyBcFxiTKe
-         r1vJZPhN00yxmarO4mEaCG8FJaDbFVV0xnbKY=
+        bh=1gQFOw2v5w6RQvzg/9d3ch6fsGJuXS0mE7iiujRgGMs=;
+        b=UTHTLApf8U1Q5liu+aMqL2YQ1hD7ngEAPhc1jjOmWdIzBvNnASnAjlH3Sgx5jxUFwI
+         /IYQ4sK9YBt0hqBHJRD77C61KNSp+Mkr9EYIa6DmnL8ePwcRS6Q1Lwk8dMZ/y0EYJSjo
+         lpcKL5PR1PygrzHV4xqH4bbZ8GC5vBaSgrgU/2CqrC1+xW4TiAx2JxDqr3CW+fNqNC6O
+         mcTCk6MWB1ikOCxgYYZOIyy/Cw33u54KCSs1bU3fRUlnCck5L/ZXDl1GQjzroIHuSW7l
+         tjKr7lAqOERcGLqjAdZtZNtMaiCpw9AB8NnACX8XNsJnoBfzb7jQYFwssJbPqMfs5rV4
+         Fvgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GYiLJYYPJSjUhcXRGu1IuMA7OVQstg8mWS33iyknnRU=;
-        b=c/NEYykuoksU3pjsDIlHq6HIoqXg1hyni0unhHmD3XI++heWaov2UvjVOXsWwt2Z6m
-         RApcpyQVjGjz/3NKdWhWeH4Ge/oUL7jqtM55qX0ty7gFs2aTtGzN10PDhD8A8rQT9IQu
-         usG+mE6bmrPOYH/J6NP7FjWR2ItaZ00xiDwpCAkkDLpF1hp/eyOM9ulfHx9Ahsq/9q9+
-         P55o3H+okbmLrwiHQ/OjLvY16rZcUzGwNbItk2HO620pDlyVAi4Jm8ueS8tm6jHC6vAr
-         j6wS2Fv8zkJk31+hQn0cBnyb5KAhSX+JCqAat41QvgLSfMBHlUQopUwXVEjmHixEZ9/y
-         8X1w==
-X-Gm-Message-State: AOAM530ojjWrX/KSVjvKBP3BVnLTGuYeeZb9J9gUJxueo5yNJhCThKUz
-        +cRjP5MSxsvJnehM9KeAiMuRHK4sMFYi2duU
-X-Google-Smtp-Source: ABdhPJx949ynv3HiJ+nDvTacdFCtsqEz72joDgFmTpq884Kyygsi3XMLbaqs+IOTlUYTIhyhn1O1iQ==
-X-Received: by 2002:a05:6402:f2a:b0:415:a3b3:2019 with SMTP id i42-20020a0564020f2a00b00415a3b32019mr11363638eda.177.1646344342731;
-        Thu, 03 Mar 2022 13:52:22 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id r11-20020aa7cfcb000000b00412c58c43ccsm1328830edy.37.2022.03.03.13.52.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 13:52:21 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id d3so9854218wrf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:52:21 -0800 (PST)
-X-Received: by 2002:a5d:64ed:0:b0:1f0:6672:f10c with SMTP id
- g13-20020a5d64ed000000b001f06672f10cmr1142174wri.679.1646344341238; Thu, 03
- Mar 2022 13:52:21 -0800 (PST)
+        bh=1gQFOw2v5w6RQvzg/9d3ch6fsGJuXS0mE7iiujRgGMs=;
+        b=Etv8BqpMzYMmLne6+CFTRqSY6VuGo2QLvdj87Y10sy1mHAXqKt9fi51UtSxpd+giNk
+         4DARB+IX2zpmYE904lvULmLZnQ0p1CTU63ADbkxOqirfuUC5hPF6n3FgKmy7wOSTfanE
+         OlVGrmRncy6MnkCVoTC42MnrB4zIGzcKmEXEcM+oozcXBEjfxTj1J6NGHYMfbU385zOk
+         XcT8H4DgSh5u+oXsywplEt9xmFVSlz4tAS+8bSPLzRpZ1BHqZeJ7rTwS5Eyia50QlChX
+         FkSGdBbACtluP4txgXGVGOKan56+eV3yUagdD3bzhlVMj/5oZuVmP9FfqP9DLewdjtK9
+         w3Bw==
+X-Gm-Message-State: AOAM533jBEPa2CLW6vHpGVFOpUcEvm2xZzPJ+aGikLzZg+6G85IOVr6U
+        gKjSimlURNJO2aI8TcTUku05HeaNJwJFHanzdoBkIw==
+X-Google-Smtp-Source: ABdhPJwrQqZzUcoHi/wGP1Rk6z4Y//Ln4C6/4fFgYJ+c6veDUb9AznEgJuFuj6FgpuVvChiswcTXktvUzsOcPJvSeQA=
+X-Received: by 2002:a05:6214:202f:b0:432:4810:1b34 with SMTP id
+ 15-20020a056214202f00b0043248101b34mr25772922qvf.35.1646344344193; Thu, 03
+ Mar 2022 13:52:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220303015151.1711860-1-pgwipeout@gmail.com>
-In-Reply-To: <20220303015151.1711860-1-pgwipeout@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 3 Mar 2022 13:52:08 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W6O5TtOHdVCbOyu221HrQWB8CnvcKA-5G49UF6TJaaHQ@mail.gmail.com>
-Message-ID: <CAD=FV=W6O5TtOHdVCbOyu221HrQWB8CnvcKA-5G49UF6TJaaHQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Addy Ke <addy.ke@rock-chips.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-9-haoluo@google.com>
+ <20220302224506.jc7jwkdaatukicik@apollo.legion> <f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com>
+ <20220303030349.drd7mmwtufl45p3u@apollo.legion> <ee991731-0e85-23be-2720-2d641704dcf9@fb.com>
+In-Reply-To: <ee991731-0e85-23be-2720-2d641704dcf9@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 3 Mar 2022 13:52:12 -0800
+Message-ID: <CA+khW7iDHeVW+gMk16mSKu=wSVMPR5ovgxKFDA+XqKCr8cYKeg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Mar 2, 2022 at 5:52 PM Peter Geis <pgwipeout@gmail.com> wrote:
+On Wed, Mar 2, 2022 at 11:34 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
-> supports. This leads to a situation during card initialization where the
-> ciu clock is set lower than the clock driver can support. The
-> dw-mmc-rockchip driver spews errors when this happens.
-> For normal operation this only happens a few times during boot, but when
-> cd-broken is enabled (in cases such as the SoQuartz module) this fires
-> multiple times each poll cycle.
 >
-> Fix this by testing the minimum frequency the clock driver can support
-> that is within the mmc specification, then divide that by the internal
-> clock divider. Set the f_min frequency to this value, or if it fails,
-> set f_min to the downstream driver's default.
 >
-> Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
+> On 3/2/22 7:03 PM, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, Mar 03, 2022 at 07:33:16AM IST, Yonghong Song wrote:
+> >>
+> >>
+> >> On 3/2/22 2:45 PM, Kumar Kartikeya Dwivedi wrote:
+> >>> On Sat, Feb 26, 2022 at 05:13:38AM IST, Hao Luo wrote:
+> >>>> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> >>>> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> >>>> be parameterized by a cgroup id and prints only that cgroup. So one
+> >>>> needs to specify a target cgroup id when attaching this iter.
+> >>>>
+> >>>> The target cgroup's state can be read out via a link of this iter.
+> >>>> Typically, we can monitor cgroup creation and deletion using sleepable
+> >>>> tracing and use it to create corresponding directories in bpffs and pin
+> >>>> a cgroup id parameterized link in the directory. Then we can read the
+> >>>> auto-pinned iter link to get cgroup's state. The output of the iter link
+> >>>> is determined by the program. See the selftest test_cgroup_stats.c for
+> >>>> an example.
+> >>>>
+> >>>> Signed-off-by: Hao Luo <haoluo@google.com>
+> >>>> ---
+> >>>>    include/linux/bpf.h            |   1 +
+> >>>>    include/uapi/linux/bpf.h       |   6 ++
+> >>>>    kernel/bpf/Makefile            |   2 +-
+> >>>>    kernel/bpf/cgroup_iter.c       | 141 +++++++++++++++++++++++++++++++++
+> >>>>    tools/include/uapi/linux/bpf.h |   6 ++
+> >>>>    5 files changed, 155 insertions(+), 1 deletion(-)
+> >>>>    create mode 100644 kernel/bpf/cgroup_iter.c
+[...]
+> >>>
+> >>> I think in existing iterators, we make a final call to seq_show, with v as NULL,
+> >>> is there a specific reason to do it differently for this? There is logic in
+> >>> bpf_iter.c to trigger ->stop() callback again when ->start() or ->next() returns
+> >>> NULL, to execute BPF program with NULL p, see the comment above stop label.
+> >>>
+> >>> If you do add the seq_show call with NULL, you'd also need to change the
+> >>> ctx_arg_info PTR_TO_BTF_ID to PTR_TO_BTF_ID_OR_NULL.
+> >>
+> >> Kumar, PTR_TO_BTF_ID should be okay since the show() never takes a non-NULL
+> >> cgroup. But we do have issues for cgroup_iter_seq_stop() which I missed
+> >> earlier.
+> >>
+> >
+> > Right, I was thinking whether it should call seq_show for v == NULL case. All
+> > other iterators seem to do so, it's a bit different here since it is only
+> > iterating over a single cgroup, I guess, but it would be nice to have some
+> > consistency.
+>
+> You are correct that I think it is okay since it only iterates with one
+> cgroup. This is different from other cases so far where more than one
+> objects may be traversed. We may have future other use cases, e.g.,
+> one task. I think we can abstract out start()/next()/stop() callbacks
+> for such use cases. So it is okay it is different from other existing
+> iterators since they are indeed different.
+>
 
-I don't spend tons of time either Rockchip or dw-mmc these days, but
-your email tickled a memory in my mind and I swore that I remember
-this whole 400 kHz minimum thing, though I never dug into it myself.
-It actually looks like the 400 kHz minimum disappeared sometime in
-2016! See commit 6a8883d614c7 ("ARM: dts: rockchip: replace to
-"max-frequency" instead of "clock-freq-min-max"") which only accounted
-for the high end, not the low end?
+Right. This iter is special. It has a single element. So we don't
+really need preamble and epilogue, which can directly be coded up in
+the iter program. And we can also guarantee the cgroup passed is
+always valid, otherwise we wouldn't invoke show(). So passing
+PTR_TO_BTF_ID is fine. I did so mainly in order to save a null check
+inside the prog.
 
-I'm pretty sure I've tested on veyron since then, though and I didn't
-see any errors, but perhaps this is because I was never using
-cd-broken and the 400 kHz always worked?
+> >
+> >> For cgroup_iter, the following is the current workflow:
+> >>     start -> not NULL -> show -> next -> NULL -> stop
+> >> or
+> >>     start -> NULL -> stop
+> >>
+> >> So for cgroup_iter_seq_stop, the input parameter 'v' will be NULL, so
+> >> the cgroup_put() is not actually called, i.e., corresponding cgroup is
+> >> not freed.
+> >>
+> >> There are two ways to fix the issue:
+> >>    . call cgroup_put() in next() before return NULL. This way,
+> >>      stop() will be a noop.
+> >>    . put cgroup_get_from_id() and cgroup_put() in
+> >>      bpf_iter_attach_cgroup() and bpf_iter_detach_cgroup().
+> >>
+> >> I prefer the second approach as it is cleaner.
+> >>
 
--Doug
+Yeah, the second approach should be fine. I was thinking of holding
+the cgroup's reference only when we actually start reading, so that a
+cgroup can go at any time and this iter gets a reference only in best
+effort. Now a reference is held from attach to detach, but I think it
+should be fine. Let me test.
+
+> >
+> > I think current approach is also not safe if cgroup_id gets reused, right? I.e.
+> > it only does cgroup_get_from_id in seq_start, not at attach time, so it may not
+> > be the same cgroup when calling read(2). kernfs is using idr_alloc_cyclic, so it
+> > is less likely to occur, but since it wraps around to find a free ID it might
+> > not be theoretical.
+>
+> As Alexei mentioned, cgroup id is 64-bit, the collision should
+> be nearly impossible. Another option is to get a fd from
+> the cgroup path, and send the fd to the kernel. This probably
+> works.
+>
+
+64bit cgroup id should be fine. Using cgroup path and fd is more
+complicated, unnecessarily IMHO.
+
+> [...]

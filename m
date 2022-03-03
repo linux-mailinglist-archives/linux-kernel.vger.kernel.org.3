@@ -2,172 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC344CC36A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83B94CC376
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbiCCRKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S235252AbiCCRME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiCCRKQ (ORCPT
+        with ESMTP id S230229AbiCCRMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:10:16 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE313163076;
-        Thu,  3 Mar 2022 09:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646327355;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=DZkjigILC9llxh5+typoDVVJKoolclEAlbUvnjI/Gfs=;
-    b=nLObxp/JntALEnC6k5IfGbDLVgzTt0Y4k/fZjTdtDPLf2Y2ovGbNmZfKAynQR1U1zt
-    XP6zqiV2mhpcuwfsNuKisVbsnnPW3vKi5fJilJEIVqqMuD1qAFqAAQY+HEWB+My4h7Rv
-    7Rr9amI8Lf544vW3/BN/kP3XexRYw1mEC7h1QZYH/yNEktwNqU2LSxkRlTXloouMD7Pr
-    5LrhaWThKeRFhISbUyz7Eq8SZU8jz14QoZo12oqfVhpA4vnrPIb4wXhI0f4C3topGfgD
-    ZXdvAGy+MZRCbu5YideeYOKArKSRoeef3741I/TDciQCZZeZs2OkviTPNJPinIqWYovg
-    o/7w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47tT+k="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id n729cey23H9F0XC
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 3 Mar 2022 18:09:15 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [Letux-kernel] [PATCH v16 1/4] drm/bridge: dw-hdmi: introduce
- dw_hdmi_enable_poll()
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
-Date:   Thu, 3 Mar 2022 18:09:14 +0100
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <ABC1BD09-383B-4499-B034-340CE88725B3@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <e54838849f80454b863f9f5634dd10f79ef7bb8f.1645895582.git.hns@goldelico.com>
- <983e9064-17ad-e646-f37d-ca9173ba0967@baylibre.com>
- <C8AE9A7A-E288-4637-ACAD-40CD33CD5F8C@goldelico.com>
- <3E620AF4-402E-45EA-9D92-92EAEA9647F5@goldelico.com>
- <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 12:12:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E997188A35;
+        Thu,  3 Mar 2022 09:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646327475; x=1677863475;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=vaOGjw7VdBKeP6eHbl1iLmTW0NFWNNn5qWcGsk5ZbQE=;
+  b=IBsdkHHXV4wbifK/fQcmch4j2dCl+OIeR+9I3TJLZJbc+X/7oOpfuHrQ
+   hdqWWgZKCK/GlUACOQgFuuVbD0kKsFRoFPX0tZLLV0DZKF5Lief0biL/g
+   uJSJbwueN8QPoCzBPrzyqVHRWB26Lyd+6hL+oQ1UmpJAtO/Y9OtgKdJuP
+   fSkQOcrY2PA1x2FHWQULaGWNOneVdNkWhFJ+ViFama+IcUdAjTLHxJC+1
+   u4vGQ5U4RrxBvO/rfHAEqcp1ymommJHwYMuC3273UixpEI8nyE/ortQ+7
+   Utv5idK+y1GauVyHG025EgKtJwZraG+BGZQUwgdoDFfr2W9pbSunDNdCV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="253928899"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="253928899"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 09:09:44 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="642184867"
+Received: from eabada-mobl2.amr.corp.intel.com (HELO [10.209.6.252]) ([10.209.6.252])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 09:09:43 -0800
+Message-ID: <5ca2583b-a873-fc5d-ece6-d4bdbd133a89@intel.com>
+Date:   Thu, 3 Mar 2022 09:09:37 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20220224165625.2175020-1-brijesh.singh@amd.com>
+ <20220224165625.2175020-23-brijesh.singh@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v11 22/45] x86/sev: Use SEV-SNP AP creation to start
+ secondary CPUs
+In-Reply-To: <20220224165625.2175020-23-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On 2/24/22 08:56, Brijesh Singh wrote:
+> +	/*
+> +	 * Allocate VMSA page to work around the SNP erratum where the CPU will
+> +	 * incorrectly signal an RMP violation #PF if a large page (2MB or 1GB)
+> +	 * collides with the RMP entry of VMSA page. The recommended workaround
+> +	 * is to not use a large page.
+> +	 *
+> +	 * Allocate one extra page, use a page which is not 2MB-aligned
+> +	 * and free the other.
+> +	 */
+> +	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
+> +	if (!p)
+> +		return NULL;
+> +
+> +	split_page(p, 1);
+> +
+> +	pfn = page_to_pfn(p);
+> +	if (IS_ALIGNED(__pfn_to_phys(pfn), PMD_SIZE)) {
+> +		pfn++;
+> +		__free_page(p);
+> +	} else {
+> +		__free_page(pfn_to_page(pfn + 1));
+> +	}
+> +
+> +	return page_address(pfn_to_page(pfn));
+> +}
 
-> Am 03.03.2022 um 17:51 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> Le jeu., mars 3 2022 at 17:43:05 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi Neil,
->>> Am 03.03.2022 um 17:30 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->>> Hi Neil,
->>>> Am 03.03.2022 um 17:23 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->>>> Hi,
->>>> On 26/02/2022 18:12, H. Nikolaus Schaller wrote:
->>>>> so that specialization drivers like ingenic-dw-hdmi can enable =
-polling.
->>>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>>>> ---
->>>>> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 9 +++++++++
->>>>> include/drm/bridge/dw_hdmi.h              | 1 +
->>>>> 2 files changed, 10 insertions(+)
->>>>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
-b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>>>> index 4befc104d2200..43e375da131e8 100644
->>>>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>>>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>>>> @@ -3217,6 +3217,15 @@ static int dw_hdmi_parse_dt(struct dw_hdmi =
-*hdmi)
->>>>> 	return 0;
->>>>> }
->>>>> +void dw_hdmi_enable_poll(struct dw_hdmi *hdmi, bool enable)
->>>>> +{
->>>>> +	if (hdmi->bridge.dev)
->>>>> +		hdmi->bridge.dev->mode_config.poll_enabled =3D enable;
->>>>> +	else
->>>>> +		dev_warn(hdmi->dev, "no hdmi->bridge.dev");
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(dw_hdmi_enable_poll);
->>>>> +
->>>>> struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
->>>>> 			      const struct dw_hdmi_plat_data *plat_data)
->>>>> {
->>>>> diff --git a/include/drm/bridge/dw_hdmi.h =
-b/include/drm/bridge/dw_hdmi.h
->>>>> index 2a1f85f9a8a3f..963960794b40e 100644
->>>>> --- a/include/drm/bridge/dw_hdmi.h
->>>>> +++ b/include/drm/bridge/dw_hdmi.h
->>>>> @@ -196,5 +196,6 @@ enum drm_connector_status =
-dw_hdmi_phy_read_hpd(struct dw_hdmi *hdmi,
->>>>> void dw_hdmi_phy_update_hpd(struct dw_hdmi *hdmi, void *data,
->>>>> 			    bool force, bool disabled, bool rxsense);
->>>>> void dw_hdmi_phy_setup_hpd(struct dw_hdmi *hdmi, void *data);
->>>>> +void dw_hdmi_enable_poll(struct dw_hdmi *hdmi, bool enable);
->>>>>   #endif /* __IMX_HDMI_H__ */
->>>> As I understand, this is because the IRQ line of the dw-hdmi IP =
-isn't connected right ? and you use the display-connector ddc gpio =
-instead ?
->>> Yes. The IRQ line is not connected on all boards as far as I can =
-see.
->>>> In this case I think the Ingenic DRM core should call =
-drm_kms_helper_poll_init(drm) instead.
->>> Ah, that is good. it seems to do "dw_hdmi_enable_poll()" in a more =
-generic way.
->> Well, I looked through source code and it is defined as
->> 	void drm_kms_helper_poll_init(struct drm_device *dev)
->> But there is no direct pointer to some drm_device available.
->> Neither in dw-hdmi nor ingenic-dw-hdmi.
->=20
-> Well he said "the Ingenic DRM core" aka ingenic-drm-drv.c. You do have =
-access to the main drm_device in the ingenic_drm_bind() function, so you =
-can add it there (with a cleanup function calling =
-drm_kms_helper_poll_fini() registered with drmm_add_action_or_reset()).
+This can be simplified.  There's no need for all the sill pfn_to_page()
+conversions or even an alignment check.  The second page (page[1]) of an
+order-1 page is never 2M/1G aligned.  Just use that:
 
-Well, do you really want to mix HPD detection between connector, =
-Synopsys bridge and Ingenic DRM core? These are independent...
-Or should be accessed only through the bridge chain pointers.
+	// Alloc an 8k page which is also 8k-aligned:
+	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
+	if (!p)
+		return NULL;
 
-IMHO we should keep separate functions separate.
+	split_page(p, 1);
 
-And maybe this should also be conditional? Maybe not depend on =
-compatible =3D jz4780 but compatible =3D ci20?
-
-Looks to me to be a quick fix in the wrong place.
-
-Let's fix the CSC issue first.
-
-BR,
-Nikolaus
-
+	// Free the first 4k.  This page _may_
+	// be 2M/1G aligned and can not be used:
+	__free_page(p);
+	
+	// Return the unaligned page:
+	return page_address(p+1);

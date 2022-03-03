@@ -2,161 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7177C4CB726
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A744B4CB728
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiCCGrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:47:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S230001AbiCCGrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCCGre (ORCPT
+        with ESMTP id S229480AbiCCGrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:47:34 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E25CF
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646290009; x=1677826009;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RKz7lI9VwsOUnQol4JTL6gKfI3KbW217oCbu7ZsqHYc=;
-  b=FrzHLhglhbi8pMzj2vTj96B35bj5XzeRmjgwGZ3eonQrylo5XKPtYKQn
-   SvjT6FOwYgA3GQm1gFyLBOrd4T56h9Cfsmt33yekrC2xHimNBPIuEY8SG
-   1LP+etsZCOyGmauEOVsjE+WW6VVvMZJGeSVszdLHvhf84GubSrcEA03xm
-   T1lhQVU05ehwW2l1ZIjPa5kFkx6OT7bCxB0XGDzBu/6fnkPxyp49IUb93
-   D/cORNQjoTuCEIRMPzAbl0vpL0zAd9Zop7ey/qBC2p+ht9FCqJP3p0K2P
-   MDKTTmk1JnDG5luDEd4WCkP371zWi9IBBgaUQ9gz1mGHxuqVWa3Ro9/xN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234207974"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="234207974"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:46:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="511306145"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 22:46:47 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPfEc-0000FV-Fd; Thu, 03 Mar 2022 06:46:46 +0000
-Date:   Thu, 3 Mar 2022 14:46:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Mark Salyzyn <salyzyn@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 782/9999] arch/mips/include/asm/vdso/gettimeofday.h:94:38: error:
- '__NR_clock_getres_time64' undeclared
-Message-ID: <202203031405.oBHU6BPY-lkp@intel.com>
+        Thu, 3 Mar 2022 01:47:51 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61556169395
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:47:07 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id r8so4707009ioj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 22:47:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=awOJT5ml/p/iN0KxyefzrE4LGX6n2gmPWGzJTQAAet8=;
+        b=Z7xCW4mND+wy80Una/SWNauxNVOG2MeRjOVmgRuceJWQNh1cSBnbSY3ys7FM+GkcpH
+         11ndhfuRDKCQvGwzM9qQtoV6GowdOm/Shi2alLhQeRbCGg36z9Z+LIpieBfrxXLSH1ne
+         SlfSmB2AX9wExRzUSCvoXbPT6zI0aRsgrrrY5Kn0mcQUIJdy0s4K6+XBLVVCFPWIw6ON
+         jmEwC11nVn9P5gw76AQOHv7yGrNIm5dy6Rz5k4M3A/YY2YQclDj1ZNSpPRZ7a0Sp239m
+         sT5J4EZgesuQCTWpgbFWABXdsFjqwl81g4QsViKCrD5lsGQtD31SohEe5weVdg/yFfmt
+         YRQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=awOJT5ml/p/iN0KxyefzrE4LGX6n2gmPWGzJTQAAet8=;
+        b=WcsLEqN/g0T4R/GMZSKnRQAnyNbMiG2LsDVgvpsdarN2V/UCcWissFVf2bF1rcfJ1O
+         zT7l94bHDW5ngAzOjGc0uTHQD4nvVIZ6F2pNhF1fMFtugxWUaOnzdglK04tLGGg5+XBV
+         v3gAA+UAG0nQrubEJEsIpunVETCdEUAEOD+864oqV3TrBPV8VbqbVD2jMAET7NJCnK01
+         xx8L6nFg1pgLFiqYSAsWSbRzF0agVEuJzzHKt4AMQ/Z9cw2sM+A8zhXACtOQoSTEUxlC
+         aly2sjbAIPdN+e67ikDBQ4vfmYDDsvaMlsE6VJ0ozKApxTRwROHLY1mpkhVTwYsYNdXB
+         E1LA==
+X-Gm-Message-State: AOAM531DC9csQIf7zXhHw+zlh2Q3zEH3qUafRdG3/8vbVJ7m9yU+e9/8
+        y9826YK7NTOl3DAseytbxIQt9g==
+X-Google-Smtp-Source: ABdhPJyQoPuVVRCc89Y1QnkaBzULkzh6Atn4Xpkt02waxT59G145ji8tP+U8C/JfEGb3Zggs1qfu8w==
+X-Received: by 2002:a02:93a3:0:b0:313:f1cd:2bde with SMTP id z32-20020a0293a3000000b00313f1cd2bdemr27667395jah.238.1646290026470;
+        Wed, 02 Mar 2022 22:47:06 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:3c49:7c37:fbd6:d914])
+        by smtp.gmail.com with ESMTPSA id e17-20020a5d8ad1000000b00644d51bbffcsm1075276iot.36.2022.03.02.22.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 22:47:05 -0800 (PST)
+Date:   Wed, 2 Mar 2022 23:47:01 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org
+Subject: Re: [PATCH v7 00/12] Multigenerational LRU Framework
+Message-ID: <YiBkZaIpQjv0D2fC@google.com>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <87czj3mux0.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87czj3mux0.fsf@vajain21.in.ibm.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincenzo,
+On Thu, Mar 03, 2022 at 11:36:51AM +0530, Vaibhav Jain wrote:
+> 
+> In a synthetic MongoDB Benchmark (YCSB) seeing an average of ~19% throughput
+> improvement on POWER10(Radix MMU + 64K Page Size) with MGLRU patches on
+> top of v5.16 kernel for MongoDB + YCSB bench across three different
+> request distriburions namely Exponential,Uniform and Zipfan
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
-commit: 23dea1cf7ed3846719448e74feeb56c28e3a9019 [782/9999] UPSTREAM: mips: Add clock_getres entry point
-config: mips-randconfig-r016-20211028 (https://download.01.org/0day-ci/archive/20220303/202203031405.oBHU6BPY-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/23dea1cf7ed3846719448e74feeb56c28e3a9019
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 23dea1cf7ed3846719448e74feeb56c28e3a9019
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ arch/mips/vdso/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from lib/vdso/gettimeofday.c:26,
-                    from <command-line>:
-   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_gettime_fallback':
-   arch/mips/include/asm/vdso/gettimeofday.h:70:38: error: '__NR_clock_gettime64' undeclared (first use in this function)
-      70 |         register long nr asm("v0") = __NR_clock_gettime64;
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/include/asm/vdso/gettimeofday.h:70:38: note: each undeclared identifier is reported only once for each function it appears in
-   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_getres_fallback':
->> arch/mips/include/asm/vdso/gettimeofday.h:94:38: error: '__NR_clock_getres_time64' undeclared (first use in this function)
-      94 |         register long nr asm("v0") = __NR_clock_getres_time64;
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from <command-line>:
-   lib/vdso/gettimeofday.c: In function '__cvdso_clock_gettime32':
-   lib/vdso/gettimeofday.c:113:20: error: invalid use of undefined type 'struct compat_timespec'
-     113 |                 res->tv_sec = ts.tv_sec;
-         |                    ^~
-   lib/vdso/gettimeofday.c:114:20: error: invalid use of undefined type 'struct compat_timespec'
-     114 |                 res->tv_nsec = ts.tv_nsec;
-         |                    ^~
-   lib/vdso/gettimeofday.c: In function '__cvdso_clock_getres_time32':
-   lib/vdso/gettimeofday.c:219:20: error: invalid use of undefined type 'struct compat_timespec'
-     219 |                 res->tv_sec = ts.tv_sec;
-         |                    ^~
-   lib/vdso/gettimeofday.c:220:20: error: invalid use of undefined type 'struct compat_timespec'
-     220 |                 res->tv_nsec = ts.tv_nsec;
-         |                    ^~
-   arch/mips/vdso/vgettimeofday.c: At top level:
-   arch/mips/vdso/vgettimeofday.c:14:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
-      14 | int __vdso_clock_gettime(clockid_t clock,
-         |     ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/vdso/vgettimeofday.c:20:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
-      20 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
-         |     ^~~~~~~~~~~~~~~~~~~
-   arch/mips/vdso/vgettimeofday.c:26:5: warning: no previous prototype for '__vdso_clock_getres' [-Wmissing-prototypes]
-      26 | int __vdso_clock_getres(clockid_t clock_id,
-         |     ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/__NR_clock_getres_time64 +94 arch/mips/include/asm/vdso/gettimeofday.h
-
-    83	
-    84	static __always_inline int clock_getres_fallback(
-    85						clockid_t _clkid,
-    86						struct __kernel_timespec *_ts)
-    87	{
-    88		register struct __kernel_timespec *ts asm("a1") = _ts;
-    89		register clockid_t clkid asm("a0") = _clkid;
-    90		register long ret asm("v0");
-    91	#if _MIPS_SIM == _MIPS_SIM_ABI64
-    92		register long nr asm("v0") = __NR_clock_getres;
-    93	#else
-  > 94		register long nr asm("v0") = __NR_clock_getres_time64;
-    95	#endif
-    96		register long error asm("a3");
-    97	
-    98		asm volatile(
-    99		"       syscall\n"
-   100		: "=r" (ret), "=r" (error)
-   101		: "r" (clkid), "r" (ts), "r" (nr)
-   102		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
-   103		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-   104	
-   105		return error ? -ret : ret;
-   106	}
-   107	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks, Vaibhav. I'll post the next version in a few days and include
+your tested-by tag.

@@ -2,167 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2B34CC995
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7F94CC99B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiCCXBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S230483AbiCCXBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiCCXBT (ORCPT
+        with ESMTP id S235214AbiCCXBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:01:19 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE5EE02D2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:00:33 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id k1so6038701pfu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+iEku6VLylBROAwohNbctWoLEYbG8sRCZosUKzOSFrE=;
-        b=iPw3nyW7O+77cw2Y3PRLCMdZYnDq9qljB/j0Duv/Rp7t+z1/3eI+aEgIDQicdfk1Mh
-         ggo7Aty6mMu7P/6ad1e9kwhEFqPHW5b9vJp5Si6KVXWuAaulPadQGkjbowlavSpEdZyB
-         jQR/Po/fX97/MnOX2PyK1+9NnV5Rzj+k3YjJZ9RU7qssGWF3UFdNlef/CHSdo0DhzfGY
-         Qc0+hs5qPFUSR5thPoBNMr+eJ9I3uYc5qzHDf8FQkG4DQqtojfCy6pVrwZuEasTh27d7
-         tnvOVVWEjUP4gLKhnApvy/ZEsugUHm2vXXkiCWCY6+R09aZ8cB7tpc8xpA6eeaa5QPA+
-         KOwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+iEku6VLylBROAwohNbctWoLEYbG8sRCZosUKzOSFrE=;
-        b=6klpmq8AnGdzTukhGWDQwzwnS11B/yrn8UyWaFHtrJdxs2/iuSB6544XWhPYZf7tQl
-         RAF+ZG2UwybTt5sF2biSnOTS9JZayKp9/8z6sMWs8UO4+WFT5Xof1SAwhWzw+6OxJQbc
-         l7wmg2RtgnN7jZy14PP+z1yqStFL6su7y/3v8vSUXvCB10Fw+qdZ2/GL9VU34gZmuucn
-         hpzjgPj8fIppEY8SqZPzTx8mrSCkLaSqjvA34yE11oqm0Dq3+Y8IlCMUyF5i3x+sN4KU
-         E4ldpr2Lmm6V1PRLeQyO5ugC8karKtoVz+u5DuEj7H1fs6BydR1n3aQyDndl2GUR9yT0
-         2KbQ==
-X-Gm-Message-State: AOAM530M/H6L8ty7loqNmC4SuTNFd/23+elceEIpvxW/rX3e3Tkaz5Yt
-        XS0Urj9wGY35HTJt2XwRpzntrA==
-X-Google-Smtp-Source: ABdhPJxG1DSPN8NKSEX7NnRSfG53qAA0jua9TnlOahP1n3mNMGwu+wBKAhv7x6qW69H04nM+rUM5vw==
-X-Received: by 2002:a65:4549:0:b0:378:c0b0:c153 with SMTP id x9-20020a654549000000b00378c0b0c153mr16475920pgr.177.1646348432238;
-        Thu, 03 Mar 2022 15:00:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o11-20020a056a0015cb00b004ce19332265sm3704501pfu.34.2022.03.03.15.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 15:00:31 -0800 (PST)
-Date:   Thu, 3 Mar 2022 23:00:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
- shadow page is zapped
-Message-ID: <YiFIjNVPLVVnRatm@google.com>
-References: <20220225182248.3812651-1-seanjc@google.com>
- <20220225182248.3812651-5-seanjc@google.com>
- <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
- <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
- <Yh/JdHphCLOm4evG@google.com>
- <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
- <Yh/1hPMhqeFKO0ih@google.com>
- <0c22b156-10c5-1988-7256-a9db7871989d@redhat.com>
+        Thu, 3 Mar 2022 18:01:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0D0F11B3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:00:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34110B82705
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC74C36AE3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646348454;
+        bh=FYI/8Y1WBT4HzXcUE12f554+O6V/H3p/NTj/MzLSdWk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AaBI9AYw916fHkP785EPyd6XN6s82z+R0fFDnP9fobA0gvyDhBlqs3qog090AVa9y
+         TWkNoUQqJ93BKn9nmLd1WobCqhG9vUZKAq25uJ0l3WGcjFqyjAew7meOXiPlFVtszd
+         GE4+nWJBWtU8yAl4a3flehl7ViFn2l6Dn7KJOTxJotdj8sTfoDg3mH5pi5MD4j+ugH
+         R6tGFYy9jCh3F3Wbq5vNAO60/pvo/2UHK/A2fnzxmQesAWR1pgBv9jCW/5w8aw0OUY
+         nZTkZsYt3gjCylySGxJ3hp8HkXCWbXiX9qsFxe9cNkuB1L2WzxlA0hpP1coW6hd1VT
+         cp/XrBfXfjJMA==
+Received: by mail-lj1-f175.google.com with SMTP id o6so8781312ljp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:00:53 -0800 (PST)
+X-Gm-Message-State: AOAM532Bx90atr2PcdLtnJeYVwi2gc1jiOsog4FbJ6YDH3DE1ggn/tw5
+        U9oZd5ubksk0lP2Y3nnms/IzPz46tV0ixfYmpjpn/w==
+X-Google-Smtp-Source: ABdhPJz3cl4jMqcvfSKVHunCPtaNdRheKNjy3rSm1wymcJSedk+TallQEQF6erOXFO+yao9Hp2Eo8ER04EB83dGMZ7o=
+X-Received: by 2002:a05:6402:2c6:b0:415:b06c:de71 with SMTP id
+ b6-20020a05640202c600b00415b06cde71mr11466619edx.50.1646348441080; Thu, 03
+ Mar 2022 15:00:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c22b156-10c5-1988-7256-a9db7871989d@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain>
+ <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com> <YgKiKEcsNt7mpMHN@grain>
+ <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+ <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org> <Yh0wIMjFdDl8vaNM@kernel.org>
+ <5a792e77-0072-4ded-9f89-e7fcc7f7a1d6@www.fastmail.com> <Yh0+9cFyAfnsXqxI@kernel.org>
+ <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com> <YiEZyTT/UBFZd6Am@kernel.org>
+In-Reply-To: <YiEZyTT/UBFZd6Am@kernel.org>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 3 Mar 2022 15:00:29 -0800
+X-Gmail-Original-Message-ID: <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+Message-ID: <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Balbir Singh <bsingharora@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Adrian Reber <adrian@lisas.de>,
+        Florian Weimer <fweimer@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>, Andrei Vagin <avagin@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, Borislav Petkov <bp@alien8.de>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Dave Martin <dave.martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Paolo Bonzini wrote:
-> On 3/2/22 23:53, Sean Christopherson wrote:
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > index c5e3f219803e..7899ca4748c7 100644
-> > > --- a/arch/x86/kvm/svm/svm.c
-> > > +++ b/arch/x86/kvm/svm/svm.c
-> > > @@ -3857,6 +3857,9 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu,
-> > > hpa_t root_hpa,
-> > >          unsigned long cr3;
-> > > 
-> > >          if (npt_enabled) {
-> > > +               if (is_tdp_mmu_root(root_hpa))
-> > > +                       svm->current_vmcb->asid_generation = 0;
-> > > +
-> > >                  svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
-> > >                  vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
-> > > 
-> > > Why not just new_asid
-> > My mental coin flip came up tails?  new_asid() is definitely more intuitive.
-> > 
-> 
-> Can you submit a patch (seems like 5.17+stable material)?
+On Thu, Mar 3, 2022 at 11:43 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Mon, Feb 28, 2022 at 02:55:30PM -0800, Andy Lutomirski wrote:
+> >
+> >
+> > On Mon, Feb 28, 2022, at 1:30 PM, Mike Rapoport wrote:
+> > > On Mon, Feb 28, 2022 at 12:30:41PM -0800, Andy Lutomirski wrote:
+> > >>
+> > >>
+> > >> On Mon, Feb 28, 2022, at 12:27 PM, Mike Rapoport wrote:
+> > >> > On Wed, Feb 09, 2022 at 06:37:53PM -0800, Andy Lutomirski wrote:
+> > >> >> On 2/8/22 18:18, Edgecombe, Rick P wrote:
+> > >> >> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
+> > >> >> >
+> > >> >
+> > >> > Even with the current shadow stack interface Rick proposed, CRIU can restore
+> > >> > the victim using ptrace without any additional knobs, but we loose an
+> > >> > important ability to "self-cure" the victim from the parasite in case
+> > >> > anything goes wrong with criu control process.
+> > >> >
+> > >> > Moreover, the issue with backward compatibility is not with ptrace but with
+> > >> > sigreturn and it seems that criu is not its only user.
+> > >>
+> > >> So we need an ability for a tracer to cause the tracee to call a function
+> > >> and to return successfully.  Apparently a gdb branch can already do this
+> > >> with shstk, and my PTRACE_CALL_FUNCTION_SIGFRAME should also do the
+> > >> trick.  I don't see why we need a sigretur-but-dont-verify -- we just
+> > >> need this mechanism to create a frame such that sigreturn actually works.
+> > >
+> > > If I understand correctly, PTRACE_CALL_FUNCTION_SIGFRAME() injects a frame
+> > > into the tracee and makes the tracee call sigreturn.
+> > > I.e. the tracee is stopped and this is used pretty much as PTRACE_CONT or
+> > > PTRACE_SYSCALL.
+> > >
+> > > In such case this defeats the purpose of sigreturn in CRIU because it is
+> > > called asynchronously by the tracee when the tracer is about to detach or
+> > > even already detached.
+> >
+> > The intent of PTRACE_CALL_FUNCTION_SIGFRAME is push a signal frame onto
+> > the stack and call a function.  That function should then be able to call
+> > sigreturn just like any normal signal handler.
+>
+> Ok, let me reiterate.
+>
+> We have a seized and stopped tracee, use PTRACE_CALL_FUNCTION_SIGFRAME
+> to push a signal frame onto the tracee's stack so that sigreturn could use
+> that frame, then set the tracee %rip to the function we'd like to call and
+> then we PTRACE_CONT the tracee. Tracee continues to execute the parasite
+> code that calls sigreturn to clean up and restore the tracee process.
+>
+> PTRACE_CALL_FUNCTION_SIGFRAME also pushes a restore token to the shadow
+> stack, just like setup_rt_frame() does, so that sys_rt_sigreturn() won't
+> bail out at restore_signal_shadow_stack().
 
-After a lot more thinking, there's no bug.  If KVM unloads all roots, e.g. fast zap,
-then all vCPUs are guaranteed to go through kvm_mmu_load(), and that will flush the
-current ASID.
+That is the intent.
 
-So the only problematic path is KVM_REQ_LOAD_MMU_PGD, which has two users,
-kvm_mmu_new_pgd() and load_pdptrs().  load_pdptrs() is benign because it triggers
-a "false" PGD load only top get PDPTRs updated on EPT, the actual PGD doesn't change
-(or rather isn't forced to change by load_pdptrs().
+>
+> The only thing that CRIU actually needs is to push a restore token to the
+> shadow stack, so for us a ptrace call that does that would be ideal.
+>
 
-Nested SVM's use of kvm_mmu_new_pgd() is "ok" because KVM currently flushes on
-every transition.
-
-That leaves kvm_set_cr3() via kvm_mmu_new_pgd().  For NPT, lack of a flush is
-moot because KVM shouldn't be loading a new PGD in the first place (see our other
-discussion about doing:
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index cf17af4d6904..f11199b41ca8 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1212,7 +1212,7 @@ int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
-        if (is_pae_paging(vcpu) && !load_pdptrs(vcpu, cr3))
-                return 1;
-
--       if (cr3 != kvm_read_cr3(vcpu))
-+       if (!tdp_enabled && cr3 != kvm_read_cr3(vcpu))
-                kvm_mmu_new_pgd(vcpu, cr3);
-
-        vcpu->arch.cr3 = cr3;
-
-
-Non-NPT shadow paging is ok because either the MOV CR3 will do a TLB flush, or the
-guest explicitly says "don't do a TLB flush", in which case KVM is off the hook
-from a correctness perspective (guest's responsibility to ensure MMU in sync'd),
-and is ok from a safety perspective because the legacy MMU does a remote TLB flush
-if it zaps any pages, i.e. the guest can't do use-after-free.
-
-All that said, this is another argument against dropping kvm_mmu_unload() from
-kvm_mmu_reset_context()[*]: SMM would theoretically be broken on AMD due to reusing
-the same ASID for both non-SMM and SMM roots/memslots.
-
-In practice, I don't think it can actually happen, but that's mostly dumb luck.
-em_rsm() temporarily transitions back to Real Mode before loading the actual
-non-SMM guest state, so only SMI that arrives with CR0.PG=0 is problematic.  In
-that case, TLB flushes may not be triggered by kvm_set_cr0() or kvm_set_cr4(),
-but kvm_set_cr3() will always trigger a flush because the "no flush" PCID bit
-will always be clear.  Well, unless the SMM handler writes the read-only SMRAM
-field, at which point it deserves to die :-)
-
-Anyways, before we transitions SMM away from kvm_mmu_reset_context(), we should
-add an explicit KVM_REQ_TLB_FLUSH_CURRENT in svm_{enter,leave}_smm(), with a TODO
-similar to nested_svm_transition_tlb_flush() to document that the explicit flush
-can go away when KVM ensures unique ASIDs for non-SMM vs. SMM.
-
-[*] https://lore.kernel.org/all/20220209170020.1775368-13-pbonzini@redhat.com
+That seems fine too.  The main benefit of the SIGFRAME approach is
+that, AIUI, CRIU eventually constructs a signal frame anyway, and
+getting one ready-made seems plausibly helpful.  But if it's not
+actually that useful, then there's no need to do it.

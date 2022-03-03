@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821844CC22F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA464CC22E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiCCQEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S234791AbiCCQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbiCCQE1 (ORCPT
+        with ESMTP id S234753AbiCCQE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:04:27 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A58187B9C;
-        Thu,  3 Mar 2022 08:03:41 -0800 (PST)
+        Thu, 3 Mar 2022 11:04:28 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D37187E3B;
+        Thu,  3 Mar 2022 08:03:42 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E47A3223F6;
-        Thu,  3 Mar 2022 17:03:39 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 52BD3223F7;
+        Thu,  3 Mar 2022 17:03:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
         t=1646323420;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BOHb81f6UjTpy/o++osD43lpaRTuWZcu/2E7PE6CXxA=;
-        b=abuUEQ/zGzluu5mT0ZzbVlfNgbdmEbU1+ftwK2a2CuMvWek5MqX7RGD3gKJbhydWzHmv0S
-        DO2cf5V1DlYHeBfBRDJCRnKYetqf2ywawas5RqHrugybdeR2N1pVRxLbCiZ2AzGZzMhvck
-        97FlmFBGObbciyYoaVm+FCYAxUnCgs8=
+        bh=50eB09uXLUfbxP4Vbgsw3GeBAsQQCWkMXzOOkk6tgQU=;
+        b=FQM7ok85A3SVGceI4wu2yTN4mTmypciLsP5h8uHRG2bUWosPLaCLDZ47i0/ouabSBX5yJD
+        r0TH5f2XhwGSgBRdJv0tZNyg3SP8Hp52p47A4RVK67FYluMtOPJegE1CXayWPAxrc0yYYK
+        0V9DKWa6Z7E/ulTnZK4DjewT5H8fsT0=
 From:   Michael Walle <michael@walle.cc>
 To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -42,9 +42,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 5/6] ARM: dts: lan966x: add flexcom I2C nodes
-Date:   Thu,  3 Mar 2022 17:03:22 +0100
-Message-Id: <20220303160323.3316317-6-michael@walle.cc>
+Subject: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10 support
+Date:   Thu,  3 Mar 2022 17:03:23 +0100
+Message-Id: <20220303160323.3316317-7-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220303160323.3316317-1-michael@walle.cc>
 References: <20220303160323.3316317-1-michael@walle.cc>
@@ -60,122 +60,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add all I2C nodes of the flexcom IP blocks. The driver supports
-FIFO, DMA or both combined. But the latter isn't working correctly.
-Thus, skip the fifo-size property for now. DMA is doing single byte
-reads in this case.
-
-Keep the nodes disabled by default.
+Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
+features 6 Gigabit copper ports and two SFP cages. For now the
+following is working:
+ - Kernel console
+ - SFP cages I2C bus and mux
+ - SPI
+ - SGPIO
+ - Watchdog
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 65 ++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 ++++++++++++++++++
+ 2 files changed, 161 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 0616927f1bb1..c4aab7f65790 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -120,6 +120,19 @@ spi0: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 085c43649d44..86dd0f9804ee 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
+ dtb-$(CONFIG_SOC_LAN966) += \
+-	lan966x-pcb8291.dtb
++	lan966x-pcb8291.dtb \
++	lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+new file mode 100644
+index 000000000000..958678dec7ad
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
++ */
 +
-+			i2c0: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx1: flexcom@e0044000 {
-@@ -158,6 +171,19 @@ spi1: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
++/dts-v1/;
++#include "lan966x.dtsi"
 +
-+			i2c1: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(4)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		trng: rng@e0048000 {
-@@ -213,6 +239,19 @@ spi2: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
++/ {
++	model = "Kontron KSwitch D10 MMT 6G-2GS";
++	compatible = "kontron,kswitch-d10-mmt-6g-2gs", "kontron,s1921",
++		     "microchip,lan9668", "microchip,lan966";
 +
-+			i2c2: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(6)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx3: flexcom@e0064000 {
-@@ -251,6 +290,19 @@ spi3: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
++	aliases {
++		serial0 = &usart0;
++	};
 +
-+			i2c3: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(8)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		dma0: dma-controller@e0068000 {
-@@ -308,6 +360,19 @@ spi4: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+			i2c4: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(10)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		timer0: timer@e008c000 {
++	gpio-restart {
++		compatible = "gpio-restart";
++		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
++		priority = <200>;
++	};
++
++	i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
++			    <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
++		i2c-parent = <&i2c4>;
++
++		i2c4_0: i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c4_1: i2c@2 {
++			reg = <2>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
++
++	sfp0: sfp0 {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c4_0>;
++		los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
++		maximum-power-milliwatt = <2500>;
++		tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
++		tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
++		rate-select0-gpios = <&sgpio_out 2 0 GPIO_ACTIVE_HIGH>;
++		rate-select1-gpios = <&sgpio_out 2 1 GPIO_ACTIVE_HIGH>;
++	};
++
++	sfp1: sfp1 {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c4_1>;
++		los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
++		maximum-power-milliwatt = <2500>;
++		tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
++		tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
++		rate-select0-gpios = <&sgpio_out 2 2 GPIO_ACTIVE_HIGH>;
++		rate-select1-gpios = <&sgpio_out 2 3 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&flx0 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
++	status = "okay";
++};
++
++&flx3 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
++	status = "okay";
++};
++
++&flx4 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
++	status = "okay";
++};
++
++&gpio {
++	usart0_pins: usart0-pins {
++		/* RXD, TXD */
++		pins = "GPIO_25", "GPIO_26";
++		function = "fc0_b";
++	};
++
++	sgpio_a_pins: sgpio-a-pins {
++		/* SCK, D0, D1, LD */
++		pins = "GPIO_32", "GPIO_33", "GPIO_34";
++		function = "sgpio_a";
++	};
++
++	sgpio_b_pins: sgpio-b-pins {
++		/* SCK, D0, D1, LD */
++		pins = "GPIO_64";
++		function = "sgpio_b";
++	};
++
++	fc3_b_pins: fc3-b-spi-pins {
++		/* SCK, MISO, MOSI */
++		pins = "GPIO_51", "GPIO_52", "GPIO_53";
++		function = "fc3_b";
++	};
++
++	fc4_b_pins: fc4-b-i2c-pins {
++		/* RXD, TXD */
++		pins = "GPIO_57", "GPIO_58";
++		function = "fc4_b";
++	};
++};
++
++&i2c4 {
++	pinctrl-0 = <&fc4_b_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&usart0 {
++	pinctrl-0 = <&usart0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&sgpio {
++	pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
++	pinctrl-names = "default";
++	bus-frequency = <8000000>;
++	/* arbitrary range because all GPIOs are in software mode */
++	microchip,sgpio-port-ranges = <0 11>;
++	status = "okay";
++};
++
++&sgpio_in {
++	ngpios = <128>;
++};
++
++&sgpio_out {
++	ngpios = <128>;
++};
++
++&spi3 {
++	pinctrl-0 = <&fc3_b_pins>;
++	pinctrl-names = "default";
++	cs-gpios = <&gpio 46 GPIO_ACTIVE_LOW>;
++	status = "okay";
++};
++
++&watchdog {
++	status = "okay";
++};
 -- 
 2.30.2
 

@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E594CB6DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280484CB6E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiCCGTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S229687AbiCCGVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiCCGT3 (ORCPT
+        with ESMTP id S229885AbiCCGU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:19:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B73149BAD;
-        Wed,  2 Mar 2022 22:18:43 -0800 (PST)
+        Thu, 3 Mar 2022 01:20:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF6166E3E;
+        Wed,  2 Mar 2022 22:20:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E55FB823EC;
-        Thu,  3 Mar 2022 06:18:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA59C004E1;
-        Thu,  3 Mar 2022 06:18:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1E33ECE254A;
+        Thu,  3 Mar 2022 06:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51F57C340F1;
+        Thu,  3 Mar 2022 06:20:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646288321;
-        bh=CV+mzyJI0MU1E13yzEY95qiJl5J/zjg0HzKnIqoOh6c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n6594idVn1X4CaWhvXjreD7uvklwCF+u3aKbL01xQJrtPVgA9mowSH0olm7nU2fVP
-         xysQ9WH+NWHkvYUAuw/9HoKnpGyS1UdAZltyoxW/XFmW3oCd4MIoWcyjNgE+7ablYh
-         U01Xq3QhZmPGuJ+ioLRp7Zr0ykOiJgmEuEJEfBIv2KCniPVipyCO9z2/xMkYf/jhHb
-         YK2//YOROxetmGcRVLcvRMeAEP+ol1l9dadP2HHifiUC2NmZtItnggPbu5+xeCkodp
-         0nPiLYqipAhOTXQbPPVhJs7O9X3pY3lxUaLREXIivAqLeXOw1AG4Z7Yqutg62XpXhA
-         IbAli1N1ptYJw==
-Date:   Wed, 2 Mar 2022 22:18:39 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, davem@davemloft.net,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] net/sctp: use memset avoid infoleaks
-Message-ID: <20220302221839.2a8649c5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220301081855.2053372-1-chi.minghao@zte.com.cn>
-References: <20220301081855.2053372-1-chi.minghao@zte.com.cn>
+        s=k20201202; t=1646288411;
+        bh=2zJXSJwtIog4m6Hi3l5UpqnmitP/JXcddG36457y4tQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=aoFL4k8jo3JxPJ+eskLPmTZkwjrzZ36Tu01pNxisdv0VrYiURB2uetz2hxjQ6+zqj
+         u0ILL75Ym6Bss+dAwddmLhp933SrvKRmD6Ho8LAInrzuegZHjYc/eukiYsMMODIilP
+         iWztcP1zZlBX7mjlZOGU6piuY7qxPrFS8rk02kTX8zF+ZhQI5nm5lMDd7nfqETE9ST
+         NP20Ak+wn+K2Ph8dbaW50eJmfvJ4P+8iIDvfdBONo3QWsSGV3FIZcBY9URZkxZUiVI
+         OhtWcsACHcqmj6P444bc4DLIUHruXtDS3ekppfAFt6nGtPpEhBJO02foIhnisWBqqQ
+         r6E6+dJWFzOAg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37B10E7BB08;
+        Thu,  3 Mar 2022 06:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] net: ipa: add an interconnect dependency
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164628841122.5215.2628804126734624595.git-patchwork-notify@kernel.org>
+Date:   Thu, 03 Mar 2022 06:20:11 +0000
+References: <20220301113440.257916-1-elder@linaro.org>
+In-Reply-To: <20220301113440.257916-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, bjorn.andersson@linaro.org,
+        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, elder@kernel.org, lkp@intel.com,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,25 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Mar 2022 08:18:55 +0000 cgel.zte@gmail.com wrote:
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  1 Mar 2022 05:34:40 -0600 you wrote:
+> In order to function, the IPA driver very clearly requires the
+> interconnect framework to be enabled in the kernel configuration.
+> State that dependency in the Kconfig file.
 > 
-> Use memset to initialize structs to preventing infoleaks
-> in sctp_auth_chunk_verify
+> This became a problem when CONFIG_COMPILE_TEST support was added.
+> Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
+> 
+> [...]
 
-Please explain where it's leaked to. Looks like a parameter structure
-that's used by the called but not copied anywhere.
+Here is the summary with links:
+  - [net,v2] net: ipa: add an interconnect dependency
+    https://git.kernel.org/netdev/net/c/1dba41c9d2e2
 
-> diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-> index cc544a97c4af..7ff16d12e0c5 100644
-> --- a/net/sctp/sm_statefuns.c
-> +++ b/net/sctp/sm_statefuns.c
-> @@ -652,6 +652,7 @@ static bool sctp_auth_chunk_verify(struct net *net, struct sctp_chunk *chunk,
->  		return false;
->  
->  	/* set-up our fake chunk so that we can process it */
-> +	memset(&auth, 0x0, sizeof(auth));
->  	auth.skb = chunk->auth_chunk;
->  	auth.asoc = chunk->asoc;
->  	auth.sctp_hdr = chunk->sctp_hdr;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

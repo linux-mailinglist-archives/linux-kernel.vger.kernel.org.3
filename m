@@ -2,123 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6D04CB780
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BCE4CB784
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiCCHKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S229664AbiCCHNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiCCHKX (ORCPT
+        with ESMTP id S230115AbiCCHMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:10:23 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A27116AA70
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 23:09:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HmglqWHIYVuIJ1p7EKpHpH7kEJPq2909Kw351HftFhvqpyRtXFilOCtR4le1/mY/6tsoUGiW++UyWi0ZD41TLriDReIGaXnbJFsErWUjmJgc8OfPj6awIs/7SVfysL0sewwV+e4coLpqbcSSGcw223pjuw8PttpHFdPvTetFm9qmuqJw6FLmHSQ8tzmf1NPdNSSkx2g4LXBzwLRNx3aDoIW2GzwF9JIWE5LZk38mpW1VMaLjVPyR1gg4krDEW08ptHA/MPbmIImJMa9HEllF17iJUJqZgNSSGIwnzJ0FiLa3sEWTWoPrvReyaR7O7IGxxDqe78vCNI0zAwRtInp0Ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mq4/0FDsyF/kkcvhEs+gEUYvZuSHqlX/dAmnWNac0lw=;
- b=TjkWlVQqMQpLNKK9UC2kYW8Ql9rUtJckT1SmPQ4i0scOUwbRfaQEnuxHZ9mkenXRzc5k4z/1bHfeK2U7UTLzg5HiYLcNCQI04oWEdOT/6P/UIunn14xgC1L3BQDsRU9b3G3F6ZbBTzpOBS3tuF40lnI8twBwaEwwWxdSGbGmm2hZCSf7dr/fgi9HhfFMGmPpBSmaV/a9WKIx6/eyLrA25DAaQx2AZcrFURD+EpGqS/cwPWLkP2FYT8aDzLwj3MKgrzP1NAKca0h/hLMR1cwbSDppVXjZ87rpzEqgXbdsmOIl3Dm6gt/dvZIB0q4/JQYNw0yIFawAneevM7pD6vQ8TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mq4/0FDsyF/kkcvhEs+gEUYvZuSHqlX/dAmnWNac0lw=;
- b=AJz27pEVFJF86pQYzqq+aXIOCcOB/nuFRu+n+cLmjSC+DjFsd9cpKon/SwfqADyrapXfm9Vd/TZyILqsS/mqL3ZCycXT0nwqI6XD9gVsxC/KbAypht9POLjTEDvWlkgUTSM9sb9pE2KWsC/zvHcKen8kbQDNbiWF8z4utChkLnE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM5PR12MB2343.namprd12.prod.outlook.com (2603:10b6:4:b3::38) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
- 2022 07:09:33 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.5038.014; Thu, 3 Mar 2022
- 07:09:32 +0000
-Message-ID: <48646a29-9cd1-f1c7-9230-453aadbfb07f@amd.com>
-Date:   Thu, 3 Mar 2022 08:09:26 +0100
+        Thu, 3 Mar 2022 02:12:53 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499C16AA72;
+        Wed,  2 Mar 2022 23:12:07 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V66BpVC_1646291523;
+Received: from 30.226.12.33(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V66BpVC_1646291523)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 15:12:04 +0800
+Message-ID: <40be865d-17c0-80a3-e434-73317c5bff70@linux.alibaba.com>
+Date:   Thu, 3 Mar 2022 15:12:01 +0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH -next] drm/amdgpu: clean up some inconsistent indenting
+Subject: Re: [PATCH v4 2/2] io_uring: Add support for napi_busy_poll
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@linux.ie
-Cc:     daniel@ffwll.ch, Xinhui.Pan@amd.com, alexander.deucher@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220303015215.92536-1-yang.lee@linux.alibaba.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220303015215.92536-1-yang.lee@linux.alibaba.com>
+To:     Olivier Langlois <olivier@trillion01.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <cover.1646142288.git.olivier@trillion01.com>
+ <aa38a667ef28cce54c08212fdfa1e2b3747ad3ec.1646142288.git.olivier@trillion01.com>
+ <29bad95d-06f8-ea7c-29fe-81e52823c90a@linux.alibaba.com>
+ <4f01857ca757ab4f0995420e6b1a6e3668a40da5.camel@trillion01.com>
+ <4af380e8-796b-2dd6-4ebc-e40e7fa51ce1@linux.alibaba.com>
+ <81a915d3-cf5f-a884-4649-704a5cf26835@linux.alibaba.com>
+ <a549f23857b327131c621dbc9a029a91401967c8.camel@trillion01.com>
+From:   Hao Xu <haoxu@linux.alibaba.com>
+In-Reply-To: <a549f23857b327131c621dbc9a029a91401967c8.camel@trillion01.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0214.eurprd06.prod.outlook.com
- (2603:10a6:20b:45e::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2316bb9-d550-409d-2338-08d9fce4c415
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2343:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB23431C30A3C6115B6CD1987683049@DM5PR12MB2343.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Oj1QJkY0afyrMDm14VZmJNYqbtMkEc/GxurEfM1/LDtBzxJdlRwjIO/JDFTubqNTEm+hRaf2TnlLK4T3PT+2RK7F/+k5wNsnPiAKm8aeJ23ZfdGDzFQwffLGMIp9Ju3/GrVDvaWZMY3Z71HFcVI8+slNFTD2vter0K5ngA/AhSnkak2MzBB1NRWYxhNEX9cx0e0RKVbocNJ+l1rRZB5PLMAXHRgic9loLM33XXPcFUnYKd90i/el7Bk7xDQd+jOqh4/TbiU23izRkROF3IGxn7R47+zaGhFI9daLbnaafceqoq/Ero5hb2ElgIbN6bQI1i1893ml3z+ExPdeRMgcO8XpmEfdJI71vxJXrUan1xSk515+0aQT1+5S7wnwdO5UUekotYWws0heqR4M/AuijggDl9Wq2Zmmvlbs6BnAv9rInJLW3X+TPKSfM7fE/c1Kk4jB9Bu9+spukUi6F+Zaw55Bahk1a+925wJEx7YN1lHeTq/HgLPgg3dBT88Q4Mq9UgIu4x4LFDxsRy1ucD9hW+OE9jAdKSV+58k+8jM5reQMPeP6KogSOgPtLbQPYSk1Gr6MSDGmFkmoAmHPSOcx0ciB6O5DB6a0VyXk3xRI0Z1/t9MjYYhAqaKN+0wmvfAThtvCionJYNiO8GQ5JLPLWxp+fTxMlnBczE09dASqDVyw6uJS931IbNnGGTIs/lw5GsApNa2R6E+awzVOr5/vBZOqlKHHMnjSngSOpuxnt9BxMIzlsb8PprzJ2qOwVuRl
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4326008)(5660300002)(66556008)(66476007)(66946007)(8676002)(2616005)(36756003)(31696002)(31686004)(66574015)(83380400001)(508600001)(8936002)(186003)(26005)(6512007)(38100700002)(6666004)(2906002)(6506007)(86362001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WnNZcFdsTDZYV3pmdTVHbllWL250dEdaMVR2b0h2WkFvbDdzMUxuVFpaYTdt?=
- =?utf-8?B?RjlnTUFWQXI2MjJzVThIRzV0b2ZsSy9FR09xeUNSZGVaME9vSUYwQzNzdFVo?=
- =?utf-8?B?RnhIdS9pSDRZQWFzR1BIYjJoVitrekRvYTZScEliQXc5d29qUStJaWplQkFO?=
- =?utf-8?B?S2Ercll1cHp5bU1ab0g1aU9LVjJ2RWZOenNpOXhIcENleFdSdlJSa0VOc0R1?=
- =?utf-8?B?SkN0emM5T3I2eS9vWGY1aUEvM1RLNlA2a1RaUGNWVzlnYWFXVzc1MnU3bUZQ?=
- =?utf-8?B?c0Z4blBhQVhhUUorcUdhVDVFWmlIMmQwSThTbzBWTEFuOXlYUW9nOGZFWUxQ?=
- =?utf-8?B?ZGJtSmxPbk1mazRkVEc1Ti9EbmpheGdYVnZsdnZMbnJpTXRJamdCcEVnT3hs?=
- =?utf-8?B?eUlqS2lja2M4VW43ck12SUhuRXcxNjhkWFVQdzRRSjlrQW5nMWwvS0xJaTMz?=
- =?utf-8?B?SGZrZC95cjl3T2w0NmZsUnZUUVhqMnkvcVNxNjM4L0QwUkU3bjJxSHNad1Vt?=
- =?utf-8?B?OWt1b2gzeFpKMHM4WGdBSVBNcjdoUmNqNmZybXByL29rUklidDQvQW0xQ01V?=
- =?utf-8?B?V3hKMHZCeTFkcndRRkpyME16N2FTckN4VG9zMTd0S21ieDlOSkJ3REp2RDB2?=
- =?utf-8?B?cVY4T2paeE1hd1ZIN1FDS2dNQXR2NVBhbVRnMFQwdDdnakloemtwQ2pHTW92?=
- =?utf-8?B?bVdlaUZxSVVONmRTVzJIeEhISFRLdTdsSWJQa0xCTGptV1lKOUloSEhsb21h?=
- =?utf-8?B?MHQyWUpYRUFsdkVtMzFhdmtjb2xKYUJjYzVLWXg0czFXa2dvbUY5bFVYUTVt?=
- =?utf-8?B?ZlRRUTJWbDlDMWxMVDd2cVQvVkgwM1pqa0lPdUFqdmhzdjZLak9idWlwQW5D?=
- =?utf-8?B?QXlGS2s3Ri8zaXRPVGhwQXBZaXo3dlBVMkg3ZmpUS0xMSzF3RDcxblNOOFFE?=
- =?utf-8?B?MkpnQ2R5NUtnNkxjT1YxcHh4b0Q2NWVIa2g2SUJhNm9ZSkU0TUdsMDBTVnc0?=
- =?utf-8?B?VGdFMkFtSVJSVVU2VndxWnF4KzZWa1FiaDhKRnpjcWRNSHVRRitwbHZuaEg3?=
- =?utf-8?B?dHB1Nm51WUR1MmNDYTVHQ2puL0Ivc1dsR0V2ZlFvaExBR0piQlNRZDNUbmEx?=
- =?utf-8?B?WTM2anM5SjB6ZDhLQUIwcGRUOXB4TWgvZTRFcW53eFFuaFZWZlJUV284anZC?=
- =?utf-8?B?QkNqWnR2V0RmRzZuK28zZkwwekY2V0wrYkl4dmxFN1ZxVThEVzhlVU1LMnE4?=
- =?utf-8?B?MjRHQVBmVXdiL3JZcDVINm1GY1A0UTdlVnRwVWNBS2ZIQUN4VTZqNmtlYkhs?=
- =?utf-8?B?SnN5ZlAwbUJyRVRaSGdjSmZVVHBscVVtRUd0dUJRQk01bFRJWkVYU3RpNmJ0?=
- =?utf-8?B?NzV3c1QvNlc2ZmJqYmx0bTVmTDJ3SkNqM3NqVHphaXBQVnM4QWp5dDJoRmFG?=
- =?utf-8?B?aWRGN1NpcXJwWEZUaWlSV0NSQWxHWTJPczFrVEhoZlViVWwraWdUeWJYTDR5?=
- =?utf-8?B?MXUxSVd1czZwNjY2TUVLY2FSNFl0RjhSbFc4NGNKYzdzdUU5dkZXNFlETUxm?=
- =?utf-8?B?QW9xdkVSd0NtVkMwRTJON3ZGOVVmNTJyR2tkQkYySnlGRW9qS25hN0ZzeGty?=
- =?utf-8?B?aWpVSDFXSS9FRU9FbFlxM0l1Q1JHVTNMV2MreUhiZTFUQ21jRFUwek0xMGdL?=
- =?utf-8?B?RStyMGgwWm9ZK281NTYrNUYwaHdGcXo0djQyVE1kTzhKWFFsRThyMCtpSTIr?=
- =?utf-8?B?RGFZeXRNQ1ZVMGpCMWg3NFkyT3ZIN1NweFhGSDdheGN3K0hYamhjRERHSkta?=
- =?utf-8?B?T1RmNzFlYlNDM2o5SmdUbHAwdk5aZ1QrUmx4emgvdThLZE5rOExVclBmMUhS?=
- =?utf-8?B?bnBnMlNmQmhIM1JKMDBKcTJqUVRJTThEWUxZajN6K3Q4cE1NdWU1R3hwMGlm?=
- =?utf-8?B?Zy9NQUgrZmozY2ZaS3hmdkFsaVQzYm9OQllIQUlId1NrUzJwSndCSm9WQzV0?=
- =?utf-8?B?dkwzOGVmZzZDYSsxRlVKR05CMTJ3RFc4SGg0MHFNOWFYYm5keHFscUszODYz?=
- =?utf-8?B?MUVNbUw0RWJiWVlVTW16YllPOHkzWnhobGJONmZlVExkT2dZYU1DQU5KV0dY?=
- =?utf-8?Q?cwNs=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2316bb9-d550-409d-2338-08d9fce4c415
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 07:09:32.7723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pWPKRs0U7p+uwhFLT0vI/BI7GAvdeZM32TmyI1euVio7HmgRzTvwkbDCuhDY3gId
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2343
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,45 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.03.22 um 02:52 schrieb Yang Li:
-> Eliminate the follow smatch warning:
-> drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:413 amdgpu_get_xgmi_hive()
-> warn: inconsistent indenting
+
+On 3/3/22 06:03, Olivier Langlois wrote:
+> On Wed, 2022-03-02 at 14:38 +0800, Hao Xu wrote:
+>>>>
+>>>> If that is what you suggest, what would this info do for the
+>>>> caller?
+>>>>
+>>>> IMHO, it wouldn't help in any way...
+>>> Hmm, I'm not sure, you're probably right based on that ENOMEM here
+>>> shouldn't
+>>>
+>>> fail the arm poll, but we wanna do it, we can do something like
+>>> what
+>>> we do for
+>>                               ^---but if we wanna do it
+> My position is that being able to perform busy poll is a nice to have
+> feature if the necessary resources are available. If not the request
+> will still be handled correctly so nothing special should be done in
+> case of mem alloc problem.
+Exactly what I meant.
 >
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-
-Reviewed-by: Christian König <christian.koenig@amd.com>
-
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 16 ++++++++--------
->   1 file changed, 8 insertions(+), 8 deletions(-)
+> but fair enough, lets wait for Jens and Pavel to chime him if they
+> would like to see something to be done here.
+Agree.
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> index 91817a31f3e1..4ff6e06babca 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> @@ -410,14 +410,14 @@ struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
->   	 */
->   	if (adev->reset_domain->type != XGMI_HIVE) {
->   		hive->reset_domain = amdgpu_reset_create_reset_domain(XGMI_HIVE, "amdgpu-reset-hive");
-> -			if (!hive->reset_domain) {
-> -				dev_err(adev->dev, "XGMI: failed initializing reset domain for xgmi hive\n");
-> -				ret = -ENOMEM;
-> -				kobject_put(&hive->kobj);
-> -				kfree(hive);
-> -				hive = NULL;
-> -				goto pro_end;
-> -			}
-> +		if (!hive->reset_domain) {
-> +			dev_err(adev->dev, "XGMI: failed initializing reset domain for xgmi hive\n");
-> +			ret = -ENOMEM;
-> +			kobject_put(&hive->kobj);
-> +			kfree(hive);
-> +			hive = NULL;
-> +			goto pro_end;
-> +		}
->   	} else {
->   		amdgpu_reset_get_reset_domain(adev->reset_domain);
->   		hive->reset_domain = adev->reset_domain;
+> Beside that, all I need to know is if napi_list needs to be protected
+> in __io_sq_thread with regards to io worket threads to start working on
+> a v5.
 
+Sorry for the delay, was stuck in other things. We definitely need
+
+lock in this case too. It should be several lines code, super appreciate
+
+if you could add it.
+
+
+Thanks,
+
+Hao
+
+>
+> I'll look into this question too...

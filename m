@@ -2,115 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EE34CC417
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CEB4CC41D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiCCRiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S232286AbiCCRjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiCCRim (ORCPT
+        with ESMTP id S230479AbiCCRje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:38:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B1F5E756;
-        Thu,  3 Mar 2022 09:37:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Mar 2022 12:39:34 -0500
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C313E108BE8;
+        Thu,  3 Mar 2022 09:38:46 -0800 (PST)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70516B82664;
-        Thu,  3 Mar 2022 17:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08654C004E1;
-        Thu,  3 Mar 2022 17:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646329073;
-        bh=AwsKZjrCfieTvEUDAR753VxI0pVb5/yxhVzdc73s6Yk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tF5Eio8uUmDzrs/3lfLgba6ZKgS7Ii7J/dwr0kY6gz/UhLzHURAFIaI/M5dyQ6ucz
-         NlbPzoiUdcbga83R9Y7yZr5Q6rOasQ/j1He7GtMgLXb/dSTBXTabb31tRcCwU/Yh9I
-         xK6TxKV9UEG4QZejP9tBw354Xm+JsNnGhWoyRt6s3oFeh2ouyEOXpldXxopj1WfIEf
-         o/RGNS29GXVTg2jsc8SR3sLzL9IqRaGEjML0ROExY5AnsbsL/B7Y/VF7dQKm1xTYx4
-         tS9Gga8Y1p0BkuOS3N875xSu8a9VmeDAwlj2WuBGqeSbLgqoUneElE7AIKAcbMX/2Z
-         K2otOXLxE4u6g==
-Date:   Thu, 3 Mar 2022 10:37:46 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-Message-ID: <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
-References: <20220301145233.3689119-1-arnd@kernel.org>
- <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
- <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
- <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
+        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4K8dWT14blz4xLFv;
+        Thu,  3 Mar 2022 17:38:45 +0000 (UTC)
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (1024-bit key) header.d=connolly.tech header.i=@connolly.tech header.b="WCL25u9O"
+Date:   Thu, 03 Mar 2022 17:38:34 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1646329118;
+        bh=HrxBmH3YwEP0q1bvU2BH7PU9i4V1wS4AlJ9ZNN4rP2A=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=WCL25u9OGiRYNyxzc0Kq+syOvA6uqkZX4H7hWkbmd9/HOiZhyDjidei+/QSpi+vro
+         zDwgTsFc/AnMEYyN/hq8rAGSDuNpuZEQ/Atx5i0PzHX33CWO8ButXm87DS4qf1hvaW
+         p/v6nxa2aJSxRkH9Rv6mQxoNhVXQE0BgkYc8TG1I=
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Caleb Connolly <caleb@connolly.tech>
+Subject: Re: [PATCH 3/3] clk: qcom: smd: Add missing MSM8998 RPM clocks
+Message-ID: <f06677f3-57ab-42eb-d707-a2d59fcdc3f2@connolly.tech>
+In-Reply-To: <20220226214126.21209-3-konrad.dybcio@somainline.org>
+References: <20220226214126.21209-1-konrad.dybcio@somainline.org> <20220226214126.21209-3-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sedat,
+[tested on Pixel 2 XL]
+Tested-by: Caleb Connolly <caleb@connolly.tech>
 
-On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
-> Hey Nick!
-> 
-> This only applies 1/3.
-> 
-> $ b4 --version
-> 0.8.0
-> 
-> $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kernel.org/
-> -o - | git am -3
-> Analyzing 14 messages in the thread
-> Will use the latest revision: v3
-> You can pick other revisions using the -vN flag
-> Checking attestation on all messages, may take a moment...
+On 26/02/2022 21:41, Konrad Dybcio wrote:
+> Add missing RPM-provided clocks on msm8998 and reorder the definitions
+> where needed.
+>
+> JAMI: fixed for a0384ecfe2aa ("clk: qcom: smd-rpm: De-duplicate identical=
+ entries")
+> JAMI: fixed for 36354c32bd76 ("clk: qcom: smd-rpm: Add .recalc_rate hook =
+for clk_smd_rpm_branch_ops")
+> Tested-by: Jami Kettunen <jami.kettunen@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 > ---
->  ✓ [PATCH v3 1/3] Kbuild: move to -std=gnu11
->    ✓ Signed: DKIM/kernel.org
->    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (✓ DKIM/kernel.org)
->  ERROR: missing [2/3]!
->  ERROR: missing [3/3]!
->  ---
->  NOTE: install patatt for end-to-end signature verification
-> ---
-> Total patches: 1
-> ---
-> WARNING: Thread incomplete!
-> Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.org
-> Base: not specified
-> Wende an: Kbuild: move to -std=gnu11
+>   drivers/clk/qcom/clk-smd-rpm.c | 40 +++++++++++++++++++++++-----------
+>   1 file changed, 27 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rp=
+m.c
+> index 418f017e933f..afc6dc930011 100644
+> --- a/drivers/clk/qcom/clk-smd-rpm.c
+> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+> @@ -816,15 +816,18 @@ static const struct rpm_smd_clk_desc rpm_clk_qcs404=
+ =3D {
+>   =09.num_clks =3D ARRAY_SIZE(qcs404_clks),
+>   };
+>
+> -DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, ln_bb_clk3_pin, ln_bb_clk3=
+_a_pin,
+> -=09=09=09=09     3, 19200000);
+> +DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8998, ln_bb_clk3, ln_bb_clk3_a, 3, 19200=
+000);
+> +DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, ln_bb_clk3_pin, ln_bb_clk3=
+_a_pin, 3, 19200000);
+>   DEFINE_CLK_SMD_RPM(msm8998, aggre1_noc_clk, aggre1_noc_a_clk,
+>   =09=09   QCOM_SMD_RPM_AGGR_CLK, 1);
+>   DEFINE_CLK_SMD_RPM(msm8998, aggre2_noc_clk, aggre2_noc_a_clk,
+>   =09=09   QCOM_SMD_RPM_AGGR_CLK, 2);
+>   DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8998, rf_clk3, rf_clk3_a, 6, 19200000);
+>   DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8998, rf_clk3_pin, rf_clk3_a_pi=
+n, 6, 19200000);
+> +
+>   static struct clk_smd_rpm *msm8998_clks[] =3D {
+> +=09[RPM_SMD_XO_CLK_SRC] =3D &sdm660_bi_tcxo,
+> +=09[RPM_SMD_XO_A_CLK_SRC] =3D &sdm660_bi_tcxo_a,
+>   =09[RPM_SMD_BIMC_CLK] =3D &msm8916_bimc_clk,
+>   =09[RPM_SMD_BIMC_A_CLK] =3D &msm8916_bimc_a_clk,
+>   =09[RPM_SMD_PCNOC_CLK] =3D &msm8916_pcnoc_clk,
+> @@ -837,12 +840,22 @@ static struct clk_smd_rpm *msm8998_clks[] =3D {
+>   =09[RPM_SMD_CE1_A_CLK] =3D &msm8992_ce1_a_clk,
+>   =09[RPM_SMD_DIV_CLK1] =3D &msm8974_div_clk1,
+>   =09[RPM_SMD_DIV_A_CLK1] =3D &msm8974_div_a_clk1,
+> +=09[RPM_SMD_DIV_CLK2] =3D &msm8974_div_clk2,
+> +=09[RPM_SMD_DIV_A_CLK2] =3D &msm8974_div_a_clk2,
+> +=09[RPM_SMD_DIV_CLK3] =3D &msm8992_div_clk3,
+> +=09[RPM_SMD_DIV_A_CLK3] =3D &msm8992_div_clk3_a,
+>   =09[RPM_SMD_IPA_CLK] =3D &msm8976_ipa_clk,
+>   =09[RPM_SMD_IPA_A_CLK] =3D &msm8976_ipa_a_clk,
+>   =09[RPM_SMD_LN_BB_CLK1] =3D &msm8916_bb_clk1,
+>   =09[RPM_SMD_LN_BB_CLK1_A] =3D &msm8916_bb_clk1_a,
+>   =09[RPM_SMD_LN_BB_CLK2] =3D &msm8916_bb_clk2,
+>   =09[RPM_SMD_LN_BB_CLK2_A] =3D &msm8916_bb_clk2_a,
+> +=09[RPM_SMD_LN_BB_CLK3] =3D &msm8998_ln_bb_clk3,
+> +=09[RPM_SMD_LN_BB_CLK3_A] =3D &msm8998_ln_bb_clk3_a,
+> +=09[RPM_SMD_LN_BB_CLK1_PIN] =3D &msm8916_bb_clk1_pin,
+> +=09[RPM_SMD_LN_BB_CLK1_A_PIN] =3D &msm8916_bb_clk1_a_pin,
+> +=09[RPM_SMD_LN_BB_CLK2_PIN] =3D &msm8916_bb_clk2_pin,
+> +=09[RPM_SMD_LN_BB_CLK2_A_PIN] =3D &msm8916_bb_clk2_a_pin,
+>   =09[RPM_SMD_LN_BB_CLK3_PIN] =3D &msm8998_ln_bb_clk3_pin,
+>   =09[RPM_SMD_LN_BB_CLK3_A_PIN] =3D &msm8998_ln_bb_clk3_a_pin,
+>   =09[RPM_SMD_MMAXI_CLK] =3D &msm8996_mmssnoc_axi_rpm_clk,
+> @@ -855,10 +868,14 @@ static struct clk_smd_rpm *msm8998_clks[] =3D {
+>   =09[RPM_SMD_QDSS_A_CLK] =3D &msm8916_qdss_a_clk,
+>   =09[RPM_SMD_RF_CLK1] =3D &msm8916_rf_clk1,
+>   =09[RPM_SMD_RF_CLK1_A] =3D &msm8916_rf_clk1_a,
+> -=09[RPM_SMD_RF_CLK2_PIN] =3D &msm8916_rf_clk2_pin,
+> -=09[RPM_SMD_RF_CLK2_A_PIN] =3D &msm8916_rf_clk2_a_pin,
+> +=09[RPM_SMD_RF_CLK2] =3D &msm8916_rf_clk2,
+> +=09[RPM_SMD_RF_CLK2_A] =3D &msm8916_rf_clk2_a,
+>   =09[RPM_SMD_RF_CLK3] =3D &msm8998_rf_clk3,
+>   =09[RPM_SMD_RF_CLK3_A] =3D &msm8998_rf_clk3_a,
+> +=09[RPM_SMD_RF_CLK1_PIN] =3D &msm8916_rf_clk1_pin,
+> +=09[RPM_SMD_RF_CLK1_A_PIN] =3D &msm8916_rf_clk1_a_pin,
+> +=09[RPM_SMD_RF_CLK2_PIN] =3D &msm8916_rf_clk2_pin,
+> +=09[RPM_SMD_RF_CLK2_A_PIN] =3D &msm8916_rf_clk2_a_pin,
+>   =09[RPM_SMD_RF_CLK3_PIN] =3D &msm8998_rf_clk3_pin,
+>   =09[RPM_SMD_RF_CLK3_A_PIN] =3D &msm8998_rf_clk3_a_pin,
+>   };
+> @@ -868,9 +885,6 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8998 =
+=3D {
+>   =09.num_clks =3D ARRAY_SIZE(msm8998_clks),
+>   };
+>
+> -DEFINE_CLK_SMD_RPM_XO_BUFFER(sdm660, ln_bb_clk3, ln_bb_clk3_a, 3, 192000=
+00);
+> -DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(sdm660, ln_bb_clk3_pin, ln_bb_clk3_=
+pin_a, 3, 19200000);
+> -
+>   static struct clk_smd_rpm *sdm660_clks[] =3D {
+>   =09[RPM_SMD_XO_CLK_SRC] =3D &sdm660_bi_tcxo,
+>   =09[RPM_SMD_XO_A_CLK_SRC] =3D &sdm660_bi_tcxo_a,
+> @@ -900,16 +914,16 @@ static struct clk_smd_rpm *sdm660_clks[] =3D {
+>   =09[RPM_SMD_LN_BB_A_CLK] =3D &msm8916_bb_clk1_a,
+>   =09[RPM_SMD_LN_BB_CLK2] =3D &msm8916_bb_clk2,
+>   =09[RPM_SMD_LN_BB_CLK2_A] =3D &msm8916_bb_clk2_a,
+> -=09[RPM_SMD_LN_BB_CLK3] =3D &sdm660_ln_bb_clk3,
+> -=09[RPM_SMD_LN_BB_CLK3_A] =3D &sdm660_ln_bb_clk3_a,
+> +=09[RPM_SMD_LN_BB_CLK3] =3D &msm8998_ln_bb_clk3,
+> +=09[RPM_SMD_LN_BB_CLK3_A] =3D &msm8998_ln_bb_clk3_a,
+>   =09[RPM_SMD_RF_CLK1_PIN] =3D &msm8916_rf_clk1_pin,
+>   =09[RPM_SMD_RF_CLK1_A_PIN] =3D &msm8916_rf_clk1_a_pin,
+>   =09[RPM_SMD_LN_BB_CLK1_PIN] =3D &msm8916_bb_clk1_pin,
+>   =09[RPM_SMD_LN_BB_CLK1_A_PIN] =3D &msm8916_bb_clk1_a_pin,
+>   =09[RPM_SMD_LN_BB_CLK2_PIN] =3D &msm8916_bb_clk2_pin,
+>   =09[RPM_SMD_LN_BB_CLK2_A_PIN] =3D &msm8916_bb_clk2_a_pin,
+> -=09[RPM_SMD_LN_BB_CLK3_PIN] =3D &sdm660_ln_bb_clk3_pin,
+> -=09[RPM_SMD_LN_BB_CLK3_A_PIN] =3D &sdm660_ln_bb_clk3_pin_a,
+> +=09[RPM_SMD_LN_BB_CLK3_PIN] =3D &msm8998_ln_bb_clk3_pin,
+> +=09[RPM_SMD_LN_BB_CLK3_A_PIN] =3D &msm8998_ln_bb_clk3_a_pin,
+>   };
+>
+>   static const struct rpm_smd_clk_desc rpm_clk_sdm660 =3D {
+> @@ -1011,8 +1025,8 @@ static struct clk_smd_rpm *sm6125_clks[] =3D {
+>   =09[RPM_SMD_LN_BB_CLK1_A] =3D &msm8916_bb_clk1_a,
+>   =09[RPM_SMD_LN_BB_CLK2] =3D &msm8916_bb_clk2,
+>   =09[RPM_SMD_LN_BB_CLK2_A] =3D &msm8916_bb_clk2_a,
+> -=09[RPM_SMD_LN_BB_CLK3] =3D &sdm660_ln_bb_clk3,
+> -=09[RPM_SMD_LN_BB_CLK3_A] =3D &sdm660_ln_bb_clk3_a,
+> +=09[RPM_SMD_LN_BB_CLK3] =3D &msm8998_ln_bb_clk3,
+> +=09[RPM_SMD_LN_BB_CLK3_A] =3D &msm8998_ln_bb_clk3_a,
+>   =09[RPM_SMD_QUP_CLK] =3D &sm6125_qup_clk,
+>   =09[RPM_SMD_QUP_A_CLK] =3D &sm6125_qup_a_clk,
+>   =09[RPM_SMD_MMRT_CLK] =3D &sm6125_mmrt_clk,
+> --
+> 2.35.1
+>
 
-It looks like the threading somehow got broken, likely due to the [v3]
-on the first patch and not the second or third:
+--
+Kind Regards,
+Caleb
 
-This worked for me on v5.17-rc6:
-
-$ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-arnd@kernel.org; done
-
-"b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
-"-P _" tells b4 to only fetch that exact message ID, not the whole
-thread.
-
-Cheers,
-Nathan

@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7344CB891
+	by mail.lfdr.de (Postfix) with ESMTP id 3217B4CB890
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiCCITj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S231238AbiCCITh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiCCITg (ORCPT
+        with ESMTP id S230188AbiCCITf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:19:36 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F9D1712B4;
-        Thu,  3 Mar 2022 00:18:51 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z16so4149026pfh.3;
-        Thu, 03 Mar 2022 00:18:51 -0800 (PST)
+        Thu, 3 Mar 2022 03:19:35 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089A11712B5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:18:50 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id j15so7037286lfe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vU1b7wDDnqVNlq1Z3Hvkh5KsF871sfs1Pb9VrlvOM1A=;
-        b=qpwp/6D+p9CYtGRLDE/pjwu0ektMH0lMywmc/153ea/IKQFvTa0ijFGROHSzpG0ur2
-         0lxIRSCwR55CVXs3b4YkLKTlfXCLiaDoP9TEl0pHT65bK6dIkDIto8ztD28Fc6QR9e1G
-         94yRK/QPDODBgmyvQuwUcgpAimqi7ihlZsrXkPZVOz1Hz7F7DtUQCdrZgsx+h27uzd0O
-         ABRUNvI5dDHu7TcJ7Yx6tBpjMEVnXwl3RV80aHQEC6vbSJx6aIMqkTC3At0wd7wpcfFS
-         5OD7VtKzLqmjB/f5+Rs2HOIRipvXTg32g8OUFJ2JisK5njm6Dtl0MboQUoYb5nS9LjDD
-         08mw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=on4cm3w97gy7RevnM2fAc8kCbBYemQ93B0MGug+f2Sw=;
+        b=HbmOUBeULRAj4VjhmZVI3EKmNdxqiWcxb0dr+4Kpd3Uum3VcFHkK4pe8+KHgkMhEwG
+         XEhHYFpvjPm4aiqP904xnKALwPNGd2RH8l59cDmlnI68h8iSOcWWegi1H5Ir8tSZAbFc
+         m61+tI1InDj0JEM9IXyUtSFpJN7s4yoRuKDdc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vU1b7wDDnqVNlq1Z3Hvkh5KsF871sfs1Pb9VrlvOM1A=;
-        b=3CyAXQFS0evdBRiUOyskkUERs+ipi1DxehTA7f6SQos8WWOBPVUrC9qQZne6cs1lK6
-         DqZdNMtz6FTFDzkFHHkc4qseECCW0gPSgZn5Gz2ZqY4BvOPSu53L/5UAyWbOoCeT/ZVh
-         zu7URgPZN6z8DNGmDwlKnyWXXFS2KGxRXtf2gNDGOGjCwO8w+1XXXmk3wH1ubSOGFG9Y
-         CdqpR0heBVzz2+p9oCpPrvAE18ablU580eAITUeEYZwI+boqXaeLy94VGu3qZ94C++3V
-         VUIaNcjYK24ndSQxajoL06VemzCr/eFOBY+kgKfQOzXAuNV+5WbyvsmPQouZP/asvVO0
-         Y5eg==
-X-Gm-Message-State: AOAM533mCvA0HzFDGRfWvtP6N036N+QI+q1glAIuomM9wwsq4LZh0EN/
-        mHlBuRWeCFYWGYnEZFutkInHuAVMxMnNCZOM
-X-Google-Smtp-Source: ABdhPJyaZ7N5WWHDTy0tfYJJ9BH5pHdFZMLr4vk8eCMjqLRRsNjkUIBSBREIrqJRHdC14YEzXyDjIg==
-X-Received: by 2002:a65:41c3:0:b0:363:5711:e234 with SMTP id b3-20020a6541c3000000b003635711e234mr29286766pgq.386.1646295530702;
-        Thu, 03 Mar 2022 00:18:50 -0800 (PST)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id k20-20020a056a00135400b004ecc81067b8sm1733592pfu.144.2022.03.03.00.18.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 00:18:50 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] bpf: Replace strncpy() with strscpy_pad()
-Date:   Thu,  3 Mar 2022 16:18:00 +0800
-Message-Id: <20220303081800.82653-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=on4cm3w97gy7RevnM2fAc8kCbBYemQ93B0MGug+f2Sw=;
+        b=d8LH1qcLwNAGLIehQbnwpLDF2zOajsRUCG2ya9oNC8ykm1bJ/7sfnu5LbiV25MEqtP
+         MdNcukRKlYJIFNbxZWgjjFBD2lXsvA9gA90ZMqY9eJv0qxZQM21bdP56kLuMznqDQS+g
+         OeHjv+EZu9hYVppI4BfihCA/Tw1MCkAFOJ40FrPnwZaGGPhTFrE6qcnbV/ra7jegWhCE
+         0LgwGrGnA47l4PRSvMDoiV3UHGmV99pG1S9d6EI63ENdJNxEY5L6iRyNXc6uJqU59EPo
+         ti4lRo42R0dgxQy3yC/Wd0+WXC1z815UBxi1rxQzyp+9kkIQLWnQi/HxZ91tNIRYHrI/
+         KKAw==
+X-Gm-Message-State: AOAM532pjJ5UqcUuBchnzzmHJXKiJ5RL/G8mZA05rwNMvnSR/nJ6doQX
+        ZmQMZNQd98d2EsL3wt9VpNfZs3b925W6YWnX76jpE5gE2Ap8/WMG
+X-Google-Smtp-Source: ABdhPJz7qOkcs9NrVpx+qNqlVj4sTQvZ7OlQDyiM5QuV1qHK2lks0edta7sb7odh4BSvah8kBcAyY+1/w97q+jW/l1Q=
+X-Received: by 2002:ac2:5fc2:0:b0:443:82cf:9603 with SMTP id
+ q2-20020ac25fc2000000b0044382cf9603mr20717684lfg.142.1646295528442; Thu, 03
+ Mar 2022 00:18:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220106065407.16036-1-johnson.wang@mediatek.com>
+ <20220106065407.16036-5-johnson.wang@mediatek.com> <Yd4yy2emxSSh80UW@robh.at.kernel.org>
+In-Reply-To: <Yd4yy2emxSSh80UW@robh.at.kernel.org>
+From:   Fei Shao <fshao@chromium.org>
+Date:   Thu, 3 Mar 2022 16:18:12 +0800
+Message-ID: <CAJ66y9F67VNRWE3JsCqnX4AFzd+R9Y9WJHoxnk_t7u2rHhuimg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: regulator: Add MT6358 regulators
+To:     Rob Herring <robh@kernel.org>
+Cc:     Johnson Wang <johnson.wang@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        broonie@kernel.org, linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using strncpy() on NUL-terminated strings is considered deprecated[1],
-replace it with strscpy_pad().
+On Tue, 11 Jan 2022 19:45:47 -0600, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, 06 Jan 2022 14:54:07 +0800, Johnson Wang wrote:
+> > Add buck_vcore_sshub and ldo_vsram_others_sshub
+> > regulators to binding document for MT6358 and MT6366.
+> >
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > ---
+> >  .../bindings/regulator/mt6358-regulator.txt   | 22 ++++++++++++++-----
+> >  1 file changed, 17 insertions(+), 5 deletions(-)
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
-
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- kernel/bpf/helpers.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index ae64110a98b5..d03b28761a67 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -225,13 +225,7 @@ BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
- 	if (unlikely(!task))
- 		goto err_clear;
- 
--	strncpy(buf, task->comm, size);
--
--	/* Verifier guarantees that size > 0. For task->comm exceeding
--	 * size, guarantee that buf is %NUL-terminated. Unconditionally
--	 * done here to save the size test.
--	 */
--	buf[size - 1] = 0;
-+	strscpy_pad(buf, task->comm, size);
- 	return 0;
- err_clear:
- 	memset(buf, 0, size);
--- 
-2.35.1
-
+Just a gentle ping on this - I assume there's no actionable item on
+Johnson's end? (or better to rebase & resend?)

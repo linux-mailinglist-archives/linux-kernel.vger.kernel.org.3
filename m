@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576584CB469
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EFB4CB48D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiCCBmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S231442AbiCCBoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbiCCBmH (ORCPT
+        with ESMTP id S231419AbiCCBoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:42:07 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418081B5124
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:41:23 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v4so3385861pjh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:41:23 -0800 (PST)
+        Wed, 2 Mar 2022 20:44:21 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A48A4B1CA
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:43:37 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id bt3so3450691qtb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ECPY2rXs0gj3ZMmKf1ZVTljD0jLnkN0k48s4x2qcO38=;
-        b=PUNnxzMxpSFabi/9CdWyQIWtepUkWGHx6ZZ3CkeKQhscGAuM5uGHPfE++wPJvpyxmA
-         iLtzRMTJlF0Yp5b8Tc6dpABJxKBLyU5qNxRJJCww8OtC9Dq+1P24VVmU7Jx6iyvDAa6U
-         JJELAb8jqSKUOmuZfn3Px0gqTxGqHKGr/twCLzRb5SbEsgc+nE6Ze+RcKYM2Y/oHrkr6
-         t8gFHqxjZTemPlhXm+xUEUPX035fKE8KJDr1po7YBU3hlRFJPD6XvqugIVGHEA6xjJ9G
-         q0eO2Ej12fMySEyh9Cd3ipzTaziiKoFmZGJNqZf5+tN4doooPAHHZ0vyZhD8eRalgKJB
-         q1vA==
+        h=date:from:to:cc:subject:message-id:mime-version;
+        bh=iPfHEmOKdhMIfmj5DivY/bN1HDyWSYEFJHhO7/nuhns=;
+        b=V7iwAeTLsXaQIKV2Op9OyY2XBqa01szKvdFcutupQlrJPMLJYdZuO3pNb7e/bI2d04
+         gsBg/TrRAZ2Jqd2WnvNmkBEUPLYA56rvBPyQVY0O3zKpvk9U43ZsXZvAbb2Qqw/Jm0SR
+         nJSViRcjwsvY1DOTB/RoteIWi4uYK5YItQn6F1Fn9lhxP+5uKaMbh4kqxT0BktjjWkDD
+         edMVE9gnNJMfgmRFuQUDBb3bHq7Xa0fSMT8pN/aKfzd1ZGJcRvkE8kFdJhLE6hjIu+7X
+         Ns44trhbwsOWUmeuekK67Kc8jHfeXoNH5YQgBeJY1GVhIzwJmYy2zKYCRs9GRxgF0S4t
+         1H1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ECPY2rXs0gj3ZMmKf1ZVTljD0jLnkN0k48s4x2qcO38=;
-        b=7m7a0wlWrBAZhPIpvmni5aOSDHVe0d1psjOqoGAj3rAzNMDCvKERzXMoHe0p2RpCTS
-         2huz8Bxw49xzGEDro8zz+TAlvf6wKjOQqNc9JBiQwTJDz9jewhf9GgoBnuSNAQviu0OA
-         0udV+BjFvoTDjzDqfSgpTVJfOOELyCGV5XLkSF247lVA+EJ945CcUEZD/JhVrlB00UUL
-         NFQZS/DK3Feqy4iv3K9/qAiRfRdKR2ltXLdRvBKzg0iDu3HDZkBo9plEQdXj3U8WyfnJ
-         DBAVgIQVlQ92A59QZCSvW7SOlHWFki47M0exC3utpSNaOGmxUr0RfGCBQdv4KQH4rKCx
-         KVhA==
-X-Gm-Message-State: AOAM530dyAOAR23GPM+0rvPVtMYnvVrefHQuWr3U0BDO7uCaqVGx3Ze4
-        5KuQQt22OnevKHXoSv88MVQlvg==
-X-Google-Smtp-Source: ABdhPJxOLeM9XsiJ3USmANfCGbc7ENEa9TQMGB4uIoaABrEWH9g0mEsUPBYh0PDa+Sy1fo13QN9krA==
-X-Received: by 2002:a17:90a:67c9:b0:1b9:51d5:6c13 with SMTP id g9-20020a17090a67c900b001b951d56c13mr2734061pjm.216.1646271682558;
-        Wed, 02 Mar 2022 17:41:22 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ip3-20020a17090b314300b001b9cb7ab96fsm309872pjb.8.2022.03.02.17.41.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
+        bh=iPfHEmOKdhMIfmj5DivY/bN1HDyWSYEFJHhO7/nuhns=;
+        b=nV5pbB3cRdJiPtH10S0q6m3/7fe0q1V7TikJ4aIy6mWyPkXTtLjDPwdH4rdNzPfAgG
+         1uJzKYIlinR7L3l05iX66G5I9ahw1rcaH/GBc9dpHib1OIUfgq2EloaSjmtHHbS7dprT
+         G121Ne567qpfWaKO15qwE1NrP8Smd2MR3fAxK2P+7J1KpShpe1FgLWiNxSkMk9VhzcXx
+         WQbKi8cK+nUEotjlmNVOAUrkWv65v4Xdv2sY9xVRYmNbnwLPLBuoxCs0VkNpatlpA+hU
+         la0T9PUXGeGmyqOKQzMGHo/+y4h/yYuFegikUDDzOGKCkM5deOsqaFebFTGXQylG9Ga6
+         IodQ==
+X-Gm-Message-State: AOAM530En7KkkttjnRgKqKl9PC5xYPcz5jHK5fJmJad0wLHeAuRVn0DV
+        xSExov5Uv10B58pWhAJ9vz7WpQbbk6nlXA==
+X-Google-Smtp-Source: ABdhPJzFHfUq3MiN2IigtOEeO0VwfWCXHQ2A9X5459o4XXiiE/KChwr0tPIPow5WzYUzTPUiz5qX1A==
+X-Received: by 2002:a05:622a:1055:b0:2de:3ea:f2ad with SMTP id f21-20020a05622a105500b002de03eaf2admr26149270qte.327.1646271816542;
+        Wed, 02 Mar 2022 17:43:36 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a14ac00b0060deaee7a21sm403207qkj.51.2022.03.02.17.43.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 17:41:21 -0800 (PST)
-Date:   Thu, 3 Mar 2022 01:41:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
- deferred TLB flush logic
-Message-ID: <YiAcvswAIrMi+iXS@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-5-seanjc@google.com>
- <YiAE4ju0a3MWXr31@google.com>
- <YiAH6UfSDyHeMP+s@google.com>
- <YiAXy+I1GcyZ7iFJ@google.com>
+        Wed, 02 Mar 2022 17:43:35 -0800 (PST)
+Date:   Wed, 2 Mar 2022 17:43:34 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Ralph Campbell <rcampbell@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH mmotm] mm/thp: refix __split_huge_pmd_locked() for migration
+ PMD
+Message-ID: <84792468-f512-e48f-378c-e34c3641e97@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiAXy+I1GcyZ7iFJ@google.com>
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -85,60 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Mingwei Zhang wrote:
-> On Thu, Mar 03, 2022, Sean Christopherson wrote:
-> > On Wed, Mar 02, 2022, Mingwei Zhang wrote:
-> > > On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> > > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > index 12866113fb4f..e35bd88d92fd 100644
-> > > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> > > >  	list_del_rcu(&root->link);
-> > > >  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> > > >  
-> > > > -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> > > > +	/*
-> > > > +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
-> > > > +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
-> > > > +	 * to a different pCPU.  Note, the local TLB flush on reuse also
-> > > > +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
-> > > > +	 * intermediate paging structures, that may be zapped, as such entries
-> > > > +	 * are associated with the ASID on both VMX and SVM.
-> > > > +	 */
-> > > > +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> > > 
-> > > Understood that we could avoid the TLB flush here. Just curious why the
-> > > "(void)" is needed here? Is it for compile time reason?
-> > 
-> > Nope, no functional purpose, though there might be some "advanced" warning or
-> > static checkers that care.
-> > 
-> > The "(void)" is to communicate to human readers that the result is intentionally
-> > ignored, e.g. to reduce the probability of someone "fixing" the code by acting on
-> > the result of zap_gfn_range().  The comment should suffice, but it's nice to have
-> > the code be self-documenting as much as possible.
-> 
-> Right, I got the point. Thanks.
-> 
-> Coming back. It seems that I pretended to understand that we should
-> avoid the TLB flush without really knowing why.
-> 
-> I mean, leaving (part of the) stale TLB entries unflushed will still be
-> dangerous right? Or am I missing something that guarantees to flush the
-> local TLB before returning to the guest? For instance,
-> kvm_mmu_{re,}load()?
+Migration entries do not contribute to a page's reference count: move
+__split_huge_pmd_locked()'s page_ref_add() into pmd_migration's else
+block (along with the page_count() check - a page is quite likely to
+to have reference count frozen to 0 when a migration entry is found).
 
-Heh, if SVM's ASID management wasn't a mess[*], it'd be totally fine.  The idea,
-and what EPT architectures mandates, is that each TDP root is associated with an
-ASID.  So even though there may be stale entries in the TLB for a root, because
-that root is no longer used those stale entries are unreachable.  And if KVM ever
-happens to reallocate the same physical page for a root, that's ok because KVM must
-be paranoid and flush that root (see code comment in this patch).
+This will fix a very rare anonymous memory leak, after a split_huge_pmd()
+raced with an anon split_huge_page() or an anon THP migrate_pages(): since
+the wrongly raised refcount stopped the page (perhaps small, perhaps huge,
+depending on when the race hit) from ever being freed.  At first I thought
+there were worse risks, from prematurely unfreezing a frozen page: but now
+think that would only affect page cache pages, which do not come this way
+(except for anonymous pages in swap cache, perhaps).
 
-What we're missing on SVM is proper ASID handling.  If KVM uses ASIDs the way AMD
-intends them to be used, then this works as intended because each root is again
-associated with a specific ASID, and KVM just needs to flush when (re)allocating
-a root and when reusing an ASID (which it already handles).
+Fixes: ec0abae6dcdf ("mm/thp: fix __split_huge_pmd_locked() for migration PMD")
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+That's an unfair "Fixes": it did not introduce the problem, but it
+missed this aspect of the problem; and will be a good guide to where this
+refix should go if stable backports are asked for.
 
-[*] https://lore.kernel.org/all/Yh%2FJdHphCLOm4evG@google.com
+ mm/huge_memory.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2039,9 +2039,9 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		young = pmd_young(old_pmd);
+ 		soft_dirty = pmd_soft_dirty(old_pmd);
+ 		uffd_wp = pmd_uffd_wp(old_pmd);
++		VM_BUG_ON_PAGE(!page_count(page), page);
++		page_ref_add(page, HPAGE_PMD_NR - 1);
+ 	}
+-	VM_BUG_ON_PAGE(!page_count(page), page);
+-	page_ref_add(page, HPAGE_PMD_NR - 1);
+ 
+ 	/*
+ 	 * Withdraw the table only after we mark the pmd entry invalid.

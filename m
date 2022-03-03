@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8577F4CC3C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281B54CC3D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbiCCRb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
+        id S232526AbiCCRcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbiCCRby (ORCPT
+        with ESMTP id S235379AbiCCRcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:31:54 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AD419E0B6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646328667; x=1677864667;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zRZLUIX8uEVckJ5UY6Uq1vgqvXkSt2grLaFVF7VRPDg=;
-  b=SH6qBpy6dddB3Gzm3l5WPheDppRVTWsoFOiJskSYQDFxxj+Cd/Vb4g87
-   z6+TdSl8rnTYIcdIJFhEr650glZt8pRHCxLKqvvnmATDdZs5fNb/+72eF
-   nfMUCxASgqbQ/VWoc9073djb7zMHXCoyUGwcAtx25rGdHazB/GpOwrj1A
-   y87kP39qxFPPAZyvieOz1eY2wv4d1CqkBhgB8WTGXxVekILWfFJ0kPvxe
-   TJbuHlA1su9095fzVzekXU5CK4773qR9UgGOqybZZFnCUzqZAcYzDh8Oz
-   d381y3a4ycoGnciw6Eiuwz0ZWpkJVUrItjnCFcGOlN2JBY0AvgWdvA1TI
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="233706049"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="233706049"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 09:31:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="642195802"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2022 09:31:05 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPpI8-0000mV-BM; Thu, 03 Mar 2022 17:31:04 +0000
-Date:   Fri, 4 Mar 2022 01:30:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: /tmp/ccc6Wvsr.s: Warning: relax hint unrecognized instruction: line
- 8743.
-Message-ID: <202203040124.0tu5hdNT-lkp@intel.com>
+        Thu, 3 Mar 2022 12:32:04 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2419E0A8;
+        Thu,  3 Mar 2022 09:31:18 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2234AADq028599;
+        Thu, 3 Mar 2022 11:31:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=84WJudr3xL0dnDa99zgx/2vbQMEBCtApcqUKb6n+efY=;
+ b=HypInva52hCFc29e6Nv9O3DrICfHRSSEQ0AAoQ2ML9sNQHTJ+L6KCmvpqsU8U/3H/pbp
+ NkGodak61EfPyU+MX2Q4Tvgv5z0ByntS35sawRFBzq4m645/LxUlg7kJ5iq4ZSHuu70n
+ qq2awF0yVCIVSoMKTb3g2h3Cz8SemV6qfbyOhoP6v04Wf2+ZPUdRRUqd6dYeaaEYaMkL
+ APIZ2wrTRX23oXyUUByJMXQTmPxAd4lj17lq086R69yd/UUxzGRJCqvsJL+1NOGYdvbU
+ s/WGIjfC6rvchwd8r80d8exjj7suA/RLFyYIvsGtitr8gRkp43q8ElrllOkLZ9VAAXvz BQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ejncq8ybk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 03 Mar 2022 11:31:04 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
+ 2022 17:31:02 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 3 Mar 2022 17:31:02 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.65.198])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BAA842A1;
+        Thu,  3 Mar 2022 17:31:01 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH 00/20] Support external boost at CS35l41 ASoC driver
+Date:   Thu, 3 Mar 2022 17:30:39 +0000
+Message-ID: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6tBsN7_2izzr_E_NtrMPINF7rOwLB622
+X-Proofpoint-GUID: 6tBsN7_2izzr_E_NtrMPINF7rOwLB622
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5859a2b1991101d6b978f3feb5325dad39421f29
-commit: d86ba831656611872e4939b895503ddac63d8196 sched: Don't make LATENCYTOP select SCHED_DEBUG
-date:   11 months ago
-config: nds32-randconfig-r026-20220303 (https://download.01.org/0day-ci/archive/20220304/202203040124.0tu5hdNT-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d86ba831656611872e4939b895503ddac63d8196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d86ba831656611872e4939b895503ddac63d8196
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+Move the support for CS35L41 external boost to its shared library
+for ASoC use.
+This move resulted in cs35l41_hda_reg_sequence being removed,
+and its steps were broken down into regmap writes or functions
+from the library. And hardware configuration struct was unified
+for its use in the shared lib.
+While at it, some minor bugs were found and fixed it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+David Rhodes (2):
+  ASoC: cs35l41: Fix GPIO2 configuration
+  Documentation: devicetree: CS35l41 External Boost
 
-All warnings (new ones prefixed by >>):
+Lucas Tanure (18):
+  ASoC: cs35l41: Fix max number of TX channels
+  ASoC: cs35l41: Fix DSP mbox start command and global enable order
+  ASoC: cs35l41: Remove unnecessary param
+  sound: cs35l41: Unify hardware configuration
+  sound: cs35l41: Check hw_config before using it
+  sound: cs35l41: Move cs35l41_gpio_config to shared lib
+  hda: cs35l41: Fix I2S params comments
+  hda: cs35l41: Always configure the DAI
+  hda: cs35l41: Add Boost type flag
+  hda: cs35l41: Put the device into safe mode for external boost
+  hda: cs35l41: Mute the device before shutdown
+  sound: cs35l41: Enable Internal Boost in shared lib
+  hda: cs35l41: Move boost config to initialization code
+  hda: cs35l41: Remove unnecessary log
+  hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+  hda: cs35l41: Handle all external boost setups the same way
+  hda: cs35l41: Move external boost handling to lib for ASoC use
+  ASoC: cs35l41: Support external boost
 
-   /tmp/ccc6Wvsr.s: Assembler messages:
->> /tmp/ccc6Wvsr.s: Warning: relax hint unrecognized instruction: line 8743.
+ .../bindings/sound/cirrus,cs35l41.yaml        |  42 ++-
+ include/sound/cs35l41.h                       |  53 +++-
+ sound/pci/hda/cs35l41_hda.c                   | 296 +++++-------------
+ sound/pci/hda/cs35l41_hda.h                   |  27 +-
+ sound/soc/codecs/cs35l41-i2c.c                |   4 +-
+ sound/soc/codecs/cs35l41-lib.c                | 185 ++++++++++-
+ sound/soc/codecs/cs35l41-spi.c                |   4 +-
+ sound/soc/codecs/cs35l41.c                    | 174 +++++-----
+ sound/soc/codecs/cs35l41.h                    |   5 +-
+ 9 files changed, 431 insertions(+), 359 deletions(-)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.35.1
+

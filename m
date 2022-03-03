@@ -2,172 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E634CBECA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD764CBED1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiCCNXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S233296AbiCCN1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiCCNXX (ORCPT
+        with ESMTP id S231142AbiCCN07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:23:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A54C34BBA;
-        Thu,  3 Mar 2022 05:22:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32460B8246E;
-        Thu,  3 Mar 2022 13:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACC0C340ED;
-        Thu,  3 Mar 2022 13:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646313754;
-        bh=WA+6m6yzwvFz/6tJbyG3UMbdVTSlsfS1c83kcIEFxWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pyf8b66awp9tbUHuOQVCaZJZ7TWxejy6MOWy8/1EDACDVYuzmng785Pltu4FO0wVf
-         zhSV6XGjpf0yNymkNk70LSl/LmsF4AYHWIam6SAZk7729mFhZ5jGwf3uE65/AnFkIV
-         BW4/z8ZhxBQkDvUKTx+QJ1x3ALjtR3zZFkjzBE88=
-Date:   Thu, 3 Mar 2022 14:22:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, spronovo@linux.microsoft.com
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Message-ID: <YiDBGFJcQXfx/hwG@kroah.com>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
- <Yh8ia7nJNN7ISR1l@kroah.com>
- <c848ade1-48e4-1868-b890-9c3401cff9de@linux.microsoft.com>
+        Thu, 3 Mar 2022 08:26:59 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2E618886B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:26:13 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id c7so3817157qka.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xpFSLJk6xKOFxZPPVd3YFcbRrJP4XDdwGDuqEjaZtmQ=;
+        b=3llJu4jH8nD8ONt+PRBtWAFa2tiEhb1yakIAnoRXoZkBUk+IosQevkXw3mRR59RsGy
+         IJqu1WDUyatVi28OT6G0Q32TltuIuh1pUfylvsLQbhYwE7/Y+R7fYYgj6jP2xNSZoDwx
+         sl1xlLq4VVExuSqX+QXMKk8Vp5kX90W5KLWOR9oTpREZ0ugRZyzqXLqv4meZt1DLBc7T
+         sDE1mDDP1oyrv75csrM84UCDtxIRbNbCNeAguWVKBy2lNcAnTgesunH+ObfQXWp4YKqc
+         DA7RSWAspDVSISewmm8BfdgcPRkJmw5CMlGWiGPE/oBmIj4huz61hD+VBx0uiJv2+sf1
+         5vTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xpFSLJk6xKOFxZPPVd3YFcbRrJP4XDdwGDuqEjaZtmQ=;
+        b=Fzn6l7E8eeQltn8z5jYT0tL5V5pRAMVhFX7SVHmz1QlUyjYrvVPUQYYd36okcR3sXO
+         st9Bhp55ILc7hWVJqXd1v29hLb8TZALjBDFgHOMGY7Gszq2e9V4IN79trSHH12k76cv6
+         g8SFwY7eV9z2EB467adQN3jpbgL89v+SxPBCyAjbjo74bvEyi0KC/NU5YO3bhkEAV0y1
+         qz11KxcymgKWdYuHNL+npjJxhLVZvQAgrlidnS8KuYwFLdRfm2T1rc8toNCYJCH+TLUT
+         OB1Wqdim6jyugOIqSCsjiRdNpySYAzCKEKpdiIl57e5CoAOeerUCxzXmHDgtDBbz8yi/
+         C2kw==
+X-Gm-Message-State: AOAM533CgdoENiblR7NpHkH2hT3y0uOew9pFqftvXyMD3GtZhm6ysbU2
+        BhMICBi/DR9qrgNPO0AV+0gXCg==
+X-Google-Smtp-Source: ABdhPJziSoDBPGbtMosaCPuOPDiOnHlOyQAD6ZVyRDJ3H28pB/a5yTPK0LVJnUj9R6m+pNkgp9c5OQ==
+X-Received: by 2002:a37:bd4:0:b0:606:4caa:650a with SMTP id 203-20020a370bd4000000b006064caa650amr18832304qkl.197.1646313972139;
+        Thu, 03 Mar 2022 05:26:12 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id w3-20020ac857c3000000b002de99dba1c3sm1428797qta.90.2022.03.03.05.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 05:26:11 -0800 (PST)
+Date:   Thu, 3 Mar 2022 08:26:10 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        surenb@google.com, ebiggers@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        Martin Steigerwald <Martin.Steigerwald@proact.de>
+Subject: Re: [PATCH] psi: remove CPU full metric at system level
+Message-ID: <YiDB8pjzthSk0X7Q@cmpxchg.org>
+References: <20220303055814.93057-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c848ade1-48e4-1868-b890-9c3401cff9de@linux.microsoft.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220303055814.93057-1-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:09:21PM -0800, Iouri Tarassov wrote:
+On Thu, Mar 03, 2022 at 01:58:14PM +0800, Chengming Zhou wrote:
+> Martin find it confusing when look at the /proc/pressure/cpu output,
+> and found no hint about that CPU "full" line in psi Documentation.
 > 
-> On 3/1/2022 11:53 PM, Greg KH wrote:
-> > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
-> > > > > +struct dxgglobal *dxgglobal;
-> > > > 
-> > > > No, make this per-device, NEVER have a single device for your driver.
-> > > > The Linux driver model makes it harder to do it this way than to do it
-> > > > correctly.  Do it correctly please and have no global structures like
-> > > > this.
-> > > > 
-> > > 
-> > > This may not be as big an issue as you thought. The device discovery is
-> > > still done via the normal VMBus probing routine. For all intents and
-> > > purposes the dxgglobal structure can be broken down into per device
-> > > fields and a global structure which contains the protocol versioning
-> > > information -- my understanding is there will always be a global
-> > > structure to hold information related to the backend, regardless of how
-> > > many devices there are.
-> >
-> > Then that is wrong and needs to be fixed.  Drivers should almost never
-> > have any global data, that is not how Linux drivers work.  What happens
-> > when you get a second device in your system for this?  Major rework
-> > would have to happen and the code will break.  Handle that all now as it
-> > takes less work to make this per-device than it does to have a global
-> > variable.
-> >
-> > > I definitely think splitting is doable, but I also understand why Iouri
-> > > does not want to do it _now_ given there is no such a model for multiple
-> > > devices yet, so anything we put into the per-device structure could be
-> > > incomplete and it requires further changing when such a model arrives
-> > > later.
-> > > 
-> > > Iouri, please correct me if I have the wrong mental model here.
-> > > 
-> > > All in all, I hope this is not going to be a deal breaker for the
-> > > acceptance of this driver.
-> >
-> > For my reviews, yes it will be.
-> >
-> > Again, it should be easier to keep things in a per-device state than
-> > not as the proper lifetime rules and the like are automatically handled
-> > for you.  If you have global data, you have to manage that all on your
-> > own and it is _MUCH_ harder to review that you got it correct.
+> % cat /proc/pressure/cpu
+> some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
+> full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
 > 
-> Hi Greg,
+> The PSI_CPU_FULL state is introduced by commit e7fcd7622823
+> ("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
+> but also counted at the system level as a side effect.
 > 
-> I do not really see how the driver be written without the global data. Let's review the design.
+> Naturally, the FULL state doesn't exist for the CPU resource at
+> the system level. These "full" numbers can come from CPU idle
+> schedule latency. For example, t1 is the time when task wakeup
+> on an idle CPU, t2 is the time when CPU pick and switch to it.
+> The delta of (t2 - t1) will be in CPU_FULL state.
+> 
+> Another case all processes can be stalled is when all cgroups
+> have been throttled at the same time, which unlikely to happen.
+> 
+> Anyway, CPU_FULL metric is meaningless and confusing at the
+> system level. So this patch removed CPU full metric at the
+> system level, and removed it's monitor function too. The psi
+> Documentation has also been updated accordingly.
+> 
+> Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
+> Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  Documentation/accounting/psi.rst | 18 +++++++++++++++---
+>  kernel/sched/psi.c               | 10 +++++++++-
+>  2 files changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+> index 860fe651d645..519652c06d7d 100644
+> --- a/Documentation/accounting/psi.rst
+> +++ b/Documentation/accounting/psi.rst
+> @@ -178,8 +178,20 @@ Cgroup2 interface
+>  In a system with a CONFIG_CGROUP=y kernel and the cgroup2 filesystem
+>  mounted, pressure stall information is also tracked for tasks grouped
+>  into cgroups. Each subdirectory in the cgroupfs mountpoint contains
+> -cpu.pressure, memory.pressure, and io.pressure files; the format is
+> -the same as the /proc/pressure/ files.
+> +cpu.pressure, memory.pressure, and io.pressure files; the format of
+> +memory.pressure and io.pressure is the same as the /proc/pressure/ files.
+> +
+> +But the format of cpu.pressure is as such::
+> +	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+> +	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 
-I see it the other way around.  It's easier to make it without a static
-structure, it is more work to keep it as you have done so here.  Do it
-correctly to start with and you will not have any of these issues going
-forward.
+It's the format of cpu.pressure, except when it's
+/sys/fs/cgroup/cpu.pressure... I think this is getting maybe a tad too
+difficult to write parsers for. Plus, we added the line over a year
+ago so we might break somebody by removing it again.
 
-> Dxgkrnl acts as the aggregator of all virtual compute devices, projected by the host. It needs to do operations, which do not belong to a particular compute device. For example, cross device synchronization and resource sharing.
+How about reporting zeroes at the system level?
 
-Then hang your data off of your device node structure that you created.
-Why ignore that?
-
-> A PCI device device is created for each virtual compute device. Therefore, there should be a global list of objects and a mutex to synchronize access to the list.
-
-Woah, what?  You create a fake PCI device for each virtual device?  If
-so, great, then you are now a PCI bus and create the PCI devices
-properly so that the PCI core can handle and manage them and then assign
-them to your driver.  You should NEVER have a global list of these
-devices, as that is what the driver model should be managing.  Not you!
-
-> A VMBus channel is offered by the host for each compute device. The list of the VMBus channels should be global.
-
-The vmbus channels are already handled by the driver core.  Use those
-devices that are given to you.  You don't need to manage them at all.
-
-> A global VMBus channel is offered by the host. The channel does not belong to any particular compute device, so it must be global.
-
-That channel is attached to your driver, use the device given to your
-driver by the bus.  It's not "global" in any sense of the word.
-
-And what's up with your lack of line wrapping?
-
-> IO space is shared by all compute devices, so its parameters should be global.
-
-Huh?  If that's the case then you have bigger problems.  Use the aux bus
-for devices that share io space.  That is what it was created for, do
-not ignore the functionality that Linux already provides you by trying
-to go around it and writing your own code.  Use the frameworks we have
-already debugged and support.  This is why your Linux driver should be
-at least 1/3 smaller than drivers for other operating systems.
-
-> Dxgkrnl needs to maintain a list of processes, which opened compute device objects. Dxgkrnl maintains private state for each process and when a process opens the /dev/dxg device, Dxgkrnl needs to find if the process state is already created by walking the global process list.
-
-That "list" is handled by the device node structure that was opened.
-It's not "global" at all.  Again, just like any other device node in
-Linux, this isn't a new thing or anything special at all.
-
-> Now, where to keep this global state? It could be kept in the /dev/dxg private device structure. But this structure is not available when, for example, dxg_pci_probe_device() or dxg_probe_vmbus() is called.
-
-Then your design is wrong.  It's as simple as that.  Fix it.
-
-> Can there be multiple /dev/dxg devices? No. Because the /dev/dxg device represents the driver itself, not a particular compute device.
-
-Then fix this.  Make your compute devices store the needed information
-when they are created.  Again, we have loads of examples in the kernel,
-this is nothing new.
-
-> I am not sure what design model you have in mind when saying there should be no global data. Could you please explain keeping in mind the above requirements?
-
-Please see all of my responses above, and please use more \n characters
-in the future :)
-
-good luck!
-
-greg k-h
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index e14358178849..86824de404bc 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 	mutex_unlock(&group->avgs_lock);
+ 
+ 	for (full = 0; full < 2; full++) {
+-		unsigned long avg[3];
+-		u64 total;
++		unsigned long avg[3] = { 0, };
++		u64 total = 0;
+ 		int w;
+ 
+-		for (w = 0; w < 3; w++)
+-			avg[w] = group->avg[res * 2 + full][w];
+-		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+-				NSEC_PER_USEC);
++		/* CPU FULL is undefined at the system level */
++		if (!(group == &psi_system && res == PSI_CPU && full)) {
++			for (w = 0; w < 3; w++)
++				avg[w] = group->avg[res * 2 + full][w];
++			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
++					NSEC_PER_USEC);
++		}
+ 
+ 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+ 			   full ? "full" : "some",

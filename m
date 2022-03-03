@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279D44CC6AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D484CC6AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbiCCT77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S235860AbiCCUAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbiCCT74 (ORCPT
+        with ESMTP id S235678AbiCCUAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:59:56 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D9719CCC8;
-        Thu,  3 Mar 2022 11:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646337550; x=1677873550;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pwhtk1GrrqE/4VynDFryxgHiiPKn9d6coiqO1HnGW5Q=;
-  b=Jj8P/Zy5EOtwhxQnbeJD9jTMAuvKkvB+vn4VJdhIrY8E/ZfDt8HCpqMc
-   9A5EV28QpCAUJ1ST27kr3x8rpUEs2qawQrHMQ6liC0t4uU7+okuJC2vyG
-   +tUt/tvQthPXOHAVKQXdlAvlTKH/hOGOxZHOB6YaT9FMaEnN2UIlG4Ab5
-   hDB2+KHhABfpvqLFMKgeuPlRR85Q1u3yQNl0Za+xk4FlO58eK+EiM78pC
-   GvLKHJGcpzkThyT1qvC9kFYkh17in7AUwbSDnv8SyhycDu5+LpEVO1Ecx
-   uWp6jfa89lEb+yKEL9ZIPyurC//CXKpz2xsMCcSIO3JKR85YF9SJd0pcL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="251373167"
-X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
-   d="scan'208";a="251373167"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 11:59:10 -0800
-X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
-   d="scan'208";a="630922010"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 11:59:10 -0800
-Date:   Thu, 3 Mar 2022 11:59:09 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Williams, Dan J" <dan.j.williams@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [RFC 07/10] platform/x86/intel/ifs: Create kthreads for online
- cpus for scan test
-Message-ID: <YiEeDfuQyqperN9x@agluck-desk3.sc.intel.com>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <20220301195457.21152-8-jithu.joseph@intel.com>
- <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
+        Thu, 3 Mar 2022 15:00:16 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4841A277D;
+        Thu,  3 Mar 2022 11:59:31 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so4893533pju.2;
+        Thu, 03 Mar 2022 11:59:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SECZtAQiZYsVQ356zmMgfQ3WYpSqn0ItZ/EiHtTGAJc=;
+        b=RoWmxYcU6YwsOuDDXfn3JP+HkgaAX9BLByYYk2G2xpqq9C1Gc0YPJeGcfDHl3oCDpv
+         vBnwR2UyIbyuqBetZEMShb3lAMTeLCVn8nX0+nOXoK+kROo/+9Qrv1WU5vBPxELyHvzD
+         26eJ6UwDONK2Oe7hlb78veqy92X48SW/OgizCl1q7EBC44ytFTEa+0+8cJSq0655v7OB
+         89h+SoeW8gN3ZCAyrzCN4LWs2Zq60i2W1sSow71NpPoKeWo207CHRXnvIImoErSk8N4n
+         /9wihC1aeBzpYRkUECOkGU9Hriv8FMXiypzw8/vf3Or+epp7XzDsYmGOvP/SdMd9IUD5
+         O5gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SECZtAQiZYsVQ356zmMgfQ3WYpSqn0ItZ/EiHtTGAJc=;
+        b=a+xcZ9QVDSrtRT2ptqgIhLgrr2n5kgDc6Fuxm+7oXQhgcJy5Lrnb13cazY9mDcEQrV
+         19Gl0ZtDimwS1ymNKp24G9m69JrHhvJYzmgWKvRQkiFDw5dsoWhy0N2M2s835aG1+AC0
+         TQ/uLQGFWbQaGNQbBRaaz9NfOCXEh8pbiaC6O6D5xfzZOogRoJtbudBrx+bQLVL5vtoY
+         TlVPPkskqmmNhmtlB9NnIfO15W/eqCmqO6ccAx4fFviIPbCzwpvY19x3TlL0cxFA7VNT
+         7T/QcUzcUxZVsslUGADCrg2oLzXFSCL84LMxyNwwxLSeaB0jjyvgUOADG8qZr+8/AKiu
+         IIig==
+X-Gm-Message-State: AOAM533BKWRzg096mael+w1ULBoITwOzvhRvnp8ygJqZ5SIj7Ul95rlN
+        jN8JkjpTRxQDWmqM53X33ok63w7w+tfjOAW6uhw=
+X-Google-Smtp-Source: ABdhPJzKfZm6JN0YkKE/595KBy78YvkZiDtQ9/t7zs4LdqfhHMk13JQbn81aQKTwiNEbwdtVLjulzwlWARtkHGmBeVM=
+X-Received: by 2002:a17:90b:1a81:b0:1bc:c3e5:27b2 with SMTP id
+ ng1-20020a17090b1a8100b001bcc3e527b2mr7173547pjb.20.1646337570337; Thu, 03
+ Mar 2022 11:59:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
+ <20220302194141.c4gvqz5v4mmmbwsv@ast-mbp.dhcp.thefacebook.com> <CA+khW7iRP8b69usnAy_j4hrYE-U0hC4Rv65K5m4wuP5ArnWsEQ@mail.gmail.com>
+In-Reply-To: <CA+khW7iRP8b69usnAy_j4hrYE-U0hC4Rv65K5m4wuP5ArnWsEQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 3 Mar 2022 11:59:19 -0800
+Message-ID: <CAADnVQJO2z2_ZO24zdAiSmoSMuhM4oeRcvAkxXiOy7ZV=R2frA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,40 +76,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 08:17:32PM -0800, Williams, Dan J wrote:
+On Thu, Mar 3, 2022 at 11:37 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Wed, Mar 2, 2022 at 11:41 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Feb 25, 2022 at 03:43:34PM -0800, Hao Luo wrote:
+> > > diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
+> > > index e7c2276be33e..c73c7ab3680e 100644
+> > > --- a/include/linux/tracepoint-defs.h
+> > > +++ b/include/linux/tracepoint-defs.h
+> > > @@ -51,6 +51,7 @@ struct bpf_raw_event_map {
+> > >       void                    *bpf_func;
+> > >       u32                     num_args;
+> > >       u32                     writable_size;
+> > > +     u32                     sleepable;
+> >
+> > It increases the size for all tracepoints.
+> > See BPF_RAW_TP in include/asm-generic/vmlinux.lds.h
+> > Please switch writeable_size and sleepable to u16.
+>
+> No problem.
+>
+> > >
+> > > -static const struct bpf_func_proto *
+> > > -syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > > +/* Syscall helpers that are also allowed in sleepable tracing prog. */
+> > > +const struct bpf_func_proto *
+> > > +tracing_prog_syscall_func_proto(enum bpf_func_id func_id,
+> > > +                             const struct bpf_prog *prog)
+> > >  {
+> > >       switch (func_id) {
+> > >       case BPF_FUNC_sys_bpf:
+> > >               return &bpf_sys_bpf_proto;
+> > > -     case BPF_FUNC_btf_find_by_name_kind:
+> > > -             return &bpf_btf_find_by_name_kind_proto;
+> > >       case BPF_FUNC_sys_close:
+> > >               return &bpf_sys_close_proto;
+> > > -     case BPF_FUNC_kallsyms_lookup_name:
+> > > -             return &bpf_kallsyms_lookup_name_proto;
+> > >       case BPF_FUNC_mkdir:
+> > >               return &bpf_mkdir_proto;
+> > >       case BPF_FUNC_rmdir:
+> > >               return &bpf_rmdir_proto;
+> > >       case BPF_FUNC_unlink:
+> > >               return &bpf_unlink_proto;
+> > > +     default:
+> > > +             return NULL;
+> > > +     }
+> > > +}
+> >
+> > If I read this correctly the goal is to disallow find_by_name_kind
+> > and lookup_name from sleepable tps. Why? What's the harm?
+>
+> A couple of thoughts, please correct me if they don't make sense. I
+> may think too much.
+>
+> 1. The very first reason is, I don't know the use case of them in
+> tracing. So I think I can leave them right now and add them later if
+> the maintainers want them.
+>
+> 2. A related question is, do we actually want all syscall helpers to
+> be in sleepable tracing? Some helpers may cause re-entering the
+> tracepoints. For a hypothetical example, if we call mkdir while
+> tracing some tracepoints in vfs_mkdir. Do we have protection for this?
 
-> What is this requirement to try to synchronize CPU execution? Comments
-> should explain the "why", the code usually explains the "what".
+If we go with noinline weak nop function approach then we will
+get recursion protection for free. All trampoline powered progs have it.
+Both sleepable and not.
 
-I need to put some more bits into the Documentation/x86/ifs.rst
-because if I had explained the IFS feature better there, you wouldn't
-have had to ask this (and some other questions).
+> Another potential problem is about lookup_name in particular,
+> sleepable_tracing could be triggered by any user, will lookup_name
+> leak kernel addresses to users in some way? The filesystem helpers
+> have some basic perm checks, I would think it's relatively safer.
 
-IFS works on one CORE at a time. But with HT enabled there are two
-logical CPUs that are on that core.
-
-Entering IFS test mode is done by all HT threads writing to the
-ACTIVATE_SCAN MSR "together". The microcode for that MSR will
-make the first logical CPU to write wait for a while. User can
-choose how many cycles to wait with some of the bits in the value
-written to the MSR ... in this driver we hard coded 5 milli-seconds.
-That seemed plenty to allow for the bottom half of interrupts, or
-a perf NMI to knock the HT threads a little bit out of sync with
-each other.
-
-So the code flow when running a test is to wake the kthreads for
-the logical CPUs that share the core. The threads may wake at
-different times, so there is the software sync to get them close
-enough.
-
-Then comes the loop to execute the test ... it is a loop because
-the core may not complete all "chunks" in one ACTIVATE_SCAN
-MSR write ... if it doesn't, the loop restarts execution from
-the chunk where IFS execution stopped.
-
-Interrupts are only blocked during the ACTIVATE_SCAN to
-increase the chances of completion. But preemption is
-disabled for the whole loop so that the threads won't
-get too far out of sync.
-
--Tony
+The tracepoint may be triggerable by any user, but the sleepable
+tp bpf prog will be loaded with cap_perfmon permissions, so it has
+the rights to read anything.
+So I don't see any concerns with enabling lookup_name to both
+syscall bpf prog and tp progs.

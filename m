@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638F04CC3F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A724CC3F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiCCRcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S235791AbiCCRdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbiCCRcK (ORCPT
+        with ESMTP id S235454AbiCCRcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:32:10 -0500
+        Thu, 3 Mar 2022 12:32:20 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFF119E715;
-        Thu,  3 Mar 2022 09:31:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5A519E72F;
+        Thu,  3 Mar 2022 09:31:22 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 223509T3013880;
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2234AADu028599;
         Thu, 3 Mar 2022 11:31:07 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=Q4jCqmm8WdBXwbOHocn75onr8efZLYyPHIo4yYA9rGo=;
- b=bf9l5yZI/wgkI2BypRXGOBqK+Lks28xSzmjtml63D/i5n9ZO3bDoMAW2Koc/5hy6bvj+
- OTF+nFkJRtfMAznghNBnEWDBymFpkxfVLj1ZJ8/F5W/lz4fSQMdGUlJkmIyCMFvtWrSw
- bfbCgt7q7F7RLTjwbEIM1cBWpIq/t9QUPoABTtZXhpYvewfejCm7GPCAf9FZdF69cY8g
- /gtmT9hOWC6uvnjwv4X8UwRWFtQvfLPsZ3h70t/GHuV2VMSbnhRZhZCRL01mLBCG4o3B
- /xDg0CaTYjUsK+SWqZsLBLUgDxGQgtXdc8+GFM7IfFB0weOIy6Mh+Rz0m0fxXJuOPc4G mg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ejncq8ybn-2
+ bh=RubtQFvEGSyaVoMB4m+eIjRGKy4eVGuqZenhheYgdWA=;
+ b=gRT99sVVugwq2Fe7A8oWqup0UdbUkBHNg8Xbb2Dz0ZDO2Lafv29XaDuy1czsNKFZXsXh
+ fsYW/ZpQ/occGyJrhimu55L/zT55PvpKlZsWKdFBsQtiYvTFmRUHOCTMUcPV/1E2eC1P
+ D14SxV+5bN/H3iGoawFU0KaR0jS9CvoupJ8G2HdCGEjYXhXCh05VnVnTY84GphkGdVvq
+ czh/4hW445weThKhmNMXluDB5QuSKEujqe4p2Cr4BP4v6Ze0OGNfDjxRALBCMcPjZSPg
+ 4AAKxBWHj9nzAae9Xm+TaE+NktXJWclWvWAQenTiyU9bftJMPSFLENEELeoZHh5XHN+9 jw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ejncq8ybk-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Thu, 03 Mar 2022 11:31:06 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
  2022 17:31:04 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
  Transport; Thu, 3 Mar 2022 17:31:04 +0000
 Received: from aryzen.ad.cirrus.com (unknown [198.61.65.198])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 26925B1A;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7D19B2A1;
         Thu,  3 Mar 2022 17:31:04 +0000 (UTC)
 From:   Lucas Tanure <tanureal@opensource.cirrus.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -49,17 +49,17 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
 CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH 05/20] sound: cs35l41: Unify hardware configuration
-Date:   Thu, 3 Mar 2022 17:30:44 +0000
-Message-ID: <20220303173059.269657-6-tanureal@opensource.cirrus.com>
+Subject: [PATCH 06/20] sound: cs35l41: Check hw_config before using it
+Date:   Thu, 3 Mar 2022 17:30:45 +0000
+Message-ID: <20220303173059.269657-7-tanureal@opensource.cirrus.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
 References: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: m2MYXIpVZzQgY3_k2XdkTjg6vvVtVMYK
-X-Proofpoint-GUID: m2MYXIpVZzQgY3_k2XdkTjg6vvVtVMYK
+X-Proofpoint-ORIG-GUID: MJUfShFocwb2VkUVfzI8r3pAiRZT1JF9
+X-Proofpoint-GUID: MJUfShFocwb2VkUVfzI8r3pAiRZT1JF9
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -70,560 +70,344 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both ASoC and HDA require to configure the GPIOs
-and Boost, so put that in single shared struct.
+The driver can receive an empty hw_config, so mark
+as valid if successfully read from device tree or
+ACPI.
+Platforms not marked with a valid hw config will
+not be supported.
 
 Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 ---
- include/sound/cs35l41.h        | 35 +++++++++----
- sound/pci/hda/cs35l41_hda.c    | 69 +++++++++++--------------
- sound/pci/hda/cs35l41_hda.h    | 13 +----
- sound/soc/codecs/cs35l41-i2c.c |  4 +-
- sound/soc/codecs/cs35l41-spi.c |  4 +-
- sound/soc/codecs/cs35l41.c     | 93 +++++++++++++++-------------------
- sound/soc/codecs/cs35l41.h     |  5 +-
- 7 files changed, 102 insertions(+), 121 deletions(-)
+ include/sound/cs35l41.h        |  3 +-
+ sound/pci/hda/cs35l41_hda.c    | 70 +++++++++++++++++++------------
+ sound/soc/codecs/cs35l41-lib.c | 16 ++++---
+ sound/soc/codecs/cs35l41.c     | 77 +++++++++++++++++++++-------------
+ 4 files changed, 105 insertions(+), 61 deletions(-)
 
 diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
-index bf7f9a9aeba0..262c75109c9e 100644
+index 262c75109c9e..57c47636c223 100644
 --- a/include/sound/cs35l41.h
 +++ b/include/sound/cs35l41.h
-@@ -701,9 +701,6 @@
- #define CS35L41_GPIO1_CTRL_SHIFT	16
- #define CS35L41_GPIO2_CTRL_MASK		0x07000000
- #define CS35L41_GPIO2_CTRL_SHIFT	24
--#define CS35L41_GPIO_CTRL_OPEN_INT	2
--#define CS35L41_GPIO_CTRL_ACTV_LO	4
--#define CS35L41_GPIO_CTRL_ACTV_HI	5
- #define CS35L41_GPIO_POL_MASK		0x1000
- #define CS35L41_GPIO_POL_SHIFT		12
+@@ -538,7 +538,6 @@
+ #define CS35L41_OTP_SIZE_WORDS		32
+ #define CS35L41_NUM_OTP_ELEM		100
  
-@@ -735,19 +732,37 @@ enum cs35l41_clk_ids {
- 	CS35L41_CLKID_MCLK = 4,
+-#define CS35L41_VALID_PDATA		0x80000000
+ #define CS35L41_NUM_SUPPLIES            2
+ 
+ #define CS35L41_SCLK_MSTR_MASK		0x10
+@@ -747,12 +746,14 @@ enum cs35l41_gpio_func {
  };
  
--struct cs35l41_irq_cfg {
--	bool irq_pol_inv;
--	bool irq_out_en;
--	int irq_src_sel;
-+enum cs35l41_gpio_func {
-+	CS35L41_HIZ,
-+	CS35L41_GPIO,
-+	CS35L41_INT_OPEN_DRAIN_GPIO2,
-+	CS35L41_MCLK,
-+	CS35L41_INT_PUSH_PULL_LOW_GPIO2,
-+	CS35L41_INT_PUSH_PULL_HIGH_GPIO2,
-+	CS35L41_PDM_CLK_GPIO2,
-+	CS35L41_PDM_DATA_GPIO2,
-+	CS35L41_MDSYNC_GPIO1 = 2,
-+	CS35L41_PDM_CLK_GPIO1 = 4,
-+	CS35L41_PDM_DATA_GPIO1 = 5,
+ struct cs35l41_gpio_cfg {
++	bool valid;
+ 	bool pol_inv;
+ 	bool out_en;
+ 	enum cs35l41_gpio_func func;
  };
  
--struct cs35l41_platform_data {
-+struct cs35l41_gpio_cfg {
-+	bool pol_inv;
-+	bool out_en;
-+	enum cs35l41_gpio_func func;
-+};
-+
-+struct cs35l41_hw_cfg {
+ struct cs35l41_hw_cfg {
++	bool valid;
  	int bst_ind;
  	int bst_ipk;
  	int bst_cap;
- 	int dout_hiz;
--	struct cs35l41_irq_cfg irq_config1;
--	struct cs35l41_irq_cfg irq_config2;
-+	struct cs35l41_gpio_cfg gpio1;
-+	struct cs35l41_gpio_cfg gpio2;
-+	unsigned int spk_pos;
-+
-+	/* Don't put the AMP in reset if VSPK can not be turned off */
-+	bool vspk_always_on;
- };
- 
- struct cs35l41_otp_packed_element_t {
 diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 718595380868..b79d6ad4b4f5 100644
+index b79d6ad4b4f5..a14ad3b0d516 100644
 --- a/sound/pci/hda/cs35l41_hda.c
 +++ b/sound/pci/hda/cs35l41_hda.c
-@@ -213,13 +213,13 @@ static const struct component_ops cs35l41_hda_comp_ops = {
- 	.unbind = cs35l41_hda_unbind,
- };
- 
--static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41,
--					const struct cs35l41_hda_hw_config *hw_cfg)
-+static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
- {
-+	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
+@@ -219,46 +219,52 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
  	bool internal_boost = false;
  	int ret;
  
--	if (!hw_cfg) {
-+	if (hw_cfg->vspk_always_on) {
++	if (!cs35l41->hw_cfg.valid)
++		return -EINVAL;
++
+ 	if (hw_cfg->vspk_always_on) {
  		cs35l41->reg_seq = &cs35l41_hda_reg_seq_no_bst;
  		return 0;
  	}
-@@ -227,7 +227,7 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41,
- 	if (hw_cfg->bst_ind || hw_cfg->bst_cap || hw_cfg->bst_ipk)
+ 
+-	if (hw_cfg->bst_ind || hw_cfg->bst_cap || hw_cfg->bst_ipk)
++	if (hw_cfg->bst_ind > 0 || hw_cfg->bst_cap > 0 || hw_cfg->bst_ipk > 0)
  		internal_boost = true;
  
--	switch (hw_cfg->gpio1_func) {
-+	switch (hw_cfg->gpio1.func) {
- 	case CS35L41_NOT_USED:
- 		break;
- 	case CS35l41_VSPK_SWITCH:
-@@ -239,11 +239,11 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41,
- 				   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
- 		break;
- 	default:
--		dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n", hw_cfg->gpio1_func);
-+		dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n", hw_cfg->gpio1.func);
- 		return -EINVAL;
+-	switch (hw_cfg->gpio1.func) {
+-	case CS35L41_NOT_USED:
+-		break;
+-	case CS35l41_VSPK_SWITCH:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO1_CTRL_MASK, 1 << CS35L41_GPIO1_CTRL_SHIFT);
+-		break;
+-	case CS35l41_SYNC:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
+-		break;
+-	default:
+-		dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n", hw_cfg->gpio1.func);
+-		return -EINVAL;
++	if (hw_cfg->gpio1.valid) {
++		switch (hw_cfg->gpio1.func) {
++		case CS35L41_NOT_USED:
++			break;
++		case CS35l41_VSPK_SWITCH:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO1_CTRL_MASK, 1 << CS35L41_GPIO1_CTRL_SHIFT);
++			break;
++		case CS35l41_SYNC:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
++			break;
++		default:
++			dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n",
++				hw_cfg->gpio1.func);
++			return -EINVAL;
++		}
  	}
  
--	switch (hw_cfg->gpio2_func) {
-+	switch (hw_cfg->gpio2.func) {
- 	case CS35L41_NOT_USED:
- 		break;
- 	case CS35L41_INTERRUPT:
-@@ -251,7 +251,7 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41,
- 				   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
- 		break;
- 	default:
--		dev_err(cs35l41->dev, "Invalid function %d for GPIO2\n", hw_cfg->gpio2_func);
-+		dev_err(cs35l41->dev, "Invalid function %d for GPIO2\n", hw_cfg->gpio2.func);
- 		return -EINVAL;
+-	switch (hw_cfg->gpio2.func) {
+-	case CS35L41_NOT_USED:
+-		break;
+-	case CS35L41_INTERRUPT:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
+-		break;
+-	default:
+-		dev_err(cs35l41->dev, "Invalid function %d for GPIO2\n", hw_cfg->gpio2.func);
+-		return -EINVAL;
++	if (hw_cfg->gpio2.valid) {
++		switch (hw_cfg->gpio2.func) {
++		case CS35L41_NOT_USED:
++			break;
++		case CS35L41_INTERRUPT:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
++			break;
++		default:
++			dev_err(cs35l41->dev, "Invalid GPIO2 function %d\n", hw_cfg->gpio2.func);
++			return -EINVAL;
++		}
  	}
  
-@@ -267,13 +267,12 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41,
- 		cs35l41->reg_seq = &cs35l41_hda_reg_seq_ext_bst;
- 	}
- 
--	return cs35l41_hda_channel_map(cs35l41->dev, 0, NULL, 1, (unsigned int *)&hw_cfg->spk_pos);
-+	return cs35l41_hda_channel_map(cs35l41->dev, 0, NULL, 1, &hw_cfg->spk_pos);
- }
- 
--static struct cs35l41_hda_hw_config *cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41,
--							   const char *hid, int id)
-+static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, int id)
- {
--	struct cs35l41_hda_hw_config *hw_cfg;
-+	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
- 	u32 values[HDA_MAX_COMPONENTS];
- 	struct acpi_device *adev;
- 	struct device *physdev;
-@@ -284,7 +283,7 @@ static struct cs35l41_hda_hw_config *cs35l41_hda_read_acpi(struct cs35l41_hda *c
- 	adev = acpi_dev_get_first_match_dev(hid, NULL, -1);
- 	if (!adev) {
- 		dev_err(cs35l41->dev, "Failed to find an ACPI device for %s\n", hid);
--		return ERR_PTR(-ENODEV);
-+		return -ENODEV;
- 	}
- 
- 	physdev = get_device(acpi_get_first_physical_node(adev));
-@@ -324,29 +323,23 @@ static struct cs35l41_hda_hw_config *cs35l41_hda_read_acpi(struct cs35l41_hda *c
- 	cs35l41->reset_gpio = fwnode_gpiod_get_index(&adev->fwnode, "reset", cs35l41->index,
- 						     GPIOD_OUT_LOW, "cs35l41-reset");
- 
--	hw_cfg = kzalloc(sizeof(*hw_cfg), GFP_KERNEL);
--	if (!hw_cfg) {
--		ret = -ENOMEM;
--		goto err;
--	}
--
- 	property = "cirrus,speaker-position";
- 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (internal_boost) {
+ 		cs35l41->reg_seq = &cs35l41_hda_reg_seq_int_bst;
+-		if (!(hw_cfg->bst_ind && hw_cfg->bst_cap && hw_cfg->bst_ipk))
+-			return -EINVAL;
+ 		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
+ 					   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
+ 		if (ret)
+@@ -334,28 +340,37 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
  	if (ret)
--		goto err_free;
-+		goto err;
- 	hw_cfg->spk_pos = values[cs35l41->index];
- 
- 	property = "cirrus,gpio1-func";
- 	ret = device_property_read_u32_array(physdev, property, values, nval);
- 	if (ret)
--		goto err_free;
--	hw_cfg->gpio1_func = values[cs35l41->index];
-+		goto err;
-+	hw_cfg->gpio1.func = values[cs35l41->index];
+ 		goto err;
+ 	hw_cfg->gpio1.func = values[cs35l41->index];
++	hw_cfg->gpio1.valid = true;
  
  	property = "cirrus,gpio2-func";
  	ret = device_property_read_u32_array(physdev, property, values, nval);
  	if (ret)
--		goto err_free;
--	hw_cfg->gpio2_func = values[cs35l41->index];
-+		goto err;
-+	hw_cfg->gpio2.func = values[cs35l41->index];
+ 		goto err;
+ 	hw_cfg->gpio2.func = values[cs35l41->index];
++	hw_cfg->gpio2.valid = true;
  
  	property = "cirrus,boost-peak-milliamp";
  	ret = device_property_read_u32_array(physdev, property, values, nval);
-@@ -365,15 +358,13 @@ static struct cs35l41_hda_hw_config *cs35l41_hda_read_acpi(struct cs35l41_hda *c
+ 	if (ret == 0)
+ 		hw_cfg->bst_ipk = values[cs35l41->index];
++	else
++		hw_cfg->bst_ipk = -1;
  
+ 	property = "cirrus,boost-ind-nanohenry";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret == 0)
+ 		hw_cfg->bst_ind = values[cs35l41->index];
++	else
++		hw_cfg->bst_ind = -1;
+ 
+ 	property = "cirrus,boost-cap-microfarad";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret == 0)
+ 		hw_cfg->bst_cap = values[cs35l41->index];
++	else
++		hw_cfg->bst_cap = -1;
+ 
++	hw_cfg->valid = true;
  	put_device(physdev);
  
--	return hw_cfg;
-+	return 0;
- 
--err_free:
--	kfree(hw_cfg);
- err:
- 	put_device(physdev);
- 	dev_err(cs35l41->dev, "Failed property %s: %d\n", property, ret);
- 
--	return ERR_PTR(ret);
-+	return ret;
- 
- no_acpi_dsd:
- 	/*
-@@ -384,22 +375,21 @@ static struct cs35l41_hda_hw_config *cs35l41_hda_read_acpi(struct cs35l41_hda *c
- 	 * fwnode.
- 	 */
- 	if (strncmp(hid, "CLSA0100", 8) != 0)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	/* check I2C address to assign the index */
+ 	return 0;
+@@ -381,6 +396,7 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
  	cs35l41->index = id == 0x40 ? 0 : 1;
  	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
--	cs35l41->vspk_always_on = true;
-+	cs35l41->hw_cfg.vspk_always_on = true;
+ 	cs35l41->hw_cfg.vspk_always_on = true;
++	cs35l41->hw_cfg.valid = true;
  	put_device(physdev);
  
--	return NULL;
-+	return 0;
- }
- 
- int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int irq,
- 		      struct regmap *regmap)
- {
- 	unsigned int int_sts, regid, reg_revid, mtl_revid, chipid, int_status;
--	struct cs35l41_hda_hw_config *acpi_hw_cfg;
- 	struct cs35l41_hda *cs35l41;
- 	int ret;
- 
-@@ -415,9 +405,11 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
- 	cs35l41->regmap = regmap;
- 	dev_set_drvdata(dev, cs35l41);
- 
--	acpi_hw_cfg = cs35l41_hda_read_acpi(cs35l41, device_name, id);
--	if (IS_ERR(acpi_hw_cfg))
--		return PTR_ERR(acpi_hw_cfg);
-+	ret = cs35l41_hda_read_acpi(cs35l41, device_name, id);
-+	if (ret) {
-+		dev_err_probe(cs35l41->dev, ret, "Platform not supported %d\n", ret);
-+		return ret;
-+	}
- 
- 	if (IS_ERR(cs35l41->reset_gpio)) {
- 		ret = PTR_ERR(cs35l41->reset_gpio);
-@@ -490,11 +482,9 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
- 	if (ret)
- 		goto err;
- 
--	ret = cs35l41_hda_apply_properties(cs35l41, acpi_hw_cfg);
-+	ret = cs35l41_hda_apply_properties(cs35l41);
- 	if (ret)
- 		goto err;
--	kfree(acpi_hw_cfg);
--	acpi_hw_cfg = NULL;
- 
- 	if (cs35l41->reg_seq->probe) {
- 		ret = regmap_multi_reg_write(cs35l41->regmap, cs35l41->reg_seq->probe,
-@@ -516,8 +506,7 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
  	return 0;
+diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
+index e5a56bcbb223..905c648a8f49 100644
+--- a/sound/soc/codecs/cs35l41-lib.c
++++ b/sound/soc/codecs/cs35l41-lib.c
+@@ -992,10 +992,20 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
+ 	case 101 ... 200:
+ 		bst_cbst_range = 3;
+ 		break;
+-	default:	/* 201 uF and greater */
++	default:
++		if (boost_cap < 0) {
++			dev_err(dev, "Invalid boost capacitor value: %d nH\n", boost_cap);
++			return -EINVAL;
++		}
++		/* 201 uF and greater */
+ 		bst_cbst_range = 4;
+ 	}
  
- err:
--	kfree(acpi_hw_cfg);
--	if (!cs35l41->vspk_always_on)
-+	if (!cs35l41->hw_cfg.vspk_always_on)
- 		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
- 	gpiod_put(cs35l41->reset_gpio);
- 
-@@ -531,7 +520,7 @@ void cs35l41_hda_remove(struct device *dev)
- 
- 	component_del(cs35l41->dev, &cs35l41_hda_comp_ops);
- 
--	if (!cs35l41->vspk_always_on)
-+	if (!cs35l41->hw_cfg.vspk_always_on)
- 		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
- 	gpiod_put(cs35l41->reset_gpio);
- }
-diff --git a/sound/pci/hda/cs35l41_hda.h b/sound/pci/hda/cs35l41_hda.h
-index 74951001501c..17f10764f174 100644
---- a/sound/pci/hda/cs35l41_hda.h
-+++ b/sound/pci/hda/cs35l41_hda.h
-@@ -40,26 +40,15 @@ struct cs35l41_hda_reg_sequence {
- 	unsigned int num_close;
- };
- 
--struct cs35l41_hda_hw_config {
--	unsigned int spk_pos;
--	unsigned int gpio1_func;
--	unsigned int gpio2_func;
--	int bst_ind;
--	int bst_ipk;
--	int bst_cap;
--};
--
- struct cs35l41_hda {
- 	struct device *dev;
- 	struct regmap *regmap;
- 	struct gpio_desc *reset_gpio;
- 	const struct cs35l41_hda_reg_sequence *reg_seq;
-+	struct cs35l41_hw_cfg hw_cfg;
- 
- 	int irq;
- 	int index;
--
--	/* Don't put the AMP in reset of VSPK can not be turned off */
--	bool vspk_always_on;
- };
- 
- int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int irq,
-diff --git a/sound/soc/codecs/cs35l41-i2c.c b/sound/soc/codecs/cs35l41-i2c.c
-index faad5c638cb8..5ff0f00a2de4 100644
---- a/sound/soc/codecs/cs35l41-i2c.c
-+++ b/sound/soc/codecs/cs35l41-i2c.c
-@@ -34,7 +34,7 @@ static int cs35l41_i2c_probe(struct i2c_client *client,
- {
- 	struct cs35l41_private *cs35l41;
- 	struct device *dev = &client->dev;
--	struct cs35l41_platform_data *pdata = dev_get_platdata(dev);
-+	struct cs35l41_hw_cfg *hw_cfg = dev_get_platdata(dev);
- 	const struct regmap_config *regmap_config = &cs35l41_regmap_i2c;
- 	int ret;
- 
-@@ -54,7 +54,7 @@ static int cs35l41_i2c_probe(struct i2c_client *client,
++	if (boost_ipk < 1600 || boost_ipk > 4500) {
++		dev_err(dev, "Invalid boost inductor peak current: %d mA\n", boost_ipk);
++		return -EINVAL;
++	}
++
+ 	ret = regmap_update_bits(regmap, CS35L41_BSTCVRT_COEFF,
+ 				 CS35L41_BST_K1_MASK | CS35L41_BST_K2_MASK,
+ 				 cs35l41_bst_k1_table[bst_lbst_val][bst_cbst_range]
+@@ -1017,10 +1027,6 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
  		return ret;
  	}
  
--	return cs35l41_probe(cs35l41, pdata);
-+	return cs35l41_probe(cs35l41, hw_cfg);
- }
+-	if (boost_ipk < 1600 || boost_ipk > 4500) {
+-		dev_err(dev, "Invalid boost inductor peak current: %d mA\n", boost_ipk);
+-		return -EINVAL;
+-	}
+ 	bst_ipk_scaled = ((boost_ipk - 1600) / 50) + 0x10;
  
- static int cs35l41_i2c_remove(struct i2c_client *client)
-diff --git a/sound/soc/codecs/cs35l41-spi.c b/sound/soc/codecs/cs35l41-spi.c
-index 169221a5b09f..9e19c946a66b 100644
---- a/sound/soc/codecs/cs35l41-spi.c
-+++ b/sound/soc/codecs/cs35l41-spi.c
-@@ -30,7 +30,7 @@ MODULE_DEVICE_TABLE(spi, cs35l41_id_spi);
- static int cs35l41_spi_probe(struct spi_device *spi)
- {
- 	const struct regmap_config *regmap_config = &cs35l41_regmap_spi;
--	struct cs35l41_platform_data *pdata = dev_get_platdata(&spi->dev);
-+	struct cs35l41_hw_cfg *hw_cfg = dev_get_platdata(&spi->dev);
- 	struct cs35l41_private *cs35l41;
- 	int ret;
- 
-@@ -52,7 +52,7 @@ static int cs35l41_spi_probe(struct spi_device *spi)
- 	cs35l41->dev = &spi->dev;
- 	cs35l41->irq = spi->irq;
- 
--	return cs35l41_probe(cs35l41, pdata);
-+	return cs35l41_probe(cs35l41, hw_cfg);
- }
- 
- static void cs35l41_spi_remove(struct spi_device *spi)
+ 	ret = regmap_update_bits(regmap, CS35L41_BSTCVRT_PEAK_CUR, CS35L41_BST_IPK_MASK,
 diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 6b784a62df0c..67b33c5c3d44 100644
+index 67b33c5c3d44..5dbc2147209a 100644
 --- a/sound/soc/codecs/cs35l41.c
 +++ b/sound/soc/codecs/cs35l41.c
-@@ -999,10 +999,10 @@ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
+@@ -995,28 +995,24 @@ static int cs35l41_dai_set_sysclk(struct snd_soc_dai *dai,
  
- 	/* Set Platform Data */
- 	/* Required */
--	if (cs35l41->pdata.bst_ipk &&
--	    cs35l41->pdata.bst_ind && cs35l41->pdata.bst_cap) {
--		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap, cs35l41->pdata.bst_ind,
--					   cs35l41->pdata.bst_cap, cs35l41->pdata.bst_ipk);
-+	if (cs35l41->hw_cfg.bst_ipk &&
-+	    cs35l41->hw_cfg.bst_ind && cs35l41->hw_cfg.bst_cap) {
-+		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap, cs35l41->hw_cfg.bst_ind,
-+					   cs35l41->hw_cfg.bst_cap, cs35l41->hw_cfg.bst_ipk);
- 		if (ret) {
- 			dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
- 			return ret;
-@@ -1013,43 +1013,39 @@ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
+ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
+ {
++	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
+ 	int ret;
+ 
+-	/* Set Platform Data */
+-	/* Required */
+-	if (cs35l41->hw_cfg.bst_ipk &&
+-	    cs35l41->hw_cfg.bst_ind && cs35l41->hw_cfg.bst_cap) {
+-		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap, cs35l41->hw_cfg.bst_ind,
+-					   cs35l41->hw_cfg.bst_cap, cs35l41->hw_cfg.bst_ipk);
+-		if (ret) {
+-			dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
+-			return ret;
+-		}
+-	} else {
+-		dev_err(cs35l41->dev, "Incomplete Boost component DT config\n");
++	if (!hw_cfg->valid)
+ 		return -EINVAL;
++
++	/* Required */
++	ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
++				   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
++	if (ret) {
++		dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
++		return ret;
  	}
  
  	/* Optional */
--	if (cs35l41->pdata.dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK &&
--	    cs35l41->pdata.dout_hiz >= 0)
--		regmap_update_bits(cs35l41->regmap, CS35L41_SP_HIZ_CTRL,
--				   CS35L41_ASP_DOUT_HIZ_MASK,
--				   cs35l41->pdata.dout_hiz);
-+	if (cs35l41->hw_cfg.dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK &&
-+	    cs35l41->hw_cfg.dout_hiz >= 0)
-+		regmap_update_bits(cs35l41->regmap, CS35L41_SP_HIZ_CTRL, CS35L41_ASP_DOUT_HIZ_MASK,
-+				   cs35l41->hw_cfg.dout_hiz);
+-	if (cs35l41->hw_cfg.dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK &&
+-	    cs35l41->hw_cfg.dout_hiz >= 0)
++	if (hw_cfg->dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK && hw_cfg->dout_hiz >= 0)
+ 		regmap_update_bits(cs35l41->regmap, CS35L41_SP_HIZ_CTRL, CS35L41_ASP_DOUT_HIZ_MASK,
+-				   cs35l41->hw_cfg.dout_hiz);
++				   hw_cfg->dout_hiz);
  
  	return 0;
  }
+@@ -1037,16 +1033,29 @@ static int cs35l41_gpio_config(struct cs35l41_private *cs35l41)
+ 			   gpio2->pol_inv << CS35L41_GPIO_POL_SHIFT |
+ 			   !gpio2->out_en << CS35L41_GPIO_DIR_SHIFT);
  
--static int cs35l41_irq_gpio_config(struct cs35l41_private *cs35l41)
-+static int cs35l41_gpio_config(struct cs35l41_private *cs35l41)
- {
--	struct cs35l41_irq_cfg *irq_gpio_cfg1 = &cs35l41->pdata.irq_config1;
--	struct cs35l41_irq_cfg *irq_gpio_cfg2 = &cs35l41->pdata.irq_config2;
-+	struct cs35l41_gpio_cfg *gpio1 = &cs35l41->hw_cfg.gpio1;
-+	struct cs35l41_gpio_cfg *gpio2 = &cs35l41->hw_cfg.gpio2;
- 	int irq_pol = IRQF_TRIGGER_NONE;
+-	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-			   CS35L41_GPIO1_CTRL_MASK | CS35L41_GPIO2_CTRL_MASK,
+-			   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT |
+-			   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
  
- 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO1_CTRL1,
- 			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
--			   irq_gpio_cfg1->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
--			   !irq_gpio_cfg1->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
-+			   gpio1->pol_inv << CS35L41_GPIO_POL_SHIFT |
-+			   !gpio1->out_en << CS35L41_GPIO_DIR_SHIFT);
- 
- 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO2_CTRL1,
- 			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
--			   irq_gpio_cfg2->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
--			   !irq_gpio_cfg2->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
-+			   gpio2->pol_inv << CS35L41_GPIO_POL_SHIFT |
-+			   !gpio2->out_en << CS35L41_GPIO_DIR_SHIFT);
- 
- 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
- 			   CS35L41_GPIO1_CTRL_MASK | CS35L41_GPIO2_CTRL_MASK,
--			   irq_gpio_cfg1->irq_src_sel << CS35L41_GPIO1_CTRL_SHIFT |
--			   irq_gpio_cfg2->irq_src_sel << CS35L41_GPIO2_CTRL_SHIFT);
-+			   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT |
-+			   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
- 
--	if ((irq_gpio_cfg2->irq_src_sel ==
--			(CS35L41_GPIO_CTRL_ACTV_LO | CS35L41_VALID_PDATA)) ||
--		(irq_gpio_cfg2->irq_src_sel ==
--			(CS35L41_GPIO_CTRL_OPEN_INT | CS35L41_VALID_PDATA)))
-+	if ((gpio2->func == (CS35L41_INT_PUSH_PULL_LOW_GPIO2 | CS35L41_VALID_PDATA)) ||
-+		(gpio2->func == (CS35L41_INT_OPEN_DRAIN_GPIO2 | CS35L41_VALID_PDATA)))
- 		irq_pol = IRQF_TRIGGER_LOW;
--	else if (irq_gpio_cfg2->irq_src_sel ==
--			(CS35L41_GPIO_CTRL_ACTV_HI | CS35L41_VALID_PDATA))
-+	else if (gpio2->func == (CS35L41_INT_PUSH_PULL_HIGH_GPIO2 | CS35L41_VALID_PDATA))
- 		irq_pol = IRQF_TRIGGER_HIGH;
+-	if ((gpio2->func == (CS35L41_INT_PUSH_PULL_LOW_GPIO2 | CS35L41_VALID_PDATA)) ||
+-		(gpio2->func == (CS35L41_INT_OPEN_DRAIN_GPIO2 | CS35L41_VALID_PDATA)))
+-		irq_pol = IRQF_TRIGGER_LOW;
+-	else if (gpio2->func == (CS35L41_INT_PUSH_PULL_HIGH_GPIO2 | CS35L41_VALID_PDATA))
+-		irq_pol = IRQF_TRIGGER_HIGH;
++	if (gpio1->valid)
++		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++				   CS35L41_GPIO1_CTRL_MASK,
++				   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT);
++
++	if (gpio2->valid) {
++		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++				   CS35L41_GPIO2_CTRL_MASK,
++				   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
++
++		switch (gpio2->func) {
++		case CS35L41_INT_PUSH_PULL_LOW_GPIO2:
++		case CS35L41_INT_OPEN_DRAIN_GPIO2:
++			irq_pol = IRQF_TRIGGER_LOW;
++			break;
++		case CS35L41_INT_PUSH_PULL_HIGH_GPIO2:
++			irq_pol = IRQF_TRIGGER_HIGH;
++			break;
++		default:
++			break;
++		}
++	}
  
  	return irq_pol;
-@@ -1115,50 +1111,44 @@ static const struct snd_soc_component_driver soc_component_dev_cs35l41 = {
- 	.set_sysclk = cs35l41_component_set_sysclk,
- };
- 
--static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_platform_data *pdata)
-+static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cfg)
- {
--	struct cs35l41_irq_cfg *irq_gpio1_config = &pdata->irq_config1;
--	struct cs35l41_irq_cfg *irq_gpio2_config = &pdata->irq_config2;
-+	struct cs35l41_gpio_cfg *gpio1 = &hw_cfg->gpio1;
-+	struct cs35l41_gpio_cfg *gpio2 = &hw_cfg->gpio2;
- 	unsigned int val;
- 	int ret;
- 
+ }
+@@ -1121,14 +1130,20 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
  	ret = device_property_read_u32(dev, "cirrus,boost-peak-milliamp", &val);
  	if (ret >= 0)
--		pdata->bst_ipk = val;
-+		hw_cfg->bst_ipk = val;
+ 		hw_cfg->bst_ipk = val;
++	else
++		hw_cfg->bst_ipk = -1;
  
  	ret = device_property_read_u32(dev, "cirrus,boost-ind-nanohenry", &val);
  	if (ret >= 0)
--		pdata->bst_ind = val;
-+		hw_cfg->bst_ind = val;
+ 		hw_cfg->bst_ind = val;
++	else
++		hw_cfg->bst_ind = -1;
  
  	ret = device_property_read_u32(dev, "cirrus,boost-cap-microfarad", &val);
  	if (ret >= 0)
--		pdata->bst_cap = val;
-+		hw_cfg->bst_cap = val;
+ 		hw_cfg->bst_cap = val;
++	else
++		hw_cfg->bst_cap = -1;
  
  	ret = device_property_read_u32(dev, "cirrus,asp-sdout-hiz", &val);
  	if (ret >= 0)
--		pdata->dout_hiz = val;
-+		hw_cfg->dout_hiz = val;
- 	else
--		pdata->dout_hiz = -1;
-+		hw_cfg->dout_hiz = -1;
- 
- 	/* GPIO1 Pin Config */
--	irq_gpio1_config->irq_pol_inv = device_property_read_bool(dev,
--					"cirrus,gpio1-polarity-invert");
--	irq_gpio1_config->irq_out_en = device_property_read_bool(dev,
--					"cirrus,gpio1-output-enable");
--	ret = device_property_read_u32(dev, "cirrus,gpio1-src-select",
--				       &val);
-+	gpio1->pol_inv = device_property_read_bool(dev, "cirrus,gpio1-polarity-invert");
-+	gpio1->out_en = device_property_read_bool(dev, "cirrus,gpio1-output-enable");
-+	ret = device_property_read_u32(dev, "cirrus,gpio1-src-select", &val);
- 	if (ret >= 0)
--		irq_gpio1_config->irq_src_sel = val | CS35L41_VALID_PDATA;
-+		gpio1->func = val | CS35L41_VALID_PDATA;
+@@ -1140,15 +1155,21 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+ 	gpio1->pol_inv = device_property_read_bool(dev, "cirrus,gpio1-polarity-invert");
+ 	gpio1->out_en = device_property_read_bool(dev, "cirrus,gpio1-output-enable");
+ 	ret = device_property_read_u32(dev, "cirrus,gpio1-src-select", &val);
+-	if (ret >= 0)
+-		gpio1->func = val | CS35L41_VALID_PDATA;
++	if (ret >= 0) {
++		gpio1->func = val;
++		gpio1->valid = true;
++	}
  
  	/* GPIO2 Pin Config */
--	irq_gpio2_config->irq_pol_inv = device_property_read_bool(dev,
--					"cirrus,gpio2-polarity-invert");
--	irq_gpio2_config->irq_out_en = device_property_read_bool(dev,
--					"cirrus,gpio2-output-enable");
--	ret = device_property_read_u32(dev, "cirrus,gpio2-src-select",
--				       &val);
-+	gpio2->pol_inv = device_property_read_bool(dev, "cirrus,gpio2-polarity-invert");
-+	gpio2->out_en = device_property_read_bool(dev, "cirrus,gpio2-output-enable");
-+	ret = device_property_read_u32(dev, "cirrus,gpio2-src-select", &val);
- 	if (ret >= 0)
--		irq_gpio2_config->irq_src_sel = val | CS35L41_VALID_PDATA;
-+		gpio2->func = val | CS35L41_VALID_PDATA;
+ 	gpio2->pol_inv = device_property_read_bool(dev, "cirrus,gpio2-polarity-invert");
+ 	gpio2->out_en = device_property_read_bool(dev, "cirrus,gpio2-output-enable");
+ 	ret = device_property_read_u32(dev, "cirrus,gpio2-src-select", &val);
+-	if (ret >= 0)
+-		gpio2->func = val | CS35L41_VALID_PDATA;
++	if (ret >= 0) {
++		gpio2->func = val;
++		gpio2->valid = true;
++	}
++
++	hw_cfg->valid = true;
  
  	return 0;
  }
-@@ -1248,17 +1238,16 @@ static int cs35l41_dsp_init(struct cs35l41_private *cs35l41)
- 	return ret;
- }
- 
--int cs35l41_probe(struct cs35l41_private *cs35l41,
--		  struct cs35l41_platform_data *pdata)
-+int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *hw_cfg)
- {
- 	u32 regid, reg_revid, i, mtl_revid, int_status, chipid_match;
- 	int irq_pol = 0;
- 	int ret;
- 
--	if (pdata) {
--		cs35l41->pdata = *pdata;
-+	if (hw_cfg) {
-+		cs35l41->hw_cfg = *hw_cfg;
- 	} else {
--		ret = cs35l41_handle_pdata(cs35l41->dev, &cs35l41->pdata);
-+		ret = cs35l41_handle_pdata(cs35l41->dev, &cs35l41->hw_cfg);
- 		if (ret != 0)
- 			return ret;
- 	}
-@@ -1357,7 +1346,7 @@ int cs35l41_probe(struct cs35l41_private *cs35l41,
- 
- 	cs35l41_test_key_lock(cs35l41->dev, cs35l41->regmap);
- 
--	irq_pol = cs35l41_irq_gpio_config(cs35l41);
-+	irq_pol = cs35l41_gpio_config(cs35l41);
- 
- 	/* Set interrupt masks for critical errors */
- 	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1,
-diff --git a/sound/soc/codecs/cs35l41.h b/sound/soc/codecs/cs35l41.h
-index 88a3d6e3434f..e3369e0aa89f 100644
---- a/sound/soc/codecs/cs35l41.h
-+++ b/sound/soc/codecs/cs35l41.h
-@@ -44,7 +44,7 @@ enum cs35l41_cspl_mbox_cmd {
- struct cs35l41_private {
- 	struct wm_adsp dsp; /* needs to be first member */
- 	struct snd_soc_codec *codec;
--	struct cs35l41_platform_data pdata;
-+	struct cs35l41_hw_cfg hw_cfg;
- 	struct device *dev;
- 	struct regmap *regmap;
- 	struct regulator_bulk_data supplies[CS35L41_NUM_SUPPLIES];
-@@ -53,8 +53,7 @@ struct cs35l41_private {
- 	struct gpio_desc *reset_gpio;
- };
- 
--int cs35l41_probe(struct cs35l41_private *cs35l41,
--		  struct cs35l41_platform_data *pdata);
-+int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *hw_cfg);
- void cs35l41_remove(struct cs35l41_private *cs35l41);
- 
- #endif /*__CS35L41_H__*/
 -- 
 2.35.1
 

@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583B14CBA0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0EB4CBA0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiCCJWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S231895AbiCCJWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiCCJWK (ORCPT
+        with ESMTP id S231671AbiCCJW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:22:10 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6FD16BCC8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:21:24 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id m6so6762897wrr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 01:21:24 -0800 (PST)
+        Thu, 3 Mar 2022 04:22:28 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66AA16BCF7;
+        Thu,  3 Mar 2022 01:21:41 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id j5so3602633qvs.13;
+        Thu, 03 Mar 2022 01:21:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DvPDduUxIuKL+yC0AJiEs10ttn/sVwtbIKSiINsPfck=;
-        b=Whs7i/l7Ta41ISRWqYoptObsB6bgijpRsSUQ44ORzGWV0eiv3MSdzllcgvNtcbgOzV
-         qEsNocRqROECrQoXT6nSFau837L0OZpiRLHG8FOGgmDtmMYRIkz6qn9o9QlYjnMQf/8J
-         E6wtNZwzdQKTs8NxFcu6iseMmGML1DLObOb+bunR8gwBluzuLLJf3GELwctxeXkv5xu4
-         d2gEUduPCFVu6XwxxjKDTnNrJLyiwvP4urthL0bZKFcDDV+q/rc89oPx3PNHFRQFdWey
-         uCvmgVQ75ezYhb05odw7aZVpXf01MrhHlXimTlb1UQvYmIIXSAizC7fST9LoQrS12GYn
-         uyNQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jjLVAHYQdC3TfzYteC4e+EJhOBPlyxvi64+3KhE2C5s=;
+        b=NKZoGBfk+iQND9eakA2JUeF6APzkG+fv/OG/s6y9qLE6vDgNzd4Fu1MU8cLlsXjbC5
+         SxYslRU5jgrTojt4IRaWKAE8k4aN3iy0hXVGcslqTDTJjfGu7NN2YVm7hcpmILxITJmy
+         gxT/txtX3M5tmL8tkkeX3RJ9z97DxmjgZFf/86GN3WK83PFsoHrIUfkKMuFLt0i1qrDz
+         atyxM91HleoV5OiyR4Yz1hjTS5NHRZVe6614yfTKNgbtpbVb1ApgqXSBvQKn+MUDcXU+
+         xGDSdX4L93QwN1OH6ysP1WkwfflwQ/+jCaVZYT0pX52jub2MY5Ou+tSjWE8xBGZlcvbd
+         CrOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DvPDduUxIuKL+yC0AJiEs10ttn/sVwtbIKSiINsPfck=;
-        b=ZkLbXTI9veBZVJqeQfgHkPtDDAc+yOwhjvcB4DAoebgTvxZJFVxFxw/ibHmQkPfKfa
-         8otGjRRuoVFx1Nh4ImzqylpwsEypSo01MRLWbwNW0Pd3tPNlInyNuIJroyRcHqiLCWf6
-         76cOtNAxcl5+bsTOZLQiijKj2aKMZnX+uhdLBAm6yPLa9sVCWmigEpHjXT7Eoo0N8/zd
-         NE1OSHScEx/IZJeA7NpCZw/JcMzRRLUYyU50Lx+pbuUquchm9gMhnzNrPuXvyol0Qbao
-         LSWRq8j1vorqkJz0t2vD+gsB2KIv1XznKxx0eaT2NACGMEPlCYDkdWMGPsySVzHXuQgF
-         G6vg==
-X-Gm-Message-State: AOAM5321FZDyME5Kj41LXupjPhfBsWznDgo8wG8OrSzZic+Nbt83fuM0
-        lFzh1Nw5d5qONIqWMwRWkbx9EA==
-X-Google-Smtp-Source: ABdhPJyr7pVJbeXlptM3psyRHARpgFUUaoaGjdJbuLZWvib+4ssC3GztiHJ961bWXmr+1LqoREKl5w==
-X-Received: by 2002:a05:6000:1b0a:b0:1ef:7c04:9bad with SMTP id f10-20020a0560001b0a00b001ef7c049badmr20292282wrz.54.1646299283022;
-        Thu, 03 Mar 2022 01:21:23 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id p16-20020adff210000000b001f062b80091sm353137wro.34.2022.03.03.01.21.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jjLVAHYQdC3TfzYteC4e+EJhOBPlyxvi64+3KhE2C5s=;
+        b=fZ5lrHaSS1K/PHQIJeP2uVEEqzwVnCGLPaYdjUlHVEjK+EvF9bEzOuFoirGqXVcYBm
+         BaI5EsSdju3ecLujIO2enirErHWoUre8gFmhNK59LetD+m5C5gc/X+LGx3gcIoazes1X
+         VEyrtDs9BO8grkH6Q663XV2vsSsL7KSMVQJ5m173qdXpgdQ8urp6yDPtMGeRfFDieIU3
+         JZp5sZSDHOtqWZGB5Dc+2LF953evU1LMNMUhZYxAFAdaf2hM1214SGlaCddu8YzD40OO
+         VVUDN6M6ItX/AdULCEpD+XSa4tOwI85ENj0cVREJP9dBXqXEPoKPRtfJ086+q4vU3TOm
+         nQcA==
+X-Gm-Message-State: AOAM5322keskCOKcIhdOVC8wIdJS57zscbXO03rcTGpXN+JRKSeBVsba
+        KCc/Dhzha3w3GBP3y4OpVLs=
+X-Google-Smtp-Source: ABdhPJwTYr80xdhkF6DAmqLB+Q2CxbEpRoiiEYyuf1CvwDdKaCXLrR6Ek0NzRds1DRSDXCtp6IhS3g==
+X-Received: by 2002:a05:6214:2265:b0:433:2aa7:5a5a with SMTP id gs5-20020a056214226500b004332aa75a5amr12275641qvb.114.1646299300872;
+        Thu, 03 Mar 2022 01:21:40 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m21-20020a05622a119500b002de3d0bdf28sm1084461qtk.45.2022.03.03.01.21.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 01:21:22 -0800 (PST)
-Date:   Thu, 3 Mar 2022 09:21:20 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-ext4@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -v4] ext4: don't BUG if kernel subsystems dirty pages
- without asking ext4 first
-Message-ID: <YiCIkNci2V3IBRme@google.com>
-References: <Yg0m6IjcNmfaSokM@google.com>
- <Yhks88tO3Em/G370@mit.edu>
- <YhlBUCi9O30szf6l@sol.localdomain>
- <YhlFRoJ3OdYMIh44@mit.edu>
- <YhlIvw00Y4MkAgxX@mit.edu>
- <YiBDf7XLnTe4Gwis@mit.edu>
+        Thu, 03 Mar 2022 01:21:40 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     avifishman70@gmail.com
+Cc:     tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, broonie@kernel.org,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] spi: Use of_device_get_match_data()
+Date:   Thu,  3 Mar 2022 09:21:31 +0000
+Message-Id: <20220303092131.2060044-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YiBDf7XLnTe4Gwis@mit.edu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Mar 2022, Theodore Ts'o wrote:
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-> [un]pin_user_pages_remote is dirtying pages without properly warning
-> the file system in advance.  A related race was noted by Jan Kara in
-> 2018[1]; however, more recently instead of it being a very hard-to-hit
-> race, it could be reliably triggered by process_vm_writev(2) which was
-> discovered by Syzbot[2].
-> 
-> This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-> that if some other kernel subsystem dirty pages without properly
-> notifying the file system using page_mkwrite(), ext4 will BUG, while
-> other file systems will not BUG (although data will still be lost).
-> 
-> So instead of crashing with a BUG, issue a warning (since there may be
-> potential data loss) and just mark the page as clean to avoid
-> unprivileged denial of service attacks until the problem can be
-> properly fixed.  More discussion and background can be found in the
-> thread starting at [2].
-> 
-> [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> [2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
-> 
-> Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-> Reported-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-> Cc: stable@kernel.org
-> ---
-> v4 - only changes to the commit description to eliminate some inaccuracies
->      and clarify the text.
-> 
->  fs/ext4/inode.c | 27 ++++++++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
+Use of_device_get_match_data() to simplify the code.
 
-Thanks a bunch for sticking with this Ted.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ drivers/spi/spi-npcm-fiu.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-I've been following along with great interest.
-
-Sadly I am not in a position to provide a review.
-
-Just wanted to pop by and say thank you.
-
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index b62471ab6d7f..71ed75bf0a20 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -671,7 +671,6 @@ static const struct of_device_id npcm_fiu_dt_ids[] = {
+ static int npcm_fiu_probe(struct platform_device *pdev)
+ {
+ 	const struct fiu_data *fiu_data_match;
+-	const struct of_device_id *match;
+ 	struct device *dev = &pdev->dev;
+ 	struct spi_controller *ctrl;
+ 	struct npcm_fiu_spi *fiu;
+@@ -685,13 +684,12 @@ static int npcm_fiu_probe(struct platform_device *pdev)
+ 
+ 	fiu = spi_controller_get_devdata(ctrl);
+ 
+-	match = of_match_device(npcm_fiu_dt_ids, dev);
+-	if (!match || !match->data) {
++	fiu_data_match = of_device_get_match_data(dev);
++	if (!fiu_data_match) {
+ 		dev_err(dev, "No compatible OF match\n");
+ 		return -ENODEV;
+ 	}
+ 
+-	fiu_data_match = match->data;
+ 	id = of_alias_get_id(dev->of_node, "fiu");
+ 	if (id < 0 || id >= fiu_data_match->fiu_max) {
+ 		dev_err(dev, "Invalid platform device id: %d\n", id);
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+

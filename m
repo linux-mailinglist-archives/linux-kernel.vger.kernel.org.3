@@ -2,159 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E5F4CB5A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6720F4CB5AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiCCEAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S229631AbiCCEBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:01:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiCCEAH (ORCPT
+        with ESMTP id S229470AbiCCEBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:00:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F0015720A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:59:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646279961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JLyYEFbzKazGajr/Z7eLhFc2iDs9PD4fdRAFMZ5Qomk=;
-        b=Xo6PY89Xap6AfFQ2FRhWBcsxBlF9R/3gwYuVBP8FX9aeBV2jbKiMy5IQM363sOdr8y7719
-        HD6NwEO77xHRf5j4fSEcxgh4OmfCsqKXIf/aUPodKIIenfoCuomJDrLjDd6AErdz6/PhTU
-        /7ER9uadbB/BbsI3W+HmkOp2AU+I+AY=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-569-gb4QMxq-NJqCDPFTnPXriA-1; Wed, 02 Mar 2022 22:59:20 -0500
-X-MC-Unique: gb4QMxq-NJqCDPFTnPXriA-1
-Received: by mail-pl1-f198.google.com with SMTP id b5-20020a170902e94500b0014f6d0a417bso2141721pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:59:20 -0800 (PST)
+        Wed, 2 Mar 2022 23:01:22 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C7D15C1AE;
+        Wed,  2 Mar 2022 20:00:38 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so3581909pjb.3;
+        Wed, 02 Mar 2022 20:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o8Wnkngh0cz774oXrOB+djrZJAC791wEW1yD76eU3mA=;
+        b=Tp2WvHtquQCKN/tDLzu1vaBVoEQ+o/F9bItG1ZGG3swOGWYolDkUzu1su5OMP5M18y
+         8vT4umeQiGvPt6GJ3ToMF1UrPDZNgwgKCcQebodBo5W4KrC/DW4qEVL/qwteae4ShpAC
+         CNwF3BgyY7R0G+JD0obJjowxXXKvsBEAPV8Vp1c46PF9UjRWbLCy+90ngloKQlyIIwCO
+         F+S8H9CKuXW9j+wwGpetgBmvo2+UFNJver6t9i/ucahV9qccHweFgcz8xVQYAz2OZNPF
+         tCqYTYiWNjnB3yKjIPdZaYhY1JB4+zVDwjDhCdEEub+aXiRatMDGmWCyCoK1sYxtFJuF
+         MAJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JLyYEFbzKazGajr/Z7eLhFc2iDs9PD4fdRAFMZ5Qomk=;
-        b=Pf0YWdzn4DBIFNw3505MHCxAR6awOM6v0d6FlKEH3R3PZkLavKSppPnU1JqhZhTnVJ
-         lgvMyaGBUHdyLZxXaROxktXJp7GkLse/wB198YL5Uz0U/DK1jWhwD2PUyOOSbyyyAwf/
-         k35BJ+e5f0nax3IPV9l/aWRPHqOGLrv84TH/bhznI/idNWeDHOTPeUfY1Bfhf8wdLqzq
-         s2mIv5UYpBbEBKYx4ksA8tVVuS+w1v7kXcAA9neYYPTmD3qnFde3ipvHdKRXloqq8Mva
-         9G2V8QlXijesI/QLh3tG5E6AdxTTS/wynZccj4wpFjzqBGuqfYq3Ug+FT3vv0gG/h5b1
-         qucQ==
-X-Gm-Message-State: AOAM531lxpDqd4RQ53f9hg89zACp/oTk6AtFxNLhJsYWOw4/c7ABPKRR
-        X52p79HTyFkBO/rdKRWZ0UAHqJheGSrUeUJE+h+SNqQH5RhIl+cJzxMbumr2rI5P55OQvJC3R0O
-        2ddfEVEaOyvAN0TdTSHKcjoYV
-X-Received: by 2002:a05:6a00:188f:b0:4e1:a253:850c with SMTP id x15-20020a056a00188f00b004e1a253850cmr36329971pfh.61.1646279959003;
-        Wed, 02 Mar 2022 19:59:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyZQZtiyN/+eVQIh36yLquJvhShQxa3L1DH/1+/nasdtDZX5ozJfyYacmVoMm56LpbVlK/3mQ==
-X-Received: by 2002:a05:6a00:188f:b0:4e1:a253:850c with SMTP id x15-20020a056a00188f00b004e1a253850cmr36329956pfh.61.1646279958700;
-        Wed, 02 Mar 2022 19:59:18 -0800 (PST)
-Received: from [10.72.13.250] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id u11-20020a056a00124b00b004e11307f8cdsm662501pfi.86.2022.03.02.19.59.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 19:59:18 -0800 (PST)
-Message-ID: <276dfdf4-2ee5-b054-4e34-c5c32b99d6d7@redhat.com>
-Date:   Thu, 3 Mar 2022 11:59:08 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o8Wnkngh0cz774oXrOB+djrZJAC791wEW1yD76eU3mA=;
+        b=kmA/cVwz5rp+2IhKPhhfExmAhqE1nkyh/Ggn50pnQKUb2N6sUMWA7TGvsJz7uTQCoP
+         tz5N4XO8NnSkmomwiLpMLW7osIe464Gqo8QTgpF1i2OgaMNq6e5+HRjZglaF+Etnvjgp
+         AOltf7UWCvwtwA2CxnHWG3PYq0LytzHjF5iN3zZknH0iUQEC+CavWv0TDtWgGL1Wgu34
+         INx0Af96icDU9AmhqpY5rtloz88bGlC98Ygci91tuvSfqjd19QSb2nU1IKCOUHR7O7jL
+         a7HC1bFc+mdmHABcIAMmtzbzA8/fgHj8PjKiVTo1ky2RMzrx7sVhYaj69OJmDIuHLQWY
+         7y1A==
+X-Gm-Message-State: AOAM531ak5ovgJN9tnF2cMnH0S7oSeWOXJ4CLhgHRqDZEYnc1iIs9HcA
+        hrdezMhxtp8qumlN/G7/zZi5rgMPGGaiXaEGkQ9wt+Xl
+X-Google-Smtp-Source: ABdhPJzbu1Dy1FqOFtzYr8EW+FoeIxo7cnjlM+ZHpIPBnve2rxGtU2v8Z7e3faKFmBw5GYlemnbFs//cDNx1s8RS6e4=
+X-Received: by 2002:a17:902:76c5:b0:14e:e325:9513 with SMTP id
+ j5-20020a17090276c500b0014ee3259513mr34067029plt.55.1646280038108; Wed, 02
+ Mar 2022 20:00:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH net-next] tuntap: add sanity checks about msg_controllen
- in sendmsg
-Content-Language: en-US
-To:     Harold Huang <baymaxhuang@gmail.com>, netdev@vger.kernel.org
-Cc:     edumazet@google.com, Eric Dumazet <eric.dumazet@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-9-haoluo@google.com>
+ <20220302224506.jc7jwkdaatukicik@apollo.legion> <f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com>
+ <20220303030349.drd7mmwtufl45p3u@apollo.legion>
+In-Reply-To: <20220303030349.drd7mmwtufl45p3u@apollo.legion>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 2 Mar 2022 20:00:26 -0800
+Message-ID: <CAADnVQJvbgq3j5SUb3OCbkndgpqeYNAv4Xgo2gOav0mC2f=vmg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO HOST (VHOST)" <kvm@vger.kernel.org>,
-        "open list:VIRTIO HOST (VHOST)" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-References: <20220301064314.2028737-1-baymaxhuang@gmail.com>
- <20220303022441.383865-1-baymaxhuang@gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220303022441.383865-1-baymaxhuang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/3/3 上午10:24, Harold Huang 写道:
-> In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
-> tun_sendmsg. Although we donot use msg_controllen in this path, we should
-> check msg_controllen to make sure the caller pass a valid msg_ctl.
+On Wed, Mar 2, 2022 at 7:03 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> >
 >
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
->
-> Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-> Suggested-by: Jason Wang <jasowang@redhat.com>
-> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+> I think current approach is also not safe if cgroup_id gets reused, right? I.e.
+> it only does cgroup_get_from_id in seq_start, not at attach time, so it may not
+> be the same cgroup when calling read(2). kernfs is using idr_alloc_cyclic, so it
+> is less likely to occur, but since it wraps around to find a free ID it might
+> not be theoretical.
 
-
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-
-> ---
->   drivers/net/tap.c   | 3 ++-
->   drivers/net/tun.c   | 3 ++-
->   drivers/vhost/net.c | 1 +
->   3 files changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-> index 8e3a28ba6b28..ba2ef5437e16 100644
-> --- a/drivers/net/tap.c
-> +++ b/drivers/net/tap.c
-> @@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
->   	struct xdp_buff *xdp;
->   	int i;
->   
-> -	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-> +	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-> +	    ctl && ctl->type == TUN_MSG_PTR) {
->   		for (i = 0; i < ctl->num; i++) {
->   			xdp = &((struct xdp_buff *)ctl->ptr)[i];
->   			tap_get_user_xdp(q, xdp);
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 969ea69fd29d..2a0d8a5d7aec 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -2501,7 +2501,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
->   	if (!tun)
->   		return -EBADFD;
->   
-> -	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-> +	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-> +	    ctl && ctl->type == TUN_MSG_PTR) {
->   		struct tun_page tpage;
->   		int n = ctl->num;
->   		int flush = 0, queued = 0;
-> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-> index 28ef323882fb..792ab5f23647 100644
-> --- a/drivers/vhost/net.c
-> +++ b/drivers/vhost/net.c
-> @@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
->   		goto signal_used;
->   
->   	msghdr->msg_control = &ctl;
-> +	msghdr->msg_controllen = sizeof(ctl);
->   	err = sock->ops->sendmsg(sock, msghdr, 0);
->   	if (unlikely(err < 0)) {
->   		vq_err(&nvq->vq, "Fail to batch sending packets\n");
-
+cgroupid is 64-bit.

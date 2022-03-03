@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414B34CC8CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701104CC8CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbiCCWYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S236861AbiCCW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236840AbiCCWYa (ORCPT
+        with ESMTP id S231707AbiCCW0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:24:30 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C06A6521
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:23:43 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id l25-20020a9d7a99000000b005af173a2875so5865471otn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:23:43 -0800 (PST)
+        Thu, 3 Mar 2022 17:26:03 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA7035260
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:25:17 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id c4so5950846qtx.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:25:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=84N9C6KvyMy2P8CDxkMygU4c2ZXeXw9ZduzWrJT2etE=;
-        b=cFzFuK9Te+gPYjsQw43HWd+lX0dK75cQbikvF+GotiKMkoC7n3D5HmUVNLnEV8gBpH
-         oBKM8lXnCJMovyZOcmMwSfRGp7xNWHY4XVb/EDVU5NpxUfncr25dJ5uqjKdGZG8y9hif
-         ATRmIFWvL8nT6Fxu9sp/brC8rt8gRB/WUcYRk=
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=EZmBSf7RjPn5+sYY9ZdCSnzCqzjve1M3G+h5tfOhBH8=;
+        b=weqSjXg88DL4Q86PolMdKXQ5mcLbv9EpSztPGU/faQsSpAtE0vJmGGaDP07nvudbOR
+         HlRcpr4wFeh7zj6oOvhAw1Qxo/n0IQD86jxZBv1aoZANW5MCuxxsBX1jF5qUB4digaml
+         M6aQwmvYuF6vGvmfaCBhsDR/DJUIDW0sxydQ3REZ4oD6LpYnJlCe6EWcnNOpryZHu6BE
+         zZMJLyWqECGso5RRrkzfoipFQbUfvh6F51VXy0U3j1ggR0I1mkD5W+FpiOmgfTmn1hjM
+         R+nLoFEz/W0Lgv3ofiAkUicR5eKVWbXSRfOEeB1yWvTu9TVALje1Cu3jsl103dsWB2ei
+         +Umw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=84N9C6KvyMy2P8CDxkMygU4c2ZXeXw9ZduzWrJT2etE=;
-        b=m1MO/8y9pw8IhgFQXOTGamrSnFxG+QfjFPNXZWm//x3yHoMpL4ZhS6JwqYrO3zYbCi
-         /r0IKOa6RFOtIvRVhBpbFnpRx5OVGDcTrreX79yBMGsWelw3dQ/qcfzPIR5GZ5AysVOi
-         xfxEQysgbYSLVYjHGlpdwZuGr/3I8emWyuI4FiMo7JTmGefWGL+JkcQVvVcOVPAkx4VG
-         e/mn7kymZPEQ17QZcbClz0WQySVpia+WrM0V/8J5y0uS1U/FWoDHODKYfqBa2fOm//yL
-         N2LiOEGQG9+uoaFlrWZ271ZV6T5L2vNNkntTw8M+psIYyIQWbmjhJ9FwuHtL+1hnqNJ3
-         HxTw==
-X-Gm-Message-State: AOAM531ZJfe0s+H8X71GTYfxOsGpIeoB7ZcZH1LgL2TExbO3pTQWA9B9
-        Rfcp/O/Y6Vk2sXf8TGWC2UWKP2JIL3JwlsO9ghzPaQ==
-X-Google-Smtp-Source: ABdhPJx96sN+CrROFdnLq4TVFnKH2FvrwIjYkI+NMasfcx0/cQZZuTxmSn4ziMWwpGM1lI9t0aITlvtBXJxVU5Cw/Xc=
-X-Received: by 2002:a9d:22e9:0:b0:5ac:1754:342c with SMTP id
- y96-20020a9d22e9000000b005ac1754342cmr20034277ota.159.1646346223173; Thu, 03
- Mar 2022 14:23:43 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Mar 2022 14:23:42 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EZmBSf7RjPn5+sYY9ZdCSnzCqzjve1M3G+h5tfOhBH8=;
+        b=NNRWnDN5XhC3889TGSVpnBdQ97/bmPxPpQRPn9u+Q0mnQ8eSYwpDgEqXC8pTJS9BvZ
+         +/GaVrA95XTHlMGeca0DI3uJRzdYvBUoxXp0WpJ0ZJv7+qNSHG8WRA9GLNBy2ns3R5DH
+         ChmjVI7RWIXacM0iSdkgmyo2GebFlM2u2DbGsEVR40gsUFp1aTWAFQjPN2hj+iqObPK8
+         DryL2MC7bcSimVp5YieOQpLYlQRrlIoVuQhaYqypYQafTUy7PsBfkAUiKNWXggi4ZzdY
+         pN44g4yO0NQCgcwX5LD4Z6J5Vif5pGCa1mg0Gw4ltFSaWzMUvGNl2o+kEBbcw+D/zEhb
+         1H8A==
+X-Gm-Message-State: AOAM530LA6p+zP3Cg5e2Vk7DDH1bxEskeWRBUA+PT/p/CB7h/2s2H3P1
+        Gpum9uuwBougiZDjqwf1HJtStr5FiEDJNQ==
+X-Google-Smtp-Source: ABdhPJzYN95+uz4+u9xXJzwMda1refAsjqTib3Zaa8+ah435dQl9KyFkVsVrBg9/zkvipfqaRlPE1Q==
+X-Received: by 2002:ac8:5cd5:0:b0:2d0:6770:c997 with SMTP id s21-20020ac85cd5000000b002d06770c997mr29105165qta.178.1646346316452;
+        Thu, 03 Mar 2022 14:25:16 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id v14-20020a05622a014e00b002cf75f5b11esm2290185qtw.64.2022.03.03.14.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 14:25:15 -0800 (PST)
+Date:   Thu, 3 Mar 2022 17:25:15 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: madvise: MADV_DONTNEED_LOCKED
+Message-ID: <YiFASwUhc1Mz1Jz2@cmpxchg.org>
+References: <20220303212956.229409-1-hannes@cmpxchg.org>
+ <A5A8E655-0CE6-4F27-85FD-E99726776EAC@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
-References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
- <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com> <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Mar 2022 14:23:42 -0800
-Message-ID: <CAE-0n53xT1OaDLg+o1g_DXO5CHOZ=YC1C=2weeET-6cvbSKXPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <A5A8E655-0CE6-4F27-85FD-E99726776EAC@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2022-03-03 07:59:22)
-> On 03/03/2022 07:13, Sandeep Maheswaram wrote:
-> > Add device tree bindings for SNPS phy tuning parameters.
-> >
-> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > ---
-> >  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
-> >  1 file changed, 125 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> > index 0dfe691..227c097 100644
-> > --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> > +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> > @@ -50,6 +50,131 @@ properties:
-> >    vdda33-supply:
-> >      description: phandle to the regulator 3.3V supply node.
-> >
-> > +  qcom,hs-disconnect:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      This adjusts the voltage level for the threshold used to
-> > +      detect a disconnect event at the host. Possible values are.
->
-> ':', instead of full stop.
->
-> > +      7 -> +21.56%
-> > +      6 -> +17.43%
-> > +      5 -> +13.32%
-> > +      4 -> +9.73%
-> > +      3 -> +6.3
-> > +      2 -> +3.17%
-> > +      1 -> 0, Design default%
->
-> Use "default:" instead. Here and in other places.
->
-> > +      0 -> -2.72%
->
-> In current form this should be an enum... but actually current form is
-> wrong. You should not store register values in DT. What if next version
-> of hardware has a different meaning of these values?
->
-> Instead, you should store here meaningful values, not register values.
+On Thu, Mar 03, 2022 at 01:35:56PM -0800, Nadav Amit wrote:
+> 
+> 
+> > On Mar 3, 2022, at 1:29 PM, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > 
+> > MADV_DONTNEED historically rejects mlocked ranges, but with
+> > MLOCK_ONFAULT and MCL_ONFAULT allowing to mlock without populating,
+> > there are valid use cases for depopulating locked ranges as well.
+> 
+> ...
+> 
+> > @@ -850,7 +858,7 @@ static long madvise_dontneed_free(struct vm_area_struct *vma,
+> > 		VM_WARN_ON(start >= end);
+> > 	}
+> > 
+> > -	if (behavior == MADV_DONTNEED)
+> > +	if (behavior == MADV_DONTNEED || behavior == MADV_DONTNEED_LOCKED)
+> > 		return madvise_dontneed_single_vma(vma, start, end);
+> > 	else if (behavior == MADV_FREE)
+> > 		return madvise_free_single_vma(vma, start, end);
+> > @@ -988,6 +996,7 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+> > 		return madvise_pageout(vma, prev, start, end);
+> > 	case MADV_FREE:
+> > 	case MADV_DONTNEED:
+> > +	case MADV_DONTNEED_LOCKED:
+> > 		return madvise_dontneed_free(vma, prev, start, end, behavior);
+> > 	case MADV_POPULATE_READ:
+> > 	case MADV_POPULATE_WRITE:
+> > @@ -1113,6 +1122,7 @@ madvise_behavior_valid(int behavior)
+> > 	case MADV_REMOVE:
+> > 	case MADV_WILLNEED:
+> > 	case MADV_DONTNEED:
+> > +	case MADV_DONTNEED_LOCKED:
+> > 	case MADV_FREE:
+> > 	case MADV_COLD:
+> > 	case MADV_PAGEOUT:
+> 
+> Don’t you want to change madvise_need_mmap_write() as well and add
+> MADV_DONTNEED_LOCKED there too?
 
-+1
+You're absolutely right, thanks Nadav! It'd be fine, but more
+expensive than necessary. Here is the fixlet:
 
-To emphasize one point, meaningful values typically have a unit of
-measure, like Hz, ms, mV, etc. What are the percentages adjusting from?
-Is it a percentage decrease from the input voltage?
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 12dfa14bc985..7dbfcd6c955a 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -52,6 +52,7 @@ static int madvise_need_mmap_write(int behavior)
+ 	case MADV_REMOVE:
+ 	case MADV_WILLNEED:
+ 	case MADV_DONTNEED:
++	case MADV_DONTNEED_LOCKED:
+ 	case MADV_COLD:
+ 	case MADV_PAGEOUT:
+ 	case MADV_FREE:

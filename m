@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC504CBE6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7754CBE73
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiCCNFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S233539AbiCCNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiCCNE5 (ORCPT
+        with ESMTP id S233526AbiCCNFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:04:57 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069F50477;
-        Thu,  3 Mar 2022 05:04:11 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id j5so3984546qvs.13;
-        Thu, 03 Mar 2022 05:04:11 -0800 (PST)
+        Thu, 3 Mar 2022 08:05:02 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B7250068
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:04:14 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id u1so7715904wrg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:04:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/lVVqGzxWl1Ux5ICb2CCCQDe80RAQD6Gjf6fg6zMkY8=;
-        b=Ztb+V9aWpOLnDQnK8i2xWUBhxQ7+roYPkRS4jvaARlWILKSyBe7MfmnHHd3R4n+bFT
-         ClCXjl97vna3KL0S2uQszBOzV7kFp8m0N7Hot0+fvLLSnlmWebPTaW8zeUP2EKP0+/eg
-         oYQVSNAjkaks3Nc88jbzNy5KYE6ZFW6UZQ3V/md9sRy+Wl98aDfOuWtbGYaGg/5h3bpV
-         +tUSRAfOsPwShrpRdlUdUtGwFieCOQgBEGd4TIrvDKidxGtU5pU/ShEv5bo0NY+Ye5rW
-         r2JhUXmQZVBtrB5Ez/Gyom1FkFb/O7KEYgBdiRXYVMv97NwteH/TTiuU/GE7uTgid+3f
-         JZnQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Fn1mW/M+b5JfP/RL4eNIoaoJKFnoTSy8/1QRkY7yY6w=;
+        b=cAfXFEhOpXumYj813HTkLEraMgQg06hYN419xoSCexoVB93sZr7EXzvNEtL0Fieqrq
+         y2PG01R601L0eMlhdJEz0GtRmms3CBjweJcfL1xQZQpLD0mTvmzFfzn50yBo5Q6zHxCC
+         5w98EIfIom79Bv09c7Fm9gbTpuNUAjAx4DMaBgrh/2yMSFAEkq+MVVwiZIksY0LGQmAo
+         JibtNXb84wWol/uCRRSBrdJ3x8FG4tCJ0z5vDxHADTEp4kvP/VaJo/Aom7BZbPvAety6
+         5vpEWUs1gS1oEsNkXh+nLaHR21sIqaY5xMf7Fn3uOokLAY+EadocHPL1ZuEAEeZIhOcf
+         2Srg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/lVVqGzxWl1Ux5ICb2CCCQDe80RAQD6Gjf6fg6zMkY8=;
-        b=d0Z1v2ABmxTedKno4+vSAcTxqxT5MWRwqlBNn43NW09GnaZANhWMVbj+p+Js04TgJc
-         0qrOE3MCeWhliw0z7LAdPFlDoRooTetJTaSXjzAy6gBM3/E5L5ch0XEmtEW2MpukaBhL
-         tUz41wBuppRI0UiP7e4dHTTtE9gB15ww9PzkyCPAmzKtBewLUpe2M2/Un3tU8QTNrmht
-         I7jvBWN4j+c2rcjuGleyAIkv0ZwcrDF6pSiPiBnrchYb4ALwJK9TaXruMv6Tk5Ts1H/J
-         dXjBbFxywCy0rn7aUaWVeBsUSUZed4sh/W78wDfCTgM4CIQWxC9Kp1pmleWGNOco1fpq
-         Oncg==
-X-Gm-Message-State: AOAM531t2PG/yeXndWeAkPHp1i9kOZ3atkgKJ2Ctx4oYzIc9dqNAlK3Z
-        dERloGExHx+WAtShn418/JHaCOBty7Uw9wEHyNM=
-X-Google-Smtp-Source: ABdhPJwdktgf6aoxdjY555xRSyIKgajAti2vfX8KCBRVqgNzmbSLxxuW2JQwZsXmzwFidaRikPpLS1azpbs3dq6ldI8=
-X-Received: by 2002:ad4:5ba8:0:b0:434:66a8:6cd8 with SMTP id
- 8-20020ad45ba8000000b0043466a86cd8mr10177600qvq.4.1646312650715; Thu, 03 Mar
- 2022 05:04:10 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fn1mW/M+b5JfP/RL4eNIoaoJKFnoTSy8/1QRkY7yY6w=;
+        b=vNl/bk+5H1v8rylUhrqOrh1dilBYLy57xagIPQE4yM4EP7UrRpNNC5s9yUxqr6KBnM
+         9OUF+c1KfRWpu9yrx3At9Lwr7C32LVbkY38KINOwAu99bTAwDvSGjLIU8Oxn4UDsA6xs
+         eNDxU97VbOIJSPRfVZAOJMuGLORbZhBekiURcS6S7svwqOAMJeiteBAGW7Pl9SZL+AC/
+         gZBqn+NcC52bL155CbD9jqQ6QoRX+C+WVxtrAX4GNLdSdNkW95Qy3GP65RpKbidcdkI+
+         xvjqRbx2TKtFZiIZSv+sj0PNT6t3GA/s0U3UA77mjuahTkuzVWUx3fx9wvde1nsGQJcy
+         nzuA==
+X-Gm-Message-State: AOAM532pdSndGdm/7CU1IPBIvPCXmuVrHMbkkyl0SvO7R2tyiNpaXpQU
+        sX1Z9CbwEbXQkcwAZrwONWGrFFiX2k4CMA==
+X-Google-Smtp-Source: ABdhPJyvuhJeoFTwSlXcRkogHWdVBOBzuvgCFWCYYC2O1J7O8WsFAPsAMwhcS8NYLsoLeBgL6NPQdQ==
+X-Received: by 2002:a05:6000:1847:b0:1e6:2783:b3e6 with SMTP id c7-20020a056000184700b001e62783b3e6mr26593796wri.163.1646312652810;
+        Thu, 03 Mar 2022 05:04:12 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98? ([2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98])
+        by smtp.googlemail.com with ESMTPSA id a3-20020a7bc1c3000000b00380e493660esm8449303wmj.42.2022.03.03.05.04.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 05:04:12 -0800 (PST)
+Message-ID: <ac06ce18-5997-d553-3033-6bc7ac65f608@linaro.org>
+Date:   Thu, 3 Mar 2022 14:04:10 +0100
 MIME-Version: 1.0
-References: <20220303083141.8742-1-warp5tw@gmail.com> <YiCXujUOUum+CAU9@smile.fi.intel.com>
-In-Reply-To: <YiCXujUOUum+CAU9@smile.fi.intel.com>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Thu, 3 Mar 2022 15:03:59 +0200
-Message-ID: <CAHb3i=sW16cykfp2Q=s6evzodD4wKreK3PrOb2YPeQzE-NWe4A@mail.gmail.com>
-Subject: Re: [PATCH v3 00/11] i2c: npcm: Bug fixes timeout, spurious interrupts
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
+Content-Language: en-US
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+Cc:     "Sanil, Shruthi" <shruthi.sanil@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
+        "Raja Subramanian, Lakshmi Bai" 
+        <lakshmi.bai.raja.subramanian@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-3-shruthi.sanil@intel.com>
+ <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
+ <BN9PR11MB55451DB929086919F8D06390F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+ <23f86de0-3869-ee22-812d-ba610bac48b3@linaro.org>
+ <BN9PR11MB55458A882EB4A681C4A63B26F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
+ <3ff11b85-249f-2f47-cbc4-41d2ab6d168f@linaro.org>
+ <DM4PR11MB554994532B3D128F85553C38F1049@DM4PR11MB5549.namprd11.prod.outlook.com>
+ <ce516de7-f1cf-c614-f9ff-439626dfafea@linaro.org>
+ <YiCcu7unsP5YDxun@smile.fi.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <YiCcu7unsP5YDxun@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 12:27 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Mar 03, 2022 at 04:31:30PM +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > This patchset includes the following fixes:
-> >
-> > - Add dt-bindings description for NPCM845.
-> > - Bug fix for timeout calculation.
-> > - Better handling of spurious interrupts.
-> > - Fix for event type in slave mode.
-> > - Removal of own slave addresses [2:10].
-> > - Support for next gen BMC (NPCM845).
-> >
-> > The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
->
-> Overall my impression that the code was never tested for this driver and
-> somehow appears in the upstream and hence this series.
->
-> Anyway, I'm going to review the changes here.
->
-> --
+On 03/03/2022 11:47, andriy.shevchenko@linux.intel.com wrote:
+> On Thu, Mar 03, 2022 at 11:17:33AM +0100, Daniel Lezcano wrote:
+>> On 03/03/2022 07:18, Sanil, Shruthi wrote:
+> 
+>>>>>>>>> +	if (!(val & TIM_CONFIG_PRESCALER_ENABLE)) { +
+>>>>>>>>> pr_err("%pOF: Prescaler is not enabled\n", np);
+>>>>>>>>> +		ret = -ENODEV; +	}
+>>>>>>>>
+>>>>>>>> Why bail out instead of enabling the prescalar ?
+>>>>>>>
+>>>>>>> Because it is a secure register and it would be updated by
+>>>>>>> the bootloader.
+>>>>>> Should it be considered as a firmware bug ?
+>>>>>
+>>>>> No. This is a common driver across products in the series and
+>>>>> enablement of this bit depends on the project requirements.
+>>>>> Hence
+>>>>> to be sure from driver, we added this check to avoid
+>>>>> initialization of the driver in the case where it cannot be
+>>>>> functional.
+>>>>
+>>>> I'm not sure to get the meaning of 'project requirements' but (for
+>>>> my understanding) why not describe the timer in the DT for such
+>>>> projects?
+>>>>
+>>>
+>>> OK, I understand your point now. We can control the driver
+>>> initialization from device tree binding rather than add a check in
+>>> the driver. But isn't it good to have a check, if enabling of the bit
+>>> is missed out in the FW? This can help in debugging.
+>>
+>> So if the description is in the DT but the prescaler bit is not enabled then
+>> the firmware is buggy, IIUC. Yeah, this check would help, may be add more
+>> context in the error message, eg. "Firmware has not enabled the prescaler
+>> bit" or something like that
+> 
+> For this we also use a FW_BUG prefix to printf()-like functions.
+
+Thanks for the information, I was unaware of this prefix.
+
+Good to know ;)
 
 
-Actually it was and is being used by multiple users in lots of BMCs.
-We haven't submitted patches for this driver for a while
-and accumulated them all on Nuvoton Github repo, but now we wanted to
-clear the table.
 
-All your comments will be addressed and fixed for the next patchset.
-As always, we really appreciate your review and taking the time to go
-through all these changes.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-> With Best Regards,
-> Andy Shevchenko
->
->
-
-Thanks!
-
-Tali Perry
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

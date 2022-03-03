@@ -2,176 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D490E4CC8EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206BF4CC904
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236922AbiCCWag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S236940AbiCCWc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236913AbiCCWac (ORCPT
+        with ESMTP id S236925AbiCCWct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:30:32 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B05311EF20;
-        Thu,  3 Mar 2022 14:29:46 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id s1so8428921edd.13;
-        Thu, 03 Mar 2022 14:29:45 -0800 (PST)
+        Thu, 3 Mar 2022 17:32:49 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8C513858E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:32:02 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso7431568ooi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:32:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qURyynMi/HgXpmSfLyUFNqbqAu/l3MGX7Mv0yI+XyPQ=;
-        b=Ep3QG/4ZU24+B32NtMclXeYMmGtv/CULxCL1Xcm8LpSfsHlwc1RTO4xFbc2BtrbqRI
-         wDXQD3JBhvqiFguK4cLM0aMfivTA8qyy0+Hnf+PP/zfio3r48S7rMkJeCF35l9tWeIJ9
-         mYwxrsKxnteK0lvvQUrJlMPI0Sk2yD/jrwglf9Wv3ZEk+QCLUDHd7m8QPxYd726BqHi7
-         8KYmUHMI7xBVqF/1QJPn4zifeyxo/cOQYMIPV9na6+SiN3Wo5GEnLYo9GjPtjmuA9BvE
-         Uzuiej//fqAXgRzjnqLsRzkRu3JqXTga+bPwZPb7aSJRoNSMim0pbBcv3PeymH4LOt94
-         ClqQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GXj+JJPwfsy1TPTyievdzxMaMQ1HgahsIy1fHCecuJ8=;
+        b=s5oo+ymjcJWqfAiP1BwjR3idcGDdOwaFb2X8H+Z/c3G5sY1UtDiv3Fv7vjncR7nFMO
+         wA8UYS+eLiiZUeb9Rrgal3IJ+vrQnXJmt3tiaP67Qu+bpO+I1pKc9eYWPE82v9mAuy0a
+         zf0JzaDYQVuA41giUxuz7reKLPok3cCf431Pr/tlhu8wiiki7ajXlfmw9DWYkqIP9KPA
+         MexWfe2ty+nGrQ/qkN0EQ00ztZard0NnaFwi6x9CO5pb5xycrzQoIxbN5A4zHkhBQrm+
+         vSeWTJEqXUe38QHMrC0SrFuUr9O+0Ik1aqwc8yImJ4BdGByk5nVux5cKyLQ/gTzC2JRh
+         J2Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qURyynMi/HgXpmSfLyUFNqbqAu/l3MGX7Mv0yI+XyPQ=;
-        b=i/xnce6N0pC3N+PGlROlgQkh4OOqMmILT9MJyBi0arboJXbWqKwKZoU0JMo9/c3TAf
-         GN8zSsQiHVmw+Zwh73FggHJTLWRFK7HBPhD4n+K1F0REcROIHkGYWYfF5wumzJGiFAlT
-         KotwGabpX8X7a4lUQS3ppN0cJgwHzCjDAw/j1g1pnkr8ZyVEZTtKYxAGxG9EvhisAyb5
-         Bb5oKYVm2jM+o6yNBAA/aRqIA5pFl4xbTlzhr+7gh/3MWUSB5u8zVpYkDlLqhM4Y/Q+w
-         brFYM+O6C12RCVrji1c21iv22pAqk8k8qtSErdkxsG6QquKKvdzUa1S+ogdxF4ZqAUZC
-         geLQ==
-X-Gm-Message-State: AOAM5335tkz8s/0muaTloTmzznakYKFQ5uL5QPln2MenACr8SgEnyo7i
-        Gx93+3gSDWZYK3rqkr37UE0=
-X-Google-Smtp-Source: ABdhPJycAcEdH9myQCMw6g6i+TkljUrgPIVf7+QgiP17Bb4KxbhWSFhcGDjT5Qr7OEZT7GxjdIz8hQ==
-X-Received: by 2002:a05:6402:270a:b0:410:63d:a66d with SMTP id y10-20020a056402270a00b00410063da66dmr36458587edd.48.1646346584524;
-        Thu, 03 Mar 2022 14:29:44 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id v2-20020a509d02000000b00412d53177a6sm1369846ede.20.2022.03.03.14.29.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GXj+JJPwfsy1TPTyievdzxMaMQ1HgahsIy1fHCecuJ8=;
+        b=P7ChTsqf/WI328odS89B5qvYZbTJJe/Ts1kPG5UOBIBZ659ICKmaZoboCgpz4aINj8
+         Z9z/rJpApI2hK/kSnVPWjFnnXLfVF9elEfXgIsDUd7a8uxG7wWl6yNBRv0X1lEXbXRts
+         W4oOQ/Q57eM1DNmEsYtZYVNpuNQUxr5h+JoOeVrx3aZjMjiHgVDL6/eFDhIvGB7aw5Gh
+         FHvDteRK92c8lPegFQYAS8uhG2d6Nz0KscVvafVXOaRFjNIUwDRIMslB9R3t3HElTtuX
+         h5o52qPhITh81pNjGAtrve5bt4ZVbAGGzNB2RwFlzM08ixxGzZr/BTIB+X2+Tk+868Pe
+         44EQ==
+X-Gm-Message-State: AOAM530mlQB8iChKUT2+G3rJIcGg5SgZYMk5JdxOzxnj34F4NhO8H0+V
+        b/gH8M2u1ikKXMkUpkLlYRbS4A==
+X-Google-Smtp-Source: ABdhPJzkhWKivVU8Vch0wuh08xQA/XMkkCLJf277FgVKCZMd2uuRFKuuha1IbHcDRlai/7h6StF3NQ==
+X-Received: by 2002:a4a:d21b:0:b0:2e2:113:db90 with SMTP id c27-20020a4ad21b000000b002e20113db90mr19603967oos.50.1646346721308;
+        Thu, 03 Mar 2022 14:32:01 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id fq14-20020a0568710b0e00b000d4492531a2sm1764777oab.17.2022.03.03.14.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 14:29:44 -0800 (PST)
-Date:   Fri, 4 Mar 2022 00:29:42 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 06/10] net: dsa: Pass VLAN MSTI migration
- notifications to driver
-Message-ID: <20220303222942.dkz7bfuagkv7hbpp@skbuf>
-References: <20220301100321.951175-1-tobias@waldekranz.com>
- <20220301100321.951175-7-tobias@waldekranz.com>
+        Thu, 03 Mar 2022 14:32:00 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v3 1/6] device property: Helper to match multiple connections
+Date:   Thu,  3 Mar 2022 14:33:46 -0800
+Message-Id: <20220303223351.141238-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220301100321.951175-7-tobias@waldekranz.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:03:17AM +0100, Tobias Waldekranz wrote:
-> Add the usual trampoline functionality from the generic DSA layer down
-> to the drivers for VLAN MSTI migrations.
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  include/net/dsa.h  |  3 +++
->  net/dsa/dsa_priv.h |  1 +
->  net/dsa/port.c     | 10 ++++++++++
->  net/dsa/slave.c    |  6 ++++++
->  4 files changed, 20 insertions(+)
-> 
-> diff --git a/include/net/dsa.h b/include/net/dsa.h
-> index cfedcfb86350..cc8acb01bd9b 100644
-> --- a/include/net/dsa.h
-> +++ b/include/net/dsa.h
-> @@ -962,6 +962,9 @@ struct dsa_switch_ops {
->  				 struct netlink_ext_ack *extack);
->  	int	(*port_vlan_del)(struct dsa_switch *ds, int port,
->  				 const struct switchdev_obj_port_vlan *vlan);
-> +	int	(*vlan_msti_set)(struct dsa_switch *ds,
-> +				 const struct switchdev_attr *attr);
+In some cases multiple connections with the same connection id
+needs to be resolved from a fwnode graph.
 
-I would rather pass the struct switchdev_vlan_attr and the orig_dev
-(bridge) as separate arguments here. Or even the struct dsa_bridge, for
-consistency to the API changes for database isolation.
+One such example is when separate hardware is used for performing muxing
+and/or orientation switching of the SuperSpeed and SBU lines in a USB
+Type-C connector. In this case the connector needs to belong to a graph
+with multiple matching remote endpoints, and the Type-C controller needs
+to be able to resolve them both.
 
-> +
->  	/*
->  	 * Forwarding database
->  	 */
-> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
-> index 07c0ad52395a..87ec0697e92e 100644
-> --- a/net/dsa/dsa_priv.h
-> +++ b/net/dsa/dsa_priv.h
-> @@ -217,6 +217,7 @@ int dsa_port_vlan_filtering(struct dsa_port *dp, bool vlan_filtering,
->  			    struct netlink_ext_ack *extack);
->  bool dsa_port_skip_vlan_configuration(struct dsa_port *dp);
->  int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock);
-> +int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr);
->  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
->  			bool targeted_match);
->  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
-> diff --git a/net/dsa/port.c b/net/dsa/port.c
-> index d9da425a17fb..5f45cb7d70ba 100644
-> --- a/net/dsa/port.c
-> +++ b/net/dsa/port.c
-> @@ -778,6 +778,16 @@ int dsa_port_bridge_flags(struct dsa_port *dp,
->  	return 0;
->  }
->  
-> +int dsa_port_vlan_msti(struct dsa_port *dp, const struct switchdev_attr *attr)
-> +{
-> +	struct dsa_switch *ds = dp->ds;
-> +
-> +	if (!ds->ops->vlan_msti_set)
-> +		return -EOPNOTSUPP;
-> +
-> +	return ds->ops->vlan_msti_set(ds, attr);
+Add a new API that allows this kind of lookup.
 
-I guess this doesn't need to be a cross-chip notifier event for all
-switches, because replication to all bridge ports is handled by
-switchdev_handle_port_attr_set(). Ok. But isn't it called too many times
-per switch?
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-> +}
-> +
->  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
->  			bool targeted_match)
->  {
-> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-> index 089616206b11..c6ffcd782b5a 100644
-> --- a/net/dsa/slave.c
-> +++ b/net/dsa/slave.c
-> @@ -314,6 +314,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
->  
->  		ret = dsa_port_bridge_flags(dp, attr->u.brport_flags, extack);
->  		break;
-> +	case SWITCHDEV_ATTR_ID_VLAN_MSTI:
-> +		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
-> +			return -EOPNOTSUPP;
-> +
-> +		ret = dsa_port_vlan_msti(dp, attr);
-> +		break;
->  	default:
->  		ret = -EOPNOTSUPP;
->  		break;
-> -- 
-> 2.25.1
-> 
+Changes since v2:
+- Allow the caller of the new api to pass a matches of NULL, to count possible
+  matches. I previously argued that this will cause memory leaks, but Andy
+  pointed out that this depends on the caller and the match function.
+- Fixed spelling mistakes in commit message and kernel-doc.
+- Use two "count" variables to make the math clearer.
+
+Changes since v1:
+- Iterator in fwnode_devcon_matches() is now unsigned.
+- fwnode_handle_put() node for unavailable nodes.
+- Extended commit message on the subject of supporting dynamically sized
+  "matches" array.
+
+ drivers/base/property.c  | 107 +++++++++++++++++++++++++++++++++++++++
+ include/linux/property.h |   5 ++
+ 2 files changed, 112 insertions(+)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index c0e94cce9c29..5cda205136f6 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -1218,6 +1218,40 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 	return NULL;
+ }
+ 
++static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
++						const char *con_id, void *data,
++						devcon_match_fn_t match,
++						void **matches,
++						unsigned int matches_len)
++{
++	struct fwnode_handle *node;
++	struct fwnode_handle *ep;
++	unsigned int count = 0;
++	void *ret;
++
++	fwnode_graph_for_each_endpoint(fwnode, ep) {
++		if (count >= matches_len && matches) {
++			fwnode_handle_put(ep);
++			return count;
++		}
++
++		node = fwnode_graph_get_remote_port_parent(ep);
++		if (!fwnode_device_is_available(node)) {
++			fwnode_handle_put(node);
++			continue;
++		}
++
++		ret = match(node, con_id, data);
++		fwnode_handle_put(node);
++		if (ret) {
++			if (matches)
++				matches[count] = ret;
++			count++;
++		}
++	}
++	return count;
++}
++
+ static void *
+ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 		    void *data, devcon_match_fn_t match)
+@@ -1240,6 +1274,37 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 	return NULL;
+ }
+ 
++static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
++					  const char *con_id, void *data,
++					  devcon_match_fn_t match,
++					  void **matches,
++					  unsigned int matches_len)
++{
++	struct fwnode_handle *node;
++	unsigned int count = 0;
++	unsigned int i;
++	void *ret;
++
++	for (i = 0; ; i++) {
++		if (count >= matches_len && matches)
++			return count;
++
++		node = fwnode_find_reference(fwnode, con_id, i);
++		if (IS_ERR(node))
++			break;
++
++		ret = match(node, NULL, data);
++		fwnode_handle_put(node);
++		if (ret) {
++			if (matches)
++				matches[count] = ret;
++			count++;
++		}
++	}
++
++	return count;
++}
++
+ /**
+  * fwnode_connection_find_match - Find connection from a device node
+  * @fwnode: Device node with the connection
+@@ -1267,3 +1332,45 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
+ 	return fwnode_devcon_match(fwnode, con_id, data, match);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
++
++/**
++ * fwnode_connection_find_matches - Find connections from a device node
++ * @fwnode: Device node with the connection
++ * @con_id: Identifier for the connection
++ * @data: Data for the match function
++ * @match: Function to check and convert the connection description
++ * @matches: Array of pointers to fill with matches
++ * @matches_len: Length of @matches
++ *
++ * Find up to @matches_len connections with unique identifier @con_id between
++ * @fwnode and other device nodes. @match will be used to convert the
++ * connection description to data the caller is expecting to be returned
++ * through the @matches array.
++ * If @matches is NULL @matches_len is ignored and the total number of resolved
++ * matches is returned.
++ *
++ * Return: Number of matches resolved, or negative errno.
++ */
++int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
++				   const char *con_id, void *data,
++				   devcon_match_fn_t match,
++				   void **matches, unsigned int matches_len)
++{
++	unsigned int count_graph;
++	unsigned int count_ref;
++
++	if (!fwnode || !match)
++		return -EINVAL;
++
++	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
++						  matches, matches_len);
++
++	matches += count_graph;
++	matches_len -= count_graph;
++
++	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
++					  matches, matches_len);
++
++	return count_graph + count_ref;
++}
++EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 4cd4b326941f..de7ff336d2c8 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -447,6 +447,11 @@ static inline void *device_connection_find_match(struct device *dev,
+ 	return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
+ }
+ 
++int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
++				   const char *con_id, void *data,
++				   devcon_match_fn_t match,
++				   void **matches, unsigned int matches_len);
++
+ /* -------------------------------------------------------------------------- */
+ /* Software fwnode support - when HW description is incomplete or missing */
+ 
+-- 
+2.33.1
 

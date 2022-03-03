@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027374CC027
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BF44CC034
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiCCOlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S234154AbiCCOmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiCCOlG (ORCPT
+        with ESMTP id S234148AbiCCOml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:41:06 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0EF21786A7
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:40:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 429EC1480;
-        Thu,  3 Mar 2022 06:40:19 -0800 (PST)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3CC483F66F;
-        Thu,  3 Mar 2022 06:40:18 -0800 (PST)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, yf.wang@mediatek.com,
-        miles.chen@mediatek.com, wsd_upstream@mediatek.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/iova: Improve 32-bit free space estimate
-Date:   Thu,  3 Mar 2022 14:40:08 +0000
-Message-Id: <033815732d83ca73b13c11485ac39336f15c3b40.1646318408.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
+        Thu, 3 Mar 2022 09:42:41 -0500
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CAA18E425
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:41:52 -0800 (PST)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 223EeT4P019337-223EeT4S019337
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Thu, 3 Mar 2022 22:40:35 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] btrfs: don't access possibly stale fs_info data in device_list_add
+Date:   Thu,  3 Mar 2022 22:40:27 +0800
+Message-Id: <20220303144027.1981835-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For various reasons based on the allocator behaviour and typical
-use-cases at the time, when the max32_alloc_size optimisation was
-introduced it seemed reasonable to couple the reset of the tracked
-size to the update of cached32_node upon freeing a relevant IOVA.
-However, since subsequent optimisations focused on helping genuine
-32-bit devices make best use of even more limited address spaces, it
-is now a lot more likely for cached32_node to be anywhere in a "full"
-32-bit address space, and as such more likely for space to become
-available from IOVAs below that node being freed.
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-At this point, the short-cut in __cached_rbnode_delete_update() really
-doesn't hold up any more, and we need to fix the logic to reliably
-provide the expected behaviour. We still want cached32_node to only move
-upwards, but we should reset the allocation size if *any* 32-bit space
-has become available.
+Syzbot reported a possible use-after-free in printing information
+in device_list_add.
 
-Reported-by: Yunfei Wang <yf.wang@mediatek.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Very similar with the bug fixed by commit 0697d9a61099 ("btrfs: don't
+access possibly stale fs_info data for printing duplicate device"),
+but this time the use occurs in btrfs_info_in_rcu.
+
+============================================================
+Call Trace:
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ btrfs_printk+0x395/0x425 fs/btrfs/super.c:244
+ device_list_add.cold+0xd7/0x2ed fs/btrfs/volumes.c:957
+ btrfs_scan_one_device+0x4c7/0x5c0 fs/btrfs/volumes.c:1387
+ btrfs_control_ioctl+0x12a/0x2d0 fs/btrfs/super.c:2409
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+============================================================
+
+Fix this by modifying device->fs_info to NULL too.
+
+Reported-and-tested-by: syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
- drivers/iommu/iova.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/btrfs/volumes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index b28c9435b898..170e0f33040e 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -95,10 +95,11 @@ __cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
- 	cached_iova = to_iova(iovad->cached32_node);
- 	if (free == cached_iova ||
- 	    (free->pfn_hi < iovad->dma_32bit_pfn &&
--	     free->pfn_lo >= cached_iova->pfn_lo)) {
-+	     free->pfn_lo >= cached_iova->pfn_lo))
- 		iovad->cached32_node = rb_next(&free->node);
-+
-+	if (free->pfn_lo < iovad->dma_32bit_pfn)
- 		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
--	}
- 
- 	cached_iova = to_iova(iovad->cached_node);
- 	if (free->pfn_lo >= cached_iova->pfn_lo)
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index b07d382d53a8..c1325bdae9a1 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -954,7 +954,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
+ 						  task_pid_nr(current));
+ 				return ERR_PTR(-EEXIST);
+ 			}
+-			btrfs_info_in_rcu(device->fs_info,
++			btrfs_info_in_rcu(NULL,
+ 	"devid %llu device path %s changed to %s scanned by %s (%d)",
+ 					  devid, rcu_str_deref(device->name),
+ 					  path, current->comm,
 -- 
-2.28.0.dirty
+2.25.1
 

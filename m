@@ -2,98 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C836E4CBA5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B319D4CBA5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiCCJfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S232013AbiCCJfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:35:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiCCJfI (ORCPT
+        with ESMTP id S231857AbiCCJfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:35:08 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290FB381B3;
-        Thu,  3 Mar 2022 01:34:23 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2236VpW9006274;
-        Thu, 3 Mar 2022 09:34:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=bMrs6h/yWRgvz9thvSel5Bw5+zRca968g7cgiKNaGXM=;
- b=mKAbowLbSf3VFNfvuU4lZwfnlFeTL/mTRSR4qWJJSeJegmb0ME86v1ffngtMordGlKNj
- NAR66XymGNlYTqfJw/mVECb54FzvJ2V6lj+C6QAZYenUjX/gIvtRAL/fJalmn1YARUoe
- N7oBpARJkeCKyZhmhOu0UUuud7AMByTweO5kSGRpSyigJew0CpkgupA4ya/vEEPH87RO
- bdZBddKKldNea4fLoVZMD1nm7dklzFuyw/LAfNBkwZxL4lYgG6QKRy+Uf2Len+QpvRo9
- Bec+GwbMGP+Hixu/dJxg2s0VWhCleBsIpqxcCzhKIdjgDBHDbInoxoAjABHdzKfbI9Ia zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejj7e1qae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:34:00 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2239K4NZ017214;
-        Thu, 3 Mar 2022 09:34:00 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejj7e1q9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:33:59 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2239Iq5h022856;
-        Thu, 3 Mar 2022 09:33:57 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3efbu9fjnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:33:57 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2239XtMC53608830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 09:33:55 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E69652052;
-        Thu,  3 Mar 2022 09:33:55 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.6.152])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 17A965204F;
-        Thu,  3 Mar 2022 09:33:53 +0000 (GMT)
-Date:   Thu, 3 Mar 2022 11:33:50 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Marco Elver <elver@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] slab, documentation: add description of debugfs
- files for SLUB caches
-Message-ID: <YiCLftpiVgrLJ9Rh@linux.ibm.com>
-References: <20220302173122.11939-1-vbabka@suse.cz>
- <20220302173122.11939-7-vbabka@suse.cz>
+        Thu, 3 Mar 2022 04:35:20 -0500
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FBF403C2;
+        Thu,  3 Mar 2022 01:34:35 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id qx21so9258426ejb.13;
+        Thu, 03 Mar 2022 01:34:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HCoJ2YMwz0q/SwgLBzV0H3UA+rYOKmWN8IjDCigSeO8=;
+        b=QeWlJjedoR2qFQBUOh4pkhzui5u5PKxnKQUs5zyRaF5mTqLJkKjx2lJcSdTp4D4V/d
+         NweQl12MrRSaJTviT4Nmzvr5hRPl6ZIoyJ5SWf1ZE/BVbnVyp5EY9W/FYSxw+W67ms0x
+         3Tc/EJHGU2v4Cfz954oAjvXSxchWOfWf70Yc/3EA91lFIKkXZeZMphk4JY7MjyCXDKRL
+         0GwdW3UkK7fcWvnmMBXR1iEnbhtTe7j210IQtL0LlpIL6x8qJNT8N10IoPqGkT4aFbYF
+         DSOqePZ20AIdQZiziy1VaHD9bE3lPjaauePg+l2qGeZG6SbHfAPvq71EfaPt2CslijLi
+         bodA==
+X-Gm-Message-State: AOAM5339lsRSqgv6ri2nmuqHXf6oMYGuzKCYahmDQa6va9QSG0FcJTmU
+        7HWgYiyml/fTml07yJ6lJqY1biMyFVU=
+X-Google-Smtp-Source: ABdhPJyj7IPoYYr6U2OkzEEq2Jm0KvkKkWEb0ABY+xk3BFll3PIddVhRcde7e62zhWwEa+oWwrxWsA==
+X-Received: by 2002:a17:906:402:b0:6d5:c6bc:3150 with SMTP id d2-20020a170906040200b006d5c6bc3150mr26995549eja.403.1646300073839;
+        Thu, 03 Mar 2022 01:34:33 -0800 (PST)
+Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id f6-20020a50fc86000000b0040f614e0906sm615639edq.46.2022.03.03.01.34.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 01:34:32 -0800 (PST)
+Message-ID: <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org>
+Date:   Thu, 3 Mar 2022 10:34:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302173122.11939-7-vbabka@suse.cz>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1WM7IjlfwJV7Y_rlBx_RjZZIXDcDkBcT
-X-Proofpoint-GUID: O71Pr85KlBDvYhXyJBkhQ8Eo_wrt_Eyq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_06,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=634 clxscore=1011 suspectscore=0 adultscore=0 impostorscore=0
- bulkscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203030044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Content-Language: en-US
+To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
+ <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+ <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
+ <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
+ <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
+ <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,104 +75,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 06:31:22PM +0100, Vlastimil Babka wrote:
-> From: Oliver Glitta <glittao@gmail.com>
+On 03/03/2022 10:01, Edwin Chiu 邱垂峰 wrote:
 > 
-> Add description of debugfs files alloc_traces and free_traces
-> to SLUB cache documentation.
 > 
-> [ vbabka@suse.cz: some rewording ]
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzk@kernel.org>
+>> Sent: Tuesday, March 1, 2022 7:34 PM
+>> To: Edwin Chiu 邱垂峰 <edwin.chiu@sunplus.com>; Edwin Chiu <edwinchiu0505tw@gmail.com>;
+>> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org;
+>> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
+>> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
+>>
+>> On 01/03/2022 10:30, Edwin Chiu 邱垂峰 wrote:
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: Krzysztof Kozlowski <krzk@kernel.org>
+>>>> Sent: Tuesday, February 22, 2022 12:48 AM
+>>>> To: Edwin Chiu <edwinchiu0505tw@gmail.com>; Edwin Chiu 邱垂峰
+>>>> <edwin.chiu@sunplus.com>;
+>>>> robh+dt@kernel.org; devicetree@vger.kernel.org;
+>>>> robh+linux-kernel@vger.kernel.org; rafael@kernel.org;
+>>>> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
+>>>> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for
+>>>> sunplus sp7021
+>>>>
+>>>> On 21/02/2022 08:26, Edwin Chiu wrote:
+>>>>> Create cpuidle driver for sunplus sp7021 chip
+>>>>>
+>>>>> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
+>>>>> ---
+>>>>> Changes in v3
+>>>>>  - Rearrangement #include sequence
+>>>>>  - Change remark style to /*~*/
+>>>>>  - Align author email address to same as sob
+>>>>>  - Optimal code
+>>>>> Changes in v4
+>>>>>  - According Rob Herringrobh's comment
+>>>>>    There is no need for this binding.
+>>>>>    Just wanting a different driver is not a reason
+>>>>>    for a duplicate schema.
+>>>>>    So remove yaml file and submit driver again.
+>>>>> Changes in v5
+>>>>>  - According Krzysztof's comment
+>>>>>    You either use appropriate compatible in DT
+>>>>>    or add your compatible to cpuidle-arm.
+>>>>>    Even if this did not work, then the solution is to
+>>>>>    use common parts, not to duplicate entire driver.
+>>>>>    According Sudeep's comment
+>>>>>    In short NACK for any dedicated driver for this platform,
+>>>>>    use the generic cpuidle-arm driver with appropriate platform hooks
+>>>>>    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
+>>>>>    for hook generic cpuidle-arm driver
+>>>>>
+>>>>>  MAINTAINERS                                   |  6 ++
+>>>>>  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
+>>>>>  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
+>>>>>  3 files changed, 106 insertions(+)
+>>>>>  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
+>>>>>  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
+>>>>>
+>>>>> diff --git a/MAINTAINERS b/MAINTAINERS index e0dca8f..5c96428 100644
+>>>>> --- a/MAINTAINERS
+>>>>> +++ b/MAINTAINERS
+>>>>> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
+>>>>>  S:	Maintained
+>>>>>  F:	drivers/net/ethernet/dlink/sundance.c
+>>>>>
+>>>>> +SUNPLUS CPUIDLE DRIVER
+>>>>> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
+>>>>> +S:	Maintained
+>>>>> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
+>>>>> +F:	include/linux/platform_data/cpuidle-sunplus.h
+>>>>> +
+>>>>>  SUPERH
+>>>>>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>>>>>  M:	Rich Felker <dalias@libc.org>
+>>>>> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c
+>>>>> b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+>>>>> new file mode 100644
+>>>>> index 0000000..e9d9738
+>>>>> --- /dev/null
+>>>>> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+>>>>> @@ -0,0 +1,88 @@
+>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>> +/*
+>>>>> + * SP7021 cpu idle Driver.
+>>>>> + * Copyright (C) Sunplus Tech / Tibbo Tech.
+>>>>> + */
+>>>>> +#define pr_fmt(fmt) "CPUidle arm: " fmt
+>>>>> +
+>>>>> +#include <linux/cpuidle.h>
+>>>>> +#include <linux/of_device.h>
+>>>>> +#include <linux/platform_data/cpuidle-sunplus.h>
+>>>>> +
+>>>>> +#include <asm/cpuidle.h>
+>>>>> +
+>>>>> +typedef int (*idle_fn)(void);
+>>>>> +
+>>>>> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
+>>>>> +
+>>>>> +static int sp7021_cpuidle_enter(unsigned long index) {
+>>>>> +	return __this_cpu_read(sp7021_idle_ops)[index]();
+>>>>> +}
+>>>>> +static int sp7021_cpu_spc(void)
+>>>>> +{
+>>>>> +	cpu_v7_do_idle();   /* idle to WFI */
+>>>>> +	return 0;
+>>>>> +}
+>>>>> +static const struct of_device_id sp7021_idle_state_match[] = {
+>>>>> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
+>>>>> +	{ },
+>>>>> +};
+>>>>
+>>>> This is confusing. You want to have two drivers to bind to the same
+>>>> compatible? As I wrote in the previous messages, you should simply use arm,idle-state just like few
+>> other architectures.
+>>>>
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>
+>>>
+>>> The patch v5 implemented according your comment.
+>>> Used common part of arm,idle-state.
+>>> Create new enable-method for cpuidle.ops function.
+>>> It only have arm cpuidle driver exist now, no two drivers to bind to the same compatible.
+>>>
+>>> What do you mean " simply use arm,idle-state just like few other architectures "?
+>>>
+>>
+>> I mean, do it similarly (by using arm,idle-state and other related
+>> properties) to for example ti,am4372/ti,am3352.
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> Signed-off-by: Oliver Glitta <glittao@gmail.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: linux-doc@vger.kernel.org
+> 
+> The am3352 cpuidle code structure is very similar to ours.				
+> Used enable-method = "ti,am3352" and compatible = "arm,idle-state" in am33xx.dtsi				
+> Used CPUIDLE_METHOD_OF_DECLARE(pm33xx_idle, "ti,am3352", &amx3_cpuidle_ops) in pm33xx-core.c				
+> 				
+> The difference are				
+> am3352				
+> amx3_idle_init(~) assign idle_states[i].wfi_flags = states[i].wfi_flags;				
+> amx3_idle_enter(~) call idle_fn(idle_state->wfi_flags)				
+> 				
+> sunplus-sp7021				
+> sp7021_cpuidle_init(~) assign fns[i] = idle_fns[i];				
+> sp7021_cpuidle_enter(~) call __this_cpu_read(sp7021_idle_ops)[index]();				
+> 
+> I don't think am3352 cpuidle code architecture simpler than ours.
+> The idle_fn function need more complex method to be assign.
+> How do you think?
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+You duplicated a driver, entire pieces of code. This is not acceptable.
+Therefore it does not really make sense to discuss whether duplicated
+solution seems simpler or not... We won't accept duplicated code.
+Especially for WFI-only driver.
 
-> ---
->  Documentation/vm/slub.rst | 64 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
-> 
-> diff --git a/Documentation/vm/slub.rst b/Documentation/vm/slub.rst
-> index d3028554b1e9..43063ade737a 100644
-> --- a/Documentation/vm/slub.rst
-> +++ b/Documentation/vm/slub.rst
-> @@ -384,5 +384,69 @@ c) Execute ``slabinfo-gnuplot.sh`` in '-t' mode, passing all of the
->        40,60`` range will plot only samples collected between 40th and
->        60th seconds).
->  
-> +
-> +DebugFS files for SLUB
-> +======================
-> +
-> +For more information about current state of SLUB caches with the user tracking
-> +debug option enabled, debugfs files are available, typically under
-> +/sys/kernel/debug/slab/<cache>/ (created only for caches with enabled user
-> +tracking). There are 2 types of these files with the following debug
-> +information:
-> +
-> +1. alloc_traces::
-> +
-> +    Prints information about unique allocation traces of the currently
-> +    allocated objects. The output is sorted by frequency of each trace.
-> +
-> +    Information in the output:
-> +    Number of objects, allocating function, minimal/average/maximal jiffies since alloc,
-> +    pid range of the allocating processes, cpu mask of allocating cpus, and stack trace.
-> +
-> +    Example:::
-> +
-> +    1085 populate_error_injection_list+0x97/0x110 age=166678/166680/166682 pid=1 cpus=1::
-> +	__slab_alloc+0x6d/0x90
-> +	kmem_cache_alloc_trace+0x2eb/0x300
-> +	populate_error_injection_list+0x97/0x110
-> +	init_error_injection+0x1b/0x71
-> +	do_one_initcall+0x5f/0x2d0
-> +	kernel_init_freeable+0x26f/0x2d7
-> +	kernel_init+0xe/0x118
-> +	ret_from_fork+0x22/0x30
-> +
-> +
-> +2. free_traces::
-> +
-> +    Prints information about unique freeing traces of the currently allocated
-> +    objects. The freeing traces thus come from the previous life-cycle of the
-> +    objects and are reported as not available for objects allocated for the first
-> +    time. The output is sorted by frequency of each trace.
-> +
-> +    Information in the output:
-> +    Number of objects, freeing function, minimal/average/maximal jiffies since free,
-> +    pid range of the freeing processes, cpu mask of freeing cpus, and stack trace.
-> +
-> +    Example:::
-> +
-> +    1980 <not-available> age=4294912290 pid=0 cpus=0
-> +    51 acpi_ut_update_ref_count+0x6a6/0x782 age=236886/237027/237772 pid=1 cpus=1
-> +	kfree+0x2db/0x420
-> +	acpi_ut_update_ref_count+0x6a6/0x782
-> +	acpi_ut_update_object_reference+0x1ad/0x234
-> +	acpi_ut_remove_reference+0x7d/0x84
-> +	acpi_rs_get_prt_method_data+0x97/0xd6
-> +	acpi_get_irq_routing_table+0x82/0xc4
-> +	acpi_pci_irq_find_prt_entry+0x8e/0x2e0
-> +	acpi_pci_irq_lookup+0x3a/0x1e0
-> +	acpi_pci_irq_enable+0x77/0x240
-> +	pcibios_enable_device+0x39/0x40
-> +	do_pci_enable_device.part.0+0x5d/0xe0
-> +	pci_enable_device_flags+0xfc/0x120
-> +	pci_enable_device+0x13/0x20
-> +	virtio_pci_probe+0x9e/0x170
-> +	local_pci_probe+0x48/0x80
-> +	pci_device_probe+0x105/0x1c0
-> +
->  Christoph Lameter, May 30, 2007
->  Sergey Senozhatsky, October 23, 2015
-> -- 
-> 2.35.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+Best regards,
+Krzysztof

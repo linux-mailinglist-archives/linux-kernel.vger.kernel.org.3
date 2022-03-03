@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE404CBC08
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5154CBC0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbiCCLB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S232587AbiCCLCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiCCLB1 (ORCPT
+        with ESMTP id S232039AbiCCLCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:01:27 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4CC1786B7
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:00:41 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d3so7231174wrf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 03:00:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/TgIBjHQi7r7WHKCasRkN2aOlr4vraq88325rI9u3hg=;
-        b=sJ2HpbTIaSDXarONqtC1kx7iU09mROR+Y1ql1Og5YiL5QIuHHYwigYAcp15XE1Qob2
-         Yk7EjLnjdOKnIWydzO8/jmCEtj9xC2JCDeHE323taLayQ3Geqvj1PFmuMxob8qJ4ua9E
-         LBpppiYiCDuxWrNUh1Hdsmpm/TGafy8GCah2fEvoBSSK0beLiK+ql2XFHHBFZ+pRiLwB
-         Bb6dz7DgATYbhYukQI1jJZo40jmtMu3/6h2anA05rpZwBTBizYSFIy54w3FyZVY1kBFr
-         k8iI1Hi+yABmbpfl8/EHdHh86VUmt8Ybmbko+lDGrMZVaTV3OvzTLEwloa5l7XoUcy2Z
-         m4gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/TgIBjHQi7r7WHKCasRkN2aOlr4vraq88325rI9u3hg=;
-        b=kbV3IWyxaBHfNRhFn5dTUfM/dH4G+TKThgDOiRpiFfixC34cLXoPqpvRjm5beyRJLw
-         qeuh/b93FHi2ThphsYytJ1uJaC0ZBNO8LYIbyTYOn2L0tURaTkW37LwzL9Au3TCdv4dk
-         lfEqNV8ego7OQGJas3r2zhtZ0kfW+HhZwwRAyEyVL+h3OjuAx2d29m4AEEhVxXMKASeL
-         w22dZj0g+TupDeeUITPJOl409tiP8XOhbcrFnN0Mbz2YtpwYAcEMqk2ImP+J7b+KSfxm
-         aGDgcUcosWwcOMgJIFy6LkJHef7lWt+tTrf/KX4F8FgCNvqEEPks+yfQjQure82Uk7b6
-         ZXEQ==
-X-Gm-Message-State: AOAM530n0DCHIoChIAK0BVjEhs9Wryw0vAv6mQMtDNdOXXxnamiWVL6J
-        5H6qg6K0r9eWn4Ftwnw2EZxINQ==
-X-Google-Smtp-Source: ABdhPJwj6ojZKa6m7KAHwOvCGqv5fGE65DExmg5fopUMCQDCtIM9GUrgtcwOeg7kJlp1WsQ9ALSE7g==
-X-Received: by 2002:adf:e98c:0:b0:1f0:2f5c:2e9 with SMTP id h12-20020adfe98c000000b001f02f5c02e9mr5191247wrm.356.1646305240498;
-        Thu, 03 Mar 2022 03:00:40 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id 11-20020a05600c22cb00b00382a960b17csm6755282wmg.7.2022.03.03.03.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 03:00:40 -0800 (PST)
-Message-ID: <ef2bdf6e-37f8-46d8-fdd3-4e548104b52f@linaro.org>
-Date:   Thu, 3 Mar 2022 11:00:38 +0000
+        Thu, 3 Mar 2022 06:02:39 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FE31786B7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646305314; x=1677841314;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y3r8Ib7tswZuhTlRizACNTSXhPpUNhhBtSN6IXXbiwM=;
+  b=UB1+5QQAriOwuqHhIb82vYJ19hddfkiqGpmNEL0c1d6PpH8bGc8u5iBq
+   xHRLdkOAfCR7wG70eTCxEFrOAVaEB6ZafcCa9jWgDPSk2uTli65+MC/SA
+   7kr2zwJ06QX/XYcpuCWNrtDpcUWrZFl/WiOAzla4f+eVqEysuEEdPeJKE
+   zbv4dtdlMhTnWhi8bVZRRbjQgcaJrzTTNAaGHpYFfnghI8H/kAu/dYnhA
+   5q7LwIGnPVHeyRkPyX4EUIxjZDY6N96Q6xUQvHnwLh1av4+kSzLhAHTJ0
+   Mf2BMpZbNwp6wGQBqCidEvOPV8Mcc8YU+ViRkyLLrpYhLRHDvTYLHfU3k
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234256873"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="234256873"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 03:01:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="535785161"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Mar 2022 03:01:51 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPjDS-0000Pw-EN; Thu, 03 Mar 2022 11:01:50 +0000
+Date:   Thu, 3 Mar 2022 19:00:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [netfilter-nf-next:master 4/12]
+ net/netfilter/nf_conntrack_netlink.c:3885:2: error: implicit declaration of
+ function 'nf_conntrack_register_notifier'
+Message-ID: <202203031802.iTj8Fo1p-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: linux-next: build failure after merge of the soundwire tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220303215930.014e72f8@canb.auug.org.au>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220303215930.014e72f8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +64,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Stephen,
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git master
+head:   25485ffb54ac073e82957218404e303469477c2f
+commit: e999c34a878887e8413b6f728b929d668e191888 [4/12] netfilter: ctnetlink: make ecache event cb global again
+config: riscv-randconfig-r042-20220303 (https://download.01.org/0day-ci/archive/20220303/202203031802.iTj8Fo1p-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=e999c34a878887e8413b6f728b929d668e191888
+        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
+        git fetch --no-tags netfilter-nf-next master
+        git checkout e999c34a878887e8413b6f728b929d668e191888
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/netfilter/
 
-On 03/03/2022 10:59, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the soundwire tree, today's linux-next build (s390
-> allmodconfig) failed like this:
-> 
-> drivers/soundwire/qcom.c:1460:12: error: 'swrm_runtime_resume' defined but not used [-Werror=unused-function]
-> 
-> Caused by commit
-> 
->    74e79da9fd46 ("soundwire: qcom: add runtime pm support")
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fix patch is on the way.
+All errors (new ones prefixed by >>):
 
---srini
-> 
+>> net/netfilter/nf_conntrack_netlink.c:3885:2: error: implicit declaration of function 'nf_conntrack_register_notifier' [-Werror,-Wimplicit-function-declaration]
+           nf_conntrack_register_notifier(&ctnl_notifier);
+           ^
+   net/netfilter/nf_conntrack_netlink.c:3885:2: note: did you mean 'netlink_register_notifier'?
+   include/linux/netlink.h:151:5: note: 'netlink_register_notifier' declared here
+   int netlink_register_notifier(struct notifier_block *nb);
+       ^
+>> net/netfilter/nf_conntrack_netlink.c:3885:34: error: use of undeclared identifier 'ctnl_notifier'; did you mean 'rtnl_notify'?
+           nf_conntrack_register_notifier(&ctnl_notifier);
+                                           ^~~~~~~~~~~~~
+                                           rtnl_notify
+   include/linux/rtnetlink.h:14:13: note: 'rtnl_notify' declared here
+   extern void rtnl_notify(struct sk_buff *skb, struct net *net, u32 pid,
+               ^
+   2 errors generated.
+
+
+vim +/nf_conntrack_register_notifier +3885 net/netfilter/nf_conntrack_netlink.c
+
+  3866	
+  3867	static int __init ctnetlink_init(void)
+  3868	{
+  3869		int ret;
+  3870	
+  3871		BUILD_BUG_ON(sizeof(struct ctnetlink_list_dump_ctx) > sizeof_field(struct netlink_callback, ctx));
+  3872	
+  3873		ret = nfnetlink_subsys_register(&ctnl_subsys);
+  3874		if (ret < 0) {
+  3875			pr_err("ctnetlink_init: cannot register with nfnetlink.\n");
+  3876			goto err_out;
+  3877		}
+  3878	
+  3879		ret = nfnetlink_subsys_register(&ctnl_exp_subsys);
+  3880		if (ret < 0) {
+  3881			pr_err("ctnetlink_init: cannot register exp with nfnetlink.\n");
+  3882			goto err_unreg_subsys;
+  3883		}
+  3884	
+> 3885		nf_conntrack_register_notifier(&ctnl_notifier);
+  3886	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

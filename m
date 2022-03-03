@@ -2,819 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244F34CBEBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B588E4CBEC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiCCNT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S233675AbiCCNT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbiCCNT0 (ORCPT
+        with ESMTP id S231213AbiCCNTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:19:26 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69452148906
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:18:34 -0800 (PST)
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 3872A3F7E4;
-        Thu,  3 Mar 2022 14:18:32 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 3/3] clk: qcom: Add display clock controller driver for SM6125
-Date:   Thu,  3 Mar 2022 14:18:12 +0100
-Message-Id: <20220303131812.302302-4-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220303131812.302302-1-marijn.suijten@somainline.org>
-References: <20220303131812.302302-1-marijn.suijten@somainline.org>
-MIME-Version: 1.0
+        Thu, 3 Mar 2022 08:19:54 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2075.outbound.protection.outlook.com [40.107.244.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3661516A1;
+        Thu,  3 Mar 2022 05:19:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kpChS0nk0M6QCcgwA+iJTQuUeZONnwRl/22yLVwSxJ3QwaMrlSdizsNUHC1TwrK3iTRHDB4ESona5bYY324OTYwRgjsSagX1ZHPklsP9RepdOfWKdIBasHaIvK6o33TTt2P1jHTtBG6NQdlt09QVwXLMBteWLI25AcSfnuqy/csd8SZuqhF8E/1W5wuroD+h0KfWzCmXOYrr8FkdvyRbqL7ChW6uQXKH/6BvridvAccLbCQ6CHvAmLLgQ3W2wLNhnF0uWYubVBhdjLr7fWKx95jBDOS32mMKiHFrzTdCID37GJE9Bl4VK+Cvb9tF76VImRR08/kkgigI4Nn/b8TyTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i5Hg0zHrDDckKpVKvdMskDnxA6YySmM100lMIkgC8ro=;
+ b=KkmnV35H0xKSjEsYwn+QP+XY8434MQnLyFnYVHQFhMlHWKBjahmpTJh+7vrc64C3HIVhGGvdyyrB3tZKoPV5slIplBT5RjA5Egieh1p4DZ3Q/IPt+l+K5/QO3Gf+WBkMogzi6yOQ2Hmp65908H1sgS1B7g9xBg+pfiL/sRyIMCrNqoupvAqyBu9269ZZ8efDGvqU4mSVfAyzsXCjlLe9tm8KOvt+DrCX2er4FWfCCbJk0v8j8p/4MCnpsC6r6ixYCWj0kKnj2RWoFE++x6aVLqncyly35stn92Q/nPhRDkKCUYAfW3o2sOswmn05YmRu4KTdaXIcCtgJ8UOjufBOMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i5Hg0zHrDDckKpVKvdMskDnxA6YySmM100lMIkgC8ro=;
+ b=W5IklotcaAk9xKfxOByoBzBRHehISQcEqnARR8ebxicL8r/UgGSHgzW4SpacQnkiZdkMMu8T9HwIynTYniUFUoGGhYGFC+iVx+sTYs5NrHkHCe/9eDZieImfFLo68rWlcl3VzRfgaaJsG9qDzL/YK6Pqo+ijyjIQ6BLEgTjqrH0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Thu, 3 Mar
+ 2022 13:19:06 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08%5]) with mapi id 15.20.5038.014; Thu, 3 Mar 2022
+ 13:19:05 +0000
+Message-ID: <edd464f1-916e-191a-3683-45b623604e4b@amd.com>
+Date:   Thu, 3 Mar 2022 07:19:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] [RFC] ata: ahci: Skip debounce delay for AMD FCH SATA
+ Controller
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220303100453.30018-1-pmenzel@molgen.mpg.de>
+ <20220303100453.30018-2-pmenzel@molgen.mpg.de>
+ <0a7c8ee9-1e09-75a4-3241-883fc8540561@opensource.wdc.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <0a7c8ee9-1e09-75a4-3241-883fc8540561@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SN6PR01CA0026.prod.exchangelabs.com (2603:10b6:805:b6::39)
+ To BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 13282db8-ac05-413b-6c15-08d9fd18646c
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3775:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB377574652B360A554B2F7947E2049@MN2PR12MB3775.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xoNGLIHJk0lhwP5CT2S7x+zK0Qwi4BFiEYfFh2gtkYeAhHvDmsJ33k+mVlzAw04kt9u+vQVEdKFFFTsi3qEkLGBbkkKhXPMnMB07tSiXJQUOwiPhXZS8v74Te7ZRUMLLSwSscnDTGs9qWR4X10MFILndrBTVpw4j7yDre42J9Qf4pvY2vk+RCgwccWbqwEK8bt7eoWP6cIopVvqS+b7PzwaiayWxN0uzOiO28GJFHfnu5K1iNnye2/uLVufkiNBwkdGyQ2azZlzcj4elvMD9J+VdFXuhPudJxL5DTibLtoyEr5uJ3YbqaGrjKPIVDwH90anFVDQ7DZq+igbuuyw1cXnVN3ZxCRwiV657AtmFdRG2I1oBpib/Uos2J8Th5Q4TIV0l9MYBRbaSaH6J3vedr35FjY917g47/YqC8xGEIjd/XtSDbn1/y/8+6LgKesj50CHM9anQi3QGYzx5P1XFXf2x1Z2sTc8jGRtL0GnyHjyE86mdJDzJHGmnH8tSlJYf+J1T9cFWGwxYX+CDsrtw+RVlTuDQsGZkKJGnfYmRpiTISKgdAe/9pXq5MulkTHVNKRqnm1wGGP0oxmCoqjq3zo8c4AY/3qGeQMDXhFK2by4smqLZziUa4TDWnI4Say0eUSnWIe5xddYbEXG1/VB4GT4TuciYvj0jB8a8eaBKRFXCMYqoQ8h47UdiMRm+XivAiYK0RfDTOszp2LJSPQ7fMmpn1STMIDvp+8bcFo2q8UE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(4326008)(8676002)(66556008)(66476007)(2906002)(36756003)(5660300002)(8936002)(66946007)(38100700002)(44832011)(2616005)(83380400001)(6512007)(53546011)(6506007)(316002)(110136005)(31696002)(86362001)(6486002)(508600001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NVZWZUs1dktMMjRyL0xDdVFvcUVmNjA3RVhHRllaTUZkbTNuZWVPWkxRSWNW?=
+ =?utf-8?B?SnJSR0kwaGlBa0xVTkNoWkNiOURFdlVRYTI0UWg3clQ5T3ZaRUlnMmdSZzFH?=
+ =?utf-8?B?MHJFTzVYZHFYTUFBc1h3dWxiUVpWTldpWXU1MUh1YW1EZURmK2ltdm5IRmhl?=
+ =?utf-8?B?eVlzSjZaNnVRM2Erd3ZIRXoyejZHOVZOMDZ4ZStLRTJYbFlndEJVaTg1b0Ny?=
+ =?utf-8?B?TUZLME5rWTRKdUQ2aVJLVDNYL3I4SGc4Q0VPUnhCMG9iUXAvOVR3WmU0bGJB?=
+ =?utf-8?B?QmVpOFh5NzJ3bWUxMkE4MVgveDMzT3c0cllnTmswajVDd1A0ejNmOGc5Rk5I?=
+ =?utf-8?B?V1NhN1QzWXVJbWFyYUlBOHN6RWNTdWhhMk5BdnBCRHBpNUVBZ1RhR0xackhh?=
+ =?utf-8?B?bDQyb1ZWak84NmR2N2trOEIrQkswRFVsWnJIUDF1WnhhU1NRRnpVMFdaUDBZ?=
+ =?utf-8?B?SS9WVHFaQ2pmSDJJcmNZekR1bWNSOHExdUJ0SjdaMW5sL2NyYVNGdlZiME5v?=
+ =?utf-8?B?YktJRUhhRW93RTh0Yy9qeTJnVk01NGRGZDhBODE4QURzNTdKUUZNN3ZubVRN?=
+ =?utf-8?B?dGhmTXVlMGF1b05yckRkU1YyZ25FaWkzejE0cXhlTXkva0VUUlVOcmNhcy9Z?=
+ =?utf-8?B?WHNLanRPclRCUi8rYU83ZkRPMmxnM0Y1b3l5cFZTclRZRU1FdXROUWZHbUpq?=
+ =?utf-8?B?NkpnK3U3YW9YdVNBUXRCRjBjeVlNWFp0WUxldU9uY1FDb2NWMmRmSThicVFh?=
+ =?utf-8?B?YVROR3ZBWFVQQUxYalB2SzVuazM5bnU0dSszdkw2VUNIYWkxUkhVTXpOVXpB?=
+ =?utf-8?B?ek5nVnViWVBDNUFNL2ZEb2hNQXR0czkvckk5U1JQNi80WXNKbDE1anRxMWtU?=
+ =?utf-8?B?VmFGbktuTHlHdEJjbDJtYXhjaktMcXNCbnVUNHR4eDRXVFJrL0RuWXBNRE9O?=
+ =?utf-8?B?azBodGZydktUMUdHU0krVURESG5CTEVIU29RUGEweHNUdS81cC84N2k4dzht?=
+ =?utf-8?B?bG9jMFFXc0Y4RHp1bzVjdHpGL1dMbmVBMGtlSVkrWjZpbjFQR1JEYzZCT1Jq?=
+ =?utf-8?B?NVJGaUhMeXJtZm03cU1VOFo2ay9TYWFQZnNEemdMTnR2UXlmZ1pYQ2JZcVFL?=
+ =?utf-8?B?UVBsQURYZGtDcG9ZV243dG50U0F5NVhEQ3ZiT0VEbkhIeVdHOFhnb3JFVGk4?=
+ =?utf-8?B?WnNONnNreVFCVDk2Y0J5SzJvd1FVeGFaYVltckd0dWtlM2ZIbHhUa2NnRThO?=
+ =?utf-8?B?ZDFmTnJqMTQrdkpvMVVEQkV2WWIzM1NodFVCZGh0Wk9zcklZcXZIT0NNUmNJ?=
+ =?utf-8?B?U0FVTXJLUHNycjVucjhnYnp5ZkhyN1Brek9VQWFZK2srVkFZY2o2RVJ6d3cw?=
+ =?utf-8?B?d0FIR3R1YUJUc1VOUjdQbm8rblUyR2dTOWVUbWFXUnF4L0tVcHpkdXVsZG5t?=
+ =?utf-8?B?SC9BOVFjS0dOWkl3ZUtwaHRNaUpFbUtjUmFnZTFBSjJac1FCcmhHYzJjRTZu?=
+ =?utf-8?B?ZXVhcEdFS1A1dWUwUEdYZzdqY3prRGJRWEVWSTYvc1ZZbnNNZEV2bTR1eENw?=
+ =?utf-8?B?cnM5alQyZGx0MjQ5R2xORW43YVExRmJoMHlvaUFoNGlSL3RKNkZvWEtUbk83?=
+ =?utf-8?B?Wm5xNGxQNHZ4V3dEU1JIek9xQTJKRUpmZytYL1YyaG9UVXpZSjNRYThCTzdy?=
+ =?utf-8?B?WjJSTkRBazh2WCs1TExtbUNzWDB6TjdoYStPd3Z6RkdOSmIwa0p0ZHlsY3Ba?=
+ =?utf-8?B?NXltK2o1a1FHVTJDbTJzejlMYjJTZ1doUnp4aXZUbFhiVzhyWTIvZGtOQnU3?=
+ =?utf-8?B?cStXcWpPSGNrekcra003RnZCelZSQ0NlT2RCWWppd21sN2xDRHZpd2lSTDhC?=
+ =?utf-8?B?ZXRkRk5WcE1KcVFsRkdkdk0zREtqYlI1QzlLbGtYVzc0RVF2OHlFdkhVY3ow?=
+ =?utf-8?B?bnZnUUFTOU15SHhPZEgxUmJPRm1jci8zSXFoaVFwTkdDLzBHNDlaUEw1QW51?=
+ =?utf-8?B?RVI5bGt0emhHYmtqbFZXMVAyVytPaElqellYdXZKVnJkcVBLREJVS2dFTy9n?=
+ =?utf-8?B?MHBHRkIwcUNoQ0FpRlVrc1JYK1lpb0ZnbTNoSjJWaVdKSXNyaEcvenhGK0ty?=
+ =?utf-8?B?cm53ZUYzeWtDSzIvanJ2OThDOVB5THl1ZFNsZnoyQStCUmhWSXVidTVJU3dn?=
+ =?utf-8?B?M2xXQjhsVkxDT2llaGN3TEd1Nnk2UldROXNiODI4aG13TmJOeVFvQmc5QVJh?=
+ =?utf-8?Q?DwBnoIjGfQ0I5vRGk3NzGFe5dJz0BPpZCGJHbcIsp4=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13282db8-ac05-413b-6c15-08d9fd18646c
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 13:19:05.7692
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C8j0U/xFVhguBY0rMV7/IM/IzKaCx1r9IYfdWY2mY2F34cG6LXFobQtf7YeyJkruAmIQAoIGQFrSlqjyj7t21g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3775
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Botka <martin.botka@somainline.org>
+On 3/3/22 06:23, Damien Le Moal wrote:
+> On 2022/03/03 12:04, Paul Menzel wrote:
+>> AMD devices with the FCH SATA Controller 0x1022:0x7901 do not need the
+>> default debounce delay of 200 ms.
+>>
+>>      07:00.2 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7901] (rev 51)
+>>
+>> So skip it, by mapping it to the board with no debounce delay.
+>>
+>> Tested on the MSI MS-7A37/B350M MORTAR (MS-7A37).
+>>
+>> To-do: Add test details and results.
+> 
+> Please squash this patch together with patch 1. Since you are adding a new board
+> entry definition, it is better to have a user for it in the same patch (this
+> avoids reverts to leave unused code behind). >
+>>
+>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> I am travelling so could not test this exact patch just yet, but I ran
+>> something similar for several weeks already. It’d be great, if the
+>> desktop and AMD folks could also give this a try.
 
-Add support for the display clock controller found on SM6125
-based devices. This allows display drivers to probe and
-control their clocks.
+As we are trying to drop the low power definition for 5.18, maybe can 
+this wait until 5.19 so we can see if that sticks so this doesn't get 
+caught up in possible reverts?
 
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/clk/qcom/Kconfig         |   9 +
- drivers/clk/qcom/Makefile        |   1 +
- drivers/clk/qcom/dispcc-sm6125.c | 709 +++++++++++++++++++++++++++++++
- 3 files changed, 719 insertions(+)
- create mode 100644 drivers/clk/qcom/dispcc-sm6125.c
-
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 161b257da9ca..3012b8133db0 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -589,6 +589,15 @@ config SM_CAMCC_8250
- 	  Support for the camera clock controller on SM8250 devices.
- 	  Say Y if you want to support camera devices and camera functionality.
- 
-+config SM_DISPCC_6125
-+	tristate "SM6125 Display Clock Controller"
-+	depends on SM_GCC_6125
-+	help
-+	  Support for the display clock controller on Qualcomm Technologies, Inc
-+	  SM6125 devices.
-+	  Say Y if you want to support display devices and functionality such as
-+	  splash screen
-+
- config SM_DISPCC_8250
- 	tristate "SM8150 and SM8250 Display Clock Controller"
- 	depends on SM_GCC_8150 || SM_GCC_8250
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index 3e4eb843b8d2..7d627dea665f 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
- obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
- obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
- obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
-+obj-$(CONFIG_SM_DISPCC_6125) += dispcc-sm6125.o
- obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
- obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
- obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
-diff --git a/drivers/clk/qcom/dispcc-sm6125.c b/drivers/clk/qcom/dispcc-sm6125.c
-new file mode 100644
-index 000000000000..b921456a2e0d
---- /dev/null
-+++ b/drivers/clk/qcom/dispcc-sm6125.c
-@@ -0,0 +1,709 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,dispcc-sm6125.h>
-+
-+#include "clk-alpha-pll.h"
-+#include "clk-branch.h"
-+#include "clk-rcg.h"
-+#include "clk-regmap.h"
-+#include "common.h"
-+#include "gdsc.h"
-+
-+enum {
-+	P_BI_TCXO,
-+	P_DISP_CC_PLL0_OUT_MAIN,
-+	P_DP_PHY_PLL_LINK_CLK,
-+	P_DP_PHY_PLL_VCO_DIV_CLK,
-+	P_DSI0_PHY_PLL_OUT_BYTECLK,
-+	P_DSI0_PHY_PLL_OUT_DSICLK,
-+	P_DSI1_PHY_PLL_OUT_DSICLK,
-+	P_GPLL0_OUT_MAIN,
-+};
-+
-+static struct pll_vco disp_cc_pll_vco[] = {
-+	{ 500000000, 1000000000, 2 },
-+};
-+
-+static struct clk_alpha_pll disp_cc_pll0 = {
-+	.offset = 0x0,
-+	.vco_table = disp_cc_pll_vco,
-+	.num_vco = ARRAY_SIZE(disp_cc_pll_vco),
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.flags = SUPPORTS_DYNAMIC_UPDATE,
-+	.clkr = {
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_pll0",
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "bi_tcxo",
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_ops,
-+		},
-+	},
-+};
-+
-+/* 768MHz configuration */
-+static const struct alpha_pll_config disp_cc_pll0_config = {
-+	.l = 0x28,
-+	.vco_val = 0x2 << 20,
-+	.vco_mask = 0x3 << 20,
-+	.main_output_mask = BIT(0),
-+	.config_ctl_val = 0x4001055b,
-+};
-+
-+static const struct parent_map disp_cc_parent_map_0[] = {
-+	{ P_BI_TCXO, 0 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_0[] = {
-+	{ .fw_name = "bi_tcxo" },
-+};
-+
-+static const struct parent_map disp_cc_parent_map_1[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_DP_PHY_PLL_LINK_CLK, 1 },
-+	{ P_DP_PHY_PLL_VCO_DIV_CLK, 2 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_1[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .fw_name = "dp_phy_pll_link_clk" },
-+	{ .fw_name = "dp_phy_pll_vco_div_clk" },
-+};
-+
-+static const struct parent_map disp_cc_parent_map_2[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_DSI0_PHY_PLL_OUT_BYTECLK, 1 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_2[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .fw_name = "dsi0_phy_pll_out_byteclk" },
-+};
-+
-+static const struct parent_map disp_cc_parent_map_3[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_DISP_CC_PLL0_OUT_MAIN, 1 },
-+	{ P_GPLL0_OUT_MAIN, 4 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_3[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .hw = &disp_cc_pll0.clkr.hw },
-+	{ .fw_name = "gcc_disp_gpll0_div_clk_src" },
-+};
-+
-+static const struct parent_map disp_cc_parent_map_4[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_GPLL0_OUT_MAIN, 4 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_4[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .fw_name = "gcc_disp_gpll0_div_clk_src" },
-+};
-+
-+static const struct parent_map disp_cc_parent_map_5[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_DSI0_PHY_PLL_OUT_DSICLK, 1 },
-+	{ P_DSI1_PHY_PLL_OUT_DSICLK, 2 },
-+};
-+
-+static const struct clk_parent_data disp_cc_parent_data_5[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .fw_name = "dsi0_phy_pll_out_dsiclk" },
-+	{ .fw_name = "dsi1_phy_pll_out_dsiclk" },
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_ahb_clk_src[] = {
-+	F(19200000, P_BI_TCXO, 1, 0, 0),
-+	F(37500000, P_GPLL0_OUT_MAIN, 16, 0, 0),
-+	F(75000000, P_GPLL0_OUT_MAIN, 8, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_ahb_clk_src = {
-+	.cmd_rcgr = 0x2154,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_4,
-+	.freq_tbl = ftbl_disp_cc_mdss_ahb_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_ahb_clk_src",
-+		.parent_data = disp_cc_parent_data_4,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_4),
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_byte0_clk_src = {
-+	.cmd_rcgr = 0x20bc,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_2,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_byte0_clk_src",
-+		.parent_data = disp_cc_parent_data_2,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
-+		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+		.ops = &clk_byte2_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_dp_aux1_clk_src[] = {
-+	F(19200000, P_BI_TCXO, 1, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_dp_aux_clk_src = {
-+	.cmd_rcgr = 0x213c,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_0,
-+	.freq_tbl = ftbl_disp_cc_mdss_dp_aux1_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_dp_aux_clk_src",
-+		.parent_data = disp_cc_parent_data_0,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_dp_crypto_clk_src[] = {
-+	F( 180000, P_DP_PHY_PLL_LINK_CLK,   1.5,   0,   0),
-+	F( 360000, P_DP_PHY_PLL_LINK_CLK,   1.5,   0,   0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_dp_crypto_clk_src = {
-+	.cmd_rcgr = 0x210c,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_1,
-+	.freq_tbl = ftbl_disp_cc_mdss_dp_crypto_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_dp_crypto_clk_src",
-+		.parent_data = disp_cc_parent_data_1,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
-+		.flags = CLK_GET_RATE_NOCACHE,
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_dp_link_clk_src[] = {
-+	F( 162000, P_DP_PHY_PLL_LINK_CLK,   1,   0,   0),
-+	F( 270000, P_DP_PHY_PLL_LINK_CLK,   1,   0,   0),
-+	F( 540000, P_DP_PHY_PLL_LINK_CLK,   1,   0,   0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_dp_link_clk_src = {
-+	.cmd_rcgr = 0x20f0,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_1,
-+	.freq_tbl = ftbl_disp_cc_mdss_dp_link_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_dp_link_clk_src",
-+		.parent_data = disp_cc_parent_data_1,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
-+		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_dp_pixel_clk_src = {
-+	.cmd_rcgr = 0x2124,
-+	.mnd_width = 16,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_1,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_dp_pixel_clk_src",
-+		.parent_data = disp_cc_parent_data_1,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
-+		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+		.ops = &clk_dp_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_esc0_clk_src = {
-+	.cmd_rcgr = 0x20d8,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_2,
-+	.freq_tbl = ftbl_disp_cc_mdss_dp_aux1_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_esc0_clk_src",
-+		.parent_data = disp_cc_parent_data_2,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src[] = {
-+	F(19200000, P_BI_TCXO, 1, 0, 0),
-+	F(192000000, P_DISP_CC_PLL0_OUT_MAIN, 4, 0, 0),
-+	F(256000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
-+	F(307200000, P_DISP_CC_PLL0_OUT_MAIN, 2.5, 0, 0),
-+	F(384000000, P_DISP_CC_PLL0_OUT_MAIN, 2, 0, 0),
-+	F(400000000, P_GPLL0_OUT_MAIN, 1.5, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_mdp_clk_src = {
-+	.cmd_rcgr = 0x2074,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_3,
-+	.freq_tbl = ftbl_disp_cc_mdss_mdp_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_mdp_clk_src",
-+		.parent_data = disp_cc_parent_data_3,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_pclk0_clk_src = {
-+	.cmd_rcgr = 0x205c,
-+	.mnd_width = 8,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_5,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_pclk0_clk_src",
-+		.parent_data = disp_cc_parent_data_5,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
-+		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+		.ops = &clk_pixel_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_disp_cc_mdss_rot_clk_src[] = {
-+	F(19200000, P_BI_TCXO, 1, 0, 0),
-+	F(192000000, P_DISP_CC_PLL0_OUT_MAIN, 4, 0, 0),
-+	F(256000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
-+	F(307200000, P_DISP_CC_PLL0_OUT_MAIN, 2.5, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_rot_clk_src = {
-+	.cmd_rcgr = 0x208c,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_3,
-+	.freq_tbl = ftbl_disp_cc_mdss_rot_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_rot_clk_src",
-+		.parent_data = disp_cc_parent_data_3,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
-+		.flags = CLK_SET_RATE_PARENT,
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 disp_cc_mdss_vsync_clk_src = {
-+	.cmd_rcgr = 0x20a4,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = disp_cc_parent_map_0,
-+	.freq_tbl = ftbl_disp_cc_mdss_dp_aux1_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "disp_cc_mdss_vsync_clk_src",
-+		.parent_data = disp_cc_parent_data_0,
-+		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_ahb_clk = {
-+	.halt_reg = 0x2044,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2044,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_ahb_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_ahb_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_byte0_clk = {
-+	.halt_reg = 0x2024,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2024,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_byte0_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_byte0_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_byte0_intf_clk = {
-+	.halt_reg = 0x2028,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2028,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_byte0_intf_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_byte0_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_dp_aux_clk = {
-+	.halt_reg = 0x2040,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2040,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_dp_aux_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_dp_aux_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_dp_crypto_clk = {
-+	.halt_reg = 0x2038,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2038,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_dp_crypto_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_dp_crypto_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_dp_link_clk = {
-+	.halt_reg = 0x2030,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2030,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_dp_link_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_dp_link_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_dp_link_intf_clk = {
-+	.halt_reg = 0x2034,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2034,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_dp_link_intf_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_dp_link_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_dp_pixel_clk = {
-+	.halt_reg = 0x203c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x203c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_dp_pixel_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_dp_pixel_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_esc0_clk = {
-+	.halt_reg = 0x202c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x202c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_esc0_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_esc0_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_mdp_clk = {
-+	.halt_reg = 0x2008,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2008,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_mdp_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_mdp_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_mdp_lut_clk = {
-+	.halt_reg = 0x2018,
-+	.halt_check = BRANCH_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x2018,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_mdp_lut_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_mdp_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_non_gdsc_ahb_clk = {
-+	.halt_reg = 0x4004,
-+	.halt_check = BRANCH_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x4004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_non_gdsc_ahb_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_ahb_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_pclk0_clk = {
-+	.halt_reg = 0x2004,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_pclk0_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_pclk0_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_rot_clk = {
-+	.halt_reg = 0x2010,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2010,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_rot_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_rot_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_mdss_vsync_clk = {
-+	.halt_reg = 0x2020,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2020,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_mdss_vsync_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&disp_cc_mdss_vsync_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch disp_cc_xo_clk = {
-+	.halt_reg = 0x604c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x604c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "disp_cc_xo_clk",
-+			.flags = CLK_IS_CRITICAL,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct gdsc mdss_gdsc = {
-+	.gdscr = 0x3000,
-+	.pd = {
-+		.name = "mdss_gdsc",
-+	},
-+	.pwrsts = PWRSTS_OFF_ON,
-+	.flags = HW_CTRL,
-+};
-+
-+static struct clk_regmap *disp_cc_sm6125_clocks[] = {
-+	[DISP_CC_MDSS_AHB_CLK] = &disp_cc_mdss_ahb_clk.clkr,
-+	[DISP_CC_MDSS_AHB_CLK_SRC] = &disp_cc_mdss_ahb_clk_src.clkr,
-+	[DISP_CC_MDSS_BYTE0_CLK] = &disp_cc_mdss_byte0_clk.clkr,
-+	[DISP_CC_MDSS_BYTE0_CLK_SRC] = &disp_cc_mdss_byte0_clk_src.clkr,
-+	[DISP_CC_MDSS_BYTE0_INTF_CLK] = &disp_cc_mdss_byte0_intf_clk.clkr,
-+	[DISP_CC_MDSS_DP_AUX_CLK] = &disp_cc_mdss_dp_aux_clk.clkr,
-+	[DISP_CC_MDSS_DP_AUX_CLK_SRC] = &disp_cc_mdss_dp_aux_clk_src.clkr,
-+	[DISP_CC_MDSS_DP_CRYPTO_CLK] = &disp_cc_mdss_dp_crypto_clk.clkr,
-+	[DISP_CC_MDSS_DP_CRYPTO_CLK_SRC] = &disp_cc_mdss_dp_crypto_clk_src.clkr,
-+	[DISP_CC_MDSS_DP_LINK_CLK] = &disp_cc_mdss_dp_link_clk.clkr,
-+	[DISP_CC_MDSS_DP_LINK_CLK_SRC] = &disp_cc_mdss_dp_link_clk_src.clkr,
-+	[DISP_CC_MDSS_DP_LINK_INTF_CLK] = &disp_cc_mdss_dp_link_intf_clk.clkr,
-+	[DISP_CC_MDSS_DP_PIXEL_CLK] = &disp_cc_mdss_dp_pixel_clk.clkr,
-+	[DISP_CC_MDSS_DP_PIXEL_CLK_SRC] = &disp_cc_mdss_dp_pixel_clk_src.clkr,
-+	[DISP_CC_MDSS_ESC0_CLK] = &disp_cc_mdss_esc0_clk.clkr,
-+	[DISP_CC_MDSS_ESC0_CLK_SRC] = &disp_cc_mdss_esc0_clk_src.clkr,
-+	[DISP_CC_MDSS_MDP_CLK] = &disp_cc_mdss_mdp_clk.clkr,
-+	[DISP_CC_MDSS_MDP_CLK_SRC] = &disp_cc_mdss_mdp_clk_src.clkr,
-+	[DISP_CC_MDSS_MDP_LUT_CLK] = &disp_cc_mdss_mdp_lut_clk.clkr,
-+	[DISP_CC_MDSS_NON_GDSC_AHB_CLK] = &disp_cc_mdss_non_gdsc_ahb_clk.clkr,
-+	[DISP_CC_MDSS_PCLK0_CLK] = &disp_cc_mdss_pclk0_clk.clkr,
-+	[DISP_CC_MDSS_PCLK0_CLK_SRC] = &disp_cc_mdss_pclk0_clk_src.clkr,
-+	[DISP_CC_MDSS_ROT_CLK] = &disp_cc_mdss_rot_clk.clkr,
-+	[DISP_CC_MDSS_ROT_CLK_SRC] = &disp_cc_mdss_rot_clk_src.clkr,
-+	[DISP_CC_MDSS_VSYNC_CLK] = &disp_cc_mdss_vsync_clk.clkr,
-+	[DISP_CC_MDSS_VSYNC_CLK_SRC] = &disp_cc_mdss_vsync_clk_src.clkr,
-+	[DISP_CC_PLL0] = &disp_cc_pll0.clkr,
-+	[DISP_CC_XO_CLK] = &disp_cc_xo_clk.clkr,
-+};
-+
-+static struct gdsc *disp_cc_sm6125_gdscs[] = {
-+	[MDSS_GDSC] = &mdss_gdsc,
-+};
-+
-+static const struct regmap_config disp_cc_sm6125_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0x10000,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_cc_desc disp_cc_sm6125_desc = {
-+	.config = &disp_cc_sm6125_regmap_config,
-+	.clks = disp_cc_sm6125_clocks,
-+	.num_clks = ARRAY_SIZE(disp_cc_sm6125_clocks),
-+	.gdscs = disp_cc_sm6125_gdscs,
-+	.num_gdscs = ARRAY_SIZE(disp_cc_sm6125_gdscs),
-+};
-+
-+static const struct of_device_id disp_cc_sm6125_match_table[] = {
-+	{ .compatible = "qcom,dispcc-sm6125" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, disp_cc_sm6125_match_table);
-+
-+static int disp_cc_sm6125_probe(struct platform_device *pdev)
-+{
-+	struct regmap *regmap;
-+
-+	regmap = qcom_cc_map(pdev, &disp_cc_sm6125_desc);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	clk_alpha_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
-+
-+	return qcom_cc_really_probe(pdev, &disp_cc_sm6125_desc, regmap);
-+}
-+
-+static struct platform_driver disp_cc_sm6125_driver = {
-+	.probe = disp_cc_sm6125_probe,
-+	.driver = {
-+		.name = "disp_cc-sm6125",
-+		.of_match_table = disp_cc_sm6125_match_table,
-+	},
-+};
-+
-+static int __init disp_cc_sm6125_init(void)
-+{
-+	return platform_driver_register(&disp_cc_sm6125_driver);
-+}
-+subsys_initcall(disp_cc_sm6125_init);
-+
-+static void __exit disp_cc_sm6125_exit(void)
-+{
-+	platform_driver_unregister(&disp_cc_sm6125_driver);
-+}
-+module_exit(disp_cc_sm6125_exit);
-+
-+MODULE_DESCRIPTION("QTI DISPCC SM6125 Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.35.1
+>>
+>>   drivers/ata/ahci.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+>> index 0fc09b86a559..44b79fe43d13 100644
+>> --- a/drivers/ata/ahci.c
+>> +++ b/drivers/ata/ahci.c
+>> @@ -456,7 +456,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+>>   	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
+>>   	{ PCI_VDEVICE(AMD, 0x7801), board_ahci_no_debounce_delay }, /* AMD Hudson-2 (AHCI mode) */
+>>   	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
+>> -	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_low_power }, /* AMD Green Sardine */
+>> +	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_low_power_no_debounce_delay }, /* AMD Green Sardine */
+> 
+> Really long name, but I cannot think of anything better...
+> 
+>>   	/* AMD is using RAID class only for ahci controllers */
+>>   	{ PCI_VENDOR_ID_AMD, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
+>>   	  PCI_CLASS_STORAGE_RAID << 8, 0xffffff, board_ahci },
+> 
+> 
 

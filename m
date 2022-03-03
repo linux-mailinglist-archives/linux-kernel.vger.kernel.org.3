@@ -2,226 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384CB4CB763
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12364CB76B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiCCHFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S230083AbiCCHGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiCCHFf (ORCPT
+        with ESMTP id S229884AbiCCHGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:05:35 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CF22D1D3;
-        Wed,  2 Mar 2022 23:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646291055;
-        bh=c8B08IuN0ueJ5P1Qw3m4mZcla5OpJNkiL6GjsRpN5GY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hZaujvICUT5hjdB6Lp+cImer0Md6B745NTlpYuexL6B27u5X4lYSDPsd0hI8v+bIK
-         yPqf87EaL996Qtg2ExqEUipUGTMS+Tw76vJ8zo4oYFxopgkNj2Fln1EDQon3qf1xIg
-         6Kn/358VgBKo66uqDsfkNTDjOzxUjMD3NQx0egj0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.154.125] ([217.61.154.125]) by web-mail.gmx.net
- (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Thu, 3 Mar 2022
- 08:04:15 +0100
+        Thu, 3 Mar 2022 02:06:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736A55E157;
+        Wed,  2 Mar 2022 23:06:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2EEA61F37E;
+        Thu,  3 Mar 2022 07:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646291162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YP2M04W2O17IP9XPUCtCo3XVP+VCvTcwNEwKuTXddlo=;
+        b=LpFjZViUovJ/t+ZtAdjERkkIsMchlvCBmyjZlXMeqFjjbPU7KqMi8aWRto63OLyYzh0QFO
+        6SMi1TdhKGZBvigqediLBxpp+cf7V9VelaPP0Xs5JCNhTaonHZZP8Y6fU2rLn1gJUX37GH
+        jk6pmIdvWXgbIpdV+k52C81gD9ACx/o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646291162;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YP2M04W2O17IP9XPUCtCo3XVP+VCvTcwNEwKuTXddlo=;
+        b=ccgI+Th04diEqYxHCda5BSdWk1vNZ9E0ycq5lYRncqSIx2IzaE3UmoLx+nuQkf01Fl4UQF
+        XiAnUvYPmSHdm6Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A77A513AB4;
+        Thu,  3 Mar 2022 07:06:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VwjXJ9hoIGKKLgAAMHmgww
+        (envelope-from <jslaby@suse.cz>); Thu, 03 Mar 2022 07:06:00 +0000
+Message-ID: <84ad3854-28b9-e450-f0a2-f1448f32f137@suse.cz>
+Date:   Thu, 3 Mar 2022 08:06:00 +0100
 MIME-Version: 1.0
-Message-ID: <trinity-1ca1f3fd-1eeb-4c8d-a7e2-65851eb8002b-1646291055736@3c-app-gmx-bs69>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3] serial: make uart_console_write->putchar()'s character
+ an unsigned char
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        =?UTF-8?Q?=27Uwe_Kleine-K=c3=b6nig=27?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Aw: Re: [PATCH v4 1/5] dt-bindings: Convert ahci-platform DT
- bindings to yaml
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 3 Mar 2022 08:04:15 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <Yh+0B+iKx1gJXXCk@robh.at.kernel.org>
-References: <20220301152421.57281-1-linux@fw-web.de>
- <20220301152421.57281-2-linux@fw-web.de>
- <Yh+0B+iKx1gJXXCk@robh.at.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:/lChWm1rfjWQIQe56yrqiZm3Y/F+aYSHAhSYt2mbFXFdfKYmHyqTFxKsF/VidPyXBtz9B
- 7wR4CfTQ9nqIidZ2bWyS+UF9dqeyvvZE2/0x1FomSQe+j0VjqQk3qexBjQPMLHCDlP2tXLZlBsGa
- QBS9Jwxf2do9zTXbnkzKTXiO4L+/ZoCvP4wZU+z6gweuR97SP+Xko7O52mvTGmt5GwABhf5TKX1S
- sn4TZYtnMs1L8cs9uic5xCqL37CC//+7ptb7BN6pk27+YDUeL8IF7+qKvIYDAwwZsuQX1d1WMIeB
- A4=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SKDpZk6cLk0=:qnvAElGXZA38EYbbf7iG9I
- x2MFrBDk9KWc9CGfyaQZsF7A7x2AKK7Ouvkzd3x0QffCTeUq8uDrhHyLX7CX3UsTpwCep0Ygi
- jsmF7gcb26NsqP2x9A8io9eRUKcwCyrbR8AKPy9ZtL0o5pYemEyv69QCA+kWjA9auq5AFqcfB
- dIG8rN1+CAnc9A00+X9xI+3s5dJ9u7BCopnbU4pVk1EwO/IrLrB4ZLbJFhjxtf5Ttu8xCASHu
- S1pOTckExZS0q97mVVkvC9T7A29bdqLoMSJ03LUm5acTAA3CvKw9NPn0GqwL8j0LinvOxR69Q
- 3SP9rKd/4SsG3RkItDGFst67vJ/LaDvunXDC9aZC3p8tJlzmXLciVhAn5+xDxSaJafbKYUTQj
- +oUxjVRc/A9aRtLRWpSdr3qeHOkolI4N7oG1tblp/QYIWhsMkY8MCb4lFj73+6O2q7hixksfy
- RdUoDTH3jx9MZSrXZK1J/b1E4mrNBM43EOQ+E/eI5gncyuKCHmYEBU5bqWYllaDetkXfRvtmL
- 9o9+OmDNq9XE1kQSk3YQUFLZ/YBEeB23Uw67FbkfFNzme/7EwHAyhi3E7vzPS39mF4lgAuaCl
- XHvGJnosohw1/HakN7NvEkYiUz/rca4KxwjgFGyBU5vBsptZ+uFi7Xwe5bYLlCT2HpfSPk+DL
- F4IBJ05JDDNSEA5P8greI8EiNEkU9fjYRFzrbrn65CkmRDKd+D6iotTQAw/H/+zUXhPR76Q9q
- KIfhkZ8geKPHcoC91j3ORzXkOg6Uq2hJTG+O522WVVtnggvEutvX8thTE6nxBMcppqyN00bcr
- SqvHZmg
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Andy Gross <agross@kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Takao Orito <orito.takao@socionext.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <20220302072732.1916-1-jslaby@suse.cz>
+ <20220302175242.ejiaf36vszr4xvou@pengutronix.de>
+ <5c7045c1910143e08ced432d938b5825@AcuMS.aculab.com>
+From:   Jiri Slaby <jslaby@suse.cz>
+In-Reply-To: <5c7045c1910143e08ced432d938b5825@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 03. 03. 22, 0:57, David Laight wrote:
+> From: Uwe Kleine-König
+>> Sent: 02 March 2022 17:53
+>>
+>> On Wed, Mar 02, 2022 at 08:27:32AM +0100, Jiri Slaby wrote:
+>>> Currently, uart_console_write->putchar's second parameter (the
+>>> character) is of type int. It makes little sense, provided uart_console_write()
+>>> accepts the input string as "const char *s" and passes its content -- the
+>>> characters -- to putchar(). So switch the character's type to unsigned
+>>> char.
+>>>
+>>> We don't use char as that is signed on some platforms. That would cause
+>>> troubles for drivers which (implicitly) cast the char to u16 when
+>>> writing to the device. Sign extension would happen in that case and the
+>>> value written would be completely different to the provided char. DZ is
+>>> an example of such a driver -- on MIPS, it uses u16 for dz_out in
+>>> dz_console_putchar().
+>>
+>> I always thought this was bigger than 8bit for hardware that supports
+>> wider characters. But if that's the case that's completely unsupported,
+>> there isn't even CS9.
+> 
+> The real problem is that using char (or short) for a function parameter
+> or result is very likely to require the compile add code to mask
+> the value to 8 (or 16) bits.
+> 
+> Remember that almost every time you do anything with a signed or unsigned
+> char/short variable the compiler has to use the integer promotion rules
+> to convert the value to int.
+> 
+> You'll almost certainly get better code if the value is left in an
+> int (or unsigned int) variable until the low 8 bits get written to
+> a buffer (or hardware register).
 
-thanks for review,
+So should we use int/uint instead of more appropriate shorter types 
+everywhere now? The answer is: definitely not. The assembly on x86 looks 
+good (it uses movz, no ands), RISC architectures have to do what they 
+chose to.
 
-have prepared the changes based on yours and krzysztof comments
+Note the patch unifies the type with preexistent uchar use in the whole 
+uart layer. I.e. before the patch, char was upcast to int, and later, it 
+was downcast to u8 again when talking to HW.
 
-https://github=2Ecom/frank-w/BPI-R2-4=2E14/commits/5=2E17-next-20220225
-
-(just ignore the top 2 commits) i thought i had a size-cells-error, but di=
-d not get them again after reverting this part, seems they are fixed by inc=
-lusion of the sata-common binding
-
-> Gesendet: Mittwoch, 02=2E M=C3=A4rz 2022 um 19:14 Uhr
-> Von: "Rob Herring" <robh@kernel=2Eorg>
-> An: "Frank Wunderlich" <linux@fw-web=2Ede>
-
-> On Tue, Mar 01, 2022 at 04:24:17PM +0100, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files=2Ede>
-
-> > diff --git a/Documentation/devicetree/bindings/ata/ahci-platform=2Eyam=
-l b/Documentation/devicetree/bindings/ata/ahci-platform=2Eyaml
-> > new file mode 100644
-> > index 000000000000=2E=2Ecf67ddfc6afb
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/ata/ahci-platform=2Eyaml
-> > @@ -0,0 +1,162 @@
-> > +# SPDX-License-Identifier: GPL-2=2E0
-> > +%YAML 1=2E2
-> > +---
-> > +$id: http://devicetree=2Eorg/schemas/ata/ahci-platform=2Eyaml#
-> > +$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
-> > +
-> > +title: AHCI SATA Controller
->=20
-> blank line=2E
-
-done
-=20
-> > +description:
-> > +  SATA nodes are defined to describe on-chip Serial ATA controllers=
-=2E
-> > +  Each SATA controller should have its own node=2E
-> > +
-> > +  It is possible, but not required, to represent each port as a sub-n=
-ode=2E
-> > +  It allows to enable each port independently when dealing with multi=
-ple
-> > +  PHYs=2E
->=20
-> You need a '|' after 'description' if you want to maintain the=20
-> paragraphs=2E
-
-ok added | to all multiline descriptions
-
-> > +
-> > +maintainers:
-> > +  - Hans de Goede <hdegoede@redhat=2Ecom>
-> > +  - Jens Axboe <axboe@kernel=2Edk>
-> > +
-> > +allOf:
-> > +- $ref: "sata-common=2Eyaml#"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +        - enum:
-> > +          - brcm,iproc-ahci
-> > +          - marvell,armada-8k-ahci
-> > +          - marvell,berlin2q-ahci
-> > +        - const: generic-ahci
-> > +      - enum:
-> > +        - brcm,iproc-ahci
-> > +        - cavium,octeon-7130-ahci
-> > +        - hisilicon,hisi-ahci
-> > +        - ibm,476gtr-ahci
-> > +        - marvell,armada-3700-ahci
-> > +        - marvell,armada-380-ahci
-> > +        - snps,dwc-ahci
-> > +        - snps,spear-ahci
->=20
-> Install yamllint and run 'make dt_binding_check'=2E It's going to=20
-> complain about the indentation=2E
-
-you're right, i had no yamllint installed, so i have not seen these indent=
-ion errors
-
-> > +  ahci-supply:
-> > +    description:
-> > +      regulator for AHCI controller
-> > +
-> > +  clock-names:
->=20
-> Group with 'clocks'
-
-ok, already done in my tree because of krzysztofs comment
-
-> > +  ports-implemented:
-> > +    $ref: '/schemas/types=2Eyaml#/definitions/uint32'
-> > +    description:
-> > +      Mask that indicates which ports that the HBA supports
-> > +      are available for software to use=2E Useful if PORTS_IMPL
-> > +      is not programmed by the BIOS, which is true with
-> > +      some embedded SoCs=2E
-> > +    maxItems: 1
->=20
-> A uint32 is only ever 1 item=2E Drop=2E
->=20
-> IIRC, isn't the max here 0xff? Add constraints=2E
-
-i've found it only set to 0x1 so i have currently set the maximum to 0x1, =
-is this ok?
-If some higher value is needed binding needs to be touched=2E=2E=2E
-
-> > +
-> > +  reg-names:
-> > +    maxItems: 1
->=20
-> Group with 'reg'=2E
-
-ok
-
-> > +patternProperties:
-> > +  "^sata-port@[0-9a-f]+$":
-> > +    type: object
->=20
->        additionalProperties: false
-
-ok added to my tree
-
-and needed to add phy-names because some marvell boards using this
-
-arch/arm64/boot/dts/marvell/armada-8040-mcbin-singleshot=2Edt=2Eyaml: sata=
-@540000: sata-port@1: 'phy-names' does not match any of the regexes: 'pinct=
-rl-[0-9]+'
-
-now i have only the marvell-errors about incomplete sata-port subnode (wit=
-hout phy/target-supply) like i mention in the patch=2E=2E=2Ehow to proceed =
-with this?
-
-regards Frank
-
-
+thanks,
+-- 
+js
+suse labs

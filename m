@@ -2,195 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D204CC25B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F464CC26B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbiCCQMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S234868AbiCCQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbiCCQM3 (ORCPT
+        with ESMTP id S234758AbiCCQQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:12:29 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEEE198D37
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:11:43 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id a8so11704038ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u+FSFzjUyL4tO84NqXDYnBQRJcBY+3fyVlESA0iCML0=;
-        b=sDUL18TKOrFy0EYFjbVgGUAo88xuwcWCafNF9Z3Qv5MK9RswflDq6wcvyZt7JjkBZ0
-         lCUKfKBRRzLvgGvwC04sE0vlxxbdFGK2JHeelVLIWZaYeAtcDRDoGjKH9VNzaXs2e24x
-         hgD56fllm3ElTxItXi6kOXjzLPrBbfOOojk4k4g8IO2cySSza2Cv8H1te2MPyyoju2cS
-         Hf+ZYtimQd9FLemaKAU2/PMPl8K17GgBfaoaTztT4N70cdeuMErbBkTFLTtvlhrc1YHj
-         9nEp5yOtOTbPNW3AZOwBdhMxNGWvdscHnjxfOwmYfm7zDDQibBPkhI7vn00KEVjnojD5
-         vPfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=u+FSFzjUyL4tO84NqXDYnBQRJcBY+3fyVlESA0iCML0=;
-        b=pzS016q6Lo/11FPGXggcPT6I2PD9ebuAcTcYJnN8Ha4A2l6OByo075dMQUqZvLyYp4
-         2UGhU09GTVNlM7YZp8oiwKBqPe75kzV9eZIgy8c71H+kajIJlud4ECUUqkRhPCVQ9+wn
-         8B9Od7LF3kMh482ELPtytPABFkscd8h+0mZjGL2Inhej8VtibnpaHuutctH3R+YDx3NW
-         DbJ22TngrgMRt3ZY088eTCAdqYZcyQ3FL6BNMMJkuvkoz96dZGMTjpXPSCiyxZ0HxLh/
-         6RPstlkkFEWNAVF7JlielkYpl9mC2lecIUcdFULgiSdrr3lrpo6MmPPx+9IY6deScAb/
-         IQkA==
-X-Gm-Message-State: AOAM532oLfI2m3GmhabKp8JAR7kuadCt/pT/YzGP/P9FKI8odi1Kk2ku
-        hB/Ji/xRDNjFqpo0x9UppMLdGbq4N9Lyeg==
-X-Google-Smtp-Source: ABdhPJztb420UBKT7kn2KUMnFMdp+OioG0SxxR0JgBDOl5FFeF6+8y/JW7c457/+xSm2ImS90VKlJw==
-X-Received: by 2002:a17:906:2ec6:b0:69f:286a:66ab with SMTP id s6-20020a1709062ec600b0069f286a66abmr27825769eji.684.1646323901445;
-        Thu, 03 Mar 2022 08:11:41 -0800 (PST)
-Received: from localhost ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm843289ejj.142.2022.03.03.08.11.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 03 Mar 2022 08:11:40 -0800 (PST)
-Sender: Michal Simek <monstr@monstr.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Robert Hancock <robert.hancock@calian.com>,
-        Stefan Asserhall <stefan.asserhall@xilinx.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] irqchip: xilinx: Enable generic irq multi handler
-Date:   Thu,  3 Mar 2022 17:11:39 +0100
-Message-Id: <2a08d6c33e95d5da5d564ed3fbddc835983ef355.1646323896.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Mar 2022 11:16:52 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE65D198EE2;
+        Thu,  3 Mar 2022 08:16:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646324164; x=1677860164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=g1C/ot8Ij1y4B2kuWS/1yaGsXWgmA9l7aQSOgcM0DMU=;
+  b=SLAPQnkKzminJ9y49v2IWCrU6loG9bNVh1y8WJC3RRkae8rVvf5F9sCL
+   1ApDtfohmgdcU1AAs7WUQyZBESINs47NsaB65sHiCqeoE1VvY+L1D7mMZ
+   M8ODM4HGJwMp6+OOtXne6y4fKDyyUxSU0Iql+/Lai1z9IJLk87GCeJMSs
+   nB0gN/vYQbP6tTt8pxTI3DiVG+qqdJMtdxwVYevlr1LfHX0rBBdGOBNJ8
+   9Xk3mcHdoQit2jkFZTcw6KTno9rhJE8odboBSNgKZoGG1NEFmoWzgTp0N
+   RgDgrcqV4rkCzK2gDe+8ZRHKB5kjRuxuCxc1QEvmKEbrDnKpXR+SvuDpG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="241135612"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="241135612"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 08:13:35 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="545908712"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 08:13:32 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id A791720087;
+        Thu,  3 Mar 2022 18:13:30 +0200 (EET)
+Date:   Thu, 3 Mar 2022 18:13:30 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH v1 1/1] device property: Allow error pointer for
+ fwnode_handle_{get,put}()
+Message-ID: <YiDpKqwiwD8jZdFT@paasikivi.fi.intel.com>
+References: <20220303150610.47596-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220303150610.47596-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register default arch handler via driver instead of directly pointing to
-xilinx intc controller. This patch makes architecture code more generic.
+Hi Andy,
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-Reviewed-by: Stefan Asserhall <stefan.asserhall@xilinx.com>
----
+On Thu, Mar 03, 2022 at 05:06:10PM +0200, Andy Shevchenko wrote:
+> Some of the fwnode APIs might return an error pointer instead of NULL
+> or valid fwnode handle. The result of such API call may be considered
+> optional and hence the test for it is usually done in a form of
+> 
+> 	fwnode = fwnode_find_reference(...);
+> 	if (IS_ERR_OR_NULL(fwnode))
+> 		...error handling...
+> 
+> Nevertheless the resulting fwnode may have bumped reference count and
+> hence caller of the above API is obliged to call fwnode_handle_put().
+> Since fwnode may be not valid either as NULL or error pointer the check
+> has to be performed there. This approach uglifies the code and adds
+> a point of making a mistake, i.e. forgetting about error point case.
+> 
+> To prevent this allow error pointer for fwnode_handle_get() and
+> fwnode_handle_put().
+> 
+> Fixes: 83b34afb6b79 ("device property: Introduce fwnode_find_reference()")
+> Reported-by: Nuno Sá <nuno.sa@analog.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/base/property.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 2d70392fc982..df7b8c7ad264 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -776,7 +776,7 @@ EXPORT_SYMBOL_GPL(device_get_named_child_node);
+>   */
+>  struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
+>  {
+> -	if (!fwnode_has_op(fwnode, get))
+> +	if (IS_ERR(fwnode) || !fwnode_has_op(fwnode, get))
+>  		return fwnode;
+>  
+>  	return fwnode_call_ptr_op(fwnode, get);
+> @@ -793,6 +793,9 @@ EXPORT_SYMBOL_GPL(fwnode_handle_get);
+>   */
+>  void fwnode_handle_put(struct fwnode_handle *fwnode)
+>  {
+> +	if (IS_ERR(fwnode) || !fwnode_has_op(fwnode, put))
+> +		return;
+> +
+>  	fwnode_call_void_op(fwnode, put);
+>  }
+>  EXPORT_SYMBOL_GPL(fwnode_handle_put);
 
- arch/microblaze/Kconfig           |  2 ++
- arch/microblaze/include/asm/irq.h |  3 ---
- arch/microblaze/kernel/irq.c      | 16 +---------------
- drivers/irqchip/irq-xilinx-intc.c | 22 +++++++++++++++++++++-
- 4 files changed, 24 insertions(+), 19 deletions(-)
+I guess fwnode_find_reference() is the only fwnode API function returning
+errors as pointers? If you changed it returning NULL on error, you'd lose
+the error codes.
 
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 59798e43cdb0..da568e981604 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -45,6 +45,8 @@ config MICROBLAZE
- 	select SET_FS
- 	select ZONE_DMA
- 	select TRACE_IRQFLAGS_SUPPORT
-+	select GENERIC_IRQ_MULTI_HANDLER
-+	select HANDLE_DOMAIN_IRQ
- 
- # Endianness selection
- choice
-diff --git a/arch/microblaze/include/asm/irq.h b/arch/microblaze/include/asm/irq.h
-index 0a28e80bbab0..cb6ab55d1d01 100644
---- a/arch/microblaze/include/asm/irq.h
-+++ b/arch/microblaze/include/asm/irq.h
-@@ -11,7 +11,4 @@
- struct pt_regs;
- extern void do_IRQ(struct pt_regs *regs);
- 
--/* should be defined in each interrupt controller driver */
--extern unsigned int xintc_get_irq(void);
--
- #endif /* _ASM_MICROBLAZE_IRQ_H */
-diff --git a/arch/microblaze/kernel/irq.c b/arch/microblaze/kernel/irq.c
-index 903dad822fad..1f8cb4c4f74f 100644
---- a/arch/microblaze/kernel/irq.c
-+++ b/arch/microblaze/kernel/irq.c
-@@ -20,27 +20,13 @@
- #include <linux/irqchip.h>
- #include <linux/of_irq.h>
- 
--static u32 concurrent_irq;
--
- void __irq_entry do_IRQ(struct pt_regs *regs)
- {
--	unsigned int irq;
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 	trace_hardirqs_off();
- 
- 	irq_enter();
--	irq = xintc_get_irq();
--next_irq:
--	BUG_ON(!irq);
--	generic_handle_irq(irq);
--
--	irq = xintc_get_irq();
--	if (irq != -1U) {
--		pr_debug("next irq: %d\n", irq);
--		++concurrent_irq;
--		goto next_irq;
--	}
--
-+	handle_arch_irq(regs);
- 	irq_exit();
- 	set_irq_regs(old_regs);
- 	trace_hardirqs_on();
-diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
-index 356a59755d63..c6710190c152 100644
---- a/drivers/irqchip/irq-xilinx-intc.c
-+++ b/drivers/irqchip/irq-xilinx-intc.c
-@@ -110,7 +110,7 @@ static struct irq_chip intc_dev = {
- 	.irq_mask_ack = intc_mask_ack,
- };
- 
--unsigned int xintc_get_irq(void)
-+static unsigned int xintc_get_irq(void)
- {
- 	unsigned int irq = -1;
- 	u32 hwirq;
-@@ -164,6 +164,25 @@ static void xil_intc_irq_handler(struct irq_desc *desc)
- 	chained_irq_exit(chip, desc);
- }
- 
-+static u32 concurrent_irq;
-+
-+static void xil_intc_handle_irq(struct pt_regs *regs)
-+{
-+	unsigned int irq;
-+
-+	irq = xintc_get_irq();
-+next_irq:
-+	BUG_ON(!irq);
-+	generic_handle_irq(irq);
-+
-+	irq = xintc_get_irq();
-+	if (irq != -1U) {
-+		pr_debug("next irq: %d\n", irq);
-+		++concurrent_irq;
-+		goto next_irq;
-+	}
-+}
-+
- static int __init xilinx_intc_of_init(struct device_node *intc,
- 					     struct device_node *parent)
- {
-@@ -233,6 +252,7 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
- 	} else {
- 		primary_intc = irqc;
- 		irq_set_default_host(primary_intc->root_domain);
-+		set_handle_irq(xil_intc_handle_irq);
- 	}
- 
- 	return 0;
+But I think this is a problem beyond fwnode_handle_{get,put}: fwnode
+obtained this way could be passed to any fwnode function and they should
+just work correctly with that.
+
+How about moving the check to fwnode_has_op()? That function is responsible
+for checking the fwnode is valid and has the op in question.
+
+It also seems the explicit fwnode_has_op() call is redundant in
+fwnode_handle_put() as fwnode_call_void_op() already calls fwnode_has_op().
+
 -- 
-2.35.1
+Kind regards,
 
+Sakari Ailus

@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80B94CB506
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4884CB508
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbiCCC3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S231712AbiCCCad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiCCC3j (ORCPT
+        with ESMTP id S231702AbiCCCab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:29:39 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51923B2A4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 18:28:54 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2dc28791ecbso26639657b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 18:28:54 -0800 (PST)
+        Wed, 2 Mar 2022 21:30:31 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C46D3EF3C;
+        Wed,  2 Mar 2022 18:29:47 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so2432055pju.2;
+        Wed, 02 Mar 2022 18:29:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=v2tz3AuOoQeFoLXvffTr2cIrrixjHNaOs+XLOL0KCfw=;
-        b=Cf/ju3K84F49k8wI7YQgyVYv3aMiVSZ7LUjx6feXZrNHr1cnaJFLUrSSLIwOUaEdtV
-         9tVTIXdEla4GZAOr3bbyF+liAgp/0T6++nQbK7rLWODyVm5sULM4XB9QCYXoe73uBXgC
-         d+cqehy56gj3gkfnaziTmIW+f6zLOu4MPFhb4ngMlS54sPtUdpqSJrSNZ++HhPn/5t0P
-         jymhfGHsOU63FPtX5lGhPABzo6+5Jx+1Q7XxI6QiL6A7HW8EnZkmhCupezBUc+6PRaJc
-         3fLtt+boLXSQc1SWIb3suDEZuEkrIlFSBBJ2Y639LLAkGjCYgSJEmjZIiSQ5Zy/X4dv7
-         igpw==
+        bh=t11rGjeJbaPKo4iIzfdlK+BfedmdNwblLmmUNHyIl/s=;
+        b=LaBwsIw262WVf/mDTL0709lGkwF46Jcxad+J+nwwx7JjWd4qP096eOqaCM2VAmSIht
+         wGxm4Dsv9k9gRui1sH4PxWNSfMr07ZeSTBdu1yvsxFYMayiLCpAJGOXhwznx97zPCd2W
+         1t93LsQ18l0E1hu4RqFZVvUk1p86GbTKRhnUeH8akfZt/XrDqNqDkrZzcOipXqJ+L7ml
+         uIVGnzLKp3MVN2HSwJwj+7wpJxJiyPXq4Gi12UuFMWI8IOxJkUUBRD2AkEogjNA0i68d
+         4BpnbqaKb2RkRn1asKsRKgctWPsFugfnLi8nIQ9HUAfJDJzzJrhcSFNGHxuV2Zed0enA
+         0qTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=v2tz3AuOoQeFoLXvffTr2cIrrixjHNaOs+XLOL0KCfw=;
-        b=LtNRz460BHa7WWQ9X4jixoI2ZrA3mmuy60q9k4C0z4ncyHAFJ/v8BlbyCaDQd7XN9b
-         qYnYr+By1grr5U4oURNAf9klbesbvfhsr5jY6sxomPFoKDZobbTJ+05peU0girLv6N+2
-         APYb84LvohKSiFbayfsa1KF5AGu2vIH5KgxAzpoLrgL8G1MVq27G6sw9pHY5v+ua1RLq
-         ce1ElCh4XmANfev41IhpGy5N96daOIsQKqbgOKfAb+0tS7ZatZywHZuvNakeWvc+2YRq
-         WuxHZPRvqASaXJNIk6aMhfzy3bvlZM3t6ONux/qD4xVwC+28WB5NXm2wg11xmJdcLIj/
-         VFKg==
-X-Gm-Message-State: AOAM532csaxmqOQ4XUCdZN9JUZmHKAWDm7EWv1qT2YByZgTzowC/YjL9
-        RknrqLZs/GUzxyx2J335Ap6FTBFzWtWhqm+K2NsJ3A==
-X-Google-Smtp-Source: ABdhPJzghYtIErFg1LL0XWlyHrqePiGoOB5PMKNoSnMLd1aQ8LcM0OZbgcs0kzaIvSgwZl0ATRheQRHUCPaCaMM23yY=
-X-Received: by 2002:a81:5dd6:0:b0:2d6:3041:12e0 with SMTP id
- r205-20020a815dd6000000b002d6304112e0mr33446832ywb.331.1646274533419; Wed, 02
- Mar 2022 18:28:53 -0800 (PST)
+        bh=t11rGjeJbaPKo4iIzfdlK+BfedmdNwblLmmUNHyIl/s=;
+        b=mQoPCob4Vj1yweEyvBDCP5q2qtkq++HQfSMtCjgelS2ECRD9k6oiIeRz44yY6kDumr
+         I/KaOHo8HP5WQTyRZHhCqGqOTOGVKvIYSx3MbgxsA+6fOWw38Va3Z4IEAJiEGRc5V3sb
+         YNC4U+B/zFMRXqO4c4qSquCRA2+AjDEI8pu7KaVUGsHIiV85CzJjfMqPG2O1EWTNmqXT
+         Mc9lnyxpp/xcfItQyaB5KfVmaSqnbd+qMJUY+b2upW7ZmftqtrcVraXudYYahhQkffu5
+         09brjf4FUUHSzt2quyJwIrbA9VJFLHllEpQ5dHky7WOhx+Ym7EKA9ZjlWtLi74N/H9NB
+         pKiQ==
+X-Gm-Message-State: AOAM532n0/RKzPPrqxiA99a2ilNmiwA/dWG2ay35cli26MaWCFV3lwxB
+        c9vIHzh1qKCGdKlVuSK4RbdU9lVqwwaHvli/JgGe60Cm
+X-Google-Smtp-Source: ABdhPJy+6x4bAj139bTUUQWuKIgLLPNL9DSC9ipZnEz5zg+b/vDIpT/n1lv2gwAmOJsh8qZWpnxAfkTDbypHY+zBp3E=
+X-Received: by 2002:a17:902:76c5:b0:14e:e325:9513 with SMTP id
+ j5-20020a17090276c500b0014ee3259513mr33748266plt.55.1646274586726; Wed, 02
+ Mar 2022 18:29:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302083758.32528-1-songmuchun@bytedance.com>
- <20220302083758.32528-2-songmuchun@bytedance.com> <e0ecfbdf-2d9e-4e2e-f538-fab115eaf4da@oracle.com>
-In-Reply-To: <e0ecfbdf-2d9e-4e2e-f538-fab115eaf4da@oracle.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 3 Mar 2022 10:28:17 +0800
-Message-ID: <CAMZfGtUcGGuq4ZoS44aMAYfYZQk-S-cJap3LZKLS-2fgi_s3Rw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] mm: hugetlb: disable freeing vmemmap pages when
- struct page crosses page boundaries
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
+ <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com> <CAADnVQ+q0vF03cH8w0c50XMZU1yf_0UjZ+ZarQ_RqMQrVpOFPA@mail.gmail.com>
+ <93c3fc30-ad38-96fa-cf8e-20e55b267a3b@fb.com>
+In-Reply-To: <93c3fc30-ad38-96fa-cf8e-20e55b267a3b@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 2 Mar 2022 18:29:35 -0800
+Message-ID: <CAADnVQL4yxhDCLjvCCmpOtg0+8-HSg32KG07TCxx+L+Gji7n6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 8:25 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Wed, Mar 2, 2022 at 5:09 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> On 3/2/22 00:37, Muchun Song wrote:
-> > If CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON is enabled and the size
-> > of "struct page" is not power of two, we cannot optimize vmemmap pages
-> > of HugeTLB pages. We should disable this feature in this case.
 >
-> I'll let you reply to the question from Luis, but IIUC there is no issue
-> today as "struct page" is certainly a power of two.  This is more future
-> looking.  Correct?
-
-Partly right. The size of "struct page" is not the power of two if
-!CONFIG_MEMCG && CONFIG_SLAB on x86_64.  But it is not
-a conventional configuration nowadays.  So it is not a critical
-problem. I am not sure if a Fixes tag is necessary.
-
 >
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  mm/hugetlb_vmemmap.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
+> On 3/2/22 1:30 PM, Alexei Starovoitov wrote:
+> > On Wed, Mar 2, 2022 at 1:23 PM Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >>
+> >>
+> >> On 2/25/22 3:43 PM, Hao Luo wrote:
+> >>> Add a new type of bpf tracepoints: sleepable tracepoints, which allows
+> >>> the handler to make calls that may sleep. With sleepable tracepoints, a
+> >>> set of syscall helpers (which may sleep) may also be called from
+> >>> sleepable tracepoints.
+> >>
+> >> There are some old discussions on sleepable tracepoints, maybe
+> >> worthwhile to take a look.
+> >>
+> >> https://lore.kernel.org/bpf/20210218222125.46565-5-mjeanson@efficios.com/T/
 > >
-> > diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> > index b3118dba0518..836d1117f08b 100644
-> > --- a/mm/hugetlb_vmemmap.c
-> > +++ b/mm/hugetlb_vmemmap.c
-> > @@ -121,6 +121,17 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
-> >       if (!hugetlb_free_vmemmap_enabled())
-> >               return;
-> >
-> > +     if (IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON) &&
-> > +         !is_power_of_2(sizeof(struct page))) {
-> > +             /*
-> > +              * The hugetlb_free_vmemmap_enabled_key can be enabled when
-> > +              * CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON. It should
-> > +              * be disabled if "struct page" crosses page boundaries.
-> > +              */
-> > +             static_branch_disable(&hugetlb_free_vmemmap_enabled_key);
+> > Right. It's very much related, but obsolete too.
+> > We don't need any of that for sleeptable _raw_ tps.
+> > I prefer to stay with "sleepable" name as well to
+> > match the rest of the bpf sleepable code.
+> > In all cases it's faultable.
 >
-> Should we possibly print a warning here as in the routine early_hugetlb_free_vmemmap_param?  This is called once per hstate, so
-> perhaps pr_warn_once.
+> sounds good to me. Agree that for the bpf user case, Hao's
+> implementation should be enough.
 
-Good point. Will do.
-
-Thanks.
+Just remembered that we can also do trivial noinline __weak
+nop function and mark it sleepable on the verifier side.
+That's what we were planning to do to trace map update/delete ops
+in Joe Burton's series.
+Then we don't need to extend tp infra.
+I'm fine whichever way. I see pros and cons in both options.

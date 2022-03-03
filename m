@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E14C4CB802
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDAA4CB806
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiCCHjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S230272AbiCCHo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHjp (ORCPT
+        with ESMTP id S229588AbiCCHoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:39:45 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEBA16E7F0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 23:39:00 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s5so4026197oic.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 23:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=hvlkBAx1TYSvfdFp/tVhjXEGQ55kSnYzbJ/Pg5/5k1k=;
-        b=FsWzYvVa/meRzJSQNo/TfOno3o+pHWVrlVIAJuLcFqb0CE4uJt6oALvksJn7XNTvgg
-         X1/P3+0ge7dmF/DXI5x8eVfmDNWj0RDpK5j/aHxslOrJQAPlBZEerG5Jy7STGuKF8c1k
-         8gnfA3Vn8+8iAexZZefH2rJJex8KBRR39zNNdyKwMS1lVLOxscMizM5CwC5MLXnnLAPM
-         wugD8A4ZhXvbnYzaZp58yAuGA/AdDK3h559sI6kOrLYlWepFJtuEuSS7AYJVkPXTt9Xj
-         zulsag1s9oyPPfuThH4KyqJoJ1Mm7dT3/7FlNip92GO3QGs6hFrCcoqp25oaykwVVmmX
-         11Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=hvlkBAx1TYSvfdFp/tVhjXEGQ55kSnYzbJ/Pg5/5k1k=;
-        b=OpPsrD3zIqL7GFvBVWxHj0EsgwRxPsqkCnRAT9eVfDHzTkafyOKjjkYIBEM2q5E0EE
-         xSlOf0yp2yKk2xD53B6vR0bPPEOTwZZP7gdPZmYXyGQRel/zig16hmgEuUo1KKWPMpnH
-         ywcw75u+V37CM/2QaLc/S55pMJdzfppfUKECcKPrSEDg1EKARC/CR64MJDX8Y0DgaANY
-         sOKdT8YTvFAxyY0Yr2/wcxFVMoJBXFH4LBJFzZQdg8IksyuxEGJUJBDLGfogIz0Fd68Y
-         8RlQ/HTMCThrz+ySRBw0M2lDKHY03rQ0Z1liUpcX/8xLMcTxF+eI+yxeqbL6BO6I/gCS
-         DXkg==
-X-Gm-Message-State: AOAM532GMn7Fbckza8vCNYqnZ0YtX3M5vuPg1zeWYSsxsU0ZKjU5N4n6
-        MtJ5uqQIXaL4me7yniEGDrS7J9qky61IsPr9csU=
-X-Google-Smtp-Source: ABdhPJzRHizGe6kIhwEJz3nhaWDHvrkV/rK1V2qvLyhEjeDErSK2S9kUDsBQ/TaRiR2TBog7vFVIONTPepPJxcydqis=
-X-Received: by 2002:a05:6808:1884:b0:2d5:1d96:deed with SMTP id
- bi4-20020a056808188400b002d51d96deedmr3327123oib.95.1646293139629; Wed, 02
- Mar 2022 23:38:59 -0800 (PST)
-MIME-Version: 1.0
-Reply-To: skjshs888@gmail.com
-Sender: jydkrs873@gmail.com
-Received: by 2002:a05:6838:ae84:0:0:0:0 with HTTP; Wed, 2 Mar 2022 23:38:58
- -0800 (PST)
-From:   Amanda Steed <bryjhns177@gmail.com>
-Date:   Thu, 3 Mar 2022 07:38:58 +0000
-X-Google-Sender-Auth: 4wYc1mQMmpMCd4x7p8cVF7dNipQ
-Message-ID: <CAFAUThS0wXjqA4j4EvEqP_OFBAs-1Ox8_QaBmdW4Wm+vpZEVTw@mail.gmail.com>
-Subject: INTERESTED IN BLITZ TRADE!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:22d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jydkrs873[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [skjshs888[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jydkrs873[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+        Thu, 3 Mar 2022 02:44:25 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3257154D01;
+        Wed,  2 Mar 2022 23:43:38 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0V66atZ3_1646293404;
+Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V66atZ3_1646293404)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 15:43:33 +0800
+From:   Dan Li <ashimida@linux.alibaba.com>
+To:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        ashimida@linux.alibaba.com, gregkh@linuxfoundation.org,
+        linux@roeck-us.net, keescook@chromium.org,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 1/2] AARCH64: Add gcc Shadow Call Stack support
+Date:   Wed,  2 Mar 2022 23:43:23 -0800
+Message-Id: <20220303074323.86282-1-ashimida@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Shadow call stacks will be available in GCC >= 12, this patch makes
+the corresponding kernel configuration available when compiling
+the kernel with the gcc.
+
+Note that the implementation in GCC is slightly different from Clang.
+With SCS enabled, functions will only pop x30 once in the epilogue,
+like:
+
+   str     x30, [x18], #8
+   stp     x29, x30, [sp, #-16]!
+   ......
+-  ldp     x29, x30, [sp], #16	  //clang
++  ldr     x29, [sp], #16	  //GCC
+   ldr     x30, [x18, #-8]!
+
+Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ce09ab17ddd21f73ff2caf6eec3b0ee9b0e1a11e
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+---
+ arch/Kconfig                 | 19 ++++++++++---------
+ arch/arm64/Kconfig           |  2 +-
+ include/linux/compiler-gcc.h |  4 ++++
+ 3 files changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..cbbe824fe8b2 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -599,21 +599,22 @@ config STACKPROTECTOR_STRONG
+ config ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 	bool
+ 	help
+-	  An architecture should select this if it supports Clang's Shadow
+-	  Call Stack and implements runtime support for shadow stack
++	  An architecture should select this if it supports the compiler's
++	  Shadow Call Stack and implements runtime support for shadow stack
+ 	  switching.
+ 
+ config SHADOW_CALL_STACK
+-	bool "Clang Shadow Call Stack"
+-	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
++	bool "Shadow Call Stack"
++	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+ 	help
+-	  This option enables Clang's Shadow Call Stack, which uses a
+-	  shadow stack to protect function return addresses from being
+-	  overwritten by an attacker. More information can be found in
+-	  Clang's documentation:
++	  This option enables the compiler's Shadow Call Stack, which
++	  uses a shadow stack to protect function return addresses from
++	  being overwritten by an attacker. More information can be found
++	  in the compiler's documentation:
+ 
+-	    https://clang.llvm.org/docs/ShadowCallStack.html
++	  - Clang: https://clang.llvm.org/docs/ShadowCallStack.html
++	  - GCC: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#Instrumentation-Options
+ 
+ 	  Note that security guarantees in the kernel differ from the
+ 	  ones documented for user space. The kernel must store addresses
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 09b885cc4db5..b7145337efae 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
+ config ARCH_HAS_FILTER_PGPROT
+ 	def_bool y
+ 
+-# Supported by clang >= 7.0
++# Supported by clang >= 7.0 or GCC >= 12.0.0
+ config CC_HAVE_SHADOW_CALL_STACK
+ 	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
+ 
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index ccbbd31b3aae..deff5b308470 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -97,6 +97,10 @@
+ #define KASAN_ABI_VERSION 4
+ #endif
+ 
++#ifdef CONFIG_SHADOW_CALL_STACK
++#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
++#endif
++
+ #if __has_attribute(__no_sanitize_address__)
+ #define __no_sanitize_address __attribute__((no_sanitize_address))
+ #else
 -- 
-Greetings,
+2.17.1
 
-Are you interested in Blitz Trade with LANCE IPPOLITO? Would you like to
-invest and earn on a regular basis?
-Do you seek a part-time job where you can earn more income, look no further
-for with little capital you can earn weekly or monthly.
-
-Contact for more information on how to sign up and start earning income on
-a regular basis.
-
-Amanda Steed

@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DFE4CBF22
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A98CD4CBF26
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiCCNt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S233295AbiCCNvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiCCNt6 (ORCPT
+        with ESMTP id S230384AbiCCNvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:49:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1CA48889;
-        Thu,  3 Mar 2022 05:49:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646315352; x=1677851352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K3zaEHW1S0fJNBI4MmfbUZ44fQEWX4hjX1GkFZ8s7LY=;
-  b=aH3on0SFW1hTOfcb59+iU6wasa2rr4tKp3kagcTeEILd+QtdpOnP+Ig7
-   Y8sBgZKKQm4y9B2l04GLA5kvKeIBgmJRCNr8VmYYAxt21Dp4sj9LDdA6C
-   Bae4xO9f2Nl4iBt6rRHrwA2t4b1z6ATtyQWKdylST/b3zwuw7wnVbKL9G
-   EpkpUSi9TTk1B7CLhjBJGVk4moUIpxJCARGm2YH1L8T2zhvz/3+kgijc4
-   DFono/QQ25QiA0w1SbVUx7ENYCpZEfCC64usLYqYjEsPSUdqHBt8R3LbP
-   RRJNH6nQTzTQEW/PYMC+KAqNI2pYBEaATS7Dv4mO9zVWzsIsMkGvaYVo0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253410146"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="253410146"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 05:49:12 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="709928521"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 05:49:09 -0800
-Date:   Thu, 3 Mar 2022 13:49:03 +0000
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Kyle Sanderson <kyle.leet@gmail.com>,
-        Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
-        Linux-Kernal <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        device-mapper development <dm-devel@redhat.com>
-Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
- dm-crypt + xfs
-Message-ID: <YiDHT31ujlGdQEe/@silpixa00400314>
-References: <Yh0y75aegqS4jIP7@silpixa00400314>
- <Yh1aLfy/oBawCJIg@gondor.apana.org.au>
- <CAHk-=wi+xewHz=BH7LcZAxrj9JXi66s9rp+kBqRchVG3a-b2BA@mail.gmail.com>
- <Yh2c4Vwu61s51d6N@gondor.apana.org.au>
- <Yh9G7FyCLtsm2mFA@kroah.com>
- <Yh9ZvLHuztwQCu0d@silpixa00400314>
- <Yh+FpKuoyj3G16lK@kroah.com>
- <Yh/vY4t3xnuoCW3Q@gondor.apana.org.au>
- <Yh/yr6oB5yeOUErL@silpixa00400314>
- <Yh/znCnZzWaL49+o@gondor.apana.org.au>
+        Thu, 3 Mar 2022 08:51:22 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E61795DC;
+        Thu,  3 Mar 2022 05:50:36 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223C3x86003862;
+        Thu, 3 Mar 2022 13:50:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2021-07-09;
+ bh=y3MYf+TlKweiceJX2qa+tIefBWioJbkZcjleCduyki0=;
+ b=cmCM3igxBxvjQ1Fv52MwdPy1xyv114vh/3/HL+uTryxk4fGPQFD3z9nIHcjXuLsieBwd
+ NUp3j8QWEOru7NVZwcNg9lVfe3qGSDKfjgphUkg/aJ3ewFbJGOaLL7iNrQgaTrAturTl
+ 6oM0gasS17AsobzI9DVpJhywKzBEx5eNSaTeh+0TFTbx7zYEc4bIoy2lldvuUe100phU
+ c4bjZQ5e5FVWK7ZmhyWpidkG+j9USEg+wAA0/XxTGCHTqecgYS/w0qZZ6cLsKxlZV9Yq
+ haujepxx45Hlo3j3R0rq/3+VdFi+7OYjDNRKGAmI2u7IQlDN8VKk/wghRs3JctsFJmo8 tw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ehh2eps5g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 13:50:27 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 223DjNr0175981;
+        Thu, 3 Mar 2022 13:50:26 GMT
+Received: from lab02.no.oracle.com (lab02.no.oracle.com [10.172.144.56])
+        by aserp3030.oracle.com with ESMTP id 3efa8j5bas-1;
+        Thu, 03 Mar 2022 13:50:25 +0000
+From:   =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH for-next] Revert "IB/mlx5: Don't return errors from poll_cq"
+Date:   Thu,  3 Mar 2022 14:50:17 +0100
+Message-Id: <1646315417-25549-1-git-send-email-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh/znCnZzWaL49+o@gondor.apana.org.au>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203030065
+X-Proofpoint-ORIG-GUID: EIQo8G5Un8scw1KmUnh94TbFJZgqIG9y
+X-Proofpoint-GUID: EIQo8G5Un8scw1KmUnh94TbFJZgqIG9y
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,111 +64,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 10:45:48AM +1200, Herbert Xu wrote:
-> On Wed, Mar 02, 2022 at 10:42:20PM +0000, Giovanni Cabiddu wrote:
-> >
-> > I was thinking, as an alternative, to lower the cra_priority in the QAT
-> > driver for the algorithms used by dm-crypt so they are not used by
-> > default.
-> > Is that a viable option?
-> 
-> Yes I think that should work too.
-The patch below implements that solution and applies to linux-5.4.y.
-If it is ok, I can send it to stable for all kernels <= 5.4 following
-https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html#option-3
+This reverts commit dbdf7d4e7f911f79ceb08365a756bbf6eecac81c.
 
----8<---
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Date: Thu, 3 Mar 2022 11:54:07 +0000
-Subject: [PATCH] crypto: qat - drop priority of algorithms
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+Commit dbdf7d4e7f91 ("IB/mlx5: Don't return errors from poll_cq") is
+needed, when driver/fw communication gets wedged.
 
-The implementations of aead and skcipher in the QAT driver are not
-properly supporting requests with the CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
-If the HW queue is full, the driver returns -EBUSY but does not enqueue
-the request.
-This can result in applications like dm-crypt waiting indefinitely for a
-completion of a request that was never submitted to the hardware.
+With a large fleet of systems equipped with CX-5, we have observed the
+following mlx5 error message:
 
-To mitigate this problem, reduce the priority of all skcipher and aead
-implementations in the QAT driver so they are not used by default.
+wait_func:945:(pid xxx): ACCESS_REG(0x805) timeout. Will cause a
+leak of a command resource
 
-This patch deviates from the original upstream solution, that prevents
-dm-crypt to use drivers registered with the flag
-CRYPTO_ALG_ALLOCATES_MEMORY, since a backport of that set to stable
-kernels may have a too wide effect.
+Followed by:
 
-commit 7bcb2c99f8ed032cfb3f5596b4dccac6b1f501df upstream
-commit 2eb27c11937ee9984c04b75d213a737291c5f58c upstream
-commit fbb6cda44190d72aa5199d728797aabc6d2ed816 upstream
-commit b8aa7dc5c7535f9abfca4bceb0ade9ee10cf5f54 upstream
-commit cd74693870fb748d812867ba49af733d689a3604 upstream
+destroy_qp_common:2109:(pid xxx): mlx5_ib: modify QP
+0x007264 to RESET failed
 
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+However, the QP is removed from the device drivers perspective, in
+particular, the QP number is removed from the radix tree. We may
+further assume that the HCA has not been informed about the intent of
+destroying the QP and setting its state to RESET.
+
+We may then poll CQEs from the HCA for this QP. Then we may end up in
+mlx5_poll_one() doing:
+
+    mqp = radix_tree_lookup(&dev->qp_table.tree, qpn);
+    *cur_qp = to_mibqp(mqp);
+
+which, in the event no QP is found, leads to the following NULL
+pointer deref:
+
+BUG: unable to handle kernel paging request at fffffffffffffff8
+IP: mlx5_poll_one+0xd0/0xbb0 [mlx5_ib]
+
+Note that the above is based on a 4.14.35 kernel, but my take is that
+this analysis is also applicable to latest upstream.
+
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+
+Conflicts:
+	drivers/infiniband/hw/mlx5/cq.c
 ---
- drivers/crypto/qat/qat_common/qat_algs.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/infiniband/hw/mlx5/cq.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
-index 6b8ad3d67481..a5c28a08fd8c 100644
---- a/drivers/crypto/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_algs.c
-@@ -1274,7 +1274,7 @@ static struct aead_alg qat_aeads[] = { {
- 	.base = {
- 		.cra_name = "authenc(hmac(sha1),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha1",
--		.cra_priority = 4001,
-+		.cra_priority = 1,
- 		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
-@@ -1291,7 +1291,7 @@ static struct aead_alg qat_aeads[] = { {
- 	.base = {
- 		.cra_name = "authenc(hmac(sha256),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha256",
--		.cra_priority = 4001,
-+		.cra_priority = 1,
- 		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
-@@ -1308,7 +1308,7 @@ static struct aead_alg qat_aeads[] = { {
- 	.base = {
- 		.cra_name = "authenc(hmac(sha512),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha512",
--		.cra_priority = 4001,
-+		.cra_priority = 1,
- 		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
-@@ -1326,7 +1326,7 @@ static struct aead_alg qat_aeads[] = { {
- static struct crypto_alg qat_algs[] = { {
- 	.cra_name = "cbc(aes)",
- 	.cra_driver_name = "qat_aes_cbc",
--	.cra_priority = 4001,
-+	.cra_priority = 1,
- 	.cra_flags = CRYPTO_ALG_TYPE_ABLKCIPHER | CRYPTO_ALG_ASYNC,
- 	.cra_blocksize = AES_BLOCK_SIZE,
- 	.cra_ctxsize = sizeof(struct qat_alg_ablkcipher_ctx),
-@@ -1348,7 +1348,7 @@ static struct crypto_alg qat_algs[] = { {
- }, {
- 	.cra_name = "ctr(aes)",
- 	.cra_driver_name = "qat_aes_ctr",
--	.cra_priority = 4001,
-+	.cra_priority = 1,
- 	.cra_flags = CRYPTO_ALG_TYPE_ABLKCIPHER | CRYPTO_ALG_ASYNC,
- 	.cra_blocksize = 1,
- 	.cra_ctxsize = sizeof(struct qat_alg_ablkcipher_ctx),
-@@ -1370,7 +1370,7 @@ static struct crypto_alg qat_algs[] = { {
- }, {
- 	.cra_name = "xts(aes)",
- 	.cra_driver_name = "qat_aes_xts",
--	.cra_priority = 4001,
-+	.cra_priority = 1,
- 	.cra_flags = CRYPTO_ALG_TYPE_ABLKCIPHER | CRYPTO_ALG_ASYNC,
- 	.cra_blocksize = AES_BLOCK_SIZE,
- 	.cra_ctxsize = sizeof(struct qat_alg_ablkcipher_ctx),
-
-base-commit: 866ae42cf4788c8b18de6bda0a522362702861d7
+diff --git a/drivers/infiniband/hw/mlx5/cq.c b/drivers/infiniband/hw/mlx5/cq.c
+index 08371a8..2bb9aa0 100644
+--- a/drivers/infiniband/hw/mlx5/cq.c
++++ b/drivers/infiniband/hw/mlx5/cq.c
+@@ -490,6 +490,12 @@ static int mlx5_poll_one(struct mlx5_ib_cq *cq,
+ 		 * from the table.
+ 		 */
+ 		mqp = radix_tree_lookup(&dev->qp_table.tree, qpn);
++		if (unlikely(!mqp)) {
++			mlx5_ib_warn(dev, "CQE@CQ %06x for unknown QPN %6x\n",
++				     cq->mcq.cqn, qpn);
++			return -EINVAL;
++		}
++
+ 		*cur_qp = to_mibqp(mqp);
+ 	}
+ 
+@@ -552,6 +558,13 @@ static int mlx5_poll_one(struct mlx5_ib_cq *cq,
+ 		xa_lock(&dev->sig_mrs);
+ 		sig = xa_load(&dev->sig_mrs,
+ 				mlx5_base_mkey(be32_to_cpu(sig_err_cqe->mkey)));
++		if (unlikely(!sig)) {
++			xa_unlock(&dev->sig_mrs);
++			mlx5_ib_warn(dev, "Unable to retrieve sig_mr for mkey %6x\n",
++				     be32_to_cpu(sig_err_cqe->mkey));
++			return -EINVAL;
++		}
++
+ 		get_sig_err_item(sig_err_cqe, &sig->err_item);
+ 		sig->sig_err_exists = true;
+ 		sig->sigerr_count++;
+@@ -606,6 +619,7 @@ int mlx5_ib_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc)
+ 	unsigned long flags;
+ 	int soft_polled = 0;
+ 	int npolled;
++	int err = 0;
+ 
+ 	spin_lock_irqsave(&cq->lock, flags);
+ 	if (mdev->state == MLX5_DEVICE_STATE_INTERNAL_ERROR) {
+@@ -622,7 +636,8 @@ int mlx5_ib_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc)
+ 		soft_polled = poll_soft_wc(cq, num_entries, wc, false);
+ 
+ 	for (npolled = 0; npolled < num_entries - soft_polled; npolled++) {
+-		if (mlx5_poll_one(cq, &cur_qp, wc + soft_polled + npolled))
++		err = mlx5_poll_one(cq, &cur_qp, wc + soft_polled + npolled);
++		if (err)
+ 			break;
+ 	}
+ 
+@@ -631,7 +646,10 @@ int mlx5_ib_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc)
+ out:
+ 	spin_unlock_irqrestore(&cq->lock, flags);
+ 
+-	return soft_polled + npolled;
++	if (err == 0 || err == -EAGAIN)
++		return soft_polled + npolled;
++	else
++		return err;
+ }
+ 
+ int mlx5_ib_arm_cq(struct ib_cq *ibcq, enum ib_cq_notify_flags flags)
 -- 
-2.35.1
+1.8.3.1
 

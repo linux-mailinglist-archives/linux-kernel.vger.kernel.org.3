@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F7B4CB740
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3674CB74D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiCCGzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S230016AbiCCG6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiCCGza (ORCPT
+        with ESMTP id S229864AbiCCG6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:55:30 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D35016A5B0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:54:45 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id n33-20020a05600c3ba100b003832caf7f3aso2047608wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 22:54:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E7Ew53yfjewVk3HWOkuEB6l85pgjkhws9cTt9TXMGuQ=;
-        b=pr4obOLhlupgLuaBUf/izWSxSovMzmddb/AVhCbU1PC44nH9PWqUXwu8rDkLwLZIXP
-         Hpv0x6QzeksAZz+t+A0zu6b+mz92zDKCVYWYzQanxeRZmhNNeKx7GUzvfydev3437j0D
-         4T8f2bmg98LO+FNmHGDYk15C1NR6OT2nhz/y63IpmFVxfokYbfVbwcklt3vXOXQ0Bf9w
-         XMaPo+6MhRfAG7kZP3m5t0tiHE6pRbVOzAup5XVsyWNmIB4BlTVYkbOGKR0qnWwo4ybS
-         Dg2ZJiwnUIHIgB/qxtHsNnP8TY889ivUBbDmM+CqDBnFDslA9f4WlaxiHmwsAlrx5hkQ
-         UqZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E7Ew53yfjewVk3HWOkuEB6l85pgjkhws9cTt9TXMGuQ=;
-        b=Kja16RIoH+ESsZq393GJ1MOR3oqvkFuVo9DUAkzGXDdiI8eDxE3VB3xdvDg7XAXqA2
-         odsMsr1HM7zGZ4f1TXJIFXf6IEU0Q1YMadj5e0yJZYryBccG6eZ0ofFYQpBT2NH0u52X
-         mOQF4KWRxiZnkUK0bnB+kjYXRHYUbmxj+E7+VgVPd0M1U/gQZDLRVB2WR7+YgHHi6Zhx
-         c1d/52foxQE/xxRaRiu8dZ4mxWD1O6LiGSJIuHOL7IAxVklHoOvFynnqDfdVGogzOCpc
-         Buv67jmgsIT7XtirL0QC3UC/c6BQ2EDKBF+GiSHTtQAxqMQtGngguzUN0AAiQgSPtizm
-         tZ+w==
-X-Gm-Message-State: AOAM532reET/80odZrx04fm+ocKD06cpq3UWTWMOcggigF2ehzK8AhDA
-        XVGN5SFz6KuP1VO0hPmNFzU=
-X-Google-Smtp-Source: ABdhPJw2uoUZvKyDoAgLWCGMAPCvsVIrIKS3kIRjPO3oQNH/HYS0Lx97JwAnRf5+oAkQEdfKN6xMYg==
-X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr2571355wmi.116.1646290483686;
-        Wed, 02 Mar 2022 22:54:43 -0800 (PST)
-Received: from localhost.localdomain ([185.239.71.98])
-        by smtp.gmail.com with ESMTPSA id z2-20020a056000110200b001e7140ddb44sm1079902wrw.49.2022.03.02.22.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 22:54:43 -0800 (PST)
-From:   Xiaolong Huang <butterflyhuangxx@gmail.com>
-To:     fei1.li@intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Xiaolong Huang <butterflyhuangxx@gmail.com>
-Subject: [RESEND PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
-Date:   Thu,  3 Mar 2022 14:54:00 +0800
-Message-Id: <20220303065401.259202-1-butterflyhuangxx@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 3 Mar 2022 01:58:24 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D2E3886;
+        Wed,  2 Mar 2022 22:57:34 -0800 (PST)
+X-UUID: 46c81073d6544573a1770f6446d486b9-20220303
+X-UUID: 46c81073d6544573a1770f6446d486b9-20220303
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1554214115; Thu, 03 Mar 2022 14:57:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 3 Mar 2022 14:57:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 3 Mar 2022 14:57:26 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
+        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [RESEND V6 0/5] add display support for MediaTek SoC MT8186
+Date:   Thu, 3 Mar 2022 14:57:20 +0800
+Message-ID: <20220303065725.23384-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vm_param and cpu_regs need to be freed via kfree()
-before return -EINVAL error.
+v6:
+1. Remove mmsys patches which are accepted.
+2. Fix error of dt-binding.
 
-Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
-Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
----
- drivers/virt/acrn/hsm.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+v5:
+1. Add binding patch of aal for MT8183.
+2. Revise enum to const.
+3. Change to use enum for mutex.
+4. Remove patches which are accepted by maintainers. (mmsys and mutex)
 
-diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
-index 5419794fccf1..423ea888d79a 100644
---- a/drivers/virt/acrn/hsm.c
-+++ b/drivers/virt/acrn/hsm.c
-@@ -136,8 +136,10 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
- 		if (IS_ERR(vm_param))
- 			return PTR_ERR(vm_param);
- 
--		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
-+		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
-+			kfree(vm_param);
- 			return -EINVAL;
-+		}
- 
- 		vm = acrn_vm_create(vm, vm_param);
- 		if (!vm) {
-@@ -182,21 +184,29 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
- 			return PTR_ERR(cpu_regs);
- 
- 		for (i = 0; i < ARRAY_SIZE(cpu_regs->reserved); i++)
--			if (cpu_regs->reserved[i])
-+			if (cpu_regs->reserved[i]) {
-+				kfree(cpu_regs);
- 				return -EINVAL;
-+			}
- 
- 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_32); i++)
--			if (cpu_regs->vcpu_regs.reserved_32[i])
-+			if (cpu_regs->vcpu_regs.reserved_32[i]) {
-+				kfree(cpu_regs);
- 				return -EINVAL;
-+			}
- 
- 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_64); i++)
--			if (cpu_regs->vcpu_regs.reserved_64[i])
-+			if (cpu_regs->vcpu_regs.reserved_64[i]) {
-+				kfree(cpu_regs);
- 				return -EINVAL;
-+			}
- 
- 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.gdt.reserved); i++)
- 			if (cpu_regs->vcpu_regs.gdt.reserved[i] |
--			    cpu_regs->vcpu_regs.idt.reserved[i])
-+			    cpu_regs->vcpu_regs.idt.reserved[i]) {
-+				kfree(cpu_regs);
- 				return -EINVAL;
-+			}
- 
- 		ret = hcall_set_vcpu_regs(vm->vmid, virt_to_phys(cpu_regs));
- 		if (ret < 0)
+v4:
+1. Remove binding of dsi and dpi.
+2. Revise aal binding.
+3. Fix indention in [4/5].
 
-base-commit: 5859a2b1991101d6b978f3feb5325dad39421f29
+v3:
+1. Modify display binding based on mtk display binding patch. ([1])
+2. Remove patch: drm/mediatek: separate postmask component from mtk_disp_drv.c
+3. Remove compatible of 8186 ovl because we can re-use compatible of 8192 for 8186.
+4. Fix issue of space before tab on mutex patch.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/?h=mediatek-drm-next&id=4ed545e7d10049b5492afc184e61a67e478a2cfd
+
+v2:
+1. Add binding documentation for mmsys, mutex and mtk_display.
+2. Remove duplicated definition of postmask registers on mtk_drm_drv.
+3. Add disp_ovl support for MT8186.
+4. Add detailed commit messages.
+
+Rex-BC Chen (4):
+  dt-bindings: display: mediatek: add aal binding for MT8183
+  dt-bindings: display: mediatek: revise enum to const
+  dt-bindings: display: mediatek: change to use enum for mutex
+  dt-bindings: display: mediatek: add MT8186 SoC binding
+
+Yongqiang Niu (1):
+  drm/mediatek: add display support for MT8186
+
+ .../display/mediatek/mediatek,aal.yaml        |  7 +++-
+ .../display/mediatek/mediatek,ccorr.yaml      |  5 ++-
+ .../display/mediatek/mediatek,color.yaml      |  7 ++--
+ .../display/mediatek/mediatek,dither.yaml     |  4 +--
+ .../display/mediatek/mediatek,gamma.yaml      |  4 +--
+ .../display/mediatek/mediatek,mutex.yaml      | 25 ++++++--------
+ .../display/mediatek/mediatek,ovl-2l.yaml     |  4 +++
+ .../display/mediatek/mediatek,ovl.yaml        |  8 +++--
+ .../display/mediatek/mediatek,postmask.yaml   |  4 +++
+ .../display/mediatek/mediatek,rdma.yaml       |  7 ++--
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 33 +++++++++++++++++++
+ 11 files changed, 76 insertions(+), 32 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 

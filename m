@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DF74CB937
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304014CB945
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiCCIi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S231487AbiCCIjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiCCIi4 (ORCPT
+        with ESMTP id S229678AbiCCIjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:38:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6167148926
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646296689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7VbL5lT53mUztHyArx9pP7wyihmJ4M3NPqTtcvOQ2VI=;
-        b=HJoIeaxiAvYYTdcRNPitEP62MHRhY66i68HZ+kTc4B7hNb0Xvu49NckOA3/Y3SUhoGIxzo
-        2nLpZY95si3zdgbbmaEliWRYgM96s8Vphagj7DoE/mf+TI/bJ1qITL+JluCXgzG/i4cTFz
-        eCYNz0U0Za31aXhlObTp7YCuGODK5ac=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-484-gpn-8lVhM3GSAm8U1KkwmQ-1; Thu, 03 Mar 2022 03:38:05 -0500
-X-MC-Unique: gpn-8lVhM3GSAm8U1KkwmQ-1
-Received: by mail-wr1-f70.google.com with SMTP id a11-20020adffb8b000000b001efe754a488so1746646wrr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:38:05 -0800 (PST)
+        Thu, 3 Mar 2022 03:39:40 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F249B148922;
+        Thu,  3 Mar 2022 00:38:55 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id j1so196967pfj.5;
+        Thu, 03 Mar 2022 00:38:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=SGMF6oSM44wO/3sji0yXCG/PEtOPShxdSQ68WLQRB2g=;
+        b=ZvINIOlHF3nZHDcX3MwxAzlzprOUAV7bE6ys/MgPVlfVq9lkuahVjDHsPLQ7QbaFo9
+         fQEFqUdMgi81YiKV62ulZnN7ZvbWazV6yRB1Qn/XiuQndMVO9fvHUymuPfTr2Dg+jh50
+         vUEnvjC71yyLrdhZGmiVJ4PzTrzLKfXKpEMH9pkW4eVCRVAqTfa9XuvSN7zcx65Vy8CK
+         d46NAYhkVq2HOhizng3Ws+JRbkWyYjQl4vq/u0RRAuHhPVUlG5PBN7oH7sIbE0gusQ26
+         6C+XTV9PxP4Ds6jAKJQCAmbFUS0yNAc3zTUs7Z/QKxXKC+XQ8KtJ4GqninQZxzg5r19Q
+         dsow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=7VbL5lT53mUztHyArx9pP7wyihmJ4M3NPqTtcvOQ2VI=;
-        b=s+FsPCrWUYqWs970DRo+6vk4UBKqVrSELKP24T5Xt2BrUYKyBdFkzCaYUhK3sBJoh4
-         rJtlpZX/3F3ALK8jl90joWbXHF3ttLX5wMUBmhjMbg0MUg6jf/0gAFr+bzOAs0e52E8P
-         7lbxyIVRMGG6Ouo6z7UusbBSkZKTlM9ZcqBkLF2CL4gtTBscW2zkIhsLK4dI8jJvq56c
-         G0tcsAduaaPqUxnZMBb3T1nZ9B1B0RAxTGmvFg3wkZcuwqa+eP1GFKNfUIoYjQ1fSbk6
-         H+xQzUFYfDiKkceDG755StyhZ+ZOtwXsd+ZP72J4k6hvugjSlopwOM3TO9YzdLxBSQIX
-         YDfQ==
-X-Gm-Message-State: AOAM5307YaI4o+d3uqeej55nSIOWBY5RUZhx/sVGitHeMDH1NLPdimjf
-        jXfWZEEQks8kk1xK8wCUq7pYCH/E5jlCT6IvihZXNq3CYfyAidfBVkx654DlWhtSqBx+UssNM82
-        q5f61kcCNSkD8SQCSH9nqmRrg
-X-Received: by 2002:a5d:47a4:0:b0:1f0:46e4:19bc with SMTP id 4-20020a5d47a4000000b001f046e419bcmr4066492wrb.601.1646296684782;
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw/AOr9kcfSCL6dEmzp2KPAxB6X5N/u/fMMDoNJCyjfqcaaRT42zcBqSgBSliGMWF1kL7ADpA==
-X-Received: by 2002:a5d:47a4:0:b0:1f0:46e4:19bc with SMTP id 4-20020a5d47a4000000b001f046e419bcmr4066475wrb.601.1646296684567;
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d590f000000b001f04b96f9a9sm1338936wrd.42.2022.03.03.00.38.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 00:38:04 -0800 (PST)
-Message-ID: <8cef7451-ac6a-9ca5-b521-1eec53d30880@redhat.com>
-Date:   Thu, 3 Mar 2022 09:38:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH][next] drm: ssd130x: remove redundant initialization of
- pointer mode
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-References: <20220302175309.1098827-1-colin.i.king@gmail.com>
- <CAFOAJEfS9dMY5nudeFxtwchTtLnBCh7N4qKaCdqvaodnRUFKzA@mail.gmail.com>
-In-Reply-To: <CAFOAJEfS9dMY5nudeFxtwchTtLnBCh7N4qKaCdqvaodnRUFKzA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=SGMF6oSM44wO/3sji0yXCG/PEtOPShxdSQ68WLQRB2g=;
+        b=w4lIIlpEWhVPgQ3x/bg+YHIjulTWDKGK7kkBECCdGPzJ68GyOwdYp9eGD4vPHBHNJv
+         FqC4r8Kyv5bAnIgwCVQ6OQgrFGxCMH1nAv1PNs3XVeTH4Bfhv64vAWJFCGkGq98m+kpP
+         O5HuBr/pKxfzySFjhR1l1CEj2ZwBBgyNgYcM5w255mew6GdYh+mW1x/vkhYR+nHzG52m
+         3XxAnkB9mg/2X1S/OK3aD0PS46qcKXvoRVytX2Y7h/wE5x6ZQMl8nkfDPUbthKUZIzRx
+         r3WruzVeaWH156hJdcJyX/4bS3bpmEY80QZQd5MBO+Kug7rOV9qxGZewJWECinZBmhRI
+         0sAw==
+X-Gm-Message-State: AOAM5325jxmfLyVe9lc9dT85I2WUTfVZBpbQdetR2XWJ22VblciWWYRN
+        Lwlc6EeWgUfTfvwkvWo5w9s=
+X-Google-Smtp-Source: ABdhPJxqu7M+1zWgFCPBx1x396RDv729JpxnE5pMePfUDpYTg5HqtDHmeV1ToBxB32C6BUNb5VRxjw==
+X-Received: by 2002:a63:f03:0:b0:374:50b5:1432 with SMTP id e3-20020a630f03000000b0037450b51432mr28638188pgl.308.1646296735582;
+        Thu, 03 Mar 2022 00:38:55 -0800 (PST)
+Received: from ubuntu.huawei.com ([119.3.119.19])
+        by smtp.googlemail.com with ESMTPSA id q92-20020a17090a1b6500b001bc169e26aasm6405436pjq.2.2022.03.03.00.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 00:38:54 -0800 (PST)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     xiam0nd.tong@gmail.com
+Cc:     David.Laight@ACULAB.COM, akpm@linux-foundation.org,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
+        bcm-kernel-feedback-list@broadcom.com, bjohannesmeyer@gmail.com,
+        c.giuffrida@vu.nl, christian.koenig@amd.com,
+        christophe.jaillet@wanadoo.fr, dan.carpenter@oracle.com,
+        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
+        dri-devel@lists.freedesktop.org, gustavo@embeddedor.com,
+        h.j.bos@vu.nl, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, jakobkoschel@gmail.com,
+        jgg@ziepe.ca, keescook@chromium.org,
+        kgdb-bugreport@lists.sourceforge.net, kvm@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-block@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux@rasmusvillemoes.dk,
+        linuxppc-dev@lists.ozlabs.org, nathan@kernel.org,
+        netdev@vger.kernel.org, nouveau@lists.freedesktop.org,
+        rppt@kernel.org, samba-technical@lists.samba.org,
+        tglx@linutronix.de, tipc-discussion@lists.sourceforge.net,
+        torvalds@linux-foundation.org, v9fs-developer@lists.sourceforge.net
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
+Date:   Thu,  3 Mar 2022 16:38:31 +0800
+Message-Id: <20220303083831.11833-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220303083007.11640-1-xiam0nd.tong@gmail.com>
+References: <20220303083007.11640-1-xiam0nd.tong@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 19:29, Javier Martinez Canillas wrote:
-> Hello Colin,
-> 
-> Thanks for the patch.
-> 
-> On Wed, Mar 2, 2022 at 6:53 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->>
->> Pointer mode is being assigned a value that is never read, it is
->> being re-assigned later with a new value. The initialization is
->> redundant and can be removed.
->>
-> 
-> Indeed.
-> 
-> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
->
+correct for typo:
 
-Pushed to drm-misc-next (with fixed drm/ssd130x subject prefix).
+-for (struct list_head *list = head->next, cond = (struct list_head *)-1; cond == (struct list_head *)-1; cond = NULL) \
++for (struct list_head *list = head->next, *cond = (struct list_head *)-1; cond == (struct list_head *)-1; cond = NULL) \
 
-Thanks!
- -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+--
+Xiaomeng Tong

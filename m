@@ -2,145 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D054CC6A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 279D44CC6AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbiCCT7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S235760AbiCCT77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbiCCT7X (ORCPT
+        with ESMTP id S235678AbiCCT74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:59:23 -0500
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF291F68DA;
-        Thu,  3 Mar 2022 11:58:36 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id bt13so12541467ybb.2;
-        Thu, 03 Mar 2022 11:58:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sjBP9R5sSBRCjbqotPuBU59YCmOLVJ0MXeepARz8oD4=;
-        b=V/smNpGsI0+UZVnl3kGV8QXrCILPzUCTozdrCGW5BV1XB9t2mbO7YgYkDgdJOr/uQe
-         gozWbktjOQSli7ne3ffVkxr4NdbK4ctkyWTT01MPpqkVvnE5xKwRbcqB9ZeGrszG1AEK
-         4DqnMTALauS56Q2tYWXc0mZ2WqvKG05qOIzpr5VRkYMPh5Ex/pJgkPRMgz6oQJUdNgFw
-         oBkWTPHR4R5/rIwjMe5yKCeIoe9USTIMTlEPBuCtuAuqVAmpNeLJGWrwI2TM7Uh6iBPY
-         nZs6YNzBy3/SJaTcB2lasQJcU02hRh4BmWZi3TIqpiBE4RbTLl5THVEhB4iZLs8S0hFY
-         ps8w==
-X-Gm-Message-State: AOAM5324zFYgn5lKDZzRnvZ9rKdDaBF5QZ/pvdXz3baJ2W+ClFtW6jL5
-        bnO78Itqcjiytl8591OkPy8ZuN6lLU8xQInizcw=
-X-Google-Smtp-Source: ABdhPJy69ncq5Im8YOiTxphflVK10P7CEA+c49Q/8seTr19kjc9+9V/j2pyHi+8QAnbezgGR1Immb/MRT5YcuqB19vI=
-X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
- h62-20020a253a41000000b0062886a20dbcmr12746549yba.633.1646337515899; Thu, 03
- Mar 2022 11:58:35 -0800 (PST)
+        Thu, 3 Mar 2022 14:59:56 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D9719CCC8;
+        Thu,  3 Mar 2022 11:59:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646337550; x=1677873550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pwhtk1GrrqE/4VynDFryxgHiiPKn9d6coiqO1HnGW5Q=;
+  b=Jj8P/Zy5EOtwhxQnbeJD9jTMAuvKkvB+vn4VJdhIrY8E/ZfDt8HCpqMc
+   9A5EV28QpCAUJ1ST27kr3x8rpUEs2qawQrHMQ6liC0t4uU7+okuJC2vyG
+   +tUt/tvQthPXOHAVKQXdlAvlTKH/hOGOxZHOB6YaT9FMaEnN2UIlG4Ab5
+   hDB2+KHhABfpvqLFMKgeuPlRR85Q1u3yQNl0Za+xk4FlO58eK+EiM78pC
+   GvLKHJGcpzkThyT1qvC9kFYkh17in7AUwbSDnv8SyhycDu5+LpEVO1Ecx
+   uWp6jfa89lEb+yKEL9ZIPyurC//CXKpz2xsMCcSIO3JKR85YF9SJd0pcL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="251373167"
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="251373167"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 11:59:10 -0800
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="630922010"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 11:59:10 -0800
+Date:   Thu, 3 Mar 2022 11:59:09 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Williams, Dan J" <dan.j.williams@intel.com>
+Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [RFC 07/10] platform/x86/intel/ifs: Create kthreads for online
+ cpus for scan test
+Message-ID: <YiEeDfuQyqperN9x@agluck-desk3.sc.intel.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <20220301195457.21152-8-jithu.joseph@intel.com>
+ <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
 MIME-Version: 1.0
-References: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Mar 2022 20:58:25 +0100
-Message-ID: <CAJZ5v0hsdRxnHs-1ra14ZQU6gmAiisS=Jc7Hpkkr-vZuWuOiww@mail.gmail.com>
-Subject: Re: [PATCH v1 1/7] ACPI: enumeration: Discourage to use custom _DSM methods
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:39 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Since we have _DSD established and specified (ACPI v5.1+) there is no
-> need to use custom _DSM methods. Rewrite documentation to use _DSD.
->
-> Fixes: f60e7074902a ("misc: at25: Make use of device property API")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  .../firmware-guide/acpi/enumeration.rst       | 48 ++++++++-----------
->  1 file changed, 21 insertions(+), 27 deletions(-)
->
-> diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
-> index d0022567c022..3b221cc9ff5f 100644
-> --- a/Documentation/firmware-guide/acpi/enumeration.rst
-> +++ b/Documentation/firmware-guide/acpi/enumeration.rst
-> @@ -227,43 +227,37 @@ to at25 SPI eeprom driver (this is meant for the above ACPI snippet)::
->         };
->
->  Note that this driver actually needs more information like page size of the
-> -eeprom etc. but at the time writing this there is no standard way of
-> -passing those. One idea is to return this in _DSM method like::
-> +eeprom, etc. This information can be passed via _DSD method like::
->
->         Device (EEP0)
->         {
->                 ...
-> -               Method (_DSM, 4, NotSerialized)
-> +               Name (_DSD, Package ()
->                 {
-> -                       Store (Package (6)
-> +                       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-> +                       Package ()
->                         {
-> -                               "byte-len", 1024,
-> -                               "addr-mode", 2,
-> -                               "page-size, 32
-> -                       }, Local0)
-> -
-> -                       // Check UUIDs etc.
-> -
-> -                       Return (Local0)
-> -               }
-> -
-> -Then the at25 SPI driver can get this configuration by calling _DSM on its
-> -ACPI handle like::
-> -
-> -       struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> -       struct acpi_object_list input;
-> -       acpi_status status;
-> +                               Package () { "size", 1024 },
-> +                               Package () { "pagesize", 32 },
-> +                               Package () { "address-width", 16 },
-> +                       }
-> +               })
-> +       }
->
-> -       /* Fill in the input buffer */
-> +Then the at25 SPI driver can get this configuration by calling device property
-> +APIs during ->probe() phase like::
->
-> -       status = acpi_evaluate_object(ACPI_HANDLE(&spi->dev), "_DSM",
-> -                                     &input, &output);
-> -       if (ACPI_FAILURE(status))
-> -               /* Handle the error */
-> +       err = device_property_read_u32(dev, "size", &size);
-> +       if (err)
-> +               ...error handling...
->
-> -       /* Extract the data here */
-> +       err = device_property_read_u32(dev, "pagesize", &page_size);
-> +       if (err)
-> +               ...error handling...
->
-> -       kfree(output.pointer);
-> +       err = device_property_read_u32(dev, "address-width", &addr_width);
-> +       if (err)
-> +               ...error handling...
->
->  I2C serial bus support
->  ======================
-> --
+On Wed, Mar 02, 2022 at 08:17:32PM -0800, Williams, Dan J wrote:
 
-Applied as 5.18 material along with the rest of the series, but I
-dropped the first hunk in patch [6/7] which didn't apply.
+> What is this requirement to try to synchronize CPU execution? Comments
+> should explain the "why", the code usually explains the "what".
 
-Thanks!
+I need to put some more bits into the Documentation/x86/ifs.rst
+because if I had explained the IFS feature better there, you wouldn't
+have had to ask this (and some other questions).
+
+IFS works on one CORE at a time. But with HT enabled there are two
+logical CPUs that are on that core.
+
+Entering IFS test mode is done by all HT threads writing to the
+ACTIVATE_SCAN MSR "together". The microcode for that MSR will
+make the first logical CPU to write wait for a while. User can
+choose how many cycles to wait with some of the bits in the value
+written to the MSR ... in this driver we hard coded 5 milli-seconds.
+That seemed plenty to allow for the bottom half of interrupts, or
+a perf NMI to knock the HT threads a little bit out of sync with
+each other.
+
+So the code flow when running a test is to wake the kthreads for
+the logical CPUs that share the core. The threads may wake at
+different times, so there is the software sync to get them close
+enough.
+
+Then comes the loop to execute the test ... it is a loop because
+the core may not complete all "chunks" in one ACTIVATE_SCAN
+MSR write ... if it doesn't, the loop restarts execution from
+the chunk where IFS execution stopped.
+
+Interrupts are only blocked during the ACTIVATE_SCAN to
+increase the chances of completion. But preemption is
+disabled for the whole loop so that the threads won't
+get too far out of sync.
+
+-Tony

@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535354CB6E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980114CB6EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiCCGYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S229901AbiCCGZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiCCGYs (ORCPT
+        with ESMTP id S229890AbiCCGZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:24:48 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351CE15C9DD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:24:04 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id u17-20020a056830231100b005ad13358af9so3727037ote.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 22:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RTAaJqVx+g0L5JChfp/fev9G6j9NqJ9mgoa/6NPnewI=;
-        b=JsAr0un9vpUk/FOo92FA4yZQMG3qwq2KxW6PjSNvQCxdyJoEweD1jZQAJoie/fcSdy
-         l0Dapen9U2y5Ffmgn3hxRwFADdbGDXqAALpJeCTu3t1zAFXQnoN06Zv89C1HVSMlGRIW
-         gf+Cbe+baFZHUWRwBo/28Ysdt16NlkJjS6CbhfARKOrOzpwDUmkQ9O2r31uL/Uma/XIf
-         fgzLuHOrL2+8qEd6UHtA9BsOZvlhOw5r9mOEsJfcUcm6Nn4n3x18ZzmQtSDROXP2Sb8g
-         ilVkpB+3I7DKeqel63k1NMQWHIBaF0UBiofy+DEPPAuSi79HUP2LmHQD114bclPQks9b
-         Y15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=RTAaJqVx+g0L5JChfp/fev9G6j9NqJ9mgoa/6NPnewI=;
-        b=jBTFGl+0V8ge/cdco+fcCkZ6MDd248f/p73BR35sgsYHWqYi4SGdrxuPN2atKB3LeD
-         4PzO78d9wAv2F/nBGcXdvwcuCO3HR/TuCgwjX4Endw5SZ3M9p0YHxaIPoBTX2BvrgALS
-         D4Tsjsm7OHSFoGnwFVAVV4pTggUnOUVnO/EdxPUM++ChcrnpbFmKl+9Y3OFzU5ROkNbW
-         B/kRu/h/KWY9/JMjrqXMOohMGXNmrZtMh/JuetRaKGCfnOitGoWGDVovWi67scx+OVnW
-         6VSDqyR095KfoGg28yhpeKxYxdtftatee4l7mMFCbIJ/8MP/rK48K+MsXOvFFe/E4Hjb
-         Mwdg==
-X-Gm-Message-State: AOAM531dCkz0IByih3mjstT4af6sMWX/K4Rs317FBp+iZnfYbGS8CjBJ
-        muZ1uos5GhJPv0uv//qpIkA=
-X-Google-Smtp-Source: ABdhPJxeF/aDCtUEPgc69fQDujQNI0Rt769/bO40LhlXDfdb/2ZAhxnoW+eMykPKVv83EnGiBypqQw==
-X-Received: by 2002:a05:6830:9c4:b0:5af:2866:2884 with SMTP id y4-20020a05683009c400b005af28662884mr17603949ott.258.1646288643544;
-        Wed, 02 Mar 2022 22:24:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o6-20020a4a2c06000000b0031c0514194fsm515777ooo.31.2022.03.02.22.24.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 22:24:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Mar 2022 22:24:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aashish Sharma <shraash@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        groeck@chromium.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: Fix no previous prototype error in drm_nomodeset.c
-Message-ID: <20220303062401.GA3284490@roeck-us.net>
-References: <20220302170902.752687-1-shraash@google.com>
+        Thu, 3 Mar 2022 01:25:20 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA24415C9E1;
+        Wed,  2 Mar 2022 22:24:34 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8LYT3Yp0z4xcq;
+        Thu,  3 Mar 2022 17:24:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646288670;
+        bh=WjEJD8qPSy1vfpk5bNiCZBfbzfMQ7OUIDYOq4UMLvZs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nexB9RKb4nJAsZftjMRV1ZStvrxNHVJYHHaQ/vteI7ntKk7YdsUNCvNd7cvPY9Qwk
+         KbaFCVj33/QuiAkbdoXVPlb+kG74JTZZoXEU3468bSjGpEnewemviUM3czcuza2VAJ
+         +wAW5cC+2n/2QmubNYinfIw4X1PmIgxDSyLPmLsalA6Xt1YjSY10AUDd57xQiIFBZA
+         PlOnZ4YlDBFErqAlJApAGSTHCT3h8vALFoMT/AdcZ6nvC3IGBSOf6X1Za3PKL2qG5t
+         TyJwRzhPEQg/9lGoJVs1JRj8KmtLrJ9M1jUuLEiW2ZjTdDBiEbzLEv8SI9mICsTuZP
+         TI15qI7GT5G1Q==
+Date:   Thu, 3 Mar 2022 17:24:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Alan Kao <alankao@andestech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: linux-next: manual merge of the folio tree with the asm-generic
+ tree
+Message-ID: <20220303172427.24e17e51@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302170902.752687-1-shraash@google.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/l5ls55R_b9kvOK/4VMNXe0C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:39:02PM +0530, Aashish Sharma wrote:
-> Fix this kernel test robot error:
-> 
-> drivers/gpu/drm/drm_nomodeset.c:8:6: error:
-> no previous prototype for 'drm_firmware_drivers_only'
-> 
-> Including drm_drv.h in drm_nomodeset.c which contains
-> drm_firmware_drivers_only's declaration.
-> 
-> Signed-off-by: Aashish Sharma <shraash@google.com>
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Hi all,
 
-> ---
->  drivers/gpu/drm/drm_nomodeset.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_nomodeset.c b/drivers/gpu/drm/drm_nomodeset.c
-> index f3978d5bd3a1..9402deb4985f 100644
-> --- a/drivers/gpu/drm/drm_nomodeset.c
-> +++ b/drivers/gpu/drm/drm_nomodeset.c
-> @@ -2,6 +2,7 @@
->  
->  #include <linux/module.h>
->  #include <linux/types.h>
-> +#include <drm/drm_drv.h>
->  
->  static bool drm_nomodeset;
->  
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+Today's linux-next merge of the folio tree got a conflict in:
+
+  arch/nds32/include/asm/pgtable.h
+
+between commit:
+
+  9f15ac318b83 ("nds32: Remove the architecture")
+
+from the asm-generic tree and commit:
+
+  e558a885a525 ("arch: Add pmd_pfn() where it is missing")
+
+from the folio tree.
+
+I fixed it up (I just deleted the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgXxsACgkQAVBC80lX
+0GxG8Qf/Ur78DnlS7j0Rho0+zBqnou0eRhYNwZng2lBwOyfJakbdfQ+7jJKrYIVb
+AtN3oJHYkA2FiXEEobCp77j9gKs+IjnSRBEuWlr0NnoXiyriE6wWWMpZgxAyxt7V
+47WaTak3KjY99P+McVEz6JltEXN799U4FN2gFX4M9N2KSYlo8c0ouBiIUv4nV9mV
+Dn8LXSbj/qQwjaxuaBZU+4PI4gLWWnHo+I0hK/rPV60Qnqtp77wvTyBrNYJUbJ2E
+hj1M99IY59shtmusCzLfhLkNEpUEoO6zH4bENhnb5+tbUkDVFW2rEA1ADPn2N1vC
+AK2Z2wtnnsqL8GOMi3U2vwE7iTqO+w==
+=W3gd
+-----END PGP SIGNATURE-----
+
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C--

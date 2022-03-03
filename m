@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACF94CBB13
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1817C4CBB19
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiCCKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S232215AbiCCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiCCKOi (ORCPT
+        with ESMTP id S229815AbiCCKRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:14:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902A11768C0;
-        Thu,  3 Mar 2022 02:13:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 428C0B8228E;
-        Thu,  3 Mar 2022 10:13:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3EFC340EF;
-        Thu,  3 Mar 2022 10:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646302431;
-        bh=CJxhrnC/0v+orCoyqK9g//SkJ3vQ/iZ/7d/x+OeTdoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=it07Iur1ptUBK6/jfLQiteERWzp4SLULJGfinqkR2F5dQGdfbSeLFOq1O8h/2PJDd
-         CeL5chQ51/nBJQvuiaiGBzo39v6A0/KKQA/KPDExwEaoczYXMU++IYQnRigOuD8moZ
-         jq1malKjCnphxcHvx/rSejLxSpQ533ADe5Dxx7RQjiMTSpVWwKfv2dlGtDRZq1Xsfa
-         k/ikNf0kUpGwNXv3UeeS40ouTgUTCkKefffTobE/7QMyAjIgLUuIW9AAEwBqxdK1Pc
-         E42f5UKd40Po6CPkzGUF6sLbQbFWRn4olIQ9g+wANS6nSXKEBsNpbZGL7tmjgL2NZR
-         9/KSG9btgb25Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nPiSy-0002uL-14; Thu, 03 Mar 2022 11:13:48 +0100
-Date:   Thu, 3 Mar 2022 11:13:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Eddie James <eajames@linux.ibm.com>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
-Message-ID: <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
-References: <20220301224446.21236-1-eajames@linux.ibm.com>
- <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
- <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
- <YiCHPuNkMuO4uARu@hovoldconsulting.com>
- <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
- <YiCN+x2XPiawaweY@hovoldconsulting.com>
- <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
+        Thu, 3 Mar 2022 05:17:43 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0F1768C0;
+        Thu,  3 Mar 2022 02:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646302607;
+        bh=+bhroAtJ81iqkmtFGoio6lBWrbhrF+LZq/qVjq8m/XA=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IJeIYfvCrb6qmT54lw8a5UDlBuZ2M2VwfoMVimJYq3z2UIL3MGwA9W5Mgi1iCU4UV
+         3vbcfTLKZrx0AG7dvV71l8usAJugm8gUvePh5RMvuQ+TStVfy8lBXvCnryAGRoHupW
+         OXOqzwirNvbS5R02g/cVRXM05daCLSoolRKR1DOg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.242.61] ([80.187.120.72]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Md6R1-1nzbQa1AI7-00a9xc; Thu, 03
+ Mar 2022 11:16:47 +0100
+Message-ID: <cdeb8c40-1861-ac1e-338f-6ffdd6ddddb9@gmx.de>
+Date:   Thu, 3 Mar 2022 11:15:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] video: fbdev: s3c-fb: fix platform_get_irq.cocci warning
+Content-Language: en-US
+To:     Yihao Han <hanyihao@vivo.com>, Jingoo Han <jingoohan1@gmail.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+References: <20220302034408.5990-1-hanyihao@vivo.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220302034408.5990-1-hanyihao@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xrVWrDszjcfyLKzbfKYWPUPXbXvqh6mQun+TX3E1XHmjS+YWhBL
+ 2XTCq31nzshja3unhJ1Qr0lQyiymrmSPn7BrJyATz8XLURZ1zxoiskGWvZUc019+RF9bl+F
+ KQh0Hll0rKESWNTe9sG7gpoXk+fL6GQ+DNkTDRtlydM0IzzzJpbga03r1KdI9mRbx1AmAtp
+ wsu1xst9Xo3/Bov4jLj/w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fJu/sc3RDaM=:xtZ6TeM+bVrP1Hp58roXZj
+ tLRSszeX3pkdMA5toeFDxVzc3I9t3gwSvOct+OgoOIU1vIYhxdJaqOSL35DtkZvf/Vx4yDL/L
+ M0e/QIZ55TI1UZ88A2SNHbMKdX+dzBy1poLT9jrm4woOKmBwpfSHiL+QWnvEciBA2dyZVbHii
+ hIlv4HnCwiFp1GRWvCCiHxvfqnGHF20Z9l0e6VGzjX4NjgTP47QKit5ZJirqdGhQ8oMIQnyxr
+ TCmt47YfLG2k5I5Xn5Ntu0OEfQ9NDnn04pl0kKhEZEJy+T1JYOaka9KaTJVu9Cl1BFwtsOdVl
+ gwlAhFUYRzmHT/Aw6TPWFkq1ONxV+Kh7RixyLCraqc3jUH1uKSh5ufV0oWhTrKhwaVc+Miy5T
+ 1N8k3+TknmQLoFd0onO8mGYnsbX5SHVX+zLWV0MIQ/ozUNNNpDb2cWi9VKanzjs5MJEdeQO/r
+ n65sTGqCRljS2ZapRz9mhS5X/9WVll+Pn+tcP1IEz5x0mdpa6It7AtQmyglbLrmLYSBp13+RO
+ PcT6s55SlJff+/qsfQ4oXQ5xaytg7yfTqcKosJnx/R72Dq9qrnG8HFxF/MObwhTeSh7e0wTxt
+ pes816keFIwNkOtXtySadzA/wpJ9Ehd2bWGXPbMZ3qPUN9L6Z3g5TybZuqSnIkqF6h2LXe22X
+ oQ6iHlfrhSPrGEYutcGUSC89UznwqP6B0gQXmRLZeUb3RJYWgk+mfU062oo0X/bBpUlFDydsm
+ 8r7fRkGGJSWMjq+oSHIQqy7vkjey+qOc/v9OZmHwZtmwZ/aPk25ZiOVIgozIs9uYWwTVGGjbe
+ +jlxadVUVb/RMz7aB1xHsVBN3Yviumgvp1Xjrj1cmHzbBnt3E+yqqBBvKiAnlo18SLxr5EY5s
+ 9r22739o3sbKWDJJtMzkGRyt/newkbw2FVyyywzuLQpcinWxId+QuCnLIzNWcztrFm1RKqKzr
+ Yf9vcpl3ZRAnEXPJPEVcFxkPae4zU/6leK79OZCzcvWH0AAzeF4hT3kgax8FYxCdJ8OShXr0y
+ ZqP1h6OTdFJEoGmk8UttiSfOfyS71YjNVnDU/kpFD+9VeGACaZT/9qFgEGDl2/pNNk/u0JSJV
+ SDdrDxvwf/NdBk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 09:46:05AM +0000, Joel Stanley wrote:
-> On Thu, 3 Mar 2022 at 09:44, Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Thu, Mar 03, 2022 at 09:24:51AM +0000, Joel Stanley wrote:
-> > > On Thu, 3 Mar 2022 at 09:15, Johan Hovold <johan@kernel.org> wrote:
-> > > >
-> > > > On Thu, Mar 03, 2022 at 08:52:29AM +0000, Joel Stanley wrote:
-> > > > > On Thu, 3 Mar 2022 at 08:25, Johan Hovold <johan@kernel.org> wrote:
-> > > > > >
-> > > > > > On Tue, Mar 01, 2022 at 04:44:46PM -0600, Eddie James wrote:
-> > > > > > > IBM manufactures a PL2303 device for UPS communications. Add the vendor
-> > > > > > > and product IDs so that the PL2303 driver binds to the device.
-> > > > > > >
-> > > > > > > Signed-off-by: Joel Stanley <joel@jms.id.au>
-> > > > > > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > > > > > > ---
-> > > > > > > Changes since v1:
-> > > > > > >  - Fix commit message Signed-off-by ordering.
-> > > > > >
-> > > > > > Almost there. You're still missing a Co-developed-by tag, a From line,
-> > > > > > or both.
-> > > > >
-> > > > > It's neither. This patch was applied to a tree by myself, and I asked
-> > > > > Eddie to send it to mainline for merging.
-> > > >
-> > > > Then you are missing a From line. As the patch looks like know, Eddie is
-> > > > considered the author and not you.
-> > >
-> > > You are incorrect. Eddie is the author.
-> >
-> > Then what is your SoB doing there in the first place? If Eddie is the
-> > sole author as well as the submitter, and you didn't touch the patch in
-> > between, then your SoB does not belong in the chain.
-> >
-> > If you applied Eddie's patch to your shared tree and Eddie generated a
-> > patch from there, then the chain should be:
-> >
-> >         SoB: E
-> >         SoB: J
-> >         SoB: E
-> >
-> > but this is starting to look a bit ridiculous.
-> 
-> I agree. I would appreciate it if you applied the patch, with or
-> without my sob in whatever order you deem fit.
+On 3/2/22 04:44, Yihao Han wrote:
+> Remove dev_err() messages after platform_get_irq*() failures.
+> platform_get_irq() already prints an error.
+>
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 
-Ok, I'll assume what you intended was E-J-E but that perhaps
-git-format-patch swallowed the last SoB. Thanks for clarifying.
+applied to the fbdev for-next git tree.
 
-I was going to apply to the patch, but I see now that you didn't provide
-any details about the product apart from it being a UPS and that's not
-reflected in the define name.
+Thanks!
+Helge
 
-Do you have a pointer to device (family) in question?
+> ---
+>  drivers/video/fbdev/s3c-fb.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
+> index 208514054c23..3abbc5737c3b 100644
+> --- a/drivers/video/fbdev/s3c-fb.c
+> +++ b/drivers/video/fbdev/s3c-fb.c
+> @@ -1418,7 +1418,6 @@ static int s3c_fb_probe(struct platform_device *pd=
+ev)
+>
+>  	sfb->irq_no =3D platform_get_irq(pdev, 0);
+>  	if (sfb->irq_no < 0) {
+> -		dev_err(dev, "failed to acquire irq resource\n");
+>  		ret =3D -ENOENT;
+>  		goto err_lcd_clk;
+>  	}
 
-Johan

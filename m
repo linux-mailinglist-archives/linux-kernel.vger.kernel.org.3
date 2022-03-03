@@ -2,75 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282F54CB850
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935214CB851
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiCCIIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S230513AbiCCIIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:08:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiCCIH7 (ORCPT
+        with ESMTP id S230326AbiCCIII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:07:59 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AA81704C1
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:07:13 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q7-20020a7bce87000000b00382255f4ca9so4302874wmj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:07:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=T4kbvdEkJq7G6CWV0LAt8KL4gr8THBwbvBRsRaY/1QQ=;
-        b=M/tb1iQDePqb2cmCw0hU63ea8SHPbgBraIobX1tCakB233EkdlNYqSdYUoLFfOEPTs
-         t5ECrCvd788ldBGHa1nJbxRykpHBaD/HEQGExMpiH5o+y6fJHq3HbMDVIDD2xNJEsSzi
-         O5hoF7fTiPL9/GC6fZ1CNfQLtjhiMrnIapRJosNBhe8s7P794FZnVdV/Wpl9z2+feW3f
-         MgpzrD7p9NfGYUVXfzr5FQDt/Y4OGOwx2Hi50nfkD3tkx0uuzQxuu6NqevUrwDJpMtLW
-         E0+pygTamKjNW+kD/MrM+puuyLqXpryxCWyFRdG8bj6+/jHGIPgu5+ITm8onuR1OtlQw
-         AwbQ==
+        Thu, 3 Mar 2022 03:08:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DE401704C1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:07:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646294842;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m2mAGXBlKqRnW4B+OtLFqzxW5wMoYCTA1YJLFQ1QSJY=;
+        b=TJGx2UTPuaZo61R0ubx4RutgL4LHt68eS4+velb5jOei+QXry5JvoUff/nx9FChHXz6DJs
+        XmtgSMYTGUoCJsV6oH+K0gyCgyluvG2W3pNKwGjbd+AYAoenzDqsVgIa4iWajZV+Adj9Q9
+        wTzoj4vwxb8iUqwA0biLnE2YkLzTTB8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-44_FQlFhNFaSZD1cGeUOBA-1; Thu, 03 Mar 2022 03:07:21 -0500
+X-MC-Unique: 44_FQlFhNFaSZD1cGeUOBA-1
+Received: by mail-wm1-f70.google.com with SMTP id n31-20020a05600c3b9f00b003812242973aso1406751wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:07:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=T4kbvdEkJq7G6CWV0LAt8KL4gr8THBwbvBRsRaY/1QQ=;
-        b=3qSQXXIVVBf0sMSH+9uPdNUPbizDYFSFnVS/LFd/SezhpPEaIbneYa/pn2Ir8oqbku
-         Zs8eUwkKT39G3ItHkiIe8vzsyZS/bH8TDBYryj/v5FuPZDHDCBIrdUgBuD4LRaQCRx6b
-         RDsCkRG41wmhe8DpkauZTsPeMqHnzrfn/8p7W6GK+eDDMJH0Ajp8NTQrevmvgElF55SN
-         /LaOmPGJL9wEP7D99aoHtNPW2c6affSfneYZRJBrZKtL2GYrE0cDqah1pgxlkHPKwzck
-         xNB/BWGuN9e4sfImwuyVmJheJqjp4IBXVLWcRUvZ6e3BnUkOCqtAUGE9PcTRToPyq00v
-         pNcw==
-X-Gm-Message-State: AOAM531shVuhZsqP/TYamR99stNQXklkED3nzfRphl5bvIHIeIP51bvk
-        rkmNGFVDwb3ziyNFDjYfqtT5Xg==
-X-Google-Smtp-Source: ABdhPJxssSWDTS0arUsVI2AtPzFrsJyLEpnlrXh0+Wuj4W0lgc2VDglTI9bvy0zswsg7KY/31OI4Qw==
-X-Received: by 2002:a05:600c:3546:b0:381:7a9d:eee2 with SMTP id i6-20020a05600c354600b003817a9deee2mr2762176wmq.24.1646294832313;
-        Thu, 03 Mar 2022 00:07:12 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:37d4:6d61:9015:27a5? ([2001:861:44c0:66c0:37d4:6d61:9015:27a5])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b001e6114938a8sm1244035wrs.56.2022.03.03.00.07.11
+        bh=m2mAGXBlKqRnW4B+OtLFqzxW5wMoYCTA1YJLFQ1QSJY=;
+        b=p2RuwS+9MD76pcnBOQFINQgEI7m7ZVPoolY1/HkXoLxEtZ4rGkUYzCSftpBfbdmAhj
+         VX6q/uHx21c26elrAbHNnh/eBokOiZL86FkAjkchgeXKy1998Ao1/4D12w5Wdp+eDdgD
+         qzIy/bY1vwVY2jfyJQwsCyZufzSxGvPaip6xEeZD+4e5bJ7Gqv3wn38wL6vK8elfD28x
+         WLCvHxCoN9XuWH38pNPonNAbTPLP1sz06Ho38KguGEnAFTUruyk4QkjgFwTUBXBYLq7r
+         D/2dsWZ16h+AfaoMQyO9zYEYOFhk2UUoGcw91UC7FQTor4EXd4in6yxWq4OtOSu8MR+9
+         qyxA==
+X-Gm-Message-State: AOAM531W4Lsrs14eaw6EpzG0qSJUb2Ff8kiSB2sCPQcP77ZR3gxdwexU
+        AgMud2cer6+Tvmx2Vv1Al9b21U0lbAgQQYCimDID+2Xl1QUWH/ytoKJZRrBMk1wCVserz3pfeyE
+        lBhLgAwg5rSLilNKEKaT6D/5a
+X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr24933479wre.711.1646294840362;
+        Thu, 03 Mar 2022 00:07:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwBVB6X+a+hnU5+DdOikbkM+SKCXiLBZpaVoc2emm4prXEv/lI7eCVSxUk0aFkP1LgEn5rVOA==
+X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr24933446wre.711.1646294840096;
+        Thu, 03 Mar 2022 00:07:20 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:3600:f39a:d830:baab:42f0? (p200300cbc7063600f39ad830baab42f0.dip0.t-ipconnect.de. [2003:cb:c706:3600:f39a:d830:baab:42f0])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05600c4f4e00b0038181486018sm1393216wmq.40.2022.03.03.00.07.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 00:07:11 -0800 (PST)
-Message-ID: <7d585748-7a41-13ca-60da-20eb4fe78374@baylibre.com>
-Date:   Thu, 3 Mar 2022 09:07:11 +0100
+        Thu, 03 Mar 2022 00:07:19 -0800 (PST)
+Message-ID: <dcfda12a-58c0-caa0-f4b0-ec2b615540d4@redhat.com>
+Date:   Thu, 3 Mar 2022 09:07:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] clk: Use of_device_get_match_data()
+Subject: Re: [PATCH RFC 12/13] mm/gup: trigger FAULT_FLAG_UNSHARE when
+ R/O-pinning a possibly shared anonymous page
 Content-Language: en-US
-To:     cgel.zte@gmail.com, mturquette@baylibre.com
-Cc:     sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220303014856.2059307-1-chi.minghao@zte.com.cn>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220303014856.2059307-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220224122614.94921-1-david@redhat.com>
+ <20220224122614.94921-13-david@redhat.com>
+ <20220302165559.GU219866@nvidia.com>
+ <fb895ba3-9d7e-7421-d5c6-f5e7a2d1231a@redhat.com>
+ <20220302205934.GV219866@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220302205934.GV219866@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +110,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 02:48, cgel.zte@gmail.com wrote:
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+On 02.03.22 21:59, Jason Gunthorpe wrote:
+> On Wed, Mar 02, 2022 at 09:38:09PM +0100, David Hildenbrand wrote:
 > 
-> Use of_device_get_match_data() to simplify the code.
+>> (a) I want a R/O pin to observe file modifications.
+>> (b) I want the R/O pin to *not* observe file modifications but observe
+>>     my (eventual? if any) private modifications,
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
-> ---
->   drivers/clk/clk-oxnas.c | 6 +-----
->   1 file changed, 1 insertion(+), 5 deletions(-)
+> A scenario I know that motivated this is fairly straightfoward:
 > 
-> diff --git a/drivers/clk/clk-oxnas.c b/drivers/clk/clk-oxnas.c
-> index 78d5ea669fea..cda5e258355b 100644
-> --- a/drivers/clk/clk-oxnas.c
-> +++ b/drivers/clk/clk-oxnas.c
-> @@ -209,15 +209,11 @@ static int oxnas_stdclk_probe(struct platform_device *pdev)
->   {
->   	struct device_node *np = pdev->dev.of_node;
->   	const struct oxnas_stdclk_data *data;
-> -	const struct of_device_id *id;
->   	struct regmap *regmap;
->   	int ret;
->   	int i;
->   
-> -	id = of_match_device(oxnas_stdclk_dt_ids, &pdev->dev);
-> -	if (!id)
-> -		return -ENODEV;
-> -	data = id->data;
-> +	data = of_device_get_match_data(&pdev->dev);
->   
->   	regmap = syscon_node_to_regmap(of_get_parent(np));
->   	if (IS_ERR(regmap)) {
+>    static char data[] = {};
+> 
+>    ibv_reg_mr(data, READ_ONLY)
+>    data[0] = 1
+>    .. go touch data via DMA ..
+> 
+> We want to reliably observe the '1'
+> 
+> What is happening under the covers is that 'data' is placed in the
+> .data segment and becomes a file backed MAP_PRIVATE page. The write
+> COWs that page
+> 
+> It would work OK if it was in .bss instead
+> 
+> I think the FOLL_FORCE is there because otherwise the trick doesn't
+> work on true RO pages and the API becomes broken.
 
+Thanks for the nice example, it matches what John brought up in respect
+to MAP_PRIVATE semantics.
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+-- 
+Thanks,
+
+David / dhildenb
+

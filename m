@@ -2,214 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DE34CC6B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064EE4CC6BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236060AbiCCUA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S234164AbiCCUDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbiCCUAW (ORCPT
+        with ESMTP id S231695AbiCCUDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:00:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06BFC1A39EE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646337575;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KII+3wpRDYxBkpQXpVqXMzOFERtKv6nriOIaVlE+FgA=;
-        b=e4la4o4F/CjnnmOTc5nyzmdjBuqpUZ+5F6CatK2llCme4+kY09mVePKVS0/q8PWZpL9l/V
-        b6zCIwEduD9TJBD4JVuxJ/1/LCG4Ad5wrvy8t5o5JDSk0KBVxTcthzwcG/k2vNwqO2aFbk
-        UYqCcfjzhW7FZ9PWV2kzyPwvploMVlA=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-384-q_VA0MADNX6GCtVrHTb_ig-1; Thu, 03 Mar 2022 14:59:33 -0500
-X-MC-Unique: q_VA0MADNX6GCtVrHTb_ig-1
-Received: by mail-oo1-f70.google.com with SMTP id u13-20020a4ab5cd000000b002e021ad5bbcso4185753ooo.17
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:59:33 -0800 (PST)
+        Thu, 3 Mar 2022 15:03:12 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6660ECF3;
+        Thu,  3 Mar 2022 12:02:25 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p17so5723578plo.9;
+        Thu, 03 Mar 2022 12:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tWjI86b7R3B3kMyOH13PFG9bWZbWpn8g1Sw0hYy2D/U=;
+        b=MAM6J173JByHHRAPuVsty9X85WMvv3RyH+xNsN8ibIXt8C5YjxtQkgHfeoXEdagV1t
+         Dtn9pKz/OM0PW0dH94Igmy9+lvbbaWMsVhoO4xM+rYnHcf8XasjF0qqfou0+Kd1I3BYX
+         NQPeFDaw3fx/MRYAGEowZy7HxUl8vZBITqUbDYRlDyWRBdZ7J0DrrHjuNk5oIcJtd0nD
+         /HAXWY0bdA5MxZbDTQK7TcqmjU613oPXEGFPVfN2+p7Z7LxbCYgsPnZef8NDfHmI+kyX
+         Gh1clstWJgmVgjZ+AwQ4Uj80X1eEiII0XGZJg5iwdZNnbvUrzIUVuIuZ6g/bw0B6+hCl
+         AWkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=KII+3wpRDYxBkpQXpVqXMzOFERtKv6nriOIaVlE+FgA=;
-        b=4nkJYaGi/XrwbcgLsZJLm49GLAb8dBrvhfgVeltEZs6dAA3xJILFwJfTHy5p7Sj8j/
-         piBdyL8dgdxIaOMGUL/jG03/tOg7oNMUkJ0WaYIJJdxQTyAlndSJzPzuWpqeWcS7fi7r
-         wO1+RW86uGuJSIt03UgyKt5jD9UgrXsQqbOcdw4car4eU8uBO2VsfszmRDD68wI15684
-         y0V4dIIN5Lg6LKmKYVz/869e1ty6Py0aS1qRbL4NhKz5afzFkoZF/tKh1LbrWY0xQgjl
-         sxqw1WxW+TLzurSJt1Q1IKCPpc3kz4h8b8VTK+5CQfFw2kq3uhXAAsacC1frLRjiagUf
-         IJNQ==
-X-Gm-Message-State: AOAM531HZK1bFw8JjB8VcrSfnSoelfT4rq6kzYF5pVrsyssraiNP0HpD
-        Kvnu5ogTTMaojTringSS0E2tcJJYLt4/4NfAnTFWcrK6BaXlY+cX/E0iWVjjkRylO13cBp3AVqG
-        fYIy2GOoxfxpADYtHf1qT2YGI
-X-Received: by 2002:a4a:c719:0:b0:2eb:c34a:2ba7 with SMTP id n25-20020a4ac719000000b002ebc34a2ba7mr19498054ooq.98.1646337573200;
-        Thu, 03 Mar 2022 11:59:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz6XTO+OhibXSv5NZahUVm0cq34tr89yXWaoMFB6Fqiab+SUFF3Phx50x9lVSIdc9AfUbbmhg==
-X-Received: by 2002:a4a:c719:0:b0:2eb:c34a:2ba7 with SMTP id n25-20020a4ac719000000b002ebc34a2ba7mr19498041ooq.98.1646337572985;
-        Thu, 03 Mar 2022 11:59:32 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id u21-20020a056870951500b000d9b9ac69cdsm901630oal.1.2022.03.03.11.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:59:32 -0800 (PST)
-Date:   Thu, 3 Mar 2022 12:59:30 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol
- with PRE_COPY
-Message-ID: <20220303125930.43d9940b.alex.williamson@redhat.com>
-In-Reply-To: <0cee64d555624e669028ba17d04b8737@huawei.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
-        <20220302172903.1995-8-shameerali.kolothum.thodi@huawei.com>
-        <20220302133159.3c803f56.alex.williamson@redhat.com>
-        <20220303000528.GW219866@nvidia.com>
-        <20220302204752.71ea8b32.alex.williamson@redhat.com>
-        <20220303130124.GX219866@nvidia.com>
-        <20220303082040.1f88e24c.alex.williamson@redhat.com>
-        <0cee64d555624e669028ba17d04b8737@huawei.com>
-Organization: Red Hat
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tWjI86b7R3B3kMyOH13PFG9bWZbWpn8g1Sw0hYy2D/U=;
+        b=67PkGCOWQLTGkBl24GIaiUGLz4mR4aUSv68C1VB37tdys6ni9S2+UeC8u5vewB0Irr
+         Ox63f7zXZZaP5tgJbaQ5LyG46ZM64mmvP94NPpuw9lG1cbJC2mqajBySL0ar0TO3W+Fo
+         jZzY/rt1RytUd/s0eo8Ael457IWOdQEWjyMY6O6/wEGuPFc6tSZp0uVcxcshrYtZWWyr
+         s5F4113DQSthDsdmxMa5gpiSQQfjgY9PiajOk2mR29Tf45RPU6n6H1qLZrsz/1+agGi4
+         gB2+I8HCumvd+rhF8EuPZqZKqH1Lhpbvi5WPgCIsX5cDfo0aaUw3EMg1KAcT1pZXdGBg
+         moig==
+X-Gm-Message-State: AOAM531nD4tGaDPbUhtvNrdutK5FSwesb0iiKxKKizoHIgGqA1B6kGh3
+        VsG6IDpc5wGU5xDSqDvN4yMxMm8OG74VOA1KXKRsSbzh
+X-Google-Smtp-Source: ABdhPJwObUr+x7WNvTmIry3wywx51F71HLMzi+NquCizbt6XTffjUgZSVRe2BLbNkyjZxVNK3m/29HA8WwiDiLUPTEw=
+X-Received: by 2002:a17:90b:10b:b0:1bc:6f86:b209 with SMTP id
+ p11-20020a17090b010b00b001bc6f86b209mr7058410pjz.33.1646337744857; Thu, 03
+ Mar 2022 12:02:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
+ <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com> <CAADnVQ+q0vF03cH8w0c50XMZU1yf_0UjZ+ZarQ_RqMQrVpOFPA@mail.gmail.com>
+ <93c3fc30-ad38-96fa-cf8e-20e55b267a3b@fb.com> <CAADnVQL4yxhDCLjvCCmpOtg0+8-HSg32KG07TCxx+L+Gji7n6g@mail.gmail.com>
+ <CA+khW7gyOGgqJjyuSjJMJ8+iQmozZ6VhSJ7exZF0gGLOeS5gog@mail.gmail.com>
+In-Reply-To: <CA+khW7gyOGgqJjyuSjJMJ8+iQmozZ6VhSJ7exZF0gGLOeS5gog@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 3 Mar 2022 12:02:13 -0800
+Message-ID: <CAADnVQ+wsp1+4DvrJjw_CAZDatsaQKKz-ZZADdTqSfUAqhv3SA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 18:05:53 +0000
-Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
-
-> > -----Original Message-----
-> > From: Alex Williamson [mailto:alex.williamson@redhat.com]
-> > Sent: 03 March 2022 15:21
-> > To: Jason Gunthorpe <jgg@nvidia.com>
-> > Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
-> > kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; cohuck@redhat.com;
-> > mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> > Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol with
-> > PRE_COPY
-> > 
-> > On Thu, 3 Mar 2022 09:01:24 -0400
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >   
-> > > On Wed, Mar 02, 2022 at 08:47:52PM -0700, Alex Williamson wrote:  
-> > > > On Wed, 2 Mar 2022 20:05:28 -0400
-> > > > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > > >  
-> > > > > On Wed, Mar 02, 2022 at 01:31:59PM -0700, Alex Williamson wrote:  
-> > > > > > > + * initial_bytes reflects the estimated remaining size of any
-> > > > > > > + initial mandatory
-> > > > > > > + * precopy data transfer. When initial_bytes returns as zero
-> > > > > > > + then the initial
-> > > > > > > + * phase of the precopy data is completed. Generally initial_bytes  
-> > should start  
-> > > > > > > + * out as approximately the entire device state.  
-> > > > > >
-> > > > > > What is "mandatory" intended to mean here?  The user isn't required  
-> > to  
-> > > > > > collect any data from the device in the PRE_COPY states.  
-> > > > >
-> > > > > If the data is split into initial,dirty,trailer then mandatory
-> > > > > means that first chunk.  
+On Thu, Mar 3, 2022 at 11:43 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Wed, Mar 2, 2022 at 6:29 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Mar 2, 2022 at 5:09 PM Yonghong Song <yhs@fb.com> wrote:
+> > >
+> > >
+> > >
+> > > On 3/2/22 1:30 PM, Alexei Starovoitov wrote:
+> > > > On Wed, Mar 2, 2022 at 1:23 PM Yonghong Song <yhs@fb.com> wrote:
+> > > >>
+> > > >>
+> > > >>
+> > > >> On 2/25/22 3:43 PM, Hao Luo wrote:
+> > > >>> Add a new type of bpf tracepoints: sleepable tracepoints, which allows
+> > > >>> the handler to make calls that may sleep. With sleepable tracepoints, a
+> > > >>> set of syscall helpers (which may sleep) may also be called from
+> > > >>> sleepable tracepoints.
+> > > >>
+> > > >> There are some old discussions on sleepable tracepoints, maybe
+> > > >> worthwhile to take a look.
+> > > >>
+> > > >> https://lore.kernel.org/bpf/20210218222125.46565-5-mjeanson@efficios.com/T/
 > > > >
-> > > > But there's no requirement to read anything in PRE_COPY, so initial
-> > > > becomes indistinguishable from trailer and dirty doesn't exist.  
+> > > > Right. It's very much related, but obsolete too.
+> > > > We don't need any of that for sleeptable _raw_ tps.
+> > > > I prefer to stay with "sleepable" name as well to
+> > > > match the rest of the bpf sleepable code.
+> > > > In all cases it's faultable.
 > > >
-> > > It is still mandatory to read that data out, it doesn't matter if it
-> > > is read during PRE_COPY or STOP_COPY.  
-> > 
-> > Not really, PRE_COPY -> RUNNING is a valid arc.
-> >   
-> > > > > > "The vfio_precopy_info data structure returned by this ioctl
-> > > > > > provides  estimates of data available from the device during the  
-> > PRE_COPY states.  
-> > > > > >  This estimate is split into two categories, initial_bytes and
-> > > > > > dirty_bytes.
-> > > > > >
-> > > > > >  The initial_bytes field indicates the amount of static data
-> > > > > > available  from the device.  This field should have a non-zero initial  
-> > value and  
-> > > > > >  decrease as migration data is read from the device.  
-> > > > >
-> > > > > static isn't great either, how about just say 'minimum data available'  
-> > > >
-> > > > 'initial precopy data-set'?  
-> > >
-> > > Sure
-> > >  
-> > > > We have no basis to make that assertion.  We've agreed that precopy
-> > > > can be used for nothing more than a compatibility test, so we could
-> > > > have a vGPU with a massive framebuffer and no ability to provide
-> > > > dirty tracking implement precopy only to include the entire
-> > > > framebuffer in the trailing STOP_COPY data set.  Per my
-> > > > understanding and the fact that we cannot enforce any heuristics
-> > > > regarding the size of the tailer relative to the pre-copy data set,
-> > > > I think the above strongly phrased sentence is necessary to
-> > > > understand the limitations of what this ioctl is meant to convey.
-> > > > Thanks,  
-> > >
-> > > This is why abusing precopy for compatability is not a great idea. It
-> > > is OK for acc because its total state is tiny, but I would not agree
-> > > to a vGPU driver being merged working like you describe. It distorts
-> > > the entire purpose of PRE_COPY and this whole estimation mechanism.
-> > >
-> > > The ioctl is intended to convey when to switch to STOP_COPY, and the
-> > > driver should provide a semantic where the closer the reported length
-> > > is to 0 then the faster the STOP_COPY will go.  
-> > 
-> > If it's an abuse, then let's not do it.  It was never my impression or intention
-> > that this was ok for acc only due to the minimal trailing data size.  My
-> > statement was that use of PRE_COPY for compatibility testing only had been a
-> > previously agreed valid use case of the original migration interface.
-> > 
-> > Furthermore the acc driver was explicitly directed not to indicate any degree
-> > of trailing data size in dirty_bytes, so while trailing data may be small for acc,
-> > this interface is explicitly not intended to provide any indication of trailing
-> > data size.  Thanks,  
-> 
-> Just to clarify, so the suggestion here is not to use PRE_COPY for compatibility
-> check at all and have a different proper infrastructure for that later as Jason
-> suggested?
-> 
-> If so, I will remove this patch from this series and go back to the old revision
-> where we only have STOP_COPY and do the compatibility check during the final
-> load data operation.
+> > > sounds good to me. Agree that for the bpf user case, Hao's
+> > > implementation should be enough.
+> >
+> > Just remembered that we can also do trivial noinline __weak
+> > nop function and mark it sleepable on the verifier side.
+> > That's what we were planning to do to trace map update/delete ops
+> > in Joe Burton's series.
+> > Then we don't need to extend tp infra.
+> > I'm fine whichever way. I see pros and cons in both options.
+>
+> Joe is also cc'ed in this patchset, I will sync up with him on the
+> status of trace map work.
+>
+> Alexei, do we have potentially other variants of tp? We can make the
+> current u16 sleepable a flag, so we can reuse this flag later when we
+> have another type of tracepoints.
 
-Hi Shameer,
-
-I think NVIDIA has a company long weekend, so I'm not sure how quickly
-we'll hear a rebuttal from Jason, but at this point I'd rather not move
-forward with using PRE_COPY exclusively for compatibility testing if
-that is seen as an abuse of the interface, regardless of the size of
-the remaining STOP_COPY data.  It might be most expedient to respin
-without PRE_COPY and we'll revisit methods to perform early
-compatibility testing in the future.  Thanks,
-
-Alex
-
+When we added the ability to attach to kernel functions and mark them
+as allow_error_inject the usefulness of tracepoints and even
+writeable tracepoints was deminissed.
+If we do sleepable tracepoint, I suspect, it may be the last extension
+in that area.
+I guess I'm convincing myself that noinline weak nop func
+is better here. Just like it's better for Joe's map tracing.

@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26584CBA4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB324CBA50
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbiCCJbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S231972AbiCCJcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiCCJbw (ORCPT
+        with ESMTP id S229732AbiCCJc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:31:52 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145A16C4E8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:31:07 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id g26so8924821ybj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 01:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w3iW8OgIGRJkwzf0fEpKvBUUqPlzMNEZGmdG3QGabg4=;
-        b=URDf26+dNOI4zWZjXx4GWjlI4pZuP/MYcrhtyADZ9dTEPdKCNsoxBXS5WkZdP4DtgO
-         +j0t5agvsO1Oe7MkM26noei61tmQvfeOR2A+2DUmd0muSEGvolKTFhtL/VFr0391jA6m
-         jniyMZM4rk35SblfZTv3DtZY4fucvqIGl6+fYr11J2Nq7FJSiaM5vlkWeADBj2EWGDb1
-         2ryEBwyA0qd5YUyDon7mzlhJMLO+FhBOWrsHZj+c+c1/Atgpf3LIbRfitjyZMXna2iHc
-         sqbMSWQF0hg48zetjwTaHtTWlPaXDnhL90D2nDuJNJwy/FWqFYwQstftKDud11EaAITb
-         qC7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w3iW8OgIGRJkwzf0fEpKvBUUqPlzMNEZGmdG3QGabg4=;
-        b=8CBf2CPeLGi/X4GbbUca4Xtu0+TdTSENskNdPLb6ogYiVjM5D6r+PEDs5YI/Itduw6
-         K1PlSFNyc8wU2n2fOMy7tzsOSATIggeeM8S4yrwhFY+Dg6NztxmUMr+i89Oa+D8MQoJ/
-         OBuWRhKlZThd6ZLlp8/zXoU8m3d2yo8ipICwxmcALRDGmTQ1xCS53ObxPr4+h6yT0w9L
-         Nz/bReKKTVWFkq8vrwxy0Wfxlsg355IAYHgc9i1jpC46w3XSMIv+rJhSZ4nIiFWTGx3x
-         HBusUOWVujJ+ep/Bgvt8uNsbRVtM6423AyXgzJ6743NkdXkGF81LfOWtzY5sJGdLHFdC
-         /ySw==
-X-Gm-Message-State: AOAM531UEdmKdkTJ82icPc2vO7IDDPxMtS1Vandw5QNlY+WglA0dlS1t
-        wUAGxS0Lm9jJwEA/FBRNxUXaamzyS27Tlc6Ckdd3FFaNZj+8aw==
-X-Google-Smtp-Source: ABdhPJwydE0RMxCm9gwQXxiITojXHEgR91W45yVq0qi5hlhxGLYhhtzcXuK/rGpMLDEJtYwE/kYLODI0InSLgkv5plY=
-X-Received: by 2002:a25:a4e8:0:b0:61e:1eb6:19bd with SMTP id
- g95-20020a25a4e8000000b0061e1eb619bdmr34271771ybi.168.1646299866132; Thu, 03
- Mar 2022 01:31:06 -0800 (PST)
+        Thu, 3 Mar 2022 04:32:29 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E550E16F951;
+        Thu,  3 Mar 2022 01:31:44 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 94AC71F45394
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646299903;
+        bh=7BamnJwMgtqrT3JoQ68Ebed6Mw0Z4qhgq17wKkO7uZQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DsKwhWmYCfBFjIrDoWzkxPNJKmtBbRcsgc1JMZx9lfNHbf04n0AFN6jYOU5/79Sgw
+         nyvDJ6M5EkqPGymiwkWb9kne6FdPEpfJ7vttPbObbeF56henBC6oGc/RTdSSjfFW6+
+         VC8zJrNU1oQ4UK0ECsXCpbxrdqn7cMaBEEa6/oHh5jqH6bCErPARX3ha6Zno76b3E+
+         mVHxV/HiSCkOtzQ38z1XM+GaVwYW7hIpmZE01VSoCluMtv/2M2vCwEAIzg0+8JiSmH
+         crxIXXQ4Kl6XsDKLzr6kxkK6ds2BQl0YGHLhGRoZPLryIOwv7sDw2menm+j746SUHW
+         LfIys7ju/p13w==
+Message-ID: <28098efc-1de1-b540-b1a3-bf7a92af9511@collabora.com>
+Date:   Thu, 3 Mar 2022 10:31:39 +0100
 MIME-Version: 1.0
-References: <20220303031505.28495-1-dtcccc@linux.alibaba.com> <CAG_fn=Wd5GMFojbvdZkysBQ5Auy5YYRdmZfjSVMq8gpDMRZ_3w@mail.gmail.com>
-In-Reply-To: <CAG_fn=Wd5GMFojbvdZkysBQ5Auy5YYRdmZfjSVMq8gpDMRZ_3w@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 3 Mar 2022 10:30:30 +0100
-Message-ID: <CANpmjNPBYgNMzQDKjNYFTkKnWwMe29gpXd2b9icFSnAwstW-jQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Alloc kfence_pool after system startup
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v15 00/12] Add Mediatek Soc DRM (vdosys0) support for
+ mt8195
+Content-Language: en-US
+To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fei Shao <fshao@chromium.org>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        "roy-cw.yeh" <roy-cw.yeh@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Jitao shi <jitao.shi@mediatek.com>, nancy.lin@mediatek.com,
+        singo.chang@mediatek.com, devicetree@vger.kernel.org,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
+ <CAL_Jsq+6k5EqouAO2Xm=GpBz3Pi-wfB-ixGwfyC+Y+qOrjUFTg@mail.gmail.com>
+ <c103927d7dbc3217431c83dc22a44c656c561228.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <c103927d7dbc3217431c83dc22a44c656c561228.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 at 10:05, Alexander Potapenko <glider@google.com> wrote:
+Il 03/03/22 05:25, Jason-JH Lin ha scritto:
+> Hi Rob,
+> 
+> Thanks for the reviews.
+> 
+> On Wed, 2022-03-02 at 17:50 -0600, Rob Herring wrote:
+>> On Wed, Jan 26, 2022 at 1:19 AM jason-jh.lin <
+>> jason-jh.lin@mediatek.com> wrote:
+>>>
+> 
+> [snip]
+> 
 
-I share Alex's concerns.
+Hello Rob, Jason-JH,
 
-> On Thu, Mar 3, 2022 at 4:15 AM Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
->>
->> KFENCE aims at production environments, but it does not allow enabling
->> after system startup because kfence_pool only alloc pages from memblock.
->> Consider the following production scene:
->> At first, for performance considerations, production machines do not
->> enable KFENCE.
->
-> What are the performance considerations you have in mind? Are you running KFENCE with a very aggressive sampling rate?
+I have just crafted a patch that fixes everything mentioned here,
+if it's easier like this, I can either send it for the maintainer(s)
+to apply on top, or squash in Jason-JH's original patch.
 
-Indeed, what is wrong with simply starting up KFENCE with a sample
-interval of 10000? However, I very much doubt that you'll notice any
-performance issues above 500ms.
+If you'd like to get my patch, though, I have one question:
+this is touching literally all of the YAML files that Jason-JH is
+introducing, so, should I send this as one patch per file (which would be
+something around 16 patches) or is just one fixing them all fine?
 
-Do let us know what performance issues you have seen. It may be
-related to an earlier version of KFENCE but has since been fixed (see
-log).
-
->> However, after running for a while, the kernel is suspected to have
->> memory errors. (e.g., a sibling machine crashed.)
->
-> I have doubts regarding this setup. It might be faster (although one can tune KFENCE to have nearly zero performance impact), but is harder to maintain.
-> It will also catch fewer errors than if you just had KFENCE on from the very beginning:
->  - sibling machines may behave differently, and a certain bug may only occur once - in that case the secondary instances won't notice it, even with KFENCE;
->  - KFENCE also catches non-lethal corruptions (e.g. OOB reads), which may stay under radar for a very long time.
->
->>
->> So other production machines need to enable KFENCE, but it's hard for
->> them to reboot.
->>
->> The 1st patch allows re-enabling KFENCE if the pool is already
->> allocated from memblock.
-
-Patch 1/2 might be ok by itself, but I still don't see the point
-because you should just leave KFENCE enabled. There should be no
-reason to have to turn it off. If anything, you can increase the
-sample interval to something very large if needed.
+Cheers,
+Angelo

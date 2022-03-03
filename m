@@ -2,35 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452A54CBBCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6394CBBEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiCCK4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S232561AbiCCK6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiCCK4I (ORCPT
+        with ESMTP id S232204AbiCCK6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:56:08 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5B217BC40
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:55:22 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 5EB7668AFE; Thu,  3 Mar 2022 11:55:20 +0100 (CET)
-Date:   Thu, 3 Mar 2022 11:55:20 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] task_work: simplify the task_work_add() interface
-Message-ID: <20220303105520.GB14991@lst.de>
-References: <20220223072754.616027-1-hch@lst.de>
-MIME-Version: 1.0
+        Thu, 3 Mar 2022 05:58:43 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B96C148653;
+        Thu,  3 Mar 2022 02:57:56 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2238S8IL028932;
+        Thu, 3 Mar 2022 10:56:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=O9xmX1MuirLAIzWDtk0fX2a4LtzMX0loCx+1U2GDoNg=;
+ b=htZNNRHGADKbHk52PyCvxQNg5OpqGIiBdTA/p81fpZilFG3uKkyAxDWCoSdZL4a5Htrd
+ 4vk4LBw0gt192P6BUlVjlNWWB8jn6GcLi65+2xIbK5Ngv0NMqPj9Z1NBnxqmuzI5U84Y
+ clINevk2F3YpxrVp3+CFGhTp/LVoxccg9QDewMC4jfMgcA9PE5f7O2uSR0Az+DQxni6Z
+ mxs0PQF4Jr663qc8fbdJoEBA9Gc6KTDxqAoGPdC5dMr/h+/K9zS53Pii1xPQfPe/xvD2
+ 6r/CF8dDBr+jxCJK7iSe0+m3qOP+tN0ZfG0oFG7VqzMO2sTYnDWNVL6nL6dCXB7jTPr8 uA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14c0geu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 10:56:46 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 223AuBZT116378;
+        Thu, 3 Mar 2022 10:56:45 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
+        by userp3030.oracle.com with ESMTP id 3ef9b32y20-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 10:56:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y6SNCZIjtrGwzKDNuhMGJ14geFd4Rj0FhRWYy2NjDFdCSi0BsBAn38rayqceBK0OVc+pFfCO21VC7V/gnflm6asblxA7UlF/megmABxay4ppMddT5Td0pSO+sSq93PLntd+IuG4YqeEN+1m+Gw+FzbPjwtpFIX/7UEIT2EcwDAsBtRsf2LjYmG7np7NSLp10UPUVaoX/P1RWzEv7G65OLSenxbCHP7xuI14TJl36l1e83K7Fly2bYiNXVR7tgR0BxXmVeJQiCerbGWacCfymQawENSncs86oazB3zx3BlO+g0atqQgriXG9khWM3pRhf684q5K9eXDdjEn9Rzxv3OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O9xmX1MuirLAIzWDtk0fX2a4LtzMX0loCx+1U2GDoNg=;
+ b=gOHaLCLZp2lB6kE3NHmkYkzLAj4aua3oODwBPCuXTtb1G1UEysTdO6b6m6NjvQHDek8Irpnlu46KWMbPqUMoqonvknyWRdMxxTQv0DHuzlv2eNaKuKq5O37jhxeN8GOXXY9vy5A7ZPUzj7Fy39G7tuNTZ6XavsJghtBeWHPV1oH4f8FIwFOEZucqfoKy/IY86GwhOQSZzjCdIpm7880YOAAHxHth9T+Kja2aLB5/ID21zjvCXb263j25fXLwWevj6q6RTp1xuqgzDUpoMSNKatYliFagjqX5AH7lH3vHzVlaQjL0csGsjZBlOHiQGVjUIDxnYWHyHx7BILjRlmmfRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O9xmX1MuirLAIzWDtk0fX2a4LtzMX0loCx+1U2GDoNg=;
+ b=HpSZ3WpTtJpqoARVQH5hdJzHChJhvz5hHEXL90blf3wc7CLiFTR5KPdJBuP4Fb+lgJLwV2WyXn7C5PJDirfZ+LB4Wp6+s8Rv81GAFznRo1s0s8p4c/3BDUQEVmFP/d+x6Qi8ZcCc0pQAjvuQ6Hsrg1OUb5n8Rz1JyiA3i48Xdes=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB3961.namprd10.prod.outlook.com
+ (2603:10b6:5:1f6::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
+ 2022 10:56:42 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
+ 10:56:42 +0000
+Date:   Thu, 3 Mar 2022 13:56:02 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <David.Laight@aculab.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <20220303105602.GE2794@kadam>
+References: <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
+ <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+ <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
+ <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+ <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
+ <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
+ <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
+ <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+ <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+ <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223072754.616027-1-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: CT2P275CA0004.ZAFP275.PROD.OUTLOOK.COM
+ (2603:1086:100:b::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5d04b1c4-80ed-4317-daaa-08d9fd047fc1
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3961:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3961B7F49CE90B06C665A4688E049@DM6PR10MB3961.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y6KIoE7fkbhiu5qMc+dXd4thp++48DDF8VsL+PfAjuGJB4JftI0jDwCvSoQShkY+wLhPkZeYqJNnHL2/jB17bxItFUbqPbt01080mfeDw50U4anv8ZXhcwo1t3K51XA4uMG1KtbhMYvqCb/yHLOlGgqNRrJgIqJjIzbFAH0+nm4bhodQWXLtojJwtMqRlNXvrOaJVtrKtroTaRESZYcQrf8mP9jb2w3xP/yP7j5MtBTVIC0a43cp1/2v0BSXpTfSfivh3vBYG5Lt5hMO802DaPr7+06U/in/ecpU9AKMHVEac6cyQ+tltjmKjf2/HX+5/U+lJjVfHafT7Eg7Ri5+3xRf0S8X6QOSeYtcHWlqJFdwal+dC85X5yZGCvkGXYi37ReK6+WV2BGICSzget3PvwGSuAro2kJSWPzB0RXsU2XpZiC+f5x8sUEfzkqlWZRG2w9GH7th8CpBNcvNH5IBjo1FsZ09DsU8oVs+v3C+xkvEluStf9Vce4VCMOzX8Ib3DLbbaNfINHQkQqX9w0WdMUbOJBn6dYXlsHJZ5wuyEfij29/lrYP+OI4SyPDNiiFg9hbHDxKj2V+mizDR7zHXGAdgBk8ZbuS9aLaI48moVdCUwlWtHQi5JXxK4WxYPUNmXvZogvRVVwsSvv/e2FBNxJs1InxTNXVXXXZL8i2r/F0F0OkhAYUyWbr8lBbY7WCI+cgSLbl2daIF1E7C9MJZVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(54906003)(110136005)(52116002)(38350700002)(38100700002)(6506007)(5660300002)(7406005)(7416002)(7366002)(44832011)(8936002)(4326008)(8676002)(66946007)(66556008)(6666004)(66476007)(1076003)(186003)(316002)(26005)(33656002)(9686003)(6512007)(33716001)(86362001)(508600001)(6486002)(83380400001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gVOkTTR6xpGrdGlyWITM5oCu8kBDxsu9KLRdsRN3/c/9FAw8dFrjfNC+NTeZ?=
+ =?us-ascii?Q?ElNqDTz1UsJlN1CVPP3oWcz4lRK/ZV9ugq9o4Fg8Mp3gsyza3R3knyPMsJTN?=
+ =?us-ascii?Q?wYopk/TqJSTSx3DPCwUjTlVr20eVjDXCV3fkCFzkefV/RtmdCEmUoBab2EmC?=
+ =?us-ascii?Q?SNKxm6yr0d1j/ZhP/KmGbrHv4rqt8Hufz6vOYJqsEguYWiM8RBVBEts5LGJ5?=
+ =?us-ascii?Q?4LLcMyuCIvb4FP/xY1s1nKs58qHir3yNKyIZ7ZA2mRmNLGdf7/kS+YFXldhQ?=
+ =?us-ascii?Q?oMNOp83kiDVQ6XJHM0kru+qoiPJdpyxabCItHzxMGrtSewIolnlmArNXMFQk?=
+ =?us-ascii?Q?wXojxF5LTwqM/Gd7D2GfdyjdGmxPUhiy3bySb0q4s95d96YJrEvVJPqdOq5C?=
+ =?us-ascii?Q?xYyCL2LeiUYyjA8aFbbB54q7ba8ENliBFpRDEzeV5nL4OSDc1/yXzxIbdgOW?=
+ =?us-ascii?Q?nbKRsVW05Q7ilLGgEt91Vw0+gyhQFxl37npLgcG5/Idp4mkTX9RYv1rc31Il?=
+ =?us-ascii?Q?GdUcAuwhTgpWUTmVVKQuBJ3exnZuMbLknLvWt8bVXu/E7T1eVnrMWz+7p69o?=
+ =?us-ascii?Q?Nupnh6/a7OJTzhXTh0zc+b+LO1618B86q3IFatmjORHmVSSYcTQX+BaHgkz6?=
+ =?us-ascii?Q?Z4ePcfRx0BBUlBKD6NnLMfZBVfEADQxGVlGNL9oBWkmjnpaEVgVyrBL+4LvR?=
+ =?us-ascii?Q?29U7Q6SElqlBiEYuq9W5FMIPAchwcdb1BDbpMzX+2sCEfy7ipV85kUynp6Q5?=
+ =?us-ascii?Q?rvyYk1hizQpM41ba5G4OvUz18n6gWIQih+iHAlNj4KDXKuRE9bFMk+ECwnsf?=
+ =?us-ascii?Q?w5DO76VH3NBH2BxD2ghUXiWvDLu1QikMYUD3OE02FqCSThc0Q0uW/nJwKPGp?=
+ =?us-ascii?Q?O475hNIrLjWFDCqf0mk0yeWdsUpwqFaLxg2g4rvDiMIWB/pKsckGBWi2O4qY?=
+ =?us-ascii?Q?fN7DdSAqpQJNHEyvUhhvwXWKR/WyKWlKnZsUWy4yy/I80WHJbxWG8mOKug3C?=
+ =?us-ascii?Q?83La+pDVy9CTz8SY4h3A+4/WFN9giEtFHnrZ9Cf69di/34UIGV6eCN6TjpHl?=
+ =?us-ascii?Q?PHSbJNdWiPIRAb6fuLehs3KCsu5QTxh53PyL8itFzaXwekOBj2KUsDg4FkaS?=
+ =?us-ascii?Q?kH7AruCroWMawD45uQpfJn8O60DW9LOW/BacRdMq0d5EMV+097O1L/DdnrJS?=
+ =?us-ascii?Q?N2ZSko7cNuk3h3MCZ3UXaLkRYojb2b48ulAs4LdAJT4XU4hGlwXa01gZuWe7?=
+ =?us-ascii?Q?PlBlXKcWUunyKP9usBpsDhXLzHHGHk/Cda99qPs2Gf/jGmVUJwUDyZf8kOTy?=
+ =?us-ascii?Q?R49t0QNY/f4iZOVBdx6wjrbelXoT5azu3TqnBZEbOe1AQyaURnZjY3ycZlPT?=
+ =?us-ascii?Q?1nJxamfcQsJrSzl5cqleNix8EG/r7yvj6TJGba9lsiAsQ0AaglC43jUoceH2?=
+ =?us-ascii?Q?yUOTfcn+MiwPC3U4CZXo+W1MrFyjWg4xSa5wCWdJLRU9Cqbr4xZetFBB6MFi?=
+ =?us-ascii?Q?w2Wu25dgFpB3ZY7m5JIJcOFVP8E1FYS7cbvZDHUdaSRgRk8rDtcXf3vI03hL?=
+ =?us-ascii?Q?W8QkK+S0noSv+bEZTkhHxs5d5ivtGLwRHq+2NJzkUXjJ94aAVAYTdx1gAo7L?=
+ =?us-ascii?Q?JPi9Drg/LCFzp26G20BXWiu/lQvmjIShGU6QOiwpU43aUI6R+DQfAOIhzK+8?=
+ =?us-ascii?Q?k/ISWw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d04b1c4-80ed-4317-daaa-08d9fd047fc1
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 10:56:41.9430
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RPDi8DvjeNmVG5VrNmrgZObtinCjgAlYAcblfQD7gsHfzrr+ELLr5NvI+TzVTqGKnpedht3O1TZtY5lwfa8bVVbyF2s18KDdH71oBwb2src=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3961
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203030052
+X-Proofpoint-GUID: E_w17a3Sulx6s3qCnsIjoi2s4f-f83nv
+X-Proofpoint-ORIG-GUID: E_w17a3Sulx6s3qCnsIjoi2s4f-f83nv
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,373 +217,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any comments?
+On Wed, Mar 02, 2022 at 10:29:31AM +0100, Rasmus Villemoes wrote:
+> This won't help the current issue (because it doesn't exist and might
+> never), but just in case some compiler people are listening, I'd like to
+> have some sort of way to tell the compiler "treat this variable as
+> uninitialized from here on". So one could do
+> 
+> #define kfree(p) do { __kfree(p); __magic_uninit(p); } while (0)
+> 
 
-On Wed, Feb 23, 2022 at 08:27:54AM +0100, Christoph Hellwig wrote:
-> Provide a low-level task_work_add_nonotify interface that just adds
-> the work to the list and open code the TWA_SIGNAL and TWA_NONE callers
-> using it.  task_work_add() itself now only handles the common TWA_RESUME
-> case and can drop the notify argument.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/x86/kernel/cpu/mce/core.c |  2 +-
->  arch/x86/mm/tlb.c              |  2 +-
->  drivers/acpi/apei/ghes.c       |  3 +-
->  drivers/android/binder.c       |  2 +-
->  fs/file_table.c                |  2 +-
->  fs/io-wq.c                     |  3 +-
->  fs/io_uring.c                  | 16 +++++-----
->  fs/namespace.c                 |  2 +-
->  include/linux/task_work.h      | 11 ++-----
->  include/linux/tracehook.h      |  2 +-
->  kernel/events/uprobes.c        |  2 +-
->  kernel/irq/manage.c            |  2 +-
->  kernel/sched/fair.c            |  2 +-
->  kernel/task_work.c             | 56 ++++++++++++++++++----------------
->  kernel/time/posix-cpu-timers.c |  2 +-
->  security/keys/keyctl.c         |  2 +-
->  security/yama/yama_lsm.c       |  2 +-
->  17 files changed, 55 insertions(+), 58 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 5818b837fd4d4..a9da9a968163c 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1349,7 +1349,7 @@ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callba
->  	if (count > 1)
->  		return;
->  
-> -	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
-> +	task_work_add(current, &current->mce_kill_me);
->  }
->  
->  /* Handle unconfigured int18 (should never happen) */
-> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-> index a6cf56a149393..8db8f4f7001f8 100644
-> --- a/arch/x86/mm/tlb.c
-> +++ b/arch/x86/mm/tlb.c
-> @@ -355,7 +355,7 @@ static void l1d_flush_evaluate(unsigned long prev_mm, unsigned long next_mm,
->  	if (this_cpu_read(cpu_info.smt_active)) {
->  		clear_ti_thread_flag(&next->thread_info, TIF_SPEC_L1D_FLUSH);
->  		next->l1d_flush_kill.func = l1d_flush_force_sigbus;
-> -		task_work_add(next, &next->l1d_flush_kill, TWA_RESUME);
-> +		task_work_add(next, &next->l1d_flush_kill);
->  	}
->  }
->  
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254e..12bd63b9af308 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -988,8 +988,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->  		if (task_work_pending && current->mm != &init_mm) {
->  			estatus_node->task_work.func = ghes_kick_task_work;
->  			estatus_node->task_work_cpu = smp_processor_id();
-> -			ret = task_work_add(current, &estatus_node->task_work,
-> -					    TWA_RESUME);
-> +			ret = task_work_add(current, &estatus_node->task_work);
->  			if (ret)
->  				estatus_node->task_work.func = NULL;
->  		}
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 8351c5638880b..eeef8dfde606b 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -1858,7 +1858,7 @@ static void binder_deferred_fd_close(int fd)
->  	close_fd_get_file(fd, &twcb->file);
->  	if (twcb->file) {
->  		filp_close(twcb->file, current->files);
-> -		task_work_add(current, &twcb->twork, TWA_RESUME);
-> +		task_work_add(current, &twcb->twork);
->  	} else {
->  		kfree(twcb);
->  	}
-> diff --git a/fs/file_table.c b/fs/file_table.c
-> index 7d2e692b66a94..3c329359c18f8 100644
-> --- a/fs/file_table.c
-> +++ b/fs/file_table.c
-> @@ -375,7 +375,7 @@ void fput_many(struct file *file, unsigned int refs)
->  
->  		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
->  			init_task_work(&file->f_u.fu_rcuhead, ____fput);
-> -			if (!task_work_add(task, &file->f_u.fu_rcuhead, TWA_RESUME))
-> +			if (!task_work_add(task, &file->f_u.fu_rcuhead))
->  				return;
->  			/*
->  			 * After this task has run exit_task_work(),
-> diff --git a/fs/io-wq.c b/fs/io-wq.c
-> index bb7f161bb19cd..23d628b591a7b 100644
-> --- a/fs/io-wq.c
-> +++ b/fs/io-wq.c
-> @@ -362,7 +362,8 @@ static bool io_queue_worker_create(struct io_worker *worker,
->  	atomic_inc(&wq->worker_refs);
->  	init_task_work(&worker->create_work, func);
->  	worker->create_index = acct->index;
-> -	if (!task_work_add(wq->task, &worker->create_work, TWA_SIGNAL)) {
-> +	if (!task_work_add_nonotify(wq->task, &worker->create_work)) {
-> +		set_notify_signal(wq->task);
->  		/*
->  		 * EXIT may have been set after checking it above, check after
->  		 * adding the task_work and remove any creation item if it is
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 77b9c7e4793bf..94116a102dc61 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -2374,7 +2374,6 @@ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
->  {
->  	struct task_struct *tsk = req->task;
->  	struct io_uring_task *tctx = tsk->io_uring;
-> -	enum task_work_notify_mode notify;
->  	struct io_wq_work_node *node;
->  	unsigned long flags;
->  	bool running;
-> @@ -2397,14 +2396,15 @@ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
->  
->  	/*
->  	 * SQPOLL kernel thread doesn't need notification, just a wakeup. For
-> -	 * all other cases, use TWA_SIGNAL unconditionally to ensure we're
-> -	 * processing task_work. There's no reliable way to tell if TWA_RESUME
-> -	 * will do the job.
-> +	 * all other cases, use set_notify_signal unconditionally to ensure
-> +	 * we're processing the task_work. There's no reliable way to tell if
-> +	 * task_work_add will do the job.
->  	 */
-> -	notify = (req->ctx->flags & IORING_SETUP_SQPOLL) ? TWA_NONE : TWA_SIGNAL;
-> -	if (likely(!task_work_add(tsk, &tctx->task_work, notify))) {
-> -		if (notify == TWA_NONE)
-> +	if (likely(!task_work_add_nonotify(tsk, &tctx->task_work))) {
-> +		if (req->ctx->flags & IORING_SETUP_SQPOLL)
->  			wake_up_process(tsk);
-> +		else
-> +			set_notify_signal(tsk);
->  		return;
->  	}
->  
-> @@ -9606,7 +9606,7 @@ static __cold void io_ring_exit_work(struct work_struct *work)
->  					ctx_node);
->  		/* don't spin on a single task if cancellation failed */
->  		list_rotate_left(&ctx->tctx_list);
-> -		ret = task_work_add(node->task, &exit.task_work, TWA_SIGNAL);
-> +		ret = task_work_add_nonotify(node->task, &exit.task_work);
->  		if (WARN_ON_ONCE(ret))
->  			continue;
->  
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index de6fae84f1a1a..a482b41621866 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -1249,7 +1249,7 @@ static void mntput_no_expire(struct mount *mnt)
->  		struct task_struct *task = current;
->  		if (likely(!(task->flags & PF_KTHREAD))) {
->  			init_task_work(&mnt->mnt_rcu, __cleanup_mnt);
-> -			if (!task_work_add(task, &mnt->mnt_rcu, TWA_RESUME))
-> +			if (!task_work_add(task, &mnt->mnt_rcu))
->  				return;
->  		}
->  		if (llist_add(&mnt->mnt_llist, &delayed_mntput_list))
-> diff --git a/include/linux/task_work.h b/include/linux/task_work.h
-> index 5b8a93f288bb4..af27deee1a559 100644
-> --- a/include/linux/task_work.h
-> +++ b/include/linux/task_work.h
-> @@ -13,14 +13,9 @@ init_task_work(struct callback_head *twork, task_work_func_t func)
->  	twork->func = func;
->  }
->  
-> -enum task_work_notify_mode {
-> -	TWA_NONE,
-> -	TWA_RESUME,
-> -	TWA_SIGNAL,
-> -};
-> -
-> -int task_work_add(struct task_struct *task, struct callback_head *twork,
-> -			enum task_work_notify_mode mode);
-> +int task_work_add(struct task_struct *task, struct callback_head *twork);
-> +int task_work_add_nonotify(struct task_struct *task,
-> +		struct callback_head *twork);
->  
->  struct callback_head *task_work_cancel_match(struct task_struct *task,
->  	bool (*match)(struct callback_head *, void *data), void *data);
-> diff --git a/include/linux/tracehook.h b/include/linux/tracehook.h
-> index 88c007ab5ebc7..910fd2d6467e7 100644
-> --- a/include/linux/tracehook.h
-> +++ b/include/linux/tracehook.h
-> @@ -202,7 +202,7 @@ static inline void tracehook_notify_resume(struct pt_regs *regs)
->  
->  /*
->   * called by exit_to_user_mode_loop() if ti_work & _TIF_NOTIFY_SIGNAL. This
-> - * is currently used by TWA_SIGNAL based task_work, which requires breaking
-> + * is currently used by signal based task_work, which requires breaking
->   * wait loops to ensure that task_work is noticed and run.
->   */
->  static inline void tracehook_notify_signal(void)
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 6357c3580d07b..6c12d9f0dc647 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -1823,7 +1823,7 @@ void uprobe_copy_process(struct task_struct *t, unsigned long flags)
->  
->  	t->utask->dup_xol_addr = area->vaddr;
->  	init_task_work(&t->utask->dup_xol_work, dup_xol_work);
-> -	task_work_add(t, &t->utask->dup_xol_work, TWA_RESUME);
-> +	task_work_add(t, &t->utask->dup_xol_work);
->  }
->  
->  /*
-> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-> index f23ffd30385b1..4557319303374 100644
-> --- a/kernel/irq/manage.c
-> +++ b/kernel/irq/manage.c
-> @@ -1268,7 +1268,7 @@ static int irq_thread(void *data)
->  		handler_fn = irq_thread_fn;
->  
->  	init_task_work(&on_exit_work, irq_thread_dtor);
-> -	task_work_add(current, &on_exit_work, TWA_NONE);
-> +	task_work_add_nonotify(current, &on_exit_work);
->  
->  	irq_thread_check_affinity(desc, action);
->  
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5146163bfabb9..616626719c5f5 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -2880,7 +2880,7 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
->  		curr->node_stamp += period;
->  
->  		if (!time_before(jiffies, curr->mm->numa_next_scan))
-> -			task_work_add(curr, work, TWA_RESUME);
-> +			task_work_add(curr, work);
->  	}
->  }
->  
-> diff --git a/kernel/task_work.c b/kernel/task_work.c
-> index 1698fbe6f0e13..4a547d80d6493 100644
-> --- a/kernel/task_work.c
-> +++ b/kernel/task_work.c
-> @@ -6,22 +6,16 @@
->  static struct callback_head work_exited; /* all we need is ->next == NULL */
->  
->  /**
-> - * task_work_add - ask the @task to execute @work->func()
-> + * task_work_add_nonotify - ask the @task to execute @work->func()
->   * @task: the task which should run the callback
->   * @work: the callback to run
->   * @notify: how to notify the targeted task
->   *
-> - * Queue @work for task_work_run() below and notify the @task if @notify
-> - * is @TWA_RESUME or @TWA_SIGNAL. @TWA_SIGNAL works like signals, in that the
-> - * it will interrupt the targeted task and run the task_work. @TWA_RESUME
-> - * work is run only when the task exits the kernel and returns to user mode,
-> - * or before entering guest mode. Fails if the @task is exiting/exited and thus
-> - * it can't process this @work. Otherwise @work->func() will be called when the
-> - * @task goes through one of the aforementioned transitions, or exits.
-> + * Queue @work for task_work_run() below.  If the targeted task is exiting, then
-> + * an error is returned and the work item is not queued. It's up to the caller
-> + * to arrange for an alternative mechanism in that case.
->   *
-> - * If the targeted task is exiting, then an error is returned and the work item
-> - * is not queued. It's up to the caller to arrange for an alternative mechanism
-> - * in that case.
-> + * The caller needs to notify @task to make sure @work is actually run.
->   *
->   * Note: there is no ordering guarantee on works queued here. The task_work
->   * list is LIFO.
-> @@ -29,8 +23,7 @@ static struct callback_head work_exited; /* all we need is ->next == NULL */
->   * RETURNS:
->   * 0 if succeeds or -ESRCH.
->   */
-> -int task_work_add(struct task_struct *task, struct callback_head *work,
-> -		  enum task_work_notify_mode notify)
-> +int task_work_add_nonotify(struct task_struct *task, struct callback_head *work)
->  {
->  	struct callback_head *head;
->  
-> @@ -44,23 +37,32 @@ int task_work_add(struct task_struct *task, struct callback_head *work,
->  		work->next = head;
->  	} while (cmpxchg(&task->task_works, head, work) != head);
->  
-> -	switch (notify) {
-> -	case TWA_NONE:
-> -		break;
-> -	case TWA_RESUME:
-> -		set_notify_resume(task);
-> -		break;
-> -	case TWA_SIGNAL:
-> -		set_notify_signal(task);
-> -		break;
-> -	default:
-> -		WARN_ON_ONCE(1);
-> -		break;
-> -	}
-> -
->  	return 0;
->  }
->  
-> +/**
-> + * task_work_add - ask the @task to execute @work->func()
-> + * @task: the task which should run the callback
-> + * @work: the callback to run
-> + * @notify: how to notify the targeted task
-> + *
-> + * Queue @work using task_work_add_nonotify() and notify the task to actually
-> + * run it when the task exits the kernel and returns to user mode, or before
-> + * entering guest mode.
-> + *
-> + * RETURNS:
-> + * 0 if succeeds or -ESRCH.
-> + */
-> +int task_work_add(struct task_struct *task, struct callback_head *work)
-> +{
-> +	int ret;
-> +
-> +	ret = task_work_add_nonotify(task, work);
-> +	if (!ret)
-> +		set_notify_resume(task);
-> +	return ret;
-> +}
-> +
->  /**
->   * task_work_cancel_match - cancel a pending work added by task_work_add()
->   * @task: the task which should execute the work
-> diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
-> index 96b4e78104266..c8808b32dc144 100644
-> --- a/kernel/time/posix-cpu-timers.c
-> +++ b/kernel/time/posix-cpu-timers.c
-> @@ -1201,7 +1201,7 @@ static inline void __run_posix_cpu_timers(struct task_struct *tsk)
->  
->  	/* Schedule task work to actually expire the timers */
->  	tsk->posix_cputimers_work.scheduled = true;
-> -	task_work_add(tsk, &tsk->posix_cputimers_work.work, TWA_RESUME);
-> +	task_work_add(tsk, &tsk->posix_cputimers_work.work);
->  }
->  
->  static inline bool posix_cpu_timers_enable_work(struct task_struct *tsk,
-> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-> index 96a92a645216d..331a825ff6616 100644
-> --- a/security/keys/keyctl.c
-> +++ b/security/keys/keyctl.c
-> @@ -1693,7 +1693,7 @@ long keyctl_session_to_parent(void)
->  
->  	/* the replacement session keyring is applied just prior to userspace
->  	 * restarting */
-> -	ret = task_work_add(parent, newwork, TWA_RESUME);
-> +	ret = task_work_add(parent, newwork);
->  	if (!ret)
->  		newwork = NULL;
->  unlock:
-> diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
-> index 06e226166aab3..2af248939dd46 100644
-> --- a/security/yama/yama_lsm.c
-> +++ b/security/yama/yama_lsm.c
-> @@ -99,7 +99,7 @@ static void report_access(const char *access, struct task_struct *target,
->  	info->access = access;
->  	info->target = target;
->  	info->agent = agent;
-> -	if (task_work_add(current, &info->work, TWA_RESUME) == 0)
-> +	if (task_work_add(current, &info->work) == 0)
->  		return; /* success */
->  
->  	WARN(1, "report_access called from exiting task");
-> -- 
-> 2.30.2
----end quoted text---
+I think this is a good idea.
+
+Smatch can already find all the iterator used outside the loop bugs that
+Jakob did with a manageably small number of false positives.  The
+problems are that:
+1) It would be better to find it in the compile stage instead of later.
+2) I hadn't published that check.  Will do shortly.
+3) A couple weeks back I noticed that the list_for_each_entry() check
+   was no longer working.  Fixed now.
+4) Smatch was only looking at cases which dereferenced the iterator and
+   not checks for NULL.  I will test the fix for that tonight.
+5) Smatch is broken on PowerPC.
+
+Coccinelle also has checks for iterator used outside the loop.
+Coccinelle had these checks before Smatch did.  I copied Julia's idea.
+
+If your annotation was added to GCC it would solve all those problems.
+
+But it's kind of awkward that we can't annotate kfree() directly
+instead of creating the kfree() macro.  And there are lots of other
+functions which free things so you'd have to create a ton of macros
+like:
+
+#define gr_free_dma_desc(a, b) do { __gr_free_dma_desc(a, b); __magic_uninit(b); } while (0)
+
+And then there are functions which free a struct member:
+
+void free_bar(struct foo *p) { kfree(p->bar); }
+
+Or functions which free a container_of().
+
+Smatch is more evolved than designed but what I do these days is use $0,
+$1, $2 to represent the parameters.  So you can say a function frees
+$0->bar.  For container_of() then is "(168<~$0)->bar" which means 168
+bytes from $0.  Returns are parameter -1 so I guess it would be $(-1),
+but as I said Smatch evolved so right now places that talk about
+returned values use a different format.
+
+What you could do is just make a parseable table next to the function
+definition with all the information.  Then you would use a Perl script
+to automatically generate a Coccinelle check to warn about use after
+frees.
+
+diff --git a/mm/slab.c b/mm/slab.c
+index ddf5737c63d9..c9dffa5c40a2 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3771,6 +3771,9 @@ EXPORT_SYMBOL(kmem_cache_free_bulk);
+  *
+  * Don't free memory not originally allocated by kmalloc()
+  * or you will run into trouble.
++ *
++ * CHECKER information
++ * frees: $0
+  */
+ void kfree(const void *objp)
+ {
+
+regards,
+dan carpenter
+

@@ -2,365 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6592F4CC908
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6A54CC920
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbiCCWdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S236946AbiCCWhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiCCWdA (ORCPT
+        with ESMTP id S231475AbiCCWgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:33:00 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E58516FDCE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:32:09 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso7456987ooi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:32:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+R4gZe/sViDjSJ+/IN1mjgukCy6kR0HogPt9Jm3IoDU=;
-        b=m41/YCDu4L1SBTcOQDy570DhXn5I1jFuozqoFT6QjDA0jxDdoYzKrZxlRvhHgz+U2g
-         j+G/4jARVNGdXh04oPNyRW1+6YrdukK3/KdPZ605veLtYb8pe7WEsJUcCI1AN+cqsFJX
-         yw7Umshxoiv2Z2yxw7JxiUybF7o4C8Puudes0LvCM3rmhUDAlbU6DnX2xxISuRRWn1r9
-         lw6v0HnG/a6j+aYRhWpHd4p1rEDWVxxG4v5Unt7sYwVMO1jIEInWkLREsDUrK/wLLVDK
-         DWoRnmHSRLAiNou6HM61pPCuX9AZdeEPgEzaCDCFAAUI9iRF58U9TwbP+Vl//PYHSH//
-         YMFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+R4gZe/sViDjSJ+/IN1mjgukCy6kR0HogPt9Jm3IoDU=;
-        b=KilMubfETdghZyk9/txm4C2Qox1yJujZ11mMo/Mp1ZplWv3nO+xOPOkQkqEJWZ86pV
-         sj2qF0EA/uycaWv/9XyktWw613DspWkgEEEeLNDw8H9oy+HREu80HfEpKiSKrCJqbLQw
-         u9+wEumrHVie2M7JyMbmKtC0C7W6A/eJlfzn37KWMd+6eIoc8hE9ZlKHCxPz7BXhE4Wj
-         QLqEJFCUVUuD3O2XKzq9jZ+PQqrvJXyS/s/PZeiqSg55O7ybSAt1a7ha8ERM6+bH9iFx
-         AegQ+6/W2HiecnbLefOziprYRHH6Ehb8N/lrpCl6EHgDzCVcUBp4IFMaUzjQSkaH7rOg
-         VBAA==
-X-Gm-Message-State: AOAM532mbHyHMqDxom6WMGsx0WudbbLG1HgQbp96eXNZkjtKkAXXx3aC
-        8b7gK+rFk9dPiZUY/Yp7sDgcSg==
-X-Google-Smtp-Source: ABdhPJwGUNBLBmGj3Cfa1FBU3DIecpDbP/DD5Jq1n3YwlrHnAG6oqh0ccHZTH6SoD5aZiSfSDoUz2A==
-X-Received: by 2002:a05:6870:2396:b0:d4:30d1:d5c with SMTP id e22-20020a056870239600b000d430d10d5cmr5910382oap.51.1646346728824;
-        Thu, 03 Mar 2022 14:32:08 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id fq14-20020a0568710b0e00b000d4492531a2sm1764777oab.17.2022.03.03.14.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 14:32:08 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v3 6/6] usb: typec: mux: Add On Semi fsa4480 driver
-Date:   Thu,  3 Mar 2022 14:33:51 -0800
-Message-Id: <20220303223351.141238-6-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220303223351.141238-1-bjorn.andersson@linaro.org>
-References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
+        Thu, 3 Mar 2022 17:36:55 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2082.outbound.protection.outlook.com [40.107.22.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A40144F53;
+        Thu,  3 Mar 2022 14:36:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bVt5GMonRJACsBtP1rMFomvsCiGlJEOXk+EmVIIgzwVGucl+n+rXP7jibXsspOUHd7NWtmmGV+4eG3xL3fi2Bcn/LwC6ZsTfxcbw02ZENx2EoVrDlkyIzN/u2qjRCfZTOBQhQTC6t0VteLEGVho/TClXNpBfbipX9n+IkVgoP9AaCMJm7/00Q5SqSxLTeVXvVaWP0Bs8E4JnF9RB6mRpxfo3Pjnla8J23zjidgwma+TYBkT+Cdmh730THl/j6n+uZvhsN/Bdr9YIXg16P7vCHrl2fWj3Xmr8fd5ICL/KTjNjNTLabNCk7fVyzaiXxoNPH5OzqN6I3q9VCdgXpQu0ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5K6zQeSq3sQcrKCaApSUoICBfsJi/RsiIe4H2tEgccw=;
+ b=PXxwt8I7O2v44xK2cFcR0y0eG0hcQM4LMoUJFPIN6Krk5zvTpLJPDmCzVWGJ0YOCpA+alyMQ9S5st/j+xSQ6xmvXTpKtpSAE113CExaOfIenS1LVoUKOzm4Frg/8N7nPZo5hTFjuopMLRi8PmbW1OVMu2hOBSvdk5Vt8KXHdQMGFI0pE6vCOaNMK+g/e3APc3tPEI5AVV2qaSzhofnCNQq6ReHPUlAusOOp3y6oBCTxNiyizjl9wnlopKw5dRh4QhKKymqWy9UlLs8lsxtelHZ31hE5RpfS9OyB/zujGn+8cI7GIGoQLZb34BIwnSWS7CA+7sFZG763PFzd+Fa4j3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5K6zQeSq3sQcrKCaApSUoICBfsJi/RsiIe4H2tEgccw=;
+ b=QL86BDLq4TteqUSP0O37KrDKS2CzfH+/EtzTHdekQalKZ7DnpnprL3d6nciNaBsMtsmRz9WY/n22vBN0oPFeqM5CFANdazjdGJBFsVc09rwXy89Sw5FjtkvVhBz6qM+AI1lOHwWvDooxvpRkvJFDC7DIwtPw3GdvMvBWTDjMYkLYnzxAKTZy+q1XZuvpG+SgRT7yIiWX6alRKpfoXhB6nvRlcmJFWNhAJje+BJMqVqbbj/tvHkRe4JPhzjoArkaXOHe7XhTIbXrpFdDZwB+tYUqPfZ+WrnquJH1zsaUF988dyirOXX1KJzJ+POmUS45TXbiJNqBl8Gf4VFUBXBZ8uw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+ by AM6PR03MB3878.eurprd03.prod.outlook.com (2603:10a6:20b:22::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
+ 2022 22:36:04 +0000
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::9130:93ae:6e27:e9a]) by DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::9130:93ae:6e27:e9a%4]) with mapi id 15.20.5038.014; Thu, 3 Mar 2022
+ 22:36:04 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Mubin Usman Sayyed <MUBINUSM@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, michal.simek@xilinx.com,
+        Alvaro Gamez <alvaro.gamez@hazent.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v14 1/2] dt-bindings: pwm: Add Xilinx AXI Timer
+Date:   Thu,  3 Mar 2022 17:35:42 -0500
+Message-Id: <20220303223544.2810594-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR04CA0009.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::22) To DB7PR03MB4523.eurprd03.prod.outlook.com
+ (2603:10a6:10:19::27)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7be3fb09-097e-4132-b764-08d9fd66337e
+X-MS-TrafficTypeDiagnostic: AM6PR03MB3878:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR03MB38784C33006F76442C71ACC596049@AM6PR03MB3878.eurprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cXUhF6E0AePhv9m2pHw4KPRwTrir4ldIeqtiyLHL7R+qN0Hi1DnfHAAIrrwZ/YK7lmiRGqT748SQLjNY+bCgxAcWjE3n426r8Y253a0cpeyJjZQLoi5VeHe/fFUAwq567ixlj+QUuZg+rwjdjhhK/8NlyWbs4RALzU6hQRQX9pmqvIGRFe1Ipmk1xTer2ezJeGxNTq2uTbGmRfpm6IVUIrzAHPK5s2hyMISR2Ud60Hww3nQY0aoNYvegM2iaurx7ni0eMDGAXVIB/jST/05OGxUzzItxhrgyT08J9AuwZij0OhRJkkWBIIcC6GtODOOrLs3XcO6ZCN1PpaCusHnMfzzG0Y50NVDJdfGtrkDeO8AGNlhsR1JBD+WGV0XK9IqBDj0qNtUmWSZctlII07q9/16QQ50vrYNOFIE9PAxFNqtMnz43sFH5+I1sFi6FOfx2Cw/R3gENpZ0tbKcA5O+hLsBZJEUeUOwgY/j0ZXlrsHMuqOZhPcbn5JLr5kS/reyoepAh216tiZYd0wjFyr/P0SEQrJGLD0+SRDtUywpdHeVrWKnJAGSvOUTndyobZUf9NqihtC0ygaNbXtzkUNkof8A9TFfy1YgbxrTEbAnfofGfk4XSgVgNF/STcgo0zvCMDkfJTCzHYkY3BeUCT8NIy0ruloJla2Fct/ZkvKAlEgOGS0jF5V1Vv6foTw5LXwtp/tDbs8uxtIEQx8hQqDtU1f7H8rfckG6GDnEZwfLBTphoXYxvLxn3Er7Vy1+nZSzgh27TTzU51RCHCqAEz99YgvKxekKH9D1ft9SvpCA+AYs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(6512007)(26005)(2906002)(1076003)(52116002)(6666004)(83380400001)(36756003)(4326008)(5660300002)(44832011)(8936002)(7416002)(8676002)(38100700002)(66946007)(86362001)(2616005)(66476007)(66556008)(38350700002)(508600001)(54906003)(966005)(6486002)(6916009)(316002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NQE5Tj9ccIk2ACdPNwzg+ll3G769c5YnOTEtulGoI3Zd6sEurm9YEvQEHU+L?=
+ =?us-ascii?Q?OpMlzqFb/DNCi5OFVYZtoNeaFyawiy7Auv4OKXLi2UhkKIXGbDcf9A+Z0fRi?=
+ =?us-ascii?Q?cTYvqHC8hjF1/xnYlqt1ea3YHYgrig8VRGLXUnZmi0UzdVu0bGwYmRKt7nlW?=
+ =?us-ascii?Q?AcfENXRU2nl298RChaMmHkRDmkuzgIOAsn0LcBj9awENgxWFlaBgSWt9b6ws?=
+ =?us-ascii?Q?HeA6zq2FtuL1KndKyt/7y2CShZfV7N22UlHchcf4ceTwW2bE0Hg+TCPVhMNw?=
+ =?us-ascii?Q?s84ulFM4XHJODvMTiE/iqpQ8KQ+6+dmCPDptGsYJg445+gW1WS4ruCFcyC6l?=
+ =?us-ascii?Q?w+xeq1r5l5MyI7o1vIts5sP4BkxzMQD92p2tsD9m9miMjdjmLIpAEYFC4iXm?=
+ =?us-ascii?Q?KzlUiT3XNnGOCOctjG0UjbEZ23u2BiqeJOPWNaHeSPxmQyjH+R85Vm+8JwLM?=
+ =?us-ascii?Q?V0DD6t5o3LONdPO74Mnb+7YYIGqq6eOAC0c5Ns3vj2kLg9EIXJCRov39i27S?=
+ =?us-ascii?Q?v4/7bB3WOUaX+A+hQ93JqQ9vdJuyQD/EjwhXt9FCI//zbnkcdJkBo4G7ZuGx?=
+ =?us-ascii?Q?zV/ZsqyAhhCP/otYHbe9iyoKiMyTcfwcKzWwnfGX7vQRZDRs+hqhSzkux+4H?=
+ =?us-ascii?Q?xKfClicfTzsTDkq8hplS6R6l5vmp00qEU0W6658SO3gEDqg8K8L0Cp5PSaMC?=
+ =?us-ascii?Q?RGyGRjpMA6dU6N1lvm7HjPvrTXW23zIc+veOa93aNLGxnu5mbQA71x0IkKCv?=
+ =?us-ascii?Q?lbyPJp4tgmgwTYpQWv2fduIRHcuYkDmt2XUClJHX4KXsG6uqr1JVT3rJ4pPK?=
+ =?us-ascii?Q?Q+pMhws3lQeOLVznsf1llnnfA+PcjBWDWKmZcj3pkm6Wb3miBVSFnKJASzCP?=
+ =?us-ascii?Q?2aFUdojjjwl4wrglOpgtXuyjseMuYJu1HnftYE9p9VvQmhFBlmAjcmeLLT4n?=
+ =?us-ascii?Q?WrMyIsN6wJTKg6vjTGDtMipqOtvZOor0M/p7qOkJeLlMY18qIJ191h5n28Up?=
+ =?us-ascii?Q?HP74HsEpFX0OIb2J+npnH9QOzpW74wpOp+sjbHBN/647CfzmncheM3AKzbx2?=
+ =?us-ascii?Q?QFSPAiiUIdK7JIw/rOjsw0pFDxTFtypMhksWj1FtlzCP2x6BbtTx5B1tuIPZ?=
+ =?us-ascii?Q?z/YVO62r2muopzH14W0ILfL5kIVypJAH7lxdPJSL/F7KVQSWVFjmTH+5B4o5?=
+ =?us-ascii?Q?tJLTVlWxBORCVXR5fdpvd3HKUOxUk6rEFFQlnOPamG2glRoT/BTABQHgwS9W?=
+ =?us-ascii?Q?p5G81GLa49WJbSCBLlJkjf196Zour58VEyJmzClpZIqsQrf3AGKBgeY7G00I?=
+ =?us-ascii?Q?ROSJ89e29c6Os+B68Dyq5ErEn5dfCRWhPCi9meEJZboKpzYhCuQmOuOQmUnG?=
+ =?us-ascii?Q?Y39SjzRr9uF66Ok1giL0wGkiUEqyURbKpfGpK+xgEQfbxmVyqKdh+UHje+l2?=
+ =?us-ascii?Q?kg54ZswRcVGx/Y0abXn8lN9fjbnO6OKYUCAH4sS2PkaSu0C52kOBFnq4EpuY?=
+ =?us-ascii?Q?ND2GXyRM8rMY5+AMrZa+/ezg7f78RRKW8TH+771oVAXQlKwqKWRDCXQcAM4T?=
+ =?us-ascii?Q?AtHPVZ40+HulUc5CPJb3GGmrNOKcAceqYuei8PhlClGj/VV3sQ0ZbYf9wf3g?=
+ =?us-ascii?Q?1ycGOhlGyqtRANm2/gExJTw=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7be3fb09-097e-4132-b764-08d9fd66337e
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 22:36:04.3007
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FbehmPZB4B5lBToBu0Vevwli2Tw9IQ0a687RFEh6mfKU0SiFnJulzBGeSQZPwbMOf4wjvHk0U/AIjbSTyz01sg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB3878
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
-support for analog audio headsets. It allows sharing a common USB Type-C
-port to pass USB2.0 signal, analog audio, sideband use wires and analog
-microphone signal.
+This adds a binding for the Xilinx LogiCORE IP AXI Timer. This device is a
+"soft" block, so it has some parameters which would not be configurable in
+most hardware. This binding is usually automatically generated by Xilinx's
+tools, so the names and values of some properties should be kept as they
+are, if possible. In addition, this binding is already in the kernel at
+arch/microblaze/boot/dts/system.dts, and in user software such as QEMU.
 
-Due to lacking upstream audio support for testing, the audio muxing is
-left untouched, but implementation of muxing the SBU lines is provided
-as a pair of Type-C mux and switch devices. This provides the necessary
-support for enabling the DisplayPort altmode on devices with this
-circuit.
+The existing driver uses the clock-frequency property, or alternatively the
+/cpus/timebase-frequency property as its frequency input. Because these
+properties are deprecated, they have not been included with this schema.
+All new bindings should use the clocks/clock-names properties to specify
+the parent clock.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Because we need to init timer devices so early in boot, we determine if we
+should use the PWM driver or the clocksource/clockevent driver by the
+presence/absence, respectively, of #pwm-cells. Because both counters are
+used by the PWM, there is no need for a separate property specifying which
+counters are to be used for the PWM.
+
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
-Changes since v2:
-- Expanded Kconfig help text.
-- Fixed copyright year
-- Fixed spelling mistakes in comments
-- Introduce FSA4480_MAX_REGISTER
-- Use dev_err_probe()
-- Removed some useless blank lines.
+(no changes since v8)
 
-Changes since v1:
-- None
+Changes in v8:
+- Set additionalProperties: false
 
- drivers/usb/typec/mux/Kconfig   |  10 ++
- drivers/usb/typec/mux/Makefile  |   1 +
- drivers/usb/typec/mux/fsa4480.c | 216 ++++++++++++++++++++++++++++++++
- 3 files changed, 227 insertions(+)
- create mode 100644 drivers/usb/typec/mux/fsa4480.c
+Changes in v7:
+- Add #pwm-cells to properties
+- Document why additionalProperties is true
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index edead555835e..5eb2c17d72c1 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -2,6 +2,16 @@
- 
- menu "USB Type-C Multiplexer/DeMultiplexer Switch support"
- 
-+config TYPEC_MUX_FSA4480
-+	tristate "ON Semi FSA4480 Analog Audio Switch driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Driver for the ON Semiconductor FSA4480 Analog Audio Switch, which
-+	  provides support for muxing analog audio and sideband signals on a
-+	  common USB Type-C connector.
-+	  If compiled as a module, the module will be named fsa4480.
-+
- config TYPEC_MUX_PI3USB30532
- 	tristate "Pericom PI3USB30532 Type-C cross switch driver"
- 	depends on I2C
-diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-index 280a6f553115..e52a56c16bfb 100644
---- a/drivers/usb/typec/mux/Makefile
-+++ b/drivers/usb/typec/mux/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
- obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
- obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+Changes in v6:
+- Enumerate possible counter widths
+- Fix incorrect schema id
+
+Changes in v5:
+- Add example for timer binding
+- Fix indentation lint
+- Move schema into the timer directory
+- Remove xlnx,axi-timer-2.0 compatible string
+- Update commit message to reflect revisions
+
+Changes in v4:
+- Make some properties optional for clocksource drivers
+- Predicate PWM driver on the presence of #pwm-cells
+- Remove references to generate polarity so this can get merged
+
+Changes in v3:
+- Add an example with non-deprecated properties only.
+- Add xlnx,pwm and xlnx,gen?-active-low properties.
+- Make newer replacement properties mutually-exclusive with what they
+  replace
+- Mark all boolean-as-int properties as deprecated
+
+Changes in v2:
+- Use 32-bit addresses for example binding
+
+ .../bindings/timer/xlnx,xps-timer.yaml        | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/timer/xlnx,xps-timer.yaml
+
+diff --git a/Documentation/devicetree/bindings/timer/xlnx,xps-timer.yaml b/Documentation/devicetree/bindings/timer/xlnx,xps-timer.yaml
 new file mode 100644
-index 000000000000..ab8d014a6b79
+index 000000000000..dd168d41d2e0
 --- /dev/null
-+++ b/drivers/usb/typec/mux/fsa4480.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021-2022 Linaro Ltd.
-+ * Copyright (C) 2018-2020 The Linux Foundation
-+ */
++++ b/Documentation/devicetree/bindings/timer/xlnx,xps-timer.yaml
+@@ -0,0 +1,92 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/xlnx,xps-timer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include <linux/bits.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/regmap.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
++title: Xilinx LogiCORE IP AXI Timer Device Tree Binding
 +
-+#define FSA4480_SWITCH_ENABLE	0x04
-+#define FSA4480_SWITCH_SELECT	0x05
-+#define FSA4480_SWITCH_STATUS1	0x07
-+#define FSA4480_SLOW_L		0x08
-+#define FSA4480_SLOW_R		0x09
-+#define FSA4480_SLOW_MIC	0x0a
-+#define FSA4480_SLOW_SENSE	0x0b
-+#define FSA4480_SLOW_GND	0x0c
-+#define FSA4480_DELAY_L_R	0x0d
-+#define FSA4480_DELAY_L_MIC	0x0e
-+#define FSA4480_DELAY_L_SENSE	0x0f
-+#define FSA4480_DELAY_L_AGND	0x10
-+#define FSA4480_RESET		0x1e
-+#define FSA4480_MAX_REGISTER	0x1f
++maintainers:
++  - Sean Anderson <sean.anderson@seco.com>
 +
-+#define FSA4480_ENABLE_DEVICE	BIT(7)
-+#define FSA4480_ENABLE_SBU	GENMASK(6, 5)
-+#define FSA4480_ENABLE_USB	GENMASK(4, 3)
++properties:
++  compatible:
++    contains:
++      const: xlnx,xps-timer-1.00.a
 +
-+#define FSA4480_SEL_SBU_REVERSE	GENMASK(6, 5)
-+#define FSA4480_SEL_USB		GENMASK(4, 3)
++  clocks:
++    maxItems: 1
 +
-+struct fsa4480 {
-+	struct i2c_client *client;
++  clock-names:
++    const: s_axi_aclk
 +
-+	/* used to serialize concurrent change requests */
-+	struct mutex lock;
++  interrupts:
++    maxItems: 1
 +
-+	struct typec_switch_dev *sw;
-+	struct typec_mux_dev *mux;
++  reg:
++    maxItems: 1
 +
-+	struct regmap *regmap;
++  '#pwm-cells': true
 +
-+	u8 cur_enable;
-+	u8 cur_select;
-+};
++  xlnx,count-width:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [8, 16, 32]
++    default: 32
++    description:
++      The width of the counter(s), in bits.
 +
-+static const struct regmap_config fsa4480_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = FSA4480_MAX_REGISTER,
-+};
++  xlnx,one-timer-only:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 0, 1 ]
++    description:
++      Whether only one timer is present in this block.
 +
-+static int fsa4480_switch_set(struct typec_switch_dev *sw,
-+			      enum typec_orientation orientation)
-+{
-+	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
-+	u8 new_sel;
++required:
++  - compatible
++  - reg
++  - xlnx,one-timer-only
 +
-+	mutex_lock(&fsa->lock);
-+	new_sel = FSA4480_SEL_USB;
-+	if (orientation == TYPEC_ORIENTATION_REVERSE)
-+		new_sel |= FSA4480_SEL_SBU_REVERSE;
++allOf:
++  - if:
++      required:
++        - '#pwm-cells'
++    then:
++      allOf:
++        - required:
++            - clocks
++        - properties:
++            xlnx,one-timer-only:
++              const: 0
++    else:
++      required:
++        - interrupts
++  - if:
++      required:
++        - clocks
++    then:
++      required:
++        - clock-names
 +
-+	if (new_sel == fsa->cur_select)
-+		goto out_unlock;
++additionalProperties: false
 +
-+	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-+		/* Disable SBU output while re-configuring the switch */
-+		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE,
-+			     fsa->cur_enable & ~FSA4480_ENABLE_SBU);
++examples:
++  - |
++    timer@800e0000 {
++        clock-names = "s_axi_aclk";
++        clocks = <&zynqmp_clk 71>;
++        compatible = "xlnx,xps-timer-1.00.a";
++        reg = <0x800e0000 0x10000>;
++        interrupts = <0 39 2>;
++        xlnx,count-width = <16>;
++        xlnx,one-timer-only = <0x0>;
++    };
 +
-+		/* 35us to allow the SBU switch to turn off */
-+		usleep_range(35, 1000);
-+	}
-+
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
-+	fsa->cur_select = new_sel;
-+
-+	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-+		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-+
-+		/* 15us to allow the SBU switch to turn on again */
-+		usleep_range(15, 1000);
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&fsa->lock);
-+
-+	return 0;
-+}
-+
-+static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-+{
-+	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
-+	u8 new_enable;
-+
-+	mutex_lock(&fsa->lock);
-+
-+	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-+	if (state->mode >= TYPEC_DP_STATE_A)
-+		new_enable |= FSA4480_ENABLE_SBU;
-+
-+	if (new_enable == fsa->cur_enable)
-+		goto out_unlock;
-+
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
-+	fsa->cur_enable = new_enable;
-+
-+	if (new_enable & FSA4480_ENABLE_SBU) {
-+		/* 15us to allow the SBU switch to turn off */
-+		usleep_range(15, 1000);
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&fsa->lock);
-+
-+	return 0;
-+}
-+
-+static int fsa4480_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct typec_switch_desc sw_desc = { };
-+	struct typec_mux_desc mux_desc = { };
-+	struct fsa4480 *fsa;
-+
-+	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
-+	if (!fsa)
-+		return -ENOMEM;
-+
-+	fsa->client = client;
-+	mutex_init(&fsa->lock);
-+
-+	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
-+	if (IS_ERR(fsa->regmap))
-+		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
-+
-+	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-+	fsa->cur_select = FSA4480_SEL_USB;
-+
-+	/* set default settings */
-+	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_R, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_MIC, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_SENSE, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_GND, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_R, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-+
-+	sw_desc.drvdata = fsa;
-+	sw_desc.fwnode = dev->fwnode;
-+	sw_desc.set = fsa4480_switch_set;
-+
-+	fsa->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(fsa->sw))
-+		return dev_err_probe(dev, PTR_ERR(fsa->sw), "failed to register typec switch\n");
-+
-+	mux_desc.drvdata = fsa;
-+	mux_desc.fwnode = dev->fwnode;
-+	mux_desc.set = fsa4480_mux_set;
-+
-+	fsa->mux = typec_mux_register(dev, &mux_desc);
-+	if (IS_ERR(fsa->mux)) {
-+		typec_switch_unregister(fsa->sw);
-+		return dev_err_probe(dev, PTR_ERR(fsa->mux), "failed to register typec mux\n");
-+	}
-+
-+	i2c_set_clientdata(client, fsa);
-+	return 0;
-+}
-+
-+static int fsa4480_remove(struct i2c_client *client)
-+{
-+	struct fsa4480 *fsa = i2c_get_clientdata(client);
-+
-+	typec_mux_unregister(fsa->mux);
-+	typec_switch_unregister(fsa->sw);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id fsa4480_table[] = {
-+	{ "fsa4480" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, fsa4480_table);
-+
-+static const struct of_device_id fsa4480_of_table[] = {
-+	{ .compatible = "fcs,fsa4480" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, fsa4480_of_table);
-+
-+static struct i2c_driver fsa4480_driver = {
-+	.driver = {
-+		.name = "fsa4480",
-+		.of_match_table = fsa4480_of_table,
-+	},
-+	.probe_new	= fsa4480_probe,
-+	.remove		= fsa4480_remove,
-+	.id_table	= fsa4480_table,
-+};
-+module_i2c_driver(fsa4480_driver);
-+
-+MODULE_DESCRIPTION("ON Semiconductor FSA4480 driver");
-+MODULE_LICENSE("GPL v2");
++    timer@800f0000 {
++        #pwm-cells = <0>;
++        clock-names = "s_axi_aclk";
++        clocks = <&zynqmp_clk 71>;
++        compatible = "xlnx,xps-timer-1.00.a";
++        reg = <0x800e0000 0x10000>;
++        xlnx,count-width = <32>;
++        xlnx,one-timer-only = <0x0>;
++    };
 -- 
-2.33.1
+2.25.1
 

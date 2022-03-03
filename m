@@ -2,81 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD5A4CC39C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF9E4CC39D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbiCCRYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S235309AbiCCRY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiCCRYo (ORCPT
+        with ESMTP id S235306AbiCCRYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:24:44 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A798F17EDBE;
-        Thu,  3 Mar 2022 09:23:56 -0800 (PST)
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXY2Z-1nh1c53Ft9-00Z2Ss; Thu, 03 Mar 2022 18:23:54 +0100
-Received: by mail-wm1-f45.google.com with SMTP id m42-20020a05600c3b2a00b00382ab337e14so4555164wms.3;
-        Thu, 03 Mar 2022 09:23:54 -0800 (PST)
-X-Gm-Message-State: AOAM531WE80095hwxC9srxD1t81rWsvLhsj5CQxJjz9d5nT3HYjED+Hb
-        mMzpeqbsfx7m/uawRHMDzRBcLeGEI8ttp+UcTKc=
-X-Google-Smtp-Source: ABdhPJwYlRoM2hP10OxnB+6WRepux9dtEcO0p1QjHz+jVcGiljix3iCRUesjDq9hNu0DboMAeNiy4Va1TJMMsMpZFaI=
-X-Received: by 2002:a7b:c001:0:b0:381:1afd:5caa with SMTP id
- c1-20020a7bc001000000b003811afd5caamr4615874wmb.35.1646328234412; Thu, 03 Mar
- 2022 09:23:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220302095008.27b6c6a9@canb.auug.org.au> <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
- <33a65b94-9e99-2cf8-0b62-95127916ce79@gmail.com>
-In-Reply-To: <33a65b94-9e99-2cf8-0b62-95127916ce79@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 3 Mar 2022 18:23:55 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1t+TmBi88wcOraPRUk8uDVnMaDJ4uSZX3DQnnu5zv+Mg@mail.gmail.com>
-Message-ID: <CAK8P3a1t+TmBi88wcOraPRUk8uDVnMaDJ4uSZX3DQnnu5zv+Mg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QRSwO+A6XLV6ejg9ogRRoSIug2APYtsOSttWJwKkiickhGAmq2F
- FztoEIrPbCKvqAPZOf+sCncpM71tgHrbhwU4IGMKmeVdmKMAm6Z7jSKHVJTDoZ0YOtmx18K
- q7FjkZr1By/O0T7lXN2e2rXqKIxRKtSvpBqgrzAI8m3y21rtQ8FnYSFcogs42jFMU7Gk0U6
- M2M+NaYqx9TTHffotRvKQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WRO6lbknXMc=:UViimbzsu8XmS0j9wNoHl3
- NepNcTK1Jo1P4SxrpAep4QY+GckfI42crtKIj6l1W8pamSDfH9Gwe3D3lQ0MiUGjDe/f+wSyC
- 4KN8fblcJ6zisEA3P95OoQrPWEtwbopqibwpDAXTxlHHl9Jgg5AQgPYQjVMC1CcXZTDta3ZsN
- 37IMYrAz1MeIxXFFaQL89PGzqoUVJdJoum2+m/vCqpq4uD2aYuarDJ5pYlaEK6IrnG4o67sul
- 9WT/4w8VacqCPtE8qddbrZ0QMPV8oAmh3scOTymGqSRrTCmqDaS6hWoSOVyRBm2AR9r3vD8UC
- KkJwe7utZaDJISKTgfZ2+xbB4Q9C4rNoYV4eMGikJtfzc5NfgyNZ4zSy/pI9TZS60KoZ2DIYU
- PrSQuP916g8lZ+M4WWUsnhcOGFdPDwCbvYOzJ6DCmuT3kHXh8fIur+0xnHDohAdEgv8y0GxEH
- 7G1xZ0mrd3BaA1YWbzmaSNQbJxUDd2qZhndqQuZtRpxvqfa+rs0lv6sbzlBIa8gRbA3eAZJqE
- Rv4UxfdWZmOr2CGyBVF+l47ju0Co2lQLhPAQBOtJ8YYRV3G39qdallPATbIWdTGqXMenwtj6X
- jy9gBFNnUBjPDgQ2QAm9xzgwEEzEiRsEJ0sj/Wg6AbSCwYS0wkwPYEBIH9FIlmHTzUJtUp+Yf
- lAhCD+3izR7cVoMLItC/4/E4m+X3C2XZxLsL26NAYq2j81ZnW/6qUd1VS8oa02wGwYHM=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 12:24:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED909182D95
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:24:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8F8EB8260E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A37C004E1;
+        Thu,  3 Mar 2022 17:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646328245;
+        bh=GZ362Y0qUSRyFFpLdb4duoISMS1QflKC2n25Lzoe8G0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P4V+RsV6L49Igx7yjoqdrFJtGQ+6Vcjlr1volUIgyMrarcFrl6mTdTXvyU97Bhrov
+         A5JUOnnp53/6PHzvAR+XNOlOp/IH1/PXIgtYhDtPQddmJyIpSIkQMsgybsTl6ENVFG
+         cq2T6lRJpvfSP8sFBmUJDfyEA88BajVZZHaV9gbr8V8OyFIVuZkC/1k8UgS47sgr8H
+         xYF86JWHoPsfDFrCNl/dm7GwubVVslyRfevirxZjH+NmDE8OrBNBrFyCgdMf9OdFJw
+         Q2ElhfHUUBmMNkaP9s02pk5BHuUbzvyjtW9QCbRoA/l3JDE7ECFTciHAx/eC/3i2PJ
+         yQVK8ttsW2LSQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nPpBL-00C0z8-27; Thu, 03 Mar 2022 17:24:03 +0000
+Date:   Thu, 03 Mar 2022 17:24:02 +0000
+Message-ID: <87sfrz0x1p.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
+        Robert Hancock <robert.hancock@calian.com>,
+        Stefan Asserhall <stefan.asserhall@xilinx.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] irqchip: xilinx: Enable generic irq multi handler
+In-Reply-To: <2a08d6c33e95d5da5d564ed3fbddc835983ef355.1646323896.git.michal.simek@xilinx.com>
+References: <2a08d6c33e95d5da5d564ed3fbddc835983ef355.1646323896.git.michal.simek@xilinx.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: michal.simek@xilinx.com, linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com, robert.hancock@calian.com, stefan.asserhall@xilinx.com, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 10:52 AM Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
-> I send a new pull request with the missing commit included. Please let me know
-> if you prefer the commit on top of the old pull request. This would break
-> git-bisecting, but the window of commits is rather small.
->
-> I fixed my for-next branch yesterday already.
+On Thu, 03 Mar 2022 16:11:39 +0000,
+Michal Simek <michal.simek@xilinx.com> wrote:
+> 
+> Register default arch handler via driver instead of directly pointing to
+> xilinx intc controller. This patch makes architecture code more generic.
+> 
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Reviewed-by: Stefan Asserhall <stefan.asserhall@xilinx.com>
+> ---
+> 
+>  arch/microblaze/Kconfig           |  2 ++
+>  arch/microblaze/include/asm/irq.h |  3 ---
+>  arch/microblaze/kernel/irq.c      | 16 +---------------
+>  drivers/irqchip/irq-xilinx-intc.c | 22 +++++++++++++++++++++-
+>  4 files changed, 24 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+> index 59798e43cdb0..da568e981604 100644
+> --- a/arch/microblaze/Kconfig
+> +++ b/arch/microblaze/Kconfig
+> @@ -45,6 +45,8 @@ config MICROBLAZE
+>  	select SET_FS
+>  	select ZONE_DMA
+>  	select TRACE_IRQFLAGS_SUPPORT
+> +	select GENERIC_IRQ_MULTI_HANDLER
+> +	select HANDLE_DOMAIN_IRQ
+>  
+>  # Endianness selection
+>  choice
+> diff --git a/arch/microblaze/include/asm/irq.h b/arch/microblaze/include/asm/irq.h
+> index 0a28e80bbab0..cb6ab55d1d01 100644
+> --- a/arch/microblaze/include/asm/irq.h
+> +++ b/arch/microblaze/include/asm/irq.h
+> @@ -11,7 +11,4 @@
+>  struct pt_regs;
+>  extern void do_IRQ(struct pt_regs *regs);
+>  
+> -/* should be defined in each interrupt controller driver */
+> -extern unsigned int xintc_get_irq(void);
+> -
+>  #endif /* _ASM_MICROBLAZE_IRQ_H */
+> diff --git a/arch/microblaze/kernel/irq.c b/arch/microblaze/kernel/irq.c
+> index 903dad822fad..1f8cb4c4f74f 100644
+> --- a/arch/microblaze/kernel/irq.c
+> +++ b/arch/microblaze/kernel/irq.c
+> @@ -20,27 +20,13 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/of_irq.h>
+>  
+> -static u32 concurrent_irq;
+> -
+>  void __irq_entry do_IRQ(struct pt_regs *regs)
+>  {
+> -	unsigned int irq;
+>  	struct pt_regs *old_regs = set_irq_regs(regs);
+>  	trace_hardirqs_off();
+>  
+>  	irq_enter();
+> -	irq = xintc_get_irq();
+> -next_irq:
+> -	BUG_ON(!irq);
+> -	generic_handle_irq(irq);
+> -
+> -	irq = xintc_get_irq();
+> -	if (irq != -1U) {
+> -		pr_debug("next irq: %d\n", irq);
+> -		++concurrent_irq;
+> -		goto next_irq;
+> -	}
+> -
+> +	handle_arch_irq(regs);
+>  	irq_exit();
+>  	set_irq_regs(old_regs);
+>  	trace_hardirqs_on();
+> diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
+> index 356a59755d63..c6710190c152 100644
+> --- a/drivers/irqchip/irq-xilinx-intc.c
+> +++ b/drivers/irqchip/irq-xilinx-intc.c
+> @@ -110,7 +110,7 @@ static struct irq_chip intc_dev = {
+>  	.irq_mask_ack = intc_mask_ack,
+>  };
+>  
+> -unsigned int xintc_get_irq(void)
+> +static unsigned int xintc_get_irq(void)
+>  {
+>  	unsigned int irq = -1;
+>  	u32 hwirq;
+> @@ -164,6 +164,25 @@ static void xil_intc_irq_handler(struct irq_desc *desc)
+>  	chained_irq_exit(chip, desc);
+>  }
+>  
+> +static u32 concurrent_irq;
 
-I would prefer a commit on top of the old pull request, so I don't have to
-rebase the later merges. I'll be able to apply that on Monday.
+Please kill this. It serves no purpose at all.
 
-       Arnd
+> +
+> +static void xil_intc_handle_irq(struct pt_regs *regs)
+> +{
+> +	unsigned int irq;
+> +
+> +	irq = xintc_get_irq();
+> +next_irq:
+> +	BUG_ON(!irq);
+> +	generic_handle_irq(irq);
+> +
+> +	irq = xintc_get_irq();
+> +	if (irq != -1U) {
+> +		pr_debug("next irq: %d\n", irq);
+> +		++concurrent_irq;
+> +		goto next_irq;
+> +	}
+
+How about writing this in (basic) C code, and use the exiting APIs?
+
+diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
+index 356a59755d63..18125bb841b2 100644
+--- a/drivers/irqchip/irq-xilinx-intc.c
++++ b/drivers/irqchip/irq-xilinx-intc.c
+@@ -110,18 +110,19 @@ static struct irq_chip intc_dev = {
+ 	.irq_mask_ack = intc_mask_ack,
+ };
+ 
+-unsigned int xintc_get_irq(void)
++#define SPURIOUS_IRQ	(-1U)
++
++static void xil_intc_handle_irq(struct pt_regs *regs)
+ {
+-	unsigned int irq = -1;
+ 	u32 hwirq;
+ 
+-	hwirq = xintc_read(primary_intc, IVR);
+-	if (hwirq != -1U)
+-		irq = irq_find_mapping(primary_intc->root_domain, hwirq);
+-
+-	pr_debug("irq-xilinx: hwirq=%d, irq=%d\n", hwirq, irq);
++	do {
++		hwirq = xintc_read(primary_intc, IVR);
++		if (unlikely(hwirq == SPURIOUS_IRQ))
++			break;
+ 
+-	return irq;
++		generic_handle_domain_irq(primary_intc->root_domain, hwirq);
++	} while (true);
+ }
+ 
+ static int xintc_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

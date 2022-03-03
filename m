@@ -2,147 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF664CB600
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C3D4CB61A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiCCEze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S229699AbiCCE7Y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 23:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiCCEzc (ORCPT
+        with ESMTP id S229561AbiCCE7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:55:32 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0312A767
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:54:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646283287; x=1677819287;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TAdTWW9fmnF0PrDe6bJdQ3LCYVJBCPRMITyyukJOaxM=;
-  b=U1qYwojkH40Vf/sLZv6wldy2vNbH5MY+QNRpAR65XrRcNG0Hbjt3VMkj
-   n1z+/xeV2zVUwJQlSLz/u74R0m3IWG0X6ARBAiCQF4ryMqZ8Bves0z6tt
-   5qT/QyOluxugm05NXLgbIhDjA44+58m/EjYRM+q2YHBxap05m+TkTEdnz
-   xgz4VkbN3uxK5s1L3D1ML/NSLZ2xH3K/4bomq+hY6WTgF9MEeBuSID/JL
-   EPOWyFSIx4+ZraGtoKjoUPYgdvZkw424lnxWSZjZY2zjytjccbhwRT0X8
-   2Lj+Ww9qrw8HRjD79DkVjreBifvpLrodpz97Du1fSt57THAFDspy18xmH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251154468"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="251154468"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 20:54:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="709778425"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2022 20:54:45 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPdUC-0000AD-9q; Thu, 03 Mar 2022 04:54:44 +0000
-Date:   Thu, 3 Mar 2022 12:54:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Mark Salyzyn <salyzyn@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 781/9999] arch/mips/include/asm/vdso/gettimeofday.h:68:38: error:
- '__NR_clock_gettime64' undeclared
-Message-ID: <202203031232.U5Jeb2G3-lkp@intel.com>
+        Wed, 2 Mar 2022 23:59:17 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FA1213DE17
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:58:28 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-5-c9saVIHFMHux_Sno3vxg6w-1; Thu, 03 Mar 2022 04:58:25 +0000
+X-MC-Unique: c9saVIHFMHux_Sno3vxg6w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 3 Mar 2022 04:58:23 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 3 Mar 2022 04:58:23 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xiaomeng Tong' <xiam0nd.tong@gmail.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "bjohannesmeyer@gmail.com" <bjohannesmeyer@gmail.com>,
+        "c.giuffrida@vu.nl" <c.giuffrida@vu.nl>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "h.j.bos@vu.nl" <h.j.bos@vu.nl>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>
+Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Index: AQHYLhg9+DU/OogLf0+tiSFmjztyUKysHu+QgADRVYCAACVtoA==
+Date:   Thu, 3 Mar 2022 04:58:23 +0000
+Message-ID: <39404befad5b44b385698ff65465abe5@AcuMS.aculab.com>
+References: <1077f17e50d34dc2bbfdf4e52a1cb2fd@AcuMS.aculab.com>
+ <20220303022729.9321-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220303022729.9321-1-xiam0nd.tong@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincenzo,
+From: Xiaomeng Tong
+> Sent: 03 March 2022 02:27
+> 
+> On Wed, 2 Mar 2022 14:04:06 +0000, David Laight
+> <David.Laight@ACULAB.COM> wrote:
+> > I think that it would be better to make any alternate loop macro
+> > just set the variable to NULL on the loop exit.
+> > That is easier to code for and the compiler might be persuaded to
+> > not redo the test.
+> 
+> No, that would lead to a NULL dereference.
 
-FYI, the error/warning still remains.
+Why, it would make it b ethe same as the 'easy to use':
+	for (item = head; item; item = item->next) {
+		...
+		if (...)
+			break;
+		...
+	}
+	if (!item)
+		return;
+ 
+> The problem is the mis-use of iterator outside the loop on exit, and
+> the iterator will be the HEAD's container_of pointer which pointers
+> to a type-confused struct. Sidenote: The *mis-use* here refers to
+> mistakely access to other members of the struct, instead of the
+> list_head member which acutally is the valid HEAD.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
-commit: 6b7f832e465d88fca5f3a07b85e664f962c88e0b [781/9999] BACKPORT: mips: Add support for generic vDSO
-config: mips-randconfig-r016-20211028 (https://download.01.org/0day-ci/archive/20220303/202203031232.U5Jeb2G3-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/6b7f832e465d88fca5f3a07b85e664f962c88e0b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 6b7f832e465d88fca5f3a07b85e664f962c88e0b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+The problem is that the HEAD's container_of pointer should never
+be calculated at all.
+This is what is fundamentally broken about the current definition.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> IOW, you would dereference a (NULL + offset_of_member) address here.
 
-All errors (new ones prefixed by >>):
+Where?
 
-   In file included from lib/vdso/gettimeofday.c:26,
-                    from <command-line>:
-   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_gettime_fallback':
->> arch/mips/include/asm/vdso/gettimeofday.h:68:38: error: '__NR_clock_gettime64' undeclared (first use in this function)
-      68 |         register long nr asm("v0") = __NR_clock_gettime64;
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/include/asm/vdso/gettimeofday.h:68:38: note: each undeclared identifier is reported only once for each function it appears in
-   In file included from <command-line>:
-   lib/vdso/gettimeofday.c: In function '__cvdso_clock_gettime32':
-   lib/vdso/gettimeofday.c:113:20: error: invalid use of undefined type 'struct compat_timespec'
-     113 |                 res->tv_sec = ts.tv_sec;
-         |                    ^~
-   lib/vdso/gettimeofday.c:114:20: error: invalid use of undefined type 'struct compat_timespec'
-     114 |                 res->tv_nsec = ts.tv_nsec;
-         |                    ^~
-   arch/mips/vdso/vgettimeofday.c: At top level:
-   arch/mips/vdso/vgettimeofday.c:14:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
-      14 | int __vdso_clock_gettime(clockid_t clock,
-         |     ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/vdso/vgettimeofday.c:20:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
-      20 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
-         |     ^~~~~~~~~~~~~~~~~~~
+> Please remind me if i missed something, thanks.
+>
+> Can you share your "alternative definitions" details? thanks!
 
+The loop should probably use as extra variable that points
+to the 'list node' in the next structure.
+Something like:
+	for (xxx *iter = head->next;
+		iter == &head ? ((item = NULL),0) : ((item = list_item(iter),1));
+		iter = item->member->next) {
+	   ...
+With a bit of casting you can use 'item' to hold 'iter'.
 
-vim +/__NR_clock_gettime64 +68 arch/mips/include/asm/vdso/gettimeofday.h
+> 
+> > OTOH there may be alternative definitions that can be used to get
+> > the compiler (or other compiler-like tools) to detect broken code.
+> > Even if the definition can't possibly generate a working kerrnel.
+> 
+> The "list_for_each_entry_inside(pos, type, head, member)" way makes
+> the iterator invisiable outside the loop, and would be catched by
+> compiler if use-after-loop things happened.
 
-    57	
-    58	static __always_inline long clock_gettime_fallback(
-    59						clockid_t _clkid,
-    60						struct __kernel_timespec *_ts)
-    61	{
-    62		register struct __kernel_timespec *ts asm("a1") = _ts;
-    63		register clockid_t clkid asm("a0") = _clkid;
-    64		register long ret asm("v0");
-    65	#if _MIPS_SIM == _MIPS_SIM_ABI64
-    66		register long nr asm("v0") = __NR_clock_gettime;
-    67	#else
-  > 68		register long nr asm("v0") = __NR_clock_gettime64;
-    69	#endif
-    70		register long error asm("a3");
-    71	
-    72		asm volatile(
-    73		"       syscall\n"
-    74		: "=r" (ret), "=r" (error)
-    75		: "r" (clkid), "r" (ts), "r" (nr)
-    76		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
-    77		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
-    78	
-    79		return error ? -ret : ret;
-    80	}
-    81	
+It is also a compete PITA for anything doing a search.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

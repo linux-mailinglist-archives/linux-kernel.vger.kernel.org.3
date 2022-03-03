@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E361A4CC829
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0064CC82D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236568AbiCCVgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S236587AbiCCVk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiCCVgo (ORCPT
+        with ESMTP id S232842AbiCCVkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:36:44 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC216FDD9
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:35:59 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id p17so5933834plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:35:59 -0800 (PST)
+        Thu, 3 Mar 2022 16:40:25 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024B3E1B49
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:39:39 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id i1so5104515ilu.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:39:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mTTQbV2A2vstkO2kh5RQpGJLvdRtPFWdqW179J6hNJ0=;
-        b=N0Hu/qem+pyMDDz2i8akwdkI4o0ab5wiaqXHx0jVz8DekzDFJJGKCRQh9OzA8XMX+h
-         gmZ1SbI4TvAiqXEdoRbtS21W9hIOgHzQKi2Dbvkfbf83YeFsb5H4IQswCLbgbo9P0wg0
-         Sb45Ip01tIdIB6zxEYBtv29Tf7VEYsuPCETkD5wrZt09QwMEXceBkvR3WAzUnfsQYp63
-         GWU0E/r+PovlZQjGUuQsjGLyAh6YJkuPB4XmvgitREtgMLbKEy6EVKB8CfEg9iIYi59E
-         RLaHzAzuN7Cg5+vQznojiovQNSR3CrW8Xt6p0DJnY9XqFDx29JyvX1AWhJzBaqu1h+/c
-         rQQQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GrVA4wCtJ9ZZHjn3qb/7bEScChq15mZGv+SPu/mtxIM=;
+        b=VCCqrS+5HnBr+1wxFMQSWauFi4Qp22D2JmhF5xNptWdbB+RRGVsOw0hr43SMv8QQSA
+         FvZ+O4XYQKizNzZzSiTG6DT1LKtSG1W1CjmvdyiW4yNigLzrBVqP0UZvQuGRu9juEqcV
+         N78vuK7UANHhsr7DbY+xfl5U00+fswtNYm4jo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mTTQbV2A2vstkO2kh5RQpGJLvdRtPFWdqW179J6hNJ0=;
-        b=oDBzjxHPANXHSyLZSBIhbEgZ/uEKIExbfEX0s/3FhlJmb4SxhJrYbUmPXQBErOGe5h
-         JSuyRhHpkDkZjR/TqIi67uzW9oF8JjaGx3VNuhg8uYAoCxMFoQzsr60oXrfpbOBZAjCR
-         3Ae5ZD2Roz4a0ZOpQ1x/4PAqYJ0aeQQiaqdRTf3zBLCMrkui+7YU+LQ8K/4UiW9wB/YP
-         IhAvHQXfuP0IpMLdNbFVd5GrUtNhbdSwc2iNtbktnYAlEgMOFoK2wNohShyadsnPptzy
-         N4s3BcK4dxNa1TpYK/46rodarxgt1cLuJ2KAPiKe4wPOl6luXXBwVVsu8hyODeBAsOm1
-         H07w==
-X-Gm-Message-State: AOAM531X2KWE+JBMcjt9gEK3nC+wrZu++kZvANr9iPyOG9qAoqz199c7
-        cCr+XTfw5NtUkbfyRkzGBwnXoxNc05g=
-X-Google-Smtp-Source: ABdhPJxeEj71FVOkpuYaEuAffExNYk8JYhq8TPI0C0rV51GW4k3JxXIM0Wc66BertAkOp9bnEhGOsQ==
-X-Received: by 2002:a17:902:7b8d:b0:14f:1aca:d95e with SMTP id w13-20020a1709027b8d00b0014f1acad95emr37928815pll.122.1646343358520;
-        Thu, 03 Mar 2022 13:35:58 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id lr11-20020a17090b4b8b00b001bc4098fa78sm3115724pjb.24.2022.03.03.13.35.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Mar 2022 13:35:58 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH] mm: madvise: MADV_DONTNEED_LOCKED
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220303212956.229409-1-hannes@cmpxchg.org>
-Date:   Thu, 3 Mar 2022 13:35:56 -0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A5A8E655-0CE6-4F27-85FD-E99726776EAC@gmail.com>
-References: <20220303212956.229409-1-hannes@cmpxchg.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GrVA4wCtJ9ZZHjn3qb/7bEScChq15mZGv+SPu/mtxIM=;
+        b=c9qrsJrNACKKAf91piYwtSroS6R9T/df8Etc0Zm4m3lV6m5jTsyCI/awMxCXwbffwd
+         f2Smh71XAn5ER5cyLWq3N4b/nM4L9Qk/a6mSGW5r+54MlqK62g00Yz0aAGIFd+h+mfOY
+         v/28UYKURy2CNiV9tWRcl/i9WZHi9tcalSpI0lYuhj4alvNeRlqv0F2QAgWRBDNQQycG
+         hyb/RE/22mfWKC9lR7CYp7zKDZpYAT7hY7IUVAHU3/+pPUSjtYcUO+kH2gCrFX+iE14s
+         yxXs16fkghGcDEhUdl+46dX+kog8Zn/7YrOQ8MZ82juuVQin9QD/+tyJDc9EGwM1RbvQ
+         cZXg==
+X-Gm-Message-State: AOAM531kjvl1OGrcg98Rinxu9YkOtBpkmXZGvIeUf36yIcHBt3ilKCYA
+        DYhA0BZ1wdS51ONO1fMIY0K/7A==
+X-Google-Smtp-Source: ABdhPJzbbv3ggQn9TAbpL4V/TQDXEGyuOp2p0inmz8pxdQifa0sBXO4Vk4R6ADVOl5MwgFyzP/zxzw==
+X-Received: by 2002:a92:c5aa:0:b0:2c5:f753:9069 with SMTP id r10-20020a92c5aa000000b002c5f7539069mr6683520ilt.71.1646343578331;
+        Thu, 03 Mar 2022 13:39:38 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id f4-20020a92b504000000b002c21ef70a81sm3233325ile.7.2022.03.03.13.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 13:39:37 -0800 (PST)
+Subject: Re: [PATCH] selftests/interpreter: fix separate directory build
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220303110629.2072927-1-usama.anjum@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b97fe611-0a2d-6907-b924-a9132e2d427f@linuxfoundation.org>
+Date:   Thu, 3 Mar 2022 14:39:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220303110629.2072927-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/3/22 4:06 AM, Muhammad Usama Anjum wrote:
+> Separate directory build fails of this test as headers include path isn't
+> set correctly in that case. Fix it by including KHDR_INCLUDES.
+> 
+> make -C tools/testing/selftests O=build1
+> gcc -Wall -O2 -I../../../../usr/include    trust_policy_test.c -lcap -o /linux_mainline/build1/kselftest/interpreter/trust_policy_test
+> trust_policy_test.c:14:10: fatal error: linux/trusted-for.h: No such file or directory
+>     14 | #include <linux/trusted-for.h>
+>        |          ^~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/interpreter/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/interpreter/Makefile b/tools/testing/selftests/interpreter/Makefile
+> index 7402fdb6533f..51dde8e01e32 100644
+> --- a/tools/testing/selftests/interpreter/Makefile
+> +++ b/tools/testing/selftests/interpreter/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> -CFLAGS += -Wall -O2 -I$(khdr_dir)
+> +CFLAGS += -Wall -O2 -I$(khdr_dir) $(KHDR_INCLUDES)
+>   LDLIBS += -lcap
+>   
 
+Change looks fine to me.
 
-> On Mar 3, 2022, at 1:29 PM, Johannes Weiner <hannes@cmpxchg.org> =
-wrote:
->=20
-> MADV_DONTNEED historically rejects mlocked ranges, but with
-> MLOCK_ONFAULT and MCL_ONFAULT allowing to mlock without populating,
-> there are valid use cases for depopulating locked ranges as well.
+>   src_test := $(wildcard *_test.c)
+> 
 
-...
+I am not seeing this test in linux-kselftest next for sure. Which tree is
+this patch based on? Please  add the repo info to the patch subject line
+in the future.
 
-> @@ -850,7 +858,7 @@ static long madvise_dontneed_free(struct =
-vm_area_struct *vma,
-> 		VM_WARN_ON(start >=3D end);
-> 	}
->=20
-> -	if (behavior =3D=3D MADV_DONTNEED)
-> +	if (behavior =3D=3D MADV_DONTNEED || behavior =3D=3D =
-MADV_DONTNEED_LOCKED)
-> 		return madvise_dontneed_single_vma(vma, start, end);
-> 	else if (behavior =3D=3D MADV_FREE)
-> 		return madvise_free_single_vma(vma, start, end);
-> @@ -988,6 +996,7 @@ static int madvise_vma_behavior(struct =
-vm_area_struct *vma,
-> 		return madvise_pageout(vma, prev, start, end);
-> 	case MADV_FREE:
-> 	case MADV_DONTNEED:
-> +	case MADV_DONTNEED_LOCKED:
-> 		return madvise_dontneed_free(vma, prev, start, end, =
-behavior);
-> 	case MADV_POPULATE_READ:
-> 	case MADV_POPULATE_WRITE:
-> @@ -1113,6 +1122,7 @@ madvise_behavior_valid(int behavior)
-> 	case MADV_REMOVE:
-> 	case MADV_WILLNEED:
-> 	case MADV_DONTNEED:
-> +	case MADV_DONTNEED_LOCKED:
-> 	case MADV_FREE:
-> 	case MADV_COLD:
-> 	case MADV_PAGEOUT:
+Either way I don't have the patch that added in liunx-kselftest repo:
 
-Don=E2=80=99t you want to change madvise_need_mmap_write() as well and =
-add
-MADV_DONTNEED_LOCKED there too?
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah

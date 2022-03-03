@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E764CC5D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254844CC5DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbiCCTPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S234196AbiCCTQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235828AbiCCTP3 (ORCPT
+        with ESMTP id S231392AbiCCTQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:15:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9A115B99F;
-        Thu,  3 Mar 2022 11:14:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D348CB82693;
-        Thu,  3 Mar 2022 19:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1002AC004E1;
-        Thu,  3 Mar 2022 19:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646334880;
-        bh=65NU4OmMIt5EFn/vNTZOvIr2kIZ0haZ0h8eEAdsZw8s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CrAUGcfsum5yXJwnDJdL4zllI0l2ylsQSR7U5pCNZe8w5kgnKsF08bzWOVxktO+AP
-         96IZy37imHsp+qYWFVm6A2v+Hu7BfOCpM/xsSQ0rLGpCm1VvIlW8QAq8jbupsDCmRM
-         qRX/AnILHatxBU9fx7kFIP43wqQ6Q/1KlngSluUam4I++GMKD6HISZ4UoXD8dHlGNC
-         Fyqspnfc8YAOa+LecnLTm7owS+UIV5AfkNCBiIjlXJoaqEw8+Drnq3LV9JgYPco3s7
-         uNEvfZXnLqux6soIBRzrSrX5VQ7SkTe8zeU2Wl1+OZ/pTCESk41cmMjy4Yt2yDiy3k
-         Bvo2g/t8Z1dxg==
-Date:   Thu, 3 Mar 2022 21:14:36 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] vhost: Provide a kernel warning if mutex is held
- whilst clean-up in progress
-Message-ID: <YiETnIcfZCLb63oB@unreal>
-References: <20220303151929.2505822-1-lee.jones@linaro.org>
+        Thu, 3 Mar 2022 14:16:56 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CC5159287
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:16:10 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id bt3so5531969qtb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:16:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lsaEHQfA1sz4dIz7RuOmeFmwQ50xPsxwpOfXV6GcrSY=;
+        b=WFhZgrwWbToo16XgHphmOomHbJQdCxEPHin71iF410pvZwItSq5Nm2njs/dGmhcbSn
+         jSouYRwLqNZejipDZAyJ2kuJlJ1XNTSnrw89DVI6/fX78vv0IeoqgeZJd74pM6JfBlzS
+         7Z1l6bEbCDApCjcas9a3MBSeDx9UDyIDfJqSNjtwasWUQVrJ2bcbnTaW/i6U85TRYBGK
+         CUPcsg9EEObKittAM/kAsgK2XmEI2gnFcupNkEdXgo/yRrK4mEMFfTuZ9yJ5igIgf8Lq
+         C8hmJgsJV/04ng4dsVVVVlHWs/e+PJPEtuHG4f6ECeu7ma3l/jZzVztpMwOJIVHgJNIi
+         esRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsaEHQfA1sz4dIz7RuOmeFmwQ50xPsxwpOfXV6GcrSY=;
+        b=TkXNh8Gu8SeEZMyf4Hx9DDAk40taBcLC2Z5/CXmV2dDGFjAhoWBoRoqdhXRijAU2UX
+         S+Wb5TJm5gbnnrDPsXnT+nw0bfvfk5NIEUGWYadl3aS/LrTNGqDp0f4p3fiyE7TLfEwE
+         CGxs1ZNo/erEfTZ/5xwlrKQW2yJvS1VP5b+vwGKZ1DAXVc8sohfEESCmX4qc1ne1skzJ
+         gPOvCrFZtlhlAzaBJjwVFdoi10wZg2Bp/R4WRtvoNdXoOfLI21dD8M+SNeiDghYnJ5a0
+         DxLfh3kq9ufCB35VJ/Lg8Z6GormcC+djbAkNqhpfcP9A9KUkyEpU69qo71ZpSX1Pwdd2
+         khpQ==
+X-Gm-Message-State: AOAM533zvi8X/vZU8iglWzrzfyIGPEa3obF05DOGXywED90aWOz548CF
+        pjQf9xypTYFLGOYXgm/270eKbmC7TTChByhAKlu6Dg==
+X-Google-Smtp-Source: ABdhPJzJPCGk8ArcwoWa410V7JH5Qxelxo/TCDVm5c4FjKo3cKpoy7FtvUnKgndHbNrENPGGFBQf56Hao5X0VwJM+H8=
+X-Received: by 2002:a05:622a:4d1:b0:2de:676:d2bd with SMTP id
+ q17-20020a05622a04d100b002de0676d2bdmr29208228qtx.565.1646334969373; Thu, 03
+ Mar 2022 11:16:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303151929.2505822-1-lee.jones@linaro.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <7e862b1c-7818-6759-caf1-962598d2c8b3@fb.com> <CA+khW7gAEL+yBmXjWO28ns5hU4oHVZrEArfepuOfy6Q1y7VDKQ@mail.gmail.com>
+ <2c5669f1-b9d9-ee78-c5ee-d29a41d4d70a@fb.com>
+In-Reply-To: <2c5669f1-b9d9-ee78-c5ee-d29a41d4d70a@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 3 Mar 2022 11:15:57 -0800
+Message-ID: <CA+khW7h=VhCgw+gzAegu6BcNTgwHvdxh6ayueKM5qiAD+fk2Uw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 03:19:29PM +0000, Lee Jones wrote:
-> All workers/users should be halted before any clean-up should take place.
-> 
-> Suggested-by:  Michael S. Tsirkin <mst@redhat.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/vhost/vhost.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index bbaff6a5e21b8..d935d2506963f 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -693,6 +693,9 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->  	int i;
->  
->  	for (i = 0; i < dev->nvqs; ++i) {
-> +		/* Ideally all workers should be stopped prior to clean-up */
-> +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> +
->  		mutex_lock(&dev->vqs[i]->mutex);
+On Thu, Mar 3, 2022 at 11:13 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 3/3/22 10:56 AM, Hao Luo wrote:
+> > On Wed, Mar 2, 2022 at 12:55 PM Yonghong Song <yhs@fb.com> wrote:
+> >> On 2/25/22 3:43 PM, Hao Luo wrote:
+> >>> @@ -5086,6 +5086,29 @@ union bpf_attr {
+> >>>     *  Return
+> >>>     *          0 on success, or a negative error in case of failure. On error
+> >>>     *          *dst* buffer is zeroed out.
+> >>> + *
+> >>> + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
+> >>
+> >> Can we make pathname_sz to be u32 instead of int? pathname_sz should
+> >> never be negative any way.
+> >>
+> >> Also, I think it is a good idea to add 'u64 flags' parameter for all
+> >> three helpers, so we have room in the future to tune for new use cases.
+> >>
+> >
+> > SG. Will make this change.
+> >
+> > Actually, I think I need to cap patthname_sz from above, to ensure
+> > pathname_sz isn't too big. Is that necessary? I see there are other
+> > helpers that don't have this type of check.
+>
+> There is no need. The verifier should ensure the memory held by pathname
+> will have at least size of pathname_sz.
+>
 
-I know nothing about vhost, but this construction and patch looks
-strange to me.
-
-If all workers were stopped, you won't need mutex_lock(). The mutex_lock
-here suggests to me that workers can still run here.
-
-Thanks
-
->  		if (dev->vqs[i]->error_ctx)
->  			eventfd_ctx_put(dev->vqs[i]->error_ctx);
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+SG. Thanks!

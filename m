@@ -2,121 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2044CB580
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8340A4CB586
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiCCDmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 22:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229507AbiCCDsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 22:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiCCDmP (ORCPT
+        with ESMTP id S229487AbiCCDso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 22:42:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D73411D7A4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:41:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F111B8219C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BF5C004E1;
-        Thu,  3 Mar 2022 03:41:25 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 22:41:24 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH 2/2] tracing: Add sample code for custom trace events
-Message-ID: <20220302224124.433ba754@rorschach.local.home>
-In-Reply-To: <CAEXW_YQ4id4-GOgYzP_U2BLx8VVKy=RRLQgmV-npHETG5SqL2g@mail.gmail.com>
-References: <20220302032414.503960863@goodmis.org>
-        <20220302032820.877781830@goodmis.org>
-        <CAEXW_YQ4id4-GOgYzP_U2BLx8VVKy=RRLQgmV-npHETG5SqL2g@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 2 Mar 2022 22:48:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83AB1136EED
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646279277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pYfgs3N+rvRxYqeQvpIVkVHYmOj1DCx1FHLabmoSbPc=;
+        b=KvJpShr88ONMsBnjnrPVjC9Q1KDptCaYzL7oiDLrZ9mGdNS+f0CN4idyJf/QT0hBolyTSM
+        9QW64+T16BzHGOMwx1NpMrZ/blfMl5EBBEDHUQNBl83b85DXgbonBTJQEHnbATlpln0M9v
+        twY6zCE8HLAYHunnvpWHxkxk+BBVpQQ=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-XfWXYbRqNeGq6dcO32w9FA-1; Wed, 02 Mar 2022 22:47:56 -0500
+X-MC-Unique: XfWXYbRqNeGq6dcO32w9FA-1
+Received: by mail-ot1-f71.google.com with SMTP id d3-20020a05683018e300b005ad2cb4db18so2655300otf.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:47:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=pYfgs3N+rvRxYqeQvpIVkVHYmOj1DCx1FHLabmoSbPc=;
+        b=trPE4DfiqtF9+1jh8crZ/WMAUCXm864qydEcKTnDdsnv/y/Twsawm5JqAWF/TYPNQn
+         dRgq7JkSbNUZTnQxEAOXaG67qDemn7JtToAK/P5z4A38ogLxxMxJmwFnyhzA5TxOxXKJ
+         qSxGCPNSyD4XFJ1zBHCzCq4TVD5Qs8dutlBf6cMuKCsNcXbTOnfBe7RLV52Q4wvazWij
+         vkTmCcBUMipSb9KNTD/Ir8H5EuHyJaDT69AKaZOguwEG/T6J3xHiCZ0Gk4Y0AOIHSas0
+         9oEawtcIUWQNQwkgIJ0dWB8IBCa3FBRcO6uXbnczCj6gha1J11IjscyS94ZYaUEiI/pl
+         m7kg==
+X-Gm-Message-State: AOAM53189VUUs5XTsH9e/PKUVSyresws5AYVVYGlYWHuTCZ0O72ytR60
+        0rqLoVd7JP4Dhp/wWN5aEvZkOmp5bkLmVBjfOWpjWE9z/hZOVyponr5xKX+USFWNdd1Ls5AF9gP
+        pyJvse/pOtE34HI7+0sUxbTEL
+X-Received: by 2002:a05:6870:c987:b0:d7:3d45:6692 with SMTP id hi7-20020a056870c98700b000d73d456692mr2568149oab.34.1646279275356;
+        Wed, 02 Mar 2022 19:47:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqAqFU9eF4TGFq+ynpN8QYYtYZBW2wrihjy9F9oNP48aBIzOrqLfKZTtd7KLpmq/YSUxV4OA==
+X-Received: by 2002:a05:6870:c987:b0:d7:3d45:6692 with SMTP id hi7-20020a056870c98700b000d73d456692mr2568136oab.34.1646279275125;
+        Wed, 02 Mar 2022 19:47:55 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056808144300b002d4dedfc1ebsm451545oiv.20.2022.03.02.19.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 19:47:54 -0800 (PST)
+Date:   Wed, 2 Mar 2022 20:47:52 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
+        cohuck@redhat.com, mgurtovoy@nvidia.com, yishaih@nvidia.com,
+        linuxarm@huawei.com, liulongfang@huawei.com,
+        prime.zeng@hisilicon.com, jonathan.cameron@huawei.com,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol
+ with PRE_COPY
+Message-ID: <20220302204752.71ea8b32.alex.williamson@redhat.com>
+In-Reply-To: <20220303000528.GW219866@nvidia.com>
+References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
+        <20220302172903.1995-8-shameerali.kolothum.thodi@huawei.com>
+        <20220302133159.3c803f56.alex.williamson@redhat.com>
+        <20220303000528.GW219866@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022 22:22:30 -0500
-Joel Fernandes <joel@joelfernandes.org> wrote:
+On Wed, 2 Mar 2022 20:05:28 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> > +#include <linux/trace_events.h>
-> > +#include <linux/version.h>
-> > +#include <linux/module.h>
-> > +#include <linux/sched.h>
-> > +#include <trace/events/sched.h>
-> > +
-> > +#define THIS_SYSTEM "custom_sched"
-> > +
-> > +#define SCHED_PRINT_FMT                                                        \
-> > +       C("prev_prio=%d next_pid=%d next_prio=%d", REC->prev_prio, REC->next_pid, \  
+> On Wed, Mar 02, 2022 at 01:31:59PM -0700, Alex Williamson wrote:
+> > > + * initial_bytes reflects the estimated remaining size of any initial mandatory
+> > > + * precopy data transfer. When initial_bytes returns as zero then the initial
+> > > + * phase of the precopy data is completed. Generally initial_bytes should start
+> > > + * out as approximately the entire device state.  
+> > 
+> > What is "mandatory" intended to mean here?  The user isn't required to
+> > collect any data from the device in the PRE_COPY states.  
 > 
-> Probably prev_pid should be included so we know what the previous task was?
+> If the data is split into initial,dirty,trailer then mandatory means
+> that first chunk.
+
+But there's no requirement to read anything in PRE_COPY, so initial
+becomes indistinguishable from trailer and dirty doesn't exist.
+
+> > "The vfio_precopy_info data structure returned by this ioctl provides
+> >  estimates of data available from the device during the PRE_COPY states.
+> >  This estimate is split into two categories, initial_bytes and
+> >  dirty_bytes.
+> > 
+> >  The initial_bytes field indicates the amount of static data available
+> >  from the device.  This field should have a non-zero initial value and
+> >  decrease as migration data is read from the device.  
 > 
-> Or are you expecting that a prior sched_switch would have that
-> information? If so, then prev_prio is also not needed as the previous
-> sched_switch's next_prio would have the prio. That would save even
-> more space too..
+> static isn't great either, how about just say 'minimum data available'
 
-No, I left it out because it's already recorded in the event:
+'initial precopy data-set'?
 
-kworker/u16:2-19213   [005] d..2. 24689.792052: sched_switch: prev_comm=kworker/u16:2 prev_pid=19213 prev_prio=120 prev_state=I ==> next_comm=swapper/5 next_pid=0 next_prio=120
-
-The above is the normal sched_switch event. The prev pid is 19213 which
-is equal to common_pid (the first 19213 in that string). As prios can
-change, I would not want to drop that anyway.
-
+> >  Userspace may use the combination of these fields to estimate the
+> >  potential data size available during the PRE_COPY phases, as well as
+> >  trends relative to the rate the device is dirtying it's internal
+> >  state, but these fields are not required to have any bearing relative
+> >  to the data size available during the STOP_COPY phase."  
 > 
-> > +         REC->next_prio)
-> > +
-> > +#define SCHED_WAKING_FMT                               \
-> > +       C("pid=%d prio=%d", REC->pid, REC->prio)
-> > +  
+> That last is too strong. I would just drop starting at but.
 > 
-> I think including the target_cpu of a wake up is also really important
-> to show where the task is going to be awakened, and maybe we can drop
-> prio since a subsequent sched_switch will have the priority in
-> next_prio.
-
-True, we can do that.
-
+> The message to communicate is the device should allow dirty_bytes to
+> reach 0 during the PRE_COPY phases if everything is is idle. Which
+> tells alot about how to calculate it.
 > 
-> [..]
-> > +static void __exit trace_sched_exit(void)
-> > +{
-> > +       trace_set_clr_event(THIS_SYSTEM, "sched_switch", 0);
-> > +       trace_set_clr_event(THIS_SYSTEM, "sched_waking", 0);
-> > +
-> > +       trace_remove_event_call(&sched_switch_call);
-> > +       trace_remove_event_call(&sched_waking_call);
-> > +}
-> > +
-> > +module_init(trace_sched_init);
-> > +module_exit(trace_sched_exit);
-> > +
-> > +MODULE_AUTHOR("Steven Rostedt");
-> > +MODULE_DESCRIPTION("Custom scheduling events");
-> > +MODULE_LICENSE("GPL");
-> > +  
+> It is all better otherwise
 > 
-> Remove extra lines from the end of the file?
->
+> > > + * Drivers should attempt to return estimates so that initial_bytes +
+> > > + * dirty_bytes matches the amount of data an immediate transition to STOP_COPY
+> > > + * will require to be streamed.  
+> >
+> > I think previous discussions have proven this false, we expect trailing
+> > data that is only available in STOP_COPY, we cannot bound the size of
+> > that data, and dirty_bytes is not intended to expose data that cannot
+> > be retrieved during the PRE_COPY phases.  Thanks,  
+> 
+> It was written assuming the stop_copy trailer is small.
 
-Ah, yeah.
+We have no basis to make that assertion.  We've agreed that precopy can
+be used for nothing more than a compatibility test, so we could have a
+vGPU with a massive framebuffer and no ability to provide dirty
+tracking implement precopy only to include the entire framebuffer in
+the trailing STOP_COPY data set.  Per my understanding and the fact
+that we cannot enforce any heuristics regarding the size of the tailer
+relative to the pre-copy data set, I think the above strongly phrased
+sentence is necessary to understand the limitations of what this ioctl
+is meant to convey.  Thanks,
 
-Thanks for reviewing.
+Alex
 
--- Steve

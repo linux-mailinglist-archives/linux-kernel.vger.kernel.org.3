@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EAF4CB73E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F7B4CB740
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiCCGyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S229910AbiCCGzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiCCGyQ (ORCPT
+        with ESMTP id S229668AbiCCGza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:54:16 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C5F68F0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:53:30 -0800 (PST)
-X-UUID: df35ec03309a404eb4332c5bead0315d-20220303
-X-UUID: df35ec03309a404eb4332c5bead0315d-20220303
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 390624326; Thu, 03 Mar 2022 14:53:24 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Mar 2022 14:53:23 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Mar 2022 14:53:23 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V6 5/5] drm/mediatek: add display support for MT8186
-Date:   Thu, 3 Mar 2022 14:53:13 +0800
-Message-ID: <20220303065322.23132-2-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220303065322.23132-1-rex-bc.chen@mediatek.com>
-References: <20220303065322.23132-1-rex-bc.chen@mediatek.com>
+        Thu, 3 Mar 2022 01:55:30 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D35016A5B0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:54:45 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id n33-20020a05600c3ba100b003832caf7f3aso2047608wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 22:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E7Ew53yfjewVk3HWOkuEB6l85pgjkhws9cTt9TXMGuQ=;
+        b=pr4obOLhlupgLuaBUf/izWSxSovMzmddb/AVhCbU1PC44nH9PWqUXwu8rDkLwLZIXP
+         Hpv0x6QzeksAZz+t+A0zu6b+mz92zDKCVYWYzQanxeRZmhNNeKx7GUzvfydev3437j0D
+         4T8f2bmg98LO+FNmHGDYk15C1NR6OT2nhz/y63IpmFVxfokYbfVbwcklt3vXOXQ0Bf9w
+         XMaPo+6MhRfAG7kZP3m5t0tiHE6pRbVOzAup5XVsyWNmIB4BlTVYkbOGKR0qnWwo4ybS
+         Dg2ZJiwnUIHIgB/qxtHsNnP8TY889ivUBbDmM+CqDBnFDslA9f4WlaxiHmwsAlrx5hkQ
+         UqZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E7Ew53yfjewVk3HWOkuEB6l85pgjkhws9cTt9TXMGuQ=;
+        b=Kja16RIoH+ESsZq393GJ1MOR3oqvkFuVo9DUAkzGXDdiI8eDxE3VB3xdvDg7XAXqA2
+         odsMsr1HM7zGZ4f1TXJIFXf6IEU0Q1YMadj5e0yJZYryBccG6eZ0ofFYQpBT2NH0u52X
+         mOQF4KWRxiZnkUK0bnB+kjYXRHYUbmxj+E7+VgVPd0M1U/gQZDLRVB2WR7+YgHHi6Zhx
+         c1d/52foxQE/xxRaRiu8dZ4mxWD1O6LiGSJIuHOL7IAxVklHoOvFynnqDfdVGogzOCpc
+         Buv67jmgsIT7XtirL0QC3UC/c6BQ2EDKBF+GiSHTtQAxqMQtGngguzUN0AAiQgSPtizm
+         tZ+w==
+X-Gm-Message-State: AOAM532reET/80odZrx04fm+ocKD06cpq3UWTWMOcggigF2ehzK8AhDA
+        XVGN5SFz6KuP1VO0hPmNFzU=
+X-Google-Smtp-Source: ABdhPJw2uoUZvKyDoAgLWCGMAPCvsVIrIKS3kIRjPO3oQNH/HYS0Lx97JwAnRf5+oAkQEdfKN6xMYg==
+X-Received: by 2002:a7b:c14c:0:b0:381:32fb:a128 with SMTP id z12-20020a7bc14c000000b0038132fba128mr2571355wmi.116.1646290483686;
+        Wed, 02 Mar 2022 22:54:43 -0800 (PST)
+Received: from localhost.localdomain ([185.239.71.98])
+        by smtp.gmail.com with ESMTPSA id z2-20020a056000110200b001e7140ddb44sm1079902wrw.49.2022.03.02.22.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 22:54:43 -0800 (PST)
+From:   Xiaolong Huang <butterflyhuangxx@gmail.com>
+To:     fei1.li@intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Xiaolong Huang <butterflyhuangxx@gmail.com>
+Subject: [RESEND PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Date:   Thu,  3 Mar 2022 14:54:00 +0800
+Message-Id: <20220303065401.259202-1-butterflyhuangxx@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+The vm_param and cpu_regs need to be freed via kfree()
+before return -EINVAL error.
 
-Add mmsys driver data and compatible for MT8186 in mtk_drm_drv.c.
-
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/virt/acrn/hsm.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 56ff8c57ef8f..be582e64d067 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id mt8183_mtk_ddp_ext[] = {
- 	DDP_COMPONENT_DPI0,
- };
+diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+index 5419794fccf1..423ea888d79a 100644
+--- a/drivers/virt/acrn/hsm.c
++++ b/drivers/virt/acrn/hsm.c
+@@ -136,8 +136,10 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+ 		if (IS_ERR(vm_param))
+ 			return PTR_ERR(vm_param);
  
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
-+	DDP_COMPONENT_OVL0,
-+	DDP_COMPONENT_RDMA0,
-+	DDP_COMPONENT_COLOR0,
-+	DDP_COMPONENT_CCORR,
-+	DDP_COMPONENT_AAL0,
-+	DDP_COMPONENT_GAMMA,
-+	DDP_COMPONENT_POSTMASK0,
-+	DDP_COMPONENT_DITHER,
-+	DDP_COMPONENT_DSI0,
-+};
-+
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
-+	DDP_COMPONENT_OVL_2L0,
-+	DDP_COMPONENT_RDMA1,
-+	DDP_COMPONENT_DPI0,
-+};
-+
- static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
- 	DDP_COMPONENT_OVL0,
- 	DDP_COMPONENT_OVL_2L0,
-@@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
- 	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
- };
+-		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
++		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
++			kfree(vm_param);
+ 			return -EINVAL;
++		}
  
-+static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-+	.main_path = mt8186_mtk_ddp_main,
-+	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
-+	.ext_path = mt8186_mtk_ddp_ext,
-+	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
-+};
-+
- static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
- 	.main_path = mt8192_mtk_ddp_main,
- 	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
-@@ -463,6 +488,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8183-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
-+	{ .compatible = "mediatek,mt8186-disp-mutex",
-+	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8192-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8173-disp-od",
-@@ -511,12 +538,16 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8186-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8173-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8183-dsi",
- 	  .data = (void *)MTK_DSI },
-+	{ .compatible = "mediatek,mt8186-dsi",
-+	  .data = (void *)MTK_DSI },
- 	{ }
- };
+ 		vm = acrn_vm_create(vm, vm_param);
+ 		if (!vm) {
+@@ -182,21 +184,29 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+ 			return PTR_ERR(cpu_regs);
  
-@@ -533,6 +564,8 @@ static const struct of_device_id mtk_drm_of_ids[] = {
- 	  .data = &mt8173_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8183-mmsys",
- 	  .data = &mt8183_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt8186-mmsys",
-+	  .data = &mt8186_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8192-mmsys",
- 	  .data = &mt8192_mmsys_driver_data},
- 	{ }
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->reserved); i++)
+-			if (cpu_regs->reserved[i])
++			if (cpu_regs->reserved[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_32); i++)
+-			if (cpu_regs->vcpu_regs.reserved_32[i])
++			if (cpu_regs->vcpu_regs.reserved_32[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_64); i++)
+-			if (cpu_regs->vcpu_regs.reserved_64[i])
++			if (cpu_regs->vcpu_regs.reserved_64[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.gdt.reserved); i++)
+ 			if (cpu_regs->vcpu_regs.gdt.reserved[i] |
+-			    cpu_regs->vcpu_regs.idt.reserved[i])
++			    cpu_regs->vcpu_regs.idt.reserved[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		ret = hcall_set_vcpu_regs(vm->vmid, virt_to_phys(cpu_regs));
+ 		if (ret < 0)
+
+base-commit: 5859a2b1991101d6b978f3feb5325dad39421f29
 -- 
-2.18.0
+2.25.1
 

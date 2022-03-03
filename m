@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0BF4CC426
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE24B4CC42A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbiCCRkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        id S234546AbiCCRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiCCRkq (ORCPT
+        with ESMTP id S234563AbiCCRlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:40:46 -0500
+        Thu, 3 Mar 2022 12:41:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED91E1A06F4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:39:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 443F41A1C40
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:40:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646329199;
+        s=mimecast20190719; t=1646329215;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=izXQJyyJ1cl2s2LE1IV4GOK79BBe2TKczXsvjIKhk5g=;
-        b=BYWQMbWYZPVCJCk531kXdVc5NWQhML4ZFzOc5hkgIRtuNvSMcTn++dkIDfyubT6HCFhpLF
-        U73Tzlb2KewgYnKSOQyaI8SrxCfDdFJSZXKGTdqRz8aBzx7cpvMwvPVZqEb4ue/kEhwgcj
-        TZZ8Jvek8wXaaaKGPnn0E5WCRaOtXqU=
+        bh=zD9CRRokuyq4RwGr8z+E2Zq2ENImi9twRvZkoxkJfXI=;
+        b=XLCOzInyOl4X7HbMkAjEUupvv4+jVduQw5F3w5D5Z38xeinx5IQ9jQEWktHLQ3hLOC/6Bd
+        /wuOOigrmLgtYb8LN4GOExbP35sVlg+bcBhqhlwKw9+zYuq0nIdYJYy/zVp1V+My02I8DS
+        7tLttxJhtA1oPJ/AGeWT7ViDs0BJzXY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-mvWeT6JdMCynYWatG-XVSw-1; Thu, 03 Mar 2022 12:39:55 -0500
-X-MC-Unique: mvWeT6JdMCynYWatG-XVSw-1
+ us-mta-47-3hHfExraPP2WpGqQXUooZg-1; Thu, 03 Mar 2022 12:40:12 -0500
+X-MC-Unique: 3hHfExraPP2WpGqQXUooZg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 55C64824FAB;
-        Thu,  3 Mar 2022 17:39:54 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B45C61854E21;
+        Thu,  3 Mar 2022 17:40:10 +0000 (UTC)
 Received: from cmirabil.remote.csb (unknown [10.22.9.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B46EC804EA;
-        Thu,  3 Mar 2022 17:39:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0E63804EA;
+        Thu,  3 Mar 2022 17:39:56 +0000 (UTC)
 From:   Charles Mirabile <cmirabil@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Charles Mirabile <cmirabil@redhat.com>,
@@ -47,13 +47,13 @@ Cc:     Charles Mirabile <cmirabil@redhat.com>,
         Mattias Brugger <mbrugger@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Bauman <dbauman@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Daniel Bauman <dbauman@redhat.com>,
         Mwesigwa Guma <mguma@redhat.com>,
         Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH v7 2/6] drivers/input/joystick: sensehat: Raspberry Pi Sense HAT joystick driver
-Date:   Thu,  3 Mar 2022 12:39:31 -0500
-Message-Id: <20220303173935.100622-3-cmirabil@redhat.com>
+Subject: [PATCH v7 3/6] drivers/auxdisplay: sensehat: Raspberry Pi Sense HAT display driver
+Date:   Thu,  3 Mar 2022 12:39:32 -0500
+Message-Id: <20220303173935.100622-4-cmirabil@redhat.com>
 In-Reply-To: <20220303173935.100622-1-cmirabil@redhat.com>
 References: <20220303173935.100622-1-cmirabil@redhat.com>
 MIME-Version: 1.0
@@ -69,9 +69,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the driver for the Sense HAT joystick. It outputs BTN_DPAD
-key events when moved in any of the four directions and the BTN_SELECT
-event when depressed.
+This patch adds the driver for the 8x8 RGB LED matrix display
+on the Sense HAT. It appears as a character device named sense-hat
+in /dev/. That special file is 128 bytes large and contains 64
+RGB565 triples (2 bytes each) one for each pixel.
 
 Co-developed-by: Daniel Bauman <dbauman@redhat.com>
 Signed-off-by: Daniel Bauman <dbauman@redhat.com>
@@ -81,53 +82,49 @@ Co-developed-by: Joel Savitz <jsavitz@redhat.com>
 Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
 ---
- drivers/input/joystick/Kconfig             |  11 ++
- drivers/input/joystick/Makefile            |   1 +
- drivers/input/joystick/sensehat-joystick.c | 128 +++++++++++++++++++++
- 3 files changed, 140 insertions(+)
- create mode 100644 drivers/input/joystick/sensehat-joystick.c
+ drivers/auxdisplay/Kconfig            |   8 ++
+ drivers/auxdisplay/Makefile           |   1 +
+ drivers/auxdisplay/sensehat-display.c | 188 ++++++++++++++++++++++++++
+ 3 files changed, 197 insertions(+)
+ create mode 100644 drivers/auxdisplay/sensehat-display.c
 
-diff --git a/drivers/input/joystick/Kconfig b/drivers/input/joystick/Kconfig
-index 3b23078bc7b5..505a032e2786 100644
---- a/drivers/input/joystick/Kconfig
-+++ b/drivers/input/joystick/Kconfig
-@@ -399,4 +399,15 @@ config JOYSTICK_N64
- 	  Say Y here if you want enable support for the four
- 	  built-in controller ports on the Nintendo 64 console.
+diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
+index 64012cda4d12..9bad1aade7a0 100644
+--- a/drivers/auxdisplay/Kconfig
++++ b/drivers/auxdisplay/Kconfig
+@@ -203,6 +203,14 @@ config ARM_CHARLCD
+ 	  line and the Linux version on the second line, but that's
+ 	  still useful.
  
-+config JOYSTICK_SENSEHAT
-+	tristate "Raspberry Pi Sense HAT joystick"
-+	depends on INPUT && I2C
++config SENSEHAT_DISPLAY
++	tristate "Raspberry Pi Sense HAT display driver"
++	depends on I2C
 +	select MFD_SIMPLE_MFD_I2C
 +	help
-+	  Say Y here if you want to enable the driver for the
-+	  the Raspberry Pi Sense HAT.
++	 This is a driver for the Raspberry Pi Sensehat 8x8 RBG-LED matrix
++	 you can access it as a misc device at /dev/sense-hat
 +
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sensehat_joystick.
-+
- endif
-diff --git a/drivers/input/joystick/Makefile b/drivers/input/joystick/Makefile
-index 5174b8aba2dd..39c8b5c6e5ae 100644
---- a/drivers/input/joystick/Makefile
-+++ b/drivers/input/joystick/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_JOYSTICK_N64)		+= n64joy.o
- obj-$(CONFIG_JOYSTICK_PSXPAD_SPI)	+= psxpad-spi.o
- obj-$(CONFIG_JOYSTICK_PXRC)		+= pxrc.o
- obj-$(CONFIG_JOYSTICK_QWIIC)		+= qwiic-joystick.o
-+obj-$(CONFIG_JOYSTICK_SENSEHAT)         += sensehat-joystick.o
- obj-$(CONFIG_JOYSTICK_SIDEWINDER)	+= sidewinder.o
- obj-$(CONFIG_JOYSTICK_SPACEBALL)	+= spaceball.o
- obj-$(CONFIG_JOYSTICK_SPACEORB)		+= spaceorb.o
-diff --git a/drivers/input/joystick/sensehat-joystick.c b/drivers/input/joystick/sensehat-joystick.c
+ menuconfig PARPORT_PANEL
+ 	tristate "Parallel port LCD/Keypad Panel support"
+ 	depends on PARPORT
+diff --git a/drivers/auxdisplay/Makefile b/drivers/auxdisplay/Makefile
+index 6968ed4d3f0a..30b2b7934046 100644
+--- a/drivers/auxdisplay/Makefile
++++ b/drivers/auxdisplay/Makefile
+@@ -14,3 +14,4 @@ obj-$(CONFIG_HT16K33)		+= ht16k33.o
+ obj-$(CONFIG_PARPORT_PANEL)	+= panel.o
+ obj-$(CONFIG_LCD2S)		+= lcd2s.o
+ obj-$(CONFIG_LINEDISP)		+= line-display.o
++obj-$(CONFIG_SENSEHAT_DISPLAY)	+= sensehat-display.o
+diff --git a/drivers/auxdisplay/sensehat-display.c b/drivers/auxdisplay/sensehat-display.c
 new file mode 100644
-index 000000000000..0a99cf0f3ba0
+index 000000000000..56d013d12293
 --- /dev/null
-+++ b/drivers/input/joystick/sensehat-joystick.c
-@@ -0,0 +1,128 @@
++++ b/drivers/auxdisplay/sensehat-display.c
+@@ -0,0 +1,188 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Raspberry Pi Sense HAT joystick driver
++ * Raspberry Pi Sense HAT 8x8 LED matrix display driver
 + * http://raspberrypi.org
 + *
 + * Copyright (C) 2015 Raspberry Pi
@@ -138,119 +135,179 @@ index 000000000000..0a99cf0f3ba0
 + */
 +
 +#include <linux/module.h>
-+#include <linux/input.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
++#include <linux/kernel.h>
++#include <linux/errno.h>
++#include <linux/string.h>
++#include <linux/mm.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/delay.h>
++#include <linux/init.h>
 +#include <linux/platform_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/miscdevice.h>
 +#include <linux/regmap.h>
 +#include <linux/property.h>
 +
-+#define JOYSTICK_SMB_REG 0xf2
++#define DISPLAY_SMB_REG 0x00
 +
-+struct sensehat_joystick {
++struct sensehat_display {
 +	struct platform_device *pdev;
-+	struct input_dev *keys_dev;
-+	unsigned long prev_states;
++	struct miscdevice mdev;
++	struct mutex rw_mtx;
++	struct {
++		u16 b : 5, u : 1, g : 5, r : 5;
++	} vmem[8][8];
 +	struct regmap *regmap;
 +};
 +
-+static const unsigned int keymap[] = {
-+	BTN_DPAD_DOWN, BTN_DPAD_RIGHT, BTN_DPAD_UP, BTN_SELECT, BTN_DPAD_LEFT,
-+};
++#define VMEM_SIZE sizeof_field(struct sensehat_display, vmem)
 +
-+static irqreturn_t sensehat_joystick_report(int n, void *cookie)
++static void sensehat_update_display(struct sensehat_display *display)
 +{
-+	int i, error, keys;
-+	struct sensehat_joystick *sensehat_joystick = cookie;
-+	unsigned long curr_states, changes;
++	int i, j, ret;
++	u8 temp[8][3][8];
 +
-+	error = regmap_read(sensehat_joystick->regmap, JOYSTICK_SMB_REG, &keys);
-+	if (error < 0) {
-+		dev_err(&sensehat_joystick->pdev->dev,
-+			"Failed to read joystick state: %d", error);
-+		return IRQ_NONE;
-+	}
-+	curr_states = keys;
-+	bitmap_xor(&changes, &curr_states, &sensehat_joystick->prev_states,
-+		   ARRAY_SIZE(keymap));
-+
-+	for_each_set_bit(i, &changes, ARRAY_SIZE(keymap)) {
-+		input_report_key(sensehat_joystick->keys_dev, keymap[i],
-+				 curr_states & BIT(i));
++	for (i = 0; i < 8; ++i) {
++		for (j = 0; j < 8; ++j)
++			temp[i][0][j] = display->vmem[i][j].r;
++		for (j = 0; j < 8; ++j)
++			temp[i][1][j] = display->vmem[i][j].g;
++		for (j = 0; j < 8; ++j)
++			temp[i][2][j] = display->vmem[i][j].b;
 +	}
 +
-+	input_sync(sensehat_joystick->keys_dev);
-+	sensehat_joystick->prev_states = keys;
-+	return IRQ_HANDLED;
++	ret = regmap_bulk_write(display->regmap, DISPLAY_SMB_REG, temp,
++				sizeof(temp));
++	if (ret < 0)
++		dev_err(&display->pdev->dev,
++			"Update to 8x8 LED matrix display failed");
 +}
 +
-+static int sensehat_joystick_probe(struct platform_device *pdev)
++static loff_t sensehat_display_llseek(struct file *filp, loff_t offset,
++				      int whence)
 +{
-+	int error, i, irq;
-+	struct sensehat_joystick *sensehat_joystick = devm_kzalloc(
-+		&pdev->dev, sizeof(*sensehat_joystick), GFP_KERNEL);
++	return fixed_size_llseek(filp, offset, whence, VMEM_SIZE);
++}
 +
-+	sensehat_joystick->pdev = pdev;
++static ssize_t sensehat_display_read(struct file *filp, char __user *buf,
++				     size_t count, loff_t *f_pos)
++{
++	struct sensehat_display *sensehat_display =
++		container_of(filp->private_data, struct sensehat_display, mdev);
++	ssize_t ret = -EFAULT;
 +
-+	sensehat_joystick->regmap = dev_get_regmap(sensehat_joystick->pdev->dev.parent, NULL);
++	if (*f_pos < 0 || *f_pos >= VMEM_SIZE)
++		return 0;
++	count = min_t(size_t, count, VMEM_SIZE - *f_pos);
 +
-+	sensehat_joystick->keys_dev = devm_input_allocate_device(&pdev->dev);
-+	if (!sensehat_joystick->keys_dev) {
-+		dev_err(&pdev->dev, "Could not allocate input device.\n");
-+		return -ENOMEM;
++	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
++		return -ERESTARTSYS;
++	if (copy_to_user(buf, *f_pos + (char *)sensehat_display->vmem, count))
++		goto out;
++	*f_pos += count;
++	ret = count;
++out:
++	mutex_unlock(&sensehat_display->rw_mtx);
++	return ret;
++}
++
++static ssize_t sensehat_display_write(struct file *filp, const char __user *buf,
++				      size_t count, loff_t *f_pos)
++{
++	struct sensehat_display *sensehat_display =
++		container_of(filp->private_data, struct sensehat_display, mdev);
++	int ret = -EFAULT;
++
++	if (*f_pos < 0 || *f_pos >= VMEM_SIZE)
++		return -EFBIG;
++	count = min_t(size_t, count, VMEM_SIZE - *f_pos);
++
++	if (mutex_lock_interruptible(&sensehat_display->rw_mtx))
++		return -ERESTARTSYS;
++	if (copy_from_user(*f_pos + (char *)sensehat_display->vmem, buf, count))
++		goto out;
++	sensehat_update_display(sensehat_display);
++	*f_pos += count;
++	ret = count;
++out:
++	mutex_unlock(&sensehat_display->rw_mtx);
++	return ret;
++}
++
++static const struct file_operations sensehat_display_fops = {
++	.owner = THIS_MODULE,
++	.llseek = sensehat_display_llseek,
++	.read = sensehat_display_read,
++	.write = sensehat_display_write,
++};
++
++static int sensehat_display_probe(struct platform_device *pdev)
++{
++	int ret;
++
++	struct sensehat_display *sensehat_display =
++		devm_kmalloc(&pdev->dev, sizeof(*sensehat_display), GFP_KERNEL);
++
++	sensehat_display->pdev = pdev;
++
++	dev_set_drvdata(&pdev->dev, sensehat_display);
++
++	sensehat_display->regmap = dev_get_regmap(pdev->dev.parent, NULL);
++
++	memset(sensehat_display->vmem, 0, VMEM_SIZE);
++
++	mutex_init(&sensehat_display->rw_mtx);
++
++	sensehat_update_display(sensehat_display);
++
++	sensehat_display->mdev = (struct miscdevice){
++		.minor = MISC_DYNAMIC_MINOR,
++		.name = "sense-hat",
++		.mode = 0666,
++		.fops = &sensehat_display_fops,
++	};
++
++	ret = misc_register(&sensehat_display->mdev);
++	if (ret < 0) {
++		dev_err(&pdev->dev,
++			"Could not register 8x8 LED matrix display.\n");
++		return ret;
 +	}
 +
-+	for (i = 0; i < ARRAY_SIZE(keymap); i++)
-+		set_bit(keymap[i], sensehat_joystick->keys_dev->keybit);
-+
-+	sensehat_joystick->keys_dev->name = "Raspberry Pi Sense HAT Joystick";
-+	sensehat_joystick->keys_dev->phys = "sensehat-joystick/input0";
-+	sensehat_joystick->keys_dev->id.bustype = BUS_I2C;
-+	sensehat_joystick->keys_dev->evbit[0] =
-+		BIT_MASK(EV_KEY) | BIT_MASK(EV_REP);
-+
-+	error = input_register_device(sensehat_joystick->keys_dev);
-+	if (error) {
-+		dev_err(&pdev->dev, "Could not register input device.\n");
-+		return error;
-+	}
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		dev_err(&pdev->dev, "Could not retrieve interrupt request.\n");
-+		return irq;
-+	}
-+
-+	error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					  sensehat_joystick_report,
-+					  IRQF_ONESHOT, "keys",
-+					  sensehat_joystick);
-+
-+	if (error) {
-+		dev_err(&pdev->dev, "IRQ request failed.\n");
-+		return error;
-+	}
++	dev_info(&pdev->dev,
++		 "8x8 LED matrix display registered with minor number %i",
++		 sensehat_display->mdev.minor);
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id sensehat_joystick_device_id[] = {
-+	{ .compatible = "raspberrypi,sensehat-joystick" },
++static int sensehat_display_remove(struct platform_device *pdev)
++{
++	struct sensehat_display *sensehat_display = dev_get_drvdata(&pdev->dev);
++
++	misc_deregister(&sensehat_display->mdev);
++	return 0;
++}
++
++static const struct of_device_id sensehat_display_device_id[] = {
++	{ .compatible = "raspberrypi,sensehat-display" },
 +	{},
 +};
-+MODULE_DEVICE_TABLE(of, sensehat_joystick_device_id);
++MODULE_DEVICE_TABLE(of, sensehat_display_device_id);
 +
-+static struct platform_driver sensehat_joystick_driver = {
-+	.probe = sensehat_joystick_probe,
++static struct platform_driver sensehat_display_driver = {
++	.probe = sensehat_display_probe,
++	.remove = sensehat_display_remove,
 +	.driver = {
-+		.name = "sensehat-joystick",
-+		.of_match_table = sensehat_joystick_device_id,
++		.name = "sensehat-display",
++		.of_match_table = sensehat_display_device_id,
 +	},
 +};
 +
-+module_platform_driver(sensehat_joystick_driver);
++module_platform_driver(sensehat_display_driver);
 +
-+MODULE_DESCRIPTION("Raspberry Pi Sense HAT joystick driver");
++MODULE_DESCRIPTION("Raspberry Pi Sense HAT 8x8 LED matrix display driver");
 +MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
 +MODULE_LICENSE("GPL");
 -- 

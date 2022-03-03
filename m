@@ -2,47 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419554CB750
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31974CB75C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiCCG6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S230044AbiCCG7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiCCG6k (ORCPT
+        with ESMTP id S229471AbiCCG7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:58:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D8D013F7C;
-        Wed,  2 Mar 2022 22:57:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 671ED1424;
-        Wed,  2 Mar 2022 22:57:53 -0800 (PST)
-Received: from [10.57.21.106] (unknown [10.57.21.106])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68FBB3F66F;
-        Wed,  2 Mar 2022 22:57:51 -0800 (PST)
-Message-ID: <c2dabec3-ffdb-909a-a8dd-f8e77a8108ed@arm.com>
-Date:   Thu, 3 Mar 2022 06:57:49 +0000
+        Thu, 3 Mar 2022 01:59:52 -0500
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED5427FD5;
+        Wed,  2 Mar 2022 22:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2m4RpdrvDWJ2Lbwggqe1wkzLSnbf7tDq1lOz4LACayk=; b=GclwX64l6V5f8kehmfrWiI/+J4
+        8RzkcfMFFgiuiQCodv/2gnIC3ikLB3SpzKZ+MKquDyTvf/2qcEKEzwnC6vkUyw5AA6m8mjD6nBBat
+        vT32LnKyaFoveOXK23R0XVuJkpl2HRzOcOM8BKTQACcHejpQBocleespRVWlGy48Yi+s=;
+Received: from p200300daa7204f000c852a81b34becd9.dip0.t-ipconnect.de ([2003:da:a720:4f00:c85:2a81:b34b:ecd9] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nPfQN-000124-AR; Thu, 03 Mar 2022 07:58:55 +0100
+Message-ID: <2bd80da6-944c-4c9d-febf-f83b4302492a@nbd.name>
+Date:   Thu, 3 Mar 2022 07:58:54 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/5] Introduce "opp-microwatt" and Energy Model from DT
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH 03/11] net: ethernet: mtk_eth_soc: add support for
+ Wireless Ethernet Dispatch (WED)
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220302112917.27270-1-lukasz.luba@arm.com>
- <20220303040539.ocnslxyswnvua3o7@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220303040539.ocnslxyswnvua3o7@vireshk-i7>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220225101811.72103-1-nbd@nbd.name>
+ <20220225101811.72103-4-nbd@nbd.name>
+ <20220225221848.7c7be7f6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <20220225221848.7c7be7f6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,37 +63,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 3/3/22 04:05, Viresh Kumar wrote:
-> On 02-03-22, 11:29, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set solves a few issues:
->> 1. It allows to register EM from DT, when the voltage information is not
->>     available. (Some background of the issues present on Chromebook devices
->>     can be checked at [1].)
->> 2. It allows to register 'advanced' EM from the DT, which is more accurate
->>     and reflects total power (dynamic + static).
->>
->> Implementation details:
->> Existing machinery in the OPP framework now handles "opp-microwatt", similarly
->> to "opp-microamp". It also has helper exported function to get power from OPP.
->> For the EM, it adds a new callback in OPP framework to use this new API and
->> read power while having an opp pointer. It's agreed to work with OPP-v2.
->>
->> Comments, suggestions are very welcome.
->>
->> changelog:
->> v5:
->> - added dual-macro to conditionally setup needed callback and compile
->>    on !EM kernel gently
->> - removed 'advanced' word from OPP patch header description
->> v4 [2]
+On 26.02.22 07:18, Jakub Kicinski wrote:
+> On Fri, 25 Feb 2022 11:18:02 +0100 Felix Fietkau wrote:
+>> +	page_list = kcalloc(n_pages, sizeof(*page_list), GFP_KERNEL);
+>> +	if (!page_list)
+>> +		return -ENOMEM;
+>> +
+>> +	dev->buf_ring.size = ring_size;
+>> +	dev->buf_ring.pages = page_list;
+>> +
+>> +	desc = dma_alloc_coherent(dev->hw->dev, ring_size * sizeof(*desc),
+>> +				  &desc_phys, GFP_KERNEL);
+>> +	if (!desc)
+>> +		return -ENOMEM;
+>> +
+>> +	dev->buf_ring.desc = desc;
+>> +	dev->buf_ring.desc_phys = desc_phys;
+>> +
+>> +	for (i = 0, page_idx = 0; i < ring_size; i += MTK_WED_BUF_PER_PAGE) {
+>> +		dma_addr_t page_phys, buf_phys;
+>> +		struct page *page;
+>> +		void *buf;
+>> +		int s;
+>> +
+>> +		page = __dev_alloc_pages(GFP_KERNEL, 0);
+>> +		if (!page)
+>> +			return -ENOMEM;
 > 
-> Applied. Thanks.
-> 
+> I haven't looked at the code, yet, but this sure looks leaky.
+It's not leaky. If the alloc fails, mtk_wed_detach is still called, 
+which cleans up even incomplete ring allocations.
 
-Thank you Viresh for your reviews.
-
-Regards,
-Lukasz
+- Felix

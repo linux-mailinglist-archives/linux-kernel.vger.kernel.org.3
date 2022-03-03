@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29284CC336
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783E44CC33D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbiCCQvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S235183AbiCCQwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235163AbiCCQu7 (ORCPT
+        with ESMTP id S230429AbiCCQwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:50:59 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89C919D742
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:50:12 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id m14so9559931lfu.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:50:12 -0800 (PST)
+        Thu, 3 Mar 2022 11:52:01 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B959419D61E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:51:15 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id s8so1077873pfk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:51:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OnP9YZiY8LZiBvuJs+7fQgruVzN1W1DRlosAbZ20eCM=;
-        b=e2OOw78cj76HlttC7akVmIp8IrXroOyLB/efbDVeKuJIH1CQABYQAInwumnT0KjIuA
-         JHcDWJ8j3Enc82Pgu5wVatU6ZlZmE/fHZctXhmdBEx6492kYgvCXMc5Sxv5pPGmBC7qV
-         JBpkIg4KPxxdgXMqrKRaffpH5T3SZvKEb5ueUX9F3FuLkVM9si2oOFN0Odlmf0Su0kLT
-         aep4o8rxfMQw8h+Cf8dT4lhSS46m5KUnnpGbop5k+UlvO+/5xS1I7hXGMTJxhJU3DWFE
-         BVZrot854eRE6SdzW4WVUD/WAquytdHmQB5EhX89dsVPrUEzv3R9ZitRPZjweC8dSX0J
-         BBMg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i0NlVOGrDQifCYycNaZxtwsr4XCCtmhTO2N4TMD4zDA=;
+        b=DpMrVHXRF13GOLQoAJSmaXRO6X88jSxHL2yXyRc+YhWTaODZ2m8/gJSlYQl5ON/2+4
+         Dxr8uHQ/7XsYc04QWUVBuxXHWjjwSaPnnLR541yMC8WTH+ytjjmp0KVvoi14ZH/6UqDs
+         dGmHHl4pvPgin5+lMoe5nDvOfurIIyvALCBBpCwpa+Sm8MK8E9UKpHCKkB3zcHv9pUDi
+         RNDCEMblLNxKk/6XD+CJQ/2w9vbxS6ZA0sGXnL6KCEPy3w1Nafqj519gl5mC5xD+TWFn
+         G6fJY03umHtFNfg+9RoO8JpgoIHuFtnZ7PP2q5ENUi2OWyH0Q25wJ+pvWMKnyQ8xqJEe
+         YcEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OnP9YZiY8LZiBvuJs+7fQgruVzN1W1DRlosAbZ20eCM=;
-        b=Vh56kfqsayaGGJsZf9sTxUOYJB0mo60H34n4n3gnURdNY8mcPD55d+7RWxiMxOOyn1
-         HVc12Dp1JM7cQxQZTt8awncQgI6SpqTnnl6/3eVGHEwkqBadjeC31dLW3LrjhuCFNhCq
-         E6Or6h0dYcndXM4J2Z4P7y497pMByaA4oyksn5MQzYyS+1HaTjSyuPxyAgev+g45Ix4m
-         D58+GBfom/X+Qp/NFc3u8+WnxwwijvZ4Hikrqxer2LkboI11KEqZImTyUkXVldTVNhnB
-         mmY/qpONK3iiu70Db386swYnUjYcoa1WYC9j4NxrdMQAaJ1nr4ScCAPnDl+qKFwRh7p0
-         cRBg==
-X-Gm-Message-State: AOAM530uZFYmBwvLBFJ/D5Zhdr3MW0Akb9nTr/LyT/C4B/18C0HlTJAa
-        +oQMHox2Y7aTvs8WqsS0e9FLpWosCr7FWw0E0S3W+bPMEaUnVA==
-X-Google-Smtp-Source: ABdhPJwns0ZI2bNJKx15VKsAw6Tlz5PjF540BG6Jo4StjaTjubs3HgdHvB6x3CQO3gqU6j/KJqlsfiJfCHCoe5HUPlk=
-X-Received: by 2002:a05:6512:2291:b0:443:ab97:7e49 with SMTP id
- f17-20020a056512229100b00443ab977e49mr21840598lfu.402.1646326208673; Thu, 03
- Mar 2022 08:50:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20220303160442.1815411-1-pgonda@google.com> <YiDsEgxUDZL+XY9R@google.com>
-In-Reply-To: <YiDsEgxUDZL+XY9R@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Thu, 3 Mar 2022 09:49:57 -0700
-Message-ID: <CAMkAt6rwiL_G1w66_rseKSFOTSV4zX8gnb1EOoQNv5TH=ToHGw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: SVM: Fix missing kvm_cache_regs.h include in svm.h
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i0NlVOGrDQifCYycNaZxtwsr4XCCtmhTO2N4TMD4zDA=;
+        b=HjUCRdWX/FUAtW40pGJHYbMSRbByFuscBukzP9iaKGc42S3hCplTKQo/RuUzJmgobi
+         rik/6BkqOxJLCHRH2KulC7qqTsw1I0bMV5PztuCXU4oNiVtg6MpY8XvobbglojgBHohq
+         zqYwUIDY0wC4CsXloVABhmpVC4J1b6nWaA2fjRup2mQyB34Szh8MBCNbRPkPIDsumNey
+         wDmzO9NRZutLK1nY71lUFITjXgKQoUH7npnq6DCAUHzP49/NsHA6ldwJF+bipdx7mSlV
+         hE3XUYYia4f7NXecwAteT044sY4H9CranFOearUefjOyO884Ds2kD+KfNvx/rdri13Wr
+         1PIw==
+X-Gm-Message-State: AOAM530ri6d7DUwOiPickp0F+9C2spjFdbH/4VliZhgkPJjXDb4DRS12
+        UqqFJO4Z5RNrquGM/U4UZrvSSQ==
+X-Google-Smtp-Source: ABdhPJxboDeeuaLxiKyqoWZz04F4zeJp+hWhJ2RpVpmGe2GaHnwrZfIp4rqtg26ySpbEKFhBVpbHuQ==
+X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr38878422pfl.38.1646326275016;
+        Thu, 03 Mar 2022 08:51:15 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c9-20020a634e09000000b003790829fbc1sm2496767pgb.53.2022.03.03.08.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 08:51:14 -0800 (PST)
+Date:   Thu, 3 Mar 2022 16:51:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH 4/4] KVM: x86: lapic: don't allow to set non default apic
+ id when not using x2apic api
+Message-ID: <YiDx/uYAMSZDvobO@google.com>
+References: <20220301135526.136554-1-mlevitsk@redhat.com>
+ <20220301135526.136554-5-mlevitsk@redhat.com>
+ <Yh5QJ4dJm63fC42n@google.com>
+ <6f4819b4169bd4e2ca9ab710388ebd44b7918eed.camel@redhat.com>
+ <Yh5b3eBYK/rGzFfj@google.com>
+ <297c8e41f512587230a54130a71ddfd9004c9507.camel@redhat.com>
+ <eae0b69fb8f5c47457fac853cc55b41a30762994.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eae0b69fb8f5c47457fac853cc55b41a30762994.camel@redhat.com>
 X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -68,68 +85,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:26 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Mar 03, 2022, Peter Gonda wrote:
-> > Adds include for is_guest_mode() in svm.h.
->
-> Write changelogs as "commands", not descriptions.  And a little extra verbosity
-> wouldn't hurt, e.g.
->
->   Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
->   which is referenced by nested_svm_virtualize_tpr().
->
-> Though you'll probably need a different changelog (see below).
+On Wed, Mar 02, 2022, Maxim Levitsky wrote:
+> When APIC state is loading while APIC is in *x2apic* mode it does enforce that
+> value in this 0x20 offset is initial apic id if KVM_CAP_X2APIC_API.
+>  
+> I think that it is fair to also enforce this when KVM_CAP_X2APIC_API is not used,
+> especially if we make apic id read-only.
 
-Thanks Will do.
+I don't disagree in principle.  But, (a) this loophole as existing for nearly 6
+years, (b) closing the loophole could break userspace, (c) false positive are
+possible due to truncation, and (d) KVM gains nothing meaningful by closing the
+loophole.
 
->
-> > Just compile tested.
->
-> This belongs in the ignored part, not the changelog proper.
-
-Ack.
-
->
-> > Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
-> > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: kvm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >  arch/x86/kvm/svm/svm.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> > index e45b5645d5e0..396d60e36b82 100644
-> > --- a/arch/x86/kvm/svm/svm.h
-> > +++ b/arch/x86/kvm/svm/svm.h
-> > @@ -22,6 +22,8 @@
-> >  #include <asm/svm.h>
-> >  #include <asm/sev-common.h>
-> >
-> > +#include "kvm_cache_regs.h"
->
-> Ha, we've already got a lovely workaround for exactly this problem.  This patch
-> should drop the include from svm_onhyperv.c, there's nothing in that file that
-> needs kvm_cache_regs.h (I verified by deleting use of is_guest_mode()), it's
-> included purely because of this bug in svm.h.
-
-Ah good catch. I assume I should add kvm_cache_regs.h to
-arch/x86/kvm/svm/nested.c too since it uses is_guest_mode().
-
->
-> diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
-> index 98aa981c04ec..8cdc62c74a96 100644
-> --- a/arch/x86/kvm/svm/svm_onhyperv.c
-> +++ b/arch/x86/kvm/svm/svm_onhyperv.c
-> @@ -4,7 +4,6 @@
->   */
->
->  #include <linux/kvm_host.h>
-> -#include "kvm_cache_regs.h"
->
->  #include <asm/mshyperv.h>
->
->
+(d) changes when we add a knob to make xAPIC ID read-only, but we can simply
+require userspace to enable KVM_CAP_X2APIC_API (or force it).  That approach
+avoids (c) by eliminating truncation, and avoids (b) by virtue of being opt-in.

@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB7B4CC3A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AF14CC389
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiCCRZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S235265AbiCCRRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiCCRZc (ORCPT
+        with ESMTP id S233552AbiCCRRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:25:32 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C2619E039
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:24:46 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id x15so8890494wru.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 09:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=krlo5s1H1nq87wng/O6VqLU57YxMUUe2fMcieUmiq1Q=;
-        b=OD0dV5gPLfQvYYRZAc5cVAP6tZg8/nyZg70DG4K7bqyasRT/tRRkrd98KW5Vr9rHkA
-         /VbO/PDAkx+i0y9V7AbxUdsOny2BiXIUvt+I8KhXaX3eES8endopgsxHOHe8gb+sX6hd
-         wXo0f0brHlGvDcuC1vfupeL9bEd7B9hYp6yT29bFqyXqaXuvWTlE5dn5/620iPm5kcZO
-         jNTIEYhUrCnXsHwIXcCgKUM+2X2yJuUtb82Bis/LBEd8nawPmEbmkSCA+/sZEg821AeX
-         bSIOKpRVv1HHWondZjBMo5Y6DV1iTkdtykN2gLmIz+3ejiSI7pEZc2hLBMQDJ0f0QX56
-         9syA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=krlo5s1H1nq87wng/O6VqLU57YxMUUe2fMcieUmiq1Q=;
-        b=495y7hLS87spxO17hlYdbuLu4OhcfB+1rIw4zjmnC5XCVsJZshGqXqV7UQ4fMdrJUg
-         ZcAlg9Vgf0EyaPehvWfZz7JbpYbHx4xTU6+IN03FcLcBQsrcFmjXN8gQYFAUXDFT4WME
-         akAF52oq1XIZtQV23SGs7hW+8I/V8LtqaYarAREGi7b5Nkz/OGTkAkkQd6yLfyPKc2qH
-         gDc7aEqc1bi2vFBy7YK0rk+PqExjblFjzKG+uAXvkN4vEdJh9NRC4FA+6UCzwa4eEHe9
-         tj29RVh4s3Djt8kVlfE1AGCOUULeXccqcjkSf3Vn23HWmF4DPBzUe0Rh/XTUlIKi9Y+w
-         sKmw==
-X-Gm-Message-State: AOAM530nWtcrTSix2E7U557srl+iBAkpLr0c724sLSeOr0Ca3JZ0URrs
-        e9t+fjixwaqrFfHF4Q4kF9M=
-X-Google-Smtp-Source: ABdhPJxCSYXo9SsS/ztE96ehrjJTQOpq2jfebSApjHnWjpv/ubUMDvDXTC0ED453w5xxSfXXqFMLtg==
-X-Received: by 2002:a5d:4dce:0:b0:1ed:9fd1:53a2 with SMTP id f14-20020a5d4dce000000b001ed9fd153a2mr27031845wru.212.1646328284912;
-        Thu, 03 Mar 2022 09:24:44 -0800 (PST)
-Received: from localhost.localdomain ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05600c500f00b003814673f202sm10298928wmr.47.2022.03.03.09.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 09:24:44 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     marex@denx.de
-Cc:     stefan@agner.ch, airlied@linux.ie, daniel@ffwll.ch,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, contact@emersion.fr,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH drm-misc-next 2/2] drm: mxsfb: Drop format_mod_supported function
-Date:   Thu,  3 Mar 2022 18:24:18 +0100
-Message-Id: <20220303172418.12565-3-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220303172418.12565-1-jose.exposito89@gmail.com>
-References: <20220303172418.12565-1-jose.exposito89@gmail.com>
+        Thu, 3 Mar 2022 12:17:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0A0F47ED;
+        Thu,  3 Mar 2022 09:16:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE88EB824C8;
+        Thu,  3 Mar 2022 17:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72976C004E1;
+        Thu,  3 Mar 2022 17:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646327808;
+        bh=sdUx4pmy1wPJZfj6t7Mf+fkJVick/R8Ggpu5sR4Dt+Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NwmIXYrrvH7iS9aCfeSxw0PbeX4QcPjSaApJqB1fJ3O9q1sfze3jXHZKmO74LRbKI
+         Xg7d3NyzLFwg8NhGr2Xvt7XHe7x4FyWCAX3AJQZL49HW4+ADRsQzeivFqsZQ7M7GCj
+         6CkPQaC/MIEh2T4NMU2Yf1s/JfFpSO9dDC1FuHpTRiaOnpF0JrP95xdKY/isOQj2WO
+         EjcjiiHjKV8ecFFd6lMkH5r7IVEY+6vQOoHliejS8mrNDXtpnw++kBkNMxQEOGTdWs
+         GwWsgCJDLn0v9B9vOGDFOqN9JyHWuxPwLQUtXhT4g9cnKjIqrgbbNNRdX/CiLOi7Fq
+         Mz8VMs5IbQc/A==
+Date:   Thu, 3 Mar 2022 11:25:03 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] drm/amd/display: Fix Wstringop-overflow warnings in
+ dc_link_dp.c
+Message-ID: <20220303172503.GA1731116@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "drm_plane_funcs.format_mod_supported" can be removed in favor of
-the default implementation.
+Fix the following Wstringop-overflow warnings when building with GCC-11:
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Simon Ser <contact@emersion.fr>
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:388:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:388:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:388:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:1491:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2613:25: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2613:25: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+
+by removing the over-specified array size from the argument declarations.
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/gpu/drm/mxsfb/mxsfb_kms.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 4 ++--
+ drivers/gpu/drm/amd/display/dc/inc/dc_link_dp.h  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/mxsfb/mxsfb_kms.c b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
-index 0655582ae8ed..df32e1c3cc5d 100644
---- a/drivers/gpu/drm/mxsfb/mxsfb_kms.c
-+++ b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
-@@ -554,13 +554,6 @@ static void mxsfb_plane_overlay_atomic_update(struct drm_plane *plane,
- 	writel(ctrl, mxsfb->base + LCDC_AS_CTRL);
- }
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+index f11a8d97fb60..81952e07acf6 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -823,7 +823,7 @@ bool dp_is_interlane_aligned(union lane_align_status_updated align_status)
+ void dp_hw_to_dpcd_lane_settings(
+ 		const struct link_training_settings *lt_settings,
+ 		const struct dc_lane_settings hw_lane_settings[LANE_COUNT_DP_MAX],
+-		union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX])
++		union dpcd_training_lane dpcd_lane_settings[])
+ {
+ 	uint8_t lane = 0;
  
--static bool mxsfb_format_mod_supported(struct drm_plane *plane,
--				       uint32_t format,
--				       uint64_t modifier)
--{
--	return modifier == DRM_FORMAT_MOD_LINEAR;
--}
--
- static const struct drm_plane_helper_funcs mxsfb_plane_primary_helper_funcs = {
- 	.atomic_check = mxsfb_plane_atomic_check,
- 	.atomic_update = mxsfb_plane_primary_atomic_update,
-@@ -572,7 +565,6 @@ static const struct drm_plane_helper_funcs mxsfb_plane_overlay_helper_funcs = {
- };
+@@ -853,7 +853,7 @@ void dp_decide_lane_settings(
+ 		const struct link_training_settings *lt_settings,
+ 		const union lane_adjust ln_adjust[LANE_COUNT_DP_MAX],
+ 		struct dc_lane_settings hw_lane_settings[LANE_COUNT_DP_MAX],
+-		union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX])
++		union dpcd_training_lane dpcd_lane_settings[])
+ {
+ 	uint32_t lane;
  
- static const struct drm_plane_funcs mxsfb_plane_funcs = {
--	.format_mod_supported	= mxsfb_format_mod_supported,
- 	.update_plane		= drm_atomic_helper_update_plane,
- 	.disable_plane		= drm_atomic_helper_disable_plane,
- 	.destroy		= drm_plane_cleanup,
+diff --git a/drivers/gpu/drm/amd/display/dc/inc/dc_link_dp.h b/drivers/gpu/drm/amd/display/dc/inc/dc_link_dp.h
+index ab9939db8cea..0d00da1640a7 100644
+--- a/drivers/gpu/drm/amd/display/dc/inc/dc_link_dp.h
++++ b/drivers/gpu/drm/amd/display/dc/inc/dc_link_dp.h
+@@ -147,12 +147,12 @@ bool dp_is_max_vs_reached(
+ void dp_hw_to_dpcd_lane_settings(
+ 	const struct link_training_settings *lt_settings,
+ 	const struct dc_lane_settings hw_lane_settings[LANE_COUNT_DP_MAX],
+-	union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX]);
++	union dpcd_training_lane dpcd_lane_settings[]);
+ void dp_decide_lane_settings(
+ 	const struct link_training_settings *lt_settings,
+ 	const union lane_adjust ln_adjust[LANE_COUNT_DP_MAX],
+ 	struct dc_lane_settings hw_lane_settings[LANE_COUNT_DP_MAX],
+-	union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX]);
++	union dpcd_training_lane dpcd_lane_settings[]);
+ 
+ uint32_t dp_translate_training_aux_read_interval(uint32_t dpcd_aux_read_interval);
+ 
 -- 
-2.25.1
+2.27.0
 

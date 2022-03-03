@@ -2,83 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262CD4CB5F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF664CB600
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiCCEv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S229659AbiCCEze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCCEvZ (ORCPT
+        with ESMTP id S229546AbiCCEzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:51:25 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C4011C7CE
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:50:40 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 195so3521530pgc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 20:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gze3j/1d/iOM5LmLeKWf8llBUc0y0bOeU/xT4taGqMg=;
-        b=ZxCbPUL09Pt+l9ErS+6ngwAma8BpiET5p+DE0e1O4Xg3Y7dRLDoPMzn1gbjynvbZTA
-         BiAK2ftZoebIbw0nNt1ud5EtdnMDO9fV8U7FHpfsWdTlPm4EvvuApPJR8vxMiPvlhRIm
-         UqQ8TlSR1UHyZKX/z9k0rG/NKg7lW0ajDUP0VVWpRCfm88tV+TVcQnwA5B0ppU+UD95C
-         9BGFhSA8VwtZ/0X2/B+Ct4upbbBwcu05fHLmQCnInnk4kD6SVQ5CBwCGiHW3o+3U1dIM
-         6EhPwRGyEN22a1JKYqJAHhdGM4CZ3IDQwC1EXD/XGMPk9xzPpWGcW6zThLy6jfqfbYBK
-         esbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gze3j/1d/iOM5LmLeKWf8llBUc0y0bOeU/xT4taGqMg=;
-        b=waZJtniT8iYAi6/5d1FFATDr1nN04jvIafv/ZzaV02O4ixb+RQdm3vbbJYRbvqkJoy
-         xobWQcEyiJXJ0y7d4GzQVvlmOe71q/6FtAr6oD91ClQHT9iFWKJYMhB7OfS3i7Oeh7WY
-         R92J34BJjyxScgvbPtWeAwFJzRsd9gySQru8XH2bVNkKDV/Sd8v0T3XIa02/isb5oV6P
-         vAZLHaLsdNydTam4JjQHH0NWXPCluW5BYx3tldNrFTjg+wdrNXsqItn7oldIeSEKLn1X
-         fXl2NOpFdk9dQsQn17x8w3edw7ElwkZD3cYGQlGaxRwZptQl5j4NdtNV3hjZLQC6RKaa
-         4Row==
-X-Gm-Message-State: AOAM531XebUpTvQCS0YCQfzBFlUHKDQ5kiY4HioiLA0Bl6TXFUB2hQTN
-        tJU4A8zXvz6pkrGJZeWmt04PnQ==
-X-Google-Smtp-Source: ABdhPJwWodNuB4r9bSMlgvX/oD3qX+/xQpSRDHfLXivnw/0qFhxbmQR32lNLjrsMGKanWnHE4EnV3g==
-X-Received: by 2002:a05:6a00:1503:b0:4e1:d277:cca with SMTP id q3-20020a056a00150300b004e1d2770ccamr36394116pfu.4.1646283039264;
-        Wed, 02 Mar 2022 20:50:39 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id ng11-20020a17090b1a8b00b001beefe9a1cbsm694005pjb.31.2022.03.02.20.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 20:50:38 -0800 (PST)
-Date:   Thu, 3 Mar 2022 04:50:34 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
- deferred TLB flush logic
-Message-ID: <YiBJGmFCdSZwkiTw@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-5-seanjc@google.com>
- <YiAE4ju0a3MWXr31@google.com>
- <YiAH6UfSDyHeMP+s@google.com>
- <YiAXy+I1GcyZ7iFJ@google.com>
- <YiAcvswAIrMi+iXS@google.com>
+        Wed, 2 Mar 2022 23:55:32 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0312A767
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646283287; x=1677819287;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TAdTWW9fmnF0PrDe6bJdQ3LCYVJBCPRMITyyukJOaxM=;
+  b=U1qYwojkH40Vf/sLZv6wldy2vNbH5MY+QNRpAR65XrRcNG0Hbjt3VMkj
+   n1z+/xeV2zVUwJQlSLz/u74R0m3IWG0X6ARBAiCQF4ryMqZ8Bves0z6tt
+   5qT/QyOluxugm05NXLgbIhDjA44+58m/EjYRM+q2YHBxap05m+TkTEdnz
+   xgz4VkbN3uxK5s1L3D1ML/NSLZ2xH3K/4bomq+hY6WTgF9MEeBuSID/JL
+   EPOWyFSIx4+ZraGtoKjoUPYgdvZkw424lnxWSZjZY2zjytjccbhwRT0X8
+   2Lj+Ww9qrw8HRjD79DkVjreBifvpLrodpz97Du1fSt57THAFDspy18xmH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251154468"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="251154468"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 20:54:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="709778425"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2022 20:54:45 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPdUC-0000AD-9q; Thu, 03 Mar 2022 04:54:44 +0000
+Date:   Thu, 3 Mar 2022 12:54:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Mark Salyzyn <salyzyn@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 781/9999] arch/mips/include/asm/vdso/gettimeofday.h:68:38: error:
+ '__NR_clock_gettime64' undeclared
+Message-ID: <202203031232.U5Jeb2G3-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiAcvswAIrMi+iXS@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,80 +66,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Sean Christopherson wrote:
-> On Thu, Mar 03, 2022, Mingwei Zhang wrote:
-> > On Thu, Mar 03, 2022, Sean Christopherson wrote:
-> > > On Wed, Mar 02, 2022, Mingwei Zhang wrote:
-> > > > On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> > > > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > > index 12866113fb4f..e35bd88d92fd 100644
-> > > > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > > > @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
-> > > > >  	list_del_rcu(&root->link);
-> > > > >  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> > > > >  
-> > > > > -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> > > > > +	/*
-> > > > > +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
-> > > > > +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
-> > > > > +	 * to a different pCPU.  Note, the local TLB flush on reuse also
-> > > > > +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
-> > > > > +	 * intermediate paging structures, that may be zapped, as such entries
-> > > > > +	 * are associated with the ASID on both VMX and SVM.
-> > > > > +	 */
-> > > > > +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> > > > 
-> > > > Understood that we could avoid the TLB flush here. Just curious why the
-> > > > "(void)" is needed here? Is it for compile time reason?
-> > > 
-> > > Nope, no functional purpose, though there might be some "advanced" warning or
-> > > static checkers that care.
-> > > 
-> > > The "(void)" is to communicate to human readers that the result is intentionally
-> > > ignored, e.g. to reduce the probability of someone "fixing" the code by acting on
-> > > the result of zap_gfn_range().  The comment should suffice, but it's nice to have
-> > > the code be self-documenting as much as possible.
-> > 
-> > Right, I got the point. Thanks.
-> > 
-> > Coming back. It seems that I pretended to understand that we should
-> > avoid the TLB flush without really knowing why.
-> > 
-> > I mean, leaving (part of the) stale TLB entries unflushed will still be
-> > dangerous right? Or am I missing something that guarantees to flush the
-> > local TLB before returning to the guest? For instance,
-> > kvm_mmu_{re,}load()?
-> 
-> Heh, if SVM's ASID management wasn't a mess[*], it'd be totally fine.  The idea,
-> and what EPT architectures mandates, is that each TDP root is associated with an
-> ASID.  So even though there may be stale entries in the TLB for a root, because
-> that root is no longer used those stale entries are unreachable.  And if KVM ever
-> happens to reallocate the same physical page for a root, that's ok because KVM must
-> be paranoid and flush that root (see code comment in this patch).
-> 
-> What we're missing on SVM is proper ASID handling.  If KVM uses ASIDs the way AMD
-> intends them to be used, then this works as intended because each root is again
-> associated with a specific ASID, and KVM just needs to flush when (re)allocating
-> a root and when reusing an ASID (which it already handles).
-> 
-> [*] https://lore.kernel.org/all/Yh%2FJdHphCLOm4evG@google.com
+Hi Vincenzo,
 
-Oh, putting AMD issues aside for now.
+FYI, the error/warning still remains.
 
-I think I might be too narrow down to the zapping logic previously. So,
-I originally think anytime we want to zap, we have to do the following
-things in strict order:
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
+commit: 6b7f832e465d88fca5f3a07b85e664f962c88e0b [781/9999] BACKPORT: mips: Add support for generic vDSO
+config: mips-randconfig-r016-20211028 (https://download.01.org/0day-ci/archive/20220303/202203031232.U5Jeb2G3-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/6b7f832e465d88fca5f3a07b85e664f962c88e0b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout 6b7f832e465d88fca5f3a07b85e664f962c88e0b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-1) zap SPTEs.
-2) flush TLBs.
-3) flush cache (AMD SEV only).
-4) deallocate shadow pages.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-However, if you have already invalidated EPTP (pgd ptr), then step 2)
-becomes optional, since those stale TLBs are no longer useable by the
-guest due to the change of ASID.
+All errors (new ones prefixed by >>):
 
-Am I understanding the point correctly? So, for all invalidated roots,
-the assumption is that we have already called "kvm_reload_rmote_mmus()",
-which basically update the ASID.
+   In file included from lib/vdso/gettimeofday.c:26,
+                    from <command-line>:
+   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_gettime_fallback':
+>> arch/mips/include/asm/vdso/gettimeofday.h:68:38: error: '__NR_clock_gettime64' undeclared (first use in this function)
+      68 |         register long nr asm("v0") = __NR_clock_gettime64;
+         |                                      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/include/asm/vdso/gettimeofday.h:68:38: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from <command-line>:
+   lib/vdso/gettimeofday.c: In function '__cvdso_clock_gettime32':
+   lib/vdso/gettimeofday.c:113:20: error: invalid use of undefined type 'struct compat_timespec'
+     113 |                 res->tv_sec = ts.tv_sec;
+         |                    ^~
+   lib/vdso/gettimeofday.c:114:20: error: invalid use of undefined type 'struct compat_timespec'
+     114 |                 res->tv_nsec = ts.tv_nsec;
+         |                    ^~
+   arch/mips/vdso/vgettimeofday.c: At top level:
+   arch/mips/vdso/vgettimeofday.c:14:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
+      14 | int __vdso_clock_gettime(clockid_t clock,
+         |     ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/vdso/vgettimeofday.c:20:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
+      20 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+         |     ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/__NR_clock_gettime64 +68 arch/mips/include/asm/vdso/gettimeofday.h
+
+    57	
+    58	static __always_inline long clock_gettime_fallback(
+    59						clockid_t _clkid,
+    60						struct __kernel_timespec *_ts)
+    61	{
+    62		register struct __kernel_timespec *ts asm("a1") = _ts;
+    63		register clockid_t clkid asm("a0") = _clkid;
+    64		register long ret asm("v0");
+    65	#if _MIPS_SIM == _MIPS_SIM_ABI64
+    66		register long nr asm("v0") = __NR_clock_gettime;
+    67	#else
+  > 68		register long nr asm("v0") = __NR_clock_gettime64;
+    69	#endif
+    70		register long error asm("a3");
+    71	
+    72		asm volatile(
+    73		"       syscall\n"
+    74		: "=r" (ret), "=r" (error)
+    75		: "r" (clkid), "r" (ts), "r" (nr)
+    76		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+    77		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+    78	
+    79		return error ? -ret : ret;
+    80	}
+    81	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB7C4CBE09
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441B84CBE0D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiCCMlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 07:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S232972AbiCCMmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 07:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiCCMlR (ORCPT
+        with ESMTP id S230189AbiCCMmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 07:41:17 -0500
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD22177766
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 04:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1646311224;
-        bh=2mTqmg1W9dS0Kv/L7soH7R821Fj9eiYWYXJ3eGCvI9M=;
-        h=From:To:Cc:Subject:Date;
-        b=NLPE2CbtxY5Nkudw2QYEFJjBNB87fbrXnmx/i+bwxLliGpYgORWXQGhWGjM2ZptUI
-         p/E9WYOewKWY3FMOX+VrKMpQ8NknJmFppws8hMTtBAPA6ZSHWP/vSk9p7JpRaQldrw
-         SOeGGd/sSbpcoywKUXWWM0m8MQffjfxh+zwdGtuk=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id A153102B; Thu, 03 Mar 2022 20:40:21 +0800
-X-QQ-mid: xmsmtpt1646311221ts9xpavs0
-Message-ID: <tencent_190A7366EE04872C45417894D2D33F240806@qq.com>
-X-QQ-XMAILINFO: MR/iVh5QLeieskBkOQTC34GkjTtKFjnqAHbO7jTmPOdIcJoSGaezNK0TEBMRHs
-         YYcz+lzJoRrC/rHx5sTHDkeORDBya205PJhtKQFDbxUhGqQlsD640Ck2lA7Lh+F4VNjRTum9MGt9
-         zicMXBkOOZ4pYMQddG5lSG3wVyVlVt3ByV5Q7wjXQZkXz+c+ue17Q0GhxAd1iM9oAKGdYPuf3Hg/
-         Xi7PVekZsxGTWYbOOnc6oLYo1zAcr6ms4YgL4qnplgaiXdeI5dukTkGgkt4cYGNuvfOdD4D0mk7w
-         aYZL/fo55eXSVTBk4ad+Rad13h0J7VMBfEQDDY8J3JbydIHGXZV3/in09S52lndaQXzaom3zb0b2
-         gGEGRkzBJxOy67GswFBIKdWG2pMWtnC3P8wHUFziY0h3HmwtjY0KxFPt4wN2pJGS+EcpQW5RfRGd
-         zP+eL7DJvCcvyKVLlZg+TvMPBUgJB/Fieb3A/BhUvZrEzPaKkpFtO5fAx6rhUnZp8+iOz097fta6
-         UZmt8voNzBTgydJI0S5Aqgqz57F7l12MtU+Fgh5PBQMXa8GkK/3xAtfDZSbKEYhky/3rrXN8gNsA
-         wzoPDw7QflYrwtYVu0chHF12+vJZD6UIZRjsZVVxAPDo1RZsTrmJjVsZiBt8e7LAgzYJ1CnJdYbn
-         p2cUn1GpRIn/H26Eo5tJGm1fMXtTTpAmR4a/K1OVOISVKqufl9izDxOTfrWQMlJo0VvhaRuElCFY
-         aZn2FHEVh/wxbYyguvi+4tzpZQo3BXuq8X/dG4t+7RhY5dgPZI7BdHCZUfyZtR1jKa/uueDmBoaj
-         ehcJesVJYM/6zWIFc1z7bkuLD52xdaYE5Awa1TLqObXd2O6iwH0WuclE+tjLZzagMuQQzpHlzC5W
-         6rO2xT9GDsvCWlcF8iGPUyPFebI4KcW08/yVQI3LBk/+ojlhQegDSTXz2Mp6jblG9PYUbdWFcX
-From:   xkernel.wang@foxmail.com
-To:     wsa+renesas@sang-engineering.com, peda@axentia.se
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] i2c: mux: demux-pinctrl: check the return value of devm_kstrdup()
-Date:   Thu,  3 Mar 2022 20:39:14 +0800
-X-OQ-MSGID: <20220303123914.4469-1-xkernel.wang@foxmail.com>
+        Thu, 3 Mar 2022 07:42:10 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9E217AEFF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 04:41:25 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id c14so5515201ioa.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 04:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9r6ZfFAaOqyWk6kgbqfNam/C9zF89QVW36Fk2rUPv5I=;
+        b=kQhkTuAMW21wgujo+qf+haNIwEOnVhDpCk/w3OWQlXSzVdjQRskWRaTVo7FsF8VT5u
+         txDom55OgR+S/eB3OFU7NBpl9W5T+lTVu3RNM7ZfjTgEv/JUeQs5qNiy05rvjebeWFxm
+         4FLbgo0SlOdp2mj+/RbNeSMU8smBjdnAbg6XQoG48aVdv1t0kRHJCAo7ZC98EP2pXP2U
+         Cn4A8UP4n14Bp3pI/QrFZ4+ERCbPGcZBF77Llv79IVxB3iWoigXtdOXGlmnqHk5sWax0
+         LzDmwQJWnKT7+nBX07iBvnu+/cP4vb+zMGAnnw10w5U8uhgTVgRHrAQ+J6evTnhoIqGj
+         pAnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9r6ZfFAaOqyWk6kgbqfNam/C9zF89QVW36Fk2rUPv5I=;
+        b=KT+53eB4wYKJy8BLzer4JevIYNoX9ESl30lX7Fp22ZkpPMmTV0HGIC7liTZAxrtVAF
+         M658vAJNqZodxsGCADW2zcBV/x0KrEp7Dm/Ib45odWGAbgCAzBopa16AS9BqdNnEVMld
+         tvgBWLocNZugKMNL3F4QeDPIuLX095snaqu/id3w5lJ+Hvo8JxucqK80SKMvmv8n/opC
+         PsAe7Ogvs6p3jL4ketKXEZSW75Ry8vvYilKEFcxAT33vQi9e34smOVP6v9dQXyAWx5hg
+         A53FrwIQ4mP4S/5OfeqHttwQ+cky87j/E+KBW7Ay/pUNfdsPc318TI8SSTL3sl656Mke
+         HpcQ==
+X-Gm-Message-State: AOAM533NBmCnDuFQuB1D4HZNVucpybQN0pZ2yZPaEy3tKv7oMfQ8hXOk
+        trUCWotpR+vUNN4yoXpiOzuSN0zxDdznQSmNz6CPXw==
+X-Google-Smtp-Source: ABdhPJzCT9ADPJDw76n+48DdfN1TK3J5QScqCaHw6cFVfo1ZTGglNXZMIpNjVlBaBGR7nOMXwQZmqtYkga5BDpnpC2o=
+X-Received: by 2002:a02:7f95:0:b0:314:2966:1d39 with SMTP id
+ r143-20020a027f95000000b0031429661d39mr29710005jac.317.1646311284120; Thu, 03
+ Mar 2022 04:41:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220131133049.77780-1-robert.marko@sartura.hr>
+ <20220131133049.77780-6-robert.marko@sartura.hr> <Yh8vJNc4D6rA68au@google.com>
+ <Yh/kFzNuvbwA2qeE@robh.at.kernel.org>
+In-Reply-To: <Yh/kFzNuvbwA2qeE@robh.at.kernel.org>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Thu, 3 Mar 2022 13:41:13 +0100
+Message-ID: <CA+HBbNHComN9kgFp1Xr4mdedwYjDMbSUkw+6_KAe8+O4hrtvKQ@mail.gmail.com>
+Subject: Re: [PATCH v10 5/6] dt-bindings: mfd: Add Delta TN48M CPLD drivers bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, brgl@bgdev.pl,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        skhan@linuxfoundation.org, Luka Perkov <luka.perkov@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Wed, Mar 2, 2022 at 10:39 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Mar 02, 2022 at 08:47:32AM +0000, Lee Jones wrote:
+> > On Mon, 31 Jan 2022, Robert Marko wrote:
+> >
+> > > Add binding documents for the Delta TN48M CPLD drivers.
+> > >
+> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> >
+> > This is missing a DT review.
+>
+> How about this one[1]?
+>
+> Rob
+>
+> [1] https://lore.kernel.org/all/20210719225906.GA2769608@robh.at.kernel.org/
 
-devm_kstrdup() returns pointer to allocated string on success,
-NULL on failure. So it is better to check the return value of it.
+Hi Rob,
+Thanks for reaching out.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/i2c/muxes/i2c-demux-pinctrl.c | 4 ++++
- 1 file changed, 4 insertions(+)
+As you can see the bindings have evolved since v6,
+GPIO driver now only uses 2 distinct compatibles.
 
-diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-index 5365199..3203361 100644
---- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
-+++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-@@ -243,6 +243,10 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
- 
- 		props[i].name = devm_kstrdup(&pdev->dev, "status", GFP_KERNEL);
- 		props[i].value = devm_kstrdup(&pdev->dev, "ok", GFP_KERNEL);
-+		if (!props[i].name || !props[i].value) {
-+			err = -ENOMEM;
-+			goto err_rollback;
-+		}
- 		props[i].length = 3;
- 
- 		of_changeset_init(&priv->chan[i].chgset);
+I am open to discussion in order to reach some kind of a consensus on
+this matter
+as the whole series is currently unfortunately stalled.
+
+Regards,
+Robert
 -- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr

@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DD94CC692
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B81E4CC69E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiCCTwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S235439AbiCCTzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiCCTwo (ORCPT
+        with ESMTP id S234886AbiCCTzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:52:44 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D245E1A39D9
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:51:58 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id a23so12984936eju.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:51:58 -0800 (PST)
+        Thu, 3 Mar 2022 14:55:51 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBFD18BA48
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:55:03 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id n14so9476273wrq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:55:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hjmWT/W5MRqML4fV3l4pipH2e7/zhAuEQ7CGP/nmDbM=;
-        b=bNXFAaflB55BjF2vEloQHSSJIxeOGy0jLkFcVy1CXkF0XyVe0a9nTBaTyP5kHa+g+e
-         mA5iKiBRiynFpXgd6FGPvYFk1Wn1UKWvLgSr7rMghEftWcpW/zwxua6wkisl9n/TdxBS
-         1tUshZbkOaiprXD4UTmcZsamRW+UmrZ6PMEu6JBcvXY8p1Ly/PI4w1Bqws3U0H2z3sI0
-         5umEPO11T9SzsU1DCEbPSYRgkQxXt+pjLTexGJrFnaaCtafbNXyxxsc/M6oyTkEIUYqR
-         LgDEUkPmo/Sam58MWhBfdm3OBF+USHeiDJsXS1hH70P6D7/SPsZc2CnFkj/Cpm4AM9Gs
-         TzlQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zsIbz0/b386hU/ZdkOSBubB6mU+6IwbbmnEE1Ycu+MY=;
+        b=P2/lLp3fpnzXDyB/a8TOfUWFAEABVhPQyw4vrBIqcCPNSqVsh75hfUEo7ksNNW/Lcb
+         ORQN/swrL9IYwChFBbsy08B20shjCFURo9fA0UgjDt75cIZKeskIDctWDweIMszbiF6m
+         3+nmbWDgvuxmybGFmrYHRHpPTjZCB/qljmJZ3vd6zWuX2A0yZ1UHZY77KScrPe2Ub+16
+         4cEBAP5AxkTO00SGIVZ8/zdzMBBN5llAfSpc1JftBSSCtowCDLpqBx1t2zciHAwnwV+W
+         7sLq/+PwEBc8tt8f0vczCDQUcL29TKHITgigXYDaIVbTLoXTERVs1vX0tt/vf35T8kAu
+         f+tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hjmWT/W5MRqML4fV3l4pipH2e7/zhAuEQ7CGP/nmDbM=;
-        b=Y7A7rQbA5lC7063INR+H8gqCedoSg5thbu4FsKOasKGfDsiw4Tz4jZgGqqmulprLBE
-         Kfk0i2gDVD3md4btgP30b8yZ9R3I1Sh0jdmrEB949+0hccxW+OGOLFoAPQQiyEwpDrq3
-         g0fS1+KuyLxPfQcCm4IPq8b8DESBRBO9Mf/1XRK2+sss0cJzcP7NIg2TbgEndUM6XowZ
-         J1C2o4Db192ULmx+7P30dYbZy2+07AivSWk0oQ31bwa3Hub6wjChDdEMTupjYPWyXPYc
-         yYS6Bi9x6OxJO7aq/mcZFj7m/HoAeKZeXIEV/V6yCD4DRM8oCM39ClzEQvrdRG+Mlbus
-         s/5g==
-X-Gm-Message-State: AOAM5326M4K84hYPrYXVy/ewZaTG/0fGvKCv+2d3xg9pzYSaGvbKhnEs
-        F9TjPirOn8Fee3cmc4/jbJs8AfsV5xYG0DN9W2M=
-X-Google-Smtp-Source: ABdhPJzuicciNIaD29btjcvtEpl11t9WodpI6Lk5thTnnh5192JvUE8OYxi/RYjedjFjZS4JW2dJz9TUg3MQ+Gkswzc=
-X-Received: by 2002:a17:906:5d12:b0:6da:960c:7e30 with SMTP id
- g18-20020a1709065d1200b006da960c7e30mr2855735ejt.380.1646337117337; Thu, 03
- Mar 2022 11:51:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zsIbz0/b386hU/ZdkOSBubB6mU+6IwbbmnEE1Ycu+MY=;
+        b=V58hXOiyuy468MzbsW8hcTpj03A5uFw9JKB7qFj28sK4Kjr0thXN883eUXoyEDZLJ/
+         NIp6SoKOdnf/uCuvbKnOE8VgsKyz2vRk5wY5HA65HXZgJiEOpnZNc+zBpCQkmp9ktR3A
+         mjoaY39yqJ9pSVDT6JgPeI/+Cmt+LAlxbBdMQ8MF5ACje1jnmdddebNmeMTy5wh0c6HH
+         1SQE+9IynNYeAPFD83CSexc3nWZ0mLWqAfmP9XeC0Kra2ZJmdM9H0a4ZthJBovadDoY7
+         +liAtTyigTesjMA50bXZ5xo830wTxinXrJEAFrzDc3v0ari6F10JM79imQa0GEBnqoCh
+         L6tQ==
+X-Gm-Message-State: AOAM533zdNa4e05yYqC5llvYCA4Su8Tiv7DuFKmyyQme2jF/g/v7t48V
+        9p8GnkEPOxvXYFftxS5gJ1OT1Q==
+X-Google-Smtp-Source: ABdhPJwSAaV6ui1w2AUfj/WG1jEQ2FypYIkPGjDYhD/nRjjjEqPVDKL8xOYDM+Z1Oa9dFUUITZz1Yw==
+X-Received: by 2002:a5d:5407:0:b0:1f0:1246:5a8c with SMTP id g7-20020a5d5407000000b001f012465a8cmr10294116wrv.193.1646337302326;
+        Thu, 03 Mar 2022 11:55:02 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm16466518wmk.9.2022.03.03.11.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 11:55:01 -0800 (PST)
+Date:   Thu, 3 Mar 2022 20:54:58 +0100
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     John Keeping <john@metanate.com>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2 06/18] crypto: rockchip: add fallback for cipher
+Message-ID: <YiEdEoX79kDp8kUY@Red>
+References: <20220302211113.4003816-1-clabbe@baylibre.com>
+ <20220302211113.4003816-7-clabbe@baylibre.com>
+ <YiDO8Tt9Lhx530Oz@donbot>
 MIME-Version: 1.0
-References: <84792468-f512-e48f-378c-e34c3641e97@google.com>
-In-Reply-To: <84792468-f512-e48f-378c-e34c3641e97@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 3 Mar 2022 11:51:45 -0800
-Message-ID: <CAHbLzkppwEBSkd2QFAHkRfQPsLqzRqPegbNUg_bnY62ai2Emyg@mail.gmail.com>
-Subject: Re: [PATCH mmotm] mm/thp: refix __split_huge_pmd_locked() for
- migration PMD
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ralph Campbell <rcampbell@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YiDO8Tt9Lhx530Oz@donbot>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 5:43 PM Hugh Dickins <hughd@google.com> wrote:
->
-> Migration entries do not contribute to a page's reference count: move
-> __split_huge_pmd_locked()'s page_ref_add() into pmd_migration's else
-> block (along with the page_count() check - a page is quite likely to
-> to have reference count frozen to 0 when a migration entry is found).
->
-> This will fix a very rare anonymous memory leak, after a split_huge_pmd()
-> raced with an anon split_huge_page() or an anon THP migrate_pages(): since
-> the wrongly raised refcount stopped the page (perhaps small, perhaps huge,
-> depending on when the race hit) from ever being freed.  At first I thought
-> there were worse risks, from prematurely unfreezing a frozen page: but now
-> think that would only affect page cache pages, which do not come this way
-> (except for anonymous pages in swap cache, perhaps).
+Le Thu, Mar 03, 2022 at 02:21:37PM +0000, John Keeping a écrit :
+> On Wed, Mar 02, 2022 at 09:11:01PM +0000, Corentin Labbe wrote:
+> > The hardware does not handle 0 size length request, let's add a
+> > fallback.
+> > Furthermore fallback will be used for all unaligned case the hardware
+> > cannot handle.
+> > 
+> > Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >  drivers/crypto/rockchip/rk3288_crypto.h       |  2 +
+> >  .../crypto/rockchip/rk3288_crypto_skcipher.c  | 97 ++++++++++++++++---
+> >  2 files changed, 86 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
+> > index c919d9a43a08..8b1e15d8ddc6 100644
+> > --- a/drivers/crypto/rockchip/rk3288_crypto.h
+> > +++ b/drivers/crypto/rockchip/rk3288_crypto.h
+> > @@ -246,10 +246,12 @@ struct rk_cipher_ctx {
+> >  	struct rk_crypto_info		*dev;
+> >  	unsigned int			keylen;
+> >  	u8				iv[AES_BLOCK_SIZE];
+> > +	struct crypto_skcipher *fallback_tfm;
+> >  };
+> >  
+> >  struct rk_cipher_rctx {
+> >  	u32				mode;
+> > +	struct skcipher_request fallback_req;   // keep at the end
+> >  };
+> >  
+> >  enum alg_type {
+> > diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
+> > index bbd0bf52bf07..bf9d398cc54c 100644
+> > --- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
+> > +++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
+> > @@ -13,6 +13,63 @@
+> >  
+> >  #define RK_CRYPTO_DEC			BIT(0)
+> >  
+> > +static int rk_cipher_need_fallback(struct skcipher_request *req)
+> > +{
+> > +	struct scatterlist *sgs, *sgd;
+> > +
+> > +	if (!req->cryptlen)
+> > +		return true;
+> > +
+> > +	sgs = req->src;
+> > +	while (sgs) {
+> > +		if (!IS_ALIGNED(sgs->offset, sizeof(u32))) {
+> > +			return true;
+> > +		}
+> > +		if (sgs->length % 16) {
+> 
+> Can this be relaxed to check for alignment to 4 rather than 16?  That's
+> the requirement for programming the registers.
 
-Thanks for catching this. I agree there may be anon memory leak due to
-bumped refcount. But I don't think it could affect page cache page
-since that code (bumping refcount) is never called for page cache page
-IIUC.
+No we cannot, the hardware could operate only one SG at a time, and the cipher operation need to be complete, so the length should be a multiple of AES_BLOCK_SIZE.
+The original driver already have this size check.
+But for DES/3DES this check is bad and should be 8, so a fix is needed anyway.
 
-The patch looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+> 
+> But I think this check is wrong in general as it doesn't account for
+> cryptlen; with fscrypt I'm seeing sgs->length == 255 but cryptlen == 16
+> so the hardware can be used but at the moment the fallback path is
+> triggered.
 
->
-> Fixes: ec0abae6dcdf ("mm/thp: fix __split_huge_pmd_locked() for migration PMD")
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
-> That's an unfair "Fixes": it did not introduce the problem, but it
-> missed this aspect of the problem; and will be a good guide to where this
-> refix should go if stable backports are asked for.
->
->  mm/huge_memory.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2039,9 +2039,9 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
->                 young = pmd_young(old_pmd);
->                 soft_dirty = pmd_soft_dirty(old_pmd);
->                 uffd_wp = pmd_uffd_wp(old_pmd);
-> +               VM_BUG_ON_PAGE(!page_count(page), page);
-> +               page_ref_add(page, HPAGE_PMD_NR - 1);
->         }
-> -       VM_BUG_ON_PAGE(!page_count(page), page);
-> -       page_ref_add(page, HPAGE_PMD_NR - 1);
->
->         /*
->          * Withdraw the table only after we mark the pmd entry invalid.
+Yes, I need to check min(sg->length, cryptlen_remaining) instead.
+I will fix that.
+
+Thanks.

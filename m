@@ -2,125 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD67B4CB5A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E5F4CB5A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiCCD6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 22:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S229621AbiCCEAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiCCD6A (ORCPT
+        with ESMTP id S229470AbiCCEAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 22:58:00 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E6615041C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:57:16 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m22so3627894pja.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:57:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sN56U/MxzcAq7Ji7ujqvCiSFXq3Px2uncy+XviL6Elo=;
-        b=UzQ9ZzQuF00lfXHKdO8TTfq27JObbQGJkGO7h1nBMLLCb6WKsmcoWsWxBSKHeMcPJr
-         bqIONY1/aUpiDtuKJkzTcvmDgo+MYYpWoPG0MHc6dDCkk8+CZ+a4VpeXH0E2zlbMqwQj
-         xiWw8fjxPVyLy0CcQ4/l5LZrc26kU4GS/iyC0=
+        Wed, 2 Mar 2022 23:00:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F0015720A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646279961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JLyYEFbzKazGajr/Z7eLhFc2iDs9PD4fdRAFMZ5Qomk=;
+        b=Xo6PY89Xap6AfFQ2FRhWBcsxBlF9R/3gwYuVBP8FX9aeBV2jbKiMy5IQM363sOdr8y7719
+        HD6NwEO77xHRf5j4fSEcxgh4OmfCsqKXIf/aUPodKIIenfoCuomJDrLjDd6AErdz6/PhTU
+        /7ER9uadbB/BbsI3W+HmkOp2AU+I+AY=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-569-gb4QMxq-NJqCDPFTnPXriA-1; Wed, 02 Mar 2022 22:59:20 -0500
+X-MC-Unique: gb4QMxq-NJqCDPFTnPXriA-1
+Received: by mail-pl1-f198.google.com with SMTP id b5-20020a170902e94500b0014f6d0a417bso2141721pll.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:59:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=sN56U/MxzcAq7Ji7ujqvCiSFXq3Px2uncy+XviL6Elo=;
-        b=nGcCWRQuyKuklRs7Btzna9KKZ+KSi0OGpLcWTwm5uHOmcXVXNe9XW2Xl0Fbqs17BFF
-         QgHSJRsMD+BZnnW793lo841/bFP/bbOWHgjMCUg7vUdUjmGlPHAWhk/W79Ufoy0bQDjL
-         QCeaJMwHjKekl1HrsYQjpKg4eC+66IAqBgJEkKNhP6xtkfN4ZLgUBvGSqaLe1kGZZTLd
-         zfqCWDsU6i1WzX7jIYH6vIAsvYlEuS3/k2zRKevEkvPDamwcwiKAASlT4WlhNSwjUWa4
-         MRzsW2YDCRW/0kd5bYivFUMq215lSheDb3Hi6ezF9QWzl/ZOeqARwFBWD11C0wH/WrLR
-         5Hsw==
-X-Gm-Message-State: AOAM531XhGEV88ROcIe4iQNw+Q04dj6FXY76dbF1t0MMyLnn71fLKk0e
-        tigjByO74uUbmPBjPouPUEg4frauOFpVnA==
-X-Google-Smtp-Source: ABdhPJwcrMOZlFSBfbq4cahkRSQNhcw0qyaNIzWMyJ8sa0tB1anPQEUPy1RXTpva9PR4JSO7Ear/xA==
-X-Received: by 2002:a17:902:e5c3:b0:151:96df:e06a with SMTP id u3-20020a170902e5c300b0015196dfe06amr6430506plf.41.1646279835479;
-        Wed, 02 Mar 2022 19:57:15 -0800 (PST)
-Received: from wmahon.c.googlers.com.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
-        by smtp.gmail.com with ESMTPSA id m11-20020a17090a3f8b00b001bc299e0aefsm6526366pjc.56.2022.03.02.19.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 19:57:15 -0800 (PST)
-From:   William Mahon <wmahon@chromium.org>
-X-Google-Original-From: William Mahon <wmahon@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     William Mahon <wmahon@google.com>,
-        William Mahon <wmahon@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
-Subject: [PATCH v3] HID: Add mapping for KEY_ALL_APPLICATIONS
-Date:   Thu,  3 Mar 2022 03:57:03 +0000
-Message-Id: <20220303035618.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+        bh=JLyYEFbzKazGajr/Z7eLhFc2iDs9PD4fdRAFMZ5Qomk=;
+        b=Pf0YWdzn4DBIFNw3505MHCxAR6awOM6v0d6FlKEH3R3PZkLavKSppPnU1JqhZhTnVJ
+         lgvMyaGBUHdyLZxXaROxktXJp7GkLse/wB198YL5Uz0U/DK1jWhwD2PUyOOSbyyyAwf/
+         k35BJ+e5f0nax3IPV9l/aWRPHqOGLrv84TH/bhznI/idNWeDHOTPeUfY1Bfhf8wdLqzq
+         s2mIv5UYpBbEBKYx4ksA8tVVuS+w1v7kXcAA9neYYPTmD3qnFde3ipvHdKRXloqq8Mva
+         9G2V8QlXijesI/QLh3tG5E6AdxTTS/wynZccj4wpFjzqBGuqfYq3Ug+FT3vv0gG/h5b1
+         qucQ==
+X-Gm-Message-State: AOAM531lxpDqd4RQ53f9hg89zACp/oTk6AtFxNLhJsYWOw4/c7ABPKRR
+        X52p79HTyFkBO/rdKRWZ0UAHqJheGSrUeUJE+h+SNqQH5RhIl+cJzxMbumr2rI5P55OQvJC3R0O
+        2ddfEVEaOyvAN0TdTSHKcjoYV
+X-Received: by 2002:a05:6a00:188f:b0:4e1:a253:850c with SMTP id x15-20020a056a00188f00b004e1a253850cmr36329971pfh.61.1646279959003;
+        Wed, 02 Mar 2022 19:59:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZQZtiyN/+eVQIh36yLquJvhShQxa3L1DH/1+/nasdtDZX5ozJfyYacmVoMm56LpbVlK/3mQ==
+X-Received: by 2002:a05:6a00:188f:b0:4e1:a253:850c with SMTP id x15-20020a056a00188f00b004e1a253850cmr36329956pfh.61.1646279958700;
+        Wed, 02 Mar 2022 19:59:18 -0800 (PST)
+Received: from [10.72.13.250] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id u11-20020a056a00124b00b004e11307f8cdsm662501pfi.86.2022.03.02.19.59.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 19:59:18 -0800 (PST)
+Message-ID: <276dfdf4-2ee5-b054-4e34-c5c32b99d6d7@redhat.com>
+Date:   Thu, 3 Mar 2022 11:59:08 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH net-next] tuntap: add sanity checks about msg_controllen
+ in sendmsg
+Content-Language: en-US
+To:     Harold Huang <baymaxhuang@gmail.com>, netdev@vger.kernel.org
+Cc:     edumazet@google.com, Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO HOST (VHOST)" <kvm@vger.kernel.org>,
+        "open list:VIRTIO HOST (VHOST)" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+References: <20220301064314.2028737-1-baymaxhuang@gmail.com>
+ <20220303022441.383865-1-baymaxhuang@gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220303022441.383865-1-baymaxhuang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new key definition for KEY_ALL_APPLICATIONS
-and aliases KEY_DASHBOARD to it.
 
-It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
+在 2022/3/3 上午10:24, Harold Huang 写道:
+> In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
+> tun_sendmsg. Although we donot use msg_controllen in this path, we should
+> check msg_controllen to make sure the caller pass a valid msg_ctl.
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
+>
+> Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+> Suggested-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
 
-Signed-off-by: William Mahon <wmahon@chromium.org>
----
 
- drivers/hid/hid-debug.c                | 1 +
- drivers/hid/hid-input.c                | 2 ++
- include/uapi/linux/input-event-codes.h | 3 ++-
- 3 files changed, 5 insertions(+), 1 deletion(-)
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index 01135713e8f9..dbde52bd6585 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -939,6 +939,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_KBDINPUTASSIST_NEXTGROUP] = "KbdInputAssistNextGroup",
- 	[KEY_KBDINPUTASSIST_ACCEPT] = "KbdInputAssistAccept",
- 	[KEY_KBDINPUTASSIST_CANCEL] = "KbdInputAssistCancel",
-+	[KEY_ALL_APPLICATIONS] = "AllApplications",
- };
- 
- static const char *relatives[REL_MAX + 1] = {
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index eccd89b5ea9f..c3e303c1d8d1 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -1162,6 +1162,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 
- 		case 0x29d: map_key_clear(KEY_KBD_LAYOUT_NEXT);	break;
- 
-+		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
-+
- 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
- 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
- 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
-diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-index 311a57f3e01a..556aa8f88201 100644
---- a/include/uapi/linux/input-event-codes.h
-+++ b/include/uapi/linux/input-event-codes.h
-@@ -278,7 +278,8 @@
- #define KEY_PAUSECD		201
- #define KEY_PROG3		202
- #define KEY_PROG4		203
--#define KEY_DASHBOARD		204	/* AL Dashboard */
-+#define KEY_ALL_APPLICATIONS	204
-+#define KEY_DASHBOARD	KEY_ALL_APPLICATIONS /* AL Dashboard */
- #define KEY_SUSPEND		205
- #define KEY_CLOSE		206	/* AC Close */
- #define KEY_PLAY		207
--- 
-2.35.1.616.g0bdcbb4464-goog
+
+> ---
+>   drivers/net/tap.c   | 3 ++-
+>   drivers/net/tun.c   | 3 ++-
+>   drivers/vhost/net.c | 1 +
+>   3 files changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+> index 8e3a28ba6b28..ba2ef5437e16 100644
+> --- a/drivers/net/tap.c
+> +++ b/drivers/net/tap.c
+> @@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
+>   	struct xdp_buff *xdp;
+>   	int i;
+>   
+> -	if (ctl && (ctl->type == TUN_MSG_PTR)) {
+> +	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
+> +	    ctl && ctl->type == TUN_MSG_PTR) {
+>   		for (i = 0; i < ctl->num; i++) {
+>   			xdp = &((struct xdp_buff *)ctl->ptr)[i];
+>   			tap_get_user_xdp(q, xdp);
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 969ea69fd29d..2a0d8a5d7aec 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -2501,7 +2501,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+>   	if (!tun)
+>   		return -EBADFD;
+>   
+> -	if (ctl && (ctl->type == TUN_MSG_PTR)) {
+> +	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
+> +	    ctl && ctl->type == TUN_MSG_PTR) {
+>   		struct tun_page tpage;
+>   		int n = ctl->num;
+>   		int flush = 0, queued = 0;
+> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> index 28ef323882fb..792ab5f23647 100644
+> --- a/drivers/vhost/net.c
+> +++ b/drivers/vhost/net.c
+> @@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
+>   		goto signal_used;
+>   
+>   	msghdr->msg_control = &ctl;
+> +	msghdr->msg_controllen = sizeof(ctl);
+>   	err = sock->ops->sendmsg(sock, msghdr, 0);
+>   	if (unlikely(err < 0)) {
+>   		vq_err(&nvq->vq, "Fail to batch sending packets\n");
 

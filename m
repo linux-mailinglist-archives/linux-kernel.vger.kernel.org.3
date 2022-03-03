@@ -2,149 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D8D4CB3C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282234CB35A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiCCAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S230185AbiCCAPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiCCAOs (ORCPT
+        with ESMTP id S230165AbiCCAPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:14:48 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE7575C25
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646266444; x=1677802444;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hmz3BXrASPM4rj/Ag7uj0PGIQr6Iu+Afl0jy4NilYKc=;
-  b=ghmcBoTRX9vJDxMdqNq22nspOc98osXQk6/Ca7ZEAi/wTQyo4vvXRQfa
-   S4mjZF1uZwlitfj7VK/W1ufuGfNT27YtN7646koikeKYbrKRYmGKZFjaI
-   f3UhbFGDeBjQ8rvaavh25n9aMyDiEBvH5JNJRljiCF9TpcPauLDQR5NZK
-   kfCaWUFTe/b2alEq+uRYlWpt/lEAXxClmJwkLQSAdHsKStr/RDuHjxQ4w
-   oOa5Ze22orzmZGXa/vyWLXmNFuh9T+gPRODnrjIm+6lIo0GUS+Vb5hicq
-   TQHSl3f5Nrm5QzbHlX0y2hN/7U1krSP81CXquaft91n3S9FQYkRBHVewT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233503210"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="233503210"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:14:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="511200012"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 16:14:02 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPZ6X-00027m-GR; Thu, 03 Mar 2022 00:14:01 +0000
-Date:   Thu, 3 Mar 2022 08:13:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 25/27]
- fs/fscache/stats.c:100: undefined reference to `netfs_stats_show'
-Message-ID: <202203030853.jADpk5H8-lkp@intel.com>
+        Wed, 2 Mar 2022 19:15:34 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FF5123BDC;
+        Wed,  2 Mar 2022 16:14:47 -0800 (PST)
+Received: from [192.168.43.69] (unknown [182.2.41.243])
+        by gnuweeb.org (Postfix) with ESMTPSA id 88C177E247;
+        Thu,  3 Mar 2022 00:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1646266486;
+        bh=pjIJzJiKgtGI6lOvU1gIl3bz4ZoAsWLGIwIxTBOaBXo=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=n336WWVvPX+eTpTbvL/FgGKFA4bFJGsfhx7ZPlcexoW0rPuh3cfOBKHYV6yeB5U77
+         wMmz7eXs3575SZmAXBJ3ZG4pYsUcRUKmCyer22k2R9z0ZYcs1s+pKZv7h94R19EDNL
+         LEg8YrMt7LWpNS+nHmVAhUvfpv+fekXMCEDR1fMNmAVaRIXB2/wr9j47OUhRaFhG2A
+         YzvHi+8lIcoo4AJ253Wh5KSgLqFUaDmisvb69xzQq7alLyMrqx0ZFUlWmTIv+3LTY3
+         hJfJyKOlnN8lOaLs8TxN0VjTCkn72b09b5FfXG8l6RnhFErJHfOzbEZyi6WxLvE+jr
+         k+Lec4y+/uNQQ==
+Message-ID: <ad4f351e-202b-fa07-871e-a0c70c310ee7@gnuweeb.org>
+Date:   Thu, 3 Mar 2022 07:14:38 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gwml@vger.gnuweeb.org" <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Jiri Hladky <hladky.jiri@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
+ <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
+ <0642444da1844f8dae2dc98b34b8ab74@AcuMS.aculab.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+In-Reply-To: <0642444da1844f8dae2dc98b34b8ab74@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   b295237bb1a924ca0723d728bb5ff30e6461ad2b
-commit: 4b3ff38b2fe2b2e490f513a7b71763ae3473cafa [25/27] netfs, fscache: Make netfslib depend on fscache
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220303/202203030853.jADpk5H8-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/4b3ff38b2fe2b2e490f513a7b71763ae3473cafa
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout 4b3ff38b2fe2b2e490f513a7b71763ae3473cafa
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 3/1/22 4:54 PM, David Laight wrote:
+> Both the function pointers in that code need killing.
+> They only have two options (each) so conditional branches
+> will almost certainly always have been better.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, I agree with simply using conditional branches to handle this
+case. But to keep the changes minimal for the stable tree, let's fix
+the obvious real bug first. Someone can refactor it later, but I
+don't see that as an urgent thing to refactor.
 
-All errors (new ones prefixed by >>):
+> I also wonder how well the comment
+>     The additional jump magic is needed to get the timing stable
+>     on all the CPU' we have to worry about.
+> applies to any modern cpu!
+> The code is unchanged since (at least) 2.6.27.
+> (It might have been moved from another file.)
+Not sure about that...
 
-   ld: fs/fscache/stats.o: in function `fscache_stats_show':
->> fs/fscache/stats.c:100: undefined reference to `netfs_stats_show'
+Thanks for the feedback.
 
-
-vim +100 fs/fscache/stats.c
-
-8e7a867bb7309fb David Howells 2021-10-20   51  
-1e1236b841166f1 David Howells 2021-10-20   52  /*
-1e1236b841166f1 David Howells 2021-10-20   53   * display the general statistics
-1e1236b841166f1 David Howells 2021-10-20   54   */
-1e1236b841166f1 David Howells 2021-10-20   55  int fscache_stats_show(struct seq_file *m, void *v)
-1e1236b841166f1 David Howells 2021-10-20   56  {
-1e1236b841166f1 David Howells 2021-10-20   57  	seq_puts(m, "FS-Cache statistics\n");
-7f3283aba39a0f3 David Howells 2021-10-20   58  	seq_printf(m, "Cookies: n=%d v=%d vcol=%u voom=%u\n",
-7f3283aba39a0f3 David Howells 2021-10-20   59  		   atomic_read(&fscache_n_cookies),
-62ab63352350e88 David Howells 2021-10-20   60  		   atomic_read(&fscache_n_volumes),
-62ab63352350e88 David Howells 2021-10-20   61  		   atomic_read(&fscache_n_volumes_collision),
-62ab63352350e88 David Howells 2021-10-20   62  		   atomic_read(&fscache_n_volumes_nomem)
-62ab63352350e88 David Howells 2021-10-20   63  		   );
-1e1236b841166f1 David Howells 2021-10-20   64  
-7f3283aba39a0f3 David Howells 2021-10-20   65  	seq_printf(m, "Acquire: n=%u ok=%u oom=%u\n",
-7f3283aba39a0f3 David Howells 2021-10-20   66  		   atomic_read(&fscache_n_acquires),
-7f3283aba39a0f3 David Howells 2021-10-20   67  		   atomic_read(&fscache_n_acquires_ok),
-7f3283aba39a0f3 David Howells 2021-10-20   68  		   atomic_read(&fscache_n_acquires_oom));
-7f3283aba39a0f3 David Howells 2021-10-20   69  
-12bb21a29c19aae David Howells 2021-10-20   70  	seq_printf(m, "LRU    : n=%u exp=%u rmv=%u drp=%u at=%ld\n",
-12bb21a29c19aae David Howells 2021-10-20   71  		   atomic_read(&fscache_n_cookies_lru),
-12bb21a29c19aae David Howells 2021-10-20   72  		   atomic_read(&fscache_n_cookies_lru_expired),
-12bb21a29c19aae David Howells 2021-10-20   73  		   atomic_read(&fscache_n_cookies_lru_removed),
-12bb21a29c19aae David Howells 2021-10-20   74  		   atomic_read(&fscache_n_cookies_lru_dropped),
-12bb21a29c19aae David Howells 2021-10-20   75  		   timer_pending(&fscache_cookie_lru_timer) ?
-12bb21a29c19aae David Howells 2021-10-20   76  		   fscache_cookie_lru_timer.expires - jiffies : 0);
-12bb21a29c19aae David Howells 2021-10-20   77  
-d24af13e2e2358a David Howells 2021-10-20   78  	seq_printf(m, "Invals : n=%u\n",
-d24af13e2e2358a David Howells 2021-10-20   79  		   atomic_read(&fscache_n_invalidates));
-d24af13e2e2358a David Howells 2021-10-20   80  
-16a96bdf92d5af0 David Howells 2021-10-20   81  	seq_printf(m, "Updates: n=%u rsz=%u rsn=%u\n",
-16a96bdf92d5af0 David Howells 2021-10-20   82  		   atomic_read(&fscache_n_updates),
-16a96bdf92d5af0 David Howells 2021-10-20   83  		   atomic_read(&fscache_n_resizes),
-16a96bdf92d5af0 David Howells 2021-10-20   84  		   atomic_read(&fscache_n_resizes_null));
-7f3283aba39a0f3 David Howells 2021-10-20   85  
-7f3283aba39a0f3 David Howells 2021-10-20   86  	seq_printf(m, "Relinqs: n=%u rtr=%u drop=%u\n",
-7f3283aba39a0f3 David Howells 2021-10-20   87  		   atomic_read(&fscache_n_relinquishes),
-7f3283aba39a0f3 David Howells 2021-10-20   88  		   atomic_read(&fscache_n_relinquishes_retire),
-7f3283aba39a0f3 David Howells 2021-10-20   89  		   atomic_read(&fscache_n_relinquishes_dropped));
-7f3283aba39a0f3 David Howells 2021-10-20   90  
-9f08ebc3438baaa David Howells 2021-10-22   91  	seq_printf(m, "NoSpace: nwr=%u ncr=%u cull=%u\n",
-3929eca769b5a23 David Howells 2021-10-21   92  		   atomic_read(&fscache_n_no_write_space),
-9f08ebc3438baaa David Howells 2021-10-22   93  		   atomic_read(&fscache_n_no_create_space),
-9f08ebc3438baaa David Howells 2021-10-22   94  		   atomic_read(&fscache_n_culled));
-3929eca769b5a23 David Howells 2021-10-21   95  
-8e7a867bb7309fb David Howells 2021-10-20   96  	seq_printf(m, "IO     : rd=%u wr=%u\n",
-8e7a867bb7309fb David Howells 2021-10-20   97  		   atomic_read(&fscache_n_read),
-8e7a867bb7309fb David Howells 2021-10-20   98  		   atomic_read(&fscache_n_write));
-8e7a867bb7309fb David Howells 2021-10-20   99  
-1e1236b841166f1 David Howells 2021-10-20 @100  	netfs_stats_show(m);
-
-:::::: The code at line 100 was first introduced by commit
-:::::: 1e1236b841166f1d2daf36fdf6bb3e656bc5f5ca fscache: Introduce new driver
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Ammar Faizi

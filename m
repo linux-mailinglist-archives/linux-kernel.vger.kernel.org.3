@@ -2,99 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB5B4CC50F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAF24CC512
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiCCSZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S235641AbiCCSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiCCSZg (ORCPT
+        with ESMTP id S232674AbiCCSZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:25:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD13F7463;
-        Thu,  3 Mar 2022 10:24:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DCA661A0A;
-        Thu,  3 Mar 2022 18:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB8CC004E1;
-        Thu,  3 Mar 2022 18:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646331889;
-        bh=3MZNzrhAk/+psbz8VzU1OByNwI7vUL1qSMbaehVjBIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=unqwnnoIczOaQY52OttmcXQyJLAjp0Oai11cxoDhm9fxfyzNYxCbGG5xfBCE/6k7k
-         tpAYbd0AHpmgDoYYINTeAnJELhdWCb7hHSS1UzI3y7ctVNpLJ1YMWXqjJceDSpT+7f
-         RgHJ76zABcWbFYzI2+4dJe+lMPudHm+xq97Q/faBLY/SNBy0DXvPtmAU86zed9hLVC
-         YCXNnsMnl1D8sBI1v7EKD1sPKrJIsRzwGFDwoAZ3X21P/Fuep0sg+u1fiF4RXVzg/i
-         lf1qZ6niI+cDhDNa//BJaA2mXBvCtE5GGIX3hD4+MH3VwwOisTpw82Ti4tXkXF3Ui6
-         +c2tm0AjiX9lg==
-Date:   Thu, 3 Mar 2022 18:24:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Rhodes <drhodes@opensource.cirrus.com>
-Subject: Re: [PATCH 20/20] Documentation: devicetree: CS35l41 External Boost
-Message-ID: <YiEH7B3btDrwGW5M@sirena.org.uk>
-References: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
- <20220303173059.269657-21-tanureal@opensource.cirrus.com>
+        Thu, 3 Mar 2022 13:25:48 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E891A39E0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:25:02 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id gb21so5278518pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4ZWHmx7szIFAdemFtNlU8I4rxfNJcdbQ9/5ouoRecWo=;
+        b=WQ0WjqaCorFcNDc/RJ6X12JdgR0t+nWufEwGfm4dkI+CiEmkvQO71QzvoTaH4xxevS
+         y9ls4zJuMlR6qBtcE2lMqPWHJd0BRxESjEA0IzSDFRTmTMF+HBd2N+V8mdDnyN43rTRj
+         GB+3ktwF1PPetBWSl2GXImn81fdfW+5EvgIL4uA3qfxGIYVb3/xpWG9Dkj7ZwhUiwsHx
+         9pLPJ1R2L1IxIcAi7FcyPjGLrHCljPThSJZi92/aYFeceyyAa2bOw8jyLldfTATcosne
+         LrEkdixwm7VVCUxr44fMK5b5iIawvZ/ZIhAlnZB4R/QP9OIll5Y/jnVEXzIJIyMkfalE
+         CUpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4ZWHmx7szIFAdemFtNlU8I4rxfNJcdbQ9/5ouoRecWo=;
+        b=PzvkpV+HGc33MLsv28KApBTpd8mZy94syBTkW9sZ//5+d5pWCRHB+61IFXuG0Cngc6
+         w9vgvQYh/7c8U9Ud3aZClHFln8TdEOmnM8NscdiKvqs/s21M/TqStUBZ8j8QUjQ+C9AE
+         RpIIBAuxZ2rM245cFpjR9DL3Y1o9fZlzSyDorOUprW/pgww98f0Ero82k9Sa4sojXSEg
+         DvtU52WZRc3GSKYsx23xeSZXxTlTWsHwBvmFRnkZZEML+utNRi+PC4IfgblBynOdZiO1
+         2yIO/NIJccH5t2Dyp8SshvnVr2DuOIxT+jNO6OAS88nl8P8FeL/91vAj1ZPbW+4xH2R5
+         3qKw==
+X-Gm-Message-State: AOAM530Rqpjew5yMg/wFPigMm7lClzaG37OR4FTAgCrCRnHGe8EIOPpp
+        MdEorYchM5dusxz31VtpMEbZWA==
+X-Google-Smtp-Source: ABdhPJwnNrjdurM6slIPKmpmR7VuRUrAX6G36QZFx1mOQGB7tMEQh38sxM3MSj9uDd3wT/ZjLwaL2w==
+X-Received: by 2002:a17:90b:4d90:b0:1be:f6a9:c4d0 with SMTP id oj16-20020a17090b4d9000b001bef6a9c4d0mr6617469pjb.129.1646331902176;
+        Thu, 03 Mar 2022 10:25:02 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id g4-20020a625204000000b004f1063e3d6csm3076565pfb.125.2022.03.03.10.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 10:25:01 -0800 (PST)
+Date:   Thu, 3 Mar 2022 18:24:58 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 09/28] KVM: x86/mmu: Drop RCU after processing each
+ root in MMU notifier hooks
+Message-ID: <YiEH+jRUe/Iqfcts@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-10-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5+pn/WO7t9hPQNbs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303173059.269657-21-tanureal@opensource.cirrus.com>
-X-Cookie: Password:
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220226001546.360188-10-seanjc@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> Drop RCU protection after processing each root when handling MMU notifier
+> hooks that aren't the "unmap" path, i.e. aren't zapping.  Temporarily
+> drop RCU to let RCU do its thing between roots, and to make it clear that
+> there's no special behavior that relies on holding RCU across all roots.
+> 
+> Currently, the RCU protection is completely superficial, it's necessary
+> only to make rcu_dereference() of SPTE pointers happy.  A future patch
+> will rely on holding RCU as a proxy for vCPUs in the guest, e.g. to
+> ensure shadow pages aren't freed before all vCPUs do a TLB flush (or
+> rather, acknowledge the need for a flush), but in that case RCU needs to
+> be held until the flush is complete if and only if the flush is needed
+> because a shadow page may have been removed.  And except for the "unmap"
+> path, MMU notifier events cannot remove SPs (don't toggle PRESENT bit,
+> and can't change the PFN for a SP).
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
 
---5+pn/WO7t9hPQNbs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
 
-On Thu, Mar 03, 2022 at 05:30:59PM +0000, Lucas Tanure wrote:
-> From: David Rhodes <drhodes@opensource.cirrus.com>
->=20
-> Document external boost feature on CS35L41
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
-Generally DT bindings patches come before the changes that they
-document.
-
---5+pn/WO7t9hPQNbs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIhB+sACgkQJNaLcl1U
-h9B2fQf+JyZdYpzru6DQzdgIuNNm9UZokagqpucw/b8YH2hd1KNhxnM24CP6DS+J
-AJvhMrlvuHTNsQYS9rSKb+FI897TAuwTyFp9yrdy5xiJf0RaNaGcq41to0/I7Gvd
-ZTFNXf23QKUbkfDN8bdzxksByfCrFX41IcrPxt9qSo4M2DLrmvty8vSYgYa8nsU+
-QIytNm6Uyrd7e5IPufaM9XrRA1aztpjQwmaP9jSYUJvI3Pl/T894JtiA89V9ntxG
-cBXI3GNifKfG4mOXw7fgs70+1lmfvKdFN9TqYf71s4DNhoWhqwmnDXEL7k4OEW23
-UBIRaCDbl3gJevI5BmfhOa2tpOtQcQ==
-=/fvV
------END PGP SIGNATURE-----
-
---5+pn/WO7t9hPQNbs--
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 634a2838e117..4f460782a848 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1100,18 +1100,18 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+>  	struct tdp_iter iter;
+>  	bool ret = false;
+>  
+> -	rcu_read_lock();
+> -
+>  	/*
+>  	 * Don't support rescheduling, none of the MMU notifiers that funnel
+>  	 * into this helper allow blocking; it'd be dead, wasteful code.
+>  	 */
+>  	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
+> +		rcu_read_lock();
+> +
+>  		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+>  			ret |= handler(kvm, &iter, range);
+> -	}
+>  
+> -	rcu_read_unlock();
+> +		rcu_read_unlock();
+> +	}
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.35.1.574.g5d30c73bfb-goog
+> 

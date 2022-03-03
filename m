@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE9F4CBE87
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963CD4CBE8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiCCNIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        id S233518AbiCCNKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiCCNIM (ORCPT
+        with ESMTP id S231362AbiCCNKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:08:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5E47186B8E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:07:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646312844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lj6VpxefHrxOOwhnhf4/p/2XcRsNuTwXL6WEnQsA11I=;
-        b=AFKMr6vLTJWojOBP40PvbVBn1m5IyHKXATf+pa5Hobu4V5OMP8sbaNFrn+rxqJIZMY15iN
-        DpEF1aJMLtM2sKgimKisKN0yB7SxGzq99mg2ISELIhDlyS9YhsahXYv2X/4KtBnimaT9GD
-        VzKKoNEgpTnrfsm+cqLLd7wlZiJ2S+w=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-oYzW5TAAPWSZWZTWOKdcgA-1; Thu, 03 Mar 2022 08:07:23 -0500
-X-MC-Unique: oYzW5TAAPWSZWZTWOKdcgA-1
-Received: by mail-wm1-f70.google.com with SMTP id l19-20020a05600c4f1300b003818783847eso1313204wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:07:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lj6VpxefHrxOOwhnhf4/p/2XcRsNuTwXL6WEnQsA11I=;
-        b=r69PDDubewmgTQzgdZNULLJ7V+DC4AwoMqTnk/2MC9XXFwh0P+ZPRxIs61oM0sp49w
-         nNUePKfR4EBsb9iAGvtidMFAKi1V7EWBqgukW2slTBwPGzOBuw7yu2e/B6ZfXcJhnvVJ
-         B9AZ6EQxbUdUUkwO362AvVTd2vLrkGPe1UYvRtB1yx/Q/vIK5ZULqRk1uPQIq9rdfgtl
-         Gh/wgj/hbnz3DpvHRo+TruOoz92ytRUdfNoY4dv0+9Vt4Eyy08D/iTmGYdDIJwTDOWzo
-         YO/8vl86pAZkih/Vruf+m25s7glS2cdiybvh+Ye46bcxfmk3iFnn9sWdSvvr2C6pTImB
-         wcJg==
-X-Gm-Message-State: AOAM531VFYuRuOXQtmCPNZMgCaRpc1X5e1Cj0WeGnjE2H7UGiGQFCHX9
-        9IE9M5c9NnQ8JacHPnBDEVIn03KBGF8cr+rAqnfbjAqMoxRWcmf7VA6otxIYXjbTfiysscG+Yb4
-        eZHdaJtW7igf+pf8XFE5Yc8KV
-X-Received: by 2002:a5d:5512:0:b0:1ef:5f08:29fb with SMTP id b18-20020a5d5512000000b001ef5f0829fbmr23412283wrv.653.1646312842498;
-        Thu, 03 Mar 2022 05:07:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwBprWCBbiaeng1f6eFEkBly6o9vzAc3MArh79lj54xDzLKMIA0Xs/dF3R5oQGH8dSoCNnPBA==
-X-Received: by 2002:a5d:5512:0:b0:1ef:5f08:29fb with SMTP id b18-20020a5d5512000000b001ef5f0829fbmr23412254wrv.653.1646312842242;
-        Thu, 03 Mar 2022 05:07:22 -0800 (PST)
-Received: from redhat.com ([2.55.143.133])
-        by smtp.gmail.com with ESMTPSA id f1-20020a5d4dc1000000b001eeadc98c0csm1908052wru.101.2022.03.03.05.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 05:07:20 -0800 (PST)
-Date:   Thu, 3 Mar 2022 08:07:16 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laszlo Ersek <lersek@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220303075426-mutt-send-email-mst@kernel.org>
-References: <20220302031738-mutt-send-email-mst@kernel.org>
- <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
- <20220302074503-mutt-send-email-mst@kernel.org>
- <Yh93UZMQSYCe2LQ7@zx2c4.com>
- <20220302092149-mutt-send-email-mst@kernel.org>
- <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
- <20220302101602-mutt-send-email-mst@kernel.org>
- <Yh+PET49oHNpxn+H@zx2c4.com>
- <20220302111737-mutt-send-email-mst@kernel.org>
- <Yh+cB5bWarl8CFN1@zx2c4.com>
+        Thu, 3 Mar 2022 08:10:33 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250B816A591;
+        Thu,  3 Mar 2022 05:09:46 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2238CPqK032368;
+        Thu, 3 Mar 2022 14:09:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=pkx2zGWPYrmHsy35xU9yJKQc3yW9y5fEcg/t+W/SnkU=;
+ b=sC6ovMPOTEXe+30l/yJflYQQHj+2vmOsf96wQ/rTixDLGP3fvI6Ooh3N3I4kV4d/h7Oe
+ KD9FbaawUGGJBOW8Nm5nnzO341bzj3RTmPCs4ButNosY+EsMaGBBjQAJUyAurUkbVCcz
+ 8gds/mjiSvihkIeyLWHh38jH5KVu8xOGOzqNrVzNuv2xJy0NK4QOFJL40v6CVw9tCZfx
+ nbhyHi9C2sWLuQguz2gzp+gdjE5fUpOWqyGIdRWvaAWhPjxG63IK5c5T+22OLQnAkhaS
+ S9i1sXco1nWZBuLWsLZabmKXG32UuefhfI9Z2IlfU3JaldcjK0qwjY4X7Aey2u2bpejI OQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ejsy7hw3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 14:09:21 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 70197100034;
+        Thu,  3 Mar 2022 14:09:18 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A18A22178A;
+        Thu,  3 Mar 2022 14:09:18 +0100 (CET)
+Received: from [10.201.22.79] (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 3 Mar
+ 2022 14:09:17 +0100
+Message-ID: <65581f3a-3ae6-2dd3-7571-1e64982b5f50@foss.st.com>
+Date:   Thu, 3 Mar 2022 14:09:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh+cB5bWarl8CFN1@zx2c4.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Linux-stm32] [PATCH v2 12/13] ARM: dts: stm32: enable optee
+ firmware and SCMI support on STM32MP13
+Content-Language: en-US
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
+ <20220225133137.813919-13-gabriel.fernandez@foss.st.com>
+ <1d90078d-e27f-539d-d010-78a3c4da565a@pengutronix.de>
+From:   Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+In-Reply-To: <1d90078d-e27f-539d-d010-78a3c4da565a@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-03_07,2022-02-26_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,121 +84,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 05:32:07PM +0100, Jason A. Donenfeld wrote:
-> Hi Michael,
-> 
-> On Wed, Mar 02, 2022 at 11:22:46AM -0500, Michael S. Tsirkin wrote:
-> > > Because that 16 byte read of vmgenid is not atomic. Let's say you read
-> > > the first 8 bytes, and then the VM is forked.
-> > 
-> > But at this point when VM was forked plaintext key and nonce are all in
-> > buffer, and you previously indicated a fork at this point is harmless.
-> > You wrote "If it changes _after_ that point of check ... it doesn't
-> > matter:"
-> 
-> Ahhh, fair point. I think you're right.
-> 
-> Alright, so all we're talking about here is an ordinary 16-byte read,
-> and 16 bytes of storage per keypair, and a 16-byte comparison.
-> 
-> Still seems much worse than just having a single word...
-> 
-> Jason
 
-Oh I forgot about __int128.
+On 2/25/22 16:13, Ahmad Fatoum wrote:
+> Hello Gabriel,
+>
+> On 25.02.22 14:31, gabriel.fernandez@foss.st.com wrote:
+>> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>>
+>> Enable optee and SCMI clocks support.
+>>
+>> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>> ---
+>>   arch/arm/boot/dts/stm32mp131.dtsi | 37 +++++++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+>> index 262de4eeb4ed..78eac53224d4 100644
+>> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+>> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+>> @@ -27,6 +27,43 @@ arm-pmu {
+>>   		interrupt-parent = <&intc>;
+>>   	};
+>>   
+>> +	scmi_sram: sram@2ffff000 {
+>> +		compatible = "mmio-sram";
+>> +		reg = <0x2ffff000 0x1000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0x2ffff000 0x1000>;
+>> +
+>> +		scmi_shm: scmi_shm@0 {
+>> +			compatible = "arm,scmi-shmem";
+>> +			reg = <0 0x80>;
+>> +		};
+>> +	};
+>> +
+>> +	firmware {
+>> +		optee {
+>> +			method = "smc";
+>> +			compatible = "linaro,optee-tz";
+>> +		};
+>> +
+>> +		scmi: scmi {
+>> +			compatible = "linaro,scmi-optee";
+> This compatible doesn't seem to be documented upstream. I am looking at v5.17-rc5.
+> Do you have a reference detailing the difference between this conduit and
+> plain arm,scmi-smc (as used with TF-A on the STM32MP151).
+>
+> Cheers,
+> Ahmad
 
+Hi
 
+Ahmad,
 
-#include <stdio.h>
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
+it's on going.
 
-struct lng {
-	__int128 l;
-};
+https://lore.kernel.org/linux-arm-kernel/20211029102118.GG6526@e120937-lin/T/#mf46c83f0aadce3061ee93fa22159405f38d881a0
 
-struct shrt {
-	unsigned long s;
-};
-
-
-struct lng l = { 1 };
-struct shrt s = { 3 };
-
-static void test1(volatile struct shrt *sp)
-{
-	if (sp->s != s.s) {
-		printf("short mismatch!\n");
-		s.s = sp->s;
-	}
-}
-static void test2(volatile struct lng *lp)
-{
-	if (lp->l != l.l) {
-		printf("long mismatch!\n");
-		l.l = lp->l;
-	}
-}
-
-int main(int argc, char **argv)
-{
-	volatile struct shrt sv = { 4 };
-	volatile struct lng lv = { 5 };
-
-	if (argc > 1) {
-		printf("test 1\n");
-		for (int i = 0; i < 100000000; ++i) 
-			test1(&sv);
-	} else {
-		printf("test 2\n");
-		for (int i = 0; i < 100000000; ++i)
-			test2(&lv);
-	}
-	return 0;
-}
-
-
-with that the compiler has an easier time to produce optimal
-code, so the difference is smaller.
-Note: compiled with
-gcc -O2 -mno-sse -mno-sse2 -ggdb bench3.c 
-
-since with sse there's no difference at all.
-
-
-[mst@tuck ~]$ perf stat -r 100 ./a.out 1 > /dev/null 
-
-
- Performance counter stats for './a.out 1' (100 runs):
-
-             94.55 msec task-clock:u              #    0.996 CPUs utilized            ( +-  0.09% )
-                 0      context-switches:u        #    0.000 /sec                   
-                 0      cpu-migrations:u          #    0.000 /sec                   
-                52      page-faults:u             #  548.914 /sec                     ( +-  0.21% )
-       400,459,851      cycles:u                  #    4.227 GHz                      ( +-  0.03% )
-       500,147,935      instructions:u            #    1.25  insn per cycle           ( +-  0.00% )
-       200,032,462      branches:u                #    2.112 G/sec                    ( +-  0.00% )
-             1,810      branch-misses:u           #    0.00% of all branches          ( +-  0.73% )
-
-         0.0949732 +- 0.0000875 seconds time elapsed  ( +-  0.09% )
-
-[mst@tuck ~]$ 
-[mst@tuck ~]$ perf stat -r 100 ./a.out > /dev/null 
-
- Performance counter stats for './a.out' (100 runs):
-
-            110.19 msec task-clock:u              #    1.136 CPUs utilized            ( +-  0.18% )
-                 0      context-switches:u        #    0.000 /sec                   
-                 0      cpu-migrations:u          #    0.000 /sec                   
-                52      page-faults:u             #  537.743 /sec                     ( +-  0.22% )
-       428,518,442      cycles:u                  #    4.431 GHz                      ( +-  0.07% )
-       900,147,986      instructions:u            #    2.24  insn per cycle           ( +-  0.00% )
-       200,032,505      branches:u                #    2.069 G/sec                    ( +-  0.00% )
-             2,139      branch-misses:u           #    0.00% of all branches          ( +-  0.77% )
-
-          0.096956 +- 0.000203 seconds time elapsed  ( +-  0.21% )
-
--- 
-MST
-
+>
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			linaro,optee-channel-id = <0>;
+>> +			shmem = <&scmi_shm>;
+>> +
+>> +			scmi_clk: protocol@14 {
+>> +				reg = <0x14>;
+>> +				#clock-cells = <1>;
+>> +			};
+>> +
+>> +			scmi_reset: protocol@16 {
+>> +				reg = <0x16>;
+>> +				#reset-cells = <1>;
+>> +			};
+>> +		};
+>> +	};
+>>   	clocks {
+>>   		clk_axi: clk-axi {
+>>   			#clock-cells = <0>;
+>

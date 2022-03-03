@@ -2,147 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5E54CBD97
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD324CBDAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiCCMTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 07:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S233222AbiCCMZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 07:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbiCCMTX (ORCPT
+        with ESMTP id S233191AbiCCMZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 07:19:23 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40943DF4A7
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 04:18:30 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id j17so7609290wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 04:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W95klwG+EWnuJlXqfneyIPG4bMJIpYFCGfgCPBAo/s4=;
-        b=BVoUYAMy6igzOx7YCxgmD2obGVeA4FBbFy39UaDXpcyotfQj1WSs4cD2dBmZ3jehpH
-         Xv0H27JfD7LtNc3KTOYt5JsPQaESLbVZdrRIjVdCS/EqEN+LtHV3OI92ZhbhaxnOPsMB
-         zwIbvmQMtvcWtqQz/AOpNYfJzkMTFsv4hojr0PuJEFUbZHgxYNi3BKpDV1mgkUzm+fR0
-         4lMaaRE5yh5PGutSdpreHiYAqhMDl6KUHTvi2q6aV5S93rhbYz2wGWOzwPq3hB3YVbYG
-         uAhL64o8wkOM/gpLUr2Hb7oB/DraMZLkoBj2jGHmKGFPjyxdoWyrLbd/6WyXGtmMO48w
-         vp2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W95klwG+EWnuJlXqfneyIPG4bMJIpYFCGfgCPBAo/s4=;
-        b=W5BUstOuMKZSDmp/X36QFtpIPdGQHOvkJC2H0Brw5hGPCI39OGZsJXAHtmra0USocM
-         7YZI29Qyn+0E3CXN9XBiiqfxp76Ki9hGDYU3gM+3MOU+Bl745ADNgKBZyIA433Itru5E
-         7JeJHj39hvYapstkZfw6b6/4tapvUce0bsgw7o9ZNKl5XL4hNDDtUmGPsM6QSZfhTZAt
-         e2u/gqcbQdvtLE2VYzkk5dtYA/sEUZJ1D9qKs87h8/OQEpO18XOHq3bL43NM4XYtRIaI
-         lFZeNwgnlpKBOC/Z4KTlWgZNS8hf+JAo56lOCVmfb/zG83loYdEBCCxa9cSIjXtj+x4l
-         n2gw==
-X-Gm-Message-State: AOAM532vRSfdokxQ2lKgen/kB2qPvMl7B+87ayqjSAwFmYzFOIRiFgJm
-        t+Dg7ToQUeG0sPi/7Tr3V3C4uA==
-X-Google-Smtp-Source: ABdhPJwgYeUN7RS9hQRShRziePljKQd/1cMutSSEkk4MeQ2QRRtTjZSLz5QSndDd2pML49XlqkHAqw==
-X-Received: by 2002:a5d:6d0d:0:b0:1e8:7b6a:38e7 with SMTP id e13-20020a5d6d0d000000b001e87b6a38e7mr26568054wrq.625.1646309908722;
-        Thu, 03 Mar 2022 04:18:28 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id p6-20020a5d4586000000b001f0436cb325sm1774600wrq.52.2022.03.03.04.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 04:18:28 -0800 (PST)
-Date:   Thu, 3 Mar 2022 12:18:24 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     david.laight@aculab.com, alsa-devel@alsa-project.org,
-        kvm@vger.kernel.org, gustavo@embeddedor.com,
-        linux-iio@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        linux@rasmusvillemoes.dk, dri-devel@lists.freedesktop.org,
-        c.giuffrida@vu.nl, amd-gfx@lists.freedesktop.org,
-        torvalds@linux-foundation.org, samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-staging@lists.linux.dev,
-        h.j.bos@vu.nl, jgg@ziepe.ca, intel-wired-lan@lists.osuosl.org,
-        nouveau@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com, dan.carpenter@oracle.com,
-        linux-media@vger.kernel.org, keescook@chromium.org, arnd@arndb.de,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        bjohannesmeyer@gmail.com, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, christophe.jaillet@wanadoo.fr,
-        jakobkoschel@gmail.com, v9fs-developer@lists.sourceforge.net,
-        linux-tegra@vger.kernel.org, tglx@linutronix.de,
-        andriy.shevchenko@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, linux-sgx@vger.kernel.org,
-        nathan@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, akpm@linux-foundation.org,
-        linuxppc-dev@lists.ozlabs.org, christian.koenig@amd.com,
-        rppt@kernel.org
-Subject: Re: [Kgdb-bugreport] [PATCH 2/6] treewide: remove using list
- iterator after loop body as a ptr
-Message-ID: <20220303121824.qdyrognluik74iph@maple.lan>
-References: <39404befad5b44b385698ff65465abe5@AcuMS.aculab.com>
- <20220303072657.11124-1-xiam0nd.tong@gmail.com>
+        Thu, 3 Mar 2022 07:25:19 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F6FF1186;
+        Thu,  3 Mar 2022 04:24:32 -0800 (PST)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K8VXf75N1z67x9f;
+        Thu,  3 Mar 2022 20:24:18 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 13:24:29 +0100
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 12:24:25 +0000
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Ajish.Koshy@microchip.com>, <linuxarm@huawei.com>,
+        <Viswas.G@microchip.com>, <hch@lst.de>, <liuqi115@huawei.com>,
+        <chenxiang66@hisilicon.com>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/4] scsi: libsas and users: Factor out internal abort code
+Date:   Thu, 3 Mar 2022 20:18:46 +0800
+Message-ID: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303072657.11124-1-xiam0nd.tong@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 03:26:57PM +0800, Xiaomeng Tong wrote:
-> On Thu, 3 Mar 2022 04:58:23 +0000, David Laight wrote:
-> > on 3 Mar 2022 10:27:29 +0800, Xiaomeng Tong wrote:
-> > > The problem is the mis-use of iterator outside the loop on exit, and
-> > > the iterator will be the HEAD's container_of pointer which pointers
-> > > to a type-confused struct. Sidenote: The *mis-use* here refers to
-> > > mistakely access to other members of the struct, instead of the
-> > > list_head member which acutally is the valid HEAD.
-> >
-> > The problem is that the HEAD's container_of pointer should never
-> > be calculated at all.
-> > This is what is fundamentally broken about the current definition.
-> 
-> Yes, the rule is "the HEAD's container_of pointer should never be
-> calculated at all outside the loop", but how do you make sure everyone
-> follows this rule?
+This is a follow-on from the series to factor out the TMF code shared
+between libsas LLDDs.
 
-Your formulation of the rule is correct: never run container_of() on HEAD
-pointer.
+The hisi_sas and pm8001 have an internal abort feature to abort pending
+commands in the host controller, prior to being sent to the target. The
+driver support implementation is naturally quite similar, so factor it
+out.
 
-However the rule that is introduced by list_for_each_entry_inside() is
-*not* this rule. The rule it introduces is: never access the iterator
-variable outside the loop.
+Again, testing and review would be appreciated.
 
-Making the iterator NULL on loop exit does follow the rule you proposed
-but using a different technique: do not allow HEAD to be stored in the
-iterator variable after loop exit. This also makes it impossible to run
-container_of() on the HEAD pointer.
+This is based on mkp-scsi 5.18 staging queue @ commit f2ddbbea7780
 
+John Garry (4):
+  scsi: libsas: Add sas_execute_internal_abort_single()
+  scsi: libsas: Add sas_execute_internal_abort_dev()
+  scsi: pm8001: Use libsas internal abort support
+  scsi: hisi_sas: Use libsas internal abort support
 
-> Everyone makes mistakes, but we can eliminate them all from the beginning
-> with the help of compiler which can catch such use-after-loop things.
+ drivers/scsi/hisi_sas/hisi_sas.h       |   8 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 453 +++++++++----------------
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  11 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  18 +-
+ drivers/scsi/libsas/sas_scsi_host.c    |  89 +++++
+ drivers/scsi/pm8001/pm8001_hwi.c       |  27 +-
+ drivers/scsi/pm8001/pm8001_hwi.h       |   5 -
+ drivers/scsi/pm8001/pm8001_sas.c       | 186 ++++------
+ drivers/scsi/pm8001/pm8001_sas.h       |   6 +-
+ drivers/scsi/pm8001/pm80xx_hwi.h       |   5 -
+ include/scsi/libsas.h                  |  24 ++
+ include/scsi/sas.h                     |   2 +
+ 12 files changed, 368 insertions(+), 466 deletions(-)
 
-Indeed but if we introduce new interfaces then we don't have to worry
-about existing usages and silent regressions. Code will have been
-written knowing the loop can exit with the iterator set to NULL.
+-- 
+2.26.2
 
-Sure it is still possible for programmers to make mistakes and
-dereference the NULL pointer but C programmers are well training w.r.t.
-NULL pointer checking so such mistakes are much less likely than with
-the current list_for_each_entry() macro. This risk must be offset
-against the way a NULLify approach can lead to more elegant code when we
-are doing a list search.
-
-
-Daniel.

@@ -2,247 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ADA4CC955
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52194CC95A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237070AbiCCWoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S237079AbiCCWow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiCCWoc (ORCPT
+        with ESMTP id S237072AbiCCWot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:44:32 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284E855200;
-        Thu,  3 Mar 2022 14:43:46 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id j2so6220602oie.7;
-        Thu, 03 Mar 2022 14:43:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uIHCa+KnIPtYqD5TBPEYYO/aR7DF5N4jQFH/0XzJtyw=;
-        b=5ETj/QB30HWXwVoaeIb7MnOpa/jajECVKaUVq7WA+/LIsP5fKuV07sV9dYzYy1tcw/
-         r0U4V9hkfM3DvQJbRXtzAWKCAH+IkxjkmUMR1fCfIcwsNyXA7tIWlQq6o0OkhhwKHlBT
-         Ke7NrmB0ZmpcPC+seprFAAAHRhRtduBejXPgR1FKG6ekQOkgatUdhNi6rQK9mSZgFEBt
-         RexfhjTV09Pb02NqZdEICSlYJh3e1L6r1MOVQLAselAitJrRJKiz4LTUGXWUenaj+F0h
-         KpdgOgIOcVRAlRvKkACQ/eRWDx7g8gjEnKB2PXcoX3J+pMnewV0HF2d7KHABrC++xzrw
-         lovQ==
-X-Gm-Message-State: AOAM531RIDkvKD55ER8F2fO6Kq27DlG3oUzw+sdC64aL8EsXWaXmQqrI
-        N//r1y0n1EDFKCnWkLqBwg==
-X-Google-Smtp-Source: ABdhPJzh1T2VePI6949NYqkhNMnV7xpV4aGqLc1QB3TTOTncSMcDTPqTJxOlGz0OTTnwdn3LnsaQ9w==
-X-Received: by 2002:a05:6808:1b27:b0:2d5:38fc:26f with SMTP id bx39-20020a0568081b2700b002d538fc026fmr6542030oib.42.1646347425366;
-        Thu, 03 Mar 2022 14:43:45 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id x10-20020a4a2a4a000000b0031bf0818df1sm1608480oox.4.2022.03.03.14.43.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 14:43:44 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thu, 3 Mar 2022 17:44:49 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C3F15928A;
+        Thu,  3 Mar 2022 14:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646347442; x=1677883442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGs61FMx3IeFD9eB7+GKLp/0tGX59gvBzS7laALfEFU=;
+  b=ddfYk6zLewr44AgGkgnryfNqOwg4t31DsOhFNR4zkzSsDKNn12tE7ntx
+   0IbIUol8cwEUrIFdUgIfI7sZoapOr0Cjagz//jnZowqRYF5jpZOdE+i+b
+   P8J6Cwm9JqP6CdScMR9ewiixR/xLSwufB50GWYAUV3wNnqu6Xs1TpvU9v
+   JeCG/Kj/L6a+jUxiytbf3/w1UhutbmgdPde0VhB5vCZ7jbZxQqYglSOgl
+   5TIP3mM27UYeBDwr+c8SqmhcewpXq3fLhN2Vn+/2KJfFY2vM1UiEFgd8z
+   xJYqksmtko7+dlb3oD66NQpiXcqKjoEkC8rzVppzANe+t0LXB3gc0cKf/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="252660211"
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="252660211"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 14:44:02 -0800
+X-IronPort-AV: E=Sophos;i="5.90,153,1643702400"; 
+   d="scan'208";a="642299153"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 14:43:57 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 33DDE20150;
+        Fri,  4 Mar 2022 00:43:55 +0200 (EET)
+Date:   Fri, 4 Mar 2022 00:43:55 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: kbuild: Use DTB files for validation
-Date:   Thu,  3 Mar 2022 16:42:37 -0600
-Message-Id: <20220303224237.2497570-3-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220303224237.2497570-1-robh@kernel.org>
-References: <20220303224237.2497570-1-robh@kernel.org>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 30/66] media: sun6i-csi: Add bridge v4l2 subdev with
+ port management
+Message-ID: <YiFEq1liAnBy0fkq@paasikivi.fi.intel.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
+ <YgqbqVRinNxQ8+WV@paasikivi.fi.intel.com>
+ <Yh+GZv9/rKQ2WbI2@aptenodytes>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh+GZv9/rKQ2WbI2@aptenodytes>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the DT validation to use DTB files directly instead of a DTS to
-YAML conversion.
+Hi Paul,
 
-The original motivation for supporting validation on DTB files was to
-enable running validation on a running system (e.g. 'dt-validate
-/sys/firmware/fdt') or other cases where the original source DTS is not
-available.
+On Wed, Mar 02, 2022 at 03:59:50PM +0100, Paul Kocialkowski wrote:
+> > > +static int
+> > > +sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifier,
+> > > +				struct v4l2_subdev *remote_subdev,
+> > > +				struct v4l2_async_subdev *async_subdev)
+> > > +{
+> > > +	struct sun6i_csi_device *csi_dev =
+> > > +		container_of(notifier, struct sun6i_csi_device,
+> > > +			     bridge.notifier);
+> > > +	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
+> > > +	struct sun6i_csi_bridge_source *source = NULL;
+> > > +	struct fwnode_handle *fwnode = dev_fwnode(csi_dev->dev);
+> > > +	struct fwnode_handle *handle = NULL;
+> > > +	bool enabled;
+> > > +	int ret;
+> > > +
+> > > +	while ((handle = fwnode_graph_get_next_endpoint(fwnode, handle))) {
+> > 
+> > I'd instead store the information you need here in struct sun6i_csi_bridge.
+> > You could remove the loop here.
+> 
+> Is there a different method for matching a remote subdev to a local port?
+> The rationale here is that I need the handle for fwnode_graph_parse_endpoint
+> but cannot get that handle from the remote subdev's fwnode pointer directly.
 
-The YAML format was not without issues. Using DTBs with the schema type
-information solves some of those problems. The YAML format relies on the
-DTS source level information including bracketing of properties, size
-directives, and phandle tags all of which are lost in a DTB file. While
-standardizing the bracketing is a good thing, it does cause a lot of
-extra warnings and churn to fix them.
+You generally shouldn't try to match fwnodes here as the V4L2 async
+framework has already done that job. This information can be found behind
+the async_subdev pointer.
 
-Another issue has been signed types are not validated correctly as sign
-information is not propagated to YAML. Using the schema type information
-allows for proper handling of signed types. YAML also can't represent
-the full range of 64-bit integers as numbers are stored as floats by
-most/all parsers.
+See e.g. drivers/media/pci/intel/ipu3/ipu3-cio2-main.c for an example.
 
-The DTB validation works by decoding property values using the type
-information in the schemas themselves. The main corner case this does
-not work for is matrix types where neither dimension is fixed. For
-now, checking the dimensions in these cases are skipped.
+> 
+> > > +		struct fwnode_endpoint endpoint = { 0 };
+> > > +		struct fwnode_handle *remote_fwnode;
+> > > +
+> > > +		remote_fwnode = fwnode_graph_get_remote_port_parent(handle);
+> > > +		if (!remote_fwnode)
+> > > +			continue;
+> > > +
+> > > +		if (remote_fwnode != remote_subdev->fwnode)
+> > > +			goto next;
+> > > +
+> > > +		ret = fwnode_graph_parse_endpoint(handle, &endpoint);
+> > > +		if (ret < 0)
+> > > +			goto next;
+> > > +
+> > > +		switch (endpoint.port) {
+> > > +		case SUN6I_CSI_PORT_PARALLEL:
+> > > +			source = &bridge->source_parallel;
+> > > +			enabled = true;
+> > > +			break;
+> > > +		default:
+> > > +			break;
+> > > +		}
+> > > +
+> > > +next:
+> > > +		fwnode_handle_put(remote_fwnode);
+> > > +	}
+> > > +
+> > > +	if (!source)
+> > > +		return -EINVAL;
+> > > +
+> > > +	source->subdev = remote_subdev;
+> > > +
+> > > +	return sun6i_csi_bridge_link(csi_dev, SUN6I_CSI_BRIDGE_PAD_SINK,
+> > > +				     remote_subdev, enabled);
+> > > +}
+> > > +
+> > > +static int
+> > > +sun6i_csi_bridge_notifier_complete(struct v4l2_async_notifier *notifier)
+> > > +{
+> > > +	struct sun6i_csi_device *csi_dev =
+> > > +		container_of(notifier, struct sun6i_csi_device,
+> > > +			     bridge.notifier);
+> > > +
+> > > +	return sun6i_csi_v4l2_complete(csi_dev);
+> > 
+> > You could call v4l2_device_register_subdev_nodes() here.
+> 
+> That's definitely what sun6i_csi_v4l2_complete does (the diff is probably not
+> very clear). Note that the wrapper is extended later on to register the capture
+> video device for the no-isp path.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/Makefile    |  7 +++----
- .../devicetree/bindings/writing-schema.rst    | 12 -----------
- scripts/Makefile.lib                          | 20 +++++++------------
- scripts/dtc/Makefile                          | 13 ------------
- scripts/dtc/update-dtc-source.sh              |  2 +-
- 5 files changed, 11 insertions(+), 43 deletions(-)
+I could be missing something... Do you need to call
+sun6i_csi_v4l2_complete() in multiple places or not? If not, then I think
+it'd be probably better to just move the code here.
 
-diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-index 246ba0ecab64..b8bd6a8ec43a 100644
---- a/Documentation/devicetree/bindings/Makefile
-+++ b/Documentation/devicetree/bindings/Makefile
-@@ -26,8 +26,7 @@ $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
- 	$(call if_changed,extract_ex)
- 
- find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
--		-name 'processed-schema*' ! \
--		-name '*.example.dt.yaml' \)
-+		-name 'processed-schema*' \)
- 
- find_cmd = $(find_all_cmd) | grep -F "$(DT_SCHEMA_FILES)"
- CHK_DT_DOCS := $(shell $(find_cmd))
-@@ -72,9 +71,9 @@ $(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version
- 
- always-y += processed-schema.json
- always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
--always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dt.yaml, $(CHK_DT_DOCS))
-+always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dtb, $(CHK_DT_DOCS))
- 
- # Hack: avoid 'Argument list too long' error for 'make clean'. Remove most of
- # build artifacts here before they are processed by scripts/Makefile.clean
- clean-files = $(shell find $(obj) \( -name '*.example.dts' -o \
--			-name '*.example.dt.yaml' \) -delete 2>/dev/null)
-+			-name '*.example.dtb' \) -delete 2>/dev/null)
-diff --git a/Documentation/devicetree/bindings/writing-schema.rst b/Documentation/devicetree/bindings/writing-schema.rst
-index 3b00fe981494..b4258bf81be5 100644
---- a/Documentation/devicetree/bindings/writing-schema.rst
-+++ b/Documentation/devicetree/bindings/writing-schema.rst
-@@ -123,18 +123,6 @@ project can be installed with pip::
- Several executables (dt-doc-validate, dt-mk-schema, dt-validate) will be
- installed. Ensure they are in your PATH (~/.local/bin by default).
- 
--dtc must also be built with YAML output support enabled. This requires that
--libyaml and its headers be installed on the host system. For some distributions
--that involves installing the development package, such as:
--
--Debian::
--
--  apt-get install libyaml-dev
--
--Fedora::
--
--  dnf -y install libyaml-devel
--
- Running checks
- ~~~~~~~~~~~~~~
- 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 9f1e8442564e..4629af60160b 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -87,11 +87,6 @@ base-dtb-y := $(foreach m, $(multi-dtb-y), $(firstword $(call suffix-search, $m,
- 
- always-y			+= $(dtb-y)
- 
--ifneq ($(CHECK_DTBS),)
--always-y += $(patsubst %.dtb,%.dt.yaml, $(real-dtb-y))
--always-y += $(patsubst %.dtbo,%.dt.yaml, $(real-dtb-y))
--endif
--
- # Add subdir path
- 
- extra-y		:= $(addprefix $(obj)/,$(extra-y))
-@@ -347,12 +342,6 @@ cmd_dtc = $(HOSTCC) -E $(dtc_cpp_flags) -x assembler-with-cpp -o $(dtc-tmp) $< ;
- 		-d $(depfile).dtc.tmp $(dtc-tmp) ; \
- 	cat $(depfile).pre.tmp $(depfile).dtc.tmp > $(depfile)
- 
--$(obj)/%.dtb: $(src)/%.dts $(DTC) FORCE
--	$(call if_changed_dep,dtc)
--
--$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
--	$(call if_changed_dep,dtc)
--
- quiet_cmd_fdtoverlay = DTOVL   $@
-       cmd_fdtoverlay = $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(real-prereqs)
- 
-@@ -365,17 +354,22 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
- DT_BINDING_DIR := Documentation/devicetree/bindings
- DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
- 
-+ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
- quiet_cmd_dtb_check =	CHECK   $@
--      cmd_dtb_check =	$(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@
-+      cmd_dtb_check =	$(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
-+endif
- 
- define rule_dtc
- 	$(call cmd_and_fixdep,dtc)
- 	$(call cmd,dtb_check)
- endef
- 
--$(obj)/%.dt.yaml: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
-+$(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
- 	$(call if_changed_rule,dtc)
- 
-+$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-+	$(call if_changed_dep,dtc)
-+
- dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
- 
- # Bzip2
-diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
-index 1cba78e1dce6..4d32b9497da9 100644
---- a/scripts/dtc/Makefile
-+++ b/scripts/dtc/Makefile
-@@ -17,20 +17,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
- 
- # Source files need to get at the userspace version of libfdt_env.h to compile
- HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
--
--ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
--ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
--$(error dtc needs libyaml for DT schema validation support. \
--	Install the necessary libyaml development package.)
--endif
- HOST_EXTRACFLAGS += -DNO_YAML
--else
--dtc-objs	+= yamltree.o
--# To include <yaml.h> installed in a non-default path
--HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
--# To link libyaml installed in a non-default path
--HOSTLDLIBS_dtc	:= $(shell pkg-config --libs yaml-0.1)
--endif
- 
- # Generated files need one more search path to include headers in source tree
- HOSTCFLAGS_dtc-lexer.lex.o := -I $(srctree)/$(src)
-diff --git a/scripts/dtc/update-dtc-source.sh b/scripts/dtc/update-dtc-source.sh
-index 32ff17ffd089..94627541533e 100755
---- a/scripts/dtc/update-dtc-source.sh
-+++ b/scripts/dtc/update-dtc-source.sh
-@@ -32,7 +32,7 @@ DTC_UPSTREAM_PATH=`pwd`/../dtc
- DTC_LINUX_PATH=`pwd`/scripts/dtc
- 
- DTC_SOURCE="checks.c data.c dtc.c dtc.h flattree.c fstree.c livetree.c srcpos.c \
--		srcpos.h treesource.c util.c util.h version_gen.h yamltree.c \
-+		srcpos.h treesource.c util.c util.h version_gen.h \
- 		dtc-lexer.l dtc-parser.y"
- LIBFDT_SOURCE="fdt.c fdt.h fdt_addresses.c fdt_empty_tree.c \
- 		fdt_overlay.c fdt_ro.c fdt_rw.c fdt_strerror.c fdt_sw.c \
+> 
+> Maybe the capture registration could be kept in sun6i_csi_probe for the non-isp
+> path and then the wrapper wouldn't be needed. I don't mind either way.
+
 -- 
-2.32.0
+Kind regards,
 
+Sakari Ailus

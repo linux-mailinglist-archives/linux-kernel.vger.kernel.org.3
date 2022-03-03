@@ -2,223 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125E04CB86C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B534CB872
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiCCIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S231193AbiCCIKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiCCIJr (ORCPT
+        with ESMTP id S231196AbiCCIKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:09:47 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0223170D5F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:08:51 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id f37so7009413lfv.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:08:51 -0800 (PST)
+        Thu, 3 Mar 2022 03:10:08 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5417128D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:09:19 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id u1so6450584wrg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:09:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=39vNSfl9IWg0yQTlFDMmjjhS46qgKyYB03/z5TZfFH0=;
-        b=bup0EM/iTQipcqIMdDSA0O0Pr+5iariGvomc7sT97T2WPPFFQX/eW5n3CKy4f3uMTL
-         F0VBXdkIsEDnubkOIz5DWXkqIUC0RPU6M035tF4XXCzOL8GFdapIXUnyRZAdxPLcWibb
-         Qs8THxVRSNHgIwe3zQPCpFHWnr0xtFX4TnXXG4StNAUegOacF4k7VU8pHiM8WcDrw06K
-         bcnKtE9N/x7FWUuFH5IO+0K6TWfXEIIhKZCyLKlLjlZmkewuMZmBO6ag0jPXwcFpu0SG
-         aY2/AhCyD9cDdsK+aO50LokVDbYSKlqCYgNRAwk18UP4PIL+EvO+y1sLCAmAt0dxj4ic
-         zlTA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6JyIRyQjmSUtkW88pmcBmgAMAjTfjaBSIAjcjL9OVw=;
+        b=E0Npjfox6oARCXqef/ki4z3U3S3pEMaz9/n9UG3aUZ68amCdmjwb18hcpdSqSONxsL
+         8DiOVPd4/4R4r4i6UPOAvZZMdhBda8JQ9ldoYTMThxhhCSuwbrG2BLYfTUhT607oVgT1
+         RA0m/RxXVYdURAuD7CQKjpD5o2O/Aljz6s3W0sIkxg3U63aq+Ch3c8JKO9WQnG5+IkgZ
+         sqmWVGmYEN4zC+TXwlfCpNPXytgMtXZaKVmx+xgjiQv8yRIZ15bfVbwyZli2CRtFd1rs
+         8QylsKiDChLpoWpkpmc66/O+ywCUSiEemr+i8IiQTiN+husZB2kbV78tV43Emgbih7NT
+         AXXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=39vNSfl9IWg0yQTlFDMmjjhS46qgKyYB03/z5TZfFH0=;
-        b=nDkMywYtRp78QoQFGlcH33IsokWPdhO+IbeSm2aLW1IbqwRjyb+zpe34Ot2rPW35iT
-         e1vGZc1f3k8dkPEM1f4grll4V+vVD5Z+d0fnq2+O68nEUAbj5DaJZU2+3JpE2vidMtlh
-         MPK61GJxe/DaWUO+h+nNOxIxJYxAsXMTeTQz7hNNqQAffrUK8FDZKbe1jiFOeB17AN+7
-         Lgs6mYQMZUaAwkU5/GQ/QYsGB8snrUvsDvIBU5NSAjhWWP0f2FZVUI67lRMEyBPIsEZP
-         58tU78bLx4kZMZKa9qVAUkjzFgG7Og6/U137Oj/E/QQ9akiiYKgpcM1tO2mLlOrXiVI5
-         PWyw==
-X-Gm-Message-State: AOAM5331y8wczDj0aaWdpZ0oOmMYocZM/1QOExvm8TRhY2A1Bapl56WA
-        s4s/WFjMHUZIOU95W89yy66U+f3xRhqlxGToM71TGg==
-X-Google-Smtp-Source: ABdhPJw1b8yDoqH+lNkBzCaPuSWFXmeztJczAYhbE8789NaSv6LBhNZmdaB5O8cGQ0KrNiRxrLU0sEcSZvmx2HCyUpc=
-X-Received: by 2002:a19:3801:0:b0:444:150b:9ef5 with SMTP id
- f1-20020a193801000000b00444150b9ef5mr19939004lfa.523.1646294929984; Thu, 03
- Mar 2022 00:08:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6JyIRyQjmSUtkW88pmcBmgAMAjTfjaBSIAjcjL9OVw=;
+        b=k0tj8Bi8boMzyA5ZNft1kKzLEw0NSbZ4CAG/kRVg/WWHeJXgaMBWmz2b7n0MoKgWqE
+         YqzglWGbvB3fBwlWGwREeDAgvl9gAT8j60DsVjXFJ6h62QZBjQEqj57Y/muxs7JATzpn
+         WlYC8B79vWvztytx6C+epsDs8PITuxGAJD/nNRyaXddjDArcSGy3HhJclqyhytkBM0Ab
+         57NxqzWqM80tBJuEqTQ6l8sWhn21kl9OfSn1KBHDmO1u4bLTdOwu75dU3nDOCN8eqngw
+         rHHJ4hc45RK+rFFqfr9UfxDC+2lOhXirkw1L9j5d9Hsc4/JpbtmguTzRnsjhK0xu8MwQ
+         lxcA==
+X-Gm-Message-State: AOAM531blkYx8e/8fK/oC74asdgtceiPxzaHAvj7rXlZ9gf55RHXrP6D
+        YWm75kziZ4t5RyycaJ5hdcK7xA==
+X-Google-Smtp-Source: ABdhPJxPM3kI13wFwt3A6IcMRrK7MK6qxv6UEHqOpofmJc3dylmW24GXvKuHRZ7VaPAAsLhhSBWpDA==
+X-Received: by 2002:a5d:4ec6:0:b0:1f0:5929:7f53 with SMTP id s6-20020a5d4ec6000000b001f059297f53mr950008wrv.400.1646294957944;
+        Thu, 03 Mar 2022 00:09:17 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:37d4:6d61:9015:27a5? ([2001:861:44c0:66c0:37d4:6d61:9015:27a5])
+        by smtp.gmail.com with ESMTPSA id c4-20020adfef44000000b001ef93c7bbb8sm1277168wrp.30.2022.03.03.00.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 00:09:17 -0800 (PST)
+Message-ID: <3c1dc535-37f5-89e0-4a75-a4b7d1cd1721@baylibre.com>
+Date:   Thu, 3 Mar 2022 09:09:17 +0100
 MIME-Version: 1.0
-References: <cover.1646094455.git.darren@os.amperecomputing.com>
- <84e7cb911936f032318b6b376cf88009c90d93d5.1646094455.git.darren@os.amperecomputing.com>
- <CAKfTPtAQwJYy4UDAgF3Va_MJTDj+UpxuU3UqTWZ5gjwmcTf5wA@mail.gmail.com> <YiAlfGuRXWVnOmyF@fedora>
-In-Reply-To: <YiAlfGuRXWVnOmyF@fedora>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 3 Mar 2022 09:08:38 +0100
-Message-ID: <CAKfTPtBbu3fUMBkXLszWGtaHkf4DRU+J+9z_2MZ42iCTAtLGkw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] arm64: smp: Skip MC sched domain on SoCs with no LLC
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V3] tty: serial: meson: Fix the compile link error
+ reported by kernel test robot
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220228135530.6918-1-yu.tu@amlogic.com>
+ <29b34655-f820-39c9-4363-878481cd3f63@baylibre.com>
+ <Yh087tJhakKHs88e@kroah.com>
+ <8747c5c6-a129-3a26-8ebb-9e21a18236ec@baylibre.com>
+ <Yh6KzOU4xsSB0lRf@kroah.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <Yh6KzOU4xsSB0lRf@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 at 03:18, Darren Hart <darren@os.amperecomputing.com> wrote:
->
-> On Wed, Mar 02, 2022 at 10:32:06AM +0100, Vincent Guittot wrote:
-> > On Tue, 1 Mar 2022 at 01:35, Darren Hart <darren@os.amperecomputing.com> wrote:
-> > >
-> > > Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
-> > > Control Unit, but have no shared CPU-side last level cache.
-> > >
-> > > cpu_coregroup_mask() will return a cpumask with weight 1, while
-> > > cpu_clustergroup_mask() will return a cpumask with weight 2.
-> > >
-> > > As a result, build_sched_domain() will BUG() once per CPU with:
-> > >
-> > > BUG: arch topology borken
-> > >      the CLS domain not a subset of the MC domain
-> > >
-> > > The MC level cpumask is then extended to that of the CLS child, and is
-> > > later removed entirely as redundant. This sched domain topology is an
-> > > improvement over previous topologies, or those built without
-> > > SCHED_CLUSTER, particularly for certain latency sensitive workloads.
-> > > With the current scheduler model and heuristics, this is a desirable
-> > > default topology for Ampere Altra and Altra Max system.
-> > >
-> > > Introduce an alternate sched domain topology for arm64 without the MC
-> > > level and test for llc_sibling weight 1 across all CPUs to enable it.
-> > >
-> > > Do this in arch/arm64/kernel/smp.c (as opposed to
-> > > arch/arm64/kernel/topology.c) as all the CPU sibling maps are now
-> > > populated and we avoid needing to extend the drivers/acpi/pptt.c API to
-> > > detect the cluster level being above the cpu llc level. This is
-> > > consistent with other architectures and provides a readily extensible
-> > > mechanism for other alternate topologies.
-> > >
-> > > The final sched domain topology for a 2 socket Ampere Altra system is
-> > > unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
-> > >
-> > > For CPU0:
-> > >
-> > > CONFIG_SCHED_CLUSTER=y
-> > > CLS  [0-1]
-> > > DIE  [0-79]
-> > > NUMA [0-159]
-> > >
-> > > CONFIG_SCHED_CLUSTER is not set
-> > > DIE  [0-79]
-> > > NUMA [0-159]
-> > >
-> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > > Cc: Barry Song <song.bao.hua@hisilicon.com>
-> > > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> > > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > > Cc: <stable@vger.kernel.org> # 5.16.x
-> > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> > > ---
-> > >  arch/arm64/kernel/smp.c | 28 ++++++++++++++++++++++++++++
-> > >  1 file changed, 28 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > > index 27df5c1e6baa..3597e75645e1 100644
-> > > --- a/arch/arm64/kernel/smp.c
-> > > +++ b/arch/arm64/kernel/smp.c
-> > > @@ -433,6 +433,33 @@ static void __init hyp_mode_check(void)
-> > >         }
-> > >  }
-> > >
-> > > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
-> > > +#ifdef CONFIG_SCHED_SMT
-> > > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-> > > +#endif
-> > > +
-> > > +#ifdef CONFIG_SCHED_CLUSTER
-> > > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-> > > +#endif
-> > > +
-> > > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
-> > > +       { NULL, },
-> > > +};
-> > > +
-> > > +static void __init update_sched_domain_topology(void)
-> > > +{
-> > > +       int cpu;
-> > > +
-> > > +       for_each_possible_cpu(cpu) {
-> > > +               if (cpu_topology[cpu].llc_id != -1 &&
-> >
-> > Have you tested it with a non-acpi system ? AFAICT, llc_id is only set
-> > by ACPI system and  llc_id == -1 for others like DT based system
-> >
-> > > +                   cpumask_weight(&cpu_topology[cpu].llc_sibling) > 1)
-> > > +                       return;
-> > > +       }
->
-> Hi Vincent,
->
-> I did not have a non-acpi system to test, no. You're right of course,
-> llc_id is only set by ACPI systems on arm64. We could wrap this in a
-> CONFIG_ACPI ifdef (or IS_ENABLED), but I think this would be preferable:
->
-> +       for_each_possible_cpu(cpu) {
-> +               if (cpu_topology[cpu].llc_id == -1 ||
-> +                   cpumask_weight(&cpu_topology[cpu].llc_sibling) > 1)
-> +                       return;
-> +       }
+Hi,
 
-This works.
-Also , do you really need to loop on all possible cpus ? Would it be
-enough to check only the 1st cpu ?
-You won't be able to support a mixed topology so all cpus have the
-same kind of topology i.e either cluster before or cluster before the
-MC level
+On 01/03/2022 22:06, Greg Kroah-Hartman wrote:
+> On Tue, Mar 01, 2022 at 08:23:26AM +0100, Neil Armstrong wrote:
+>> Hi Greg,
+>>
+>> Le 28/02/2022 à 22:21, Greg Kroah-Hartman a écrit :
+>>> On Mon, Feb 28, 2022 at 03:13:48PM +0100, Neil Armstrong wrote:
+>>>> Hi,
+>>>>
+>>>> On 28/02/2022 14:55, Yu Tu wrote:
+>>>>> Describes the calculation of the UART baud rate clock using a clock
+>>>>> frame. Forgot to add in Kconfig kernel test Robot compilation error
+>>>>> due to COMMON_CLK dependency.
+>>>>>
+>>>>> Fixes: ("tty: serial:meson: Describes the calculation of the UART baud rate clock using a clock frame“)
+>>>>
+>>>> As I already replied on V2 of this patch, you're invited to apply these fixes directly
+>>>> on the next version of your "Use CCF to describe the UART baud rate clock" patchset
+>>>> and not as a separate patch.
+>>>
+>>> No, this is broken in linux-next now as the path listed here is in my
+>>> tree right now.
+>>
+>> Oh, I wasn't aware you took this patchset.
+>>
+>>>
+>>> I need a fix for it, or I can revert the original.
+>>
+>> Please revert the whole patchset, it's not ready yet, neither fully reviewed ands buggy
+>> on old SoCs.
+> 
+> Yes, will go do so now, thanks for letting me know and sorry about all
+> of this.
 
+Thanks, we'll make sure it won't happen again and will work toawrds a working solution
 
->
-> Quickly tested on Altra successfully. Would appreciate anyone with non-acpi
-> arm64 systems who can test and verify this behaves as intended. I will ask
-> around tomorrow as well to see what I may have access to.
->
-> Thanks,
->
-> > > +
-> > > +       pr_info("No LLC siblings, using No MC sched domains topology\n");
-> > > +       set_sched_topology(arm64_no_mc_topology);
-> > > +}
-> > > +
-> > >  void __init smp_cpus_done(unsigned int max_cpus)
-> > >  {
-> > >         pr_info("SMP: Total of %d processors activated.\n", num_online_cpus());
-> > > @@ -440,6 +467,7 @@ void __init smp_cpus_done(unsigned int max_cpus)
-> > >         hyp_mode_check();
-> > >         apply_alternatives_all();
-> > >         mark_linear_text_alias_ro();
-> > > +       update_sched_domain_topology();
-> > >  }
-> > >
-> > >  void __init smp_prepare_boot_cpu(void)
-> > > --
-> > > 2.31.1
-> > >
->
-> --
-> Darren Hart
-> Ampere Computing / OS and Kernel
+Neil
+
+> 
+> greg k-h
+

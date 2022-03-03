@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939784CB5FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262CD4CB5F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiCCEvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S229623AbiCCEv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiCCEvl (ORCPT
+        with ESMTP id S229491AbiCCEvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:51:41 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC30B14A6DA;
-        Wed,  2 Mar 2022 20:50:56 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id h28so3141719ila.3;
-        Wed, 02 Mar 2022 20:50:56 -0800 (PST)
+        Wed, 2 Mar 2022 23:51:25 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C4011C7CE
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:50:40 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 195so3521530pgc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 20:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dDVQJ3Fq8NBV53TAXzlYHtLwOtwjE+voGwaucY4wx34=;
-        b=HOd3Bo2TJtj5RUF+AU2SbNMmTDqhHTL4q71s4CZQH+/qY7mTR7pEhhfpM9z5HxlfB1
-         FMmQYP0i0TbI5Iesr/t3IULcSAQaVqSBJymDqOVcIPbOScVch8QPAmSvfEj5cZAVAxOn
-         tHk0v3euML/2dPmoSUXxe+MQZpeYAAXzurpujrqJsbfcQikMIP4TnHrjqubjntAd4+uF
-         IulMOwi0PYXF1ID8dlxtPTzZfl7CZsVpq1GpTQeoMs3d6NurigkGvGGdQ+wnYfvY/97H
-         v0eY8Sz7Wx0Pfqn5btFW21BWQp1EXlgdxtqH2YEbUiuHnVMOoazKD+fhprEzweup43pD
-         7ayw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gze3j/1d/iOM5LmLeKWf8llBUc0y0bOeU/xT4taGqMg=;
+        b=ZxCbPUL09Pt+l9ErS+6ngwAma8BpiET5p+DE0e1O4Xg3Y7dRLDoPMzn1gbjynvbZTA
+         BiAK2ftZoebIbw0nNt1ud5EtdnMDO9fV8U7FHpfsWdTlPm4EvvuApPJR8vxMiPvlhRIm
+         UqQ8TlSR1UHyZKX/z9k0rG/NKg7lW0ajDUP0VVWpRCfm88tV+TVcQnwA5B0ppU+UD95C
+         9BGFhSA8VwtZ/0X2/B+Ct4upbbBwcu05fHLmQCnInnk4kD6SVQ5CBwCGiHW3o+3U1dIM
+         6EhPwRGyEN22a1JKYqJAHhdGM4CZ3IDQwC1EXD/XGMPk9xzPpWGcW6zThLy6jfqfbYBK
+         esbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dDVQJ3Fq8NBV53TAXzlYHtLwOtwjE+voGwaucY4wx34=;
-        b=mQjJ7gikDQdR6A4mUd0fF4XqsECs6gWBR44ULzwPGgr5C03dUS5m5t0jxSJsQT9y8c
-         +P+zO723SBRxUnED/3L3xKH/7g0hjld98XAtxKZrNW9xy1gOLr4e+y+/MnKRCHhLck5R
-         6QQ1aWqW4Dm81L/DgrjiDHo9iPUNdDWZpBlQ//DC2MVfQ0nomqJgq2qlP4N5NI+lgZjQ
-         mNPXn+21megPmHTFwLlw/iYNYRm4oYallEv+JCPhOtYYv0U/6WWNpohgA9/NqA/0ij3b
-         j2AYQFAn4u5iN6RZTdnIb7hMhqnB8mvNpqBYMisA8+1o23+hjulc3Vf47EjaDA/aUKCU
-         LZXg==
-X-Gm-Message-State: AOAM531q46OFMks6fLT/Dt5RPdGXvUaiYLp6XmEyl9iB8N5jWbO05jkg
-        i8KzOR8W0Si18Zf5ZnYOxyOeVMW44pY=
-X-Google-Smtp-Source: ABdhPJyu0K+8wWbtmHCooE/7xGVZrJwHUYIBOSWwylrdyuwWIVLeZHps3qXtK0k1ssPT2zqL4sLF8A==
-X-Received: by 2002:a92:c8ca:0:b0:2c4:ff8b:98cb with SMTP id c10-20020a92c8ca000000b002c4ff8b98cbmr6853050ilq.183.1646283056143;
-        Wed, 02 Mar 2022 20:50:56 -0800 (PST)
-Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id b1-20020a926701000000b002c25d28d378sm672203ilc.71.2022.03.02.20.50.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gze3j/1d/iOM5LmLeKWf8llBUc0y0bOeU/xT4taGqMg=;
+        b=waZJtniT8iYAi6/5d1FFATDr1nN04jvIafv/ZzaV02O4ixb+RQdm3vbbJYRbvqkJoy
+         xobWQcEyiJXJ0y7d4GzQVvlmOe71q/6FtAr6oD91ClQHT9iFWKJYMhB7OfS3i7Oeh7WY
+         R92J34BJjyxScgvbPtWeAwFJzRsd9gySQru8XH2bVNkKDV/Sd8v0T3XIa02/isb5oV6P
+         vAZLHaLsdNydTam4JjQHH0NWXPCluW5BYx3tldNrFTjg+wdrNXsqItn7oldIeSEKLn1X
+         fXl2NOpFdk9dQsQn17x8w3edw7ElwkZD3cYGQlGaxRwZptQl5j4NdtNV3hjZLQC6RKaa
+         4Row==
+X-Gm-Message-State: AOAM531XebUpTvQCS0YCQfzBFlUHKDQ5kiY4HioiLA0Bl6TXFUB2hQTN
+        tJU4A8zXvz6pkrGJZeWmt04PnQ==
+X-Google-Smtp-Source: ABdhPJwWodNuB4r9bSMlgvX/oD3qX+/xQpSRDHfLXivnw/0qFhxbmQR32lNLjrsMGKanWnHE4EnV3g==
+X-Received: by 2002:a05:6a00:1503:b0:4e1:d277:cca with SMTP id q3-20020a056a00150300b004e1d2770ccamr36394116pfu.4.1646283039264;
+        Wed, 02 Mar 2022 20:50:39 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id ng11-20020a17090b1a8b00b001beefe9a1cbsm694005pjb.31.2022.03.02.20.50.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 20:50:55 -0800 (PST)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/8] compiler_types.h: Add unified __diag_ignore_all for GCC/LLVM
-Date:   Thu,  3 Mar 2022 10:20:27 +0530
-Message-Id: <20220303045029.2645297-7-memxor@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220303045029.2645297-1-memxor@gmail.com>
-References: <20220303045029.2645297-1-memxor@gmail.com>
+        Wed, 02 Mar 2022 20:50:38 -0800 (PST)
+Date:   Thu, 3 Mar 2022 04:50:34 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
+ deferred TLB flush logic
+Message-ID: <YiBJGmFCdSZwkiTw@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-5-seanjc@google.com>
+ <YiAE4ju0a3MWXr31@google.com>
+ <YiAH6UfSDyHeMP+s@google.com>
+ <YiAXy+I1GcyZ7iFJ@google.com>
+ <YiAcvswAIrMi+iXS@google.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1928; h=from:subject; bh=GM32fUklsZxVmnh4SsQp2kGBKENfBpd3/E++0grOsvk=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiIEj/uurNr9aPwnll4PFTLHqfDRT07+h7GF9UMqxl cR9jt+uJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYiBI/wAKCRBM4MiGSL8Ryn8/D/ 99KWLHtaGnFgQsA7AVZSnFtencmZK3cbVgcplr1rtdpVTlGzdtRKm3/Or4xvN5xvZ4kCo9kDxGd3x1 AHgpTraVqQvmewNp9UkCFkFAHuRKctzLWsXL78M8lAFevU+CAzv14T7NAQqsr4DMxK79imrF9cywRe op81+NJq+lLsN1FJmoZXfbzfYR5JSzYWovxljGqr7+mFcAz+kHISBWHk2nANiqX1N7YvGg80cpu/Ei JtPIyuIfgi+r1EbotrdXdsem7PMtzoqgPHFI45F2F0tmdE3ntk7QXcgQetT3AikKjQUxJoJVPOIDKK XqX+gfxLUJlZQ8ANSKIdywaG9jcP0B4TIxGX4XTvzTOOorKYgeIQFJ5hOTYl9VCptbobT7govsUZ54 6DOfk5WGwc4jzp+RIvCykaY+0z5c72o0Z5ENTq9Esl3I31Glco4FVuSIUMQPZCtV47nxP/pJuQ2sRj yeOlJSUx4KP2U3wQC06WntLHaXSCmf0yn0MYTb+VTVNiRMkduYcdw8uL8s0flkEyuVMi/3g9Se91x/ cWqbvCvefczEebnPP1fRjGFoAMPgEVkDq2dnI0v9vgkDNaFgZuxP3XDm2vDxc189cyd7j3FlXRyvXd 0DkSybogRC/Hxvd0iPxtDRL8cpzDFnyrNB41PElgPDUJybwS8pW2I5avDmag==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiAcvswAIrMi+iXS@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +86,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a __diag_ignore_all macro, to ignore warnings for both GCC and LLVM,
-without having to specify the compiler type and version. By default, GCC
-8 and clang 11 are used. This will be used by bpf subsystem to ignore
--Wmissing-prototypes warning for functions that are meant to be global
-functions so that they are in vmlinux BTF, but don't have a prototype.
+On Thu, Mar 03, 2022, Sean Christopherson wrote:
+> On Thu, Mar 03, 2022, Mingwei Zhang wrote:
+> > On Thu, Mar 03, 2022, Sean Christopherson wrote:
+> > > On Wed, Mar 02, 2022, Mingwei Zhang wrote:
+> > > > On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> > > > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > > > index 12866113fb4f..e35bd88d92fd 100644
+> > > > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > > > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > > > @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+> > > > >  	list_del_rcu(&root->link);
+> > > > >  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+> > > > >  
+> > > > > -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+> > > > > +	/*
+> > > > > +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
+> > > > > +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> > > > > +	 * to a different pCPU.  Note, the local TLB flush on reuse also
+> > > > > +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> > > > > +	 * intermediate paging structures, that may be zapped, as such entries
+> > > > > +	 * are associated with the ASID on both VMX and SVM.
+> > > > > +	 */
+> > > > > +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+> > > > 
+> > > > Understood that we could avoid the TLB flush here. Just curious why the
+> > > > "(void)" is needed here? Is it for compile time reason?
+> > > 
+> > > Nope, no functional purpose, though there might be some "advanced" warning or
+> > > static checkers that care.
+> > > 
+> > > The "(void)" is to communicate to human readers that the result is intentionally
+> > > ignored, e.g. to reduce the probability of someone "fixing" the code by acting on
+> > > the result of zap_gfn_range().  The comment should suffice, but it's nice to have
+> > > the code be self-documenting as much as possible.
+> > 
+> > Right, I got the point. Thanks.
+> > 
+> > Coming back. It seems that I pretended to understand that we should
+> > avoid the TLB flush without really knowing why.
+> > 
+> > I mean, leaving (part of the) stale TLB entries unflushed will still be
+> > dangerous right? Or am I missing something that guarantees to flush the
+> > local TLB before returning to the guest? For instance,
+> > kvm_mmu_{re,}load()?
+> 
+> Heh, if SVM's ASID management wasn't a mess[*], it'd be totally fine.  The idea,
+> and what EPT architectures mandates, is that each TDP root is associated with an
+> ASID.  So even though there may be stale entries in the TLB for a root, because
+> that root is no longer used those stale entries are unreachable.  And if KVM ever
+> happens to reallocate the same physical page for a root, that's ok because KVM must
+> be paranoid and flush that root (see code comment in this patch).
+> 
+> What we're missing on SVM is proper ASID handling.  If KVM uses ASIDs the way AMD
+> intends them to be used, then this works as intended because each root is again
+> associated with a specific ASID, and KVM just needs to flush when (re)allocating
+> a root and when reusing an ASID (which it already handles).
+> 
+> [*] https://lore.kernel.org/all/Yh%2FJdHphCLOm4evG@google.com
 
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- include/linux/compiler-clang.h | 3 +++
- include/linux/compiler-gcc.h   | 3 +++
- include/linux/compiler_types.h | 4 ++++
- 3 files changed, 10 insertions(+)
+Oh, putting AMD issues aside for now.
 
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index f1aa41d520bd..babb1347148c 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -90,3 +90,6 @@
- #else
- #define __diag_clang_11(s)
- #endif
-+
-+#define __diag_ignore_all(option, comment) \
-+	__diag_clang(11, ignore, option)
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index ccbbd31b3aae..d364c98a4a80 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -151,6 +151,9 @@
- #define __diag_GCC_8(s)
- #endif
- 
-+#define __diag_ignore_all(option, comment) \
-+	__diag_GCC(8, ignore, option)
-+
- /*
-  * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
-  * attribute) do not work, and must be disabled.
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 3f31ff400432..8e5d2f50f951 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -371,4 +371,8 @@ struct ftrace_likely_data {
- #define __diag_error(compiler, version, option, comment) \
- 	__diag_ ## compiler(version, error, option)
- 
-+#ifndef __diag_ignore_all
-+#define __diag_ignore_all(option, comment)
-+#endif
-+
- #endif /* __LINUX_COMPILER_TYPES_H */
--- 
-2.35.1
+I think I might be too narrow down to the zapping logic previously. So,
+I originally think anytime we want to zap, we have to do the following
+things in strict order:
 
+1) zap SPTEs.
+2) flush TLBs.
+3) flush cache (AMD SEV only).
+4) deallocate shadow pages.
+
+However, if you have already invalidated EPTP (pgd ptr), then step 2)
+becomes optional, since those stale TLBs are no longer useable by the
+guest due to the change of ASID.
+
+Am I understanding the point correctly? So, for all invalidated roots,
+the assumption is that we have already called "kvm_reload_rmote_mmus()",
+which basically update the ASID.

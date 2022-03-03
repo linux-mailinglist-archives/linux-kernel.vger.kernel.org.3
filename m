@@ -2,110 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE464CBFBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB574CBFBA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbiCCOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S233128AbiCCOPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiCCOPn (ORCPT
+        with ESMTP id S230329AbiCCOPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:15:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACE818CC5C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=qWQNOthXTquOrhHmzl9lJmVcX4KkTKg2fea12CYh7ts=; b=daTg9H0LzTWywP8J4AOyFF8HBx
-        f3yQ2gydD0pRWTogso66lz7wlkNfGX+hIr4GZQ+x1jV2I0H3fhDPG05ZLgUeKNZ7ZqikymyEs+0Ws
-        3QLhR5ztDhesX8o9sqhYfFdze331xoS20sPdUwWfdMT8+etPMjyVsEKbJWnPERtb4r0HLcIlhfWz2
-        SHghMLQ6umhJYfr7WIWAj5wnqeVAr1kpZxl65C3cSFdrL+ww3vbEBs4ojkVrat5L9a1ECFX5653nk
-        xSNjP/ktZsyH5EnZkAEj3oa996Z6sKNQ07AtRiVRHSGAZollARMXttGOcECfioTWAB3jd5RIZsVcy
-        TfwdcfQA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPmCg-00Bhis-Oe; Thu, 03 Mar 2022 14:13:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C83E6300230;
-        Thu,  3 Mar 2022 15:13:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A6EA230268E82; Thu,  3 Mar 2022 15:13:12 +0100 (CET)
-Date:   Thu, 3 Mar 2022 15:13:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v2 33/39] objtool: Add IBT/ENDBR decoding
-Message-ID: <YiDM+P1tElLUvxtI@hirez.programming.kicks-ass.net>
-References: <20220224145138.952963315@infradead.org>
- <20220224151323.959862564@infradead.org>
- <alpine.LSU.2.21.2203031138040.704@pobox.suse.cz>
- <aa6076af-0f7c-ae48-4eb4-8bf2e3f0ed06@citrix.com>
- <alpine.LSU.2.21.2203031330530.704@pobox.suse.cz>
+        Thu, 3 Mar 2022 09:15:14 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691FA18C7B4;
+        Thu,  3 Mar 2022 06:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646316869; x=1677852869;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5QG9h5lx2anIO5uIyhVHkmCiySJytsOAX/CGcMce8NM=;
+  b=LbxnWVSe5MLrk+r0E9HQpM3q9hRl+sToWPrC+eziFpgNYkhGwgHOisJy
+   Yskv1fe5pwch43V6V2lZ3SSv3cmdJ7eoJnLrJ6qcRaHC3b/N6SH1akHoY
+   1blNHAgunH0GSoB2qlXd3fit6HMGZbE6R6ZgtdrMFW8XLILNt+6ZT6TWx
+   2Dt2ghoVS7Ds7hUb0MFs3FGCObASTm0tnfMgGqhLAEt8GEpoq2c8FMMHI
+   9vnwBnGMyCSbjb0FtCQ7QHcf15xB2NKymHX86Y8DmuCcSkPAXQe/XieJV
+   aeAS2snnVB71ewA2X92snXNkwM6nNHbwye4ZuGSl9ed31/scJlWNZLP5n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251258796"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="251258796"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 06:14:29 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="511442309"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 06:14:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nPmD0-00ApIt-Ho;
+        Thu, 03 Mar 2022 16:13:34 +0200
+Date:   Thu, 3 Mar 2022 16:13:34 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        arnd@arndb.de, olof@lixom.net, Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 09/11] i2c: npcm: Handle spurious interrupts
+Message-ID: <YiDNDsPWKyaIUlQR@smile.fi.intel.com>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-10-warp5tw@gmail.com>
+ <YiCaSSbbszm3qYIQ@smile.fi.intel.com>
+ <CAHb3i=sStqdSpLKtF_UGmTsOssR_swssTd3pv6c2-z_kiUPTTA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alpine.LSU.2.21.2203031330530.704@pobox.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHb3i=sStqdSpLKtF_UGmTsOssR_swssTd3pv6c2-z_kiUPTTA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 01:33:06PM +0100, Miroslav Benes wrote:
-> On Thu, 3 Mar 2022, Andrew Cooper wrote:
-> 
-> > On 03/03/2022 10:53, Miroslav Benes wrote:
-> > > Hi,
+On Thu, Mar 03, 2022 at 02:48:20PM +0200, Tali Perry wrote:
+> > On Thu, Mar 3, 2022 at 12:37 PM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > > >
-> > > On Thu, 24 Feb 2022, Peter Zijlstra wrote:
+> > > On Thu, Mar 03, 2022 at 04:31:39PM +0800, Tyrone Ting wrote:
+> > > > From: Tali Perry <tali.perry1@gmail.com>
+> > > >
+> > > > In order to better handle spurious interrupts:
+> > > > 1. Disable incoming interrupts in master only mode.
+> > > > 2. Clear end of busy (EOB) after every interrupt.
+> > > > 3. Return correct status during interrupt.
 > > >
-> > >> Decode ENDBR instructions and WARN about NOTRACK prefixes.
-> > > I guess it has been already mentioned somewhere, but could you explain 
-> > > NOTRACK prefix here, please? If I understand it right, it disables IBT for 
-> > > the indirect branch instruction meaning that its target does not have to 
-> > > start with ENDBR?
-> > 
-> > CET-IBT has loads of get-out clauses.  The NOTRACK prefix is one; the
-> > legacy code bitmap (implicit NOTRACK for whole libraries) is another.
-> > 
-> > And yes - the purpose of NOTRACK is to exempt a specific indirect branch
-> > from checks.
-> > 
-> > GCC can emit NOTRACK'd calls in some cases when e.g. the programmer
-> > launders a function pointer through (void *), or when
-> > __attribute__((no_cf_check)) is used explicitly.
-> > 
-> > 
-> > Each of the get-out clauses has separate enable bits, as each of them
-> > reduces security.  In this series, Linux sets MSR_S_CET.ENDBR_EN but
-> > specifically does not set NOTRACK_EN, so NOTRACK prefixes will be
-> > ignored and suffer #CP if encountered.
-> 
-> Thanks for the explanation. I would be nice to include it somewhere so 
-> that it is not lost.
+> > > This is bad commit message, it doesn't explain "why" you are doing these.
 
-I'll add something to the Changelog. Thanks!
+...
+
+> BMC users connect a huge tree of i2c devices and muxes.
+> This tree suffers from spikes, noise and double clocks.
+> All these may cause spurious interrupts to the BMC.
+> 
+> If the driver gets an IRQ which was not expected and was not handled
+> by the IRQ handler,
+> there is nothing left to do but to clear the interrupt and move on.
+
+Yes, the problem is what "move on" means in your case.
+If you get a spurious interrupts there are possibilities what's wrong:
+1) HW bug(s)
+2) FW bug(s)
+3) Missed IRQ mask in the driver
+4) Improper IRQ mask in the driver
+
+The below approach seems incorrect to me.
+
+> If the transaction failed, driver has a recovery function.
+> After that, user may retry to send the message.
+> 
+> Indeed the commit message doesn't explain all this.
+> We will fix and add to the next patchset.
+> 
+> > > > +     /*
+> > > > +      * if irq is not one of the above, make sure EOB is disabled and all
+> > > > +      * status bits are cleared.
+> > >
+> > > This does not explain why you hide the spurious interrupt.
+> > >
+> > > > +      */
+> > > > +     if (ret == IRQ_NONE) {
+> > > > +             npcm_i2c_eob_int(bus, false);
+> > > > +             npcm_i2c_clear_master_status(bus);
+> > > > +     }
+> > > > +
+> > > > +     return IRQ_HANDLED;
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

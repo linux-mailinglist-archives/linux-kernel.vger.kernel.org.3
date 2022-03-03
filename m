@@ -2,280 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6FE4CC213
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F136E4CC212
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiCCQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S234422AbiCCQAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234487AbiCCQAX (ORCPT
+        with ESMTP id S231298AbiCCQAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:00:23 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077D618F21C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 07:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lmKm34gjsT5RKmkMNGJuz66nZitqN3EkUdufPgE1EqY=; b=RG2xqR1pwGB1xg2w4P6vt85GbB
-        buRzpHu/9KZ3e2ilalq/4PlHTHaqkuxdwIeSkroXc3mNTGLHINRfrizZGHcj8J/SHJDefO9TgWO7A
-        XeiDEyu+ftuWkvGIPEjxy9agQmhE4c+R65jVaTTdYgBjdzvLbn66Sw09Wah6kc0lXAlnT0xUDZuqq
-        nEql1jOCKRnCVSgQjpx59+Q3GiOdwaLFf4zb5RMSGLBx4AnnHHxdNjqoFw++RPSdzG3DAHNZzyG/Y
-        Yal8DxyI5EKMSf2szOtNoMi4qBdq7sWxptjIrwdUIM3JTsbhqDH2ucYde2LwEcFwJ4s5UUwyNIlwJ
-        kKht/vFQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPnr8-00BmOS-5U; Thu, 03 Mar 2022 15:59:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Thu, 3 Mar 2022 11:00:12 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D469418E41D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 07:59:26 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA0DF300230;
-        Thu,  3 Mar 2022 16:59:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9463620790218; Thu,  3 Mar 2022 16:59:03 +0100 (CET)
-Date:   Thu, 3 Mar 2022 16:59:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
-        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
-        joao@overdrivepizza.com, jpoimboe@redhat.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mbenes@suse.cz,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ndesaulniers@google.com, samitolvanen@google.com, x86@kernel.org
-Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
-Message-ID: <YiDlx0J1KMNP39if@hirez.programming.kicks-ass.net>
-References: <20220225083647.12ceb54b@gandalf.local.home>
- <1646159447.ngbqgzj71t.naveen@linux.ibm.com>
- <20220301142016.22e787fb@gandalf.local.home>
- <Yh9vF8REB1JlhQCJ@hirez.programming.kicks-ass.net>
- <20220302110138.6d2abcec@gandalf.local.home>
- <20220302144716.1772020c@gandalf.local.home>
- <Yh/Y2FHw90m00owK@hirez.programming.kicks-ass.net>
- <1646300416.yyrqygami4.naveen@linux.ibm.com>
- <YiC89O5WtsU871Sf@hirez.programming.kicks-ass.net>
- <20220303093413.387ee6f1@gandalf.local.home>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 977E83F61F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646323165;
+        bh=MdwjWjZqm0RnOglfFnSZ5WY/pIE+2hElYzOWtQJQrYc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=MDfg+jPjpKksoV3C4ckPNTlr6lsnvPv+QZArpMsQY8WYhLtUFIqz+LK/lFlpJZYZ8
+         ivJcT3Rk65/Jz0jNlaaI0f99CvhDkERzadWiACAYpWmUdD0hP0Ghfd5lfxvFEzycf/
+         qZy4zYqp9a4YTfzIk+OwhLHztwFHdqC/d2Tf+7fV8WdPV4+afop1QfOBn4mG8e6iDa
+         e9q/EubfqG1UDuRYDxIteNZ+96iR3UPjEOZwkxyUeOoHSjqRF5B7PpgM/F1NvyQO6T
+         yA3LLUHX3zGyYsuPQ6BUuCoLq6VL6BK4xqdpkxI34yPshpCPoaeupLnyK4wCE0Jp5V
+         iQ6aI7XEOlGMw==
+Received: by mail-wm1-f72.google.com with SMTP id a26-20020a7bc1da000000b003857205ec7cso1313591wmj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 07:59:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MdwjWjZqm0RnOglfFnSZ5WY/pIE+2hElYzOWtQJQrYc=;
+        b=70ziji/J2z7PQOwf6RsfVnK09Ehexb0MlyLYcHkiyL+taMxj8Zw/MRJ3KG5YudvEO+
+         O4CJ0fA1aa1ze4keygdUaK5JG//qnxB0v2XWZXNJd5qvQjKu98/jt6Vt15A8V82ln9g6
+         hSvmyWAiEWGD0R5JTxNAMp60DO8B/sdQq089OFWbpNyjGlUo+QF9eW0R46zUZiLF29RU
+         G0gbhYb0evh4S1bFs/r7yKJDWmQum4+2dH29qiWK5CpmPq6GxsafdRWFP5s6L2AFJ6a/
+         X9/JYQ0H8YmZ4NA051GucDq6s5KBWVvScDERb19r9HOnOCKcZzEfbaEeLlRfQTklZhqJ
+         99lw==
+X-Gm-Message-State: AOAM533Qn6iD3Ur92aplT2a8YSv5N6MrwG5Cx46vwHSayWG9WP2A9w3H
+        wAeJpNMCQL42mOZxML7lU1X7V9aoQ4RarSA291a+y//JVUm5JEInj2HGM5RTdNvmtS0EkfAXIh8
+        6+0Mo2x9RCIPK9tRTjwhc1shFD12ZywkfUfelNEh9Zw==
+X-Received: by 2002:a5d:50d2:0:b0:1f0:2348:4331 with SMTP id f18-20020a5d50d2000000b001f023484331mr8154300wrt.19.1646323164084;
+        Thu, 03 Mar 2022 07:59:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxHlIPEDuVmE/S59LvjLHrwrYJRSachY/7BYD0C1MLQqqJNXoqHm4h7MEj9W5zhmieIqEBtnw==
+X-Received: by 2002:a5d:50d2:0:b0:1f0:2348:4331 with SMTP id f18-20020a5d50d2000000b001f023484331mr8154279wrt.19.1646323163879;
+        Thu, 03 Mar 2022 07:59:23 -0800 (PST)
+Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id o13-20020a5d648d000000b001efd62a840dsm2610469wri.111.2022.03.03.07.59.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 07:59:23 -0800 (PST)
+Message-ID: <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
+Date:   Thu, 3 Mar 2022 16:59:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303093413.387ee6f1@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 09:34:13AM -0500, Steven Rostedt wrote:
-> On Thu, 3 Mar 2022 14:04:52 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
+On 03/03/2022 07:13, Sandeep Maheswaram wrote:
+> Add device tree bindings for SNPS phy tuning parameters.
 > 
-> > > @@ -1596,7 +1596,7 @@ static int check_ftrace_location(struct kprobe *p)
-> > > {
-> > > 	unsigned long ftrace_addr;
-> > > 
-> > > -	ftrace_addr = ftrace_location((unsigned long)p->addr);
-> > > +	ftrace_addr = ftrace_location_range((unsigned long)p->addr, (unsigned long)p->addr);  
-> > 
-> > Yes, although perhaps a new helper. I'll go ponder during lunch.
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> ---
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
+>  1 file changed, 125 insertions(+)
 > 
-> Is there more places to add that to make it worth creating a helper?
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> index 0dfe691..227c097 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> @@ -50,6 +50,131 @@ properties:
+>    vdda33-supply:
+>      description: phandle to the regulator 3.3V supply node.
+>  
+> +  qcom,hs-disconnect:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect a disconnect event at the host. Possible values are.
 
-This is what I ended up with, I've looked at all ftrace_location() sites
-there are, seems to work too, both the built-in boot time ftrace tests
-and the selftests work splat-less.
+':', instead of full stop.
 
-I should update the Changelog some though.
+> +      7 -> +21.56%
+> +      6 -> +17.43%
+> +      5 -> +13.32%
+> +      4 -> +9.73%
+> +      3 -> +6.3
+> +      2 -> +3.17%
+> +      1 -> 0, Design default%
 
-Naveen also mentioned register_ftrace_direct() could be further cleaned
-up, but I didn't want to do too much in once go.
+Use "default:" instead. Here and in other places.
 
----
+> +      0 -> -2.72%
 
-Subject: x86/ibt,ftrace: Search for __fentry__ location
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Wed Feb 23 10:01:38 CET 2022
+In current form this should be an enum... but actually current form is
+wrong. You should not store register values in DT. What if next version
+of hardware has a different meaning of these values?
 
-Have ftrace_location() search the symbol for the __fentry__ location
-when it isn't at func+0 and use this for {,un}register_ftrace_direct().
+Instead, you should store here meaningful values, not register values.
 
-This avoids a whole bunch of assumptions about __fentry__ being at
-func+0.
+This applies to all cases below.
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/kprobes/core.c |   11 +---------
- kernel/bpf/trampoline.c        |   20 +++----------------
- kernel/kprobes.c               |    8 +------
- kernel/trace/ftrace.c          |   43 +++++++++++++++++++++++++++++++++--------
- 4 files changed, 43 insertions(+), 39 deletions(-)
+> +
+> +  qcom,squelch-detector:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect valid high-speed data. Possible values are
+> +      7-> -20.90%
+> +      6-> -15.60%
+> +      5-> -10.30%
+> +      4-> -5.30%
+> +      3-> 0, Design default%
+> +      2-> +5.30%
+> +      1-> +10.60%
+> +      0-> +15.90%
+> +
+> +  qcom,hs-amplitude:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This adjusts the high-speed DC level voltage.
+> +      Possible values are
+> +      15-> +26.70%
+> +      14-> +24.30%
+> +      13-> +22.20%
+> +      12-> +20.00%
+> +      11-> +17.80%
+> +      10-> +15.60%
+> +      9-> +13.30%
+> +      8-> +11.10%
+> +      7-> +8.90%
+> +      6-> +6.50%
+> +      5-> +4.40%
+> +      4-> +2.30%
+> +      3-> 0, Design default%
+> +      2-> -2.20%
+> +      1-> -4.40%
+> +      0-> -6.60%
+> +
+> +  qcom,pre-emphasis-duration:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This signal controls the duration for which the
+> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+> +      The HS Transmitter pre-emphasis duration is defined in terms of
+> +      unit amounts. One unit of pre-emphasis duration is approximately
+> +      650 ps and is defined as 1X pre-emphasis duration.
+> +      Possible values are
+> +      1-> 1x, short pre-emphasis current duration
+> +      0-> 2x, long pre-emphasis current duration
 
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -193,17 +193,10 @@ static unsigned long
- __recover_probed_insn(kprobe_opcode_t *buf, unsigned long addr)
- {
- 	struct kprobe *kp;
--	unsigned long faddr;
-+	bool faddr;
- 
- 	kp = get_kprobe((void *)addr);
--	faddr = ftrace_location(addr);
--	/*
--	 * Addresses inside the ftrace location are refused by
--	 * arch_check_ftrace_location(). Something went terribly wrong
--	 * if such an address is checked here.
--	 */
--	if (WARN_ON(faddr && faddr != addr))
--		return 0UL;
-+	faddr = ftrace_location(addr) == addr;
- 	/*
- 	 * Use the current code if it is not modified by Kprobe
- 	 * and it cannot be modified by ftrace.
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -117,18 +117,6 @@ static void bpf_trampoline_module_put(st
- 	tr->mod = NULL;
- }
- 
--static int is_ftrace_location(void *ip)
--{
--	long addr;
--
--	addr = ftrace_location((long)ip);
--	if (!addr)
--		return 0;
--	if (WARN_ON_ONCE(addr != (long)ip))
--		return -EFAULT;
--	return 1;
--}
--
- static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
- {
- 	void *ip = tr->func.addr;
-@@ -160,12 +148,12 @@ static int modify_fentry(struct bpf_tram
- static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- {
- 	void *ip = tr->func.addr;
-+	unsigned long faddr;
- 	int ret;
- 
--	ret = is_ftrace_location(ip);
--	if (ret < 0)
--		return ret;
--	tr->func.ftrace_managed = ret;
-+	faddr = ftrace_location((unsigned long)ip);
-+	if (faddr)
-+		tr->func.ftrace_managed = true;
- 
- 	if (bpf_trampoline_module_get(tr))
- 		return -ENOENT;
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1562,14 +1562,10 @@ static inline int warn_kprobe_rereg(stru
- 
- static int check_ftrace_location(struct kprobe *p)
- {
--	unsigned long ftrace_addr;
-+	unsigned long addr = (unsigned long)p->addr;
- 
--	ftrace_addr = ftrace_location((unsigned long)p->addr);
--	if (ftrace_addr) {
-+	if (ftrace_location(addr) == addr) {
- #ifdef CONFIG_KPROBES_ON_FTRACE
--		/* Given address is not on the instruction boundary */
--		if ((unsigned long)p->addr != ftrace_addr)
--			return -EILSEQ;
- 		p->flags |= KPROBE_FLAG_FTRACE;
- #else	/* !CONFIG_KPROBES_ON_FTRACE */
- 		return -EINVAL;
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -1568,17 +1568,34 @@ unsigned long ftrace_location_range(unsi
- }
- 
- /**
-- * ftrace_location - return true if the ip giving is a traced location
-+ * ftrace_location - return the ftrace location
-  * @ip: the instruction pointer to check
-  *
-- * Returns rec->ip if @ip given is a pointer to a ftrace location.
-- * That is, the instruction that is either a NOP or call to
-- * the function tracer. It checks the ftrace internal tables to
-- * determine if the address belongs or not.
-+ * If @ip matches the ftrace location, return @ip.
-+ * If @ip matches sym+0, return sym's ftrace location.
-+ * Otherwise, return 0.
-  */
- unsigned long ftrace_location(unsigned long ip)
- {
--	return ftrace_location_range(ip, ip);
-+	struct dyn_ftrace *rec;
-+	unsigned long offset;
-+	unsigned long size;
-+
-+	rec = lookup_rec(ip, ip);
-+	if (!rec) {
-+		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
-+			goto out;
-+
-+		/* map sym+0 to __fentry__ */
-+		if (!offset)
-+			rec = lookup_rec(ip, ip + size - 1);
-+	}
-+
-+	if (rec)
-+		return rec->ip;
-+
-+out:
-+	return 0;
- }
- 
- /**
-@@ -4962,7 +4979,8 @@ ftrace_match_addr(struct ftrace_hash *ha
- {
- 	struct ftrace_func_entry *entry;
- 
--	if (!ftrace_location(ip))
-+	ip = ftrace_location(ip);
-+	if (!ip)
- 		return -EINVAL;
- 
- 	if (remove) {
-@@ -5110,11 +5128,16 @@ int register_ftrace_direct(unsigned long
- 	struct ftrace_func_entry *entry;
- 	struct ftrace_hash *free_hash = NULL;
- 	struct dyn_ftrace *rec;
--	int ret = -EBUSY;
-+	int ret = -ENODEV;
- 
- 	mutex_lock(&direct_mutex);
- 
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	/* See if there's a direct function at @ip already */
-+	ret = -EBUSY;
- 	if (ftrace_find_rec_direct(ip))
- 		goto out_unlock;
- 
-@@ -5222,6 +5245,10 @@ int unregister_ftrace_direct(unsigned lo
- 
- 	mutex_lock(&direct_mutex);
- 
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	entry = find_direct_entry(&ip, NULL);
- 	if (!entry)
- 		goto out_unlock;
+I could understand encoding of percentages in way of register value, but
+a boolean flag is too much.
+
+
+Best regards,
+Krzysztof

@@ -2,68 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB514CC46B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF794CC470
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbiCCRzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S233871AbiCCR5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiCCRzM (ORCPT
+        with ESMTP id S229662AbiCCR5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:55:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E36D151D21;
-        Thu,  3 Mar 2022 09:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UV2hB1zkm4w2N/cVmxd2f8qUZG8NhtBV7uEZ+ZDD/j8=; b=5G9BjEnyNDNGU8wiwVpz6l9+v1
-        PUAzOVWDaQPbz5e1ScvAS27cYYNwAImal4U3tQy8gb4YlerafX+sFB4q+TzEgKWXjALQXItdxp65O
-        qgz3wYslIHyOYkkaEO81CJWDSqUcHfvaxsA1qoAyknGw/5r/E3g+oW1SRSXN/QUIOQEwTvJKm9Kem
-        8vpBRWyOWQmTEXjEImbVk/UaTXVBXTjbTHEdWMyasL2uxRROZwaI/b76goKiphRG3U13RkIq6B+Kf
-        bd6a8sItPaiPgMOo+oNYNrmjI8Dho5sHbQtX/Pv/dzX21HuI2U+NU/tQdjI7YKnqlVtlb+J05OMS/
-        vMCb0cJg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPpeY-007P9M-BJ; Thu, 03 Mar 2022 17:54:14 +0000
-Date:   Thu, 3 Mar 2022 09:54:14 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <YiEAxgVYx552UQFS@infradead.org>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
- <20220302161917.gx5icfszakoye4uh@maple.lan>
- <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
- <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
- <YiDEmRf3X0fxSayK@infradead.org>
- <20220303145949.inaz2tecmfuek2hf@maple.lan>
+        Thu, 3 Mar 2022 12:57:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001441405C6
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:56:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646330192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pt2NEyN77WvQVDGkaIF/Nqcc+6j6rTEVnHq5++rUv8c=;
+        b=LhSZwx9iahYcAre7GSsJuHJgirNF2cDLo31kjmjVYEnEwr2aVx6O1CXlOOkKqwY/Ylq/Nn
+        9dRsaOySgRo715xurguPPp+3TvW0ZG4tzgzNB86Ot3vMhPRQZ7cN3Ufs4dWl/0+Vz55nn/
+        en6YknoKsjTvuVVJFmzaGz9ymuN6g7c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-MsJQHMtHPVumj4VNRIi2gQ-1; Thu, 03 Mar 2022 12:56:29 -0500
+X-MC-Unique: MsJQHMtHPVumj4VNRIi2gQ-1
+Received: by mail-ej1-f70.google.com with SMTP id sa7-20020a170906eda700b006d1b130d65bso3116886ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 09:56:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Pt2NEyN77WvQVDGkaIF/Nqcc+6j6rTEVnHq5++rUv8c=;
+        b=AmSXFHy3sYnBw7SErg/+IvewCJTjLL9PeUbRd1myiMMi79wPThCom/87BmlUKMfRKP
+         ViSq8kqRm/r+8HOu0b/TNf0h4KDdbtQ3p1IW/3TcTV82SEF5ir+SVSWH8raBEyL1/xzr
+         Ycgz7Mmf04wp1l4k+p67fonck5FfRZAvKCS27XrfrwFXwITfC9aa8XHM3BfpnBZh48pT
+         uBfFaoEq7RBvQasWkUY1zh/r51arbdbFG0kA/PKn2keycKsJfFuRnGs7wl/4p4Q/Q68t
+         gRmNikk5aRJ0I4dDhBy3TciHTrXGyvZMRVBiHEejLB2hCXS8/O/XaPSuwX6GilE15fkM
+         FKkw==
+X-Gm-Message-State: AOAM5321gWnMDJH80c8cIH5zyzFA8YI4Ppnapcrg+Ob0BjCof/9KPYk4
+        Vsa6r2Vju2eNMv+ZdBIIWCOH10dekPwFufNIsPyc1d+JCAUd2TTfeT9szzamH5/LSnv3qZtI6Vx
+        aMwpsvmkMAWvdJFgc7s4/cciY
+X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id y20-20020a056402441400b004084dc03ee9mr35543559eda.203.1646330187927;
+        Thu, 03 Mar 2022 09:56:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPRtKLOiKu9tA7Gy98mghBFK0zV7El+3s6ksl1od7pWlMdP3fg7CriUUTbr2yPPhb7rsU+gg==
+X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id y20-20020a056402441400b004084dc03ee9mr35543539eda.203.1646330187754;
+        Thu, 03 Mar 2022 09:56:27 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id lk10-20020a170906cb0a00b006da92317793sm825104ejb.131.2022.03.03.09.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 09:56:27 -0800 (PST)
+Message-ID: <535336dc-8c54-7c3a-ecf6-b2920ea99297@redhat.com>
+Date:   Thu, 3 Mar 2022 18:56:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303145949.inaz2tecmfuek2hf@maple.lan>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] ACPI / x86: Work around broken XSDT on Advantech
+ DAC-BJ01 board
+Content-Language: en-US
+To:     Mark Cilissen <mark@yotsuba.nl>
+Cc:     linux-acpi@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kernel test robot <lkp@intel.com>
+References: <20220302040800.10355-1-mark@yotsuba.nl>
+ <832a5b2e-d70c-f1a6-e377-7697b1eb7049@redhat.com>
+ <7BD8A71A-95C7-4A10-82FD-BEAAE0B0DDE9@yotsuba.nl>
+ <43b0c275-e728-492b-c6a7-d054fae72117@redhat.com>
+ <4BBB58DC-653C-4373-A5F5-9239C86C8AE8@yotsuba.nl>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <4BBB58DC-653C-4373-A5F5-9239C86C8AE8@yotsuba.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,173 +93,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:59:49PM +0000, Daniel Thompson wrote:
-> 
-> One of the best ways that we can common up code might be to dust
-> off some code I wrote a while back to display seq_files from
-> kdb.
-> 
-> The basic idea worked well enough but it often needs special
-> start/stop operatings to ensure the start meeds kdb's rather
-> odd locking restrictions. If there is a willingness for
-> something like the below to be included in the module code then we
-> could replace kdb_lsmod() with something that reused the code to
->  format /proc/modules.
+Hi,
 
-Displaying seq_files sounds nice to have, but in the short term I'm
-just thinking of something like this:
+On 3/3/22 14:42, Mark Cilissen wrote:
+> 
+>> On 3 Mar 4 Reiwa, at 14:38, Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi Mark,
+> 
+> Hi Hans,
+> 
+>> On 3/2/22 21:20, Mark Cilissen wrote:
+>>>>
+>>
+>> I think that there are a lot more boards that will have
+>> DMI_BIOS_VENDOR == "Phoenix Technologies LTD"
+>> then that there are boards that will have
+>> DMI_PRODUCT_NAME == "Bearlake CRB Board"
+>>
+>> So if you want to make the DMI match as specific as possible then
+>> IMHO dropping the bios-vendor match is best.
+> 
+> Of course, but just to clarify -- my proposal above is to drop
+> 
+>> DMI_MATCH(DMI_SYS_VENDOR, "NEC”),
+> 
+> not
+> 
+>> DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board”),
+> 
+> . :-)
 
-diff --git a/include/linux/kdb.h b/include/linux/kdb.h
-index ea0f5e580fac2..07dfb6a20a1c4 100644
---- a/include/linux/kdb.h
-+++ b/include/linux/kdb.h
-@@ -222,5 +222,6 @@ enum {
- 
- extern int kdbgetintenv(const char *, int *);
- extern int kdb_set(int, const char **);
-+int kdb_lsmod(int argc, const char **argv);
- 
- #endif	/* !_KDB_H */
-diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-index 0852a537dad4c..292a407118a4f 100644
---- a/kernel/debug/kdb/kdb_main.c
-+++ b/kernel/debug/kdb/kdb_main.c
-@@ -2004,54 +2004,6 @@ static int kdb_ef(int argc, const char **argv)
- 	return 0;
- }
- 
--#if defined(CONFIG_MODULES)
--/*
-- * kdb_lsmod - This function implements the 'lsmod' command.  Lists
-- *	currently loaded kernel modules.
-- *	Mostly taken from userland lsmod.
-- */
--static int kdb_lsmod(int argc, const char **argv)
--{
--	struct module *mod;
--
--	if (argc != 0)
--		return KDB_ARGCOUNT;
--
--	kdb_printf("Module                  Size  modstruct     Used by\n");
--	list_for_each_entry(mod, kdb_modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--
--		kdb_printf("%-20s%8u  0x%px ", mod->name,
--			   mod->core_layout.size, (void *)mod);
--#ifdef CONFIG_MODULE_UNLOAD
--		kdb_printf("%4d ", module_refcount(mod));
--#endif
--		if (mod->state == MODULE_STATE_GOING)
--			kdb_printf(" (Unloading)");
--		else if (mod->state == MODULE_STATE_COMING)
--			kdb_printf(" (Loading)");
--		else
--			kdb_printf(" (Live)");
--		kdb_printf(" 0x%px", mod->core_layout.base);
--
--#ifdef CONFIG_MODULE_UNLOAD
--		{
--			struct module_use *use;
--			kdb_printf(" [ ");
--			list_for_each_entry(use, &mod->source_list,
--					    source_list)
--				kdb_printf("%s ", use->target->name);
--			kdb_printf("]\n");
--		}
--#endif
--	}
--
--	return 0;
--}
--
--#endif	/* CONFIG_MODULES */
--
- /*
-  * kdb_env - This function implements the 'env' command.  Display the
-  *	current environment variables.
-diff --git a/kernel/debug/kdb/kdb_private.h b/kernel/debug/kdb/kdb_private.h
-index 0d2f9feea0a46..1f8c519a5f81c 100644
---- a/kernel/debug/kdb/kdb_private.h
-+++ b/kernel/debug/kdb/kdb_private.h
-@@ -226,10 +226,6 @@ extern void kdb_kbd_cleanup_state(void);
- #define kdb_kbd_cleanup_state()
- #endif /* ! CONFIG_KDB_KEYBOARD */
- 
--#ifdef CONFIG_MODULES
--extern struct list_head *kdb_modules;
--#endif /* CONFIG_MODULES */
--
- extern char kdb_prompt_str[];
- 
- #define	KDB_WORD_SIZE	((int)sizeof(unsigned long))
-diff --git a/kernel/module.c b/kernel/module.c
-index 6cea788fd965c..754ec20aab4f1 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -57,6 +57,7 @@
- #include <linux/bsearch.h>
- #include <linux/dynamic_debug.h>
- #include <linux/audit.h>
-+#include <linux/kdb.h>
- #include <uapi/linux/module.h>
- #include "module-internal.h"
- 
-@@ -252,10 +253,6 @@ static void mod_update_bounds(struct module *mod)
- 		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
- }
- 
--#ifdef CONFIG_KGDB_KDB
--struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
--#endif /* CONFIG_KGDB_KDB */
--
- static void module_assert_mutex_or_preempt(void)
- {
- #ifdef CONFIG_LOCKDEP
-@@ -4808,3 +4805,45 @@ void module_layout(struct module *mod,
- }
- EXPORT_SYMBOL(module_layout);
- #endif
-+
-+#ifdef CONFIG_KGDB_KDB
-+int kdb_lsmod(int argc, const char **argv)
-+{
-+	struct module *mod;
-+
-+	if (argc != 0)
-+		return KDB_ARGCOUNT;
-+
-+	kdb_printf("Module                  Size  modstruct     Used by\n");
-+	list_for_each_entry(mod, &modules, list) {
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+
-+		kdb_printf("%-20s%8u  0x%px ", mod->name,
-+			   mod->core_layout.size, (void *)mod);
-+#ifdef CONFIG_MODULE_UNLOAD
-+		kdb_printf("%4d ", module_refcount(mod));
-+#endif
-+		if (mod->state == MODULE_STATE_GOING)
-+			kdb_printf(" (Unloading)");
-+		else if (mod->state == MODULE_STATE_COMING)
-+			kdb_printf(" (Loading)");
-+		else
-+			kdb_printf(" (Live)");
-+		kdb_printf(" 0x%px", mod->core_layout.base);
-+
-+#ifdef CONFIG_MODULE_UNLOAD
-+		{
-+			struct module_use *use;
-+			kdb_printf(" [ ");
-+			list_for_each_entry(use, &mod->source_list,
-+					    source_list)
-+				kdb_printf("%s ", use->target->name);
-+			kdb_printf("]\n");
-+		}
-+#endif
-+	}
-+
-+	return 0;
-+}
-+#endif	/* CONFIG_KGDB_KDB */
+Ah I see, I did indeed misunderstand that. Still NEC is not that
+often seen as sys-vendor, so I still believe dropping the bios-vendor
+match is best.
+
+Regards,
+
+Hans
+

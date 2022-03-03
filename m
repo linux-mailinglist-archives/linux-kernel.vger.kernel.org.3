@@ -2,258 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421CC4CB98E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEECA4CB994
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiCCIuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S229609AbiCCIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiCCIt4 (ORCPT
+        with ESMTP id S231686AbiCCIuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:49:56 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7373A17585A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:49:09 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id x14so3453920ill.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=31oR/5R8uiOoYLaqojfd9sfVOvx41Qx3BFeK4/Ytd84=;
-        b=j5CDqRS3oxPTE35yyFrHx2Y6GB2DlGJtO1iBOz3pvlLX8PTZyPdSu/k/MLAFVdzMdM
-         WI9TdX0wk42+MOxOtu4a5Tz8h8cw0KwEDv4EKo5pIzBWME8qpuq6MbGHgKPpeNNbRE77
-         9TKifPjcQSQzE+W9OZUSdKgA6FFRCCsXKvU63O2nMiQw248a4c6xQDUeY0MMkBERCopw
-         BtfK7bSiJ9jtqkj6DcVbpFE22wS/gbrHcHuZUlUtZX2yo/8axZqS5aeV5waqSET/uOHQ
-         7Utib7uaAZUc2eCJhMiVrezn2YYr10VwkBY8JdWuAUpOb5CHIJea6BQ/t6bS6xrOfwWL
-         qNfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=31oR/5R8uiOoYLaqojfd9sfVOvx41Qx3BFeK4/Ytd84=;
-        b=Q0wV7ff4kIxZ2HvXW4sj5uZHMEgh3aJsDYe6i0ezWPjFDvHoF+TRWGgoHAVAGHJBnP
-         MvfBsxrH9/OCP58tzdwkZdb0cQ40mukH+8p2/iHZnszViwXMdCshtl1eAtjLnWp94q9Z
-         bhWf/1WwWqf76w3bLtfNoHo+Sc86EdPKjYMXy6If6uWohgY0uiJUJVWHyHLR9Ev02Oda
-         rW63c63mbZDfCy1YU3QYeRdWHDHn6BGhVZA9AQzTRa9WtrF553i5sO/MXUvDKIorhGrj
-         YqnjQlTIo4KKVqFSLH6B3MubTQBLmxIV4HPTY+t4X6DUh7E827OjQw4+qjg2SZSHU98f
-         +RyQ==
-X-Gm-Message-State: AOAM533YJzVz9dt2Vu4ggVGjA/WbZ38bN6tdElULNrV3fE507dxOdKYJ
-        CsAHiq+v4kF3z+bTxjG2SHi4nw==
-X-Google-Smtp-Source: ABdhPJwPOMyXQ3RYefx6bbUpZKR8O4u9lKzqY1zOzCWZGh6vbFl1jFWIQFFAAaSdqNoF7NR8nEpD4w==
-X-Received: by 2002:a05:6e02:15c8:b0:2bd:fdca:18a8 with SMTP id q8-20020a056e0215c800b002bdfdca18a8mr30638024ilu.320.1646297348867;
-        Thu, 03 Mar 2022 00:49:08 -0800 (PST)
-Received: from localhost.localdomain ([182.64.85.91])
-        by smtp.gmail.com with ESMTPSA id m9-20020a923f09000000b002c2a1a3a888sm1480704ila.50.2022.03.03.00.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 00:49:08 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org, bjorn.andersson@linaro.org,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v3 6/6] arm64: dts: qcom: sa8155p-adp: Enable ethernet node
-Date:   Thu,  3 Mar 2022 14:18:24 +0530
-Message-Id: <20220303084824.284946-7-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
-References: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
+        Thu, 3 Mar 2022 03:50:55 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAEF175866;
+        Thu,  3 Mar 2022 00:50:08 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A7171FF808;
+        Thu,  3 Mar 2022 08:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646297407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5UW3cjbm8xQStGhB2RvIfU4jnFusyu8R3w5M3pRZH24=;
+        b=dANPvPfz8FfZs3WYqIq9bl4LlaLJLTAlJ5KjEa5/oSz4t4sxrd/UksWc73/lSCGG+nrHCd
+        mQIxG3Ur43o8TMewlH30a6KsQHToz3ai9gTjVkLYOfs1J0ysL1HCB5xUmtUX3PGTynenxc
+        C9JR86pqix6ZdzHmr4NC1Xi/zegZdOfIZIewOvdoXVb8ro7spl0+Vg6PcWaqO+k2QU+Zyr
+        IZ/nAzMfgna+2fCIn63SCZP9bEOTTG/pLhMuc694mgQVT8ubQa8/cmDsgN7/OandstlQoA
+        RwRHGSWNGI6ycsn7veJsYuVOW0Xp94gZ89qONjeyTS3SL9/Y9UjVGSN76TCcQA==
+Date:   Thu, 3 Mar 2022 09:48:40 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Message-ID: <20220303094840.3b75c4c9@fixe.home>
+In-Reply-To: <Yhe/qhFNNiGVHSW1@sirena.org.uk>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220224154040.2633a4e4@fixe.home>
+        <2d3278ef-0126-7b93-319b-543b17bccdc2@redhat.com>
+        <20220224174205.43814f3f@fixe.home>
+        <Yhe/qhFNNiGVHSW1@sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Koul <vkoul@kernel.org>
+Le Thu, 24 Feb 2022 17:26:02 +0000,
+Mark Brown <broonie@kernel.org> a =C3=A9crit :
 
-Enable the etheret node, add the phy node and pinctrl for ethernet.
+> On Thu, Feb 24, 2022 at 05:42:05PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Hans de Goede <hdegoede@redhat.com> a =C3=A9crit : =20
+>=20
+> > > As Mark already mentioned the regulator subsystem has shown to
+> > > be a bit problematic here, but you don't seem to need that? =20
+>=20
+> > Indeed, I don't need this subsystem. However, I'm still not clear why
+> > this subsystem in particular is problematic. Just so that I can
+> > recognize the other subsystems with the same pattern, could you explain
+> > me why it is problematic ?  =20
+>=20
+> ACPI has a strong concept of how power supply (and general critical
+> resources) for devices should be described by firmware which is very
+> different to that which DT as it is used in Linux has, confusing that
+> model would make it much harder for generic OSs to work with generic
+> ACPI systems, and makes it much easier to create unfortunate interactions
+> between bits of software expecting ACPI models and bits of software
+> expecting DT models for dealing with a device.  Potentially we could
+> even run into issues with new versions of Linux if there's timing or
+> other changes.  If Linux starts parsing the core DT bindings for
+> regulators on ACPI systems then that makes it more likely that system
+> integrators who are primarily interested in Linux will produce firmwares
+> that run into these issues, perhaps unintentionally through a "this just
+> happens to work" process.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[bhsharma: Correct ethernet/rgmii related pinmuxs, specify multi-queues and
- plug in the PHY interrupt for WOL]
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 144 +++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
+Ok that's way more clear.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-index 8756c2b25c7e..474f688f14a2 100644
---- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-@@ -47,6 +47,65 @@ vreg_s4a_1p8: smps4 {
- 
- 		vin-supply = <&vreg_3p3>;
- 	};
-+
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <4>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xC>;
-+		};
-+	};
-+
-+	mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <4>;
-+		snps,tx-sched-wrr;
-+
-+		queue0 {
-+			snps,weight = <0x10>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x0>;
-+		};
-+
-+		queue1 {
-+			snps,weight = <0x11>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue2 {
-+			snps,weight = <0x12>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x2>;
-+		};
-+
-+		queue3 {
-+			snps,weight = <0x13>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x3>;
-+		};
-+	};
- };
- 
- &apps_rsc {
-@@ -317,6 +376,42 @@ &remoteproc_cdsp {
- 	firmware-name = "qcom/sa8155p/cdsp.mdt";
- };
- 
-+&ethernet {
-+	status = "okay";
-+
-+	snps,reset-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
-+	snps,reset-active-low;
-+	snps,reset-delays-us = <0 11000 70000>;
-+
-+	snps,ptp-ref-clk-rate = <250000000>;
-+	snps,ptp-req-clk-rate = <96000000>;
-+
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet_defaults>;
-+
-+	phy-handle = <&rgmii_phy>;
-+	phy-mode = "rgmii";
-+	mdio {
-+		#address-cells = <0x1>;
-+		#size-cells = <0x0>;
-+
-+		compatible = "snps,dwmac-mdio";
-+
-+		/* Micrel KSZ9031RNZ PHY */
-+		rgmii_phy: phy@7 {
-+			reg = <0x7>;
-+
-+			interrupt-parent = <&tlmm>;
-+			interrupts-extended = <&tlmm 124 IRQ_TYPE_EDGE_FALLING>; /* phy intr */
-+			device_type = "ethernet-phy";
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+		};
-+	};
-+};
-+
- &uart2 {
- 	status = "okay";
- };
-@@ -407,4 +502,53 @@ mux {
- 			drive-strength = <2>;
- 		};
- 	};
-+
-+	ethernet_defaults: ethernet-defaults {
-+		mdc {
-+			pins = "gpio7";
-+			function = "rgmii";
-+			bias-pull-up;
-+		};
-+
-+		mdio {
-+			pins = "gpio59";
-+			function = "rgmii";
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx {
-+			pins = "gpio117", "gpio118", "gpio119", "gpio120", "gpio115", "gpio116";
-+			function = "rgmii";
-+			bias-disable;
-+			drive-strength = <2>;
-+		};
-+
-+		rgmii-tx {
-+			pins = "gpio122", "gpio4", "gpio5", "gpio6", "gpio114", "gpio121";
-+			function = "rgmii";
-+			bias-pull-up;
-+			drive-strength = <16>;
-+		};
-+
-+		phy-intr {
-+			pins = "gpio124";
-+			function = "emac_phy";
-+			bias-disable;
-+			drive-strength = <8>;
-+		};
-+
-+		pps {
-+			pins = "gpio81";
-+			function = "emac_pps";
-+			bias-disable;
-+			drive-strength = <8>;
-+		};
-+
-+		phy-reset {
-+			pins = "gpio79";
-+			function = "gpio";
-+			bias-pull-up;
-+			drive-strength = <16>;
-+		};
-+	};
- };
--- 
-2.35.1
+>=20
+> As a result of this we very much do not want to have the regulator code
+> parsing DT bindings using the fwnode APIs since that makes it much
+> easier for us to end up with a situation where we are interpreting _DSD
+> versions of regulator bindings and ending up with people making systems
+> that rely on that.  Instead the regulator API is intentional about which
+> platform description interfaces it is using.  We could potentially have
+> something that is specific to swnode and won't work with general fwnode
+> but it's hard to see any advantages for this over the board file based
+> mechanism we have already, swnode offers less error detection (typoing
+> field names is harder to spot) and the data marshalling takes more code.
 
+Instead of making it specific for swnode, could we make it instead non
+working for acpi nodes ? Thus, the parsing would work only for swnode
+and device_node, not allowing to use the fwnode support with acpi for
+such subsystems (not talking about regulators here).
+
+If switching to board file based mechanism, this means that all drivers
+that are used by the PCIe card will have to be modified to support this
+mechanism.
+
+>=20
+> fwnode is great for things like properties for leaf devices since those
+> are basically a free for all on ACPI systems, it allows us to quickly
+> and simply apply the work done defining bindings for DT to ACPI systems
+> in a way that's compatible with how APCI wants to work.  It's also good
+> for cross device bindings that are considered out of scope for ACPI,
+> though a bit of caution is needed determining when that's the case.
+
+Ok got it, thanks for the in-depth explanations.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

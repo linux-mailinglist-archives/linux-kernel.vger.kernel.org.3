@@ -2,147 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B81E4CC69E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D054CC6A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbiCCTzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S235663AbiCCT7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234886AbiCCTzv (ORCPT
+        with ESMTP id S232206AbiCCT7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:55:51 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBFD18BA48
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:55:03 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id n14so9476273wrq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zsIbz0/b386hU/ZdkOSBubB6mU+6IwbbmnEE1Ycu+MY=;
-        b=P2/lLp3fpnzXDyB/a8TOfUWFAEABVhPQyw4vrBIqcCPNSqVsh75hfUEo7ksNNW/Lcb
-         ORQN/swrL9IYwChFBbsy08B20shjCFURo9fA0UgjDt75cIZKeskIDctWDweIMszbiF6m
-         3+nmbWDgvuxmybGFmrYHRHpPTjZCB/qljmJZ3vd6zWuX2A0yZ1UHZY77KScrPe2Ub+16
-         4cEBAP5AxkTO00SGIVZ8/zdzMBBN5llAfSpc1JftBSSCtowCDLpqBx1t2zciHAwnwV+W
-         7sLq/+PwEBc8tt8f0vczCDQUcL29TKHITgigXYDaIVbTLoXTERVs1vX0tt/vf35T8kAu
-         f+tw==
+        Thu, 3 Mar 2022 14:59:23 -0500
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF291F68DA;
+        Thu,  3 Mar 2022 11:58:36 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id bt13so12541467ybb.2;
+        Thu, 03 Mar 2022 11:58:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zsIbz0/b386hU/ZdkOSBubB6mU+6IwbbmnEE1Ycu+MY=;
-        b=V58hXOiyuy468MzbsW8hcTpj03A5uFw9JKB7qFj28sK4Kjr0thXN883eUXoyEDZLJ/
-         NIp6SoKOdnf/uCuvbKnOE8VgsKyz2vRk5wY5HA65HXZgJiEOpnZNc+zBpCQkmp9ktR3A
-         mjoaY39yqJ9pSVDT6JgPeI/+Cmt+LAlxbBdMQ8MF5ACje1jnmdddebNmeMTy5wh0c6HH
-         1SQE+9IynNYeAPFD83CSexc3nWZ0mLWqAfmP9XeC0Kra2ZJmdM9H0a4ZthJBovadDoY7
-         +liAtTyigTesjMA50bXZ5xo830wTxinXrJEAFrzDc3v0ari6F10JM79imQa0GEBnqoCh
-         L6tQ==
-X-Gm-Message-State: AOAM533zdNa4e05yYqC5llvYCA4Su8Tiv7DuFKmyyQme2jF/g/v7t48V
-        9p8GnkEPOxvXYFftxS5gJ1OT1Q==
-X-Google-Smtp-Source: ABdhPJwSAaV6ui1w2AUfj/WG1jEQ2FypYIkPGjDYhD/nRjjjEqPVDKL8xOYDM+Z1Oa9dFUUITZz1Yw==
-X-Received: by 2002:a5d:5407:0:b0:1f0:1246:5a8c with SMTP id g7-20020a5d5407000000b001f012465a8cmr10294116wrv.193.1646337302326;
-        Thu, 03 Mar 2022 11:55:02 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm16466518wmk.9.2022.03.03.11.55.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:55:01 -0800 (PST)
-Date:   Thu, 3 Mar 2022 20:54:58 +0100
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     John Keeping <john@metanate.com>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 06/18] crypto: rockchip: add fallback for cipher
-Message-ID: <YiEdEoX79kDp8kUY@Red>
-References: <20220302211113.4003816-1-clabbe@baylibre.com>
- <20220302211113.4003816-7-clabbe@baylibre.com>
- <YiDO8Tt9Lhx530Oz@donbot>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sjBP9R5sSBRCjbqotPuBU59YCmOLVJ0MXeepARz8oD4=;
+        b=V/smNpGsI0+UZVnl3kGV8QXrCILPzUCTozdrCGW5BV1XB9t2mbO7YgYkDgdJOr/uQe
+         gozWbktjOQSli7ne3ffVkxr4NdbK4ctkyWTT01MPpqkVvnE5xKwRbcqB9ZeGrszG1AEK
+         4DqnMTALauS56Q2tYWXc0mZ2WqvKG05qOIzpr5VRkYMPh5Ex/pJgkPRMgz6oQJUdNgFw
+         oBkWTPHR4R5/rIwjMe5yKCeIoe9USTIMTlEPBuCtuAuqVAmpNeLJGWrwI2TM7Uh6iBPY
+         nZs6YNzBy3/SJaTcB2lasQJcU02hRh4BmWZi3TIqpiBE4RbTLl5THVEhB4iZLs8S0hFY
+         ps8w==
+X-Gm-Message-State: AOAM5324zFYgn5lKDZzRnvZ9rKdDaBF5QZ/pvdXz3baJ2W+ClFtW6jL5
+        bnO78Itqcjiytl8591OkPy8ZuN6lLU8xQInizcw=
+X-Google-Smtp-Source: ABdhPJy69ncq5Im8YOiTxphflVK10P7CEA+c49Q/8seTr19kjc9+9V/j2pyHi+8QAnbezgGR1Immb/MRT5YcuqB19vI=
+X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
+ h62-20020a253a41000000b0062886a20dbcmr12746549yba.633.1646337515899; Thu, 03
+ Mar 2022 11:58:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YiDO8Tt9Lhx530Oz@donbot>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220228223936.54310-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Mar 2022 20:58:25 +0100
+Message-ID: <CAJZ5v0hsdRxnHs-1ra14ZQU6gmAiisS=Jc7Hpkkr-vZuWuOiww@mail.gmail.com>
+Subject: Re: [PATCH v1 1/7] ACPI: enumeration: Discourage to use custom _DSM methods
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, Mar 03, 2022 at 02:21:37PM +0000, John Keeping a écrit :
-> On Wed, Mar 02, 2022 at 09:11:01PM +0000, Corentin Labbe wrote:
-> > The hardware does not handle 0 size length request, let's add a
-> > fallback.
-> > Furthermore fallback will be used for all unaligned case the hardware
-> > cannot handle.
-> > 
-> > Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> >  drivers/crypto/rockchip/rk3288_crypto.h       |  2 +
-> >  .../crypto/rockchip/rk3288_crypto_skcipher.c  | 97 ++++++++++++++++---
-> >  2 files changed, 86 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-> > index c919d9a43a08..8b1e15d8ddc6 100644
-> > --- a/drivers/crypto/rockchip/rk3288_crypto.h
-> > +++ b/drivers/crypto/rockchip/rk3288_crypto.h
-> > @@ -246,10 +246,12 @@ struct rk_cipher_ctx {
-> >  	struct rk_crypto_info		*dev;
-> >  	unsigned int			keylen;
-> >  	u8				iv[AES_BLOCK_SIZE];
-> > +	struct crypto_skcipher *fallback_tfm;
-> >  };
-> >  
-> >  struct rk_cipher_rctx {
-> >  	u32				mode;
-> > +	struct skcipher_request fallback_req;   // keep at the end
-> >  };
-> >  
-> >  enum alg_type {
-> > diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> > index bbd0bf52bf07..bf9d398cc54c 100644
-> > --- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> > +++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> > @@ -13,6 +13,63 @@
-> >  
-> >  #define RK_CRYPTO_DEC			BIT(0)
-> >  
-> > +static int rk_cipher_need_fallback(struct skcipher_request *req)
-> > +{
-> > +	struct scatterlist *sgs, *sgd;
-> > +
-> > +	if (!req->cryptlen)
-> > +		return true;
-> > +
-> > +	sgs = req->src;
-> > +	while (sgs) {
-> > +		if (!IS_ALIGNED(sgs->offset, sizeof(u32))) {
-> > +			return true;
-> > +		}
-> > +		if (sgs->length % 16) {
-> 
-> Can this be relaxed to check for alignment to 4 rather than 16?  That's
-> the requirement for programming the registers.
+On Mon, Feb 28, 2022 at 11:39 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Since we have _DSD established and specified (ACPI v5.1+) there is no
+> need to use custom _DSM methods. Rewrite documentation to use _DSD.
+>
+> Fixes: f60e7074902a ("misc: at25: Make use of device property API")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  .../firmware-guide/acpi/enumeration.rst       | 48 ++++++++-----------
+>  1 file changed, 21 insertions(+), 27 deletions(-)
+>
+> diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
+> index d0022567c022..3b221cc9ff5f 100644
+> --- a/Documentation/firmware-guide/acpi/enumeration.rst
+> +++ b/Documentation/firmware-guide/acpi/enumeration.rst
+> @@ -227,43 +227,37 @@ to at25 SPI eeprom driver (this is meant for the above ACPI snippet)::
+>         };
+>
+>  Note that this driver actually needs more information like page size of the
+> -eeprom etc. but at the time writing this there is no standard way of
+> -passing those. One idea is to return this in _DSM method like::
+> +eeprom, etc. This information can be passed via _DSD method like::
+>
+>         Device (EEP0)
+>         {
+>                 ...
+> -               Method (_DSM, 4, NotSerialized)
+> +               Name (_DSD, Package ()
+>                 {
+> -                       Store (Package (6)
+> +                       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+> +                       Package ()
+>                         {
+> -                               "byte-len", 1024,
+> -                               "addr-mode", 2,
+> -                               "page-size, 32
+> -                       }, Local0)
+> -
+> -                       // Check UUIDs etc.
+> -
+> -                       Return (Local0)
+> -               }
+> -
+> -Then the at25 SPI driver can get this configuration by calling _DSM on its
+> -ACPI handle like::
+> -
+> -       struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> -       struct acpi_object_list input;
+> -       acpi_status status;
+> +                               Package () { "size", 1024 },
+> +                               Package () { "pagesize", 32 },
+> +                               Package () { "address-width", 16 },
+> +                       }
+> +               })
+> +       }
+>
+> -       /* Fill in the input buffer */
+> +Then the at25 SPI driver can get this configuration by calling device property
+> +APIs during ->probe() phase like::
+>
+> -       status = acpi_evaluate_object(ACPI_HANDLE(&spi->dev), "_DSM",
+> -                                     &input, &output);
+> -       if (ACPI_FAILURE(status))
+> -               /* Handle the error */
+> +       err = device_property_read_u32(dev, "size", &size);
+> +       if (err)
+> +               ...error handling...
+>
+> -       /* Extract the data here */
+> +       err = device_property_read_u32(dev, "pagesize", &page_size);
+> +       if (err)
+> +               ...error handling...
+>
+> -       kfree(output.pointer);
+> +       err = device_property_read_u32(dev, "address-width", &addr_width);
+> +       if (err)
+> +               ...error handling...
+>
+>  I2C serial bus support
+>  ======================
+> --
 
-No we cannot, the hardware could operate only one SG at a time, and the cipher operation need to be complete, so the length should be a multiple of AES_BLOCK_SIZE.
-The original driver already have this size check.
-But for DES/3DES this check is bad and should be 8, so a fix is needed anyway.
+Applied as 5.18 material along with the rest of the series, but I
+dropped the first hunk in patch [6/7] which didn't apply.
 
-> 
-> But I think this check is wrong in general as it doesn't account for
-> cryptlen; with fscrypt I'm seeing sgs->length == 255 but cryptlen == 16
-> so the hardware can be used but at the moment the fallback path is
-> triggered.
-
-Yes, I need to check min(sg->length, cryptlen_remaining) instead.
-I will fix that.
-
-Thanks.
+Thanks!

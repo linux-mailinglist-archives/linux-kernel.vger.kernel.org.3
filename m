@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7414CB435
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3A44CB439
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiCCBUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S231302AbiCCBUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiCCBUT (ORCPT
+        with ESMTP id S231169AbiCCBUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:20:19 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15515D04B2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:19:36 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id c23so4101837ioi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:19:36 -0800 (PST)
+        Wed, 2 Mar 2022 20:20:39 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91161688E2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:19:55 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id b5so187906ilj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:19:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2BhmaRmYMwsDXMOGXqzs2oLmHsIhmCbTH9eQZva/pJw=;
-        b=kNw3rAoqo+2XZvdIHomz64pvqIfkAMETqMITBZyL8OEtmLeMoNoVWNzVPLbBi0uhn5
-         DuE/xYIl9e+9097UJrx+X8Xj7VPWKDmn+iOobdRNCxt4TqwU89WnizQsDjTJU0G3GxH6
-         b7EfiQqrvhlnyVrniLpJLx9Pqm5Uv2o0ZBB1mEq07C7Jm7fH63tl++Mzmi+vPYHpU+mj
-         c/pfp+wujPXvfwLHKW5nr6TbQSL43bk2FYA73c46W0OtUaMx/8qVXu+gf4u+zgI3YqoR
-         Lk0CY3Lwrd/93y6/+ihkjO2dWXw2FfyFeql+ZWv1cKY3/hpgswFaNv9qinPGg87fi4TR
-         RrYA==
+        bh=XfdxHsJdjpHJMT5Bk6OrqDEOsR0qkATqti2d54wO7lo=;
+        b=j9gOzaJxLQ29yG3yvnUU5jtZMlCzMw81UmGCof7z/ll/LSRBr6hl86GwqCJk/GPj2v
+         GgDbwlTHOYsE5XBYqFm616+DrrJkKWTV32t9/+DWkx5g0nap6wVoRby2i9WmAjJjFu1e
+         MSEt8NJXImj59mVGBg2ybShyeVr8JFmMk6zys79MORGZrOwOS8H8ReAxNgni9PhxeR0T
+         8YNnBRK6kZQ/3dI5wQ+JZFLexE27mVoMpkv/2PfS+JgOCPReWNGJYWR9fwAENAz6k//h
+         8x1zNUsdVpPyjXLuWItZ2R2WJhKYoLzcCJ4B4BrU95K0JxpLFrFKTDz+Do9IZNhhqwm6
+         oCRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2BhmaRmYMwsDXMOGXqzs2oLmHsIhmCbTH9eQZva/pJw=;
-        b=JHAWihW3nY81MxXIYdcasWUbvIX9TUr1Y4d0K+WcToRKvW2p6fR1nu596ANc4WXkWN
-         O062UaeUD57ua+p5Lf11dnshB22jIZHcxz47RqnzpaPZtYvTQYGLm1OHGK/Irwfmoo+S
-         UEwqQIFRb4xMLwnac0Lk39CeIxGoFCijLyBs3Qm+OpDgLfe4OQSW8ck8BkLZAiuUoXbA
-         EZNw5S2zL+QGV4Zv1I8Ul+pi4MBiDfmSRBtxGobpcZcOOnfUFRfGMqVoh5h+HoFnBmW/
-         JlvvPC+9jNtZgn4jkQbTGL4kXqnBjR+YTwxz/Qm/PRZh2ITozUfoodeqwm331TAW7Z2s
-         KLDg==
-X-Gm-Message-State: AOAM530dq3/4MDzojVdqP1fkERlOQtvkPTcLy4KFtRsqHBBVBRTFMsc9
-        PdB8cZf/tzT02R1fukSFqukvbH3GyPujoT883+Bf8W2+fnM=
-X-Google-Smtp-Source: ABdhPJzcwQ4PGFqO3cIk6IPiGPojtj10W5n1ah9y/D1T4iyI8Nw8gNbuJL47TYwmCjP5998JkHepATT0bRCcx/Eryw0=
-X-Received: by 2002:a05:6638:328b:b0:315:3802:697 with SMTP id
- f11-20020a056638328b00b0031538020697mr27659220jav.308.1646270375499; Wed, 02
- Mar 2022 17:19:35 -0800 (PST)
+        bh=XfdxHsJdjpHJMT5Bk6OrqDEOsR0qkATqti2d54wO7lo=;
+        b=u/IVCQDepkiWtF2xvTqSQOfv2k5DvoV3CgNg1xG5fE23lv3D3us6vgMq5IIgQKV50/
+         Qk2g0RjUmcvjdsFqch3d8qGhkvIxm++n99q3yIFNPkhLbEkjB6aJD5KvQ9dIX4+qa49v
+         zZ0joeEUcK6ntDWotG6uRNcp6Uz6e4qPF0UIdCEK5rZ+07d0HGFr4hI8m9bPTZXakV0a
+         US6cgWxnJ0t73F002jSDX3WD6zDvxMq/liuA7CZLp+4Sy3aAESpnXsdP0/Sd9w6lzCdn
+         1YiWCopaE5830Q0erV0+nTsVlLpxTUdkimyiL4X4RnSVVV+mAnmYwoZSv9U3GG5FZM2j
+         l8xg==
+X-Gm-Message-State: AOAM530s/k+eOrTPfpubeeAy2aT+GAN0qmzvsfXVv2olfbxa3bVM3Opt
+        b17MrkpHH4qSocQHdc0BBCoPC8odtscpuQd1w95aPnOh18Y=
+X-Google-Smtp-Source: ABdhPJxyx1WpMObbtDIfVBmDtK/+qLIkFnQyHTzYdT47kD/+mvGRqtvv3o7jKZdQe8VhuoUQUV/HN5CcBpvajIkXhJ8=
+X-Received: by 2002:a05:6e02:198b:b0:2c2:c454:ea7 with SMTP id
+ g11-20020a056e02198b00b002c2c4540ea7mr20629794ilf.151.1646270395383; Wed, 02
+ Mar 2022 17:19:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com> <20220223154718.83500-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220223154718.83500-2-andriy.shevchenko@linux.intel.com>
+References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com> <20220223154718.83500-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220223154718.83500-3-andriy.shevchenko@linux.intel.com>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Mar 2022 02:19:24 +0100
-Message-ID: <CANiq72mkmDYm1bxryS0Yknm9=j+nK7RhDKP9oGf1-6vVNp_rbQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] auxdisplay: lcd2s: Fix memory leak in ->remove()
+Date:   Thu, 3 Mar 2022 02:19:44 +0100
+Message-ID: <CANiq72msgSQ2Tp3mKd+AtK5yK5Jqhr2Xws_rdOFxAbqzMpFN2g@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] auxdisplay: lcd2s: Use proper API to free the
+ instance of charlcd object
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
@@ -70,8 +71,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Feb 23, 2022 at 4:47 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> Once allocated the struct lcd2s_data is never freed.
-> Fix the memory leak by switching to devm_kzalloc().
+> While it might work, the current approach is fragile in a few ways:
+> - whenever members in the structure are shuffled, the pointer will be wrong
+> - the resource freeing may include more than covered by kfree()
+>
+> Fix this by using charlcd_free() call instead of kfree().
 >
 > Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
 > Cc: Lars Poeschel <poeschel@lemonage.de>

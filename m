@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DDC4CC71D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D022D4CC742
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbiCCUiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
+        id S233194AbiCCUr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiCCUiA (ORCPT
+        with ESMTP id S229483AbiCCUr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:38:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C41D32C;
-        Thu,  3 Mar 2022 12:37:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6CA5B824B3;
-        Thu,  3 Mar 2022 20:37:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB6DC340EF;
-        Thu,  3 Mar 2022 20:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646339831;
-        bh=OXGr1PhWd90UciyXoThMqMTWRA8qGdjyNBBLaOztyWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X+KjScztBhjYUP8tJdR/XaLnR53G+5qb3QCupyPWaIdUxaHN+ARp5NZXvwhmUeXF1
-         caA0cXxRDYeCEs9kFx7eMBcZJUStWa2CkvacrvJGG1jGYCqhSxii4zPdxZnUZYdD38
-         PwDrY5sqlJNDieJtf7Oddv3DFhjIlYPEGGqyBNhwqY9ESjiqyxeGW3N0NE0xpQ/pht
-         RA9kyBDi4MJkNrQPHuNQBWwO5QxU259tlde65nIodNx6FHnKZ/1lj14a0Otn4DQonf
-         zjxhHxSU/WGYWCxBv2QYi8ZxbmmPQJbi3JMmlbSp0MJx3WM2KxzFZFr5YDIIKkHUH/
-         /t+H2u+oVsKdQ==
-Date:   Thu, 3 Mar 2022 14:45:26 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] drm/amd/display: Fix Wstringop-overflow warnings
- in dc_link_dp.c
-Message-ID: <20220303204526.GA1733280@embeddedor>
-References: <20220303172503.GA1731116@embeddedor>
- <202203030937.5BFE3EF@keescook>
- <20220303181957.GA1731711@embeddedor>
+        Thu, 3 Mar 2022 15:47:58 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6018FDEA3F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:47:12 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so7145581oos.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=+Puf4aNWGnBjbMoB3Susur6crhlYcLtx4j9Ip8HC7kA=;
+        b=k6W8e10+Uf4sakf0fAoRyizRgUlCGT2fKfRGf7YwCJrtx8hpizrlDmaFiq8woyaLIu
+         W+2+qR2dv4+7DFP95rd8s2jg2ZvOv5SouJRZ7Afuui/tPsw9eOVrD0vpNwJnfae5s/1O
+         p4+Jh9D3nwk0keSiFtAGFSLDSlgSabeDgSqRk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=+Puf4aNWGnBjbMoB3Susur6crhlYcLtx4j9Ip8HC7kA=;
+        b=nPbu+PPloU2i/3IpWSwNc346AFCjO2xx5XjZv3afBcFCHrTktEGoAyodvBkDEDEgzN
+         ws+9h7Vw/AV/K2H1F4cYkRiE6UArdSG74W/+AQ5HbJYacZizsQqXlRRxbE7U9zySF42l
+         I0ZG5K5IYNrUbiKJ/xonKPN1CVFw5djL1wz4V6a/f4/z1pAXkcBtg0I/1TVIh9MVjA1Y
+         CavedSujx4SF+8gkKb4fhYfW+DJfVWxZqDrsi0jFAS0fPTpJPhEjMnPZbffi7pDIXy49
+         Xjx47RnoKER3sBz8jQYbYXCWFwvbxN2JS833R4KRU728aC+TFyw+GBrvPa7tYRtjuKxp
+         +tAw==
+X-Gm-Message-State: AOAM531ADWg2+H7ugwJZr6Mrv15BhPJ/kumZ+M/HSPZ73od7kh7g95YQ
+        tUI4T3H5HIfoL+/xtCzldHJ4N6D1FahvKtb5GJOKnw==
+X-Google-Smtp-Source: ABdhPJzs1MvRVnkrIzc9Yf/1HC1AcAjxcK4UHZbLjJ8EUNjw5BY9npnsX81bicw0V269DxxbFy1/oRBcFej16mWlsGQ=
+X-Received: by 2002:a4a:a9cf:0:b0:2e9:5c75:e242 with SMTP id
+ h15-20020a4aa9cf000000b002e95c75e242mr19586044oon.25.1646340431451; Thu, 03
+ Mar 2022 12:47:11 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 3 Mar 2022 12:47:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220303181957.GA1731711@embeddedor>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220303194758.710358-4-robdclark@gmail.com>
+References: <20220303194758.710358-1-robdclark@gmail.com> <20220303194758.710358-4-robdclark@gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 3 Mar 2022 12:47:10 -0800
+Message-ID: <CAE-0n532ZX=qXTBKSFyRYAmkqFN7oqKyPvJHBuVMmr2eHY+O4A@mail.gmail.com>
+Subject: Re: [PATCH 3/4] drm/msm: Add SYSPROF param
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Emma Anholt <emma@anholt.net>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,119 +76,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 12:19:57PM -0600, Gustavo A. R. Silva wrote:
-> On Thu, Mar 03, 2022 at 09:43:28AM -0800, Kees Cook wrote:
-> > On Thu, Mar 03, 2022 at 11:25:03AM -0600, Gustavo A. R. Silva wrote:
-> > > Fix the following Wstringop-overflow warnings when building with GCC-11:
-> > > 
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-> > 
-> > Can you "show your work" a little more here? I don't actually see the
-> > what is getting fixed:
-> > 
-> > enum dc_lane_count {
-> > 	...
-> >         LANE_COUNT_FOUR = 4,
-> > 	...
-> >         LANE_COUNT_DP_MAX = LANE_COUNT_FOUR
-> > };
-> > 
-> > struct link_training_settings {
-> > 	...
-> >         union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX];
-> > };
-> > 
-> > void dp_hw_to_dpcd_lane_settings(
-> > 		...
-> > 		union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX])
-> > {
-> > 	...
-> > }
-> > 
-> > static enum link_training_result dpia_training_cr_transparent(
-> > 		...
-> >                 struct link_training_settings *lt_settings)
-> > {
-> > 	...
-> >                 dp_decide_lane_settings(lt_settings, dpcd_lane_adjust,
-> >                                 lt_settings->hw_lane_settings, lt_settings->dpcd_lane_settings);
-> > 	...
-> > }
-> > 
-> > Everything looks to be the correct size?
-> 
-> Yep; this fix is similar to the one for intel_pm.c in this
-> 
-> 	commit e7c6e405e171fb33990a12ecfd14e6500d9e5cf2
-> 
-> where the array size of 8 seems to be fine for all the
-> struct members related (pri_latency, spr_latency, cur_latency
-> and skl_latency):
-> 
-> drivers/gpu/drm/i915/i915_drv.h:465:struct drm_i915_private {
-> ...
-> 
-> drivers/gpu/drm/i915/i915_drv.h-739-    struct {
-> 
-> ...
-> drivers/gpu/drm/i915/i915_drv.h-745-            /* primary */
-> drivers/gpu/drm/i915/i915_drv.h-746-            u16 pri_latency[5];
-> drivers/gpu/drm/i915/i915_drv.h-747-            /* sprite */
-> drivers/gpu/drm/i915/i915_drv.h-748-            u16 spr_latency[5];
-> drivers/gpu/drm/i915/i915_drv.h-749-            /* cursor */
-> drivers/gpu/drm/i915/i915_drv.h-750-            u16 cur_latency[5];
-> drivers/gpu/drm/i915/i915_drv.h-751-            /*
-> drivers/gpu/drm/i915/i915_drv.h-752-             * Raw watermark memory latency values
-> drivers/gpu/drm/i915/i915_drv.h-753-             * for SKL for all 8 levels
-> drivers/gpu/drm/i915/i915_drv.h-754-             * in 1us units.
-> drivers/gpu/drm/i915/i915_drv.h-755-             */
-> drivers/gpu/drm/i915/i915_drv.h-756-            u16 skl_latency[8];
-> 
-> ...
-> drivers/gpu/drm/i915/i915_drv.h-773-    } wm;
-> ...
-> }
+Quoting Rob Clark (2022-03-03 11:46:47)
+> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+> index fde9a29f884e..0ba1dbd4e50f 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu.h
+> +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> @@ -330,6 +337,24 @@ struct msm_file_private {
+>         struct kref ref;
+>         int seqno;
+>
+> +       /**
+> +        * sysprof:
+> +        *
+> +        * The value of MSM_PARAM_SYSPROF set by userspace.  This is
+> +        * intended to be used by system profiling tools like Mesa's
+> +        * pps-producer (perfetto), and restricted to CAP_SYS_ADMIN.
+> +        *
+> +        * Setting a value of 1 will preserve performance counters across
+> +        * context switches.  Setting a value of 2 will in addition
+> +        * suppress suspend.  (Performance counters loose  state across
 
-and in this case the ilk_wm_max_level() returns the right maximum size for the
-corresponding 'struct wm' member:
+s/loose  /lose/
 
-drivers/gpu/drm/i915/intel_pm.c:2993:int ilk_wm_max_level(const struct drm_i915_private *dev_priv)
-drivers/gpu/drm/i915/intel_pm.c-2994-{
-drivers/gpu/drm/i915/intel_pm.c-2995-   /* how many WM levels are we expecting */
-drivers/gpu/drm/i915/intel_pm.c-2996-   if (HAS_HW_SAGV_WM(dev_priv))
-drivers/gpu/drm/i915/intel_pm.c-2997-           return 5;
-drivers/gpu/drm/i915/intel_pm.c-2998-   else if (DISPLAY_VER(dev_priv) >= 9)
-drivers/gpu/drm/i915/intel_pm.c-2999-           return 7;
-drivers/gpu/drm/i915/intel_pm.c-3000-   else if (IS_HASWELL(dev_priv) || IS_BROADWELL(dev_priv))
-drivers/gpu/drm/i915/intel_pm.c-3001-           return 4;
-drivers/gpu/drm/i915/intel_pm.c-3002-   else if (DISPLAY_VER(dev_priv) >= 6)
-drivers/gpu/drm/i915/intel_pm.c-3003-           return 3;
-drivers/gpu/drm/i915/intel_pm.c-3004-   else
-drivers/gpu/drm/i915/intel_pm.c-3005-           return 2;
-drivers/gpu/drm/i915/intel_pm.c-3006-}
+> +        * power collapse, which is undesirable for profiling in some
+> +        * cases.)
+> +        *
+> +        * The value automatically reverts to zero when the drm device
+> +        * file is closed.
+> +        */
+> +       int sysprof;
+> +
+>         /**
+>          * elapsed:
+>          *
+> diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
+> index 7cb158bcbcf6..4179db54ac93 100644
+> --- a/drivers/gpu/drm/msm/msm_submitqueue.c
+> +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
+> @@ -7,6 +7,40 @@
+>
+>  #include "msm_gpu.h"
+>
+> +int msm_file_private_set_sysprof(struct msm_file_private *ctx,
+> +                                struct msm_gpu *gpu, int sysprof)
+> +{
+> +       /* unwind old value first: */
+> +       switch (ctx->sysprof) {
+> +       case 2:
+> +               pm_runtime_put_autosuspend(&gpu->pdev->dev);
+> +               fallthrough;
+> +       case 1:
+> +               refcount_dec(&gpu->sysprof_active);
+> +               fallthrough;
+> +       case 0:
+> +               break;
+> +       }
+> +
+> +       /* then apply new value: */
 
-drivers/gpu/drm/i915/intel_pm.c:3009:static void intel_print_wm_latency(struct drm_i915_private *dev_priv,
-drivers/gpu/drm/i915/intel_pm.c-3010-                              const char *name,
-drivers/gpu/drm/i915/intel_pm.c-3011-                              const u16 wm[])
-drivers/gpu/drm/i915/intel_pm.c-3012-{
-drivers/gpu/drm/i915/intel_pm.c-3013-   int level, max_level = ilk_wm_max_level(dev_priv);
-drivers/gpu/drm/i915/intel_pm.c-3014-
-drivers/gpu/drm/i915/intel_pm.c-3015-   for (level = 0; level <= max_level; level++) {
-drivers/gpu/drm/i915/intel_pm.c-3016-           unsigned int latency = wm[level];
-drivers/gpu/drm/i915/intel_pm.c-3017-
-...
-}
+It would be safer to swap this. Otherwise a set when the values are at
+"1" would drop to "zero" here and potentially trigger some glitch,
+whereas incrementing one more time and then dropping the previous state
+would avoid that short blip.
 
-still GCC warns about this with Wstringop-overread, as it is explained
-in commit e7c6e405e171.
+> +       switch (sysprof) {
+> +       default:
+> +               return -EINVAL;
 
---
-Gustavo
+This will become more complicated though.
 
-> 
-> however GCC warns about accessing bytes beyond the limits, and turning the
-> argument declarations into pointers (removing the over-specified array
-> size from the argument declaration) silence the warnings.
-> 
-> --
-> Gustavo
+> +       case 2:
+> +               pm_runtime_get_sync(&gpu->pdev->dev);
+> +               fallthrough;
+> +       case 1:
+> +               refcount_inc(&gpu->sysprof_active);
+> +               fallthrough;
+> +       case 0:
+> +               break;
+> +       }
+> +
+> +       ctx->sysprof = sysprof;
+> +
+> +       return 0;
+> +}

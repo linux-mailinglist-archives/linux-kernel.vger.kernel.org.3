@@ -2,190 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA3D4CCA46
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C394CCA49
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbiCCXup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S237321AbiCCXvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbiCCXul (ORCPT
+        with ESMTP id S232005AbiCCXvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:50:41 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455C2166A4D;
-        Thu,  3 Mar 2022 15:49:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GF8+yMwcaqaFFYq9drAdS/beo9u9syz9r63S+v2diHLfDXcJCZpylJQwrAHldqg2hXm3HkcVfLHR3WSC5bFVIy93M2tlQerjxUGLJAyCt/OfAY5nqAuLj166PPAuzxZpQZYyBHEimEFleVinpDkaB+PYbL29nypoihtf5nkI0I0iQjMSEdcbqBUwBa7alZ4VCBHLKD/ZcAhp4LOhiIKt/QHckof1ebV7sjMiZgRxbeTpKG2ys8KnKdmn7A3p7inPNjSnx55YS7xCiXYkUY+AXeVIyev70atdoTCQY6Fv9nRHt3iILI9J9D3/spaXMNcPH3LT/H3jpgPzsxPFmBtu5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YqQe1MvJwX2HKZJo8D25feA67gkw2eZaWBbECMkKil4=;
- b=k88dlq5tVY6xR2iLH+yHxlN8OcPwgJcWfy/nbSZcDR5WvNCdbAtdP5C0GoJ1gHD0tpbO465KUzSFSjqP4Oi5BCzGloG4PNgI0Jq+jWRBZ1jcDBgj8Tsg8bocPZCiGkuK6u1ozt+xzEE3haU3NUcsq1Ff7SEHxwqggEjP2GtHMZGtmv4cd6VMMqeTZHBunp5Qh+K2J5nSsjeXGKaBRn5wsqYln4DKkhMbHbmGf8F5V9HkNblei46Zjn1AVcfMEPdfkh/FkJMk0EKTliAUsILQyUDswqEZ3LjMqmPZA3Leu6hTbUbUg+i/j1VbLdcWAOkXMULQvwnk1fBkD+TCLXkg2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YqQe1MvJwX2HKZJo8D25feA67gkw2eZaWBbECMkKil4=;
- b=VmvNJugY0jvOdSwznfNzT5qxwAJRVCTCpuYztCLH6doE2kCKeuOIgEWGAzrKtE9fdAoYiMaap0NbinyFyxOTTRXxsbGfV9wh+imUQKKok+Hbj4ddY/hkQeNCNs6F3GYuVJ0zDKd8X3QzfXoLOY0zGZViS2xYD0vw/vA1wRYZuA0x3blh+XnDwBy4DD9A2pWVmDlN8d26BbXycP3rbDigL3a9QUu4AOOG2ObUG0NaVXvYORwTs0dJHbnbk6Fbv/6+1RcKo5vQI16gIs1ZuSJ+uP7zkx6SiVAbMP/5Heh4wqlx8NOriXmcUVYXxlhgllxSYLSEXIHi3QvtP/wOZYXJbQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN6PR12MB1281.namprd12.prod.outlook.com (2603:10b6:404:1b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13; Thu, 3 Mar
- 2022 23:49:52 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5038.015; Thu, 3 Mar 2022
- 23:49:52 +0000
-Date:   Thu, 3 Mar 2022 19:49:51 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol with
- PRE_COPY
-Message-ID: <20220303234951.GB219866@nvidia.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
- <20220302172903.1995-8-shameerali.kolothum.thodi@huawei.com>
- <20220302133159.3c803f56.alex.williamson@redhat.com>
- <20220303000528.GW219866@nvidia.com>
- <20220302204752.71ea8b32.alex.williamson@redhat.com>
- <20220303130124.GX219866@nvidia.com>
- <20220303082040.1f88e24c.alex.williamson@redhat.com>
- <0cee64d555624e669028ba17d04b8737@huawei.com>
- <20220303125930.43d9940b.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303125930.43d9940b.alex.williamson@redhat.com>
-X-ClientProxiedBy: MN2PR05CA0061.namprd05.prod.outlook.com
- (2603:10b6:208:236::30) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: affe49b5-5f24-42f8-6271-08d9fd7082f4
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1281:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1281F38EA42E2273BED5A934C2049@BN6PR12MB1281.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /3w2wpIqqEd1E8M244Vx/DP6HSdV/h8pK3qFz95rIY7rGUNlcYsHmynEMwRviFJgPC0Wk76tvT/Fv2S8XlrqjB4b7YcDisT2bUowj6wdW6svIXCn8weJ10c5mrDUxEy45/PvbaJ1p4SRrG8TTt3xXUs4QPDIv2i0gs/cc/3NGg8g/i+3P1F6FPBrLcAU6ATk6rSt8sDbaOZmy9sWRV+matot9fQTv45IqtzJJzexcRhXvn2kobxpZDCwBSN1UN/mFwkUUHt0/68iTFxJls89CZNfjTKrAwWNBW9yuuxS/XRd8QB1eQlCR8TC/bcZ3Qh4Cz7UPl4QkZ5i5VTKUHW+6Vg5Vz9EeBJo1JDkB0i1gWMObFgoVYw7VYdrKb9+rSHw8ebIi+OyXB7Ud15DRFfzXxnXSQ+1hQQ8HrNFoo8VKS0SDaN9Bi+0TmgaAyisGg/QEAzSHVDAbfLYlojou02E0NWO76Rolk0hPR5RlDNePOGuNUW6Fjdh2J3pMzuJOVh/X1nLWySjSrUMGZu+Wy/fTOepDUknHw3rULm8wMkKBFLB7OtHf1+fGReOA8NY70bai1eS7ZOXEOSQTYq2DN4eXp6tAqJoyFqHjqtgyWKDtUh5SdL9LZ2AEkocPfWFGDZ9LLb5+Xwd8wma5IRYrJ/4lhRWtf+tQZFzbbFjvaj+75uhYq4bet62rDjHSLOTk9u4nebTEoSv8DvTCkJkyBpzMA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(6512007)(6486002)(6506007)(508600001)(36756003)(1076003)(26005)(316002)(33656002)(54906003)(6916009)(8936002)(5660300002)(2906002)(8676002)(66556008)(66476007)(38100700002)(66946007)(4326008)(186003)(7416002)(86362001)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ht4A5JCzQdMSjxG6tCM/m2wH+Csa5IVXDP1OB9ILkUynybbn0klVoqc8XJMR?=
- =?us-ascii?Q?If035buBDK8go2IdXAsA3eOkXzN7dgt15OAXjYIH/ytzRN0lILtyyYUpQNzc?=
- =?us-ascii?Q?buCNDRXe3feP60AzJwyDmu6v3yKAvjqZ1X1/NYqYl3I+zujYDX0TcowxCqmP?=
- =?us-ascii?Q?hBIKXLVuQ51OaZ8H7k+E/Toi8sz6wNvqejebQUaOlcvt3hyqGgvEsLBnlSTC?=
- =?us-ascii?Q?jYDvO4ZiiGLQLL7vA6rIrP7Q+0eUVblpAiC0Qws5AWXg7fdOJcTB+fLJ2Tdx?=
- =?us-ascii?Q?rZmlGZErnIN3wsnJTVCGlzfVMTZxJKDNNpRIiZO5jPQHUjWN0fSsgYwiDAV9?=
- =?us-ascii?Q?oRCad1nl/v65y+W+neUiDV9965rhwXimOXCiI7XvYsK0+Mu8OLYSGOgkYmQl?=
- =?us-ascii?Q?XPmgKpOHMKEgKitWEVyYEBk9ePqqNPOpidCANQP9yOnqNtW8zgDZRsiNPqjy?=
- =?us-ascii?Q?9rYcX2w0+wUePjWhuf8bbLI2ZX4wOPPhJmB3GrvX1Ev7r3567LfWaw4ZneT9?=
- =?us-ascii?Q?rwNaVbJ/0mTEason8m/6BYwKsfYUB/HayVrskMeYzM03+pRIf+60x7Ez1j26?=
- =?us-ascii?Q?4hmWdvYPb4uOd7JUH+CXJlYBQ0ar9kD8rCiNvTWIBom4/1ohcL9E/w98Oocu?=
- =?us-ascii?Q?BjVn0gzkou+l8eR7CTr1jezyUAG8I/BYfIXS2ZxiuoT3Ava+XZtZJM1q27Jq?=
- =?us-ascii?Q?55XMSKvOSNjpr7OmuqPifTLx430TNls295fkb4yidA36/qiEudEVIzwPOqv/?=
- =?us-ascii?Q?Mw7OoxwYBdaZZIPd/Lhv+y7YanD3XN9nGkMgsWowLl4rrH9mQAXaTyLWU+aC?=
- =?us-ascii?Q?45wX0fToi56d6YPJWXBEDMuoIrsVOcQ7dIJ9iJIz5V5EN/Xcu43iFnh3Nsqa?=
- =?us-ascii?Q?u5vzHHZkVg09xL4BvMhdS7R14R0bnlgjyW27BxZN96exhR+zFHlDyHptl5RK?=
- =?us-ascii?Q?ywttl51GeFz69c6B08SQG01kwz2mZ50v7c9ZTSouyAFgLYeUu2EE42ysBF+2?=
- =?us-ascii?Q?2i0jC9/37aVFn/PpCe0dBCb785ydqMrRVpsqu9ycV8Dbe6p7GCF1EUgbjRCU?=
- =?us-ascii?Q?FuQz1dC7WM++txu3RSzGDf300fdPSX+R16E4mcrTCChkeDNkVBzkYzH7QmiJ?=
- =?us-ascii?Q?cSphWlJAp6EoQ8ORF3T0L9b7eyCYt4R0IHHniWZDMsOuBom2FUH6scyXYexL?=
- =?us-ascii?Q?TH3szuanypcRQ7ZtjIegIplSUOJ9Pv8z5KHvTPRigQTpDlL//RvOzFFKS/eA?=
- =?us-ascii?Q?Wqy4M1te6KmVCKmvNWi3g/N8aC5ciyromRNx56v0cFBz1JphEBHEDhwasuC1?=
- =?us-ascii?Q?KCllUeehefgq5yWIdmlhsD0IbQgRswXIALHwBQKkDusyocgvs6ulzPczLA5P?=
- =?us-ascii?Q?BbStvVeOCdRp2emoDdTU2zpPOSuLUKwSwWXm4l+rC2r8jQ1Kokaj0CvPyKIe?=
- =?us-ascii?Q?rdJzlWMWbuWH32iV+Ea7K3cEb0TRZwfz4WTOvhDMQ1dWxZ99KxN7myTshqUS?=
- =?us-ascii?Q?SutJMM7o6NOhYfjNaCXaa/Z2bO/8qQlkAMUPNdyhiH8VDRRSFB9hpGTL5cCK?=
- =?us-ascii?Q?/wgwmQ0obQhrQhJwBh8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: affe49b5-5f24-42f8-6271-08d9fd7082f4
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 23:49:52.6416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1uJvXzCCamPMzY1eWWpLnU6QUseGuUCUiWFYLAfh9Bs4SrRYeO3dq3At4HSt4/QS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1281
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 18:51:36 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64866166A54
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:50:49 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbf52cc4b9so56187607b3.18
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=RzXfRdPwODy02923U5nFm/TySh/3wRc/Ufwipi409kA=;
+        b=Y4umStgGOU3qKFXtdHIb2UiD44nyyNUF7PUQzjSQR56em3DzsMLfvBaPMg9fhTVsPx
+         12YWCtUkBlvjJyQkypEFc3Xw5TH3iMUREU//EpJFSdkCejYOwv2+CMKKXS6fL8WTGw5D
+         uJvO0bofMwzEmzrX7a8Uw6cpfc4zCm1OwDVXcdxrro71bznkX2r4zViJCfDOsL+okjxn
+         K6G0sySSjOOorkaRi5KEG4Vo2diLRUEdfRejbSHxgJkfMpUktIY0cKrfqwfdN50PxvAQ
+         kxkeMdTH2qSO+oorsH6FJC6nvxPp8BoiNtClReHAzotJJrB4LmOB8eFB6yTyv9itOQue
+         tDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=RzXfRdPwODy02923U5nFm/TySh/3wRc/Ufwipi409kA=;
+        b=fOYUaPPo1eB3sPRRGHzJE24TGajZjjLKpezDFfBy04xvX3p/0x1yd8WqRvey5veu7f
+         HvXjdSu3LNBpgU5+A+RFOTPp4pL4EUvcDPFc9sll/lyx449rv5pf/H3qo+n2rrbx8Ddw
+         NnAKpbeHBPJqrieVcv1rFaVBJWQaoa3mPzgVEz1zHudotCuqTrsNKf7hsRPCmgk3AO2o
+         T+OJkE9jc3xzptyl21desPKdQJ2IK6KmIRfR2pby4pBv8SXDEgQGn6m8GsiRUkZRzHVt
+         /mTberNFMNt+R5d+3neyLmosDt32o5fxSly5cNsP9gaQq5QFNVn2+dFxTOzM+JKhadi9
+         RptQ==
+X-Gm-Message-State: AOAM532cm+xpiipTt/V6dUWemsamuX+2f/OqXwZrPRR2ef4PUhiku1Tr
+        SySn+zKLVmkN/r02j2wnHTKuFSMSmmg=
+X-Google-Smtp-Source: ABdhPJy7eFpXwwLbDzEG0CCWjK3DKcdr/vPHtKl58N7/d+zbGtc8yJm/vTntmqSvsDGmV46h1hQBiaPb7Uc=
+X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:306])
+ (user=ctshao job=sendgmr) by 2002:a25:f301:0:b0:628:ba6a:6447 with SMTP id
+ c1-20020a25f301000000b00628ba6a6447mr7052562ybs.217.1646351448611; Thu, 03
+ Mar 2022 15:50:48 -0800 (PST)
+Date:   Thu,  3 Mar 2022 23:50:27 +0000
+In-Reply-To: <CAKwvOdnHioO_tjBbA0Dzghr-kcXywp-OEROkoCYTcq8STonFVA@mail.gmail.com>
+Message-Id: <20220303235028.913923-1-ctshao@google.com>
+Mime-Version: 1.0
+References: <CAKwvOdnHioO_tjBbA0Dzghr-kcXywp-OEROkoCYTcq8STonFVA@mail.gmail.com>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v3] config: Allow kernel installation packaging to override pkg-config
+From:   Chun-Tse Shao <ctshao@google.com>
+To:     rostedt@goodmis.org, ndesaulniers@google.com
+Cc:     ctshao@google.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 12:59:30PM -0700, Alex Williamson wrote:
+Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
+what pkg-config and parameters are used.
 
-> > > If it's an abuse, then let's not do it.  It was never my
-> > > impression or intention
+Signed-off-by: Chun-Tse Shao <ctshao@google.com>
+---
+Changes in v3:
+  - Fix more open coded instance of pkg-config in scripts and certs
+  - Tested with make allmodconfig
 
-So maybe abuse is the wrong word, but I don't want to mess up this
-interface, which is intended to support real pre-copy devices, just
-because devices that don't actually implement true precopy might do
-silly things.
+Changes in v2:
+  - Make the commit message more clearer.
+---
 
-The vGPU case you imagine will still work and qemu will switch to
-STOP_COPY with a huge trailer and be slow. That is unavoidable and I
-think it is fine.
+ Makefile                     |  3 ++-
+ certs/Makefile               |  4 ++--
+ scripts/Makefile             |  4 ++--
+ scripts/dtc/Makefile         |  6 +++---
+ scripts/kconfig/gconf-cfg.sh | 10 +++++-----
+ scripts/kconfig/mconf-cfg.sh | 14 +++++++-------
+ scripts/kconfig/nconf-cfg.sh | 14 +++++++-------
+ scripts/kconfig/qconf-cfg.sh | 14 +++++++-------
+ tools/objtool/Makefile       |  4 ++--
+ 9 files changed, 37 insertions(+), 36 deletions(-)
 
-> > > Furthermore the acc driver was explicitly directed not to indicate any degree
-> > > of trailing data size in dirty_bytes, so while trailing data may be small for acc,
-> > > this interface is explicitly not intended to provide any indication of trailing
-> > > data size.  Thanks, 
+diff --git a/Makefile b/Makefile
+index daeb5c88b50b..f6c5bef7e141 100644
+--- a/Makefile
++++ b/Makefile
+@@ -430,6 +430,7 @@ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+ endif
++HOSTPKG_CONFIG	= pkg-config
 
-Yes, trailing data is not what this is for. This is only to help
-decide when to switch from PRE_COPY to STOP_COPY. If the device can
-execute STOP_COPY in the right time is a completely different
-discussion/interface.
+ export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+ 			      -O2 -fomit-frame-pointer -std=gnu89
+@@ -525,7 +526,7 @@ KBUILD_LDFLAGS_MODULE :=
+ KBUILD_LDFLAGS :=
+ CLANG_FLAGS :=
 
-> > Just to clarify, so the suggestion here is not to use PRE_COPY for compatibility
-> > check at all and have a different proper infrastructure for that later as Jason
-> > suggested?
-> > 
-> > If so, I will remove this patch from this series and go back to the old revision
-> > where we only have STOP_COPY and do the compatibility check during the final
-> > load data operation.
-> 
-> Hi Shameer,
-> 
-> I think NVIDIA has a company long weekend, so I'm not sure how quickly
-> we'll hear a rebuttal from Jason, but at this point I'd rather not
-> move
+-export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
++export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
+ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
+ export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+ export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+diff --git a/certs/Makefile b/certs/Makefile
+index 3ea7fe60823f..fa540d14ef2d 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -89,5 +89,5 @@ targets += x509_revocation_list
 
-Yes, company long weekend.
+ hostprogs := extract-cert
 
-> forward with using PRE_COPY exclusively for compatibility testing if
-> that is seen as an abuse of the interface, regardless of the size of
-> the remaining STOP_COPY data.  It might be most expedient to respin
-> without PRE_COPY and we'll revisit methods to perform early
-> compatibility testing in the future.  Thanks,
+-HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+diff --git a/scripts/Makefile b/scripts/Makefile
+index ce5aa9030b74..f084f08ed176 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -14,8 +14,8 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+ HOSTLDLIBS_sorttable = -lpthread
+ HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
+-HOSTCFLAGS_sign-file.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
 
-Shameerali has talked about wanting this compat check early from the
-start, and done all the work to implement it. I think it is pretty
-extreme to blow up his series over trailing_data.
+ ifdef CONFIG_UNWINDER_ORC
+ ifeq ($(ARCH),x86_64)
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 95aaf7431bff..743fc08827ea 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -18,7 +18,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
+ # Source files need to get at the userspace version of libfdt_env.h to compile
+ HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
 
-To me acc is fine to use it this way until we get a better solution
-for compatability. We all need this, but I expect it to be complicated
-to define.
+-ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
++ifeq ($(shell $(HOSTPKG_CONFIG) --exists yaml-0.1 2>/dev/null && echo yes),)
+ ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
+ $(error dtc needs libyaml for DT schema validation support. \
+ 	Install the necessary libyaml development package.)
+@@ -27,9 +27,9 @@ HOST_EXTRACFLAGS += -DNO_YAML
+ else
+ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+-HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
++HOSTCFLAGS_yamltree.o := $(shell $(HOSTPKG_CONFIG) --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell $(HOSTPKG_CONFIG) yaml-0.1 --libs)
+ endif
 
-Jason
+ # Generated files need one more search path to include headers in source tree
+diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
+index 480ecd8b9f41..267ef6012203 100755
+--- a/scripts/kconfig/gconf-cfg.sh
++++ b/scripts/kconfig/gconf-cfg.sh
+@@ -3,14 +3,14 @@
+
+ PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v $(HOSTPKG_CONFIG))" ]; then
+ 	echo >&2 "*"
+ 	echo >&2 "* 'make gconfig' requires 'pkg-config'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if ! pkg-config --exists $PKG; then
++if ! $(HOSTPKG_CONFIG) --exists $PKG; then
+ 	echo >&2 "*"
+ 	echo >&2 "* Unable to find the GTK+ installation. Please make sure that"
+ 	echo >&2 "* the GTK+ 2.0 development package is correctly installed."
+@@ -19,12 +19,12 @@ if ! pkg-config --exists $PKG; then
+ 	exit 1
+ fi
+
+-if ! pkg-config --atleast-version=2.0.0 gtk+-2.0; then
++if ! $(HOSTPKG_CONFIG) --atleast-version=2.0.0 gtk+-2.0; then
+ 	echo >&2 "*"
+ 	echo >&2 "* GTK+ is present but version >= 2.0.0 is required."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-echo cflags=\"$(pkg-config --cflags $PKG)\"
+-echo libs=\"$(pkg-config --libs $PKG)\"
++echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
+index b520e407a8eb..21e40e9a7cd6 100755
+--- a/scripts/kconfig/mconf-cfg.sh
++++ b/scripts/kconfig/mconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw"
+ PKG2="ncurses"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v $(HOSTPKG_CONFIG))" ]; then
++	if $(HOSTPKG_CONFIG) --exists $PKG; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if $(HOSTPKG_CONFIG) --exists $PKG2; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG2)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
+index c212255070c0..eec46e627e5c 100755
+--- a/scripts/kconfig/nconf-cfg.sh
++++ b/scripts/kconfig/nconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw menuw panelw"
+ PKG2="ncurses menu panel"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v $(HOSTPKG_CONFIG))" ]; then
++	if $(HOSTPKG_CONFIG) --exists $PKG; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if $(HOSTPKG_CONFIG) --exists $PKG2; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG2)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+diff --git a/scripts/kconfig/qconf-cfg.sh b/scripts/kconfig/qconf-cfg.sh
+index fa564cd795b7..839b45b5746e 100755
+--- a/scripts/kconfig/qconf-cfg.sh
++++ b/scripts/kconfig/qconf-cfg.sh
+@@ -3,22 +3,22 @@
+
+ PKG="Qt5Core Qt5Gui Qt5Widgets"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v $(HOSTPKG_CONFIG))" ]; then
+ 	echo >&2 "*"
+-	echo >&2 "* 'make xconfig' requires 'pkg-config'. Please install it."
++	echo >&2 "* 'make xconfig' requires '$(HOSTPKG_CONFIG)'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if pkg-config --exists $PKG; then
+-	echo cflags=\"-std=c++11 -fPIC $(pkg-config --cflags $PKG)\"
+-	echo libs=\"$(pkg-config --libs $PKG)\"
+-	echo moc=\"$(pkg-config --variable=host_bins Qt5Core)/moc\"
++if $(HOSTPKG_CONFIG) --exists $PKG; then
++	echo cflags=\"-std=c++11 -fPIC $($(HOSTPKG_CONFIG) --cflags $PKG)\"
++	echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
++	echo moc=\"$($(HOSTPKG_CONFIG) --variable=host_bins Qt5Core)/moc\"
+ 	exit 0
+ fi
+
+ echo >&2 "*"
+-echo >&2 "* Could not find Qt5 via pkg-config."
++echo >&2 "* Could not find Qt5 via $(HOSTPKG_CONFIG)."
+ echo >&2 "* Please install Qt5 and make sure it's in PKG_CONFIG_PATH"
+ echo >&2 "*"
+ exit 1
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 92ce4fce7bc7..549acc5859e9 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -19,8 +19,8 @@ LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
+ OBJTOOL    := $(OUTPUT)objtool
+ OBJTOOL_IN := $(OBJTOOL)-in.o
+
+-LIBELF_FLAGS := $(shell pkg-config libelf --cflags 2>/dev/null)
+-LIBELF_LIBS  := $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
++LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+
+ all: $(OBJTOOL)
+
+--
+2.35.1.616.g0bdcbb4464-goog
+

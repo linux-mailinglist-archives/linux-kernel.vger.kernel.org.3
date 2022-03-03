@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F2A4CC4B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00534CC4B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiCCSJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S235045AbiCCSKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiCCSJh (ORCPT
+        with ESMTP id S230239AbiCCSK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:09:37 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7CBE0A2A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:08:51 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id w37so5220918pga.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:08:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BTYLb9HBGbhFly2fPG2qXLCkv8yykoYepo3XTTdlldU=;
-        b=hMNEn/GbmsMUtg4oxmhbIXRQPVu7NbT/WnAC+/jn+WiRKSM7xs9ti7I+wV1P4R2KS6
-         WyVaAQBYn8vI35ur6gZJAJaQMN+WKs4MtDZsOsg3sgrnOB+a+83MvWTlsNKCDHwTbVNs
-         AuNKx6JVDpCoQvMOaz4KETYS9boMeymCUkhtZW9QSbQ3vdqakdm//NbGnRRYgYv3Z0lq
-         puUAUv3NNNaHd8SeCesRLc/m6vEaOpcbH3NUoLG6sfuyIVCzVUldPEUSFQcO3DYJfflj
-         QgUdSyRbbMGqeQvDzGYp75lw3LygYoCXG/K8Uc9iyIT3sBJVfDqdm7XqMMwDJnTAqIMZ
-         jMfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BTYLb9HBGbhFly2fPG2qXLCkv8yykoYepo3XTTdlldU=;
-        b=5KYLG8vlVUd7Myc1W9k0lr1MbEzSjrH38y2C6+S0ZajdD7CoAtRN5gVsjllbiyfMd1
-         aEpczb78XtwEhVGyLA5hqKte6PKatwhkGW5Xu+vhfDUMGG8a6qvxqxFaZmPcqD3QUmfE
-         W0J8lsEHDT+JOgi1DNqVL9CM77uEwJfdJrl+DAdw1CJfEo+XRC5BrhwTheOJSMzuVrVX
-         D7BK+ntZr5S3MfHeqRXhOJu5u3A6dtYGMVJ+DP0ZZWqIJw7AIzeV5YNf56MM0ANrdPz3
-         qK1rEane6H7Igidf6mdtA8VVih//HgET6X7Mw+OfsGLw/pYGMfBgw3/CuNdahJNLDGfa
-         KSvQ==
-X-Gm-Message-State: AOAM531Fnrz+9BdSgI/NG1fs2J6BOZUGit/euewZ/PVZVbZEnHR7fD7f
-        KjlPs3JBXO0200mKpJv6ANqGzw==
-X-Google-Smtp-Source: ABdhPJwI4iCgO48anf6OIfRvqNpdDFYISkBjKns/9buSsWxjNWb2URbn2Tq6d3Jp3jtY1wj0NOs/Lg==
-X-Received: by 2002:a63:1c14:0:b0:36b:28ef:f8ce with SMTP id c20-20020a631c14000000b0036b28eff8cemr31681899pgc.96.1646330930904;
-        Thu, 03 Mar 2022 10:08:50 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id 124-20020a621682000000b004f6a2e59a4dsm963540pfw.121.2022.03.03.10.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:08:50 -0800 (PST)
-Date:   Thu, 3 Mar 2022 18:08:47 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 08/28] KVM: x86/mmu: Batch TLB flushes from TDP MMU
- for MMU notifier change_spte
-Message-ID: <YiEELzrSymLY05zm@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-9-seanjc@google.com>
+        Thu, 3 Mar 2022 13:10:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A0A15FCBE;
+        Thu,  3 Mar 2022 10:09:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 755A4B81E67;
+        Thu,  3 Mar 2022 18:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079AAC004E1;
+        Thu,  3 Mar 2022 18:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646330981;
+        bh=PmxWgWYYEa9JLK8qebEjp4pPoTL5mDmqZB4piqpOtvM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AnmT/FxGaPyzVmDOxrDUnKWgM8sCsnyTdw6HY8X3RrDUHBqeFixlj+U5VsoU00dWF
+         p4O5/qlCZeOvBxzdnb4f7kPKkBACygIc6F4bJt9R2WfQWkUeYLfYBTt1yrbSRJY4Q6
+         SjaQa2PPzP6h4vU3mTx2p5IlZhAn8P86d/YAn08MduJejbhLVdEtVwTUmXWn9w8iiZ
+         f6NPXmvW/CUTdYIbAjY4FIuRC5oIKhd7MR9os9dHq8jMbM9NHYvcsoZZiYl4uvrBrw
+         y3WSkm/at/tNvgcJLTAMG1S1D6eyXdlsOxSHWyiYVHSQI6ZeEUb072haepmXQZXFTW
+         OsAoGxWvdEokQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nPptT-0000t3-Q6; Thu, 03 Mar 2022 19:09:39 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] ARM: mmp: fix platform-device leak on registration errors
+Date:   Thu,  3 Mar 2022 19:09:00 +0100
+Message-Id: <20220303180900.3371-1-johan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-9-seanjc@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> Batch TLB flushes (with other MMUs) when handling ->change_spte()
-> notifications in the TDP MMU.  The MMU notifier path in question doesn't
-> allow yielding and correcty flushes before dropping mmu_lock.
-nit: correctly
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 848448b65703..634a2838e117 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1203,13 +1203,12 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
->   */
->  bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
-> -	bool flush = kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
-> -
-> -	/* FIXME: return 'flush' instead of flushing here. */
-> -	if (flush)
-> -		kvm_flush_remote_tlbs_with_address(kvm, range->start, 1);
-> -
-> -	return false;
-> +	/*
-> +	 * No need to handle the remote TLB flush under RCU protection, the
-> +	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
-> +	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
-> +	 */
-> +	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
->  }
->  
->  /*
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+Make sure to free the platform device also in the event that
+registration fails.
+
+Fixes: 49cbe78637eb ("[ARM] pxa: add base support for Marvell's PXA168 processor line")
+Cc: stable@vger.kernel.org      # 2.6.30
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ arch/arm/mach-mmp/devices.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/mach-mmp/devices.c b/arch/arm/mach-mmp/devices.c
+index 18bee66a671f..0b99aa1d5350 100644
+--- a/arch/arm/mach-mmp/devices.c
++++ b/arch/arm/mach-mmp/devices.c
+@@ -53,20 +53,25 @@ int __init pxa_register_device(struct pxa_device_desc *desc,
+ 	}
+ 
+ 	ret = platform_device_add_resources(pdev, res, nres);
+-	if (ret) {
+-		platform_device_put(pdev);
+-		return ret;
+-	}
++	if (ret)
++		goto err_put_device;
+ 
+ 	if (data && size) {
+ 		ret = platform_device_add_data(pdev, data, size);
+-		if (ret) {
+-			platform_device_put(pdev);
+-			return ret;
+-		}
++		if (ret)
++			goto err_put_device;
+ 	}
+ 
+-	return platform_device_add(pdev);
++	ret = platform_device_add(pdev);
++	if (ret)
++		goto err_put_device;
++
++	return 0;
++
++err_put_device:
++	platform_device_put(pdev);
++
++	return ret;
+ }
+ 
+ #if IS_ENABLED(CONFIG_USB) || IS_ENABLED(CONFIG_USB_GADGET)
+-- 
+2.34.1
+

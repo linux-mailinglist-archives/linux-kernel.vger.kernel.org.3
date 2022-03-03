@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBB54CC562
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1256C4CC560
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbiCCSpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S234204AbiCCSng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiCCSpO (ORCPT
+        with ESMTP id S229943AbiCCSne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:45:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A4817AED6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:44:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A4BDB81E67
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:44:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B57C004E1;
-        Thu,  3 Mar 2022 18:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646333065;
-        bh=3O+xj138CKdSRUjGT/Vt82Xrl+Z2mQQ8p+Q3rCPCPbQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BfUHnONYl3vtbDnVUTjjryKV4FphJ1R8XnmmZNdDzDZm1R44ZTNl8qHI5z7iuBhX2
-         5ievjiz0wLG+6qyX0aZLRlasloKj9nHdgdHSWvaPoDrVF2F905TQ3+bPJq89QAyw86
-         +fjnbUpDpOKlqLi37JbZB4jYs+IGG/ydVxV8rE8VrJG4Qfdxk9X9jIBUP8JojXGFF/
-         fuGZXY1x4gggZk4RkkGb2W38+kVZMT6JQ/XaiVmozAUqLaKpRD7HHmcaizvaeWZyzj
-         dj+6xRAVZXFflJRnqXiZ5lnGvOmaCVVDuezxp7y0DGc91Kyb33U3/Aqxpp03nOSqfc
-         F3voKhLEp+Esg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH -next] clocksource/drivers/imx-tpm: Move tpm_read_sched_clock() under CONFIG_ARM
-Date:   Thu,  3 Mar 2022 11:42:12 -0700
-Message-Id: <20220303184212.2356245-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Mar 2022 13:43:34 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1D849252
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:42:47 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id k1so5482783pfu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:42:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wVCqmsaBx5BRJU8Ae8H+hFHgXaVbJdgyYzPL4TAjOOk=;
+        b=HcOsysllIrXqkZ7AqKo7NIj5C/qd6Tx/yY06ZsbHhm5uDSH3QWXNtcVFm+734lU0Ou
+         B2LbMD16TWJD8ltQkObec+Rdr5hwnFr8fGvMV6sRaTHTlhht4FJXOIEQ9OZlITMvXCkA
+         noxBf7TQkoacHdqu2xQyqdlQtGsTRSz2HtbvA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wVCqmsaBx5BRJU8Ae8H+hFHgXaVbJdgyYzPL4TAjOOk=;
+        b=6ydZbWyiPeh1pp9GxQiFeLAmelq7FzspClcTa2R6Dfl7ctj3XWWXlWZqRGR7GpfRkg
+         k/IfmEtJhebWKVaXHMcaXVswXuT1RjAihs0nSGsrHJxCmtnIkqAyRV4Nk1pSJs/1ZCBT
+         RFSl5N/nlv5NKlYU4vMUdNIcPso7kukYcNP6raIQjiHhstgYMsAkvxy+YjpYu9Q/5yKZ
+         JqjW8Y/saw+j+8YTACpKDiMNos4YCQXd2i9/ptrDT7kHzfz7C5sqsGf7pERBykkjIq0G
+         5VcQyxtdeJ/EfhhbINeEliWMQ5cwxMQAx6D1IKTFsv0Eq+3nP5W/8EHsNwuzu5PlZlpl
+         23lA==
+X-Gm-Message-State: AOAM530nKK1RCELwnLUqGvBogiALd8dDyjew36I+fdFqCtluGFO7qwUd
+        LIYU6XNiqp8R0yjvfJ436vdZiQ==
+X-Google-Smtp-Source: ABdhPJzhNyErLdMw9KeCxNp9VGvIjoU7U/12E0jQypZE/NP075cuApJe7oeWRcL/I8O0Bx0kAVi3Bw==
+X-Received: by 2002:a63:4e14:0:b0:374:4a37:4966 with SMTP id c20-20020a634e14000000b003744a374966mr31414094pgb.118.1646332966859;
+        Thu, 03 Mar 2022 10:42:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b4-20020a17090a9bc400b001bc2e7e51f3sm3101065pjw.21.2022.03.03.10.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 10:42:46 -0800 (PST)
+Date:   Thu, 3 Mar 2022 10:42:45 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Message-ID: <202203031010.0A492D114@keescook>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,42 +75,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building this driver for an architecture other than ARCH=arm:
+On Wed, Mar 02, 2022 at 11:43:39PM -0800, Dan Li wrote:
+> Add tests for SCS (Shadow Call Stack) based
+> backward CFI (as implemented by Clang and GCC).
 
-  drivers/clocksource/timer-imx-tpm.c:78:20: error: unused function 'tpm_read_sched_clock' [-Werror,-Wunused-function]
-  static u64 notrace tpm_read_sched_clock(void)
-                     ^
-  1 error generated.
+Cool; thanks for writing these!
 
-Move the function definition under the existing CONFIG_ARM section so
-there is no more warning.
+> 
+> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> ---
+>  drivers/misc/lkdtm/Makefile             |  1 +
+>  drivers/misc/lkdtm/core.c               |  2 +
+>  drivers/misc/lkdtm/lkdtm.h              |  4 ++
+>  drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
+>  tools/testing/selftests/lkdtm/tests.txt |  2 +
+>  5 files changed, 76 insertions(+)
+>  create mode 100644 drivers/misc/lkdtm/scs.c
+> 
+> diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
+> index 2e0aa74ac185..e2fb17868af2 100644
+> --- a/drivers/misc/lkdtm/Makefile
+> +++ b/drivers/misc/lkdtm/Makefile
+> @@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
+>  lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
+>  lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
+>  lkdtm-$(CONFIG_LKDTM)		+= cfi.o
+> +lkdtm-$(CONFIG_LKDTM)		+= scs.o
 
-Fixes: 10720e120e2b ("clocksource/drivers/imx-tpm: Exclude sched clock for ARM64")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/clocksource/timer-imx-tpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'd expect these to be in cfi.c, rather than making a new source file.
 
-diff --git a/drivers/clocksource/timer-imx-tpm.c b/drivers/clocksource/timer-imx-tpm.c
-index 60cefc247b71..bd64a8a8427f 100644
---- a/drivers/clocksource/timer-imx-tpm.c
-+++ b/drivers/clocksource/timer-imx-tpm.c
-@@ -73,12 +73,12 @@ static unsigned long tpm_read_current_timer(void)
- {
- 	return tpm_read_counter();
- }
--#endif
- 
- static u64 notrace tpm_read_sched_clock(void)
- {
- 	return tpm_read_counter();
- }
-+#endif
- 
- static int tpm_set_next_event(unsigned long delta,
- 				struct clock_event_device *evt)
+>  lkdtm-$(CONFIG_LKDTM)		+= fortify.o
+>  lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
+>  
+> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+> index f69b964b9952..d0ce0bec117c 100644
+> --- a/drivers/misc/lkdtm/core.c
+> +++ b/drivers/misc/lkdtm/core.c
+> @@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
+>  	CRASHTYPE(USERCOPY_KERNEL),
+>  	CRASHTYPE(STACKLEAK_ERASING),
+>  	CRASHTYPE(CFI_FORWARD_PROTO),
+> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
+> +	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
+>  	CRASHTYPE(FORTIFIED_OBJECT),
+>  	CRASHTYPE(FORTIFIED_SUBOBJECT),
+>  	CRASHTYPE(FORTIFIED_STRSCPY),
+> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+> index d6137c70ebbe..a23d32dfc10b 100644
+> --- a/drivers/misc/lkdtm/lkdtm.h
+> +++ b/drivers/misc/lkdtm/lkdtm.h
+> @@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
+>  /* cfi.c */
+>  void lkdtm_CFI_FORWARD_PROTO(void);
+>  
+> +/* scs.c */
+> +void lkdtm_CFI_BACKWARD_SHADOW(void);
+> +void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
+> +
+>  /* fortify.c */
+>  void lkdtm_FORTIFIED_OBJECT(void);
+>  void lkdtm_FORTIFIED_SUBOBJECT(void);
+> diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
+> new file mode 100644
+> index 000000000000..5922a55a8844
+> --- /dev/null
+> +++ b/drivers/misc/lkdtm/scs.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * This is for all the tests relating directly to Shadow Call Stack.
+> + */
+> +#include "lkdtm.h"
+> +
+> +#ifdef CONFIG_ARM64
+> +/* Function clears its return address. */
+> +static noinline void lkdtm_scs_clear_lr(void)
+> +{
+> +	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+> +
+> +	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
 
-base-commit: b22a1c270f533e30bc5d5d4cab6199a2cbb07b07
+Is the asm needed here? Why not:
+
+	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+
+	*lr = 0;
+
+> +}
+> +
+> +/* Function with __noscs attribute clears its return address. */
+> +static noinline void __noscs lkdtm_noscs_clear_lr(void)
+> +{
+> +	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+> +
+> +	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
+> +}
+> +#endif
+> +
+> +/*
+> + * This tries to call a function protected by Shadow Call Stack,
+> + * which corrupts its own return address during execution.
+> + * Due to the protection, the corruption will not take effect
+> + * when the function returns.
+> + */
+> +void lkdtm_CFI_BACKWARD_SHADOW(void)
+
+I think these two tests should be collapsed into a single one.
+
+> +{
+> +#ifdef CONFIG_ARM64
+> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
+> +		return;
+> +	}
+> +
+> +	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+> +	lkdtm_scs_clear_lr();
+> +
+> +	pr_err("ok: scs takes effect.\n");
+> +#else
+> +	pr_err("XFAIL: this test is arm64-only\n");
+> +#endif
+
+This is slightly surprising -- we have no detection when a function has
+its non-shadow-stack return address corrupted: it just _ignores_ the
+value stored there. That seems like a missed opportunity for warning
+about an unexpected state.
+
+> +}
+> +
+> +/*
+> + * This tries to call a function not protected by Shadow Call Stack,
+> + * which corrupts its own return address during execution.
+> + */
+> +void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
+> +{
+> +#ifdef CONFIG_ARM64
+> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
+> +		return;
+
+Other tests try to give some hints about failures, e.g.:
+
+		pr_err("FAIL: cannot change for SCS\n");
+		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+
+Though, having the IS_ENABLED in there makes me wonder if this test
+should instead be made _survivable_ on failure. Something like this,
+completely untested:
+
+
+#ifdef CONFIG_ARM64
+static noinline void lkdtm_scs_set_lr(unsigned long *addr)
+{
+	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
+	*lr = addr;
+}
+
+/* Function with __noscs attribute clears its return address. */
+static noinline void __noscs lkdtm_noscs_set_lr(unsigned long *addr)
+{
+	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
+	*lr = addr;
+}
+#endif
+
+
+void lkdtm_CFI_BACKWARD_SHADOW(void)
+{
+#ifdef CONFIG_ARM64
+
+	/* Verify the "normal" condition of LR corruption working. */
+	do {
+		/* Keep label in scope to avoid compiler warning. */
+		if ((volatile int)0)
+			goto unexpected;
+
+		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
+		lkdtm_noscs_set_lr(&&expected);
+
+unexpected:
+		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
+		break;
+
+expected:
+		pr_err("ok: lr corruption redirected without scs.\n");
+	} while (0);
+
+
+	do {
+		/* Keep labe in scope to avoid compiler warning. */
+		if ((volatile int)0)
+			goto good_scs;
+
+		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+		lkdtm_scs_set_lr(&&bad_scs);
+
+good_scs:
+		pr_info("ok: scs takes effect.\n");
+		break;
+
+bad_scs:
+		pr_err("FAIL: return address rewritten!\n");
+		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+	} while (0);
+#else
+	pr_err("XFAIL: this test is arm64-only\n");
+#endif
+}
+
+And we should, actually, be able to make the "set_lr" functions be
+arch-specific, leaving the test itself arch-agnostic....
+
 -- 
-2.35.1
-
+Kees Cook

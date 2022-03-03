@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BDF4CC34F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9294CC354
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbiCCQ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S235214AbiCCRA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234358AbiCCQ6L (ORCPT
+        with ESMTP id S230229AbiCCRA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:58:11 -0500
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D1382;
-        Thu,  3 Mar 2022 08:57:25 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so6460636ooi.2;
-        Thu, 03 Mar 2022 08:57:25 -0800 (PST)
+        Thu, 3 Mar 2022 12:00:26 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CB116203C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:59:40 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v4so5059674pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TRe594s70/BSgqAig7s+8kVsNXAhB41CkpW4XEV91Hg=;
+        b=Sw0dfYxFJ4mEKPvVublWYLsl673lFfJ18wDifxKlKiovIH089C/9DXqx76iw+U9Wy1
+         c1QZEs/MqMiWOaevM2WlLHTh9kxnCfRnHseHHrArIGj5zCh7NuIA5+mLEPKfM1HDYAjj
+         KeX4REFSgSXsCkIJugPgRW8jOLuV4i4C5vJLDAdw+ygAHwbKFm3tIwOGzm9ZIJ3zLAbi
+         iRov0EnBkeoxOiMZf/W1aSyhlXQPw1zq+pnjcpFm4RjNTAeMRtd3mAomXCp+mhkAANRY
+         SMQDUSV9wuO4oWfxGQwK/UkFWNnnRFDeQSayvqvTNKh9rNu3RdkAwy+P1OtFzm6n7reI
+         wOnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XGCumHgMLBELRu52rk5UqShkzz2ZUaCbCoiX7DHIJjo=;
-        b=3daa/Xi6PRdQVAlbzp0kfVKo6cW9IllCPEh1rgDtJM/YFEKfz/QfnBZO6ZuO+tWA2l
-         rMZRgMdDAQhWDR3biBOC4jwA6IJV/EeczDdcN44758lwZmRMbLMnyH5tNgZXX5qp+xEQ
-         rNDuoDBE1bjECG+CywGheBzjiOG3Sp8+ncEbocldysocdeGtRFh/cYFq5zkmD1Qpt0hv
-         5HTE5Hr5chRteD2xK9tgrq/KWqIwhn7XNyJsfg9U9EY5lpD1c66jktG9EbyrT/rOJSR7
-         7HI5PQNPcWUjg3qroOanuJ5egZE9bOnrvtmfhBNKYjtXmcuy5p0M+yVVoNwt8BMa5ees
-         4Jww==
-X-Gm-Message-State: AOAM532VSCD0tB8CjprYB4bJ7906DwW373klPCuk3ZxU2nBdYDYrVHsk
-        6ssNaY8ibb5SkeEYFwA2ko1jvEizGw==
-X-Google-Smtp-Source: ABdhPJwXDCjm/ogChH0mahEYJGjHROaJuT/GNQDy5B6m7ZeQMkVYPgNQGQYbmPKjCrLxG505HRERSQ==
-X-Received: by 2002:a05:6820:552:b0:31c:5eca:fa40 with SMTP id n18-20020a056820055200b0031c5ecafa40mr18682006ooj.82.1646326644797;
-        Thu, 03 Mar 2022 08:57:24 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a056820031400b0031cf5913126sm1155125ooe.36.2022.03.03.08.57.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TRe594s70/BSgqAig7s+8kVsNXAhB41CkpW4XEV91Hg=;
+        b=58RJCfHkEC53+RLlAbhkwkp9qj0DH33f0AqNxwAXITtriJmC031/y7OxK5rRplAo2O
+         vMCX7ue7o7vRjA4t2sZsqdD43cFkHg5oIBHiOc9e0ogSsGdmB+2+7PDS7YICpERwmgxv
+         pK5mDeS2JpWjE+GacQ0zlNCsEFNOQKyYpUYAkUaZis6WfM6efPcQAWYRLsmksCtm5nk2
+         j0PHc6efLQcQ7qCYVWp6h2RpddHeXWHSjqizc9t0ccK5iB5P2CKL4RZ3iYaTCJeI1vId
+         yBCR1yU2gZVAillDe9Au/XycdzwVGzOoa5QAwuADb6fYySFWmnxgcZHkqmD32q2rV6qp
+         zD8Q==
+X-Gm-Message-State: AOAM533HWKPGsKKWQJyV0cRhGGIBE/pfNCSSH3x8/glPpXaNP0Eg+S9p
+        KVkGOuB+UHZiVS1w5M2iw2JNXw==
+X-Google-Smtp-Source: ABdhPJxb4kj47xxaByYvUO4XtKKnHahIGOZu3XEgeG5BAzJeSsGKxMgaQOn+rxpNIox3oVhLlWIOmw==
+X-Received: by 2002:a17:903:244d:b0:150:18f3:8e98 with SMTP id l13-20020a170903244d00b0015018f38e98mr37058822pls.28.1646326779923;
+        Thu, 03 Mar 2022 08:59:39 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090ad81300b001bc447c2c91sm8558375pjv.31.2022.03.03.08.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 08:57:24 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: arm: Allow 32-bit 'cpu-release-addr' values
-Date:   Thu,  3 Mar 2022 10:57:09 -0600
-Message-Id: <20220303165710.1859862-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 03 Mar 2022 08:59:39 -0800 (PST)
+Date:   Thu, 3 Mar 2022 16:59:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: SVM: Fix missing kvm_cache_regs.h include in svm.h
+Message-ID: <YiDz9w7W6+LTRtVz@google.com>
+References: <20220303160442.1815411-1-pgonda@google.com>
+ <YiDsEgxUDZL+XY9R@google.com>
+ <CAMkAt6rwiL_G1w66_rseKSFOTSV4zX8gnb1EOoQNv5TH=ToHGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6rwiL_G1w66_rseKSFOTSV4zX8gnb1EOoQNv5TH=ToHGw@mail.gmail.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While the DT Spec says 'cpu-release-addr' is always 64-bit, some 32-bit Arm
-DTs used a 32-bit value. We're now stuck with those cases, so add uint32 as
-a valid type.
+On Thu, Mar 03, 2022, Peter Gonda wrote:
+> On Thu, Mar 3, 2022 at 9:26 AM Sean Christopherson <seanjc@google.com> wrote:
+> > Ha, we've already got a lovely workaround for exactly this problem.  This patch
+> > should drop the include from svm_onhyperv.c, there's nothing in that file that
+> > needs kvm_cache_regs.h (I verified by deleting use of is_guest_mode()), it's
+> > included purely because of this bug in svm.h.
+> 
+> Ah good catch. I assume I should add kvm_cache_regs.h to
+> arch/x86/kvm/svm/nested.c too since it uses is_guest_mode().
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/arm/cpus.yaml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 85a31ca862d0..ed04650291a8 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -233,14 +233,14 @@ properties:
-           - ti,am4372
- 
-   cpu-release-addr:
--    $ref: '/schemas/types.yaml#/definitions/uint64'
--
-+    oneOf:
-+      - $ref: '/schemas/types.yaml#/definitions/uint32'
-+      - $ref: '/schemas/types.yaml#/definitions/uint64'
-     description:
-+      The DT specification defines this as 64-bit always, but some 32-bit Arm
-+      systems have used a 32-bit value which must be supported.
-       Required for systems that have an "enable-method"
-         property value of "spin-table".
--      On ARM v8 64-bit systems must be a two cell
--        property identifying a 64-bit zero-initialised
--        memory location.
- 
-   cpu-idle-states:
-     $ref: '/schemas/types.yaml#/definitions/phandle-array'
--- 
-2.32.0
-
+Nah, picking it up from svm.h (and several other headers) is ok.  If we required
+every compilation unit to _directly_ include every header, we'd probably double
+the size of the kernel source :-)

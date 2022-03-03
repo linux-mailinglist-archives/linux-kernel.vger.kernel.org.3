@@ -2,83 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3010D4CCA23
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E590F4CCA28
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbiCCXj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S237280AbiCCXkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiCCXjZ (ORCPT
+        with ESMTP id S231128AbiCCXkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:39:25 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24BF3F31C;
-        Thu,  3 Mar 2022 15:38:38 -0800 (PST)
-X-UUID: e9352919be7d4247b49524b61b6ece65-20220304
-X-UUID: e9352919be7d4247b49524b61b6ece65-20220304
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 775196386; Fri, 04 Mar 2022 07:38:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 4 Mar 2022 07:38:32 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Mar 2022 07:38:32 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <robin.murphy@arm.com>
-CC:     <iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
-        <linux-kernel@vger.kernel.org>, <miles.chen@mediatek.com>,
-        <will@kernel.org>, <wsd_upstream@mediatek.com>,
-        <yf.wang@mediatek.com>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] iommu/iova: Improve 32-bit free space estimate
-Date:   Fri, 4 Mar 2022 07:36:46 +0800
-Message-ID: <20220303233646.13773-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <033815732d83ca73b13c11485ac39336f15c3b40.1646318408.git.robin.murphy@arm.com>
-References: <033815732d83ca73b13c11485ac39336f15c3b40.1646318408.git.robin.murphy@arm.com>
+        Thu, 3 Mar 2022 18:40:23 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D97117C99
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:39:35 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so6324526pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:39:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zbrxoFXUbPPWy2OmGHM/87ehykZdoUkb/q8EdrCv/aE=;
+        b=kPQFbEidLAFavoqL/HEOhmglZRBz4Q68Wjxv38L/nrQW38gsLkeVaoFz6YtOG/32CC
+         EDGDXsVNNg1nhObKAgqVXBB7xfrgxb2R1m/hOZjoW7tqFVDqneF8nkYiy8694vo/9vt1
+         J9JfkapL8D3Puoz4DNULTMQQdyanboKRrYace7dcwv6DsAJDK5sysjunkk1xM2qTj7dm
+         yKMc4p9WW/u8pdzDdRfD6dqiv1UeFYAI5AvXEbocjxKD36IXqpF5y6RHHA6gq4fv/yKL
+         tSWxu27g7bgHaof8/k6HMh+sbeDoxtVKxKTqhlpvhQASvR3TlH1GpCn+PUwvnANutGAS
+         nSLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zbrxoFXUbPPWy2OmGHM/87ehykZdoUkb/q8EdrCv/aE=;
+        b=VAFnL5y2TRkyFnNkDhQACdF4mwy7o3viumuzfIrygGKHjE4UAMZIfmKavJ6PxCtuBg
+         FJtbEsZgb28GBq2MSqQiRz0pi32aU8ZTz2UPh9afMYX5J6Ab3jgzUJDUN6jVFO4E9wQM
+         vnUxRo9xUAQAPOK5Iu4/+Q7VK+W7ReoYKlIHjhE+NijbRuSh9FgeYf4NwL8zrevyV7BW
+         8uS6gr0p7g86gjLPCmNfbvVvYCeGUhZQ5w3PAwCWBaEQiQh7T05IPf61/PqERNxJNA3K
+         lPWvF5zbSDwpdL1ToSxhI/Qk91d2Czu/4PaK0pg084ej9JZAYbAYoOtl4iL79ep2bfmd
+         evPw==
+X-Gm-Message-State: AOAM532FFhmI2DLjew+St0Vjnn23QuSL4cNQwSr3JQNl6QIBWBEb5Xma
+        xEfQDcw4jajAH/+YgUA1A5lF4g==
+X-Google-Smtp-Source: ABdhPJxQjg95R9JFFXlStDH19lXfsnvZg9NnD6hwBMG0sCBaS1VHLy9LXud4G7o1/P38lPP3lZKi5A==
+X-Received: by 2002:a17:90a:1108:b0:1be:e1bd:e2f0 with SMTP id d8-20020a17090a110800b001bee1bde2f0mr7787232pja.144.1646350774737;
+        Thu, 03 Mar 2022 15:39:34 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id x7-20020a17090a1f8700b001bf1db72189sm1124311pja.23.2022.03.03.15.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 15:39:34 -0800 (PST)
+Date:   Thu, 3 Mar 2022 23:39:30 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v4 03/30] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
+ deferred TLB flush logic
+Message-ID: <YiFRskA4p1pwNAwS@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-4-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303193842.370645-4-pbonzini@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
-
-> For various reasons based on the allocator behaviour and typical
-> use-cases at the time, when the max32_alloc_size optimisation was
-> introduced it seemed reasonable to couple the reset of the tracked
-> size to the update of cached32_node upon freeing a relevant IOVA.
-> However, since subsequent optimisations focused on helping genuine
-> 32-bit devices make best use of even more limited address spaces, it
-> is now a lot more likely for cached32_node to be anywhere in a "full"
-> 32-bit address space, and as such more likely for space to become
-> available from IOVAs below that node being freed.
+On Thu, Mar 03, 2022, Paolo Bonzini wrote:
+> From: Sean Christopherson <seanjc@google.com>
 > 
-> At this point, the short-cut in __cached_rbnode_delete_update() really
-> doesn't hold up any more, and we need to fix the logic to reliably
-> provide the expected behaviour. We still want cached32_node to only move
-> upwards, but we should reset the allocation size if *any* 32-bit space
-> has become available.
+> Explicitly ignore the result of zap_gfn_range() when putting the last
+> reference to a TDP MMU root, and add a pile of comments to formalize the
+> TDP MMU's behavior of deferring TLB flushes to alloc/reuse.  Note, this
+> only affects the !shared case, as zap_gfn_range() subtly never returns
+> true for "flush" as the flush is handled by tdp_mmu_zap_spte_atomic().
 > 
-> Reported-by: Yunfei Wang <yf.wang@mediatek.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Putting the root without a flush is ok because even if there are stale
+> references to the root in the TLB, they are unreachable because KVM will
+> not run the guest with the same ASID without first flushing (where ASID
+> in this context refers to both SVM's explicit ASID and Intel's implicit
+> ASID that is constructed from VPID+PCID+EPT4A+etc...).
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Message-Id: <20220226001546.360188-5-seanjc@google.com>
+> Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c     |  8 ++++++++
+>  arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 32c041ed65cb..9a6df2d02777 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5083,6 +5083,14 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
+>  	kvm_mmu_sync_roots(vcpu);
+>  
+>  	kvm_mmu_load_pgd(vcpu);
+> +
+> +	/*
+> +	 * Flush any TLB entries for the new root, the provenance of the root
+> +	 * is unknown.  Even if KVM ensures there are no stale TLB entries
+> +	 * for a freed root, in theory another hypervisor could have left
+> +	 * stale entries.  Flushing on alloc also allows KVM to skip the TLB
+> +	 * flush when freeing a root (see kvm_tdp_mmu_put_root()).
+> +	 */
+>  	static_call(kvm_x86_flush_tlb_current)(vcpu);
+>  out:
+>  	return r;
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index b97a4125feac..921fa386df99 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  	list_del_rcu(&root->link);
+>  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+>  
+> -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+> +	/*
+> +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
+> +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> +	 * to a different pCPU.  Note, the local TLB flush on reuse also
+> +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> +	 * intermediate paging structures, that may be zapped, as such entries
+> +	 * are associated with the ASID on both VMX and SVM.
+> +	 */
+> +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
 
-Would you mind adding:
+Discussed offline with Sean. Now I get myself comfortable with the style
+of mmu with multiple 'roots' and leaving TLB unflushed for invalidated
+roots.
 
-Cc: <stable@vger.kernel.org> 
+I guess one minor improvement on the comment could be:
 
-to this path? I checked and I think the patch can be applied to
-5.4 and later.
+"A TLB flush is not necessary as each vCPU performs a local TLB flush
+when allocating or assigning a new root (see kvm_mmu_load()), and when
+migrating to a different pCPU."
 
-thanks,
-Miles
+The above could be better since "KVM performs a local TLB flush" makes
+readers think why we miss the 'remote' TLB flushes?
+>  
+>  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
+>  }
+> -- 
+> 2.31.1
+> 
+> 

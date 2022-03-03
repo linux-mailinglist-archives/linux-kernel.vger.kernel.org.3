@@ -2,76 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E9C4CC9B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D204CC9CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiCCXDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S230504AbiCCXEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237183AbiCCXDZ (ORCPT
+        with ESMTP id S237208AbiCCXE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:03:25 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD01090CDF
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:02:34 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id i11so8520212eda.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QYz72xS4UEUEZyA/zmJjeRPqsPKoO6eSb+1q4FNlVR8=;
-        b=l6FIj3aats2SLjz57UHUFzeX+1E7k3S4Dlpstfnlv80RVlxrN8PxjndVH7iYewpCSq
-         Xyhxd+QRKRv3vVvSZb2z4KiSw3xMy1qgAriSSd2zu2wTAj9I5snO+A0DBK9Sv3Cr4A7n
-         f39aaXyoc2P3YxjLzmAQQ0cYuuX07Cz/93Qug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QYz72xS4UEUEZyA/zmJjeRPqsPKoO6eSb+1q4FNlVR8=;
-        b=F07lkiCAiuKGv3gJiSw2SjVKtNkZ/rt/VSeR353tGFZRRP/SGijcR7nWnDg+kGW6XS
-         X3EZ2sikKOnsznpncX4r9ALVBvCCuMUqwV0EbOLgkLD6FX0xlg0fpIe/H2Hrgj7aPFus
-         NGdRA8nVJj5OAdSO5DB231K1uDcmWekYuf3PdE7TNmE+IZps/EuDureFG8J0QnL8mRK9
-         Vv6fbP7geKCe4WUxEYCQKMWrAO+a262SS3P7IseswaNuKAA6MJ58k6Hp1n0DKc6k5Bpw
-         M+YIdbw+9rfVWaGHbAEYrSY2DCrZR79tidQHVUCPh0cZYilbr492noZ2zezFD954SoxL
-         /1Vg==
-X-Gm-Message-State: AOAM533SBZQO6nC8ZQv6a+t5xOKDlSJL9oG76LwO1rF7a+6IupE3rDAw
-        10MzL3j59yx1frzBfjcdAAe6IzFY1dXE8w==
-X-Google-Smtp-Source: ABdhPJyIZdb8Szc0KviewFA/v8XW0TOZsUgOnLWKNu3fjnSvFvVjmzxpwXF+PirClYV9EpsxF+AxZg==
-X-Received: by 2002:a05:6402:424b:b0:410:92aa:30b1 with SMTP id g11-20020a056402424b00b0041092aa30b1mr36374049edb.297.1646348552763;
-        Thu, 03 Mar 2022 15:02:32 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm1389343edt.3.2022.03.03.15.02.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 15:02:32 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id d3so10051561wrf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:02:31 -0800 (PST)
-X-Received: by 2002:a5d:64ed:0:b0:1f0:6672:f10c with SMTP id
- g13-20020a5d64ed000000b001f06672f10cmr1270642wri.679.1646348551347; Thu, 03
- Mar 2022 15:02:31 -0800 (PST)
+        Thu, 3 Mar 2022 18:04:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5D871795FE
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:03:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5023A1424;
+        Thu,  3 Mar 2022 15:03:33 -0800 (PST)
+Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 69C6E3F73D;
+        Thu,  3 Mar 2022 15:03:32 -0800 (PST)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     gregkh@linuxfoundation.org
+Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: [GIT PULL] coresight changes for v5.18
+Date:   Thu,  3 Mar 2022 23:03:01 +0000
+Message-Id: <20220303230301.255049-1-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <20220301181107.v4.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
- <20220301181107.v4.2.I48b18ab197c9b649d376cf8cfd934e59d338f86d@changeid>
-In-Reply-To: <20220301181107.v4.2.I48b18ab197c9b649d376cf8cfd934e59d338f86d@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 3 Mar 2022 15:02:18 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=X6jf-UbCzB23MjBWwfs0HcHuoE9ozd3FZxN1U-H_8Saw@mail.gmail.com>
-Message-ID: <CAD=FV=X6jf-UbCzB23MjBWwfs0HcHuoE9ozd3FZxN1U-H_8Saw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] drm/bridge: analogix_dp: Enable autosuspend
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, Sean Paul <sean@poorly.run>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,45 +41,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Greg
 
-On Tue, Mar 1, 2022 at 6:11 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> DP AUX transactions can consist of many short operations. There's no
-> need to power things up/down in short intervals.
->
-> I pick an arbitrary 100ms; for the systems I'm testing (Rockchip
-> RK3399), runtime-PM transitions only take a few microseconds.
->
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
->
-> Changes in v4:
->  - call pm_runtime_mark_last_busy() and
->    pm_runtime_dont_use_autosuspend()
->  - drop excess pm references around drm_get_edid(), now that we grab and
->    hold in the dp-aux helper
->
-> Changes in v3:
->  - New in v3
->
->  drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+Please find the pull request for coresight subsystem for v5.18.
 
-This looks great to me now, thanks.
+Suzuki
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
 
-Though I'm not a massive expert on the Analogix DP driver, I'm pretty
-confident about the DP AUX stuff that Brian is touching. I just
-checked and I see that this driver isn't changing lots and the last
-change landed in drm-misc, which means that I can commit this. Thus,
-unless someone else shouts, I'll plan to wait until next week and
-commit these two patches to drm-misc.
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
 
-The first of the two patches is a "Fix" but since it's been broken
-since 2016 I'll assume that nobody is chomping at the bit for these to
-get into stable and that it would be easier to land both in
-"drm-misc-next". Please yell if someone disagrees.
+are available in the Git repository at:
 
--Doug
+  git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.18
+
+for you to fetch changes up to b54f53bc11a584713f79a704c70c488489f524b8:
+
+  coresight: Drop unused 'none' enum value for each component (2022-02-28 09:51:40 -0700)
+
+----------------------------------------------------------------
+coresight: changes for v5.18
+
+The coresight update for v5.18 includes
+  - TRBE erratum workarounds for Arm Cortex-A510
+  - Fixes for leaking root namespace PIDs into non-root namespace
+    trace sessions
+  - Miscellaneous fixes and cleanups
+
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+
+----------------------------------------------------------------
+Anshuman Khandual (4):
+      coresight: trbe: Work around the ignored system register writes
+      coresight: trbe: Work around the invalid prohibited states
+      coresight: trbe: Work around the trace data corruption
+      coresight: Drop unused 'none' enum value for each component
+
+James Clark (2):
+      coresight: Fix TRCCONFIGR.QE sysfs interface
+      coresight: no-op refactor to make INSTP0 check more idiomatic
+
+Leo Yan (4):
+      coresight: etm4x: Add lock for reading virtual context ID comparator
+      coresight: etm4x: Don't use virtual contextID for non-root PID namespace
+      coresight: etm4x: Don't trace PID for non-root PID namespace
+      coresight: etm3x: Don't trace PID for non-root PID namespace
+
+Miaoqian Lin (1):
+      coresight: syscfg: Fix memleak on registration failure in cscfg_create_device
+
+Rafael J. Wysocki (1):
+      hwtracing: coresight: Replace acpi_bus_get_device()
+
+Sudeep Holla (1):
+      coresight: trbe: Move check for kernel page table isolation from EL0 to probe
+
+ arch/arm64/Kconfig                                 |   6 +-
+ drivers/hwtracing/coresight/coresight-core.c       |   3 -
+ drivers/hwtracing/coresight/coresight-etm3x-core.c |   4 +
+ drivers/hwtracing/coresight/coresight-etm4x-core.c |  12 +-
+ .../hwtracing/coresight/coresight-etm4x-sysfs.c    |  38 ++++++-
+ drivers/hwtracing/coresight/coresight-platform.c   |   8 +-
+ drivers/hwtracing/coresight/coresight-syscfg.c     |   2 +-
+ drivers/hwtracing/coresight/coresight-trbe.c       | 125 +++++++++++++++------
+ drivers/hwtracing/coresight/coresight-trbe.h       |   8 --
+ include/linux/coresight.h                          |   5 -
+ 10 files changed, 149 insertions(+), 62 deletions(-)

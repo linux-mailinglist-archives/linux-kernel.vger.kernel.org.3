@@ -2,143 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FE64CC612
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0A64CC623
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbiCCTiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S236066AbiCCTkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiCCTiW (ORCPT
+        with ESMTP id S235975AbiCCTjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:38:22 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106F64F0
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:37:34 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id 8so4955789qvf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZLz6jo4x58h2g9mHNukYRMIkhrbbw9vzkVWIa2i7m3Q=;
-        b=M2wy4Eequ/VYrHh7vqbtylJTihfO5wHVfscRBSvANAAaHg6MttPacF5n578ODHmCHi
-         raE5o+IETL5qV+2giWFnOU8WvjBnPHV4oq5mmGlnOBMa79WNfGBNMbLrEthPd5htrKT0
-         Jvkuhx8rCSD9MuClXK3vxXhJUNPLM2vE0sER/Li+ms27dFJHEHi1AT2ayM7SabjAiZLX
-         JWv/Ll3w8nEXZNQAz5yfdD6lfeip7k8vaX2pUgqOu3L2YLgFoRdKz7wORrE1OuaBkCVB
-         EulaUDUwhKUFlICPIbvoQXMTe0xcwj2fZLptvqrXiAld3zWNc+yZBfbktLlFFZ3iihFG
-         Ar+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZLz6jo4x58h2g9mHNukYRMIkhrbbw9vzkVWIa2i7m3Q=;
-        b=trqTHOpTYSZr+71aVPBn074YKcaXXlfMqaVtaUhMEv+uqGn12BtbSCjdgAD7yxLSbY
-         WBAcJYlRyIy6IH9akLywolMAQNDIVbUSha/HwFhau08dOyXyEUmBaOwTcCr/e44O4Z2L
-         kqhnWFJKWFvS3cUIldDThczJNpikoauByw3XF3zhbukAuQwhfshElCrjL743YLvGSXh2
-         MNAR0kvuWF2TFN4el6Gu302nBE/0GFXSBoy4EN66o8QAqpywoDjq96uZpT/4qkwHp+XN
-         W2hFszbVu/+wqwl0TDTfbsw0KSqDk0QRimLvBVwUm/m4fWZ5Vs3rjlLa1zVAfy4p42Yk
-         f2XQ==
-X-Gm-Message-State: AOAM531x5q8Rhe8B91sNy/3wFku4MKu8nehY8JUp1e9nUeWp6q65c4KX
-        yw/NPMDAziKw9hu9cTH058Xud8sjgmgA7OKdCbxTJg==
-X-Google-Smtp-Source: ABdhPJzAKtHy6Tgp6w3t1ZoHaLPWIK8SWJOD/Nb+X0nKgGN6oeKpnBh5ekYZNlunAUUhtsWXA58X4YKjLdnh7G34qLg=
-X-Received: by 2002:a05:6214:202f:b0:432:4810:1b34 with SMTP id
- 15-20020a056214202f00b0043248101b34mr25370584qvf.35.1646336253632; Thu, 03
- Mar 2022 11:37:33 -0800 (PST)
+        Thu, 3 Mar 2022 14:39:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D33876E11
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646336331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LIqA+lNqjHjKCKmjSiwf7/bxTydScBcjTgeR2eFkens=;
+        b=Y7H7GyIDAwOXSBJI1X6dI8/muXkYGvO3ZwOqqVa046VVA8RYWXDQbdlvuZjNbMZODanOa0
+        36TfoEB8tvbEwx42MhhCxlHKjoUXkHvzoc1KfS+Ewk4ktzaIwJFvzK+5ciq1ODZrX+QJ4X
+        IdZzrw6sHFarCA6TGTeI2ZSB2+/zw74=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-Bo2uh_HbOxOOCc6touhNvQ-1; Thu, 03 Mar 2022 14:38:46 -0500
+X-MC-Unique: Bo2uh_HbOxOOCc6touhNvQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57FD451DF;
+        Thu,  3 Mar 2022 19:38:44 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57D375DF2E;
+        Thu,  3 Mar 2022 19:38:43 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: [PATCH v4 00/30] KVM: x86/mmu: Overhaul TDP MMU zapping and flushing
+Date:   Thu,  3 Mar 2022 14:38:12 -0500
+Message-Id: <20220303193842.370645-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
- <20220302194141.c4gvqz5v4mmmbwsv@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220302194141.c4gvqz5v4mmmbwsv@ast-mbp.dhcp.thefacebook.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 3 Mar 2022 11:37:21 -0800
-Message-ID: <CA+khW7iRP8b69usnAy_j4hrYE-U0hC4Rv65K5m4wuP5ArnWsEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 11:41 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Feb 25, 2022 at 03:43:34PM -0800, Hao Luo wrote:
-> > diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-> > index e7c2276be33e..c73c7ab3680e 100644
-> > --- a/include/linux/tracepoint-defs.h
-> > +++ b/include/linux/tracepoint-defs.h
-> > @@ -51,6 +51,7 @@ struct bpf_raw_event_map {
-> >       void                    *bpf_func;
-> >       u32                     num_args;
-> >       u32                     writable_size;
-> > +     u32                     sleepable;
->
-> It increases the size for all tracepoints.
-> See BPF_RAW_TP in include/asm-generic/vmlinux.lds.h
-> Please switch writeable_size and sleepable to u16.
 
-No problem.
+Overhaul TDP MMU's handling of zapping and TLB flushing to reduce the
+number of TLB flushes, fix soft lockups and RCU stalls, avoid blocking
+vCPUs for long durations while zapping paging structure, and to clean up
+the zapping code.
 
-> >
-> > -static const struct bpf_func_proto *
-> > -syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> > +/* Syscall helpers that are also allowed in sleepable tracing prog. */
-> > +const struct bpf_func_proto *
-> > +tracing_prog_syscall_func_proto(enum bpf_func_id func_id,
-> > +                             const struct bpf_prog *prog)
-> >  {
-> >       switch (func_id) {
-> >       case BPF_FUNC_sys_bpf:
-> >               return &bpf_sys_bpf_proto;
-> > -     case BPF_FUNC_btf_find_by_name_kind:
-> > -             return &bpf_btf_find_by_name_kind_proto;
-> >       case BPF_FUNC_sys_close:
-> >               return &bpf_sys_close_proto;
-> > -     case BPF_FUNC_kallsyms_lookup_name:
-> > -             return &bpf_kallsyms_lookup_name_proto;
-> >       case BPF_FUNC_mkdir:
-> >               return &bpf_mkdir_proto;
-> >       case BPF_FUNC_rmdir:
-> >               return &bpf_rmdir_proto;
-> >       case BPF_FUNC_unlink:
-> >               return &bpf_unlink_proto;
-> > +     default:
-> > +             return NULL;
-> > +     }
-> > +}
->
-> If I read this correctly the goal is to disallow find_by_name_kind
-> and lookup_name from sleepable tps. Why? What's the harm?
+The largest cleanup is to separate the flows for zapping roots (zap
+_everything_), zapping leaf SPTEs (zap guest mappings for whatever reason),
+and zapping a specific SP (NX recovery).  They're currently smushed into a
+single zap_gfn_range(), which was a good idea at the time, but became a
+mess when trying to handle the different rules, e.g. TLB flushes aren't
+needed when zapping a root because KVM can safely zap a root if and only
+if it's unreachable.
 
-A couple of thoughts, please correct me if they don't make sense. I
-may think too much.
+To solve the soft lockups, stalls, and vCPU performance issues:
 
-1. The very first reason is, I don't know the use case of them in
-tracing. So I think I can leave them right now and add them later if
-the maintainers want them.
+ - Defer remote TLB flushes to the caller when zapping TDP MMU shadow
+   pages by relying on RCU to ensure the paging structure isn't freed
+   until all vCPUs have exited the guest.
 
-2. A related question is, do we actually want all syscall helpers to
-be in sleepable tracing? Some helpers may cause re-entering the
-tracepoints. For a hypothetical example, if we call mkdir while
-tracing some tracepoints in vfs_mkdir. Do we have protection for this?
-Another potential problem is about lookup_name in particular,
-sleepable_tracing could be triggered by any user, will lookup_name
-leak kernel addresses to users in some way? The filesystem helpers
-have some basic perm checks, I would think it's relatively safer.
+ - Allowing yielding when zapping TDP MMU roots in response to the root's
+   last reference being put.  This requires a bit of trickery to ensure
+   the root is reachable via mmu_notifier, but it's not too gross.
+
+ - Zap roots in two passes to avoid holding RCU for potential hundreds of
+   seconds when zapping guest with terabytes of memory that is backed
+   entirely by 4kb SPTEs.
+
+ - Zap defunct roots asynchronously via the common work_queue so that a
+   vCPU doesn't get stuck doing the work if the vCPU happens to drop the
+   last reference to a root.
+
+The selftest at the end allows populating a guest with the max amount of
+memory allowed by the underlying architecture.  The most I've tested is
+~64tb (MAXPHYADDR=46) as I don't have easy access to a system with
+MAXPHYADDR=52.  The selftest compiles on arm64 and s390x, but otherwise
+hasn't been tested outside of x86-64.  It will hopefully do something
+useful as is, but there's a non-zero chance it won't get past init with
+a high max memory.  Running on x86 without the TDP MMU is comically slow.
+
+Testing: passes kvm-unit-tests and guest installation tests on Intel.
+Haven't yet run AMD or selftests.
+
+Thanks,
+
+Paolo
+
+v4:
+- collected reviews and typo fixes (plus some typo fixes of my own)
+
+- new patches to simplify reader invariants: they are not allowed to
+  acquire references to invalid roots
+
+- new version of "Allow yielding when zapping GFNs for defunct TDP MMU
+  root", simplifying the atomic a bit by 1) using xchg and relying on
+  its implicit memory barriers 2) relying on readers to have the same
+  behavior for the three stats refcount=0/valid, refcount=0/invalid,
+  refcount=1/invalid (see previous point)
+
+- switch zapping of invalidated roots to asynchronous workers on a
+  per-VM workqueue, fixing a bug in v3 where the extra reference added
+  by kvm_tdp_mmu_put_root could be given back twice.  This also replaces
+  "KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots"
+  in v3, since it gets rid of next_invalidated_root() in a different way.
+
+- because of the previous point, most of the logic in v3's "KVM: x86/mmu:
+  Zap defunct roots via asynchronous worker" moves to the earlier patch
+  "KVM: x86/mmu: Zap invalidated roots via asynchronous worker"
+
+
+v3:
+- Drop patches that were applied.
+- Rebase to latest kvm/queue.
+- Collect a review. [David]
+- Use helper instead of goto to zap roots in two passes. [David]
+- Add patches to disallow REMOVED "old" SPTE when atomically
+  setting SPTE.
+
+Paolo Bonzini (5):
+  KVM: x86/mmu: only perform eager page splitting on valid roots
+  KVM: x86/mmu: do not allow readers to acquire references to invalid roots
+  KVM: x86/mmu: Zap invalidated roots via asynchronous worker
+  KVM: x86/mmu: Allow yielding when zapping GFNs for defunct TDP MMU root
+  KVM: x86/mmu: Zap defunct roots via asynchronous worker
+
+Sean Christopherson (25):
+  KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP MMU
+  KVM: x86/mmu: Fix wrong/misleading comments in TDP MMU fast zap
+  KVM: x86/mmu: Formalize TDP MMU's (unintended?) deferred TLB flush logic
+  KVM: x86/mmu: Document that zapping invalidated roots doesn't need to flush
+  KVM: x86/mmu: Require mmu_lock be held for write in unyielding root iter
+  KVM: x86/mmu: Check for !leaf=>leaf, not PFN change, in TDP MMU SP removal
+  KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU notifier change_spte
+  KVM: x86/mmu: Drop RCU after processing each root in MMU notifier hooks
+  KVM: x86/mmu: Add helpers to read/write TDP MMU SPTEs and document RCU
+  KVM: x86/mmu: WARN if old _or_ new SPTE is REMOVED in non-atomic path
+  KVM: x86/mmu: Refactor low-level TDP MMU set SPTE helper to take raw values
+  KVM: x86/mmu: Zap only the target TDP MMU shadow page in NX recovery
+  KVM: x86/mmu: Skip remote TLB flush when zapping all of TDP MMU
+  KVM: x86/mmu: Add dedicated helper to zap TDP MMU root shadow page
+  KVM: x86/mmu: Require mmu_lock be held for write to zap TDP MMU range
+  KVM: x86/mmu: Zap only TDP MMU leafs in kvm_zap_gfn_range()
+  KVM: x86/mmu: Do remote TLB flush before dropping RCU in TDP MMU resched
+  KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow pages
+  KVM: x86/mmu: Zap roots in two passes to avoid inducing RCU stalls
+  KVM: x86/mmu: Check for a REMOVED leaf SPTE before making the SPTE
+  KVM: x86/mmu: WARN on any attempt to atomically update REMOVED SPTE
+  KVM: selftests: Move raw KVM_SET_USER_MEMORY_REGION helper to utils
+  KVM: selftests: Split out helper to allocate guest mem via memfd
+  KVM: selftests: Define cpu_relax() helpers for s390 and x86
+  KVM: selftests: Add test to populate a VM with the max possible guest mem
+
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/mmu/mmu.c                        |  49 +-
+ arch/x86/kvm/mmu/mmu_internal.h               |  15 +-
+ arch/x86/kvm/mmu/tdp_iter.c                   |   6 +-
+ arch/x86/kvm/mmu/tdp_iter.h                   |  15 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    | 559 +++++++++++-------
+ arch/x86/kvm/mmu/tdp_mmu.h                    |  26 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/include/kvm_util_base.h     |   5 +
+ .../selftests/kvm/include/s390x/processor.h   |   8 +
+ .../selftests/kvm/include/x86_64/processor.h  |   5 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  66 ++-
+ .../selftests/kvm/max_guest_memory_test.c     | 292 +++++++++
+ .../selftests/kvm/set_memory_region_test.c    |  35 +-
+ 15 files changed, 794 insertions(+), 293 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/max_guest_memory_test.c
+
+-- 
+2.31.1
+

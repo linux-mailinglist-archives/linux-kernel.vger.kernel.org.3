@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437464CC12F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D774CC13F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbiCCP3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 10:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S234418AbiCCP3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 10:29:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbiCCP3A (ORCPT
+        with ESMTP id S233331AbiCCP3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 10:29:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EB53EF02;
-        Thu,  3 Mar 2022 07:28:14 -0800 (PST)
-Received: from nazgul.tnic (nat0.nue.suse.com [IPv6:2001:67c:2178:4000::1111])
+        Thu, 3 Mar 2022 10:29:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8D3FBC5;
+        Thu,  3 Mar 2022 07:29:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 599F61EC0354;
-        Thu,  3 Mar 2022 16:28:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646321288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3wkQa12TOe6L5HnGAAvvXCd9OYOioyR8PkC5Q5bDZB0=;
-        b=ciJK03bk+KE2NLCrkhmmPvmEM91yiPiBgSXRnWJ4sIiDpwWLEP52w2yQp9MjTvHzkehrZQ
-        ju+iK3ka4iPLgdPAWM9OaNPZz0L+bYQFt96nt8NKVlT2hSEz372BTl/oJjMUqBbQW2HzJJ
-        wgRKuvFN3dDc+VpN/yEElwHAVnXA7fo=
-Date:   Thu, 3 Mar 2022 16:28:13 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v11 44/45] virt: sevguest: Add support to get extended
- report
-Message-ID: <YiDegxDviQ81VH0H@nazgul.tnic>
-References: <20220224165625.2175020-1-brijesh.singh@amd.com>
- <20220224165625.2175020-45-brijesh.singh@amd.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30F47B8260E;
+        Thu,  3 Mar 2022 15:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335A5C340F0;
+        Thu,  3 Mar 2022 15:28:54 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 15:28:50 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH V3 05/30] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <YiDessYDSt060Euc@arm.com>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-6-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224165625.2175020-45-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <1646045273-9343-6-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,74 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 10:56:24AM -0600, Brijesh Singh wrote:
-> +static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+Hi Anshuman,
+
+On Mon, Feb 28, 2022 at 04:17:28PM +0530, Anshuman Khandual wrote:
+> +static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
 > +{
-> +	struct snp_guest_crypto *crypto = snp_dev->crypto;
-> +	struct snp_ext_report_req req = {0};
-> +	struct snp_report_resp *resp;
-> +	int ret, npages = 0, resp_len;
-> +
-> +	lockdep_assert_held(&snp_cmd_mutex);
-> +
-> +	if (!arg->req_data || !arg->resp_data)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
-> +		return -EFAULT;
-> +
-> +	if (req.certs_len) {
-> +		if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
-> +		    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
-> +			return -EINVAL;
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return PAGE_NONE;
+> +	case VM_READ:
+> +	case VM_WRITE:
+> +	case VM_WRITE | VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_EXEC:
+> +		return PAGE_EXECONLY;
+> +	case VM_EXEC | VM_READ:
+> +	case VM_EXEC | VM_WRITE:
+> +	case VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_READONLY_EXEC;
+> +	case VM_SHARED:
+> +		return PAGE_NONE;
+> +	case VM_SHARED | VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_SHARED | VM_WRITE:
+> +	case VM_SHARED | VM_WRITE | VM_READ:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_EXEC:
+> +		return PAGE_EXECONLY;
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_EXEC;
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_SHARED_EXEC;
+> +	default:
+> +		BUILD_BUG();
 > +	}
+> +}
+
+I'd say ack for trying to get of the extra arch_vm_get_page_prot() and
+arch_filter_pgprot() but, TBH, I'm not so keen on the outcome. I haven't
+built the code to see what's generated but I suspect it's no significant
+improvement. As for the code readability, the arm64 parts don't look
+much better either. The only advantage with this patch is that all
+functions have been moved under arch/arm64.
+
+I'd keep most architectures that don't have own arch_vm_get_page_prot()
+or arch_filter_pgprot() unchanged and with a generic protection_map[]
+array. For architectures that need fancier stuff, add a
+CONFIG_ARCH_HAS_VM_GET_PAGE_PROT (as you do) and allow them to define
+vm_get_page_prot() while getting rid of arch_vm_get_page_prot() and
+arch_filter_pgprot(). I think you could also duplicate protection_map[]
+for architectures with own vm_get_page_prot() (make it static) and
+#ifdef it out in mm/mmap.c.
+
+If later you have more complex needs or a switch statement generates
+better code, go for it, but for this series I'd keep things simple, only
+focus on getting rid of arch_vm_get_page_prot() and
+arch_filter_pgprot().
+
+If I grep'ed correctly, there are only 4 architectures that have own
+arch_vm_get_page_prot() (arm64, powerpc, sparc, x86) and 2 that have own
+arch_filter_pgprot() (arm64, x86). Try to only change these for the time
+being, together with the other generic mm cleanups you have in this
+series. I think there are a couple more that touch protection_map[]
+(arm, m68k). You can leave the generic protection_map[] global if the
+arch does not select ARCH_HAS_VM_GET_PAGE_PROT.
+
+> +static pgprot_t arm64_arch_filter_pgprot(pgprot_t prot)
+> +{
+> +	if (cpus_have_const_cap(ARM64_HAS_EPAN))
+> +		return prot;
 > +
-> +	if (req.certs_address && req.certs_len) {
-> +		if (!access_ok(req.certs_address, req.certs_len))
-> +			return -EFAULT;
+> +	if (pgprot_val(prot) != pgprot_val(PAGE_EXECONLY))
+> +		return prot;
 > +
-> +		/*
-> +		 * Initialize the intermediate buffer with all zeros. This buffer
-> +		 * is used in the guest request message to get the certs blob from
-> +		 * the host. If host does not supply any certs in it, then copy
-> +		 * zeros to indicate that certificate data was not provided.
-> +		 */
-> +		memset(snp_dev->certs_data, 0, req.certs_len);
+> +	return PAGE_READONLY_EXEC;
+> +}
 > +
-> +		npages = req.certs_len >> PAGE_SHIFT;
-> +	}
+> +static pgprot_t arm64_arch_vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	pteval_t prot = 0;
+> +
+> +	if (vm_flags & VM_ARM64_BTI)
+> +		prot |= PTE_GP;
+> +
+> +	/*
+> +	 * There are two conditions required for returning a Normal Tagged
+> +	 * memory type: (1) the user requested it via PROT_MTE passed to
+> +	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
+> +	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
+> +	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
+> +	 * mmap() call since mprotect() does not accept MAP_* flags.
+> +	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
+> +	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
+> +	 */
+> +	if (vm_flags & VM_MTE)
+> +		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
+> +
+> +	return __pgprot(prot);
+> +}
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	pgprot_t ret = __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
+> +			pgprot_val(arm64_arch_vm_get_page_prot(vm_flags)));
+> +
+> +	return arm64_arch_filter_pgprot(ret);
+> +}
 
-I think all those checks should be made more explicit. This makes the
-code a lot more readable and straight-forward (pasting the full excerpt
-because the incremental diff ontop is less readable):
+If we kept the array, we can have everything in a single function
+(untested and with my own comments for future changes):
 
-	...
+pgprot_t vm_get_page_prot(unsigned long vm_flags)
+{
+	pgprot_t prot = __pgprot(pgprot_val(protection_map[vm_flags &
+				(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]));
 
-        if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
-                return -EFAULT;
+	/*
+	 * We could get rid of this test if we updated protection_map[]
+	 * to turn exec-only into read-exec during boot.
+	 */
+	if (!cpus_have_const_cap(ARM64_HAS_EPAN) &&
+	    pgprot_val(prot) == pgprot_val(PAGE_EXECONLY))
+		prot = PAGE_READONLY_EXEC;
 
-        if (!req.certs_len || !req.certs_address)
-                return -EINVAL;
+	if (vm_flags & VM_ARM64_BTI)
+		prot != PTE_GP;
 
-        if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
-            !IS_ALIGNED(req.certs_len, PAGE_SIZE))
-                return -EINVAL;
+	/*
+	 * We can get rid of the requirement for PROT_NORMAL to be 0
+	 * since here we can mask out PTE_ATTRINDX_MASK.
+	 */
+	if (vm_flags & VM_MTE) {
+		prot &= ~PTE_ATTRINDX_MASK;
+		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
+	}
 
-        if (!access_ok(req.certs_address, req.certs_len))
-                return -EFAULT;
-
-        /*
-         * Initialize the intermediate buffer with all zeros. This buffer
-         * is used in the guest request message to get the certs blob from
-         * the host. If host does not supply any certs in it, then copy
-         * zeros to indicate that certificate data was not provided.
-         */
-        memset(snp_dev->certs_data, 0, req.certs_len);
-
-        npages = req.certs_len >> PAGE_SHIFT;
+	return prot;
+}
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Catalin

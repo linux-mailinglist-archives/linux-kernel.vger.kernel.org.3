@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735F24CC3B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B274CC3BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiCCR1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S235363AbiCCRa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbiCCR1J (ORCPT
+        with ESMTP id S235353AbiCCRaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:27:09 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF8019E083
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:26:22 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so6561230ooi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 09:26:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Hi+eKfkvL+1ELz8vCd2J8tALPiN2Yeq81v7WF2HdAvA=;
-        b=ST/Z+X1lhcPRR3gkR9suvwoVxqwduRsMYavBHcuzH6MEWvRTvI8XehW5GVLJKxx+FC
-         NE7DS70gcRfuBP+bWOto18cMXOIZPLk609iw8smuy/WxCEcWYm/+G+iCdIlMCCWpSINZ
-         +DfLXoHb7999QY5ssTrZRl7n0KNUX8O58zRTFoWlx3ttRtJXmbbewgi9suaOM+NiV36v
-         NmeOZAmFGzTuS00K7V5if14XLORNd3xksz9NN+wJMfw08Eh1bK23PFyL0ckhuwl0BCpJ
-         0VrqKXWYsDnU5ViWauFzYYUT0AyGj/KfqWwXDxN3Hn0HNlf+Zxf4qRSEUTD/zgtZ55wd
-         vatw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hi+eKfkvL+1ELz8vCd2J8tALPiN2Yeq81v7WF2HdAvA=;
-        b=muz3nYPk1UmPMoMuJMNw2LbKaF7W3nfkr/+mBGNcth30TL/t7+i0Vco+uYaJvxgPT5
-         tJvIEYAvbBszYgQbfZDulgsafAXPgoSaCGx79aQnOY90TSzpS2kqtATg/ReR225B5JHa
-         QCAAaw0dz2ZQMyJa+tlTSSuJBV9m+KRQCl1IW/Yeo0mubw7krMuaYfPbx3OXjNM+YyrU
-         fp5hyXw/E2gniUhjDu8ZqslsSnBrW3clyXlgzcmMpoKDyp6FbkJB9M6aL5394Vbh2CM/
-         0bXj1V2PugH+LQfV2Br9SncuZ0bdRItA2cDq/gT5s34GE4v36T8u24paf5FgEzJRgAkr
-         KI2w==
-X-Gm-Message-State: AOAM532Mfit9pDPWkfB/oRTfd0G34zkqGXuJqXLYCcUlEvpGays+fydf
-        2+UMaUGt/4BbxfaiHSgC+68qOg==
-X-Google-Smtp-Source: ABdhPJwv1sxGTZF0niRgbP0qtUDDm24paYlb1odjA9ejm9/YPSBr9Tb4EAnKGNswbr1L/KDB331RZA==
-X-Received: by 2002:a05:6870:a1a0:b0:d9:b198:4cfa with SMTP id a32-20020a056870a1a000b000d9b1984cfamr3722424oaf.159.1646328381877;
-        Thu, 03 Mar 2022 09:26:21 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id c26-20020a4ae25a000000b0031c268c5436sm1195619oot.16.2022.03.03.09.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 09:26:21 -0800 (PST)
-Date:   Thu, 3 Mar 2022 09:28:10 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Subject: Re: [PATCH v13 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <YiD6qrLC9B4A8sNz@ripper>
-References: <20220218183116.2261770-1-bjorn.andersson@linaro.org>
- <20220218183116.2261770-2-bjorn.andersson@linaro.org>
- <CAD=FV=UOLcu5xycimDsYTO1spwf=CMRPUSU3o0qRRC+a+zuRTQ@mail.gmail.com>
- <CAD=FV=We4Lv25h2XF6BsdYhMbYu4716LBuhAjH5N0s_HHt_Xcw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=We4Lv25h2XF6BsdYhMbYu4716LBuhAjH5N0s_HHt_Xcw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 3 Mar 2022 12:30:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C13C8FA1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:29:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 963296177B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2B9C004E1;
+        Thu,  3 Mar 2022 17:29:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646328576;
+        bh=FOw+85uwmyeCg5YFO8PbTlTtboPnRTZQlSAakLzXseA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RBGiaT51hagwMp8oY91hK6Cz8Vxfbmh7xb6MBZf9kRQZkun+DuA9cTcePc7EY6LvM
+         /pH1fOlPU+biHohqNGjvovDaI2QmwtG/ZSRzCT8FG8EteWh4F358xVG3kP5vdyj7U2
+         TkxIBm8WQhzjwx+UcD/BFDW/aMNOoV23VRvw6tMG5NRUIr/uSVDqgSIdGYgJ/EsISU
+         TBa+cT/GaLLOclth+gbqvkcu+YMNiKYp5xlPGtN4oxJ1i0gec6jdOt9Y10Tcw+Z8rq
+         APbNdFTkV4Zp4aPA8FL2cPqZ6+Hz2aeKx0uUwsoPjsfQInLDmEo1fqzd+x0pb6u5l3
+         01C/F0rtLgZ4w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nPpGf-00C14D-UP; Thu, 03 Mar 2022 17:29:34 +0000
+Date:   Thu, 03 Mar 2022 17:29:33 +0000
+Message-ID: <87r17j0wsi.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Will Deacon <will@kernel.org>, Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/8] KVM: arm64: Introduce pkvm_alloc_private_va_range()
+In-Reply-To: <CAC_TJvfTZP9+EKFFXQUeGOWJb=WK2Wkd53bPOX2gaz0Gh5o8OA@mail.gmail.com>
+References: <20220225033548.1912117-1-kaleshsingh@google.com>
+        <20220225033548.1912117-3-kaleshsingh@google.com>
+        <87v8ww6bl0.wl-maz@kernel.org>
+        <CAC_TJvfTZP9+EKFFXQUeGOWJb=WK2Wkd53bPOX2gaz0Gh5o8OA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, broonie@kernel.org, mhiramat@kernel.org, pcc@google.com, madvenka@linux.microsoft.com, ascull@google.com, pbonzini@redhat.com, ardb@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,73 +86,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Mar 08:41 PST 2022, Doug Anderson wrote:
+Hi Kalesh,
 
-> Hi,
+On Wed, 02 Mar 2022 17:24:53 +0000,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> On Wed, Mar 2, 2022 at 4:03 PM Doug Anderson <dianders@chromium.org> wrote:
+> On Tue, Mar 1, 2022 at 11:46 PM Marc Zyngier <maz@kernel.org> wrote:
 > >
-> > Hi,
-> >
-> > On Fri, Feb 18, 2022 at 10:29 AM Bjorn Andersson
-> > <bjorn.andersson@linaro.org> wrote:
+> > On Fri, 25 Feb 2022 03:34:47 +0000,
+> > Kalesh Singh <kaleshsingh@google.com> wrote:
 > > >
-> > > +static void lpg_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
-> > > +                             struct pwm_state *state)
-> > > +{
-> > > +       struct lpg *lpg = container_of(chip, struct lpg, pwm);
-> > > +       struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
-> > > +       unsigned int pre_div;
-> > > +       unsigned int refclk;
-> > > +       unsigned int val;
-> > > +       unsigned int m;
-> > > +       u16 pwm_value;
-> > > +       int ret;
-> > > +
-> > > +       ret = regmap_read(lpg->map, chan->base + LPG_SIZE_CLK_REG, &val);
-> > > +       if (ret)
-> > > +               return;
-> > > +
-> > > +       refclk = lpg_clk_rates[(val & PWM_CLK_SELECT_MASK) - 1];
+> > > pkvm_hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> > > in the pKVM nVHE hypervisor (). Also update __pkvm_create_private_mapping()
+> > > to allow specifying an alignment for the private VA mapping.
+> > >
+> > > These will be used to implement stack guard pages for pKVM nVHE hypervisor
+> > > (in a subsequent patch in the series).
+> > >
+> > > Credits to Quentin Perret <qperret@google.com> for the idea of moving
+> > > private VA allocation out of __pkvm_create_private_mapping()
+> > >
+> > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > > ---
+> > >
+> > > Changes in v4:
+> > >   - Handle null ptr in pkvm_alloc_private_va_range() and replace
+> > >     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
+> > >   - Fix kernel-doc comments format, per Fuad
+> > >   - Format __pkvm_create_private_mapping() prototype args (< 80 col), per Fuad
+> > >
+> > > Changes in v3:
+> > >   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+> > >
+> > > Changes in v2:
+> > >   - Allow specifying an alignment for the private VA allocations, per Marc
 > >
-> > I don't know why I didn't notice it before (maybe I was accidentally
-> > not building with KASAN?), but in my recent boots I'm getting a KASAN
-> > error pointing at the line above.
+> > I probably badly expressed my earlier concern.
 > >
-> > Sure enough, the above looks a bit on the unsafe side. If (val & 0x3)
-> > is 0 then the "-1" will not be so wonderful. I put some printouts and,
-> > indeed, it's not so great.
-> >
-> > [    7.201635] DOUG: val is 0x00000004
-> >
-> > Amazingly my `refclk` ends up as 0 and I guess somehow this doesn't
-> > cause a divide by 0.
+> > Yes, an alignment is necessary. But how often do we want an alignment
+> > that isn't naturally aligned to the size of the allocation (i.e. the
+> > power of 2 >= the size of the allocation)? This is what the rest of
+> > the kernel does (get_order() and co), and I thing we should follow
+> > this.
 > 
-> I dug a little more and found a document that talks about this
-> register. I guess the answer here is that at boot time on my device
-> the PWM is disabled and has never been enabled. That explains why, at
-> boot time, the "clk_select" is 0 AKA "no clock". So we do an invalid
-> memory access here and that's not so great, but it doesn't _truly_
-> cause any harm. All we need is something like this right before the
-> array dereference:
+> Hi Marc,
 > 
-> if ((val & PWM_CLK_SELECT_MASK) == 0)
->   return;
-> 
+> Thanks for clarifying. I think making the alignment implicitly based
+> on the size here will create unnecessary holes where PAGE_SIZE
+> alignment would be ok and potentially overflow the private VA space
+> earlier. Is it not a concern?
 
-Thanks for spotting and digging that up. I can confirm that the
-documentation has 0 as "no clock" and I think it would be nice if
-lpg_clk_rates[] reflected the possible hardware values. That way we can
-also get rid of the + 1 in lpg_apply_freq().
+I don't think we should worry too much about this. Even when building
+the kernel with a very small VA space (commonly 39 bits), we still
+have a quarter of that reserved for private EL2 mappings. That's
+pretty big.
 
-I will fix this up, as well as fix up the indentation issue spotted by
-Uwe in the documentation and repost.
+We will use a bit more of the memory that is set aside for EL2 page
+tables, but this shouldn't be a problem either.
 
-Regards,
-Bjorn
+Thanks,
 
-> I'm still pretty interested in seeing this patch series land and, if
-> it helps it land sooner, I wouldn't object to the above getting fixed
-> in a followup patch.
-> 
-> -Doug
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

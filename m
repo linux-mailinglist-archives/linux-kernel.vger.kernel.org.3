@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171E64CC6C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323D24CC6C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbiCCUEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S236021AbiCCUFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiCCUEi (ORCPT
+        with ESMTP id S231293AbiCCUFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:04:38 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B858D4B40D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:03:52 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id j1so1711224pfj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:03:52 -0800 (PST)
+        Thu, 3 Mar 2022 15:05:35 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA4B1A614A;
+        Thu,  3 Mar 2022 12:04:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so8768072pjb.3;
+        Thu, 03 Mar 2022 12:04:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Pi8iH0FAYkIoz6MeuCkLdqM2juK9qQBoN4Ks48wQ+iA=;
-        b=kwAxKx2fJbB7ljjwDZJV2FM0kwSPs73r6pQ8wAnY/3kHs37v6JZsIrTXQN53Bt4skz
-         yyqVxn6+X7N3wpZLLN8h9GKt32c6qIlcAPqIDKfo9dH5iB1eeQ6v22e/xOtcht6inFUJ
-         B6F87BAaFpwNu1r6QBlFyBpzdbDDpoOM224IxSKT+Abshs68aZSvbBiNdoE0jevxiMAj
-         7rbmoLO/r5urHspdeg6T/wy63VhA3E3KCf0BgXYo3dI6ht7Ge1Q6QDHUgN+O+RgQCiv/
-         uDwKWtOFhUyDGdvaJccDbRAxzkpHF8jms3QQ+IAqDUnsN9OFu1H/B7iQO8Z/CgnwzUjM
-         uhTw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yho2Dl6zShl3TZZkq1NcbPCns9z7cGft4LPJ8Xl368w=;
+        b=lNS2rMT/gK/+w8QkIK7rO4Qt3B+qUPqMdfDWn/FJac6BVBaQdMJwxQdT4MuC2HqW8t
+         b/1J0jdLkcBwL//tj0M7RSAfqLlsr8ED+x3NFybe82/2VMTuCfNht74yMgRG59m0DP2e
+         JYWEt/VknEWSkSn61Z5C76z3wpiHlfBma9KkjsqULcNNRJVFB3Gqvv8gzXl43+0+a0+v
+         KMq749VxNgBmbF3u9egK/k4U0wxBUF+nQorgurHA98GZbQmyJaQG3MF0DcYHpOVrjR3T
+         Uev8EZ0dHD8uxoILnNPsifEMA7D2eP1E4FtH4HaKzrl2S+ORlO/OF79ZIZjfM7OBUCWI
+         noBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Pi8iH0FAYkIoz6MeuCkLdqM2juK9qQBoN4Ks48wQ+iA=;
-        b=M/OFCkyB6gf3XaVkijrl8FPnqTP3DUKWiXgP6TO6EQgUnaM2E4hsAlIXkN2jzYdpVr
-         R9AG5YSpxK87qFQnnka3tOh/xLms/dNbMalFOzG1DYWJJEIJUJnvlTWLO7mdHDP4jnJv
-         n+7/PlCnpfH77qYlQsKUxEWv/AtKMZnTs1721Myr+/FXQ5Altp3cH54VNkMU3yvijxIt
-         2p2aDYSahD9ZXycrBSXOo3dCVzDuyg1AJ6is6JR1nJgpVifUvokPFxYF6mCedypcwRIm
-         OUC2zFxKPFczvlDPFo6NVe8nSkCu0l9+znIyLLSCiOX8395en5CBBGOMBEBA6U1xP4et
-         ABSw==
-X-Gm-Message-State: AOAM530GIK9e5mvsUXqGaSQAuULdwKrmwCWY6gcg4sKGxWcq09yv1Ds/
-        1ywy0OO4ycWpTYwMKevhalisvw==
-X-Google-Smtp-Source: ABdhPJzWDDSu+QZHAmizrO5aMSiFU6NdT3KLIfTXE5v94X6e4+P4/7SuaoNqW/drd1Cpjh/dctSSSg==
-X-Received: by 2002:a63:d252:0:b0:363:271c:fe63 with SMTP id t18-20020a63d252000000b00363271cfe63mr31827445pgi.524.1646337831852;
-        Thu, 03 Mar 2022 12:03:51 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m4-20020a17090a7f8400b001bef3fc3938sm2837806pjl.49.2022.03.03.12.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 12:03:51 -0800 (PST)
-Date:   Thu, 3 Mar 2022 20:03:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v4 06/30] KVM: x86/mmu: only perform eager page splitting
- on valid roots
-Message-ID: <YiEfI0s6PJyHR96L@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-7-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yho2Dl6zShl3TZZkq1NcbPCns9z7cGft4LPJ8Xl368w=;
+        b=eFGupIYmIb1CAdIRIHgZVBFC0cjA2Na/LakH+pQ39/cOSItwUHnfCgadb1vKBRywnt
+         DOXhqYFhDoNLeWfhml7VK0TZ0ye7TdLhegIiU6wK/4/CM9nRz24yBstvflmbRid7bGHS
+         XaM1Ctg37Bfw4tFU6euWAwTxEvnIWvIMK/B7s9X5iRoDWh5Q8TRhFpQWGvY5lQ3Wq268
+         PCA3srMZVRGRRmeJwy1l4synCIXpAArULQcW+FD0x3zMrDqoB4fSzxl4rCXkt+Ttbeo9
+         3eS31/umvBqu5C1Zp5TjXNBuwBmt5Or1SRMIeEkEdRjGmkKZPDi1KloPGvDt5K1X2p2M
+         PZ7w==
+X-Gm-Message-State: AOAM5331utJuhK2iGJGcthX+RemEvGZLw8/BX28LzHPqrhp/VG6EGXoN
+        QLzLUUDP6QJALRj/ZFEfLkk1qWo3fI8tt8owRME=
+X-Google-Smtp-Source: ABdhPJwznKq7WAlWGc5jU9fVVPRFGTBBbRz1nOWEus/QP1k4cwGVZuGTO18YEyGhePknq75Rx4utv2aqTmUl0FhyLwk=
+X-Received: by 2002:a17:902:e807:b0:150:2801:86f8 with SMTP id
+ u7-20020a170902e80700b00150280186f8mr32835951plg.64.1646337889035; Thu, 03
+ Mar 2022 12:04:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303193842.370645-7-pbonzini@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
+ <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com> <CAADnVQ+q0vF03cH8w0c50XMZU1yf_0UjZ+ZarQ_RqMQrVpOFPA@mail.gmail.com>
+ <93c3fc30-ad38-96fa-cf8e-20e55b267a3b@fb.com> <CAADnVQL4yxhDCLjvCCmpOtg0+8-HSg32KG07TCxx+L+Gji7n6g@mail.gmail.com>
+ <CA+khW7gyOGgqJjyuSjJMJ8+iQmozZ6VhSJ7exZF0gGLOeS5gog@mail.gmail.com> <CAADnVQ+wsp1+4DvrJjw_CAZDatsaQKKz-ZZADdTqSfUAqhv3SA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+wsp1+4DvrJjw_CAZDatsaQKKz-ZZADdTqSfUAqhv3SA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 3 Mar 2022 12:04:37 -0800
+Message-ID: <CAADnVQ+YBiHR5NyAww3_Y7sW2iANPcVB42SEqdxrvXmaVSEgjg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,13 +78,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Paolo Bonzini wrote:
-> Eager page splitting is an optimization; it does not have to be performed on
-> invalid roots.  It is also the only case in which a reader might acquire
-> a reference to an invalid root, so after this change we know that readers
-> will skip both dying and invalid roots.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+On Thu, Mar 3, 2022 at 12:02 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Mar 3, 2022 at 11:43 AM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Wed, Mar 2, 2022 at 6:29 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Mar 2, 2022 at 5:09 PM Yonghong Song <yhs@fb.com> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On 3/2/22 1:30 PM, Alexei Starovoitov wrote:
+> > > > > On Wed, Mar 2, 2022 at 1:23 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > >>
+> > > > >>
+> > > > >>
+> > > > >> On 2/25/22 3:43 PM, Hao Luo wrote:
+> > > > >>> Add a new type of bpf tracepoints: sleepable tracepoints, which allows
+> > > > >>> the handler to make calls that may sleep. With sleepable tracepoints, a
+> > > > >>> set of syscall helpers (which may sleep) may also be called from
+> > > > >>> sleepable tracepoints.
+> > > > >>
+> > > > >> There are some old discussions on sleepable tracepoints, maybe
+> > > > >> worthwhile to take a look.
+> > > > >>
+> > > > >> https://lore.kernel.org/bpf/20210218222125.46565-5-mjeanson@efficios.com/T/
+> > > > >
+> > > > > Right. It's very much related, but obsolete too.
+> > > > > We don't need any of that for sleeptable _raw_ tps.
+> > > > > I prefer to stay with "sleepable" name as well to
+> > > > > match the rest of the bpf sleepable code.
+> > > > > In all cases it's faultable.
+> > > >
+> > > > sounds good to me. Agree that for the bpf user case, Hao's
+> > > > implementation should be enough.
+> > >
+> > > Just remembered that we can also do trivial noinline __weak
+> > > nop function and mark it sleepable on the verifier side.
+> > > That's what we were planning to do to trace map update/delete ops
+> > > in Joe Burton's series.
+> > > Then we don't need to extend tp infra.
+> > > I'm fine whichever way. I see pros and cons in both options.
+> >
+> > Joe is also cc'ed in this patchset, I will sync up with him on the
+> > status of trace map work.
+> >
+> > Alexei, do we have potentially other variants of tp? We can make the
+> > current u16 sleepable a flag, so we can reuse this flag later when we
+> > have another type of tracepoints.
+>
+> When we added the ability to attach to kernel functions and mark them
+> as allow_error_inject the usefulness of tracepoints and even
+> writeable tracepoints was deminissed.
+> If we do sleepable tracepoint, I suspect, it may be the last extension
+> in that area.
+> I guess I'm convincing myself that noinline weak nop func
+> is better here. Just like it's better for Joe's map tracing.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+To add to the above... The only downside of sleepable nop func
+comparing to tp is the lack of static_branch.
+So this nop call will always be there.
+For map tracing and for cgroup mkdir/rmdir the few nanosecond
+overhead of calling an empty function isn't even measurable.

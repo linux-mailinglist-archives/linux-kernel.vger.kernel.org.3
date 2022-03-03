@@ -2,116 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DDF4CC4C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668BE4CC4D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiCCSMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S235647AbiCCSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235604AbiCCSMf (ORCPT
+        with ESMTP id S233816AbiCCSPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:12:35 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68F41A3634
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:11:49 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so3735346wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LUNck2qOGIAZFIO08K9dH5K9dUeU/y3CCAiHWVsNaiU=;
-        b=Kpcv05RipLSXMkEJacI2qWUGB8DGkLunNPOKAp6q407QfQqPXVYLHuh3tJVflMHewP
-         dw0VCX6cq4WM83I5HFN4btHcgUbdKj7KQDUNZKYwjxyfF2HD55eObICGoJao+rnzWtVd
-         ZXhNnp9caIWT09rwqvnyT9j7SZz0zUZt2Hpbf8mjXHUEVYoKQlm2CW9oC685CVG4HedG
-         8JCNdi9JPUWR8pwtB294VW2E5MeQ4N2LCElCVvGUrnme7/IHs6uwSEghbydoBp4+74Ek
-         x7735I3+orSjIhv48+JSmAWzwG36r8JqpjknG3FDuLbq9QxxBnrIsUlbF5fgog54XVja
-         QN+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LUNck2qOGIAZFIO08K9dH5K9dUeU/y3CCAiHWVsNaiU=;
-        b=r3M7w9o0EdvU3OzdiGXnmjQZmogQtwiVdE1qluyWInN9sg8VAAjelbyZ/PUVSo4JPS
-         RGWiqszrbESi9kpSIrmOR7rqByIvn21oH/t0gCO6RbqSPBg8H41ZU5b5oaicmdXmv2/R
-         YOnBE80ku+gxW8/AxMJLw5jtPz98yD43Z1yS6eukEHV7LDsKA7VesHHFv3UE4GHrkUQS
-         2sNdu5JASPun8pY2BY03bT6st2ECFGRFzX9JnfkFKHLiKbdZ7pbzpiav5MzsyzTFLf4W
-         idKohQbkWk1ipDnx9B5Youl6L4i33QkYeBGFqpBLBDUEvN+a7rBzCrCgDrsLDJdQJBRU
-         vSug==
-X-Gm-Message-State: AOAM5319Pww289WO/N+6AeWjKnzOUWoWcpIWlVWBHdlG0rMDDPtxLZ//
-        LhiP0lR7QpK/S3f7PbqtDM8=
-X-Google-Smtp-Source: ABdhPJzRO7ZiUQqf2Fl/fQaFy6YVw9cLJ9bwUb90MHgEF3jGLGM6QNbhzaMywKv3HqVgyUo7ltZpKQ==
-X-Received: by 2002:a7b:c455:0:b0:380:a646:eb0e with SMTP id l21-20020a7bc455000000b00380a646eb0emr4675939wmi.170.1646331108203;
-        Thu, 03 Mar 2022 10:11:48 -0800 (PST)
-Received: from elementary ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b00380ee4a78fdsm3696436wmq.4.2022.03.03.10.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:11:47 -0800 (PST)
-Date:   Thu, 3 Mar 2022 19:11:46 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     tomba@kernel.org, airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, maxime@cerno.tech
-Subject: Re: [PATCH] drm/omap: switch to drm_of_find_panel_or_bridge
-Message-ID: <20220303181146.GA330174@elementary>
-References: <20220220195212.1129437-1-jose.exposito89@gmail.com>
- <YhK0Y3D0O87T5fVW@ravnborg.org>
+        Thu, 3 Mar 2022 13:15:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08AE1965EA
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:14:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F73619EF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3158C340F5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646331269;
+        bh=qFUOAEusKf5EqlT1leY+fpapk6uaLFy25npXakzaPOU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LgUz89MlyL2oMwnV+jl1CbkoV4FbjRYo0SlhXSUZ5hMQ4yb4Pb/zp+uPocsPFMlLo
+         +PAx6suDpzaP2faoPunZF/mEOn2MyJE+M/fwgFgk+f3BRfUub8yYBjEuyRaYnm+WR3
+         zRK4lTnWpb3wOnfBAI1+ZbMVeC9JaNL1vEsPfnFHgH804PMs+l+YfcnTECikPFhXMi
+         kelhjewrFDrVG2AdHUUmuJIl02+yTU70VqMCcPqOYv5ablzsxGe4RqxQd5AZq/QTIB
+         gaB9H+Let7QPiYMJNQm63Ac6YvnY8T11fAlrpmyHwftuwyttNrOPF5VZyz2CrSkndp
+         vFaQFnxldDTtA==
+Received: by mail-ej1-f46.google.com with SMTP id qa43so12368851ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:14:29 -0800 (PST)
+X-Gm-Message-State: AOAM530y/avUuL8KY43DoJGRtM8JLJhYUaVWrfrewc6m6INYYFfDvvXj
+        WZDcj4zAxYXlyt1t/ZZGyP5r2kLup9gM2+c1vQ0GDQ==
+X-Google-Smtp-Source: ABdhPJxnZKo6LX8xW1ggtkT/YnLsX1bDHLa/SMbYlFtKkMSZxzUgC3/QFBzNDtHaNzXIkRqX2USVwPgCqAewaig5tfo=
+X-Received: by 2002:a17:906:9814:b0:6da:a60b:f99b with SMTP id
+ lm20-20020a170906981400b006daa60bf99bmr1287850ejb.496.1646331267646; Thu, 03
+ Mar 2022 10:14:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhK0Y3D0O87T5fVW@ravnborg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+ <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+ <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+ <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com> <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
+In-Reply-To: <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 3 Mar 2022 19:14:16 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
+Message-ID: <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, revest@chromium.org, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 20, 2022 at 10:36:35PM +0100, Sam Ravnborg wrote:
-> Hi José,
-> 
-> On Sun, Feb 20, 2022 at 08:52:12PM +0100, José Expósito wrote:
-> > Use the "drm_of_find_panel_or_bridge" function instead of a custom
-> > version of it to reduce the boilerplate.
-> Thanks for looking into this.
-
-Hi Sam,
-
-Thanks for your quick review, and sorry for the error in my patch.
-I thought my toolchain was properly configured, but it wasn't and
-I missed an include:
-
-  #include <drm/drm_bridge.h>
- +#include <drm/drm_of.h>
-  #include <drm/drm_panel.h>
-
-I apologize for the mistake.
-
-> From the documentation of drm_of_find_panel_or_bridge():
+On Thu, Mar 3, 2022 at 5:30 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
 >
->  * This function is deprecated and should not be used in new drivers. Use
->  * devm_drm_of_get_bridge() instead.
+> On Thu, 2022-03-03 at 17:17 +0100, KP Singh wrote:
+> > On Thu, Mar 3, 2022 at 5:05 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >
+> > > [Cc'ing Florent, Kees]
+> > >
+> > > Hi Alexei,
+> > >
+> > > On Wed, 2022-03-02 at 14:20 -0800, Alexei Starovoitov wrote:
+> > > > On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
+> > > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > > implementation of integrity-focused LSMs based on eBPF.
+> > > > >
+> > > > > Patch 1 fixes some style issues.
+> > > > >
+> > > > > Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
+> > > > > measurement capability of IMA without needing to setup a policy in IMA
+> > > > > (those LSMs might implement the policy capability themselves).
+> > > > >
+> > > > > Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
+> > > > >
+> > > > > Changelog
+> > > > >
+> > > > > v2:
+> > > > > - Add better description to patch 1 (suggested by Shuah)
+> > > > > - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
+> > > > > - Move declaration of bpf_ima_file_hash() at the end (suggested by
+> > > > >   Yonghong)
+> > > > > - Add tests to check if the digest has been recalculated
+> > > > > - Add deny test for bpf_kernel_read_file()
+> > > > > - Add description to tests
+> > > > >
+> > > > > v1:
+> > > > > - Modify ima_file_hash() only and allow the usage of the function with the
+> > > > >   modified behavior by eBPF-based LSMs through the new function
+> > > > >   bpf_ima_file_hash() (suggested by Mimi)
+> > > > > - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
+> > > > >   and bpf_ima_file_hash() can be called inside the implementation of
+> > > > >   eBPF-based LSMs for this hook
+> > > > >
+> > > > > Roberto Sassu (9):
+> > > > >   ima: Fix documentation-related warnings in ima_main.c
+> > > > >   ima: Always return a file measurement in ima_file_hash()
+> > > > >   bpf-lsm: Introduce new helper bpf_ima_file_hash()
+> > > > >   selftests/bpf: Move sample generation code to ima_test_common()
+> > > > >   selftests/bpf: Add test for bpf_ima_file_hash()
+> > > > >   selftests/bpf: Check if the digest is refreshed after a file write
+> > > > >   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
+> > > > >   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+> > > > >   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
+> > > > >     policy
+> > > >
+> > > > We have to land this set through bpf-next.
+> > > > Please get the Acks for patches 1 and 2, so we can proceed.
+> > >
+> >
+> > Hi Mimi,
+> >
+> > > Each year in the LSS integrity status update talk, I've mentioned the
+> > > eBPF integrity gaps.  I finally reached out to KP, Florent Revest, Kees
+> >
+> > Thanks for bringing this up and it's very timely because we have been
+> > having discussion around eBPF program signing and delineating that
+> > from eBPF program integrity use-cases.
+> >
+> > My plan is to travel to LSS (travel and visa permitting) and we can discuss
+> > it more there.
+> >
+> > If you prefer we can also discuss it before in one of the BPF office hours:
+> >
+> > https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
 >
-> Are you OK to give this a second try with the above referenced function?
+> Sounds good.
 >
-> There is a good chance the deprecation happened after you looked into
-> this first, sometimes things moves fast in the drm sub-system.
+> >
+> > > and others, letting them know that I'm concerned about the eBPF module
+> > > integrity gaps.  True there is a difference between signing the eBPF
+> > > source modules versus the eBPF generated output, but IMA could at least
+> > > verify the integrity of the source eBPF modules making sure they are
+> > > measured, the module hash audited, and are properly signed.
+> > >
+> > > Before expanding the ima_file_hash() or ima_inode_hash() usage, I'd
+> > > appreciate someone adding the IMA support to measure, appraise, and
+> > > audit eBPF modules.  I realize that closing the eBPF integrity gaps is
+> > > orthogonal to this patch set, but this patch set is not only extending
+> >
+> > This really is orthogonal and IMHO it does not seem rational to block this
+> > patchset on it.
+> >
+> > > the ima_file_hash()/ima_inode_hash() usage, but will be used to
+> > > circumvent IMA.  As per usual, IMA is policy based, allowing those
+> >
+> > I don't think they are being used to circumvent IMA but for totally
+> > different use-cases (e.g. as a data point for detecting attacks).
+> >
+> >
+> > > interested in eBPF module integrity to define IMA policy rules.
 >
->       Sam
+> That might be true for your usecase, but not Roberto's.  From the cover
+> letter above, Roberto was honest in saying:
+>
+> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of
+> the measurement capability of IMA without needing to setup a policy in
+> IMA (those LSMs might implement the policy capability themselves).
 
-I'm getting started in the DRM subsystem, so I might have overlooked
-a function, but I think that in this case, since we need to store the
-panel in "out->panel" we can not use "devm_drm_of_get_bridge".
+Currently to use the helper bpf_ima_inode_hash in LSM progs
+one needs to have a basic IMA policy in place just to get a hash,
+even if one does not need to use the whole feature-set provided by IMA.
+These patches would be quite beneficial for this user-journey.
 
-"devm_drm_of_get_bridge" returns the bridge and I didn't find a way
-to access the panel from it... But as I mentioned, I probably
-overlooked the required function or pointer.
+Even Robert's use case is to implement IMA policies in BPF this is still
+fundamentally different from IMA doing integrity measurement for BPF
+and blocking this patch-set on the latter does not seem rational and
+I don't see how implementing integrity for BPF would avoid your
+concerns.
 
-Thanks again for your review,
-Jose
+
+
+>
+> --
+> thanks,
+>
+> Mimi
+>

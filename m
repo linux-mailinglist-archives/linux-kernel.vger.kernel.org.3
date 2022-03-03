@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8585E4CC272
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344A24CC27A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbiCCQSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S234923AbiCCQS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbiCCQSH (ORCPT
+        with ESMTP id S234914AbiCCQSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:18:07 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B8198EF8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:17:20 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id cx5so4969826pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:17:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
-        b=f5cbZWp0l7V5NSC/zdO1vxrF3W7wwYFHKtO8cOCwJaIDiB6EMzBYBsj1g6UWsRfLB4
-         aX1Uhevud6cITd1Z+d/TsvEbBYDd2fnfSH2cHOBQdRVrYGrTbq8thToFnuO46RA6Nybt
-         hrtZ+n8mPcu9Dw/9i/Nfd40xkBTM0jFyQGyqVjkeya/O/FoNCdt5yq+Qct21QYxrQBrl
-         ABzhjQ4qMXdxAzqEIhVt9BwtGKxSNSTuPWHd4BccpkheqvEWvMEgQEh/g+EWaqLl2M+8
-         A9FQg4M80zo269WKPnX6UD67fSjA/ZTF1dF6VIBhzRatTW/U9ofK8sYf1kA/qH9dQbqx
-         tJ3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
-        b=dqQ+6ZMAvIGiCST0ZzkUJIbROvKvUbuP22KcCsatJoYX+tzO1wS4f4jsGUcVPWXDcD
-         samHz/B00va68XFSMRZ/DyCfdy4hIA8crQmOn8qIfpUlCG8C7/zjIhDId1c9ITCD1Xgs
-         kFJPn4yl5RJy8oNJAAY8xKuu7sInNvue62b4cr/nko2IuZ6pBMhquyAFnHRWkObqXeat
-         fKVRNmPYgSii2U/Q6K1e+yXTK0o+jmjbVValNwUXf6uDknl13Gv8wa2tU6O614akN+om
-         YRiuGW2UuMcXv6Bff/Uj5bIGefuUD7/rSUsgsmaNFQp/PoenqAyl1K72rJ062LYu2gIr
-         hcjQ==
-X-Gm-Message-State: AOAM530Qaf9/cU5R9qfROQwywRb+tznvMcQCpYUTBaBrNZrlJJrKc6bT
-        7anunl68e++ezUuhNmHn3ChjZpf+uOul9g7ytY7+Dg==
-X-Google-Smtp-Source: ABdhPJwPEu+6ywb/M5QvzZRCzi2yTouSdW4zQSvgUsZL0viME6YTiy6qZ4sf58hiUdsCnAuMA9/GDRf7cqf6M9ysSOo=
-X-Received: by 2002:a17:903:24f:b0:14f:73fa:2b30 with SMTP id
- j15-20020a170903024f00b0014f73fa2b30mr37072357plh.174.1646324239927; Thu, 03
- Mar 2022 08:17:19 -0800 (PST)
+        Thu, 3 Mar 2022 11:18:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B2A2714B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:17:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A6EFB8265D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 16:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D076EC340F9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 16:17:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646324252;
+        bh=/ZWe49jQJkr12AEm1P07Eh98cxlG3/HS474l5FTMwHs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UmOn7Bosj8t4oJVKS4OA8FcbJfAC7B5LlYUL0bF0Zx2KIZQ2zzqpmJWIqHPkkt00f
+         WZrgr+ODVt05JnZ/joO39CjW7HjzONyd3le6TpMnYD20To5hFAY9T9FKy/XbzX9Zux
+         5o2EdoyUphx0cLcEixg+3ww8AZ23f0gjSUOh5m5xzw6jWzowBRmGdQius9HJvjqmyz
+         9TfmHOoAPDrUznNmMT1KWBIeXdUoHX4p4pORRdCXo1vcLxgGbFgBHryqa+sWEWeUZD
+         EJdLGBON4afC46HdGjbUnPAKX6m0VFZTprvIU55I9bxD3Sbl53UNc6rR/LjTUY9nPr
+         uc0LE2SMbWvzQ==
+Received: by mail-ed1-f41.google.com with SMTP id w4so4755338edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:17:32 -0800 (PST)
+X-Gm-Message-State: AOAM532hk7wIRChGxawwnXEBILdHTSN7BWaIFUkXmkf+HBgqDv+hA2mo
+        /qgKVZb7CRgfloRQVjB1W6cxluo46OIAzMLlbABTvA==
+X-Google-Smtp-Source: ABdhPJyN5PZNXSguyXSUb/tYULbqPF/1hx/svuD9WOYMW+wLY8zvUzl7ttjxUk1ATBrmx+q9bEM9gwwjMV5lttVgcWo=
+X-Received: by 2002:a50:cf48:0:b0:415:df40:9e3d with SMTP id
+ d8-20020a50cf48000000b00415df409e3dmr3350050edk.185.1646324249183; Thu, 03
+ Mar 2022 08:17:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302150717.11193-1-clement.leger@bootlin.com>
- <CAHUa44H4d2QdXSY5e5VqrGh5sQPhRuFBaBvsy_mTErQQmxJo6w@mail.gmail.com> <20220303091555.7a0298b9@fixe.home>
-In-Reply-To: <20220303091555.7a0298b9@fixe.home>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 3 Mar 2022 17:17:08 +0100
-Message-ID: <CAHUa44F8HLwd2b0sYR0ELJucEe3-__gSKwVigsr7Oig+vqiTTA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: optee: add RTC driver for OP-TEE RTC PTA
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+ <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com> <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+In-Reply-To: <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 3 Mar 2022 17:17:18 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
+Message-ID: <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, revest@chromium.org, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,177 +71,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:17 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@bootl=
-in.com> wrote:
+On Thu, Mar 3, 2022 at 5:05 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
 >
-> Le Thu, 3 Mar 2022 08:35:17 +0100,
-> Jens Wiklander <jens.wiklander@linaro.org> a =C3=A9crit :
+> [Cc'ing Florent, Kees]
 >
-> Hi Jens, looks like you forgot to "Reply All".
+> Hi Alexei,
+>
+> On Wed, 2022-03-02 at 14:20 -0800, Alexei Starovoitov wrote:
+> > On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
+> > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > implementation of integrity-focused LSMs based on eBPF.
+> > >
+> > > Patch 1 fixes some style issues.
+> > >
+> > > Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
+> > > measurement capability of IMA without needing to setup a policy in IMA
+> > > (those LSMs might implement the policy capability themselves).
+> > >
+> > > Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
+> > >
+> > > Changelog
+> > >
+> > > v2:
+> > > - Add better description to patch 1 (suggested by Shuah)
+> > > - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
+> > > - Move declaration of bpf_ima_file_hash() at the end (suggested by
+> > >   Yonghong)
+> > > - Add tests to check if the digest has been recalculated
+> > > - Add deny test for bpf_kernel_read_file()
+> > > - Add description to tests
+> > >
+> > > v1:
+> > > - Modify ima_file_hash() only and allow the usage of the function with the
+> > >   modified behavior by eBPF-based LSMs through the new function
+> > >   bpf_ima_file_hash() (suggested by Mimi)
+> > > - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
+> > >   and bpf_ima_file_hash() can be called inside the implementation of
+> > >   eBPF-based LSMs for this hook
+> > >
+> > > Roberto Sassu (9):
+> > >   ima: Fix documentation-related warnings in ima_main.c
+> > >   ima: Always return a file measurement in ima_file_hash()
+> > >   bpf-lsm: Introduce new helper bpf_ima_file_hash()
+> > >   selftests/bpf: Move sample generation code to ima_test_common()
+> > >   selftests/bpf: Add test for bpf_ima_file_hash()
+> > >   selftests/bpf: Check if the digest is refreshed after a file write
+> > >   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
+> > >   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+> > >   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
+> > >     policy
+> >
+> > We have to land this set through bpf-next.
+> > Please get the Acks for patches 1 and 2, so we can proceed.
+>
 
-You're right.
+Hi Mimi,
 
->
-> > > +
-> > > +       /* Fill invoke cmd params */
-> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
-> > > +       param[0].u.memref.size =3D sizeof(struct optee_rtc_time);
-> > > +       param[0].u.memref.shm_offs =3D 0;
-> > > +
-> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
-> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
-> >
-> > if (ret < 0 || inv_arg.ret) looks easier to me. Please check the patch
-> > with checkpatch --strict do catch all these and other trivial checks.
->
-> Acked, the rng-optee driver might not be a good starting point :/ Will
-> check that.
->
-> > > +static int optee_rtc_read_info(struct device *dev, struct rtc_device=
- *rtc,
-> > > +                              u64 *features)
-> > > +{
-> > > +       struct optee_rtc *priv =3D dev_get_drvdata(dev);
-> > > +       struct tee_ioctl_invoke_arg inv_arg =3D {0};
-> > > +       struct tee_param param[4] =3D {0};
-> > > +       struct optee_rtc_info *info;
-> > > +       struct optee_rtc_time *tm;
-> > > +       int ret =3D 0;
-> > > +
-> > > +       inv_arg.func =3D TA_CMD_RTC_GET_INFO;
-> > > +       inv_arg.session =3D priv->session_id;
-> > > +       inv_arg.num_params =3D 4;
-> > > +
-> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
-> > > +       param[0].u.memref.size =3D sizeof(*info);
-> > > +       param[0].u.memref.shm_offs =3D 0;
-> > > +
-> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
-> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
-> > > +               dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\=
-n",
-> > > +                       inv_arg.ret);
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > > +       info =3D tee_shm_get_va(priv->entropy_shm_pool, 0);
-> > > +       if (IS_ERR(info)) {
-> > > +               dev_err(dev, "tee_shm_get_va failed\n");
-> > > +               return PTR_ERR(info);
-> > > +       }
-> > > +
-> > > +       if (param[0].u.memref.size < sizeof(*info)) {
-> > > +               dev_err(dev, "Invalid read size from OPTEE\n");
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > > +       if (info->version !=3D RTC_INFO_VERSION) {
-> > > +               dev_err(dev, "Unsupported information version %llu\n"=
-,
-> > > +                             info->version);
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > > +       *features =3D info->features;
-> > > +
-> > > +       tm =3D &info->range_min;
-> > > +       rtc->range_min =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
-day,
-> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
-);
-> > > +       tm =3D &info->range_max;
-> > > +       rtc->range_max =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
-day,
-> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
-);
-> >
-> > If this is the only thing we're going to do with the returned min and
-> > max, how come this wasn't done on the OP-TEE side already? Without
-> > these large structs we could have defined an ABI without the need for
-> > shared memory.
->
-> mktime64 converts the time range to the number of seconds elapsed since
-> 1970. I thought it would be better not to assess anything about the way
-> the time is stored on OP-TEE side and thus return the full time struct.
-> If you think it's acceptable to suppose that, then, we can still switch
-> to using timestamps as the ABI with OP-TEE RTC PTA. The same could be
-> done to get/set time if needed in this case.
+> Each year in the LSS integrity status update talk, I've mentioned the
+> eBPF integrity gaps.  I finally reached out to KP, Florent Revest, Kees
 
-This is a bit more complicated than I first thought. The proposed ABI
-is fine from my point of view.
+Thanks for bringing this up and it's very timely because we have been
+having discussion around eBPF program signing and delineating that
+from eBPF program integrity use-cases.
 
-Cheers,
-Jens
+My plan is to travel to LSS (travel and visa permitting) and we can discuss
+it more there.
 
+If you prefer we can also discuss it before in one of the BPF office hours:
+
+https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
+
+> and others, letting them know that I'm concerned about the eBPF module
+> integrity gaps.  True there is a difference between signing the eBPF
+> source modules versus the eBPF generated output, but IMA could at least
+> verify the integrity of the source eBPF modules making sure they are
+> measured, the module hash audited, and are properly signed.
 >
-> > > +
-> > > +static int optee_rtc_probe(struct device *dev)
-> > > +{
-> > > +       struct tee_client_device *rtc_device =3D to_tee_client_device=
-(dev);
-> > > +       struct tee_ioctl_open_session_arg sess_arg;
-> > > +       struct tee_shm *entropy_shm_pool =3D NULL;
-> > > +       int ret =3D 0, err =3D -ENODEV;
-> >
-> > There is generally no need to initialize these here.
-> >
-> > > +       struct optee_rtc *priv;
-> > > +       struct rtc_device *rtc;
-> > > +
-> > > +       memset(&sess_arg, 0, sizeof(sess_arg));
-> > > +
-> > > +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > > +       if (!priv)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       rtc =3D devm_rtc_allocate_device(dev);
-> > > +       if (IS_ERR(rtc))
-> > > +               return PTR_ERR(rtc);
-> > > +
-> > > +       /* Open context with TEE driver */
-> > > +       priv->ctx =3D tee_client_open_context(NULL, optee_ctx_match, =
-NULL,
-> > > +                                              NULL);
-> > > +       if (IS_ERR(priv->ctx))
-> > > +               return -ENODEV;
-> > > +
-> > > +       /* Open session with rtc Trusted App */
-> > > +       memcpy(sess_arg.uuid, rtc_device->id.uuid.b, TEE_IOCTL_UUID_L=
-EN);
-> >
-> > Perhaps uuid_copy() would be better.
+> Before expanding the ima_file_hash() or ima_inode_hash() usage, I'd
+> appreciate someone adding the IMA support to measure, appraise, and
+> audit eBPF modules.  I realize that closing the eBPF integrity gaps is
+> orthogonal to this patch set, but this patch set is not only extending
+
+This really is orthogonal and IMHO it does not seem rational to block this
+patchset on it.
+
+> the ima_file_hash()/ima_inode_hash() usage, but will be used to
+> circumvent IMA.  As per usual, IMA is policy based, allowing those
+
+I don't think they are being used to circumvent IMA but for totally
+different use-cases (e.g. as a data point for detecting attacks).
+
+- KP
+
+> interested in eBPF module integrity to define IMA policy rules.
 >
-> Ok, I will use export_uuid() then.
+> thanks,
 >
-> >
-> > > +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
-> > > +       sess_arg.num_params =3D 0;
-> > > +
-> > > +       ret =3D tee_client_open_session(priv->ctx, &sess_arg, NULL);
-> > > +       if ((ret < 0) || (sess_arg.ret !=3D 0)) {
-> > > +               dev_err(dev, "tee_client_open_session failed, err: %x=
-\n",
-> > > +                       sess_arg.ret);
-> > > +               err =3D -EINVAL;
-> > > +               goto out_ctx;
-> > > +       }
-> > > +       priv->session_id =3D sess_arg.session;
-> > > +
-> > > +       entropy_shm_pool =3D tee_shm_alloc(priv->ctx,
-> > > +                                        sizeof(struct optee_rtc_info=
-),
-> > > +                                        TEE_SHM_MAPPED | TEE_SHM_DMA=
-_BUF);
-> >
-> > tee_shm_alloc() is about to be removed. Please rebase on
-> > https://git.linaro.org/people/jens.wiklander/linux-tee.git/tag/?h=3Dtee=
--shm-for-v5.18
+> Mimi
 >
-> Acked.
->
-> --
-> Cl=C3=A9ment L=C3=A9ger,
-> Embedded Linux and Kernel engineer at Bootlin
-> https://bootlin.com

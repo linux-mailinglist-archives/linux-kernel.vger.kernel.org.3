@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29984CC34D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BDF4CC34F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiCCQ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S235207AbiCCQ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiCCQ5o (ORCPT
+        with ESMTP id S234358AbiCCQ6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:57:44 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9227219DEAB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:56:58 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e6so5044487pgn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:56:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=E0epGT0NyN75DMnyrgnvgf75tyJ75K4JPqaLbgb0ul8=;
-        b=mqgoW9O8l6XRyzNT9pkEkJDgLRqeD3PIedns7h5AvY0YdUN+TYOr1nOVrUEqq3yfVf
-         +SFgO5kMvjdVShDdb6IDxm6NYeo6pgsE7W5iOTMABofaoq3I5n3fmC5ajtDu7JDkMS1y
-         eAwy8F8DKLGrASZPUM27H02cWnvhYeo80c669EE7IJbFsYzve9THp6HEkY+ZmvF7PG6J
-         f7PYRJu1vuH0gRTmzRCdcMJmRsXhLn+5Vuit76F3rxYO46i2L91MTrIpyaEoJWrTaIF1
-         gcjErt52PJeJrd12JZ4rBGxw5CRtRON9O9OkxgebKS9Stw8wNfSFP35YAMVcSZT4ZKyO
-         Vrsw==
+        Thu, 3 Mar 2022 11:58:11 -0500
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D1382;
+        Thu,  3 Mar 2022 08:57:25 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so6460636ooi.2;
+        Thu, 03 Mar 2022 08:57:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=E0epGT0NyN75DMnyrgnvgf75tyJ75K4JPqaLbgb0ul8=;
-        b=CAJ0yNX2C0telrqkitAFxlvpl1GCO/GlvvOVhVCzFyzHyGU+7gVnH83Imfpl2nClcq
-         rA+JU7qeFUYj0p25t8Nwl9CL2tNvNF6YA/DwEi64pKGt4ecpjhzT5nqEcYFOj0rEtQXJ
-         PEyUfGy6Mn+XFgwP8lp35TBJ+Ub4byEdVlZkJ6RkNjkXZzaKmMGTl1osuwYTjScjjzB/
-         xNCCbXwpOW1H6oeUJKNGDu+jnjpVCQl0R58EmweCgyepvHJNOCNyCY5GQeKeqNUuOYHy
-         u2LVyuGnKm8j/xXWBN2MnIkAIH06ovxcuUbymnkVOaWR7j6Q1dlWXrb343NC7NqiLmMd
-         GlkA==
-X-Gm-Message-State: AOAM532szrAVZLPIKs9YUnQT6X/la5j29HofjyZ44mrGnXXsr1R4Z36m
-        WjvuBhe92XfWq0HkedARhgaO8K0MBev4NA==
-X-Google-Smtp-Source: ABdhPJyzD5wtRnsX77E3+CshxjS9x8p4UfMWvuB6NjRfZbIyL92Mjkd54E5GHJkWgp4bcYXUKNh46A==
-X-Received: by 2002:a63:ea53:0:b0:341:a28e:16b9 with SMTP id l19-20020a63ea53000000b00341a28e16b9mr30928837pgk.259.1646326617785;
-        Thu, 03 Mar 2022 08:56:57 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g14-20020a65594e000000b003759850ef17sm2583102pgu.31.2022.03.03.08.56.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XGCumHgMLBELRu52rk5UqShkzz2ZUaCbCoiX7DHIJjo=;
+        b=3daa/Xi6PRdQVAlbzp0kfVKo6cW9IllCPEh1rgDtJM/YFEKfz/QfnBZO6ZuO+tWA2l
+         rMZRgMdDAQhWDR3biBOC4jwA6IJV/EeczDdcN44758lwZmRMbLMnyH5tNgZXX5qp+xEQ
+         rNDuoDBE1bjECG+CywGheBzjiOG3Sp8+ncEbocldysocdeGtRFh/cYFq5zkmD1Qpt0hv
+         5HTE5Hr5chRteD2xK9tgrq/KWqIwhn7XNyJsfg9U9EY5lpD1c66jktG9EbyrT/rOJSR7
+         7HI5PQNPcWUjg3qroOanuJ5egZE9bOnrvtmfhBNKYjtXmcuy5p0M+yVVoNwt8BMa5ees
+         4Jww==
+X-Gm-Message-State: AOAM532VSCD0tB8CjprYB4bJ7906DwW373klPCuk3ZxU2nBdYDYrVHsk
+        6ssNaY8ibb5SkeEYFwA2ko1jvEizGw==
+X-Google-Smtp-Source: ABdhPJwXDCjm/ogChH0mahEYJGjHROaJuT/GNQDy5B6m7ZeQMkVYPgNQGQYbmPKjCrLxG505HRERSQ==
+X-Received: by 2002:a05:6820:552:b0:31c:5eca:fa40 with SMTP id n18-20020a056820055200b0031c5ecafa40mr18682006ooj.82.1646326644797;
+        Thu, 03 Mar 2022 08:57:24 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id l20-20020a056820031400b0031cf5913126sm1155125ooe.36.2022.03.03.08.57.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 08:56:57 -0800 (PST)
-Date:   Thu, 3 Mar 2022 16:56:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        x86@kernel.org, Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] KVM: x86: mmu: trace kvm_mmu_set_spte after the new SPTE
- was set
-Message-ID: <YiDzVRG0VA3LXLrC@google.com>
-References: <20220302102457.588450-1-mlevitsk@redhat.com>
+        Thu, 03 Mar 2022 08:57:24 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: arm: Allow 32-bit 'cpu-release-addr' values
+Date:   Thu,  3 Mar 2022 10:57:09 -0600
+Message-Id: <20220303165710.1859862-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302102457.588450-1-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022, Maxim Levitsky wrote:
-> It makes more sense to print new SPTE value than the
-> old value.
-> 
+While the DT Spec says 'cpu-release-addr' is always 64-bit, some 32-bit Arm
+DTs used a 32-bit value. We're now stuck with those cases, so add uint32 as
+a valid type.
 
-  Fixes: d786c7783b01 ("KVM: MMU: inline set_spte in mmu_set_spte")
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/cpus.yaml | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-And arguably even Cc: stable@vger.kernel.org, though that's unnecessary if this
-gets into 5.17, which it should.
+diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+index 85a31ca862d0..ed04650291a8 100644
+--- a/Documentation/devicetree/bindings/arm/cpus.yaml
++++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+@@ -233,14 +233,14 @@ properties:
+           - ti,am4372
+ 
+   cpu-release-addr:
+-    $ref: '/schemas/types.yaml#/definitions/uint64'
+-
++    oneOf:
++      - $ref: '/schemas/types.yaml#/definitions/uint32'
++      - $ref: '/schemas/types.yaml#/definitions/uint64'
+     description:
++      The DT specification defines this as 64-bit always, but some 32-bit Arm
++      systems have used a 32-bit value which must be supported.
+       Required for systems that have an "enable-method"
+         property value of "spin-table".
+-      On ARM v8 64-bit systems must be a two cell
+-        property identifying a 64-bit zero-initialised
+-        memory location.
+ 
+   cpu-idle-states:
+     $ref: '/schemas/types.yaml#/definitions/phandle-array'
+-- 
+2.32.0
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 94f077722b290..0e209f0b2e1d2 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2690,8 +2690,8 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
->  	if (*sptep == spte) {
->  		ret = RET_PF_SPURIOUS;
->  	} else {
-> -		trace_kvm_mmu_set_spte(level, gfn, sptep);
->  		flush |= mmu_spte_update(sptep, spte);
-> +		trace_kvm_mmu_set_spte(level, gfn, sptep);
->  	}
->  
->  	if (wrprot) {
-> -- 
-> 2.26.3> 

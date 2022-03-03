@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBA54CB6BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62CC4CB6C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiCCGNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S229815AbiCCGOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiCCGNe (ORCPT
+        with ESMTP id S229491AbiCCGOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:13:34 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106CA3466F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:12:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646287969; x=1677823969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=su36CMckldqWhdXbhjjzt3AD3t+FfqRqmUyh69ml0Ok=;
-  b=KtoAeugOXcwyULg2cBi/kB6fhqIlFCorWHKcLq0Q79iIt+Nwftn0d/GH
-   wAoeJJlb5tmEdBRlo9Zlv8c34ZWXGjMcxs+aP96d1AZzC1maIxO69/jG0
-   rruoP9TRqvC4ZddSXKzP2Q3BtMb5af2plgea4D8raOareGJ0buRcqUvEa
-   HJArUOOB4a3FTqbROU3eWb6YA4D98iRGGfKl1YOqgzk5DARvJPSD3BKxI
-   FODj20qbFLb0pzxUXA4vX/tHwEs89FunYELm55o+MgR0fVRQdvvOXQ9AE
-   BCDoe59G94vTtKY/B6CUUHcbhEV+4F3YN+XLmdJDyINdHrw2O8TSL2JHm
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234202225"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="234202225"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:12:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="511295925"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 22:12:46 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPehh-0000DU-KR; Thu, 03 Mar 2022 06:12:45 +0000
-Date:   Thu, 3 Mar 2022 14:12:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
-Subject: [RFC PATCH ammarfaizi2-block] ANDROID: net: paranoid: commoncap:
- __cap_capable() can be static
-Message-ID: <20220303061236.GA70904@6305ff5a442d>
-References: <202203031440.TcuCrT9t-lkp@intel.com>
+        Thu, 3 Mar 2022 01:14:36 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E57F142360;
+        Wed,  2 Mar 2022 22:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646288032; x=1677824032;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=VD0AZMAIYmqzxJLxeOrA726gsjmp5TyhBn4gVSNajQ0=;
+  b=zLA2ndNuTXZpj9MlAjwsXMK7VLRJbsKN7YBa6mF3oh5mbHJkUMA3mLT9
+   SNa0JambftjT0xtxU4tHMsLlApUFAX8QMsreKqsxHm4t+j1l3Xpygmv9R
+   c0v7jodzQVulfxhsYA8D1TTKNKwbbkOWrTX/hzlFBasEnxNqoQ0I56/qB
+   U=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Mar 2022 22:13:51 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:13:50 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 2 Mar 2022 22:13:50 -0800
+Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 2 Mar 2022 22:13:44 -0800
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: [PATCH v2 0/3] Add QCOM SNPS PHY overriding params support
+Date:   Thu, 3 Mar 2022 11:43:28 +0530
+Message-ID: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203031440.TcuCrT9t-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-security/commoncap.c:75:5: warning: symbol '__cap_capable' was not declared. Should it be static?
+Added support for overriding tuning parameters in QCOM SNPS PHY
+from device tree.
 
-Fixes: 2b02b4ab89b9 ("ANDROID: net: paranoid: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- security/commoncap.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+changes in v2:
+Reading the individual fields in each overriding register from device tree.
 
-diff --git a/security/commoncap.c b/security/commoncap.c
-index 2ed79a834a965..f38709ba26317 100644
---- a/security/commoncap.c
-+++ b/security/commoncap.c
-@@ -72,7 +72,7 @@ static void warn_setuid_and_fcaps_mixed(const char *fname)
-  * cap_has_capability() returns 0 when a task has a capability, but the
-  * kernel's capable() and has_capability() returns 1 for this case.
-  */
--int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
-+static int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
- 		int cap, int audit)
- {
- 	struct user_namespace *ns = targ_ns;
+Sandeep Maheswaram (3):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+    bindings
+  phy: qcom-snps: Add support for overriding phy tuning parameters
+  arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
+
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 ++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 192 +++++++++++++++++++++
+ 3 files changed, 323 insertions(+)
+
+-- 
+2.7.4
+

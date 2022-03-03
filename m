@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743294CBE32
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D110A4CBE36
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbiCCMwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 07:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S233462AbiCCMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 07:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiCCMwX (ORCPT
+        with ESMTP id S231392AbiCCMzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 07:52:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721FD184B79;
-        Thu,  3 Mar 2022 04:51:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 275C9B8250F;
-        Thu,  3 Mar 2022 12:51:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5767FC004E1;
-        Thu,  3 Mar 2022 12:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646311895;
-        bh=OTrmcL4xmDZ9LP4eXxRB4TvKYiKUGaZuGXMOhO/shuw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=P78vbiaJb4eH+kfLw5HeUxNqzBzyVqR2D9jgkzEjNIv7dYjFi6gvexgokzKCzQlT+
-         gwVUe0oD3GhjqnD+86B0+Lu9bDGERqR3aQe0O5Bg/xHHFy2TTj9zIS1OU8Yn1wUyKt
-         06x/XEienkLrtwHm6+JCQpdw4DUMgL+R1yettUrqd4ukAOHI+t2yDC9ZmPuP9wqFXm
-         9fMkmFAHT7lJEZ8x5dMN6dCzrxQQ3OsRg6KDc0nQqGNktKhUGfacrz8Q5VF/x5P+u8
-         98Fh8qd7KDUC17DJpBL5Ct1lof45B4R3ODTG8EVCFvW5bnm2cuXDILjI7EjPF0JxoF
-         ZTPvocfGXvb1g==
-Message-ID: <ca84ca91f1114bb9d8d0de29a00ac8a631caf5b2.camel@kernel.org>
-Subject: Re: [PATCH] cachefiles: Fix incorrect length to fallocate()
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 03 Mar 2022 07:51:33 -0500
-In-Reply-To: <164630854858.3665356.17419701804248490708.stgit@warthog.procyon.org.uk>
-References: <164630854858.3665356.17419701804248490708.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 3 Mar 2022 07:55:24 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38F3EBBC;
+        Thu,  3 Mar 2022 04:54:39 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id b13so3740871qkj.12;
+        Thu, 03 Mar 2022 04:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gpvc/JncUD6k2jJA3rPe/Gzgk+Fq4UJfHnGecuBxreA=;
+        b=IKexSrjmgJhU/WoXJKfWByEwrcXXCaNVPlDjEbMiSg0nxBodoBSBq20+tAwigK6+pC
+         9Dp6cFBNY+QNtcPfFvnwju/gHjuFP+6ukcCnooqujSXxGAkBpnouqN1b+TQXjs+Yfi36
+         WUWSGgNTjHRQiqueElBcOjkFqfNubmTwkDuIPRDKk65BJVYxujTBTUB/R9Yj71lu8EmR
+         1Dh4K2vfrjlXP5q1NTc264erP0AEzWAhFK8isbrZAlyXsw11MyCLEOS2Xu/38VYki9dP
+         VCdIcInwZgLBQFuPC8S/9sVzCg7bShQNrudP7qD0LkThcDgEkk0geVGMx22W9GCSObdd
+         eVoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gpvc/JncUD6k2jJA3rPe/Gzgk+Fq4UJfHnGecuBxreA=;
+        b=EI+MeLd1RLOA60DY1nIuUct8EqfkM0r1/WB/hLgShm4b2Gy6EAzN7XZ+Vql1V7d03m
+         GxZQIi+4AjePoRsyyJCzq39zyPYc/jkEqaQjsY2A91IpbgAQStRCuxOUm0FTXEZa6XPd
+         jgEiLYNzHPOfgZXlbh5JHWKTzYE8MgkOeeQ4FMvs8fuWPQYWaYV2LJAK7WCHjw7k4Hh3
+         FXvIvXGatMcuF4MHKgfSYdoAkoapefnJcGiXsBHz1BsF8jIBUFvwr32Yz/a1y4OP63Dx
+         LJSwu6WWwP49unC4drefz2h1TlSR9gj+phUcRg2QqRa6CBeMsfTs/C/HSyCUpCrU62AU
+         xtIA==
+X-Gm-Message-State: AOAM530L32cTe151n1qzyLRBDsEnqOcFn1x6aL4IT1MfPF67j4jtZpow
+        /v81cbbrmnQkMgWbll3QcDwXaee/jk2p7p4lpDE=
+X-Google-Smtp-Source: ABdhPJya62aW6zfOJJA50kUityeXdjHGZGgzkLm44Teu6/f9/Pp5GGbIVsrZWAIDPZCmqYoXqiTzVJWyoZq7y7zgu3A=
+X-Received: by 2002:a05:620a:11:b0:508:7199:40ef with SMTP id
+ j17-20020a05620a001100b00508719940efmr18483948qki.62.1646312078413; Thu, 03
+ Mar 2022 04:54:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-9-warp5tw@gmail.com>
+ <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
+In-Reply-To: <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
+From:   Tali Perry <tali.perry1@gmail.com>
+Date:   Thu, 3 Mar 2022 14:54:27 +0200
+Message-ID: <CAHb3i=t+Ai3w5mMhmZxxMsD7Zv0xpM4ZicMCmdDMtVn_OMbWYA@mail.gmail.com>
+Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        arnd@arndb.de, olof@lixom.net, Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-03 at 11:55 +0000, David Howells wrote:
-> When cachefiles_shorten_object() calls fallocate() to shape the cache file
-> to match the DIO size, it passes the total file size it wants to achieve,
-> not the amount of zeros that should be inserted.  Since this is meant to
-> preallocate that amount of storage for the file, it can cause the cache to
-> fill up the disk and hit ENOSPC.
-> 
-> Fix this by passing the length actually required to go from the current EOF
-> to the desired EOF.
-> 
-> Fixes: 7623ed6772de ("cachefiles: Implement cookie resize for truncate")
-> Reported-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> ---
-> 
->  fs/cachefiles/interface.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/cachefiles/interface.c b/fs/cachefiles/interface.c
-> index 51c968cd00a6..ae93cee9d25d 100644
-> --- a/fs/cachefiles/interface.c
-> +++ b/fs/cachefiles/interface.c
-> @@ -254,7 +254,7 @@ static bool cachefiles_shorten_object(struct cachefiles_object *object,
->  		ret = cachefiles_inject_write_error();
->  		if (ret == 0)
->  			ret = vfs_fallocate(file, FALLOC_FL_ZERO_RANGE,
-> -					    new_size, dio_size);
-> +					    new_size, dio_size - new_size);
->  		if (ret < 0) {
->  			trace_cachefiles_io_error(object, file_inode(file), ret,
->  						  cachefiles_trace_fallocate_error);
-> 
-> 
+> On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > Use ioread8 instead of ioread32 to access the SMBnCTL3 register since
+> > the register is only 8-bit wide.
+>
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+>
+> No, this is bad commit message, since you have bitwise masks and there is
+> nothing to fix from functional point of view. So, why is this a fix?
+>
 
-Looks good!
+The next gen of this device is a 64 bit cpu.
+The module is and was 8 bit.
 
-I could often force the cache to fill up with the right fsstress run on
-ceph, but with this in place I'm on the 5th run of xfstest generic/013
-and it hasn't happened yet. You can add these if you like:
+The ioread32 that seemed to work smoothly on a 32 bit machine
+was causing a panic on a 64 bit machine.
+since the module is 8 bit we changed to ioread8.
+This is working both for the 32 and 64 CPUs with no issue.
 
-Tested-by: Jeff Layton <jlayton@kernel.org>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+>
+> This is wrong SoB chain.
+>
+> ...
+>
+> > -     return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> > +     return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+>
+> ...
+>
+> > -     return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> > +     return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+
+Thanks Andy,
+
+BR,
+Tali Perry

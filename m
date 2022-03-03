@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF5B4CC7DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981654CC7EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbiCCVVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S236495AbiCCVXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234966AbiCCVVf (ORCPT
+        with ESMTP id S234379AbiCCVXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:21:35 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE55131F40
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:20:49 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id e13so5919903plh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:20:49 -0800 (PST)
+        Thu, 3 Mar 2022 16:23:45 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A465D0C;
+        Thu,  3 Mar 2022 13:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rBo3jZiOb9ie0OVzwiL7KeGDNnK38FfYtqhoqdr/oLw=;
-        b=IJHZYEdssdmdMlb2+aXz7JQ31BYbsvxLjYn9LnFurux/4lGINeibeBYeYOLyvSYb6T
-         43F49jU7r0OH9Dn2nbJXJiyr6bwUvbkoNuwsrrYEmU5SzoCFWWVkVnuEfrd1PoCQMDdr
-         daQG9ZYuvKIbVaXwdtHq2W3ck+wtdheldhbx4u2bU3K/JvlZpKI4fy6c4Kaa68bdT93F
-         anByzCC9lUmSFFeMhNhDq63ay0IY6H7Ea6QFR9XQGKtOWtkn+9qIM7uU1DGNGHQbnNxF
-         jnNYlCpotrlOK8EaQU4y8l6ULSHiBb/SWtYyVkvTo8g9rBKmqktKAS3VLlFBSfQhha8x
-         65Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rBo3jZiOb9ie0OVzwiL7KeGDNnK38FfYtqhoqdr/oLw=;
-        b=wXoUA/WU35YLvVcHuCbnZKlckV9IX2eiNJ8TjNZ2QLGiu9VQjW92Ce/iABusTYbQHt
-         a22ZL3jJCpOJm2Ka0KTBDMrA3Pl+baXC5i8xovyV/cSp6isDNVoCiniypvtzrma7YaIP
-         FrxTJTT6QrroNEzkWuBQaPtvQVESH0mjidEo08zmmsTjRh6Ws/CNpfD4cCnnB18Vr+zk
-         t7+yGax8KsfZpMluHpoRmk/Ygv2A+oA1GUSv1krATg65E3LX+s+u61q+etXZsXMsc7AC
-         vDJWiYmj/uLtA2BsWLyPfKqEMRlCWwHu+wHzyFwNr7v1km2R+IgguFX2L+85OVVaiUJi
-         XsRQ==
-X-Gm-Message-State: AOAM533citGc4hM1qZELOf8/9OIpGbxe9wu0/sWbAig3sNuukCfWRqgl
-        4/b6ViL30BFiiSA4e0X7wzZq+Q==
-X-Google-Smtp-Source: ABdhPJyZej1S+ipPlCpE5zwxhOct0Jzxus2BoBq3B7nKU4FQPqch3LAAJv5IuWcy80rDQRSInXeQGg==
-X-Received: by 2002:a17:90a:1b81:b0:1be:ecf2:4cf8 with SMTP id w1-20020a17090a1b8100b001beecf24cf8mr7455284pjc.72.1646342448990;
-        Thu, 03 Mar 2022 13:20:48 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm2753439pgr.37.2022.03.03.13.20.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 13:20:47 -0800 (PST)
-Date:   Thu, 3 Mar 2022 21:20:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
- asynchronous worker
-Message-ID: <YiExLB3O2byI4Xdu@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-22-pbonzini@redhat.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646342579; x=1677878579;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dZMgWTTVxQBwMLLw02HkVQCrgECXmVAFuZOqW8AjXfw=;
+  b=aG+9lZnsYFl4kEe7fczH6Zhpy4e+JkdxbNH5DcAnzE9W4u+VkHeHWJET
+   Y/TC/F1p/dqn1sTEcEdqzrZ9V8b9YN3zI+sfbjLjGI9pIkhI8m5orc0Po
+   3zCi9zmmJI4WupRgm/pwfx0GRyf97ojQ+XmpE3hmP7f4tbaRLnxJZ4+hE
+   8=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 Mar 2022 13:22:59 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 13:22:58 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 3 Mar 2022 13:22:58 -0800
+Received: from [10.110.60.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 3 Mar 2022
+ 13:22:57 -0800
+Message-ID: <dee90099-d739-5f84-c1b8-0c0022afb02e@quicinc.com>
+Date:   Thu, 3 Mar 2022 13:22:56 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303193842.370645-22-pbonzini@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/4] drm/msm: Update generated headers
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220303194758.710358-1-robdclark@gmail.com>
+ <20220303194758.710358-2-robdclark@gmail.com>
+ <1a42ff3e-154a-b2b8-9c99-8d5fba9a38e5@quicinc.com>
+ <CAF6AEGvBzFKbPVe+6+kHVDdFFvxXeFCp-7Jx=61or96HdQby4g@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAF6AEGvBzFKbPVe+6+kHVDdFFvxXeFCp-7Jx=61or96HdQby4g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,10 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Paolo Bonzini wrote:
-> The only issue is that kvm_tdp_mmu_invalidate_all_roots() now assumes that
-> there is at least one reference in kvm->users_count; so if the VM is dying
-> just go through the slow path, as there is nothing to gain by using the fast
-> zapping.
 
-This isn't actually implemented. :-)
+
+On 3/3/2022 1:11 PM, Rob Clark wrote:
+> On Thu, Mar 3, 2022 at 12:42 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>> Hi Rob
+>>
+>> On 3/3/2022 11:46 AM, Rob Clark wrote:
+>>> From: Rob Clark <robdclark@chromium.org>
+>>>
+>>> Update headers from mesa commit:
+>>>
+>>>     commit 7e63fa2bb13cf14b765ad06d046789ee1879b5ef
+>>>     Author:     Rob Clark <robclark@freedesktop.org>
+>>>     AuthorDate: Wed Mar 2 17:11:10 2022 -0800
+>>>
+>>>         freedreno/registers: Add a couple regs we need for kernel
+>>>
+>>>         Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>         Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/15221>
+>>>
+>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/adreno/a2xx.xml.h         |  26 +-
+>>>    drivers/gpu/drm/msm/adreno/a3xx.xml.h         |  30 +-
+>>>    drivers/gpu/drm/msm/adreno/a4xx.xml.h         | 112 ++-
+>>>    drivers/gpu/drm/msm/adreno/a5xx.xml.h         |  63 +-
+>>>    drivers/gpu/drm/msm/adreno/a6xx.xml.h         | 674 +++++++++++-------
+>>>    drivers/gpu/drm/msm/adreno/a6xx_gmu.xml.h     |  26 +-
+>>>    .../gpu/drm/msm/adreno/adreno_common.xml.h    |  31 +-
+>>>    drivers/gpu/drm/msm/adreno/adreno_pm4.xml.h   |  46 +-
+>>>    drivers/gpu/drm/msm/disp/mdp4/mdp4.xml.h      |  37 +-
+>>>    drivers/gpu/drm/msm/disp/mdp5/mdp5.xml.h      |  37 +-
+>>>    drivers/gpu/drm/msm/disp/mdp_common.xml.h     |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi.xml.h             |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi_phy_10nm.xml.h    |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi_phy_14nm.xml.h    |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi_phy_20nm.xml.h    |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi_phy_28nm.xml.h    |  37 +-
+>>>    .../gpu/drm/msm/dsi/dsi_phy_28nm_8960.xml.h   |  37 +-
+>>>    drivers/gpu/drm/msm/dsi/dsi_phy_5nm.xml.h     | 480 -------------
+>> Why is the 5nm PHY removed? Am i missing something?
+> 
+> Dmitry removed it in mesa, because it was identical to 7nm
+> 
+> BR,
+> -R
+Alright got it, for the display bits,
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+>>
+>> Thanks
+>>
+>> Abhinav

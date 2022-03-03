@@ -2,83 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34614CC896
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB32B4CC898
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiCCWHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S234942AbiCCWJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236795AbiCCWHc (ORCPT
+        with ESMTP id S232050AbiCCWJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:07:32 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763C9172E75
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:06:41 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id k2so6130719oia.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:06:41 -0800 (PST)
+        Thu, 3 Mar 2022 17:09:00 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA593C71B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:08:13 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z2so6009418plg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:08:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=r7kKCHWz3Rfv0TQHHwtEWE4mf+UhKdYlq+PNtd3O+F8=;
-        b=Z/JYd4+V376HcbtMkvRBhrUgb5bIqQI7F34q31nMVDyB5DKCMuF39gIVI7GHkLnK5z
-         xwecd6zPlWqMWR83kkWkOdDZRbFCWNM5KowBFcTzELnIZyrazGRjk+9YjZMMPeCzfSen
-         Dc4coFcuRY/XfS2qdlrDgBfiaAjeb+BrfQnDE=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W/TzNiPeigL0ybLFFuG1hFcpyfv81UUM7woffq6f+EE=;
+        b=MMHEBXueAzqDEsE5wiiM5H+gGRnExkrrDKWkUaSEsk8DUCsdP27CLVo1vaTeJagjSr
+         CiSEEsg3qJYJhHI+vrnS5A90omkj8FP4rq2zSR/D4ysjtAigzqxd7qwbyD4sPZ02KMNP
+         K1eiuAfmfwVG6l7GIMdKYvviXNx51N2HchR1qs5UwuIIDSFUegSoQvUBgRARyBt3uRwU
+         N8Ejvgj3Eg3iYS5s35YWhFr+571WFqfNXsmYNCP/gtaJI350Ui9f6V5AQrAz34Mtarl9
+         WLyBVNlYcqmvorwlbfpNrLd1eejIvs5IcScpPf/nleW6qvKLVUuwBtRKlAyYSME2X5Yi
+         8GEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=r7kKCHWz3Rfv0TQHHwtEWE4mf+UhKdYlq+PNtd3O+F8=;
-        b=JFlw1Hm+tbVVMCfNC3Wk+S4kQa99NJ6GNKupVPkq38mJMOOPZ1T7xdtj2LyGTqI8C0
-         sbt9xDgBSjrNXX++h9CCyCVnPj1t/pufEMbJGXWvegvEBMzMkjnBMRHUIEmdWLLHgtMz
-         QeX7eeIUDlDZupsWp8XCSdif+FlT87Rug7TCS1PqXU7h8G6u8m7YvR+6uddSfKww+v90
-         NOQm+zvxSMUZBLDQHk+UaX8Xbs/Egs+fKE98AlK4pWF7rCewFhIBArDrw3kNwtWZ+Zlg
-         xE+J5xmKNBBeBu3ybjNSyj1ZV+a+P6ZGgGPJfpI8gZEeR0TiOyI+m/Z1kaF1IRioHR+s
-         6y6w==
-X-Gm-Message-State: AOAM533idpRttErRDA4HuAi/TaMEG0i+9aQ2FgNTHdKQbuh6gRtweCWh
-        XmRvauky38+Dc5Nxt8NBQpo0Z/mGXKbc6m6YN+RQFQ==
-X-Google-Smtp-Source: ABdhPJyMZuWL+CCeZIqQWqg/RiahdrvQ8SCiVP/B4EwHgyJoeXa1tCMmS59sHA3zE1RwwWN0mnFkZj+JMSwmHPiUj3g=
-X-Received: by 2002:aca:3346:0:b0:2d9:91f9:a7f2 with SMTP id
- z67-20020aca3346000000b002d991f9a7f2mr809414oiz.32.1646345200874; Thu, 03 Mar
- 2022 14:06:40 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Mar 2022 14:06:40 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W/TzNiPeigL0ybLFFuG1hFcpyfv81UUM7woffq6f+EE=;
+        b=4xRrR2pI/ROaAZ3nZJphA0/1QcKARBDReBfxwE6cMjAR8z5WAKPQsn6jviIwmQ2y2f
+         +jnud8YX6rmtVzO+kcMi0OSWyZY4/4j1tZdwXzLUjORJ99jo53hJkizwwjsGFcKQDZjq
+         C0q7j2NAeWi1JfmZBXGz229UjFE00S9lL4IKAdWyibjRVYp561/96VgUE16vGrBZZaxn
+         2bQyBrFFTXjYCp/uFigeDxdmNjQkQJi+k9QupNKS7t6RpVykUwGPv0W3eNz549oK60cW
+         aYmh2uySxUW2a7T3Y88CmQz7IPoJXFkM7qSgt59cwgIS4ckyNfO37Mqq2uOv12Jsi1W2
+         vpdA==
+X-Gm-Message-State: AOAM532O+kyFXJIVwBOVKJHeXY1V9ZE6DZduvo1PBWLLOD/s89x2A9Qa
+        yhX15SMgZQz15ggb8Kis7C6LXg==
+X-Google-Smtp-Source: ABdhPJy8b6qcW2LqSXVR4nuKQ0P9aVRPzmLSKf1goQOakMcT/YeEL9h873IMeVWnAPnqEkLCQTihJg==
+X-Received: by 2002:a17:90a:20a:b0:1be:e850:1a37 with SMTP id c10-20020a17090a020a00b001bee8501a37mr7569061pjc.28.1646345292897;
+        Thu, 03 Mar 2022 14:08:12 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m20-20020a634c54000000b003739af127c9sm2889926pgl.70.2022.03.03.14.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 14:08:12 -0800 (PST)
+Date:   Thu, 3 Mar 2022 22:08:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v4 24/30] KVM: x86/mmu: Zap defunct roots via
+ asynchronous worker
+Message-ID: <YiE8SH4Sn1zzRZwe@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-25-pbonzini@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1646300401-9063-5-git-send-email-quic_vpolimer@quicinc.com>
-References: <1646300401-9063-1-git-send-email-quic_vpolimer@quicinc.com> <1646300401-9063-5-git-send-email-quic_vpolimer@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Mar 2022 14:06:40 -0800
-Message-ID: <CAE-0n50sRHDaBdKADrqXMR1Dc7s=Stj_eY3Go=VPTTHRHtiUPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] arm64/dts/qcom/sm8250: remove assigned-clock-rate
- property for mdp clk
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, quic_kalyant@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303193842.370645-25-pbonzini@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vinod Polimera (2022-03-03 01:40:01)
-> Kernel clock driver assumes that initial rate is the
-> max rate for that clock and was not allowing it to scale
-> beyond the assigned clock value.
->
-> Drop the assigned clock rate property and vote on the mdp clock as per
-> calculated value during the usecase.
->
-> Fixes: 7c1dffd471("arm64: dts: qcom: sm8250.dtsi: add display system nodes")
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+On Thu, Mar 03, 2022, Paolo Bonzini wrote:
+> Zap defunct roots, a.k.a. roots that have been invalidated after their
+> last reference was initially dropped, asynchronously via the system work
+> queue instead of forcing the work upon the unfortunate task that happened
+> to drop the last reference.
+> 
+> If a vCPU task drops the last reference, the vCPU is effectively blocked
+> by the host for the entire duration of the zap.  If the root being zapped
+> happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
+> being active, the zap can take several hundred seconds.  Unsurprisingly,
+> most guests are unhappy if a vCPU disappears for hundreds of seconds.
+> 
+> E.g. running a synthetic selftest that triggers a vCPU root zap with
+> ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
+> Offloading the zap to a worker drops the block time to <100ms.
+> 
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
+> Message-Id: <20220226001546.360188-23-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index e24a1bff9218..2456f880508d 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -170,13 +170,24 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  	 */
+>  	if (!kvm_tdp_root_mark_invalid(root)) {
+>  		refcount_set(&root->tdp_mmu_root_count, 1);
+> -		tdp_mmu_zap_root(kvm, root, shared);
+>  
+>  		/*
+> -		 * Give back the reference that was added back above.  We now
+> +		 * If the struct kvm is alive, we might as well zap the root
+> +		 * in a worker.  The worker takes ownership of the reference we
+> +		 * just added to root and is flushed before the struct kvm dies.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Not a fan of the "we might as well zap the root in a worker", IMO we should require
+going forward that invalidated, reachable TDP MMU roots are always zapped in a worker
+
+> +		 */
+> +		if (likely(refcount_read(&kvm->users_count))) {
+> +			tdp_mmu_schedule_zap_root(kvm, root);
+
+Regarding the need for kvm_tdp_mmu_invalidate_all_roots() to guard against
+re-queueing a root for zapping, this is the point where it becomes functionally
+problematic.  When "fast zap" was the only user of tdp_mmu_schedule_zap_root(),
+re-queueing was benign as the work struct was guaranteed to not be currently
+queued.  But this code runs outside of slots_lock, and so a root that was "put"
+but hasn't finished zapping can be observed and re-queued by the "fast zap.
+
+I think it makes sense to create a rule/invariant that an invalidated TDP MMU root
+_must_ be zapped via the work queue.  Then 
+
+I.e. do this as fixup:
+
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 40bf861b622a..cff4f2102a63 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1019,8 +1019,9 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
+  * of invalidated roots; the list is effectively the list of work items in
+  * the workqueue.
+  *
+- * Skip roots that are already queued for zapping, flushing the work queue will
+- * ensure invalidated roots are zapped regardless of when they were queued.
++ * Skip roots that are already invalid and thus queued for zapping, flushing
++ * the work queue will ensure invalid roots are zapped regardless of when they
++ * were queued.
+  *
+  * Because mmu_lock is held for write, it should be impossible to observe a
+  * root with zero refcount,* i.e. the list of roots cannot be stale.
+@@ -1034,13 +1035,12 @@ void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
+
+        lockdep_assert_held_write(&kvm->mmu_lock);
+        list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
+-               if (root->tdp_mmu_async_data)
++               if (kvm_tdp_root_mark_invalid(root))
+                        continue;
+
+                if (WARN_ON_ONCE(!kvm_tdp_mmu_get_root(root)))
+                        continue;
+
+-               root->role.invalid = true;
+                tdp_mmu_schedule_zap_root(kvm, root);
+        }
+ }
+
+> +			return;
+> +		}
+> +
+> +		/*
+> +		 * The struct kvm is being destroyed, zap synchronously and give
+> +		 * back immediately the reference that was added above.  We now
+>  		 * know that the root is invalid, so go ahead and free it if
+>  		 * no one has taken a reference in the meanwhile.
+>  		 */
+> +		tdp_mmu_zap_root(kvm, root, shared);
+>  		if (!refcount_dec_and_test(&root->tdp_mmu_root_count))
+>  			return;
+>  	}
+> -- 
+> 2.31.1
+> 
+>

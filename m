@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDB54CB5EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939784CB5FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiCCEjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S229658AbiCCEvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCCEjm (ORCPT
+        with ESMTP id S229645AbiCCEvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:39:42 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E452187
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:38:56 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id q5so3768873oij.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 20:38:56 -0800 (PST)
+        Wed, 2 Mar 2022 23:51:41 -0500
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC30B14A6DA;
+        Wed,  2 Mar 2022 20:50:56 -0800 (PST)
+Received: by mail-il1-x144.google.com with SMTP id h28so3141719ila.3;
+        Wed, 02 Mar 2022 20:50:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wo7DR6hin152XAg/mOrL8xQTTw69iw6giRIoImOhAss=;
-        b=tBNSePt5D36Q4+SxLdam2ME33dJzm5Z2/Qt7AhmESbvYQEHBfItiUpeesWZ3Xu9O1Z
-         pLztfP99SkzEIsM6gq2q9U4DaaRBdbOd+2IACldieNP8Yy7QSs0q3PwC4SzRxfEqktRI
-         DGp0TC8QX7T7T9HiGYrxIbXemCRl1gQiKHh/Yio+hb7XyR8oNPR/lMXYqL/8SUxVSu69
-         DZttcf+rOn9GgZ+EtY5euqwb/xFWiSSUethtfd5Uab2Lb+CvVjGvF3bbieNZEENj9I6O
-         aKql0BNpFNPjCyol82LjJpVNwoWOBOQE6yKWxa7BHw1IbWx+4lOsMN3Nk2CW4CnH5W74
-         wlJg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dDVQJ3Fq8NBV53TAXzlYHtLwOtwjE+voGwaucY4wx34=;
+        b=HOd3Bo2TJtj5RUF+AU2SbNMmTDqhHTL4q71s4CZQH+/qY7mTR7pEhhfpM9z5HxlfB1
+         FMmQYP0i0TbI5Iesr/t3IULcSAQaVqSBJymDqOVcIPbOScVch8QPAmSvfEj5cZAVAxOn
+         tHk0v3euML/2dPmoSUXxe+MQZpeYAAXzurpujrqJsbfcQikMIP4TnHrjqubjntAd4+uF
+         IulMOwi0PYXF1ID8dlxtPTzZfl7CZsVpq1GpTQeoMs3d6NurigkGvGGdQ+wnYfvY/97H
+         v0eY8Sz7Wx0Pfqn5btFW21BWQp1EXlgdxtqH2YEbUiuHnVMOoazKD+fhprEzweup43pD
+         7ayw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wo7DR6hin152XAg/mOrL8xQTTw69iw6giRIoImOhAss=;
-        b=3Mq1uM8PfHKCnNl1yayaUBfZx6prsePBz8PjcMJxrUDHDFFQD//MX1wadOtIdcmP12
-         UQuojz3y3dRAy0XDP2qYVtc5YPgpgtT9eW8lcZQ5wFhYGs9ifP2fZycQq6sBr6YrM1rm
-         aH/SmqJMRiEnRiHwXOWiH/BLkVUvsgoioMVGFyrXn8vGJQEYxiNy5mr4Eyxk9jTwkl6r
-         Qi0c7FaAMXAAeeWqUAY0OPBU+zAXRv/oz4iWjMXf4kkLjORRJ4yd+7OFncLvAdUFD2Wb
-         HHvRyE9w1JmTazQS3xL4upIRxgcnt2rVROtJFz6YvqRw2KRRqpBsVECSsfoqfVqyjuTj
-         t9iw==
-X-Gm-Message-State: AOAM5317v7kwdfSk60z1mYwqcBL58VgLohd4APVtbaHNwFrfkh82J3t4
-        C3Sjr/jxL18F3N1HNRKR//nGlvP7RGLwmgnXNGqXxA==
-X-Google-Smtp-Source: ABdhPJw/KBkvONKt9Wn4/0uYn7NnptsmDqJMe0dlO8oCQEOxR1thOKUdkAXxW6zLTBPFM3gAg1cJVxgsicshKPRlak4=
-X-Received: by 2002:a05:6808:1443:b0:2d7:306b:2943 with SMTP id
- x3-20020a056808144300b002d7306b2943mr2994793oiv.66.1646282335689; Wed, 02 Mar
- 2022 20:38:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dDVQJ3Fq8NBV53TAXzlYHtLwOtwjE+voGwaucY4wx34=;
+        b=mQjJ7gikDQdR6A4mUd0fF4XqsECs6gWBR44ULzwPGgr5C03dUS5m5t0jxSJsQT9y8c
+         +P+zO723SBRxUnED/3L3xKH/7g0hjld98XAtxKZrNW9xy1gOLr4e+y+/MnKRCHhLck5R
+         6QQ1aWqW4Dm81L/DgrjiDHo9iPUNdDWZpBlQ//DC2MVfQ0nomqJgq2qlP4N5NI+lgZjQ
+         mNPXn+21megPmHTFwLlw/iYNYRm4oYallEv+JCPhOtYYv0U/6WWNpohgA9/NqA/0ij3b
+         j2AYQFAn4u5iN6RZTdnIb7hMhqnB8mvNpqBYMisA8+1o23+hjulc3Vf47EjaDA/aUKCU
+         LZXg==
+X-Gm-Message-State: AOAM531q46OFMks6fLT/Dt5RPdGXvUaiYLp6XmEyl9iB8N5jWbO05jkg
+        i8KzOR8W0Si18Zf5ZnYOxyOeVMW44pY=
+X-Google-Smtp-Source: ABdhPJyu0K+8wWbtmHCooE/7xGVZrJwHUYIBOSWwylrdyuwWIVLeZHps3qXtK0k1ssPT2zqL4sLF8A==
+X-Received: by 2002:a92:c8ca:0:b0:2c4:ff8b:98cb with SMTP id c10-20020a92c8ca000000b002c4ff8b98cbmr6853050ilq.183.1646283056143;
+        Wed, 02 Mar 2022 20:50:56 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id b1-20020a926701000000b002c25d28d378sm672203ilc.71.2022.03.02.20.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 20:50:55 -0800 (PST)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 6/8] compiler_types.h: Add unified __diag_ignore_all for GCC/LLVM
+Date:   Thu,  3 Mar 2022 10:20:27 +0530
+Message-Id: <20220303045029.2645297-7-memxor@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220303045029.2645297-1-memxor@gmail.com>
+References: <20220303045029.2645297-1-memxor@gmail.com>
 MIME-Version: 1.0
-References: <20220221073140.10618-1-ravi.bangoria@amd.com> <20220221073140.10618-4-ravi.bangoria@amd.com>
- <1e0fc70a-1135-1845-b534-79f409e0c29d@gmail.com> <80fce7df-d387-773d-ad7d-3540c2d411d1@amd.com>
-In-Reply-To: <80fce7df-d387-773d-ad7d-3540c2d411d1@amd.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 2 Mar 2022 20:38:44 -0800
-Message-ID: <CALMp9eQtW6SWG83rJa0jKt7ciHPiRbvEyCi2CDNkQ-FJC+ZLjA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] KVM: x86/pmu: Segregate Intel and AMD specific logic
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>, seanjc@google.com,
-        dave.hansen@linux.intel.com, peterz@infradead.org,
-        alexander.shishkin@linux.intel.com, eranian@google.com,
-        daviddunn@google.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        santosh.shukla@amd.com,
-        "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
-        <pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1928; h=from:subject; bh=GM32fUklsZxVmnh4SsQp2kGBKENfBpd3/E++0grOsvk=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiIEj/uurNr9aPwnll4PFTLHqfDRT07+h7GF9UMqxl cR9jt+uJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYiBI/wAKCRBM4MiGSL8Ryn8/D/ 99KWLHtaGnFgQsA7AVZSnFtencmZK3cbVgcplr1rtdpVTlGzdtRKm3/Or4xvN5xvZ4kCo9kDxGd3x1 AHgpTraVqQvmewNp9UkCFkFAHuRKctzLWsXL78M8lAFevU+CAzv14T7NAQqsr4DMxK79imrF9cywRe op81+NJq+lLsN1FJmoZXfbzfYR5JSzYWovxljGqr7+mFcAz+kHISBWHk2nANiqX1N7YvGg80cpu/Ei JtPIyuIfgi+r1EbotrdXdsem7PMtzoqgPHFI45F2F0tmdE3ntk7QXcgQetT3AikKjQUxJoJVPOIDKK XqX+gfxLUJlZQ8ANSKIdywaG9jcP0B4TIxGX4XTvzTOOorKYgeIQFJ5hOTYl9VCptbobT7govsUZ54 6DOfk5WGwc4jzp+RIvCykaY+0z5c72o0Z5ENTq9Esl3I31Glco4FVuSIUMQPZCtV47nxP/pJuQ2sRj yeOlJSUx4KP2U3wQC06WntLHaXSCmf0yn0MYTb+VTVNiRMkduYcdw8uL8s0flkEyuVMi/3g9Se91x/ cWqbvCvefczEebnPP1fRjGFoAMPgEVkDq2dnI0v9vgkDNaFgZuxP3XDm2vDxc189cyd7j3FlXRyvXd 0DkSybogRC/Hxvd0iPxtDRL8cpzDFnyrNB41PElgPDUJybwS8pW2I5avDmag==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,31 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 2:02 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
->
->
-> On 21-Feb-22 1:27 PM, Like Xu wrote:
-> > On 21/2/2022 3:31 pm, Ravi Bangoria wrote:
-> >>   void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
-> >>   {
-> >>       struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, pmc_idx);
-> >> +    bool is_intel = !strncmp(kvm_x86_ops.name, "kvm_intel", 9);
-> >
-> > How about using guest_cpuid_is_intel(vcpu)
->
-> Yeah, that's better then strncmp().
->
-> > directly in the reprogram_gp_counter() ?
->
-> We need this flag in reprogram_fixed_counter() as well.
+Add a __diag_ignore_all macro, to ignore warnings for both GCC and LLVM,
+without having to specify the compiler type and version. By default, GCC
+8 and clang 11 are used. This will be used by bpf subsystem to ignore
+-Wmissing-prototypes warning for functions that are meant to be global
+functions so that they are in vmlinux BTF, but don't have a prototype.
 
-Explicit "is_intel" checks in any form seem clumsy, since we have
-already put some effort into abstracting away the implementation
-differences in struct kvm_pmu. It seems like these differences could
-be handled by adding three masks to that structure: the "raw event
-mask" (i.e. event selector and unit mask), the hsw_in_tx mask, and the
-hsw_in_tx_checkpointed mask.
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/compiler-clang.h | 3 +++
+ include/linux/compiler-gcc.h   | 3 +++
+ include/linux/compiler_types.h | 4 ++++
+ 3 files changed, 10 insertions(+)
 
-These changes should also be coordinated with Like's series that
-eliminates all of the PERF_TYPE_HARDWARE nonsense.
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index f1aa41d520bd..babb1347148c 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -90,3 +90,6 @@
+ #else
+ #define __diag_clang_11(s)
+ #endif
++
++#define __diag_ignore_all(option, comment) \
++	__diag_clang(11, ignore, option)
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index ccbbd31b3aae..d364c98a4a80 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -151,6 +151,9 @@
+ #define __diag_GCC_8(s)
+ #endif
+ 
++#define __diag_ignore_all(option, comment) \
++	__diag_GCC(8, ignore, option)
++
+ /*
+  * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
+  * attribute) do not work, and must be disabled.
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 3f31ff400432..8e5d2f50f951 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -371,4 +371,8 @@ struct ftrace_likely_data {
+ #define __diag_error(compiler, version, option, comment) \
+ 	__diag_ ## compiler(version, error, option)
+ 
++#ifndef __diag_ignore_all
++#define __diag_ignore_all(option, comment)
++#endif
++
+ #endif /* __LINUX_COMPILER_TYPES_H */
+-- 
+2.35.1
+

@@ -2,201 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1424CC0CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8758B4CC0DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiCCPJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 10:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S231961AbiCCPNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 10:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiCCPJA (ORCPT
+        with ESMTP id S229716AbiCCPNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 10:09:00 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3586522BE3;
-        Thu,  3 Mar 2022 07:08:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E01201F417E5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646320091;
-        bh=4AnpB0bYq27BC2obrhRVr+DJd2wAvFLS3ceAZEqlmi8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YmxxYkponFYhDybTF8nddo7rMJTsASLxFCpeVD75jv0aJPhBhqX8kkXnCaPQJXvY3
-         nUzbIyxllmRywUCgmIxeDhHq8Zqbpo5WJ/rporDoCUl4h6eAMGvpfYry52LIqx0InJ
-         Qbg1cZKSA3fi0beT5Efr9M5IRzuFBhgzpb7xBWLv5SqCswmxDSYcW9tv+FJSs9cM7l
-         PJwxmT+Z3WGs+H1NCLLrBZrfOKacGUCyJF27EiNVYp2c7bqe4zBCv7J4XBzRJ/lG5/
-         dTaysJnMMzYdNSCfjYgqBwi+ZGnO09TH5IoWfFCocfLBlJZcEQ1zZ3lziCsS6x0zQF
-         9H0xcfGdtKVRg==
-Message-ID: <6bc78592-36c0-8462-f4f8-ad9e04a13da6@collabora.com>
-Date:   Thu, 3 Mar 2022 16:08:08 +0100
+        Thu, 3 Mar 2022 10:13:41 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8501043397;
+        Thu,  3 Mar 2022 07:12:55 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id u20so9068301lff.2;
+        Thu, 03 Mar 2022 07:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcEw33IhwCSXhCAOEzznBRk7sVuMjubPA9NfR/kktrI=;
+        b=Ui/wIrlfgf+emNcCMxoStcQcqMAbsgijpSRUmw1uLuj1Eo5vXsVexAuQO8IgtbOg7/
+         mgHWCZMbJIU5KbwQYTt6r68ETv0LoH36faM0iw3bOGqw0NGS0horsIDb+0p1xk2GgEQB
+         dE/+xNzLdznQc5gy/lX8yWmeN07J1HFkuAjq27jMpI2LCnv/UL75Tzw8O4buRWw6cIwx
+         wC/LRjC4tuOJy4Dau5/07vtfIGc2YsKNmUHVaEw/yPqJjcs5dUK29O4c2/Gf0RgA+Z+V
+         cZAWUhV8y7Ds4OgvzFLSpZaPOwIK1++GhRAy1wpZwN52bnPpX6J1pPev/ZRovuL9ANOG
+         Nhjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcEw33IhwCSXhCAOEzznBRk7sVuMjubPA9NfR/kktrI=;
+        b=EqLazuLXClwJiKaK1J9YgTpJVZ/hZwKkH83I2CwHiF6KB/klzIVNL8CBVuCidDMl1L
+         5wfX7IgDjnvaLwFrgvTnipdYfiNZjPMRp2HFEY0Xt5Ipea65daIQUypv011jqBVESJem
+         bmBdRhXG8ILRXKrrEVnP13QoOU4dgdqn0kAEBJ1kwWIbbU6fcZp1trDV7inA/x+gGpz1
+         0pobwD6n+ZeBRiDyBRw8wx+N5Bhu/ABGRoMwnrTQOYxAzVetCNNC2gbeSFT2oulWop0S
+         buGyw/H+rs5o8gh8sRRQ4qSF6M7MbU3T5+WFogK6LpXnOGKcCmKes0SA4G89FP5/k9rV
+         4lVA==
+X-Gm-Message-State: AOAM530cc1DccgAVuuhc7iRGCFM9dScr1ZbLSUVPv+gh+jQb8FUERvdf
+        Ml6Wy9Zw4XwR/guJ+pz2UY/S6i1UiQ80a78o
+X-Google-Smtp-Source: ABdhPJxqHTxQxqL2E/+jznvgRiRNcAJ9/x4px4936ZBMnI/K3XwadC6n+hrgdlOb/eRjuI+TS3Vh+w==
+X-Received: by 2002:a05:6512:1284:b0:445:b88e:dc4a with SMTP id u4-20020a056512128400b00445b88edc4amr5690457lfs.46.1646320370666;
+        Thu, 03 Mar 2022 07:12:50 -0800 (PST)
+Received: from localhost.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id a10-20020a056512374a00b004438dd764d1sm476022lfs.306.2022.03.03.07.12.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 07:12:50 -0800 (PST)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        jeff@labundy.com, markuss.broks@gmail.com,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, rydberg@bitmath.com,
+        sfr@canb.auug.org.au, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v8 0/2] Add support for Imagis touchscreens
+Date:   Thu,  3 Mar 2022 17:12:25 +0200
+Message-Id: <20220303151227.25659-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [v2 09/17] ASoC: mediatek: mt8186: support tdm in platform driver
-Content-Language: en-US
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
- <20220217134205.15400-10-jiaxin.yu@mediatek.com>
- <fcae42a5-6e11-e683-8f3a-453650f08d38@collabora.com>
- <9ba63387baecf598db696d0ebbc1583406a57a62.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <9ba63387baecf598db696d0ebbc1583406a57a62.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/03/22 15:10, Jiaxin Yu ha scritto:
-> On Fri, 2022-02-18 at 15:54 +0100, AngeloGioacchino Del Regno wrote:
->> Il 17/02/22 14:41, Jiaxin Yu ha scritto:
->>> This patch adds mt8186 tdm dai driver.
->>>
->>> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
->>> ---
->>>    sound/soc/mediatek/mt8186/mt8186-dai-tdm.c | 713
->>> +++++++++++++++++++++
->>>    1 file changed, 713 insertions(+)
->>>    create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
->>>
->>> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
->>> b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
->>> new file mode 100644
->>> index 000000000000..28dd3661f0e0
->>> --- /dev/null
->>> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
->>> @@ -0,0 +1,713 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +//
->>> +// MediaTek ALSA SoC Audio DAI TDM Control
->>> +//
->>> +// Copyright (c) 2022 MediaTek Inc.
->>> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
->>> +
+Add support for Imagis touchscreens, used on various mobile
+devices such as Samsung Galaxy J5 (2015), J3 (2015), J5 (2016).
 
-..snip..
+v2: rebase on top of the correct tree
+v3:
+- prefix all defines as IST3038C
+- use two tabs for all defines
+- add missing <linux/regulator/consumer.h> header
+- drop ADDR_LEN and DATA_LEN defines; use sizeof(reg_be) instead
+- use __be32 type for reg_be
+- add a comment about i2c read not being successful on first try
+- use "ret" instead of "res" in read_reg function
+- don't use the internal __cpu_to_be32 function, use cpu_to_be32 instead
+- use "error" instead of "ret" in interrupt handler
+- pass the slot state directly, without ternary operator
+- drop the dev_err in init_input_dev function
+- reorder the functions in _probe so that the chipid command is read as fast 
+as possible
+- don't use imagis_start in probe
+- initialize the irq after the chip is powered
+- save the return value in imagis_resume
+- drop WIDTH_MAJOR since only TOUCH_MAJOR is reported
+- the "chip detected" message is now dev_dbg
+- reorder headers so they are in alphabetic order
+- use GENMASK to generate masks for getting the X and Y coordinates and touch area
+- drop *_pressure from device tree bindings since the driver doesn't
+support reporting pressure
+- fix the typo with i2c address in device treee bindings (48 instead of 50)
+- add IRQF_NO_AUTOEN flag to avoid unbalanced irq enable
+v4:
+- alphabetically order MAINTAINERS entry
+- alphabetically order Kconfig and Makefile
+- drop the error message in init_regulators
+- disable regulators on probe error
+- drop IRQF_TRIGGER_FALLING
+- @ is not optional (device tree bindings)
+- don't use items for compatible
+- add maxItems property to reg, drop the comment
+v5:
+- compatible enum is not an item of the list, drop "-"
+v6:
+- add _MS suffix to the delay define, drop the comment
+- change the reason for retry comment
+- add imagis_power_off and imagis_power_on functions to turn regulators
+on and off
+- use imagis_power_on/off in imagis_start and imagis_stop as well as in probe function
+- use error instead of ret in calls to functions which only return 0 or -errno
+- include linux/bits.h
+- proper indentation in Kconfig
+- drop the dev_dbg chip id message
+- MODULE_DEVICE_TABLE(of, ...);
+- no extra tabs in i2c_driver struct
+- save the return value in imagis_suspend
+v7:
+- initialize ret with 0 in _suspend and _resume (kernel test robot)
+- use a separate ret_be variable to avoid casting to __be32 (kernel test robot)
+v8:
+- use poweroff action
+- power_off returns void
+- ret -> error
+- combine dev declaration and assignment
+- use same style for error everywhere
+- return devm_regulator_bulk_get() directly
 
->>> +
->>> +static int mtk_dai_tdm_hw_params(struct snd_pcm_substream
->>> *substream,
->>> +				 struct snd_pcm_hw_params *params,
->>> +				 struct snd_soc_dai *dai)
->>> +{
->>> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
->>> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
->>> +	int tdm_id = dai->id;
->>> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[tdm_id];
->>> +	unsigned int tdm_mode = tdm_priv->tdm_mode;
->>> +	unsigned int data_mode = tdm_priv->data_mode;
->>> +	unsigned int rate = params_rate(params);
->>> +	unsigned int channels = params_channels(params);
->>> +	snd_pcm_format_t format = params_format(params);
->>> +	unsigned int bit_width =
->>> +		snd_pcm_format_physical_width(format);
->>> +	unsigned int tdm_channels = (data_mode == TDM_DATA_ONE_PIN) ?
->>> +		get_tdm_ch_per_sdata(tdm_mode, channels) : 2;
->>> +	unsigned int lrck_width =
->>> +		get_tdm_lrck_width(format, tdm_mode);
->>> +	unsigned int tdm_con = 0;
->>> +	bool slave_mode = tdm_priv->slave_mode;
->>> +	bool lrck_inv = tdm_priv->lck_invert;
->>> +	bool bck_inv = tdm_priv->bck_invert;
->>> +	unsigned int ctrl_reg;
->>> +	unsigned int ctrl_mask;
->>> +	unsigned int tran_rate;
->>> +	unsigned int tran_relatch_rate;
->>> +
->>> +	if (tdm_priv)
->>> +		tdm_priv->rate = rate;
->>> +	else
->>> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
->>> +
->>> +	tran_rate = mt8186_rate_transform(afe->dev, rate, dai->id);
->>> +	tran_relatch_rate = mt8186_tdm_relatch_rate_transform(afe->dev,
->>> rate);
->>> +
->>> +	/* calculate mclk_rate, if not set explicitly */
->>> +	if (!tdm_priv->mclk_rate) {
->>> +		tdm_priv->mclk_rate = rate * tdm_priv->mclk_multiple;
->>> +		mtk_dai_tdm_cal_mclk(afe,
->>> +				     tdm_priv,
->>> +				     tdm_priv->mclk_rate);
->>> +	}
->>> +
->>> +	/* ETDM_IN1_CON0 */
->>> +	tdm_con |= slave_mode << ETDM_IN1_CON0_REG_SLAVE_MODE_SFT;
->>> +	tdm_con |= tdm_mode << ETDM_IN1_CON0_REG_FMT_SFT;
->>> +	tdm_con |= (bit_width - 1) << ETDM_IN1_CON0_REG_BIT_LENGTH_SFT;
->>> +	tdm_con |= (bit_width - 1) <<
->>> ETDM_IN1_CON0_REG_WORD_LENGTH_SFT;
->>> +	tdm_con |= (tdm_channels - 1) << ETDM_IN1_CON0_REG_CH_NUM_SFT;
->>> +	/* default disable sync mode */
->>> +	tdm_con |= 0 << ETDM_IN1_CON0_REG_SYNC_MODE_SFT;
->>
->> 0 << (anything) == 0
->>
->> (number |= 0) == number
->>
->> Is this a mistake, or are you really doing nothing here?
->>
-> No, this is just to emphasize the need to set this bit to 0.
-> It really do nothing here, just link a reminder.
-> Can I keep this sentence?
+Markuss Broks (2):
+  dt-bindings: input/touchscreen: bindings for Imagis
+  Input: add Imagis touchscreen driver
 
-If, in your judgement, it is very important to have a reminder about that
-bit having to be unset, then add a comment in the code saying so.
-Don't simply comment out the statement as it is.
+ .../input/touchscreen/imagis,ist3038c.yaml    |  74 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   6 +
+ drivers/input/touchscreen/Kconfig             |  10 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/imagis.c            | 348 ++++++++++++++++++
+ 6 files changed, 441 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
+ create mode 100644 drivers/input/touchscreen/imagis.c
 
-A good way would be something like
-/* sync mode bit has to be unset because this that reason, otherwise X happens */
-
->>
->>> +	/* relatch fix to h26m */
->>> +	tdm_con |= 0 << ETDM_IN1_CON0_REG_RELATCH_1X_EN_SEL_DOMAIN_SFT;
->>> +
->>> +	ctrl_reg = ETDM_IN1_CON0;
->>> +	ctrl_mask = ETDM_IN_CON0_CTRL_MASK;
->>> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
->>> +
->>> +	/* ETDM_IN1_CON1 */
->>> +	tdm_con = 0;
->>> +	tdm_con |= 0 << ETDM_IN1_CON1_REG_LRCK_AUTO_MODE_SFT;
->>> +	tdm_con |= 1 << ETDM_IN1_CON1_PINMUX_MCLK_CTRL_OE_SFT;
->>> +	tdm_con |= (lrck_width - 1) <<
->>> ETDM_IN1_CON1_REG_LRCK_WIDTH_SFT;
->>> +
->>> +	ctrl_reg = ETDM_IN1_CON1;
->>> +	ctrl_mask = ETDM_IN_CON1_CTRL_MASK;
->>> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
->>
->> You don't need the ctrl_reg, nor ctrl_mask variables...
-> I was trying to avoid a line of more than 80 words, so I shortened the
-> number of words through variables.
-> 
-
-Yes, I know, I did understand what you were trying to do...
-...but it's fine to go past 80: in this case this would be 88 columns,
-which is still ok to have!
-
-And note, this is the case with all of similar calls present in this function,
-that's why I said that you don't need these two variables! :)
-
-Thank you,
-Angelo
-
+-- 
+2.20.1
 

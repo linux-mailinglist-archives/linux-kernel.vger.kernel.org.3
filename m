@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1584CB532
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B824CB533
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbiCCDEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 22:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S231928AbiCCDEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 22:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiCCDEG (ORCPT
+        with ESMTP id S231912AbiCCDEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 22:04:06 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2655A162
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:03:21 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id w16so7429654ybi.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:03:21 -0800 (PST)
+        Wed, 2 Mar 2022 22:04:38 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DCDED96C;
+        Wed,  2 Mar 2022 19:03:53 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id 12so3376907pgd.0;
+        Wed, 02 Mar 2022 19:03:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b2CfZEulgaB/ZZHlt0VqYYJ3F0+b+0caeXMzWvmvls4=;
-        b=cB6dKtO7fAPblX1RoQOE+vq9Ax8VmiCNBR1nWJnHm6bN5zdXa1KwBjT2i9fiyFstkK
-         FwxCFBUASA/SywideaDQhhfHPG2XRYfHwfbB+i3f+B8BdGYLqeFA8r5z+06ibKo2zqg4
-         KN9nC+nu9GcD0isfJ5eJUTaN45oICDOaJeYcHxo/Cxu34EtEqzk+FEa4H4JZU6qXk97u
-         otpvIjnDpGINVrUq4FB/26H1bedWvJmWiCmVNGDLJmtZr6shzO2O0zYD3vnjoGMBgjkj
-         w/aJTiod9SodoGwGXOvUwq2yc+dBMJoLpFbGrosr6E4yASUiLKQ4IKD0cD9FZ0aQ58W+
-         N9UA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1T2pQiZbXMlGRmXFIqTrOqvgWauP+ciwm+r1geHJ1uw=;
+        b=cw+fwGH+AFgfI573z/Ws8CS0mauU3imZKGGexYFtW6cSLkZYt0SkWENuPuy+pCMCq7
+         1EZVnDReKyHSZj9UGj2VL+sDQJm6VS/7fCYcSWVsjCiIS+ketVqBJWlAzk9yBCJn4xox
+         pG0SD1pkfgEVZF4UOMfJ8gKBJfAuqZRfbUR9RWnLHQiTId28XLioZIHDKuYacJSMV66k
+         hh2Flbv18XxBuDvIx2s91Ijo1Gnw9eLGE/wp97+slWQb/YwgM1/SFDeRTvCpGmR3tVM5
+         ybmQma7l7D5r5Lvo6bwU/YELWXMoWGyPgefrcWZHEckrniVLnmDDsMgJf1WGwRrtoAvi
+         z+dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b2CfZEulgaB/ZZHlt0VqYYJ3F0+b+0caeXMzWvmvls4=;
-        b=Q83UX6gomnsYQp1mNxPfP5cGn6VS8cYwsXmVFmtLt79qk+3ZZN1sjKKKDSMFtD54pW
-         Z3737in/Je4U2ZC6ejFqv6binc0+SKkCsVFaTDqvUtOAAv33Dwi08g0g00N+VsriewGy
-         RP6TOdVaRahq9+mZPm9vICx/OQyufojKhvWiIRh5+UvHl/WXwej775siotqHLddpsFP9
-         QL5gelm/bZw+y8snnOH+kugwkjBLKabXqwaHhXII4Ch+LSl6Qv9zUU9wP90ov4qgDmks
-         yDmd8Wy7Mjcamb4vJtNdglXoE+qKqXsvgwXh31QiOFea9sOOuEBDemBj3RJ7SHYPErpW
-         aYDQ==
-X-Gm-Message-State: AOAM531fjnYpWPRN03mM57k+DowqWvFgHioyOo5PwAjs03SYzMmlcSqt
-        F0gDGmQE7SyYmx9eGQr0g3fCUVpCtq2npcVhYHN0Lw==
-X-Google-Smtp-Source: ABdhPJykl2pu2zEb3sFU5W8LyAFUx78TAzMAvlj03mByBKusatOobfqLjwlL5sft5NKigUcprifuRCuZFYT+c70nRh8=
-X-Received: by 2002:a25:90d:0:b0:619:52e6:9f9b with SMTP id
- 13-20020a25090d000000b0061952e69f9bmr32134363ybj.447.1646276600399; Wed, 02
- Mar 2022 19:03:20 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1T2pQiZbXMlGRmXFIqTrOqvgWauP+ciwm+r1geHJ1uw=;
+        b=1wrlRWGM/i1Nk2++X6F8M3DMm0L8DR9zTQTJGFB0gyCkWyNrIIbNCG8I9OKPZczzdZ
+         bD/Y2nemkqjaahCwakVIpuhCKQGXo4O51bLYEFVOP9QnQdLogstLekyJjCPjEXCevKI3
+         AQdYywAPBa13im9TDKQWIiE5cQXXcqhTZgU3VV+wnVAfBg/vx2aY3mjTPXmJZh3pOi/J
+         DnQRFK0S/63gaYLV4ljiInsNR8CRvacoalV4x4GtlTRZhPRzUc+I5hF5HFbSZSzfNr08
+         LSyd/72ygqu6PeQgomAYwjWymFIlXb7uyq80+06ouZffMWzRC+NL7mL9QO6ZcZt8YQap
+         l6cw==
+X-Gm-Message-State: AOAM5320f+yTPVS9aPg+crm/R44Y1ZjTQ1GF3BhqOQoN3r7121JxEWA2
+        8/CijGjjHr6MWWC4PAOrOcg=
+X-Google-Smtp-Source: ABdhPJz5Mddl9rcZtv4HDTnH0mTxyJ7dFwmBYJCQvR3sS9HN8w9/82ndp6bB7WqGsFMmXqSm779Y4w==
+X-Received: by 2002:a63:1c15:0:b0:372:ffcd:4d21 with SMTP id c21-20020a631c15000000b00372ffcd4d21mr28631649pgc.450.1646276633238;
+        Wed, 02 Mar 2022 19:03:53 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id bh3-20020a056a02020300b00378b62df320sm470171pgb.73.2022.03.02.19.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 19:03:52 -0800 (PST)
+Date:   Thu, 3 Mar 2022 08:33:49 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 8/9] bpf: Introduce cgroup iter
+Message-ID: <20220303030349.drd7mmwtufl45p3u@apollo.legion>
+References: <20220225234339.2386398-1-haoluo@google.com>
+ <20220225234339.2386398-9-haoluo@google.com>
+ <20220302224506.jc7jwkdaatukicik@apollo.legion>
+ <f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com>
 MIME-Version: 1.0
-References: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
-In-Reply-To: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 2 Mar 2022 19:02:44 -0800
-Message-ID: <CAGETcx_yDtX0m4gVKahABvKamUtGg2adL1+6=gwb4U=KEhwm7w@mail.gmail.com>
-Subject: Re: Regression: memory corruption on Atmel SAMA5D31
-To:     Peter Rosin <peda@axentia.se>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Nicolas Ferre <Nicolas.Ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <Ludovic.Desroches@microchip.com>,
-        Daniels Umanovskis <du@axentia.se>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,227 +81,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 4:29 PM Peter Rosin <peda@axentia.se> wrote:
+On Thu, Mar 03, 2022 at 07:33:16AM IST, Yonghong Song wrote:
 >
-> Hi!
 >
-> I'm seeing a weird problem, and I'd like some help with further
-> things to try in order to track down what's going on. I have
-> bisected the issue to
+> On 3/2/22 2:45 PM, Kumar Kartikeya Dwivedi wrote:
+> > On Sat, Feb 26, 2022 at 05:13:38AM IST, Hao Luo wrote:
+> > > Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> > > iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> > > be parameterized by a cgroup id and prints only that cgroup. So one
+> > > needs to specify a target cgroup id when attaching this iter.
+> > >
+> > > The target cgroup's state can be read out via a link of this iter.
+> > > Typically, we can monitor cgroup creation and deletion using sleepable
+> > > tracing and use it to create corresponding directories in bpffs and pin
+> > > a cgroup id parameterized link in the directory. Then we can read the
+> > > auto-pinned iter link to get cgroup's state. The output of the iter link
+> > > is determined by the program. See the selftest test_cgroup_stats.c for
+> > > an example.
+> > >
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > >   include/linux/bpf.h            |   1 +
+> > >   include/uapi/linux/bpf.h       |   6 ++
+> > >   kernel/bpf/Makefile            |   2 +-
+> > >   kernel/bpf/cgroup_iter.c       | 141 +++++++++++++++++++++++++++++++++
+> > >   tools/include/uapi/linux/bpf.h |   6 ++
+> > >   5 files changed, 155 insertions(+), 1 deletion(-)
+> > >   create mode 100644 kernel/bpf/cgroup_iter.c
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > index 759ade7b24b3..3ce9b0b7ed89 100644
+> > > --- a/include/linux/bpf.h
+> > > +++ b/include/linux/bpf.h
+> > > @@ -1595,6 +1595,7 @@ int bpf_obj_get_path(bpfptr_t pathname, int flags);
+> > >
+> > >   struct bpf_iter_aux_info {
+> > >   	struct bpf_map *map;
+> > > +	u64 cgroup_id;
+> > >   };
+> > >
+> > >   typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > index a5dbc794403d..855ad80d9983 100644
+> > > --- a/include/uapi/linux/bpf.h
+> > > +++ b/include/uapi/linux/bpf.h
+> > > @@ -91,6 +91,9 @@ union bpf_iter_link_info {
+> > >   	struct {
+> > >   		__u32	map_fd;
+> > >   	} map;
+> > > +	struct {
+> > > +		__u64	cgroup_id;
+> > > +	} cgroup;
+> > >   };
+> > >
+> > >   /* BPF syscall commands, see bpf(2) man-page for more details. */
+> > > @@ -5887,6 +5890,9 @@ struct bpf_link_info {
+> > >   				struct {
+> > >   					__u32 map_id;
+> > >   				} map;
+> > > +				struct {
+> > > +					__u64 cgroup_id;
+> > > +				} cgroup;
+> > >   			};
+> > >   		} iter;
+> > >   		struct  {
+> > > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> > > index c1a9be6a4b9f..52a0e4c6e96e 100644
+> > > --- a/kernel/bpf/Makefile
+> > > +++ b/kernel/bpf/Makefile
+> > > @@ -8,7 +8,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
+> > >
+> > >   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+> > >   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+> > > -obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
+> > > +obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o cgroup_iter.o
+> > >   obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+> > >   obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+> > >   obj-$(CONFIG_BPF_SYSCALL) += disasm.o
+> > > diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
+> > > new file mode 100644
+> > > index 000000000000..011d9dcd1d51
+> > > --- /dev/null
+> > > +++ b/kernel/bpf/cgroup_iter.c
+> > > @@ -0,0 +1,141 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/* Copyright (c) 2022 Google */
+> > > +#include <linux/bpf.h>
+> > > +#include <linux/btf_ids.h>
+> > > +#include <linux/cgroup.h>
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/seq_file.h>
+> > > +
+> > > +struct bpf_iter__cgroup {
+> > > +	__bpf_md_ptr(struct bpf_iter_meta *, meta);
+> > > +	__bpf_md_ptr(struct cgroup *, cgroup);
+> > > +};
+> > > +
+> > > +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> > > +{
+> > > +	struct cgroup *cgroup;
+> > > +	u64 cgroup_id;
+> > > +
+> > > +	/* Only one session is supported. */
+> > > +	if (*pos > 0)
+> > > +		return NULL;
+> > > +
+> > > +	cgroup_id = *(u64 *)seq->private;
+> > > +	cgroup = cgroup_get_from_id(cgroup_id);
+> > > +	if (!cgroup)
+> > > +		return NULL;
+> > > +
+> > > +	if (*pos == 0)
+> > > +		++*pos;
+> > > +
+> > > +	return cgroup;
+> > > +}
+> > > +
+> > > +static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+> > > +{
+> > > +	++*pos;
+> > > +	return NULL;
+> > > +}
+> > > +
+> > > +static int cgroup_iter_seq_show(struct seq_file *seq, void *v)
+> > > +{
+> > > +	struct bpf_iter__cgroup ctx;
+> > > +	struct bpf_iter_meta meta;
+> > > +	struct bpf_prog *prog;
+> > > +	int ret = 0;
+> > > +
+> > > +	ctx.meta = &meta;
+> > > +	ctx.cgroup = v;
+> > > +	meta.seq = seq;
+> > > +	prog = bpf_iter_get_info(&meta, false);
+> > > +	if (prog)
+> > > +		ret = bpf_iter_run_prog(prog, &ctx);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
+> > > +{
+> > > +	if (v)
+> > > +		cgroup_put(v);
+> > > +}
+> >
+> > I think in existing iterators, we make a final call to seq_show, with v as NULL,
+> > is there a specific reason to do it differently for this? There is logic in
+> > bpf_iter.c to trigger ->stop() callback again when ->start() or ->next() returns
+> > NULL, to execute BPF program with NULL p, see the comment above stop label.
+> >
+> > If you do add the seq_show call with NULL, you'd also need to change the
+> > ctx_arg_info PTR_TO_BTF_ID to PTR_TO_BTF_ID_OR_NULL.
 >
-> f9aa460672c9 ("driver core: Refactor fw_devlink feature")
+> Kumar, PTR_TO_BTF_ID should be okay since the show() never takes a non-NULL
+> cgroup. But we do have issues for cgroup_iter_seq_stop() which I missed
+> earlier.
+>
 
-I skimmed through your email and I'll read it more closely tomorrow,
-but it wasn't clear if you see this on Linus's tip of the tree too.
-Asking because of:
-https://lore.kernel.org/lkml/20210930085714.2057460-1-yangyingliang@huawei.com/
+Right, I was thinking whether it should call seq_show for v == NULL case. All
+other iterators seem to do so, it's a bit different here since it is only
+iterating over a single cgroup, I guess, but it would be nice to have some
+consistency.
 
-Also, a couple of other data points that _might_ help. Try kernel
-command line option fw_devlink=permissive vs fw_devlink=on (I forget
-if this was the default by 5.10) vs fw_devlink=off.
+> For cgroup_iter, the following is the current workflow:
+>    start -> not NULL -> show -> next -> NULL -> stop
+> or
+>    start -> NULL -> stop
+>
+> So for cgroup_iter_seq_stop, the input parameter 'v' will be NULL, so
+> the cgroup_put() is not actually called, i.e., corresponding cgroup is
+> not freed.
+>
+> There are two ways to fix the issue:
+>   . call cgroup_put() in next() before return NULL. This way,
+>     stop() will be a noop.
+>   . put cgroup_get_from_id() and cgroup_put() in
+>     bpf_iter_attach_cgroup() and bpf_iter_detach_cgroup().
+>
+> I prefer the second approach as it is cleaner.
+>
 
-I'm expecting "off" to fix the issue for you. But if permissive vs on
-shows a difference driver issues would start becoming a real
-possibility.
+I think current approach is also not safe if cgroup_id gets reused, right? I.e.
+it only does cgroup_get_from_id in seq_start, not at attach time, so it may not
+be the same cgroup when calling read(2). kernfs is using idr_alloc_cyclic, so it
+is less likely to occur, but since it wraps around to find a free ID it might
+not be theoretical.
 
--Saravana
+> >
+> > > +
+> > > +static const struct seq_operations cgroup_iter_seq_ops = {
+> > > +	.start  = cgroup_iter_seq_start,
+> > > +	.next   = cgroup_iter_seq_next,
+> > > +	.stop   = cgroup_iter_seq_stop,
+> > > +	.show   = cgroup_iter_seq_show,
+> > > +};
+> > > +
+> > > +BTF_ID_LIST_SINGLE(bpf_cgroup_btf_id, struct, cgroup)
+> > > +
+> > > +static int cgroup_iter_seq_init(void *priv_data, struct bpf_iter_aux_info *aux)
+> > > +{
+> > > +	*(u64 *)priv_data = aux->cgroup_id;
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void cgroup_iter_seq_fini(void *priv_data)
+> > > +{
+> > > +}
+> > > +
+> > > +static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
+> > > +	.seq_ops                = &cgroup_iter_seq_ops,
+> > > +	.init_seq_private       = cgroup_iter_seq_init,
+> > > +	.fini_seq_private       = cgroup_iter_seq_fini,
+> > > +	.seq_priv_size          = sizeof(u64),
+> > > +};
+> > > +
+> > > +static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
+> > > +				  union bpf_iter_link_info *linfo,
+> > > +				  struct bpf_iter_aux_info *aux)
+> > > +{
+> > > +	aux->cgroup_id = linfo->cgroup.cgroup_id;
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void bpf_iter_detach_cgroup(struct bpf_iter_aux_info *aux)
+> > > +{
+> > > +}
+> > > +
+> > > +void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> > > +				 struct seq_file *seq)
+> > > +{
+> > > +	char buf[64] = {0};
+> > > +
+> > > +	cgroup_path_from_kernfs_id(aux->cgroup_id, buf, sizeof(buf));
+> > > +	seq_printf(seq, "cgroup_id:\t%lu\n", aux->cgroup_id);
+> > > +	seq_printf(seq, "cgroup_path:\t%s\n", buf);
+> > > +}
+> > > +
+> > > +int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
+> > > +				   struct bpf_link_info *info)
+> > > +{
+> > > +	info->iter.cgroup.cgroup_id = aux->cgroup_id;
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +DEFINE_BPF_ITER_FUNC(cgroup, struct bpf_iter_meta *meta,
+> > > +		     struct cgroup *cgroup)
+> > > +
+> > > +static struct bpf_iter_reg bpf_cgroup_reg_info = {
+> > > +	.target			= "cgroup",
+> > > +	.attach_target		= bpf_iter_attach_cgroup,
+> > > +	.detach_target		= bpf_iter_detach_cgroup,
+> > > +	.show_fdinfo		= bpf_iter_cgroup_show_fdinfo,
+> > > +	.fill_link_info		= bpf_iter_cgroup_fill_link_info,
+> > > +	.ctx_arg_info_size	= 1,
+> > > +	.ctx_arg_info		= {
+> > > +		{ offsetof(struct bpf_iter__cgroup, cgroup),
+> > > +		  PTR_TO_BTF_ID },
+> > > +	},
+> > > +	.seq_info		= &cgroup_iter_seq_info,
+> > > +};
+> > > +
+> > > +static int __init bpf_cgroup_iter_init(void)
+> > > +{
+> > > +	bpf_cgroup_reg_info.ctx_arg_info[0].btf_id = bpf_cgroup_btf_id[0];
+> > > +	return bpf_iter_reg_target(&bpf_cgroup_reg_info);
+> > > +}
+> > > +
+> > > +late_initcall(bpf_cgroup_iter_init);
+> > > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> > > index a5dbc794403d..855ad80d9983 100644
+> > > --- a/tools/include/uapi/linux/bpf.h
+> > > +++ b/tools/include/uapi/linux/bpf.h
+> > > @@ -91,6 +91,9 @@ union bpf_iter_link_info {
+> > >   	struct {
+> > >   		__u32	map_fd;
+> > >   	} map;
+> > > +	struct {
+> > > +		__u64	cgroup_id;
+> > > +	} cgroup;
+> > >   };
+> > >
+> > >   /* BPF syscall commands, see bpf(2) man-page for more details. */
+> > > @@ -5887,6 +5890,9 @@ struct bpf_link_info {
+> > >   				struct {
+> > >   					__u32 map_id;
+> > >   				} map;
+> > > +				struct {
+> > > +					__u64 cgroup_id;
+> > > +				} cgroup;
+> > >   			};
+> > >   		} iter;
+> > >   		struct  {
+> > > --
+> > > 2.35.1.574.g5d30c73bfb-goog
+> > >
+> >
+> > --
+> > Kartikeya
 
->
-> The symptoms are that I get (seemingly) random memory corruption
-> when processing large amounts of data (compared to system size).
-> I have two known reproducers, but I'm sure there are more if I
-> keep digging. One is to do this:
->
-> $ dd if=/dev/urandom of=testfile bs=1024 count=40000
-> 40000+0 records in
-> 40000+0 records out
-> 40960000 bytes (41 MB, 39 MiB) copied, 19.7759 s, 2.1 MB/s
-> $ for i in 1 2 3 4; do cat testfile | sha256sum; done
-> d8c85f816e08baa5ad27050bf0413e11a09f325fb0a8843b7b2b45b9333ab542  -
-> f223c1cbb6dbecb02d1741e7991dc98cd8d5b40ffee05bb32dc2c15eb73d6b1f  -
-> d6f3e7f3d325c67e83a6104934dd8a7c891ebfd9a2cf59633dbe97fb2cbb9c81  -
-> cf8ada47e7e2fee299314440b225ba83fca3cef1f6286adc160a5d4f207caccd  -
->
-> It is harder to tickle the problem if I redirect the testfile to
-> sha256sum w/o involving cat or give the file as an argument to
-> sha256sum. I can also get things to behave better by getting rid
-> of a bunch of USB interrupts by doing the following:
->
-> $ echo 100 > /sys/bus/usb-serial/devices/ttyUSB0/latency_timer
-> $ echo 100 > /sys/bus/usb-serial/devices/ttyUSB1/latency_timer
-> $ echo 100 > /sys/bus/usb-serial/devices/ttyUSB2/latency_timer
-> $ echo 100 > /sys/bus/usb-serial/devices/ttyUSB3/latency_timer
->
-> With the lower interrupt pressure I get this:
->
-> $ for i in 1 2 3 4; do cat testfile | sha256sum; done
-> 4f9173f63cb2e13d1470e59e1b5c657f3b0f4f2e9a55ab6facffbb03f34ce04d  -
-> 4f9173f63cb2e13d1470e59e1b5c657f3b0f4f2e9a55ab6facffbb03f34ce04d  -
-> 4f9173f63cb2e13d1470e59e1b5c657f3b0f4f2e9a55ab6facffbb03f34ce04d  -
-> 4f9173f63cb2e13d1470e59e1b5c657f3b0f4f2e9a55ab6facffbb03f34ce04d  -
->
-> Nice. However, I need the latency to be lower than the default
-> 16ms, 3ms could perhaps work in theory, but preferably 1ms, so
-> the above 100ms is far off. The initial hash run was with latency
-> set to 1ms, which makes it easy to trigger the issue. The latency
-> timer setting is for this driver: drivers/usb/serial/ftdi_sio.c
->
-> And also, that does not help with the other reproducer, namely
-> to copy that same random testfile with scp to a working system...
->
-> $ scp testfile peda@xyzzy:testfile1
-> testfile                                      100%   39MB   2.0MB/s   00:19
-> $ scp testfile peda@xyzzy:testfile2
-> testfile                                      100%   39MB   2.1MB/s   00:18
-> $ scp testfile peda@xyzzy:testfile3
-> testfile                                      100%   39MB   2.1MB/s   00:18
-> $ scp testfile peda@xyzzy:testfile4
-> testfile                                      100%   39MB   2.1MB/s   00:19
->
-> ...and then perform the sha256sum on that xyzzy host instead:
->
-> $ sha256sum testfile?
-> 39dc3a7d05483ae7a2c64c5ed2e8e6108287bf4ddf124a2f0c1a9d0221f9ac66  testfile1
-> 9597ef542e7cce879872a027d9ec591feb5fc766aeaec47d58eff6e8c6ab3206  testfile2
-> c6104a700b1d6f13eb1de84b5a91a1846a3e1576e052d51a664d2e2711a3869d  testfile3
-> 60b9c240cb331bad530c3c1d766f50d53a24e01831bfc04e48f329b738521310  testfile4
-> $ sha256sum testfile?
-> 39dc3a7d05483ae7a2c64c5ed2e8e6108287bf4ddf124a2f0c1a9d0221f9ac66  testfile1
-> 9597ef542e7cce879872a027d9ec591feb5fc766aeaec47d58eff6e8c6ab3206  testfile2
-> c6104a700b1d6f13eb1de84b5a91a1846a3e1576e052d51a664d2e2711a3869d  testfile3
-> 60b9c240cb331bad530c3c1d766f50d53a24e01831bfc04e48f329b738521310  testfile4
->
-> Same output every time. Of course. xyzzy is a working system...
-> Converting these files to hex (hexdump -C) and diffing yields this:
->
-> $ diff -u0 testfile1.hex testfile2.hex
-> --- testfile1.hex       2022-03-02 23:56:38.273149516 +0100
-> +++ testfile2.hex       2022-03-03 00:00:57.912747033 +0100
-> @@ -8658,2 +8658,2 @@
-> -00021d10  08 2a dd c6 c8 0f 0d e2  4c 1e 46 21 f9 89 a2 54  |.*......L.F!...T|
-> -00021d20  23 8c 4f f1 46 f1 61 05  ee f2 d2 ee 56 79 4f 28  |#.O.F.a.....VyO(|
-> +00021d10  7b c8 d2 0b f4 ca 5f ba  61 b3 93 04 59 8f ed bf  |{....._.a...Y...|
-> +00021d20  2a f8 fb 0c ad 0e 23 2a  3e cf d3 10 02 ef 04 b9  |*.....#*>.......|
-> @@ -20592,2 +20592,2 @@
-> -000506f0  1f 6c ca 6b a6 2a 39 a6  1f bd b0 67 5b 22 1a dd  |.l.k.*9....g["..|
-> -00050700  8b 6d 86 7c 87 37 ee a8  46 4d e5 79 0e 3e 96 e6  |.m.|.7..FM.y.>..|
-> +000506f0  ad e6 d5 65 e6 dc c1 a3  e2 ba c9 e2 61 39 5f 5f  |...e........a9__|
-> +00050700  bf eb 8e 5c 08 f1 f2 89  3c 57 c5 07 b9 f4 91 fc  |...\....<W......|
-> @@ -461019,2 +461019,2 @@
-> -00708da0  0d 49 c3 e8 57 06 20 5a  c1 27 74 29 f8 83 af 69  |.I..W. Z.'t)...i|
-> -00708db0  94 4d 5b 71 9f 3e e5 d2  91 cc cb cd aa ff 44 8b  |.M[q.>........D.|
-> +00708da0  d3 b4 96 d6 40 8d 79 67  69 68 fd 10 b4 15 82 e6  |....@.ygih......|
-> +00708db0  5f f4 10 92 ae 39 9d 92  42 88 44 3b be 35 38 33  |_....9..B.D;.583|
-> @@ -902788,2 +902788,2 @@
-> -00dc6830  f2 41 23 1b ec 54 d5 fe  f0 33 51 f7 d2 fc bf bd  |.A#..T...3Q.....|
-> -00dc6840  e5 1f 58 df 24 2f e3 dc  65 87 b2 27 12 86 d1 9a  |..X.$/..e..'....|
-> +00dc6830  44 82 94 b5 c9 26 08 42  bd 89 e1 96 41 66 8a b5  |D....&.B....Af..|
-> +00dc6840  a5 34 46 5e fd 1b c1 73  86 33 24 fd 4d e1 e1 68  |.4F^...s.3$.M..h|
-> @@ -931900,2 +931900,2 @@
-> -00e383b0  ee 64 c5 6f 38 44 5b 31  41 e1 2c 64 49 d5 f8 ad  |.d.o8D[1A.,dI...|
-> -00e383c0  fb 85 52 4f 00 1f 80 7a  f3 de ee 8e db ac d5 bb  |..RO...z........|
-> +00e383b0  4b 4d 29 a1 0a 99 8f f7  32 71 8c de 23 ca a0 f1  |KM).....2q..#...|
-> +00e383c0  e2 af e3 c4 a0 95 d3 1c  ed 58 c4 c5 30 da 56 b9  |.........X..0.V.|
-> @@ -1170109,2 +1170109,2 @@
-> -011dabc0  6a 7c 0c 3c 86 1a b6 48  50 d7 98 68 0c 01 e3 1c  |j|.<...HP..h....|
-> -011dabd0  a3 a8 b0 f2 62 21 86 b9  d1 52 9d 74 9e 26 42 51  |....b!...R.t.&BQ|
-> +011dabc0  5b 1a 9e 23 ae 58 42 68  83 58 df d6 c1 57 6b b0  |[..#.XBh.X...Wk.|
-> +011dabd0  ec d5 50 8b 76 5e 96 b4  49 21 f7 e4 b7 8f a3 45  |..P.v^..I!.....E|
-> @@ -1880164,2 +1880164,2 @@
-> -01cb0630  1c 74 74 16 75 b4 de f7  ce 4b 5e 4d 97 d6 36 d4  |.tt.u....K^M..6.|
-> -01cb0640  44 d9 fd 69 c5 d0 f0 a6  c6 44 26 53 7f 91 f3 62  |D..i.....D&S...b|
-> +01cb0630  73 bc 40 ce f8 9d 99 91  1b 14 8b a8 52 2a 7b 39  |s.@.........R*{9|
-> +01cb0640  6b ff f5 c5 02 b9 ab c2  c2 08 5e e7 3a 5e 69 c4  |k.........^.:^i.|
->
-> Grepping (some of the above) for duplicates yields this:
->
-> $ egrep "0  (08 2a dd|23 8c 4f|7b c8 d2|2a f8 fb)" testfile1.hex
-> 00020d40  7b c8 d2 0b f4 ca 5f ba  61 b3 93 04 59 8f ed bf  |{....._.a...Y...|
-> 00020d50  2a f8 fb 0c ad 0e 23 2a  3e cf d3 10 02 ef 04 b9  |*.....#*>.......|
-> 00021d10  08 2a dd c6 c8 0f 0d e2  4c 1e 46 21 f9 89 a2 54  |.*......L.F!...T|
-> 00021d20  23 8c 4f f1 46 f1 61 05  ee f2 d2 ee 56 79 4f 28  |#.O.F.a.....VyO(|
-> $ egrep "0  (08 2a dd|23 8c 4f|7b c8 d2|2a f8 fb)" testfile2.hex
-> 00020d40  7b c8 d2 0b f4 ca 5f ba  61 b3 93 04 59 8f ed bf  |{....._.a...Y...|
-> 00020d50  2a f8 fb 0c ad 0e 23 2a  3e cf d3 10 02 ef 04 b9  |*.....#*>.......|
-> 00021d10  7b c8 d2 0b f4 ca 5f ba  61 b3 93 04 59 8f ed bf  |{....._.a...Y...|*
-> 00021d20  2a f8 fb 0c ad 0e 23 2a  3e cf d3 10 02 ef 04 b9  |*.....#*>.......|*
->
-> $ egrep "0  (1f 6c ca|8b 6d 86|ad e6 d5|bf eb 8e)" testfile1.hex
-> 0004f6f0  1f 6c ca 6b a6 2a 39 a6  1f bd b0 67 5b 22 1a dd  |.l.k.*9....g["..|
-> 0004f700  8b 6d 86 7c 87 37 ee a8  46 4d e5 79 0e 3e 96 e6  |.m.|.7..FM.y.>..|
-> 000506f0  1f 6c ca 6b a6 2a 39 a6  1f bd b0 67 5b 22 1a dd  |.l.k.*9....g["..|*
-> 00050700  8b 6d 86 7c 87 37 ee a8  46 4d e5 79 0e 3e 96 e6  |.m.|.7..FM.y.>..|*
-> $ egrep "0  (1f 6c ca|8b 6d 86|ad e6 d5|bf eb 8e)" testfile2.hex
-> 0004f6f0  1f 6c ca 6b a6 2a 39 a6  1f bd b0 67 5b 22 1a dd  |.l.k.*9....g["..|
-> 0004f700  8b 6d 86 7c 87 37 ee a8  46 4d e5 79 0e 3e 96 e6  |.m.|.7..FM.y.>..|
-> 000506f0  ad e6 d5 65 e6 dc c1 a3  e2 ba c9 e2 61 39 5f 5f  |...e........a9__|
-> 00050700  bf eb 8e 5c 08 f1 f2 89  3c 57 c5 07 b9 f4 91 fc  |...\....<W......|
->
-> $ egrep "0  (0d 49 c3|94 4d 5b|d3 b4 96|5f f4 10 92)" testfile1.hex
-> 00707dd0  d3 b4 96 d6 40 8d 79 67  69 68 fd 10 b4 15 82 e6  |....@.ygih......|
-> 00707de0  5f f4 10 92 ae 39 9d 92  42 88 44 3b be 35 38 33  |_....9..B.D;.583|
-> 00708da0  0d 49 c3 e8 57 06 20 5a  c1 27 74 29 f8 83 af 69  |.I..W. Z.'t)...i|
-> 00708db0  94 4d 5b 71 9f 3e e5 d2  91 cc cb cd aa ff 44 8b  |.M[q.>........D.|
-> $ egrep "0  (0d 49 c3|94 4d 5b|d3 b4 96|5f f4 10 92)" testfile2.hex
-> 00707dd0  d3 b4 96 d6 40 8d 79 67  69 68 fd 10 b4 15 82 e6  |....@.ygih......|
-> 00707de0  5f f4 10 92 ae 39 9d 92  42 88 44 3b be 35 38 33  |_....9..B.D;.583|
-> 00708da0  d3 b4 96 d6 40 8d 79 67  69 68 fd 10 b4 15 82 e6  |....@.ygih......|*
-> 00708db0  5f f4 10 92 ae 39 9d 92  42 88 44 3b be 35 38 33  |_....9..B.D;.583|*
->
-> I.e. testfile1 is (probably) corrupted at 000506f0..70f while
-> testfile2 is (probably) corrupted at 00021d10..2f and 00708da0..bf
-> (correpted lines marked with hand-made asterisks above)
->
-> If I keep grepping like this, the pattern is similar both within
-> these files and within testfile3 and testfile4. I.e. with
-> corruptions in 32-byte blocks at (seemingly) random positions
-> in the files. The corruption is always 16-byte-aligned and the bad
-> data seems to be a copy from exactly one page up in the file.
->
-> As stated above, I have bisected the issue to patch
->
-> f9aa460672c9 ("driver core: Refactor fw_devlink feature")
->
-> which was added between v5.10-rc3 and v5.10-rc4. Every kernel I have
-> tried with that patch applied have exhibited the issue, and I have
-> had no trouble like this with any kernel without that patch. Apart
-> from a whole bunch of kernels prior to v5.10-rc3, that includes some
-> later kernels with the patch reverted (along with the dependent
-> followup 2d09e6eb4a6f). The latest I have tried is 5.11.22. Those
-> two patches does not revert cleanly in 5.12 (and thereafter) so I
-> have not tried anything beyond 5.11 with the patch reverted.
->
-> I fail to understand how that patch might cause this issue. I have
-> compared boot messages before and after the patch and there is no
-> (significant) difference. Everything seems to happen in the same
-> order with the same result. But that comparison is of course limited
-> to what is logged.
->
-> In some random attempt I tried to disable the D-Cache bit, and that
-> makes it all very slow but it also (seemingly) fixes the issue. But
-> that may of course be due to vastly different timings.
->
-> Some background:
->
-> We have a "Linea" CPU module, with a design based on the Atmel (now
-> Microchip) SAMA5D31 evaluation board. This CPU module is used on e.g.
-> our TSE-850 for which there is a device tree in
->     arch/arm/boot/dts/at91-tse850-3.dts
-> It has a nand flash for the rootfs and 64 MB RAM. The 40 MB random
-> testfile is thus big enough to cause page cache churn.
->
-> We have used this module in thousands of delivered units (however,
-> not that many TSE-850) and have never observed anything like this
-> before. But that has been with older kernels. 4.13.<something> and
-> 4.15.<something> was what we were on until this recent activity.
->
-> We're now developing a new product (preliminary device tree included)
-> and the trusty old CPU module was used again and a fresh new kernel
-> was built for it. I then started to notice this issue and have tried
-> to include as much relevant data as possible. If you need more data
-> or would like me to test something, please ask.
->
-> I'm stumped.
->
-> Cheers,
-> Peter
+--
+Kartikeya

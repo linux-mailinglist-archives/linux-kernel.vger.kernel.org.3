@@ -2,108 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6674CB4E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E1B4CB4DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiCCCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S231745AbiCCCZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiCCCZU (ORCPT
+        with ESMTP id S231706AbiCCCZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:25:20 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41D22503;
-        Wed,  2 Mar 2022 18:24:35 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id p9so5526433wra.12;
-        Wed, 02 Mar 2022 18:24:35 -0800 (PST)
+        Wed, 2 Mar 2022 21:25:53 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E272B197;
+        Wed,  2 Mar 2022 18:25:09 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z2so3237605plg.8;
+        Wed, 02 Mar 2022 18:25:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=bs5ojZXXlLRZXUwC3XJKXaFe2NaCdMkJfCggibvm1pE=;
-        b=jg6O0SzIZvQ0dZtavnIktpzmUozBQixShvJVM1Tj6K+wpAtQ5EK0DJTQyMjBbwV345
-         kefreXsEKX7onCIiawRPSREjXf/ZFEhxeW1itTQRt9flzXy6Ea08VxuGwfM5XPC7hBey
-         M8WBmKlICVK2wr6G2D32vIb47E58EKZ+pGPnMx8n+QEUkOp3Tu+nk/gSpS7tNXFRNtQy
-         po1UCpox9K93LsPPlD7eyun4WJ/3GCpGnAf9xmOwfuXUo8/pWyuohd+xmAmpECwXMpcH
-         6e3CkeyNHwyBl2Cc1ep4jobHnQXfRKbRj/vfUnCTo+D4HTlUUVG95K1EhoM2QImvUWWq
-         HxZA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+owYc1beiZNdVQWI5pfer3AMJMG+Sa0wwOUcL3jCg/M=;
+        b=N/ogtJZFKTRwAFlfhS0OuPvfRc3Mc2rkVgfcoUi3PHPuoQhst7CUfVAi1rLMJRPfDh
+         96ZAyKA0/PRpcSC+A/L0WsJS+9B4PMY9RlMTC/lR6byI+mc/U5FU6uP+jzWmjq5XdkH2
+         RJ96SYYuRYHp7ODGFJygl+vsFusH/OxSGBtC91Acn8g9oBIfLFFl5dcVgqsoTHmyEBXU
+         b2kOfJoBtlz2KDk8oxiM+W5DcU+99501t2Rzp39KYEoOgmF32rFvyefNyLdMZx2v/niZ
+         GXFAudoxSQO4KEvagjnsRSiyniFMk3cEptyjnwSOyzOf+whsnt5H9oFqUzLLQqpCusky
+         I50Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bs5ojZXXlLRZXUwC3XJKXaFe2NaCdMkJfCggibvm1pE=;
-        b=r5F4aq40arOjSG8sBAspmlBCjf9MoMRdbo6u4MDIdyCOROt44O5osXXm9Ijce/lpHL
-         Yuz2Y6dvrdbcJjN86BO9x/vx0cO9FEBo1PkT95umtevB+XSqWxfOphWwTO5rxu+wzbQq
-         1tPFuEiwlHOUNRMHUG8QsZYf0IJeSvaCThSzwfD+U4lUzsK2hH6OxAtA+TXUhQzLVTC9
-         XvHMjra2iK79NqVyewibmWssMkp19+iufAjel5u608HOa4DjQmtt6hbxCOJQNnBBfVRV
-         ZSy9JwAnVy7E3LEUN9o0fwANCAn4gQBp495XpNX3d1nLzgDOyos7zIu9k5t5M38hGuir
-         7Ptg==
-X-Gm-Message-State: AOAM533291S45gGKT67nme9M57HWQIkeyBn5KvjyHa0K90pJ14IdhalQ
-        ZJVSAna0HxtZd03k1Q+8oo8xWQuAqTY86Q==
-X-Google-Smtp-Source: ABdhPJwbyH4tQeCUC2s0hLlopCdEpRq6dM05TWo/TQpenI+bJUoLyRDH0qdHpgrQ4DqTGI6KLBB0IQ==
-X-Received: by 2002:a5d:4f03:0:b0:1ed:9eb4:9e45 with SMTP id c3-20020a5d4f03000000b001ed9eb49e45mr24240589wru.464.1646274273857;
-        Wed, 02 Mar 2022 18:24:33 -0800 (PST)
-Received: from localhost.localdomain ([64.64.123.48])
-        by smtp.gmail.com with ESMTPSA id f22-20020a1cc916000000b00380d3e49e89sm620979wmb.22.2022.03.02.18.24.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+owYc1beiZNdVQWI5pfer3AMJMG+Sa0wwOUcL3jCg/M=;
+        b=ls0b83qUXC3xJ2HZfRv32kpMEvjXS+v3Debw5y+qJJAoA9VdEbU5HQQdNTtV9vyCr3
+         qoI2nV93snilIuNGMlYmvUsfnQb/tYR6ousJ+Sat9U2f2Vwurc0MF0Lw+KMAy7Mr7enM
+         bwgW0bFrFBom13/+CvXeutsH7/k5nksIeWDdhrFSEKqJ+azagyvhUZCq1iSZuPxDUcdo
+         JR/7JaylR4IMI2d51ORLSLMSGYT4aL92pR6wU65AF/JlTFR3Qh+smQbvJTzCnDWve7Qh
+         ytcVUfHAIokfujeSlrfGCMt3OK99xeIZucBsi312BnG8IgaqOOdquy979EFVMi8S4ieq
+         +o1w==
+X-Gm-Message-State: AOAM530PNtWwwnB/+39GrQp8GzkXkxVdPAfoQFgZdY3yOvmSCwXEmwz0
+        /4eLkCuCOLcOfnoD1P5NjKneEmNOVNKDBloG
+X-Google-Smtp-Source: ABdhPJwNk7hy6g36u2v2wPwp/L7scAUbPYKRT4PM+N0nuOLZg5Ue5d7LQjdVp7ZLYxBbSMx6+xBXBQ==
+X-Received: by 2002:a17:902:7802:b0:150:baa:bc1a with SMTP id p2-20020a170902780200b001500baabc1amr33493067pll.110.1646274308811;
+        Wed, 02 Mar 2022 18:25:08 -0800 (PST)
+Received: from localhost.localdomain ([157.255.44.218])
+        by smtp.gmail.com with ESMTPSA id s9-20020a056a00194900b004e1583f88a2sm490687pfk.0.2022.03.02.18.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 18:24:33 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH v2] platform: x86: huawei-wmi: check the return value of device_create_file()
-Date:   Wed,  2 Mar 2022 18:24:21 -0800
-Message-Id: <20220303022421.313-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 02 Mar 2022 18:25:08 -0800 (PST)
+From:   Harold Huang <baymaxhuang@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     jasowang@redhat.com, edumazet@google.com,
+        Harold Huang <baymaxhuang@gmail.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org (open list),
+        kvm@vger.kernel.org (open list:VIRTIO HOST (VHOST)),
+        virtualization@lists.linux-foundation.org (open list:VIRTIO HOST
+        (VHOST)), bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
+Subject: [PATCH net-next] tuntap: add sanity checks about msg_controllen in sendmsg
+Date:   Thu,  3 Mar 2022 10:24:40 +0800
+Message-Id: <20220303022441.383865-1-baymaxhuang@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220301064314.2028737-1-baymaxhuang@gmail.com>
+References: <20220301064314.2028737-1-baymaxhuang@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function device_create_file() in huawei_wmi_battery_add() can fail,
-so its return value should be checked.
+In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
+tun_sendmsg. Although we donot use msg_controllen in this path, we should
+check msg_controllen to make sure the caller pass a valid msg_ctl.
 
-Fixes: 355a070b09ab ("platform/x86: huawei-wmi: Add battery charging thresholds")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
+
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Suggested-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
 ---
-v2:
-* Fix the code format.
-  Thank Hans for good advice.
+ drivers/net/tap.c   | 3 ++-
+ drivers/net/tun.c   | 3 ++-
+ drivers/vhost/net.c | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
----
- drivers/platform/x86/huawei-wmi.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/x86/huawei-wmi.c b/drivers/platform/x86/huawei-wmi.c
-index a2d846c4a7ee..eac3e6b4ea11 100644
---- a/drivers/platform/x86/huawei-wmi.c
-+++ b/drivers/platform/x86/huawei-wmi.c
-@@ -470,10 +470,17 @@ static DEVICE_ATTR_RW(charge_control_thresholds);
+diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+index 8e3a28ba6b28..ba2ef5437e16 100644
+--- a/drivers/net/tap.c
++++ b/drivers/net/tap.c
+@@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
+ 	struct xdp_buff *xdp;
+ 	int i;
  
- static int huawei_wmi_battery_add(struct power_supply *battery)
- {
--	device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
--	device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
-+	int err = 0;
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		for (i = 0; i < ctl->num; i++) {
+ 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
+ 			tap_get_user_xdp(q, xdp);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 969ea69fd29d..2a0d8a5d7aec 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -2501,7 +2501,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 	if (!tun)
+ 		return -EBADFD;
  
--	return 0;
-+	err = device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
-+	if (err)
-+		return err;
-+
-+	err = device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
-+	if (err)
-+		device_remove_file(&battery->dev, &dev_attr_charge_control_start_threshold);
-+
-+	return err;
- }
+-	if (ctl && (ctl->type == TUN_MSG_PTR)) {
++	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
++	    ctl && ctl->type == TUN_MSG_PTR) {
+ 		struct tun_page tpage;
+ 		int n = ctl->num;
+ 		int flush = 0, queued = 0;
+diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+index 28ef323882fb..792ab5f23647 100644
+--- a/drivers/vhost/net.c
++++ b/drivers/vhost/net.c
+@@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
+ 		goto signal_used;
  
- static int huawei_wmi_battery_remove(struct power_supply *battery)
+ 	msghdr->msg_control = &ctl;
++	msghdr->msg_controllen = sizeof(ctl);
+ 	err = sock->ops->sendmsg(sock, msghdr, 0);
+ 	if (unlikely(err < 0)) {
+ 		vq_err(&nvq->vq, "Fail to batch sending packets\n");
 -- 
-2.17.1
+2.27.0
 

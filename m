@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1224CC9F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B984CC9FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbiCCXU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        id S235240AbiCCXYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbiCCXUZ (ORCPT
+        with ESMTP id S229809AbiCCXYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:20:25 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13743BA6E;
-        Thu,  3 Mar 2022 15:19:39 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id t5so6061009pfg.4;
-        Thu, 03 Mar 2022 15:19:39 -0800 (PST)
+        Thu, 3 Mar 2022 18:24:23 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D476710D0;
+        Thu,  3 Mar 2022 15:23:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id bg10so13941749ejb.4;
+        Thu, 03 Mar 2022 15:23:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zjuVnCbRWCkKZzG24Qbc3K9Rg+v9KCs6GJmxooo6ImU=;
-        b=JunhUSYXT7H21ToQtYdrAhv32jLNwVVvUnOISnZrFUQSwXYeT9Xm+o7gyZhuoJZhVZ
-         5drHBIwbv04hR5IxcQgmbACgWc2rTxAlWFNhGCxsAxWS4RCXqtCzc2Tuga0fV5bX1HBH
-         y9Ngkvncl45cm9GapGWCtROcqfy9zGviZFNrybf55pyhToiq7KtM/ZKHO0eEM3GetPkc
-         p794iolP2OC1gc48ZH8tYdmfmb0QhiqGr0bAqBmYR8RQFieF+qvVFzy6aJfdQLTQkjYR
-         X0siBzdYBauPfOsPsZOSdyHuoPE6k13NwytrFqMpKKe8TKJnoG2b+7usdhT1rqimN9Mi
-         I+aA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9c2fVUpY7DyP3VgtwSVx0smNHNJcvslxILkoyROtr1w=;
+        b=ItflX7sdEXiW8zlZ4EFJkhQ4cvSrk29ApLzREKca8BMZ5SHJFf/LQLHc+vpa5ldKhD
+         gayzeFaCbaTmiA/r2El83NvflWOrzgHj9tQvgu32iQ263O9uefwrfR/T2TLtIrMnia2l
+         wpAwzTjXQTco2LnnHPLEbVGehHO6S69AjUmWcLpKmYAvSoc2J+p6TntH5uOqZDFLkH+n
+         qB9PqcYQlTnYLOWgh4UDBUCwtUoE+O565clRJFbAlDKu9FuvhPchofEH59jwPb1ThBh9
+         cJ5tyrMwE2nroYd4n098SepAGlo/xlYllHZ17bwqVd2C6LXLS8NeevZ3EPyx9FkA49w2
+         S7vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zjuVnCbRWCkKZzG24Qbc3K9Rg+v9KCs6GJmxooo6ImU=;
-        b=WVQRvbzJ4D5ItG7JEoPFQb3LEsXVoEpEDWqTzb47DCEM5J1QZjOZu3DYx0ykWf3Ucf
-         nXWvi/3jUMwpeA2ONsI4QxqAoHuP7lAGiQTgEYkhGegnmd6XRaOQMoeb1b/J032OlGMU
-         SWNzGHWP8tJ1ZR7BsPOPSGG+szJ2cc2kEEkOf1xtn8uWUO+5IyzLyEmzwInxCCN0dYYu
-         dNl8LmLTDbURDNClmg+Tpanu8UtCPihbycJPvkhPhF1nhz8MJsDRro+5RAX8mBfT5xCq
-         7NK8dFMT88WETbkpYn8ps6xowV8G62EY/PxNXxf3G9ZhNV0FZzvmrczEzuycMrQohch6
-         k7cw==
-X-Gm-Message-State: AOAM533TJSO0RRuzf21rFIFxYbTK5epQOdnWrtSG3WpLKvjFUSF0jPAS
-        KYCMY2SUMr5vsTgcxAAqlO8=
-X-Google-Smtp-Source: ABdhPJwDJODFk3S4d4ZDXWIYNC1lVTWKiEgRPAaVdcs+sRcG0Dlwm4CCVfmIShdQqnYrEx6HVt372A==
-X-Received: by 2002:a05:6a00:a1d:b0:4f6:5051:6183 with SMTP id p29-20020a056a000a1d00b004f650516183mr10703840pfh.42.1646349579082;
-        Thu, 03 Mar 2022 15:19:39 -0800 (PST)
-Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:5388:c313:5e37:a261])
-        by smtp.gmail.com with ESMTPSA id e14-20020a056a001a8e00b004e136d54a15sm3626149pfv.105.2022.03.03.15.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 15:19:38 -0800 (PST)
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-raid@vger.kernel.org
-Subject: [PATCH] md: use msleep() in md_notify_reboot()
-Date:   Thu,  3 Mar 2022 15:19:33 -0800
-Message-Id: <20220303231933.1313075-1-eric.dumazet@gmail.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9c2fVUpY7DyP3VgtwSVx0smNHNJcvslxILkoyROtr1w=;
+        b=U7495zDFARigDXvWnQRRcrjWXtWw6zu+okh9eqYlKKDFuSOd/cX5w0InhAJIfldRbN
+         pPNQBNThjGSKulnB9EkoxPICBEKVS+ib7dTWZC7w5jRyQHef4POi0O8xMwwkwx+OiaCO
+         9bu868DgC7wLNB0BQ552tPIZwhgW1fjUO1ZU7pw9UkkDrXqLzS+8p00SFieoBno2bbsH
+         Y3WCe/9skyco1MlKC2dEVeQVrr+o/u73RceeuGhGZCcUD6CBb1Q3oYq7V2inwXQiwoat
+         VwZ1H2xOGXI+ikbNQtfUJPNhtmcBvcVSOphCusbgj/OtwxBJCVbKFC1qY8UlCCBOVuft
+         4mhQ==
+X-Gm-Message-State: AOAM533CKGqHCQg1j5jTvRxHonDRj8RW5mLF4eXRTJBmIOCdCLEFkNB4
+        Img6jh1U8HetsSQr/gYFn8D4S6VIO5bNAJpnOv5+M6ajbio=
+X-Google-Smtp-Source: ABdhPJxeMzRCXl3xo2gq478pKijm5mLzaTTem/4gSoCd9EheSFl4eBnXdb0Xyeuvp/fb3WCw46LNosphVQOF7BQsleU=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr29813134ejc.497.1646349814940; Thu, 03
+ Mar 2022 15:23:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220303150610.47596-1-andriy.shevchenko@linux.intel.com> <YiDpKqwiwD8jZdFT@paasikivi.fi.intel.com>
+In-Reply-To: <YiDpKqwiwD8jZdFT@paasikivi.fi.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 4 Mar 2022 01:22:58 +0200
+Message-ID: <CAHp75Ve6k7zqy6Z+2cscV1xq_wh6gyRGBUuSy8ES0KU1g2cnow@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] device property: Allow error pointer for fwnode_handle_{get,put}()
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,32 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+On Thu, Mar 3, 2022 at 11:34 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+> On Thu, Mar 03, 2022 at 05:06:10PM +0200, Andy Shevchenko wrote:
+> > Some of the fwnode APIs might return an error pointer instead of NULL
+> > or valid fwnode handle. The result of such API call may be considered
+> > optional and hence the test for it is usually done in a form of
+> >
+> >       fwnode = fwnode_find_reference(...);
+> >       if (IS_ERR_OR_NULL(fwnode))
+> >               ...error handling...
+> >
+> > Nevertheless the resulting fwnode may have bumped reference count and
+> > hence caller of the above API is obliged to call fwnode_handle_put().
+> > Since fwnode may be not valid either as NULL or error pointer the check
+> > has to be performed there. This approach uglifies the code and adds
+> > a point of making a mistake, i.e. forgetting about error point case.
+> >
+> > To prevent this allow error pointer for fwnode_handle_get() and
+> > fwnode_handle_put().
 
-Calling mdelay(1000) from process context, even while a reboot
-is in progress, does not make sense.
+Thanks for the review, my comments below.
 
-Using msleep() allows other threads to make progress.
+...
 
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: linux-raid@vger.kernel.org
----
- drivers/md/md.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I guess fwnode_find_reference() is the only fwnode API function returning
+> errors as pointers? If you changed it returning NULL on error, you'd lose
+> the error codes.
+>
+> But I think this is a problem beyond fwnode_handle_{get,put}: fwnode
+> obtained this way could be passed to any fwnode function and they should
+> just work correctly with that.
+>
+> How about moving the check to fwnode_has_op()? That function is responsible
+> for checking the fwnode is valid and has the op in question.
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 4d38bd7dadd604acdc9832d62c81c913abddc07d..330c53e212b82dd58670962fc9204cf4eec484f4 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -9583,7 +9583,7 @@ static int md_notify_reboot(struct notifier_block *this,
- 	 * driver, we do want to have a safe RAID driver ...
- 	 */
- 	if (need_delay)
--		mdelay(1000*1);
-+		msleep(1000);
- 
- 	return NOTIFY_DONE;
- }
+Yes, I was thinking about it (and I even have a local followup), so
+this version of the fix is (semi-)RFC. Moreover, we (wrongly!) do
+check in many already, but only _after_ trying to dereference error
+pointers.
+
+Letme prepare v2 tomorrow.
+
+> It also seems the explicit fwnode_has_op() call is redundant in
+> fwnode_handle_put() as fwnode_call_void_op() already calls fwnode_has_op().
+
+Then call_ptr_op should have the same check as well.
+
 -- 
-2.35.1.616.g0bdcbb4464-goog
-
+With Best Regards,
+Andy Shevchenko

@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A444CB9EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBC34CB9EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiCCJPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S231816AbiCCJPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiCCJPW (ORCPT
+        with ESMTP id S229933AbiCCJPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:15:22 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887B4119435;
-        Thu,  3 Mar 2022 01:14:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CC1A6885;
-        Thu,  3 Mar 2022 10:14:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646298876;
-        bh=OSe+PR5iWXfk7TT5SmP463t6QDDD1+tQqfbrYuJ59f8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XnUFRHaoCchmSwwnyhCDedhVyStwSz2xuZyQIv1ynac1QJiCugETWID5aNAINkn0p
-         tpChYrzOvLoJh6Tv78+ZZ2V0KnuTwB0WmtY7iK5EbxWEh4sMnxGzLtebJZ+3LarCIN
-         Z4kWWgD51SU28KPoS1cw/FwUbTe6bHkRWX6Jij/Y=
-Date:   Thu, 3 Mar 2022 11:14:23 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: display: bridge: renesas,lvds: Document
- r8a77961 bindings
-Message-ID: <YiCG7xSHx6qqFlrc@pendragon.ideasonboard.com>
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-4-nikita.yoush@cogentembedded.com>
- <YcyRAk/d2728mDgH@pendragon.ideasonboard.com>
- <CAMuHMdWkgEwgSEBrNt57nMPuMvyCSPsSbKFuQTGX8qX0-mrDLA@mail.gmail.com>
+        Thu, 3 Mar 2022 04:15:35 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57CF119855;
+        Thu,  3 Mar 2022 01:14:49 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V67Be.m_1646298882;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V67Be.m_1646298882)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 17:14:47 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, gustavoars@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] net: ethernet: sun: Remove redundant code
+Date:   Thu,  3 Mar 2022 17:14:40 +0800
+Message-Id: <20220303091440.71416-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWkgEwgSEBrNt57nMPuMvyCSPsSbKFuQTGX8qX0-mrDLA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 06:00:08PM +0100, Geert Uytterhoeven wrote:
-> On Wed, Dec 29, 2021 at 5:47 PM Laurent Pinchart wrote:
-> > On Fri, Dec 24, 2021 at 08:23:09AM +0300, Nikita Yushchenko wrote:
-> > > Document the R-Car M3-W+ (R8A77961) SoC in the R-Car LVDS encoder
-> > > bindings.
-> > >
-> > > Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> > > ---
-> > >  .../devicetree/bindings/display/bridge/renesas,lvds.yaml         | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml b/Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
-> > > index acfc327f70a7..ca5443e5c2e3 100644
-> > > --- a/Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
-> > > +++ b/Documentation/devicetree/bindings/display/bridge/renesas,lvds.yaml
-> > > @@ -27,6 +27,7 @@ properties:
-> > >        - renesas,r8a7791-lvds # for R-Car M2-W compatible LVDS encoders
-> > >        - renesas,r8a7793-lvds # for R-Car M2-N compatible LVDS encoders
-> > >        - renesas,r8a7795-lvds # for R-Car H3 compatible LVDS encoders
-> > > +      - renesas,r8a77961-lvds # for R-Car M3-W+ compatible LVDS encoders
-> >
-> > I'll move this line after the next to keep them sorted. No need to
-> > resubmit.
-> 
-> Any chance this will happen soon? Same for patch 1/3 .
-> Patch 2/3 is already queued in soc/for-next.
+Because CAS_FLAG_REG_PLUS is assigned a value of 1, it never enters
+these for loops.
 
-Oops. I can send a pull request right away, but we're already at -rc6,
-so I'm afraid it will get delayed to v5.19.
+Clean up the following smatch warning:
 
+drivers/net/ethernet/sun/cassini.c:3513 cas_start_dma() warn: we never
+enter this loop.
+
+drivers/net/ethernet/sun/cassini.c:1239 cas_init_rx_dma() warn: we never
+enter this loop.
+
+drivers/net/ethernet/sun/cassini.c:1247 cas_init_rx_dma() warn: we never
+enter this loop.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/net/ethernet/sun/cassini.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
+index 947a76a788c7..153edc5eadad 100644
+--- a/drivers/net/ethernet/sun/cassini.c
++++ b/drivers/net/ethernet/sun/cassini.c
+@@ -1235,19 +1235,6 @@ static void cas_init_rx_dma(struct cas *cp)
+ 	 */
+ 	readl(cp->regs + REG_INTR_STATUS_ALIAS);
+ 	writel(INTR_RX_DONE | INTR_RX_BUF_UNAVAIL, cp->regs + REG_ALIAS_CLEAR);
+-	if (cp->cas_flags & CAS_FLAG_REG_PLUS) {
+-		for (i = 1; i < N_RX_COMP_RINGS; i++)
+-			readl(cp->regs + REG_PLUS_INTRN_STATUS_ALIAS(i));
+-
+-		/* 2 is different from 3 and 4 */
+-		if (N_RX_COMP_RINGS > 1)
+-			writel(INTR_RX_DONE_ALT | INTR_RX_BUF_UNAVAIL_1,
+-			       cp->regs + REG_PLUS_ALIASN_CLEAR(1));
+-
+-		for (i = 2; i < N_RX_COMP_RINGS; i++)
+-			writel(INTR_RX_DONE_ALT,
+-			       cp->regs + REG_PLUS_ALIASN_CLEAR(i));
+-	}
+ 
+ 	/* set up pause thresholds */
+ 	val  = CAS_BASE(RX_PAUSE_THRESH_OFF,
+@@ -3509,9 +3496,6 @@ static inline void cas_start_dma(struct cas *cp)
+ 		if (N_RX_DESC_RINGS > 1)
+ 			writel(RX_DESC_RINGN_SIZE(1) - 4,
+ 			       cp->regs + REG_PLUS_RX_KICK1);
+-
+-		for (i = 1; i < N_RX_COMP_RINGS; i++)
+-			writel(0, cp->regs + REG_PLUS_RX_COMPN_TAIL(i));
+ 	}
+ }
+ 
 -- 
-Regards,
+2.20.1.7.g153144c
 
-Laurent Pinchart

@@ -2,132 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41DC4CC5B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580624CC5C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbiCCTMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S235846AbiCCTOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbiCCTMe (ORCPT
+        with ESMTP id S231142AbiCCTOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:12:34 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D4B12624;
-        Thu,  3 Mar 2022 11:11:47 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id b5so9348803wrr.2;
-        Thu, 03 Mar 2022 11:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=edxzlT0ua6q/WXD1RlHEu98j/w9wI0fapmJTiBUe15k=;
-        b=GQXrOrivW1MnjCYBa5LVMnvnaOVAw209ImFARkARXMI3U9X8Kc3+9+eUvssQCdUD9N
-         rpSkWDp6atspq7VRacpcfJT7nCvGtyaFvCmbk4ljd3XjHezeDsd8TvadKPRk+Yk5C5p2
-         6vXiC/OjRQOjdeLmJky0H+7Xdx6aU1S4cFZBz0CLe2edjLSz0uFifnbLbkdsbAr/fyz8
-         5wHxh8o9wGzLgFnqKoermHZG/NwTGge6LEkyOTyC42B1obldTZsoS7KCDHQ3hzQBEkmO
-         q/GJ2rU/oJe90f4R0pgVmjv1B4GApmxgqaeoo9BVJEBJh6lgSWKdbhZ/1Ihnz3Zw4qgW
-         7NCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=edxzlT0ua6q/WXD1RlHEu98j/w9wI0fapmJTiBUe15k=;
-        b=rDbcb3IEL4GM5IO9MwlXj6S02WRe31N9OQxlN8RiVA1A2SNG4YuJyTBmJMgG5ToV+Y
-         15s5XlUC2IDrWo0RePIGN0t6skOw18+0ymevzCFY2skqBxPDr7BWQgBSONvBhKmAFUwd
-         /3ETAvADXKbO36GqU4eGCLE/fY8gM9qQIIY0wNEVOG7OX2eSVS6thpCdL3hP5VaUEJQs
-         9UMNYtdOg3oSm5iSjafd8ARUu56fY1Ug5Q8EDGb6eqgk40OhFi2SAEAQafND9eh6oqEw
-         xab2UFWYo+lHEhkRWqCe+XzfzG44h53PeXUMVaTP5up5Ww+lfDoWT8l8JAD2kWTN9bcv
-         IXVA==
-X-Gm-Message-State: AOAM5302b3zvf0PUtwAzgk/bjXkvJ8BV+c8ga1Zllf3j0q87SNJC7kxm
-        NlB0H7/2oIjxJYZlRFgWKEo=
-X-Google-Smtp-Source: ABdhPJyxh5uuODFt55cQHPPblOjHfDLTnMQ2MQy32zg30St9DxGfGo6u9V5RNhRN6X+uV7/v1lam5A==
-X-Received: by 2002:a5d:4578:0:b0:1ed:bf30:40f3 with SMTP id a24-20020a5d4578000000b001edbf3040f3mr28245345wrc.669.1646334705876;
-        Thu, 03 Mar 2022 11:11:45 -0800 (PST)
-Received: from localhost.localdomain ([102.122.167.77])
-        by smtp.gmail.com with ESMTPSA id f13-20020adff8cd000000b001f03439743fsm2811600wrq.75.2022.03.03.11.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:11:45 -0800 (PST)
-From:   hatimmohammed369@gmail.com
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hatim Muhammed <hatimmohammed369@gmail.com>
-Subject: [PATCH] Fixed function pointers coding style issues
-Date:   Thu,  3 Mar 2022 21:11:20 +0200
-Message-Id: <20220303191120.7503-1-hatimmohammed369@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 14:14:43 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C268E15695C;
+        Thu,  3 Mar 2022 11:13:53 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223I7lah022075;
+        Thu, 3 Mar 2022 19:13:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qmrt+/Jkb8gDsrGOIzxJnNKsZAsWE6WMeHS3jtGFsOw=;
+ b=DiSJgUgqV7yXSBLAk+0HzVrG7I4/t/D2mCttumHpFScW6oS0jrkN3NDg3d9cyNoePadv
+ 54tzw9Vlm+QqZwcrckbjN9EDRMh5eSnRSobU2uYLLdkCe32o88YAkgtyrUdjQTa73kZV
+ wzN0th04iOw9EqF7PaAEeCuFZz22nu+Cfe8BRkLUuM7yjg0+kmaZqZt89qF1l+Clg+yh
+ 67Q7bpkJ7pQb9O5WF/ce/ne9l1X1OxHW/MALb9hgxpfEx2IttLwc5vqfR7S/tdJ4vvh4
+ +6BS/QKQZu/dyQ1NKXSscwI9/JR5NVxOd3fcRX8xKmwEwaQQxZFehTlR7VyW1gwM0ZCB rQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ek0nm4asy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 19:13:32 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 223IdA7Z019088;
+        Thu, 3 Mar 2022 19:13:32 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ek0nm4ase-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 19:13:31 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 223J8wax004102;
+        Thu, 3 Mar 2022 19:13:29 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3efbu9h0wq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 19:13:29 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 223JDRHq41877958
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Mar 2022 19:13:27 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4232A42049;
+        Thu,  3 Mar 2022 19:13:27 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD84B42047;
+        Thu,  3 Mar 2022 19:13:24 +0000 (GMT)
+Received: from sig-9-65-93-208.ibm.com (unknown [9.65.93.208])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Mar 2022 19:13:24 +0000 (GMT)
+Message-ID: <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, revest@chromium.org, gregkh@linuxfoundation.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>
+Date:   Thu, 03 Mar 2022 14:13:24 -0500
+In-Reply-To: <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+         <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+         <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+         <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
+         <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
+         <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FANeqy5G1wiM_J_SJU3GjaSTTFkeGmlg
+X-Proofpoint-GUID: Ur-wuaMT2dDIoAnuan4VD-noqUb6Frs_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-03_09,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 mlxscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=995 clxscore=1015 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203030086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hatim Muhammed <hatimmohammed369@gmail.com>
+On Thu, 2022-03-03 at 19:14 +0100, KP Singh wrote:
+> 
+> Even Robert's use case is to implement IMA policies in BPF this is still
+> fundamentally different from IMA doing integrity measurement for BPF
+> and blocking this patch-set on the latter does not seem rational and
+> I don't see how implementing integrity for BPF would avoid your
+> concerns.
 
-Signed-off-by: Hatim Muhammed <hatimmohammed369@gmail.com>
+eBPF modules are an entire class of files currently not being measured,
+audited, or appraised.  This is an integrity gap that needs to be
+closed.  The purpose would be to at least measure and verify the
+integrity of the eBPF module that is going to be used in lieu of
+traditional IMA.
 
-Some functions pointers did not provide names for their parameters,
-     Fixed that
-
----
- virt/kvm/vfio.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
-index 8fcbc50221c2..37887b158aae 100644
---- a/virt/kvm/vfio.c
-+++ b/virt/kvm/vfio.c
-@@ -35,7 +35,7 @@ struct kvm_vfio {
- static struct vfio_group *kvm_vfio_group_get_external_user(struct file *filep)
- {
- 	struct vfio_group *vfio_group;
--	struct vfio_group *(*fn)(struct file *);
-+	struct vfio_group *(*fn)(struct file *_file);
- 
- 	fn = symbol_get(vfio_group_get_external_user);
- 	if (!fn)
-@@ -66,7 +66,7 @@ static bool kvm_vfio_external_group_match_file(struct vfio_group *group,
- 
- static void kvm_vfio_group_put_external_user(struct vfio_group *vfio_group)
- {
--	void (*fn)(struct vfio_group *);
-+	void (*fn)(struct vfio_group *_vfio_group);
- 
- 	fn = symbol_get(vfio_group_put_external_user);
- 	if (!fn)
-@@ -79,7 +79,7 @@ static void kvm_vfio_group_put_external_user(struct vfio_group *vfio_group)
- 
- static void kvm_vfio_group_set_kvm(struct vfio_group *group, struct kvm *kvm)
- {
--	void (*fn)(struct vfio_group *, struct kvm *);
-+	void (*fn)(struct vfio_group *_vfio_group, struct kvm *_kvm);
- 
- 	fn = symbol_get(vfio_group_set_kvm);
- 	if (!fn)
-@@ -92,7 +92,7 @@ static void kvm_vfio_group_set_kvm(struct vfio_group *group, struct kvm *kvm)
- 
- static bool kvm_vfio_group_is_coherent(struct vfio_group *vfio_group)
- {
--	long (*fn)(struct vfio_group *, unsigned long);
-+	long (*fn)(struct vfio_group *_vfio_group, unsigned long _n);
- 	long ret;
- 
- 	fn = symbol_get(vfio_external_check_extension);
-@@ -109,7 +109,7 @@ static bool kvm_vfio_group_is_coherent(struct vfio_group *vfio_group)
- #ifdef CONFIG_SPAPR_TCE_IOMMU
- static int kvm_vfio_external_user_iommu_id(struct vfio_group *vfio_group)
- {
--	int (*fn)(struct vfio_group *);
-+	int (*fn)(struct vfio_group *_vfio_group);
- 	int ret = -EINVAL;
- 
- 	fn = symbol_get(vfio_external_user_iommu_id);
 -- 
-2.35.1
+thanks,
+
+Mimi
 

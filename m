@@ -2,194 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3A04CB69C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 06:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726F24CB699
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 06:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiCCF5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 00:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S229743AbiCCF4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 00:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiCCF47 (ORCPT
+        with ESMTP id S229608AbiCCF4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 00:56:59 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D6211E3E2;
-        Wed,  2 Mar 2022 21:56:13 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2233GOuf028932;
-        Thu, 3 Mar 2022 05:55:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
- b=yMs1LT8AT0kYoaK+Xo4RvKRvZZnEBFHwV7tzCFbDnar10j9nfoRjxav0jY1KVxS22KM1
- IJGbHULnjNLDgyuHUhZ285b5NrCjNxktZ9PXNvrmfVauGCsIC3jHfCDfiWKIfySui26i
- yJEHHQWbXFBLA2VY+rD3wvrOxVwczM1lA+N47pef3czm8FcYM5JDy9Fltl/uQrNGZsh+
- FI7GlWAFd0S1XK+PtU0Ve5lbemZZWwwK2IccYQ9lEn2DHYuTv0FMYEmLMOyI13BPmQFj
- 8qvATpD6HjdDpXmGdfVvwEcAOi49QTJwzlQz4LAIV3gBt1s0qF9cdGix9+jLGPl+Cgxr xg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14byvaf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Mar 2022 05:55:18 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2235fTvL176716;
-        Thu, 3 Mar 2022 05:55:17 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
-        by aserp3030.oracle.com with ESMTP id 3efa8he6t8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Mar 2022 05:55:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BT0SIZe3fjdX+4fIGQEAs3hLac0AZViGLb5LcEhyddCtQknOGFL2tzX33PTlMuBG9/JhvC76H48GQfM1jH4PAQfbUeayehlUxbqZbrH5/YbbJpGDWyh2+WgaUrk2AA+ZmHzf6k4w2mU/c8Js5bf6RfneRF5htf9GprTMQpcgVIHgkL7LkxA3iYw9vxD+NOG2KRaMovsrCo3tV/it6mmHjtm85yKR7mG02JkRnahfcZktkz6BsCwj9aefNshrHhF98M5wleBBQFUWxN+CF8+TXmYprcAZ1HXfmMaRtl52GbRvn5svzw765Y3jyrCgLhEKOtnS0uAjZzyNURGT1r7yFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
- b=nUkTvrZD8yombitsLK57TUIU/VhS3M3Qae3z7XvqhNPmeISq/usut1WE6WA3HwSkkDFm3P8KwDoiNOmHPk++9A2+vFlat4TmioYbABqc/UL1v5KRKc/DSq6Q7XY6G/7CW0VY44TnJxlsbDVHDeM2CVGdjK0pX2QTj42qFMKoFCEr4y/GbGOYgoQAhu6+9gSmeuIEoWopBpmD/1aG33LMtqNiX2iWnt9/lcT38fAH3YJuadAagXsnQWB/Eu5a5KPNW7z+Em9c7KBWVkzt1IHXWgOjwnV0fgYkUKQKReU7X2o/8fWoakRzrYg62/kEFh7JT8C2nNyDzKuTy27gjrYklw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
- b=iUSYr9b17Hym8cNvTLbA9gtr2MrHf+xx7T68PQEs2ZTp/vw92KmIc5zGN9Dw32gtsT1OvIS4SiOV1YK/3FLDds+ukItvMY64u42WoaKqzPaXKLNviUNFfP6qtZKJa8FOYy3ScOob1OSWioEdH7bVkXTC3C+7YMI7AxNc7saVxuU=
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
- by MWHPR1001MB2144.namprd10.prod.outlook.com (2603:10b6:301:2b::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Thu, 3 Mar
- 2022 05:55:15 +0000
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
- 05:55:15 +0000
-Subject: Re: [PATCH net-next v4 4/4] net: tun: track dropped skb via
- kfree_skb_reason()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     dsahern@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220226084929.6417-1-dongli.zhang@oracle.com>
- <20220226084929.6417-5-dongli.zhang@oracle.com>
- <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <ca81687c-4943-6d58-34f9-fb0a858f6887@oracle.com>
- <20220302111731.00746020@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <e3bc5ac4-e1db-584c-7219-54a09192a001@oracle.com>
- <20220302212122.7863b690@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-Message-ID: <8daa7abc-c78f-3895-996f-6bb5ead5049a@oracle.com>
-Date:   Wed, 2 Mar 2022 21:55:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-In-Reply-To: <20220302212122.7863b690@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0201CA0048.namprd02.prod.outlook.com
- (2603:10b6:803:2e::34) To BYAPR10MB2663.namprd10.prod.outlook.com
- (2603:10b6:a02:a9::20)
+        Thu, 3 Mar 2022 00:56:32 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8C7C9A24
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 21:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646286947; x=1677822947;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6ovB6vVB1YiVQjCPofVI32+qZDjcMARUkCWmcU5z5J0=;
+  b=cwkBIzQg/x/yzbCCBymoLIfM+KQL+0tkY0Mth7ZG0iMW/d+o9asr0T5h
+   Vd8k9bYl8l6eWHjqoXL87pdU2YObZvk4rMGL6oez1QyljjOuMNwpRB08E
+   oIhPWBb+byImnDID0l0BePl0pDR0ahR/yb49pPqVYD1RtlWsy0m9+mXv1
+   TPsqF687Cs9TZEa+TmsbRf0/JpOq8qrZbXNiVyY6+agBFuftTgycWlO/f
+   goXTjyo2jofoLj61rcAiaezpC5i3DOCJn+scRv+GoCo8OftxhZi9o1tYf
+   l6JDZnKYv8c+XFes4LY9cFv+fdSHCzWO/ZYS4+KPxOSJKYwGzLtpLlYwD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233550564"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="233550564"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 21:55:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="594268649"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Mar 2022 21:55:45 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPeRF-0000Cj-7z; Thu, 03 Mar 2022 05:55:45 +0000
+Date:   Thu, 3 Mar 2022 13:55:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Elder <elder@linaro.org>
+Subject: [mani-mhi:mhi-next 26/30] drivers/bus/mhi/ep/main.c:357:71: sparse:
+ sparse: incorrect type in argument 3 (different address spaces)
+Message-ID: <202203031356.vS8LSPwY-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9158837e-03e2-4af4-7f35-08d9fcda6356
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2144:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB2144C4CF030003378E1A8A6EF0049@MWHPR1001MB2144.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c5kQburEvTusd2twPY8SSBBgQ60pRQedUgvvZEyNIDgXUtvxX0f43x9mnD39TR7pIlAMFM+Ruqwqe2KdkhAcf+W+E/NgsksXprbpRZ7ZbS6ZcIWugQ0Z03xXt5HeliBqAFpXDu3wcXfMuWku/0wCln6LMhewPPwHSvKci7Aw9COI76AgUgxWFrkVDU6vlH94y5pEks3GpvWip8inkNQ8nysIZGU3J8DsUoD4fOGxKvFaDCI+TrbpWNuXDz173dTjeO+/luf8QtDH03R/7lwHfUfregCYhcYLfNdd2+4MgWGZkizwGP8IfEgvBFXeYAtyyv4rcxkV3ZbDShIfDZeXiwtx3nGd17AoYHzcH3DTDMEvUI8GD4jWu5quekjZOpEo4TNOfv7BUON0yJPvk3wt7rBkr+/WBSKr2NSmbuwpDIIA4CHx+B7hCDUSZFEmbZJInaGn1KbDDvfktTfOJIBTgkUlQatJl2WUjxRqnSGW7aQhGuR56ij9CHVVcfCRzkxCszP/BtnUcewwHnwfYx9Yq/2IoQKGSceaP36/rV/KV+ywliL7wQB7ia3/Sn25gKdGuM0WYLUj0nVcCuJxELu4f1Ym5WyZN+UTAtYQwfJRLjlkZXxlgAmkf4XbAFAO+TSDAm1r+3RMhSW5M99Rkmpo+cILIW+E3Ti/n4tSvdCi6RWZmlPYXrtSiY31BNgQKX6ti3uDkt+7ONOfYBJYDvhaF6Zhh1qumeb66jrY6WX2UAY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66556008)(36756003)(31686004)(4744005)(2906002)(44832011)(5660300002)(38100700002)(86362001)(6486002)(508600001)(31696002)(8936002)(316002)(6916009)(7416002)(186003)(6666004)(6506007)(6512007)(2616005)(53546011)(66946007)(4326008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmtBNE92ZFNoc0UzUEw3K2g1b2xPemh6b2NDVW5MN0ZDOCtITjgwUE9WaUlQ?=
- =?utf-8?B?R21lQjhPMWlRVVN6UjJNS2Fwc3VEeU1PL09HUXYvM2V2aVFvTnE3b1I1SE42?=
- =?utf-8?B?YmVZZEFQN29zUmgyWjI5OXMyQ1lBNGZldFRUdE1qVFpEdUJJNXhwb0oyQ1Ey?=
- =?utf-8?B?ekpVdnNySkpiWFMwUXdtamNnUEx6dXJKWlZnMWdXdjlVbzE3S1RvSkdxYS94?=
- =?utf-8?B?RVE3aUhwWjZsNjZVWjhUZWhTVVpwTk9uUXRSWXd4Zm9tMWRQcTNKbnRvZHU5?=
- =?utf-8?B?SFVvTllWUnlKd3dmRDJtdGNlV2hmeG5vTVcwaDlWY0V2K1l3di9rU2w2MFhj?=
- =?utf-8?B?dWVQVjFVQzRuZ2Z5elE3cHl0QkRNK1FCSEoyMmh1YU5HZ2J4N21kK3JZSVY5?=
- =?utf-8?B?NURLVFJNSWxhci8walMySm1DN3J2WmtuWm1oclRrb2hZRVUwdnA5eFJ6Vkhz?=
- =?utf-8?B?b2NlYllNSG5zV29NVVVPbmxvTjdaNU1CeEhmWVNKSHJVd2N5cWJ3NTZuTWlL?=
- =?utf-8?B?QUtDdVJFUVlIaXlIZmFtZHN2aVBDVmdZdHRDSnliMGxiUkpJblMzZmhZNWYw?=
- =?utf-8?B?WitFL3ZNTWJ4cUdXVUlDZ0JXYU1PMlpDcWVHTVFhTkVERUlvSGwrQldiMHMx?=
- =?utf-8?B?UU1BckhoYi9kMEhZTW9oZUhnU256UkZJRUtNN0sxcG1vVndxaGtWNjRPL3Rl?=
- =?utf-8?B?eWRtMytJTGhnQmdUbkptYkNBdXpwM3l1a0VDQkluT3BtNW9oVmdVekFCZzZK?=
- =?utf-8?B?cGRiSUs2WlQ0WG9MRElWaWIxeXEybFIyWkxlbldvSWNGYjlJT29GSmNjM2gv?=
- =?utf-8?B?NXcyZ0hqdEtlaW5iRWdFYjU1a3VQTjJOU3VYR0Fjb3ZIbTNyWFZmUVRDdWdY?=
- =?utf-8?B?UGp4bWJ0WHAvWWhyR251dzZqZTVWaHNHRGlqQ1ZoSWxOdjNPM0dqUWxFR2Ux?=
- =?utf-8?B?OVlyY3BITzB1ZlJkSmVmckduYmFPMjBTYkN6MVlFVGJIUnozTmJYMUhZSmlw?=
- =?utf-8?B?VmdNaWhpeFgzT0orU1pqRmZiYWtGdTN0WTNNVDRadjVFZGVBZFpuM2xIK1g1?=
- =?utf-8?B?SVVJZDlxS2hqZEZRRHAveVc5MjhKWnF4RTZHVUF4Ym9UUUVmT21VTVhqVmFU?=
- =?utf-8?B?cU45RVFxSElmbEpEQkd1V04vQkpRbCtnSjhTcGk2K2JJdWowVUhaWnVrenJY?=
- =?utf-8?B?YjNnUzY4VVd6R3Z2NGRXZmV5Nk1TODhJSU1nWXBTUUtEcGptdWg4cndBQVpx?=
- =?utf-8?B?dFZsVXdpVXBKdVdYWjdIangxNEFPSkllRS9KdTdOOHZETGphb0ZNTThraXIr?=
- =?utf-8?B?V0Y3KzI0bmVwdXZjUHFvalo0bmVNWVU2bkJkUjlmYjlVclVkSjlwQVNKK2Rs?=
- =?utf-8?B?VzIxaHB5UWZTWXEzNks5b0lVRmZYRmZMUXdpRWd5dm9oazY3RXpXZ09ERE9V?=
- =?utf-8?B?cmwza0FUZThuMWxZczErdUJ3TFE5dzVlZXZCaVA0cUxYODZPWndWWTg0aWhn?=
- =?utf-8?B?MEsvaHl4THZkRzN4M1dRRVBHejlGb0hxdVY1VXBQekJMeU5Mdi9KSHRpUlB5?=
- =?utf-8?B?VStGT1BsT3JZUzFXUXh5ZGYyam5VOGZLZ0xhQUZidmw5aEMxVTgzQk04eVMx?=
- =?utf-8?B?UFZpTEhnaGFNeWlvNW8zNzFlQVZJL0FxMnNSaG1jaXVVaENEdllteGV4R29N?=
- =?utf-8?B?MEticWpKSkxBN3lxeUVMWWNldDFEU1d5SDJ2bDEyRGFJS2F4ZkxwdkZnNDVt?=
- =?utf-8?B?NHJNaDIwWE5UbXVvVFppZ3gySGZxSnRNY0lvbExOUy9LTFdxRzM3SWc2eHJ4?=
- =?utf-8?B?SWR3dU1tVi9NbEoxOXRNblNJTTdvYjZ6N2gzVHI1ajRSYlRnNkFvZjY4TXpk?=
- =?utf-8?B?a0FCdCsySG5meEl3L25hZW0yZGk1c1plMC91WUxUUVF3MXcrMW9ZbWhkSUhz?=
- =?utf-8?B?eFh2TytSWWVPMkpBY0MyN05qa1U3MDlmcFlDSWNMYkZyT2FldWFHM0FHZXln?=
- =?utf-8?B?bnM3eXRsV0owTTY0T1FVSlZGTmV5VldxMnd4SlF5clA2TVVzK1MrU1JHMGFm?=
- =?utf-8?B?dTFMVzV4eFlPT0dIb1BKU05DWEp6NytIQS9WcGRQR1BDSXdEekY4bzFlMGhI?=
- =?utf-8?B?TU4rcGNnb0RhY0JVQVAycmR4cml4dUdPQlc1dVUzcjdvalpTY04xWWE2azl0?=
- =?utf-8?Q?wzAwbSd0NdVc+fmQ0HjihkcD9BYn6+F2RXg+CSC8ORte?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9158837e-03e2-4af4-7f35-08d9fcda6356
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 05:55:15.1818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VHiezOTDoZN43zu1mtddYr+99fzh1EZR9eI7gHkFgb24fAcdiYfg2z8QZWEjYzrAnWrw2rXFVm4UDgjNh+pF5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2144
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 phishscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203030028
-X-Proofpoint-GUID: m48DiFQBzOS86xzGJcpqt3c8SvQmxREx
-X-Proofpoint-ORIG-GUID: m48DiFQBzOS86xzGJcpqt3c8SvQmxREx
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git mhi-next
+head:   4aa2b597db8f8808b7e0f89239cd98c3a56b21b1
+commit: 8c4345a08ac4d20d50fe394141ba5f7945196c7d [26/30] bus: mhi: ep: Add support for reading from the host
+config: ia64-randconfig-s031-20220302 (https://download.01.org/0day-ci/archive/20220303/202203031356.vS8LSPwY-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=8c4345a08ac4d20d50fe394141ba5f7945196c7d
+        git remote add mani-mhi https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
+        git fetch --no-tags mani-mhi mhi-next
+        git checkout 8c4345a08ac4d20d50fe394141ba5f7945196c7d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/bus/mhi/ep/ drivers/nvmem/
 
-On 3/2/22 9:21 PM, Jakub Kicinski wrote:
-> On Wed, 2 Mar 2022 14:21:31 -0800 Dongli Zhang wrote:
->>> because of OOM" is what should be reported. What we were trying to
->>> allocate is not very relevant (and can be gotten from the stack trace 
->>> if needed).  
->>
->> I think OOM is not enough. Although it may not be the case in this patchset,
->> sometimes the allocation is failed because we are allocating a large chunk of
->> physically continuous pages (kmalloc vs. vmalloc) while there is still plenty of
->> memory pages available.
->>
->> As a kernel developer, it is very significant for me to identify the specific
->> line/function and specific data structure that cause the error. E.g, the bug
->> filer may be chasing which line is making trouble.
->>
->> It is less likely to SKB_TRIM more than once in a driver function, compared to
->> ENOMEM.
-> 
-> Nack, trim is meaningless.
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I will use SKB_DROP_REASON_NOMEM.
 
-Thank you very much!
+sparse warnings: (new ones prefixed by >>)
+   drivers/bus/mhi/ep/main.c:152:5: sparse: sparse: symbol 'mhi_ep_process_cmd_ring' was not declared. Should it be static?
+>> drivers/bus/mhi/ep/main.c:357:71: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void [noderef] __iomem *to @@     got void *[assigned] write_addr @@
+   drivers/bus/mhi/ep/main.c:357:71: sparse:     expected void [noderef] __iomem *to
+   drivers/bus/mhi/ep/main.c:357:71: sparse:     got void *[assigned] write_addr
+   drivers/bus/mhi/ep/main.c:487:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_cmd_ctxt *cmd_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:487:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:487:34: sparse:     got struct mhi_cmd_ctxt *cmd_ctx_cache
+   drivers/bus/mhi/ep/main.c:491:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_event_ctxt *ev_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:491:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:491:34: sparse:     got struct mhi_event_ctxt *ev_ctx_cache
+   drivers/bus/mhi/ep/main.c:495:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_chan_ctxt *ch_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:495:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:495:34: sparse:     got struct mhi_chan_ctxt *ch_ctx_cache
+   drivers/bus/mhi/ep/main.c:509:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_cmd_ctxt *cmd_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:509:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:509:34: sparse:     got struct mhi_cmd_ctxt *cmd_ctx_cache
+   drivers/bus/mhi/ep/main.c:511:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_event_ctxt *ev_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:511:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:511:34: sparse:     got struct mhi_event_ctxt *ev_ctx_cache
+   drivers/bus/mhi/ep/main.c:513:34: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __iomem *virt @@     got struct mhi_chan_ctxt *ch_ctx_cache @@
+   drivers/bus/mhi/ep/main.c:513:34: sparse:     expected void [noderef] __iomem *virt
+   drivers/bus/mhi/ep/main.c:513:34: sparse:     got struct mhi_chan_ctxt *ch_ctx_cache
 
-Dongli Zhang
+vim +357 drivers/bus/mhi/ep/main.c
+
+   312	
+   313	static int mhi_ep_read_channel(struct mhi_ep_cntrl *mhi_cntrl,
+   314					struct mhi_ep_ring *ring,
+   315					struct mhi_result *result,
+   316					u32 len)
+   317	{
+   318		struct mhi_ep_chan *mhi_chan = &mhi_cntrl->mhi_chan[ring->ch_id];
+   319		struct device *dev = &mhi_cntrl->mhi_dev->dev;
+   320		size_t tr_len, read_offset, write_offset;
+   321		struct mhi_ring_element *el;
+   322		bool tr_done = false;
+   323		void *write_addr;
+   324		u64 read_addr;
+   325		u32 buf_left;
+   326		int ret;
+   327	
+   328		buf_left = len;
+   329	
+   330		do {
+   331			/* Don't process the transfer ring if the channel is not in RUNNING state */
+   332			if (mhi_chan->state != MHI_CH_STATE_RUNNING) {
+   333				dev_err(dev, "Channel not available\n");
+   334				return -ENODEV;
+   335			}
+   336	
+   337			el = &ring->ring_cache[ring->rd_offset];
+   338	
+   339			/* Check if there is data pending to be read from previous read operation */
+   340			if (mhi_chan->tre_bytes_left) {
+   341				dev_dbg(dev, "TRE bytes remaining: %u\n", mhi_chan->tre_bytes_left);
+   342				tr_len = min(buf_left, mhi_chan->tre_bytes_left);
+   343			} else {
+   344				mhi_chan->tre_loc = MHI_TRE_DATA_GET_PTR(el);
+   345				mhi_chan->tre_size = MHI_TRE_DATA_GET_LEN(el);
+   346				mhi_chan->tre_bytes_left = mhi_chan->tre_size;
+   347	
+   348				tr_len = min(buf_left, mhi_chan->tre_size);
+   349			}
+   350	
+   351			read_offset = mhi_chan->tre_size - mhi_chan->tre_bytes_left;
+   352			write_offset = len - buf_left;
+   353			read_addr = mhi_chan->tre_loc + read_offset;
+   354			write_addr = result->buf_addr + write_offset;
+   355	
+   356			dev_dbg(dev, "Reading %zd bytes from channel (%u)\n", tr_len, ring->ch_id);
+ > 357			ret = mhi_cntrl->read_from_host(mhi_cntrl, read_addr, write_addr, tr_len);
+   358			if (ret < 0) {
+   359				dev_err(&mhi_chan->mhi_dev->dev, "Error reading from channel\n");
+   360				return ret;
+   361			}
+   362	
+   363			buf_left -= tr_len;
+   364			mhi_chan->tre_bytes_left -= tr_len;
+   365	
+   366			/*
+   367			 * Once the TRE (Transfer Ring Element) of a TD (Transfer Descriptor) has been
+   368			 * read completely:
+   369			 *
+   370			 * 1. Send completion event to the host based on the flags set in TRE.
+   371			 * 2. Increment the local read offset of the transfer ring.
+   372			 */
+   373			if (!mhi_chan->tre_bytes_left) {
+   374				/*
+   375				 * The host will split the data packet into multiple TREs if it can't fit
+   376				 * the packet in a single TRE. In that case, CHAIN flag will be set by the
+   377				 * host for all TREs except the last one.
+   378				 */
+   379				if (MHI_TRE_DATA_GET_CHAIN(el)) {
+   380					/*
+   381					 * IEOB (Interrupt on End of Block) flag will be set by the host if
+   382					 * it expects the completion event for all TREs of a TD.
+   383					 */
+   384					if (MHI_TRE_DATA_GET_IEOB(el)) {
+   385						ret = mhi_ep_send_completion_event(mhi_cntrl, ring, el,
+   386									     MHI_TRE_DATA_GET_LEN(el),
+   387									     MHI_EV_CC_EOB);
+   388						if (ret < 0) {
+   389							dev_err(&mhi_chan->mhi_dev->dev,
+   390								"Error sending transfer compl. event\n");
+   391							return ret;
+   392						}
+   393					}
+   394				} else {
+   395					/*
+   396					 * IEOT (Interrupt on End of Transfer) flag will be set by the host
+   397					 * for the last TRE of the TD and expects the completion event for
+   398					 * the same.
+   399					 */
+   400					if (MHI_TRE_DATA_GET_IEOT(el)) {
+   401						ret = mhi_ep_send_completion_event(mhi_cntrl, ring, el,
+   402									     MHI_TRE_DATA_GET_LEN(el),
+   403									     MHI_EV_CC_EOT);
+   404						if (ret < 0) {
+   405							dev_err(&mhi_chan->mhi_dev->dev,
+   406								"Error sending transfer compl. event\n");
+   407							return ret;
+   408						}
+   409					}
+   410	
+   411					tr_done = true;
+   412				}
+   413	
+   414				mhi_ep_ring_inc_index(ring);
+   415			}
+   416	
+   417			result->bytes_xferd += tr_len;
+   418		} while (buf_left && !tr_done);
+   419	
+   420		return 0;
+   421	}
+   422	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

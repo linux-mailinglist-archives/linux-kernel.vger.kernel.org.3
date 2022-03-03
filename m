@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837654CBAE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38534CBAED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiCCKCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S232173AbiCCKDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiCCKCw (ORCPT
+        with ESMTP id S230476AbiCCKDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:02:52 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B0B178687;
-        Thu,  3 Mar 2022 02:02:05 -0800 (PST)
-X-UUID: 0b0048544c294cfeadcfd0240e5d25c5-20220303
-X-UUID: 0b0048544c294cfeadcfd0240e5d25c5-20220303
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 912777949; Thu, 03 Mar 2022 18:02:00 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Mar 2022 18:02:00 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Mar
- 2022 18:01:59 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Mar 2022 18:01:58 +0800
-Message-ID: <710af1457bd59a017a62ecb8028dae0b94b809b3.camel@mediatek.com>
-Subject: Re: [PATCH v12 4/4] soc: mediatek: mutex: add functions that
- operate registers by CMDQ
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Jernej Skrabec" <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 3 Mar 2022 18:01:58 +0800
-In-Reply-To: <20220301100246.2153-5-moudy.ho@mediatek.com>
-References: <20220301100246.2153-1-moudy.ho@mediatek.com>
-         <20220301100246.2153-5-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 3 Mar 2022 05:03:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 795511B785;
+        Thu,  3 Mar 2022 02:02:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E5AD1424;
+        Thu,  3 Mar 2022 02:02:44 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 380833F73D;
+        Thu,  3 Mar 2022 02:02:43 -0800 (PST)
+Date:   Thu, 3 Mar 2022 10:02:40 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Edwin Chiu =?utf-8?B?6YKx5Z6C5bOw?= <edwin.chiu@sunplus.com>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Message-ID: <YiCSQCG4NkepeZKs@bogus>
+References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
+ <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+ <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
+ <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
+ <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
+ <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
+ <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,213 +57,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
+On Thu, Mar 03, 2022 at 10:34:31AM +0100, Krzysztof Kozlowski wrote:
+> On 03/03/2022 10:01, Edwin Chiu 邱垂峰 wrote:
+> >
+> >
+> >> -----Original Message-----
+> >> From: Krzysztof Kozlowski <krzk@kernel.org>
+> >> Sent: Tuesday, March 1, 2022 7:34 PM
+> >> To: Edwin Chiu 邱垂峰 <edwin.chiu@sunplus.com>; Edwin Chiu <edwinchiu0505tw@gmail.com>;
+> >> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org;
+> >> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
+> >> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
+> >>
+> >> On 01/03/2022 10:30, Edwin Chiu 邱垂峰 wrote:
+> >>>
+> >>>
+> >>>> -----Original Message-----
+> >>>> From: Krzysztof Kozlowski <krzk@kernel.org>
+> >>>> Sent: Tuesday, February 22, 2022 12:48 AM
+> >>>> To: Edwin Chiu <edwinchiu0505tw@gmail.com>; Edwin Chiu 邱垂峰
+> >>>> <edwin.chiu@sunplus.com>;
+> >>>> robh+dt@kernel.org; devicetree@vger.kernel.org;
+> >>>> robh+linux-kernel@vger.kernel.org; rafael@kernel.org;
+> >>>> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
+> >>>> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for
+> >>>> sunplus sp7021
+> >>>>
+> >>>> On 21/02/2022 08:26, Edwin Chiu wrote:
+> >>>>> Create cpuidle driver for sunplus sp7021 chip
+> >>>>>
+> >>>>> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
+> >>>>> ---
+> >>>>> Changes in v3
+> >>>>>  - Rearrangement #include sequence
+> >>>>>  - Change remark style to /*~*/
+> >>>>>  - Align author email address to same as sob
+> >>>>>  - Optimal code
+> >>>>> Changes in v4
+> >>>>>  - According Rob Herringrobh's comment
+> >>>>>    There is no need for this binding.
+> >>>>>    Just wanting a different driver is not a reason
+> >>>>>    for a duplicate schema.
+> >>>>>    So remove yaml file and submit driver again.
+> >>>>> Changes in v5
+> >>>>>  - According Krzysztof's comment
+> >>>>>    You either use appropriate compatible in DT
+> >>>>>    or add your compatible to cpuidle-arm.
+> >>>>>    Even if this did not work, then the solution is to
+> >>>>>    use common parts, not to duplicate entire driver.
+> >>>>>    According Sudeep's comment
+> >>>>>    In short NACK for any dedicated driver for this platform,
+> >>>>>    use the generic cpuidle-arm driver with appropriate platform hooks
+> >>>>>    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
+> >>>>>    for hook generic cpuidle-arm driver
+> >>>>>
+> >>>>>  MAINTAINERS                                   |  6 ++
+> >>>>>  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
+> >>>>>  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
+> >>>>>  3 files changed, 106 insertions(+)
+> >>>>>  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
+> >>>>>  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
+> >>>>>
+> >>>>> diff --git a/MAINTAINERS b/MAINTAINERS index e0dca8f..5c96428 100644
+> >>>>> --- a/MAINTAINERS
+> >>>>> +++ b/MAINTAINERS
+> >>>>> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
+> >>>>>  S:	Maintained
+> >>>>>  F:	drivers/net/ethernet/dlink/sundance.c
+> >>>>>
+> >>>>> +SUNPLUS CPUIDLE DRIVER
+> >>>>> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
+> >>>>> +S:	Maintained
+> >>>>> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
+> >>>>> +F:	include/linux/platform_data/cpuidle-sunplus.h
+> >>>>> +
+> >>>>>  SUPERH
+> >>>>>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+> >>>>>  M:	Rich Felker <dalias@libc.org>
+> >>>>> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c
+> >>>>> b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+> >>>>> new file mode 100644
+> >>>>> index 0000000..e9d9738
+> >>>>> --- /dev/null
+> >>>>> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+> >>>>> @@ -0,0 +1,88 @@
+> >>>>> +// SPDX-License-Identifier: GPL-2.0-only
+> >>>>> +/*
+> >>>>> + * SP7021 cpu idle Driver.
+> >>>>> + * Copyright (C) Sunplus Tech / Tibbo Tech.
+> >>>>> + */
+> >>>>> +#define pr_fmt(fmt) "CPUidle arm: " fmt
+> >>>>> +
+> >>>>> +#include <linux/cpuidle.h>
+> >>>>> +#include <linux/of_device.h>
+> >>>>> +#include <linux/platform_data/cpuidle-sunplus.h>
+> >>>>> +
+> >>>>> +#include <asm/cpuidle.h>
+> >>>>> +
+> >>>>> +typedef int (*idle_fn)(void);
+> >>>>> +
+> >>>>> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
+> >>>>> +
+> >>>>> +static int sp7021_cpuidle_enter(unsigned long index) {
+> >>>>> +	return __this_cpu_read(sp7021_idle_ops)[index]();
+> >>>>> +}
+> >>>>> +static int sp7021_cpu_spc(void)
+> >>>>> +{
+> >>>>> +	cpu_v7_do_idle();   /* idle to WFI */
+> >>>>> +	return 0;
+> >>>>> +}
+> >>>>> +static const struct of_device_id sp7021_idle_state_match[] = {
+> >>>>> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
+> >>>>> +	{ },
+> >>>>> +};
+> >>>>
+> >>>> This is confusing. You want to have two drivers to bind to the same
+> >>>> compatible? As I wrote in the previous messages, you should simply use arm,idle-state just like few
+> >> other architectures.
+> >>>>
+> >>>>
+> >>>> Best regards,
+> >>>> Krzysztof
+> >>>
+> >>>
+> >>> The patch v5 implemented according your comment.
+> >>> Used common part of arm,idle-state.
+> >>> Create new enable-method for cpuidle.ops function.
+> >>> It only have arm cpuidle driver exist now, no two drivers to bind to the same compatible.
+> >>>
+> >>> What do you mean " simply use arm,idle-state just like few other architectures "?
+> >>>
+> >>
+> >> I mean, do it similarly (by using arm,idle-state and other related
+> >> properties) to for example ti,am4372/ti,am3352.
+> >>
+> >> Best regards,
+> >> Krzysztof
+> >
+> >
+> > The am3352 cpuidle code structure is very similar to ours.
+> > Used enable-method = "ti,am3352" and compatible = "arm,idle-state" in am33xx.dtsi
+> > Used CPUIDLE_METHOD_OF_DECLARE(pm33xx_idle, "ti,am3352", &amx3_cpuidle_ops) in pm33xx-core.c
+> >
+> > The difference are
+> > am3352
+> > amx3_idle_init(~) assign idle_states[i].wfi_flags = states[i].wfi_flags;
+> > amx3_idle_enter(~) call idle_fn(idle_state->wfi_flags)
+> >
+> > sunplus-sp7021
+> > sp7021_cpuidle_init(~) assign fns[i] = idle_fns[i];
+> > sp7021_cpuidle_enter(~) call __this_cpu_read(sp7021_idle_ops)[index]();
+> >
+> > I don't think am3352 cpuidle code architecture simpler than ours.
+> > The idle_fn function need more complex method to be assign.
+> > How do you think?
+>
+> You duplicated a driver, entire pieces of code. This is not acceptable.
+> Therefore it does not really make sense to discuss whether duplicated
+> solution seems simpler or not... We won't accept duplicated code.
+> Especially for WFI-only driver.
+>
 
-On Tue, 2022-03-01 at 18:02 +0800, Moudy Ho wrote:
-> Considering that some functions have timing requirements
-> in specific situation, this patch adds several interface that
-> operate registers by CMDQ.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c       | 72
-> +++++++++++++++++++++++++-
->  include/linux/soc/mediatek/mtk-mutex.h |  6 +++
->  2 files changed, 76 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c
-> b/drivers/soc/mediatek/mtk-mutex.c
-> index a6268ecde240..a45864183cd1 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -7,10 +7,14 @@
->  #include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_address.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/soc/mediatek/mtk-mmsys.h>
->  #include <linux/soc/mediatek/mtk-mutex.h>
-> +#include <linux/soc/mediatek/mtk-cmdq.h>
-> +
-> +#define MTK_MUTEX_ENABLE			BIT(0)
->  
->  #define MT2701_MUTEX0_MOD0			0x2c
->  #define MT2701_MUTEX0_SOF0			0x30
-> @@ -173,6 +177,7 @@ struct mtk_mutex_data {
->  	const unsigned int mutex_mdp_mod_mask;
->  	const unsigned int mutex_mdp_sof_mask;
->  	const bool no_clk;
-> +	const bool has_gce_client_reg;
->  };
->  
->  struct mtk_mutex_ctx {
-> @@ -181,6 +186,8 @@ struct mtk_mutex_ctx {
->  	void __iomem			*regs;
->  	struct mtk_mutex		mutex[10];
->  	const struct mtk_mutex_data	*data;
-> +	phys_addr_t			addr;
-> +	struct cmdq_client_reg		cmdq_reg;
->  };
->  
->  static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-> @@ -374,6 +381,7 @@ static const struct mtk_mutex_data
-> mt8183_mutex_driver_data = {
->  	.mutex_mdp_mod_mask = MT8183_MUTEX_MDP_MOD_MASK,
->  	.mutex_mdp_sof_mask = MT8183_MUTEX_MDP_SOF_MASK,
->  	.no_clk = true,
-> +	.has_gce_client_reg = true,
->  };
->  
->  static const struct mtk_mutex_data mt8186_mutex_driver_data = {
-> @@ -553,6 +561,25 @@ u32 mtk_mutex_get_mdp_mod(struct mtk_mutex
-> *mutex, enum mtk_mdp_comp_id id)
->  }
->  EXPORT_SYMBOL_GPL(mtk_mutex_get_mdp_mod);
->  
-> +void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-> +			       struct mmsys_cmdq_cmd *cmd)
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +	unsigned int offset;
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg, mutex-
-> >id);
-> +	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys, mtx->addr +
-> offset,
-> +			    mod, mtx->data->mutex_mdp_mod_mask);
-> +
-> +	offset = DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex-
-> >id);
-> +	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys, mtx->addr +
-> offset,
-> +			    0, mtx->data->mutex_mdp_sof_mask);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_add_mod_by_cmdq);
-> +
->  void mtk_mutex_enable(struct mtk_mutex *mutex)
->  {
->  	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> @@ -564,6 +591,20 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
->  }
->  EXPORT_SYMBOL_GPL(mtk_mutex_enable);
->  
-> +void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-> +			      struct mmsys_cmdq_cmd *cmd)
++1 for above comment.
 
-There are 10 mutex and you could bind each pipeline to one mutex and
-always enable it. I think it's not necessary to frequently
-enable/disable mutex.
+In addition, the reference platform am33xx* doesn't seem to support hotplug
+(may be I am missing to see but quick grep gave no results) and their idle
+is definitely not just WFI. So what I asked is that please document the
+chosen "sunplus,sc-smp" as bot cpu idle and hotplug methods and when you
+support non WFI states, we can revisit this. Also you must stick to this
+hotplug method whenever you decided to support it.
 
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys,
-> +			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-> +			    MTK_MUTEX_ENABLE, MTK_MUTEX_ENABLE);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-> +
->  void mtk_mutex_disable(struct mtk_mutex *mutex)
->  {
->  	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> @@ -575,6 +616,20 @@ void mtk_mutex_disable(struct mtk_mutex *mutex)
->  }
->  EXPORT_SYMBOL_GPL(mtk_mutex_disable);
->  
-> +void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-> +			       struct mmsys_cmdq_cmd *cmd)
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	cmdq_pkt_write_mask(cmd->pkt, mtx->cmdq_reg.subsys,
-> +			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-> +			    0x0, MTK_MUTEX_ENABLE);
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_disable_by_cmdq);
-> +
->  void mtk_mutex_acquire(struct mtk_mutex *mutex)
->  {
->  	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> @@ -602,8 +657,8 @@ static int mtk_mutex_probe(struct platform_device
-> *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct mtk_mutex_ctx *mtx;
-> -	struct resource *regs;
-> -	int i;
-> +	struct resource *regs, addr;
-> +	int i, ret;
->  
->  	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
->  	if (!mtx)
-> @@ -623,6 +678,19 @@ static int mtk_mutex_probe(struct
-> platform_device *pdev)
->  		}
->  	}
->  
-> +	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-> +		mtx->addr = 0L;
-> +	else
-> +		mtx->addr = addr.start;
-> +
-> +	if (mtx->data->has_gce_client_reg) {
-> +		ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
 
-Add gce client reg in binding document [1]
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml?h=next-20220302
-
+--
 Regards,
-CK
-
-> +		if (ret) {
-> +			dev_err(dev, "No mediatek,gce-client-reg!\n");
-> +			return ret;
-> +		}
-> +	}
-> +
->  	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	mtx->regs = devm_ioremap_resource(dev, regs);
->  	if (IS_ERR(mtx->regs)) {
-> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
-> b/include/linux/soc/mediatek/mtk-mutex.h
-> index b2608f4220ee..05de7ad4a124 100644
-> --- a/include/linux/soc/mediatek/mtk-mutex.h
-> +++ b/include/linux/soc/mediatek/mtk-mutex.h
-> @@ -17,8 +17,14 @@ int mtk_mutex_prepare(struct mtk_mutex *mutex);
->  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
->  			enum mtk_ddp_comp_id id);
->  u32 mtk_mutex_get_mdp_mod(struct mtk_mutex *mutex, enum
-> mtk_mdp_comp_id id);
-> +void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-> +			       struct mmsys_cmdq_cmd *cmd);
->  void mtk_mutex_enable(struct mtk_mutex *mutex);
-> +void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-> +			      struct mmsys_cmdq_cmd *cmd);
->  void mtk_mutex_disable(struct mtk_mutex *mutex);
-> +void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-> +			       struct mmsys_cmdq_cmd *cmd);
->  void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
->  			   enum mtk_ddp_comp_id id);
->  void mtk_mutex_unprepare(struct mtk_mutex *mutex);
-
+Sudeep

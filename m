@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E654CB6C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 044984CB6CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiCCGOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S229578AbiCCGOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiCCGOl (ORCPT
+        with ESMTP id S229832AbiCCGOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:14:41 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9349114560C;
-        Wed,  2 Mar 2022 22:13:56 -0800 (PST)
+        Thu, 3 Mar 2022 01:14:49 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078DF14562B;
+        Wed,  2 Mar 2022 22:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646288036; x=1677824036;
+  t=1646288043; x=1677824043;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=zyPTvh1c8RPn8sc5rNOcCfJp4uV5whVdkZZ2y239PwE=;
-  b=gs4xzdJREQuiMzdO/0cvc7b5y+YhAmPwwOanBGsTxyzX32ttLOewj0Ki
-   hC7/bYppqb0go9dqkWsiHUhtcA9ZLr71HjWlXfwSJFqFp74Ft59YvjGMM
-   FHjM3ViBX6gzj+mU1q1gr9iLJmUe02rQSDHJJ0vgtTodQ/249wiNgmBWn
-   o=;
+  bh=BnNk6OUFPnc+vLPsfLLdU9Fq1XHaDrR7D82fqGD7X9M=;
+  b=y0cVkNZHxvRlGYz0AQ0ogAX9+CmSt7cC+a9UTGbX/CuuexjqnzhqmwYy
+   QGKUXtjpjSciR0HjF/wGyYNqIj0cVoymd3j6BKRU9bZarM4YUYkBftlfK
+   RYHtuGFby43IKIPm7w9/q7LC08iPi/pDLiUbibwBAoW6qJTLr6i/+Chhv
+   k=;
 Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Mar 2022 22:13:56 -0800
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Mar 2022 22:14:01 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:13:56 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:14:01 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 2 Mar 2022 22:13:55 -0800
+ 15.2.986.15; Wed, 2 Mar 2022 22:14:01 -0800
 Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 2 Mar 2022 22:13:50 -0800
+ 15.2.986.15; Wed, 2 Mar 2022 22:13:55 -0800
 From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         "Bjorn Andersson" <bjorn.andersson@linaro.org>,
@@ -54,9 +54,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
         <quic_ppratap@quicinc.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params bindings
-Date:   Thu, 3 Mar 2022 11:43:29 +0530
-Message-ID: <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
+Subject: [PATCH v2 2/3] phy: qcom-snps: Add support for overriding phy tuning parameters
+Date:   Thu, 3 Mar 2022 11:43:30 +0530
+Message-ID: <1646288011-32242-3-git-send-email-quic_c_sanm@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
 References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
@@ -75,149 +75,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for SNPS phy tuning parameters.
+Added support for overriding x0,x1,x2,x3 params for SNPS PHY by reading
+values from device tree.
 
 Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 ---
- .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 192 ++++++++++++++++++++++++++
+ 1 file changed, 192 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-index 0dfe691..227c097 100644
---- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-@@ -50,6 +50,131 @@ properties:
-   vdda33-supply:
-     description: phandle to the regulator 3.3V supply node.
+diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+index 7e61202..b5aa06d 100644
+--- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
++++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+@@ -51,6 +51,48 @@
+ #define USB2_SUSPEND_N				BIT(2)
+ #define USB2_SUSPEND_N_SEL			BIT(3)
  
-+  qcom,hs-disconnect:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the voltage level for the threshold used to
-+      detect a disconnect event at the host. Possible values are.
-+      7 -> +21.56%
-+      6 -> +17.43%
-+      5 -> +13.32%
-+      4 -> +9.73%
-+      3 -> +6.3
-+      2 -> +3.17%
-+      1 -> 0, Design default%
-+      0 -> -2.72%
++#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0	(0x6c)
 +
-+  qcom,squelch-detector:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the voltage level for the threshold used to
-+      detect valid high-speed data. Possible values are
-+      7-> -20.90%
-+      6-> -15.60%
-+      5-> -10.30%
-+      4-> -5.30%
-+      3-> 0, Design default%
-+      2-> +5.30%
-+      1-> +10.60%
-+      0-> +15.90%
++/*USB_PHY_HS_PHY_OVERRIDE_X0 register bits*/
++#define HS_DISCONNECT_MASK			GENMASK(2, 0)
++#define HS_DISCONNECT_SHIFT			0x0
 +
-+  qcom,hs-amplitude:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the high-speed DC level voltage.
-+      Possible values are
-+      15-> +26.70%
-+      14-> +24.30%
-+      13-> +22.20%
-+      12-> +20.00%
-+      11-> +17.80%
-+      10-> +15.60%
-+      9-> +13.30%
-+      8-> +11.10%
-+      7-> +8.90%
-+      6-> +6.50%
-+      5-> +4.40%
-+      4-> +2.30%
-+      3-> 0, Design default%
-+      2-> -2.20%
-+      1-> -4.40%
-+      0-> -6.60%
++#define SQUELCH_DETECTOR_MASK			GENMASK(7, 5)
++#define SQUELCH_DETECTOR_SHIFT			0x5
 +
-+  qcom,pre-emphasis-duration:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This signal controls the duration for which the
-+      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
-+      The HS Transmitter pre-emphasis duration is defined in terms of
-+      unit amounts. One unit of pre-emphasis duration is approximately
-+      650 ps and is defined as 1X pre-emphasis duration.
-+      Possible values are
-+      1-> 1x, short pre-emphasis current duration
-+      0-> 2x, long pre-emphasis current duration
 +
-+  qcom,pre-emphasis-amplitude:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This signal controls the amount of current sourced to
-+      DP<#> and DM<#> after a J-to-K or K-to-J transition.
-+      The HS Transmitter pre-emphasis current is defined in terms of unit
-+      amounts. One unit amount is approximately 2 mA and is defined as
-+      1X pre-emphasis current.
-+      Possible values are
-+      3-> HS Transmitter pre-emphasis circuit sources 3x pre-emphasis
-+      current.
-+      2-> (design default) HS Transmitter pre-emphasis circuit sources 2x
-+      pre-emphasis current.
-+      1-> HS Transmitter pre-emphasis circuit sources 1x pre-emphasis
-+      current.
-+      0-> HS Transmitter pre-emphasis circuit sources 4x pre-emphasis
-+      current.
++#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1	(0x70)
 +
-+  qcom,hs-rise-fall-time:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the rise/fall times of the high-speed waveform.
-+      Possible values are
-+      3-> -41.0%
-+      2-> 0, Design default
-+      1-> +28.1
-+      0-> +54.3%
++/*USB_PHY_HS_PHY_OVERRIDE_X1 register bits*/
++#define HS_AMPLITUDE_MASK			GENMASK(3, 0)
++#define HS_AMPLITUDE_SHIFT			0x0
 +
-+  qcom,hs-crossover-voltage:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the voltage at which the DP<#> and DM<#>
-+      signals cross while transmitting in HS mode.
-+      Possible values are
-+      3-> 0, Default setting
-+      2-> +28 mV
-+      1-> -31 mV
-+      0-> Reserved
++#define PREEMPHASIS_DURATION_MASK		BIT(5)
++#define PREEMPHASIS_DURATION_SHIFT		0x5
 +
-+  qcom,hs-output-impedance:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      In some applications, there can be significant series resistance
-+      on the D+ and D- paths between the transceiver and cable. This adjusts
-+      the driver source impedance to compensate for added series
-+      resistance on the USB.
-+      3-> Source impedance is decreased by approximately 2.3 ohms
-+      2-> 0, Design default
-+      1-> Source impedance is increased by approximately 2.6 ohms
-+      0-> Source impedance is increased by approximately 6.1 ohms
++#define PREEMPHASIS_AMPLITUDE_MASK		GENMASK(7, 6)
++#define PREEMPHASIS_AMPLITUDE_SHIFT		0x6
 +
-+  qcom,ls-fs-output-impedance:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This adjusts the low- and full-speed single-ended source
-+      impedance while driving high. The following adjustment values are based
-+      on nominal process, voltage, and temperature.
-+      15-> -10.53%
-+      7-> -5.57%
-+      3-> 0, Design default
-+      1-> +6.12%
-+      0-> +13.10%
 +
- required:
-   - compatible
-   - reg
++#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2	(0x74)
++
++/*USB_PHY_HS_PHY_OVERRIDE_X2 register bits*/
++#define HS_RISE_FALL_MASK			GENMASK(1, 0)
++#define HS_RISE_FALL_SHIFT			0x0
++
++#define HS_CROSSOVER_VOLTAGE_MASK		GENMASK(3, 2)
++#define HS_CROSSOVER_VOLTAGE_SHIFT		0x2
++
++#define HS_OUTPUT_IMPEDANCE_MASK		GENMASK(5, 4)
++#define HS_OUTPUT_IMPEDANCE_SHIFT		0x4
++
++
++#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3	(0x78)
++
++/*USB_PHY_HS_PHY_OVERRIDE_X3 register bits*/
++#define LS_FS_OUTPUT_IMPEDANCE_MASK		GENMASK(3, 0)
++#define LS_FS_OUTPUT_IMPEDANCE_SHIFT		0x0
++
+ #define USB2_PHY_USB_PHY_CFG0			(0x94)
+ #define UTMI_PHY_DATAPATH_CTRL_OVERRIDE_EN	BIT(0)
+ #define UTMI_PHY_CMN_CTRL_OVERRIDE_EN		BIT(1)
+@@ -65,6 +107,43 @@ static const char * const qcom_snps_hsphy_vreg_names[] = {
+ 
+ #define SNPS_HS_NUM_VREGS		ARRAY_SIZE(qcom_snps_hsphy_vreg_names)
+ 
++/* struct override_param - structure holding snps phy overriding param
++ * set override true if the  device tree property exists and read and assign
++ * to value
++ */
++struct override_param {
++	bool override;
++	u8 value;
++};
++
++/*struct override_params - structure holding snps phy overriding params
++ * @hs_disconnect: disconnect threshold
++ * @squelch_detector: threshold to detect valid high-speed data
++ * @hs_amplitude: high-speed DC level voltage
++ * @preemphasis_duration: duration for which the HS pre-emphasis current
++ *  is sourced onto DP<#> or DM<#>
++ * @preemphasis_amplitude: current sourced to DP<#> and DM<#> after
++ *  a J-to-K or K-to-J transition.
++ * @hs_rise_fall_time: rise/fall times of the high-speed waveform
++ * @hs_crossover_voltage: voltage at which the DP<#> and DM<#>
++ *  signals cross while transmitting in HS mode
++ * @hs_output_impedance: driver source impedance to compensate for added series
++ *  resistance on the USB
++ * @ls_fs_output_impedance: low and full-speed single-ended source
++ *  impedance while driving high
++ */
++struct override_params {
++	struct override_param hs_disconnect;
++	struct override_param squelch_detector;
++	struct override_param hs_amplitude;
++	struct override_param preemphasis_duration;
++	struct override_param preemphasis_amplitude;
++	struct override_param hs_rise_fall_time;
++	struct override_param hs_crossover_voltage;
++	struct override_param hs_output_impedance;
++	struct override_param ls_fs_output_impedance;
++};
++
+ /**
+  * struct qcom_snps_hsphy - snps hs phy attributes
+  *
+@@ -87,6 +166,7 @@ struct qcom_snps_hsphy {
+ 	struct clk *ref_clk;
+ 	struct reset_control *phy_reset;
+ 	struct regulator_bulk_data vregs[SNPS_HS_NUM_VREGS];
++	struct override_params overrides;
+ 
+ 	bool phy_initialized;
+ 	enum phy_mode mode;
+@@ -175,6 +255,7 @@ static int qcom_snps_hsphy_set_mode(struct phy *phy, enum phy_mode mode,
+ static int qcom_snps_hsphy_init(struct phy *phy)
+ {
+ 	struct qcom_snps_hsphy *hsphy = phy_get_drvdata(phy);
++	struct override_params *or = &hsphy->overrides;
+ 	int ret;
+ 
+ 	dev_vdbg(&phy->dev, "%s(): Initializing SNPS HS phy\n", __func__);
+@@ -222,6 +303,60 @@ static int qcom_snps_hsphy_init(struct phy *phy)
+ 	qcom_snps_hsphy_write_mask(hsphy->base, USB2_PHY_USB_PHY_HS_PHY_CTRL1,
+ 					VBUSVLDEXT0, VBUSVLDEXT0);
+ 
++	if (or->hs_disconnect.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
++			HS_DISCONNECT_MASK,
++			or->hs_disconnect.value << HS_DISCONNECT_SHIFT);
++
++	if (or->squelch_detector.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
++			SQUELCH_DETECTOR_MASK,
++			or->squelch_detector.value << SQUELCH_DETECTOR_SHIFT);
++
++	if (or->hs_amplitude.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
++			HS_AMPLITUDE_MASK,
++			or->hs_amplitude.value << HS_AMPLITUDE_SHIFT);
++
++	if (or->preemphasis_duration.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
++			PREEMPHASIS_DURATION_MASK,
++			or->preemphasis_duration.value << PREEMPHASIS_DURATION_SHIFT);
++
++	if (or->preemphasis_amplitude.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
++			PREEMPHASIS_AMPLITUDE_MASK,
++			or->preemphasis_amplitude.value << PREEMPHASIS_AMPLITUDE_SHIFT);
++
++	if (or->hs_rise_fall_time.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
++			HS_RISE_FALL_MASK,
++			or->hs_rise_fall_time.value << HS_RISE_FALL_SHIFT);
++
++	if (or->hs_crossover_voltage.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
++			HS_CROSSOVER_VOLTAGE_MASK,
++			or->hs_crossover_voltage.value << HS_CROSSOVER_VOLTAGE_SHIFT);
++
++	if (or->hs_output_impedance.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
++			HS_OUTPUT_IMPEDANCE_MASK,
++			or->hs_output_impedance.value << HS_OUTPUT_IMPEDANCE_SHIFT);
++
++	if (or->ls_fs_output_impedance.override)
++		qcom_snps_hsphy_write_mask(hsphy->base,
++			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3,
++			LS_FS_OUTPUT_IMPEDANCE_MASK,
++			or->ls_fs_output_impedance.value << LS_FS_OUTPUT_IMPEDANCE_SHIFT);
++
+ 	qcom_snps_hsphy_write_mask(hsphy->base,
+ 					USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON2,
+ 					VREGBYPASS, VREGBYPASS);
+@@ -292,12 +427,15 @@ static int qcom_snps_hsphy_probe(struct platform_device *pdev)
+ 	struct qcom_snps_hsphy *hsphy;
+ 	struct phy_provider *phy_provider;
+ 	struct phy *generic_phy;
++	struct override_params *or;
+ 	int ret, i;
+ 	int num;
++	u32 value;
+ 
+ 	hsphy = devm_kzalloc(dev, sizeof(*hsphy), GFP_KERNEL);
+ 	if (!hsphy)
+ 		return -ENOMEM;
++	or = &hsphy->overrides;
+ 
+ 	hsphy->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hsphy->base))
+@@ -329,6 +467,60 @@ static int qcom_snps_hsphy_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (!of_property_read_u32(dev->of_node, "qcom,hs-disconnect",
++				  &value)) {
++		or->hs_disconnect.value = (u8)value;
++		or->hs_disconnect.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,squelch-detector",
++				  &value)) {
++		or->squelch_detector.value = (u8)value;
++		or->squelch_detector.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,hs-amplitude",
++				  &value)) {
++		or->hs_amplitude.value = (u8)value;
++		or->hs_amplitude.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,preemphasis-duration",
++				  &value)) {
++		or->preemphasis_duration.value = (u8)value;
++		or->preemphasis_duration.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,preemphasis-amplitude",
++				  &value)) {
++		or->preemphasis_amplitude.value = (u8)value;
++		or->preemphasis_amplitude.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,hs-rise-fall-time",
++				  &value)) {
++		or->hs_rise_fall_time.value = (u8)value;
++		or->hs_rise_fall_time.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,hs-crossover-voltage",
++				  &value)) {
++		or->hs_crossover_voltage.value = (u8)value;
++		or->hs_crossover_voltage.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,hs-output-impedance",
++				  &value)) {
++		or->hs_output_impedance.value = (u8)value;
++		or->hs_output_impedance.override = true;
++	}
++
++	if (!of_property_read_u32(dev->of_node, "qcom,ls-fs-output-impedance",
++				  &value)) {
++		or->ls_fs_output_impedance.value = (u8)value;
++		or->ls_fs_output_impedance.override = true;
++	}
++
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 	/*
 -- 
 2.7.4
 

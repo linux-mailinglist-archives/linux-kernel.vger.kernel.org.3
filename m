@@ -2,179 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D9B4CB509
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1011B4CB50F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiCCCdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S231842AbiCCCdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiCCCdM (ORCPT
+        with ESMTP id S231802AbiCCCd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:33:12 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADCF13E81;
-        Wed,  2 Mar 2022 18:32:27 -0800 (PST)
-Received: from [192.168.43.69] (unknown [182.2.41.243])
-        by gnuweeb.org (Postfix) with ESMTPSA id 121D27E216;
-        Thu,  3 Mar 2022 02:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646274746;
-        bh=TUzitEj4aBUgL+Bsby3W+X8ST/3/o4WMlq2+CFaMLXc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=V/yQ/RvNucXD536SfA72fKV1ZavNrFL3JskOc6rzZ4JeAVnJKjFgrUhmWgXrHn9OZ
-         /LqDbtCdRLJgeLXxpr8h9rJafDc018OJ7E1OeSc3xzdA86Poh4aK39XkaRnNTNaa8u
-         4DoB5b3yOzFc48YJT3EkxRBl6oLIp9iWtwDuCPADZXTgUaAUAkOYt9amDHixCDTDI+
-         aj78JdonuLchwVUgUhiQHbqHFj6EFpsAmcyPdZgRbgKJWVHs8TuzQKm/vvxvfbUPlJ
-         e3EpTdFpG1a0KP37WiWKUL793vefDKYlm4z+dkGgy/ukehmfOZE3G2p1wvuXRjP0HJ
-         CiK7bZ5leNs4A==
-Message-ID: <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
-Date:   Thu, 3 Mar 2022 09:32:16 +0700
+        Wed, 2 Mar 2022 21:33:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2D8DFF4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 18:32:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C08A61471
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B118C004E1;
+        Thu,  3 Mar 2022 02:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646274759;
+        bh=5XSp38aU3KA0DzW361Z0nmko3KMEF0z6VS+NuXyW3jk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f7BvzjnyLcHFwCoIEdS7oU2KSZNJCS794vBPgHCRMwYx01ONB5bfZAbrlMr4AnYMP
+         RmZrkn77KGiknktRBMqdvGQHE6WZVtRLaNtQZZnQbxoK8A3wWLPc2ke2fmVcIin6yI
+         jYdhIbybqVG68eSfixoJGG8k0+Lvz0VVpSsoDBQCHF0Bt/C/qJSo4JdS9lKQnEZzWc
+         8pZVqjIIvHMFer1m1mSwKZEnsQ6ra6yzozFV3FDe+Ct8yokni32VRU/jaF1ubO2NIY
+         9zS3L4MTB+r7nTr+2zEWMaHJG0iue1DKTM8n6lyZSkj3YUwQ1wDAeY7yMitb1zgjwy
+         fWeswTDxnOs/g==
+Message-ID: <f1aa6b0d-bb48-f0e3-f9e2-5b1199a9635d@kernel.org>
+Date:   Thu, 3 Mar 2022 10:32:33 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
- `threshold_create_bank()` fails
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to avoid potential deadlock
 Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
-        x86@kernel.org, stable@vger.kernel.org,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-3-ammarfaizi2@gnuweeb.org>
- <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
- <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org>
- <109a10da-d1d1-c47a-2f04-31796457f6ff@gnuweeb.org>
- <20220303015826.4176416-1-alviro.iskandar@gnuweeb.org>
- <49313736-61f8-d001-0fe4-b6166c859585@gnuweeb.org>
-In-Reply-To: <49313736-61f8-d001-0fe4-b6166c859585@gnuweeb.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Jing Xia <jing.xia@unisoc.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        linux-kernel@vger.kernel.org
+References: <YfMVxzdhat01ca7m@google.com>
+ <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+ <YfSMMpj2GrYXAJK2@google.com>
+ <51be77f1-6e85-d46d-d0d3-c06d2055a190@kernel.org>
+ <Yfs1KRgwgzSOvocR@google.com>
+ <86a175d3-c438-505b-1dbc-4ef6e8b5adcb@kernel.org>
+ <5b5e20d1-877f-b321-b341-c0f233ee976c@kernel.org>
+ <51826b5f-e480-994a-4a72-39ff4572bb3f@kernel.org>
+ <Yh8AAOjxTItKTwPQ@google.com>
+ <c0d3528b-e6b4-8557-4c2b-e26a972d8aaa@kernel.org>
+ <Yh/JSlaIw49gV+15@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yh/JSlaIw49gV+15@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 9:07 AM, Ammar Faizi wrote:
-> On 3/3/22 8:58 AM, Alviro Iskandar Setiawan wrote:
->> hi sir, i think this can be improved again, we can avoid calling
->> this_cpu_read(mce_num_banks) twice if we pass the numbanks as an
->> argument, plz review the changes below
+On 2022/3/3 3:45, Jaegeuk Kim wrote:
+> On 03/02, Chao Yu wrote:
+>> On 2022/3/2 13:26, Jaegeuk Kim wrote:
+>>> On 03/02, Chao Yu wrote:
+>>>> ping,
+>>>>
+>>>> On 2022/2/25 11:02, Chao Yu wrote:
+>>>>> On 2022/2/3 22:57, Chao Yu wrote:
+>>>>>> On 2022/2/3 9:51, Jaegeuk Kim wrote:
+>>>>>>> On 01/29, Chao Yu wrote:
+>>>>>>>> On 2022/1/29 8:37, Jaegeuk Kim wrote:
+>>>>>>>>> On 01/28, Chao Yu wrote:
+>>>>>>>>>> On 2022/1/28 5:59, Jaegeuk Kim wrote:
+>>>>>>>>>>> On 01/27, Chao Yu wrote:
+>>>>>>>>>>>> Quoted from Jing Xia's report, there is a potential deadlock may happen
+>>>>>>>>>>>> between kworker and checkpoint as below:
+>>>>>>>>>>>>
+>>>>>>>>>>>> [T:writeback]                [T:checkpoint]
+>>>>>>>>>>>> - wb_writeback
+>>>>>>>>>>>>       - blk_start_plug
+>>>>>>>>>>>> bio contains NodeA was plugged in writeback threads
+>>>>>>>>>>>
+>>>>>>>>>>> I'm still trying to understand more precisely. So, how is it possible to
+>>>>>>>>>>> have bio having node write in this current context?
+>>>>>>>>>>
+>>>>>>>>>> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
+>>>>>>>>>> during writebacking node_inode's data page (which should be node page)?
+>>>>>>>>>
+>>>>>>>>> Wasn't that added into a different task->plug?
+>>>>>>>>
+>>>>>>>> I'm not sure I've got your concern correctly...
+>>>>>>>>
+>>>>>>>> Do you mean NodeA and other IOs from do_writepages() were plugged in
+>>>>>>>> different local plug variables?
+>>>>>>>
+>>>>>>> I think so.
+>>>>>>
+>>>>>> I guess block plug helper says it doesn't allow to use nested plug, so there
+>>>>>> is only one plug in kworker thread?
+>>>
+>>> Is there only one kworker thread that flushes node and inode pages?
+>>
+>> IIRC, =one kworker per block device?
 > 
-> OK, nice improvement. I will fold this in...
+> If there's one kworker only, f2fs_write_node_pages() should have flushed its
+> plug?
+
+No, f2fs_write_node_pages() failed to attach local plug into current->plug due to
+current has attached plug from wb_writeback(), and also, f2fs_write_node_pages()
+will fail to flush current->plug due to its local plug doesn't match current->plug.
+
+void blk_start_plug_nr_ios()
+{
+	if (tsk->plug)
+		return;
+...
+}
+
+void blk_finish_plug(struct blk_plug *plug)
+{
+	if (plug == current->plug) {
+		__blk_flush_plug(plug, false);
+		current->plug = NULL;
+	}
+}
+
+Thanks,
+
 > 
-
-It looks like this now. Yazen, Alviro, please review the
-following patch. If you think it looks good, I will submit
-it for the v5.
-
- From 91a447f837d502b7a040cd68f333fb98f4b941d9 Mon Sep 17 00:00:00 2001
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Date: Thu, 3 Mar 2022 09:22:17 +0700
-Subject: [PATCH v5 2/2] x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails
-
-In mce_threshold_create_device(), if threshold_create_bank() fails, the
-@bp will be leaked, because mce_threshold_remove_device() will not free
-the @bp. It only frees the @bp when we've already written the @bp to
-the @threshold_banks per-CPU variable, but at the point, we haven't.
-
-Fix this by extracting the cleanup part into a new static function
-_mce_threshold_remove_device(), then use it from create/remove device
-function. Also, eliminate the "goto out_err". Just early return inside
-the loop if we fail.
-
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org # v5.8+
-Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
-Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Co-authored-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-  arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++++++-------------
-  1 file changed, 19 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9f4b508886dd..e492efab68a2 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1293,10 +1293,23 @@ static void threshold_remove_bank(struct threshold_bank *bank)
-  	kfree(bank);
-  }
-  
-+static void _mce_threshold_remove_device(struct threshold_bank **bp,
-+					 unsigned int numbanks)
-+{
-+	unsigned int bank;
-+
-+	for (bank = 0; bank < numbanks; bank++) {
-+		if (bp[bank]) {
-+			threshold_remove_bank(bp[bank]);
-+			bp[bank] = NULL;
-+		}
-+	}
-+	kfree(bp);
-+}
-+
-  int mce_threshold_remove_device(unsigned int cpu)
-  {
-  	struct threshold_bank **bp = this_cpu_read(threshold_banks);
--	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
-  
-  	if (!bp)
-  		return 0;
-@@ -1307,13 +1320,7 @@ int mce_threshold_remove_device(unsigned int cpu)
-  	 */
-  	this_cpu_write(threshold_banks, NULL);
-  
--	for (bank = 0; bank < numbanks; bank++) {
--		if (bp[bank]) {
--			threshold_remove_bank(bp[bank]);
--			bp[bank] = NULL;
--		}
--	}
--	kfree(bp);
-+	_mce_threshold_remove_device(bp, this_cpu_read(mce_num_banks));
-  	return 0;
-  }
-  
-@@ -1350,15 +1357,14 @@ int mce_threshold_create_device(unsigned int cpu)
-  		if (!(this_cpu_read(bank_map) & (1 << bank)))
-  			continue;
-  		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			_mce_threshold_remove_device(bp, numbanks);
-+			return err;
-+		}
-  	}
-  	this_cpu_write(threshold_banks, bp);
-  
-  	if (thresholding_irq_en)
-  		mce_threshold_vector = amd_threshold_interrupt;
-  	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
-  }
--- 
-Ammar Faizi
-
+>>
+>> Thanks,
+>>
+>>>
+>>>>>>
+>>>>>> void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
+>>>>>> {
+>>>>>>        struct task_struct *tsk = current;
+>>>>>>
+>>>>>>        /*
+>>>>>>         * If this is a nested plug, don't actually assign it.
+>>>>>>         */
+>>>>>>        if (tsk->plug)
+>>>>>>            return;
+>>>>>> ...
+>>>>>> }
+>>>>>
+>>>>> Any further comments?
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>>>
+>>>>>> Thanks,
+>>>>>>
+>>>>>>>
+>>>>>>>>
+>>>>>>>> Thanks,
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> Thanks,
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>>                       - do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+>>>>>>>>>>>>                        - f2fs_write_data_pages
+>>>>>>>>>>>>                         - f2fs_write_single_data_page -- write last dirty page
+>>>>>>>>>>>>                          - f2fs_do_write_data_page
+>>>>>>>>>>>>                           - set_page_writeback  -- clear page dirty flag and
+>>>>>>>>>>>>                           PAGECACHE_TAG_DIRTY tag in radix tree
+>>>>>>>>>>>>                           - f2fs_outplace_write_data
+>>>>>>>>>>>>                            - f2fs_update_data_blkaddr
+>>>>>>>>>>>>                             - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+>>>>>>>>>>>>                          - inode_dec_dirty_pages
+>>>>>>>>>>>>       - writeback_sb_inodes
+>>>>>>>>>>>>        - writeback_single_inode
+>>>>>>>>>>>>         - do_writepages
+>>>>>>>>>>>>          - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+>>>>>>>>>>>>           - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+>>>>>>>>>>>>        - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+>>>>>>>>>>>>       - blk_finish_plug
+>>>>>>>>>>>>
+>>>>>>>>>>>> Let's try to avoid deadlock condition by forcing unplugging previous bio via
+>>>>>>>>>>>> blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+>>>>>>>>>>>> due to valid sbi->wb_sync_req[DATA/NODE].
+>>>>>>>>>>>>
+>>>>>>>>>>>> Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+>>>>>>>>>>>> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+>>>>>>>>>>>> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+>>>>>>>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>       fs/f2fs/data.c | 6 +++++-
+>>>>>>>>>>>>       fs/f2fs/node.c | 6 +++++-
+>>>>>>>>>>>>       2 files changed, 10 insertions(+), 2 deletions(-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>>>>>>>>> index 76d6fe7b0c8f..932a4c81acaf 100644
+>>>>>>>>>>>> --- a/fs/f2fs/data.c
+>>>>>>>>>>>> +++ b/fs/f2fs/data.c
+>>>>>>>>>>>> @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+>>>>>>>>>>>>           /* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+>>>>>>>>>>>>           if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>>>>>>>               atomic_inc(&sbi->wb_sync_req[DATA]);
+>>>>>>>>>>>> -    else if (atomic_read(&sbi->wb_sync_req[DATA]))
+>>>>>>>>>>>> +    else if (atomic_read(&sbi->wb_sync_req[DATA])) {
+>>>>>>>>>>>> +        /* to avoid potential deadlock */
+>>>>>>>>>>>> +        if (current->plug)
+>>>>>>>>>>>> +            blk_finish_plug(current->plug);
+>>>>>>>>>>>>               goto skip_write;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>>           if (__should_serialize_io(inode, wbc)) {
+>>>>>>>>>>>>               mutex_lock(&sbi->writepages);
+>>>>>>>>>>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+>>>>>>>>>>>> index 556fcd8457f3..69c6bcaf5aae 100644
+>>>>>>>>>>>> --- a/fs/f2fs/node.c
+>>>>>>>>>>>> +++ b/fs/f2fs/node.c
+>>>>>>>>>>>> @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
+>>>>>>>>>>>>           if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>>>>>>>               atomic_inc(&sbi->wb_sync_req[NODE]);
+>>>>>>>>>>>> -    else if (atomic_read(&sbi->wb_sync_req[NODE]))
+>>>>>>>>>>>> +    else if (atomic_read(&sbi->wb_sync_req[NODE])) {
+>>>>>>>>>>>> +        /* to avoid potential deadlock */
+>>>>>>>>>>>> +        if (current->plug)
+>>>>>>>>>>>> +            blk_finish_plug(current->plug);
+>>>>>>>>>>>>               goto skip_write;
+>>>>>>>>>>>> +    }
+>>>>>>>>>>>>           trace_f2fs_writepages(mapping->host, wbc, NODE);
+>>>>>>>>>>>> -- 
+>>>>>>>>>>>> 2.32.0
+>>>>>>
+>>>>>>
+>>>>>> _______________________________________________
+>>>>>> Linux-f2fs-devel mailing list
+>>>>>> Linux-f2fs-devel@lists.sourceforge.net
+>>>>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+>>>>>
+>>>>>
+>>>>> _______________________________________________
+>>>>> Linux-f2fs-devel mailing list
+>>>>> Linux-f2fs-devel@lists.sourceforge.net
+>>>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8C94CBB1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A8B4CBB24
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiCCKS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S232238AbiCCKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbiCCKSY (ORCPT
+        with ESMTP id S231436AbiCCKVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:18:24 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A795B3E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:17:37 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id i66so2811301wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 02:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TtOHWLLsa7rSXRza0fGN1cBKMNwfwygfgSB4i7ej/Go=;
-        b=Nbxsqfpf4U//4kMEYQgwampDN3L5Q2TZvU6x4HLIh5rHGeSfTWOiwOWf7WlZqw6Frz
-         zabhNvVrT6tq8E8cRpfzQby2OfWLCvBQS6NEKRHlj/5MZ486/unuIlHEcozP6A2obxrZ
-         vgvn9NR7WrxE6k4h/FVtUhMxA0XamBacTNXmPndxgT1s1Gzq1iOClFR7LzN8VEfyDUNC
-         CPyh7ZV2CDvjdanG5kRemUYkgHYqpusnawgCP2gFBEL0axzKiQyl7FN0TM/0pSmF7XrP
-         rg+gzo7zHRPIMjtAOSzVsLtTBGl1VLlODl7eu5qVrzYcg95eWFhHCKqTy7XYy/L5UnL1
-         6HXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TtOHWLLsa7rSXRza0fGN1cBKMNwfwygfgSB4i7ej/Go=;
-        b=2R30nmmSs8Xl/BlhBi+dv4nKmcbPSFfSh3Ps0xUR2lVm+rbZ46bnpf3ILDCUjrXrPu
-         EO8s7o8QT34lH+iBDD/GzOZUVhSsZxOL76OteIiTRZDfxteejTdz09necghPGRXRWSR4
-         0dFrInsAjXCwaR/Kw6WFlC8D4sctbAISKF/rTh2J7sciIL1kPj0yvYZzmBmtSLHq6dRR
-         ICUt+q4lbgF0czlr+T2oOc8ddK4d8yL2WFa71UgIIXaN55rU6YL/D31tnoBTTpbl4jtb
-         ISmrYwCziCMwkfzHtD6oSdq0q5FpbKJUQz9AkrcnS3URqYb8SwVK6imQ8sZqoHCXJ9W7
-         8uRA==
-X-Gm-Message-State: AOAM533nL0eVivXHYWA3YpIe9gMDyYnJCDoTI+gXCfZK9aNlqFTPXkxS
-        d5X65FEallvH3gmorqN5i9eqhQ==
-X-Google-Smtp-Source: ABdhPJymkgSussHvNIxK2wwqP7NcLV6g47ibW+vjezWNLiFeFT+TfibQHdlBZqfWNbFWWCD8pOD30Q==
-X-Received: by 2002:a05:600c:4401:b0:387:1bcb:af41 with SMTP id u1-20020a05600c440100b003871bcbaf41mr2793032wmn.101.1646302655488;
-        Thu, 03 Mar 2022 02:17:35 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98? ([2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98])
-        by smtp.googlemail.com with ESMTPSA id e18-20020adfdbd2000000b001e4bbbe5b92sm1713098wrj.76.2022.03.03.02.17.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 02:17:34 -0800 (PST)
-Message-ID: <ce516de7-f1cf-c614-f9ff-439626dfafea@linaro.org>
-Date:   Thu, 3 Mar 2022 11:17:33 +0100
+        Thu, 3 Mar 2022 05:21:10 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501BA488A3;
+        Thu,  3 Mar 2022 02:20:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646302825; x=1677838825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Otr+JQyp8IM/RF61Ihr+OMf6poonNq4fmWZEgecv5k=;
+  b=LPMPaQdr1+yzrSUw4rffpZKeVM0rWNGfjdLkNBgTB3h70AUqOlogRbFJ
+   BZexuWWeOUQh7udIFu9uE3VU/DvTXklgPVi7Teogt2BC+fqnM6rXicQw4
+   /e6RQW7YO18pQiroWdpBAI2nXq5M0yK6EXpASk4zSwEjpzriBZ5rYrgs8
+   rjIImx/t1lVvzZRb1ofxYI04N296Bsgo0R+UcNhI5mWZnsNAngudz/XNg
+   dV8T2wmjEX6Pw8MrUbkLDJb2lpNsRSas3nEg6H4l1Uy4z7+aflyWgdGlz
+   etNoLCo3g+4x5h5oZ/qv6NOFqRs2PU7Tq+szGkw6ye0w3R4mxyvexzKeF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234250005"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="234250005"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:20:25 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="551694758"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:20:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nPiYY-00Ajk2-Cp;
+        Thu, 03 Mar 2022 12:19:34 +0200
+Date:   Thu, 3 Mar 2022 12:19:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Michael Mueller <mimu@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v1 1/1] KVM: s390: Don't cast parameter in bit operations
+Message-ID: <YiCWNdWd+AsLbDkp@smile.fi.intel.com>
+References: <20220223164420.45344-1-andriy.shevchenko@linux.intel.com>
+ <20220224123620.57fd6c8b@p-imbrenda>
+ <3640a910-60fe-0935-4dfc-55bb65a75ce5@linux.ibm.com>
+ <Yh+Qw6Pb+Cd9JDNa@smile.fi.intel.com>
+ <Yh+m65BSfQgaDFwi@yury-laptop>
+ <Yh+qDhd6FL9nlQdD@smile.fi.intel.com>
+ <Yh+66v3OJZanfBLb@yury-laptop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 2/2] clocksource: Add Intel Keem Bay timer support
-Content-Language: en-US
-To:     "Sanil, Shruthi" <shruthi.sanil@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
-        "Raja Subramanian, Lakshmi Bai" 
-        <lakshmi.bai.raja.subramanian@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>
-References: <20220222095654.9097-1-shruthi.sanil@intel.com>
- <20220222095654.9097-3-shruthi.sanil@intel.com>
- <91653d8d-1dc6-0170-2c3c-1187b0bad899@linaro.org>
- <BN9PR11MB55451DB929086919F8D06390F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
- <23f86de0-3869-ee22-812d-ba610bac48b3@linaro.org>
- <BN9PR11MB55458A882EB4A681C4A63B26F1039@BN9PR11MB5545.namprd11.prod.outlook.com>
- <3ff11b85-249f-2f47-cbc4-41d2ab6d168f@linaro.org>
- <DM4PR11MB554994532B3D128F85553C38F1049@DM4PR11MB5549.namprd11.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <DM4PR11MB554994532B3D128F85553C38F1049@DM4PR11MB5549.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh+66v3OJZanfBLb@yury-laptop>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 07:18, Sanil, Shruthi wrote:
-
-[ ... ]
-
->>>>>>> +	if (!(val & TIM_CONFIG_PRESCALER_ENABLE)) { + 
->>>>>>> pr_err("%pOF: Prescaler is not enabled\n", np); +		ret = 
->>>>>>> -ENODEV; +	}
->>>>>> 
->>>>>> Why bail out instead of enabling the prescalar ?
->>>>> 
->>>>> Because it is a secure register and it would be updated by
->>>>> the bootloader.
->>>> Should it be considered as a firmware bug ?
->>> 
->>> No. This is a common driver across products in the series and 
->>> enablement of this bit depends on the project requirements. Hence
->>> to be sure from driver, we added this check to avoid
->>> initialization of the driver in the case where it cannot be
->>> functional.
->> 
->> I'm not sure to get the meaning of 'project requirements' but (for
->> my understanding) why not describe the timer in the DT for such
->> projects?
->> 
+On Wed, Mar 02, 2022 at 10:43:54AM -0800, Yury Norov wrote:
+> On Wed, Mar 02, 2022 at 07:31:58PM +0200, Andy Shevchenko wrote:
+> > On Wed, Mar 02, 2022 at 09:18:35AM -0800, Yury Norov wrote:
+> > > On Wed, Mar 02, 2022 at 05:44:03PM +0200, Andy Shevchenko wrote:
+> > > > On Thu, Feb 24, 2022 at 01:10:34PM +0100, Michael Mueller wrote:
+> > > > > On 24.02.22 12:36, Claudio Imbrenda wrote:
+> > > > 
+> > > > ...
+> > > > 
+> > > > > we do that at several places
+> > > > 
+> > > > Thanks for pointing out.
+> > > > 
+> > > > > arch/s390/kernel/processor.c:	for_each_set_bit_inv(bit, (long
+> > > > > *)&stfle_fac_list, MAX_FACILITY_BIT)
+> > > > 
+> > > > This one requires a separate change, not related to this patch.
+> > > > 
+> > > > > arch/s390/kvm/interrupt.c:	set_bit_inv(IPM_BIT_OFFSET + gisc, (unsigned long
+> > > > > *) gisa);
+> > > > 
+> > > > This is done in the patch. Not sure how it appears in your list.
+> > > > 
+> > > > > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
+> > > > > sca->mcn);
+> > > > > arch/s390/kvm/kvm-s390.c:		set_bit_inv(vcpu->vcpu_id, (unsigned long *)
+> > > > > &sca->mcn);
+> > > > 
+> > > > These two should be fixed in a separate change.
+> > > > 
+> > > > Also this kind of stuff:
+> > > > 
+> > > > 	bitmap_copy(kvm->arch.cpu_feat, (unsigned long *) data.feat,
+> > > > 	            KVM_S390_VM_CPU_FEAT_NR_BITS);
+> > > > 
+> > > > might require a new API like
+> > > > 
+> > > > bitmap_from_u64_array()
+> > > > bitmap_to_u64_array()
+> > > > 
+> > > > Yury?
+> > > 
+> > > If BE32 is still the case then yes.
+> > 
+> > The whole point is to get rid of the bad pattern, while it may still work
+> > in the particular case.
 > 
-> OK, I understand your point now. We can control the driver
-> initialization from device tree binding rather than add a check in
-> the driver. But isn't it good to have a check, if enabling of the bit
-> is missed out in the FW? This can help in debugging.
+> Then yes unconditionally. Is it already on table of s390 folks? If no,
+> I can do it myself.
+> 
+> We have bitmap_from_arr32 and bitmap_to_arr32, so for 64-bit versions,
+> we'd start from that.
 
-So if the description is in the DT but the prescaler bit is not enabled 
-then the firmware is buggy, IIUC. Yeah, this check would help, may be 
-add more context in the error message, eg. "Firmware has not enabled the 
-prescaler bit" or something like that
-
-Thanks for the clarification
-
-   -- D.
-
-
+Yep, thanks!
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+With Best Regards,
+Andy Shevchenko
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+

@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325014CC07B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83654CC086
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 16:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiCCPAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 10:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S234234AbiCCPAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 10:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbiCCPAR (ORCPT
+        with ESMTP id S234225AbiCCPAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 10:00:17 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA24FDE2F8;
-        Thu,  3 Mar 2022 06:59:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rRwUAybaAGZPQgyHfYMkNr65Ww6gAF8vxx97N0fO01k=; b=Eexf+bW7N0NT8TMty7sO7cm+A0
-        UufwhWu+9FIfCy2G7p5948fd7tEeeEO2PrJB0z8cOlB3ZA54rZz80NuqR/DEtymr1JdwT/n1LsPhP
-        swfluO79vBnQ2G2wbDFUu9t8LQCGS6cMUKPYOIHNPNVxR96jpsVYyZwBStrg6ccu4Jo+7fFJxNXfu
-        fJs0bYUzWycLb6jd9jm4I9nUhsrAc5BL6L4OI4DVd52bQ5VnukjHvqTiQUAXGcXBHS9G/ArOH5nkm
-        lcjxdQcRBzEcNpbTyPoKFWFaA1jQy22UdXoJMwseAfKakvOv89lx6edV31uGxh4R3rIROcG/AeUas
-        8ZwHYCKw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPmvK-006jV2-Sl; Thu, 03 Mar 2022 14:59:22 +0000
-Date:   Thu, 3 Mar 2022 06:59:22 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v2 3/3] mm: hugetlb: add hugetlb_free_vmemmap sysctl
-Message-ID: <YiDXypdn4ltFbHqs@bombadil.infradead.org>
-References: <20220302083758.32528-1-songmuchun@bytedance.com>
- <20220302083758.32528-4-songmuchun@bytedance.com>
- <Yh/g2BRPZC3370mX@bombadil.infradead.org>
- <CAMZfGtUCPAc2Ff7Cg1oxo=JYMaX1GM3HVNvK_Nka+4j5Xg3AtA@mail.gmail.com>
+        Thu, 3 Mar 2022 10:00:45 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05C111EF0D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:59:59 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i6-20020a1c3b06000000b00386f2897400so123214wma.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 06:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hyZKtms3/fooY346YEFh4aDUln7VR4f3ZkWUMV+VfiY=;
+        b=XoZI7nJBCKEM9JhyOj4+4Q/Ee/yq2th4jAnz/UhBWAKDEgTrbUkfdcxKDciB6eEhjC
+         eu1hktSPl2tRO0qnypW8sk7nLauSF373ejLjGCvkInaDqIkg8mTY8BOO0SbsT19/BQE8
+         FU24TDNc2ZrpGUMsktjKuOK6lRIqhUtV4r4tniYIIPW/fYzB+c9YvQK3ouion6eS/abr
+         dcu5rUaZ6s2dWGZ4ZbaVtabVYr1ASu4BeEA8hiVMqCVbcERpTZOxGCHrMksDLSSRL2eX
+         VzrlPgWl6ukUwfM+NF0fwROCvjlq/g3LVy9wr/qzTzkRy26qkAIUi27HY72ND5MxX4Qi
+         ir/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hyZKtms3/fooY346YEFh4aDUln7VR4f3ZkWUMV+VfiY=;
+        b=L0/Rc6KCrW20bVah1iojGAVGwEeHAxg+qH9fzGFq/mlI16rcnJl3O47qrr7uTUbJZU
+         ZfbMkYf7mG4IHU3WKDzHTgQzTRGRSFHg0YyBtQFp84UdhiN79Ugtw1dMvP181B6Ve3Pq
+         fpBDGyysijxNiB+au3sAlnPHEmnmVzOF4Aq9AEMiX8i8bt35qBXRRP5m1qqnJXC3SIKP
+         xd4c1DfYZu8qXSBMGiwjJHQHq6fkg/BqPX2z20PBxqXFRAs7kSVcjUoHKqUKKfeA1w89
+         bn+EOPLYACe2LA7x/PT3QZAl9hUH5p7e9UqvmmerSvzL6wvFMsmOGZMHk6ED65Eg0PPK
+         asPA==
+X-Gm-Message-State: AOAM533QFcY+/NebRfUNggoZW3nwGwqNgaqj/ybpYGAnEjULhlvMlT3Y
+        Bw7iVpeZN7YohPhRGgDpJ9WBug==
+X-Google-Smtp-Source: ABdhPJyNhPVn3ujz+yed9ZU8ZsVBArmJ+s8GAWfDmrjEO7NKWveEpuqL/2TcQKekRcVES9Tf/1cDog==
+X-Received: by 2002:a05:600c:1c25:b0:380:d306:1058 with SMTP id j37-20020a05600c1c2500b00380d3061058mr4125847wms.150.1646319598144;
+        Thu, 03 Mar 2022 06:59:58 -0800 (PST)
+Received: from localhost.localdomain ([49.206.7.17])
+        by smtp.gmail.com with ESMTPSA id i15-20020a5d522f000000b001e85b14dadcsm2224166wra.5.2022.03.03.06.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 06:59:57 -0800 (PST)
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Abner Chang <abner.chang@hpe.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Sunil V L <sunilvl@ventanamicro.com>
+Subject: [RFC PATCH V2 0/1] RISCV_EFI_BOOT_PROTOCOL support in linux
+Date:   Thu,  3 Mar 2022 20:29:43 +0530
+Message-Id: <20220303145944.307321-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtUCPAc2Ff7Cg1oxo=JYMaX1GM3HVNvK_Nka+4j5Xg3AtA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 07:15:05PM +0800, Muchun Song wrote:
-> On Thu, Mar 3, 2022 at 5:25 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Wed, Mar 02, 2022 at 04:37:58PM +0800, Muchun Song wrote:
-> > > We must add "hugetlb_free_vmemmap=on" to boot cmdline and reboot the
-> > > server to enable the feature of freeing vmemmap pages of HugeTLB
-> > > pages. Rebooting usually taske a long time. Add a sysctl to enable
-> > > the feature at runtime and do not need to reboot.
-> > >
-> > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > ---
-> > >  Documentation/admin-guide/sysctl/vm.rst | 13 ++++++++++
-> > >  include/linux/memory_hotplug.h          |  9 +++++++
-> > >  mm/hugetlb_vmemmap.c                    | 42 ++++++++++++++++++++++++++++-----
-> > >  mm/hugetlb_vmemmap.h                    |  4 +++-
-> > >  mm/memory_hotplug.c                     |  5 ++++
-> > >  5 files changed, 66 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> > > index f4804ce37c58..01f18e6cc227 100644
-> > > --- a/Documentation/admin-guide/sysctl/vm.rst
-> > > +++ b/Documentation/admin-guide/sysctl/vm.rst
-> > > @@ -561,6 +561,19 @@ Change the minimum size of the hugepage pool.
-> > >  See Documentation/admin-guide/mm/hugetlbpage.rst
-> > >
-> > >
-> > > +hugetlb_free_vmemmap
-> > > +====================
-> > > +
-> > > +A toggle value indicating if vmemmap pages are allowed to be optimized.
-> > > +If it is off (0), then it can be set true (1).  Once true, the vmemmap
-> > > +pages associated with each HugeTLB page will be optimized, and the toggle
-> > > +cannot be set back to false.  It only optimizes the subsequent allocation
-> > > +of HugeTLB pages from buddy system, while already allocated HugeTLB pages
-> > > +will not be optimized.
-> >
-> > The commit log or documentation does not descrie why its safe to toggle
-> > one way and not the other?
-> >
-> 
-> I thought it was easy to handle the transition from disable to enable
-> (code is simple).  I might be wrong. I'll try to handle the other side in
-> the next version if it is not hard to handle.
+This patch adds support for getting the boot hart ID using new
+RISCV_EFI_BOOT_PROTOCOL in linux efi stub. While there is an existing
+solution of passing the boot hart ID through Device Tree, it doesn't work
+for ACPI. Hence an EFI protocol protocol is recommended which works for
+both DT and ACPI based platforms.
 
-You should do the homework and explain why something is not possible.
-And if you are enabling to disable something why is it safe to do so
-at runtime?
+The latest draft spec of this new protocol is available at
+https://github.com/riscv-non-isa/riscv-uefi/releases/download/1.0-rc2/RISCV_UEFI_PROTOCOL-spec.pdf
 
-  Luis
+This linux ptach can be found in:
+riscv_boot_protocol_rfc_v2 branch at
+https://github.com/vlsunil/linux.git
+
+This is tested in qemu with u-boot 2022.04.rc3.
+
+Changes since V1:
+  - Rebased to get the "Fix get_boot_hartid_from_fdt() return value"
+    patch
+  - Removed mixed_mode member
+  - Separated return value and status.
+
+Sunil V L (1):
+  riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
+
+ drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
+ drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
+ include/linux/efi.h                       |  1 +
+ 3 files changed, 32 insertions(+), 5 deletions(-)
+
+-- 
+2.25.1
+

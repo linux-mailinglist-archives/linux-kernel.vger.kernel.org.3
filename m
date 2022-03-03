@@ -2,526 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326CA4CBF91
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EA14CBF99
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiCCOLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S233937AbiCCOL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiCCOLG (ORCPT
+        with ESMTP id S233917AbiCCOL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:11:06 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475E518C7BF;
-        Thu,  3 Mar 2022 06:10:14 -0800 (PST)
-X-UUID: 6d8ca964a6bd4ff9abb1f2dea29c70d2-20220303
-X-UUID: 6d8ca964a6bd4ff9abb1f2dea29c70d2-20220303
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 571788455; Thu, 03 Mar 2022 22:10:09 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 3 Mar 2022 22:10:07 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Mar 2022 22:10:06 +0800
-Message-ID: <9ba63387baecf598db696d0ebbc1583406a57a62.camel@mediatek.com>
-Subject: Re: [v2 09/17] ASoC: mediatek: mt8186: support tdm in platform
- driver
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <broonie@kernel.org>
-CC:     <lgirdwood@gmail.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <perex@perex.cz>,
-        <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <aaronyu@google.com>, <zhangqilong3@huawei.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 3 Mar 2022 22:10:06 +0800
-In-Reply-To: <fcae42a5-6e11-e683-8f3a-453650f08d38@collabora.com>
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
-         <20220217134205.15400-10-jiaxin.yu@mediatek.com>
-         <fcae42a5-6e11-e683-8f3a-453650f08d38@collabora.com>
+        Thu, 3 Mar 2022 09:11:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FF6918CC15
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646316640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aWk3jBMeJTdwrNX3wqrCnZbk5d/gQSX5OEwgsEHsMQY=;
+        b=CIkdahvzdSPSmxYnghK0xrMVl/vN2JCALBA+r2xaID7ESstmaF/VenzfQEMGe21wN+JvC5
+        la/3kBqeNf5dBPlMKtekslfJlDEMJA57p3ZxI5gYt27Ov+Y7tlmyjZD3SpOAYKhVqKmRrg
+        D/wpgl85qT+BVv3VfHu7uD7A1aP9aoI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-JDdpN_SzMoea_UkDUyhr4w-1; Thu, 03 Mar 2022 09:10:39 -0500
+X-MC-Unique: JDdpN_SzMoea_UkDUyhr4w-1
+Received: by mail-wm1-f69.google.com with SMTP id l31-20020a05600c1d1f00b00380e3425ba7so1688380wms.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 06:10:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=aWk3jBMeJTdwrNX3wqrCnZbk5d/gQSX5OEwgsEHsMQY=;
+        b=A57bZUnxZw3gOsLK7p5x3Z+eusc3KQ/8C9tUQFIX75kRVwtdy9uukBGwUzPXYT3uZG
+         QkkxY89r/YFJH+vRBftd7clE3ZTwnYQvRB5AtvzI7XyrCGZ/EnXDmb/4ZxFABUOrzEht
+         RbchNwA7uLc4BfW34r+Jtn1gQ9x/JzXB0gdib4U/8RzAYBV9fJcJSMo1UsNaaq1kf/+9
+         0iP+SpFr471XQXIFBy9Nkdc27hwV42MG6X7L3JXG19YLDu3uE7ETjOxlO6tntUZza25H
+         BJ01BkTp94AHGfME1WZlQipJOlJXV8LEHwRT5AeSquboayLefwDPmYqaBLrIGLVZnDi/
+         tkYA==
+X-Gm-Message-State: AOAM530Yf5Cbh+9YG2uPWf8y9JSHvh7uAkZ4q/hVUxlQTy3PrLV+CpkO
+        uo4wjxpd7bb4BgtKY597CnkAuyDgDkqxrrbALIXRgSUdunlMSnxplp4DCHiQe1hhRqIM+yLGLdg
+        YZ22qIFotw5Ehvo0S5WLXiXzF
+X-Received: by 2002:a1c:a583:0:b0:383:67c7:3d58 with SMTP id o125-20020a1ca583000000b0038367c73d58mr3923437wme.150.1646316638328;
+        Thu, 03 Mar 2022 06:10:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy5tuwb8TCREOTiw1/McPbtRm6otYmLs60Pbfo9wZFOZgL7sBSpDo17lbyuysN9uH3XoeRXYA==
+X-Received: by 2002:a1c:a583:0:b0:383:67c7:3d58 with SMTP id o125-20020a1ca583000000b0038367c73d58mr3923418wme.150.1646316638039;
+        Thu, 03 Mar 2022 06:10:38 -0800 (PST)
+Received: from ?IPv6:2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8? ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
+        by smtp.gmail.com with ESMTPSA id bd5-20020a05600c1f0500b00387d812a267sm2255337wmb.37.2022.03.03.06.10.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 06:10:37 -0800 (PST)
+Message-ID: <d2b9c1ebe7d25060ad4334a0d37d909860e1bd37.camel@redhat.com>
+Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        frederic@kernel.org, tglx@linutronix.de, mtosatti@redhat.com,
+        mgorman@suse.de, linux-rt-users@vger.kernel.org, cl@linux.com,
+        paulmck@kernel.org, willy@infradead.org
+Date:   Thu, 03 Mar 2022 15:10:35 +0100
+In-Reply-To: <ad999259-0ea9-06f4-eec0-bba5372bbb0a@suse.cz>
+References: <20220208100750.1189808-1-nsaenzju@redhat.com>
+         <ad999259-0ea9-06f4-eec0-bba5372bbb0a@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-18 at 15:54 +0100, AngeloGioacchino Del Regno wrote:
-> Il 17/02/22 14:41, Jiaxin Yu ha scritto:
-> > This patch adds mt8186 tdm dai driver.
+On Thu, 2022-03-03 at 14:27 +0100, Vlastimil Babka wrote:
+> On 2/8/22 11:07, Nicolas Saenz Julienne wrote:
+> > This series replaces mm/page_alloc's per-cpu page lists drain mechanism with
+> > one that allows accessing the lists remotely. Currently, only a local CPU is
+> > permitted to change its per-cpu lists, and it's expected to do so, on-demand,
+> > whenever a process demands it by means of queueing a drain task on the local
+> > CPU. This causes problems for NOHZ_FULL CPUs and real-time systems that can't
+> > take any sort of interruption and to some lesser extent inconveniences idle and
+> > virtualised systems.
 > > 
-> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > ---
-> >   sound/soc/mediatek/mt8186/mt8186-dai-tdm.c | 713
-> > +++++++++++++++++++++
-> >   1 file changed, 713 insertions(+)
-> >   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> > The new algorithm will atomically switch the pointer to the per-cpu page lists
+> > and use RCU to make sure it's not being concurrently used before draining the
+> > lists. And its main benefit of is that it fixes the issue for good, avoiding
+> > the need for configuration based heuristics or having to modify applications
+> > (i.e. using the isolation prctrl being worked by Marcello Tosatti ATM).
 > > 
-> > diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
-> > b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
-> > new file mode 100644
-> > index 000000000000..28dd3661f0e0
-> > --- /dev/null
-> > +++ b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
-> > @@ -0,0 +1,713 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +//
-> > +// MediaTek ALSA SoC Audio DAI TDM Control
-> > +//
-> > +// Copyright (c) 2022 MediaTek Inc.
-> > +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > +
-> > +#include <linux/regmap.h>
-> > +#include <sound/pcm_params.h>
-> > +
-> > +#include "mt8186-afe-clk.h"
-> > +#include "mt8186-afe-common.h"
-> > +#include "mt8186-afe-gpio.h"
-> > +#include "mt8186-interconnection.h"
-> > +
-> > +#define TDM_HD_EN_W_NAME "TDM_HD_EN"
-> > +#define TDM_MCLK_EN_W_NAME "TDM_MCLK_EN"
-> > +#define MTK_AFE_TDM_KCONTROL_NAME "TDM_HD_Mux"
-> > +
-> > +struct mtk_afe_tdm_priv {
-> > +	unsigned int id;
-> > +	unsigned int rate; /* for determine which apll to use */
-> > +	unsigned int bck_invert;
-> > +	unsigned int lck_invert;
-> > +	unsigned int lrck_width;
-> > +	unsigned int mclk_id;
-> > +	unsigned int mclk_multiple; /* according to sample rate */
-> > +	unsigned int mclk_rate;
-> > +	unsigned int mclk_apll;
-> > +	unsigned int tdm_mode;
-> > +	unsigned int data_mode;
-> > +	unsigned int slave_mode;
-> > +	unsigned int low_jitter_en;
-> > +};
-> > +
-> > +enum {
-> > +	TDM_IN_I2S = 0,
-> > +	TDM_IN_LJ = 1,
-> > +	TDM_IN_RJ = 2,
-> > +	TDM_IN_DSP_A = 4,
-> > +	TDM_IN_DSP_B = 5,
-> > +};
-> > +
-> > +enum {
-> > +	TDM_DATA_ONE_PIN = 0,
-> > +	TDM_DATA_MULTI_PIN,
-> > +};
-> > +
-> > +enum {
-> > +	TDM_BCK_NON_INV = 0,
-> > +	TDM_BCK_INV = 1,
-> > +};
-> > +
-> > +enum {
-> > +	TDM_LCK_NON_INV = 0,
-> > +	TDM_LCK_INV = 1,
-> > +};
-> > +
-> > +static unsigned int get_tdm_lrck_width(snd_pcm_format_t format,
-> > +				       unsigned int mode)
-> > +{
-> > +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
-> > +		return 0;
-> > +	else
+> > All this with minimal performance implications: a page allocation
+> > microbenchmark was run on multiple systems and architectures generally showing
+> > no performance differences, only the more extreme cases showed a 1-3%
+> > degradation. See data below. Needless to say that I'd appreciate if someone
+> > could validate my values independently.
+> > 
+> > The approach has been stress-tested: I forced 100 drains/s while running
+> > mmtests' pft in a loop for a full day on multiple machines and archs (arm64,
+> > x86_64, ppc64le).
+> > 
+> > Note that this is not the first attempt at fixing this per-cpu page lists:
+> >  - The first attempt[1] tried to conditionally change the pagesets locking
+> >    scheme based the NOHZ_FULL config. It was deemed hard to maintain as the
+> >    NOHZ_FULL code path would be rarely tested. Also, this only solves the issue
+> >    for NOHZ_FULL setups, which isn't ideal.
+> >  - The second[2] unanimously switched the local_locks to per-cpu spinlocks. The
+> >    performance degradation was too big.
 > 
-> Drop the "else"
-> 
-> > +		return snd_pcm_format_physical_width(format) - 1;
-> > +}
-> > +
-> > +static unsigned int get_tdm_ch_fixup(unsigned int channels)
-> > +{
-> > +	if (channels > 4)
-> > +		return 8;
-> > +	else if (channels > 2)
-> > +		return 4;
-> > +	else
-> 
-> Same here
-> 
-> > +		return 2;
-> > +}
-> > +
-> > +static unsigned int get_tdm_ch_per_sdata(unsigned int mode,
-> > +					 unsigned int channels)
-> > +{
-> > +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
-> > +		return get_tdm_ch_fixup(channels);
-> > +	else
-> 
-> ...and same here
-> 
-> > +		return 2;
-> > +}
-> > +
-> > +enum {
-> > +	SUPPLY_SEQ_APLL,
-> > +	SUPPLY_SEQ_TDM_MCK_EN,
-> > +	SUPPLY_SEQ_TDM_HD_EN,
-> > +	SUPPLY_SEQ_TDM_EN,
-> > +};
-> > +
-> > +static int get_tdm_id_by_name(const char *name)
-> > +{
-> > +	return MT8186_DAI_TDM_IN;
-> > +}
-> > +
-> > +static int mtk_tdm_en_event(struct snd_soc_dapm_widget *w,
-> > +			    struct snd_kcontrol *kcontrol,
-> > +			    int event)
-> > +{
-> > +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w-
-> > >dapm);
-> > +	struct mtk_base_afe *afe =
-> > snd_soc_component_get_drvdata(cmpnt);
-> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> > +	int dai_id = get_tdm_id_by_name(w->name);
-> > +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
-> > +
-> > +	if (!tdm_priv) {
-> > +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
-> 
-> dev_err()
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
-> > +		__func__, w->name, event);
-> > +
-> > +	switch (event) {
-> > +	case SND_SOC_DAPM_PRE_PMU:
-> > +		mt8186_afe_gpio_request(afe->dev, true, tdm_priv->id,
-> > 0);
-> > +		break;
-> > +	case SND_SOC_DAPM_POST_PMD:
-> > +		mt8186_afe_gpio_request(afe->dev, false, tdm_priv->id,
-> > 0);
-> > +		break;
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_tdm_mck_en_event(struct snd_soc_dapm_widget *w,
-> > +				struct snd_kcontrol *kcontrol,
-> > +				int event)
-> > +{
-> > +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w-
-> > >dapm);
-> > +	struct mtk_base_afe *afe =
-> > snd_soc_component_get_drvdata(cmpnt);
-> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> > +	int dai_id = get_tdm_id_by_name(w->name);
-> > +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
-> > +
-> > +	if (!tdm_priv) {
-> > +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
-> 
-> dev_err() - please fix all other instances
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
-> > +		__func__, w->name, event, dai_id);
-> > +
-> > +	switch (event) {
-> > +	case SND_SOC_DAPM_PRE_PMU:
-> > +		mt8186_mck_enable(afe, tdm_priv->mclk_id, tdm_priv-
-> > >mclk_rate);
-> > +		break;
-> > +	case SND_SOC_DAPM_POST_PMD:
-> > +		tdm_priv->mclk_rate = 0;
-> > +		mt8186_mck_disable(afe, tdm_priv->mclk_id);
-> > +		break;
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> ...snip...
-> 
-> > +
-> > +static int mt8186_tdm_hd_set(struct snd_kcontrol *kcontrol,
-> > +			     struct snd_ctl_elem_value *ucontrol)
-> > +{
-> > +	struct snd_soc_component *cmpnt =
-> > snd_soc_kcontrol_component(kcontrol);
-> > +	struct mtk_base_afe *afe =
-> > snd_soc_component_get_drvdata(cmpnt);
-> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> > +	int dai_id = get_tdm_id_by_name(kcontrol->id.name);
-> > +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
-> > +	struct soc_enum *e = (struct soc_enum *)kcontrol-
-> > >private_value;
-> > +	int hd_en;
-> > +
-> > +	if (ucontrol->value.enumerated.item[0] >= e->items)
-> > +		return -EINVAL;
-> > +
-> > +	hd_en = ucontrol->value.integer.value[0];
-> > +
-> > +	dev_info(afe->dev, "%s(), kcontrol name %s, hd_en %d\n",
-> > +		 __func__, kcontrol->id.name, hd_en);
-> 
-> dev_dbg()
-> 
-> > +
-> > +	if (!tdm_priv) {
-> > +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	tdm_priv->low_jitter_en = hd_en;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct snd_kcontrol_new mtk_dai_tdm_controls[] = {
-> > +	SOC_ENUM_EXT(MTK_AFE_TDM_KCONTROL_NAME, mt8186_tdm_enum[0],
-> > +		     mt8186_tdm_hd_get, mt8186_tdm_hd_set),
-> > +};
-> > +
-> > +static const struct snd_soc_dapm_route mtk_dai_tdm_routes[] = {
-> > +	{"TDM IN", NULL, "aud_tdm_clk"},
-> > +	{"TDM IN", NULL, "TDM_EN"},
-> > +	{"TDM IN", NULL, TDM_HD_EN_W_NAME, mtk_afe_tdm_hd_connect},
-> > +	{TDM_HD_EN_W_NAME, NULL, APLL1_W_NAME,
-> > mtk_afe_tdm_apll_connect},
-> > +	{TDM_HD_EN_W_NAME, NULL, APLL2_W_NAME,
-> > mtk_afe_tdm_apll_connect},
-> > +
-> > +	{"TDM IN", NULL, TDM_MCLK_EN_W_NAME, mtk_afe_tdm_mclk_connect},
-> > +	{TDM_MCLK_EN_W_NAME, NULL, APLL1_W_NAME,
-> > mtk_afe_tdm_mclk_apll_connect},
-> > +	{TDM_MCLK_EN_W_NAME, NULL, APLL2_W_NAME,
-> > mtk_afe_tdm_mclk_apll_connect},
-> > +
-> > +	/* allow tdm on without codec on */
-> > +	{"TDM IN", NULL, "TDM_In_Mux"},
-> > +	{"TDM_In_Mux", "Dummy_Widget", "TDM_DUMMY_IN"},
-> > +};
-> > +
-> > +/* dai ops */
-> > +static int mtk_dai_tdm_cal_mclk(struct mtk_base_afe *afe,
-> > +				struct mtk_afe_tdm_priv *tdm_priv,
-> > +				int freq)
-> > +{
-> > +	int apll;
-> > +	int apll_rate;
-> > +
-> > +	apll = mt8186_get_apll_by_rate(afe, freq);
-> > +	apll_rate = mt8186_get_apll_rate(afe, apll);
-> > +
-> > +	if (!freq || freq > apll_rate) {
-> > +		dev_info(afe->dev,
-> > +			 "%s(), freq(%d Hz) invalid\n", __func__,
-> > freq);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (apll_rate % freq != 0) {
-> > +		dev_info(afe->dev,
-> > +			 "%s(), APLL cannot generate %d Hz", __func__,
-> > freq);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	tdm_priv->mclk_rate = freq;
-> > +	tdm_priv->mclk_apll = apll;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_dai_tdm_hw_params(struct snd_pcm_substream
-> > *substream,
-> > +				 struct snd_pcm_hw_params *params,
-> > +				 struct snd_soc_dai *dai)
-> > +{
-> > +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> > +	int tdm_id = dai->id;
-> > +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[tdm_id];
-> > +	unsigned int tdm_mode = tdm_priv->tdm_mode;
-> > +	unsigned int data_mode = tdm_priv->data_mode;
-> > +	unsigned int rate = params_rate(params);
-> > +	unsigned int channels = params_channels(params);
-> > +	snd_pcm_format_t format = params_format(params);
-> > +	unsigned int bit_width =
-> > +		snd_pcm_format_physical_width(format);
-> > +	unsigned int tdm_channels = (data_mode == TDM_DATA_ONE_PIN) ?
-> > +		get_tdm_ch_per_sdata(tdm_mode, channels) : 2;
-> > +	unsigned int lrck_width =
-> > +		get_tdm_lrck_width(format, tdm_mode);
-> > +	unsigned int tdm_con = 0;
-> > +	bool slave_mode = tdm_priv->slave_mode;
-> > +	bool lrck_inv = tdm_priv->lck_invert;
-> > +	bool bck_inv = tdm_priv->bck_invert;
-> > +	unsigned int ctrl_reg;
-> > +	unsigned int ctrl_mask;
-> > +	unsigned int tran_rate;
-> > +	unsigned int tran_relatch_rate;
-> > +
-> > +	if (tdm_priv)
-> > +		tdm_priv->rate = rate;
-> > +	else
-> > +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
-> > +
-> > +	tran_rate = mt8186_rate_transform(afe->dev, rate, dai->id);
-> > +	tran_relatch_rate = mt8186_tdm_relatch_rate_transform(afe->dev, 
-> > rate);
-> > +
-> > +	/* calculate mclk_rate, if not set explicitly */
-> > +	if (!tdm_priv->mclk_rate) {
-> > +		tdm_priv->mclk_rate = rate * tdm_priv->mclk_multiple;
-> > +		mtk_dai_tdm_cal_mclk(afe,
-> > +				     tdm_priv,
-> > +				     tdm_priv->mclk_rate);
-> > +	}
-> > +
-> > +	/* ETDM_IN1_CON0 */
-> > +	tdm_con |= slave_mode << ETDM_IN1_CON0_REG_SLAVE_MODE_SFT;
-> > +	tdm_con |= tdm_mode << ETDM_IN1_CON0_REG_FMT_SFT;
-> > +	tdm_con |= (bit_width - 1) << ETDM_IN1_CON0_REG_BIT_LENGTH_SFT;
-> > +	tdm_con |= (bit_width - 1) <<
-> > ETDM_IN1_CON0_REG_WORD_LENGTH_SFT;
-> > +	tdm_con |= (tdm_channels - 1) << ETDM_IN1_CON0_REG_CH_NUM_SFT;
-> > +	/* default disable sync mode */
-> > +	tdm_con |= 0 << ETDM_IN1_CON0_REG_SYNC_MODE_SFT;
-> 
-> 0 << (anything) == 0
-> 
-> (number |= 0) == number
-> 
-> Is this a mistake, or are you really doing nothing here?
-> 
-No, this is just to emphasize the need to set this bit to 0.
-It really do nothing here, just link a reminder.
-Can I keep this sentence?
-> 
-> > +	/* relatch fix to h26m */
-> > +	tdm_con |= 0 << ETDM_IN1_CON0_REG_RELATCH_1X_EN_SEL_DOMAIN_SFT;
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON0;
-> > +	ctrl_mask = ETDM_IN_CON0_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> > +
-> > +	/* ETDM_IN1_CON1 */
-> > +	tdm_con = 0;
-> > +	tdm_con |= 0 << ETDM_IN1_CON1_REG_LRCK_AUTO_MODE_SFT;
-> > +	tdm_con |= 1 << ETDM_IN1_CON1_PINMUX_MCLK_CTRL_OE_SFT;
-> > +	tdm_con |= (lrck_width - 1) <<
-> > ETDM_IN1_CON1_REG_LRCK_WIDTH_SFT;
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON1;
-> > +	ctrl_mask = ETDM_IN_CON1_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> 
-> You don't need the ctrl_reg, nor ctrl_mask variables...
-I was trying to avoid a line of more than 80 words, so I shortened the
-number of words through variables.
+> For completeness, what was the fate of the approach to have pcp->high = 0
+> for NOHZ cpus? [1] It would be nice to have documented why it wasn't
+> feasible. Too much overhead for when these CPUs eventually do allocate, or
+> some other unforeseen issue? Thanks.
 
-> 
-> regmap_update_bits(afe->regmap, ETDM_IN1_CON1,
-> ETDM_IN_CON1_CTRL_MASK, tdm_con);
-> 
-> > +
-> > +	/* ETDM_IN1_CON3 */
-> > +	tdm_con = 0;
-> > +	tdm_con = ETDM_IN_CON3_FS(tran_rate);
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON3;
-> > +	ctrl_mask = ETDM_IN_CON3_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> 
-> same here
-> 
-> > +
-> > +	/* ETDM_IN1_CON4 */
-> > +	tdm_con = 0;
-> > +	tdm_con = ETDM_IN_CON4_FS(tran_relatch_rate);
-> > +	if (slave_mode) {
-> > +		if (lrck_inv)
-> > +			tdm_con |= ETDM_IN_CON4_CON0_SLAVE_LRCK_INV;
-> > +		if (bck_inv)
-> > +			tdm_con |= ETDM_IN_CON4_CON0_SLAVE_BCK_INV;
-> > +	} else {
-> > +		if (lrck_inv)
-> > +			tdm_con |= ETDM_IN_CON4_CON0_MASTER_LRCK_INV;
-> > +		if (bck_inv)
-> > +			tdm_con |= ETDM_IN_CON4_CON0_MASTER_BCK_INV;
-> > +	}
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON4;
-> > +	ctrl_mask = ETDM_IN_CON4_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> 
-> and here
-> 
-> > +
-> > +	/* ETDM_IN1_CON2 */
-> > +	tdm_con = 0;
-> > +	if (data_mode == TDM_DATA_MULTI_PIN) {
-> > +		tdm_con |= ETDM_IN_CON2_MULTI_IP_2CH_MODE;
-> > +		tdm_con |= ETDM_IN_CON2_MULTI_IP_CH(channels);
-> > +	}
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON2;
-> > +	ctrl_mask = ETDM_IN_CON2_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> 
-> and here
-> 
-> > +
-> > +	/* ETDM_IN1_CON8 */
-> > +	tdm_con = 0;
-> > +	if (slave_mode) {
-> > +		tdm_con |= 1 << ETDM_IN1_CON8_REG_ETDM_USE_AFIFO_SFT;
-> > +		tdm_con |= 0 <<
-> > ETDM_IN1_CON8_REG_AFIFO_CLOCK_DOMAIN_SEL_SFT;
-> > +		tdm_con |= ETDM_IN_CON8_FS(tran_relatch_rate);
-> > +	} else {
-> > +		tdm_con |= 0 << ETDM_IN1_CON8_REG_ETDM_USE_AFIFO_SFT;
-> > +	}
-> > +
-> > +	ctrl_reg = ETDM_IN1_CON8;
-> > +	ctrl_mask = ETDM_IN_CON8_CTRL_MASK;
-> > +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
-> 
-> finally, here too.
-> 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> Thanks,
-> ANgelo
+Yes sorry, should've been more explicit on why I haven't gone that way yet.
+
+Some points:
+ - As I mention above, not only CPU isolation users care for this. RT and HPC
+   do too. This is my main motivation for focusing on this solution, or
+   potentially Mel's.
+
+ - Fully disabling pcplists on nohz_full CPUs is too drastic, as isolated CPUs
+   might want to retain the performance edge while not running their sensitive
+   workloads. (I remember Christoph Lamenter's commenting about this on the
+   previous RFC).
+
+ - So the idea would be to selectively disable pcplists upon entering in the
+   really 'isolated' area. This could be achieved with Marcelo Tosatti's new
+   WIP prctrl[1]. And if we decide the current solutions are unacceptable I'll
+   have a go at it.
+
+Thanks!
+
+[1] https://lore.kernel.org/lkml/20220204173554.534186379@fedora.localdomain/T/
+
+-- 
+Nicolás Sáenz
 

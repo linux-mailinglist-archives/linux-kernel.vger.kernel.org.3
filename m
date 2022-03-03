@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67974CBCF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CE94CBCFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiCCLmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S232903AbiCCLnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiCCLmm (ORCPT
+        with ESMTP id S232822AbiCCLnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:42:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF1054F98
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646307715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aqBSrbSdMNwPK2ZUsZhrHTBj0wDT7DRz3Uh9oe8j24M=;
-        b=OLg88BfxCzUDnWLcbCK6WWoZjYbyMRdxQ7EdOjuK/Do19+eoXnRVt2qE0eV3obEuWL8932
-        iVQd4txPw4qUKUecnaqYXmwUAFzrPpbwptl+dgTehp/21O/gKtpCv1SuWkQ5XDIYj0Lro2
-        ffWRDBIkHPfLM81Jl0LRmmAgCnzDrxk=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-xQpIU_i6Pjq7lxeH0wPl5A-1; Thu, 03 Mar 2022 06:41:54 -0500
-X-MC-Unique: xQpIU_i6Pjq7lxeH0wPl5A-1
-Received: by mail-lj1-f197.google.com with SMTP id u19-20020a05651c131300b00246a8982589so1796930lja.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 03:41:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aqBSrbSdMNwPK2ZUsZhrHTBj0wDT7DRz3Uh9oe8j24M=;
-        b=6HKRG4WboDmAe83cJ/VyvNjdZ1foqq7aQ8ISCA/RN3f1l9YTGzH1LdrfMJuC3aBXnB
-         HvI28N6el0iZqSsvzl1PeDDbFzem0Q57pQP2Udhe4eEexkjbwgBRPkI6+50AwDm6e/BL
-         rGmJqeddBWHT6idS9Qt4H8bZq1S7gA2/L4SkADUSRDv//ggX1PrrRQ6+fGrtWx9tw6iq
-         fLzvH0zkmhbojZAGhrUev6AxJ70qdJRFWMmJ/9mds/pgQQqBeRKrCKY19UjWw5LZIptZ
-         Qdcjxt5F8/JIXQ8RSYX3fG9l6r7MUTKjEZ/iKLwhcJMpcvL7opTlXg4zZV/rnJHMRxsw
-         eGKg==
-X-Gm-Message-State: AOAM531rc78LxQkQWiRAS+UCe+/1IyYjCOYAiY1lwFcEj5EPyRaMQWkc
-        z60SImHd7qdUEFg2NCTo0rlmpEqbvBnwbCE/aKMtbXOKPFpoYTT+zCZGUR3ezE9QbphQ9/fGRoX
-        nRtyFQNQDwWP9c0LeWu7Uv8bggDaNZ5JslfcxlyFV
-X-Received: by 2002:a05:6512:490:b0:443:d65a:2bc8 with SMTP id v16-20020a056512049000b00443d65a2bc8mr20830479lfq.579.1646307713162;
-        Thu, 03 Mar 2022 03:41:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxI2CyAVDrRpKoot3YdtX360CQv7KQn1exb01Q3XrvX14zqrROec19o0dyRL/oekGIY04Kwk/Rp60Fag1A7Wds=
-X-Received: by 2002:a05:6512:490:b0:443:d65a:2bc8 with SMTP id
- v16-20020a056512049000b00443d65a2bc8mr20830459lfq.579.1646307712908; Thu, 03
- Mar 2022 03:41:52 -0800 (PST)
+        Thu, 3 Mar 2022 06:43:40 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B98410F3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:42:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646307774; x=1677843774;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=F+m8Rx68JLtGS1ypq//Or1gja316qsP2GMXCoqYbkEc=;
+  b=GkcitjTDnJNGrIkxSzGjBAnMO3e65kLneZojFC4zOXOJP+KFRg9AtC7n
+   RXxXXINlJyAU+r4Gsu0zJnRtILwFgQyLEtpDv+R5zGA3USRPMVmeVDm7J
+   n0E/R0MzXmL80BUvbHmGuLCBmD1sTgfJZNXNv0Ziq6jirF6vJhF/e2aD8
+   YvE2RM3cUuC/unz5QJ+UavbowWm4aObFzYHwNhyF4Hc5ddchfU9u8eMCt
+   /O2F7J0TwkP67TKTC1L8dc6aeDaoCO7WB2/1bXuys9kqoNoJU61az/ru+
+   Pvl1r2Sz/AMHZUvsZ6QG37W/5Rfx65wEtktr5MP9igArizAupX1+xXAA+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="278332633"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="278332633"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 03:42:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="642086974"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2022 03:42:51 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPjr9-0000S8-7I; Thu, 03 Mar 2022 11:42:51 +0000
+Date:   Thu, 3 Mar 2022 19:41:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [netfilter-nf-next:master 8/12]
+ net/netfilter/nf_conntrack_netlink.c:1817:15: error: implicit declaration of
+ function 'nf_conn_pernet_ecache'
+Message-ID: <202203031953.bHVCmKKO-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-In-Reply-To: <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-From:   Konrad Wilhelm Kleine <kkleine@redhat.com>
-Date:   Thu, 3 Mar 2022 12:41:41 +0100
-Message-ID: <CABRYuG=WCBLp+roXzdEZE-X_HHDtwnN-S-CsA2V41h-1v3otnA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Tom Rix <trix@redhat.com>, Joe Perches <joe@perches.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com, megaraidlinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,74 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Resending in plain text format to make mailing lists happy.)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git master
+head:   25485ffb54ac073e82957218404e303469477c2f
+commit: 78babcd3d89c2de2bc8ba688faa4f6d64d82f7ff [8/12] netfilter: conntrack: include ecache dying list in dumps
+config: riscv-randconfig-r042-20220303 (https://download.01.org/0day-ci/archive/20220303/202203031953.bHVCmKKO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=78babcd3d89c2de2bc8ba688faa4f6d64d82f7ff
+        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
+        git fetch --no-tags netfilter-nf-next master
+        git checkout 78babcd3d89c2de2bc8ba688faa4f6d64d82f7ff
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/netfilter/
 
-Hi Finn,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Thu, 3 Mar 2022 at 09:40, Finn Thain <fthain@linux-m68k.org> wrote:
->
->
-> On Wed, 2 Mar 2022, Tom Rix wrote:
->
-> > >>> Long term, it would be good have a reliable way to automatically fix
-> > >>> either new files or really broken old files.
-> > >> That's really a maintainer preference no?
-> > >>
-> > >> Especially so for any automation.
-> > >
-> > > In practice everything is up to the maintainer.
-> > >
-> > > If some maintainer wants fix their formatting then clang-format should
-> > > just work
-> > >
-> > > It isn't likely they will have time to hand fix every file.
-> >
-> > A follow up issue in the clang project has been raised by Konrad, here
-> >
-> > https://github.com/llvm/llvm-project/issues/54137
-> >
->
-> Why request a "leave" option for every style rule? Why not just a "leave"
-> option for the most contentious rules?
+All error/warnings (new ones prefixed by >>):
+
+>> net/netfilter/nf_conntrack_netlink.c:1817:15: error: implicit declaration of function 'nf_conn_pernet_ecache' [-Werror,-Wimplicit-function-declaration]
+           ecache_net = nf_conn_pernet_ecache(net);
+                        ^
+>> net/netfilter/nf_conntrack_netlink.c:1817:13: warning: incompatible integer to pointer conversion assigning to 'struct nf_conntrack_net_ecache *' from 'int' [-Wint-conversion]
+           ecache_net = nf_conn_pernet_ecache(net);
+                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nf_conntrack_netlink.c:3941:2: error: implicit declaration of function 'nf_conntrack_register_notifier' [-Werror,-Wimplicit-function-declaration]
+           nf_conntrack_register_notifier(&ctnl_notifier);
+           ^
+   net/netfilter/nf_conntrack_netlink.c:3941:2: note: did you mean 'netlink_register_notifier'?
+   include/linux/netlink.h:151:5: note: 'netlink_register_notifier' declared here
+   int netlink_register_notifier(struct notifier_block *nb);
+       ^
+   net/netfilter/nf_conntrack_netlink.c:3941:34: error: use of undeclared identifier 'ctnl_notifier'; did you mean 'rtnl_notify'?
+           nf_conntrack_register_notifier(&ctnl_notifier);
+                                           ^~~~~~~~~~~~~
+                                           rtnl_notify
+   include/linux/rtnetlink.h:14:13: note: 'rtnl_notify' declared here
+   extern void rtnl_notify(struct sk_buff *skb, struct net *net, u32 pid,
+               ^
+   1 warning and 3 errors generated.
 
 
-Getting to the point that every style option can be disabled
-individually is not an operation done in one go. I plan on presenting
-the changes required to exactly one style option and from there I'm
-all ears if you have style options that you consider "contentious". We
-could certainly tackle them next. But for starters I think it's fine
-to just show the impact of changing one style option only.
+vim +/nf_conn_pernet_ecache +1817 net/netfilter/nf_conntrack_netlink.c
 
->> The response from the developers that anyone who wants to leave existing
->> code unmolested by certain rules should "wake up and smell the coffee" is
->> obnoxious, IMO.
+  1802	
+  1803	static int
+  1804	ctnetlink_dump_dying(struct sk_buff *skb, struct netlink_callback *cb)
+  1805	{
+  1806		struct ctnetlink_list_dump_ctx *ctx = (void *)cb->ctx;
+  1807		struct nf_conntrack_net_ecache *ecache_net;
+  1808		const struct net *net = sock_net(skb->sk);
+  1809		struct nf_conn *last = ctx->last;
+  1810		struct nf_conntrack_tuple_hash *h;
+  1811		struct hlist_nulls_node *n;
+  1812	
+  1813		if (ctx->retrans_done)
+  1814			return ctnetlink_dump_list(skb, cb, true);
+  1815	
+  1816		ctx->last = NULL;
+> 1817		ecache_net = nf_conn_pernet_ecache(net);
+  1818		spin_lock_bh(&ecache_net->dying_lock);
+  1819	
+  1820		hlist_nulls_for_each_entry(h, n, &ecache_net->dying_list, hnnode) {
+  1821			struct nf_conn *ct;
+  1822			int res;
+  1823	
+  1824			ct = nf_ct_tuplehash_to_ctrack(h);
+  1825			if (last && last != ct)
+  1826				continue;
+  1827	
+  1828			res = ctnetlink_dump_one_entry(skb, cb, ct, true);
+  1829			if (res < 0) {
+  1830				spin_unlock_bh(&ecache_net->dying_lock);
+  1831				nf_ct_put(last);
+  1832				return skb->len;
+  1833			}
+  1834	
+  1835			nf_ct_put(last);
+  1836			last = NULL;
+  1837		}
+  1838	
+  1839		ctx->retrans_done = true;
+  1840		spin_unlock_bh(&ecache_net->dying_lock);
+  1841		nf_ct_put(last);
+  1842	
+  1843		return ctnetlink_dump_list(skb, cb, true);
+  1844	}
+  1845	
 
-I hear you, I like tea better than coffee ;). In all seriousness, I'm
-here to help and I don't judge the developers for protecting their
-code and having an opinion about other projects. We're here to talk
-and find a solution, nothing more. Let's try to ignore the sarcastic
-undertone in the dialogue.
-
->> Presumably clang-format must grow until it has sufficient program logic
->> and config options to cater to every exception to every rule. How long
->> will that take? Some carefully chosen "leave" options might make the
->> program much more useful in the near term.
-
-That's what I aim at. I hope I've outlined this in the first paragraph
-of this email. One baby step at a time...
-- Konrad
-
->
->
->
-> > Tom
-> >
-> >
-> > >
-> > > Tom
-> > >
-> > >>
-> > >>
-> >
->
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

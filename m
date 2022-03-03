@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382C74CB52B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637F24CB53A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiCCC6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S231919AbiCCC7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiCCC6H (ORCPT
+        with ESMTP id S231910AbiCCC7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:58:07 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2124993A;
-        Wed,  2 Mar 2022 18:57:23 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id ay10so5636535wrb.6;
-        Wed, 02 Mar 2022 18:57:23 -0800 (PST)
+        Wed, 2 Mar 2022 21:59:17 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC195DCE36;
+        Wed,  2 Mar 2022 18:58:31 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id q8so4293198iod.2;
+        Wed, 02 Mar 2022 18:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=VWT1nnZHFDs5KVBOsFtYYBtJaBHbWpLPsvtCyOdWdNA=;
-        b=WRMDzRVxlt+lbSe+XQv4GQ55KeEuKYtud9GSY9bBRprMwKCIGSWym34qliDbbk4IQd
-         p0RV1PL+byNgeR70N1HoqI3dkGa3EhjEKO70n9HHQRYhbNDieIYRAifCt4X7DbJQfCle
-         ma8XSa2zwNtVJB7YHyJ/PXvy4ty8AZzEwR5a+E2cqpPmrJs4a8A3ydGALHrBZlLN4mhd
-         nwB5Tz/0YPUkFUWO4YWIjlXEob3yq3MgokWdj1CfB420hB1+aa23E1lwMrWkivCsjGLp
-         z+s3LofRlqBznrnjuDADYlUZHSLsSBhFzIweBksvAZkG6eyAPhKESFQgPmgPHfzXQ6D3
-         An9Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1H4fbbodFL+rmUux9zr3IzveyrIH4qejmueZOopSFSg=;
+        b=Kn+3avd5LqetsWkpBJPiPKBACwyOVorChnB4+tsXtro6mJbJwxoOae6JK/+rNostCe
+         uRhMqiHPo6muvKqG8tnESlPH+sSQ/mPAx+RbLdL3ghK/rZ7LrzIDKmfbysWgesD2BVIg
+         1HfpkwiZzz2L/0zkG0QiJp68z7HD7QneSTYYGUv121SuQmYtCS1QpRFuTCHG8/ilZx1r
+         neFmOCkEQtcOi3diu1HXk/OapCAsP00TDyPU6ZxqdgLXHzZng1RbhQqCwzQXVNhRlESQ
+         5TN+43LGAAvIQihac/wibSwGwMMGgMMSdbhdK7mzlEmnrAAG4WAubdPun3XQiXoMJB8u
+         Ufqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=VWT1nnZHFDs5KVBOsFtYYBtJaBHbWpLPsvtCyOdWdNA=;
-        b=58T0HdP5Wxe0UdGTXr5YUDjg0mnznkSHmh1oZ9byhiPQ49jZH2JtZqkm39WDuP0VJK
-         HBChYYWHmRQPWkemWTJwlaY+AI3KWuRy9hICHtNQvYqbxBtNA6SE+Pixm3kdDgq3yamT
-         I6qqgZMLFTGG5EfEO/0XqydYnxqYsPrcftCqOkVj7TNSykWaFNlcze237dQ18a2SvTuL
-         5lveBK4Mw9WU6cAydm4uG1fltUUYAEuruZeKfh/+2k4CgsFT67p1XTxPkvaOmf/DGFeT
-         zJcySVXZ3qM4p1ZyjoNj9ZrAIQ39nPrdDteeAOySQomh+hsqhpy4q2iSIsoW7GTVwWRo
-         FSqw==
-X-Gm-Message-State: AOAM530ont+eJcW1ZHqsYul/az7Zip/GuIxKtyVDQslifQxPCxy+KyRQ
-        1n3TJa3KlyhvopGKGbdsom4=
-X-Google-Smtp-Source: ABdhPJwRki+RozVmL4+AnfkNifNb8GY8a4uRigih5L9Ru3UVsKhqOjv5ZFlPbnKgRKOYj4nox/IpOg==
-X-Received: by 2002:a05:6000:16c9:b0:1ef:f2e8:1210 with SMTP id h9-20020a05600016c900b001eff2e81210mr10481252wrf.494.1646276241741;
-        Wed, 02 Mar 2022 18:57:21 -0800 (PST)
-Received: from localhost.localdomain ([64.64.123.48])
-        by smtp.gmail.com with ESMTPSA id k184-20020a1ca1c1000000b0038617ae5297sm2323697wme.33.2022.03.02.18.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 18:57:21 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     isdn@linux-pingi.de, davem@davemloft.net, zou_wei@huawei.com,
-        zheyuma97@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] isdn: hfcpci: check the return value of dma_set_mask() in setup_hw()
-Date:   Wed,  2 Mar 2022 18:57:10 -0800
-Message-Id: <20220303025710.1201-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1H4fbbodFL+rmUux9zr3IzveyrIH4qejmueZOopSFSg=;
+        b=eFtj1vDvx4CDVaXQC9KySuO7bO+3IryH0e5rQQ/iuQ680a2Vlsw/tYp+Xs950tf4aG
+         MWtS1ejsq9C24mPSDMjEjkz3YjnwKKvWE7eglF2GICmI28UxFeRCxErDuXz85qyvpe46
+         puO4tCRK2BuvgjclFhpKBKbS5YkQo+r6pl09wJf+sjuzlqWxoOi4wOllIY8n5ajPEnv9
+         e02VjMQ0RZuZ3125jAyWrp0mSmtJB9acZBmkhLN906wvZTjFVdLbFZxshfIPMOgkyrGZ
+         6VC8HZ1YbxT8RkSO0CJNdtxrk6q9hYeBBr3/pEyjh+GoArLp/mEvrCtekJW6E99oTiTA
+         8nug==
+X-Gm-Message-State: AOAM530SAjHhUyv0b9khqR7FeFTpfw57yWTdXrAHjVbywPV+uG6yCzCw
+        cPU7RCUkzogc5HTYNF96nzeLiCBQNZYi1bnaYlQ=
+X-Google-Smtp-Source: ABdhPJxM6u0ZGEggPTQ7pSChdE1EmALRR0gWb+iKx5lq+RjU2pcSXVpp3RaJkXEUJoBpFdnEytRHi9oB99BOzhOGQZM=
+X-Received: by 2002:a02:a984:0:b0:317:36c9:b572 with SMTP id
+ q4-20020a02a984000000b0031736c9b572mr14083601jam.252.1646276311176; Wed, 02
+ Mar 2022 18:58:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20220301063756.16817-1-flyingpeng@tencent.com>
+ <Yh5d7XBD9D4FhEe3@google.com> <CAPm50a+p2pSjExDwPmGpZ_aTuxs=x6RZ4-AAD19RDQx2o-=NCw@mail.gmail.com>
+ <YiAZ3wTICeLTVnJz@google.com>
+In-Reply-To: <YiAZ3wTICeLTVnJz@google.com>
+From:   Hao Peng <flyingpenghao@gmail.com>
+Date:   Thu, 3 Mar 2022 10:56:59 +0800
+Message-ID: <CAPm50aLJ51mm9JVpTMQCkNENX_9-Do5UeH5zxu-5byOcOFsJBg@mail.gmail.com>
+Subject: Re: [PATCH] kvm: x86: Improve virtual machine startup performance
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function dma_set_mask() in setup_hw() can fail, so its return value
-should be checked.
+On Thu, Mar 3, 2022 at 9:29 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Mar 02, 2022, Hao Peng wrote:
+> > On Wed, Mar 2, 2022 at 1:54 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Tue, Mar 01, 2022, Peng Hao wrote:
+> > > >  From: Peng Hao <flyingpeng@tencent.com>
+> > > >
+> > > > vcpu 0 will repeatedly enter/exit the smm state during the startup
+> > > > phase, and kvm_init_mmu will be called repeatedly during this process.
+> > > > There are parts of the mmu initialization code that do not need to be
+> > > > modified after the first initialization.
+> > > >
+> > > > Statistics on my server, vcpu0 when starting the virtual machine
+> > > > Calling kvm_init_mmu more than 600 times (due to smm state switching).
+> > > > The patch can save about 36 microseconds in total.
+> > > >
+> > > > Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+> > > > ---
+> > > > @@ -5054,7 +5059,7 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> > > >  void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > >       kvm_mmu_unload(vcpu);
+> > > > -     kvm_init_mmu(vcpu);
+> > > > +     kvm_init_mmu(vcpu, false);
+> > >
+> > > This is wrong, kvm_mmu_reset_context() is the "big hammer" and is expected to
+> > > unconditionally get the MMU to a known good state.  E.g. failure to initialize
+> > > means this code:
+> > >
+> > >         context->shadow_root_level = kvm_mmu_get_tdp_level(vcpu);
+> > >
+> > > will not update the shadow_root_level as expected in response to userspace changing
+> > > guest.MAXPHYADDR in such a way that KVM enables/disables 5-level paging.
+> > >
+> > Thanks for pointing this out. However, other than shadow_root_level,
+> > other fields of context will not
+> > change during the entire operation, such as
+> > page_fault/sync_page/direct_map and so on under
+> > the condition of tdp_mmu.
+> > Is this patch still viable after careful confirmation of the fields
+> > that won't be modified?
+>
+> No, passing around the "init" flag is a hack.
+>
+> But, we can achieve what you want simply by initializing the constant data once
+> per vCPU.  There's a _lot_ of state that is constant for a given MMU now that KVM
+> uses separate MMUs for L1 vs. L2 when TDP is enabled.  I should get patches posted
+> tomorrow, just need to test (famous last words).
+>
+> Also, based on the number of SMM transitions, I'm guessing you're using SeaBIOS.
+> Have you tried disabling CONFIG_CALL32_SMM, or CONFIG_USE_SMM altogether?  That
+> might be an even better way to improve performance in your environment.
+>
 
-Fixes: e85da794f658 ("mISDN: switch from 'pci_' to 'dma_' API")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
- drivers/isdn/hardware/mISDN/hfcpci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Both options are disabled in guest.
+> Last question, do you happen to know why eliminating this code shaves 36us?  The
+> raw writes don't seem like they'd take that long.  Maybe the writes to function
+> pointers trigger stalls or mispredicts or something?  If you don't have an easy
+> answer, don't bother investigating, I'm just curious.
 
-diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
-index bd087cca1c1d..af17459c1a5c 100644
---- a/drivers/isdn/hardware/mISDN/hfcpci.c
-+++ b/drivers/isdn/hardware/mISDN/hfcpci.c
-@@ -2005,7 +2005,11 @@ setup_hw(struct hfc_pci *hc)
- 	}
- 	/* Allocate memory for FIFOS */
- 	/* the memory needs to be on a 32k boundary within the first 4G */
--	dma_set_mask(&hc->pdev->dev, 0xFFFF8000);
-+	if (dma_set_mask(&hc->pdev->dev, 0xFFFF8000)) {
-+		printk(KERN_WARNING
-+		       "HFC-PCI: No usable DMA configuration!\n");
-+		return -EIO;
-+	}
- 	buffer = dma_alloc_coherent(&hc->pdev->dev, 0x8000, &hc->hw.dmahandle,
- 				    GFP_KERNEL);
- 	/* We silently assume the address is okay if nonzero */
--- 
-2.17.1
-
+I'm guessing it's because of the cache. At first, I wanted to replace
+it with memcpy, if the modified fields are continuous enough, I can
+use instructions such as erms/fsrm.

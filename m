@@ -2,148 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F389F4CC689
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2424CC66F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiCCTuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S233401AbiCCTtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiCCTuR (ORCPT
+        with ESMTP id S230395AbiCCTtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:50:17 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD56D1A41D4;
-        Thu,  3 Mar 2022 11:49:29 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id o23so5550939pgk.13;
-        Thu, 03 Mar 2022 11:49:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xmkJTY4UoVeWJUK/ZSD0iRFmOgOS8XNBDluJphWOGhI=;
-        b=Va808++pxqpNi95Q7zLOC4N2eUYH6cpb2Mk/xWme4nq2VFd0yfNgou7qpo9HGAIh1j
-         40lemyZ7v0VsivcdJQ6t1fZQ4t8ohTjwPYAcdzb3KK0cI8q9muDVK1lqV7GJPqypi5A6
-         QfuwluGKFpllbebaPvxtX3Xb8jmO0apK5I5SKYgQL4WjGCO7rCxqbYOn6peUcVrqqbgr
-         ADXw842UdMhGqvFaj1y2LA38RmiN+e0vHt5DSUcnbIa/6FVJyNfJ0V6vF85OgicVqZLp
-         beYKE7I2F9DT1+X2eZ5vRr9wyoIETXvAZKM98K0vr+Yz5X0goqvpJOBCppfn5+Jb1mxI
-         TaVA==
+        Thu, 3 Mar 2022 14:49:01 -0500
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3A5193F0;
+        Thu,  3 Mar 2022 11:48:12 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id d134-20020a4a528c000000b00319244f4b04so6981954oob.8;
+        Thu, 03 Mar 2022 11:48:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xmkJTY4UoVeWJUK/ZSD0iRFmOgOS8XNBDluJphWOGhI=;
-        b=lq0b8MTfYMEW0NgsW4llhZaxd/rr5FkbfQ1LCWRyhLTXqNqUqCHDeF+aEf/sPIi6fN
-         VAY6YLrT/IrFW8zaIt/s4Co+wvjVN/1cMm+7k4ymjDBt6Ea4i92N8Eto6m6ckeyE/Uko
-         OvJDnlwfm0gNlwjYaEaeMTl6LB4MmfVjVt4wOJFB7q3eW+VoMmE5iHawD03wTlZJaqUW
-         kYCTbMxny39wpuoEZHDvxRJYRNCOpfi1kshX2vqA0tsLbyO5eftvYdT8gLAqhLcEXDL4
-         kzU6JmZZzwg3gGfInkn0g1U5zsprMQRJW2pZKf1bsBB1bTxTzsYtoYT70ejalNW7vmCS
-         zBgA==
-X-Gm-Message-State: AOAM531eP0tYLkuoL60sOcNaXZz1HiE28RDI2xkXirPedOj/4PWkzDfW
-        w7bB9OjVCCCb7v0yiVg9GyY=
-X-Google-Smtp-Source: ABdhPJzzhu782jKEl9lNoZKQq0BWCXwyE1OsMvvHOFPI8fezzk2jK0tRGvsvCFtEMQq0CZ3xPMNfwg==
-X-Received: by 2002:a05:6a00:23c6:b0:4cf:1e1e:ff4f with SMTP id g6-20020a056a0023c600b004cf1e1eff4fmr39340020pfc.80.1646336969077;
-        Thu, 03 Mar 2022 11:49:29 -0800 (PST)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id y74-20020a62644d000000b004f129e94f40sm3295024pfb.131.2022.03.03.11.49.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9yFbGp0EZ8ry89Lh1bMjpmj2K73JEWfQSj/2tdftbTg=;
+        b=xat+9QLI4xvVwbOo7NW0sbGf7fBokAJR5RmpiG1x3Mgl4pfqUmkLibIFj62R9U/aVP
+         5WDp/HhiAL/11y5oGlmqh5aP0mYHinbN5sFcvpkCTOEEsKy2NyzIpA4VjG8+FUc1Snzq
+         EEJxumGVWb7zbEdvxPO48P+5wqNwIzlYK+7p5Q2JaqBMYW12oKpx1TJEU6Q2bZUG+wTk
+         tIxMBcDO34/p3deLm9jksQAqcvApLej4XfQDJZMD/MsFB3SW4RJts9LfO9tDUxp4/JPO
+         ed+5BBPOnY2wko5TCVdJI3RJ+FsTsm+URR7rzxkyQz/rcpLnCnkN6kCLdrhMcrOfHmWm
+         e6vA==
+X-Gm-Message-State: AOAM532CHWkv4tcJumPJ1yNu17PTQ/tsePTstOApoinKf+h1V035evlg
+        FNuyxjYu0H/XhVtgptRw7i/pn2BKNQ==
+X-Google-Smtp-Source: ABdhPJyTGsyf+8qFhYYvUNW2ISTyF/8adw+l7DqOzzvPLIU9gt+qyaJ1gyJmKaUVl9jH6aWYPV40sw==
+X-Received: by 2002:a05:6870:b427:b0:d3:5044:db1b with SMTP id x39-20020a056870b42700b000d35044db1bmr5123974oap.2.1646336892232;
+        Thu, 03 Mar 2022 11:48:12 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id w15-20020a9d70cf000000b005ad26785e7dsm1360906otj.57.2022.03.03.11.48.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:49:28 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 4/4] drm/msm/a6xx: Zap counters across context switch
-Date:   Thu,  3 Mar 2022 11:46:48 -0800
-Message-Id: <20220303194758.710358-5-robdclark@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220303194758.710358-1-robdclark@gmail.com>
-References: <20220303194758.710358-1-robdclark@gmail.com>
+        Thu, 03 Mar 2022 11:48:11 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        - <patches@opensource.cirrus.com>
+Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org
+Subject: [PATCH] dt-bindings: mfd: Fix pinctrl node name warnings
+Date:   Thu,  3 Mar 2022 13:47:37 -0600
+Message-Id: <20220303194737.2258809-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+The recent addition pinctrl.yaml in commit c09acbc499e8 ("dt-bindings:
+pinctrl: use pinctrl.yaml") resulted in some node name warnings:
 
-Any app controlled perfcntr collection (GL_AMD_performance_monitor, etc)
-does not require counters to maintain state across context switches.  So
-clear them if systemwide profiling is not active.
+Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: \
+ lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+Documentation/devicetree/bindings/mfd/cirrus,madera.example.dt.yaml: \
+ codec@1a: $nodename:0: 'codec@1a' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: \
+ pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fix the node names to the preferred 'pinctrl'. For cirrus,madera,
+nothing from pinctrl.yaml schema is used, so just drop the reference.
+
+Fixes: c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml")
+Cc: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 29 +++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ Documentation/devicetree/bindings/mfd/brcm,cru.yaml          | 4 ++--
+ Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml  | 2 +-
+ Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml | 3 ---
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 237c2e7a7baa..98b3282a117b 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -101,6 +101,7 @@ static void get_stats_counter(struct msm_ringbuffer *ring, u32 counter,
- static void a6xx_set_pagetable(struct a6xx_gpu *a6xx_gpu,
- 		struct msm_ringbuffer *ring, struct msm_file_private *ctx)
- {
-+	bool sysprof = refcount_read(&a6xx_gpu->base.base.sysprof_active) > 0;
- 	phys_addr_t ttbr;
- 	u32 asid;
- 	u64 memptr = rbmemptr(ring, ttbr0);
-@@ -111,6 +112,15 @@ static void a6xx_set_pagetable(struct a6xx_gpu *a6xx_gpu,
- 	if (msm_iommu_pagetable_params(ctx->aspace->mmu, &ttbr, &asid))
- 		return;
+diff --git a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
+index be4a2df71c25..b85819fbb07c 100644
+--- a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
++++ b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
+@@ -39,7 +39,7 @@ patternProperties:
+   '^phy@[a-f0-9]+$':
+     $ref: ../phy/bcm-ns-usb2-phy.yaml
  
-+	if (!sysprof) {
-+		/* Turn off protected mode to write to special registers */
-+		OUT_PKT7(ring, CP_SET_PROTECTED_MODE, 1);
-+		OUT_RING(ring, 0);
-+
-+		OUT_PKT4(ring, REG_A6XX_RBBM_PERFCTR_SRAM_INIT_CMD, 1);
-+		OUT_RING(ring, 1);
-+	}
-+
- 	/* Execute the table update */
- 	OUT_PKT7(ring, CP_SMMU_TABLE_UPDATE, 4);
- 	OUT_RING(ring, CP_SMMU_TABLE_UPDATE_0_TTBR0_LO(lower_32_bits(ttbr)));
-@@ -137,6 +147,25 @@ static void a6xx_set_pagetable(struct a6xx_gpu *a6xx_gpu,
+-  '^pin-controller@[a-f0-9]+$':
++  '^pinctrl@[a-f0-9]+$':
+     $ref: ../pinctrl/brcm,ns-pinmux.yaml
  
- 	OUT_PKT7(ring, CP_EVENT_WRITE, 1);
- 	OUT_RING(ring, 0x31);
-+
-+	if (!sysprof) {
-+		/*
-+		 * Wait for SRAM clear after the pgtable update, so the
-+		 * two can happen in parallel:
-+		 */
-+		OUT_PKT7(ring, CP_WAIT_REG_MEM, 6);
-+		OUT_RING(ring, CP_WAIT_REG_MEM_0_FUNCTION(WRITE_EQ));
-+		OUT_RING(ring, CP_WAIT_REG_MEM_1_POLL_ADDR_LO(
-+				REG_A6XX_RBBM_PERFCTR_SRAM_INIT_STATUS));
-+		OUT_RING(ring, CP_WAIT_REG_MEM_2_POLL_ADDR_HI(0));
-+		OUT_RING(ring, CP_WAIT_REG_MEM_3_REF(0x1));
-+		OUT_RING(ring, CP_WAIT_REG_MEM_4_MASK(0x1));
-+		OUT_RING(ring, CP_WAIT_REG_MEM_5_DELAY_LOOP_CYCLES(0));
-+
-+		/* Re-enable protected mode: */
-+		OUT_PKT7(ring, CP_SET_PROTECTED_MODE, 1);
-+		OUT_RING(ring, 1);
-+	}
- }
+   '^syscon@[a-f0-9]+$':
+@@ -94,7 +94,7 @@ examples:
+             reg = <0x180 0x4>;
+         };
  
- static void a6xx_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
+-        pin-controller@1c0 {
++        pinctrl@1c0 {
+             compatible = "brcm,bcm4708-pinmux";
+             reg = <0x1c0 0x24>;
+             reg-names = "cru_gpio_control";
+diff --git a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
+index c00ad3e21c21..975a46f3c46f 100644
+--- a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
++++ b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
+@@ -126,7 +126,7 @@ properties:
+       clock-frequency:
+         const: 12288000
+ 
+-  lochnagar-pinctrl:
++  pinctrl:
+     type: object
+     $ref: /schemas/pinctrl/cirrus,lochnagar.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+index c85f759ae5a3..8a90d8273767 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+@@ -107,9 +107,6 @@ properties:
+ 
+     additionalProperties: false
+ 
+-allOf:
+-  - $ref: "pinctrl.yaml#"
+-
+ required:
+   - pinctrl-0
+   - pinctrl-names
 -- 
-2.35.1
+2.32.0
 

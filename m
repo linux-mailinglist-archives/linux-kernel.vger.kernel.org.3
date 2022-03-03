@@ -2,139 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEECA4CB994
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711C54CB996
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiCCIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S229660AbiCCIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiCCIuz (ORCPT
+        with ESMTP id S230378AbiCCIui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:50:55 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAEF175866;
-        Thu,  3 Mar 2022 00:50:08 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A7171FF808;
-        Thu,  3 Mar 2022 08:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646297407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5UW3cjbm8xQStGhB2RvIfU4jnFusyu8R3w5M3pRZH24=;
-        b=dANPvPfz8FfZs3WYqIq9bl4LlaLJLTAlJ5KjEa5/oSz4t4sxrd/UksWc73/lSCGG+nrHCd
-        mQIxG3Ur43o8TMewlH30a6KsQHToz3ai9gTjVkLYOfs1J0ysL1HCB5xUmtUX3PGTynenxc
-        C9JR86pqix6ZdzHmr4NC1Xi/zegZdOfIZIewOvdoXVb8ro7spl0+Vg6PcWaqO+k2QU+Zyr
-        IZ/nAzMfgna+2fCIn63SCZP9bEOTTG/pLhMuc694mgQVT8ubQa8/cmDsgN7/OandstlQoA
-        RwRHGSWNGI6ycsn7veJsYuVOW0Xp94gZ89qONjeyTS3SL9/Y9UjVGSN76TCcQA==
-Date:   Thu, 3 Mar 2022 09:48:40 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <20220303094840.3b75c4c9@fixe.home>
-In-Reply-To: <Yhe/qhFNNiGVHSW1@sirena.org.uk>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-        <20220224154040.2633a4e4@fixe.home>
-        <2d3278ef-0126-7b93-319b-543b17bccdc2@redhat.com>
-        <20220224174205.43814f3f@fixe.home>
-        <Yhe/qhFNNiGVHSW1@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Thu, 3 Mar 2022 03:50:38 -0500
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914F4175871;
+        Thu,  3 Mar 2022 00:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=JraoEzfEu6BVdZPY22b9hr2HRvi9Lg4wAD5QnaTlQvQ=; b=Uzu5ikcdaD2LeKuz7YlSfqL2Rd
+        zHmlzoo/7Rp94sqmn55Y/prB0TYZe/9B8ocnsqcxOeflHQ8BQFcwYU9Gc8A17OfgljU5DWsREfzox
+        pGqr0j3osNbyhYjud8eLurnfnoAsSq8AuhFCMVsARC5/MCGJbMIFgkKVD3/YvaV0X7cukuL6khjr4
+        dCSs9kLBkqv3FYqdxHTWdgWYUzFyWA5ucAcuVCJeYbJEdGipec3/oEUetYU1CVBAaG6F9ZOxATauF
+        2yq9GIlMYgqieGSRGmOpttxgLxwTtZtU9DDm/9EPTz+H1jIU9cGhwPRK1+AvYnxH50KelgKX3eGWo
+        ofb6PtZA==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1nPh9U-00287t-A6; Thu, 03 Mar 2022 08:49:36 +0000
+Date:   Thu, 3 Mar 2022 08:49:36 +0000
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/15] Multiple addition and improvement to ipq8064 gcc
+Message-ID: <YiCBIIA1FU1DbOso@earth.li>
+References: <20220226135235.10051-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226135235.10051-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 24 Feb 2022 17:26:02 +0000,
-Mark Brown <broonie@kernel.org> a =C3=A9crit :
+On Sat, Feb 26, 2022 at 02:52:20PM +0100, Ansuel Smith wrote:
+> This is an attempt in making the ipq8064 SoC actually usable. Currently
+> many feature are missing for this SoC and devs user off-the-tree patches
+> to make it work (example patch for missing clock, patch for cpufreq
+> driver, patch to add missing node in the dts)
+> 
+> I notice there was some work in modernizing the gcc driver for other
+> qcom target but this wasn't done for ipq806x. This does exactly this, we
+> drop any parent_names stuff and we switch to the parent_data way. We
+> also drop the pxo and cxo source clk from gcc driver and we refer to the
+> dts for it.
+> 
+> This also add all the missing feature for the nss cores and the
+> cryptoengine in them. It does also introduce the required flags to make
+> the RPM actually work and NOT reject any command. There was an attempt
+> in declaring these clock as core clock in the dts but this ends up in no
+> serial as the kernel makes these clock not accessible. We just want to
+> make the kernel NOT disable them if unused nothing more.
+> 
+> At the end we update the ipq8064 dtsi to add the pxo and cxo tag and
+> declare them in gcc and also fix a problem with tsens probe.
 
-> On Thu, Feb 24, 2022 at 05:42:05PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Hans de Goede <hdegoede@redhat.com> a =C3=A9crit : =20
->=20
-> > > As Mark already mentioned the regulator subsystem has shown to
-> > > be a bit problematic here, but you don't seem to need that? =20
->=20
-> > Indeed, I don't need this subsystem. However, I'm still not clear why
-> > this subsystem in particular is problematic. Just so that I can
-> > recognize the other subsystems with the same pattern, could you explain
-> > me why it is problematic ?  =20
->=20
-> ACPI has a strong concept of how power supply (and general critical
-> resources) for devices should be described by firmware which is very
-> different to that which DT as it is used in Linux has, confusing that
-> model would make it much harder for generic OSs to work with generic
-> ACPI systems, and makes it much easier to create unfortunate interactions
-> between bits of software expecting ACPI models and bits of software
-> expecting DT models for dealing with a device.  Potentially we could
-> even run into issues with new versions of Linux if there's timing or
-> other changes.  If Linux starts parsing the core DT bindings for
-> regulators on ACPI systems then that makes it more likely that system
-> integrators who are primarily interested in Linux will produce firmwares
-> that run into these issues, perhaps unintentionally through a "this just
-> happens to work" process.
+FWIW, series tested on my RB3011. No regressions, tsens driver now
+correctly loads.
 
-Ok that's way more clear.
+Tested-by: Jonathan McDowell <noodles@earth.li>
 
->=20
-> As a result of this we very much do not want to have the regulator code
-> parsing DT bindings using the fwnode APIs since that makes it much
-> easier for us to end up with a situation where we are interpreting _DSD
-> versions of regulator bindings and ending up with people making systems
-> that rely on that.  Instead the regulator API is intentional about which
-> platform description interfaces it is using.  We could potentially have
-> something that is specific to swnode and won't work with general fwnode
-> but it's hard to see any advantages for this over the board file based
-> mechanism we have already, swnode offers less error detection (typoing
-> field names is harder to spot) and the data marshalling takes more code.
+> v6:
+> - Add more info about the changed define
+> - Fixed wrong definition for pxo/cxo parent map
+> v5:
+> - Drop patch removing fixed clk
+> - Use name in parent_data to keep compatibility with old dtb
+> - Fix error in the documentation commits
+> - Keep old copyright for gcc documentation
+> - Fix an error with the rcg floor ops
+> - Set nss clk based on the device compatible
+> v4:
+> - Drop drivers in all the patches.
+> - Introduce floor ops for sdc
+> - gcc.yaml to gcc-other.yaml
+> - gcc-common.yaml to gcc.yaml
+> v3:
+> - Rework Documentation with Rob suggestions
+> v2:
+> - Fix error from Rob bot.
+> - Add additional commits to make qcom,gcc.yaml a template
+> - Squash parent_hws patch with the modernize patch
+> - Create gcc_pxo instead of using long define.
+> 
+> Ansuel Smith (15):
+>   dt-bindings: clock: split qcom,gcc.yaml to common and specific schema
+>   dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation
+>   dt-bindings: clock: document qcom,gcc-ipq8064 binding
+>   clk: qcom: gcc-ipq806x: fix wrong naming for gcc_pxo_pll8_pll0
+>   clk: qcom: gcc-ipq806x: convert parent_names to parent_data
+>   clk: qcom: gcc-ipq806x: use ARRAY_SIZE for num_parents
+>   clk: qcom: gcc-ipq806x: add additional freq nss cores
+>   clk: qcom: gcc-ipq806x: add unusued flag for critical clock
+>   clk: qcom: clk-rcg: add clk_rcg_floor_ops ops
+>   clk: qcom: gcc-ipq806x: add additional freq for sdc table
+>   dt-bindings: clock: add ipq8064 ce5 clk define
+>   clk: qcom: gcc-ipq806x: add CryptoEngine clocks
+>   dt-bindings: reset: add ipq8064 ce5 resets
+>   clk: qcom: gcc-ipq806x: add CryptoEngine resets
+>   ARM: dts: qcom: add syscon and cxo/pxo clock to gcc node for ipq8064
+> 
+>  .../bindings/clock/qcom,gcc-apq8064.yaml      |  29 +-
+>  .../bindings/clock/qcom,gcc-ipq8064.yaml      |  76 ++
+>  .../bindings/clock/qcom,gcc-other.yaml        |  70 ++
+>  .../devicetree/bindings/clock/qcom,gcc.yaml   |  59 +-
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi           |   8 +-
+>  drivers/clk/qcom/clk-rcg.c                    |  24 +
+>  drivers/clk/qcom/clk-rcg.h                    |   1 +
+>  drivers/clk/qcom/gcc-ipq806x.c                | 649 +++++++++++++-----
+>  include/dt-bindings/clock/qcom,gcc-ipq806x.h  |   5 +-
+>  include/dt-bindings/reset/qcom,gcc-ipq806x.h  |   5 +
+>  10 files changed, 685 insertions(+), 241 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+> 
+> -- 
+> 2.34.1
 
-Instead of making it specific for swnode, could we make it instead non
-working for acpi nodes ? Thus, the parsing would work only for swnode
-and device_node, not allowing to use the fwnode support with acpi for
-such subsystems (not talking about regulators here).
+J.
 
-If switching to board file based mechanism, this means that all drivers
-that are used by the PCIe card will have to be modified to support this
-mechanism.
-
->=20
-> fwnode is great for things like properties for leaf devices since those
-> are basically a free for all on ACPI systems, it allows us to quickly
-> and simply apply the work done defining bindings for DT to ACPI systems
-> in a way that's compatible with how APCI wants to work.  It's also good
-> for cross device bindings that are considered out of scope for ACPI,
-> though a bit of caution is needed determining when that's the case.
-
-Ok got it, thanks for the in-depth explanations.
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+-- 
+Web [            Even the Evening Herald slags me off.             ]
+site: https:// [                                          ]      Made by
+www.earth.li/~noodles/  [                      ]         HuggieTag 0.0.24

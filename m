@@ -2,202 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BA84CC739
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DDC4CC71D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbiCCUn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S235964AbiCCUiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiCCUnx (ORCPT
+        with ESMTP id S230186AbiCCUiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:43:53 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5027635273
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:43:07 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso5495118pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B07u8PwztIDT/t6XfdN5+sheHaP7KOymmsGZ6gm7cvQ=;
-        b=g35UOZ2H2BUbeBCNpKfxn2d++rHQqBdGKgSqyF9IlKxDEMjB8jqH4437yhcwo3v6DK
-         /ixM6hpQFMCxOspVS9T1nLyhrNFe64Nse3uB/kd9lmaMpglfhOZjzy6D2gpTfGw7IaRd
-         IR2HOKsex0l4U8co5RVxieOxvigwyso/QO0XcaAv0I+jKsLifYi6NH/jsnuah2oA2qE9
-         7RAt+Yv6W5MfXUL015UENVFuDxJzgGnbp613COC+mdTV0QghAy55Z1LNCsO68+YtYskv
-         WkY6tpu4MsMRSaiHjqzeri5UPzRrjRmBhiEdvn5L4Oj/BBNIbdSl/XHW2ug+rXQWoUi9
-         w5OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=B07u8PwztIDT/t6XfdN5+sheHaP7KOymmsGZ6gm7cvQ=;
-        b=bjGPiQuHH+bU5zNHAJkUQpOqyciiIrScRv7gH9bfhXZd8T4AZYWHVDidIOX8TWnApK
-         OIi4gar4IhiygsvmGc8o9wfTIIXqzgUw+EbfYfK4A2rRSG86TyyMD2t0pf1eDdZrChMf
-         OI0r+PU9KsExDfXCCLnWFk2Y1t29TojdsPuBTqflPQnqRx9YxmVFMzRC+rU4i2yd/FLJ
-         F/2OnnNFQrda6KQcxNKV5t0qiYYawPErNslXeUZdYTVmOYXueNd9aHj3EF2IfUWyhIiW
-         S5Y7e0q9cOu+HaSR61KAAOmlr3P7x0GuEw2HBpZaiW7dnV7h6KpT4pw+LQ9KdudJ3iNd
-         TXhg==
-X-Gm-Message-State: AOAM532ixIbCsG5s3T27IX3XXW0NmAR/EfS6DZzczBCRn3TmCuF/NoMU
-        RhsqM9iiqBNJuWQ0oFuI1AvUog==
-X-Google-Smtp-Source: ABdhPJzqWrdGV/V4cZ9E62uIW3uerWRtG11PeC/+Dyn1oLPg/pGjvxJCA+OYLmguFq+xUhW6gSCO9g==
-X-Received: by 2002:a17:902:dacd:b0:150:4f5:1158 with SMTP id q13-20020a170902dacd00b0015004f51158mr37292546plx.67.1646340186649;
-        Thu, 03 Mar 2022 12:43:06 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id k190-20020a633dc7000000b0037c921abb5bsm268485pga.23.2022.03.03.12.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 12:43:06 -0800 (PST)
-Date:   Thu, 03 Mar 2022 12:43:06 -0800 (PST)
-X-Google-Original-Date: Thu, 03 Mar 2022 12:39:36 PST (-0800)
-Subject:     Re: [PATCH v5 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-In-Reply-To: <CANXhq0p-Jv2HMNu9NaG=03yudanoqV6MH=LhiCspHbj5nTn+GQ@mail.gmail.com>
-CC:     vkoul@kernel.org, robh+dt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-956767d2-f9fc-4d96-8a05-f7a618e3a16b@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 3 Mar 2022 15:38:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C41D32C;
+        Thu,  3 Mar 2022 12:37:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6CA5B824B3;
+        Thu,  3 Mar 2022 20:37:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB6DC340EF;
+        Thu,  3 Mar 2022 20:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646339831;
+        bh=OXGr1PhWd90UciyXoThMqMTWRA8qGdjyNBBLaOztyWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X+KjScztBhjYUP8tJdR/XaLnR53G+5qb3QCupyPWaIdUxaHN+ARp5NZXvwhmUeXF1
+         caA0cXxRDYeCEs9kFx7eMBcZJUStWa2CkvacrvJGG1jGYCqhSxii4zPdxZnUZYdD38
+         PwDrY5sqlJNDieJtf7Oddv3DFhjIlYPEGGqyBNhwqY9ESjiqyxeGW3N0NE0xpQ/pht
+         RA9kyBDi4MJkNrQPHuNQBWwO5QxU259tlde65nIodNx6FHnKZ/1lj14a0Otn4DQonf
+         zjxhHxSU/WGYWCxBv2QYi8ZxbmmPQJbi3JMmlbSp0MJx3WM2KxzFZFr5YDIIKkHUH/
+         /t+H2u+oVsKdQ==
+Date:   Thu, 3 Mar 2022 14:45:26 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] drm/amd/display: Fix Wstringop-overflow warnings
+ in dc_link_dp.c
+Message-ID: <20220303204526.GA1733280@embeddedor>
+References: <20220303172503.GA1731116@embeddedor>
+ <202203030937.5BFE3EF@keescook>
+ <20220303181957.GA1731711@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220303181957.GA1731711@embeddedor>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 22:52:14 PST (-0800), zong.li@sifive.com wrote:
-> On Tue, Feb 15, 2022 at 8:06 PM Vinod Koul <vkoul@kernel.org> wrote:
->>
->> On 07-02-22, 14:30, Zong Li wrote:
->> > It currently assumes that there are always four channels, it would
->> > cause the error if there is actually less than four channels. Change
->> > that by getting number of channel from device tree.
->> >
->> > For backwards-compatibility, it uses the default value (i.e. 4) when
->> > there is no 'dma-channels' information in dts.
->> >
->> > Signed-off-by: Zong Li <zong.li@sifive.com>
->> > ---
->> >  drivers/dma/sf-pdma/sf-pdma.c | 21 ++++++++++++++-------
->> >  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
->> >  2 files changed, 16 insertions(+), 13 deletions(-)
->> >
->> > diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
->> > index f12606aeff87..2ae10b61dfa1 100644
->> > --- a/drivers/dma/sf-pdma/sf-pdma.c
->> > +++ b/drivers/dma/sf-pdma/sf-pdma.c
->> > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
->> >  static int sf_pdma_probe(struct platform_device *pdev)
->> >  {
->> >       struct sf_pdma *pdma;
->> > -     struct sf_pdma_chan *chan;
->> >       struct resource *res;
->> > -     int len, chans;
->> >       int ret;
->> >       const enum dma_slave_buswidth widths =
->> >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
->> > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
->> >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
->> >               DMA_SLAVE_BUSWIDTH_64_BYTES;
->> >
->> > -     chans = PDMA_NR_CH;
->> > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
->> > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
->> > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
->> >       if (!pdma)
->> >               return -ENOMEM;
->> >
->> > -     pdma->n_chans = chans;
->> > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
->> > +                                &pdma->n_chans);
->> > +     if (ret) {
->> > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
->>
->> This is useful for only debug i think, so dev_dbg perhaps
->>
->
-> Thanks for your suggestion, let me change it in the next version.
+On Thu, Mar 03, 2022 at 12:19:57PM -0600, Gustavo A. R. Silva wrote:
+> On Thu, Mar 03, 2022 at 09:43:28AM -0800, Kees Cook wrote:
+> > On Thu, Mar 03, 2022 at 11:25:03AM -0600, Gustavo A. R. Silva wrote:
+> > > Fix the following Wstringop-overflow warnings when building with GCC-11:
+> > > 
+> > > drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: ‘dp_decide_lane_settings’ accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+> > 
+> > Can you "show your work" a little more here? I don't actually see the
+> > what is getting fixed:
+> > 
+> > enum dc_lane_count {
+> > 	...
+> >         LANE_COUNT_FOUR = 4,
+> > 	...
+> >         LANE_COUNT_DP_MAX = LANE_COUNT_FOUR
+> > };
+> > 
+> > struct link_training_settings {
+> > 	...
+> >         union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX];
+> > };
+> > 
+> > void dp_hw_to_dpcd_lane_settings(
+> > 		...
+> > 		union dpcd_training_lane dpcd_lane_settings[LANE_COUNT_DP_MAX])
+> > {
+> > 	...
+> > }
+> > 
+> > static enum link_training_result dpia_training_cr_transparent(
+> > 		...
+> >                 struct link_training_settings *lt_settings)
+> > {
+> > 	...
+> >                 dp_decide_lane_settings(lt_settings, dpcd_lane_adjust,
+> >                                 lt_settings->hw_lane_settings, lt_settings->dpcd_lane_settings);
+> > 	...
+> > }
+> > 
+> > Everything looks to be the correct size?
+> 
+> Yep; this fix is similar to the one for intel_pm.c in this
+> 
+> 	commit e7c6e405e171fb33990a12ecfd14e6500d9e5cf2
+> 
+> where the array size of 8 seems to be fine for all the
+> struct members related (pri_latency, spr_latency, cur_latency
+> and skl_latency):
+> 
+> drivers/gpu/drm/i915/i915_drv.h:465:struct drm_i915_private {
+> ...
+> 
+> drivers/gpu/drm/i915/i915_drv.h-739-    struct {
+> 
+> ...
+> drivers/gpu/drm/i915/i915_drv.h-745-            /* primary */
+> drivers/gpu/drm/i915/i915_drv.h-746-            u16 pri_latency[5];
+> drivers/gpu/drm/i915/i915_drv.h-747-            /* sprite */
+> drivers/gpu/drm/i915/i915_drv.h-748-            u16 spr_latency[5];
+> drivers/gpu/drm/i915/i915_drv.h-749-            /* cursor */
+> drivers/gpu/drm/i915/i915_drv.h-750-            u16 cur_latency[5];
+> drivers/gpu/drm/i915/i915_drv.h-751-            /*
+> drivers/gpu/drm/i915/i915_drv.h-752-             * Raw watermark memory latency values
+> drivers/gpu/drm/i915/i915_drv.h-753-             * for SKL for all 8 levels
+> drivers/gpu/drm/i915/i915_drv.h-754-             * in 1us units.
+> drivers/gpu/drm/i915/i915_drv.h-755-             */
+> drivers/gpu/drm/i915/i915_drv.h-756-            u16 skl_latency[8];
+> 
+> ...
+> drivers/gpu/drm/i915/i915_drv.h-773-    } wm;
+> ...
+> }
 
-Not sure if I'm missing something, but I don't see a v6.  I'm going to 
-assume that one will be sent, but the suggested changes look minor 
-enough so 
+and in this case the ilk_wm_max_level() returns the right maximum size for the
+corresponding 'struct wm' member:
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+drivers/gpu/drm/i915/intel_pm.c:2993:int ilk_wm_max_level(const struct drm_i915_private *dev_priv)
+drivers/gpu/drm/i915/intel_pm.c-2994-{
+drivers/gpu/drm/i915/intel_pm.c-2995-   /* how many WM levels are we expecting */
+drivers/gpu/drm/i915/intel_pm.c-2996-   if (HAS_HW_SAGV_WM(dev_priv))
+drivers/gpu/drm/i915/intel_pm.c-2997-           return 5;
+drivers/gpu/drm/i915/intel_pm.c-2998-   else if (DISPLAY_VER(dev_priv) >= 9)
+drivers/gpu/drm/i915/intel_pm.c-2999-           return 7;
+drivers/gpu/drm/i915/intel_pm.c-3000-   else if (IS_HASWELL(dev_priv) || IS_BROADWELL(dev_priv))
+drivers/gpu/drm/i915/intel_pm.c-3001-           return 4;
+drivers/gpu/drm/i915/intel_pm.c-3002-   else if (DISPLAY_VER(dev_priv) >= 6)
+drivers/gpu/drm/i915/intel_pm.c-3003-           return 3;
+drivers/gpu/drm/i915/intel_pm.c-3004-   else
+drivers/gpu/drm/i915/intel_pm.c-3005-           return 2;
+drivers/gpu/drm/i915/intel_pm.c-3006-}
 
-LMK if you guys were expecting this to go in via the RISC-V tree, 
-otherwise I'll assume this aimed at the dmaengine tree.  Probably best to keep
-all three together, so feel free to take the DTS updates as well -- having some
-shared tag never hurts, but the DTs don't move that much so any conflicts
-should be straight-forward to just fix at merge time.
+drivers/gpu/drm/i915/intel_pm.c:3009:static void intel_print_wm_latency(struct drm_i915_private *dev_priv,
+drivers/gpu/drm/i915/intel_pm.c-3010-                              const char *name,
+drivers/gpu/drm/i915/intel_pm.c-3011-                              const u16 wm[])
+drivers/gpu/drm/i915/intel_pm.c-3012-{
+drivers/gpu/drm/i915/intel_pm.c-3013-   int level, max_level = ilk_wm_max_level(dev_priv);
+drivers/gpu/drm/i915/intel_pm.c-3014-
+drivers/gpu/drm/i915/intel_pm.c-3015-   for (level = 0; level <= max_level; level++) {
+drivers/gpu/drm/i915/intel_pm.c-3016-           unsigned int latency = wm[level];
+drivers/gpu/drm/i915/intel_pm.c-3017-
+...
+}
 
-Thanks!
+still GCC warns about this with Wstringop-overread, as it is explained
+in commit e7c6e405e171.
 
->> > +             pdma->n_chans = PDMA_MAX_NR_CH;
->> > +     }
->> > +
->> > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
->> > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
->> > +             return -EINVAL;
->> > +     }
->> >
->> >       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> >       pdma->membase = devm_ioremap_resource(&pdev->dev, res);
->> > @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
->> >       struct sf_pdma_chan *ch;
->> >       int i;
->> >
->> > -     for (i = 0; i < PDMA_NR_CH; i++) {
->> > +     for (i = 0; i < pdma->n_chans; i++) {
->> >               ch = &pdma->chans[i];
->> >
->> >               devm_free_irq(&pdev->dev, ch->txirq, ch);
->> > @@ -574,6 +580,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
->> >
->> >  static const struct of_device_id sf_pdma_dt_ids[] = {
->> >       { .compatible = "sifive,fu540-c000-pdma" },
->> > +     { .compatible = "sifive,pdma0" },
->> >       {},
->> >  };
->> >  MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
->> > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
->> > index 0c20167b097d..8127d792f639 100644
->> > --- a/drivers/dma/sf-pdma/sf-pdma.h
->> > +++ b/drivers/dma/sf-pdma/sf-pdma.h
->> > @@ -22,11 +22,7 @@
->> >  #include "../dmaengine.h"
->> >  #include "../virt-dma.h"
->> >
->> > -#define PDMA_NR_CH                                   4
->> > -
->> > -#if (PDMA_NR_CH != 4)
->> > -#error "Please define PDMA_NR_CH to 4"
->> > -#endif
->> > +#define PDMA_MAX_NR_CH                                       4
->> >
->> >  #define PDMA_BASE_ADDR                                       0x3000000
->> >  #define PDMA_CHAN_OFFSET                             0x1000
->> > @@ -118,7 +114,7 @@ struct sf_pdma {
->> >       void __iomem            *membase;
->> >       void __iomem            *mappedbase;
->> >       u32                     n_chans;
->> > -     struct sf_pdma_chan     chans[PDMA_NR_CH];
->> > +     struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
->>
->> why waste memory allocating max, we know number of channels in probe,
->> why not allocate runtime?
->>
->
-> I kept it there because I'd like to do minimum change in this patch
-> set. You're right, let me change it in the next version.
->
->> --
->> ~Vinod
+--
+Gustavo
+
+> 
+> however GCC warns about accessing bytes beyond the limits, and turning the
+> argument declarations into pointers (removing the over-specified array
+> size from the argument declaration) silence the warnings.
+> 
+> --
+> Gustavo

@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E50F4CB807
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEE44CB80A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiCCHo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S230318AbiCCHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHo2 (ORCPT
+        with ESMTP id S229588AbiCCHoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:44:28 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936B015C9ED;
-        Wed,  2 Mar 2022 23:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646293423; x=1677829423;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uFbDZllnjgFcPHD9kmqzGdMepkMXyq0m/mHoU/oLtz0=;
-  b=M+p7vCVkJ+MJx45rqoNhHJJK8DV5Xh11er0XPuG/L4Z54rawI/IMDBfM
-   3ZTGGeI+8CHcRwthPig3q1bimjR8YO9R113Lc1AZMFhlQbF7mm3yKga0F
-   mK8XpOMGoC09GtX9CQ6ir/+rc5Qm/APjSMVCgnu6TSipnN6VAXizAbEWm
-   Ay9ot2+DTaCVVc7oHRmMUw+APi4O8RdqoOEBfasXLKtkqhs6WeWmGksdc
-   PEpGyt2hpeZBf49zFCITIcEJBLnVPA+f5J97WXNtkVT3x/dIyZPU4oPXF
-   g42z9HzIQAChaAveAbgDmdnULOl8sk9ZGBzb9tqORmT0BIYdBzCC/9Nlp
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="340035954"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="340035954"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:43:43 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="779158794"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:43:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:43:38 +0200
-Date:   Thu, 3 Mar 2022 09:43:38 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH 2/5] drivers/thunderbolt: don't resume switches without
- uid set
-Message-ID: <YiBxqkG9iB9x8SMW@lahna>
-References: <20220302220709.3138846-1-mario.limonciello@amd.com>
- <20220302220709.3138846-2-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302220709.3138846-2-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Thu, 3 Mar 2022 02:44:37 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A6F1637FF;
+        Wed,  2 Mar 2022 23:43:51 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0V66qjBS_1646293420;
+Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V66qjBS_1646293420)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 15:43:46 +0800
+From:   Dan Li <ashimida@linux.alibaba.com>
+To:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        ashimida@linux.alibaba.com, gregkh@linuxfoundation.org,
+        linux@roeck-us.net, keescook@chromium.org,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Date:   Wed,  2 Mar 2022 23:43:39 -0800
+Message-Id: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,51 +48,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Add tests for SCS (Shadow Call Stack) based
+backward CFI (as implemented by Clang and GCC).
 
-On Wed, Mar 02, 2022 at 04:07:06PM -0600, Mario Limonciello wrote:
-> Switches might not have a uid set if the DROM read failed during
+Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+---
+ drivers/misc/lkdtm/Makefile             |  1 +
+ drivers/misc/lkdtm/core.c               |  2 +
+ drivers/misc/lkdtm/lkdtm.h              |  4 ++
+ drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
+ tools/testing/selftests/lkdtm/tests.txt |  2 +
+ 5 files changed, 76 insertions(+)
+ create mode 100644 drivers/misc/lkdtm/scs.c
 
-That's "Routers" and "UID" :)
+diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
+index 2e0aa74ac185..e2fb17868af2 100644
+--- a/drivers/misc/lkdtm/Makefile
++++ b/drivers/misc/lkdtm/Makefile
+@@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
+ lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
+ lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
+ lkdtm-$(CONFIG_LKDTM)		+= cfi.o
++lkdtm-$(CONFIG_LKDTM)		+= scs.o
+ lkdtm-$(CONFIG_LKDTM)		+= fortify.o
+ lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
+ 
+diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+index f69b964b9952..d0ce0bec117c 100644
+--- a/drivers/misc/lkdtm/core.c
++++ b/drivers/misc/lkdtm/core.c
+@@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
+ 	CRASHTYPE(USERCOPY_KERNEL),
+ 	CRASHTYPE(STACKLEAK_ERASING),
+ 	CRASHTYPE(CFI_FORWARD_PROTO),
++	CRASHTYPE(CFI_BACKWARD_SHADOW),
++	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
+ 	CRASHTYPE(FORTIFIED_OBJECT),
+ 	CRASHTYPE(FORTIFIED_SUBOBJECT),
+ 	CRASHTYPE(FORTIFIED_STRSCPY),
+diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+index d6137c70ebbe..a23d32dfc10b 100644
+--- a/drivers/misc/lkdtm/lkdtm.h
++++ b/drivers/misc/lkdtm/lkdtm.h
+@@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
+ /* cfi.c */
+ void lkdtm_CFI_FORWARD_PROTO(void);
+ 
++/* scs.c */
++void lkdtm_CFI_BACKWARD_SHADOW(void);
++void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
++
+ /* fortify.c */
+ void lkdtm_FORTIFIED_OBJECT(void);
+ void lkdtm_FORTIFIED_SUBOBJECT(void);
+diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
+new file mode 100644
+index 000000000000..5922a55a8844
+--- /dev/null
++++ b/drivers/misc/lkdtm/scs.c
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This is for all the tests relating directly to Shadow Call Stack.
++ */
++#include "lkdtm.h"
++
++#ifdef CONFIG_ARM64
++/* Function clears its return address. */
++static noinline void lkdtm_scs_clear_lr(void)
++{
++	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
++
++	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
++}
++
++/* Function with __noscs attribute clears its return address. */
++static noinline void __noscs lkdtm_noscs_clear_lr(void)
++{
++	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
++
++	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
++}
++#endif
++
++/*
++ * This tries to call a function protected by Shadow Call Stack,
++ * which corrupts its own return address during execution.
++ * Due to the protection, the corruption will not take effect
++ * when the function returns.
++ */
++void lkdtm_CFI_BACKWARD_SHADOW(void)
++{
++#ifdef CONFIG_ARM64
++	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
++		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
++		return;
++	}
++
++	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
++	lkdtm_scs_clear_lr();
++
++	pr_err("ok: scs takes effect.\n");
++#else
++	pr_err("XFAIL: this test is arm64-only\n");
++#endif
++}
++
++/*
++ * This tries to call a function not protected by Shadow Call Stack,
++ * which corrupts its own return address during execution.
++ */
++void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
++{
++#ifdef CONFIG_ARM64
++	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
++		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
++		return;
++	}
++
++	pr_info("Trying to corrupt lr in a function with attribute __noscs ...\n");
++	lkdtm_noscs_clear_lr();
++
++	pr_err("FAIL: __noscs attribute does not take effect!\n");
++#else
++	pr_err("XFAIL: this test is arm64-only\n");
++#endif
++}
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 6b36b7f5dcf9..c849765c8dcc 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -73,6 +73,8 @@ USERCOPY_STACK_BEYOND
+ USERCOPY_KERNEL
+ STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+ CFI_FORWARD_PROTO
++CFI_BACKWARD_SHADOW ok: scs takes effect
++CFI_BACKWARD_SHADOW_WITH_NOSCS
+ FORTIFIED_STRSCPY
+ FORTIFIED_OBJECT
+ FORTIFIED_SUBOBJECT
+-- 
+2.17.1
 
-Also $subject should have prefix "thunderbolt: " not
-"drivers/thunderbolt". Please capitalize the summary too:
-
-  thunderbolt: Do not resume routers if UID is not set
-
-The patch itself looks good to me.
-
-> initialization previously.
-> 
-> Normally upon resume the uid is re-read to confirm it's the same
-> device connected.
-> * If the DROM read failed during init but then succeeded during
->   resume it could either be a new device or faulty device
-> * If the DROM read failed during init and also failed during resume
->   it might be a different device plugged in all together.
-> 
-> Detect this situation and prevent re-using the same configuration in
-> these cirucmstances.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/thunderbolt/switch.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index b5fb3e76ed09..294518af4ee4 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -2980,6 +2980,10 @@ int tb_switch_resume(struct tb_switch *sw)
->  			return err;
->  		}
->  
-> +		/* We don't have any way to confirm this was the same device */
-> +		if (!sw->uid)
-> +			return -ENODEV;
-> +
->  		if (tb_switch_is_usb4(sw))
->  			err = usb4_switch_read_uid(sw, &uid);
->  		else
-> -- 
-> 2.34.1

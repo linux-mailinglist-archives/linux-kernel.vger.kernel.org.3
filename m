@@ -2,90 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4F44CC555
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C964A4CC558
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiCCSkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S235779AbiCCSlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiCCSkL (ORCPT
+        with ESMTP id S235753AbiCCSlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:40:11 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EC631500;
-        Thu,  3 Mar 2022 10:39:25 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id DB6361F45EF7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646332764;
-        bh=fqL4sRiIZuSw4D7lvMNNLB/CnfsldiP6MMuPIpLaqTY=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=mzY1bNcNUw40RKsLg4UG8YXhJNN8dB3x5zuv2XO8p4fy6MqbgjuWMG/qZxPIgqM0+
-         6lMfCTL6UWRhwEMhpI+B7PObV7DsUlyOR4rPnXoOa3vqOxCaJwSa1IJjoaBPQSj7Td
-         ST5WHcS820F9XWEhMsEVw2oWAyWIq517fEJeM9/PWmptNfyWu8kTr08mUKpBZFjYCH
-         /1bCnuat6ZY3xGa7emC82dsVqe+22jaZnAczwAlVnttkRc6sX6lX/UyLOBUUXcdEt/
-         zE5wztNuR9OToiuR19n0L4I52QdnatmaMZSfcDGKNoGnHomdpvLTOZqyDrz4N0fp++
-         1BV04XeTUkf2A==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        kernelci@groups.io, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
-Organization: Collabora
-References: <20220224212335.3045905-1-usama.anjum@collabora.com>
-        <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
-        <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
-Date:   Thu, 03 Mar 2022 13:39:20 -0500
-In-Reply-To: <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org> (Shuah
-        Khan's message of "Thu, 3 Mar 2022 11:19:35 -0700")
-Message-ID: <87o82mkhif.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 3 Mar 2022 13:41:00 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECFE32996
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:40:12 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id v28so7953005ljv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y9eIeQ0ho5+PgyAKnaaB11UpUGBa3mppG5jHpvKWnBA=;
+        b=BjH5X6Yj0lRLeYOc8+oSpAblIl1dkXNqVGcH9rXpzrumLG854C8lBpc1Hf32dy9X7S
+         qN144M6BlKdb/TeKDx4m4KlRfbXCKSuIqZSqDAKIaMsp/mNK0QGzcF0nI54JGHx/GDIf
+         JiaQLSrtU95mf2sbhwjFSoKjW96x+Y/thc44fNJ1JCLIcNzbIhDJPp339LrPgRBP548x
+         Lqw1WlROjRYD6A8BHvM+qqmOmYuhm94stV8lJbFSYie+bs4si8ZjxZPjzxUSVl2KkMlH
+         E45QFbuyDCz8Jrn4GPhNWcrNdFjXLzSLHep6Zk6vW/eISe6AvtEYi0RsmuJydwV0rYk7
+         zKbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y9eIeQ0ho5+PgyAKnaaB11UpUGBa3mppG5jHpvKWnBA=;
+        b=XCH9bHmRlnhnEH5whgHhFso8Jo0dhHXxEdDTPwUTPkyar7V/Iqr9lEfrDGaX/7XmSx
+         GOVwoVkqcXsS2emVsf03hpayv3SKZVxDGaSiAHYi6r5eVPSca/hUDoyQHh8SMVIrRIEO
+         k3EIFOIVVwh8ny9k1gXt8TQHrS6DwkVjc2dyPT7/ti7E2H5g4pDsyxtTK2RGpa0SEQGV
+         Z4zUqRf/afOcJPGCBsXL2UETcS9wphuG56lRbhkMKP/nwSOO+VIdDDZioNw9jZIrAebZ
+         1dW/bIjI2BmrbCgfI1qZVpRGcI7LNbSwgvtgRBF23lWbMQqyq4iz/ELu+sljG3aIS+XR
+         pe1w==
+X-Gm-Message-State: AOAM533/gr/UaKRhxlSu+XEpVkU37pw+ATVQIxeeldsOfRfCGDWSZyRU
+        Sh9I5ShOwAONaUnRVNzHdycM1VlW7GRicdvRzdS2Hw==
+X-Google-Smtp-Source: ABdhPJwyjNAAm+EL9aaDfd+4HLNYZJcB+u5Y2JbOp3rzBkroi7cpVqLVVllTAVIMTyL9bcg2tNAPemU2mRq88VzGMek=
+X-Received: by 2002:a2e:bf24:0:b0:246:801e:39d3 with SMTP id
+ c36-20020a2ebf24000000b00246801e39d3mr17157636ljr.472.1646332810871; Thu, 03
+ Mar 2022 10:40:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220303090643.241747-1-davidgow@google.com> <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+ <202203030947.E2FA3D9@keescook> <YiEISsoS/XrbEtbm@thelio-3990X>
+In-Reply-To: <YiEISsoS/XrbEtbm@thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Mar 2022 10:39:58 -0800
+Message-ID: <CAKwvOdkA1c3U6+-6hB3Nj9m2Z8eYzsFWm5X4se2eq_cF3NB2jA@mail.gmail.com>
+Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
-
-> On 2/28/22 2:37 AM, David Hildenbrand wrote:
->> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
->>> This introduces three tests:
->>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
->>> check if the SD bit flipped.
->>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
->>> 3) Check soft-dirty on huge pages
->>>
->>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
->>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
->>> same issue that he fixed, and this test would have caught it.
->>>
->> A note that madv_populate.c already contains some SOFTDIRTY tests
->> regarding MADV_POPULATE. Eventually we want to factor out
->> softdirty/pagemap handling+checks for easier reuse.
->> 
+On Thu, Mar 3, 2022 at 10:26 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Is this patch unnecessary then?
+> On Thu, Mar 03, 2022 at 10:04:28AM -0800, Kees Cook wrote:
+> > How does -mno-global-merge get KBUILD_CFLAGS in the first place? If it's
+> > arm/arm64 only, shouldn't that get relocated to those architectures?
+> >
+> > *time travel* found it:
+> >
+> > 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for building kernel with Clang")
+> >
+> > So I think this may have been universally true long ago, and now only
+> > arm/arm64 need it?
 
-It is not unnecessary since the madv test doesn't cover the bug tested
-here, afaik.  But, as mentioned when I originally submitted this patch,
-it should be merged into selftests/vm/madv_populate.c or, at least,
-reuse that existing infrastructure.
+Looks like that's the case from LLVM sources.
 
-https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
+<snip>
+
+> > diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> > index a2391b8de5a5..dcab28c44c26 100644
+> > --- a/arch/arm/Makefile
+> > +++ b/arch/arm/Makefile
+> > @@ -48,6 +48,13 @@ CHECKFLAGS += -D__ARMEL__
+> >  KBUILD_LDFLAGS       += -EL
+> >  endif
+> >
+> > +ifdef CONFIG_CC_IS_CLANG
+> > +# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+> > +# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+
+I think there's a typo in the original comment.
+s/on of/one of/ ?
+
+Also, I'm not sure what's meant by _MergedGlobals. Perhaps this is an
+opportunity to make this clearer?
+
+"Clang's "global-merge" pass (implemented only for arm and aarch64)
+may break modpost Pattern 2 if symbols are renamed and thus don't
+appear on modpost's allowlist.
+
+> > +# See modpost pattern 2
+> > +KBUILD_CFLAGS        += -mno-global-merge
+> > +endif
+> > +
+
+
 
 -- 
-Gabriel Krisman Bertazi
+Thanks,
+~Nick Desaulniers

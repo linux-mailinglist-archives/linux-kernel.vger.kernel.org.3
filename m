@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395FA4CB99E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B241C4CB9A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiCCIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        id S231689AbiCCIyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiCCIx2 (ORCPT
+        with ESMTP id S229717AbiCCIyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:53:28 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433F522513;
-        Thu,  3 Mar 2022 00:52:42 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id c4so4026701qtx.1;
-        Thu, 03 Mar 2022 00:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l3YwZrIa1hnk4V8mHJmIK2SN5I6btSlJmKT0fdYrMXk=;
-        b=Gz/mjzbyYfOVzRYClOrl/oyLlSXePDrUzU5Tt1UNSLl0QuI5SttrDXkbM7pmQXqSF8
-         6jqor/+j/mYgaUfwVT7dXXSiZbcSgJrel08vkujji3dil/SbdNQ6nm7pyq4hmjrrbvJP
-         m691AfNnSoKx6EMcIVoctPebz/Gkj0vIXbz30=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l3YwZrIa1hnk4V8mHJmIK2SN5I6btSlJmKT0fdYrMXk=;
-        b=0P1SmQlBTIiil7f1byZVp8xqNBdN24UKaXzRyy+V2vHvmNT7FAooP7B8+GGIiJLqul
-         u/iQzSY5nTcAjeijuHNcgZ31B7WpZtINUB/+EOQHL77NGpG1En3LvHVThwu6yNMfvS0j
-         Sr4QZNq4bkA/nZbXB3O12xnsk+VJPUXfk5RUfvHfrCoJiZn3dcWEACLdKDNUv+E2rsiw
-         JUZAxS4qQewUZjC+75bNWSOWI2A+4dODABJWhBZvfVjlYDV0oc2+IXlLoyCPZMdmLTfI
-         cwn2qg/sEmigWpYbrf9bxA/axR3V+Sr3ulUaSph/BrG5EvIHkGKvDZ1FTpWNQ31PlGle
-         5YNQ==
-X-Gm-Message-State: AOAM533FUVQ9MB8H2lAj7qjsBk5cRmOFgzMjgXynMTDXVRJ7o+nWc1YM
-        wHooHRruB2ZLrsZmYfbU0st93PbgcC+nfETqWsw=
-X-Google-Smtp-Source: ABdhPJzwz+Ngz65boCEemD+fRKPQrTxsbFiMK6xQltfABMfoEWApCyZjYRtn/H7SDZ4Vs+t6ywXdg+xYBGqcPwmyB4Y=
-X-Received: by 2002:a05:622a:1b8d:b0:2c6:59a9:360e with SMTP id
- bp13-20020a05622a1b8d00b002c659a9360emr26590611qtb.678.1646297561365; Thu, 03
- Mar 2022 00:52:41 -0800 (PST)
+        Thu, 3 Mar 2022 03:54:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D7ECB09;
+        Thu,  3 Mar 2022 00:53:33 -0800 (PST)
+Date:   Thu, 03 Mar 2022 08:53:30 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646297612;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=2TAbRctTTqetHFgNZ/dxnfVR4kDZIM4+M3pCcy2QaFg=;
+        b=m3BT+TLFmEv1pW2C11HREPkDQ27h8ffgq2q6j5iQOHCTumGGbqlQbsZQtNXFc66MNFVnDH
+        SwGnV69zJV41zrEJ79/uMZwwjc24Z2+lzqoVac6jCAWglKbltuKXgJRxHvSV88ZIUDVNBj
+        kCTm/rT66m5vQSmcP9r6cUrnANa3T5wYA1VRW6SCalnqBb5vj+LmcOGBsM8XbQ3j3j3EFW
+        fdG9/gnZvyh+Wzfg0tjpQ8uHNth+uJVZglQ38x6P/Fv/kQLbCsE0xYWsqkMM9d+dJM5tJb
+        thax+YQ7Aq60jIa1VHzkEmb00vTa4RN0nti+r+2RKZOFZNmeUunh0cgQpUaKKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646297612;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=2TAbRctTTqetHFgNZ/dxnfVR4kDZIM4+M3pCcy2QaFg=;
+        b=aAlnosntwxNGXFOTFHB6T/HH6GpF9CG6ENO+Crh+O87bpPwP/DzS2lf5ASQzU0m0r2/mgW
+        4ABtqzKnoL1657Dg==
+From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/intel/uncore: Fix the build on
+ !CONFIG_PHYS_ADDR_T_64BIT
+Cc:     Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-References: <20220301224446.21236-1-eajames@linux.ibm.com> <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
-In-Reply-To: <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 3 Mar 2022 08:52:29 +0000
-Message-ID: <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
-Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Eddie James <eajames@linux.ibm.com>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Message-ID: <164629761097.16921.9969025085170581381.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,33 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 at 08:25, Johan Hovold <johan@kernel.org> wrote:
->
-> On Tue, Mar 01, 2022 at 04:44:46PM -0600, Eddie James wrote:
-> > IBM manufactures a PL2303 device for UPS communications. Add the vendor
-> > and product IDs so that the PL2303 driver binds to the device.
-> >
-> > Signed-off-by: Joel Stanley <joel@jms.id.au>
-> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > ---
-> > Changes since v1:
-> >  - Fix commit message Signed-off-by ordering.
->
-> Almost there. You're still missing a Co-developed-by tag, a From line,
-> or both.
+The following commit has been merged into the perf/core branch of tip:
 
-It's neither. This patch was applied to a tree by myself, and I asked
-Eddie to send it to mainline for merging.
+Commit-ID:     02a08d78f5c429c7dc8e5b9417b4efb518b3d041
+Gitweb:        https://git.kernel.org/tip/02a08d78f5c429c7dc8e5b9417b4efb518b=
+3d041
+Author:        Ingo Molnar <mingo@kernel.org>
+AuthorDate:    Thu, 03 Mar 2022 08:57:08 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Thu, 03 Mar 2022 08:58:22 +01:00
 
-Given it's come through me, and now has been sent to you, I think the
-chain of s-o-b is appropriate.
+perf/x86/intel/uncore: Fix the build on !CONFIG_PHYS_ADDR_T_64BIT
 
-Cheers,
+'val2' is unused if !CONFIG_PHYS_ADDR_T_64BIT:
 
-Joel
+  arch/x86/events/intel/uncore_discovery.c:213:18: error: unused variable =E2=
+=80=98val2=E2=80=99 [-Werror=3Dunused-variable]
 
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ arch/x86/events/intel/uncore_discovery.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->
-> Please take another look at the documentation I pointed to.
->
-> Johan
+diff --git a/arch/x86/events/intel/uncore_discovery.c b/arch/x86/events/intel=
+/uncore_discovery.c
+index 61185d1..5fd72d4 100644
+--- a/arch/x86/events/intel/uncore_discovery.c
++++ b/arch/x86/events/intel/uncore_discovery.c
+@@ -210,7 +210,7 @@ static int parse_discovery_table(struct pci_dev *dev, int=
+ die,
+ 	void __iomem *io_addr;
+ 	resource_size_t addr;
+ 	unsigned long size;
+-	u32 val, val2;
++	u32 val;
+ 	int i;
+=20
+ 	pci_read_config_dword(dev, bar_offset, &val);
+@@ -221,6 +221,8 @@ static int parse_discovery_table(struct pci_dev *dev, int=
+ die,
+ 	addr =3D (resource_size_t)(val & PCI_BASE_ADDRESS_MEM_MASK);
+ #ifdef CONFIG_PHYS_ADDR_T_64BIT
+ 	if ((val & PCI_BASE_ADDRESS_MEM_TYPE_MASK) =3D=3D PCI_BASE_ADDRESS_MEM_TYPE=
+_64) {
++		u32 val2;
++
+ 		pci_read_config_dword(dev, bar_offset + 4, &val2);
+ 		addr |=3D ((resource_size_t)val2) << 32;
+ 	}

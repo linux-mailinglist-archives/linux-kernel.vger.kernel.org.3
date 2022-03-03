@@ -2,145 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935214CB851
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B9E4CB853
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiCCIIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S231127AbiCCIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiCCIII (ORCPT
+        with ESMTP id S230520AbiCCIIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:08:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DE401704C1
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646294842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2mAGXBlKqRnW4B+OtLFqzxW5wMoYCTA1YJLFQ1QSJY=;
-        b=TJGx2UTPuaZo61R0ubx4RutgL4LHt68eS4+velb5jOei+QXry5JvoUff/nx9FChHXz6DJs
-        XmtgSMYTGUoCJsV6oH+K0gyCgyluvG2W3pNKwGjbd+AYAoenzDqsVgIa4iWajZV+Adj9Q9
-        wTzoj4vwxb8iUqwA0biLnE2YkLzTTB8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-44_FQlFhNFaSZD1cGeUOBA-1; Thu, 03 Mar 2022 03:07:21 -0500
-X-MC-Unique: 44_FQlFhNFaSZD1cGeUOBA-1
-Received: by mail-wm1-f70.google.com with SMTP id n31-20020a05600c3b9f00b003812242973aso1406751wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:07:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=m2mAGXBlKqRnW4B+OtLFqzxW5wMoYCTA1YJLFQ1QSJY=;
-        b=p2RuwS+9MD76pcnBOQFINQgEI7m7ZVPoolY1/HkXoLxEtZ4rGkUYzCSftpBfbdmAhj
-         VX6q/uHx21c26elrAbHNnh/eBokOiZL86FkAjkchgeXKy1998Ao1/4D12w5Wdp+eDdgD
-         qzIy/bY1vwVY2jfyJQwsCyZufzSxGvPaip6xEeZD+4e5bJ7Gqv3wn38wL6vK8elfD28x
-         WLCvHxCoN9XuWH38pNPonNAbTPLP1sz06Ho38KguGEnAFTUruyk4QkjgFwTUBXBYLq7r
-         D/2dsWZ16h+AfaoMQyO9zYEYOFhk2UUoGcw91UC7FQTor4EXd4in6yxWq4OtOSu8MR+9
-         qyxA==
-X-Gm-Message-State: AOAM531W4Lsrs14eaw6EpzG0qSJUb2Ff8kiSB2sCPQcP77ZR3gxdwexU
-        AgMud2cer6+Tvmx2Vv1Al9b21U0lbAgQQYCimDID+2Xl1QUWH/ytoKJZRrBMk1wCVserz3pfeyE
-        lBhLgAwg5rSLilNKEKaT6D/5a
-X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr24933479wre.711.1646294840362;
-        Thu, 03 Mar 2022 00:07:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwBVB6X+a+hnU5+DdOikbkM+SKCXiLBZpaVoc2emm4prXEv/lI7eCVSxUk0aFkP1LgEn5rVOA==
-X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr24933446wre.711.1646294840096;
-        Thu, 03 Mar 2022 00:07:20 -0800 (PST)
-Received: from ?IPV6:2003:cb:c706:3600:f39a:d830:baab:42f0? (p200300cbc7063600f39ad830baab42f0.dip0.t-ipconnect.de. [2003:cb:c706:3600:f39a:d830:baab:42f0])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05600c4f4e00b0038181486018sm1393216wmq.40.2022.03.03.00.07.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 00:07:19 -0800 (PST)
-Message-ID: <dcfda12a-58c0-caa0-f4b0-ec2b615540d4@redhat.com>
-Date:   Thu, 3 Mar 2022 09:07:18 +0100
+        Thu, 3 Mar 2022 03:08:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C6C2191;
+        Thu,  3 Mar 2022 00:07:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C48A8B8241C;
+        Thu,  3 Mar 2022 08:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D50C004E1;
+        Thu,  3 Mar 2022 08:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646294847;
+        bh=CW4nPiLszX8YLU4FHSsO2BkxTO2NCXCBRwRANNIF8Yc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jk/Oj6Ddvf88y2Tno1YS4kfcXOoq22tsCK7QeVqhqJBaiiMNePBqRxTUuzZKa6Tth
+         fRkabtbutyfzYYc5lzPM1l4JQrG8P5hJWNQPvyP15t9SobJD2tiCNmnKrEy4VSh9c0
+         ZkkUxj7uhHXHeAToRYt2qDjTqFOgw23Vo0j1JcDY=
+Date:   Thu, 3 Mar 2022 09:07:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH v3] serial: make uart_console_write->putchar()'s
+ character an unsigned char
+Message-ID: <YiB3OjwZDDPtKgmm@kroah.com>
+References: <20220302072732.1916-1-jslaby@suse.cz>
+ <1be133eb-bfe8-b644-6aad-00a0a606aa05@suse.cz>
+ <YiByDgvP3epfDfhX@kroah.com>
+ <0ed348d2-a3dd-22a1-0773-83369c35794e@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RFC 12/13] mm/gup: trigger FAULT_FLAG_UNSHARE when
- R/O-pinning a possibly shared anonymous page
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220224122614.94921-1-david@redhat.com>
- <20220224122614.94921-13-david@redhat.com>
- <20220302165559.GU219866@nvidia.com>
- <fb895ba3-9d7e-7421-d5c6-f5e7a2d1231a@redhat.com>
- <20220302205934.GV219866@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220302205934.GV219866@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ed348d2-a3dd-22a1-0773-83369c35794e@suse.cz>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.03.22 21:59, Jason Gunthorpe wrote:
-> On Wed, Mar 02, 2022 at 09:38:09PM +0100, David Hildenbrand wrote:
+On Thu, Mar 03, 2022 at 08:49:44AM +0100, Jiri Slaby wrote:
+> On 03. 03. 22, 8:45, Greg KH wrote:
+> > On Thu, Mar 03, 2022 at 07:32:59AM +0100, Jiri Slaby wrote:
+> > > On 02. 03. 22, 8:27, Jiri Slaby wrote:
+> > > > Currently, uart_console_write->putchar's second parameter (the
+> > > > character) is of type int. It makes little sense, provided uart_console_write()
+> > > > accepts the input string as "const char *s" and passes its content -- the
+> > > > characters -- to putchar(). So switch the character's type to unsigned
+> > > > char.
+> > > > 
+> > > > We don't use char as that is signed on some platforms. That would cause
+> > > > troubles for drivers which (implicitly) cast the char to u16 when
+> > > > writing to the device. Sign extension would happen in that case and the
+> > > > value written would be completely different to the provided char. DZ is
+> > > > an example of such a driver -- on MIPS, it uses u16 for dz_out in
+> > > > dz_console_putchar().
+> > > > 
+> > > > Note we do the char -> uchar conversion implicitly in
+> > > > uart_console_write(). Provided we do not change size of the data type,
+> > > > sign extension does not happen there, so the problem is void.
+> > > > 
+> > > > This makes the types consistent and unified with the rest of the uart
+> > > > layer, which uses unsigned char in most places already. One exception is
+> > > > xmit_buf, but that is going to be converted later.
+> > > 
+> > > Kbuild seems to serve me this one by one. So this patch is still incomplete:
+> > > > drivers/tty/serial/sunplus-uart.c:526:7: error: incompatible function
+> > > pointer types passing 'void (struct uart_port *, int)' to parameter of type
+> > > 'void (*)(struct uart_port *, unsigned char)'
+> > 
+> > Let me just add this to my -testing branch, that will give us much
+> > quicker kbuild responses and handle stuff like this easier and I can fix
+> > the errors up when they are reported.
 > 
->> (a) I want a R/O pin to observe file modifications.
->> (b) I want the R/O pin to *not* observe file modifications but observe
->>     my (eventual? if any) private modifications,
+> Note this was missed as this driver was added only few days ago, so it was
+> not covered by kbuild against my tree until then. And to me, it looks like
+> kbuild is run on my tree only when it has nothing better to do (which is
+> perfectly fine, as even that catches a lot of things).
 > 
-> A scenario I know that motivated this is fairly straightfoward:
+> Besides that, there are two places in the driver which need update.
 > 
->    static char data[] = {};
-> 
->    ibv_reg_mr(data, READ_ONLY)
->    data[0] = 1
->    .. go touch data via DMA ..
-> 
-> We want to reliably observe the '1'
-> 
-> What is happening under the covers is that 'data' is placed in the
-> .data segment and becomes a file backed MAP_PRIVATE page. The write
-> COWs that page
-> 
-> It would work OK if it was in .bss instead
-> 
-> I think the FOLL_FORCE is there because otherwise the trick doesn't
-> work on true RO pages and the API becomes broken.
+> So should I send a v4 or wait?
 
-Thanks for the nice example, it matches what John brought up in respect
-to MAP_PRIVATE semantics.
+If you have a v4 now with this fixed, sure, I'll take that and queue
+that one up.
 
--- 
-Thanks,
+thanks,
 
-David / dhildenb
-
+greg k-h

@@ -2,278 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E344CB87E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6C24CB839
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiCCINq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S230454AbiCCIBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiCCINo (ORCPT
+        with ESMTP id S230258AbiCCIBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:13:44 -0500
-X-Greylist: delayed 922 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Mar 2022 00:12:59 PST
-Received: from smtpout2.mo529.mail-out.ovh.net (smtpout2.mo529.mail-out.ovh.net [79.137.123.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2403F2C12A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:12:58 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.25])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 2446DE58E32F;
-        Thu,  3 Mar 2022 08:57:30 +0100 (CET)
-Received: from kaod.org (37.59.142.107) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
- 2022 08:57:28 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-107S0011b51f2f7-e82d-49ee-9801-eb43e836e213,
-                    A0610A17E77809494FE20D2F959CCE2A9331EACD) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <88d86ba1-65ba-0c95-6d46-c064eaa62856@kaod.org>
-Date:   Thu, 3 Mar 2022 08:57:22 +0100
+        Thu, 3 Mar 2022 03:01:08 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294BC1688EB;
+        Thu,  3 Mar 2022 00:00:20 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22380CJ0096549;
+        Thu, 3 Mar 2022 02:00:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646294412;
+        bh=cUfnBSa5Y6H8tD7pfJUnVu2gf9wOMmbuMF7hXOj/rLM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=FJOojwEbdjEIzmTEGlhn4FQV/tCuAiekPplalBRd2gJiXgIp/RoXyIajvMXcjvMRm
+         mlw1ofsus+dBEa+x4iItMi2uRwidlfWlJbc9rLs7K0aZKIREXs10iu+MN5n6izHDGi
+         7Jcf/93JvWjaJF8iDCxNDyvEc9la6+c4IJhBucXc=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22380Cjf073496
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Mar 2022 02:00:12 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 3
+ Mar 2022 02:00:12 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 3 Mar 2022 02:00:12 -0600
+Received: from [10.250.233.98] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 223808Cq049411;
+        Thu, 3 Mar 2022 02:00:09 -0600
+Message-ID: <869aa1ad-e3ed-cd0b-ab5e-a4b7d1d23311@ti.com>
+Date:   Thu, 3 Mar 2022 13:30:08 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 10/10] ARM: dts: aspeed: Enable Dual SPI RX transfers
+Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] remoteproc: Introduce
+ sysfs_read_only flag
 Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     <linux-spi@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220302173114.927476-1-clg@kaod.org>
- <20220302173114.927476-11-clg@kaod.org>
- <CACPK8XeDBCMCEO4=w7qUQxsYiFUDKPAuBhXW5Sr6=UHM_GRsWA@mail.gmail.com>
- <CACPK8Xd6VJLuWsvSjYrQ-y=yS+yR7vjdWECfsd2W9_J7e09K-A@mail.gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <CACPK8Xd6VJLuWsvSjYrQ-y=yS+yR7vjdWECfsd2W9_J7e09K-A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.107]
-X-ClientProxiedBy: DAG7EX2.mxp5.local (172.16.2.62) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: e05de279-3f2e-408a-be31-93ae24799af8
-X-Ovh-Tracer-Id: 8424546055071435652
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddruddthedgudduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+CC:     <vigneshr@ti.com>, <s-anna@ti.com>, <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220216081224.9956-1-p-mohan@ti.com>
+ <20220216081224.9956-2-p-mohan@ti.com>
+ <0d44d73f-d882-83db-9cf2-09f7cdc91ab2@ti.com> <Yg80gABeszDDN/m6@ripper>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <Yg80gABeszDDN/m6@ripper>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 23:48, Joel Stanley wrote:
-> On Wed, 2 Mar 2022 at 22:45, Joel Stanley <joel@jms.id.au> wrote:
->>
->> On Wed, 2 Mar 2022 at 17:31, Cédric Le Goater <clg@kaod.org> wrote:
->>>
->>> All these controllers support at least Dual SPI. Update the DTs.
->>>
->>> Reviewed-by: Joel Stanley <joel@jms.id.au>
->>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->>
->> Thanks. I'll apply this to the aspeed tree now.
->>
->> Did you also have a patch to add a second flash chip to the AST2400 FMC?
-> 
-> That was a reference to the discussion on the openbmc list with Tao. I
-> was mistaken; the flash chips are there, but they lack the
-> spi-max-frequency property.
+Hi Bjorn,
+Hi Mathieu,
 
-Yes.
+When is this series expected to be applied?
 
-I will include a patch in v3 for the second flash chip of the AST2400 FMC.
+I am going to post another series titled "PRU Consumer API".
+One patch from that series depends on this "Introduce sysfs_read_only
+flag" patch.
+
+Please let me know so I can rebase and post that series.
 
 Thanks,
+Puranjay Mohan
 
-C.
-
+On 18/02/22 11:24, Bjorn Andersson wrote:
+> On Thu 17 Feb 21:00 PST 2022, Kishon Vijay Abraham I wrote:
 > 
 >>
+>>
+>> On 16/02/22 1:42 pm, Puranjay Mohan wrote:
+>>> The remoteproc framework provides sysfs interfaces for changing
+>>> the firmware name and for starting/stopping a remote processor
+>>> through the sysfs files 'state' and 'firmware'. The 'coredump'
+>>> file is used to set the coredump configuration. The 'recovery'
+>>> sysfs file can also be used similarly to control the error recovery
+>>> state machine of a remoteproc. These interfaces are currently
+>>> allowed irrespective of how the remoteprocs were booted (like
+>>> remoteproc self auto-boot, remoteproc client-driven boot etc).
+>>> These interfaces can adversely affect a remoteproc and its clients
+>>> especially when a remoteproc is being controlled by a remoteproc
+>>> client driver(s). Also, not all remoteproc drivers may want to
+>>> support the sysfs interfaces by default.
+>>>
+>>> Add support to make the remoteproc sysfs files read only by
+>>> introducing a state flag 'sysfs_read_only' that the individual
+>>> remoteproc drivers can set based on their usage needs. The default
+>>> behavior is to allow the sysfs operations as before.
+>>>
+>>> Implement attribute_group->is_visible() to make the sysfs
+>>> entries read only when 'sysfs_read_only' flag is set.
+>>>
+>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 >>> ---
->>>   arch/arm/boot/dts/aspeed-g4.dtsi | 6 ++++++
->>>   arch/arm/boot/dts/aspeed-g5.dtsi | 7 +++++++
->>>   arch/arm/boot/dts/aspeed-g6.dtsi | 8 ++++++++
->>>   3 files changed, 21 insertions(+)
+>>> Changes in v4->v5:
+>>> Rename deny_sysfs_ops to sysfs_read_only.
+>>> Make coredump readonly with other files.
 >>>
->>> diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
->>> index 9ae67e83cf60..31e6569db97e 100644
->>> --- a/arch/arm/boot/dts/aspeed-g4.dtsi
->>> +++ b/arch/arm/boot/dts/aspeed-g4.dtsi
->>> @@ -64,27 +64,32 @@ fmc: spi@1e620000 {
->>>                          flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>> +                               spi-rx-bus-width = <2>;
->>>                                  spi-max-frequency = <50000000>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@2 {
->>>                                  reg = < 2 >;
->>>                                  compatible = "jedec,spi-nor";
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@3 {
->>>                                  reg = < 3 >;
->>>                                  compatible = "jedec,spi-nor";
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@4 {
->>>                                  reg = < 4 >;
->>>                                  compatible = "jedec,spi-nor";
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> @@ -100,6 +105,7 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
->>> index c3e0a8e13c8a..29bf017899b6 100644
->>> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
->>> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
->>> @@ -66,18 +66,21 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@2 {
->>>                                  reg = < 2 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> @@ -93,12 +96,14 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> @@ -114,12 +119,14 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
->>> index 1ad05dde19d2..ce93c56a21a7 100644
->>> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
->>> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
->>> @@ -106,18 +106,21 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@2 {
->>>                                  reg = < 2 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> @@ -133,12 +136,14 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> @@ -154,18 +159,21 @@ flash@0 {
->>>                                  reg = < 0 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@1 {
->>>                                  reg = < 1 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                          flash@2 {
->>>                                  reg = < 2 >;
->>>                                  compatible = "jedec,spi-nor";
->>>                                  spi-max-frequency = <50000000>;
->>> +                               spi-rx-bus-width = <2>;
->>>                                  status = "disabled";
->>>                          };
->>>                  };
->>> --
->>> 2.34.1
+>>> Changes in v3->v4:
+>>> Use mode = 0444 in rproc_is_visible() to make the sysfs entries
+>>> read-only when the deny_sysfs_ops flag is set.
+>>> ---
+>>>  drivers/remoteproc/remoteproc_sysfs.c | 19 ++++++++++++++++++-
+>>>  include/linux/remoteproc.h            |  2 ++
+>>>  2 files changed, 20 insertions(+), 1 deletion(-)
 >>>
-
+>>> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+>>> index ea8b89f97d7b..abf0cd05d5e1 100644
+>>> --- a/drivers/remoteproc/remoteproc_sysfs.c
+>>> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+>>> @@ -230,6 +230,22 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+>>>  }
+>>>  static DEVICE_ATTR_RO(name);
+>>>  
+>>> +static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
+>>> +				int n)
+>>> +{
+>>> +	struct device *dev = kobj_to_dev(kobj);
+>>> +	struct rproc *rproc = to_rproc(dev);
+>>> +	umode_t mode = attr->mode;
+>>> +
+>>> +	if (rproc->sysfs_read_only && (attr == &dev_attr_recovery.attr ||
+>>> +				       attr == &dev_attr_firmware.attr ||
+>>> +				       attr == &dev_attr_state.attr ||
+>>> +				       attr == &dev_attr_coredump.attr))
+>>> +		mode = 0444;
+>>
+>> Nitpick: use S_IRUGO instead of 0444.
+>>
+> 
+> Thanks for the suggestion Kishon, but I like 0444, it has direct meaning
+> to me.
+> 
+> So unless there's some directive to use S_I*** throughout the kernel I
+> would prefer this.
+> 
+> Regards,
+> Bjorn
+> 
+>> Thanks,
+>> Kishon
+>>> +
+>>> +	return mode;
+>>> +}
+>>> +
+>>>  static struct attribute *rproc_attrs[] = {
+>>>  	&dev_attr_coredump.attr,
+>>>  	&dev_attr_recovery.attr,
+>>> @@ -240,7 +256,8 @@ static struct attribute *rproc_attrs[] = {
+>>>  };
+>>>  
+>>>  static const struct attribute_group rproc_devgroup = {
+>>> -	.attrs = rproc_attrs
+>>> +	.attrs = rproc_attrs,
+>>> +	.is_visible = rproc_is_visible,
+>>>  };
+>>>  
+>>>  static const struct attribute_group *rproc_devgroups[] = {
+>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>>> index e0600e1e5c17..93a1d0050fbc 100644
+>>> --- a/include/linux/remoteproc.h
+>>> +++ b/include/linux/remoteproc.h
+>>> @@ -523,6 +523,7 @@ struct rproc_dump_segment {
+>>>   * @table_sz: size of @cached_table
+>>>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>>>   * @auto_boot: flag to indicate if remote processor should be auto-started
+>>> + * @sysfs_read_only: flag to make remoteproc sysfs files read only
+>>>   * @dump_segments: list of segments in the firmware
+>>>   * @nb_vdev: number of vdev currently handled by rproc
+>>>   * @elf_class: firmware ELF class
+>>> @@ -562,6 +563,7 @@ struct rproc {
+>>>  	size_t table_sz;
+>>>  	bool has_iommu;
+>>>  	bool auto_boot;
+>>> +	bool sysfs_read_only;
+>>>  	struct list_head dump_segments;
+>>>  	int nb_vdev;
+>>>  	u8 elf_class;
+>>>

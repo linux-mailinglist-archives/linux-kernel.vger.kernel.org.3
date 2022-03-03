@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713054CBB74
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896564CBB7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiCCKeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
+        id S232406AbiCCKfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiCCKeT (ORCPT
+        with ESMTP id S232413AbiCCKfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:34:19 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89B3329BB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:33:29 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 9so4144994pll.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 02:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Oja3CIqE9fA451Twve2pF1vRqS/QrpX6zmesqNzXMcA=;
-        b=N2wLZPHbeKHF/4+voaEtvGxD4D0DSWyFiqi97W2sREHJv/ENo8uK3Hw2n9e7A8qvDo
-         bRnCP8++kh/M1T6jTh2vnsUxNhP55uzjf6FwKhRll3JN6V4st8JWD8EjUYMgQH6Gu2m9
-         nIqW2sYZaRtLvnOcgLgz4RtyvzU9oNl8C4llgeoPWxSBTL9wQZv/A06uyPaoC7uoA0x6
-         hwt7zKUvioPFQ+yGUbePCCrclL+jR+ca+xK/4HQJz4Au+x4aJogZj+hQiyzSuPvauxNe
-         QTyL+t9uIlHdaKPct5K3nCbb7IwbeJsBMYPvKl+zRIHZJHAhZhoNItFaepYo/neCFKYn
-         yVDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Oja3CIqE9fA451Twve2pF1vRqS/QrpX6zmesqNzXMcA=;
-        b=0TzD/k3foZk64bxs2HDVuJ234MzN0RfyfOVLQpZvh5a7ygaJkNDPtSEbrFFyx01y44
-         bs14wvolzH+iB5XVl7/BwxTEcYnojxGL5f/J8pSuWrjNVXwSvmre2ZjW5feZXhOnMVK7
-         0jJxHLu6Jc0PnV0pXDMkNLzxFvRuv6eJukXFxkEO/YWfOkvmzJSkZfQYLrav9xv61WCX
-         Ix8Z5lW16PtSwNmnJ81uNxCDADmGYMwu2jYFxkz/KiVkTr7eF13llKJVlulo+xu3forz
-         /Mafh7o7Sjvc9U820FoSBUF8HDjG7SIRWVQ9jBCDyG718k9W+lPH7vTy1JZDgqfBOUXa
-         sl6w==
-X-Gm-Message-State: AOAM531bjCqwgGTq7lchPymVIfCPHSt+npp45k68UJAB1zolDbBgycMP
-        LM6RLqW07vWOAMpQH5BLChdQuw==
-X-Google-Smtp-Source: ABdhPJwutRy4qdqPFYgzNqskFDJ/moT5feFg+cSc2e2YBVONBSsWgVv8iInhQ+HQBDY5RsXkZaBwQA==
-X-Received: by 2002:a17:90b:4d86:b0:1bd:223f:6cb5 with SMTP id oj6-20020a17090b4d8600b001bd223f6cb5mr4604124pjb.151.1646303609319;
-        Thu, 03 Mar 2022 02:33:29 -0800 (PST)
-Received: from [10.255.179.141] ([139.177.225.237])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056a00150900b004f4735396fesm2163786pfu.191.2022.03.03.02.33.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 02:33:28 -0800 (PST)
-Message-ID: <1929669c-7674-035b-8cf1-5b5007ecccec@bytedance.com>
-Date:   Thu, 3 Mar 2022 18:33:22 +0800
+        Thu, 3 Mar 2022 05:35:40 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAF3340D2;
+        Thu,  3 Mar 2022 02:34:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646303694; x=1677839694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U3CkbipzqRbVQQYh0KNk3tlacM3JmBcSMhxa/ULnS34=;
+  b=cdAxkBGfkumrfX2yaZdh0j+J0bSjBzm/GktY0+UKwQaz13zQB2U3hq6z
+   1FHzsq7ln9bKrnwoJUwT3N7C3gWLaIdG+M7ak43vf5yZjN4TZejNO8b66
+   +bd7B7YE0JFRi6815LH7ca/tsHGHbtDtuLud3Z0dc6ujHURFr5S3M6cjK
+   5zpy3EApPCCMbCn7r4xJy+cPClvuSUgPUCecfyT0nOawCb1kLRHIZWxaH
+   AvXFDb5u3mlmEwz/MATEvQUkciRpRzFHjyBwMCA6paG4BNLRsxyBf8zGW
+   dNtclbTaQzpHt/UU6qILe8dtpUXxnKbfj3VrLeU5Ssf86i7yvX+UmCvjC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237150278"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="237150278"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:34:53 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="508542490"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:34:46 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nPimV-00Ak1G-2F;
+        Thu, 03 Mar 2022 12:33:59 +0200
+Date:   Thu, 3 Mar 2022 12:33:58 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
+Message-ID: <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-9-warp5tw@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [External] Re: [PATCH] livepatch: Only block the removal of
- KLP_UNPATCHED forced transition patch
-Content-Language: en-US
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        qirui.001@bytedance.com
-References: <20220301140840.29345-1-zhouchengming@bytedance.com>
- <alpine.LSU.2.21.2203021052470.5895@pobox.suse.cz>
- <fe2b9225-44c3-2041-f8a3-6f17f9d1be40@bytedance.com>
- <alpine.LSU.2.21.2203030847430.704@pobox.suse.cz>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <alpine.LSU.2.21.2203030847430.704@pobox.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303083141.8742-9-warp5tw@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,83 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/3 3:51 下午, Miroslav Benes wrote:
-> On Thu, 3 Mar 2022, Chengming Zhou wrote:
+On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
 > 
->> Hi,
->>
->> On 2022/3/2 5:55 下午, Miroslav Benes wrote:
->>> Hi,
->>>
->>> On Tue, 1 Mar 2022, Chengming Zhou wrote:
->>>
->>>> module_put() is currently never called for a patch with forced flag, to block
->>>> the removal of that patch module that might still be in use after a forced
->>>> transition.
->>>>
->>>> But klp_force_transition() will flag all patches on the list to be forced, since
->>>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
->>>> has removed stack ordering of the livepatches, it will cause all other patches can't
->>>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
->>>>
->>>> In fact, we don't need to flag a patch to forced if it's a KLP_PATCHED forced
->>>> transition. It can still be unloaded only if it has passed through the consistency
->>>> model in KLP_UNPATCHED transition.
->>>>
->>>> So this patch only set forced flag and block the removal of a KLP_UNPATCHED forced
->>>> transition livepatch.
->>>>
->>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>>> ---
->>>>  kernel/livepatch/transition.c | 4 ++--
->>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
->>>> index 5683ac0d2566..8b296ad9e407 100644
->>>> --- a/kernel/livepatch/transition.c
->>>> +++ b/kernel/livepatch/transition.c
->>>> @@ -641,6 +641,6 @@ void klp_force_transition(void)
->>>>  	for_each_possible_cpu(cpu)
->>>>  		klp_update_patch_state(idle_task(cpu));
->>>>  
->>>> -	klp_for_each_patch(patch)
->>>> -		patch->forced = true;
->>>> +	if (klp_target_state == KLP_UNPATCHED)
->>>> +		klp_transition_patch->forced = true;
->>>
->>> I do not think this would interact nicely with the atomic replace feature. 
->>> If you force the transition of a patch with ->replace set to true, no 
->>> existing patch would get ->forced set with this change, which means all 
->>> patches will be removed at the end of klp_try_complete_transition(). And 
->>> that is something we want to prevent.
->>
->> Good point, I should check if it's an atomic replace livepatch in the else
->> branch, in which case we have to set all existing patches to forced.
-> 
-> Yes, but that leads to a question if it then brings any value. Forcing a 
-> transition should be exceptional. If it is needed, there may be other 
-> issues involved which should probably be fixed. Have you come across a 
-> practical situation where the patch helped?
+> Use ioread8 instead of ioread32 to access the SMBnCTL3 register since
+> the register is only 8-bit wide.
 
-Yes, you're right, the correct way is to find and fix the issues that
-make us to use this "force" transition interface, until we don't need
-to use it.
+> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
 
-Apart from this reason, another reason we may use "force" transition
-is that we want to speed up the transition process of some patches
-when load them, and we can make sure these patches are safe to do so.
-(just like a consistency model check disable option when load a patch)
+No, this is bad commit message, since you have bitwise masks and there is
+nothing to fix from functional point of view. So, why is this a fix?
 
-Then I find it confusing and limited that force transition in loading
-a patch will make all previous patches can't be unloaded, so can't be
-reverted and enabled again (updated or not).
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 
-Anyway, I think this patch won't decrease the security performance of
-livepatch, but can increase flexibility in some user experience.
+This is wrong SoB chain.
 
-Thanks.
+...
 
-> 
-> Thanks
-> 
-> Miroslav
+> -	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> +	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+
+...
+
+> -	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> +	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

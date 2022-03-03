@@ -2,237 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B319D4CBA5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD6B4CBA63
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiCCJfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S232018AbiCCJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiCCJfU (ORCPT
+        with ESMTP id S229662AbiCCJiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:35:20 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FBF403C2;
-        Thu,  3 Mar 2022 01:34:35 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id qx21so9258426ejb.13;
-        Thu, 03 Mar 2022 01:34:35 -0800 (PST)
+        Thu, 3 Mar 2022 04:38:19 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F46425DF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:37:31 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 639513F5FC
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646300249;
+        bh=WN0fHS1E3WYhaNTMIUFWDS4nw/cwGpcpJ5Ec381RmGw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=k2hQd24JScVsX1Ixeq9TUSFbK+09EuipWJSvhrcFxsesEMJRA1ua+PFjHnBkjr6OK
+         /t9uIioomzQvwHGpaOqY2za575U+Mf6im8w15V5OHJ6s2ayW6MPo5IHlj5UmFhtuxP
+         IsoMKSadiSeA+cj5pQ9MWWgDCt5Nbj5txVFPBAWdzxRWiuLElp4p7Jxk50ROa9AgUH
+         g+nQoBihW9a2kDMYd2lfoRPjcUQao4izqdpCTqtLOCY5tlAzjqB72e8IclZAneFzao
+         q1VmLxA4KNFaD5Fg8szB8m4sVgr+DN6+Rwtattize7kpHOVEOVWKHQPEh0g33SoP9j
+         Mn1sC0L3WMB9Q==
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020a056402344e00b0041593c729adso2531680edc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 01:37:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HCoJ2YMwz0q/SwgLBzV0H3UA+rYOKmWN8IjDCigSeO8=;
-        b=QeWlJjedoR2qFQBUOh4pkhzui5u5PKxnKQUs5zyRaF5mTqLJkKjx2lJcSdTp4D4V/d
-         NweQl12MrRSaJTviT4Nmzvr5hRPl6ZIoyJ5SWf1ZE/BVbnVyp5EY9W/FYSxw+W67ms0x
-         3Tc/EJHGU2v4Cfz954oAjvXSxchWOfWf70Yc/3EA91lFIKkXZeZMphk4JY7MjyCXDKRL
-         0GwdW3UkK7fcWvnmMBXR1iEnbhtTe7j210IQtL0LlpIL6x8qJNT8N10IoPqGkT4aFbYF
-         DSOqePZ20AIdQZiziy1VaHD9bE3lPjaauePg+l2qGeZG6SbHfAPvq71EfaPt2CslijLi
-         bodA==
-X-Gm-Message-State: AOAM5339lsRSqgv6ri2nmuqHXf6oMYGuzKCYahmDQa6va9QSG0FcJTmU
-        7HWgYiyml/fTml07yJ6lJqY1biMyFVU=
-X-Google-Smtp-Source: ABdhPJyj7IPoYYr6U2OkzEEq2Jm0KvkKkWEb0ABY+xk3BFll3PIddVhRcde7e62zhWwEa+oWwrxWsA==
-X-Received: by 2002:a17:906:402:b0:6d5:c6bc:3150 with SMTP id d2-20020a170906040200b006d5c6bc3150mr26995549eja.403.1646300073839;
-        Thu, 03 Mar 2022 01:34:33 -0800 (PST)
+        bh=WN0fHS1E3WYhaNTMIUFWDS4nw/cwGpcpJ5Ec381RmGw=;
+        b=OrImqawTJoBEnOYN76WytPHrwL8mGxA1uFfXPCYbYI3l13mbJTKVe5vt8CkWxYVZfa
+         QrmSSKjArQy1QvFLThFhxV2rEQQXu2EZxMCMOJFd3wjGJabahP8yjeimBIZt0BoRDYmp
+         wx9O8Hex77g7zwtL+t+IndKO1uDyIiy2hOgzmRRD6SWptC79GV6pQU0Cm5mGiD8wNOMz
+         NgfuoJe1TgqkuVsG5pyd6zllmJ/8banlq/op7VgAFWQJZA6umvzP2F+ul/b8rlQyiLSk
+         C796Ih9W2luVWuCml/RRDBhZloNDXv981yy98SuJ2JXVliDoYX6wE12fCbzizNI9Ore0
+         SHFw==
+X-Gm-Message-State: AOAM530fGSSgGHbyJ6Ol26StGRLndPAyw6mmDVTnwAKKQzzLqTUxhf1l
+        Fm0d4I6VPav6v/o0qc5vP6Fzum0OePj977GG9U2H4B2tG3xx16lBB8VKO3Ese3ighm2N5XThxJZ
+        o+1KDbdFL4b2UtmgIm+9/GW8ZrDwGslEkVJvrfkVAvQ==
+X-Received: by 2002:a05:6402:d06:b0:412:eafd:8b9a with SMTP id eb6-20020a0564020d0600b00412eafd8b9amr34091221edb.278.1646300249135;
+        Thu, 03 Mar 2022 01:37:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEOItBLjufIOG9pn9AcKVKBYrCqc0esYl+3bxjYohOhF8iGM2MCH5hndXuQg+/CTNrvTsxYg==
+X-Received: by 2002:a05:6402:d06:b0:412:eafd:8b9a with SMTP id eb6-20020a0564020d0600b00412eafd8b9amr34091202edb.278.1646300248959;
+        Thu, 03 Mar 2022 01:37:28 -0800 (PST)
 Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id f6-20020a50fc86000000b0040f614e0906sm615639edq.46.2022.03.03.01.34.32
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709066b8200b006bbea7e566esm506462ejr.55.2022.03.03.01.37.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 01:34:32 -0800 (PST)
-Message-ID: <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org>
-Date:   Thu, 3 Mar 2022 10:34:31 +0100
+        Thu, 03 Mar 2022 01:37:28 -0800 (PST)
+Message-ID: <77a147f9-794c-83ca-070b-fb17d665ed8f@canonical.com>
+Date:   Thu, 3 Mar 2022 10:37:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
+Subject: Re: [PATCH] clk/samsung: Use of_device_get_match_data()
 Content-Language: en-US
-To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
- <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
- <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
- <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
- <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
+To:     cgel.zte@gmail.com, s.nawrocki@samsung.com
+Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com,
+        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220303092223.2060108-1-chi.minghao@zte.com.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220303092223.2060108-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 10:01, Edwin Chiu 邱垂峰 wrote:
+On 03/03/2022 10:22, cgel.zte@gmail.com wrote:
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 > 
+> Use of_device_get_match_data() to simplify the code.
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Tuesday, March 1, 2022 7:34 PM
->> To: Edwin Chiu 邱垂峰 <edwin.chiu@sunplus.com>; Edwin Chiu <edwinchiu0505tw@gmail.com>;
->> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org;
->> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
->> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
->>
->> On 01/03/2022 10:30, Edwin Chiu 邱垂峰 wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzk@kernel.org>
->>>> Sent: Tuesday, February 22, 2022 12:48 AM
->>>> To: Edwin Chiu <edwinchiu0505tw@gmail.com>; Edwin Chiu 邱垂峰
->>>> <edwin.chiu@sunplus.com>;
->>>> robh+dt@kernel.org; devicetree@vger.kernel.org;
->>>> robh+linux-kernel@vger.kernel.org; rafael@kernel.org;
->>>> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
->>>> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for
->>>> sunplus sp7021
->>>>
->>>> On 21/02/2022 08:26, Edwin Chiu wrote:
->>>>> Create cpuidle driver for sunplus sp7021 chip
->>>>>
->>>>> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
->>>>> ---
->>>>> Changes in v3
->>>>>  - Rearrangement #include sequence
->>>>>  - Change remark style to /*~*/
->>>>>  - Align author email address to same as sob
->>>>>  - Optimal code
->>>>> Changes in v4
->>>>>  - According Rob Herringrobh's comment
->>>>>    There is no need for this binding.
->>>>>    Just wanting a different driver is not a reason
->>>>>    for a duplicate schema.
->>>>>    So remove yaml file and submit driver again.
->>>>> Changes in v5
->>>>>  - According Krzysztof's comment
->>>>>    You either use appropriate compatible in DT
->>>>>    or add your compatible to cpuidle-arm.
->>>>>    Even if this did not work, then the solution is to
->>>>>    use common parts, not to duplicate entire driver.
->>>>>    According Sudeep's comment
->>>>>    In short NACK for any dedicated driver for this platform,
->>>>>    use the generic cpuidle-arm driver with appropriate platform hooks
->>>>>    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
->>>>>    for hook generic cpuidle-arm driver
->>>>>
->>>>>  MAINTAINERS                                   |  6 ++
->>>>>  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
->>>>>  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
->>>>>  3 files changed, 106 insertions(+)
->>>>>  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>>>  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
->>>>>
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS index e0dca8f..5c96428 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
->>>>>  S:	Maintained
->>>>>  F:	drivers/net/ethernet/dlink/sundance.c
->>>>>
->>>>> +SUNPLUS CPUIDLE DRIVER
->>>>> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
->>>>> +S:	Maintained
->>>>> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>>> +F:	include/linux/platform_data/cpuidle-sunplus.h
->>>>> +
->>>>>  SUPERH
->>>>>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->>>>>  M:	Rich Felker <dalias@libc.org>
->>>>> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>>> b/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>>> new file mode 100644
->>>>> index 0000000..e9d9738
->>>>> --- /dev/null
->>>>> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>>> @@ -0,0 +1,88 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>> +/*
->>>>> + * SP7021 cpu idle Driver.
->>>>> + * Copyright (C) Sunplus Tech / Tibbo Tech.
->>>>> + */
->>>>> +#define pr_fmt(fmt) "CPUidle arm: " fmt
->>>>> +
->>>>> +#include <linux/cpuidle.h>
->>>>> +#include <linux/of_device.h>
->>>>> +#include <linux/platform_data/cpuidle-sunplus.h>
->>>>> +
->>>>> +#include <asm/cpuidle.h>
->>>>> +
->>>>> +typedef int (*idle_fn)(void);
->>>>> +
->>>>> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
->>>>> +
->>>>> +static int sp7021_cpuidle_enter(unsigned long index) {
->>>>> +	return __this_cpu_read(sp7021_idle_ops)[index]();
->>>>> +}
->>>>> +static int sp7021_cpu_spc(void)
->>>>> +{
->>>>> +	cpu_v7_do_idle();   /* idle to WFI */
->>>>> +	return 0;
->>>>> +}
->>>>> +static const struct of_device_id sp7021_idle_state_match[] = {
->>>>> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
->>>>> +	{ },
->>>>> +};
->>>>
->>>> This is confusing. You want to have two drivers to bind to the same
->>>> compatible? As I wrote in the previous messages, you should simply use arm,idle-state just like few
->> other architectures.
->>>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>
->>>
->>> The patch v5 implemented according your comment.
->>> Used common part of arm,idle-state.
->>> Create new enable-method for cpuidle.ops function.
->>> It only have arm cpuidle driver exist now, no two drivers to bind to the same compatible.
->>>
->>> What do you mean " simply use arm,idle-state just like few other architectures "?
->>>
->>
->> I mean, do it similarly (by using arm,idle-state and other related
->> properties) to for example ti,am4372/ti,am3352.
->>
->> Best regards,
->> Krzysztof
-> 
-> 
-> The am3352 cpuidle code structure is very similar to ours.				
-> Used enable-method = "ti,am3352" and compatible = "arm,idle-state" in am33xx.dtsi				
-> Used CPUIDLE_METHOD_OF_DECLARE(pm33xx_idle, "ti,am3352", &amx3_cpuidle_ops) in pm33xx-core.c				
-> 				
-> The difference are				
-> am3352				
-> amx3_idle_init(~) assign idle_states[i].wfi_flags = states[i].wfi_flags;				
-> amx3_idle_enter(~) call idle_fn(idle_state->wfi_flags)				
-> 				
-> sunplus-sp7021				
-> sp7021_cpuidle_init(~) assign fns[i] = idle_fns[i];				
-> sp7021_cpuidle_enter(~) call __this_cpu_read(sp7021_idle_ops)[index]();				
-> 
-> I don't think am3352 cpuidle code architecture simpler than ours.
-> The idle_fn function need more complex method to be assign.
-> How do you think?
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-You duplicated a driver, entire pieces of code. This is not acceptable.
-Therefore it does not really make sense to discuss whether duplicated
-solution seems simpler or not... We won't accept duplicated code.
-Especially for WFI-only driver.
+Where is the bug report to be credited? Where is the actual bug which
+justifies usage of "Reported-by" tag (it is *only* for crediting bug
+reporters)? Last time this email was invalid - why do you add invalid
+emails to commit log?
+
+NAK.
+
+Please resend without this.
 
 Best regards,
 Krzysztof

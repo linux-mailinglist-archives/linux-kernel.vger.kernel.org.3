@@ -2,216 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5CC4CBEE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5674CBEE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbiCCNaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S233533AbiCCNaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiCCNaQ (ORCPT
+        with ESMTP id S232419AbiCCNaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:30:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01116188A1D;
-        Thu,  3 Mar 2022 05:29:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C74161A73;
-        Thu,  3 Mar 2022 13:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79078C004E1;
-        Thu,  3 Mar 2022 13:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646314170;
-        bh=QoUIlhSX3DrEFyg4qhjbuIqMXNXDasSJRxk9hH0m6j8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XmKdCLVpinz8bEgJHV5HTEpQUTAzDN+edwGCFQi+VVI0Q+BcwI/EDC3vwvn8f3VGk
-         KOrQGAJmf7uOBF/y/7/C3dzAv31bNiXuWfYCLKPKYl3Fo38qeq/I8Ay8+2Arwky3jm
-         dZSkADJEcpeNNymgGDoYkr6qKUHZ8XIJ/H7mFL38=
-Date:   Thu, 3 Mar 2022 14:29:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        spronovo@linux.microsoft.com
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Message-ID: <YiDCt05zLvRetoMM@kroah.com>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <7e696255-fba5-614b-81b5-a5f7e0877a83@linux.microsoft.com>
+        Thu, 3 Mar 2022 08:30:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25328188A2E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646314176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5hm9nPvkOIfJeoDF9aZf1lbKJY5zFksWJ9/IiMToaKE=;
+        b=ir1RstfFMd60PvZamPpNa/a8FbNrjy6j30chUrmnFKs2I+MrrMPqPPzbWOAOBlKNXmkAbL
+        3yUMgQY7M1KiOBjv+DAFFXdbEN+IyjSIoLJkkX/28iMYoKZIWPcnTXQXrscHl25HoNZ7bW
+        /9HL6P+pP2KEKKSd08lTDjgJbZGFMuI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-401-ksGDQitrOf63kYEFv-t0XA-1; Thu, 03 Mar 2022 08:29:35 -0500
+X-MC-Unique: ksGDQitrOf63kYEFv-t0XA-1
+Received: by mail-ed1-f72.google.com with SMTP id j10-20020a05640211ca00b004090fd8a936so2829090edw.23
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:29:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5hm9nPvkOIfJeoDF9aZf1lbKJY5zFksWJ9/IiMToaKE=;
+        b=2ptQXxXkQDPWcXQE3V8YxZEH6+/XEClF27F1p0not4nqPTLqgEj3uCNJ3AarhMeRH1
+         9+IVow+pM97kgpH7s95cejRYURlt8vshl11ZVy1TL5B3lwQ6ggDvakBdX/U6PFewq5tv
+         JjIQM8exQPJPlzrFyzMReQfB0OoVfg8ZO8paa6sUjz1x/ImOn2LFIrB6jBisMsT/w73u
+         6ShECJLQYth/K1neYxqaRsw+Fx1DXnOevq5ns47zPr7P1ddlhH2Bwahxnggwai4JelGm
+         7ftPs/YW2CfUpHohAVTq+No1wx/zFAilDHmzIoLnYHsu7XxuiEmuDKGruVpj299P0NwE
+         LbxA==
+X-Gm-Message-State: AOAM532ZY1VCk70bQEpjf1k8LOMZ0f9uzQbNHCAgxnHwn9/ew2DvyfB3
+        tVHCtpKROxmtQpCBiKnS6987Tjs7dA9U2TIQBmGHLiOlCa+IbnSPQaF3IwyOtmS0MihUOfCjhh0
+        MrO5wYjbnudSWLmMVimvcWDCu
+X-Received: by 2002:a17:906:c114:b0:6d8:cfd4:f746 with SMTP id do20-20020a170906c11400b006d8cfd4f746mr7290143ejc.538.1646314172359;
+        Thu, 03 Mar 2022 05:29:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyfMuQ9yUcJyVxYOynovimYSiinHK0NhW6m1Rp6Vv26Di/JSVofi0Q2xFVOeyHq75vhAke9PA==
+X-Received: by 2002:a17:906:c114:b0:6d8:cfd4:f746 with SMTP id do20-20020a170906c11400b006d8cfd4f746mr7290106ejc.538.1646314171834;
+        Thu, 03 Mar 2022 05:29:31 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id u1-20020aa7d0c1000000b004132c0a9ee3sm837183edo.84.2022.03.03.05.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 05:29:31 -0800 (PST)
+Message-ID: <55c6d785-e29a-872e-ddbe-3d9f9b11be8e@redhat.com>
+Date:   Thu, 3 Mar 2022 14:29:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e696255-fba5-614b-81b5-a5f7e0877a83@linux.microsoft.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] x86/PCI: Disable exclusion of E820 reserved addressed
+ in some cases
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220303004058.GA610543@bhelgaas>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220303004058.GA610543@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 02:59:13PM -0800, Iouri Tarassov wrote:
-> Hi Greg,
+Hi Bjorn,
+
+On 3/3/22 01:40, Bjorn Helgaas wrote:
+> On Mon, Feb 28, 2022 at 11:52:59AM +0100, Hans de Goede wrote:
 > 
-> Thanks a lot for reviewing the patches.
+> I know Rafael has already applied this, but I'm still trying to
+> understand this because it looks like a very complicated maintenance
+> problem.
 > 
-> I appreciate the very detailed comments. I my reply I omitted the
-> comments, which I agree with and will address in subsequent patches.
+>> Some fw has a bug where the PCI bridge window returned by the ACPI
+>> resources partly overlaps with some other address range, causing issues.
+>> To workaround this Linux excludes E820 reserved addresses when allocating
+>> addresses from the PCI bridge window. 2 known examples of such fw bugs are:
+>>
+>> 1. The returned window contains addresses which map to system RAM,
+>> see commit 4dc2287c1805 ("x86: avoid E820 regions when allocating
+>> address space").
 > 
-> On 3/1/2022 12:45 PM, Greg KH wrote:
+> Bug report is https://bugzilla.kernel.org/show_bug.cgi?id=16228
+> First dmesg log https://bugzilla.kernel.org/attachment.cgi?id=26811
+> shows:
 > 
-> >
-> > > +long dxgk_unlocked_ioctl(struct file *f, unsigned int p1, unsigned long p2);
-> > > +
-> > > +static inline void guid_to_luid(guid_t *guid, struct winluid *luid)
-> > > +{
-> > > +	*luid = *(struct winluid *)&guid->b[0];
-> >
-> > Why is the cast needed?  Shouldn't you use real types in your
-> > structures?
+>   BIOS-e820: 00000000bfe4dc00 - 00000000c0000000 (reserved)
+>   pci_root PNP0A03:00: host bridge window [mem 0xbff00000-0xdfffffff]
+>   pci 0000:00:1f.2: no compatible bridge window for [mem 0xff970000-0xff9707ff]
+>   pci 0000:00:1f.2: BAR 5: assigned [mem 0xbff00000-0xbff007ff]
+>   ahci 0000:00:1f.2: controller reset failed (0xffffffff)
+>   ahci 0000:00:1f.2: failed to stop engine (-5)
+> 
+> The problem is that _CRS advertises [mem 0xbff00000-0xdfffffff], and
+> we assigned [mem 0xbff00000-0xbff007ff] to 00:1f.2, but
+> 0xbff00000-0xbfffffff is not usable for PCI devices.  My guess is that
+> it contains host bridge registers, but all we really know is that it
+> doesn't work.
+> 
+> I think the _CRS that includes non-usable space is clearly a BIOS
+> defect.
+> 
+> The fix from 4dc2287c1805 was to avoid that region based on the
+> 0xbfe4dc00-0xc0000000 E820 entry, and the result is in
+> https://bugzilla.kernel.org/attachment.cgi?id=30662:
+> 
+>   BIOS-e820: 00000000bfe4dc00 - 00000000c0000000 (reserved)
+>   pci_root PNP0A03:00: host bridge window [mem 0xbff00000-0xf7ffffff]
+>   pci_root PNP0A03:00: host bridge window [mem 0xff980000-0xff980fff]
+>   pci 0000:00:1f.2: reg 24: [mem 0xff970000-0xff9707ff]   # BAR 5
+>   pci 0000:00:1f.2: no compatible bridge window for [mem 0xff970000-0xff9707ff]
+>   pci 0000:00:1f.2: BAR 5: assigned [mem 0xff980800-0xff980fff]
+> 
+> The patch below doesn't affect this workaround.
+> 
+>> 2. The Lenovo X1 carbon gen 2 BIOS has an overlap between an EFI/E820
+>> reserved range and the ACPI provided PCI bridge window:
+>>  efi: mem46: [MMIO] range=              [0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+>>  BIOS-e820:                         [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+>>  pci_bus 0000:00: root bus resource [mem         0xdfa00000-        0xfebfffff window]
+>> If Linux assigns the overlapping 0xdfa00000-0xdfa0ffff range to a PCI BAR
+>> then the system fails to resume after a suspend.
+> 
+> I think this is from https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+
+Correct.
+
+> If I understand correctly, the log in comment 23 from Ivan
+> (https://bugzilla.redhat.com/attachment.cgi?id=1859801) is a
+> case where resume doesn't work:
+> 
+>   BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff]
+> 
+> And the log in comment 38, also from Ivan,
+> (https://bugzilla.redhat.com/attachment.cgi?id=1861539) is a case
+> where resume *does* work:
+> 
+>   BIOS-e820: [mem 0x00000000dcf00000-0x00000000dfa0ffff] reserved
+>   efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff]
+> 
+> _CRS advertises [mem 0xdfa00000-0xfebfffff], but when we assign the
+> 0xdfa00000-0xdfafffff region to the 00:1c.0 MMIO window, resume fails.
+
+Correct this "when we assign the 0xdfa00000-0xdfafffff region to
+the 00:1c.0 MMIO window, resume fails" is my conclusion too.
+
+> I don't see a theory about what the root cause is.
+
+Correct, because I have no theory, I merely observed that:
+
+1. 0xdfa00000-0xdfa0ffff (note the 0 between the a and ffff)
+is reserved in the E820 ranges (this was first seen with
+classic BIOS boot, but also reproduces with EFI bootiung)
+
+2. If the kernel assigns PCI resources to it despite it being
+reserved the reporter reports resume being broken.
+
+I indeed do not know the exact cause of this.
+
+> It's possible this
+> is similar to case 1 above, where _CRS is defective.
+
+I definitely consider this another case of _CRS being defective
+and it is similar to 1 in that regards, yes.
+
+> But here we're
+> only assigning the 00:1c.0 MMIO window, and 00:1c.0 is a bridge to
+> [bus 02], and there are no devices on bus 02.  There should be no
+> transactions that use that MMIO window, so it's not clear why this
+> should matter.
+> 
+> If this is a _CRS defect similar to case 1, it's possible there are
+> host bridge registers in 0xdfa00000-0xdfafffff, and BIOS might use
+> those during resume, and assigning that area to the 00:1c.0 MMIO
+> window might interfere with that.  But that's a lot of speculation.
+> 
+> If you have a good Lenovo contact, they might be able to confirm or
+> deny this.
+> 
+> I'm missing some things here that should be obvious; can you help me
+> out?
+> 
+>   - Why did the 4dc2287c1805 workaround not apply here?  The E820
+>     region overlaps the _CRS window just like in case 1, so why did we
+>     assign 0xdfa00000?
+
+The 4dc2287c1805 workaround does apply here. The problem is that
+my earlier patch which Rafael merged to not honor e820 reservations
+on newer BIOS-es broke suspend/resume since that patch disables
+the 4dc2287c1805 workaround on this machine.
+
+The comment tries to mention this issue as a second case of
+why the 4dc2287c1805 workaround is necessary.
+
+The goal of this part of the comment is to explain why we
+cannot just disable the 4dc2287c1805 workaround.
+
+>   - How does this patch work around the problem?  This patch checks if
+>     a host bridge window is completely contained in an EFI MMIO
+>     region, but I don't see such an EFI region here.
+
+It does not help with case 2 from the comment, since that
+case is already effectively fixed by the 4dc2287c1805 workaround.
+
+This patch is a replacement for my earlier fix to disable
+the 4dc2287c1805 workaround on newer systems. Since that patch
+was causing the regression reported in the Red Hat 2029207
+the patch to disable the 4dc2287c1805 workaround on newer systems
+has been reverted.
+
+So this is yet another attempt to fix the case where
+the PCI subsystem cannot assign resources to some PCI
+devices because the entire root bridge window is covered
+by an EFI memtable MMIO entry, which gets translated into
+an e820_table reserved entry.
+
+What this patch does is identify systems which have the
+problem of the entire root bridge window being covered
+by an EFI memtable MMIO entry and only disable the
+4dc2287c1805 workaround there.
+
+The idea here is to only disable arch_remove_reservations()
+taking e820 reservations into account on as narrow a set of
+systems as possible.
+
+Keeping it enabled on all other systems, including recent
+systems. Since recent systems also benefit from the
+4dc2287c1805 workaround as the regression from my patch
+to disable it on recent systems has shown us.
+
+I hope this helps understand things better.
+
+Regards,
+
+Hans
+
+
+
+
+
+>> Recently (2019) some systems have shown-up with EFI memmap MMIO entries
+>> covering the entire ACPI provided PCI bridge window. These memmap entries
+>> get converted into e820_table entries, causing all attempts to assign
+>> memory to PCI BARs which have not been setup by the BIOS to fail.
+>> For example see these dmesg snippets from a Lenovo IdeaPad 3 15IIL 81WE:
+>>  efi: mem63: [MMIO] range=              [0x0000000065400000-0x00000000cfffffff] (1708MB)
+>>  BIOS-e820:                         [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>>  pci_bus 0000:00: root bus resource [mem         0x65400000-        0xbfffffff window]
+>>  pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
+>>  pci 0000:00:15.0: BAR 0: failed to assign [mem size 0x00001000 64bit]
+>>
+>> To fix this, check if the ACPI provided PCI bridge window is fully
+>> contained within in EFI memmap MMIO region and in that case disable
+>> the "exclude E820 reserved addresses" workaround, fixing the problem
+>> of not being able to find free space for unassigned BARs.
+>>
+>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+>> BugLink: https://bugs.launchpad.net/bugs/1878279
+>> BugLink: https://bugs.launchpad.net/bugs/1931715
+>> BugLink: https://bugs.launchpad.net/bugs/1932069
+>> BugLink: https://bugs.launchpad.net/bugs/1921649
+>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>> Changes in v2:
+>> - Add a couple of missing includes to arch/x86/include/asm/pci_x86.h
+>>   to fix i386 build errors Reported-by: kernel test robot <lkp@intel.com>
+>> - Do not call resource_is_efi_mmio_region() on resource-list entries which
+>>   have just been destroyed because they match resource_is_pcicfg_ioport()
+>>   Reported-by: kernel test robot <oliver.sang@intel.com>
+>> - Add (res->flags & IORESOURCE_MEM) check to resource_is_efi_mmio_region()
+>> ---
+>>  arch/x86/include/asm/pci_x86.h | 10 +++++
+>>  arch/x86/kernel/resource.c     |  4 ++
+>>  arch/x86/pci/acpi.c            | 68 +++++++++++++++++++++++++++++++++-
+>>  3 files changed, 81 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
+>> index 490411dba438..4ce61ab01a4f 100644
+>> --- a/arch/x86/include/asm/pci_x86.h
+>> +++ b/arch/x86/include/asm/pci_x86.h
+>> @@ -5,7 +5,9 @@
+>>   *	(c) 1999 Martin Mares <mj@ucw.cz>
+>>   */
+>>  
+>> +#include <linux/init.h>
+>>  #include <linux/ioport.h>
+>> +#include <linux/spinlock.h>
+>>  
+>>  #undef DEBUG
+>>  
+>> @@ -64,6 +66,8 @@ void pcibios_scan_specific_bus(int busn);
+>>  
+>>  /* pci-irq.c */
+>>  
+>> +struct pci_dev;
+> 
+> Both the above look like fixes to an unrelated asm/pci_x86.h
+> problem that happened to be exposed by including it in
+> arch/x86/kernel/resource.c.  Most users of asm/pci_x86.h
+> include linux/pci.h first, which covers up the problem.
+> 
+>>  struct irq_info {
+>>  	u8 bus, devfn;			/* Bus, device and function */
+>>  	struct {
+>> @@ -232,3 +236,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
+>>  # define x86_default_pci_init_irq	NULL
+>>  # define x86_default_pci_fixup_irqs	NULL
+>>  #endif
+>> +
+>> +#if defined CONFIG_PCI && defined CONFIG_ACPI
+>> +extern bool pci_use_e820;
+>> +#else
+>> +#define pci_use_e820 true
+>> +#endif
+>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+>> index 9b9fb7882c20..e8dc9bc327bd 100644
+>> --- a/arch/x86/kernel/resource.c
+>> +++ b/arch/x86/kernel/resource.c
+>> @@ -1,6 +1,7 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>>  #include <linux/ioport.h>
+>>  #include <asm/e820/api.h>
+>> +#include <asm/pci_x86.h>
+>>  
+>>  static void resource_clip(struct resource *res, resource_size_t start,
+>>  			  resource_size_t end)
+>> @@ -28,6 +29,9 @@ static void remove_e820_regions(struct resource *avail)
+>>  	int i;
+>>  	struct e820_entry *entry;
+>>  
+>> +	if (!pci_use_e820)
+>> +		return;
+>> +
+>>  	for (i = 0; i < e820_table->nr_entries; i++) {
+>>  		entry = &e820_table->entries[i];
+>>  
+>> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+>> index 052f1d78a562..fce05e03ba9e 100644
+>> --- a/arch/x86/pci/acpi.c
+>> +++ b/arch/x86/pci/acpi.c
+>> @@ -1,4 +1,5 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>> +#include <linux/efi.h>
+>>  #include <linux/pci.h>
+>>  #include <linux/acpi.h>
+>>  #include <linux/init.h>
+>> @@ -21,6 +22,7 @@ struct pci_root_info {
+>>  
+>>  static bool pci_use_crs = true;
+>>  static bool pci_ignore_seg;
+>> +bool pci_use_e820 = true;
+>>  
+>>  static int __init set_use_crs(const struct dmi_system_id *id)
+>>  {
+>> @@ -291,6 +293,63 @@ static bool resource_is_pcicfg_ioport(struct resource *res)
+>>  		res->start == 0xCF8 && res->end == 0xCFF;
+>>  }
+>>  
+>> +/*
+>> + * Some fw has a bug where the PCI bridge window returned by the ACPI resources
+>> + * partly overlaps with some other address range, causing issues. To workaround
+>> + * this Linux excludes E820 reserved addresses when allocating addresses from
+>> + * the PCI bridge window. 2 known examples of such firmware bugs are:
+>> + *
+>> + * 1. The returned window contains addresses which map to system RAM, see
+>> + * commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address space").
+>> + *
+>> + * 2. The Lenovo X1 carbon gen 2 BIOS has an overlap between an EFI/E820
+>> + * reserved range and the ACPI provided PCI bridge window:
+>> + *  efi: mem46: [MMIO] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+>> + *  BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+>> + *  pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>> + * If Linux assigns the overlapping 0xdfa00000-0xdfa0ffff range to a PCI BAR
+>> + * then the system fails to resume after a suspend.
+>> + *
+>> + * Recently (2019) some systems have shown-up with EFI memmap MMIO entries
+>> + * covering the entire ACPI provided PCI bridge window. These memmap entries
+>> + * get converted into e820_table entries, causing all attempts to assign
+>> + * memory to PCI BARs which have not been setup by the BIOS to fail.
+>> + * For example see these dmesg snippets from a Lenovo IdeaPad 3 15IIL 81WE:
+>> + *  efi: mem63: [MMIO] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+>> + *  BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>> + *  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+>> + *  pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
+>> + *  pci 0000:00:15.0: BAR 0: failed to assign [mem size 0x00001000 64bit]
+>> + *
+>> + * To code below checks if the ACPI provided PCI bridge window is fully
+>> + * contained within in EFI memmap MMIO region and in that case disables
+>> + * the "exclude E820 reserved addresses" workaround to avoid this issue.
+>> + */
+>> +static bool resource_is_efi_mmio_region(const struct resource *res)
+>> +{
+>> +	unsigned long long start, end;
+>> +	efi_memory_desc_t *md;
+>> +
+>> +	if (!(res->flags & IORESOURCE_MEM))
+>> +		return false;
+>> +
+>> +	if (!efi_enabled(EFI_MEMMAP))
+>> +		return false;
+>> +
+>> +	for_each_efi_memory_desc(md) {
+>> +		if (md->type != EFI_MEMORY_MAPPED_IO)
+>> +			continue;
+>> +
+>> +		start = md->phys_addr;
+>> +		end = start + (md->num_pages << EFI_PAGE_SHIFT) - 1;
+>> +
+>> +		if (res->start >= start && res->end <= end)
+>> +			return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+>>  {
+>>  	struct acpi_device *device = ci->bridge;
+>> @@ -300,9 +359,16 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+>>  
+>>  	status = acpi_pci_probe_root_resources(ci);
+>>  	if (pci_use_crs) {
+>> -		resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
+>> +		resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+>>  			if (resource_is_pcicfg_ioport(entry->res))
+>>  				resource_list_destroy_entry(entry);
+>> +			else if (resource_is_efi_mmio_region(entry->res)) {
+>> +				dev_info(&device->dev,
+>> +					"host bridge window %pR is marked by EFI as MMIO\n",
+>> +					entry->res);
+>> +				pci_use_e820 = false;
+> 
+> This message suggests that marking the host bridge window as MMIO in
+> EFI is a defect, or at least something unusual and worthy of being
+> flagged.  But I think it's perfectly legal.
+> 
+> UEFI v2.8, sec 7.2, says EfiMemoryMappedIO means:
+> 
+>   Used by system firmware to request that a memory-mapped IO region be
+>   mapped by the OS to a virtual address so it can be accessed by EFI
+>   runtime services.
 > 
 > 
-> The VMBus channel ID, which is GUID, is present in the PCI config space
-> of the compute device. The convention is that the lower part of the GUID
-> is LUID (local unique identifier). This function just converts GUID to
-> LUID. I am not sure what is the ask here.
-
-You need to documen the heck out of what you are doing here as it looks
-very very odd.
-
-> > > +/*
-> > > + * The interface version is used to ensure that the host and the guest use the
-> > > + * same VM bus protocol. It needs to be incremented every time the VM bus
-> > > + * interface changes. DXGK_VMBUS_LAST_COMPATIBLE_INTERFACE_VERSION is
-> > > + * incremented each time the earlier versions of the interface are no longer
-> > > + * compatible with the current version.
-> > > + */
-> > > +#define DXGK_VMBUS_INTERFACE_VERSION_OLD		27
-> > > +#define DXGK_VMBUS_INTERFACE_VERSION			40
-> > > +#define DXGK_VMBUS_LAST_COMPATIBLE_INTERFACE_VERSION	16
-> >
-> > Where do these numbers come from, the hypervisor specification?
+>> +			}
+>> +		}
+>>  		return status;
+>>  	}
+>>  
+>> -- 
+>> 2.35.1
+>>
 > 
-> 
-> The definitions are for the VMBus interface between the virtual compute
-> device in the guest and the Windows host. The interface version is
-> updated when the VMBus protocol is changed. These are specific to the
-> virtual compute device, not to the hypervisor.
 
-That's not ok, you can not break the user/kernel interface from this
-moment going forward forever.  You can't just have version numbers for
-your protocol, you need to handle it correctly like all of Linux does.
-
-> > > +#define DXGKRNL_VERSION			0x2216
-> >
-> > What does this mean?
-> 
-> 
-> This is the driver implementation version. There are many Microsoft
-> shipped Linux kernels, which include the driver. The version allows to
-> quickly determine, which level of functionality or bug fixes is
-> implemented in the current driver.
-
-That number means nothing once the driver is in the kernel tree as your
-driver is part of a larger whole and you have no idea what people have,
-or have not, backported to your portion of the driver or the rest of the
-kernel anymore.  Just drop this, it's not going to be used ever again,
-and will always be out of date and wrong.
-
-In-kernel drivers do NOT need a version number.  I have worked to remove
-almost all of them, but have not finished that task, which is why you
-see a few remaining.  Do not copy bad examples.
-
-> > > +/*
-> > > + * Part of the PCI config space of the vGPU device is used for vGPU
-> > > + * configuration data. Reading/writing of the PCI config space is forwarded
-> > > + * to the host.
-> > > + */
-> >
-> > > +/* DXGK_VMBUS_INTERFACE_VERSION (u32) */
-> >
-> > What is this?
-> 
-> 
-> This comment explains that the value of DXGK_VMBUS_INTERFACE_VERSION is
-> located at the offset DXGK_VMBUS_CHANNEL_ID_OFFSET in the PCI config space.
-
-Then please explain that.
-
-> > > +#define DXGK_VMBUS_VERSION_OFFSET	(DXGK_VMBUS_CHANNEL_ID_OFFSET + \
-> > > +					sizeof(guid_t))
-> >
-> > offsetof() is your friend, please use it.
-> 
-> 
-> There is no structure definition for the PCI config space of the device.
-> Therefore, offsets are computed by using data size.
-
-That's odd, why not just use a structure on top of the memory location?
-That way you get real structure information if things change and you
-don't have to cast anything.
-
-> > > +/* Luid of the virtual GPU on the host (struct winluid) */
-> >
-> > What is a "luid"?
-> 
-> 
-> LUID is "Locally Unique Identifier". It is used in Windows and its value
-> is guaranteed to be unique until the computer reboots.
-
-What about vm lifespans?  VM cloning?  Why does the Linux kernel care
-about this value?
-
-> > > +	ret = vmbus_driver_register(&dxg_drv);
-> > > +	if (ret) {
-> > > +		pr_err("vmbus_driver_register failed: %d", ret);
-> > > +		return ret;
-> > > +	}
-> > > +	dxgglobal->vmbus_registered = true;
-> > > +
-> > > +	pr_info("%s  Version: %x", __func__, DXGKRNL_VERSION);
-> >
-> > When drivers work, they are quiet.
-> >
-> > Also, in-kernel modules do not have a version, they are part of the
-> > kernel tree, and that's the "version" they have.  You can drop the
-> > individual version here, it makes no sense anymore.
-> 
-> 
-> Microsoft develops many Linux kernels when the dxgkrnl driver is
-> included (EFLOW, Android, WSL). The kernels are built at different times
-> and might include a different version of the driver. Printing the
-> version allows to quickly determine what functionality and bug fixes are
-> included in the driver.
-
-Again, see above why your driver version is not needed.  Please remove
-this line as well.
-
-> I see that other in-tree drivers print some information during
-> init_module (like nfblock.c).
-
-Some older ones do, yes.  Please be good and follow the proper rules and
-be quiet when booting.
-
-> This is done for convenience. So instead of tracking multiple kernel
-> versions, we can track the dxgkrnl driver version. I am ok to remove it
-> if it really hurts something. It is only a single line per driver load.
-
-The driver version _IS_ the kernel version once it is merged into the
-kernel tree, as you rely on the whole of the kernel for your proper
-functionality.  Drivers do not need individual versions.
-
-Again, work with the experienced Linux developers at your company for
-this type of thing.  They know this already, you don't need me to find
-basic problems like this in your code :)
-
-thanks,
-
-greg k-h

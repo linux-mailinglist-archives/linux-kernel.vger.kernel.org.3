@@ -2,100 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAF14CC9E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232FB4CC9E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiCCXS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S235729AbiCCXSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiCCXSZ (ORCPT
+        with ESMTP id S231898AbiCCXSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:18:25 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFAFDEB1;
-        Thu,  3 Mar 2022 15:17:37 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id k7so5254279ilo.8;
-        Thu, 03 Mar 2022 15:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
-        b=WdEq8Z/fW+RL+Ej4Z4MFuld6ZS/v8HLUbxQGRncbLZD49oQmlx/ygy9YpL76W4YMdG
-         dPTLPRcfVspo2oDtOcXWrBJGSLhVKZX4Tgv+EaQaDXxg8aILtMholWijNBkhpdkyukq9
-         /nmmMX4v5JORNe4LrGEY/f6RR4w0MsbZuj2V6VmtsZHrn8npzp4URUBhvys6mnUKUBn3
-         gQ5nCmY+DKZQm1yACzBkMPDp25V6e7YdkHZe/ebB9G0ktfy1tjmDfMkP9mslH4f36AOG
-         SmMICNRXWvf2YisP9UZx/ntekFAJBNN0LjJqH5dNr3jwP4+i4rqCC+vU28v9Ds5TS7Ad
-         /VfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
-        b=D+zGdkAmEAVPf/8m0BvtPyM8jm62pSTIpfey8KsfeNYeW+3RFzdzfltiozBcUKiBvU
-         sj4tSugLyjo3OFakISzonyGtOAvF3u1JZKE5SXSgAzhPeNQO0OOESxB+Q9TIig5g5rJs
-         qioD4a9iGY6zyl8SFo8PlW0Oh1P/Q3F0J8o3TaOfkYInF5vXwMV3BkKjxpJoX9haPR8u
-         +WbW00C5kkSLAQPQLEem3SN73MXr+eG4fW3U364wRJrDVEDvDRY5uo0SBuoBT0hS2sCd
-         +ILzzAWmdobpOii4TkG/xF24kwtSjZsOtNugMJGdw5E66OWkv04Dc4Bb2E3skNg2/PeU
-         v9vQ==
-X-Gm-Message-State: AOAM530lpxD82Wa6c/cau0od3jA45oLH0T0NkJKAqI2zn3ecL3OtiFNE
-        KywBVcYRcpBbQgJg+8+hEszx/Vz/gBvASYQV3L8=
-X-Google-Smtp-Source: ABdhPJxi8VypfVGr9Khjx8L28LU1hG/qzef02DaLMAkHfbs2sOCVurtw7fWFOlTYy2xjj36m0p2movbsKHKZ2XFic4Q=
-X-Received: by 2002:a92:c908:0:b0:2c1:a287:8868 with SMTP id
- t8-20020a92c908000000b002c1a2878868mr32170001ilp.321.1646349456482; Thu, 03
- Mar 2022 15:17:36 -0800 (PST)
+        Thu, 3 Mar 2022 18:18:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0E72A70E;
+        Thu,  3 Mar 2022 15:18:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455B761532;
+        Thu,  3 Mar 2022 23:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F7EC340F1;
+        Thu,  3 Mar 2022 23:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646349482;
+        bh=tlOHNfyRtXEFJ6xoJ1AtsupQm9XzW3NADGZEF72E09I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FSEdEhsphzeP07HC7WHYwdul0B2vKlmEIrKvi0FwBCC+QJLQQ6mr4OX0OMQOp6FYW
+         tigRGG0MyZbrzSM66O2k5FQMbyZdAlUSNdK7RVosG2TvW2RTMY5GFQ5Ln6e20z+JPF
+         ozi0nuP16NZZsa1lCfilUB9asttLe71PTDN7GxXuGLYyyU6dnWwRjlZowT4OTGARQW
+         2a3pRbPncrYYKmQgP69WtBPOimN3Xuusbgks8+l51Y4asforlD5I0/LmGZ0IJx8AkV
+         JQnWJ0YMf6rsSviWCZigheHA1NOYMJvD054gRPpMh+SPuqOyJ7Al+YaYrvlwqxQEs7
+         faLc08eacbILA==
+Received: by mail-ed1-f46.google.com with SMTP id o1so7530082edc.3;
+        Thu, 03 Mar 2022 15:18:02 -0800 (PST)
+X-Gm-Message-State: AOAM530hsYMDr16amKWivENSDcLRzJMUF4HduiBSGBsnWoBFzxqHemNN
+        tyxhCx1UOhiQQjkO1LhTCYLcqed+QXkkwc4MFA==
+X-Google-Smtp-Source: ABdhPJzvyLJfhUCl0fo8/owb0CYZcEj2xeWHM6SoIUh0U5eB5kzm5d1D+Kv+qFcoK6fL5nAJQT70EZLXKwscis5r5DA=
+X-Received: by 2002:a05:6402:4384:b0:413:9e36:b56f with SMTP id
+ o4-20020a056402438400b004139e36b56fmr25916622edc.280.1646349480795; Thu, 03
+ Mar 2022 15:18:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-In-Reply-To: <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 4 Mar 2022 00:17:25 +0100
-Message-ID: <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Tom Rix <trix@redhat.com>, Joe Perches <joe@perches.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220303211620.32456-1-david@ixit.cz>
+In-Reply-To: <20220303211620.32456-1-david@ixit.cz>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Mar 2022 17:17:49 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKXwfKRooYmUB7HQwOi49P6Fd9sOqbxMa9TRnp6WqiYnw@mail.gmail.com>
+Message-ID: <CAL_JsqKXwfKRooYmUB7HQwOi49P6Fd9sOqbxMa9TRnp6WqiYnw@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: timer: Tegra: Convert text bindings to yaml
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Warren <swarren@nvidia.com>,
+        ~okias/devicetree@lists.sr.ht,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 11:44 PM Finn Thain <fthain@linux-m68k.org> wrote:
+On Thu, Mar 3, 2022 at 3:16 PM David Heidelberg <david@ixit.cz> wrote:
 >
-> Others might argue that they should always be changed from,
+> Convert Tegra timer binding into yaml format.
 >
-> /*
->  * this style
->  * of multiline comment
->  */
+> This commit also merge 3 text bindings with almost
+> identical content (differens in number of registers).
 >
-> to
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+> v2:
+>  - reg: true -> reg: maxItems: 1
+> ---
+>  .../bindings/timer/nvidia,tegra-timer.yaml    | 150 ++++++++++++++++++
+>  .../bindings/timer/nvidia,tegra20-timer.txt   |  24 ---
+>  .../bindings/timer/nvidia,tegra210-timer.txt  |  36 -----
+>  .../bindings/timer/nvidia,tegra30-timer.txt   |  28 ----
+>  4 files changed, 150 insertions(+), 88 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra20-timer.txt
+>  delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra210-timer.txt
+>  delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra30-timer.txt
 >
-> /* this style
->  * of multiline comment
->  */
+> diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml b/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml
+> new file mode 100644
+> index 000000000000..f0b401f80aff
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml
+> @@ -0,0 +1,150 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/timer/nvidia,tegra-timer.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: NVIDIA Tegra timer
+> +
+> +maintainers:
+> +  - Stephen Warren <swarren@nvidia.com>
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: nvidia,tegra210-timer
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          # Either a single combined interrupt or up to 14 individual interrupts
+> +          minItems: 1
+> +          maxItems: 14
+> +          description: >
+> +            A list of 14 interrupts; one per each timer channels 0 through 13
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          oneOf:
+> +            - items:
+> +                - enum:
+> +                    - nvidia,tegra114-timer
+> +                    - nvidia,tegra124-timer
+> +                    - nvidia,tegra132-timer
+> +                - const: nvidia,tegra30-timer
+> +            - items:
+> +                - const: nvidia,tegra30-timer
+> +                - const: nvidia,tegra20-timer
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          # Either a single combined interrupt or up to 6 individual interrupts
+> +          minItems: 1
+> +          maxItems: 6
+> +          description: >
+> +            A list of 6 interrupts; one per each of timer channels 1 through 5,
+> +            and one for the shared interrupt for the remaining channels.
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: nvidia,tegra20-timer
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          # Either a single combined interrupt or up to 4 individual interrupts
+> +          minItems: 1
+> +          maxItems: 4
+> +          description: |
+> +            A list of 4 interrupts; one per timer channel.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: nvidia,tegra210-timer
+> +        description: >
+> +          The Tegra210 timer provides fourteen 29-bit timer counters and one 32-bit
+> +          timestamp counter. The TMRs run at either a fixed 1 MHz clock rate derived
+> +          from the oscillator clock (TMR0-TMR9) or directly at the oscillator clock
+> +          (TMR10-TMR13). Each TMR can be programmed to generate one-shot, periodic,
+> +          or watchdog interrupts.
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra114-timer
+> +              - nvidia,tegra124-timer
+> +              - nvidia,tegra132-timer
+> +          - const: nvidia,tegra30-timer
+> +      - items:
+> +          - const: nvidia,tegra30-timer
+> +          - const: nvidia,tegra20-timer
+> +        description: >
+> +          The Tegra30 timer provides ten 29-bit timer channels, a single 32-bit free
+> +          running counter, and 5 watchdog modules. The first two channels may also
+> +          trigger a legacy watchdog reset.
+> +      - const: nvidia,tegra20-timer
+> +        description: >
+> +          The Tegra20 timer provides four 29-bit timer channels and a single 32-bit free
+> +          running counter. The first two channels may also trigger a watchdog reset.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts: true
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: timer
+> +
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    timer@60005000 {
+> +        compatible = "nvidia,tegra30-timer", "nvidia,tegra20-timer";
+> +        reg = <0x60005000 0x400>;
+> +        interrupts = <0 0 IRQ_TYPE_LEVEL_HIGH
+> +                      0 1 IRQ_TYPE_LEVEL_HIGH
+> +                      0 41 IRQ_TYPE_LEVEL_HIGH
+> +                      0 42 IRQ_TYPE_LEVEL_HIGH
+> +                      0 121 IRQ_TYPE_LEVEL_HIGH
+> +                      0 122 IRQ_TYPE_LEVEL_HIGH>;
 
-In general, for things that the coding style guide talks about, we
-should follow them, even if some subsystems do not (they can always
-override in their folder if they really, really want it). So, here for
-instance, the first one should be used.
+The unhelpful bot warning is a new thing. 'interrupts' here must now
+have brackets around each entry to figure out the interrupt cell size.
 
-Cheers,
-Miguel
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +        clocks = <&tegra_car 214>;
+> +    };
+> +  - |
+> +    #include <dt-bindings/clock/tegra210-car.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    timer@60005000 {
+> +        compatible = "nvidia,tegra210-timer";
+> +        reg = <0x60005000 0x400>;
+> +        interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&tegra_car TEGRA210_CLK_TIMER>;
+> +        clock-names = "timer";
+> +    };

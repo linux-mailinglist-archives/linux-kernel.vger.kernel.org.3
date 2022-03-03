@@ -2,290 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1256C4CC560
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EBC4CC56C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234204AbiCCSng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S235734AbiCCSsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiCCSne (ORCPT
+        with ESMTP id S233217AbiCCSsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:43:34 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1D849252
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:42:47 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id k1so5482783pfu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:42:47 -0800 (PST)
+        Thu, 3 Mar 2022 13:48:50 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D1D5E140
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:48:00 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id z11so5454539pla.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=wVCqmsaBx5BRJU8Ae8H+hFHgXaVbJdgyYzPL4TAjOOk=;
-        b=HcOsysllIrXqkZ7AqKo7NIj5C/qd6Tx/yY06ZsbHhm5uDSH3QWXNtcVFm+734lU0Ou
-         B2LbMD16TWJD8ltQkObec+Rdr5hwnFr8fGvMV6sRaTHTlhht4FJXOIEQ9OZlITMvXCkA
-         noxBf7TQkoacHdqu2xQyqdlQtGsTRSz2HtbvA=
+        bh=p7fhDS5lYFCTZC+D85sVdozKwDtg+g9RjPaejvj9554=;
+        b=dB8mtC6VM7kHHTyoxH5/QJKjVMIR277NeZ85hG44JH5v/jSPveyQlMXnFAYPTeYTE+
+         ru5G4JV6wDdcmKBn+lXnLb80ODe/fPvo7IUv8V652dQ9pDmcwshSm6WF4DlrMM+TUG6m
+         K25VJuCVmRJhJxpNV6RgHsJ1XrNuRy5u9xtSsAWRANJjUIf6clAsoKR7Ihkc/yyVfTCC
+         RzWOiLSmppt17Tpj6GkIU3wJgEBeLVsUIss+hlqeM384Y1MUHkRgro+yyTr5Ebc+LEYw
+         2XvoC87Dw3DYUxxA+Eoq4kstx+IhPRq9ilBEkvAYicr5zEqX4mZZuDosiAk+z8InzQv0
+         uVLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wVCqmsaBx5BRJU8Ae8H+hFHgXaVbJdgyYzPL4TAjOOk=;
-        b=6ydZbWyiPeh1pp9GxQiFeLAmelq7FzspClcTa2R6Dfl7ctj3XWWXlWZqRGR7GpfRkg
-         k/IfmEtJhebWKVaXHMcaXVswXuT1RjAihs0nSGsrHJxCmtnIkqAyRV4Nk1pSJs/1ZCBT
-         RFSl5N/nlv5NKlYU4vMUdNIcPso7kukYcNP6raIQjiHhstgYMsAkvxy+YjpYu9Q/5yKZ
-         JqjW8Y/saw+j+8YTACpKDiMNos4YCQXd2i9/ptrDT7kHzfz7C5sqsGf7pERBykkjIq0G
-         5VcQyxtdeJ/EfhhbINeEliWMQ5cwxMQAx6D1IKTFsv0Eq+3nP5W/8EHsNwuzu5PlZlpl
-         23lA==
-X-Gm-Message-State: AOAM530nKK1RCELwnLUqGvBogiALd8dDyjew36I+fdFqCtluGFO7qwUd
-        LIYU6XNiqp8R0yjvfJ436vdZiQ==
-X-Google-Smtp-Source: ABdhPJzhNyErLdMw9KeCxNp9VGvIjoU7U/12E0jQypZE/NP075cuApJe7oeWRcL/I8O0Bx0kAVi3Bw==
-X-Received: by 2002:a63:4e14:0:b0:374:4a37:4966 with SMTP id c20-20020a634e14000000b003744a374966mr31414094pgb.118.1646332966859;
-        Thu, 03 Mar 2022 10:42:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4-20020a17090a9bc400b001bc2e7e51f3sm3101065pjw.21.2022.03.03.10.42.46
+        bh=p7fhDS5lYFCTZC+D85sVdozKwDtg+g9RjPaejvj9554=;
+        b=NYtoSw2EOubBpRFeGCXvn/tI6XPTRDmi7Sc9/fH2Pj3xaqu4ucpPNqcxRAayS9JcVq
+         ZM2leFqkxUqnP/cHEsUdmdWo+Ngy2heebTxQ2Oq7+4De5cRK2AJGOHFsc7qOob7nGie7
+         1lcW9huGbImCT/G/h2OtMX4e9etkBBf8lAV61dN3Tx0lbZZS4FUygI5ER8XdeG8dT3KS
+         Oiz8/BJNa/ZfUmcPOduItF6kcN6hChVwN9wU8ytPNi5lEZOG8tnJXeyIOUkuP+nZSXrT
+         WQckDF21soBY7dqn7DdlwwH52KcKXj3f1tskfhL2UkXELDgXKlyePDAr/20WZ1/cF30s
+         gMtA==
+X-Gm-Message-State: AOAM5336eHfPxjyg5P4FM+BXPcOvj3vdnb6P1SRFRfgM4tl0IPeR/lfK
+        0hfQIBUpocyYsSnKOE3UrM7/6A==
+X-Google-Smtp-Source: ABdhPJymlZyWv19HlXRmNhb0DuWfd4UTVZi8t9hyR5Fg/bFTNpoepuiPPT4hR9BqH07InBiRmc61Bg==
+X-Received: by 2002:a17:902:a613:b0:151:7d6d:aa69 with SMTP id u19-20020a170902a61300b001517d6daa69mr16183298plq.89.1646333279704;
+        Thu, 03 Mar 2022 10:47:59 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b004f3f2929d7asm3095289pfc.217.2022.03.03.10.47.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:42:46 -0800 (PST)
-Date:   Thu, 3 Mar 2022 10:42:45 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Li <ashimida@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Message-ID: <202203031010.0A492D114@keescook>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
+        Thu, 03 Mar 2022 10:47:59 -0800 (PST)
+Date:   Thu, 3 Mar 2022 18:47:55 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 12/28] KVM: x86/mmu: Refactor low-level TDP MMU set
+ SPTE helper to take raw vals
+Message-ID: <YiENWyDecwhlwJRi@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-13-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303074339.86337-1-ashimida@linux.alibaba.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220226001546.360188-13-seanjc@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 11:43:39PM -0800, Dan Li wrote:
-> Add tests for SCS (Shadow Call Stack) based
-> backward CFI (as implemented by Clang and GCC).
-
-Cool; thanks for writing these!
-
+On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> Refactor __tdp_mmu_set_spte() to work with raw values instead of a
+> tdp_iter objects so that a future patch can modify SPTEs without doing a
+> walk, and without having to synthesize a tdp_iter.
 > 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Ben Gardon <bgardon@google.com>
+
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
+
 > ---
->  drivers/misc/lkdtm/Makefile             |  1 +
->  drivers/misc/lkdtm/core.c               |  2 +
->  drivers/misc/lkdtm/lkdtm.h              |  4 ++
->  drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
->  tools/testing/selftests/lkdtm/tests.txt |  2 +
->  5 files changed, 76 insertions(+)
->  create mode 100644 drivers/misc/lkdtm/scs.c
+>  arch/x86/kvm/mmu/tdp_mmu.c | 51 +++++++++++++++++++++++---------------
+>  1 file changed, 31 insertions(+), 20 deletions(-)
 > 
-> diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-> index 2e0aa74ac185..e2fb17868af2 100644
-> --- a/drivers/misc/lkdtm/Makefile
-> +++ b/drivers/misc/lkdtm/Makefile
-> @@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
->  lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
->  lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
->  lkdtm-$(CONFIG_LKDTM)		+= cfi.o
-> +lkdtm-$(CONFIG_LKDTM)		+= scs.o
-
-I'd expect these to be in cfi.c, rather than making a new source file.
-
->  lkdtm-$(CONFIG_LKDTM)		+= fortify.o
->  lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 1dcdf1a4fcc1..9e8ba6f12ebf 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -617,9 +617,13 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
 >  
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index f69b964b9952..d0ce0bec117c 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
->  	CRASHTYPE(USERCOPY_KERNEL),
->  	CRASHTYPE(STACKLEAK_ERASING),
->  	CRASHTYPE(CFI_FORWARD_PROTO),
-> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
-> +	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
->  	CRASHTYPE(FORTIFIED_OBJECT),
->  	CRASHTYPE(FORTIFIED_SUBOBJECT),
->  	CRASHTYPE(FORTIFIED_STRSCPY),
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index d6137c70ebbe..a23d32dfc10b 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
->  /* cfi.c */
->  void lkdtm_CFI_FORWARD_PROTO(void);
+>  /*
+>   * __tdp_mmu_set_spte - Set a TDP MMU SPTE and handle the associated bookkeeping
+> - * @kvm: kvm instance
+> - * @iter: a tdp_iter instance currently on the SPTE that should be set
+> - * @new_spte: The value the SPTE should be set to
+> + * @kvm:	      KVM instance
+> + * @as_id:	      Address space ID, i.e. regular vs. SMM
+> + * @sptep:	      Pointer to the SPTE
+> + * @old_spte:	      The current value of the SPTE
+> + * @new_spte:	      The new value that will be set for the SPTE
+> + * @gfn:	      The base GFN that was (or will be) mapped by the SPTE
+> + * @level:	      The level _containing_ the SPTE (its parent PT's level)
+>   * @record_acc_track: Notify the MM subsystem of changes to the accessed state
+>   *		      of the page. Should be set unless handling an MMU
+>   *		      notifier for access tracking. Leaving record_acc_track
+> @@ -631,12 +635,10 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+>   *		      Leaving record_dirty_log unset in that case prevents page
+>   *		      writes from being double counted.
+>   */
+> -static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+> -				      u64 new_spte, bool record_acc_track,
+> -				      bool record_dirty_log)
+> +static void __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
+> +			       u64 old_spte, u64 new_spte, gfn_t gfn, int level,
+> +			       bool record_acc_track, bool record_dirty_log)
+>  {
+> -	WARN_ON_ONCE(iter->yielded);
+> -
+>  	lockdep_assert_held_write(&kvm->mmu_lock);
 >  
-> +/* scs.c */
-> +void lkdtm_CFI_BACKWARD_SHADOW(void);
-> +void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
+>  	/*
+> @@ -646,39 +648,48 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+>  	 * should be used. If operating under the MMU lock in write mode, the
+>  	 * use of the removed SPTE should not be necessary.
+>  	 */
+> -	WARN_ON(is_removed_spte(iter->old_spte) || is_removed_spte(new_spte));
+> +	WARN_ON(is_removed_spte(old_spte) || is_removed_spte(new_spte));
+>  
+> -	kvm_tdp_mmu_write_spte(iter->sptep, new_spte);
+> +	kvm_tdp_mmu_write_spte(sptep, new_spte);
 > +
->  /* fortify.c */
->  void lkdtm_FORTIFIED_OBJECT(void);
->  void lkdtm_FORTIFIED_SUBOBJECT(void);
-> diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
-> new file mode 100644
-> index 000000000000..5922a55a8844
-> --- /dev/null
-> +++ b/drivers/misc/lkdtm/scs.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * This is for all the tests relating directly to Shadow Call Stack.
-> + */
-> +#include "lkdtm.h"
-> +
-> +#ifdef CONFIG_ARM64
-> +/* Function clears its return address. */
-> +static noinline void lkdtm_scs_clear_lr(void)
-> +{
-> +	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-> +
-> +	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-
-Is the asm needed here? Why not:
-
-	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-
-	*lr = 0;
-
+> +	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
+>  
+> -	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
+> -			      new_spte, iter->level, false);
+>  	if (record_acc_track)
+> -		handle_changed_spte_acc_track(iter->old_spte, new_spte,
+> -					      iter->level);
+> +		handle_changed_spte_acc_track(old_spte, new_spte, level);
+>  	if (record_dirty_log)
+> -		handle_changed_spte_dirty_log(kvm, iter->as_id, iter->gfn,
+> -					      iter->old_spte, new_spte,
+> -					      iter->level);
+> +		handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
+> +					      new_spte, level);
 > +}
 > +
-> +/* Function with __noscs attribute clears its return address. */
-> +static noinline void __noscs lkdtm_noscs_clear_lr(void)
+> +static inline void _tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+> +				     u64 new_spte, bool record_acc_track,
+> +				     bool record_dirty_log)
 > +{
-> +	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+> +	WARN_ON_ONCE(iter->yielded);
 > +
-> +	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-> +}
-> +#endif
-> +
-> +/*
-> + * This tries to call a function protected by Shadow Call Stack,
-> + * which corrupts its own return address during execution.
-> + * Due to the protection, the corruption will not take effect
-> + * when the function returns.
-> + */
-> +void lkdtm_CFI_BACKWARD_SHADOW(void)
-
-I think these two tests should be collapsed into a single one.
-
-> +{
-> +#ifdef CONFIG_ARM64
-> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-> +		return;
-> +	}
-> +
-> +	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> +	lkdtm_scs_clear_lr();
-> +
-> +	pr_err("ok: scs takes effect.\n");
-> +#else
-> +	pr_err("XFAIL: this test is arm64-only\n");
-> +#endif
-
-This is slightly surprising -- we have no detection when a function has
-its non-shadow-stack return address corrupted: it just _ignores_ the
-value stored there. That seems like a missed opportunity for warning
-about an unexpected state.
-
-> +}
-> +
-> +/*
-> + * This tries to call a function not protected by Shadow Call Stack,
-> + * which corrupts its own return address during execution.
-> + */
-> +void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
-> +{
-> +#ifdef CONFIG_ARM64
-> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-> +		return;
-
-Other tests try to give some hints about failures, e.g.:
-
-		pr_err("FAIL: cannot change for SCS\n");
-		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-
-Though, having the IS_ENABLED in there makes me wonder if this test
-should instead be made _survivable_ on failure. Something like this,
-completely untested:
-
-
-#ifdef CONFIG_ARM64
-static noinline void lkdtm_scs_set_lr(unsigned long *addr)
-{
-	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-	*lr = addr;
-}
-
-/* Function with __noscs attribute clears its return address. */
-static noinline void __noscs lkdtm_noscs_set_lr(unsigned long *addr)
-{
-	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-	*lr = addr;
-}
-#endif
-
-
-void lkdtm_CFI_BACKWARD_SHADOW(void)
-{
-#ifdef CONFIG_ARM64
-
-	/* Verify the "normal" condition of LR corruption working. */
-	do {
-		/* Keep label in scope to avoid compiler warning. */
-		if ((volatile int)0)
-			goto unexpected;
-
-		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-		lkdtm_noscs_set_lr(&&expected);
-
-unexpected:
-		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-		break;
-
-expected:
-		pr_err("ok: lr corruption redirected without scs.\n");
-	} while (0);
-
-
-	do {
-		/* Keep labe in scope to avoid compiler warning. */
-		if ((volatile int)0)
-			goto good_scs;
-
-		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-		lkdtm_scs_set_lr(&&bad_scs);
-
-good_scs:
-		pr_info("ok: scs takes effect.\n");
-		break;
-
-bad_scs:
-		pr_err("FAIL: return address rewritten!\n");
-		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-	} while (0);
-#else
-	pr_err("XFAIL: this test is arm64-only\n");
-#endif
-}
-
-And we should, actually, be able to make the "set_lr" functions be
-arch-specific, leaving the test itself arch-agnostic....
-
--- 
-Kees Cook
+> +	__tdp_mmu_set_spte(kvm, iter->as_id, iter->sptep, iter->old_spte,
+> +			   new_spte, iter->gfn, iter->level,
+> +			   record_acc_track, record_dirty_log);
+>  }
+>  
+>  static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+>  				    u64 new_spte)
+>  {
+> -	__tdp_mmu_set_spte(kvm, iter, new_spte, true, true);
+> +	_tdp_mmu_set_spte(kvm, iter, new_spte, true, true);
+>  }
+>  
+>  static inline void tdp_mmu_set_spte_no_acc_track(struct kvm *kvm,
+>  						 struct tdp_iter *iter,
+>  						 u64 new_spte)
+>  {
+> -	__tdp_mmu_set_spte(kvm, iter, new_spte, false, true);
+> +	_tdp_mmu_set_spte(kvm, iter, new_spte, false, true);
+>  }
+>  
+>  static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
+>  						 struct tdp_iter *iter,
+>  						 u64 new_spte)
+>  {
+> -	__tdp_mmu_set_spte(kvm, iter, new_spte, true, false);
+> +	_tdp_mmu_set_spte(kvm, iter, new_spte, true, false);
+>  }
+>  
+>  #define tdp_root_for_each_pte(_iter, _root, _start, _end) \
+> -- 
+> 2.35.1.574.g5d30c73bfb-goog
+> 

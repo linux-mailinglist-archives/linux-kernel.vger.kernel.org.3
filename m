@@ -2,446 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77AB4CB519
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FF04CB516
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiCCCmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S231867AbiCCCnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiCCCl7 (ORCPT
+        with ESMTP id S231841AbiCCCni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:41:59 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA83627CE4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 18:41:13 -0800 (PST)
-Received: (Authenticated sender: ash@heyquark.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 407E3FF804;
-        Thu,  3 Mar 2022 02:41:04 +0000 (UTC)
-Message-ID: <01e8b44f-6fc3-280e-a88b-e7fa55d39837@heyquark.com>
-Date:   Thu, 3 Mar 2022 13:41:02 +1100
+        Wed, 2 Mar 2022 21:43:38 -0500
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B311C23;
+        Wed,  2 Mar 2022 18:42:53 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1646275371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T2DBq1T9P8xVlTmIkAaGvH0gMt3oU3lKJwnNun+3nHw=;
+        b=AQuA4J371fF5tOg9mTeetwNCbnOxzKEgn1T+EzqGD5SHZosw71F/7YUEkCP7pqRtIaGo1x
+        lH99nc/DxIjstCdU5KyVgsIscLMWNjgdFYT68F5UUIqfV4iyDFLsi279wD9qQ3K5m69Nw6
+        biCvnAN0wUqTmYZn7eZDrRHJisdNdTE=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     jgg@nvidia.com, leonro@nvidia.com
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH for-next] RDMA/core: Fix ib_qp_usecnt_dec() called when error
+Date:   Thu,  3 Mar 2022 10:42:32 +0800
+Message-Id: <20220303024232.2847388-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 02/12] powerpc: wiiu: device tree
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.ne@posteo.net>,
-        Roberto Van Eeden <rw-r-r-0644@protonmail.com>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        devicetree@vger.kernel.org
-References: <20220302044406.63401-1-ash@heyquark.com>
- <20220302044406.63401-3-ash@heyquark.com>
- <CAL_Jsq+ej_vZHRfjNk61ogEstsqwJXx8bkRJa4vhnQss1bzYSA@mail.gmail.com>
-From:   Ash Logan <ash@heyquark.com>
-In-Reply-To: <CAL_Jsq+ej_vZHRfjNk61ogEstsqwJXx8bkRJa4vhnQss1bzYSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-Thanks for the review.
+ib_destroy_qp() would called by ib_create_qp_user() if error, the former
+contains ib_qp_usecnt_dec(), but ib_qp_usecnt_inc() was not called before.
 
-On 3/3/22 00:36, Rob Herring wrote:
-> On Tue, Mar 1, 2022 at 10:44 PM Ash Logan <ash@heyquark.com> wrote:
->>
->> Add a device tree source file for the Nintendo Wii U video game console.
-> 
-> Test this with 'make W=1 dtbs_checks'.
+So move ib_qp_usecnt_inc() into create_qp().
 
-Does make W=1 ARCH=powerpc wiiu_defconfig dtbs_check seem reasonable? I 
-ran it, and saw LINT/CHKDT/UPD/SCHEMA/COPY steps, but if I put garbage 
-in the .dts it gives no warnings.
+Fixes: d2b10794fc13 ("RDMA/core: Create clean QP creations interface for uverbs")
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ drivers/infiniband/core/uverbs_cmd.c          | 1 -
+ drivers/infiniband/core/uverbs_std_types_qp.c | 1 -
+ drivers/infiniband/core/verbs.c               | 3 +--
+ 3 files changed, 1 insertion(+), 4 deletions(-)
 
->>
->> Signed-off-by: Ash Logan <ash@heyquark.com>
->> Co-developed-by: Roberto Van Eeden <rw-r-r-0644@protonmail.com>
->> Signed-off-by: Roberto Van Eeden <rw-r-r-0644@protonmail.com>
->> Co-developed-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
->> Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
->> ---
->>   arch/powerpc/boot/dts/wiiu.dts | 327 +++++++++++++++++++++++++++++++++
->>   1 file changed, 327 insertions(+)
->>   create mode 100644 arch/powerpc/boot/dts/wiiu.dts
->>
->> diff --git a/arch/powerpc/boot/dts/wiiu.dts b/arch/powerpc/boot/dts/wiiu.dts
->> new file mode 100644
->> index 000000000000..aaf264963f61
->> --- /dev/null
->> +++ b/arch/powerpc/boot/dts/wiiu.dts
->> @@ -0,0 +1,327 @@
->> +// SPDX-License-Identifier: GPL-2.0
-> 
-> What about non-GPL environments?
+diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
+index 6b6393176b3c..4437f834c0a7 100644
+--- a/drivers/infiniband/core/uverbs_cmd.c
++++ b/drivers/infiniband/core/uverbs_cmd.c
+@@ -1437,7 +1437,6 @@ static int create_qp(struct uverbs_attr_bundle *attrs,
+ 		ret = PTR_ERR(qp);
+ 		goto err_put;
+ 	}
+-	ib_qp_usecnt_inc(qp);
+ 
+ 	obj->uevent.uobject.object = qp;
+ 	obj->uevent.event_file = READ_ONCE(attrs->ufile->default_async_file);
+diff --git a/drivers/infiniband/core/uverbs_std_types_qp.c b/drivers/infiniband/core/uverbs_std_types_qp.c
+index dd1075466f61..75353e09c6fe 100644
+--- a/drivers/infiniband/core/uverbs_std_types_qp.c
++++ b/drivers/infiniband/core/uverbs_std_types_qp.c
+@@ -254,7 +254,6 @@ static int UVERBS_HANDLER(UVERBS_METHOD_QP_CREATE)(
+ 		ret = PTR_ERR(qp);
+ 		goto err_put;
+ 	}
+-	ib_qp_usecnt_inc(qp);
+ 
+ 	if (attr.qp_type == IB_QPT_XRC_TGT) {
+ 		obj->uxrcd = container_of(xrcd_uobj, struct ib_uxrcd_object,
+diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
+index a9819c40a140..bc9a83f1ca2d 100644
+--- a/drivers/infiniband/core/verbs.c
++++ b/drivers/infiniband/core/verbs.c
+@@ -1245,6 +1245,7 @@ static struct ib_qp *create_qp(struct ib_device *dev, struct ib_pd *pd,
+ 	if (ret)
+ 		goto err_security;
+ 
++	ib_qp_usecnt_inc(qp);
+ 	rdma_restrack_add(&qp->res);
+ 	return qp;
+ 
+@@ -1345,8 +1346,6 @@ struct ib_qp *ib_create_qp_kernel(struct ib_pd *pd,
+ 	if (IS_ERR(qp))
+ 		return qp;
+ 
+-	ib_qp_usecnt_inc(qp);
+-
+ 	if (qp_init_attr->cap.max_rdma_ctxs) {
+ 		ret = rdma_rw_init_mrs(qp, qp_init_attr);
+ 		if (ret)
+-- 
+2.25.1
 
-The other powerpc dts files are all GPL-2.0(-or-later), is there a 
-preferred license for devicetrees?
-
->> +/*
->> + * Nintendo Wii U Device Tree Source
->> + *
->> + * Copyright (C) 2022 The linux-wiiu Team
->> + */
->> +
->> +/dts-v1/;
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->> +
->> +/ {
->> +       model = "nintendo,wiiu";
->> +       compatible = "nintendo,wiiu";
->> +
->> +       #address-cells = <1>;
->> +       #size-cells = <1>;
->> +
->> +       chosen {
->> +               bootargs = "root=/dev/sda1 rootwait";
->> +       };
->> +
->> +       memory {
->> +               device_type = "memory";
->> +               reg = <0x00000000 0x02000000    /* MEM1 - 32MiB */
->> +                      0x08000000 0x00300000    /* MEM0 - 3MiB  */
->> +                      0x10000000 0x80000000>;  /* MEM2 - 2GiB  */
->> +       };
->> +
->> +       cpus {
->> +               #address-cells = <1>;
->> +               #size-cells = <0>;
->> +
->> +               /* TODO: Add SMP */
->> +               PowerPC,espresso@0 {
->> +                       device_type = "cpu";
->> +                       reg = <0>;
->> +                       clock-frequency = <1243125000>;         /* 1.243125GHz */
->> +                       bus-frequency = <248625000>;            /* 248.625MHz core-to-bus 5x */
->> +                       timebase-frequency = <62156250>;        /* 1/4 of the bus clock */
->> +                       i-cache-size = <32768>; /* 32K icache */
->> +                       i-cache-line-size = <32>;
->> +                       i-cache-block-size = <32>;
->> +                       i-cache-sets = <128>;
->> +                       d-cache-size = <32768>; /* 32K dcache */
->> +                       d-cache-line-size = <32>;
->> +                       d-cache-block-size = <32>;
->> +                       d-cache-sets = <128>;
->> +                       next-level-cache = <&L2_0>;
->> +                       L2_0:l2-cache {
->> +                               compatible = "cache";
->> +                               cache-level = <2>;
->> +                               cache-unified;
->> +                               cache-size = <0x80000>; /* 512KB L2 */
->> +                               cache-line-size = <64>;
->> +                               cache-block-size = <32>;
->> +                               cache-sets = <2048>;
->> +                       };
->> +               };
->> +       };
->> +
->> +       latte {
->> +               #address-cells = <1>;
->> +               #size-cells = <1>;
->> +               compatible = "nintendo,latte";
->> +               ranges = <0x0c000000 0x0c000000 0x00400000      /* Espresso-only registers */
->> +                         0x0d000000 0x0d000000 0x00200000      /* Latte AHB deivces */
->> +                         0x0d800000 0x0d800000 0x00800000>;    /* Latte SoC registers */
->> +
->> +               gpu7@c200000 {
-> 
-> gpu@...
-> 
->> +                       compatible = "nintendo,latte-gpu7";
->> +                       reg = <0x0c200000 0x80000>;
->> +                       interrupts = <2>;
->> +                       interrupt-parent = <&espresso_pic>;
->> +               };
->> +
->> +               espresso_pic: pic@c000078 {
->> +                       #interrupt-cells = <1>;
->> +                       interrupt-controller;
->> +
->> +                       compatible = "nintendo,espresso-pic";
->> +                       reg = <0x0c000078 0x18>;
->> +               };
->> +
->> +               latte_dsp: dsp@c005000 {
->> +                       compatible = "nintendo,latte-dsp";
->> +                       reg = <0x0c005000 0x200>;
->> +               };
->> +
->> +               ehci_0: usb@d040000 {
->> +                       compatible = "nintendo,latte-usb-ehci", "usb-ehci";
->> +                       reg = <0x0d040000 0x100>;
->> +                       interrupts = <4>;
->> +                       interrupt-parent = <&latte_pic>;
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ohci_0_0: usb@d050000 {
->> +                       compatible = "nintendo,latte-usb-ohci";
->> +                       reg = <0x0d050000 0x100>;
->> +                       interrupts = <5>;
->> +                       interrupt-parent = <&latte_pic>;
->> +
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ohci_0_1: usb@d060000 {
->> +                       compatible = "nintendo,latte-usb-ohci";
->> +                       reg = <0x0d060000 0x100>;
->> +                       interrupts = <6>;
->> +                       interrupt-parent = <&latte_pic>;
->> +
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ehci_1: usb@d120000 {
->> +                       compatible = "nintendo,latte-usb-ehci", "usb-ehci";
->> +                       reg = <0x0d120000 0x100>;
->> +                       interrupts = <16>;
->> +                       interrupt-parent = <&latte_pic>;
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ohci_1_0: usb@d130000 {
->> +                       compatible = "nintendo,latte-usb-ohci";
->> +                       reg = <0x0d130000 0x100>;
->> +                       interrupts = <35>;
->> +                       interrupt-parent = <&latte_pic>;
->> +
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ehci_2: usb@d140000 {
->> +                       compatible = "nintendo,latte-usb-ehci", "usb-ehci";
->> +                       reg = <0x0d140000 0x100>;
->> +                       interrupts = <36>;
->> +                       interrupt-parent = <&latte_pic>;
->> +                       big-endian-regs;
->> +               };
->> +
->> +               ohci_2_0: usb@d150000 {
->> +                       compatible = "nintendo,latte-usb-ohci";
->> +                       reg = <0x0d150000 0x100>;
->> +                       interrupts = <37>;
->> +                       interrupt-parent = <&latte_pic>;
->> +
->> +                       big-endian-regs;
->> +               };
->> +
->> +               sdcard_0: sdhci@d070000 {
->> +                       compatible = "nintendo,latte-sdhci","sdhci";
->> +                       reg = <0x0d070000 0x200>;
->> +                       interrupts = <7>;
->> +                       interrupt-parent = <&latte_pic>;
->> +               };
->> +
->> +               wifi_0: sdhci@d080000 {
->> +                       compatible = "nintendo,latte-sdhci","sdhci";
->> +                       reg = <0x0d080000 0x200>;
->> +                       interrupts = <8>;
->> +                       interrupt-parent = <&latte_pic>;
->> +               };
->> +
->> +               legacy_ipc: ipc@d800000 {
->> +                       compatible = "nintendo,latte-ipc","nintendo,hollywood-ipc";
-> 
-> space between compatibles needed.
-> 
->> +                       reg = <0x0d800000 0x10>;
->> +                       interrupts = <30 31>;
->> +                       interrupt-parent = <&latte_pic>;
->> +               };
->> +
->> +               latte_otp: otp@d8001ec {
->> +                       compatible = "nintendo,latte-otp";
->> +                       reg = <0x0d8001ec 0x8>;
->> +               };
->> +
->> +               sata: ahci@d160400 {
->> +                       compatible = "nintendo,latte-ahci";
->> +                       reg = <0x0d160400 0x808>;
->> +
->> +                       interrupt-parent = <&latte_pic>;
->> +                       interrupts = <38 28>;
->> +               };
->> +
->> +               latte_pic: pic@d800440 {
->> +                       #interrupt-cells = <1>;
->> +                       interrupt-controller;
->> +
->> +                       compatible = "nintendo,latte-pic";
->> +                       reg = <0x0d800440 0x30>;
->> +                       interrupt-parent = <&espresso_pic>;
->> +                       interrupts = <24>;
->> +               };
->> +
->> +               gpio: gpio@d8000c0 {
->> +                       #gpio-cells = <2>;
->> +                       compatible = "nintendo,latte-gpio", "nintendo,hollywood-gpio";
->> +
->> +                       reg = <0x0d8000c0 0x40>;
->> +                       gpio-controller;
->> +                       /* TODO: There are actually 31 AHBALL GPIOs */
->> +                       ngpios = <24>;
->> +
->> +                       gpio-line-names =
->> +                               "POWER", "DWIFI", "FAN", "DC_DC",
->> +                               "", "Esp10WorkAround", "", "",
->> +                               "PADPD", "", "EEP_CS", "EEP_CLK",
->> +                               "EEP_MOSI", "EEP_MISO", "AVE_SCL", "AVE_SDA",
->> +                               "DEBUG0", "DEBUG1", "DEBUG2", "DEBUG3",
->> +                               "DEBUG4", "DEBUG5", "DEBUG6", "DEBUG7";
->> +
->> +                       interrupt-controller;
->> +                       #interrupt-cells = <2>;
->> +                       interrupts = <10>;
->> +                       interrupt-parent = <&latte_pic>;
->> +               };
->> +
->> +               spi_gpio: spi-gpio {
-> 
-> Move this to root level. It's not on the 'latte' bus.
-> 
->> +                       compatible = "spi-gpio";
->> +                       #address-cells = <1>;
->> +                       #size-cells = <0>;
->> +                       status = "okay";
-> 
-> Not needed, that's the default.
-> 
->> +
->> +                       cs-gpios = <&gpio 10 GPIO_ACTIVE_HIGH>;
->> +                       gpio-sck = <&gpio 11 GPIO_ACTIVE_HIGH>;
->> +                       gpio-mosi = <&gpio 12 GPIO_ACTIVE_HIGH>;
->> +                       gpio-miso = <&gpio 13 GPIO_ACTIVE_HIGH>;
->> +                       num-chipselects = <1>;
->> +
->> +                       seeprom@0 {
-> 
-> eeprom@0
-> 
->> +                               compatible = "atmel,at93c66";
->> +                               reg = <0>;
->> +                               spi-max-frequency = <1000000>;
->> +                               spi-cs-high;
->> +                               /* TODO: wiiubrew says this is 16-bit, but I only get the correct
->> +                                * values in 8-bit...
->> +                                */
->> +                               data-size = <8>;
->> +                               read-only;
->> +
->> +                               #address-cells = <1>;
->> +                               #size-cells = <1>;
->> +
->> +                               /* https://wiiubrew.org/wiki/Hardware/SEEPROM */
->> +                               rng_seed: rng@12 { reg = <0x012 8>; };
->> +                               ppc_pvr: pvr@20 { reg = <0x020 4>; };
->> +                               seeprom_ver_str: sver-str@24 { reg = <0x024 6>; };
->> +                               seeprom_ver: sver@2a { reg = <0x02A 2>; };
->> +                               otp_ver: over@2c { reg = <0x02C 2>; };
->> +                               otp_rev: orev@2e { reg = <0x02E 2>; };
->> +                               otp_ver_str: over-str@30 { reg = <0x030 8>; };
->> +
->> +                               bc_crc: bc-crc@38 { reg = <0x038 4>; };
->> +                               bc_sz: bc-sz@3c { reg = <0x03C 2>; };
->> +                               bc_ver: bc-ver@3e { reg = <0x03E 2>; };
->> +                               bc_boardtype: boardtype@42 { reg = <0x042 2>; };
->> +                               bc_boardrev: boardrev@44 { reg = <0x044 2>; };
->> +                               bc_bootsource: bootsource@46 { reg = <0x046 2>; };
->> +                               bc_ddr3size: ddr3size@48 { reg = <0x048 2>; };
->> +                               bc_ddr3speed: ddr3speed@4a { reg = <0x04A 2>; };
->> +                               bc_ppcclockmul: ppcclockmul@4c { reg = <0x04C 2>; };
->> +                               bc_iopclockmul: iopclockmul@46 { reg = <0x04E 2>; };
->> +                               bc_video1080p: video1080p@50 { reg = <0x050 2>; };
->> +                               bc_ddr3vendor: ddr3vendor@52 { reg = <0x052 2>; };
->> +                               bc_movpassivereset: movpassivereset@54 { reg = <0x054 2>; };
->> +                               bc_syspllspd: syspllspd@56 { reg = <0x056 2>; };
->> +                               bc_satadevice: satadevice@58 { reg = <0x058 2>; };
->> +                               bc_consoletype: consoletype@5a { reg = <0x05A 2>; };
->> +                               bc_deviceprescence: deviceprescence@5c { reg = <0x05C 2>; };
->> +
->> +                               drive_key: drvkey@80 { reg = <0x080 16>; };
->> +                               factory_key: fackey@90 { reg = <0x090 16>; };
->> +                               shdd_key: shddkey@a0 { reg = <0x0A0 16>; };
->> +                               usb_key_seed: usbkeyseed@b0 { reg = <0x0B0 16>; };
->> +                               drive_key_flag: drvkeyf@c0 { reg = <0x0C0 2>; };
->> +                               usb_key_flag: udbkeyf@c2 { reg = <0x0C2 2>; };
->> +                               shdd_key_flag: shddkeyf@c4 { reg = <0x0C4 2>; };
->> +
->> +                               sysprod_version: sp_ver@140 { reg = <0x140 4>; };
->> +                               sysprod_eeprom_version: sp_ee_ver@144 { reg = <0x144 4>; };
->> +                               sysprod_product_area: sp_parea@148 { reg = <0x148 4>; };
->> +                               sysprod_game_region: sp_region@14c { reg = <0x14C 4>; };
->> +                               sysprod_ntsc_pal: sp_ntscpal@150 { reg = <0x150 4>; };
->> +                               sysprod_5ghz_country: sp_5ghz_c@154 { reg = <0x154 2>; };
->> +                               sysprod_5ghz_country_rev: sp_5ghz_crev@156 { reg = <0x156 2>; };
->> +                               sysprod_code: sp_code@158 { reg = <0x158 8>; };
->> +                               sysprod_serial: sp_serial@160 { reg = <0x160 16>; };
->> +                               sysprod_model: sp_model@170 { reg = <0x170 16>; };
->> +
->> +                               prod_year: pyear@188 { reg = <0x188 2>; };
->> +                               prod_date: pdate@18a { reg = <0x18A 2>; };
->> +                               prod_time: ptime@18c { reg = <0x18C 2>; };
->> +
->> +                               boot_params: boot_params@1c0 { reg = <0x1C0 48>; };
->> +                       };
->> +               };
->> +
->> +               /* TODO make this gpio-keyed once hollywood-gpio supports interrupts */
->> +               gpio-keys-polled {
-> 
-> This too.
-> 
->> +                       poll-interval = <50>;
->> +                       compatible = "gpio-keys-polled";
->> +
->> +                       power {
->> +                               label = "Power Button";
->> +                               gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
->> +                               linux,code = <KEY_POWER>;
->> +                       };
->> +               };
->> +
->> +               gpio2: gpio2@d8000c0 {
-> 
-> gpio@d800520
-> 
->> +                       #gpio-cells = <2>;
->> +                       compatible = "nintendo,latte-gpio", "nintendo,hollywood-gpio";
->> +
->> +                       reg = <0x0d800520 0x40>;
->> +                       gpio-controller;
->> +                       ngpios = <7>;
->> +
->> +                       gpio-line-names =
->> +                               "FANSPEED", "SMC_SCL", "SMC_SDA", "DC_DC2",
->> +                               "AVE_INT", "", "AVE_RESET";
->> +
->> +                       interrupt-controller;
->> +                       #interrupt-cells = <2>;
->> +                       interrupts = <10>;
->> +                       interrupt-parent = <&latte_pic>;
->> +               };
->> +       };
->> +};
->> --
->> 2.35.1
->>
-
-Will do in v2.
-
-Thanks,
-Ash

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7644CBCAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F224CBC9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiCCLeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S232819AbiCCLbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiCCLbR (ORCPT
+        with ESMTP id S232705AbiCCLbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:31:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6803D17CC46
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:30:23 -0800 (PST)
+        Thu, 3 Mar 2022 06:31:11 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C761795FE
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:30:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=41LwMtvOLrmCCpEeK45Bz2QrPFsLhIO0Z4y1ZqPj0RU=; b=u4r7OEYkkwKYBV97kICizEAx+w
-        R5764ZVq9GofrhWujZ0oimFzgLd6nM8+YCekhKryN3zZYjiqq2rjUDjcZz5VC5Mko1mqzMqgQcQrk
-        CwPfSzB3dXv/Ex2mSLtri6/n/I1e7mrBiGdQJM6ZJyXJhsk3eKr1ti9ofH4VjOEE58WcJJNd6Lnn2
-        1AJeKclMzdQ5F+Tty9b1GuBUm16UCftGdj103aK+lofvR1OFpB8Jor+WjXiDtmUnpXDtZUlXUV3fg
-        t+T/w/gwhGnNzgb2IxMkpmK+10FPFntYnJ2EiSvlgeVzJpFyCxtk5ONnIXdBA8HBMfE3n/f0usnKH
-        1eMrgNXA==;
+        bh=1h/ft8uEzPwA8bso5xyVZXC8EKcwtN+ddoxwlbZkOho=; b=OtRwD1HTr0fSKeREEY0D0sLC9w
+        YAtaRXS/hMz+JQnCMiKtxwNtUlcvcrqqHBPcx0IDwy4ydQnsMxm1uzFrn3nQnuRjNQgcrbOIXeAAz
+        9CVKaShaWsEo/c0hGLahNYXais5z6HallAE5FR4eXKy59n/+ahYaral4DhS41y3vwbtB+/d55EOzp
+        OIxmG2QYX6f+0L3ft/T8FMOX+/9U9ZE0T9+Oj/ztmtXfiePqezSgtUhMG8wv3rZs8jFwYAuo9ek7e
+        B7Zj8XLW4Pa/E2GaRczNvBeL63xvRLKsmXTAOOExgLgrwoAnAZkw8I0nWC41RoZRmIgnkXCzYebwe
+        +tDtDOMA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPjeh-00BaH4-9r; Thu, 03 Mar 2022 11:30:00 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPjeh-00Etph-Sf; Thu, 03 Mar 2022 11:30:00 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 08F22302D39;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 09C7B302D41;
         Thu,  3 Mar 2022 12:29:57 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 76DB230126659; Thu,  3 Mar 2022 12:29:56 +0100 (CET)
-Message-ID: <20220303112826.421945580@infradead.org>
+        id 7DAD530126B23; Thu,  3 Mar 2022 12:29:56 +0100 (CET)
+Message-ID: <20220303112826.481793874@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 03 Mar 2022 12:23:45 +0100
+Date:   Thu, 03 Mar 2022 12:23:46 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v3 24/39] x86/ibt: Disable IBT around firmware
+Subject: [PATCH v3 25/39] x86/bugs: Disable Retpoline when IBT
 References: <20220303112321.422525803@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,153 +61,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assume firmware isn't IBT clean and disable it across calls.
+Retpoline and IBT are mutually exclusive. IBT relies on indirect
+branches (JMP/CALL *%reg) while retpoline avoids them by design.
+
+Demote to LFENCE on IBT enabled hardware.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/efi.h   |    9 +++++++--
- arch/x86/include/asm/ibt.h   |    6 ++++++
- arch/x86/kernel/apm_32.c     |    7 +++++++
- arch/x86/kernel/cpu/common.c |   28 ++++++++++++++++++++++++++++
- 4 files changed, 48 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/bugs.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/arch/x86/include/asm/efi.h
-+++ b/arch/x86/include/asm/efi.h
-@@ -7,6 +7,7 @@
- #include <asm/tlb.h>
- #include <asm/nospec-branch.h>
- #include <asm/mmu_context.h>
-+#include <asm/ibt.h>
- #include <linux/build_bug.h>
- #include <linux/kernel.h>
- #include <linux/pgtable.h>
-@@ -120,8 +121,12 @@ extern asmlinkage u64 __efi_call(void *f
- 	efi_enter_mm();							\
- })
- 
--#define arch_efi_call_virt(p, f, args...)				\
--	efi_call((void *)p->f, args)					\
-+#define arch_efi_call_virt(p, f, args...) ({				\
-+	u64 ret, ibt = ibt_save();					\
-+	ret = efi_call((void *)p->f, args);				\
-+	ibt_restore(ibt);						\
-+	ret;								\
-+})
- 
- #define arch_efi_call_virt_teardown()					\
- ({									\
---- a/arch/x86/include/asm/ibt.h
-+++ b/arch/x86/include/asm/ibt.h
-@@ -39,6 +39,9 @@ static inline bool is_endbr(u32 val)
- 	return val == gen_endbr();
- }
- 
-+extern __noendbr u64 ibt_save(void);
-+extern __noendbr void ibt_restore(u64 save);
-+
- #else /* __ASSEMBLY__ */
- 
- #ifdef CONFIG_X86_64
-@@ -61,6 +64,9 @@ static inline bool is_endbr(u32 val)
- 
- static inline bool is_endbr(u32 val) { return false; }
- 
-+static inline u64 ibt_save(void) { return 0; }
-+static inline void ibt_restore(u64 save) { }
-+
- #else /* __ASSEMBLY__ */
- 
- #define ENDBR
---- a/arch/x86/kernel/apm_32.c
-+++ b/arch/x86/kernel/apm_32.c
-@@ -232,6 +232,7 @@
- #include <asm/paravirt.h>
- #include <asm/reboot.h>
- #include <asm/nospec-branch.h>
-+#include <asm/ibt.h>
- 
- #if defined(CONFIG_APM_DISPLAY_BLANK) && defined(CONFIG_VT)
- extern int (*console_blank_hook)(int);
-@@ -598,6 +599,7 @@ static long __apm_bios_call(void *_call)
- 	struct desc_struct	save_desc_40;
- 	struct desc_struct	*gdt;
- 	struct apm_bios_call	*call = _call;
-+	u64			ibt;
- 
- 	cpu = get_cpu();
- 	BUG_ON(cpu != 0);
-@@ -607,11 +609,13 @@ static long __apm_bios_call(void *_call)
- 
- 	apm_irq_save(flags);
- 	firmware_restrict_branch_speculation_start();
-+	ibt = ibt_save();
- 	APM_DO_SAVE_SEGS;
- 	apm_bios_call_asm(call->func, call->ebx, call->ecx,
- 			  &call->eax, &call->ebx, &call->ecx, &call->edx,
- 			  &call->esi);
- 	APM_DO_RESTORE_SEGS;
-+	ibt_restore(ibt);
- 	firmware_restrict_branch_speculation_end();
- 	apm_irq_restore(flags);
- 	gdt[0x40 / 8] = save_desc_40;
-@@ -676,6 +680,7 @@ static long __apm_bios_call_simple(void
- 	struct desc_struct	save_desc_40;
- 	struct desc_struct	*gdt;
- 	struct apm_bios_call	*call = _call;
-+	u64			ibt;
- 
- 	cpu = get_cpu();
- 	BUG_ON(cpu != 0);
-@@ -685,10 +690,12 @@ static long __apm_bios_call_simple(void
- 
- 	apm_irq_save(flags);
- 	firmware_restrict_branch_speculation_start();
-+	ibt = ibt_save();
- 	APM_DO_SAVE_SEGS;
- 	error = apm_bios_call_simple_asm(call->func, call->ebx, call->ecx,
- 					 &call->eax);
- 	APM_DO_RESTORE_SEGS;
-+	ibt_restore(ibt);
- 	firmware_restrict_branch_speculation_end();
- 	apm_irq_restore(flags);
- 	gdt[0x40 / 8] = save_desc_40;
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -594,6 +594,34 @@ static __init int setup_disable_pku(char
- __setup("nopku", setup_disable_pku);
- #endif /* CONFIG_X86_64 */
- 
-+#ifdef CONFIG_X86_KERNEL_IBT
-+
-+__noendbr u64 ibt_save(void)
-+{
-+	u64 msr = 0;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
-+		rdmsrl(MSR_IA32_S_CET, msr);
-+		wrmsrl(MSR_IA32_S_CET, msr & ~CET_ENDBR_EN);
-+	}
-+
-+	return msr;
-+}
-+
-+__noendbr void ibt_restore(u64 save)
-+{
-+	u64 msr;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
-+		rdmsrl(MSR_IA32_S_CET, msr);
-+		msr &= ~CET_ENDBR_EN;
-+		msr |= (save & CET_ENDBR_EN);
-+		wrmsrl(MSR_IA32_S_CET, msr);
-+	}
-+}
-+
-+#endif
-+
- static __always_inline void setup_cet(struct cpuinfo_x86 *c)
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -891,6 +891,7 @@ static void __init spectre_v2_select_mit
  {
- 	u64 msr = CET_ENDBR_EN;
+ 	enum spectre_v2_mitigation_cmd cmd = spectre_v2_parse_cmdline();
+ 	enum spectre_v2_mitigation mode = SPECTRE_V2_NONE;
++	bool silent_demote = false;
+ 
+ 	/*
+ 	 * If the CPU is not affected and the command line mode is NONE or AUTO
+@@ -906,6 +907,7 @@ static void __init spectre_v2_select_mit
+ 
+ 	case SPECTRE_V2_CMD_FORCE:
+ 	case SPECTRE_V2_CMD_AUTO:
++		silent_demote = true;
+ 		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
+ 			mode = SPECTRE_V2_IBRS_ENHANCED;
+ 			/* Force it so VMEXIT will restore correctly */
+@@ -938,6 +940,7 @@ static void __init spectre_v2_select_mit
+ 	retpoline_amd:
+ 		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
+ 			pr_err("Spectre mitigation: LFENCE not serializing, switching to generic retpoline\n");
++			silent_demote = false;
+ 			goto retpoline_generic;
+ 		}
+ 		mode = SPECTRE_V2_RETPOLINE_AMD;
+@@ -947,6 +950,16 @@ static void __init spectre_v2_select_mit
+ 	retpoline_generic:
+ 		mode = SPECTRE_V2_RETPOLINE_GENERIC;
+ 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
++
++		/*
++		 * ROP defeats IBT, make sure not to use Retpolines and IBT together.
++		 */
++		if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT)) {
++			if (!silent_demote)
++				pr_warn("Spectre mitigation: Switching to LFENCE due to IBT\n");
++			mode = SPECTRE_V2_RETPOLINE_AMD;
++			setup_force_cpu_cap(X86_FEATURE_RETPOLINE_AMD);
++		}
+ 	}
+ 
+ specv2_set_mode:
 
 

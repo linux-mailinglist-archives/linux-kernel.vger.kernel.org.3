@@ -2,143 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323D24CC6C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20184CC6CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbiCCUFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S235116AbiCCUJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiCCUFf (ORCPT
+        with ESMTP id S231293AbiCCUJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:05:35 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA4B1A614A;
-        Thu,  3 Mar 2022 12:04:49 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so8768072pjb.3;
-        Thu, 03 Mar 2022 12:04:49 -0800 (PST)
+        Thu, 3 Mar 2022 15:09:04 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFC49F14
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:08:17 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w3so8047711edu.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:08:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yho2Dl6zShl3TZZkq1NcbPCns9z7cGft4LPJ8Xl368w=;
-        b=lNS2rMT/gK/+w8QkIK7rO4Qt3B+qUPqMdfDWn/FJac6BVBaQdMJwxQdT4MuC2HqW8t
-         b/1J0jdLkcBwL//tj0M7RSAfqLlsr8ED+x3NFybe82/2VMTuCfNht74yMgRG59m0DP2e
-         JYWEt/VknEWSkSn61Z5C76z3wpiHlfBma9KkjsqULcNNRJVFB3Gqvv8gzXl43+0+a0+v
-         KMq749VxNgBmbF3u9egK/k4U0wxBUF+nQorgurHA98GZbQmyJaQG3MF0DcYHpOVrjR3T
-         Uev8EZ0dHD8uxoILnNPsifEMA7D2eP1E4FtH4HaKzrl2S+ORlO/OF79ZIZjfM7OBUCWI
-         noBQ==
+        bh=FWhW+YEtKAt25AZygKvKKjc7akmRR9ol+ClTeEq3Lbo=;
+        b=IhaK1MCdFibrxiiYKMWtxOQzMJqlKexiy9nkBZphPO+tGMURXU9zv4kgOB1YX/UDOu
+         qpzrrPE9/7Is64Tjw6dlXCGMAF6f6T9iLHFyT9wOu9pCFt4d2pifgRFSUvgD4rCbKnzo
+         /YFQZuFmiGSVbJn09/1DxaNZ6h8T3uVRsAzNegiGma6nyvPuu2BGdxdcyAGMqitMzE1t
+         RaONLcn5rEW1y3b05XCvt9G4f5/zFG0Bic1zEN+ANymJXXPLNFwlNSSkH6DnPrdTCEp4
+         dQ51ai1gVWIV9AXbmYGEKdQAsX+kKsXXekH8UN9lIWCnueTyFpPa35IB3T2EgGbxZRTp
+         XiTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yho2Dl6zShl3TZZkq1NcbPCns9z7cGft4LPJ8Xl368w=;
-        b=eFGupIYmIb1CAdIRIHgZVBFC0cjA2Na/LakH+pQ39/cOSItwUHnfCgadb1vKBRywnt
-         DOXhqYFhDoNLeWfhml7VK0TZ0ye7TdLhegIiU6wK/4/CM9nRz24yBstvflmbRid7bGHS
-         XaM1Ctg37Bfw4tFU6euWAwTxEvnIWvIMK/B7s9X5iRoDWh5Q8TRhFpQWGvY5lQ3Wq268
-         PCA3srMZVRGRRmeJwy1l4synCIXpAArULQcW+FD0x3zMrDqoB4fSzxl4rCXkt+Ttbeo9
-         3eS31/umvBqu5C1Zp5TjXNBuwBmt5Or1SRMIeEkEdRjGmkKZPDi1KloPGvDt5K1X2p2M
-         PZ7w==
-X-Gm-Message-State: AOAM5331utJuhK2iGJGcthX+RemEvGZLw8/BX28LzHPqrhp/VG6EGXoN
-        QLzLUUDP6QJALRj/ZFEfLkk1qWo3fI8tt8owRME=
-X-Google-Smtp-Source: ABdhPJwznKq7WAlWGc5jU9fVVPRFGTBBbRz1nOWEus/QP1k4cwGVZuGTO18YEyGhePknq75Rx4utv2aqTmUl0FhyLwk=
-X-Received: by 2002:a17:902:e807:b0:150:2801:86f8 with SMTP id
- u7-20020a170902e80700b00150280186f8mr32835951plg.64.1646337889035; Thu, 03
- Mar 2022 12:04:49 -0800 (PST)
+        bh=FWhW+YEtKAt25AZygKvKKjc7akmRR9ol+ClTeEq3Lbo=;
+        b=PR/TBiudLnAleX7pA0RbAQ2VOW3Ml0VcHUSJanWwD+xs279qLl4Tql1Hjx7nOWDx74
+         pFbrIqyC2VctZz3Vm50eEltB2NHF4/QlXPyIwJAGFCtjcIrD85J8x4Hjs7rPIT+ZU6+b
+         pvEdaO19r6ohhAKOuXC8B5y4YuyTEm8K6yFKZ83dnePYj1S9kL6CMGYv8EA/viXp1Z5I
+         K2GuQLqFGu9hIXil1DDl4Vb5cMgJ5/jc7w0fRLuuddvajnYrPz9skoFXT2opzBVksiaQ
+         Lp/PE1DhhWCdjGPyJFK9CaKIcq/BwF/AtFZqsFiRkWm6/0Kwz1j8yXlbkkbfmQqwOgSz
+         IinQ==
+X-Gm-Message-State: AOAM530ZTdkEnfUxey/OoqBEWSXHjm1QWq6IUcKnlhnmMT6LDR6URbNl
+        +XPpQbUxgKhqfSD8E8ci5qfLTOWyJkyO/b9ieeFWayrs
+X-Google-Smtp-Source: ABdhPJyWpNmagaVrWTlH/Le2wXtM87/a1EcwAsrEEtw1oF/pyNGsCesh8qEHkpkjr210cmrZhee+V8LWzy9t2BTw9ls=
+X-Received: by 2002:aa7:d78e:0:b0:415:d787:6226 with SMTP id
+ s14-20020aa7d78e000000b00415d7876226mr5146631edq.121.1646338096463; Thu, 03
+ Mar 2022 12:08:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-5-haoluo@google.com>
- <c323bce9-a04e-b1c3-580a-783fde259d60@fb.com> <CAADnVQ+q0vF03cH8w0c50XMZU1yf_0UjZ+ZarQ_RqMQrVpOFPA@mail.gmail.com>
- <93c3fc30-ad38-96fa-cf8e-20e55b267a3b@fb.com> <CAADnVQL4yxhDCLjvCCmpOtg0+8-HSg32KG07TCxx+L+Gji7n6g@mail.gmail.com>
- <CA+khW7gyOGgqJjyuSjJMJ8+iQmozZ6VhSJ7exZF0gGLOeS5gog@mail.gmail.com> <CAADnVQ+wsp1+4DvrJjw_CAZDatsaQKKz-ZZADdTqSfUAqhv3SA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+wsp1+4DvrJjw_CAZDatsaQKKz-ZZADdTqSfUAqhv3SA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 3 Mar 2022 12:04:37 -0800
-Message-ID: <CAADnVQ+YBiHR5NyAww3_Y7sW2iANPcVB42SEqdxrvXmaVSEgjg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 4/9] bpf: Introduce sleepable tracepoints
-To:     Hao Luo <haoluo@google.com>
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <e02e52a1-8550-a57c-ed29-f51191ea2375@google.com>
+In-Reply-To: <e02e52a1-8550-a57c-ed29-f51191ea2375@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 3 Mar 2022 12:08:04 -0800
+Message-ID: <CAHbLzkpyJJH2XMMs25eaJuZ2Z8TOO5NS84WzC+2f6k2Y1-Np5g@mail.gmail.com>
+Subject: Re: [PATCH mmotm] mm/thp: fix NR_FILE_MAPPED accounting in page_*_file_rmap()
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 12:02 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Mar 2, 2022 at 5:46 PM Hugh Dickins <hughd@google.com> wrote:
 >
-> On Thu, Mar 3, 2022 at 11:43 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Wed, Mar 2, 2022 at 6:29 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Mar 2, 2022 at 5:09 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 3/2/22 1:30 PM, Alexei Starovoitov wrote:
-> > > > > On Wed, Mar 2, 2022 at 1:23 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > >>
-> > > > >>
-> > > > >>
-> > > > >> On 2/25/22 3:43 PM, Hao Luo wrote:
-> > > > >>> Add a new type of bpf tracepoints: sleepable tracepoints, which allows
-> > > > >>> the handler to make calls that may sleep. With sleepable tracepoints, a
-> > > > >>> set of syscall helpers (which may sleep) may also be called from
-> > > > >>> sleepable tracepoints.
-> > > > >>
-> > > > >> There are some old discussions on sleepable tracepoints, maybe
-> > > > >> worthwhile to take a look.
-> > > > >>
-> > > > >> https://lore.kernel.org/bpf/20210218222125.46565-5-mjeanson@efficios.com/T/
-> > > > >
-> > > > > Right. It's very much related, but obsolete too.
-> > > > > We don't need any of that for sleeptable _raw_ tps.
-> > > > > I prefer to stay with "sleepable" name as well to
-> > > > > match the rest of the bpf sleepable code.
-> > > > > In all cases it's faultable.
-> > > >
-> > > > sounds good to me. Agree that for the bpf user case, Hao's
-> > > > implementation should be enough.
-> > >
-> > > Just remembered that we can also do trivial noinline __weak
-> > > nop function and mark it sleepable on the verifier side.
-> > > That's what we were planning to do to trace map update/delete ops
-> > > in Joe Burton's series.
-> > > Then we don't need to extend tp infra.
-> > > I'm fine whichever way. I see pros and cons in both options.
-> >
-> > Joe is also cc'ed in this patchset, I will sync up with him on the
-> > status of trace map work.
-> >
-> > Alexei, do we have potentially other variants of tp? We can make the
-> > current u16 sleepable a flag, so we can reuse this flag later when we
-> > have another type of tracepoints.
+> NR_FILE_MAPPED accounting in mm/rmap.c (for /proc/meminfo "Mapped" and
+> /proc/vmstat "nr_mapped" and the memcg's memory.stat "mapped_file") is
+> slightly flawed for file or shmem huge pages.
 >
-> When we added the ability to attach to kernel functions and mark them
-> as allow_error_inject the usefulness of tracepoints and even
-> writeable tracepoints was deminissed.
-> If we do sleepable tracepoint, I suspect, it may be the last extension
-> in that area.
-> I guess I'm convincing myself that noinline weak nop func
-> is better here. Just like it's better for Joe's map tracing.
+> It is well thought out, and looks convincing, but there's a racy case
+> when the careful counting in page_remove_file_rmap() (without page lock)
+> gets discarded.  So that in a workload like two "make -j20" kernel builds
+> under memory pressure, with cc1 on hugepage text, "Mapped" can easily
+> grow by a spurious 5MB or more on each iteration, ending up implausibly
+> bigger than most other numbers in /proc/meminfo.  And, hypothetically,
+> might grow to the point of seriously interfering in mm/vmscan.c's
+> heuristics, which do take NR_FILE_MAPPED into some consideration.
+>
+> Fixed by moving the __mod_lruvec_page_state() down to where it will not
+> be missed before return (and I've grown a bit tired of that oft-repeated
+> but-not-everywhere comment on the __ness: it gets lost in the move here).
+>
+> Does page_add_file_rmap() need the same change?  I suspect not, because
+> page lock is held in all relevant cases, and its skipping case looks safe;
+> but it's much easier to be sure, if we do make the same change.
+>
+> Fixes: dd78fedde4b9 ("rmap: support file thp")
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-To add to the above... The only downside of sleepable nop func
-comparing to tp is the lack of static_branch.
-So this nop call will always be there.
-For map tracing and for cgroup mkdir/rmdir the few nanosecond
-overhead of calling an empty function isn't even measurable.
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+
+> ---
+> If this were thought serious enough to backport (I don't feel strongly,
+> but it is something I keep in my own trees), it needs a little more care
+> near "out", because the mm/munlock series has removed some action there.
+>
+>  mm/rmap.c | 31 ++++++++++++++-----------------
+>  1 file changed, 14 insertions(+), 17 deletions(-)
+>
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1238,14 +1238,14 @@ void page_add_new_anon_rmap(struct page *page,
+>  void page_add_file_rmap(struct page *page,
+>         struct vm_area_struct *vma, bool compound)
+>  {
+> -       int i, nr = 1;
+> +       int i, nr = 0;
+>
+>         VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+>         lock_page_memcg(page);
+>         if (compound && PageTransHuge(page)) {
+>                 int nr_pages = thp_nr_pages(page);
+>
+> -               for (i = 0, nr = 0; i < nr_pages; i++) {
+> +               for (i = 0; i < nr_pages; i++) {
+>                         if (atomic_inc_and_test(&page[i]._mapcount))
+>                                 nr++;
+>                 }
+> @@ -1262,11 +1262,12 @@ void page_add_file_rmap(struct page *page,
+>                         VM_WARN_ON_ONCE(!PageLocked(page));
+>                         SetPageDoubleMap(compound_head(page));
+>                 }
+> -               if (!atomic_inc_and_test(&page->_mapcount))
+> -                       goto out;
+> +               if (atomic_inc_and_test(&page->_mapcount))
+> +                       nr++;
+>         }
+> -       __mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
+>  out:
+> +       if (nr)
+> +               __mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
+>         unlock_page_memcg(page);
+>
+>         mlock_vma_page(page, vma, compound);
+> @@ -1274,7 +1275,7 @@ void page_add_file_rmap(struct page *page,
+>
+>  static void page_remove_file_rmap(struct page *page, bool compound)
+>  {
+> -       int i, nr = 1;
+> +       int i, nr = 0;
+>
+>         VM_BUG_ON_PAGE(compound && !PageHead(page), page);
+>
+> @@ -1289,12 +1290,12 @@ static void page_remove_file_rmap(struct page *page, bool compound)
+>         if (compound && PageTransHuge(page)) {
+>                 int nr_pages = thp_nr_pages(page);
+>
+> -               for (i = 0, nr = 0; i < nr_pages; i++) {
+> +               for (i = 0; i < nr_pages; i++) {
+>                         if (atomic_add_negative(-1, &page[i]._mapcount))
+>                                 nr++;
+>                 }
+>                 if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
+> -                       return;
+> +                       goto out;
+>                 if (PageSwapBacked(page))
+>                         __mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+>                                                 -nr_pages);
+> @@ -1302,16 +1303,12 @@ static void page_remove_file_rmap(struct page *page, bool compound)
+>                         __mod_lruvec_page_state(page, NR_FILE_PMDMAPPED,
+>                                                 -nr_pages);
+>         } else {
+> -               if (!atomic_add_negative(-1, &page->_mapcount))
+> -                       return;
+> +               if (atomic_add_negative(-1, &page->_mapcount))
+> +                       nr++;
+>         }
+> -
+> -       /*
+> -        * We use the irq-unsafe __{inc|mod}_lruvec_page_state because
+> -        * these counters are not modified in interrupt context, and
+> -        * pte lock(a spinlock) is held, which implies preemption disabled.
+> -        */
+> -       __mod_lruvec_page_state(page, NR_FILE_MAPPED, -nr);
+> +out:
+> +       if (nr)
+> +               __mod_lruvec_page_state(page, NR_FILE_MAPPED, -nr);
+>  }
+>
+>  static void page_remove_anon_compound_rmap(struct page *page)

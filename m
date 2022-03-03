@@ -2,110 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D764CB9D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3E74CB9DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiCCJHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S231802AbiCCJKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiCCJHh (ORCPT
+        with ESMTP id S229930AbiCCJK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:07:37 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0A417776E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:06:53 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id y1-20020a17090a644100b001bc901aba0dso2205871pjm.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 01:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
-        b=CwcLSYEWIYkwRIiSSoxKp+6DeCkwVywNCvkORnPKqsNTneqEIEtKoa1z3mwpqSO5W4
-         C4EHKgRYdUXjCIOSBiph61mK8NoMu3VVGZdQoh1vzbAAj6PmbcMhAyb+4ErMMn/svnDL
-         FP8rthWhTrzh2Va1j3Zfzp+FYQz4qCJD1gVJd7MbjNd/ghRt2JDE69B0eP4rYOZJWtNk
-         iy8+/9w5gmFETfLE9rVgJeZuSKmAoHiJKgxbZtHPkGMaD2ChCzD6jJS3mXJoVYXdg2Zb
-         Nn0/DhX7zv8c3bY7H6zzF0hk+Q/LD8THdUGTyGynCcth2eoJxJBm37j1FQ/tcNYb/tBi
-         a+Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
-        b=4Pkvtnlt1nqB7aGLlqC0b6yjydJIjZnAZ/w2GdRUaFcUp9dj8H3hXunLhC1uI697Qk
-         kNUv6c81wBecU+cyZ6TN6A+wgLO2OnQl4QK5YWjj99uM9ZjYio5nyJrq+V+gQc0zlVxV
-         voTLMj9MEHGMQAb6cKt9jBuXhGzMFfV6BMJf2hNDGqmFii2BjlYQOxnXljGpGjrVowjz
-         sPLeFBGDHd7CsymdI5Ri/FcrGwVuYBo0YmonaGgf4TGXK+twiRbDohJhbSlhBLUHfHkd
-         lCEKP25Yka7iEHTgK9ZqgrfstJLjrMZECo4rPYJXkLOJPFGi19q6d4e+Y5n28rXVJC1v
-         i9qQ==
-X-Gm-Message-State: AOAM530R2fKUjoveip28RR/Y2sQqd3QtwZ5rOfFEHsnwrQmGqAq7kHKe
-        vP6oIfbxkHsgfZVcuw4pvhfjnobruGsiIw==
-X-Google-Smtp-Source: ABdhPJxF438b/WEu22WxHZgv3A03n8SRdHWfJx5cX+REUymSJzQW01Ac5BTggzKnp1cW4D9MmVLPr1IGpLealw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:4b52:b0:1bc:b208:dc5c with SMTP
- id mi18-20020a17090b4b5200b001bcb208dc5cmr1023750pjb.1.1646298411425; Thu, 03
- Mar 2022 01:06:51 -0800 (PST)
-Date:   Thu,  3 Mar 2022 17:06:42 +0800
-Message-Id: <20220303090643.241747-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
-From:   David Gow <davidgow@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 04:10:28 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5144838F;
+        Thu,  3 Mar 2022 01:09:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646298583; x=1677834583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OnJVXfIxBJCa2zbcrSYYMyJc+X5r5JG+8hWCDRkOLX0=;
+  b=DyB2HCw1TdJiosFY3th3V8aO4DyRqwkBHVcMpmRzJSKBYBQI/WqL42nc
+   V3ON20WBDpGn0rDsTD9WT5lDpWcclnPAW1xtizsZXv4GjuSe8C+ofH6m6
+   N88dyXUKOxQR6DGOllU1vcfXGsfWtjhJwNFt3J7y/OIrEm1QqVfmBjieA
+   I/7paPIM0PbzGGaWc14fMMomyhhEcJGGcKNgL1ycfGe+Hwxev3IsfLWTR
+   I3/+FsO5smdO4CXTy4CfGvFBmMp8Qg85sUqWZjjhjMs0b8/nPVYJFMEBp
+   +v0I1bm4uM219WEeGQAcy3hxTB9j7tHAzGViFpdkYmUjpJjOOMiJBDPtv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233586762"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="233586762"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 01:09:42 -0800
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="535747413"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 01:09:39 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 3B1C320090;
+        Thu,  3 Mar 2022 11:09:37 +0200 (EET)
+Date:   Thu, 3 Mar 2022 11:09:37 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Kate Hsuan <hpa@redhat.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com
+Subject: Re: [PATCH 1/1] staging: media: ipu3: Fix AF x_start position when
+ rightmost stripe is used
+Message-ID: <YiCF0Ze+mPxYQ2NP@paasikivi.fi.intel.com>
+References: <20220223090648.41989-1-hpa@redhat.com>
+ <20220223090648.41989-2-hpa@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223090648.41989-2-hpa@redhat.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The things built with USER_CFLAGS don't seem to recognise it as a
-compiler option, and print a warning:
-clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
+Hi Kate,
 
-Fixes: 744814d2fa ("um: Allow builds with Clang")
-Signed-off-by: David Gow <davidgow@google.com>
----
+Thank you for the patch.
 
-This warning shows up after merging:
-https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
+On Wed, Feb 23, 2022 at 05:06:48PM +0800, Kate Hsuan wrote:
+> For the AF configuration, if the rightmost stripe is used, the AF scene
+> will be at the incorrect location of the sensor.
+> 
+> The AF coordinate may be set to the right part of the sensor. This
+> configuration would lead to x_start being greater than the
+> down_scaled_stripes offset and the leftmost stripe would be disabled
+> and only the rightmost stripe is used to control the AF coordinate. If
+> the x_start doesn't perform any adjustments, the AF coordinate will be
+> at the wrong place of the sensor since down_scaled_stripes offset
+> would be the new zero of the coordinate system.
+> 
+> In this patch, if only the rightmost stripe is used, x_start should
+> minus down_scaled_stripes offset to maintain its correctness of AF
+> scene coordinate.
+> 
+> Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> ---
+>  drivers/staging/media/ipu3/ipu3-css-params.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3-css-params.c b/drivers/staging/media/ipu3/ipu3-css-params.c
+> index d9e3c3785075..efe4de8ef205 100644
+> --- a/drivers/staging/media/ipu3/ipu3-css-params.c
+> +++ b/drivers/staging/media/ipu3/ipu3-css-params.c
+> @@ -2556,6 +2556,14 @@ int imgu_css_cfg_acc(struct imgu_css *css, unsigned int pipe,
+>  		/* Enable only for rightmost stripe, disable left */
+>  		acc->af.stripes[0].grid_cfg.y_start &=
+>  			~IPU3_UAPI_GRID_Y_START_EN;
+> +		acc->af.stripes[0].grid_cfg.x_start -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
+> +		acc->af.stripes[0].grid_cfg.x_end -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
+> +		acc->af.stripes[1].grid_cfg.x_start -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
+> +		acc->af.stripes[1].grid_cfg.x_end -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
 
-I'm not 100% sure why this is necessary, but it does seem to work. All
-the attempts to get rid of -mno-global-merge entirely have been met with
-skepticism, but I'm guessing that it's not a problem for just the UML
-"user" files, as they shouldn't(?) interact too much with modules.
+The grid x/y ends are calculated from the width when both grids are enabled
+and I think it should work the same way here. There's also masking of the
+bits that aren't in use.
 
- arch/um/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+The first stripe isn't enabled so changing values there has no effect as
+far as I can tell.
 
-diff --git a/arch/um/Makefile b/arch/um/Makefile
-index f2fe63bfd819..320b09cd513c 100644
---- a/arch/um/Makefile
-+++ b/arch/um/Makefile
-@@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
- 		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
- 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
- 
-+ifdef CONFIG_CC_IS_CLANG
-+USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
-+endif
-+
- #This will adjust *FLAGS accordingly to the platform.
- include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
- 
+Looking at the code a little, it seems all awb_fr, ae and af seem to suffer
+from the same issue. Let's still iron out the fix for af first before
+considering those.
+
+>  	} else if (acc->af.config.grid_cfg.x_end <=
+>  		   acc->stripe.bds_out_stripes[0].width - min_overlap) {
+>  		/* Enable only for leftmost stripe, disable right */
+> @@ -2563,7 +2571,6 @@ int imgu_css_cfg_acc(struct imgu_css *css, unsigned int pipe,
+>  			~IPU3_UAPI_GRID_Y_START_EN;
+>  	} else {
+>  		/* Enable for both stripes */
+> -
+>  		acc->af.stripes[0].grid_cfg.width =
+>  			(acc->stripe.bds_out_stripes[0].width - min_overlap -
+>  			 acc->af.config.grid_cfg.x_start + 1) >>
+
 -- 
-2.35.1.616.g0bdcbb4464-goog
+Kind regards,
 
+Sakari Ailus

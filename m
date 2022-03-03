@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7B94CB8E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A394CB8E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiCCIbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S231246AbiCCIcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiCCIbU (ORCPT
+        with ESMTP id S229846AbiCCIcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:31:20 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8F171850;
-        Thu,  3 Mar 2022 00:30:35 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id z4so3886069pgh.12;
-        Thu, 03 Mar 2022 00:30:35 -0800 (PST)
+        Thu, 3 Mar 2022 03:32:32 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7FB171866;
+        Thu,  3 Mar 2022 00:31:47 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id w37so3899960pga.7;
+        Thu, 03 Mar 2022 00:31:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uLpTC29O7sSEzWIyhD1PQNyRAs1/upRhzEEBO0P7TrY=;
-        b=R05ZV01Yp+GvJafCjJwp2DdNQL1X7N4+v2qDpWCUjxekJqjhV8nKttt+lgDdDv8VHZ
-         pTpad4a62LLA8SjB/yHHEpNTxY0U28zfBa611uCN9ihzVETreTphlyPy+ETyTE4AgOSy
-         RSp6pqcLA1mQfW+JjTEEtr3nMT+EN3gAPPB7pPpCIhAgeloFO+Vkph8Zctn11Qajj/U0
-         QUVjSv6dTXzOO7akWefQCdrhFJznQKo01Wl+2crhxprXX9zSh/gHLWP/Xe3lMKAcW1nu
-         BI3FrzUOW0QskfQ+hVH91vnr00ExY+gCD8VtMWG6RhFXS05x/6dGZMaR1NPNguf29zlo
-         qAtA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O4+a81i4/FwqFWCQQwaGMX+OknTM79jrm4CHit9fHIU=;
+        b=S6CtsfUZ6tGsP4RWc03eGal1v41L86zKqse8e2BxVa1Yej1V4K9NC3LAie0DLzY6WH
+         QiS8MqCMwP9VPv27Nh+M5QRRNE7aFdbBy91qDwLSo+1fP5+eAk+kgrKrd9qccQKiTftM
+         xx0JhshzSdil0hzu6Lpjda9I/K5l8r52cUWC/nhNoxte6m/eSEAzao95e2E8lFww+w+x
+         /Km6ZQeH00f/WgUKPxsHyEauqJSG0kcCEn10Wtu0r5J2/OYFf05NisMXIf7E5KN3bU01
+         L8g6Vaqup5XBbpqn3p0yI1dw5JdcjXB4OTDoqB+c33LxC7PxVA4PhOhGwtam6i7p5xUw
+         kydw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=uLpTC29O7sSEzWIyhD1PQNyRAs1/upRhzEEBO0P7TrY=;
-        b=tX4Lvnprkbl55JgpIMGPwUYB3zl4weKQtUQYSCGebicA19Oo2euseaSt/seHhHgl0U
-         WGEXF4Yq70OpGaJzdrRUdewFnJPKwyRe2hcmhELKOAaCQScpZMjVomIJ7EFgGxvhYEp3
-         9HxQe4UlZmMPk4ZhvlJqwjvYVIunkaPltt23SQUu1FRGohEGvel7sT8VStEWsaxjfs5X
-         viiLJUsV/Poav7kbPBu/1Hl2pXtDu+ktsOyqWkyiZbpO4/DOhJ/qeHIG5UgkeNYfEpB/
-         i4SSxCqaL5X+skhojHCTmrD6wVTzE//JfLQc8R7q5KqW7Pfmirm/ksaw2x6Yi8IQw3cR
-         RW+Q==
-X-Gm-Message-State: AOAM533yIcrXrWD0e+qg8tCGwICNQuG2ezuK76KXrTeyZwEDIAawJ7rL
-        tJd6y95jIfu3iOx5y5a6kN0=
-X-Google-Smtp-Source: ABdhPJxl3tqNmXwEb6Rf4RyrJiQAiYb1f64m7AmzgvvLqhkGp3dQvJbj8a24YWybBg5gGNAc3KtcpA==
-X-Received: by 2002:a63:8bca:0:b0:370:2717:3756 with SMTP id j193-20020a638bca000000b0037027173756mr29011952pge.604.1646296234811;
-        Thu, 03 Mar 2022 00:30:34 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.19])
-        by smtp.googlemail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm7342532pju.44.2022.03.03.00.30.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 00:30:34 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     jakobkoschel@gmail.com
-Cc:     David.Laight@ACULAB.COM, akpm@linux-foundation.org,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
-        bcm-kernel-feedback-list@broadcom.com, bjohannesmeyer@gmail.com,
-        c.giuffrida@vu.nl, christian.koenig@amd.com,
-        christophe.jaillet@wanadoo.fr, dan.carpenter@oracle.com,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, gustavo@embeddedor.com,
-        h.j.bos@vu.nl, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, jgg@ziepe.ca,
-        keescook@chromium.org, kgdb-bugreport@lists.sourceforge.net,
-        kvm@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-block@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux@rasmusvillemoes.dk,
-        linuxppc-dev@lists.ozlabs.org, nathan@kernel.org,
-        netdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-        rppt@kernel.org, samba-technical@lists.samba.org,
-        tglx@linutronix.de, tipc-discussion@lists.sourceforge.net,
-        torvalds@linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
-Date:   Thu,  3 Mar 2022 16:30:07 +0800
-Message-Id: <20220303083007.11640-1-xiam0nd.tong@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O4+a81i4/FwqFWCQQwaGMX+OknTM79jrm4CHit9fHIU=;
+        b=OpswMkOq3GfWCOSksWKvBr4NbdAgW1OV/wVDe8Go9HLGFLRYVBpy8gV70hAgeMPs9K
+         y97weYjsnMPqRXLzN33lgjO+L1TXFt2QaHP1I/yxwa5ZDk2VOuAkHLh7u3uVhzVsPBCQ
+         wQf5WO+VFba/EJj52vTpimxkuxRJlZw2FvpDot6o8Y5405XXQ00ds3iIuET+OT7IqDQT
+         e6FMAN+PzYmWURDmccTecXysqJT2MNHy4AgistJILyB6xYUaEKq+HM6f/JliO3Bl53eb
+         Czh9KXmpEHNSIueKPQKDp0JLyDdzuiVpMFvDm/+iEXUL5BLvprTkFH701bNuaNNZVFrh
+         Wfzw==
+X-Gm-Message-State: AOAM532XXM0Opscy6SmvJdiiE0DtrimLelI+Ofpy+r4kOCK6cnF2nCZz
+        f+U+0NDo3zCjVW+66E+gEQ==
+X-Google-Smtp-Source: ABdhPJzRW212yGX1lOcQ4NKFw8lHn01VNtegjIdJxQWlPv0j0N5TvzdqQhz5izdtNS5j5HtOXLHYUg==
+X-Received: by 2002:a63:4d8:0:b0:373:cf6d:40e3 with SMTP id 207-20020a6304d8000000b00373cf6d40e3mr29425592pge.590.1646296306997;
+        Thu, 03 Mar 2022 00:31:46 -0800 (PST)
+Received: from localhost ([2401:e180:8860:3b30:e4a0:392a:996e:c525])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056a000b8100b004f111c21535sm1758909pfj.80.2022.03.03.00.31.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 03 Mar 2022 00:31:46 -0800 (PST)
+From:   Tyrone Ting <warp5tw@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/11] i2c: npcm: Bug fixes timeout, spurious interrupts
+Date:   Thu,  3 Mar 2022 16:31:30 +0800
+Message-Id: <20220303083141.8742-1-warp5tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <A568BD90-FE81-4740-B1D3-C795EB636A5A@gmail.com>
-References: <A568BD90-FE81-4740-B1D3-C795EB636A5A@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -95,44 +78,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I think this would make sense, it would mean you only assign the containing
-> element on valid elements.
->
-> I was thinking something along the lines of:
->
-> #define list_for_each_entry(pos, head, member)					\
->	for (struct list_head *list = head->next, typeof(pos) pos;	\
->	     list == head ? 0 : (( pos = list_entry(pos, list, member), 1));	\
->	     list = list->next)
->
-> Although the initialization block of the for loop is not valid C, I'm
-> not sure there is any way to declare two variables of a different type
-> in the initialization part of the loop.
+From: Tyrone Ting <kfting@nuvoton.com>
 
-It can be done using a *nested loop*, like this:
+This patchset includes the following fixes:
 
-#define list_for_each_entry(pos, head, member)					\
-	for (struct list_head *list = head->next, cond = (struct list_head *)-1; cond == (struct list_head *)-1; cond = NULL) \
-	  for (typeof(pos) pos;	\
-	     list == head ? 0 : (( pos = list_entry(pos, list, member), 1));	\
-	     list = list->next)
+- Add dt-bindings description for NPCM845.
+- Bug fix for timeout calculation.
+- Better handling of spurious interrupts.
+- Fix for event type in slave mode.
+- Removal of own slave addresses [2:10].
+- Support for next gen BMC (NPCM845).
 
->
-> I believe all this does is get rid of the &pos->member == (head) check
-> to terminate the list.
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 
-Indeed, although the original way is harmless.
+Addressed comments from:
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/21/129
+ - Wolfram Sang : https://lore.kernel.org/lkml/Yh536s%2F7bm6Xt6o3@ninjato/
+ - Rob Herring : https://lkml.org/lkml/2022/2/20/425
+ - Rob Herring : https://lkml.org/lkml/2022/2/22/945
+ - Krzysztof Kozlowski : https://www.spinics.net/lists/linux-i2c/
+                         msg55903.html
+ - Jonathan Neuschäfer : https://lkml.org/lkml/2022/2/21/500
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/20/49
 
-> It alone will not fix any of the other issues that using the iterator
-> variable after the loop currently has.
+Changes since version 2:
+ - Keep old code as fallback, if getting nuvoton,sys-mgr property fails.
+ - Fix the error reported by running 'make DT_CHECKER_FLAGS=-m 
+   dt_binding_check'.
+ - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+ - Correct the patch's subject about changing the way of getting GCR
+   regmap and add the description about keeping old code as fallback
+   if getting nuvoton,sys-mgr property fails.
+ - Correct the patch title and description about removing the unused 
+   variable clk_regmap.
+ - Use the data field directly instead of the macros since macros are
+   not constants anymore in this patch.
+ 
+Changes since version 1:
+ - Add nuvoton,sys-mgr property in NPCM devicetree.
+ - Describe the commit message in imperative mood.
+ - Modify the description in i2c binding document to cover NPCM series.
+ - Add new property in i2c binding document.
+ - Create a new patch for client address calculation.
+ - Create a new patch for updating gcr property name.
+ - Create a new patch for removing unused clock node.
+ - Explain EOB in the commit description.
+ - Create a new patch for correcting NPCM register access width.
+ - Remove some comment since the corresponding logic no longer exists.
+ - Remove fixes tag while the patch adds an additional feature.
+ - Use devicetree data field to support NPCM845.
 
-Yes, but I stick with the list_for_each_entry_inside(pos, type, head, member)
-way to make the iterator invisiable outside the loop (before and after the loop).
-It is maintainable longer-term than "type(pos) pos" one and perfect.
-see my explain:
-https://lore.kernel.org/lkml/20220302093106.8402-1-xiam0nd.tong@gmail.com/
-and list_for_each_entry_inside(pos, type, head, member) patch here:
-https://lore.kernel.org/lkml/20220301075839.4156-3-xiam0nd.tong@gmail.com/
+Tali Perry (7):
+  i2c: npcm: Fix client address calculation
+  i2c: npcm: Change the way of getting GCR regmap
+  i2c: npcm: Remove unused variable clk_regmap
+  i2c: npcm: Fix timeout calculation
+  i2c: npcm: Add tx complete counter
+  i2c: npcm: Handle spurious interrupts
+  i2c: npcm: Remove own slave addresses 2:10
 
---
-Xiaomeng Tong
+Tyrone Ting (4):
+  arm: dts: add new property for NPCM i2c module
+  dt-bindings: i2c: npcm: support NPCM845
+  i2c: npcm: Correct register access width
+  i2c: npcm: Support NPCM845
+
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  26 +-
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |  16 +
+ drivers/i2c/busses/Kconfig                    |   8 +-
+ drivers/i2c/busses/Makefile                   |   2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              | 291 +++++++++++-------
+ 5 files changed, 221 insertions(+), 122 deletions(-)
+
+-- 
+2.17.1
+

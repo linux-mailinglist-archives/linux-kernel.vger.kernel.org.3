@@ -2,179 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848B84CC580
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4924CC589
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiCCS56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S235726AbiCCTBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiCCS5v (ORCPT
+        with ESMTP id S233939AbiCCTBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:57:51 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EAC57488
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:57:05 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id 11so5424995qtt.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:57:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yS7kazZpf1WctKIduUm7SU3KoWdFaMISwpfhZK76qk4=;
-        b=Nc+Q0v+PIGcbgNSKGbAhoiP4zv0ZLw9EYz+X+vcZ7eAvYAkptoELg10H+l8UiNtoQd
-         zTdX1x+Dejrwn4ZSU240LOeUObpgjLNFjn6VhA87Bwir4Zd3RnU4IrPqjJPyTMqfnnbW
-         TRjwEalgqsarcOi9ia2xb267aKpZApOuvMurAkWuYqQ0Wd7WIeYIAsrlvb6jxVyVX9sc
-         7WNuDEZytTuZxDL7mlDkxob3dH1Y0V11qSnKIefDDmk1Xein6gXCNLxJzzqFMMynOROe
-         Z2y+e7G4bGHlc4zthKwbDP8O5oo7rYFxSEazLVK2bVW1XBoMsZlxJveTaRdgTStHcJW2
-         g5LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yS7kazZpf1WctKIduUm7SU3KoWdFaMISwpfhZK76qk4=;
-        b=BNp6vNfUUo4H6kSn/OLL+sk6mxUAtiH+SQZ3ElEGNMZ4/HBgBXWBW/wHtuJnnO99oD
-         gV7DdK3FGJE8/9/nmNjc2gZpcDQ/H1doZG15q5mlpFqGHcjixkOwlI/Z5MH/TcYsVS2s
-         Ga2Equ5Dei2tqyEufVPdi81YCH2t8tMSZZF3jrcIADSahexhn40mH/YXUCmcHiqlSq6Z
-         cfUeBfJAuWBTMIJq63Q7raLAmYuu2cUNtAtaSqFkGQyZIqeifSx1HqQ8l4ak7b1gLJGr
-         NgEaVBAOyeIDoCfufp2v+171gRwXERp9T48zYC2+tEk7Ff8mVMehzh0c998neNybYThI
-         lBvA==
-X-Gm-Message-State: AOAM532+mT3H9qw06r7/eTx2xxnOFXaAZWuzw0JZqocXYdmtyamdRJ63
-        CMfd7VzSQkAKJmeEN73x3YKxQ7ZN/cqk+uIAMhjM5A==
-X-Google-Smtp-Source: ABdhPJxedlbfXtoMJQMP8Jo1Mh1Laf2i0+pAwrCkSOLmzz9A1WP/B6pZotVHj++FMBJwTIhOsrUW1XQIEyA+cC81Iv0=
-X-Received: by 2002:ac8:58d5:0:b0:2de:2dfc:77d3 with SMTP id
- u21-20020ac858d5000000b002de2dfc77d3mr28109007qta.168.1646333824282; Thu, 03
- Mar 2022 10:57:04 -0800 (PST)
+        Thu, 3 Mar 2022 14:01:38 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0142719F452;
+        Thu,  3 Mar 2022 11:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mYrrOG/s2mjfio75s3dq/dKVQ4hb6AKuIgv4XF18k5o=; b=puVBQooXBZePIB2vmMTSbXd57s
+        p17MgatBJCjBKtRJ+UT1TBodIBURDW/LOhzMJ50muFzytAz8XxJ/BrFPLQ4prU8hIxdCLVJ2wCJH9
+        TZlwm3rAbg9eJGfQi+uBcbCqS9bstks2nG8cEyx5xEVVy9hZXbSACSKhfmtrS1JMAIGb2Nm7ujVm7
+        fEAr2epRFpKIzcV4yR7wr7k0C5+ORqH73Md/qogC3eWDJmwJbhh+WbqhyOkk/cvqdd1G8emGY0Wq+
+        IUDmTg9cCbO+gDzXRygN3zXeeV05WeYo1IodMQrwzObhU5ZJHPFZoUt5BlHoU/WrJzCmPcW0I4q74
+        EvEhJhzw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPqgl-007WTc-Tq; Thu, 03 Mar 2022 19:00:35 +0000
+Date:   Thu, 3 Mar 2022 11:00:35 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
+Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
+Message-ID: <YiEQU37pZgjaeT8k@infradead.org>
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <20220228234322.2073104-14-atomlin@redhat.com>
+ <20220302161917.gx5icfszakoye4uh@maple.lan>
+ <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
+ <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+ <YiDEmRf3X0fxSayK@infradead.org>
+ <20220303145949.inaz2tecmfuek2hf@maple.lan>
+ <YiEAxgVYx552UQFS@infradead.org>
+ <5b582422-ef36-009e-7cb7-b85b5022c9aa@csgroup.eu>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
- <7e862b1c-7818-6759-caf1-962598d2c8b3@fb.com>
-In-Reply-To: <7e862b1c-7818-6759-caf1-962598d2c8b3@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 3 Mar 2022 10:56:53 -0800
-Message-ID: <CA+khW7gAEL+yBmXjWO28ns5hU4oHVZrEArfepuOfy6Q1y7VDKQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b582422-ef36-009e-7cb7-b85b5022c9aa@csgroup.eu>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 12:55 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/25/22 3:43 PM, Hao Luo wrote:
-> > This patch allows bpf_syscall prog to perform some basic filesystem
-> > operations: create, remove directories and unlink files. Three bpf
-> > helpers are added for this purpose. When combined with the following
-> > patches that allow pinning and getting bpf objects from bpf prog,
-> > this feature can be used to create directory hierarchy in bpffs that
-> > help manage bpf objects purely using bpf progs.
-> >
-> > The added helpers subject to the same permission checks as their syscall
-> > version. For example, one can not write to a read-only file system;
-> > The identity of the current process is checked to see whether it has
-> > sufficient permission to perform the operations.
-> >
-> > Only directories and files in bpffs can be created or removed by these
-> > helpers. But it won't be too hard to allow these helpers to operate
-> > on files in other filesystems, if we want.
-> >
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-> >   include/linux/bpf.h            |   1 +
-> >   include/uapi/linux/bpf.h       |  26 +++++
-> >   kernel/bpf/inode.c             |   9 +-
-> >   kernel/bpf/syscall.c           | 177 +++++++++++++++++++++++++++++++++
-> >   tools/include/uapi/linux/bpf.h |  26 +++++
-> >   5 files changed, 236 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index f19abc59b6cd..fce5e26179f5 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -1584,6 +1584,7 @@ int bpf_link_new_fd(struct bpf_link *link);
-> >   struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd);
-> >   struct bpf_link *bpf_link_get_from_fd(u32 ufd);
-> >
-> > +bool bpf_path_is_bpf_dir(const struct path *path);
-> >   int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
-> >   int bpf_obj_get_user(const char __user *pathname, int flags);
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index afe3d0d7f5f2..a5dbc794403d 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -5086,6 +5086,29 @@ union bpf_attr {
-> >    *  Return
-> >    *          0 on success, or a negative error in case of failure. On error
-> >    *          *dst* buffer is zeroed out.
-> > + *
-> > + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
->
-> Can we make pathname_sz to be u32 instead of int? pathname_sz should
-> never be negative any way.
->
-> Also, I think it is a good idea to add 'u64 flags' parameter for all
-> three helpers, so we have room in the future to tune for new use cases.
->
+On Thu, Mar 03, 2022 at 06:16:58PM +0000, Christophe Leroy wrote:
+> Well .... The idea at the first place was to get rid of the #ifdef 
+> CONFIG_KGDB_KDB in modules.
+> 
+> Here you propose it the other way round. Why not, in that case that 
+> would mean a dedicated file in kernel/module/ as part of the series 
+> https://patchwork.kernel.org/project/linux-modules/list/?series=618917&state=*
 
-SG. Will make this change.
-
-Actually, I think I need to cap patthname_sz from above, to ensure
-pathname_sz isn't too big. Is that necessary? I see there are other
-helpers that don't have this type of check.
-
-> > + *   Description
-> > + *           Attempts to create a directory name *pathname*. The argument
-> > + *           *pathname_sz* specifies the length of the string *pathname*.
-> > + *           The argument *mode* specifies the mode for the new directory. It
-> > + *           is modified by the process's umask. It has the same semantic as
-> > + *           the syscall mkdir(2).
-> > + *   Return
-> > + *           0 on success, or a negative error in case of failure.
-> > + *
-> > + * long bpf_rmdir(const char *pathname, int pathname_sz)
-> > + *   Description
-> > + *           Deletes a directory, which must be empty.
-> > + *   Return
-> > + *           0 on sucess, or a negative error in case of failure.
-> > + *
-> > + * long bpf_unlink(const char *pathname, int pathname_sz)
-> > + *   Description
-> > + *           Deletes a name and possibly the file it refers to. It has the
-> > + *           same semantic as the syscall unlink(2).
-> > + *   Return
-> > + *           0 on success, or a negative error in case of failure.
-> >    */
-> >   #define __BPF_FUNC_MAPPER(FN)               \
-> >       FN(unspec),                     \
-> > @@ -5280,6 +5303,9 @@ union bpf_attr {
-> >       FN(xdp_load_bytes),             \
-> >       FN(xdp_store_bytes),            \
-> >       FN(copy_from_user_task),        \
-> > +     FN(mkdir),                      \
-> > +     FN(rmdir),                      \
-> > +     FN(unlink),                     \
-> >       /* */
-> >
-> >   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> [...]
+With the series you can of course move it to a new kernel/module/kdb.c.
+But I don't have a tree with the series applied at hand and just want
+to show how kdb_lsmod can live outside of kernel/debug easily.

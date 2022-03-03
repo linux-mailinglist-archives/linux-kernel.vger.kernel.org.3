@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB324CBA50
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EEE4CBA55
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiCCJcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:32:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S231984AbiCCJd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiCCJc3 (ORCPT
+        with ESMTP id S231718AbiCCJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:32:29 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E550E16F951;
-        Thu,  3 Mar 2022 01:31:44 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 94AC71F45394
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646299903;
-        bh=7BamnJwMgtqrT3JoQ68Ebed6Mw0Z4qhgq17wKkO7uZQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DsKwhWmYCfBFjIrDoWzkxPNJKmtBbRcsgc1JMZx9lfNHbf04n0AFN6jYOU5/79Sgw
-         nyvDJ6M5EkqPGymiwkWb9kne6FdPEpfJ7vttPbObbeF56henBC6oGc/RTdSSjfFW6+
-         VC8zJrNU1oQ4UK0ECsXCpbxrdqn7cMaBEEa6/oHh5jqH6bCErPARX3ha6Zno76b3E+
-         mVHxV/HiSCkOtzQ38z1XM+GaVwYW7hIpmZE01VSoCluMtv/2M2vCwEAIzg0+8JiSmH
-         crxIXXQ4Kl6XsDKLzr6kxkK6ds2BQl0YGHLhGRoZPLryIOwv7sDw2menm+j746SUHW
-         LfIys7ju/p13w==
-Message-ID: <28098efc-1de1-b540-b1a3-bf7a92af9511@collabora.com>
-Date:   Thu, 3 Mar 2022 10:31:39 +0100
+        Thu, 3 Mar 2022 04:33:51 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B742E0B9;
+        Thu,  3 Mar 2022 01:33:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8Ql42Lbbz4xPv;
+        Thu,  3 Mar 2022 20:33:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646299985;
+        bh=zB1rt3zvUYOpLIIQyWGRlPSN53imFyGRFWlvIg4BBVA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oKRMUxIGWodX098W6LnlLbt9/UI6ugfaKk+5+oQUeSBUghkSP96UKpmGRpDzK7dwc
+         jFO9pQNryWI/ok8LBjBMsGQCSef9r+MnfmjRhY+vkitU/2aiTI4Z1clIbxiMhLgR5h
+         3SZl6+g+Jdoyu+nKjyIKJmFMFhR0rrq5pMPCv8UED6IvKEb+A/MKEOTkZNbi5u/3bA
+         3FRW6drTjbjosMtyUmuCoVVMGe8zNbWZhhCMjvBQL1rEY5PCm5uixAidvkOyXJXrNN
+         zFR6Sv8Wy032/WmSiC2LIk3JJYj4ndHq5zDO+SG+FHT5eYDe9TjEsdJC9GIPIP1Kun
+         yBvxv7GeJXXsA==
+Date:   Thu, 3 Mar 2022 20:33:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20220303203303.2e59c643@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v15 00/12] Add Mediatek Soc DRM (vdosys0) support for
- mt8195
-Content-Language: en-US
-To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fei Shao <fshao@chromium.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        "roy-cw.yeh" <roy-cw.yeh@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Jitao shi <jitao.shi@mediatek.com>, nancy.lin@mediatek.com,
-        singo.chang@mediatek.com, devicetree@vger.kernel.org,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
- <CAL_Jsq+6k5EqouAO2Xm=GpBz3Pi-wfB-ixGwfyC+Y+qOrjUFTg@mail.gmail.com>
- <c103927d7dbc3217431c83dc22a44c656c561228.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <c103927d7dbc3217431c83dc22a44c656c561228.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WuOx/LZAXxXM4L9s_Wxd8fV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/03/22 05:25, Jason-JH Lin ha scritto:
-> Hi Rob,
-> 
-> Thanks for the reviews.
-> 
-> On Wed, 2022-03-02 at 17:50 -0600, Rob Herring wrote:
->> On Wed, Jan 26, 2022 at 1:19 AM jason-jh.lin <
->> jason-jh.lin@mediatek.com> wrote:
->>>
-> 
-> [snip]
-> 
+--Sig_/WuOx/LZAXxXM4L9s_Wxd8fV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello Rob, Jason-JH,
+Hi all,
 
-I have just crafted a patch that fixes everything mentioned here,
-if it's easier like this, I can either send it for the maintainer(s)
-to apply on top, or squash in Jason-JH's original patch.
+In commit
 
-If you'd like to get my patch, though, I have one question:
-this is touching literally all of the YAML files that Jason-JH is
-introducing, so, should I send this as one patch per file (which would be
-something around 16 patches) or is just one fixing them all fine?
+  875ad0601532 ("iwlwifi: fix build error for IWLMEI")
 
+Fixes tag
+
+  Fixes: 977df8bd5844 ("wlwifi: work around reverse dependency on MEI")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+--=20
 Cheers,
-Angelo
+Stephen Rothwell
+
+--Sig_/WuOx/LZAXxXM4L9s_Wxd8fV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgi08ACgkQAVBC80lX
+0GyFKwf/ep0aTMcEt41fSFQyLyRXq0hERCHs0ut/4+ED2gcvbQSyb1DV6QzupNR/
+t1+O6EkJYv/mGY+uBkhDWpAWoM1aL29YvGAvGfnUN8hG7BMNZPnYS4Lu6F9ei9cF
+VK2AH3HvHIctCNUq+nAKs0zClj//5PE+/XQ06fAQ+r9lyjRWR51N8BSFHzQEi2Et
+hwOg32yS35Y0XlCjrj2HjEGBgFmPQXBeNxR/4i85QezjrSUWH+82OD6AqaWxDh2O
+NO4Au2tyD4o19qTzis6nCv7EEole8/NJBUmK9RuYzeEiXX//zt+IOe/eJNoMJJmQ
+MeHh2F6/Hs9KFpd6Sxk9PIvB1SOAbQ==
+=eGa9
+-----END PGP SIGNATURE-----
+
+--Sig_/WuOx/LZAXxXM4L9s_Wxd8fV--

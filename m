@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D784CBFCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C8C4CBFCF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiCCORq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S233996AbiCCOSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiCCORo (ORCPT
+        with ESMTP id S233972AbiCCOR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:17:44 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAFE18CC31;
-        Thu,  3 Mar 2022 06:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646317019; x=1677853019;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yN2G/1s3nnRhWNWBfpygstYHT/OoQNrY04dyYU6iFzI=;
-  b=j4aLbsPxrfe2dsafGwICVLSD/0b26+YscArYa7x9FsVamQj4WQHN0xAG
-   mTs8jdogXYBtLvyMzcVZuavrOAqItbsASlRpfYIKMp9PE2fcurX9FZven
-   asYmxHl6j1aOXbyHyYpvPU1vwvAxX5auD1uSIW6Ijo8N4tUf47vPmY6C8
-   LPk2tjM77wg+IJG4y9grKhvZEqNDKjxjjKOHK6ZPanOkoQEMTLI0bWp4T
-   kyj1C/bhjdWQRxGrsFj2L35iJBtfU11akM43sirYoCHi6EpvgziOMBvC7
-   g6/uJD9OrXL3do60fcZwDJGDbSrXcMQ5I2R6fWQpE+KABmRI+/9susWeS
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233648377"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="233648377"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 06:16:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="576499289"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2022 06:16:55 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPmGF-0000bs-39; Thu, 03 Mar 2022 14:16:55 +0000
-Date:   Thu, 3 Mar 2022 22:16:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] nvmem: Add Apple eFuse driver
-Message-ID: <202203032219.gDn8cX7m-lkp@intel.com>
-References: <20220227115743.69059-2-sven@svenpeter.dev>
+        Thu, 3 Mar 2022 09:17:59 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F75818CC75
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 06:17:12 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id x15so8049882wru.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 06:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=o87FE1s1Wm0goe8u+iMFz3QFDTGxpEfcNIHyIf4cYXc=;
+        b=qjtp5qx/MAS7oqOrzTmksFxlCuVhzhNjct9+cVdZJ0lL6LcvKJpYIbhjcbFQ5y9Sev
+         DocA3PoxsiNIlDGie3zqTL7+3cZqizI67vE9M6VfGzSXMuNeAvca61E1ggaYqv9zQFqL
+         fJODUuKt9vY9USIyyVUP20Kqq0V7c19LkZlvs7UwQ2NN5XFi/YawqJef+7uk3L9avGAN
+         U+tVGYNR/FGSTKHT61X9VJIZzSU+SKbQpPqMelLVGiYbB9c5AR28XhyRDVus0xBAcPmJ
+         6FreKTdHUZke8zDVjWjeeEE8ttpNaGeilOikSatq/h4i7sbml9cna2lWaV+MvgXYz04K
+         Bjfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=o87FE1s1Wm0goe8u+iMFz3QFDTGxpEfcNIHyIf4cYXc=;
+        b=UJxLglVzGlZYwVqymP+gE82FjwiLjcP06+z5k3Cz6nH9SjIcFV7QTBGx2iD4rTQd/t
+         4eWPGxyiL/KE/LquFydc9WOymYI7cTKmlKmwNDe9LaD4EV/roCqDD1YHNGKTHilRt1MO
+         YTgHRwpgo2eW41YO2SEL8BiZ6X/UL8hFJEWq8qY41tJvQ7AEGtpBBGE/yzMpUfIeA3F5
+         8v9Qkxw8tMTKfRWEitLa7UsCbd3+Dz/fnLNVp1z1bjPu2s1ALk8bmcx7DMbjkIyOQBuP
+         z9T6LUK3wWgToaWQIlOV19MfLbePT4Iwp7x94d/A/XF9TTlqI4uFe1Xw5gFYFu6uE4+c
+         hdOQ==
+X-Gm-Message-State: AOAM530z2q0JZXLOCHSvIl6YzmsQr0nEMQHwdUv2meMa21yUtP6HAi7X
+        /M5SaNy/bOKdqg01FA72wVThzQ==
+X-Google-Smtp-Source: ABdhPJxGby9qFrKdJzMjz97SEhrdFbTgsA5JiONah34Fa2/z0rLBVsD2gF8PbtEBkulh+SvN06cb+A==
+X-Received: by 2002:adf:edc4:0:b0:1ee:27de:4b04 with SMTP id v4-20020adfedc4000000b001ee27de4b04mr25622352wro.117.1646317030825;
+        Thu, 03 Mar 2022 06:17:10 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1cf406000000b0037c4e2d3baesm9037338wma.19.2022.03.03.06.17.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 06:17:10 -0800 (PST)
+Date:   Thu, 3 Mar 2022 14:17:07 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <YiDN4xpb1+8k5K5/@google.com>
+References: <20220302075421.2131221-1-lee.jones@linaro.org>
+ <20220302082021-mutt-send-email-mst@kernel.org>
+ <Yh93k2ZKJBIYQJjp@google.com>
+ <20220302095045-mutt-send-email-mst@kernel.org>
+ <Yh+F1gkCGoYF2lMV@google.com>
+ <CAGxU2F4cUDrMzoHH1NT5_ivxBPgEE8HOzP5s_Bt5JURRaSsLdQ@mail.gmail.com>
+ <20220302112945-mutt-send-email-mst@kernel.org>
+ <Yh+gDZUbgBRx/1ro@google.com>
+ <20220302171048.aijkcrwcrgsu475z@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220227115743.69059-2-sven@svenpeter.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302171048.aijkcrwcrgsu475z@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +86,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sven,
+On Wed, 02 Mar 2022, Stefano Garzarella wrote:
 
-I love your patch! Perhaps something to improve:
+> On Wed, Mar 02, 2022 at 04:49:17PM +0000, Lee Jones wrote:
+> > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > 
+> > > On Wed, Mar 02, 2022 at 05:28:31PM +0100, Stefano Garzarella wrote:
+> > > > On Wed, Mar 2, 2022 at 3:57 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > > > >
+> > > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > > > >
+> > > > > > On Wed, Mar 02, 2022 at 01:56:35PM +0000, Lee Jones wrote:
+> > > > > > > On Wed, 02 Mar 2022, Michael S. Tsirkin wrote:
+> > > > > > >
+> > > > > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
+> > > > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
+> > > > > > > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > > > > > > >
+> > > > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > > > > > > >
+> > > > > > > > > Cc: <stable@vger.kernel.org>
+> > > > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> > > > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > > > > ---
+> > > > > > > > >  drivers/vhost/vhost.c | 2 ++
+> > > > > > > > >  1 file changed, 2 insertions(+)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > > > > > > index 59edb5a1ffe28..bbaff6a5e21b8 100644
+> > > > > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > > > > @@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > > > >         int i;
+> > > > > > > > >
+> > > > > > > > >         for (i = 0; i < dev->nvqs; ++i) {
+> > > > > > > > > +               mutex_lock(&dev->vqs[i]->mutex);
+> > > > > > > > >                 if (dev->vqs[i]->error_ctx)
+> > > > > > > > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+> > > > > > > > >                 if (dev->vqs[i]->kick)
+> > > > > > > > > @@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > > > >                 if (dev->vqs[i]->call_ctx.ctx)
+> > > > > > > > >                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+> > > > > > > > >                 vhost_vq_reset(dev, dev->vqs[i]);
+> > > > > > > > > +               mutex_unlock(&dev->vqs[i]->mutex);
+> > > > > > > > >         }
+> > > > > > > >
+> > > > > > > > So this is a mitigation plan but the bug is still there though
+> > > > > > > > we don't know exactly what it is.  I would prefer adding something like
+> > > > > > > > WARN_ON(mutex_is_locked(vqs[i]->mutex) here - does this make sense?
+> > > > > > >
+> > > > > > > As a rework to this, or as a subsequent patch?
+> > > > > >
+> > > > > > Can be a separate patch.
+> > > > > >
+> > > > > > > Just before the first lock I assume?
+> > > > > >
+> > > > > > I guess so, yes.
+> > > > >
+> > > > > No problem.  Patch to follow.
+> > > > >
+> > > > > I'm also going to attempt to debug the root cause, but I'm new to this
+> > > > > subsystem to it might take a while for me to get my head around.
+> > > >
+> > > > IIUC the root cause should be the same as the one we solved here:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
+> > > >
+> > > > The worker was not stopped before calling vhost_dev_cleanup(). So while
+> > > > the worker was still running we were going to free memory or initialize
+> > > > fields while it was still using virtqueue.
+> > > 
+> > > Right, and I agree but it's not the root though, we do attempt to stop all workers.
+> > 
+> > Exactly.  This is what happens, but the question I'm going to attempt
+> > to answer is *why* does this happen.
+> 
+> IIUC the worker was still running because the /dev/vhost-vsock file was not
+> explicitly closed, so vhost_vsock_dev_release() was called in the do_exit()
+> of the process.
+> 
+> In that case there was the issue, because vhost_dev_check_owner() returned
+> false in vhost_vsock_stop() since current->mm was NULL.
+> So it returned earlier, without calling vhost_vq_set_backend(vq, NULL).
+> 
+> This did not stop the worker from continuing to run, causing the multiple
+> issues we are seeing.
+> 
+> current->mm was NULL, because in the do_exit() the address space is cleaned
+> in the exit_mm(), which is called before releasing the files into the
+> exit_task_work().
+> 
+> This can be seen from the logs, where we see first the warnings printed by
+> vhost_dev_cleanup() and then the panic in the worker (e.g. here
+> https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000)
+> 
+> Mike also added a few more helpful details in this thread:
+> https://lore.kernel.org/virtualization/20220221100500.2x3s2sddqahgdfyt@sgarzare-redhat/T/#ree61316eac63245c9ba3050b44330e4034282cc2
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v5.17-rc6]
-[cannot apply to robh/for-next next-20220303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I guess that about sums it up. :)
 
-url:    https://github.com/0day-ci/linux/commits/Sven-Peter/dt-bindings-nvmem-Add-apple-efuses/20220227-195847
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: ia64-randconfig-s031-20220302 (https://download.01.org/0day-ci/archive/20220303/202203032219.gDn8cX7m-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/e47f957c24fcbc9f99a972b1b7c802eec04ed40a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sven-Peter/dt-bindings-nvmem-Add-apple-efuses/20220227-195847
-        git checkout e47f957c24fcbc9f99a972b1b7c802eec04ed40a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/nvmem/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/nvmem/apple-efuses.c:17:31: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *fuses @@     got void *context @@
-   drivers/nvmem/apple-efuses.c:17:31: sparse:     expected void [noderef] __iomem *fuses
-   drivers/nvmem/apple-efuses.c:17:31: sparse:     got void *context
->> drivers/nvmem/apple-efuses.c:42:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *priv @@     got void [noderef] __iomem * @@
-   drivers/nvmem/apple-efuses.c:42:21: sparse:     expected void *priv
-   drivers/nvmem/apple-efuses.c:42:21: sparse:     got void [noderef] __iomem *
-   drivers/nvmem/apple-efuses.c: note: in included file (through arch/ia64/include/asm/io.h, include/linux/io.h):
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-
-vim +17 drivers/nvmem/apple-efuses.c
-
-    13	
-    14	static int apple_efuses_read(void *context, unsigned int offset, void *val,
-    15				     size_t bytes)
-    16	{
-  > 17		void __iomem *fuses = context;
-    18		u32 *dst = val;
-    19	
-    20		while (bytes >= sizeof(u32)) {
-    21			*dst++ = readl_relaxed(fuses + offset);
-    22			bytes -= sizeof(u32);
-    23			offset += sizeof(u32);
-    24		}
-    25	
-    26		return 0;
-    27	}
-    28	
-    29	static int apple_efuses_probe(struct platform_device *pdev)
-    30	{
-    31		struct resource *res;
-    32		struct nvmem_config config = {
-    33			.dev = &pdev->dev,
-    34			.read_only = true,
-    35			.reg_read = apple_efuses_read,
-    36			.stride = sizeof(u32),
-    37			.word_size = sizeof(u32),
-    38			.name = "apple_efuses_nvmem",
-    39			.id = NVMEM_DEVID_AUTO,
-    40		};
-    41	
-  > 42		config.priv = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-    43		if (IS_ERR(config.priv))
-    44			return PTR_ERR(config.priv);
-    45	
-    46		config.size = resource_size(res);
-    47	
-    48		return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
-    49	}
-    50	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

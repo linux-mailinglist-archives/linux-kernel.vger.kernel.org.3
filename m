@@ -2,263 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148D84CB4C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3104CB4DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiCCCTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S231643AbiCCCX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiCCCTa (ORCPT
+        with ESMTP id S231679AbiCCCXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:19:30 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2093.outbound.protection.outlook.com [40.107.244.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EB824F24;
-        Wed,  2 Mar 2022 18:18:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g+F1N5LMsqvkNo+HMv9iDIZEb+U6U3gRU9b7/wsOIKaixu1gofnKf6zoaxFPLtZSDJmGu0o/dIpyeDwIPPlbnficvYhyxUqehOTNPUMGblUPFx1tItnFtWn6Br4T2zppwQAmofOSznecqCu2Bu7E/+SASF+3kkU3ZUy1n7NNhggFme5AUsxWbZRNcbCQLFmIQOJJ3+rU+GYdq3bO86U8h+1RAp8iIxF/Tpa6R9l4oVaPf21JOVFZ1NhUkoecl10SfTfKF6zf9k5w0WcGG7DshKsWiE/FR+XwC7WLx4+sWX54hqSqBVDYtGJDP2KuvzNjIlFIqSfhGwA/ArTan8WFDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zwOMs48+WRZjc9i2N1olgQiTe52XZxybh4uFuXarQRM=;
- b=aDnest2V5R60wXLko2DWM/C9RdVOzjjvHz2g916cUBEhWymNAMIK5+El+8CvQYsUAoVXgsKkL21sqlDcXqO+40R24GxblUSUBFHiAWrupnhVi6LcCg22h9xn0xF11Czs6EbImwqnVX8F4gequiUG2xU/Y2AMulwlZgv/KQFo6gUmWBIskBb9U4aI2FN5Z9ujQWcQuXbRFdD1mQrflhFafFqt15b7Az/vu5WgEk5H9CBszk4C4bsvJQjf8JoBj57tikh4iaPjUXzHyU0Pkf6hzDIHiXeiKqYCBwb6b8PTPIv/rhTJvXiXs9fw6PxEH3yMRUDQfIdkG6hrg+YWoed3bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zwOMs48+WRZjc9i2N1olgQiTe52XZxybh4uFuXarQRM=;
- b=PB+4NLcz3kTVfcNtaKVwmegSO2qJpeVrOnWiVvfjnV4YGdWlmQQDj0sfZXF2HztZwvR8mnoUG9GsgUKljHefISoZ8z5EgvVpAlF8twwfttLZVcTqODOb80A2awv598JNIF3nhMfto9my5tqnFlp5Q6dwZG3fNbXivLn8dTesUkA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SA0PR01MB6329.prod.exchangelabs.com (2603:10b6:806:ee::12) by
- PH0PR01MB7400.prod.exchangelabs.com (2603:10b6:510:10b::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.14; Thu, 3 Mar 2022 02:18:40 +0000
-Received: from SA0PR01MB6329.prod.exchangelabs.com
- ([fe80::7cd6:6594:ce3c:6941]) by SA0PR01MB6329.prod.exchangelabs.com
- ([fe80::7cd6:6594:ce3c:6941%9]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
- 02:18:40 +0000
-Date:   Wed, 2 Mar 2022 18:18:36 -0800
-From:   Darren Hart <darren@os.amperecomputing.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] arm64: smp: Skip MC sched domain on SoCs with no LLC
-Message-ID: <YiAlfGuRXWVnOmyF@fedora>
-References: <cover.1646094455.git.darren@os.amperecomputing.com>
- <84e7cb911936f032318b6b376cf88009c90d93d5.1646094455.git.darren@os.amperecomputing.com>
- <CAKfTPtAQwJYy4UDAgF3Va_MJTDj+UpxuU3UqTWZ5gjwmcTf5wA@mail.gmail.com>
+        Wed, 2 Mar 2022 21:23:23 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58CCC23BEA
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 18:22:32 -0800 (PST)
+Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
+        by 156.147.23.52 with ESMTP; 3 Mar 2022 11:22:29 +0900
+X-Original-SENDERIP: 156.147.1.151
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.151 with ESMTP; 3 Mar 2022 11:22:29 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Thu, 3 Mar 2022 11:22:08 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
+        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+        djwong@kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com
+Subject: Re: [PATCH v3 00/21] DEPT(Dependency Tracker)
+Message-ID: <20220303022208.GA20956@X58A-UD3R>
+References: <1646042220-28952-1-git-send-email-byungchul.park@lge.com>
+ <Yh70VkRkUfwIjPWv@ip-172-31-19-208.ap-northeast-1.compute.internal>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtAQwJYy4UDAgF3Va_MJTDj+UpxuU3UqTWZ5gjwmcTf5wA@mail.gmail.com>
-X-ClientProxiedBy: CH0PR04CA0103.namprd04.prod.outlook.com
- (2603:10b6:610:75::18) To SA0PR01MB6329.prod.exchangelabs.com
- (2603:10b6:806:ee::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f080d145-63f0-4466-5642-08d9fcbc2183
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7400:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR01MB7400DE6FB2E34D60EB9DD67DF7049@PH0PR01MB7400.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qHkhN0TbjuzBAzWXk3+CwbTVmaj0fi6+Q+su2GbOBtXOuAweJMmMkpheI4mtwP8ivKkZkYhPE8g6JQ2EKW6L+ZKcMqKCFte2aJJ8xYmJpDus8IzKck433eJ6aNCYzkLkItP2j2/rJqiOovHeeqcf26ugyg+z2LzF4gpkvsUCpxc/A4Eslw18N+wlpcrMU4+PwRe5B5WBxRrsfzmY2JhA7pNTN5S7BYjtjfb7YqwranYCFki5qD9oidtoGqUhHBAEyDVmr72EkvCXzvH9Q5ES6V44SAursYKo9rRIA3374XKeAX6/pDDeNgNQXERhT/6E30W3BJsphL7Akaxk8lH5BZpT9fJ3UeC4cTGjh+ov698x+kvj+gj8x/8E7gl5XXSPCK9eUCo0tNNohDk5FYIX9zcR0xvhpmhJWn5CnokJkAru7ZP/HHqnoLqDceRBQXJD+gPVnHcP+nDw03DNtDYOzk5c2Wuz2YmSPy1LEIBF3FCb0ttL5OU0jfAjrIqrMm9GFAWPXPcv1GY0FvQ/ek7xAyjHTCjX4Z13gNiYXWZcCy/kbKpvS0mLGuz2r22jetC7mtVd9G8JfNQtb6t/iKBLIfBAL2EBWv3jljHtFi1qMVgU6u33XxzUM2NZC0fR72EY84WEEFHxaRPUcIrgTQH7dcy4wF+Sppyl/ppIQHoHaqtYpzbaDnIYLSBv7KGp6lBx+HgBsxOtm/Qynm9HHs2YDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR01MB6329.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(7916004)(4636009)(366004)(33716001)(508600001)(6506007)(8936002)(52116002)(5660300002)(86362001)(9686003)(6486002)(6512007)(8676002)(4326008)(38350700002)(38100700002)(66946007)(66476007)(66556008)(186003)(26005)(316002)(6916009)(83380400001)(6666004)(54906003)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MeUcsivSrpbu7cy0OLvIjIOf9VYsjYbJGJ4+2HMHoTv9/3kQ6z1czD2jzyGm?=
- =?us-ascii?Q?rU6BWs0Ss7SxjOtbkNvOUlFzGVhuOztNh5YGFHkEVuP5qwYiE5aW3CzJp1X9?=
- =?us-ascii?Q?QMcPQx5tVYq2+H0Rh78M0WWeN5fw4KTIbadRUReaxhkjwaC68nbWeoJUEsf5?=
- =?us-ascii?Q?o1ULeGHVk7BFe5uwRpLWAkFr7W1N+piBR5P7PHVi0ROJ4V/yj/PaBaaeJWp7?=
- =?us-ascii?Q?Bmeq6AdMkH4+ZVzK0vYLkuu+2iQggJd7auZXNcwY2DlS60UIFTTKHTMKPSgJ?=
- =?us-ascii?Q?GQoZZUHX8T7eG+D4IRG8q9+3fzWyu4eXhYQpIC30orzeNTsTudN5DtT8v42Y?=
- =?us-ascii?Q?5EOLvgthTkV/9sRw6G1V7ImRkhP6Qmt7kSRTF9l3gJShYpdvtUh75Xc6/zzY?=
- =?us-ascii?Q?HS2sH+seQVJMTC2Ko3dvkeMGl6CRhRDC39q+izvkDANGujT7DhsNeidrYAOi?=
- =?us-ascii?Q?bp34mHMv50/YMEF/9PHpoiyQwYI8cqaNu9QWwLY4CZ2f5z+DhYnFAfvs5FNc?=
- =?us-ascii?Q?Cr1I5Ac/PaiQGZV4tzGKxwDM9WnziM+0l25L2a0zoM3E9fkejAmmVFUAX9wq?=
- =?us-ascii?Q?W5xeDIdkN4ivd89ynq8pX1dIQxiesUyvGZxeiU2xhy+dEAJz76YcKSu3+gqE?=
- =?us-ascii?Q?DZsHk5duFA/HY8Oj+tpRlSBxZZxsirW165VSRdlOJ/pZ5Vq4Yq4Igb9zmN6a?=
- =?us-ascii?Q?WX61Ac2slAZjeJfzQFNJVm39gKQ1YSgLiiwNPUz6hGsvLmdl2KAMIsBWGIJb?=
- =?us-ascii?Q?wdYGT9wkFC76eZoG5IjzivA4PrUNie1WF933J3zplH6twf5rkc3Q1hs1Z4Gm?=
- =?us-ascii?Q?FqKWHLeXVV+nhlBTlY/x90wN50MaoL4Z7pGW/hSSTYnp3GSJctbWyw3AoCq4?=
- =?us-ascii?Q?3uSME5YJkN7AZFs/XzDTtaXEDknGbbUqPQFlpOsCf5tXq+LeEOjl6Th1GpOS?=
- =?us-ascii?Q?N4F/X8LBFXrVM7H3RfyIgYGjnlH2EuHmadelR10FIHWIzc0QsMGUxkOvGemx?=
- =?us-ascii?Q?CJtMfL4z+JvRhoEiZOymDKnqUuXn+sNxwdQkPDpMAEPdL3m0OX8qKsafxYvb?=
- =?us-ascii?Q?WhuDHuHbv/alvUrYgupXPuTKbyWWtxTbyPHI5GarSmZ/59De2gzhz6w1OEby?=
- =?us-ascii?Q?fLTT7U7Tbyl04AdLy1QG2CW9LXsRx9b4hAfXXQO6Rn4S6+LXZgVEl7G6ClyL?=
- =?us-ascii?Q?nOrb0E4wxFyFw8dsPE6J71ZdCwZ6PgMuPozNYBa71Xim9cSuY8FEQiDUYPGf?=
- =?us-ascii?Q?M7osIkWfauAzQA9481tqAbDzBqLmkDa/rtVA2LrYnJHgfLaHzhfdCvsHlWh+?=
- =?us-ascii?Q?a59LxOzH1EwUPdND5BtKPKPj2iLqj6mojkYO85vfbRcZZtJjKHIrNAfDTf/A?=
- =?us-ascii?Q?0lOjjUEOnNGOtZPpMa1KzC97uN3izOyzDfZ0dQJNm5O+NNpd9TtKnb3gwimk?=
- =?us-ascii?Q?0ylXEvrLQblTA6TvAWb/J6tyo5zuifbh+MBJ57EMrCqBDgfi5lGYJfJ5A45R?=
- =?us-ascii?Q?M25ylQA51JOzEH1NawnCWrt0zxq9VLi+WkSGi0M2nP+wR/BsKpm95ausvdaP?=
- =?us-ascii?Q?DpJtXFhMGCz5103eTqKejhN3ECzdOVJIBhoz9pMnd7GEoftE0NKQeaNO24/M?=
- =?us-ascii?Q?lAjQxvVmSV5bLxsoX5clG/l4pHe6Hg170Vj2K5XjLiAKVZUJc5fR9EcrLwTP?=
- =?us-ascii?Q?mtSL3bdkNvcgqFgFizkNw1xBZCwCK+L/2kDNXY/pi+vJLb3VJAQQlNfjqQlL?=
- =?us-ascii?Q?FI++0/HEfA=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f080d145-63f0-4466-5642-08d9fcbc2183
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR01MB6329.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 02:18:40.2792
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BZErI/d/x++zCwFlrV6R6GyJc+q5yiKh8kCWpsWG9ojNFMCe+Mw44XLYumklsb048oaFPrgvVnwixwu2WKIEL8DIcmCb5fHbnyA9QbBkm3sWG4TMdASLQw81cdDemFJu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB7400
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yh70VkRkUfwIjPWv@ip-172-31-19-208.ap-northeast-1.compute.internal>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:32:06AM +0100, Vincent Guittot wrote:
-> On Tue, 1 Mar 2022 at 01:35, Darren Hart <darren@os.amperecomputing.com> wrote:
+On Wed, Mar 02, 2022 at 04:36:38AM +0000, Hyeonggon Yoo wrote:
+> On Mon, Feb 28, 2022 at 06:56:39PM +0900, Byungchul Park wrote:
+> > I didn't want to bother you so I was planning to send the next spin
+> > after making more progress. However, PATCH v2 reports too many false
+> > positives because Dept tracked the bit_wait_table[] wrong way - I
+> > apologize for that. So I decided to send PATCH v3 first before going
+> > further for those who want to run Dept for now.
+> > 
+> > There might still be some false positives but not overwhelming.
 > >
-> > Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
-> > Control Unit, but have no shared CPU-side last level cache.
-> >
-> > cpu_coregroup_mask() will return a cpumask with weight 1, while
-> > cpu_clustergroup_mask() will return a cpumask with weight 2.
-> >
-> > As a result, build_sched_domain() will BUG() once per CPU with:
-> >
-> > BUG: arch topology borken
-> >      the CLS domain not a subset of the MC domain
-> >
-> > The MC level cpumask is then extended to that of the CLS child, and is
-> > later removed entirely as redundant. This sched domain topology is an
-> > improvement over previous topologies, or those built without
-> > SCHED_CLUSTER, particularly for certain latency sensitive workloads.
-> > With the current scheduler model and heuristics, this is a desirable
-> > default topology for Ampere Altra and Altra Max system.
-> >
-> > Introduce an alternate sched domain topology for arm64 without the MC
-> > level and test for llc_sibling weight 1 across all CPUs to enable it.
-> >
-> > Do this in arch/arm64/kernel/smp.c (as opposed to
-> > arch/arm64/kernel/topology.c) as all the CPU sibling maps are now
-> > populated and we avoid needing to extend the drivers/acpi/pptt.c API to
-> > detect the cluster level being above the cpu llc level. This is
-> > consistent with other architectures and provides a readily extensible
-> > mechanism for other alternate topologies.
-> >
-> > The final sched domain topology for a 2 socket Ampere Altra system is
-> > unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
-> >
-> > For CPU0:
-> >
-> > CONFIG_SCHED_CLUSTER=y
-> > CLS  [0-1]
-> > DIE  [0-79]
-> > NUMA [0-159]
-> >
-> > CONFIG_SCHED_CLUSTER is not set
-> > DIE  [0-79]
-> > NUMA [0-159]
-> >
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > Cc: Barry Song <song.bao.hua@hisilicon.com>
-> > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > Cc: <stable@vger.kernel.org> # 5.16.x
-> > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> > ---
-> >  arch/arm64/kernel/smp.c | 28 ++++++++++++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> >
-> > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > index 27df5c1e6baa..3597e75645e1 100644
-> > --- a/arch/arm64/kernel/smp.c
-> > +++ b/arch/arm64/kernel/smp.c
-> > @@ -433,6 +433,33 @@ static void __init hyp_mode_check(void)
-> >         }
-> >  }
-> >
-> > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
-> > +#ifdef CONFIG_SCHED_SMT
-> > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-> > +#endif
-> > +
-> > +#ifdef CONFIG_SCHED_CLUSTER
-> > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-> > +#endif
-> > +
-> > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
-> > +       { NULL, },
-> > +};
-> > +
-> > +static void __init update_sched_domain_topology(void)
-> > +{
-> > +       int cpu;
-> > +
-> > +       for_each_possible_cpu(cpu) {
-> > +               if (cpu_topology[cpu].llc_id != -1 &&
 > 
-> Have you tested it with a non-acpi system ? AFAICT, llc_id is only set
-> by ACPI system and  llc_id == -1 for others like DT based system
+> Hello Byungchul, I'm running DEPT v3 on my system
+> and I see report below.
 > 
-> > +                   cpumask_weight(&cpu_topology[cpu].llc_sibling) > 1)
-> > +                       return;
-> > +       }
+> Looking at the kmemleak code and comment, I think
+> kmemleak tried to avoid lockdep recursive warning
+> but detected by DEPT?
+> 
+> ===================================================
+> DEPT: Circular dependency has been detected.
+> 5.17.0-rc1+ #1 Tainted: G        W
+> ---------------------------------------------------
+> summary
+> ---------------------------------------------------
+> *** AA DEADLOCK ***
+> 
+> context A
+>     [S] __raw_spin_lock_irqsave(&object->lock:0)
+>     [W] _raw_spin_lock_nested(&object->lock:0)
+>     [E] spin_unlock(&object->lock:0)
+> 
+> [S]: start of the event context
+> [W]: the wait blocked
+> [E]: the event not reachable
+> ---------------------------------------------------
+> context A's detail
+> ---------------------------------------------------
+> context A
+>     [S] __raw_spin_lock_irqsave(&object->lock:0)
+>     [W] _raw_spin_lock_nested(&object->lock:0)
+>     [E] spin_unlock(&object->lock:0)
+> 
+> [S] __raw_spin_lock_irqsave(&object->lock:0):
+> [<ffffffc00810302c>] scan_gray_list+0x84/0x13c
+> stacktrace:
+>       dept_ecxt_enter+0x88/0xf4
+>       _raw_spin_lock_irqsave+0xf0/0x1c4
+>       scan_gray_list+0x84/0x13c
+>       kmemleak_scan+0x2d8/0x54c
+>       kmemleak_scan_thread+0xac/0xd4
+>       kthread+0xd4/0xe4
+>       ret_from_fork+0x10/0x20
 
-Hi Vincent,
-
-I did not have a non-acpi system to test, no. You're right of course,
-llc_id is only set by ACPI systems on arm64. We could wrap this in a
-CONFIG_ACPI ifdef (or IS_ENABLED), but I think this would be preferable:
-
-+       for_each_possible_cpu(cpu) {
-+               if (cpu_topology[cpu].llc_id == -1 ||
-+                   cpumask_weight(&cpu_topology[cpu].llc_sibling) > 1)
-+                       return;
-+       }
-
-Quickly tested on Altra successfully. Would appreciate anyone with non-acpi
-arm64 systems who can test and verify this behaves as intended. I will ask
-around tomorrow as well to see what I may have access to.
+[W]'s stack trace is missed. But I guess this issue is the same issue of
+what you reported following this one. We can discuss this issue on the
+other report's thread.
 
 Thanks,
+Byunghcul
 
-> > +
-> > +       pr_info("No LLC siblings, using No MC sched domains topology\n");
-> > +       set_sched_topology(arm64_no_mc_topology);
-> > +}
-> > +
-> >  void __init smp_cpus_done(unsigned int max_cpus)
-> >  {
-> >         pr_info("SMP: Total of %d processors activated.\n", num_online_cpus());
-> > @@ -440,6 +467,7 @@ void __init smp_cpus_done(unsigned int max_cpus)
-> >         hyp_mode_check();
-> >         apply_alternatives_all();
-> >         mark_linear_text_alias_ro();
-> > +       update_sched_domain_topology();
-> >  }
+> [E] spin_unlock(&object->lock:0):
+> [<ffffffc008102ee0>] scan_block+0x60/0x128
+> ---------------------------------------------------
+> information that might be helpful
+> ---------------------------------------------------
+> CPU: 1 PID: 38 Comm: kmemleak Tainted: G        W         5.17.0-rc1+ #1
+> Hardware name: linux,dummy-virt (DT)
+> Call trace:
+>  dump_backtrace.part.0+0x9c/0xc4
+>  show_stack+0x14/0x28
+>  dump_stack_lvl+0x9c/0xcc
+>  dump_stack+0x14/0x2c
+>  print_circle+0x2d4/0x438
+>  cb_check_dl+0x44/0x70
+>  bfs+0x60/0x168
+>  add_dep+0x88/0x11c
+>  add_wait+0x2d0/0x2dc
+>  __dept_wait+0x8c/0xa4
+>  dept_wait+0x6c/0x88
+>  _raw_spin_lock_nested+0xa8/0x1b0
+>  scan_block+0xb4/0x128
+>  scan_gray_list+0xc4/0x13c
+>  kmemleak_scan+0x2d8/0x54c
+>  kmemleak_scan_thread+0xac/0xd4
+>  kthread+0xd4/0xe4
+>  ret_from_fork+0x10/0x20
+> 
+> > ---
+> > 
+> > Hi Linus and folks,
+> > 
+> > I've been developing a tool for detecting deadlock possibilities by
+> > tracking wait/event rather than lock(?) acquisition order to try to
+> > cover all synchonization machanisms. It's done on v5.17-rc1 tag.
+> > 
+> > https://github.com/lgebyungchulpark/linux-dept/commits/dept1.14_on_v5.17-rc1
 > >
-> >  void __init smp_prepare_boot_cpu(void)
-> > --
-> > 2.31.1
-> >
-
--- 
-Darren Hart
-Ampere Computing / OS and Kernel
+> [...]
+> > Benifit:
+> > 
+> > 	0. Works with all lock primitives.
+> > 	1. Works with wait_for_completion()/complete().
+> > 	2. Works with 'wait' on PG_locked.
+> > 	3. Works with 'wait' on PG_writeback.
+> > 	4. Works with swait/wakeup.
+> > 	5. Works with waitqueue.
+> > 	6. Multiple reports are allowed.
+> > 	7. Deduplication control on multiple reports.
+> > 	8. Withstand false positives thanks to 6.
+> > 	9. Easy to tag any wait/event.
+> > 
+> > Future work:
+> > 
+> > 	0. To make it more stable.
+> > 	1. To separates Dept from Lockdep.
+> > 	2. To improves performance in terms of time and space.
+> > 	3. To use Dept as a dependency engine for Lockdep.
+> > 	4. To add any missing tags of wait/event in the kernel.
+> > 	5. To deduplicate stack trace.
+> > 
+> > How to interpret reports:
+> > 
+> > 	1. E(event) in each context cannot be triggered because of the
+> > 	   W(wait) that cannot be woken.
+> > 	2. The stack trace helping find the problematic code is located
+> > 	   in each conext's detail.
+> > 
+> > Thanks,
+> > Byungchul
+> > 
+> > ---
+> > 
+> > Changes from v2:
+> > 
+> > 	1. Disable Dept on bit_wait_table[] in sched/wait_bit.c
+> > 	   reporting a lot of false positives, which is my fault.
+> > 	   Wait/event for bit_wait_table[] should've been tagged in a
+> > 	   higher layer for better work, which is a future work.
+> > 	   (feedback from Jan Kara)
+> > 	2. Disable Dept on crypto_larval's completion to prevent a false
+> > 	   positive.
+> > 
+> > Changes from v1:
+> > 
+> > 	1. Fix coding style and typo. (feedback from Steven)
+> > 	2. Distinguish each work context from another in workqueue.
+> > 	3. Skip checking lock acquisition with nest_lock, which is about
+> > 	   correct lock usage that should be checked by Lockdep.
+> > 
+> > Changes from RFC:
+> > 
+> > 	1. Prevent adding a wait tag at prepare_to_wait() but __schedule().
+> > 	   (feedback from Linus and Matthew)
+> > 	2. Use try version at lockdep_acquire_cpus_lock() annotation.
+> > 	3. Distinguish each syscall context from another.
+> [ ... ] 
+> 
+> -- 
+> Thank you, You are awesome!
+> Hyeonggon :-)

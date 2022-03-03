@@ -2,165 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AE24CB394
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D8D4CB3C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiCCAOD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 19:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S230142AbiCCAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiCCAOC (ORCPT
+        with ESMTP id S230119AbiCCAOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:14:02 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CED1107F2;
-        Wed,  2 Mar 2022 16:13:17 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:34562)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nPZ5l-008Jz4-9e; Wed, 02 Mar 2022 17:13:13 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:60740 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nPZ5j-007x5a-5P; Wed, 02 Mar 2022 17:13:12 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Kou?= =?utf-8?Q?tn=C3=BD?= <mkoutny@suse.com>,
-        <linux-api@vger.kernel.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-        <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
-        <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Wed, 02 Mar 2022 18:12:40 -0600
-In-Reply-To: <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Fri, 18 Feb 2022 09:34:24 -0600")
-Message-ID: <87o82nhp1j.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 2 Mar 2022 19:14:48 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE7575C25
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:14:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646266444; x=1677802444;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Hmz3BXrASPM4rj/Ag7uj0PGIQr6Iu+Afl0jy4NilYKc=;
+  b=ghmcBoTRX9vJDxMdqNq22nspOc98osXQk6/Ca7ZEAi/wTQyo4vvXRQfa
+   S4mjZF1uZwlitfj7VK/W1ufuGfNT27YtN7646koikeKYbrKRYmGKZFjaI
+   f3UhbFGDeBjQ8rvaavh25n9aMyDiEBvH5JNJRljiCF9TpcPauLDQR5NZK
+   kfCaWUFTe/b2alEq+uRYlWpt/lEAXxClmJwkLQSAdHsKStr/RDuHjxQ4w
+   oOa5Ze22orzmZGXa/vyWLXmNFuh9T+gPRODnrjIm+6lIo0GUS+Vb5hicq
+   TQHSl3f5Nrm5QzbHlX0y2hN/7U1krSP81CXquaft91n3S9FQYkRBHVewT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="233503210"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="233503210"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 16:14:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="511200012"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 16:14:02 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPZ6X-00027m-GR; Thu, 03 Mar 2022 00:14:01 +0000
+Date:   Thu, 3 Mar 2022 08:13:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 25/27]
+ fs/fscache/stats.c:100: undefined reference to `netfs_stats_show'
+Message-ID: <202203030853.jADpk5H8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nPZ5j-007x5a-5P;;;mid=<87o82nhp1j.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19gXnmU5328L5QL/gVJuFWBeZcN6LESlxA=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1544 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.7 (0.3%), b_tie_ro: 3.2 (0.2%), parse: 1.42
-        (0.1%), extract_message_metadata: 17 (1.1%), get_uri_detail_list: 2.8
-        (0.2%), tests_pri_-1000: 21 (1.4%), tests_pri_-950: 1.09 (0.1%),
-        tests_pri_-900: 0.83 (0.1%), tests_pri_-90: 153 (9.9%), check_bayes:
-        149 (9.6%), b_tokenize: 8 (0.5%), b_tok_get_all: 10 (0.7%),
-        b_comp_prob: 2.4 (0.2%), b_tok_touch_all: 125 (8.1%), b_finish: 0.70
-        (0.0%), tests_pri_0: 1333 (86.3%), check_dkim_signature: 0.42 (0.0%),
-        check_dkim_adsp: 2.5 (0.2%), poll_dns_idle: 0.19 (0.0%), tests_pri_10:
-        1.68 (0.1%), tests_pri_500: 6 (0.4%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] ucounts: Regression fix for v5.17
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
+head:   b295237bb1a924ca0723d728bb5ff30e6461ad2b
+commit: 4b3ff38b2fe2b2e490f513a7b71763ae3473cafa [25/27] netfs, fscache: Make netfslib depend on fscache
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220303/202203030853.jADpk5H8-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/4b3ff38b2fe2b2e490f513a7b71763ae3473cafa
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
+        git checkout 4b3ff38b2fe2b2e490f513a7b71763ae3473cafa
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Linus,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please pull the ucount-rlimit-fixes-for-v5.17 branch from the git tree:
+All errors (new ones prefixed by >>):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.17
-
-  HEAD: 0ac983f512033cb7b5e210c9589768ad25b1e36b ucounts: Fix systemd LimitNPROC with private users regression
-
-Etienne Dechamps recently found a regression caused by enforcing
-RLIMIT_NPROC for root where the rlimit was not previously enforced.
-
-Michal Koutný had previously pointed out the inconsistency in enforcing
-the RLIMIT_NPROC that had been on the root owned process after the root
-user creates a user namespace.
-
-Which makes the fix for the regression simply removing the
-inconsistency.
+   ld: fs/fscache/stats.o: in function `fscache_stats_show':
+>> fs/fscache/stats.c:100: undefined reference to `netfs_stats_show'
 
 
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-Date: Thu, 24 Feb 2022 08:32:28 -0600
-Subject: [PATCH] ucounts: Fix systemd LimitNPROC with private users regression
+vim +100 fs/fscache/stats.c
 
-Long story short recursively enforcing RLIMIT_NPROC when it is not
-enforced on the process that creates a new user namespace, causes
-currently working code to fail.  There is no reason to enforce
-RLIMIT_NPROC recursively when we don't enforce it normally so update
-the code to detect this case.
+8e7a867bb7309fb David Howells 2021-10-20   51  
+1e1236b841166f1 David Howells 2021-10-20   52  /*
+1e1236b841166f1 David Howells 2021-10-20   53   * display the general statistics
+1e1236b841166f1 David Howells 2021-10-20   54   */
+1e1236b841166f1 David Howells 2021-10-20   55  int fscache_stats_show(struct seq_file *m, void *v)
+1e1236b841166f1 David Howells 2021-10-20   56  {
+1e1236b841166f1 David Howells 2021-10-20   57  	seq_puts(m, "FS-Cache statistics\n");
+7f3283aba39a0f3 David Howells 2021-10-20   58  	seq_printf(m, "Cookies: n=%d v=%d vcol=%u voom=%u\n",
+7f3283aba39a0f3 David Howells 2021-10-20   59  		   atomic_read(&fscache_n_cookies),
+62ab63352350e88 David Howells 2021-10-20   60  		   atomic_read(&fscache_n_volumes),
+62ab63352350e88 David Howells 2021-10-20   61  		   atomic_read(&fscache_n_volumes_collision),
+62ab63352350e88 David Howells 2021-10-20   62  		   atomic_read(&fscache_n_volumes_nomem)
+62ab63352350e88 David Howells 2021-10-20   63  		   );
+1e1236b841166f1 David Howells 2021-10-20   64  
+7f3283aba39a0f3 David Howells 2021-10-20   65  	seq_printf(m, "Acquire: n=%u ok=%u oom=%u\n",
+7f3283aba39a0f3 David Howells 2021-10-20   66  		   atomic_read(&fscache_n_acquires),
+7f3283aba39a0f3 David Howells 2021-10-20   67  		   atomic_read(&fscache_n_acquires_ok),
+7f3283aba39a0f3 David Howells 2021-10-20   68  		   atomic_read(&fscache_n_acquires_oom));
+7f3283aba39a0f3 David Howells 2021-10-20   69  
+12bb21a29c19aae David Howells 2021-10-20   70  	seq_printf(m, "LRU    : n=%u exp=%u rmv=%u drp=%u at=%ld\n",
+12bb21a29c19aae David Howells 2021-10-20   71  		   atomic_read(&fscache_n_cookies_lru),
+12bb21a29c19aae David Howells 2021-10-20   72  		   atomic_read(&fscache_n_cookies_lru_expired),
+12bb21a29c19aae David Howells 2021-10-20   73  		   atomic_read(&fscache_n_cookies_lru_removed),
+12bb21a29c19aae David Howells 2021-10-20   74  		   atomic_read(&fscache_n_cookies_lru_dropped),
+12bb21a29c19aae David Howells 2021-10-20   75  		   timer_pending(&fscache_cookie_lru_timer) ?
+12bb21a29c19aae David Howells 2021-10-20   76  		   fscache_cookie_lru_timer.expires - jiffies : 0);
+12bb21a29c19aae David Howells 2021-10-20   77  
+d24af13e2e2358a David Howells 2021-10-20   78  	seq_printf(m, "Invals : n=%u\n",
+d24af13e2e2358a David Howells 2021-10-20   79  		   atomic_read(&fscache_n_invalidates));
+d24af13e2e2358a David Howells 2021-10-20   80  
+16a96bdf92d5af0 David Howells 2021-10-20   81  	seq_printf(m, "Updates: n=%u rsz=%u rsn=%u\n",
+16a96bdf92d5af0 David Howells 2021-10-20   82  		   atomic_read(&fscache_n_updates),
+16a96bdf92d5af0 David Howells 2021-10-20   83  		   atomic_read(&fscache_n_resizes),
+16a96bdf92d5af0 David Howells 2021-10-20   84  		   atomic_read(&fscache_n_resizes_null));
+7f3283aba39a0f3 David Howells 2021-10-20   85  
+7f3283aba39a0f3 David Howells 2021-10-20   86  	seq_printf(m, "Relinqs: n=%u rtr=%u drop=%u\n",
+7f3283aba39a0f3 David Howells 2021-10-20   87  		   atomic_read(&fscache_n_relinquishes),
+7f3283aba39a0f3 David Howells 2021-10-20   88  		   atomic_read(&fscache_n_relinquishes_retire),
+7f3283aba39a0f3 David Howells 2021-10-20   89  		   atomic_read(&fscache_n_relinquishes_dropped));
+7f3283aba39a0f3 David Howells 2021-10-20   90  
+9f08ebc3438baaa David Howells 2021-10-22   91  	seq_printf(m, "NoSpace: nwr=%u ncr=%u cull=%u\n",
+3929eca769b5a23 David Howells 2021-10-21   92  		   atomic_read(&fscache_n_no_write_space),
+9f08ebc3438baaa David Howells 2021-10-22   93  		   atomic_read(&fscache_n_no_create_space),
+9f08ebc3438baaa David Howells 2021-10-22   94  		   atomic_read(&fscache_n_culled));
+3929eca769b5a23 David Howells 2021-10-21   95  
+8e7a867bb7309fb David Howells 2021-10-20   96  	seq_printf(m, "IO     : rd=%u wr=%u\n",
+8e7a867bb7309fb David Howells 2021-10-20   97  		   atomic_read(&fscache_n_read),
+8e7a867bb7309fb David Howells 2021-10-20   98  		   atomic_read(&fscache_n_write));
+8e7a867bb7309fb David Howells 2021-10-20   99  
+1e1236b841166f1 David Howells 2021-10-20 @100  	netfs_stats_show(m);
 
-I would like to simply use capable(CAP_SYS_RESOURCE) to detect when
-RLIMIT_NPROC is not enforced upon the caller.  Unfortunately because
-RLIMIT_NPROC is charged and checked for enforcement based upon the
-real uid, using capable() which is euid based is inconsistent with reality.
-Come as close as possible to testing for capable(CAP_SYS_RESOURCE) by
-testing for when the real uid would match the conditions when
-CAP_SYS_RESOURCE would be present if the real uid was the effective
-uid.
+:::::: The code at line 100 was first introduced by commit
+:::::: 1e1236b841166f1d2daf36fdf6bb3e656bc5f5ca fscache: Introduce new driver
 
-Reported-by: Etienne Dechamps <etienne@edechamps.fr>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215596
-Link: https://lkml.kernel.org/r/e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr
-Link: https://lkml.kernel.org/r/87sfs8jmpz.fsf_-_@email.froward.int.ebiederm.org
-Cc: stable@vger.kernel.org
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
 ---
- kernel/user_namespace.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index 6b2e3ca7ee99..5481ba44a8d6 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -58,6 +58,18 @@ static void set_cred_user_ns(struct cred *cred, struct user_namespace *user_ns)
- 	cred->user_ns = user_ns;
- }
- 
-+static unsigned long enforced_nproc_rlimit(void)
-+{
-+	unsigned long limit = RLIM_INFINITY;
-+
-+	/* Is RLIMIT_NPROC currently enforced? */
-+	if (!uid_eq(current_uid(), GLOBAL_ROOT_UID) ||
-+	    (current_user_ns() != &init_user_ns))
-+		limit = rlimit(RLIMIT_NPROC);
-+
-+	return limit;
-+}
-+
- /*
-  * Create a new user namespace, deriving the creator from the user in the
-  * passed credentials, and replacing that user with the new root user for the
-@@ -122,7 +134,7 @@ int create_user_ns(struct cred *new)
- 	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++) {
- 		ns->ucount_max[i] = INT_MAX;
- 	}
--	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
-+	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, enforced_nproc_rlimit());
- 	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
- 	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
- 	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
--- 
-2.29.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

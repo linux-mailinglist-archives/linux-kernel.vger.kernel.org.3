@@ -2,220 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54FD4CB43B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF62D4CB45E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiCCBYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S231355AbiCCB2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiCCBYs (ORCPT
+        with ESMTP id S231249AbiCCB2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:24:48 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF230E78;
-        Wed,  2 Mar 2022 17:24:03 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id f8so4605372edf.10;
-        Wed, 02 Mar 2022 17:24:03 -0800 (PST)
+        Wed, 2 Mar 2022 20:28:09 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29FB6337;
+        Wed,  2 Mar 2022 17:27:24 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j15so416674lfg.1;
+        Wed, 02 Mar 2022 17:27:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3467nWZC+KAJVLicOM15omsr+yL6Bg92k71Yp4t13dQ=;
-        b=TUxU5rY59G2o3LjWEZfFUOJqqwXW4FQeJ+4Nb65Cx0MI2116zcxYevNsk0AALHPnpB
-         uogSbFmePS0klnIll9vZ/DXp+psjAzaJxHZ4yjeuQsyfEop7OInuoz0/rCJvI4aYlwQK
-         xbiu9T4eQXSTt8KKDFY1hdIpy5wDNRsX7//9Abat+2qWluBT6ala2y61KhnEbGtSJIca
-         Ogh1JaH+dp50QX6oyP35/947/KSZWvb1ybqxmOBgemdXCz2F5yWh60iIWDMhUt1oR6AQ
-         UlYFLlPdcMVL1X/Vpu058fAY9BXwZOoIwneKmcpc5PpSAiw8brGOxhEUP/kr+2L0z+MM
-         0iJw==
+         :cc;
+        bh=NJ2B08gabJYFOVfBFYdoJ25PiQBivMoWx7JQUDugqj8=;
+        b=XK9g8de1WlKR4Ep1aunBAzRbzL518T38TZYa+51FTG7FvSU8eLsi/nPu656mKCH3tV
+         JH4GFqGnnFtf2my/pCAoyx47iWRGwifeiqCC/OsIPznUnTM480n+pYXRyVT1Jr4LcZE8
+         osGTSqU24WTVrl81+DZWGMqkEbT7dv4j0f8NPM48OMpy9n5HTOl7X7M6MLLk8ySG6qbE
+         7HyxRjPwSLMvCIi+2Ltqij3/T/09vIWT4r8KR53HvfWG4TeSGu2Pi9/mWCuB+2UympSV
+         7sH0wXU9YBz8I3fn6OtNut9/J79iOUxbLowji/gOK4aMzilo1tkX7lJaqiH6QF6+LQFk
+         V+mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3467nWZC+KAJVLicOM15omsr+yL6Bg92k71Yp4t13dQ=;
-        b=oLDKSFDKsSSzOfnIK/B7FEa24vzaCiH3Pt7l3cEU8JVj9VLw8znGWlTEvxZUhFbgU6
-         uTODM7KF5SzqGvIrznW84ChGmISPNgw0I9Gf9t94thlRpCwu1o2TAoRoscqK0COUqF6B
-         gskfYZcs7dSLyI/XbRVqc7r6QvPnO+RRxXVK8CpYT9VsJ+P4owFrKzFeZr6H8xV8lCGR
-         ADcBQ9JDMzGa8Y3/nAOGCOx4iBkK+vaStx6sxAvjbM7icJF+MaCg8fXkFq2PhNeva1zw
-         N0kjb1Ho4hXVSZjgOhg9TKsZ9EsMZ6A9qNpKSrh5GK91OlCTFO+6tzm/MN+RQIfuFVOT
-         Fmow==
-X-Gm-Message-State: AOAM531ht4Gw73Km/Av4od5dAkfsKrv5iCQVRfDqO7hMQHUG2NmmC1lg
-        OaP7OvmR8xFZdxJ84PSFqR6aaRUqB0INH8gdfUg=
-X-Google-Smtp-Source: ABdhPJwvB1dU87k2TUEoV71MreDjl9INYbX233X4HisAj4CxIAGd6ZOicsbmF/IV18XgbjYDUwwD7ynC/O3RrXgzzys=
-X-Received: by 2002:aa7:cb18:0:b0:413:3a7a:b5d6 with SMTP id
- s24-20020aa7cb18000000b004133a7ab5d6mr31792705edt.254.1646270642228; Wed, 02
- Mar 2022 17:24:02 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=NJ2B08gabJYFOVfBFYdoJ25PiQBivMoWx7JQUDugqj8=;
+        b=RgcQahWITDUySjS7TK8cXeH8It24rMR2gDruja3o+9nDzLoufu014QUAhOxhFm9KLX
+         U94/RnX5eiOB6NkIQELRxXawGzPp5qdEH4mlwAnNDZcqPdVX55KeHuTGR704IR4ft2fy
+         VypDQ9Cm41DQDXOsyZoN400t0LoMZwJ0gV0A1dv13BRGd82L5SdhnjtPYScEr0+68yxn
+         Sl6uWulROIChRW7iUwt2f1okEtG6EEGMT7X/oGRZJFU+ggyy1mVZsx2jrCUt5DMuTA14
+         za1agTFBlbmYMRRR4QLlwFje7E5LBD9F9/eL3Qb9Fi6GZ5YG9/5a7+hLsmdiY9jO9uNC
+         WamQ==
+X-Gm-Message-State: AOAM53332AeEKGnllXXx/PsV1Z6xCQuXwJxpDI6PQvMeeAgudO3uZd+B
+        jlLRdGaLBgHZlfS0CMPlXdwrDi8X1cTScqIQDhk=
+X-Google-Smtp-Source: ABdhPJybVffnhsMu3mAEUolbs46+nnRBt8avMFeRcwJ2+g9t25FCJJ53mhJ8wrGGNqA36LrGqEDGOHuh7DCGTPUkUik=
+X-Received: by 2002:ac2:5c11:0:b0:445:b993:bfff with SMTP id
+ r17-20020ac25c11000000b00445b993bfffmr3943357lfp.595.1646270842893; Wed, 02
+ Mar 2022 17:27:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
- <CAHCN7x+AUy4JsqfdyZFqg4ScR1OgoLvqF91za0AZ278NSBJj4A@mail.gmail.com> <b832271d-cecd-a373-48ff-ba5ce736e47d@collabora.com>
-In-Reply-To: <b832271d-cecd-a373-48ff-ba5ce736e47d@collabora.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 2 Mar 2022 19:23:50 -0600
-Message-ID: <CAHCN7xJ3K2bLEc8dcTM+x-E0brDW-t4yrUdkUe0jCfuzH8v9pA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] Move HEVC stateless controls out of staging
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
+References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+ <CAH2r5mt_2f==5reyc0HmMLvYJVmP4Enykwauo+LQoFGFbVFeRQ@mail.gmail.com>
+ <CAJjP=BvNVOj3KRnhFgk6xiwnxVhxE-sN98-pr6e1Kzc5Xg5EvQ@mail.gmail.com>
+ <CAH2r5mvsetx5G+c=8ePh+X8ng7FvMrnuM9+FJ4Sid4b3E+T41Q@mail.gmail.com>
+ <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com>
+ <CAN05THSGwCKckQoeB6D91iBv0Sed+ethK7tde7GSc1UzS-0OYg@mail.gmail.com>
+ <CAJjP=BvcWrF-k_sFxak1mgHAHVVS7_JZow+h_47XB1VzG2+Drw@mail.gmail.com>
+ <ebf8c487-0377-834e-fbb7-725cceae1fbb@leemhuis.info> <CAN05THRJJj48ueb34t18Yj=JYuhiwZ8hTvOssX4D6XhNpjx-bg@mail.gmail.com>
+ <f7eb4a3e-9799-3fe4-d464-d84dd9e64510@leemhuis.info> <CAJjP=Bus1_ce4vbHXpiou1WrSe8a61U1NzGm4XvN5fYCPGNikA@mail.gmail.com>
+ <fe156bb6-c6d2-57da-7f62-57d2972bf1ae@leemhuis.info> <CAHk-=wjSBvRk-ksUBOiQzJd=e19UZKvOSZs1UHahK5U0QVh6RQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjSBvRk-ksUBOiQzJd=e19UZKvOSZs1UHahK5U0QVh6RQ@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 2 Mar 2022 19:27:11 -0600
+Message-ID: <CAH2r5mvQnQTDQaci-NbLBjRb=gCPtMewrKhLBOLGrN2_Zpc3Bg@mail.gmail.com>
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Davyd McColl <davydm@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 4:13 AM Benjamin Gaignard
-<benjamin.gaignard@collabora.com> wrote:
+We have been looking to see if we could setup some VMs for something
+that old, and we are willing to test against it if it could
+realistically be setup, but it has been harder than expected.  Ronnie
+had some ideas and we are willing to experiment more but realistically
+it is very hard to deal with 'legacy museum style' unless we have some
+VMs available for old systems.
+
+Feel free to contact Ronnie and me or Shyam etc (offline if easier) if
+you have ideas on how to setup something like this.   We don't want to
+be encouraging SMB1, but certainly not NTLMv1 auth with SMB1 given its
+security weaknesses (especially given the particular uses hackers have
+made of 25+ year old NTLMv1 weaknesses).
+
+On Wed, Mar 2, 2022 at 6:51 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
->
-> Le 26/02/2022 =C3=A0 23:25, Adam Ford a =C3=A9crit :
-> > On Fri, Feb 25, 2022 at 4:41 PM Benjamin Gaignard
-> > <benjamin.gaignard@collabora.com> wrote:
-> >> This series aims to make HEVC uapi stable and usable for hardware
-> >> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> >> and 2 out of the tree drivers (rkvdec and RPI).
-> >>
-> >> After the remarks done on version 2, I have completely reworked to pat=
-ches
-> >> split so changelogs are meaningless. I have also drop "RFC" from the
-> >> titles.
-> >>
-> >> In this v3 I do all the changes (new controls, documentation, etc..)
-> >> in the staging directory before moving the HEVC uAPI to stable
-> >> steps by steps (unlike the big one patch in v2).
-> >>
-> >> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
->
-> I have push a branch here:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/HEV=
-C_UAPI_V4
->
-> it is the incoming version 4 of this series + patches to enable G2 on my =
-IMX8MQ
-
-Benjamin,
-
-I checked this repo out, and built it along with pulling the latest
-versions of G-streamer and fluster.
-When I check for v4l2 compatibility, I get the following:
-
-    GStreamer-H.264-V4L2-Gst1.0: GStreamer H.264 V4L2 decoder for
-GStreamer 1.0... =E2=9D=8C
-    GStreamer-H.264-V4L2SL-Gst1.0: GStreamer H.264 V4L2SL decoder for
-GStreamer 1.0... =E2=9C=94=EF=B8=8F
-    GStreamer-AV1-V4L2SL-Gst1.0: GStreamer AV1 V4L2SL decoder for
-GStreamer 1.0... =E2=9D=8C
-    GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for
-GStreamer 1.0... =E2=9D=8C
-    GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
-GStreamer 1.0... =E2=9D=8C
-    GStreamer-VP8-V4L2-Gst1.0: GStreamer VP8 V4L2 decoder for GStreamer 1.0=
-... =E2=9D=8C
-    GStreamer-VP8-V4L2SL-Gst1.0: GStreamer VP8 V4L2SL decoder for
-GStreamer 1.0... =E2=9C=94=EF=B8=8F
-    GStreamer-VP9-V4L2SL-Gst1.0: GStreamer VP9 V4L2SL decoder for
-GStreamer 1.0... =E2=9C=94=EF=B8=8F
-
-I see H,264, VP8 and VP9, but I would have also expected
-GStreamer-H.265-V4L2SL-Gst1.0 to return with a check box.
-
-When I checked to see if both decoders were being enumerated, I found they =
-were.
-[gst-main] root@localhost:~/gstreamer/fluster# dmesg |grep -i hantro
-[   16.044243] hantro_vpu: module is from the staging directory, the
-quality is unknown, you have been warned.
-[   16.044243] hantro_vpu: module is from the staging directory, the
-quality is unknown, you have been warned.
-[   16.095661] hantro-vpu 38300000.video-codec: registered
-nxp,imx8mq-vpu-g1-dec as /dev/video0
-[   16.096782] hantro-vpu 38310000.video-codec: registered
-nxp,imx8mq-vpu-g2-dec as /dev/video1
-
-Did I do something wrong, or did I miss something?
-
-adam
-
->
-> Regards,
-> Benjamin
->
-> > Benjamin,
+> On Tue, Mar 1, 2022 at 10:58 PM Thorsten Leemhuis
+> <regressions@leemhuis.info> wrote:
 > >
-> > I have an imx8mm and imx8mq that I can test. Do you happen to have a
-> > repo that I can clone to test this?  The imx8m stuff is spread around
-> > between the media tree and the imx tree since it hasn't been fully
-> > merged yet.
-> >
-> > thanks,
-> >
-> > adam
-> >
-> >> Benjamin
-> >>
-> >> Benjamin Gaignard (11):
-> >>    media: uapi: HEVC: Add missing fields in HEVC controls
-> >>    media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
-> >>      prefix
-> >>    media: uapi: HEVC: Add document uAPI structure
-> >>    media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
-> >>      dynamic array
-> >>    media: uapi: Move parsed HEVC pixel format out of staging
-> >>    media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
-> >>    media: uapi: Move the HEVC stateless control type out of staging
-> >>    media: controls: Log HEVC stateless control in .std_log
-> >>    media: uapi: Create a dedicated header for Hantro control
-> >>    media: uapi: HEVC: fix padding in v4l2 control structures
-> >>    media: uapi: move HEVC stateless controls out of staging
-> >>
-> >> Hans Verkuil (3):
-> >>    videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-> >>    v4l2-ctrls: add support for dynamically allocated arrays.
-> >>    vivid: add dynamic array test control
-> >>
-> >>   .../userspace-api/media/drivers/hantro.rst    |   5 -
-> >>   .../media/v4l/ext-ctrls-codec-stateless.rst   | 831 ++++++++++++++++=
-++
-> >>   .../media/v4l/ext-ctrls-codec.rst             | 780 ----------------
-> >>   .../media/v4l/pixfmt-compressed.rst           |   7 +-
-> >>   .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
-> >>   .../media/v4l/vidioc-queryctrl.rst            |   8 +
-> >>   .../media/videodev2.h.rst.exceptions          |   5 +
-> >>   .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
-> >>   drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
-> >>   drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
-> >>   drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +-
-> >>   drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
-> >>   drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
-> >>   drivers/staging/media/hantro/hantro_drv.c     |  27 +-
-> >>   drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
-> >>   drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
-> >>   .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
-> >>   include/media/hevc-ctrls.h                    | 250 ------
-> >>   include/media/v4l2-ctrls.h                    |  48 +-
-> >>   include/uapi/linux/hantro-media.h             |  19 +
-> >>   include/uapi/linux/v4l2-controls.h            | 436 +++++++++
-> >>   include/uapi/linux/videodev2.h                |  13 +
-> >>   22 files changed, 1686 insertions(+), 1169 deletions(-)
-> >>   delete mode 100644 include/media/hevc-ctrls.h
-> >>   create mode 100644 include/uapi/linux/hantro-media.h
-> >>
-> >> --
-> >> 2.32.0
-> >>
+> > Thx for the update. I pointed Linus towards this thread two times now,
+> > but he didn't comment on it afaics. CCing him now, maybe that will to
+> > the trick.
+>
+> So I have to admit that I think it's a 20+ year old legacy and
+> insecure protocol that nobody should be using.
+>
+> When the maintainer can't really even test it, and it really has been
+> deprecated that long, I get the feeling that somebody who wants it to
+> be maintained will need to do that job himself.
+>
+> This seems to be a _very_ niche thing, possibly legacy museum style
+> equipment, and maybe using an older kernel ends up being the answer if
+> nobody steps up and maintains it as an external patch.
+>
+>              Linus
+
+
+
+-- 
+Thanks,
+
+Steve

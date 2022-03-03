@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46A24CC26E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8585E4CC272
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbiCCQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S234896AbiCCQSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbiCCQRU (ORCPT
+        with ESMTP id S234893AbiCCQSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:17:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C234198EE0;
-        Thu,  3 Mar 2022 08:16:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF64561269;
-        Thu,  3 Mar 2022 16:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE890C004E1;
-        Thu,  3 Mar 2022 16:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646324193;
-        bh=ZBgu8qB7ikjiop06p0mbS+ll8oA4xHLp5J/GkO6hDo0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kvNE5ThaqQ9xL+L6i0Kj+YbJFiPNat8saIjy9ABNoqdAKG2c5vczMQQs+YJpw0g81
-         xdFBuJRaScEHveO2/5/NmEb/bf+prLczK1lN7TAF+y3JTNpmEiaQVtnbZ41O1w3B+i
-         QHOcsxx8WAgJd/R0XvSA5jzfLgPHP0vwJ8phVKZe1tL9Lpj+j0nvfMyMSiPsnpXwUd
-         qO7f6svLffxWs4cCMSIc4ZDVisw1xQ32XokmRJMSQzmw+6q/+/qZxCL7RVj5pAAn38
-         EukTlJykGBB6+spw4eivdm08mDszwWO/jRIBKpfaQn5kBm6q+6kCsPWsi1+3FOPqdH
-         jqN2ibVqxFNeQ==
-Date:   Thu, 3 Mar 2022 18:16:21 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH V6 12/22] LoongArch: Add memory management
-Message-ID: <YiDp1VmAv4aMfX3B@kernel.org>
-References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-13-chenhuacai@loongson.cn>
+        Thu, 3 Mar 2022 11:18:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B8198EF8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:17:20 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cx5so4969826pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
+        b=f5cbZWp0l7V5NSC/zdO1vxrF3W7wwYFHKtO8cOCwJaIDiB6EMzBYBsj1g6UWsRfLB4
+         aX1Uhevud6cITd1Z+d/TsvEbBYDd2fnfSH2cHOBQdRVrYGrTbq8thToFnuO46RA6Nybt
+         hrtZ+n8mPcu9Dw/9i/Nfd40xkBTM0jFyQGyqVjkeya/O/FoNCdt5yq+Qct21QYxrQBrl
+         ABzhjQ4qMXdxAzqEIhVt9BwtGKxSNSTuPWHd4BccpkheqvEWvMEgQEh/g+EWaqLl2M+8
+         A9FQg4M80zo269WKPnX6UD67fSjA/ZTF1dF6VIBhzRatTW/U9ofK8sYf1kA/qH9dQbqx
+         tJ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
+        b=dqQ+6ZMAvIGiCST0ZzkUJIbROvKvUbuP22KcCsatJoYX+tzO1wS4f4jsGUcVPWXDcD
+         samHz/B00va68XFSMRZ/DyCfdy4hIA8crQmOn8qIfpUlCG8C7/zjIhDId1c9ITCD1Xgs
+         kFJPn4yl5RJy8oNJAAY8xKuu7sInNvue62b4cr/nko2IuZ6pBMhquyAFnHRWkObqXeat
+         fKVRNmPYgSii2U/Q6K1e+yXTK0o+jmjbVValNwUXf6uDknl13Gv8wa2tU6O614akN+om
+         YRiuGW2UuMcXv6Bff/Uj5bIGefuUD7/rSUsgsmaNFQp/PoenqAyl1K72rJ062LYu2gIr
+         hcjQ==
+X-Gm-Message-State: AOAM530Qaf9/cU5R9qfROQwywRb+tznvMcQCpYUTBaBrNZrlJJrKc6bT
+        7anunl68e++ezUuhNmHn3ChjZpf+uOul9g7ytY7+Dg==
+X-Google-Smtp-Source: ABdhPJwPEu+6ywb/M5QvzZRCzi2yTouSdW4zQSvgUsZL0viME6YTiy6qZ4sf58hiUdsCnAuMA9/GDRf7cqf6M9ysSOo=
+X-Received: by 2002:a17:903:24f:b0:14f:73fa:2b30 with SMTP id
+ j15-20020a170903024f00b0014f73fa2b30mr37072357plh.174.1646324239927; Thu, 03
+ Mar 2022 08:17:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226110338.77547-13-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220302150717.11193-1-clement.leger@bootlin.com>
+ <CAHUa44H4d2QdXSY5e5VqrGh5sQPhRuFBaBvsy_mTErQQmxJo6w@mail.gmail.com> <20220303091555.7a0298b9@fixe.home>
+In-Reply-To: <20220303091555.7a0298b9@fixe.home>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 3 Mar 2022 17:17:08 +0100
+Message-ID: <CAHUa44F8HLwd2b0sYR0ELJucEe3-__gSKwVigsr7Oig+vqiTTA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: optee: add RTC driver for OP-TEE RTC PTA
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,388 +71,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 07:03:28PM +0800, Huacai Chen wrote:
-> This patch adds memory management support for LoongArch, including:
-> cache and tlb management, page fault handling and ioremap/mmap support.
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
+On Thu, Mar 3, 2022 at 9:17 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@bootl=
+in.com> wrote:
+>
+> Le Thu, 3 Mar 2022 08:35:17 +0100,
+> Jens Wiklander <jens.wiklander@linaro.org> a =C3=A9crit :
+>
+> Hi Jens, looks like you forgot to "Reply All".
 
-...
+You're right.
 
-> diff --git a/arch/loongarch/include/asm/fixmap.h b/arch/loongarch/include/asm/fixmap.h
-> new file mode 100644
-> index 000000000000..04ac3c871294
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/fixmap.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * fixmap.h: compile-time virtual memory allocation
-> + *
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#ifndef _ASM_FIXMAP_H
-> +#define _ASM_FIXMAP_H
-> +
-> +#include <asm/page.h>
+>
+> > > +
+> > > +       /* Fill invoke cmd params */
+> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
+> > > +       param[0].u.memref.size =3D sizeof(struct optee_rtc_time);
+> > > +       param[0].u.memref.shm_offs =3D 0;
+> > > +
+> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
+> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> >
+> > if (ret < 0 || inv_arg.ret) looks easier to me. Please check the patch
+> > with checkpatch --strict do catch all these and other trivial checks.
+>
+> Acked, the rng-optee driver might not be a good starting point :/ Will
+> check that.
+>
+> > > +static int optee_rtc_read_info(struct device *dev, struct rtc_device=
+ *rtc,
+> > > +                              u64 *features)
+> > > +{
+> > > +       struct optee_rtc *priv =3D dev_get_drvdata(dev);
+> > > +       struct tee_ioctl_invoke_arg inv_arg =3D {0};
+> > > +       struct tee_param param[4] =3D {0};
+> > > +       struct optee_rtc_info *info;
+> > > +       struct optee_rtc_time *tm;
+> > > +       int ret =3D 0;
+> > > +
+> > > +       inv_arg.func =3D TA_CMD_RTC_GET_INFO;
+> > > +       inv_arg.session =3D priv->session_id;
+> > > +       inv_arg.num_params =3D 4;
+> > > +
+> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
+> > > +       param[0].u.memref.size =3D sizeof(*info);
+> > > +       param[0].u.memref.shm_offs =3D 0;
+> > > +
+> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
+> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> > > +               dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\=
+n",
+> > > +                       inv_arg.ret);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       info =3D tee_shm_get_va(priv->entropy_shm_pool, 0);
+> > > +       if (IS_ERR(info)) {
+> > > +               dev_err(dev, "tee_shm_get_va failed\n");
+> > > +               return PTR_ERR(info);
+> > > +       }
+> > > +
+> > > +       if (param[0].u.memref.size < sizeof(*info)) {
+> > > +               dev_err(dev, "Invalid read size from OPTEE\n");
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       if (info->version !=3D RTC_INFO_VERSION) {
+> > > +               dev_err(dev, "Unsupported information version %llu\n"=
+,
+> > > +                             info->version);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       *features =3D info->features;
+> > > +
+> > > +       tm =3D &info->range_min;
+> > > +       rtc->range_min =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
+day,
+> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
+);
+> > > +       tm =3D &info->range_max;
+> > > +       rtc->range_max =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
+day,
+> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
+);
+> >
+> > If this is the only thing we're going to do with the returned min and
+> > max, how come this wasn't done on the OP-TEE side already? Without
+> > these large structs we could have defined an ABI without the need for
+> > shared memory.
+>
+> mktime64 converts the time range to the number of seconds elapsed since
+> 1970. I thought it would be better not to assess anything about the way
+> the time is stored on OP-TEE side and thus return the full time struct.
+> If you think it's acceptable to suppose that, then, we can still switch
+> to using timestamps as the ABI with OP-TEE RTC PTA. The same could be
+> done to get/set time if needed in this case.
 
-Why this include is needed here?
+This is a bit more complicated than I first thought. The proposed ABI
+is fine from my point of view.
 
-> +
-> +#define NR_FIX_BTMAPS 64
-> +
-> +#endif
-> diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
-> new file mode 100644
-> index 000000000000..8619ef2823ad
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/page.h
-> @@ -0,0 +1,127 @@
+Cheers,
+Jens
 
-...
-
-> +/*
-> + * __pa()/__va() should be used only during mem init.
-> + */
-> +#define __pa(x)		PHYSADDR(x)
-> +#define __va(x)		((void *)((unsigned long)(x) + PAGE_OFFSET - PHYS_OFFSET))
-> +
-> +#ifndef __pa_symbol
-> +#define __pa_symbol(x)	__pa(RELOC_HIDE((unsigned long)(x), 0))
-> +#endif
-
-This is the same definition as in include/linux/mm.h.
-Is it required here?
-
-...
-
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> new file mode 100644
-> index 000000000000..61993cd4c3d7
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/pgtable.h
-
-...
-
-> +#define PGD_ORDER		0
-> +#define PUD_ORDER		0
-> +#define PMD_ORDER		0
-> +#define PTE_ORDER		0
-
-Is it possible for these to change? 
-If not, please remove them.
-
-...
-
-> diff --git a/arch/loongarch/mm/fault.c b/arch/loongarch/mm/fault.c
-> new file mode 100644
-> index 000000000000..d0170e4d5fe0
-> --- /dev/null
-> +++ b/arch/loongarch/mm/fault.c
-> @@ -0,0 +1,257 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + *
-> + * Derived from MIPS:
-> + * Copyright (C) 1995 - 2000 by Ralf Baechle
-> + */
-> +#include <linux/context_tracking.h>
-> +#include <linux/signal.h>
-> +#include <linux/sched.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/entry-common.h>
-> +#include <linux/errno.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +#include <linux/ptrace.h>
-> +#include <linux/ratelimit.h>
-> +#include <linux/mman.h>
-> +#include <linux/mm.h>
-> +#include <linux/smp.h>
-> +#include <linux/kdebug.h>
-> +#include <linux/kprobes.h>
-> +#include <linux/perf_event.h>
-> +#include <linux/uaccess.h>
-> +
-> +#include <asm/branch.h>
-> +#include <asm/mmu_context.h>
-> +#include <asm/ptrace.h>
-> +
-> +int show_unhandled_signals = 1;
-> +
-> +/*
-> + * This routine handles page faults.  It determines the address,
-> + * and the problem, and then passes it off to one of the appropriate
-> + * routines.
-> + */
-> +static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
-> +	unsigned long address)
-> +{
-> +	int si_code;
-> +	const int field = sizeof(unsigned long) * 2;
-> +	unsigned int flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
-> +	struct task_struct *tsk = current;
-> +	struct mm_struct *mm = tsk->mm;
-> +	struct vm_area_struct *vma = NULL;
-> +	vm_fault_t fault;
-> +
-> +	static DEFINE_RATELIMIT_STATE(ratelimit_state, 5 * HZ, 10);
-> +
-> +	si_code = SEGV_MAPERR;
-> +
-> +	if (user_mode(regs) && (address & __UA_LIMIT))
-> +		goto bad_area_nosemaphore;
-> +
-> +	/*
-> +	 * We fault-in kernel-space virtual memory on-demand. The
-> +	 * 'reference' page table is init_mm.pgd.
-> +	 *
-> +	 * NOTE! We MUST NOT take any locks for this case. We may
-> +	 * be in an interrupt or a critical region, and should
-> +	 * only copy the information from the master page table,
-> +	 * nothing more.
-> +	 */
-> +	if (unlikely(address >= MODULES_VADDR && address <= MODULES_END))
-> +		goto no_context;
-> +
-> +	if (unlikely(address >= VMALLOC_START && address <= VMALLOC_END))
-> +		goto no_context;
-> +
-> +	/*
-> +	 * If we're in an interrupt or have no user
-> +	 * context, we must not take the fault..
-> +	 */
-> +	if (faulthandler_disabled() || !mm)
-> +		goto bad_area_nosemaphore;
-> +
-> +	if (user_mode(regs))
-> +		flags |= FAULT_FLAG_USER;
-> +retry:
-> +	mmap_read_lock(mm);
-> +	vma = find_vma(mm, address);
-> +	if (!vma)
-> +		goto bad_area;
-> +	if (vma->vm_start <= address)
-> +		goto good_area;
-> +	if (!(vma->vm_flags & VM_GROWSDOWN))
-> +		goto bad_area;
-> +	if (expand_stack(vma, address))
-> +		goto bad_area;
-> +/*
-> + * Ok, we have a good vm_area for this memory access, so
-> + * we can handle it..
-> + */
-> +good_area:
-> +	si_code = SEGV_ACCERR;
-> +
-> +	if (write) {
-> +		if (!(vma->vm_flags & VM_WRITE))
-> +			goto bad_area;
-> +		flags |= FAULT_FLAG_WRITE;
-> +	} else {
-> +		if (address == regs->csr_era && !(vma->vm_flags & VM_EXEC))
-> +			goto bad_area;
-> +		if (!(vma->vm_flags & VM_READ) && exception_era(regs) != address)
-> +			goto bad_area;
-> +	}
-> +
-> +	/*
-> +	 * If for any reason at all we couldn't handle the fault,
-> +	 * make sure we exit gracefully rather than endlessly redo
-> +	 * the fault.
-> +	 */
-> +	fault = handle_mm_fault(vma, address, flags, regs);
-> +
-> +	if (fault_signal_pending(fault, regs)) {
-> +		if (!user_mode(regs))
-> +			goto no_context;
-> +		return;
-> +	}
-> +
-> +	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
-> +	if (unlikely(fault & VM_FAULT_ERROR)) {
-> +		if (fault & VM_FAULT_OOM)
-> +			goto out_of_memory;
-> +		else if (fault & VM_FAULT_SIGSEGV)
-> +			goto bad_area;
-> +		else if (fault & (VM_FAULT_SIGBUS|VM_FAULT_HWPOISON|VM_FAULT_HWPOISON_LARGE))
-> +			goto do_sigbus;
-> +		BUG();
-> +	}
-> +	if (flags & FAULT_FLAG_ALLOW_RETRY) {
-> +		if (fault & VM_FAULT_MAJOR) {
-> +			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
-> +						  regs, address);
-> +			tsk->maj_flt++;
-> +		} else {
-> +			perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
-> +						  regs, address);
-> +			tsk->min_flt++;
-> +		}
-> +		if (fault & VM_FAULT_RETRY) {
-> +			flags &= ~FAULT_FLAG_ALLOW_RETRY;
-> +			flags |= FAULT_FLAG_TRIED;
-> +
-> +			/*
-> +			 * No need to mmap_read_unlock(mm) as we would
-> +			 * have already released it in __lock_page_or_retry
-> +			 * in mm/filemap.c.
-> +			 */
-> +
-> +			goto retry;
-> +		}
-> +	}
-> +
-> +	mmap_read_unlock(mm);
-> +	return;
-> +
-> +/*
-> + * Something tried to access memory that isn't in our memory map..
-> + * Fix it, but check if it's kernel or user first..
-> + */
-> +bad_area:
-> +	mmap_read_unlock(mm);
-> +
-> +bad_area_nosemaphore:
-> +	/* User mode accesses just cause a SIGSEGV */
-> +	if (user_mode(regs)) {
-> +		tsk->thread.csr_badvaddr = address;
-> +		if (!write)
-> +			tsk->thread.error_code = 1;
-> +		else
-> +			tsk->thread.error_code = 2;
-> +
-> +		if (show_unhandled_signals &&
-> +		    unhandled_signal(tsk, SIGSEGV) &&
-> +		    __ratelimit(&ratelimit_state)) {
-> +			pr_info("do_page_fault(): sending SIGSEGV to %s for invalid %s %0*lx\n",
-> +				tsk->comm,
-> +				write ? "write access to" : "read access from",
-> +				field, address);
-> +			pr_info("era = %0*lx in", field,
-> +				(unsigned long) regs->csr_era);
-> +			print_vma_addr(KERN_CONT " ", regs->csr_era);
-> +			pr_cont("\n");
-> +			pr_info("ra  = %0*lx in", field,
-> +				(unsigned long) regs->regs[1]);
-> +			print_vma_addr(KERN_CONT " ", regs->regs[1]);
-> +			pr_cont("\n");
-> +		}
-> +		current->thread.trap_nr = read_csr_excode();
-> +		force_sig_fault(SIGSEGV, si_code, (void __user *)address);
-> +		return;
-> +	}
-> +
-> +no_context:
-> +	/* Are we prepared to handle this kernel fault?	 */
-> +	if (fixup_exception(regs))
-> +		return;
-> +
-> +	/*
-> +	 * Oops. The kernel tried to access some bad page. We'll have to
-> +	 * terminate things with extreme prejudice.
-> +	 */
-> +	bust_spinlocks(1);
-> +
-> +	pr_alert("CPU %d Unable to handle kernel paging request at "
-> +	       "virtual address %0*lx, era == %0*lx, ra == %0*lx\n",
-> +	       raw_smp_processor_id(), field, address, field, regs->csr_era,
-> +	       field,  regs->regs[1]);
-> +	die("Oops", regs);
-> +
-> +out_of_memory:
-> +	/*
-> +	 * We ran out of memory, call the OOM killer, and return the userspace
-> +	 * (which will retry the fault, or kill us if we got oom-killed).
-> +	 */
-> +	mmap_read_unlock(mm);
-> +	if (!user_mode(regs))
-> +		goto no_context;
-> +	pagefault_out_of_memory();
-> +
-> +	return;
-> +
-> +do_sigbus:
-> +	mmap_read_unlock(mm);
-> +
-> +	/* Kernel mode? Handle exceptions or die */
-> +	if (!user_mode(regs))
-> +		goto no_context;
-> +
-> +	/*
-> +	 * Send a sigbus, regardless of whether we were in kernel
-> +	 * or user mode.
-> +	 */
-> +	current->thread.trap_nr = read_csr_excode();
-> +	tsk->thread.csr_badvaddr = address;
-> +	force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *)address);
-> +
-
-The page fault handler is really long.
-Consider splitting it to several functions.
-
-> +	return;
-> +}
-> +
-> +asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
-> +	unsigned long write, unsigned long address)
-> +{
-> +	irqentry_state_t state = irqentry_enter(regs);
-> +
-> +	/* Enable interrupt if enabled in parent context */
-> +	if (likely(regs->csr_prmd & CSR_PRMD_PIE))
-> +		local_irq_enable();
-> +
-> +	__do_page_fault(regs, write, address);
-> +
-> +	local_irq_disable();
-> +
-> +	irqentry_exit(regs, state);
-> +}
-
-...
-
-> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> new file mode 100644
-> index 000000000000..b8aa96903056
-> --- /dev/null
-> +++ b/arch/loongarch/mm/init.c
-> @@ -0,0 +1,196 @@
-
-...
-
-> +void free_init_pages(const char *what, unsigned long begin, unsigned long end)
-> +{
-
-This function seems unused
-
-> +	unsigned long pfn;
-> +
-> +	for (pfn = PFN_UP(begin); pfn < PFN_DOWN(end); pfn++) {
-> +		struct page *page = pfn_to_page(pfn);
-> +		void *addr = phys_to_virt(PFN_PHYS(pfn));
-> +
-> +		memset(addr, POISON_FREE_INITMEM, PAGE_SIZE);
-> +		free_reserved_page(page);
-> +	}
-> +	pr_info("Freeing %s: %ldk freed\n", what, (end - begin) >> 10);
-> +}
-> +
-> +#ifdef CONFIG_BLK_DEV_INITRD
-> +void free_initrd_mem(unsigned long start, unsigned long end)
-> +{
-
-There is a generic free_initrd_mem(), no need to override it.
-
-> +	free_reserved_area((void *)start, (void *)end, POISON_FREE_INITMEM,
-> +			   "initrd");
-> +}
-> +#endif
-
--- 
-Sincerely yours,
-Mike.
+>
+> > > +
+> > > +static int optee_rtc_probe(struct device *dev)
+> > > +{
+> > > +       struct tee_client_device *rtc_device =3D to_tee_client_device=
+(dev);
+> > > +       struct tee_ioctl_open_session_arg sess_arg;
+> > > +       struct tee_shm *entropy_shm_pool =3D NULL;
+> > > +       int ret =3D 0, err =3D -ENODEV;
+> >
+> > There is generally no need to initialize these here.
+> >
+> > > +       struct optee_rtc *priv;
+> > > +       struct rtc_device *rtc;
+> > > +
+> > > +       memset(&sess_arg, 0, sizeof(sess_arg));
+> > > +
+> > > +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > > +       if (!priv)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       rtc =3D devm_rtc_allocate_device(dev);
+> > > +       if (IS_ERR(rtc))
+> > > +               return PTR_ERR(rtc);
+> > > +
+> > > +       /* Open context with TEE driver */
+> > > +       priv->ctx =3D tee_client_open_context(NULL, optee_ctx_match, =
+NULL,
+> > > +                                              NULL);
+> > > +       if (IS_ERR(priv->ctx))
+> > > +               return -ENODEV;
+> > > +
+> > > +       /* Open session with rtc Trusted App */
+> > > +       memcpy(sess_arg.uuid, rtc_device->id.uuid.b, TEE_IOCTL_UUID_L=
+EN);
+> >
+> > Perhaps uuid_copy() would be better.
+>
+> Ok, I will use export_uuid() then.
+>
+> >
+> > > +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
+> > > +       sess_arg.num_params =3D 0;
+> > > +
+> > > +       ret =3D tee_client_open_session(priv->ctx, &sess_arg, NULL);
+> > > +       if ((ret < 0) || (sess_arg.ret !=3D 0)) {
+> > > +               dev_err(dev, "tee_client_open_session failed, err: %x=
+\n",
+> > > +                       sess_arg.ret);
+> > > +               err =3D -EINVAL;
+> > > +               goto out_ctx;
+> > > +       }
+> > > +       priv->session_id =3D sess_arg.session;
+> > > +
+> > > +       entropy_shm_pool =3D tee_shm_alloc(priv->ctx,
+> > > +                                        sizeof(struct optee_rtc_info=
+),
+> > > +                                        TEE_SHM_MAPPED | TEE_SHM_DMA=
+_BUF);
+> >
+> > tee_shm_alloc() is about to be removed. Please rebase on
+> > https://git.linaro.org/people/jens.wiklander/linux-tee.git/tag/?h=3Dtee=
+-shm-for-v5.18
+>
+> Acked.
+>
+> --
+> Cl=C3=A9ment L=C3=A9ger,
+> Embedded Linux and Kernel engineer at Bootlin
+> https://bootlin.com

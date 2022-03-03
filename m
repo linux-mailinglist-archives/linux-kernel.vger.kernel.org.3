@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD184CBDA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB89B4CBDB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbiCCMYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 07:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S233223AbiCCM0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 07:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiCCMYl (ORCPT
+        with ESMTP id S233277AbiCCMZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 07:24:41 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD1F47E9
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 04:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646310234; x=1677846234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YlWiPlnQT/J4CWX3oOcwnxjiyCoPKF45JgGeKXxefBw=;
-  b=Ha469Kt3jK7NrAeiI8sYr0YGDXlI2Fq2duk6tnhUsT5LpC7gDgs+toki
-   3LhngEzAC/aRDkDAFDaECyjHP63b+sqFhazDLdA9cGrr5xY6xZcr/0e2c
-   HYP6CNcH7brTbtlJPhtZdXy74JQWRf/uhqBBIe36sLdDWDBw5aWOO1svg
-   5j+n7wQWzJswXVoI3deam/2Iww004lvbSOdRP70tXGFKSghMxXrUHWvyj
-   SLROkRJeggZhK2xOpeDBb0z+pqgp9fsCQqeK/2dnfUX2KZWpACfI2GGog
-   8alNj/lMe6gem8ygF6iUCHk9Lm8K/Thel25bv3dQ3IxubmJsVXsM8TVse
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234273266"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="234273266"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 04:23:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="511412803"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Mar 2022 04:23:52 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPkUq-0000UP-34; Thu, 03 Mar 2022 12:23:52 +0000
-Date:   Thu, 3 Mar 2022 20:23:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [netfilter-nf-next:master 9/12]
- net/netfilter/nf_conntrack_core.c:670:19: error: no member named 'ecache' in
- 'struct nf_conntrack_net'
-Message-ID: <202203032033.frsNjH8R-lkp@intel.com>
+        Thu, 3 Mar 2022 07:25:58 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE212179258;
+        Thu,  3 Mar 2022 04:25:06 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id t19so827977plr.5;
+        Thu, 03 Mar 2022 04:25:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=5klmtEuPK05A2bZEnhFnExu8KFOALZ0/el122sDEVgQ=;
+        b=ZWxHGbWbbQVwMO3M+0bh+UF6Lgyjvb0hppo10T43cEgQsTMDdwGOI3irvZhVQLRX0+
+         zQtYFkfx2q9G3wkdo4w9wnKGxLw69UPJNIaOamu3Cpn0DcksjajBB0RScDg+p9Vtvx57
+         QYfFHq/gWIZ/a5KPlA9SxSqqFKkarUpd5NneuBwyFcPRKVMAih2BGbjFF0GEte3L4rrR
+         hdGlJMmHhW5idLEC3Fvf74+hMDPO2Dc0lPLdujSsGmxXTjoBnFOKS4CIAW6fo2dTFcGf
+         kO0ZcEyAAr0+mQcvXVcSTwhEEqNrAonomJODFkO2uh8ouQirFDjjk62RGJJHviszoazo
+         vreA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=5klmtEuPK05A2bZEnhFnExu8KFOALZ0/el122sDEVgQ=;
+        b=Q2gqkB3AQkLrIjT1TFKVfxrW0xjcjG0qu/4b2w3kZ7PSxYk1c/HViQCHScu7sYByWT
+         oeKDWFD2U6SLT4Pfc6LqpLvm6DHt9xn4e+JfAKrKgInVToIUh1tNFvJ6G/vQEDh0jDe5
+         AT2zD3Cst1StCm4THe7IO2inJiT2NCdSt3LL0/G/7H+HKJ8In5mEy9eqDHiNPa2ws1Qr
+         PN9VDeHLhSAdcfldvn7bJvmT56/RCwZzTNjSuruUGyVTFGnDD5ZKeP8HAiITd7VVgSDM
+         IyCe6sJs+OKCsSKE2jT0rKNz3npxsvlOj3ZLa7gEW6lXDYKjF3JvoP742f03HdpBfFgV
+         /3IA==
+X-Gm-Message-State: AOAM533VKlgbESHsEwTaqkhyCh+Dcz4Ec3XvsmjxEqUI0wOT6Cq4jWAG
+        zcyygv/c2iabimC2mrhX3/1gjIN1/4YG0jSFigP/iPBytnlAxAU=
+X-Google-Smtp-Source: ABdhPJwaLUMlExda1aQnb1hgeI9rCTldFuSOnET20jKc2ckT7XjgFOFv74ioMh2f5cTpAAx9rkZuABWf1V7CPo7DxVk=
+X-Received: by 2002:a17:902:8a91:b0:14f:969b:f6be with SMTP id
+ p17-20020a1709028a9100b0014f969bf6bemr36109864plo.161.1646310305880; Thu, 03
+ Mar 2022 04:25:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Thu, 3 Mar 2022 20:24:53 +0800
+Message-ID: <CAMhUBjkt1E4gQ5-sgAfPvKqNrfXBFUQ14zRP=MWPwfhZJu3QPA@mail.gmail.com>
+Subject: [BUG] net: macb: Use-After-Free when removing the module
+To:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        netdev@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git master
-head:   25485ffb54ac073e82957218404e303469477c2f
-commit: 3ad61edaa5ac46811b4ea07a994428ead31e7468 [9/12] netfilter: conntrack: remove the percpu dying list
-config: riscv-randconfig-r042-20220303 (https://download.01.org/0day-ci/archive/20220303/202203032033.frsNjH8R-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=3ad61edaa5ac46811b4ea07a994428ead31e7468
-        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
-        git fetch --no-tags netfilter-nf-next master
-        git checkout 3ad61edaa5ac46811b4ea07a994428ead31e7468
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/netfilter/
+When removing the macb_pci module, the driver will cause a UAF bug.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Commit d82d5303c4c5 ("net: macb: fix use after free on rmmod") moves
+the platform_device_unregister() after clk_unregister(), but this
+introduces another UAF bug.
 
-All errors (new ones prefixed by >>):
+The following log reveals it:
 
->> net/netfilter/nf_conntrack_core.c:670:19: error: no member named 'ecache' in 'struct nf_conntrack_net'
-           spin_lock(&cnet->ecache.dying_lock);
-                      ~~~~  ^
-   net/netfilter/nf_conntrack_core.c:672:13: error: no member named 'ecache' in 'struct nf_conntrack_net'
-                                    &cnet->ecache.dying_list);
-                                     ~~~~  ^
-   net/netfilter/nf_conntrack_core.c:673:21: error: no member named 'ecache' in 'struct nf_conntrack_net'
-           spin_unlock(&cnet->ecache.dying_lock);
-                        ~~~~  ^
-   3 errors generated.
+[   64.783836] BUG: KASAN: use-after-free in clk_prepare+0x32/0x50
+[   64.794805]  kasan_report+0x45/0x60
+[   64.795226]  clk_prepare+0x32/0x50
+[   64.795641]  macb_runtime_resume+0xc4/0x2e0
+[   64.796149]  __rpm_callback+0x3e8/0xa30
+[   64.796621]  ? ktime_get_mono_fast_ns+0x97/0x1c0
+[   64.797172]  ? pm_generic_runtime_suspend+0xb0/0xb0
+[   64.797760]  rpm_resume+0xff5/0x1860
+[   64.798194]  ? _raw_spin_lock_irqsave+0x7a/0x140
+[   64.798751]  __pm_runtime_resume+0x105/0x160
+[   64.799253]  device_release_driver_internal+0x13c/0x7c0
+[   64.799874]  bus_remove_device+0x2d0/0x340
 
+[   64.816165] Allocated by task 252:
+[   64.817167]  ____kasan_kmalloc+0xb5/0xf0
+[   64.817669]  __clk_register+0x98d/0x23b0
+[   64.818149]  clk_hw_register+0xb2/0xd0
+[   64.818610]  clk_register_fixed_rate+0x290/0x350
+[   64.819861]  macb_probe+0x233/0x590 [macb_pci]
+[   64.820411]  local_pci_probe+0x13f/0x210
+[   64.820890]  pci_device_probe+0x34c/0x6d0
+[   64.821368]  really_probe+0x24c/0x8d0
+[   64.821814]  __driver_probe_device+0x1b3/0x280
+[   64.822346]  driver_probe_device+0x50/0x370
 
-vim +670 net/netfilter/nf_conntrack_core.c
+[   64.828473] Freed by task 485:
+[   64.829440]  kasan_set_track+0x3d/0x70
+[   64.829901]  kasan_set_free_info+0x1f/0x40
+[   64.830396]  ____kasan_slab_free+0x103/0x140
+[   64.830914]  kfree+0xf2/0x270
+[   64.831275]  clk_unregister+0x6df/0x8d0
+[   64.831739]  macb_remove+0x89/0xc0 [macb_pci]
+[   64.832252]  pci_device_remove+0x92/0x240
+[   64.832741]  device_release_driver_internal+0x4e4/0x7c0
+[   64.833365]  driver_detach+0x1e1/0x2b0
+[   64.833817]  bus_remove_driver+0xf2/0x1d0
+[   64.834294]  pci_unregister_driver+0x29/0x1a0
 
-dd7669a92c6066 Pablo Neira Ayuso 2009-06-13  665  
-38a419ee4e646c Florian Westphal  2022-02-24  666  static void nf_ct_add_to_ecache_list(struct nf_conn *ct)
-38a419ee4e646c Florian Westphal  2022-02-24  667  {
-38a419ee4e646c Florian Westphal  2022-02-24  668  	struct nf_conntrack_net *cnet = nf_ct_pernet(nf_ct_net(ct));
-38a419ee4e646c Florian Westphal  2022-02-24  669  
-38a419ee4e646c Florian Westphal  2022-02-24 @670  	spin_lock(&cnet->ecache.dying_lock);
-38a419ee4e646c Florian Westphal  2022-02-24  671  	hlist_nulls_add_head_rcu(&ct->tuplehash[IP_CT_DIR_ORIGINAL].hnnode,
-38a419ee4e646c Florian Westphal  2022-02-24  672  				 &cnet->ecache.dying_list);
-38a419ee4e646c Florian Westphal  2022-02-24  673  	spin_unlock(&cnet->ecache.dying_lock);
-38a419ee4e646c Florian Westphal  2022-02-24  674  }
-38a419ee4e646c Florian Westphal  2022-02-24  675  
-
-:::::: The code at line 670 was first introduced by commit
-:::::: 38a419ee4e646c1a6427f98717ad0bfac9762607 netfilter: ecache: use dedicated list for event redelivery
-
-:::::: TO: Florian Westphal <fw@strlen.de>
-:::::: CC: Pablo Neira Ayuso <pablo@netfilter.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Zheyu Ma

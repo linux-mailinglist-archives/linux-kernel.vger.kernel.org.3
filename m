@@ -2,105 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896564CBB7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E234CBB7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiCCKfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S232399AbiCCKfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbiCCKfk (ORCPT
+        with ESMTP id S231175AbiCCKfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:35:40 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAF3340D2;
-        Thu,  3 Mar 2022 02:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646303694; x=1677839694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U3CkbipzqRbVQQYh0KNk3tlacM3JmBcSMhxa/ULnS34=;
-  b=cdAxkBGfkumrfX2yaZdh0j+J0bSjBzm/GktY0+UKwQaz13zQB2U3hq6z
-   1FHzsq7ln9bKrnwoJUwT3N7C3gWLaIdG+M7ak43vf5yZjN4TZejNO8b66
-   +bd7B7YE0JFRi6815LH7ca/tsHGHbtDtuLud3Z0dc6ujHURFr5S3M6cjK
-   5zpy3EApPCCMbCn7r4xJy+cPClvuSUgPUCecfyT0nOawCb1kLRHIZWxaH
-   AvXFDb5u3mlmEwz/MATEvQUkciRpRzFHjyBwMCA6paG4BNLRsxyBf8zGW
-   dNtclbTaQzpHt/UU6qILe8dtpUXxnKbfj3VrLeU5Ssf86i7yvX+UmCvjC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237150278"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="237150278"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:34:53 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="508542490"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 02:34:46 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nPimV-00Ak1G-2F;
-        Thu, 03 Mar 2022 12:33:59 +0200
-Date:   Thu, 3 Mar 2022 12:33:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
-        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
-Message-ID: <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
-References: <20220303083141.8742-1-warp5tw@gmail.com>
- <20220303083141.8742-9-warp5tw@gmail.com>
+        Thu, 3 Mar 2022 05:35:30 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C44338B0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 02:34:44 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id bm39so3577487qkb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 02:34:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Paj8FNxOly+Z1sFlHaZ1IXLZB2+GxhjkskQqoM3JxY8=;
+        b=MOxX/pIfiTOHdcUuGfh6LT1Cc8tLMfyk3Kw99M3VF33JijFC6ckUJO1x69xBW1P26N
+         sUWWm3HwoEgSn6edanOXeaqALRNvLDAkFWPe6wpn4pGtIGAxVkGqX4AQYhak6lzWNm/u
+         0ps0yB/+WjA2yEayDqcUmErk48dHwvz1j8MkHWfwsOvnk+Ocumjo9nVHu3V3QKxzJh8R
+         iryNVi1grlruL0lxxIukQto7olpV1KJXn0K5SMUb3a/uTBL24O1rQu/FDjAx5lD63N6I
+         NUi9DvCs3DwRNknUOB43Vd1SHL+CBCIb/aYoWLkHpzlhttHUmKoz4Fm8z+OpodTH3s09
+         OKfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Paj8FNxOly+Z1sFlHaZ1IXLZB2+GxhjkskQqoM3JxY8=;
+        b=AUjPbgQo1JbemumXbgsl2xTbZU0ELmGg9lTyhLJBnZlemGPtgayUiipX0wEs7hktnB
+         1uP2wCewRYBUxWeXDeeoqtovclomwHMJ1pZbz5vAsk96z5GwBoPPNGlkncbP4LFBfRmS
+         Dq0Fha5Gj262MLXEEO/DnXEGyqAAEj7J7YNzLO0rrWKvXLCltnXgRVd37y4fB8nMtwHj
+         2J7uE7XjggXHnc8Yc0YeubBFINKBII43o41B6r9HxVZ7kNKiKYiRChZANm2DuJjy2182
+         WlQz5ABqEn6xoH3xhGNdBY7nMNN6EKGzfuEFdwHhczn78wShSB5ZdFm593QG4A6+sbjY
+         QDqA==
+X-Gm-Message-State: AOAM532AEACIIUG/+oN8WlbNjF2neqFI1w25OqXeFQkodI6pHXl0X+SV
+        xNqxlt+hR18htc4gPF+L8XRwwrSC5sa30mj3eS+N8w==
+X-Google-Smtp-Source: ABdhPJwo7qYsBN4V7J+1DL7V0IsCYkDt2z/F+5SxCYlKEhf0gzrrQAla1e+8qSFyuEdV0xn468wsWrAwkznC6fcjC24=
+X-Received: by 2002:a37:6215:0:b0:508:c213:72de with SMTP id
+ w21-20020a376215000000b00508c21372demr18862608qkb.30.1646303683187; Thu, 03
+ Mar 2022 02:34:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303083141.8742-9-warp5tw@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220303084824.284946-1-bhupesh.sharma@linaro.org> <20220303084824.284946-6-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220303084824.284946-6-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 3 Mar 2022 13:34:32 +0300
+Message-ID: <CAA8EJprSU5KAN-pOE1kz49_f8sDD1+1qB80Ga5+RWe5WRnuKPA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] arm64: dts: qcom: sm8150: add ethernet node
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
-> 
-> Use ioread8 instead of ioread32 to access the SMBnCTL3 register since
-> the register is only 8-bit wide.
+On Thu, 3 Mar 2022 at 11:49, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>
+> From: Vinod Koul <vkoul@kernel.org>
+>
+> SM8150 SoC supports ethqos ethernet controller so add the node for it
 
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Is it available e.g. in the sm8150 SoC that I have in the phone?
 
-No, this is bad commit message, since you have bitwise masks and there is
-nothing to fix from functional point of view. So, why is this a fix?
+>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> [bhsharma: Correct ethernet interrupt numbers and add power-domain]
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index 6012322a5984..2ed231767535 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -915,6 +915,33 @@ gpi_dma0: dma-controller@800000 {
+>                         status = "disabled";
+>                 };
+>
+> +               ethernet: ethernet@20000 {
+> +                       compatible = "qcom,sm8150-ethqos";
+> +                       reg = <0x0 0x00020000 0x0 0x10000>,
+> +                             <0x0 0x00036000 0x0 0x100>;
+> +                       reg-names = "stmmaceth", "rgmii";
+> +                       clock-names = "stmmaceth", "pclk", "ptp_ref", "rgmii";
+> +                       clocks = <&gcc GCC_EMAC_AXI_CLK>,
+> +                               <&gcc GCC_EMAC_SLV_AHB_CLK>,
+> +                               <&gcc GCC_EMAC_PTP_CLK>,
+> +                               <&gcc GCC_EMAC_RGMII_CLK>;
+> +                       interrupts = <GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>,
+> +                                    <GIC_SPI 699 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "macirq", "eth_lpi";
+> +
+> +                       power-domains = <&gcc EMAC_GDSC>;
+> +                       resets = <&gcc GCC_EMAC_BCR>;
+> +
+> +                       iommus = <&apps_smmu 0x3C0 0x0>;
+> +
+> +                       snps,tso;
+> +                       rx-fifo-depth = <4096>;
+> +                       tx-fifo-depth = <4096>;
+> +
+> +                       status = "disabled";
+> +               };
+> +
+> +
+>                 qupv3_id_0: geniqup@8c0000 {
+>                         compatible = "qcom,geni-se-qup";
+>                         reg = <0x0 0x008c0000 0x0 0x6000>;
+> --
+> 2.35.1
+>
 
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-
-This is wrong SoB chain.
-
-...
-
-> -	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-> +	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
-
-...
-
-> -	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
-> +	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+With best wishes
+Dmitry

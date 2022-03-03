@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1761C4CB591
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9F24CB592
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiCCDzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 22:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S229528AbiCCDzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 22:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCCDzI (ORCPT
+        with ESMTP id S229562AbiCCDzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 22:55:08 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C484145626
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:54:19 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id o23so3402799pgk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:54:19 -0800 (PST)
+        Wed, 2 Mar 2022 22:55:10 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5FE1451D0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:54:25 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id e2so3386727pls.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 19:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=484aUuxNZc3KsETq0d0X9kiFjP9VE9iZOfI8FszPlhE=;
-        b=eqfYaYtiJAfrMrJum4SkBgX812U6U5MPYDU9P1w7mfqX3sqhPYqFlZIJCrv91imDGz
-         2nT2SGfJQUdyE+MEMQBOmqiNiBgihOHyx2+JdHh+3HiwA1Yxei9cXwN1lIvyDGo7ylxK
-         PPMRodzVSxZOiHZgLCyj7NYMsT+wUQt7M3xvtLLHvYkcZQem3zTTvNWJwNVD8aa+cCA2
-         dBNTyrMV09l5sYU4gOBaOjPL+shG1Sms5Zyb59iVgWnfpf3PmsC1eSUmNPAYGB/v9GzL
-         8D5QlQGdJasLdLVtOyx36j9Tvs9QmcrEzIiwSzgK1jrvCBrDFzzdZBjtFzT4xHvdaJRR
-         U7sA==
+        bh=0xi68o3LflOcJSjUAfCp8Eoq36gaPXd65N0Lh9gWJYs=;
+        b=ChfhB9Q1kgf/HK+IvTlWJSoEe7i7wRN7jW+tLSNaZYf3qVVOVUTFZ8feF9bKd47/9g
+         avHCxxhlbyUiX169fh2S8gdAafEtssa6ara44eJCjzdXGcUSAM1jW7MAEPdTT2F4mg8p
+         B9bUq+eeA1JwGEBoZn1+0IEulPYR8jYCZ+OE7LgPS8eI81ljAYkLxaOvF2KHwCgvGWVi
+         KkTSh4ceX5qGSOInRyqbgRoWfXl4/tHVPHEp8XkvmlbdAujalCF2L6deYKeJLDNFdrmU
+         JLzCmxak3kaVex5DTyt3+sxWKWJa6uGB/rc94pM/6e5hA/JimowneArLhcgOzd4HrCnD
+         d+Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=484aUuxNZc3KsETq0d0X9kiFjP9VE9iZOfI8FszPlhE=;
-        b=XclY6DAEQFxVk0vXsoZUGezg58SlfImuZpVmfjuhNZXcOcyr7vPCMh9AvjGn1YZ6RQ
-         SCDKJ1ptg4j4QEjOyCXxvEZi5vNmbNhBblI/8kAKK88dNPOw91uKT642It1QVy9+glMF
-         bjYuhBrKy92c1ABxVxY1LUujCEBBTky9uSSU5sZO/GguV2vLiyD8N7wKqeWdDJoFcdv3
-         bIKn08d+8tjjf1D3GbW0wj3ZjY2sPnJcEDaXna+aJKSBesjpog1FM9u0TBALicOdNxCK
-         uJ7TvRayjv7OjbuNQHT0kV39a43zo03lj8vVjU+oWSsnbqSQEBL01EEb1Pjwev4S3cu+
-         srug==
-X-Gm-Message-State: AOAM533JTJh5GOVCzM1TcFUTczeKwRiaLPGCE3Ionh4CTo/WIN/x6LHp
-        0gETXTOW1SbleX64mZ+zfZe/zGnW2Dk=
-X-Google-Smtp-Source: ABdhPJwqGNnwLeK/h1YzAuB+fUY8G1SroSa6VKnTnnZks/0u+o2UKlaU8+LDpauD/nfI/8YCGiu9Wg==
-X-Received: by 2002:a63:a66:0:b0:373:c36b:e500 with SMTP id z38-20020a630a66000000b00373c36be500mr28700968pgk.419.1646279658821;
-        Wed, 02 Mar 2022 19:54:18 -0800 (PST)
+        bh=0xi68o3LflOcJSjUAfCp8Eoq36gaPXd65N0Lh9gWJYs=;
+        b=CvkQZhp/i05ROJQGj2kfHOsIlHE9zYZoySRLfOah84kpIMe7zipSExjcafACwy3XnN
+         YHt5XeZd/AQzhCqVtZsCr0zmcWC/TgVU9WRrpCaSjNLjFoBXcKIfiFp8BPejjNQkTm0o
+         JYGjyVTJg7PpZZYz8hqs1r6XjzJjMF/kPZJqlhhVwEoFuhvjhv1Dn0YhCHq1aK+4Rfpj
+         jArPKwTPHLkB0R3hPYL2ig6PSeCo5entQJMffeKg7Tf2Tb5ks+gXt4PG1/eDSFcLFmiX
+         pEDidpOTfNFt5xsxbyBGsw30bwjPkVK9A3qOQQLIN2Tw6X1jO/u7Sx3ylupctQd8HrDn
+         OaRA==
+X-Gm-Message-State: AOAM532h+Mrs49cMgBdKxCZxeCkcbCjmJn1zW2nq2OMR3sOTFD/xQNIV
+        63wP+ku8mRuxmcYCMscFKj1rEkFo5/E=
+X-Google-Smtp-Source: ABdhPJx9vlpkZP7hoE3xxjO/freHx46CvxGDExvwku0oaXYuPlqsKDL6avcM0qFHzLzGEG9697dV5g==
+X-Received: by 2002:a17:90b:8d:b0:1bc:4273:251b with SMTP id bb13-20020a17090b008d00b001bc4273251bmr3190332pjb.141.1646279664726;
+        Wed, 02 Mar 2022 19:54:24 -0800 (PST)
 Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id x42-20020a056a0018aa00b004e1bf2a3376sm676209pfh.215.2022.03.02.19.54.17
+        by smtp.gmail.com with ESMTPSA id a8-20020aa795a8000000b004f670c2ef2esm358174pfk.163.2022.03.02.19.54.23
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Mar 2022 19:54:18 -0800 (PST)
+        Wed, 02 Mar 2022 19:54:24 -0800 (PST)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
@@ -56,9 +56,9 @@ Cc:     x86@kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V2 3/7] x86/entry: move PUSH_AND_CLEAR_REGS out of error_entry
-Date:   Thu,  3 Mar 2022 11:54:30 +0800
-Message-Id: <20220303035434.20471-4-jiangshanlai@gmail.com>
+Subject: [PATCH V2 4/7] x86/entry: Move cld to the start of idtentry
+Date:   Thu,  3 Mar 2022 11:54:31 +0800
+Message-Id: <20220303035434.20471-5-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220303035434.20471-1-jiangshanlai@gmail.com>
 References: <20220303035434.20471-1-jiangshanlai@gmail.com>
@@ -76,63 +76,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Moving PUSH_AND_CLEAR_REGS out of error_entry doesn't change any
-functionality.  It will enlarge the size:
+Make it next to CLAC
 
-size arch/x86/entry/entry_64.o.before:
-   text	   data	    bss	    dec	    hex	filename
-  17916	    384	      0	  18300	   477c	arch/x86/entry/entry_64.o
-
-size --format=SysV arch/x86/entry/entry_64.o.before:
-.entry.text                      5528      0
-.orc_unwind                      6456      0
-.orc_unwind_ip                   4304      0
-
-size arch/x86/entry/entry_64.o.after:
-   text	   data	    bss	    dec	    hex	filename
-  26868	    384	      0	  27252	   6a74	arch/x86/entry/entry_64.o
-
-size --format=SysV arch/x86/entry/entry_64.o.after:
-.entry.text                      8200      0
-.orc_unwind                     10224      0
-.orc_unwind_ip                   6816      0
-
-But .entry.text in x86_64 is 2M aligned, enlarging it to 8.2k doesn't
-enlarge the final text size.
-
-The tables .orc_unwind[_ip] are enlarged due to it adds many pushes.
-
-It is prepared for not calling error_entry() from XENPV in later patch
-and for future converting the whole error_entry into C code.
-
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/entry_64.S | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/entry/entry_64.S | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index a51cad2b7fff..3ca64bad4697 100644
+index 3ca64bad4697..630bf8164a09 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -322,6 +322,9 @@ SYM_CODE_END(ret_from_fork)
-  */
- .macro idtentry_body cfunc has_error_code:req
+@@ -356,6 +356,7 @@ SYM_CODE_END(ret_from_fork)
+ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+ 	ASM_CLAC
++	cld
  
-+	PUSH_AND_CLEAR_REGS
-+	ENCODE_FRAME_POINTER
-+
- 	call	error_entry
- 	movq	%rax, %rsp			/* switch stack settled by sync_regs() */
- 	ENCODE_FRAME_POINTER
-@@ -968,8 +971,6 @@ SYM_CODE_END(paranoid_exit)
+ 	.if \has_error_code == 0
+ 		pushq	$-1			/* ORIG_RAX: no syscall to restart */
+@@ -423,6 +424,7 @@ SYM_CODE_END(\asmsym)
+ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS
+ 	ASM_CLAC
++	cld
+ 
+ 	pushq	$-1			/* ORIG_RAX: no syscall to restart */
+ 
+@@ -478,6 +480,7 @@ SYM_CODE_END(\asmsym)
+ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS
+ 	ASM_CLAC
++	cld
+ 
+ 	/*
+ 	 * If the entry is from userspace, switch stacks and treat it as
+@@ -539,6 +542,7 @@ SYM_CODE_END(\asmsym)
+ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS offset=8
+ 	ASM_CLAC
++	cld
+ 
+ 	/* paranoid_entry returns GS information for paranoid_exit in EBX. */
+ 	call	paranoid_entry
+@@ -852,7 +856,6 @@ SYM_CODE_END(xen_failsafe_callback)
+  */
+ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	UNWIND_HINT_FUNC
+-	cld
+ 	PUSH_AND_CLEAR_REGS save_ret=1
+ 	ENCODE_FRAME_POINTER 8
+ 
+@@ -970,7 +973,6 @@ SYM_CODE_END(paranoid_exit)
+  */
  SYM_CODE_START_LOCAL(error_entry)
  	UNWIND_HINT_FUNC
- 	cld
--	PUSH_AND_CLEAR_REGS save_ret=1
--	ENCODE_FRAME_POINTER 8
+-	cld
  	testb	$3, CS+8(%rsp)
  	jz	.Lerror_kernelspace
  
+@@ -1103,6 +1105,7 @@ SYM_CODE_START(asm_exc_nmi)
+ 	 */
+ 
+ 	ASM_CLAC
++	cld
+ 
+ 	/* Use %rdx as our temp variable throughout */
+ 	pushq	%rdx
+@@ -1122,7 +1125,6 @@ SYM_CODE_START(asm_exc_nmi)
+ 	 */
+ 
+ 	swapgs
+-	cld
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdx
+ 	movq	%rsp, %rdx
 -- 
 2.19.1.6.gb485710b
 

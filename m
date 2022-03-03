@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B5F4CB3BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA6E4CB370
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiCCAAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S229861AbiCCABf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiCCAAU (ORCPT
+        with ESMTP id S229869AbiCCABc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:00:20 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07073496A7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 15:59:36 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso6219120pjj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 15:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ckCBduCU8rIC3xMm3IAzUST/V5HZeQGdJRo5tI2p308=;
-        b=KxhA+CG1r0bDnPfRKPRFC4gWUhhykeI8AD5VmSGys12v1gnCr1jqlAXuyRGCQEa5xu
-         MbxFpEqZObEdVp9jxGfe67+QSPDRS3eTe7Knh2vk8ZwqewwaTmNiZmbGTB/JCDGJrzt0
-         Kr7KUS9mo0vj05w/YDjQlaHpwIy5/BKQoglm9GVlHLe0e4jDc9EG8M1vN6BPd19TwktT
-         pHCwVpH0nat/DKrUdcH21H5XA8rHzH3vn0zpKjYPLfTLOEMlOaAZ0yu03RSIvjMik4iU
-         sFJFW8xyL7nOO3FV/nd6fHVCtBIXYCUvAn3UTVbbMXXgOaEBUf210V2B8LzHhtVXpqXm
-         CD6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ckCBduCU8rIC3xMm3IAzUST/V5HZeQGdJRo5tI2p308=;
-        b=3IJrxt8GzTE1OWC4GKNIAddk92QcBZgNPMAEgQItjqlIDSNNPy6sR4nN6emtzeGuYt
-         YX6yQJVg5rUu5w+V6NlTdCuR/hDxXQtFHBlOPgn3HQAJXFfBiDrGdU+aQ9+tELK4gOqa
-         qbf+YcaKVXv84HG/X6/ty/Kh47lF/KjMZxAkGapm/vZEsqCtu2UtEuqQ/99SWaw9drt8
-         Bd+VhuaXTU4MRUzNaP7wo0WYEKnpPs6pA6LOfw1f5KQ2h2l1s5XOiZmZPVsYCf0JnmeS
-         +SW5LOkfDzU5+ouLOI0xyXNYhTLTTtT0OhBcz8W/AiOaVZByRXuASHsbrG/i++T6gexp
-         PywA==
-X-Gm-Message-State: AOAM533UB9xRo4szV3BTga/7A6DSG2n1SOFW0TvacIAvT/XHnxtZJ5bS
-        wn8Bpj0BPxZXMO/C5R1K4nhZiQ==
-X-Google-Smtp-Source: ABdhPJwnOxGOxT+j0GWCzApEGE5efrNfWQ84mPA2upSypv5fvtV9FoH1ielmix1ygb7LhabIpUzT8A==
-X-Received: by 2002:a17:902:8306:b0:14f:a386:6a44 with SMTP id bd6-20020a170902830600b0014fa3866a44mr33123916plb.140.1646265575211;
-        Wed, 02 Mar 2022 15:59:35 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm299171pfl.44.2022.03.02.15.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 15:59:34 -0800 (PST)
-Date:   Wed, 2 Mar 2022 23:59:30 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
- deferred TLB flush logic
-Message-ID: <YiAE4ju0a3MWXr31@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-5-seanjc@google.com>
+        Wed, 2 Mar 2022 19:01:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B365007D;
+        Wed,  2 Mar 2022 16:00:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 945BE61BA9;
+        Thu,  3 Mar 2022 00:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00CE8C36AE3;
+        Thu,  3 Mar 2022 00:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646265647;
+        bh=Gh+Iw395lx9OcmDBaop4139TbIG8zRBjlYsZzNBFWco=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BocpuqTmutORsZYOiNSdm6lbdqku4oUyiaGBbawYajhypmeyVq/AFKrfpskEbcDf1
+         Q4/3uRPtQVWQFi13n7scGMH2Wid9LMjelDkVKUG+YEX7DHDQZ0KWBXrrawYLftXc3k
+         imwIMLlwqpUJdpgJFKoH1Z3B51kHkMs0QNYnA8bhbSTXwnhU0Cu1B3wklft1sYv1Q5
+         sZrEciaPDY3ZaKJyqH1bwFDtdS/e3oeCQj2G8VxNKQ5Z3e8195bISM1iV0JOy11v3j
+         OMssM1DtJK+tk/y6B7eunZOi4e+gNL/pU1dRgivstJDAtlfMwXfKDmZjslIiDbLCgP
+         ZdiHHAR5HAnQQ==
+Received: by mail-ed1-f50.google.com with SMTP id y11so3921809eda.12;
+        Wed, 02 Mar 2022 16:00:46 -0800 (PST)
+X-Gm-Message-State: AOAM5322o6RgSTMaVRROWjOUvDSonuRi5Mz0sizM6JGQY6JDMqWB4vnE
+        BtX3oFBEUZlJqqEC969QDVjoY3UBrp98QXXdYQ==
+X-Google-Smtp-Source: ABdhPJyCWS2G7IAO37h6jGUTcYx1AHcHdPNzIqNZZelMR25IBMLn05AR7M7SJt01irflojL+S4EdT9nvnMtxT4pRjgc=
+X-Received: by 2002:aa7:df12:0:b0:410:a50b:de00 with SMTP id
+ c18-20020aa7df12000000b00410a50bde00mr31738511edy.2.1646265645243; Wed, 02
+ Mar 2022 16:00:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226001546.360188-5-seanjc@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
+ <20220126071932.32615-4-jason-jh.lin@mediatek.com> <CAAOTY__K_0sp6+VdL0yi=wF9wA_uag4HKqK3ST7uySdkzfCHBA@mail.gmail.com>
+ <CAAOTY__Xz0Pu30tmUrNJ=Nji=03Xv_3Qw526_hT-zELME36Bxw@mail.gmail.com>
+In-Reply-To: <CAAOTY__Xz0Pu30tmUrNJ=Nji=03Xv_3Qw526_hT-zELME36Bxw@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 2 Mar 2022 18:00:34 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLU0m9C1OPdiBPTkofB4sfiAeUPbFHp0w8caWyP4XPOEw@mail.gmail.com>
+Message-ID: <CAL_JsqLU0m9C1OPdiBPTkofB4sfiAeUPbFHp0w8caWyP4XPOEw@mail.gmail.com>
+Subject: Re: [PATCH v15 03/12] dt-bindings: display: mediatek: disp: split
+ each block to individual yaml
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fei Shao <fshao@chromium.org>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        "roy-cw.yeh" <roy-cw.yeh@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Jitao shi <jitao.shi@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>, singo.chang@mediatek.com,
+        DTML <devicetree@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022, Sean Christopherson wrote:
-> Explicitly ignore the result of zap_gfn_range() when putting the last
-> reference to a TDP MMU root, and add a pile of comments to formalize the
-> TDP MMU's behavior of deferring TLB flushes to alloc/reuse.  Note, this
-> only affects the !shared case, as zap_gfn_range() subtly never returns
-> true for "flush" as the flush is handled by tdp_mmu_zap_spte_atomic().
-> 
-> Putting the root without a flush is ok because even if there are stale
-> references to the root in the TLB, they are unreachable because KVM will
-> not run the guest with the same ASID without first flushing (where ASID
-> in this context refers to both SVM's explicit ASID and Intel's implicit
-> ASID that is constructed from VPID+PCID+EPT4A+etc...).
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c     |  8 ++++++++
->  arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 80607513a1f2..5a931c89d27b 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5069,6 +5069,14 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  	kvm_mmu_sync_roots(vcpu);
->  
->  	kvm_mmu_load_pgd(vcpu);
-> +
-> +	/*
-> +	 * Flush any TLB entries for the new root, the provenance of the root
-> +	 * is unknown.  In theory, even if KVM ensures there are no stale TLB
-> +	 * entries for a freed root, in theory, an out-of-tree hypervisor could
-> +	 * have left stale entries.  Flushing on alloc also allows KVM to skip
-> +	 * the TLB flush when freeing a root (see kvm_tdp_mmu_put_root()).
-> +	 */
->  	static_call(kvm_x86_flush_tlb_current)(vcpu);
->  out:
->  	return r;
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 12866113fb4f..e35bd88d92fd 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
->  	list_del_rcu(&root->link);
->  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
->  
-> -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> +	/*
-> +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
-> +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
-> +	 * to a different pCPU.  Note, the local TLB flush on reuse also
-> +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
-> +	 * intermediate paging structures, that may be zapped, as such entries
-> +	 * are associated with the ASID on both VMX and SVM.
-> +	 */
-> +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+On Mon, Feb 7, 2022 at 5:07 PM Chun-Kuang Hu <chunkuang.hu@kernel.org> wrote:
+>
+> OK, it seems no one has comment on this patch, so
 
-Understood that we could avoid the TLB flush here. Just curious why the
-"(void)" is needed here? Is it for compile time reason?
->  
->  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
->  }
-> -- 
-> 2.35.1.574.g5d30c73bfb-goog
-> 
+No comment because the patch was not in PW. That's most likely due to this:
+
+Subject: [PATCH v15 03/12] dt-bindings: display: mediatek: disp: split
+each block to individual yaml
+Date: Wed, 26 Jan 2022 15:19:23 +0800 [thread overview]
+Message-ID: <20220126071932.32615-4-jason-jh.lin@mediatek.com> (raw)
+In-Reply-To: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
+
+[-- Warning: decoded text below may be mangled, UTF-8 assumed --]
+[-- Attachment #1: Type: text/plain; charset="y", Size: 50916 bytes --]
+
+"y" is not a valid charset. This is caused when git-send-email asks
+for the encoding and you answer 'y' rather than <enter>.
+
+Rob

@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4955D4CC86F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00AB4CC875
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiCCV5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S236684AbiCCWAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiCCV5j (ORCPT
+        with ESMTP id S231630AbiCCWAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:57:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C63041612
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:56:49 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPtRG-0006SQ-4Q; Thu, 03 Mar 2022 22:56:46 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPtRF-002UFJ-A5; Thu, 03 Mar 2022 22:56:44 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPtRD-006n2H-UC; Thu, 03 Mar 2022 22:56:43 +0100
-Date:   Thu, 3 Mar 2022 22:56:40 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Max Kellermann <max.kellermann@gmail.com>
-Cc:     linux-pwm@vger.kernel.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        andrey@lebedev.lt, stable@vger.kernel.org
-Subject: Re: [PATCH 3/3] pwm-sun4i: calculate the delay without rounding down
- to jiffies
-Message-ID: <20220303215640.m23yozioeqxvmlfc@pengutronix.de>
-References: <20220125123429.3490883-1-max.kellermann@gmail.com>
- <20220125123429.3490883-3-max.kellermann@gmail.com>
- <20220224165135.g4ufknd3alrhnfx3@pengutronix.de>
+        Thu, 3 Mar 2022 17:00:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA96DFDC;
+        Thu,  3 Mar 2022 13:59:32 -0800 (PST)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F0346101E;
+        Thu,  3 Mar 2022 22:59:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646344770;
+        bh=tu4nl7oMY6soz2c3whO1qbqCHUSafi/7e+F/6CMnMlM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=cWq/k33atmYXJ1snfvtAEUqdVLrTAn7ydpWd8WSMQ3r0ARmExthG9Pj9fyi5pKbFZ
+         Zw9bMbWPKPh5XSo3uwY4cYrD020QmAlCtCbjkOOxx1Qep+TMUootcnM/aHvdyXCJkO
+         9QJt7pDmZpoYDR2nitPTMIgaRYrm3j56sEWUFuN4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jer5rcewuptdavq4"
-Content-Disposition: inline
-In-Reply-To: <20220224165135.g4ufknd3alrhnfx3@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220303183720.GA334969@elementary>
+References: <20220228183955.25508-1-jose.exposito89@gmail.com> <164609067646.2361501.15747139249939190799@Monstersaurus> <20220303183720.GA334969@elementary>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: switch to devm_drm_of_get_bridge
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     andrzej.hajda@intel.com, linux-pwm@vger.kernel.org,
+        jonas@kwiboo.se, airlied@linux.ie, robert.foss@linaro.org,
+        dri-devel@lists.freedesktop.org, narmstrong@baylibre.com,
+        linux-kernel@vger.kernel.org, jernej.skrabec@gmail.com,
+        thierry.reding@gmail.com, Laurent.pinchart@ideasonboard.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        maxime@cerno.tech
+To:     =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Date:   Thu, 03 Mar 2022 21:59:26 +0000
+Message-ID: <164634476693.3683041.3124143336848085499@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---jer5rcewuptdavq4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 24, 2022 at 05:51:35PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Tue, Jan 25, 2022 at 01:34:29PM +0100, Max Kellermann wrote:
-> > This fixes a problem that was supposed to be addressed by commit
-> > 6eefb79d6f5bc ("pwm: sun4i: Remove erroneous else branch") - backlight
-> > could not be switched off on some Allwinner A20.  The commit was
-> > correct, but was not a reliable fix for the problem, which was timing
-> > related.
+Quoting Jos=C3=A9 Exp=C3=B3sito (2022-03-03 18:37:20)
+> On Mon, Feb 28, 2022 at 11:24:36PM +0000, Kieran Bingham wrote:
+> > Hi Jos=C3=A9
 > >=20
-> > The real problem for the backlight switching problem was that sleeping
-> > for a full period did not work, because delay_us is always zero.
+> > Quoting Jos=C3=A9 Exp=C3=B3sito (2022-02-28 18:39:54)
+> > > The function "drm_of_find_panel_or_bridge" has been deprecated in
+> > > favor of "devm_drm_of_get_bridge".
+> > >=20
+> > > Switch to the new function and reduce boilerplate.
+> > >=20
+> > > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 8 +-------
+> > >  1 file changed, 1 insertion(+), 7 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/=
+bridge/ti-sn65dsi86.c
+> > > index dab8f76618f3..fb8e16ed7e90 100644
+> > > --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> > > +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> > > @@ -1232,15 +1232,9 @@ static int ti_sn_bridge_probe(struct auxiliary=
+_device *adev,
+> > >  {
+> > >         struct ti_sn65dsi86 *pdata =3D dev_get_drvdata(adev->dev.pare=
+nt);
+> > >         struct device_node *np =3D pdata->dev->of_node;
+> > > -       struct drm_panel *panel;
+> > >         int ret;
+> > > =20
+> > > -       ret =3D drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
+> > > -       if (ret)
+> > > -               return dev_err_probe(&adev->dev, ret,
+> > > -                                    "could not find any panel node\n=
+");
+> > > -
+> > > -       pdata->next_bridge =3D devm_drm_panel_bridge_add(pdata->dev, =
+panel);
+> > > +       pdata->next_bridge =3D devm_drm_of_get_bridge(pdata->dev, np,=
+ 1, 0);
 > >=20
-> > It is zero because the period (plus 1 microsecond) is rounded down to
-> > the next "jiffies", but the period is less than one jiffy.
+> > Yikes, I was about to rely on this panel variable to determine if the
+> > device is a panel or a display port connector. (Well, I am relying on
+> > it, and patches are hoping to be reposted this week).
 > >=20
-> > On my Cubieboard 2, the period is 5ms, and 1 jiffy (at the default
-> > HZ=3D100) is 10ms, so nsecs_to_jiffies(10ms+1us)=3D0.
+> > Is there expected to be another way to identify if the next connection
+> > is a panel or a bridge?
 > >=20
-> > The roundtrip from nanoseconds to jiffies and back to microseconds is
-> > an unnecessary loss of precision; always rounding down (via
-> > nsecs_to_jiffies()) then causes the breakage.
-> >=20
-> > This patch eliminates this roundtrip, and directly converts from
-> > nanoseconds to microseconds (for usleep_range()), using
-> > DIV_ROUND_UP_ULL() to force rounding up.  This way, the sleep time is
-> > never zero, and after the sleep, we are guaranteed to be in a
-> > different period, and the device is ready for another control command
-> > for sure.
-> >=20
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
+> > Regards
 >=20
-> Sounds reasonable
+> Hi Kieran,
 >=20
-> Acked-by; Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> I'm getting started in the DRM subsystem. I couldn't tell if there is a
+> good way to access the panel pointer... I didn't manage to find it, but
+> hopefully someone with more experience can point us to a solution.
+>=20
+> Since you mentioned display port, I'm not sure if in your case checking
+> "pdata->next_bridge->type" could be good enough.
+>=20
+> Anyway, if this patch causes you problems, please go ahead and ignore it.
+> I'm sure the series you are working on are more important than removing
+> a deprecated function :)
 
-/me had problems with is keyboard, the Shift-key didn't work and so I
-typed a ; instead a :. To make patchwork pick up my tag, I'll repeat it
-here:
+If it's deprecated, I don't want to block it's removal. Hopefully I can
+resume my work on this tomorrow so I can check to see what I can parse.
+Thanks for the lead on the bridge type, I'm sure I've seen that around
+too so hopefully that's enough. If it is, I'll rebase my work on top of
+your patch and retest.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+--
+Kieran
 
-Thanks
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jer5rcewuptdavq4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIhOZUACgkQwfwUeK3K
-7AlIfgf9HeL94rE/TP4y8ECAlIoCb0eRRWZ4Zj1TM0SxRd1KtmcvQHx/jfivLc8H
-IVuljJbzUmrEKRTTXzSZ2Ptj4Lgs3jBYARTklK/lR+NTn9dI1AQyv2TK7Sf3S4fE
-ZESjVxH610fLuLTG8aVVCT3mN8PMb6V5RJfIZ1ee5/lyWWkzXWkvGvW89I8+vZYe
-ic93WQx9tKt93L8w8SAat/J6OhLhHVXHUSc0Ia/LBGpU6KDHCsaSj58W5G9bbF76
-1/YKmMj636lZfN8ts7kNmHiwCsgwFbFqd/nPuRehyDITg1vBADDlPboyTk0KHf8h
-7KT0qN1D2OIqm/ZeWWEpm1sszA5d7w==
-=DJyp
------END PGP SIGNATURE-----
-
---jer5rcewuptdavq4--
+>=20
+> Best wishes,
+> Jose

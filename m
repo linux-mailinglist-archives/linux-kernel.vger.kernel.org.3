@@ -2,168 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C994CC89E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1B84CC8A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbiCCWLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S236729AbiCCWQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbiCCWLp (ORCPT
+        with ESMTP id S230484AbiCCWQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:11:45 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662CDFD19
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:10:59 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o1so7370490edc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O15QTD4cJWZUCrV53Q7o/AL5EB1oKwJTXEHaA5LT8Z8=;
-        b=LArKsEtR2mGirSRnS4QPB7n7g9uLcdhGS2kHqFIb8XMf4LzumrX1fTUWS3uLd0WvY7
-         WLmzhRTfJFRSwidr8ido80GjMNVcP71/BhUV6EopxiDenC4YhqBj6Dwh6h95iQIK1orX
-         IVEDLOvBMjjsnhO237DselDbca8Q8omBwAy+0=
+        Thu, 3 Mar 2022 17:16:30 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53D879395;
+        Thu,  3 Mar 2022 14:15:44 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id h16-20020a4a6f10000000b00320507b9ccfso7400696ooc.7;
+        Thu, 03 Mar 2022 14:15:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O15QTD4cJWZUCrV53Q7o/AL5EB1oKwJTXEHaA5LT8Z8=;
-        b=mVm5wjYER2HRjwO6+85/9E78zYIjzq+gmVkJYVBSsGr7EC6zvWqnf/jSvdCaNBbHpY
-         +WcLFGsa9jotpZ12cd17BuheECaeNJKnf1nXKNOYnYZvRhx5xkaYFvMGQJDmHPoFzr9L
-         OKpNOo2EBRVxzHQ8YEdlC0yO16bVe4ZsOQGjsTqQx0IBH802J7eMpxV4O54U+PBlZqB+
-         QQE0S+lTIrEWAMt2nSxiH7KEjmlv34BekQR2HFZQycJ3YwNOF65ncrSlaAz5sQkrMKkP
-         ZRvlZMPxVvx00lGHVtuMhnQ+nZRE4CxzaUMgPx+zHuNBCnbjsPRtXGraPjXhwgKmAs3x
-         nGDA==
-X-Gm-Message-State: AOAM531gBbgOzOqs18BFSsETbjNZVccTJE3PSIGku/U8JCz4Q2K49TSA
-        6sUnhCidL6faVYcVgjFf1UdJM6fuukGz1w==
-X-Google-Smtp-Source: ABdhPJzzLarSu3lIh+MTqKSSoNGHkbpXWqm5VSuNJ7VJs8lOBs1JunspNdGSQErsTf7E/i4ArcSmAw==
-X-Received: by 2002:aa7:d505:0:b0:415:9f06:d4f5 with SMTP id y5-20020aa7d505000000b004159f06d4f5mr13228467edq.305.1646345457972;
-        Thu, 03 Mar 2022 14:10:57 -0800 (PST)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id bm23-20020a170906c05700b006d597fd51c6sm1130257ejb.145.2022.03.03.14.10.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 14:10:57 -0800 (PST)
-Received: by mail-wm1-f41.google.com with SMTP id o18-20020a05600c4fd200b003826701f847so5552862wmq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:10:57 -0800 (PST)
-X-Received: by 2002:a7b:c0c1:0:b0:385:be1b:e6a with SMTP id
- s1-20020a7bc0c1000000b00385be1b0e6amr5367480wmh.73.1646345456912; Thu, 03 Mar
- 2022 14:10:56 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DSkWNUygoFllhMK/e+tGM/T1Vv9qWNlJs5zfF4YOiUE=;
+        b=KB3bSyw1Iy4mDLOR/7YUj1ZHLM6sWkmSjXbroe0vaHmd5ndQayq/o45Et9COWwodfc
+         KqVYcaV4xf8mcw6EEZMPQ79jSAeubtUGRYhm+fsWoZWdRvu7NrtTCorabCHKiQhGnKmL
+         gGPP40FQR3npjDX/vbts4h0chbubo9LmitZBd1UeC0QQz9YV7jk9SMFncBXvPria9/oq
+         UO3N2rx+gIx6FAfqyB66wKedt0/OgxJTxJRqY2pcnqTq276JnS8nSC7bXGBXEYEWmO9D
+         IORiHvCy9L29bdMTzy3RQPKxGT0KEExUwa5FVTOhrEhMNmsYM9yqZNex8hHegZEDi3Zy
+         OEoA==
+X-Gm-Message-State: AOAM531fn8KLCcyoeXxAC9AGQtBKVyMqd8ke3qfkyHyWRSQq24rSFysn
+        iLReAJebEt+jsFoQYsVcaVr/baahNw==
+X-Google-Smtp-Source: ABdhPJwvPdrs/nfwmVnQv0K7L3fAYY08vszpv57bRcMP5sS5M1Hctf3G6hySPUlSyYEHTpQwu0I6tw==
+X-Received: by 2002:a05:6870:a102:b0:d9:bcaf:7181 with SMTP id m2-20020a056870a10200b000d9bcaf7181mr2808605oae.8.1646345743921;
+        Thu, 03 Mar 2022 14:15:43 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id v7-20020a4aa507000000b0031c01a4ef37sm1535047ook.32.2022.03.03.14.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 14:15:43 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] dt-bindings: kbuild: Print a warning if yamllint is not found
+Date:   Thu,  3 Mar 2022 16:14:17 -0600
+Message-Id: <20220303221417.2486268-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org> <20220303214300.59468-2-bjorn.andersson@linaro.org>
-In-Reply-To: <20220303214300.59468-2-bjorn.andersson@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 3 Mar 2022 14:10:44 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WkgcJA6-niUh0L5_jLNSS=Hv0xrR5QZghPmNriekH7XA@mail.gmail.com>
-Message-ID: <CAD=FV=WkgcJA6-niUh0L5_jLNSS=Hv0xrR5QZghPmNriekH7XA@mail.gmail.com>
-Subject: Re: [PATCH v14 2/2] leds: Add driver for Qualcomm LPG
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Running yamllint is effectively required for binding schemas, so print a
+warning if not found rather than silently skipping running it.
 
-On Thu, Mar 3, 2022 at 1:41 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> with their output being routed to various other components, such as
-> current sinks or GPIOs.
->
-> Each LPG instance can operate on fixed parameters or based on a shared
-> lookup-table, altering the duty cycle over time. This provides the means
-> for hardware assisted transitions of LED brightness.
->
-> A typical use case for the fixed parameter mode is to drive a PWM
-> backlight control signal, the driver therefor allows each LPG instance
-> to be exposed to the kernel either through the LED framework or the PWM
-> framework.
->
-> A typical use case for the LED configuration is to drive RGB LEDs in
-> smartphones etc, for which the driver supports multiple channels to be
-> ganged up to a MULTICOLOR LED. In this configuration the pattern
-> generators will be synchronized, to allow for multi-color patterns.
->
-> The idea of modelling this as a LED driver ontop of a PWM driver was
-> considered, but setting the properties related to patterns does not fit
-> in the PWM API. Similarly the idea of just duplicating the lower bits in
-> a PWM and LED driver separately was considered, but this would not allow
-> the PWM channels and LEDs to be configured on a per-board basis. The
-> driver implements the more complex LED interface, and provides a PWM
-> interface on the side of that, in the same driver.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->
-> Changes since v13:
-> - Fixed mixed space/tab indentation in documentation
-> - Added 0 as to lpg_clk_rates[] to match the hardware state, to avoid + 1 in
->   lpg_apply_freq() and - 1 in lpg_pwm_get_state()
-> - Don't divide with 0 if current clock is 0 in lpg_pwm_get_state(), just return
->   period = duty = 0 in this case
-> - Renamed "clk" in struct lpg_channel to clk_sel
-> - Renamed "pre_div" in struct lpg_channel to pre_div_sel
->
-> Changes since v12:
-> - Initialize ret in lpg_pwm_apply()
->
-> Changes since v11:
-> - Extended commit message to cover decision to put pwm_chip in the LED driver
-> - Added Documentation, in particular for the hw_pattern format
-> - Added a lock to synchronize requests from LED and PWM frameworks
-> - Turned out that the 9bit selector differs per channel in some PMICs, so
->   replaced bitmask in lpg_data with lookup based on QPNP SUBTYPE
-> - Fixed kerneldoc for the struct device pointer in struct lpg
-> - Rewrote conditional in lut_free() to make it easier to read
-> - Corrected and deduplicated max_period expression in lpg_calc_freq()
-> - Extended nom/dom to numerator/denominator in lpg_calc_freq()
-> - Replaced 1 << 9 with LPG_RESOLUTION in one more place in lpg_calc_freq()
-> - Use FIELD_PREP() in lpg_apply_freq() as masks was introduced for reading the
->   same in get_state()
-> - Cleaned up the pattern format, to allow specifying both low and high pause
->   with and without pingpong mode.
-> - Only update frequency and pwm_value if PWM channel is enabled in lpg_pwm_apply
-> - Make lpg_pwm_get_state() read the hardware state, in order to pick up e.g.
->   bootloader backlight configuration
-> - Use devm_bitmap_zalloc() to allocate the lut_bitmap
-> - Use dev_err_probe() in lpg_probe()
-> - Extended Kconfig help text to mention module name and satisfy checkpatch
->
->  Documentation/leds/leds-qcom-lpg.rst |   76 ++
->  drivers/leds/Kconfig                 |    3 +
->  drivers/leds/Makefile                |    3 +
->  drivers/leds/rgb/Kconfig             |   18 +
->  drivers/leds/rgb/Makefile            |    3 +
->  drivers/leds/rgb/leds-qcom-lpg.c     | 1405 ++++++++++++++++++++++++++
->  6 files changed, 1508 insertions(+)
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Gets rid of the KASAN error and PWM still works for me, so happy to add back:
+diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
+index 5138d10e0601..61ec18ecc931 100644
+--- a/Documentation/devicetree/bindings/Makefile
++++ b/Documentation/devicetree/bindings/Makefile
+@@ -3,7 +3,8 @@ DT_DOC_CHECKER ?= dt-doc-validate
+ DT_EXTRACT_EX ?= dt-extract-example
+ DT_MK_SCHEMA ?= dt-mk-schema
+ 
+-DT_SCHEMA_LINT = $(shell which yamllint)
++DT_SCHEMA_LINT := $(shell which yamllint || \
++  echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
+ 
+ DT_SCHEMA_MIN_VERSION = 2021.2.1
+ 
+-- 
+2.32.0
 
-Tested-by: Douglas Anderson <dianders@chromium.org>
-
-I haven't done a full review of the driver but I did a once-over of
-the changes between v12 and v13 and they look good to me.
-
--Doug

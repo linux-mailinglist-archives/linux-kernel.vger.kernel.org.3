@@ -2,122 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1944CC00D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695644CC015
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiCCOfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
+        id S234092AbiCCOhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiCCOf3 (ORCPT
+        with ESMTP id S230193AbiCCOhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:35:29 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DEA15C9D1;
-        Thu,  3 Mar 2022 06:34:43 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id p9so8130160wra.12;
-        Thu, 03 Mar 2022 06:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GxN8h7L2LXnHB8VpVtq2yQnoP4VfiQvLPMhymszGuv4=;
-        b=Lel/0NQb4buqvKc+9T/sn4AIpQy82QTeubDPa/IAXmzmeMn6SZBELOCSaycLRNXTHD
-         9EmNscSIAej+JsMIpuFm8q0McIYxSxIxq1dWfHZFhHMBXXHXoGA0ApciSWdVR//P+587
-         QJEuJsFwTYSjN2ZedMJepqp/KFz5PnAo827XBdTWJi+QTPBQz2ttPXkNzG3hiB6o0rns
-         nLnkK/8DdMNQVjT91fcEK3RHdiAH18eNc/GqH8sGl348Zs6lqBV2mH8d+lLOAc4khhL8
-         Xt942lE3fo4yEq1lah7IKQAiSxhKTleaE/Wt7UtuLxIF1NZY15ay5Drddl3rQ7WtR9cw
-         sZng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GxN8h7L2LXnHB8VpVtq2yQnoP4VfiQvLPMhymszGuv4=;
-        b=NJ3/Clmf9VFZ+YjJKExX+ur59sTM1EfpOWPI5PLZBBn1E6TvkMqazbKVKjTrdfCzPo
-         0SEc0Sox4kDgpjzNucSC5RXkAlRDo+Q7AqpOJoHLNbu0I9q/WUSmxyBq+EVj62/bQ1kD
-         Z5Hdvn17sPFztCm0qtE/+APpbAKrtZtdbJgLIkbSwOIF3UILNGkTbsmUvcC9W8+Um4v8
-         pl/22jGkmKWTVDcCNO4AINcNl8EFZbEWQf4yyq3ZRODd61tfxE5iV6ZO2q8Gj58w6BjN
-         3gN4VsIclmyaX1pFs8gHwSOTatHzHgBqvtN3Z+5cc1udSn/wBJhD5+kEDlLw3lC7J7Wy
-         lcBQ==
-X-Gm-Message-State: AOAM531Q/it50wU+JFLJzr44v2yVvIeiDaUnvg+s+m90qs4mZgA4ZPNb
-        DzNZ4Rn8hINShd5EAqzHva1Zpj/SnI0sVA==
-X-Google-Smtp-Source: ABdhPJwycauQBU16hXmq8/RdYtzLbTamgVEta0wBzuUfMQAZDc/8XT6dWw5g2Xq6AzEupFOT02hmjg==
-X-Received: by 2002:adf:f94a:0:b0:1ef:9485:e43d with SMTP id q10-20020adff94a000000b001ef9485e43dmr17061994wrr.552.1646318081857;
-        Thu, 03 Mar 2022 06:34:41 -0800 (PST)
-Received: from localhost.localdomain ([105.66.7.237])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b00380ee4a78fdsm3018255wmq.4.2022.03.03.06.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 06:34:41 -0800 (PST)
-From:   Nour-eddine Taleb <kernel.noureddine@gmail.com>
-To:     christophe.leroy@csgroup.eu, paulus@ozlabs.org, mpe@ellerman.id.au,
-        benh@kernel.crashing.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kvm-ppc@vger.kernel.org,
-        Nour-eddine Taleb <kernel.noureddine@gmail.com>
-Subject: [PATCH] arch:powerpc:kvm: remove unnecessary type castings
-Date:   Thu,  3 Mar 2022 15:34:16 +0100
-Message-Id: <20220303143416.201851-1-kernel.noureddine@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 3 Mar 2022 09:37:17 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4073B188841;
+        Thu,  3 Mar 2022 06:36:28 -0800 (PST)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 223EaQAC027849
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 3 Mar 2022 09:36:26 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id F15C115C0038; Thu,  3 Mar 2022 09:36:25 -0500 (EST)
+Date:   Thu, 3 Mar 2022 09:36:25 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <YiDSabde88HJ/aTt@mit.edu>
+References: <YiAow5gi21zwUT54@mit.edu>
+ <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary castings, from "void *" to "struct kvmppc_xics *"
+On Thu, Mar 03, 2022 at 02:23:33PM +0900, Byungchul Park wrote:
+> I totally agree with you. *They aren't really locks but it's just waits
+> and wakeups.* That's exactly why I decided to develop Dept. Dept is not
+> interested in locks unlike Lockdep, but fouces on waits and wakeup
+> sources itself. I think you get Dept wrong a lot. Please ask me more if
+> you have things you doubt about Dept.
 
-Signed-off-by: Nour-eddine Taleb <kernel.noureddine@gmail.com>
----
- arch/powerpc/kvm/book3s_xics.c        | 2 +-
- arch/powerpc/kvm/book3s_xive.c        | 2 +-
- arch/powerpc/kvm/book3s_xive_native.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+So the question is this --- do you now understand why, even though
+there is a circular dependency, nothing gets stalled in the
+interactions between the two wait channels?
 
-diff --git a/arch/powerpc/kvm/book3s_xics.c b/arch/powerpc/kvm/book3s_xics.c
-index ebd5d920de8c..ec208d0c8d13 100644
---- a/arch/powerpc/kvm/book3s_xics.c
-+++ b/arch/powerpc/kvm/book3s_xics.c
-@@ -1440,7 +1440,7 @@ static int kvmppc_xics_create(struct kvm_device *dev, u32 type)
- 
- static void kvmppc_xics_init(struct kvm_device *dev)
- {
--	struct kvmppc_xics *xics = (struct kvmppc_xics *)dev->private;
-+	struct kvmppc_xics *xics = dev->private;
- 
- 	xics_debugfs_init(xics);
- }
-diff --git a/arch/powerpc/kvm/book3s_xive.c b/arch/powerpc/kvm/book3s_xive.c
-index 225008882958..0c1f4819884c 100644
---- a/arch/powerpc/kvm/book3s_xive.c
-+++ b/arch/powerpc/kvm/book3s_xive.c
-@@ -2368,7 +2368,7 @@ static void xive_debugfs_init(struct kvmppc_xive *xive)
- 
- static void kvmppc_xive_init(struct kvm_device *dev)
- {
--	struct kvmppc_xive *xive = (struct kvmppc_xive *)dev->private;
-+	struct kvmppc_xive *xive = dev->private;
- 
- 	/* Register some debug interfaces */
- 	xive_debugfs_init(xive);
-diff --git a/arch/powerpc/kvm/book3s_xive_native.c b/arch/powerpc/kvm/book3s_xive_native.c
-index 99db9ac49901..1405b3f4e94e 100644
---- a/arch/powerpc/kvm/book3s_xive_native.c
-+++ b/arch/powerpc/kvm/book3s_xive_native.c
-@@ -1276,7 +1276,7 @@ static void xive_native_debugfs_init(struct kvmppc_xive *xive)
- 
- static void kvmppc_xive_native_init(struct kvm_device *dev)
- {
--	struct kvmppc_xive *xive = (struct kvmppc_xive *)dev->private;
-+	struct kvmppc_xive *xive = dev->private;
- 
- 	/* Register some debug interfaces */
- 	xive_native_debugfs_init(xive);
--- 
-2.33.1
-
+						- Ted

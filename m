@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04BE4CBFEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113914CBFED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 15:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiCCOWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 09:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S233183AbiCCOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 09:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiCCOWj (ORCPT
+        with ESMTP id S229919AbiCCOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 09:22:39 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462C118E3E6;
-        Thu,  3 Mar 2022 06:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=qjeRQXDRHJDEOFaM/bFhRf+N+QLbWVSGAMDaOy7ZtIw=; b=Rvpp4
-        8c8iAHDqTdLm8OD88p2G1kMMZO1W9Qi8uaYRy6VtgwIne1WnNP5cFq+1yHtWWbJKgAzkyrTZ2OD/t
-        1GAjcpLSaQ2q1Z/zbJhwn+ZgShs+EEoJtL4NtYR7Lr4tJBrTiRgJjUiYtedY05KN3wsNw56tzeXd5
-        xYsbHbNtEHBnddcHxE2yKCNmG24T3XqK0lcyH9rwZlwmW76WtWKTAsk6ZiB2mxqelhLwKG/iIkfPH
-        Q4t4f9pYMq0gttOHOmdDFCcchJpb1xwWOAz2XvzIyq0SEQiHiymNXyNpwu9qTLXc/GpjeaUg474I2
-        zs2suSeUxZ4I2VTyRjKIDlr7YdiWQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nPmKo-0005yL-KP; Thu, 03 Mar 2022 14:21:38 +0000
-Date:   Thu, 3 Mar 2022 14:21:37 +0000
-From:   John Keeping <john@metanate.com>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 06/18] crypto: rockchip: add fallback for cipher
-Message-ID: <YiDO8Tt9Lhx530Oz@donbot>
-References: <20220302211113.4003816-1-clabbe@baylibre.com>
- <20220302211113.4003816-7-clabbe@baylibre.com>
+        Thu, 3 Mar 2022 09:23:35 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC89E42495;
+        Thu,  3 Mar 2022 06:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FE1RUnKIPLpvyuGyxirLfG2pGSchVmNj3iusKNQ3aGU=; b=Fd7fOJEaWMx/H86NWQQ5FYFOeN
+        bODq4psjtEEX5C+99j+mV5l69Jka9QTloP+9HnKi2/CJQraDAe/e4szbZu8SVNlzHdni4j9tlm/rS
+        1pk1Jj3NQgeZ722iBodH/RXlMCFkPXeHhrBhnytALGRka98dHw8ecnOVlaNZ4J91aoUc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nPmLr-00968N-Jy; Thu, 03 Mar 2022 15:22:43 +0100
+Date:   Thu, 3 Mar 2022 15:22:43 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, gustavoars@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] net: ethernet: sun: Remove redundant code
+Message-ID: <YiDPM7JhGLX73wHk@lunn.ch>
+References: <20220303091440.71416-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302211113.4003816-7-clabbe@baylibre.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220303091440.71416-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 09:11:01PM +0000, Corentin Labbe wrote:
-> The hardware does not handle 0 size length request, let's add a
-> fallback.
-> Furthermore fallback will be used for all unaligned case the hardware
-> cannot handle.
+On Thu, Mar 03, 2022 at 05:14:40PM +0800, Jiapeng Chong wrote:
+> Because CAS_FLAG_REG_PLUS is assigned a value of 1, it never enters
+> these for loops.
+
+Please can you expand this comment, it is not clear to my what you
+mean here. When i look at:
+
+/* check pci invariants */
+static void cas_check_pci_invariants(struct cas *cp)
+{
+        struct pci_dev *pdev = cp->pdev;
+
+        cp->cas_flags = 0;
+        if ((pdev->vendor == PCI_VENDOR_ID_SUN) &&
+            (pdev->device == PCI_DEVICE_ID_SUN_CASSINI)) {
+                if (pdev->revision >= CAS_ID_REVPLUS)
+                        cp->cas_flags |= CAS_FLAG_REG_PLUS;
+
+it is not obvious why it could not enter these loops.
+
+   Andrew
+
 > 
-> Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Clean up the following smatch warning:
+> 
+> drivers/net/ethernet/sun/cassini.c:3513 cas_start_dma() warn: we never
+> enter this loop.
+> 
+> drivers/net/ethernet/sun/cassini.c:1239 cas_init_rx_dma() warn: we never
+> enter this loop.
+> 
+> drivers/net/ethernet/sun/cassini.c:1247 cas_init_rx_dma() warn: we never
+> enter this loop.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  drivers/crypto/rockchip/rk3288_crypto.h       |  2 +
->  .../crypto/rockchip/rk3288_crypto_skcipher.c  | 97 ++++++++++++++++---
->  2 files changed, 86 insertions(+), 13 deletions(-)
+>  drivers/net/ethernet/sun/cassini.c | 16 ----------------
+>  1 file changed, 16 deletions(-)
 > 
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-> index c919d9a43a08..8b1e15d8ddc6 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto.h
-> +++ b/drivers/crypto/rockchip/rk3288_crypto.h
-> @@ -246,10 +246,12 @@ struct rk_cipher_ctx {
->  	struct rk_crypto_info		*dev;
->  	unsigned int			keylen;
->  	u8				iv[AES_BLOCK_SIZE];
-> +	struct crypto_skcipher *fallback_tfm;
->  };
+> diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
+> index 947a76a788c7..153edc5eadad 100644
+> --- a/drivers/net/ethernet/sun/cassini.c
+> +++ b/drivers/net/ethernet/sun/cassini.c
+> @@ -1235,19 +1235,6 @@ static void cas_init_rx_dma(struct cas *cp)
+>  	 */
+>  	readl(cp->regs + REG_INTR_STATUS_ALIAS);
+>  	writel(INTR_RX_DONE | INTR_RX_BUF_UNAVAIL, cp->regs + REG_ALIAS_CLEAR);
+> -	if (cp->cas_flags & CAS_FLAG_REG_PLUS) {
+> -		for (i = 1; i < N_RX_COMP_RINGS; i++)
+> -			readl(cp->regs + REG_PLUS_INTRN_STATUS_ALIAS(i));
+> -
+> -		/* 2 is different from 3 and 4 */
+> -		if (N_RX_COMP_RINGS > 1)
+> -			writel(INTR_RX_DONE_ALT | INTR_RX_BUF_UNAVAIL_1,
+> -			       cp->regs + REG_PLUS_ALIASN_CLEAR(1));
+> -
+> -		for (i = 2; i < N_RX_COMP_RINGS; i++)
+> -			writel(INTR_RX_DONE_ALT,
+> -			       cp->regs + REG_PLUS_ALIASN_CLEAR(i));
+> -	}
 >  
->  struct rk_cipher_rctx {
->  	u32				mode;
-> +	struct skcipher_request fallback_req;   // keep at the end
->  };
+>  	/* set up pause thresholds */
+>  	val  = CAS_BASE(RX_PAUSE_THRESH_OFF,
+> @@ -3509,9 +3496,6 @@ static inline void cas_start_dma(struct cas *cp)
+>  		if (N_RX_DESC_RINGS > 1)
+>  			writel(RX_DESC_RINGN_SIZE(1) - 4,
+>  			       cp->regs + REG_PLUS_RX_KICK1);
+> -
+> -		for (i = 1; i < N_RX_COMP_RINGS; i++)
+> -			writel(0, cp->regs + REG_PLUS_RX_COMPN_TAIL(i));
+>  	}
+>  }
 >  
->  enum alg_type {
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> index bbd0bf52bf07..bf9d398cc54c 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> @@ -13,6 +13,63 @@
->  
->  #define RK_CRYPTO_DEC			BIT(0)
->  
-> +static int rk_cipher_need_fallback(struct skcipher_request *req)
-> +{
-> +	struct scatterlist *sgs, *sgd;
-> +
-> +	if (!req->cryptlen)
-> +		return true;
-> +
-> +	sgs = req->src;
-> +	while (sgs) {
-> +		if (!IS_ALIGNED(sgs->offset, sizeof(u32))) {
-> +			return true;
-> +		}
-> +		if (sgs->length % 16) {
-
-Can this be relaxed to check for alignment to 4 rather than 16?  That's
-the requirement for programming the registers.
-
-But I think this check is wrong in general as it doesn't account for
-cryptlen; with fscrypt I'm seeing sgs->length == 255 but cryptlen == 16
-so the hardware can be used but at the moment the fallback path is
-triggered.
+> -- 
+> 2.20.1.7.g153144c
+> 

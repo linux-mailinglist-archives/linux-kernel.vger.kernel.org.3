@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C3F4CB522
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382C74CB52B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 03:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiCCCwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 21:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S231881AbiCCC6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 21:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiCCCwT (ORCPT
+        with ESMTP id S231834AbiCCC6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 21:52:19 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D022162016;
-        Wed,  2 Mar 2022 18:51:34 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        by gnuweeb.org (Postfix) with ESMTPSA id 7AFB77E6B2;
-        Thu,  3 Mar 2022 02:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646275893;
-        bh=5R8CtEIQAKm9DWp0yzIHx+yDFFKxgK9WMLzK1eontrU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fTBKyPxtbjqj5dfmMrFfkpCL3i+b6lnI76IffnpZQN/DXazvWtHDrFp1qVKdO+OO9
-         PalyoMXD5foNdo/G/7M+woTNWma+yVH3pngxLco+u5pnSjyP7WlYshmdKV5+/gHVzK
-         /TKbm2eEQR8/r8UxSr9dwbMxBKjq8MZEbQGxUJapgk7Z8F+IeeZizEZ2xl04prQNZp
-         BUp0G18+T7+jRfsiTVJ0FtfAWMtFkUmH9x9qJck3P0tvlr9LCABZsGM4cnAyxjYOlj
-         DQb4HdJXLmdVWqVS98Gs59jgJoWrCI8HuX8/WTWj8iuWg1aBIe1087uXVQMxZwundU
-         oFYZvotz9YNWA==
-Received: by mail-lf1-f48.google.com with SMTP id g39so6039246lfv.10;
-        Wed, 02 Mar 2022 18:51:33 -0800 (PST)
-X-Gm-Message-State: AOAM530rmDL5eGZtyuhpkAiAg6j23hZGB83NeuTmXLerqhWBGZWoW8KN
-        R225Xz193qS1gNVG7U9O/h3ayFKK+3KsgjFGScA=
-X-Google-Smtp-Source: ABdhPJyv90IKXz8uZ/SLsv8Ivd2dShHqBxwheVBt3+dCnU5rpnzjNuNHTcMq6jBf+tbGvIfGopymNZ3oqMlZj8Km87A=
-X-Received: by 2002:ac2:4e85:0:b0:441:94b6:b2c with SMTP id
- o5-20020ac24e85000000b0044194b60b2cmr20570001lfr.610.1646275891428; Wed, 02
- Mar 2022 18:51:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-3-ammarfaizi2@gnuweeb.org> <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
- <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org> <109a10da-d1d1-c47a-2f04-31796457f6ff@gnuweeb.org>
- <20220303015826.4176416-1-alviro.iskandar@gnuweeb.org> <49313736-61f8-d001-0fe4-b6166c859585@gnuweeb.org>
- <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
-In-Reply-To: <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
-From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date:   Thu, 3 Mar 2022 09:51:20 +0700
-X-Gmail-Original-Message-ID: <CAOG64qPHf3Y+m-9DcewPhqKUzHD7rOtkG_kRXfuMsH66g0P2Vg@mail.gmail.com>
-Message-ID: <CAOG64qPHf3Y+m-9DcewPhqKUzHD7rOtkG_kRXfuMsH66g0P2Vg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
- `threshold_create_bank()` fails
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, x86@kernel.org,
-        stable@vger.kernel.org, Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        Wed, 2 Mar 2022 21:58:07 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2124993A;
+        Wed,  2 Mar 2022 18:57:23 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id ay10so5636535wrb.6;
+        Wed, 02 Mar 2022 18:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=VWT1nnZHFDs5KVBOsFtYYBtJaBHbWpLPsvtCyOdWdNA=;
+        b=WRMDzRVxlt+lbSe+XQv4GQ55KeEuKYtud9GSY9bBRprMwKCIGSWym34qliDbbk4IQd
+         p0RV1PL+byNgeR70N1HoqI3dkGa3EhjEKO70n9HHQRYhbNDieIYRAifCt4X7DbJQfCle
+         ma8XSa2zwNtVJB7YHyJ/PXvy4ty8AZzEwR5a+E2cqpPmrJs4a8A3ydGALHrBZlLN4mhd
+         nwB5Tz/0YPUkFUWO4YWIjlXEob3yq3MgokWdj1CfB420hB1+aa23E1lwMrWkivCsjGLp
+         z+s3LofRlqBznrnjuDADYlUZHSLsSBhFzIweBksvAZkG6eyAPhKESFQgPmgPHfzXQ6D3
+         An9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=VWT1nnZHFDs5KVBOsFtYYBtJaBHbWpLPsvtCyOdWdNA=;
+        b=58T0HdP5Wxe0UdGTXr5YUDjg0mnznkSHmh1oZ9byhiPQ49jZH2JtZqkm39WDuP0VJK
+         HBChYYWHmRQPWkemWTJwlaY+AI3KWuRy9hICHtNQvYqbxBtNA6SE+Pixm3kdDgq3yamT
+         I6qqgZMLFTGG5EfEO/0XqydYnxqYsPrcftCqOkVj7TNSykWaFNlcze237dQ18a2SvTuL
+         5lveBK4Mw9WU6cAydm4uG1fltUUYAEuruZeKfh/+2k4CgsFT67p1XTxPkvaOmf/DGFeT
+         zJcySVXZ3qM4p1ZyjoNj9ZrAIQ39nPrdDteeAOySQomh+hsqhpy4q2iSIsoW7GTVwWRo
+         FSqw==
+X-Gm-Message-State: AOAM530ont+eJcW1ZHqsYul/az7Zip/GuIxKtyVDQslifQxPCxy+KyRQ
+        1n3TJa3KlyhvopGKGbdsom4=
+X-Google-Smtp-Source: ABdhPJwRki+RozVmL4+AnfkNifNb8GY8a4uRigih5L9Ru3UVsKhqOjv5ZFlPbnKgRKOYj4nox/IpOg==
+X-Received: by 2002:a05:6000:16c9:b0:1ef:f2e8:1210 with SMTP id h9-20020a05600016c900b001eff2e81210mr10481252wrf.494.1646276241741;
+        Wed, 02 Mar 2022 18:57:21 -0800 (PST)
+Received: from localhost.localdomain ([64.64.123.48])
+        by smtp.gmail.com with ESMTPSA id k184-20020a1ca1c1000000b0038617ae5297sm2323697wme.33.2022.03.02.18.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 18:57:21 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     isdn@linux-pingi.de, davem@davemloft.net, zou_wei@huawei.com,
+        zheyuma97@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] isdn: hfcpci: check the return value of dma_set_mask() in setup_hw()
+Date:   Wed,  2 Mar 2022 18:57:10 -0800
+Message-Id: <20220303025710.1201-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,21 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:32 AM Ammar Faizi wrote:
-> On 3/3/22 9:07 AM, Ammar Faizi wrote:
-> > On 3/3/22 8:58 AM, Alviro Iskandar Setiawan wrote:
-> > > hi sir, i think this can be improved again, we can avoid calling
-> > > this_cpu_read(mce_num_banks) twice if we pass the numbanks as an
-> > > argument, plz review the changes below
-> >
-> > OK, nice improvement. I will fold this in...
-> >
->
-> It looks like this now. Yazen, Alviro, please review the
-> following patch. If you think it looks good, I will submit
-> it for the v5.
->
+The function dma_set_mask() in setup_hw() can fail, so its return value
+should be checked.
 
-i think it looks good, thanks sir
+Fixes: e85da794f658 ("mISDN: switch from 'pci_' to 'dma_' API")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/isdn/hardware/mISDN/hfcpci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
--- Viro
+diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+index bd087cca1c1d..af17459c1a5c 100644
+--- a/drivers/isdn/hardware/mISDN/hfcpci.c
++++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+@@ -2005,7 +2005,11 @@ setup_hw(struct hfc_pci *hc)
+ 	}
+ 	/* Allocate memory for FIFOS */
+ 	/* the memory needs to be on a 32k boundary within the first 4G */
+-	dma_set_mask(&hc->pdev->dev, 0xFFFF8000);
++	if (dma_set_mask(&hc->pdev->dev, 0xFFFF8000)) {
++		printk(KERN_WARNING
++		       "HFC-PCI: No usable DMA configuration!\n");
++		return -EIO;
++	}
+ 	buffer = dma_alloc_coherent(&hc->pdev->dev, 0x8000, &hc->hw.dmahandle,
+ 				    GFP_KERNEL);
+ 	/* We silently assume the address is okay if nonzero */
+-- 
+2.17.1
+

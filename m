@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D3E4CBA03
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4124CBA07
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiCCJUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S231869AbiCCJV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiCCJUE (ORCPT
+        with ESMTP id S229613AbiCCJVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:20:04 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB13F16AA48
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:19:17 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id ay10so6768243wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 01:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=49xGlm/DxY0ahn3U3JBRs5yGk2SDIewapjDdO3Gg/+Y=;
-        b=AtZQQ1Ms/KXgba3kaO2jKK5cWXRU+SayBn87UkdQm/v6JrrJHsm+HUgcKYTTh9mDO9
-         Je1ZPwVLyX3gCAVefkixlLx89TDEBiUANtsejO9isoIJ8FrMKL+9IjeLQiQI5kl8uF8X
-         8rahIRSfaopWs/AzhDsZE6UH3r/iLC0SqEJ4KuPqt8f8jAoFKZkUV8PcYMfCBWmkYCtj
-         EzYzduLGL3UiIk6Mrj+IaRSR8IZbF/Pj4sH0g1sRJUxg+FOwdhwtmhhY4N5kw+U3QGFp
-         10Phsq8eudKDVeDbnViBTADjyExuDHRv9KOorGWWJWh1YqyfmmLFJK+Absefpq1W8kxp
-         XNVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=49xGlm/DxY0ahn3U3JBRs5yGk2SDIewapjDdO3Gg/+Y=;
-        b=eFhsCVfxFsbZBDNIglxWf4VeVPEuhoKZ6qQ2tdzzeBBxKC/eKWciClmwWpKTNRFo9S
-         EmB11ta8Zx/S4zcQD08ZhGd79z2cJG67TtMmzBBtrzVpa8f4gYl6Ymo/mHpLFzsJCqzV
-         zhod4vZx1AAhU/t5XIxNRSn24pzsXi0S0jAJZXcUJQ5Np7NVsvUwlPGRgcrCAqefCLDU
-         lnZlsCL2eov/nBnTT+OYZzLJnf/sxC6ZdfqEwo0hC8iAT9h6L87Bxgb2ZyLwoxEiIdBI
-         Uza134Gksof/iGtqYcdZ8b4PPUqgXsYRDDVi2pNvTsFwbTDgMdt+bwdyh8B5Kpz3JIL9
-         DLWg==
-X-Gm-Message-State: AOAM530j0XrFe+NNJXgUYKgVDpL3gitntZld/GXFms+n70xeo63Jzdw3
-        wCSNQdz64sOfeXf3I9XSx970mA==
-X-Google-Smtp-Source: ABdhPJxuhqXmLr+4swlzFDpUazpx85y15v3ttKVl4YU+8C6hPlbir/P24pU8bQbhDBUzVN3002Aetw==
-X-Received: by 2002:a05:6000:3c8:b0:1ef:64e8:9235 with SMTP id b8-20020a05600003c800b001ef64e89235mr22508518wrg.498.1646299156414;
-        Thu, 03 Mar 2022 01:19:16 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g17-20020adff411000000b001f03426827csm1426404wro.71.2022.03.03.01.19.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 01:19:15 -0800 (PST)
-Date:   Thu, 3 Mar 2022 09:19:14 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Robert Marko <robert.marko@sartura.hr>, linus.walleij@linaro.org,
-        brgl@bgdev.pl, p.zabel@pengutronix.de, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH v10 5/6] dt-bindings: mfd: Add Delta TN48M CPLD drivers
- bindings
-Message-ID: <YiCIEsMVcK1WEecR@google.com>
-References: <20220131133049.77780-1-robert.marko@sartura.hr>
- <20220131133049.77780-6-robert.marko@sartura.hr>
- <Yh8vJNc4D6rA68au@google.com>
- <Yh/kFzNuvbwA2qeE@robh.at.kernel.org>
+        Thu, 3 Mar 2022 04:21:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E6B16AA4E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:20:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35BDD61C31
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21679C004E1;
+        Thu,  3 Mar 2022 09:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646299236;
+        bh=BujV7lNeAWkNsMofyT66pdBcFGsUyYMTJ5RRJQhoH8w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UvnHTsEIHOU3TOu3c/X0BUVu6evrc6wo5Q1SFWDfvADwgZlV0gRM6SBbsr6cknc/8
+         TC7//pjpGSwYltyiVkVW2lmGo+2DZJ6h1DRAy7tQ8Mh4g8FpZcay1b4tYqFt3OZztj
+         773ndMVdHHJqO3VquWWfz2ZZjj8/pU/nEkbgQdV0i7N8NJlNUGfeQpzCp9wJxoHxzF
+         7WCeT8BisYu5g3wmGvUAD9+1gq3BjgLR7z+217t9sN2Mq/l2c8Dfnh0s7DJ7vsJpNi
+         32LWikPC0jYsW1zRmAz6E2sZ2XeXOg2n/4e1tzHCOlyTn+K7rpZclJ1ZRCtdS8qcF7
+         5rnhtpdGqoJVg==
+Message-ID: <32165383-5ccf-e6a1-92ef-cde14c401eaa@kernel.org>
+Date:   Thu, 3 Mar 2022 11:20:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh/kFzNuvbwA2qeE@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V1] extcon/usb: Remove disable irq operation in system
+ sleep.
+Content-Language: en-US
+To:     Bruce Chen <brucechen251@gmail.com>, bruce.chen@unisoc.com,
+        myungjoo.ham@samsung.com, cw00.choi@samsung.com,
+        linux-kernel@vger.kernel.org,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     orsonzhai@gmail.com, gengcixi@gmail.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com
+References: <1646292963-20570-1-git-send-email-brucechen251@gmail.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <1646292963-20570-1-git-send-email-brucechen251@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Mar 2022, Rob Herring wrote:
++TI folks Aswath & Vignesh.
 
-> On Wed, Mar 02, 2022 at 08:47:32AM +0000, Lee Jones wrote:
-> > On Mon, 31 Jan 2022, Robert Marko wrote:
-> > 
-> > > Add binding documents for the Delta TN48M CPLD drivers.
-> > > 
-> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > 
-> > This is missing a DT review.
-> 
-> How about this one[1]?
-> 
-> Rob
-> 
-> [1] https://lore.kernel.org/all/20210719225906.GA2769608@robh.at.kernel.org/
+Hi Bruce,
 
-Looks like the ball is in your court Robert.
+On 03/03/2022 09:36, Bruce Chen wrote:
+> From: Bruce Chen <bruce.chen@unisoc.com>
+> 
+> If disable vbus/id irq, it will lead to wakeup system fail
+> in unisoc platform. In unisoc platform, Irq enable and irq
+> wakeup are the same interrupt line. So remove disable vbus/id
+> irq operation is a way to solve the issue> 
+> Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
+> ---
+>  drivers/extcon/extcon-usb-gpio.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon-usb-gpio.c b/drivers/extcon/extcon-usb-gpio.c
+> index f2b65d9..40d967a 100644
+> --- a/drivers/extcon/extcon-usb-gpio.c
+> +++ b/drivers/extcon/extcon-usb-gpio.c
+> @@ -226,16 +226,6 @@ static int usb_extcon_suspend(struct device *dev)
+>  		}
+>  	}
+>  
+> -	/*
+> -	 * We don't want to process any IRQs after this point
+> -	 * as GPIOs used behind I2C subsystem might not be
+> -	 * accessible until resume completes. So disable IRQ.
+> -	 */
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I think the reason this was added was that if USB cable is plugged/unplugged
+while system was suspending it was causing some faults on TI DRA7 EVM
+at usb_irq_handler()/usb_extcon_detect_cable() when it tries to read GPIO status
+when I2C based GPIO controller was used but already suspended.
+But looks like disabling the IRQ is not the right approach either so your patch
+is right.
+
+However I'm not sure if the above issue will still exist on DRA7 and other TI EVMS
+using ID/VBUS GPIO over I2C device.
+
+Let's wait for Aswath/Vignesh to confirm. If no issues I'm OK with this patch.
+
+> -	if (info->id_gpiod)
+> -		disable_irq(info->id_irq);
+> -	if (info->vbus_gpiod)
+> -		disable_irq(info->vbus_irq);
+> -
+>  	if (!device_may_wakeup(dev))
+>  		pinctrl_pm_select_sleep_state(dev);
+>  
+> @@ -267,11 +257,6 @@ static int usb_extcon_resume(struct device *dev)
+>  		}
+>  	}
+>  
+> -	if (info->id_gpiod)
+> -		enable_irq(info->id_irq);
+> -	if (info->vbus_gpiod)
+> -		enable_irq(info->vbus_irq);
+> -
+>  	queue_delayed_work(system_power_efficient_wq,
+>  			   &info->wq_detcable, 0);
+>  
+
+cheers,
+-roger

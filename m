@@ -2,119 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B30F4CC9CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6021C4CC9CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbiCCXHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S233087AbiCCXJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiCCXHv (ORCPT
+        with ESMTP id S229625AbiCCXJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:07:51 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E369E12AE8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:07:03 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v4so5921204pjh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:07:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wsytA5en+ItUqruLb4F/YGyRxRL/LbEBBpbjnswyCM8=;
-        b=EOrYv2zrhk9TWezM970VEXgU/SbfP82z4FbUmK+LjtSUU9pY+C+Wk+f/zBqYlSXA/a
-         Ww4tMAL8LjMgy1f4nmU4kUSwmRL019Y4izs5Fmy/y53ymi/qopXdHs+h1vUSXv8omro2
-         ieXiH/PlD215WhzH562QpXM8rNA40+XvObuhuAxeOpwsw73HDBcE1idHi3mvm4pJcOD5
-         2Fw3IY0MLMmMTG7SbfX4bqXvYSQpSAUE58VlDRA3N4wZvixHXZ7ZwNU77D9PUjr7j5CA
-         uhB0ioX7fVTwQix49pvqHEGzC9JZt99Sz6mPcTUxSwWN2xM6KcIq9TiVWC8s+Ko25WyL
-         4zBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wsytA5en+ItUqruLb4F/YGyRxRL/LbEBBpbjnswyCM8=;
-        b=aJBzBvRbAhKAPCE5cHpo1inGFJqm6uPIcbUs0s9LRQkokjkk+514xTHolC7e1KDotX
-         eTWLAhU+0OwNIQOqxcAP1AIIKJY3zZqGlU09eipakr0UFZ9cXVspEJ1Pn9KhlYInatU5
-         vn83jcknfkedV65ugci9l3JqiazDdx879yVMAdYS6In6WqOAW+nx+m+p+XFlnC/xKAhJ
-         FNpQZqnMrVO05GDUu8PlJ3haJtmM+NQqkdlixOUEzPzixatpPuL0xcZ7KDh9M+If5ZXI
-         rnW6wAlF/pJKwXNuN+YLo4A+NYu7nTNW/F/MebwCfPKuQXgy+zrmc1qv+3ACqBXia7Qf
-         2YXA==
-X-Gm-Message-State: AOAM532RX8cqvtf3OYrkfRD1cpm9KxNIpHts6rg83S6mZC+9eO93jxWS
-        T3qgzctjcnoz9cjHy3MQMjddTw==
-X-Google-Smtp-Source: ABdhPJwo9c8LbCkavdKfpoadHPuUcYrp0SSG4dnjNHU5gp2pCtsaa3ksUhu2md7xyaz1S92gcf2Hxw==
-X-Received: by 2002:a17:903:41d0:b0:151:8b0c:5dd1 with SMTP id u16-20020a17090341d000b001518b0c5dd1mr14207833ple.160.1646348822205;
-        Thu, 03 Mar 2022 15:07:02 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m20-20020a634c54000000b003739af127c9sm2942153pgl.70.2022.03.03.15.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 15:07:01 -0800 (PST)
-Date:   Thu, 3 Mar 2022 23:06:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 15/28] KVM: x86/mmu: Add dedicated helper to zap TDP
- MMU root shadow page
-Message-ID: <YiFKEQPLzlcA403J@google.com>
-References: <20220226001546.360188-1-seanjc@google.com>
- <20220226001546.360188-16-seanjc@google.com>
- <YiEw7z9TCQJl+udS@google.com>
- <YiEyEWDkNxNIAn/z@google.com>
+        Thu, 3 Mar 2022 18:09:16 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F17546679
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:08:28 -0800 (PST)
+X-UUID: a0062f3918ee45d48cd2d42cbe27ea98-20220304
+X-UUID: a0062f3918ee45d48cd2d42cbe27ea98-20220304
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2024328738; Fri, 04 Mar 2022 07:08:22 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 4 Mar 2022 07:08:21 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 4 Mar 2022 07:08:21 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <robin.murphy@arm.com>
+CC:     <iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
+        <linux-kernel@vger.kernel.org>, <miles.chen@mediatek.com>,
+        <will@kernel.org>, <wsd_upstream@mediatek.com>,
+        <yf.wang@mediatek.com>
+Subject: Re: [PATCH] iommu/iova: Improve 32-bit free space estimate
+Date:   Fri, 4 Mar 2022 07:08:21 +0800
+Message-ID: <20220303230821.13149-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <033815732d83ca73b13c11485ac39336f15c3b40.1646318408.git.robin.murphy@arm.com>
+References: <033815732d83ca73b13c11485ac39336f15c3b40.1646318408.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiEyEWDkNxNIAn/z@google.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Mingwei Zhang wrote:
-> On Thu, Mar 03, 2022, Mingwei Zhang wrote:
-> > > +	/*
-> > > +	 * No need to try to step down in the iterator when zapping an entire
-> > > +	 * root, zapping an upper-level SPTE will recurse on its children.
-> > > +	 */
-> > > +	for_each_tdp_pte_min_level(iter, root, root->role.level, start, end) {
-> > > +retry:
-> > > +		/*
-> > > +		 * Yielding isn't allowed when zapping an unreachable root as
-> > > +		 * the root won't be processed by mmu_notifier callbacks.  When
-> > > +		 * handling an unmap/release mmu_notifier command, KVM must
-> > > +		 * drop all references to relevant pages prior to completing
-> > > +		 * the callback.  Dropping mmu_lock can result in zapping SPTEs
-> > > +		 * for an unreachable root after a relevant callback completes,
-> > > +		 * which leads to use-after-free as zapping a SPTE triggers
-> > > +		 * "writeback" of dirty/accessed bits to the SPTE's associated
-> > > +		 * struct page.
-> > > +		 */
-> > 
-> > I have a quick question here: when the roots are unreachable, we can't
-> > yield, understand that after reading the comments. However, what if
-> > there are too many SPTEs that need to be zapped that requires yielding.
-> > In this case, I guess we will have a RCU warning, which is unavoidable,
-> > right?
+> For various reasons based on the allocator behaviour and typical
+> use-cases at the time, when the max32_alloc_size optimisation was
+> introduced it seemed reasonable to couple the reset of the tracked
+> size to the update of cached32_node upon freeing a relevant IOVA.
+> However, since subsequent optimisations focused on helping genuine
+> 32-bit devices make best use of even more limited address spaces, it
+> is now a lot more likely for cached32_node to be anywhere in a "full"
+> 32-bit address space, and as such more likely for space to become
+> available from IOVAs below that node being freed.
 > 
-> I will take that back. I think the subsequent patches solve the problem
-> using two passes.
+> At this point, the short-cut in __cached_rbnode_delete_update() really
+> doesn't hold up any more, and we need to fix the logic to reliably
+> provide the expected behaviour. We still want cached32_node to only move
+> upwards, but we should reset the allocation size if *any* 32-bit space
+> has become available.
+> 
+> Reported-by: Yunfei Wang <yf.wang@mediatek.com>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-Yes, but it's worth noting that the yielding problem is also solved by keeping
-roots reachable while they're being zapped (also done in later patches).  That
-way if a mmu_notifier event comes along, it can guarantee the SPTEs it cares about
-are zapped (and their metadata flushed) even if the MMU root is no longer usable
-by a vCPU.
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>

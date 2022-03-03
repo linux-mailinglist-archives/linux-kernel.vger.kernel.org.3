@@ -2,368 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF054CBAC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77254CBAC5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiCCJyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S231625AbiCCJzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiCCJyR (ORCPT
+        with ESMTP id S229672AbiCCJzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:54:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D86214560B;
-        Thu,  3 Mar 2022 01:53:32 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2239qajp018339;
-        Thu, 3 Mar 2022 09:53:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Tvq0dU0QBR6SgkniRyVT7+6XnxgcT648Nia/6qZaPw4=;
- b=DkBxiPHO4iWiQge3j7NkovCpoTOm9rDL1NSSQHtClj+U4ObCN290n/AqvV9fo7d52f/h
- i0uulGeYOoim+8tXf+KXVjXibij03API0+eNm2cITNT4hZqfHgzx59R9EYB0PyeCBWaN
- TxT+3g6qtoSzRektdQtq4M7XxMG0HHJQYyreZ2cejMMWLps3mmi8urqV5z540auWeo/A
- FaFZOhZm7ZipN4P5CdLHV3LuBNf00dkQCcqBMEXLMs+Pm+m2UWw+L98fXWfBDXu8Pxx7
- 70c1/fy4pZep28bFpYY4XGr52HpwH4WV1L/nmThj0n3tbfxK54Hh0xc/FIMnVE4dg6GI bQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejue780hy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:53:29 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2239qadW018357;
-        Thu, 3 Mar 2022 09:53:28 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejue780hj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:53:28 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2239mtCS019890;
-        Thu, 3 Mar 2022 09:53:26 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3efbu9fm6a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 09:53:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2239rJm434865562
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 09:53:19 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80813A4062;
-        Thu,  3 Mar 2022 09:53:19 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF5A7A405B;
-        Thu,  3 Mar 2022 09:53:18 +0000 (GMT)
-Received: from [9.145.8.68] (unknown [9.145.8.68])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Mar 2022 09:53:18 +0000 (GMT)
-Message-ID: <cc1d8dd0-fae2-18b2-3ac7-02a760e06173@linux.ibm.com>
-Date:   Thu, 3 Mar 2022 10:53:18 +0100
+        Thu, 3 Mar 2022 04:55:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3915DB1B;
+        Thu,  3 Mar 2022 01:54:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88F89B82461;
+        Thu,  3 Mar 2022 09:54:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E494C340EF;
+        Thu,  3 Mar 2022 09:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646301272;
+        bh=tIodI2Hud+QBpoZXN7zKKPXqPQ1ebddBIKjXe7wyLco=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BLZTNr+I20KCM66UzQQ64UqOLDenanYbvWYnkkl1KVuK2ZhK1TrQujavQ6NPhQR8f
+         02rEXT6JFviQ6F1zcQgD1PN9apZ3ktb+1mH8j/osjgscN9sV1D3A8uweEgYuBZ12gL
+         ma2ZjuSmRvE/R9tVL6SYf4QPIfp75xZ2uNjazKAlQYRYiQCQQ6RS0/6LlOnjH8CxsN
+         VL/DdBP0eWsAiomzTTTTwtpyeKpgK5paKSsYRbu1vxugxY/o8NWDdusQoh2pXFW7Is
+         1lOO6fvasrQJqL9VaaVgyhvG6SOqH3iZkrwhMxXrVgMmUEfGbztA88dBSUi3n4WILN
+         lc2U1TLgpJnvA==
+Received: by mail-yb1-f172.google.com with SMTP id e186so9071979ybc.7;
+        Thu, 03 Mar 2022 01:54:32 -0800 (PST)
+X-Gm-Message-State: AOAM532eLN36C8Sa5RLCfr7pC7dwHvpC9foHTx6bem5c7c0CNl39D1D3
+        LueTmOSWM2EbfsfrrSa4oW0h9jLdAxd/x5c8CCU=
+X-Google-Smtp-Source: ABdhPJyHYDUNXhzk6J7M8BSCGmB29RrwdM9CZzel6nEjh11lBBidQUmLAGxSs3L4T09tNq8StA7c1r7BV5sQqpuQD0Y=
+X-Received: by 2002:a25:53c4:0:b0:628:a0de:b4d6 with SMTP id
+ h187-20020a2553c4000000b00628a0deb4d6mr6260062ybb.299.1646301270987; Thu, 03
+ Mar 2022 01:54:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Steffen Eiden <seiden@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220223144830.44039-1-seiden@linux.ibm.com>
- <20220223144830.44039-2-seiden@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v2 1/3] drivers/s390/char: Add Ultravisor io device
-In-Reply-To: <20220223144830.44039-2-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zkCtDL-TrJJz9jjEb0xvRo1Z3TBQYfsx
-X-Proofpoint-ORIG-GUID: NXTCo0mmb_0Utn_xkBoPbcDdkA6aQd3a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_06,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- bulkscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
- adultscore=0 malwarescore=0 suspectscore=0 clxscore=1015 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2203030044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
+ <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
+ <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
+ <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
+ <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
+ <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
+ <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
+ <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+ <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
+ <CAK8P3a2wF2XA8wCFtP9RNTNQf3W9D8fKOuQ704yE+dRSS5aCVw@mail.gmail.com>
+ <CAAhV-H65PeK8w0U2DSbQ0eSWzAR-zjhPz8swSgZhbtKKJAYAKg@mail.gmail.com>
+ <CAMj1kXFgCu659zGuZPpRLYPzFemtBv0jsOt1Yz0U0-R4DucqTw@mail.gmail.com>
+ <CAAhV-H6GrAH_HGehqernowaTyZjQRNOyp=O8QNE3_7RHfarUFQ@mail.gmail.com> <CAAhV-H7B0xxNeTLd5n1cqPbF_hCp2N1KTbnNMAXFGxfZDzMcpw@mail.gmail.com>
+In-Reply-To: <CAAhV-H7B0xxNeTLd5n1cqPbF_hCp2N1KTbnNMAXFGxfZDzMcpw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 3 Mar 2022 09:54:20 +0000
+X-Gmail-Original-Message-ID: <CAMj1kXHc-Mpt_NTyR1CVzttV3ORtPerj23BBGNf=g7WmDu7BhA@mail.gmail.com>
+Message-ID: <CAMj1kXHc-Mpt_NTyR1CVzttV3ORtPerj23BBGNf=g7WmDu7BhA@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 15:48, Steffen Eiden wrote:
-> This patch adds a new miscdevice to expose some Ultravisor functions
-> to userspace. Userspace can send IOCTLs to the uvdevice that will then
-> emit a corresponding Ultravisor Call and hands the result over to
-> userspace. The uvdevice is available if the Ultravisor Call facility is
-> present.
-> 
-> Userspace is now able to call the Query Ultravisor Information
-> Ultravisor Command through the uvdevice.
-> 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> ---
->   MAINTAINERS                           |   2 +
->   arch/s390/include/uapi/asm/uvdevice.h |  27 +++++
->   drivers/s390/char/Kconfig             |  11 ++
->   drivers/s390/char/Makefile            |   1 +
->   drivers/s390/char/uvdevice.c          | 145 ++++++++++++++++++++++++++
->   5 files changed, 186 insertions(+)
->   create mode 100644 arch/s390/include/uapi/asm/uvdevice.h
->   create mode 100644 drivers/s390/char/uvdevice.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 777cd6fa2b3d..f32e876f45c2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10577,9 +10577,11 @@ F:	Documentation/virt/kvm/s390*
->   F:	arch/s390/include/asm/gmap.h
->   F:	arch/s390/include/asm/kvm*
->   F:	arch/s390/include/uapi/asm/kvm*
-> +F:	arch/s390/include/uapi/asm/uvdevice.h
->   F:	arch/s390/kernel/uv.c
->   F:	arch/s390/kvm/
->   F:	arch/s390/mm/gmap.c
-> +F:	drivers/s390/char/uvdevice.c
->   F:	tools/testing/selftests/kvm/*/s390x/
->   F:	tools/testing/selftests/kvm/s390x/
->   
-> diff --git a/arch/s390/include/uapi/asm/uvdevice.h b/arch/s390/include/uapi/asm/uvdevice.h
-> new file mode 100644
-> index 000000000000..60956f8d2dc0
-> --- /dev/null
-> +++ b/arch/s390/include/uapi/asm/uvdevice.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + *  Copyright IBM Corp. 2022
-> + *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-> + */
-> +#ifndef __S390X_ASM_UVDEVICE_H
-> +#define __S390X_ASM_UVDEVICE_H
-> +
-> +#include <linux/types.h>
-> +
-> +struct uvio_ioctl_cb {
-> +	__u32 flags;
-> +	__u16 uv_rc;			/* UV header rc value */
-> +	__u16 uv_rrc;			/* UV header rrc value */
-> +	__u64 argument_addr;		/* Userspace address of uvio argument */
-> +	__u32 argument_len;
-> +	__u8  reserved14[0x40 - 0x14];	/* must be zero */
-> +};
-> +
-> +#define UVIO_QUI_MAX_LEN		0x8000
-> +
-> +#define UVIO_DEVICE_NAME "uv"
-> +#define UVIO_TYPE_UVC 'u'
-> +
-> +#define UVIO_IOCTL_QUI _IOWR(UVIO_TYPE_UVC, 0x01, struct uvio_ioctl_cb)
-> +
-> +#endif  /* __S390X_ASM_UVDEVICE_H */
-> diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
-> index 6cc4b19acf85..2a828274257a 100644
-> --- a/drivers/s390/char/Kconfig
-> +++ b/drivers/s390/char/Kconfig
-> @@ -184,3 +184,14 @@ config S390_VMUR
->   	depends on S390
->   	help
->   	  Character device driver for z/VM reader, puncher and printer.
-> +
-> +config S390_UV_UAPI
-> +	def_tristate y
-> +	prompt "Ultravisor userspace API"
-> +	depends on PROTECTED_VIRTUALIZATION_GUEST
-> +	help
-> +	  Selecting exposes parts of the UV interface to userspace
-> +	  by providing a misc character device at /dev/uv.
-> +	  Using IOCTLs one can interact with the UV.
-> +	  The device is available if the Ultravisor
-> +	  Facility (158) is present.
-> diff --git a/drivers/s390/char/Makefile b/drivers/s390/char/Makefile
-> index c6fdb81a068a..ce32270082f5 100644
-> --- a/drivers/s390/char/Makefile
-> +++ b/drivers/s390/char/Makefile
-> @@ -48,6 +48,7 @@ obj-$(CONFIG_MONREADER) += monreader.o
->   obj-$(CONFIG_MONWRITER) += monwriter.o
->   obj-$(CONFIG_S390_VMUR) += vmur.o
->   obj-$(CONFIG_CRASH_DUMP) += sclp_sdias.o zcore.o
-> +obj-$(CONFIG_S390_UV_UAPI) += uvdevice.o
->   
->   hmcdrv-objs := hmcdrv_mod.o hmcdrv_dev.o hmcdrv_ftp.o hmcdrv_cache.o diag_ftp.o sclp_ftp.o
->   obj-$(CONFIG_HMC_DRV) += hmcdrv.o
-> diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-> new file mode 100644
-> index 000000000000..1d90e129b570
-> --- /dev/null
-> +++ b/drivers/s390/char/uvdevice.c
-> @@ -0,0 +1,145 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  Copyright IBM Corp. 2022
-> + *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-> + */
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt ".\n"
-> +
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/types.h>
-> +#include <linux/stddef.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/slab.h>
-> +
-> +#include <asm/uvdevice.h>
-> +#include <asm/uv.h>
-> +
-> +/**
-> + * uvio_qui() - Perform a Query Ultravisor Information UVC.
-> + *
-> + * uv_ioctl: ioctl control block
-> + *
-> + * uvio_qui() does a Query Ultravisor Information (QUI) Ultravisor Call.
-> + * It creates the uvc qui request and sends it to the Ultravisor. After that
-> + * it copies the response to userspace and fills the rc and rrc of uv_ioctl
-> + * uv_call with the response values of the Ultravisor.
-> + *
-> + * Create the UVC structure, send the UVC to UV and write the response in the ioctl struct.
-> + *
-> + * Return: 0 on success or a negative error code on error.
-> + */
-> +static int uvio_qui(struct uvio_ioctl_cb *uv_ioctl)
-> +{
-> +	u8 __user *user_buf_addr = (__user u8 *)uv_ioctl->argument_addr;
-> +	size_t user_buf_len = uv_ioctl->argument_len;
-> +	struct uv_cb_header *uvcb_qui = NULL;
-> +	int ret;
-> +
-> +	/*
-> +	 * Do not check for a too small buffer. If userspace provides a buffer
-> +	 * that is too small the Ultravisor will complain.
-> +	 */
-> +	ret = -EINVAL;
-> +	if (!user_buf_len || user_buf_len > UVIO_QUI_MAX_LEN)
-> +		goto out;
-> +	ret = -ENOMEM;
-> +	uvcb_qui = kvzalloc(user_buf_len, GFP_KERNEL);
-> +	if (!uvcb_qui)
-> +		goto out;
-> +	uvcb_qui->len = user_buf_len;
-> +	uvcb_qui->cmd = UVC_CMD_QUI;
-> +
-> +	uv_call(0, (u64)uvcb_qui);
+On Thu, 3 Mar 2022 at 07:26, Huacai Chen <chenhuacai@gmail.com> wrote:
+>
+> Hi, Ard & Arnd,
+>
+> On Wed, Mar 2, 2022 at 5:20 PM Huacai Chen <chenhuacai@gmail.com> wrote:
+> >
+> > Hi, Ard,
+> >
+> > On Wed, Mar 2, 2022 at 4:58 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Wed, 2 Mar 2022 at 09:56, Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > >
+> > > > Hi, Arnd & Ard,
+> > > >
+> > > > On Tue, Mar 1, 2022 at 6:19 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > >
+> > > > > On Tue, Mar 1, 2022 at 5:17 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > > On Mon, Feb 28, 2022 at 7:35 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > > > > On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > > > > Can't you just use the UEFI protocol for kernel entry regardless
+> > > > > > > > of the bootloader? It seems odd to use a different protocol for loading
+> > > > > > > > grub and the kernel, especially if that means you end up having to
+> > > > > > > > support both protocols inside of u-boot and grub, in order to chain-load
+> > > > > > > > a uefi application like grub.
+> > > > > > > >
+> > > > > > >
+> > > > > > > I think this would make sense. Now that the EFI stub has generic
+> > > > > > > support for loading the initrd via a UEFI specific protocol (of which
+> > > > > > > u-boot already carries an implementation), booting via UEFI only would
+> > > > > > > mean that no Linux boot protocol would need to be defined outside of
+> > > > > > > the kernel at all (i.e., where to load the kernel, where to put the
+> > > > > > > command line, where to put the initrd, other arch specific rules etc
+> > > > > > > etc) UEFI already supports both ACPI and DT boot
+> > > > > >
+> > > > > > After one night thinking, I agree with Ard that we can use RISCV-style
+> > > > > > fdt to support the raw elf kernel at present, and add efistub support
+> > > > > > after new UEFI SPEC released.
+> > > > >
+> > > > > I think that is the opposite of what Ard and I discussed above.
+> > > > Hmm, I thought that new UEFI SPEC is a requirement of efistub, maybe I'm wrong?
+> > > >
+> > > > >
+> > > > > > If I'm right, it seems that RISC-V passes a0 (hartid) and a1 (fdt
+> > > > > > pointer, which contains cmdline, initrd, etc.) to the raw elf kernel.
+> > > > > > And in my opinion, the main drawback of current LoongArch method
+> > > > > > (a0=argc a1=argv a2=bootparamsinterface pointer) is it uses a
+> > > > > > non-standard method to pass kernel args and initrd. So, can the below
+> > > > > > new solution be acceptable?
+> > > > > >
+> > > > > > a0=bootparamsinterface pointer (the same as a2 in current method)
+> > > > > > a1=fdt pointer (contains cmdline, initrd, etc., like RISC-V, I think
+> > > > > > this is the standard method)
+> > > > >
+> > > > > It would seem more logical to me to keep those details as part of the
+> > > > > interface between the EFI stub and the kernel, rather than the
+> > > > > documented boot interface.
+> > > > >
+> > > > > You said that there is already grub support using the UEFI
+> > > > > loader, so I assume you have a working draft of the boot
+> > > > > protocol. Are there still open questions about the interface
+> > > > > definition for that preventing you from using it as the only
+> > > > > way to enter the kernel from a bootloader?
+> > > > Things become simple if we only consider efistub rather than raw elf.
+> > > > But there are still some problems:
+> > > > 1, We want the first patch series as minimal as possible, efistub
+> > > > support will add a lot of code.
+> > > > 2, EFISTUB hides the interface between bootloader and raw kernel, but
+> > > > the interface does actually exist (efistub itself is also a
+> > > > bootloader, though it binds with the raw kernel). In the current
+> > > > implementation (a0=argc a1=argv a2=bootparaminterface), we should
+> > > > select EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER which is marked as
+> > > > deprecated. Is this acceptable? If not, we still need to change the
+> > > > bootloader-kernel interface, maybe use the method in my previous
+> > > > email?
+> > >
+> > > Why do you need this?
+> > Because in the current implementation (a0=argc a1=argv
+> > a2=bootparaminterface), initrd should be passed by cmdline
+> > (initrd=xxxx). If without that option, efi_load_initrd_cmdline() will
+> > not call handle_cmdline_files().
+> It seems I'm wrong. EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER controls
+> "initrd=xxxx" from BIOS to EFISTUB, but has nothing to do with
+> a0/a1/a2 usage (which controls the "initrd=xxxx" from efistub to raw
+> kernel). The real reason is our UEFI BIOS has an old codebase without
+> LoadFile2 support.
+>
 
-You'll copy zeroes to userspace if the rc is anything other than 0x1 or 
-0x100. It's not a mistake in itself, it just looks weird to me.
+The problem with initrd= is that it can only load the initrd from the
+same EFI block device that the kernel was loaded from, which is highly
+restrictive, and doesn't work with bootloaders that call LoadImage()
+on a kernel image loaded into memory. This is why x86 supports passing
+the initrd in memory, and provide the base/size via struct bootparams,
+and arm64 supports the same using DT.
 
-Also you don't consider the UV rc an error so userspace will always have 
-to check the uv rc and rrc even if the ioctl returns 0.
+The LoadImage2 protocol based method intends to provide a generic
+alternative to this, as it uses a pure EFI abstraction, and therefore
+does not rely on struct bootparams or DT at all.
 
-And it pretty much makes the rc and rrc copying below completely useless 
-since they'll always be in the actual uvcb data, no?
+So the LoadImage2() based method is preferred, but if your
+architecture implements DT support already, there is nothing
+preventing you from passing initrd information directly to the kernel
+via the /chosen node.
 
-> +
-> +	ret = -EFAULT;
-> +	if (copy_to_user(user_buf_addr, uvcb_qui, uvcb_qui->len))
-> +		goto out;
-> +	uv_ioctl->uv_rc = uvcb_qui->rc;
-> +	uv_ioctl->uv_rrc = uvcb_qui->rrc;
-> +
-> +	ret = 0;
-> +out:
-> +	kvfree(uvcb_qui);
-> +	return ret;
-> +}
-> +
-> +static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp)
-> +{
-> +	if (copy_from_user(ioctl, argp, sizeof(*ioctl)))
-> +		return -EFAULT;
-> +	if (ioctl->flags != 0)
-> +		return -EINVAL;
-> +	if (memchr_inv(ioctl->reserved14, 0, sizeof(ioctl->reserved14)))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * IOCTL entry point for the Ultravisor device.
-> + */
-> +static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> +{
-> +	void __user *argp = (void __user *)arg;
-> +	struct uvio_ioctl_cb *uv_ioctl;
-> +	long ret;
-> +
-> +	ret = -ENOMEM;
-> +	uv_ioctl = vzalloc(sizeof(*uv_ioctl));
-> +	if (!uv_ioctl)
-> +		goto out;
-> +
-> +	switch (cmd) {
-> +	case UVIO_IOCTL_QUI:
-> +		ret = uvio_copy_and_check_ioctl(uv_ioctl, argp);
-> +		if (ret)
-> +			goto out;
+> Then, my new questions are:
+> 1, Is EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER an unacceptable option
+> for a new Arch? If yes, we should backport LoadFile2 support to our
+> BIOS.
 
-You'll have to repeat this for every command making the
+See above.
 
-> +		ret = uvio_qui(uv_ioctl);
-> +		break;
-> +	default:
-> +		ret = -ENOIOCTLCMD;
-> +		break;
-> +	}
-> +	if (ret)
-> +		goto out;
-> +
-> +	if (copy_to_user(argp, uv_ioctl, sizeof(*uv_ioctl)))
-> +		ret = -EFAULT;
-> +
-> + out:
-> +	vfree(uv_ioctl);
-> +	return ret;
-> +}
-> +
-> +static const struct file_operations uvio_dev_fops = {
-> +	.owner = THIS_MODULE,
-> +	.unlocked_ioctl = uvio_ioctl,
-> +	.llseek = no_llseek,
-> +};
-> +
-> +static struct miscdevice uvio_dev_miscdev = {
-> +	.minor = MISC_DYNAMIC_MINOR,
-> +	.name = UVIO_DEVICE_NAME,
-> +	.fops = &uvio_dev_fops,
-> +};
-> +
-> +static void __exit uvio_dev_exit(void)
-> +{
-> +	misc_deregister(&uvio_dev_miscdev);
-> +}
-> +
-> +static int __init uvio_dev_init(void)
-> +{
-> +	if (!test_facility(158))
-> +		return -ENXIO;
-> +	return misc_register(&uvio_dev_miscdev);
-> +}
-> +
-> +module_init(uvio_dev_init);
-> +module_exit(uvio_dev_exit);
-> +
-> +MODULE_AUTHOR("IBM Corporation");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Ultravisor UAPI driver");
+> 2, We now all agree that EFISTUB is the standard and maybe the only
+> way in future. But, can we do the efistub work in the second series,
+> in order to make the first series as minimal as possible? (I will
+> update the commit message to make it clear that a0/a1/a2 usage is only
+> an internal interface between efistub and raw kernel).
+>
 
+I think it would be better to drop the UEFI and ACPI pieces for now,
+and resubmit it once the dust has settled around this.

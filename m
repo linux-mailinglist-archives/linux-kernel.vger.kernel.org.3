@@ -2,207 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1D54CC493
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2614CC496
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 19:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiCCSFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 13:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S233509AbiCCSGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 13:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiCCSFR (ORCPT
+        with ESMTP id S230342AbiCCSGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 13:05:17 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D2415A23D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:04:30 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s1so5261178plg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:04:30 -0800 (PST)
+        Thu, 3 Mar 2022 13:06:09 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AA51A3609
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 10:05:24 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id o7-20020a056820040700b003205d5eae6eso6145827oou.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 10:05:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ohbn/bPviM+Tn+8s9bW5yJzK3RtPWtRGdwqb7XZ19L4=;
-        b=fYI3KNOpEKTXvpyCy3jCS2z+jaUVpXtgvjgEgAdk8FMI22Cg6u/XNKbhtN0HvFfYFm
-         x9P6oFBQLx3A9RVSKEJVMFyI0zWPw7TUDUqVQiTBk1hwqx089hMWSRVZhqCDlZeH4/8R
-         ist44ayWIh7Yb4m/Z1f26HDstQYgLpqBnwFPw=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/ovabB264TUfiikvyHgOc2D5zXM9RNGNE3+8hMb4K1Q=;
+        b=VLtZb6YUqbdwpT+ckMqn9vj4WkFREB8maD+Pl0b4g6ayGbk0l60ornYMsL1GkfMmFS
+         pK6r4jMMd25Z4cqUgONEiBJJsmVAKyUXz/msVSwF3nzEfIkxmrMIWYZnlVYk/e3m29oO
+         OIQpS9yQOSVwBnrrWps+64QmebwvSkKcqa2Q1LeKxvV4gRu0/YgrkDExNi63MGeHEh8G
+         jv5hZ3tC0rbIj8yZjWuiUTic3ZqcSlkJjzOj1SAfbysCQV/7re5e/rw4hdVrJ/qy/lnQ
+         VWB49C0AFbvAf/qex/F/cywZfLKg9yyXGekNo2PI5lvBu09KqyuZZa7fSEaQMcpSAO7y
+         /Ayw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ohbn/bPviM+Tn+8s9bW5yJzK3RtPWtRGdwqb7XZ19L4=;
-        b=AJuhcERNsEsbBkc1ZIb/fapN8rypa3pp1HcWNlc8SUcXsK3sLDFIjRwbJNCua+nudW
-         //rl8ngYVgnjKyJ4F4B0cgLIKQpo2+PtM6R44mXyjy4pzCNl9JuX6uTEItUnq65sNJkB
-         GkRGEll0doZDwvrjZeAxL1x//WIjkoSTS9oJBpd6SLQGr9MB8I7FniqbfoUP7NitRuyT
-         zuIM8q9EObhE3z1dIscf1y3/r92eVni/LS+tXbMRAWLvdX6V+LYzKywAIhkbDjalwrOX
-         4Gg5R5HKRMoWCb3DusJXm1nHkRTeo1+ayVHZiNjbjyWy82gies01/iTnuDOvFsWlvjhO
-         YrAA==
-X-Gm-Message-State: AOAM5302vmBgTAX7nkRGfN0t2wf+ZEympiOJ2duwc4rZnav+FlADYi27
-        S20U+obK6mgPQQsF9WNq0ez3Xw==
-X-Google-Smtp-Source: ABdhPJzENxxIElfJcMEZP9UKQ3wwMJC+ln7NAZmhkNK3m4+s2kgRV0YYtMmkprd45T6MhhStzxY7sw==
-X-Received: by 2002:a17:902:e812:b0:14f:40ad:befa with SMTP id u18-20020a170902e81200b0014f40adbefamr36437378plg.172.1646330669843;
-        Thu, 03 Mar 2022 10:04:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 16-20020a056a00073000b004dfe2217090sm3226384pfm.200.2022.03.03.10.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 10:04:29 -0800 (PST)
-Date:   Thu, 3 Mar 2022 10:04:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
-Message-ID: <202203030947.E2FA3D9@keescook>
-References: <20220303090643.241747-1-davidgow@google.com>
- <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ovabB264TUfiikvyHgOc2D5zXM9RNGNE3+8hMb4K1Q=;
+        b=i+E4CnYGL5EFzuOi92xSTRN0DJfYNDcHeUGdiVX0J3xS/sIzLUdnbY1Fc8KBXFXZr+
+         7qNnFJjYzCmnviG6vwNrPB5Clazq93DDqeeQ2GK5FkSJGlMln2fUsKEzmFi8Dr2wglo7
+         HmPlJfsR0zz0PP0LBVcLG4tnDBDvK4VP7ZJJ7b+5oE3Rg3x9SEzmlSjYmyugm1+fDEIC
+         gbEFiY3xy1V6k54KBdj6DzbZGSDUqYbtExkXNRjoIARLKTe7KoHHviWLiadT3QegadBm
+         sRTZFLgekv0UqNfJPjnl6XkJHcuqjD5ap1lvexupobrDuzp+L0bdv7VT9G04+KzPU9gG
+         5quA==
+X-Gm-Message-State: AOAM532nGQPX5/0Uf1+xeROZVCt1X6ZHkCgSCpii/my8hLNi/qCaVI9H
+        3zlX7J+EBX2NQ9nbZ3uKPW1NwuG9iyCB9aKKP7ndrg==
+X-Google-Smtp-Source: ABdhPJyEcCe0YZDxh1cT9exb/+QzY5fiz55WHLtf3SayuTdiDhpLL3G+Dr3i2wqPjPQ7qOPVT8ozFxb8qsVadn1zCsw=
+X-Received: by 2002:a4a:5596:0:b0:2dd:bb93:8800 with SMTP id
+ e144-20020a4a5596000000b002ddbb938800mr18965773oob.85.1646330722922; Thu, 03
+ Mar 2022 10:05:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220221073140.10618-1-ravi.bangoria@amd.com> <20220221073140.10618-4-ravi.bangoria@amd.com>
+ <1e0fc70a-1135-1845-b534-79f409e0c29d@gmail.com> <80fce7df-d387-773d-ad7d-3540c2d411d1@amd.com>
+ <CALMp9eQtW6SWG83rJa0jKt7ciHPiRbvEyCi2CDNkQ-FJC+ZLjA@mail.gmail.com> <54d94539-a14f-49d7-e4f3-092f76045b33@amd.com>
+In-Reply-To: <54d94539-a14f-49d7-e4f3-092f76045b33@amd.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 3 Mar 2022 10:05:11 -0800
+Message-ID: <CALMp9eTTpdtsEek17-EnSZu53-+LmwcSTYmou1+u34LdT3TMmQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] KVM: x86/pmu: Segregate Intel and AMD specific logic
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>, seanjc@google.com,
+        dave.hansen@linux.intel.com, peterz@infradead.org,
+        alexander.shishkin@linux.intel.com, eranian@google.com,
+        daviddunn@google.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kim.phillips@amd.com,
+        santosh.shukla@amd.com,
+        "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
+        <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 10:30:47AM -0700, Nathan Chancellor wrote:
-> Hi David,
-> 
-> On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
-> > The things built with USER_CFLAGS don't seem to recognise it as a
-> > compiler option, and print a warning:
-> > clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
-> > 
-> > Fixes: 744814d2fa ("um: Allow builds with Clang")
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
-> > 
-> > This warning shows up after merging:
-> > https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
-> > 
-> > I'm not 100% sure why this is necessary, but it does seem to work. All
-> > the attempts to get rid of -mno-global-merge entirely have been met with
-> > skepticism, but I'm guessing that it's not a problem for just the UML
-> > "user" files, as they shouldn't(?) interact too much with modules.
-> 
-> Thank you for the patch! I think it is correct, as this flag only works
-> for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
-> and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
-> which are obviously never called with UML. I am not sure why we do not
-> see warning during regular kernel builds, maybe something about how UML
-> objects are compiled exposes this?
+On Thu, Mar 3, 2022 at 8:25 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>
+>
+>
+> On 03-Mar-22 10:08 AM, Jim Mattson wrote:
+> > On Mon, Feb 21, 2022 at 2:02 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+> >>
+> >>
+> >>
+> >> On 21-Feb-22 1:27 PM, Like Xu wrote:
+> >>> On 21/2/2022 3:31 pm, Ravi Bangoria wrote:
+> >>>>   void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
+> >>>>   {
+> >>>>       struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, pmc_idx);
+> >>>> +    bool is_intel = !strncmp(kvm_x86_ops.name, "kvm_intel", 9);
+> >>>
+> >>> How about using guest_cpuid_is_intel(vcpu)
+> >>
+> >> Yeah, that's better then strncmp().
+> >>
+> >>> directly in the reprogram_gp_counter() ?
+> >>
+> >> We need this flag in reprogram_fixed_counter() as well.
+> >
+> > Explicit "is_intel" checks in any form seem clumsy,
+>
+> Indeed. However introducing arch specific callback for such tiny
+> logic seemed overkill to me. So thought to just do it this way.
 
-Yeah, I got really turned around when I tried to find this last week.
+I agree that arch-specific callbacks are ridiculous for these distinctions.
 
-> 
-> Regardless, I would definitely like to clean up this instance of the
-> warning because I would like to make this warning a hard error so that
-> we do not get cryptic cc-option failures:
-> 
-> https://github.com/ClangBuiltLinux/linux/issues/1587
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> One small comment below.
-> 
-> >  arch/um/Makefile | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/arch/um/Makefile b/arch/um/Makefile
-> > index f2fe63bfd819..320b09cd513c 100644
-> > --- a/arch/um/Makefile
-> > +++ b/arch/um/Makefile
-> > @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
-> >  		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
-> >  		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
-> >  
-> > +ifdef CONFIG_CC_IS_CLANG
-> 
-> Is this ifdef needed?
-> 
-> > +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
-> > +endif
+> > since we have
+> > already put some effort into abstracting away the implementation
+> > differences in struct kvm_pmu. It seems like these differences could
+> > be handled by adding three masks to that structure: the "raw event
+> > mask" (i.e. event selector and unit mask), the hsw_in_tx mask, and the
+> > hsw_in_tx_checkpointed mask.
+>
+> struct kvm_pmu is arch independent. You mean struct kvm_pmu_ops?
 
-How does -mno-global-merge get KBUILD_CFLAGS in the first place? If it's
-arm/arm64 only, shouldn't that get relocated to those architectures?
+No; I meant exactly what I said. See, for example, how the
+reserved_bits field is used. It is initialized in the vendor-specific
+pmu_refresh functions, and from then on, it facilitates
+vendor-specific behaviors without explicit checks or vendor-specific
+callbacks. An eventsel_mask field would be a natural addition to this
+structure, to deal with the vendor-specific event selector widths. The
+hsw_in_tx_mask and hsw_in_tx_checkpointed_mask fields are less
+natural, since they will be 0 on AMD, but they would make it simple to
+write the corresponding code in a vendor-neutral fashion.
 
-*time travel* found it:
+BTW, am I the only one who finds the HSW_ prefixes a bit absurd here,
+since TSX was never functional on Haswell?
 
-61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for building kernel with Clang")
+> >
+> > These changes should also be coordinated with Like's series that
+> > eliminates all of the PERF_TYPE_HARDWARE nonsense.
+>
+> I'll rebase this on Like's patch series.
 
-So I think this may have been universally true long ago, and now only
-arm/arm64 need it?
-
-
-diff --git a/Makefile b/Makefile
-index 2f6fbba88a0e..fbc42c3c389e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -852,10 +852,6 @@ ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
- # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
- KBUILD_CFLAGS += -Wno-gnu
--# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
--# source of a reference will be _MergedGlobals and not on of the whitelisted names.
--# See modpost pattern 2
--KBUILD_CFLAGS += -mno-global-merge
- else
- 
- # gcc inanely warns about local variables called 'main'
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index a2391b8de5a5..dcab28c44c26 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -48,6 +48,13 @@ CHECKFLAGS	+= -D__ARMEL__
- KBUILD_LDFLAGS	+= -EL
- endif
- 
-+ifdef CONFIG_CC_IS_CLANG
-+# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-+# source of a reference will be _MergedGlobals and not on of the whitelisted names.
-+# See modpost pattern 2
-+KBUILD_CFLAGS	+= -mno-global-merge
-+endif
-+
- #
- # The Scalar Replacement of Aggregates (SRA) optimization pass in GCC 4.9 and
- # later may result in code being generated that handles signed short and signed
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 2f1de88651e6..2d20fb2ea664 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -36,6 +36,13 @@ ifeq ($(CONFIG_BROKEN_GAS_INST),y)
- $(warning Detected assembler with broken .inst; disassembly will be unreliable)
- endif
- 
-+ifdef CONFIG_CC_IS_CLANG
-+# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-+# source of a reference will be _MergedGlobals and not on of the whitelisted names.
-+# See modpost pattern 2
-+KBUILD_CFLAGS	+= -mno-global-merge
-+endif
-+
- KBUILD_CFLAGS	+= -mgeneral-regs-only	\
- 		   $(compat_vdso) $(cc_has_k_constraint)
- KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
-
-> > +
-> >  #This will adjust *FLAGS accordingly to the platform.
-> >  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
-> >  
-> > -- 
-> > 2.35.1.616.g0bdcbb4464-goog
-> > 
-
--- 
-Kees Cook
+That's not exactly what I meant, but okay.

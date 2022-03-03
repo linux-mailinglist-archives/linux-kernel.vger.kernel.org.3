@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652494CC664
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EE74CC65B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbiCCToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S233981AbiCCTnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236242AbiCCTof (ORCPT
+        with ESMTP id S236394AbiCCTmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:44:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 622D91165
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:43:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646336612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rZukSBtRSbVXgI+lPoT1DA/PpetoH7/G31hBXSlFcS0=;
-        b=Bm/+lAjjGsyho+ma/+JHPEcL9UW2uKGse4nrGqWMgttYsGmI126prLJpciFwkM9GbfZT3g
-        LgcYu8//4fgrnukWUmVgn/JdRtE3PJ8PGKiKsHaVGSD85Xhu8mw7ycvHLDTUWdSoGhbFer
-        ln3rPrkvwZ+5qIypkXoNbA3fj1E/zHk=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-aYJaGXoOPYio9VKFFLVOJA-1; Thu, 03 Mar 2022 14:40:18 -0500
-X-MC-Unique: aYJaGXoOPYio9VKFFLVOJA-1
-Received: by mail-qt1-f200.google.com with SMTP id b3-20020ac84f03000000b002e038c19f71so4388142qte.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:40:18 -0800 (PST)
+        Thu, 3 Mar 2022 14:42:51 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF611A6378
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:41:13 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so3861333wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:41:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2iz36OqO+jJdVuW+N+ZU8T8BnAKilg+w/Ds7DOBUBqc=;
+        b=ue5oc5VPyETrPzFUI5tMGWXNiS185SPWKtF65IQwQ8xjOEJBTsqlkLW11dFs9AUawE
+         /DqBBuqSIaymgZxjn4q4XebOpM61LpRpAasj3CBwMmaltTCAgz8RrZDoWQVARRBYOWLM
+         ZATUI/FMIHvt/Oj55HEb5KU+vio6s5llgv1ytHRWDrpdhkBny//uqi426HgraMzr8bV/
+         9DrLkA6uquYAc4QYPmNe39H/9Wg1OgFxUaJ7IV9FTiGv8nEHb8C+43FVJq1s151WMbKO
+         B4SpRlna1oorMDGQ39I4TkITXj/lN3y/5QwDPJkvW7jgaE9N/PbCjYVIi3crn9Fc/GTk
+         LHlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rZukSBtRSbVXgI+lPoT1DA/PpetoH7/G31hBXSlFcS0=;
-        b=xzSjcPY7pJWdeXOTkb6Nrn2hAcL/QUY3ZGaWJtGLnf07vPbCr/VPrH3R3qOSmlMQX3
-         HKso82n9Omjm6tRUXqZOoOJ/aCEsCcr3rEpWR1vPRlwXg288nJ5Y7DJYJQLoasWmX0li
-         ZzUaSJSOgjUyXO8C4BVlnZhmzML8rnOqB+kZzyn5ZlqCiWIeCrLrsviNLSBGjXu7v/E+
-         wzgKNhhmthoKVxSuWK8FGrZxz/xcEs0g23YGHJicGkeNcq1CTnZWd6TnE6uYuZtq4iMV
-         hYVlcIx2t2ErHW/jlfbQF+8i7FlFDY9elBW2DIyim4vs8Jccm74Fe1FFY892Odtay9Wd
-         gvGw==
-X-Gm-Message-State: AOAM532jNGT6x4Fi5BKUyYoaEL8xWgMs1fBY2Lv0IfCkLbFlVXIphkVn
-        2Xa5m1aGBG7w0K9tbjsElVE9nVANoq01Hzfc8rq6BqWj6pV65LM265mWAKecFUxIXNPNSwa+eMu
-        fdV4CVzV+Od8M7Au7kyVRztxvprusfjgIstNvq1+q
-X-Received: by 2002:a05:6214:1d0d:b0:433:1869:1fb7 with SMTP id e13-20020a0562141d0d00b0043318691fb7mr15259243qvd.40.1646336417218;
-        Thu, 03 Mar 2022 11:40:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyp3Cbp/Nx9iTTLMWrponYhL1QXQRLgnfcp48KwsXN2YE1W36I5QdI131uucyme4XFXJuQ1X8YitSqQxKWRwtU=
-X-Received: by 2002:a05:6214:1d0d:b0:433:1869:1fb7 with SMTP id
- e13-20020a0562141d0d00b0043318691fb7mr15259207qvd.40.1646336416863; Thu, 03
- Mar 2022 11:40:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2iz36OqO+jJdVuW+N+ZU8T8BnAKilg+w/Ds7DOBUBqc=;
+        b=qAyC8Dzc/C74KqcMnQyCIs2lzhUahhnJ2ONY3RypreariLpXe8GWbmxit65dL5q3PG
+         /TkJEHM9WMq/kenBRV/TX60b1gKKFi2aFgKEr/yNEHUIMX8QqVC409hJ7EVdpei+7Mss
+         qzXqlyrPZLU87XGodXKsD7BeFadW55FbOLbJ0M6pivr2WK+zrs9dN8QwmfGWPwSz1XqR
+         gpGrbW90cDXk7ZHeQx5Rdn+pxMqRr8p7jfCRrNIjH97UMm6Vle+ibpbo6VqRFUB7nBli
+         5QQ1pQZ4TiZADY6Is9NZtxvWjf2XBiOERlDzW9gIA6xfJfPDswzM7vxXF+9DaTj4sWqv
+         X3Rg==
+X-Gm-Message-State: AOAM532ounF+7eqsdzRnTExhICJfptgN7o7or0jp5OIIcJ8H1MTkD8be
+        kysDvztU7unpEbKYJNg82cs7pQ==
+X-Google-Smtp-Source: ABdhPJxeRW34laxVBvgaVBv3M2eH0QaO9wO8gWc12fv7n8JCsG+wcXFQzJGW9RUr1sYLQWexnzqMCw==
+X-Received: by 2002:a7b:c382:0:b0:388:2e76:49ed with SMTP id s2-20020a7bc382000000b003882e7649edmr3351768wmj.195.1646336452447;
+        Thu, 03 Mar 2022 11:40:52 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id e15-20020a5d6d0f000000b001ef7dca67fasm3255157wrq.114.2022.03.03.11.40.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 11:40:51 -0800 (PST)
+Date:   Thu, 3 Mar 2022 20:40:49 +0100
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, heiko@sntech.de,
+        linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        john@metanate.com, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 17/18] dt-bindings: crypto: convert rockchip-crypto to
+ yaml
+Message-ID: <YiEZwetOpRhZ4iCa@Red>
+References: <20220302211113.4003816-1-clabbe@baylibre.com>
+ <20220302211113.4003816-18-clabbe@baylibre.com>
+ <1646315078.991896.1495435.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-References: <20201216064818.48239-1-jasowang@redhat.com> <20220224212314.1326-1-gdawar@xilinx.com>
- <20220224212314.1326-7-gdawar@xilinx.com>
-In-Reply-To: <20220224212314.1326-7-gdawar@xilinx.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Thu, 3 Mar 2022 20:39:40 +0100
-Message-ID: <CAJaqyWeeJeFzmov0XPOBMoKS=xH0zA_XXXunMsWOds+53aKxYw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 06/19] vdpa: multiple address spaces support
-To:     Gautam Dawar <gautam.dawar@xilinx.com>
-Cc:     Gautam Dawar <gdawar@xilinx.com>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>, tanujk@xilinx.com,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Longpeng <longpeng2@huawei.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel@vger.kernel.org, kvm list <kvm@vger.kernel.org>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1646315078.991896.1495435.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,292 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 10:25 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
->
-> This patches introduces the multiple address spaces support for vDPA
-> device. This idea is to identify a specific address space via an
-> dedicated identifier - ASID.
->
-> During vDPA device allocation, vDPA device driver needs to report the
-> number of address spaces supported by the device then the DMA mapping
-> ops of the vDPA device needs to be extended to support ASID.
->
-> This helps to isolate the environments for the virtqueue that will not
-> be assigned directly. E.g in the case of virtio-net, the control
-> virtqueue will not be assigned directly to guest.
->
-> As a start, simply claim 1 virtqueue groups and 1 address spaces for
-> all vDPA devices. And vhost-vDPA will simply reject the device with
-> more than 1 virtqueue groups or address spaces.
->
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
-> ---
->  drivers/vdpa/ifcvf/ifcvf_main.c   |  2 +-
->  drivers/vdpa/mlx5/net/mlx5_vnet.c |  5 +++--
->  drivers/vdpa/vdpa.c               |  4 +++-
->  drivers/vdpa/vdpa_sim/vdpa_sim.c  | 10 ++++++----
->  drivers/vhost/vdpa.c              | 14 +++++++++-----
->  include/linux/vdpa.h              | 28 +++++++++++++++++++---------
->  6 files changed, 41 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
-> index c815a2e62440..a4815c5612f9 100644
-> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
-> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
-> @@ -513,7 +513,7 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
->         pdev = ifcvf_mgmt_dev->pdev;
->         dev = &pdev->dev;
->         adapter = vdpa_alloc_device(struct ifcvf_adapter, vdpa,
-> -                                   dev, &ifc_vdpa_ops, 1, name, false);
-> +                                   dev, &ifc_vdpa_ops, 1, 1, name, false);
->         if (IS_ERR(adapter)) {
->                 IFCVF_ERR(pdev, "Failed to allocate vDPA structure");
->                 return PTR_ERR(adapter);
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index fcfc28460b72..a76417892ef3 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -2282,7 +2282,8 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_device *vdev)
->         return mvdev->generation;
->  }
->
-> -static int mlx5_vdpa_set_map(struct vdpa_device *vdev, struct vhost_iotlb *iotlb)
-> +static int mlx5_vdpa_set_map(struct vdpa_device *vdev, unsigned int asid,
-> +                            struct vhost_iotlb *iotlb)
->  {
->         struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
->         bool change_map;
-> @@ -2581,7 +2582,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
->         }
->
->         ndev = vdpa_alloc_device(struct mlx5_vdpa_net, mvdev.vdev, mdev->device, &mlx5_vdpa_ops,
-> -                                1, name, false);
-> +                                1, 1, name, false);
->         if (IS_ERR(ndev))
->                 return PTR_ERR(ndev);
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index a07bf0130559..1793dc12b208 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -160,6 +160,7 @@ static void vdpa_release_dev(struct device *d)
->   * @parent: the parent device
->   * @config: the bus operations that is supported by this device
->   * @ngroups: number of groups supported by this device
-> + * @nas: number of address spaces supported by this device
->   * @size: size of the parent structure that contains private data
->   * @name: name of the vdpa device; optional.
->   * @use_va: indicate whether virtual address must be used by this device
-> @@ -172,7 +173,7 @@ static void vdpa_release_dev(struct device *d)
->   */
->  struct vdpa_device *__vdpa_alloc_device(struct device *parent,
->                                         const struct vdpa_config_ops *config,
-> -                                       unsigned int ngroups,
-> +                                       unsigned int ngroups, unsigned int nas,
->                                         size_t size, const char *name,
->                                         bool use_va)
->  {
-> @@ -206,6 +207,7 @@ struct vdpa_device *__vdpa_alloc_device(struct device *parent,
->         vdev->features_valid = false;
->         vdev->use_va = use_va;
->         vdev->ngroups = ngroups;
-> +       vdev->nas = nas;
->
->         if (name)
->                 err = dev_set_name(&vdev->dev, "%s", name);
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> index c98cb1f869fa..659e2e2e4b0c 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -251,7 +251,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
->                 ops = &vdpasim_config_ops;
->
->         vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops, 1,
-> -                                   dev_attr->name, false);
-> +                                   1, dev_attr->name, false);
->         if (IS_ERR(vdpasim)) {
->                 ret = PTR_ERR(vdpasim);
->                 goto err_alloc;
-> @@ -539,7 +539,7 @@ static struct vdpa_iova_range vdpasim_get_iova_range(struct vdpa_device *vdpa)
->         return range;
->  }
->
-> -static int vdpasim_set_map(struct vdpa_device *vdpa,
-> +static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
->                            struct vhost_iotlb *iotlb)
->  {
->         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-> @@ -566,7 +566,8 @@ static int vdpasim_set_map(struct vdpa_device *vdpa,
->         return ret;
->  }
->
-> -static int vdpasim_dma_map(struct vdpa_device *vdpa, u64 iova, u64 size,
-> +static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
-> +                          u64 iova, u64 size,
->                            u64 pa, u32 perm, void *opaque)
->  {
->         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-> @@ -580,7 +581,8 @@ static int vdpasim_dma_map(struct vdpa_device *vdpa, u64 iova, u64 size,
->         return ret;
->  }
->
-> -static int vdpasim_dma_unmap(struct vdpa_device *vdpa, u64 iova, u64 size)
-> +static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
-> +                            u64 iova, u64 size)
->  {
->         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 655ff7029401..6bf755f84d26 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -599,10 +599,10 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->                 return r;
->
->         if (ops->dma_map) {
-> -               r = ops->dma_map(vdpa, iova, size, pa, perm, opaque);
-> +               r = ops->dma_map(vdpa, 0, iova, size, pa, perm, opaque);
->         } else if (ops->set_map) {
->                 if (!v->in_batch)
-> -                       r = ops->set_map(vdpa, iotlb);
-> +                       r = ops->set_map(vdpa, 0, iotlb);
->         } else {
->                 r = iommu_map(v->domain, iova, pa, size,
->                               perm_to_iommu_flags(perm));
-> @@ -628,10 +628,10 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
->         vhost_vdpa_iotlb_unmap(v, iotlb, iova, iova + size - 1);
->
->         if (ops->dma_map) {
-> -               ops->dma_unmap(vdpa, iova, size);
-> +               ops->dma_unmap(vdpa, 0, iova, size);
->         } else if (ops->set_map) {
->                 if (!v->in_batch)
-> -                       ops->set_map(vdpa, iotlb);
-> +                       ops->set_map(vdpa, 0, iotlb);
->         } else {
->                 iommu_unmap(v->domain, iova, size);
->         }
-> @@ -863,7 +863,7 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev,
->                 break;
->         case VHOST_IOTLB_BATCH_END:
->                 if (v->in_batch && ops->set_map)
-> -                       ops->set_map(vdpa, iotlb);
-> +                       ops->set_map(vdpa, 0, iotlb);
->                 v->in_batch = false;
->                 break;
->         default:
-> @@ -1128,6 +1128,10 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
->         int minor;
->         int r;
->
-> +       /* Only support 1 address space and 1 groups */
-> +       if (vdpa->ngroups != 1 || vdpa->nas != 1)
-> +               return -EOPNOTSUPP;
-> +
->         v = kzalloc(sizeof(*v), GFP_KERNEL | __GFP_RETRY_MAYFAIL);
->         if (!v)
->                 return -ENOMEM;
-> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> index 026b7ad72ed7..de22ca1a8ef3 100644
-> --- a/include/linux/vdpa.h
-> +++ b/include/linux/vdpa.h
-> @@ -69,6 +69,8 @@ struct vdpa_mgmt_dev;
->   * @cf_mutex: Protects get and set access to configuration layout.
->   * @index: device index
->   * @features_valid: were features initialized? for legacy guests
-> + * @ngroups: the number of virtqueue groups
-> + * @nas: the number of address spaces
->   * @use_va: indicate whether virtual address must be used by this device
->   * @nvqs: maximum number of supported virtqueues
->   * @mdev: management device pointer; caller must setup when registering device as part
-> @@ -86,6 +88,7 @@ struct vdpa_device {
->         int nvqs;
->         struct vdpa_mgmt_dev *mdev;
->         unsigned int ngroups;
-> +       unsigned int nas;
->  };
->
->  /**
-> @@ -240,6 +243,7 @@ struct vdpa_map_file {
->   *                             Needed for device that using device
->   *                             specific DMA translation (on-chip IOMMU)
->   *                             @vdev: vdpa device
-> + *                             @asid: address space identifier
->   *                             @iotlb: vhost memory mapping to be
->   *                             used by the vDPA
->   *                             Returns integer: success (0) or error (< 0)
-> @@ -248,6 +252,7 @@ struct vdpa_map_file {
->   *                             specific DMA translation (on-chip IOMMU)
->   *                             and preferring incremental map.
->   *                             @vdev: vdpa device
-> + *                             @asid: address space identifier
->   *                             @iova: iova to be mapped
->   *                             @size: size of the area
->   *                             @pa: physical address for the map
-> @@ -259,6 +264,7 @@ struct vdpa_map_file {
->   *                             specific DMA translation (on-chip IOMMU)
->   *                             and preferring incremental unmap.
->   *                             @vdev: vdpa device
-> + *                             @asid: address space identifier
->   *                             @iova: iova to be unmapped
->   *                             @size: size of the area
->   *                             Returns integer: success (0) or error (< 0)
-> @@ -309,10 +315,12 @@ struct vdpa_config_ops {
->         struct vdpa_iova_range (*get_iova_range)(struct vdpa_device *vdev);
->
->         /* DMA ops */
-> -       int (*set_map)(struct vdpa_device *vdev, struct vhost_iotlb *iotlb);
-> -       int (*dma_map)(struct vdpa_device *vdev, u64 iova, u64 size,
-> -                      u64 pa, u32 perm, void *opaque);
-> -       int (*dma_unmap)(struct vdpa_device *vdev, u64 iova, u64 size);
-> +       int (*set_map)(struct vdpa_device *vdev, unsigned int asid,
-> +                      struct vhost_iotlb *iotlb);
-> +       int (*dma_map)(struct vdpa_device *vdev, unsigned int asid,
-> +                      u64 iova, u64 size, u64 pa, u32 perm, void *opaque);
-> +       int (*dma_unmap)(struct vdpa_device *vdev, unsigned int asid,
-> +                        u64 iova, u64 size);
->
->         /* Free device resources */
->         void (*free)(struct vdpa_device *vdev);
-> @@ -320,7 +328,7 @@ struct vdpa_config_ops {
->
->  struct vdpa_device *__vdpa_alloc_device(struct device *parent,
->                                         const struct vdpa_config_ops *config,
-> -                                       unsigned int ngroups,
-> +                                       unsigned int ngroups, unsigned int nas,
->                                         size_t size, const char *name,
->                                         bool use_va);
->
-> @@ -332,17 +340,19 @@ struct vdpa_device *__vdpa_alloc_device(struct device *parent,
->   * @parent: the parent device
->   * @config: the bus operations that is supported by this device
->   * @ngroups: the number of virtqueue groups supported by this device
-> + * @nas: the number of address spaces
->   * @name: name of the vdpa device
->   * @use_va: indicate whether virtual address must be used by this device
->   *
->   * Return allocated data structure or ERR_PTR upon error
->   */
-> -#define vdpa_alloc_device(dev_struct, member, parent, config, ngroups, name, use_va)   \
-> +#define vdpa_alloc_device(dev_struct, member, parent, config, ngroups, nas, \
-> +                         name, use_va) \
->                           container_of((__vdpa_alloc_device( \
-> -                                      parent, config, ngroups, \
-> -                                      sizeof(dev_struct) + \
-> +                                      parent, config, ngroups, nas, \
-> +                                      (sizeof(dev_struct) + \
+Le Thu, Mar 03, 2022 at 07:44:38AM -0600, Rob Herring a écrit :
+> On Wed, 02 Mar 2022 21:11:12 +0000, Corentin Labbe wrote:
+> > convert rockchip-crypto to yaml
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> >  .../crypto/rockchip,rk3288-crypto.yaml        | 64 +++++++++++++++++++
+> >  .../bindings/crypto/rockchip-crypto.txt       | 28 --------
+> >  2 files changed, 64 insertions(+), 28 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+> > 
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+> 
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/patch/1600075
+> 
+> 
+> cypto-controller@ff8a0000: clock-names: ['aclk', 'hclk', 'sclk', 'apb_pclk'] is too long
+> 	arch/arm/boot/dts/rk3288-evb-act8846.dt.yaml
+> 	arch/arm/boot/dts/rk3288-evb-rk808.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly-beta.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly-reload.dt.yaml
+> 	arch/arm/boot/dts/rk3288-miqi.dt.yaml
+> 	arch/arm/boot/dts/rk3288-phycore-rdk.dt.yaml
+> 	arch/arm/boot/dts/rk3288-popmetal.dt.yaml
+> 	arch/arm/boot/dts/rk3288-r89.dt.yaml
+> 	arch/arm/boot/dts/rk3288-rock2-square.dt.yaml
+> 	arch/arm/boot/dts/rk3288-rock-pi-n8.dt.yaml
+> 	arch/arm/boot/dts/rk3288-tinker.dt.yaml
+> 	arch/arm/boot/dts/rk3288-tinker-s.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-brain.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-fievel.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-jaq.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-jerry.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-mickey.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-mighty.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-minnie.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-pinky.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-speedy.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-tiger.dt.yaml
+> 	arch/arm/boot/dts/rk3288-vyasa.dt.yaml
+> 
+> cypto-controller@ff8a0000: clocks: [[7, 199], [7, 461], [7, 125], [7, 193]] is too long
+> 	arch/arm/boot/dts/rk3288-evb-act8846.dt.yaml
+> 	arch/arm/boot/dts/rk3288-evb-rk808.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly-beta.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly.dt.yaml
+> 	arch/arm/boot/dts/rk3288-firefly-reload.dt.yaml
+> 	arch/arm/boot/dts/rk3288-miqi.dt.yaml
+> 	arch/arm/boot/dts/rk3288-phycore-rdk.dt.yaml
+> 	arch/arm/boot/dts/rk3288-popmetal.dt.yaml
+> 	arch/arm/boot/dts/rk3288-r89.dt.yaml
+> 	arch/arm/boot/dts/rk3288-rock2-square.dt.yaml
+> 	arch/arm/boot/dts/rk3288-rock-pi-n8.dt.yaml
+> 	arch/arm/boot/dts/rk3288-tinker.dt.yaml
+> 	arch/arm/boot/dts/rk3288-tinker-s.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-brain.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-fievel.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-jaq.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-jerry.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-mickey.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-mighty.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-minnie.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-pinky.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-speedy.dt.yaml
+> 	arch/arm/boot/dts/rk3288-veyron-tiger.dt.yaml
+> 	arch/arm/boot/dts/rk3288-vyasa.dt.yaml
+> 
 
-Maybe too nitpick or I'm missing something, but do we need to add the
-parentheses around (sizeof(dev_struct) + BUILD_BUG_ON_ZERO(...)) ?
+The patch fixing thoses warning is in the serie.
 
->                                        BUILD_BUG_ON_ZERO(offsetof( \
-> -                                      dev_struct, member)), name, use_va)), \
-> +                                      dev_struct, member))), name, use_va)), \
->                                        dev_struct, member)
->
->  int vdpa_register_device(struct vdpa_device *vdev, int nvqs);
-> --
-> 2.25.0
->
-
+Regards

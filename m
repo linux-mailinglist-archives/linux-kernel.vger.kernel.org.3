@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA3E4CBC75
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9B04CBC7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbiCCLWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S232709AbiCCLYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiCCLWi (ORCPT
+        with ESMTP id S229794AbiCCLYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:22:38 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162681795D1
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646306513; x=1677842513;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/iuZEozBJt22c60CC91WkPJgESWawyjpyId2kx6JMq8=;
-  b=nKQkMPaxZSVeaaeiBoXFtBoojJQh8AyObz/mjqCUcDOjlD7CIzlKEd6W
-   dshnx7LC6RTzjC27KS6CXMlKNUFEqu4hJFG1XZqAinvMM0pkgRTgiFjRw
-   kzFJAIsmP51t8Am2lU3ZlieVZaS34gwP8QTJLG8CuHrjZTSviId/fF4ti
-   ZMKDyGAKtP8qhvF0NRKTdnPjbNNv0ozRc0XtaaAY7DT4bVOHzNfsh94GM
-   8MuH2y42UtrPteetPACOEBb2NGXnP7p6tDDnTvB7Ky7VSaHkedVISb0j7
-   BtgbdVH4sfQXSAs/XCHjGmGv5KDtCQx3D0rZhHeTYRkp+20NhRk+X0hQn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="316866180"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="316866180"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 03:21:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="511394365"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Mar 2022 03:21:51 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPjWo-0000Qm-Po; Thu, 03 Mar 2022 11:21:50 +0000
-Date:   Thu, 3 Mar 2022 19:21:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 24/27]
- microblaze-linux-ld: fs/cifs/file.o:undefined reference to
- `netfs_invalidatepage'
-Message-ID: <202203031912.4ZBI2sVg-lkp@intel.com>
+        Thu, 3 Mar 2022 06:24:05 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0BD9512E775;
+        Thu,  3 Mar 2022 03:23:18 -0800 (PST)
+Received: from localhost (unknown [192.168.98.254])
+        by app1 (Coremail) with SMTP id C4KowAB36FDLpCBiuLw6AA--.16098S2;
+        Thu, 03 Mar 2022 19:21:48 +0800 (CST)
+Date:   Thu, 3 Mar 2022 19:21:47 +0800
+From:   fuyao <fuyao1697@cyg.com>
+To:     Rob@scg, Herring@scg, robh+dt@kernel.org, Maxime@scg, Ripard@scg,
+        mripard@kernel.org, Chen-Yu@scg, Tsai@scg, wens@csie.org,
+        Jernej@scg, Skrabec@scg, jernej.skrabec@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     =?utf-8?B?6bqm5YGl5qif?= <maijianzhang@allwinnertech.com>
+Subject: [PATCH] sunxi:dts: remove r40 can node
+Message-ID: <YiCky/6luAPcmiEB@scg>
+Mail-Followup-To: Rob@scg, Herring@scg, robh+dt@kernel.org, Maxime@scg,
+        Ripard@scg, mripard@kernel.org, Chen-Yu@scg, Tsai@scg,
+        wens@csie.org, Jernej@scg, Skrabec@scg, jernej.skrabec@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        =?utf-8?B?6bqm5YGl5qif?= <maijianzhang@allwinnertech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: work_work_work
+X-CM-TRANSID: C4KowAB36FDLpCBiuLw6AA--.16098S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF18CFWUuw4xWF4fGFyDZFb_yoW3KFb_Ka
+        4fGa15WFWrArZ8trn5Jw43Jw18Zw48C3s3X34IqF4UJanIvws5XF4DJa93Xw15WrW2gFZY
+        yay5XF98tw1Y9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbs8YjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+        s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
+        8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E
+        87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
+        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6x8ErcxFaVAv8VW8GwAv7VCY1x0262k0Y48FwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k2
+        0xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r48MxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IUeeVbPUUUUU==
+X-CM-SenderInfo: 5ix1t0irwzlqxf1jhudrp/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   b295237bb1a924ca0723d728bb5ff30e6461ad2b
-commit: a606c4415f43f7122d98648f7e62c669986e6665 [24/27] netfs: Provide invalidatepage and releasepage calls
-config: microblaze-defconfig (https://download.01.org/0day-ci/archive/20220303/202203031912.4ZBI2sVg-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/a606c4415f43f7122d98648f7e62c669986e6665
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout a606c4415f43f7122d98648f7e62c669986e6665
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
+it does not have can in r40/a40i/t3.so delete it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> microblaze-linux-ld: fs/cifs/file.o:(.rodata+0x470): undefined reference to `netfs_invalidatepage'
->> microblaze-linux-ld: fs/cifs/file.o:(.rodata+0x474): undefined reference to `netfs_releasepage'
-   microblaze-linux-ld: fs/cifs/file.o:(.rodata+0x4c8): undefined reference to `netfs_invalidatepage'
-   microblaze-linux-ld: fs/cifs/file.o:(.rodata+0x4cc): undefined reference to `netfs_releasepage'
-
+Signed-off-by: fuyao <fuyao1697@cyg.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm/boot/dts/sun8i-r40.dtsi | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
+index 03d3e5f45a09..dde803b6ada0 100644
+--- a/arch/arm/boot/dts/sun8i-r40.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+@@ -936,15 +936,6 @@ i2c3: i2c@1c2b800 {
+ 			#size-cells = <0>;
+ 		};
+ 
+-		can0: can@1c2bc00 {
+-			compatible = "allwinner,sun8i-r40-can";
+-			reg = <0x01c2bc00 0x400>;
+-			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&ccu CLK_BUS_CAN>;
+-			resets = <&ccu RST_BUS_CAN>;
+-			status = "disabled";
+-		};
+-
+ 		i2c4: i2c@1c2c000 {
+ 			compatible = "allwinner,sun6i-a31-i2c";
+ 			reg = <0x01c2c000 0x400>;
+-- 
+2.32.0
+
+
+-- 
+Technology is exciting
+

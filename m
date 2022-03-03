@@ -2,131 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D57A4CBEC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E634CBECA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233697AbiCCNUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        id S233593AbiCCNXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiCCNUk (ORCPT
+        with ESMTP id S229909AbiCCNXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:20:40 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A004B188870
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:19:54 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id f8so6563377edf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:19:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VexrjkXSjl/LTDm+xnGgTi8XTrYcdQ/0U3vjR+rYTQw=;
-        b=p1j7mA4YzD3XdeLqxs2B1b8zKL6YZUoDqmFhWdCRW7JWnkJx8j0Em3ciA/IQx2xIJY
-         9qNHbVbhQY9JntYcwKWlljR4V0icJQXqcdT+k/QStB+rCraJhMwVOVN6WSBtiLIIhw/B
-         ixzTTLJYLnG9+DLq5U1JM5VzzZDsr+LezlGZNnqPce8IRZKgDj7gC2jhRQRusDHXx72X
-         0lgBEt7RvCd1mCZkR96nja6+whvhw0UZhT3XlWT4spuFdF6xj9ByDgX8oyD2FDkdNQUV
-         cryPmyfLEDZmH/37imjP9KER89/sQMqMN5djWJBV048VXma/IRCovAGirCQSEjk9Gzec
-         CZCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VexrjkXSjl/LTDm+xnGgTi8XTrYcdQ/0U3vjR+rYTQw=;
-        b=IIzHgebHdX2HnmBoKIB/9Eh35As6SAfPk81dv4cDPbUwcr5TBq4TejfpVhuvAsvrlt
-         IcnjjReT40T7iaUSmOhalfy9IwOdE2IiWQSauHH81UX+Hl8PRRSKSfsrLKZFZ80LbdfH
-         Zc/BvSuN187WE/sFIY/2YAwnxUL2j5HrEs0bF4WyO//GMJydAmiNdaHKIuEqrBJtlV4M
-         YZ9Rs9XxAjHSrH0a7kutRYfzyyfLAiwMFO9QuA4Fhep8io4fHUbb/HDpf7Tz2oZm33a4
-         pVHWHe4uZ+xBPw/744MAOg+Yj6QeC53G9cUexPtNxsOp+lv+j35ZwOxkeJwrPnr4QbDn
-         NjGA==
-X-Gm-Message-State: AOAM532EwNebquUVN504jwTI7ilJIK3lEJqNgpLddruS1XIezJRtLo8P
-        y2uQnmtaedcUoWXvyeIexAo=
-X-Google-Smtp-Source: ABdhPJzhH7vWeEc4jjV/03JS2MkMl9gdUKGbS+srAF1Wvec5Pz5Fdy5CpNjvMtU/YGx1IpeyZxWPkw==
-X-Received: by 2002:a05:6402:34cb:b0:415:b974:ec5c with SMTP id w11-20020a05640234cb00b00415b974ec5cmr8031561edc.329.1646313592647;
-        Thu, 03 Mar 2022 05:19:52 -0800 (PST)
-Received: from tsf-452-wpa-4-117.epfl.ch (tsf-452-wpa-4-117.epfl.ch. [128.179.156.117])
-        by smtp.gmail.com with ESMTPSA id h24-20020a170906261800b006da94c9ccc9sm481323ejc.129.2022.03.03.05.19.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 05:19:52 -0800 (PST)
-From:   Chun-Hung Tseng <henrybear327@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, christian@brauner.io,
-        linux-kernel@vger.kernel.org
-Cc:     Chun-Hung Tseng <henrybear327@gmail.com>
-Subject: [PATCH v3] sched: Simplify __sched_init runtime checks
-Date:   Thu,  3 Mar 2022 14:19:42 +0100
-Message-Id: <20220303131942.12030-1-henrybear327@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Mar 2022 08:23:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A54C34BBA;
+        Thu,  3 Mar 2022 05:22:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32460B8246E;
+        Thu,  3 Mar 2022 13:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACC0C340ED;
+        Thu,  3 Mar 2022 13:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646313754;
+        bh=WA+6m6yzwvFz/6tJbyG3UMbdVTSlsfS1c83kcIEFxWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pyf8b66awp9tbUHuOQVCaZJZ7TWxejy6MOWy8/1EDACDVYuzmng785Pltu4FO0wVf
+         zhSV6XGjpf0yNymkNk70LSl/LmsF4AYHWIam6SAZk7729mFhZ5jGwf3uE65/AnFkIV
+         BW4/z8ZhxBQkDvUKTx+QJ1x3ALjtR3zZFkjzBE88=
+Date:   Thu, 3 Mar 2022 14:22:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        spronovo@microsoft.com, spronovo@linux.microsoft.com
+Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
+ loading
+Message-ID: <YiDBGFJcQXfx/hwG@kroah.com>
+References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
+ <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
+ <Yh6F9cG6/SV6Fq8Q@kroah.com>
+ <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
+ <Yh8ia7nJNN7ISR1l@kroah.com>
+ <c848ade1-48e4-1868-b890-9c3401cff9de@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c848ade1-48e4-1868-b890-9c3401cff9de@linux.microsoft.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve runtime checks in __sched_init(void) by replacing if conditional
-checks with preprocessor directives.
+On Wed, Mar 02, 2022 at 05:09:21PM -0800, Iouri Tarassov wrote:
+> 
+> On 3/1/2022 11:53 PM, Greg KH wrote:
+> > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
+> > > > > +struct dxgglobal *dxgglobal;
+> > > > 
+> > > > No, make this per-device, NEVER have a single device for your driver.
+> > > > The Linux driver model makes it harder to do it this way than to do it
+> > > > correctly.  Do it correctly please and have no global structures like
+> > > > this.
+> > > > 
+> > > 
+> > > This may not be as big an issue as you thought. The device discovery is
+> > > still done via the normal VMBus probing routine. For all intents and
+> > > purposes the dxgglobal structure can be broken down into per device
+> > > fields and a global structure which contains the protocol versioning
+> > > information -- my understanding is there will always be a global
+> > > structure to hold information related to the backend, regardless of how
+> > > many devices there are.
+> >
+> > Then that is wrong and needs to be fixed.  Drivers should almost never
+> > have any global data, that is not how Linux drivers work.  What happens
+> > when you get a second device in your system for this?  Major rework
+> > would have to happen and the code will break.  Handle that all now as it
+> > takes less work to make this per-device than it does to have a global
+> > variable.
+> >
+> > > I definitely think splitting is doable, but I also understand why Iouri
+> > > does not want to do it _now_ given there is no such a model for multiple
+> > > devices yet, so anything we put into the per-device structure could be
+> > > incomplete and it requires further changing when such a model arrives
+> > > later.
+> > > 
+> > > Iouri, please correct me if I have the wrong mental model here.
+> > > 
+> > > All in all, I hope this is not going to be a deal breaker for the
+> > > acceptance of this driver.
+> >
+> > For my reviews, yes it will be.
+> >
+> > Again, it should be easier to keep things in a per-device state than
+> > not as the proper lifetime rules and the like are automatically handled
+> > for you.  If you have global data, you have to manage that all on your
+> > own and it is _MUCH_ harder to review that you got it correct.
+> 
+> Hi Greg,
+> 
+> I do not really see how the driver be written without the global data. Let's review the design.
 
-Signed-off-by: Chun-Hung Tseng <henrybear327@gmail.com>
----
- kernel/sched/core.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+I see it the other way around.  It's easier to make it without a static
+structure, it is more work to keep it as you have done so here.  Do it
+correctly to start with and you will not have any of these issues going
+forward.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 9745613d531c..003e8677f6ba 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9317,28 +9317,29 @@ void __init sched_init(void)
- #ifdef CONFIG_RT_GROUP_SCHED
- 	ptr += 2 * nr_cpu_ids * sizeof(void **);
- #endif
--	if (ptr) {
--		ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
-+
-+#if defined(CONFIG_FAIR_GROUP_SCHED) || defined(CONFIG_RT_GROUP_SCHED)
-+	ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
--		root_task_group.se = (struct sched_entity **)ptr;
--		ptr += nr_cpu_ids * sizeof(void **);
-+	root_task_group.se = (struct sched_entity **)ptr;
-+	ptr += nr_cpu_ids * sizeof(void **);
- 
--		root_task_group.cfs_rq = (struct cfs_rq **)ptr;
--		ptr += nr_cpu_ids * sizeof(void **);
-+	root_task_group.cfs_rq = (struct cfs_rq **)ptr;
-+	ptr += nr_cpu_ids * sizeof(void **);
- 
--		root_task_group.shares = ROOT_TASK_GROUP_LOAD;
--		init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
-+	root_task_group.shares = ROOT_TASK_GROUP_LOAD;
-+	init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- #ifdef CONFIG_RT_GROUP_SCHED
--		root_task_group.rt_se = (struct sched_rt_entity **)ptr;
--		ptr += nr_cpu_ids * sizeof(void **);
--
--		root_task_group.rt_rq = (struct rt_rq **)ptr;
--		ptr += nr_cpu_ids * sizeof(void **);
-+	root_task_group.rt_se = (struct sched_rt_entity **)ptr;
-+	ptr += nr_cpu_ids * sizeof(void **);
- 
-+	root_task_group.rt_rq = (struct rt_rq **)ptr;
-+	ptr += nr_cpu_ids * sizeof(void **);
- #endif /* CONFIG_RT_GROUP_SCHED */
--	}
-+#endif /* CONFIG_FAIR_GROUP_SCHED || CONFIG_RT_GROUP_SCHED */
-+
- #ifdef CONFIG_CPUMASK_OFFSTACK
- 	for_each_possible_cpu(i) {
- 		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
--- 
-2.35.1
+> Dxgkrnl acts as the aggregator of all virtual compute devices, projected by the host. It needs to do operations, which do not belong to a particular compute device. For example, cross device synchronization and resource sharing.
 
+Then hang your data off of your device node structure that you created.
+Why ignore that?
+
+> A PCI device device is created for each virtual compute device. Therefore, there should be a global list of objects and a mutex to synchronize access to the list.
+
+Woah, what?  You create a fake PCI device for each virtual device?  If
+so, great, then you are now a PCI bus and create the PCI devices
+properly so that the PCI core can handle and manage them and then assign
+them to your driver.  You should NEVER have a global list of these
+devices, as that is what the driver model should be managing.  Not you!
+
+> A VMBus channel is offered by the host for each compute device. The list of the VMBus channels should be global.
+
+The vmbus channels are already handled by the driver core.  Use those
+devices that are given to you.  You don't need to manage them at all.
+
+> A global VMBus channel is offered by the host. The channel does not belong to any particular compute device, so it must be global.
+
+That channel is attached to your driver, use the device given to your
+driver by the bus.  It's not "global" in any sense of the word.
+
+And what's up with your lack of line wrapping?
+
+> IO space is shared by all compute devices, so its parameters should be global.
+
+Huh?  If that's the case then you have bigger problems.  Use the aux bus
+for devices that share io space.  That is what it was created for, do
+not ignore the functionality that Linux already provides you by trying
+to go around it and writing your own code.  Use the frameworks we have
+already debugged and support.  This is why your Linux driver should be
+at least 1/3 smaller than drivers for other operating systems.
+
+> Dxgkrnl needs to maintain a list of processes, which opened compute device objects. Dxgkrnl maintains private state for each process and when a process opens the /dev/dxg device, Dxgkrnl needs to find if the process state is already created by walking the global process list.
+
+That "list" is handled by the device node structure that was opened.
+It's not "global" at all.  Again, just like any other device node in
+Linux, this isn't a new thing or anything special at all.
+
+> Now, where to keep this global state? It could be kept in the /dev/dxg private device structure. But this structure is not available when, for example, dxg_pci_probe_device() or dxg_probe_vmbus() is called.
+
+Then your design is wrong.  It's as simple as that.  Fix it.
+
+> Can there be multiple /dev/dxg devices? No. Because the /dev/dxg device represents the driver itself, not a particular compute device.
+
+Then fix this.  Make your compute devices store the needed information
+when they are created.  Again, we have loads of examples in the kernel,
+this is nothing new.
+
+> I am not sure what design model you have in mind when saying there should be no global data. Could you please explain keeping in mind the above requirements?
+
+Please see all of my responses above, and please use more \n characters
+in the future :)
+
+good luck!
+
+greg k-h

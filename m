@@ -2,171 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B08C4CB69E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 06:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0304CB6A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiCCF7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 00:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S229743AbiCCGCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiCCF7O (ORCPT
+        with ESMTP id S229468AbiCCGCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 00:59:14 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7603119F19
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 21:58:28 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id b5so553581ilj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 21:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mV84UzvwgcTzHrS1PWSpDhxSyXTiMnXaQ2zCTd8Q558=;
-        b=UZ/tqQYZi+ogQesV46CHakDd32m+0wL6DfJVcLrOka/3rU3gfGo4gJcNSOvA2BGs9B
-         OjPxDa0sbiH/7Q67uGyy54+fs1hLf6x24XjzTf5qk3BdXOVix3Ah59En3zhwepPXpyDX
-         BcyMJBi3fyv3OAbfWuNsXLeIXCE7z7cJl0xw+VWDNO9eOrmFw+jLaJuIy6S2xgaYT+Zm
-         /+k9Uh3uG2WGfouxTefJ7Usjojy9IGA3sM1Y/lBxIu4TVXi5llZIeZ1EJZ0J4n1tGHl+
-         /aLcTPNNLM53heiRJusvi7ezyfcF+xc+1EOzcgXNa09Guik6iY1rG7eLqrGnum0J3OxT
-         GTAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mV84UzvwgcTzHrS1PWSpDhxSyXTiMnXaQ2zCTd8Q558=;
-        b=T94fZKg75/pPojqHhLI+sSS0NZM+1sHVneyQXxj1nOdc5kaxnIYNLeinUKQXqwiqGn
-         nsG5AgVTt+3ulDMDpJ3agI1ReY2JbP7dHXtg/OBVAcNY7+6fbZXnjPGI2Z+QTy5XqHrh
-         0l101zkuMu8Wp+yVd+6tmNBAkwqaBVv4BUCSnja2CuUVZcQHZBQu0r7ZrDBPQ1wN++pN
-         CPxAGx/kKCZHRgX2HenOHkTu3UAMIZ8Ylph1N73FFw6kDsNU4dzSTfAxusNynoJlL6ui
-         bKEd8RRTjHTEosibDCPFm7Rq83B2Ocdwazc75N5S3yFehv7cTiX6G5ebYwpr+mHgi+8d
-         rDRg==
-X-Gm-Message-State: AOAM530yi3XigOEBBgO1D+OSQ2izwPYc6fNQ/CTmyw0HBTDo/mx3BqpQ
-        6ubXikh1PWWTU44esy45KtZxC0GBuRWWDg==
-X-Google-Smtp-Source: ABdhPJzu54Dx+if56oJLM2VL7QdcrZOD0qKkts4F8jiuqloHdxsuPwtqUxPKmc7COOV/y7BltcJ/WQ==
-X-Received: by 2002:a05:6e02:b4d:b0:2c2:2786:5215 with SMTP id f13-20020a056e020b4d00b002c227865215mr31467464ilu.4.1646287108186;
-        Wed, 02 Mar 2022 21:58:28 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.237])
-        by smtp.gmail.com with ESMTPSA id s13-20020a056e0218cd00b002c5f74a97d6sm1023018ilu.39.2022.03.02.21.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 21:58:27 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     corbet@lwn.net, hannes@cmpxchg.org, mingo@redhat.com,
-        peterz@infradead.org, surenb@google.com, ebiggers@google.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Martin Steigerwald <Martin.Steigerwald@proact.de>
-Subject: [PATCH] psi: remove CPU full metric at system level
-Date:   Thu,  3 Mar 2022 13:58:14 +0800
-Message-Id: <20220303055814.93057-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Mar 2022 01:02:17 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC612119F19
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:01:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646287293; x=1677823293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Z+ZH1umZkNELFDPrnAM2VJLDXgRWD8auXJ2VBm24Ag=;
+  b=VlpnNcfciImA/roIatHUurSj3z2+9y4tIkjx2IfSIe6Y90XvWgUCViMI
+   veIUMYnUYkCZRvnJ1wxGRgQU1GMroEzlrrBe3VQeFVbEFUHbnePuvNEGs
+   AxV/hq7eo5L9gWlW7PxPg+L8vsqFOWKgp0PMK9it0o9qOqUz3gLT4+54N
+   SrKo/BVOA33n/OUE0Qgpe53trvloKv9hdOGYj5aoNUjyJSDV8Mc+fnUUS
+   noEUStliOZ/dq6Tp8SDR+USZK36/aNv0HkfJEpVBuVBkBDVH6mwgWDujk
+   l1LpWoM2CEI46vmsDtc30QVub/ZZ/naaLAA+KJOSGpBiF0ibNLRWQoIIZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="252413638"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="252413638"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:01:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="508468671"
+Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.81.140])
+  by orsmga002.jf.intel.com with ESMTP; 02 Mar 2022 22:01:08 -0800
+Date:   Thu, 3 Mar 2022 14:01:52 +0800
+From:   Li Fei1 <fei1.li@intel.com>
+To:     Xiaolong Huang <butterflyhuangxx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, fei1.li@intel.com
+Subject: Re: [PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Message-ID: <20220303060152.GA5056@louislifei-OptiPlex-7050>
+References: <20220301100059.1834362-1-butterflyhuangxx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301100059.1834362-1-butterflyhuangxx@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin find it confusing when look at the /proc/pressure/cpu output,
-and found no hint about that CPU "full" line in psi Documentation.
+On Tue, Mar 01, 2022 at 06:00:59PM +0800, Xiaolong Huang wrote:
+> The vm_param and cpu_regs need to be freed via kfree() before return -EINVAL error.
+> 
+> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+> Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
+> Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+> ---
+>  drivers/virt/acrn/hsm.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+Hi Xiaolong
 
-% cat /proc/pressure/cpu
-some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
-full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
+Thanks for helping to fix this issue.
 
-The PSI_CPU_FULL state is introduced by commit e7fcd7622823
-("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
-but also counted at the system level as a side effect.
+This patch looks good. But I didn't see the base tree information of your patch applies to.
+Would you please help to record it.
 
-Naturally, the FULL state doesn't exist for the CPU resource at
-the system level. These "full" numbers can come from CPU idle
-schedule latency. For example, t1 is the time when task wakeup
-on an idle CPU, t2 is the time when CPU pick and switch to it.
-The delta of (t2 - t1) will be in CPU_FULL state.
+Thanks.
 
-Another case all processes can be stalled is when all cgroups
-have been throttled at the same time, which unlikely to happen.
-
-Anyway, CPU_FULL metric is meaningless and confusing at the
-system level. So this patch removed CPU full metric at the
-system level, and removed it's monitor function too. The psi
-Documentation has also been updated accordingly.
-
-Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
-Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- Documentation/accounting/psi.rst | 18 +++++++++++++++---
- kernel/sched/psi.c               | 10 +++++++++-
- 2 files changed, 24 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
-index 860fe651d645..519652c06d7d 100644
---- a/Documentation/accounting/psi.rst
-+++ b/Documentation/accounting/psi.rst
-@@ -178,8 +178,20 @@ Cgroup2 interface
- In a system with a CONFIG_CGROUP=y kernel and the cgroup2 filesystem
- mounted, pressure stall information is also tracked for tasks grouped
- into cgroups. Each subdirectory in the cgroupfs mountpoint contains
--cpu.pressure, memory.pressure, and io.pressure files; the format is
--the same as the /proc/pressure/ files.
-+cpu.pressure, memory.pressure, and io.pressure files; the format of
-+memory.pressure and io.pressure is the same as the /proc/pressure/ files.
-+
-+But the format of cpu.pressure is as such::
-+	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
-+	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
-+
-+The "some" line indicates the share of time in which at least some tasks
-+in the cgroup are stalled on CPU resource.
-+
-+The "full" line indicates the share of time in which all non-idle tasks
-+in the cgroup are stalled on CPU resource, which is being used by others
-+outside of the cgroup or throttled by the cgroup cpu.max configuration.
- 
- Per-cgroup psi monitors can be specified and used the same way as
--system-wide ones.
-+system-wide ones, except that users can also monitor full pressure on
-+CPU resource at the cgroup level.
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index e14358178849..d1baeb07d08c 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1047,6 +1047,7 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
- 
- int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- {
-+	int full_max = 2;
- 	int full;
- 	u64 now;
- 
-@@ -1061,7 +1062,11 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- 		group->avg_next_update = update_averages(group, now);
- 	mutex_unlock(&group->avgs_lock);
- 
--	for (full = 0; full < 2; full++) {
-+	/* CPU_FULL state doesn't exist at system level */
-+	if (res == PSI_CPU && group == &psi_system)
-+		full_max = 1;
-+
-+	for (full = 0; full < full_max; full++) {
- 		unsigned long avg[3];
- 		u64 total;
- 		int w;
-@@ -1103,6 +1108,9 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 	if (state >= PSI_NONIDLE)
- 		return ERR_PTR(-EINVAL);
- 
-+	if (state == PSI_CPU_FULL && group == &psi_system)
-+		return ERR_PTR(-EINVAL);
-+
- 	if (window_us < WINDOW_MIN_US ||
- 		window_us > WINDOW_MAX_US)
- 		return ERR_PTR(-EINVAL);
--- 
-2.20.1
-
+> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+> index 5419794fccf1..423ea888d79a 100644
+> --- a/drivers/virt/acrn/hsm.c
+> +++ b/drivers/virt/acrn/hsm.c
+> @@ -136,8 +136,10 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+>  		if (IS_ERR(vm_param))
+>  			return PTR_ERR(vm_param);
+>  
+> -		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
+> +		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
+> +			kfree(vm_param);
+>  			return -EINVAL;
+> +		}
+>  
+>  		vm = acrn_vm_create(vm, vm_param);
+>  		if (!vm) {
+> @@ -182,21 +184,29 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+>  			return PTR_ERR(cpu_regs);
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->reserved); i++)
+> -			if (cpu_regs->reserved[i])
+> +			if (cpu_regs->reserved[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_32); i++)
+> -			if (cpu_regs->vcpu_regs.reserved_32[i])
+> +			if (cpu_regs->vcpu_regs.reserved_32[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_64); i++)
+> -			if (cpu_regs->vcpu_regs.reserved_64[i])
+> +			if (cpu_regs->vcpu_regs.reserved_64[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.gdt.reserved); i++)
+>  			if (cpu_regs->vcpu_regs.gdt.reserved[i] |
+> -			    cpu_regs->vcpu_regs.idt.reserved[i])
+> +			    cpu_regs->vcpu_regs.idt.reserved[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		ret = hcall_set_vcpu_regs(vm->vmid, virt_to_phys(cpu_regs));
+>  		if (ret < 0)
+> -- 
+> 2.25.1
+> 

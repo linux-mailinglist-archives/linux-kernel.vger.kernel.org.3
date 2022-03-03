@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659B94CB475
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA4E4CB494
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbiCCByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S231515AbiCCBzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiCCByV (ORCPT
+        with ESMTP id S231484AbiCCBzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:54:21 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566C53708;
-        Wed,  2 Mar 2022 17:53:31 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x5so4660571edd.11;
-        Wed, 02 Mar 2022 17:53:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/nj/x4EcaAHZ48ZKXHO6tJgxsIj+fgw8rai9ogBnLJw=;
-        b=cEW3C4IP39oJbfJsEO7S34XAGWuiAXKUmAPcPxXLO7TZ4JVHyy0UC2DFm5DjAI87MX
-         8j4e50naS9CPkmi1oAW6M46COrau5sWUPum5VQGpVGRMNdJJ6Usk6pjxddBw1BScvc8P
-         7dVXfu/drbdVKSMPBfKF4cvdVmhVDaYsy+bAQMBi2vOuIDunlgFO453auNkTc5Bb+wBF
-         H4qi7Wf0TeTKMcSwe+MaEFWVoDvpJ4djxyBWmXBo7QoMTMWCXYbYz5sjjKkEt53qhvmi
-         Rn3T9VU3ZgMKI2m3jL1AnaYxWkWVM9F88eCHB+4Clh4vgEysxfpqnZErEqwHbjbRJvuX
-         d91Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/nj/x4EcaAHZ48ZKXHO6tJgxsIj+fgw8rai9ogBnLJw=;
-        b=YrPxlJZ4boQ2mE8YMcE3LdEk+tNLJIsYSshMoZ+CYaefhL4lvcNK0f6WUQQFR2VQ4R
-         6cY5NzUmyhqDsank8qy6ucU6DgRKso1YjxTGke0Ch1auI5oy4UmBUEIAs1RfgWa0qvBz
-         N8XuBCeflgweoQ8bJzAWfApNCpZY69u51rWnfs3+KmVaBJL7krgBBzhyDcYNP/u/ZHFO
-         ddM+M/UD8EoG3Vlr2eI01RWi/vRry1qPxxB0TgbHbPlEal+GGbcg0Vl9DulPcL6IuoHv
-         1Ab2qGI72oImLx9eudOnsVxAXHv/zUKTJyL1kekrv9rXWWDIwX/utn/a8U2aB8YEkpMz
-         ySJA==
-X-Gm-Message-State: AOAM533o9JmiPnn9fwIkXFdjWJBv/ClprFsRxKO7PF4b5qcSIFjd/Tga
-        WkQk6z9PlNcGz3C6sHqt1YY=
-X-Google-Smtp-Source: ABdhPJzQ7uwSc5TZ2tt5UEwG1otUMR1DpALsL1r/ey7vpe5qaAuzMZd5JJpdc1GnjBEr58GhdSkUIA==
-X-Received: by 2002:a05:6402:5254:b0:410:def7:132c with SMTP id t20-20020a056402525400b00410def7132cmr32443104edd.161.1646272409352;
-        Wed, 02 Mar 2022 17:53:29 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id i26-20020a17090671da00b006d9b2150a22sm193305ejk.146.2022.03.02.17.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 17:53:28 -0800 (PST)
-Date:   Thu, 3 Mar 2022 03:53:27 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH v2] net: dsa: qca8k: pack driver struct and
- improve cache use
-Message-ID: <20220303015327.k3fqkkxunm6kihjl@skbuf>
-References: <20220228110408.4903-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228110408.4903-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 2 Mar 2022 20:55:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79072F9F98
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:54:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EBDBB82132
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 01:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B4DC004E1;
+        Thu,  3 Mar 2022 01:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646272485;
+        bh=2zpcMz+EQ09fMOlU5HGSenxjVwDgGz5varO+fnzOgWs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IoTgSdfmx/hEScRr+JrOxKcbAsamzIdGFTWyffprUZKW4mLUq1oORkA7bQpq752LC
+         J/Q7lScTVq5OcOavAKo40m3BMqh0KZCewHsqIb9rg1XufnvnKQA92zkWMt2V5LiCGp
+         cjD9zW9s6W+XK6aMVR7uHWzDnk0Pv0rTlsCWLTRc8DcIOPbBd6z/mrgcCS2CXsUjgA
+         GFA5RSxYYCeylNx3vCaKItwENaDTLOdycqLHxPvXKYEfV2nKBbSiZkk0KQ5lTVWIH9
+         /jug/09LH2t/MW9f95V+LEIC0Y0S+/+kIw59h+IjL50iDcTUq7WvdaJ6rVKW6qE9Au
+         C4/G3CCOagK3g==
+Date:   Thu, 3 Mar 2022 10:54:40 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        alexei.starovoitov@gmail.com, alyssa.milburn@intel.com,
+        andrew.cooper3@citrix.com, hjl.tools@gmail.com,
+        joao@overdrivepizza.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mbenes@suse.cz,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ndesaulniers@google.com, rostedt@goodmis.org,
+        samitolvanen@google.com, x86@kernel.org
+Subject: Re: [PATCH v2 15/39] x86/ibt,kprobes: Fix more +0 assumptions
+Message-Id: <20220303105440.bd8bb739257a05846b5f2185@kernel.org>
+In-Reply-To: <1646236764.vx04n8yp12.naveen@linux.ibm.com>
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.892372059@infradead.org>
+        <20220228150705.aab2d654b973109bab070ffe@kernel.org>
+        <20220228232513.GH11184@worktop.programming.kicks-ass.net>
+        <20220301114905.e11146ad69d6e01998101c3b@kernel.org>
+        <Yh3ZQQv8GjtqgUF4@hirez.programming.kicks-ass.net>
+        <1646154463.4r1sh4kjf0.naveen@linux.ibm.com>
+        <20220301191245.GI11184@worktop.programming.kicks-ass.net>
+        <20220301200547.GK11184@worktop.programming.kicks-ass.net>
+        <1646236764.vx04n8yp12.naveen@linux.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,236 +71,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:04:08PM +0100, Ansuel Smith wrote:
-> Pack qca8k priv and other struct using pahole and set the first priv
-> struct entry to mgmt_master and mgmt_eth_data to speedup access.
-> While at it also rework pcs struct and move it qca8k_ports_config
-> following other configuration set for the cpu ports.
+On Wed, 02 Mar 2022 21:47:03 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+
+> Peter Zijlstra wrote:
+> > --- a/arch/powerpc/kernel/kprobes.c
+> > +++ b/arch/powerpc/kernel/kprobes.c
+> > @@ -105,6 +105,27 @@ kprobe_opcode_t *kprobe_lookup_name(cons
+> >  	return addr;
+> >  }
+> > 
+> > +static bool arch_kprobe_on_func_entry(unsigned long offset)
+> > +{
+> > +#ifdef PPC64_ELF_ABI_v2
+> > +#ifdef CONFIG_KPROBES_ON_FTRACE
+> > +	return offset <= 16;
+> > +#else
+> > +	return offset <= 8;
+> > +#endif
+> > +#else
+> > +	return !offset;
+> > +#endif
+> > +}
+> > +
+> > +/* XXX try and fold the magic of kprobe_lookup_name() in this */
+> > +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
+> > +					 bool *on_func_entry)
+> > +{
+> > +	*on_func_entry = arch_kprobe_on_func_entry(offset);
+> > +	return (kprobe_opcode_t *)(addr + offset);
+> > +}
+> > +
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
-
-How did you "pack" struct qca8k_priv exactly?
-
-Before:
-
-struct qca8k_priv {
-        u8                         switch_id;            /*     0     1 */
-        u8                         switch_revision;      /*     1     1 */
-        u8                         mirror_rx;            /*     2     1 */
-        u8                         mirror_tx;            /*     3     1 */
-        u8                         lag_hash_mode;        /*     4     1 */
-        bool                       legacy_phy_port_mapping; /*     5     1 */
-        struct qca8k_ports_config  ports_config;         /*     6     7 */
-
-        /* XXX 3 bytes hole, try to pack */
-
-        struct regmap *            regmap;               /*    16     8 */
-        struct mii_bus *           bus;                  /*    24     8 */
-        struct ar8xxx_port_status  port_sts[7];          /*    32    28 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        /* --- cacheline 1 boundary (64 bytes) --- */
-        struct dsa_switch *        ds;                   /*    64     8 */
-        struct mutex               reg_mutex;            /*    72   160 */
-        /* --- cacheline 3 boundary (192 bytes) was 40 bytes ago --- */
-        struct device *            dev;                  /*   232     8 */
-        struct dsa_switch_ops      ops;                  /*   240   864 */
-        /* --- cacheline 17 boundary (1088 bytes) was 16 bytes ago --- */
-        struct gpio_desc *         reset_gpio;           /*  1104     8 */
-        unsigned int               port_mtu[7];          /*  1112    28 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        struct net_device *        mgmt_master;          /*  1144     8 */
-        /* --- cacheline 18 boundary (1152 bytes) --- */
-        struct qca8k_mgmt_eth_data mgmt_eth_data;        /*  1152   280 */
-        /* --- cacheline 22 boundary (1408 bytes) was 24 bytes ago --- */
-        struct qca8k_mib_eth_data  mib_eth_data;         /*  1432   272 */
-        /* --- cacheline 26 boundary (1664 bytes) was 40 bytes ago --- */
-        struct qca8k_mdio_cache    mdio_cache;           /*  1704     6 */
-
-        /* XXX 2 bytes hole, try to pack */
-
-        struct qca8k_pcs           pcs_port_0;           /*  1712    32 */
-
-        /* XXX last struct has 4 bytes of padding */
-
-        /* --- cacheline 27 boundary (1728 bytes) was 16 bytes ago --- */
-        struct qca8k_pcs           pcs_port_6;           /*  1744    32 */
-
-        /* XXX last struct has 4 bytes of padding */
-
-        /* size: 1776, cachelines: 28, members: 22 */
-        /* sum members: 1763, holes: 4, sum holes: 13 */
-        /* paddings: 2, sum paddings: 8 */
-        /* last cacheline: 48 bytes */
-};
-
-After:
-
-struct qca8k_priv {
-        struct net_device *        mgmt_master;          /*     0     8 */
-        struct qca8k_mgmt_eth_data mgmt_eth_data;        /*     8   280 */
-        /* --- cacheline 4 boundary (256 bytes) was 32 bytes ago --- */
-        struct qca8k_mdio_cache    mdio_cache;           /*   288     6 */
-        u8                         switch_id;            /*   294     1 */
-        u8                         switch_revision;      /*   295     1 */
-        u8                         mirror_rx;            /*   296     1 */
-        u8                         mirror_tx;            /*   297     1 */
-        u8                         lag_hash_mode;        /*   298     1 */
-        bool                       legacy_phy_port_mapping; /*   299     1 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        struct qca8k_ports_config  ports_config;         /*   304    72 */
-        /* --- cacheline 5 boundary (320 bytes) was 56 bytes ago --- */
-        struct regmap *            regmap;               /*   376     8 */
-        /* --- cacheline 6 boundary (384 bytes) --- */
-        struct mii_bus *           bus;                  /*   384     8 */
-        struct ar8xxx_port_status  port_sts[7];          /*   392    28 */
-
-        /* XXX 4 bytes hole, try to pack */
-
-        struct dsa_switch *        ds;                   /*   424     8 */
-        struct mutex               reg_mutex;            /*   432   160 */
-        /* --- cacheline 9 boundary (576 bytes) was 16 bytes ago --- */
-        struct device *            dev;                  /*   592     8 */
-        struct gpio_desc *         reset_gpio;           /*   600     8 */
-        struct dsa_switch_ops      ops;                  /*   608   864 */
-        /* --- cacheline 23 boundary (1472 bytes) --- */
-        struct qca8k_mib_eth_data  mib_eth_data;         /*  1472   280 */
-
-        /* XXX last struct has 4 bytes of padding */
-
-        /* --- cacheline 27 boundary (1728 bytes) was 24 bytes ago --- */
-        unsigned int               port_mtu[7];          /*  1752    28 */
-
-        /* size: 1784, cachelines: 28, members: 20 */
-        /* sum members: 1772, holes: 2, sum holes: 8 */
-        /* padding: 4 */
-        /* paddings: 1, sum paddings: 4 */
-        /* last cacheline: 56 bytes */
-};
-
-1776 vs 1784. That's... larger?!
-
-Also, struct qca8k_priv is so large because the "ops" member is a full
-copy of qca8k_switch_ops. I understand why commit db460c54b67f ("net:
-dsa: qca8k: extend slave-bus implementations") did this, but I wonder,
-is there no better way?
-
->  drivers/net/dsa/qca8k.c |  8 ++++----
->  drivers/net/dsa/qca8k.h | 33 ++++++++++++++++-----------------
->  2 files changed, 20 insertions(+), 21 deletions(-)
+> With respect to kprobe_lookup_name(), one of the primary motivations there was 
+> the issue with function descriptors for the previous elf v1 ABI (it likely also 
+> affects ia64/parisc). I'm thinking it'll be simpler if we have a way to obtain 
+> function entry point. Something like this:
 > 
-> diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-> index ee0dbf324268..8d059da5f0ca 100644
-> --- a/drivers/net/dsa/qca8k.c
-> +++ b/drivers/net/dsa/qca8k.c
-> @@ -1685,11 +1685,11 @@ qca8k_phylink_mac_select_pcs(struct dsa_switch *ds, int port,
->  	case PHY_INTERFACE_MODE_1000BASEX:
->  		switch (port) {
->  		case 0:
-> -			pcs = &priv->pcs_port_0.pcs;
-> +			pcs = &priv->ports_config.qpcs[QCA8K_CPU_PORT0].pcs;
->  			break;
+> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> index 4176c7eca7b5aa..8c57cc5b77f9ae 100644
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -73,6 +73,12 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+>  /* Lookup the address for a symbol. Returns 0 if not found. */
+>  unsigned long kallsyms_lookup_name(const char *name);
 >  
->  		case 6:
-> -			pcs = &priv->pcs_port_6.pcs;
-> +			pcs = &priv->ports_config.qpcs[QCA8K_CPU_PORT6].pcs;
->  			break;
->  		}
->  		break;
-> @@ -2889,8 +2889,8 @@ qca8k_setup(struct dsa_switch *ds)
->  	if (ret)
->  		return ret;
->  
-> -	qca8k_setup_pcs(priv, &priv->pcs_port_0, 0);
-> -	qca8k_setup_pcs(priv, &priv->pcs_port_6, 6);
-> +	qca8k_setup_pcs(priv, &priv->ports_config.qpcs[QCA8K_CPU_PORT0], 0);
-> +	qca8k_setup_pcs(priv, &priv->ports_config.qpcs[QCA8K_CPU_PORT6], 6);
->  
->  	/* Make sure MAC06 is disabled */
->  	ret = regmap_clear_bits(priv->regmap, QCA8K_REG_PORT0_PAD_CTRL,
-> diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-> index f375627174c8..611dc2335dbe 100644
-> --- a/drivers/net/dsa/qca8k.h
-> +++ b/drivers/net/dsa/qca8k.h
-> @@ -341,18 +341,24 @@ enum {
->  
->  struct qca8k_mgmt_eth_data {
->  	struct completion rw_done;
-> -	struct mutex mutex; /* Enforce one mdio read/write at time */
-> +	u32 data[4];
->  	bool ack;
->  	u32 seq;
-> -	u32 data[4];
-> +	struct mutex mutex; /* Enforce one mdio read/write at time */
->  };
->  
->  struct qca8k_mib_eth_data {
->  	struct completion rw_done;
-> +	u64 *data; /* pointer to ethtool data */
-> +	u8 req_port;
->  	struct mutex mutex; /* Process one command at time */
->  	refcount_t port_parsed; /* Counter to track parsed port */
-> -	u8 req_port;
-> -	u64 *data; /* pointer to ethtool data */
-> +};
+> +/* Return function entry point by additionally dereferencing function descriptor */
+> +static inline unsigned long kallsyms_lookup_function(const char *name)
+> +{
+> +	return (unsigned long)dereference_symbol_descriptor((void *)kallsyms_lookup_name(name));
+> +}
 > +
-> +struct qca8k_pcs {
-> +	struct phylink_pcs pcs;
-> +	struct qca8k_priv *priv;
-> +	int port;
->  };
+>  extern int kallsyms_lookup_size_offset(unsigned long addr,
+>  				  unsigned long *symbolsize,
+>  				  unsigned long *offset);
+> @@ -103,6 +109,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
+>  	return 0;
+>  }
 >  
->  struct qca8k_ports_config {
-> @@ -361,6 +367,7 @@ struct qca8k_ports_config {
->  	bool sgmii_enable_pll;
->  	u8 rgmii_rx_delay[QCA8K_NUM_CPU_PORTS]; /* 0: CPU port0, 1: CPU port6 */
->  	u8 rgmii_tx_delay[QCA8K_NUM_CPU_PORTS]; /* 0: CPU port0, 1: CPU port6 */
-> +	struct qca8k_pcs qpcs[QCA8K_NUM_CPU_PORTS];
->  };
+> +static inline unsigned long kallsyms_lookup_function(const char *name)
+> +{
+> +	return 0;
+> +}
+> +
+>  static inline int kallsyms_lookup_size_offset(unsigned long addr,
+>  					      unsigned long *symbolsize,
+>  					      unsigned long *offset)
+> 
+> 
+> With that, we can fold some of the code from kprobe_lookup_name() into 
+> arch_adjust_kprobe_addr() and remove kprobe_lookup_name(). This should also 
+> address Masami's concerns with powerpc promoting all probes at function entry 
+> into a probe at the ftrace location.
+
+Good point, this looks good to me.
+And "kallsyms_lookup_entry_address()" will be the preferable name.
+
+Thank you,
+> 
+> 
+> - Naveen
+> 
+> 
+> ---
+>  arch/powerpc/kernel/kprobes.c | 70 +++--------------------------------
+>  include/linux/kprobes.h       |  1 -
+>  kernel/kprobes.c              | 19 ++--------
+>  kernel/trace/trace_kprobe.c   |  2 +-
+>  4 files changed, 9 insertions(+), 83 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
+> index 7dae0b01abfbd6..46aa2b9e44c27c 100644
+> --- a/arch/powerpc/kernel/kprobes.c
+> +++ b/arch/powerpc/kernel/kprobes.c
+> @@ -41,70 +41,6 @@ bool arch_within_kprobe_blacklist(unsigned long addr)
+>  		 addr < (unsigned long)__head_end);
+>  }
 >  
->  struct qca8k_mdio_cache {
-> @@ -376,13 +383,10 @@ struct qca8k_mdio_cache {
->  	u16 hi;
->  };
->  
-> -struct qca8k_pcs {
-> -	struct phylink_pcs pcs;
-> -	struct qca8k_priv *priv;
-> -	int port;
-> -};
+> -kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset)
+> -{
+> -	kprobe_opcode_t *addr = NULL;
 > -
->  struct qca8k_priv {
-> +	struct net_device *mgmt_master; /* Track if mdio/mib Ethernet is available */
-> +	struct qca8k_mgmt_eth_data mgmt_eth_data;
-> +	struct qca8k_mdio_cache mdio_cache;
->  	u8 switch_id;
->  	u8 switch_revision;
->  	u8 mirror_rx;
-> @@ -396,15 +400,10 @@ struct qca8k_priv {
->  	struct dsa_switch *ds;
->  	struct mutex reg_mutex;
->  	struct device *dev;
-> -	struct dsa_switch_ops ops;
->  	struct gpio_desc *reset_gpio;
-> -	unsigned int port_mtu[QCA8K_NUM_PORTS];
-> -	struct net_device *mgmt_master; /* Track if mdio/mib Ethernet is available */
-> -	struct qca8k_mgmt_eth_data mgmt_eth_data;
-> +	struct dsa_switch_ops ops;
->  	struct qca8k_mib_eth_data mib_eth_data;
-> -	struct qca8k_mdio_cache mdio_cache;
-> -	struct qca8k_pcs pcs_port_0;
-> -	struct qca8k_pcs pcs_port_6;
-> +	unsigned int port_mtu[QCA8K_NUM_PORTS];
->  };
+> -#ifdef PPC64_ELF_ABI_v2
+> -	/* PPC64 ABIv2 needs local entry point */
+> -	addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
+> -	if (addr && !offset) {
+> -#ifdef CONFIG_KPROBES_ON_FTRACE
+> -		unsigned long faddr;
+> -		/*
+> -		 * Per livepatch.h, ftrace location is always within the first
+> -		 * 16 bytes of a function on powerpc with -mprofile-kernel.
+> -		 */
+> -		faddr = ftrace_location_range((unsigned long)addr,
+> -					      (unsigned long)addr + 16);
+> -		if (faddr)
+> -			addr = (kprobe_opcode_t *)faddr;
+> -		else
+> -#endif
+> -			addr = (kprobe_opcode_t *)ppc_function_entry(addr);
+> -	}
+> -#elif defined(PPC64_ELF_ABI_v1)
+> -	/*
+> -	 * 64bit powerpc ABIv1 uses function descriptors:
+> -	 * - Check for the dot variant of the symbol first.
+> -	 * - If that fails, try looking up the symbol provided.
+> -	 *
+> -	 * This ensures we always get to the actual symbol and not
+> -	 * the descriptor.
+> -	 *
+> -	 * Also handle <module:symbol> format.
+> -	 */
+> -	char dot_name[MODULE_NAME_LEN + 1 + KSYM_NAME_LEN];
+> -	bool dot_appended = false;
+> -	const char *c;
+> -	ssize_t ret = 0;
+> -	int len = 0;
+> -
+> -	if ((c = strnchr(name, MODULE_NAME_LEN, ':')) != NULL) {
+> -		c++;
+> -		len = c - name;
+> -		memcpy(dot_name, name, len);
+> -	} else
+> -		c = name;
+> -
+> -	if (*c != '\0' && *c != '.') {
+> -		dot_name[len++] = '.';
+> -		dot_appended = true;
+> -	}
+> -	ret = strscpy(dot_name + len, c, KSYM_NAME_LEN);
+> -	if (ret > 0)
+> -		addr = (kprobe_opcode_t *)kallsyms_lookup_name(dot_name);
+> -
+> -	/* Fallback to the original non-dot symbol lookup */
+> -	if (!addr && dot_appended)
+> -		addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
+> -#else
+> -	addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
+> -#endif
+> -
+> -	return addr;
+> -}
+> -
+>  static bool arch_kprobe_on_func_entry(unsigned long offset)
+>  {
+>  #ifdef PPC64_ELF_ABI_v2
+> @@ -118,11 +54,15 @@ static bool arch_kprobe_on_func_entry(unsigned long offset)
+>  #endif
+>  }
 >  
->  struct qca8k_mib_desc {
+> -/* XXX try and fold the magic of kprobe_lookup_name() in this */
+>  kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
+>  					 bool *on_func_entry)
+>  {
+>  	*on_func_entry = arch_kprobe_on_func_entry(offset);
+> +#ifdef PPC64_ELF_ABI_v2
+> +	/* Promote probes on the GEP to the LEP */
+> +	if (!offset)
+> +		addr = ppc_function_entry((void *)addr);
+> +#endif
+>  	return (kprobe_opcode_t *)(addr + offset);
+>  }
+>  
+> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+> index 9c28f7a0ef4268..dad375056ba049 100644
+> --- a/include/linux/kprobes.h
+> +++ b/include/linux/kprobes.h
+> @@ -382,7 +382,6 @@ static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+>  	return this_cpu_ptr(&kprobe_ctlblk);
+>  }
+>  
+> -kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
+>  kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset, bool *on_func_entry);
+>  
+>  int register_kprobe(struct kprobe *p);
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 8be57fdc19bdc0..066fa644e9dfa3 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -67,12 +67,6 @@ static bool kprobes_all_disarmed;
+>  static DEFINE_MUTEX(kprobe_mutex);
+>  static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
+>  
+> -kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
+> -					unsigned int __unused)
+> -{
+> -	return ((kprobe_opcode_t *)(kallsyms_lookup_name(name)));
+> -}
+> -
+>  /*
+>   * Blacklist -- list of 'struct kprobe_blacklist_entry' to store info where
+>   * kprobes can not probe.
+> @@ -1481,7 +1475,7 @@ bool within_kprobe_blacklist(unsigned long addr)
+>  		if (!p)
+>  			return false;
+>  		*p = '\0';
+> -		addr = (unsigned long)kprobe_lookup_name(symname, 0);
+> +		addr = kallsyms_lookup_function(symname);
+>  		if (addr)
+>  			return __within_kprobe_blacklist(addr);
+>  	}
+> @@ -1524,14 +1518,7 @@ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
+>  		goto invalid;
+>  
+>  	if (symbol_name) {
+> -		/*
+> -		 * Input: @sym + @offset
+> -		 * Output: @addr + @offset
+> -		 *
+> -		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
+> -		 *       argument into it's output!
+> -		 */
+> -		addr = kprobe_lookup_name(symbol_name, offset);
+> +		addr = (kprobe_opcode_t *)kallsyms_lookup_function(symbol_name);
+>  		if (!addr)
+>  			return ERR_PTR(-ENOENT);
+>  	}
+> @@ -2621,7 +2608,7 @@ static int __init init_kprobes(void)
+>  		/* lookup the function address from its name */
+>  		for (i = 0; kretprobe_blacklist[i].name != NULL; i++) {
+>  			kretprobe_blacklist[i].addr =
+> -				kprobe_lookup_name(kretprobe_blacklist[i].name, 0);
+> +				(void *)kallsyms_lookup_function(kretprobe_blacklist[i].name);
+>  			if (!kretprobe_blacklist[i].addr)
+>  				pr_err("Failed to lookup symbol '%s' for kretprobe blacklist. Maybe the target function is removed or renamed.\n",
+>  				       kretprobe_blacklist[i].name);
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 508f14af4f2c7e..a8d01954051e60 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -461,7 +461,7 @@ static bool within_notrace_func(struct trace_kprobe *tk)
+>  		if (!p)
+>  			return true;
+>  		*p = '\0';
+> -		addr = (unsigned long)kprobe_lookup_name(symname, 0);
+> +		addr = kallsyms_lookup_function(symname);
+>  		if (addr)
+>  			return __within_notrace_func(addr);
+>  	}
 > -- 
-> 2.34.1
+> 2.35.1
+> 
 > 
 
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

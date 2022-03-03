@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5C94CB82B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAAC4CB832
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiCCHy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S230426AbiCCH4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiCCHy6 (ORCPT
+        with ESMTP id S229814AbiCCH4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:54:58 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AC416F960;
-        Wed,  2 Mar 2022 23:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646294053; x=1677830053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b/d2xM5QHwo48QlJhIIi1Xm1eu2owKNVfYPj+uvB7DE=;
-  b=E5XWVMiFXWfa50RdckcLz4v0p17w4Kw015LpUCgZ0VH7fFFCuDoHQkDw
-   OnMzMeBEy1CsdXdSwsjwLua1dU+FlzCu4FWvr8Iu/hIkQapkhZuuYtQQ3
-   O5GKdW6IilfR/hKdRKyIBKuW2JDYjfLsDTObpHhnfagbXjgs2KCL4Sk0J
-   sLR5G3s2M7SaupOSKCzYHwmq2DPG0tg3ZaVb/0jsAv1e5ZrUjcJ2jcWn3
-   9KA2nnctT/MCESSdHkRvktnf5LjtYnbDLvlMK/3s4cPHS178s5HbSBA+y
-   YCQ9RTM2vk/pERE0TbRZfw3+VCH6KpkBHsW754Ydydr0WaUs3uc4HLiuY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="241023334"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="241023334"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:54:12 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="508496453"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:54:10 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:54:08 +0200
-Date:   Thu, 3 Mar 2022 09:54:08 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH 4/5] drivers/thunderbolt: Clarify/correct register
- offsets for tb_cap_plug_events
-Message-ID: <YiB0IFe96XIORdUz@lahna>
-References: <20220302220709.3138846-1-mario.limonciello@amd.com>
- <20220302220709.3138846-4-mario.limonciello@amd.com>
+        Thu, 3 Mar 2022 02:56:49 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D668716F960;
+        Wed,  2 Mar 2022 23:56:00 -0800 (PST)
+X-UUID: 4a72785ec92a48dc8d8e5438043181db-20220303
+X-UUID: 4a72785ec92a48dc8d8e5438043181db-20220303
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <alice.chao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 344685981; Thu, 03 Mar 2022 15:55:53 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 3 Mar 2022 15:55:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 3 Mar 2022 15:55:47 +0800
+From:   Alice Chao <alice.chao@mediatek.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <matthias.bgg@gmail.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+CC:     <stanley.chu@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <jonathan.hsu@mediatek.com>, <powen.kao@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <yanxu.wei@mediatek.com>,
+        <wsd_upstream@mediatek.com>
+Subject: [PATCH 1/1] scsi: Fix racing between dev init and dev reset
+Date:   Thu, 3 Mar 2022 15:55:27 +0800
+Message-ID: <20220303075527.25258-1-alice.chao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302220709.3138846-4-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:07:08PM -0600, Mario Limonciello wrote:
-> The USB4 1.0 specification outlines the `cap_plug_events` structure in
-> table 13-14 located on page 507.  This shows that there was a mistake
-> in VSC_CS_1 where plug events disable should be 4 bits and
-> "TBT3-Compatible" should be 3 bits.
-> 
-> While correcting the mistake, update the names and comments to more
-> closely match the specification.  This should not change anything
-> functionally.
-> 
-> Link: https://www.usb.org/sites/default/files/USB4%20Specification%2020211116.zip
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/thunderbolt/tb_regs.h | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> index 70795a2aa9bb..8c42f8bc679e 100644
-> --- a/drivers/thunderbolt/tb_regs.h
-> +++ b/drivers/thunderbolt/tb_regs.h
-> @@ -146,14 +146,14 @@ struct tb_eeprom_ctl {
->  
->  struct tb_cap_plug_events {
->  	struct tb_cap_extended_short cap_header;
-> -	u32 __unknown1:2;
-> -	u32 plug_events:5;
-> -	u32 __unknown2:25;
-> -	u32 __unknown3;
-> -	u32 __unknown4;
-> +	u32 __unknown1:3; /* VSC_CS_1 */
-> +	u32 plug_events:4; /* VSC_CS_1 */
-> +	u32 __unknown2:25; /* VSC_CS_1 */
-> +	u32 vsc_cs_2;
-> +	u32 vsc_cs_3;
->  	struct tb_eeprom_ctl eeprom_ctl;
-> -	u32 __unknown5[7];
-> -	u32 drom_offset; /* 32 bit register, but eeprom addresses are 16 bit */
-> +	u32 __unknown5[7]; /* VSC_CS_5 -> VSC_CS_11 */
-> +	u32 drom_offset; /* VSC_CS_12: 32 bit register, but eeprom addresses are 16 bit */
->  } __packed;
->  
->  /* device headers */
-> @@ -464,6 +464,10 @@ struct tb_regs_hop {
->  
->  /* Plug Events registers */
->  #define TB_PLUG_EVENTS_USB_DISABLE		BIT(2)
-> +#define USB4_PLUG_EVENTS_LANE_DISABLE		BIT(3)
-> +#define USB4_PLUG_EVENTS_DPOUT_DISABLE		BIT(4)
-> +#define USB4_PLUG_EVENTS_LOW_DPIN_DISABLE	BIT(5)
-> +#define USB4_PLUG_EVENTS_HIGH_DPIN_DISABLE	BIT(6)
+Device reset thread uses kobject_uevent_env() to get kobj.parent
+after scsi_evt_emit(), and it races with device init thread which
+calls device_add() to create kobj.parent before kobject_uevent_env().
 
-Since this is TBT3 "compatible" we should use TB_ prefix. What about:
+Device reset call trace:
+fill_kobj_path
+kobject_get_path
+kobject_uevent_env
+scsi_evt_emit			<- add wait_event()
+scsi_evt_thread
 
-TB_PLUG_EVENTS_CS_1_ ?
+Device init call trace:
+fill_kobj_path
+kobject_get_path
+kobject_uevent_env
+device_add				<- create kobj.parent
+scsi_target_add
+scsi_sysfs_add_sdev
+scsi_add_lun
+scsi_probe_and_add_lun
 
-or 
+These two jobs are scheduled asynchronously, we can't guaranteed that
+kobj.parent will be created in device init thread before device reset
+thread calls kobj_get_path().
 
-TB_VSEC_3_CS_1_ ?
+To resolve the racing issue between device init thread and device
+reset thread, we use wait_event() in scsi_evt_emit() to wait for
+device_add() to complete the creation of kobj.parent.
 
-something that is easy to match with the register name in the USB4 spec.
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+---
+ drivers/scsi/scsi_lib.c  | 1 +
+ drivers/scsi/scsi_scan.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 0a70aa763a96..abf9a71ed77c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
+ 		break;
+ 	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
+ 		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
++		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
+ 		break;
+ 	default:
+ 		/* do nothing */
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index f4e6c68ac99e..431f229ac435 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
+ 	} else {
+ 		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
+ 				SCAN_WILD_CARD, 0);
++		wake_up(&shost->host_wait);
+ 	}
+ }
+ 
+-- 
+2.18.0
+

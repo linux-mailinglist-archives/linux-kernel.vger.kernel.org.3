@@ -2,230 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79F94CBB0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF94CBB13
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 11:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiCCKNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 05:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S232207AbiCCKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 05:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiCCKNy (ORCPT
+        with ESMTP id S229815AbiCCKOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:13:54 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4982416EAB0;
-        Thu,  3 Mar 2022 02:13:09 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:1c92:7dc6:3047:5f3b] (unknown [IPv6:2a01:e0a:120:3210:1c92:7dc6:3047:5f3b])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 3 Mar 2022 05:14:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902A11768C0;
+        Thu,  3 Mar 2022 02:13:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6B95E1F45504;
-        Thu,  3 Mar 2022 10:13:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646302388;
-        bh=yXrU5uknXeIgDXfseugJ6jxwHEV2jK9Ih9G3VFEr2FI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bWVRkTP+uWNzEJtWGLu3XPF5ZJ41K4BK716WAmi9uspUwCdUgaKt95YXbMBnW98MU
-         J2LX0BlIcoNK1sY++GggCAo3KB6t0uJnsJgaGgYhuBz/eWFSRp72KEsfDrZFANmn+C
-         FRS0h3UQYVLoAH4kHCGScI4okAIF83f04Q4n7GPpk8B9O45tHWHpZbusNvfz1biaO5
-         IlGT8HAzjTKo4zYFJ2plbyrgssJasOleChDM3LIN/BcYjb/m7KtujJwhXr3SjIIwsf
-         szCA0uEecK4Tp4xi397nVytkO5epxm5Ctjf0oSQHX0YeguERx4dO8LhotQniwDnfsB
-         9AyLg6dpI80mg==
-Message-ID: <678c1f01-c6cd-d1be-bd0b-277a808b006a@collabora.com>
-Date:   Thu, 3 Mar 2022 11:13:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 00/14] Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media <linux-media@vger.kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 428C0B8228E;
+        Thu,  3 Mar 2022 10:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3EFC340EF;
+        Thu,  3 Mar 2022 10:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646302431;
+        bh=CJxhrnC/0v+orCoyqK9g//SkJ3vQ/iZ/7d/x+OeTdoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=it07Iur1ptUBK6/jfLQiteERWzp4SLULJGfinqkR2F5dQGdfbSeLFOq1O8h/2PJDd
+         CeL5chQ51/nBJQvuiaiGBzo39v6A0/KKQA/KPDExwEaoczYXMU++IYQnRigOuD8moZ
+         jq1malKjCnphxcHvx/rSejLxSpQ533ADe5Dxx7RQjiMTSpVWwKfv2dlGtDRZq1Xsfa
+         k/ikNf0kUpGwNXv3UeeS40ouTgUTCkKefffTobE/7QMyAjIgLUuIW9AAEwBqxdK1Pc
+         E42f5UKd40Po6CPkzGUF6sLbQbFWRn4olIQ9g+wANS6nSXKEBsNpbZGL7tmjgL2NZR
+         9/KSG9btgb25Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nPiSy-0002uL-14; Thu, 03 Mar 2022 11:13:48 +0100
+Date:   Thu, 3 Mar 2022 11:13:48 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Eddie James <eajames@linux.ibm.com>, linux-usb@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
-References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
- <CAHCN7x+AUy4JsqfdyZFqg4ScR1OgoLvqF91za0AZ278NSBJj4A@mail.gmail.com>
- <b832271d-cecd-a373-48ff-ba5ce736e47d@collabora.com>
- <CAHCN7xJ3K2bLEc8dcTM+x-E0brDW-t4yrUdkUe0jCfuzH8v9pA@mail.gmail.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAHCN7xJ3K2bLEc8dcTM+x-E0brDW-t4yrUdkUe0jCfuzH8v9pA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
+Message-ID: <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
+References: <20220301224446.21236-1-eajames@linux.ibm.com>
+ <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
+ <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
+ <YiCHPuNkMuO4uARu@hovoldconsulting.com>
+ <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
+ <YiCN+x2XPiawaweY@hovoldconsulting.com>
+ <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 03, 2022 at 09:46:05AM +0000, Joel Stanley wrote:
+> On Thu, 3 Mar 2022 at 09:44, Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Thu, Mar 03, 2022 at 09:24:51AM +0000, Joel Stanley wrote:
+> > > On Thu, 3 Mar 2022 at 09:15, Johan Hovold <johan@kernel.org> wrote:
+> > > >
+> > > > On Thu, Mar 03, 2022 at 08:52:29AM +0000, Joel Stanley wrote:
+> > > > > On Thu, 3 Mar 2022 at 08:25, Johan Hovold <johan@kernel.org> wrote:
+> > > > > >
+> > > > > > On Tue, Mar 01, 2022 at 04:44:46PM -0600, Eddie James wrote:
+> > > > > > > IBM manufactures a PL2303 device for UPS communications. Add the vendor
+> > > > > > > and product IDs so that the PL2303 driver binds to the device.
+> > > > > > >
+> > > > > > > Signed-off-by: Joel Stanley <joel@jms.id.au>
+> > > > > > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> > > > > > > ---
+> > > > > > > Changes since v1:
+> > > > > > >  - Fix commit message Signed-off-by ordering.
+> > > > > >
+> > > > > > Almost there. You're still missing a Co-developed-by tag, a From line,
+> > > > > > or both.
+> > > > >
+> > > > > It's neither. This patch was applied to a tree by myself, and I asked
+> > > > > Eddie to send it to mainline for merging.
+> > > >
+> > > > Then you are missing a From line. As the patch looks like know, Eddie is
+> > > > considered the author and not you.
+> > >
+> > > You are incorrect. Eddie is the author.
+> >
+> > Then what is your SoB doing there in the first place? If Eddie is the
+> > sole author as well as the submitter, and you didn't touch the patch in
+> > between, then your SoB does not belong in the chain.
+> >
+> > If you applied Eddie's patch to your shared tree and Eddie generated a
+> > patch from there, then the chain should be:
+> >
+> >         SoB: E
+> >         SoB: J
+> >         SoB: E
+> >
+> > but this is starting to look a bit ridiculous.
+> 
+> I agree. I would appreciate it if you applied the patch, with or
+> without my sob in whatever order you deem fit.
 
-Le 03/03/2022 à 02:23, Adam Ford a écrit :
-> On Mon, Feb 28, 2022 at 4:13 AM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->>
->> Le 26/02/2022 à 23:25, Adam Ford a écrit :
->>> On Fri, Feb 25, 2022 at 4:41 PM Benjamin Gaignard
->>> <benjamin.gaignard@collabora.com> wrote:
->>>> This series aims to make HEVC uapi stable and usable for hardware
->>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
->>>> and 2 out of the tree drivers (rkvdec and RPI).
->>>>
->>>> After the remarks done on version 2, I have completely reworked to patches
->>>> split so changelogs are meaningless. I have also drop "RFC" from the
->>>> titles.
->>>>
->>>> In this v3 I do all the changes (new controls, documentation, etc..)
->>>> in the staging directory before moving the HEVC uAPI to stable
->>>> steps by steps (unlike the big one patch in v2).
->>>>
->>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
->> I have push a branch here:
->> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/HEVC_UAPI_V4
->>
->> it is the incoming version 4 of this series + patches to enable G2 on my IMX8MQ
-> Benjamin,
->
-> I checked this repo out, and built it along with pulling the latest
-> versions of G-streamer and fluster.
-> When I check for v4l2 compatibility, I get the following:
->
->      GStreamer-H.264-V4L2-Gst1.0: GStreamer H.264 V4L2 decoder for
-> GStreamer 1.0... ❌
->      GStreamer-H.264-V4L2SL-Gst1.0: GStreamer H.264 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->      GStreamer-AV1-V4L2SL-Gst1.0: GStreamer AV1 V4L2SL decoder for
-> GStreamer 1.0... ❌
->      GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for
-> GStreamer 1.0... ❌
->      GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
-> GStreamer 1.0... ❌
->      GStreamer-VP8-V4L2-Gst1.0: GStreamer VP8 V4L2 decoder for GStreamer 1.0... ❌
->      GStreamer-VP8-V4L2SL-Gst1.0: GStreamer VP8 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->      GStreamer-VP9-V4L2SL-Gst1.0: GStreamer VP9 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->
-> I see H,264, VP8 and VP9, but I would have also expected
-> GStreamer-H.265-V4L2SL-Gst1.0 to return with a check box.
->
-> When I checked to see if both decoders were being enumerated, I found they were.
-> [gst-main] root@localhost:~/gstreamer/fluster# dmesg |grep -i hantro
-> [   16.044243] hantro_vpu: module is from the staging directory, the
-> quality is unknown, you have been warned.
-> [   16.044243] hantro_vpu: module is from the staging directory, the
-> quality is unknown, you have been warned.
-> [   16.095661] hantro-vpu 38300000.video-codec: registered
-> nxp,imx8mq-vpu-g1-dec as /dev/video0
-> [   16.096782] hantro-vpu 38310000.video-codec: registered
-> nxp,imx8mq-vpu-g2-dec as /dev/video1
->
-> Did I do something wrong, or did I miss something?
+Ok, I'll assume what you intended was E-J-E but that perhaps
+git-format-patch swallowed the last SoB. Thanks for clarifying.
 
-Hi Adam,
+I was going to apply to the patch, but I see now that you didn't provide
+any details about the product apart from it being a UPS and that's not
+reflected in the define name.
 
-I guess it could be a misalignment between v4l2 kernel headers
-and GStreamer v4l2 headers.
-I have push a new version of the GST merge request which is aligned with
-HEVC uAPI v4 proposal.
+Do you have a pointer to device (family) in question?
 
-When you inspect v4l2codecs gst plugin (gst-inspect-1.0 v4l2codecs) do
-you see v4l2slh265dec plugin ?
-I have fluster happy with it:
-./fluster.py list -c
-
-
-H265
-     ...
-     GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for GStreamer 1.0... ❌
-     GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for GStreamer 1.0... ✔️
-     GStreamer-H.265-VA-Gst1.0: GStreamer H.265 VA decoder for GStreamer 1.0... ❌
-     GStreamer-H.265-VAAPI-Gst1.0: GStreamer H.265 VAAPI decoder for GStreamer 1.0... ❌
-     JCT-VT-H.265: JCT-VT H.265/HEVC reference decoder... ❌
-
-I hope that will help you,
-
-Regards,
-Benjamin
-
->
-> adam
->
->> Regards,
->> Benjamin
->>
->>> Benjamin,
->>>
->>> I have an imx8mm and imx8mq that I can test. Do you happen to have a
->>> repo that I can clone to test this?  The imx8m stuff is spread around
->>> between the media tree and the imx tree since it hasn't been fully
->>> merged yet.
->>>
->>> thanks,
->>>
->>> adam
->>>
->>>> Benjamin
->>>>
->>>> Benjamin Gaignard (11):
->>>>     media: uapi: HEVC: Add missing fields in HEVC controls
->>>>     media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->>>>       prefix
->>>>     media: uapi: HEVC: Add document uAPI structure
->>>>     media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
->>>>       dynamic array
->>>>     media: uapi: Move parsed HEVC pixel format out of staging
->>>>     media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
->>>>     media: uapi: Move the HEVC stateless control type out of staging
->>>>     media: controls: Log HEVC stateless control in .std_log
->>>>     media: uapi: Create a dedicated header for Hantro control
->>>>     media: uapi: HEVC: fix padding in v4l2 control structures
->>>>     media: uapi: move HEVC stateless controls out of staging
->>>>
->>>> Hans Verkuil (3):
->>>>     videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->>>>     v4l2-ctrls: add support for dynamically allocated arrays.
->>>>     vivid: add dynamic array test control
->>>>
->>>>    .../userspace-api/media/drivers/hantro.rst    |   5 -
->>>>    .../media/v4l/ext-ctrls-codec-stateless.rst   | 831 ++++++++++++++++++
->>>>    .../media/v4l/ext-ctrls-codec.rst             | 780 ----------------
->>>>    .../media/v4l/pixfmt-compressed.rst           |   7 +-
->>>>    .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->>>>    .../media/v4l/vidioc-queryctrl.rst            |   8 +
->>>>    .../media/videodev2.h.rst.exceptions          |   5 +
->>>>    .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->>>>    drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
->>>>    drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
->>>>    drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +-
->>>>    drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->>>>    drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->>>>    drivers/staging/media/hantro/hantro_drv.c     |  27 +-
->>>>    drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
->>>>    drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
->>>>    .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->>>>    include/media/hevc-ctrls.h                    | 250 ------
->>>>    include/media/v4l2-ctrls.h                    |  48 +-
->>>>    include/uapi/linux/hantro-media.h             |  19 +
->>>>    include/uapi/linux/v4l2-controls.h            | 436 +++++++++
->>>>    include/uapi/linux/videodev2.h                |  13 +
->>>>    22 files changed, 1686 insertions(+), 1169 deletions(-)
->>>>    delete mode 100644 include/media/hevc-ctrls.h
->>>>    create mode 100644 include/uapi/linux/hantro-media.h
->>>>
->>>> --
->>>> 2.32.0
->>>>
+Johan

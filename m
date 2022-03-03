@@ -2,162 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E590F4CCA28
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E564CCA2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbiCCXkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S237286AbiCCXmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiCCXkX (ORCPT
+        with ESMTP id S231128AbiCCXmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:40:23 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D97117C99
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:39:35 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so6324526pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:39:35 -0800 (PST)
+        Thu, 3 Mar 2022 18:42:08 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F60175841
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:41:22 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2d07ae0b1c0so73833347b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:41:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zbrxoFXUbPPWy2OmGHM/87ehykZdoUkb/q8EdrCv/aE=;
-        b=kPQFbEidLAFavoqL/HEOhmglZRBz4Q68Wjxv38L/nrQW38gsLkeVaoFz6YtOG/32CC
-         EDGDXsVNNg1nhObKAgqVXBB7xfrgxb2R1m/hOZjoW7tqFVDqneF8nkYiy8694vo/9vt1
-         J9JfkapL8D3Puoz4DNULTMQQdyanboKRrYace7dcwv6DsAJDK5sysjunkk1xM2qTj7dm
-         yKMc4p9WW/u8pdzDdRfD6dqiv1UeFYAI5AvXEbocjxKD36IXqpF5y6RHHA6gq4fv/yKL
-         tSWxu27g7bgHaof8/k6HMh+sbeDoxtVKxKTqhlpvhQASvR3TlH1GpCn+PUwvnANutGAS
-         nSLg==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=rSqQP18Wd5NjhlnE4AqOcj5HhSDR0at9tMDx/gdLLlo=;
+        b=yRmMVk1t4YVHVWSGbfOVyeRazJTFv7gUI8AQpl8PJ0Lc6YZ/2i11q5FFuGAp+h1W5d
+         da41qXCZKxNC5tC/aSkNNNRk1p1Hj9Rb54nxLmZs+jghB0FhkWq8uEAXaWDd4ecHLuEg
+         4zs54BYBdf6j2tG6Bk+TQW0yogAxZp1vQbdKcZ9HQiwev2x9ZpMOvXOEtJCv153M9d7e
+         fzwuxcSy7+ax7dmy8rJ7nxBKGdtSBTBut8aXsaVoRm8Ci19A/RjIb2vDBTaE4pHms68C
+         hgJPIu6dyqz9TSMbuwcS9Y1FId8Cu7QYJU3mNTBN2L6XjSPjV8fE2H1BNHHNkJdVv3/g
+         0sng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zbrxoFXUbPPWy2OmGHM/87ehykZdoUkb/q8EdrCv/aE=;
-        b=VAFnL5y2TRkyFnNkDhQACdF4mwy7o3viumuzfIrygGKHjE4UAMZIfmKavJ6PxCtuBg
-         FJtbEsZgb28GBq2MSqQiRz0pi32aU8ZTz2UPh9afMYX5J6Ab3jgzUJDUN6jVFO4E9wQM
-         vnUxRo9xUAQAPOK5Iu4/+Q7VK+W7ReoYKlIHjhE+NijbRuSh9FgeYf4NwL8zrevyV7BW
-         8uS6gr0p7g86gjLPCmNfbvVvYCeGUhZQ5w3PAwCWBaEQiQh7T05IPf61/PqERNxJNA3K
-         lPWvF5zbSDwpdL1ToSxhI/Qk91d2Czu/4PaK0pg084ej9JZAYbAYoOtl4iL79ep2bfmd
-         evPw==
-X-Gm-Message-State: AOAM532FFhmI2DLjew+St0Vjnn23QuSL4cNQwSr3JQNl6QIBWBEb5Xma
-        xEfQDcw4jajAH/+YgUA1A5lF4g==
-X-Google-Smtp-Source: ABdhPJxQjg95R9JFFXlStDH19lXfsnvZg9NnD6hwBMG0sCBaS1VHLy9LXud4G7o1/P38lPP3lZKi5A==
-X-Received: by 2002:a17:90a:1108:b0:1be:e1bd:e2f0 with SMTP id d8-20020a17090a110800b001bee1bde2f0mr7787232pja.144.1646350774737;
-        Thu, 03 Mar 2022 15:39:34 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id x7-20020a17090a1f8700b001bf1db72189sm1124311pja.23.2022.03.03.15.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 15:39:34 -0800 (PST)
-Date:   Thu, 3 Mar 2022 23:39:30 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v4 03/30] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
- deferred TLB flush logic
-Message-ID: <YiFRskA4p1pwNAwS@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-4-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rSqQP18Wd5NjhlnE4AqOcj5HhSDR0at9tMDx/gdLLlo=;
+        b=uZ8SV7k/i7j6z3CkDJexf6ucpUgG2F8vgYQRsJ5QMlyeWBRl/oq15PuYVKceYr7Let
+         KqE8YDRQGoabSKjUMim+VzegpylmSQKWNuBc1xE4/AIjyMZgdJCBhgETFc7hdy3SFj+a
+         6ihnjr6nfzgtmOBZSuh8/XNfQvrPxmT5XQrqM3gmryq+w13247dB12CAYlNaZX6KLoZp
+         JYiN+IwGUbTFTt7ogcNo4O64zxfUbvzvMksvbAZF92dqybA3jyBSDMqTQ6NoYy8xOy9E
+         ual1kSDUjZ4SHgSqffdpjghqGhCnbZvs1rcQKKrXY+EPuRvhoS+F/MIB9CzW/QYCeurW
+         5aIA==
+X-Gm-Message-State: AOAM532nktjK+HeV+abrr10u4QOU00qE1Kn1J+r7rbf/h24rf/0Y/wxQ
+        jcYnYAaiHw6z/0kvtQktfIuC+nIfyO8lwOjCDnlPIA==
+X-Google-Smtp-Source: ABdhPJwtC1jhKWkPjadvpjvVogW8B+4VLWiojzRsvx+jKaozVAbWCq1Wrf4pA84QhGsjYIdSfK9xZ4qqGOZqWIuNV60=
+X-Received: by 2002:a81:1182:0:b0:2dc:4e58:da41 with SMTP id
+ 124-20020a811182000000b002dc4e58da41mr3555190ywr.268.1646350881491; Thu, 03
+ Mar 2022 15:41:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303193842.370645-4-pbonzini@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 4 Mar 2022 00:41:10 +0100
+Message-ID: <CACRpkda0eFMzvfCjtXYiRoe=Wa5XqacL1Lhy4mBBOo6pu_Wi5w@mail.gmail.com>
+Subject: [GIT PULL] late pin control fixes for v5.17
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Samuel Holland <samuel@sholland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022, Paolo Bonzini wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Explicitly ignore the result of zap_gfn_range() when putting the last
-> reference to a TDP MMU root, and add a pile of comments to formalize the
-> TDP MMU's behavior of deferring TLB flushes to alloc/reuse.  Note, this
-> only affects the !shared case, as zap_gfn_range() subtly never returns
-> true for "flush" as the flush is handled by tdp_mmu_zap_spte_atomic().
-> 
-> Putting the root without a flush is ok because even if there are stale
-> references to the root in the TLB, they are unreachable because KVM will
-> not run the guest with the same ASID without first flushing (where ASID
-> in this context refers to both SVM's explicit ASID and Intel's implicit
-> ASID that is constructed from VPID+PCID+EPT4A+etc...).
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Message-Id: <20220226001546.360188-5-seanjc@google.com>
-> Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c     |  8 ++++++++
->  arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 32c041ed65cb..9a6df2d02777 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5083,6 +5083,14 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  	kvm_mmu_sync_roots(vcpu);
->  
->  	kvm_mmu_load_pgd(vcpu);
-> +
-> +	/*
-> +	 * Flush any TLB entries for the new root, the provenance of the root
-> +	 * is unknown.  Even if KVM ensures there are no stale TLB entries
-> +	 * for a freed root, in theory another hypervisor could have left
-> +	 * stale entries.  Flushing on alloc also allows KVM to skip the TLB
-> +	 * flush when freeing a root (see kvm_tdp_mmu_put_root()).
-> +	 */
->  	static_call(kvm_x86_flush_tlb_current)(vcpu);
->  out:
->  	return r;
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index b97a4125feac..921fa386df99 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
->  	list_del_rcu(&root->link);
->  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
->  
-> -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
-> +	/*
-> +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
-> +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
-> +	 * to a different pCPU.  Note, the local TLB flush on reuse also
-> +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
-> +	 * intermediate paging structures, that may be zapped, as such entries
-> +	 * are associated with the ASID on both VMX and SVM.
-> +	 */
-> +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+Hi Linus,
 
-Discussed offline with Sean. Now I get myself comfortable with the style
-of mmu with multiple 'roots' and leaving TLB unflushed for invalidated
-roots.
+as promised, here are the fixes for the issues seen by Guenther
+on the OrangePi, details in the signed tag.
 
-I guess one minor improvement on the comment could be:
+Please pull it in!
 
-"A TLB flush is not necessary as each vCPU performs a local TLB flush
-when allocating or assigning a new root (see kvm_mmu_load()), and when
-migrating to a different pCPU."
+Yours,
+Linus Walleij
 
-The above could be better since "KVM performs a local TLB flush" makes
-readers think why we miss the 'remote' TLB flushes?
->  
->  	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
->  }
-> -- 
-> 2.31.1
-> 
-> 
+The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+
+  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+tags/pinctrl-v5.17-3
+
+for you to fetch changes up to bac129dbc6560dfeb634c03f0c08b78024e71915:
+
+  pinctrl: sunxi: Use unique lockdep classes for IRQs (2022-02-28
+23:53:19 +0100)
+
+----------------------------------------------------------------
+Pin control fixes for the v5.17 series
+
+These two fixes should fix the issues seen on the OrangePi,
+first we needed the correct offset when calling
+pinctrl_gpio_direction(), and fixing that made a lockdep
+issue explode in our face. Both now fixed.
+
+----------------------------------------------------------------
+Hans Verkuil (1):
+      pinctrl-sunxi: sunxi_pinctrl_gpio_direction_in/output: use correct offset
+
+Samuel Holland (1):
+      pinctrl: sunxi: Use unique lockdep classes for IRQs
+
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)

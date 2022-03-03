@@ -2,267 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899E84CBE42
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4B74CBE46
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 13:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiCCM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 07:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
+        id S233498AbiCCM6Y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Mar 2022 07:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiCCM6D (ORCPT
+        with ESMTP id S233492AbiCCM6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 07:58:03 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEABF186218;
-        Thu,  3 Mar 2022 04:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=Ui7Wx3HT5wFF2lD9OqwpaMhrO7qy33DzT68PqCTpFeA=; b=t2ko4
-        NFlATGyheALC9w+H68/z3RvSSOEB6BrmYEzUF5r8KqMq1m06wmG4/48fY/k1SirfLL8ebbuWySbK+
-        yAIBOZP7CNmNQwuVEQFAyP6sY3UK1LSpXV+t+8dZS/gAeJjam7Eu7BQ1fmtksh1ecMYZM7QJCHYtn
-        kBW0GuvUjAebv5yS+bC5ZA0izcBIu8XwZBDNE8aadZPiBBeTFnvKy1vu7Nb0iW8b60M7xMAX9fUIL
-        kVAxrsn/p2QVIA4oUW3Ety5Agn002vZfP/aTWFOu8FDRIHiBKgqt4I8XPykJQCQ8JszenDrhULJNU
-        z9o0dmnVkLuKL3W7mSH/OAvSeAIsQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nPl0y-0004oa-Jj; Thu, 03 Mar 2022 12:57:04 +0000
-Date:   Thu, 3 Mar 2022 12:57:03 +0000
-From:   John Keeping <john@metanate.com>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 15/18] crypto: rockchip: introduce PM
-Message-ID: <YiC7Hxm0epcAcHen@donbot>
-References: <20220302211113.4003816-1-clabbe@baylibre.com>
- <20220302211113.4003816-16-clabbe@baylibre.com>
+        Thu, 3 Mar 2022 07:58:19 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37AE1FA42;
+        Thu,  3 Mar 2022 04:57:32 -0800 (PST)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K8WFW72w4z67GZK;
+        Thu,  3 Mar 2022 20:56:15 +0800 (CST)
+Received: from lhreml711-chm.china.huawei.com (10.201.108.62) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 13:57:30 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml711-chm.china.huawei.com (10.201.108.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 12:57:29 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Thu, 3 Mar 2022 12:57:29 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Topic: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Index: AQHYLltL2nbHr5hFZkexUhHVpQU6TqyszJkAgADNzBA=
+Date:   Thu, 3 Mar 2022 12:57:29 +0000
+Message-ID: <19e294814f284755b207be3ba7054ec2@huawei.com>
+References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
+ <20220302172903.1995-10-shameerali.kolothum.thodi@huawei.com>
+ <20220303002142.GE1026713@nvidia.com>
+In-Reply-To: <20220303002142.GE1026713@nvidia.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.82.4]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302211113.4003816-16-clabbe@baylibre.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 09:11:10PM +0000, Corentin Labbe wrote:
-> Add runtime PM support for rockchip crypto.
+
+
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 03 March 2022 00:22
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org;
+> alex.williamson@redhat.com; cohuck@redhat.com; mgurtovoy@nvidia.com;
+> yishaih@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
+> <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+> Jonathan Cameron <jonathan.cameron@huawei.com>; Wangzhou (B)
+> <wangzhou1@hisilicon.com>
+> Subject: Re: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+> migration
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  drivers/crypto/Kconfig                        |  1 +
->  drivers/crypto/rockchip/rk3288_crypto.c       | 50 ++++++++++++++++++-
->  drivers/crypto/rockchip/rk3288_crypto.h       |  1 +
->  drivers/crypto/rockchip/rk3288_crypto_ahash.c | 11 ++++
->  .../crypto/rockchip/rk3288_crypto_skcipher.c  | 10 ++++
->  5 files changed, 71 insertions(+), 2 deletions(-)
+> On Wed, Mar 02, 2022 at 05:29:02PM +0000, Shameer Kolothum wrote:
+> > +static long hisi_acc_vf_save_unl_ioctl(struct file *filp,
+> > +				       unsigned int cmd, unsigned long arg)
+> > +{
+> > +	struct hisi_acc_vf_migration_file *migf = filp->private_data;
+> > +	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(migf,
+> > +			struct hisi_acc_vf_core_device, saving_migf);
+> > +	loff_t *pos = &filp->f_pos;
+> > +	struct vfio_precopy_info info;
+> > +	unsigned long minsz;
+> > +	int ret;
+> > +
+> > +	if (cmd != VFIO_MIG_GET_PRECOPY_INFO)
+> > +		return -ENOTTY;
+> > +
+> > +	minsz = offsetofend(struct vfio_precopy_info, dirty_bytes);
+> > +
+> > +	if (copy_from_user(&info, (void __user *)arg, minsz))
+> > +		return -EFAULT;
+> > +	if (info.argsz < minsz)
+> > +		return -EINVAL;
+> > +
+> > +	mutex_lock(&hisi_acc_vdev->state_mutex);
+> > +	if (hisi_acc_vdev->mig_state != VFIO_DEVICE_STATE_PRE_COPY) {
+> > +		mutex_unlock(&hisi_acc_vdev->state_mutex);
+> > +		return -EINVAL;
+> > +	}
 > 
-> diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-> index 04c8e332c5a1..685631a5cbea 100644
-> --- a/drivers/crypto/Kconfig
-> +++ b/drivers/crypto/Kconfig
-> @@ -784,6 +784,7 @@ config CRYPTO_DEV_IMGTEC_HASH
->  config CRYPTO_DEV_ROCKCHIP
->  	tristate "Rockchip's Cryptographic Engine driver"
->  	depends on OF && ARCH_ROCKCHIP
-> +	depends on PM
+> IMHO it is easier just to check the total_length and not grab this
+> other lock
 
-Does this need to depend on PM?  If you enable the clock in _probe then
-use pm_runtime_put_autosuspend() the no-op helpers when !PM will mean
-this works whether PM is enabled or not.
+The problem with checking the total_length here is that it is possible that
+in STOP_COPY the dev is not ready and there are no more data to be transferred 
+and the total_length remains at QM_MATCH_SIZE.
 
->  	select CRYPTO_AES
->  	select CRYPTO_ENGINE
->  	select CRYPTO_LIB_DES
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-> index cd0755731cf7..ba56f8ff97c3 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto.c
-> @@ -57,6 +57,48 @@ static void rk_crypto_disable_clk(struct rk_crypto_info *dev)
->  	clk_disable_unprepare(dev->sclk);
->  }
->  
-> +/*
-> + * Power management strategy: The device is suspended unless a TFM exists for
-> + * one of the algorithms proposed by this driver.
-> + */
-> +static int rk_crypto_pm_suspend(struct device *dev)
-> +{
-> +	struct rk_crypto_info *rkdev = dev_get_drvdata(dev);
-> +
-> +	rk_crypto_disable_clk(rkdev);
-> +	return 0;
-> +}
-> +
-> +static int rk_crypto_pm_resume(struct device *dev)
-> +{
-> +	struct rk_crypto_info *rkdev = dev_get_drvdata(dev);
-> +
-> +	return rk_crypto_enable_clk(rkdev);
-> +}
-> +
-> +static const struct dev_pm_ops rk_crypto_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(rk_crypto_pm_suspend, rk_crypto_pm_resume, NULL)
-> +};
-> +
-> +static int rk_crypto_pm_init(struct rk_crypto_info *rkdev)
-> +{
-> +	int err;
-> +
-> +	pm_runtime_use_autosuspend(rkdev->dev);
-> +	pm_runtime_set_autosuspend_delay(rkdev->dev, 2000);
-> +
-> +	err = pm_runtime_set_suspended(rkdev->dev);
-> +	if (err)
-> +		return err;
-> +	pm_runtime_enable(rkdev->dev);
-> +	return err;
-> +}
-> +
-> +static void rk_crypto_pm_exit(struct rk_crypto_info *rkdev)
-> +{
-> +	pm_runtime_disable(rkdev->dev);
-> +}
-> +
->  static irqreturn_t rk_crypto_irq_handle(int irq, void *dev_id)
->  {
->  	struct rk_crypto_info *dev  = platform_get_drvdata(dev_id);
-> @@ -259,7 +301,9 @@ static int rk_crypto_probe(struct platform_device *pdev)
->  	crypto_engine_start(crypto_info->engine);
->  	init_completion(&crypto_info->complete);
->  
-> -	rk_crypto_enable_clk(crypto_info);
-> +	err = rk_crypto_pm_init(crypto_info);
-> +	if (err)
-> +		goto err_crypto;
->  
->  	err = rk_crypto_register(crypto_info);
->  	if (err) {
-> @@ -280,6 +324,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
->  	return 0;
->  
->  err_register_alg:
-> +	rk_crypto_pm_exit(crypto_info);
->  err_crypto:
->  	dev_err(dev, "Crypto Accelerator not successfully registered\n");
->  	return err;
-> @@ -293,7 +338,7 @@ static int rk_crypto_remove(struct platform_device *pdev)
->  	debugfs_remove_recursive(crypto_tmp->dbgfs_dir);
->  #endif
->  	rk_crypto_unregister();
-> -	rk_crypto_disable_clk(crypto_tmp);
-> +	rk_crypto_pm_exit(crypto_tmp);
->  	return 0;
->  }
->  
-> @@ -302,6 +347,7 @@ static struct platform_driver crypto_driver = {
->  	.remove		= rk_crypto_remove,
->  	.driver		= {
->  		.name	= "rk3288-crypto",
-> +		.pm		= &rk_crypto_pm_ops,
->  		.of_match_table	= crypto_of_id_table,
->  	},
->  };
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-> index e2a6d735f2e2..06b2d9f52a80 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto.h
-> +++ b/drivers/crypto/rockchip/rk3288_crypto.h
-> @@ -9,6 +9,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/scatterlist.h>
->  #include <crypto/engine.h>
->  #include <crypto/internal/hash.h>
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto_ahash.c b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-> index 8856c6226be6..a41e21c7141b 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-> @@ -328,6 +328,7 @@ static int rk_cra_hash_init(struct crypto_tfm *tfm)
->  	struct ahash_alg *alg = __crypto_ahash_alg(tfm->__crt_alg);
->  
->  	const char *alg_name = crypto_tfm_alg_name(tfm);
-> +	int err;
->  
->  	algt = container_of(alg, struct rk_crypto_tmp, alg.hash);
->  
-> @@ -349,7 +350,16 @@ static int rk_cra_hash_init(struct crypto_tfm *tfm)
->  	tctx->enginectx.op.prepare_request = rk_hash_prepare;
->  	tctx->enginectx.op.unprepare_request = rk_hash_unprepare;
->  
-> +	err = pm_runtime_get_sync(tctx->dev->dev);
+This just reminded me that the -ENOMSG setting logic in save_read() is
+wrong now as it uses only the total_length to determine the PRE_COPY state. 
 
-pm_runtime_resume_and_get() ?  The error handling is nicer with that.
+I think either we need to get the curr state info at both places or in STOP_COPY,
+if there are no additional data, set the total_length = 0 and handle it in save_read().
 
-> +	if (err < 0)
-> +		goto error_pm;
-> +
->  	return 0;
-> +error_pm:
-> +	pm_runtime_put_noidle(tctx->dev->dev);
-> +	crypto_free_ahash(tctx->fallback_tfm);
-> +
-> +	return err;
->  }
->  
->  static void rk_cra_hash_exit(struct crypto_tfm *tfm)
-> @@ -357,6 +367,7 @@ static void rk_cra_hash_exit(struct crypto_tfm *tfm)
->  	struct rk_ahash_ctx *tctx = crypto_tfm_ctx(tfm);
->  
->  	crypto_free_ahash(tctx->fallback_tfm);
-> +	pm_runtime_put_sync_suspend(tctx->dev->dev);
+Looks like setting the total_length = 0 in STOP_COPY is a better solution(If there are
+no other issues with that) as it will avoid grabbing the state_mutex as you
+mentioned above.
 
-Why use sync_suspend here?  Could this be pm_runtime_put_autosuspend()?
+> > +struct acc_vf_data {
+> > +#define QM_MATCH_SIZE 32L
+> 
+> This should be
+> 
+> #define QM_MATCH_SIZE offsetofend(struct acc_vf_data, qm_rsv_state)
 
->  }
->  
->  struct rk_crypto_tmp rk_ahash_sha1 = {
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> index a8cfb520eaf8..55efda6ea3e7 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> @@ -458,6 +458,7 @@ static int rk_ablk_init_tfm(struct crypto_skcipher *tfm)
->  	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
->  	const char *name = crypto_tfm_alg_name(&tfm->base);
->  	struct rk_crypto_tmp *algt;
-> +	int err;
->  
->  	algt = container_of(alg, struct rk_crypto_tmp, alg.skcipher);
->  
-> @@ -475,7 +476,15 @@ static int rk_ablk_init_tfm(struct crypto_skcipher *tfm)
->  
->  	ctx->enginectx.op.do_one_request = rk_cipher_run;
->  
-> +	err = pm_runtime_get_sync(ctx->dev->dev);
+Ok.
 
-Another place for pm_runtime_resume_and_get() ?
+> > +	/* QM match information */
+> 
+> You should probably put an 8 byte random magic number here just to
+> make the compatibility more unique.
 
-> +	if (err < 0)
-> +		goto error_pm;
-> +
->  	return 0;
-> +error_pm:
-> +	pm_runtime_put_noidle(ctx->dev->dev);
-> +	crypto_free_skcipher(ctx->fallback_tfm);
-> +	return err;
->  }
->  
->  static void rk_ablk_exit_tfm(struct crypto_skcipher *tfm)
-> @@ -484,6 +493,7 @@ static void rk_ablk_exit_tfm(struct crypto_skcipher *tfm)
->  
->  	memzero_explicit(ctx->key, ctx->keylen);
->  	crypto_free_skcipher(ctx->fallback_tfm);
-> +	pm_runtime_put_sync_suspend(ctx->dev->dev);
+Ok. Will add one.
 
-Again, can this be pm_runtime_put_autosuspend() ?
+> > +	u32 qp_num;
+> > +	u32 dev_id;
+> > +	u32 que_iso_cfg;
+> > +	u32 qp_base;
+> > +	/* QM reserved match information */
+> > +	u32 qm_rsv_state[4];
+> > +
+> > +	/* QM RW regs */
+> > +	u32 aeq_int_mask;
+> > +	u32 eq_int_mask;
+> > +	u32 ifc_int_source;
+> > +	u32 ifc_int_mask;
+> > +	u32 ifc_int_set;
+> > +	u32 page_size;
+> > +
+> > +	/* QM_EQC_DW has 7 regs */
+> > +	u32 qm_eqc_dw[7];
+> > +
+> > +	/* QM_AEQC_DW has 7 regs */
+> > +	u32 qm_aeqc_dw[7];
+> > +
+> > +	/* QM reserved 5 regs */
+> > +	u32 qm_rsv_regs[5];
+> > +
+> > +	/* qm memory init information */
+> > +	u64 eqe_dma;
+> 
+> Am I counting wrong or is there a padding before this? 7+7+5 is not a multiple
+> of 2. Be explicit about padding in a structure like this.
+
+That's right. It needs padding before 'eqe_dma'.
+
+Thanks,
+Shameer

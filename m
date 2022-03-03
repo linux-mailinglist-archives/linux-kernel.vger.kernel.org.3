@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D204CC9CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B30F4CC9CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiCCXEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S232428AbiCCXHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237208AbiCCXE0 (ORCPT
+        with ESMTP id S230199AbiCCXHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:04:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5D871795FE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:03:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5023A1424;
-        Thu,  3 Mar 2022 15:03:33 -0800 (PST)
-Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 69C6E3F73D;
-        Thu,  3 Mar 2022 15:03:32 -0800 (PST)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     gregkh@linuxfoundation.org
-Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: [GIT PULL] coresight changes for v5.18
-Date:   Thu,  3 Mar 2022 23:03:01 +0000
-Message-Id: <20220303230301.255049-1-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.25.4
+        Thu, 3 Mar 2022 18:07:51 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E369E12AE8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 15:07:03 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v4so5921204pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 15:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wsytA5en+ItUqruLb4F/YGyRxRL/LbEBBpbjnswyCM8=;
+        b=EOrYv2zrhk9TWezM970VEXgU/SbfP82z4FbUmK+LjtSUU9pY+C+Wk+f/zBqYlSXA/a
+         Ww4tMAL8LjMgy1f4nmU4kUSwmRL019Y4izs5Fmy/y53ymi/qopXdHs+h1vUSXv8omro2
+         ieXiH/PlD215WhzH562QpXM8rNA40+XvObuhuAxeOpwsw73HDBcE1idHi3mvm4pJcOD5
+         2Fw3IY0MLMmMTG7SbfX4bqXvYSQpSAUE58VlDRA3N4wZvixHXZ7ZwNU77D9PUjr7j5CA
+         uhB0ioX7fVTwQix49pvqHEGzC9JZt99Sz6mPcTUxSwWN2xM6KcIq9TiVWC8s+Ko25WyL
+         4zBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wsytA5en+ItUqruLb4F/YGyRxRL/LbEBBpbjnswyCM8=;
+        b=aJBzBvRbAhKAPCE5cHpo1inGFJqm6uPIcbUs0s9LRQkokjkk+514xTHolC7e1KDotX
+         eTWLAhU+0OwNIQOqxcAP1AIIKJY3zZqGlU09eipakr0UFZ9cXVspEJ1Pn9KhlYInatU5
+         vn83jcknfkedV65ugci9l3JqiazDdx879yVMAdYS6In6WqOAW+nx+m+p+XFlnC/xKAhJ
+         FNpQZqnMrVO05GDUu8PlJ3haJtmM+NQqkdlixOUEzPzixatpPuL0xcZ7KDh9M+If5ZXI
+         rnW6wAlF/pJKwXNuN+YLo4A+NYu7nTNW/F/MebwCfPKuQXgy+zrmc1qv+3ACqBXia7Qf
+         2YXA==
+X-Gm-Message-State: AOAM532RX8cqvtf3OYrkfRD1cpm9KxNIpHts6rg83S6mZC+9eO93jxWS
+        T3qgzctjcnoz9cjHy3MQMjddTw==
+X-Google-Smtp-Source: ABdhPJwo9c8LbCkavdKfpoadHPuUcYrp0SSG4dnjNHU5gp2pCtsaa3ksUhu2md7xyaz1S92gcf2Hxw==
+X-Received: by 2002:a17:903:41d0:b0:151:8b0c:5dd1 with SMTP id u16-20020a17090341d000b001518b0c5dd1mr14207833ple.160.1646348822205;
+        Thu, 03 Mar 2022 15:07:02 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m20-20020a634c54000000b003739af127c9sm2942153pgl.70.2022.03.03.15.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 15:07:01 -0800 (PST)
+Date:   Thu, 3 Mar 2022 23:06:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 15/28] KVM: x86/mmu: Add dedicated helper to zap TDP
+ MMU root shadow page
+Message-ID: <YiFKEQPLzlcA403J@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-16-seanjc@google.com>
+ <YiEw7z9TCQJl+udS@google.com>
+ <YiEyEWDkNxNIAn/z@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiEyEWDkNxNIAn/z@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Thu, Mar 03, 2022, Mingwei Zhang wrote:
+> On Thu, Mar 03, 2022, Mingwei Zhang wrote:
+> > > +	/*
+> > > +	 * No need to try to step down in the iterator when zapping an entire
+> > > +	 * root, zapping an upper-level SPTE will recurse on its children.
+> > > +	 */
+> > > +	for_each_tdp_pte_min_level(iter, root, root->role.level, start, end) {
+> > > +retry:
+> > > +		/*
+> > > +		 * Yielding isn't allowed when zapping an unreachable root as
+> > > +		 * the root won't be processed by mmu_notifier callbacks.  When
+> > > +		 * handling an unmap/release mmu_notifier command, KVM must
+> > > +		 * drop all references to relevant pages prior to completing
+> > > +		 * the callback.  Dropping mmu_lock can result in zapping SPTEs
+> > > +		 * for an unreachable root after a relevant callback completes,
+> > > +		 * which leads to use-after-free as zapping a SPTE triggers
+> > > +		 * "writeback" of dirty/accessed bits to the SPTE's associated
+> > > +		 * struct page.
+> > > +		 */
+> > 
+> > I have a quick question here: when the roots are unreachable, we can't
+> > yield, understand that after reading the comments. However, what if
+> > there are too many SPTEs that need to be zapped that requires yielding.
+> > In this case, I guess we will have a RCU warning, which is unavoidable,
+> > right?
+> 
+> I will take that back. I think the subsequent patches solve the problem
+> using two passes.
 
-Please find the pull request for coresight subsystem for v5.18.
-
-Suzuki
-
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
-
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.18
-
-for you to fetch changes up to b54f53bc11a584713f79a704c70c488489f524b8:
-
-  coresight: Drop unused 'none' enum value for each component (2022-02-28 09:51:40 -0700)
-
-----------------------------------------------------------------
-coresight: changes for v5.18
-
-The coresight update for v5.18 includes
-  - TRBE erratum workarounds for Arm Cortex-A510
-  - Fixes for leaking root namespace PIDs into non-root namespace
-    trace sessions
-  - Miscellaneous fixes and cleanups
-
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
-----------------------------------------------------------------
-Anshuman Khandual (4):
-      coresight: trbe: Work around the ignored system register writes
-      coresight: trbe: Work around the invalid prohibited states
-      coresight: trbe: Work around the trace data corruption
-      coresight: Drop unused 'none' enum value for each component
-
-James Clark (2):
-      coresight: Fix TRCCONFIGR.QE sysfs interface
-      coresight: no-op refactor to make INSTP0 check more idiomatic
-
-Leo Yan (4):
-      coresight: etm4x: Add lock for reading virtual context ID comparator
-      coresight: etm4x: Don't use virtual contextID for non-root PID namespace
-      coresight: etm4x: Don't trace PID for non-root PID namespace
-      coresight: etm3x: Don't trace PID for non-root PID namespace
-
-Miaoqian Lin (1):
-      coresight: syscfg: Fix memleak on registration failure in cscfg_create_device
-
-Rafael J. Wysocki (1):
-      hwtracing: coresight: Replace acpi_bus_get_device()
-
-Sudeep Holla (1):
-      coresight: trbe: Move check for kernel page table isolation from EL0 to probe
-
- arch/arm64/Kconfig                                 |   6 +-
- drivers/hwtracing/coresight/coresight-core.c       |   3 -
- drivers/hwtracing/coresight/coresight-etm3x-core.c |   4 +
- drivers/hwtracing/coresight/coresight-etm4x-core.c |  12 +-
- .../hwtracing/coresight/coresight-etm4x-sysfs.c    |  38 ++++++-
- drivers/hwtracing/coresight/coresight-platform.c   |   8 +-
- drivers/hwtracing/coresight/coresight-syscfg.c     |   2 +-
- drivers/hwtracing/coresight/coresight-trbe.c       | 125 +++++++++++++++------
- drivers/hwtracing/coresight/coresight-trbe.h       |   8 --
- include/linux/coresight.h                          |   5 -
- 10 files changed, 149 insertions(+), 62 deletions(-)
+Yes, but it's worth noting that the yielding problem is also solved by keeping
+roots reachable while they're being zapped (also done in later patches).  That
+way if a mmu_notifier event comes along, it can guarantee the SPTEs it cares about
+are zapped (and their metadata flushed) even if the MMU root is no longer usable
+by a vCPU.

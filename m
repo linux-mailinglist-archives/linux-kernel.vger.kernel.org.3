@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1504CBC3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6B24CBC3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiCCLPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S232675AbiCCLQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbiCCLPC (ORCPT
+        with ESMTP id S231876AbiCCLQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:15:02 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED6615472B;
-        Thu,  3 Mar 2022 03:14:17 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b11so7790739lfb.12;
-        Thu, 03 Mar 2022 03:14:17 -0800 (PST)
+        Thu, 3 Mar 2022 06:16:28 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25101688F0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:15:42 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id j2so9575935ybu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 03:15:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=s/D0SgAxUR3VSzGSe6y/eEiPzY/klLlpFUguwYZhOco=;
-        b=QFCOHPqu0k6ef3uTAMQ85AgvdJkHyZ8H/Gh7zy/Xy/pA0QzglqkYbTNi8bPIfk7A/H
-         wr2ihUk89QkfuzP/lBJMHHmlj0IvyF1dlNxd4ZHG2AyIeoSbhytZibMm8hbtoCxwTtpF
-         IVx7sB6iPn+4yu0X6jTXuH/Z+eUbY0mMSbrbTB058mVTjNC8XJFYyYO2gSZA0/BxfizI
-         ZYDojTK4yreR6imUbIyrcDHYyW5sO6KucaUBIXLWdoMFCHFaNgnUvD/gP6AtEDTtRsBP
-         pVpcWW8fqjGgVaZ6lHo5rF9a0ybYSeZZQkrhns1NSyIbrOV5FqfybWZPTIEKsvcU6NUq
-         qkew==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HoCF6NhxARCr3ueC6ZsYxpx/8H0Eb++Uzi1onIsqoOI=;
+        b=vEyMm8AoudFkaUiSf63rN3f+y8qOG2p1y/HS/fJTPu1jm6bL42nRqFnoFdDWk0eOIM
+         wCzc7FNE4wVhBJARwJalFPSk2FcLPnKaTOtkSwUef3OgINTy7HXa2sVBxjDJnJ1yGhxO
+         WKm0iCHP9rlmjVEacE7KW27nIEUwBj7ExG2KwaoQjzPEbfJmlS+Xw5cY7cLNwtlyjmm4
+         8HntGVf2ezfkJ3yHo7X1k8k0/lmA356l/zbX0yaHFNej17DLMOJvyW+LDESdoPZxNby9
+         Vqoi+9OzQbmFmQLc5IACX+pgGYjrB4HD5QKAygv6e6vWDCxhVUKDC14SWRqSZYeIuk8I
+         SDBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=s/D0SgAxUR3VSzGSe6y/eEiPzY/klLlpFUguwYZhOco=;
-        b=fpsFdWjtALPXo1Mr7JTe/bKPuWIwf+SNUsHUJvue38H99x7OPJA49lC+Wu6lnG4yiT
-         h7KBrfckQjE7oX/AQAX1kX8sPL2mXdhOpHoIXBYg6jfyY5A0ipKK2jtc/N0UWswr/GIn
-         QWRCRxTMYkVzqyHjH9us8Q5YPrEOtYW+csZ4DFNL2+YOAuNAOmqh9pJrVvEAb4vIUHTk
-         KwtVkXXcBkTL5iA5E/H4G1DPiUFXJ7oTHh2EE3nZH66gmaRbRC8h/pbRNnpOLxTXtakc
-         AiFzGD0byGhCkVSMWgbQkKjPWKZ8XqzbhcEXJzdWDaXMKOM4Jvx9L2C6dH0IYcW//Kxy
-         bsfQ==
-X-Gm-Message-State: AOAM5305eYe3tKUaGtr7XhbsHFoVyq8mGC9/lEFFMQUg0AJ1aVOvHij8
-        /PTmUaT0m5PDpS5QYNYD6GTcSEsjlAY=
-X-Google-Smtp-Source: ABdhPJxpRCvkaXhNiwJqXp2IUYH0TYamY/1/yk7j8QFFWhZ/sotzPBr6Eau1BA0mdM1kMKKBBn5fDw==
-X-Received: by 2002:a05:6512:689:b0:43e:da3e:42c3 with SMTP id t9-20020a056512068900b0043eda3e42c3mr21665276lfe.543.1646306055594;
-        Thu, 03 Mar 2022 03:14:15 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.85.105])
-        by smtp.gmail.com with ESMTPSA id q1-20020ac24a61000000b00445ba5b66dcsm367403lfp.220.2022.03.03.03.14.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 03:14:15 -0800 (PST)
-Subject: Re: [PATCH 1/2] ata: ahci: Add new board low_power_no_debounce_delay
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220303100453.30018-1-pmenzel@molgen.mpg.de>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <74abdd89-863d-19a7-d90e-525036ca6a51@gmail.com>
-Date:   Thu, 3 Mar 2022 14:14:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HoCF6NhxARCr3ueC6ZsYxpx/8H0Eb++Uzi1onIsqoOI=;
+        b=TTJNB5zynwndDlYpCvvD00I97hnJOY4cbkyaIbE4LCbbsIi7z6Za5Z0e+TS/MZuA13
+         LCLQ8qyoy1/f3PcwHtd367d645q1Qv7zcONNrGIoHwjJtb4p3ZobB/d7iaMOIyYBDx8A
+         T2/7eC4ESwPlMfwYafe1K3s9vbSOOBpTcoT16RpjdRybi5/Lgy3PmJDk+klja5d3H2xd
+         M80INEdahdLwdIORHJvigRZI5XjLbrsxmDGUnFjfhlWfZmblS8xx49iNMo3Tf8DLXBBD
+         jKHp/iT4kMnoc8qLG6GxvR3969DBTVYstcU6NU97/ob2IOSmNe1tFiVDW4M2BWdbfjk8
+         l7DQ==
+X-Gm-Message-State: AOAM531M7F2IPtE6/C/guetQk9KGbdtUyLLfrLg7PBavyuMXmNLMELo1
+        zdPpmT1/WNqhMzyKG6LMdPRZTXupMKHFYPSHGY6OOA==
+X-Google-Smtp-Source: ABdhPJxaDIq/YEzZwJfm09LBLmjgPY+iewMxbF1kjAykJ3N+XvyUN9PxI2ut1UTmptmNB87P4qQubfrG5JzIp82VraM=
+X-Received: by 2002:a25:d188:0:b0:628:ba86:ee68 with SMTP id
+ i130-20020a25d188000000b00628ba86ee68mr3937633ybg.427.1646306141760; Thu, 03
+ Mar 2022 03:15:41 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220303100453.30018-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220302083758.32528-1-songmuchun@bytedance.com>
+ <20220302083758.32528-4-songmuchun@bytedance.com> <Yh/g2BRPZC3370mX@bombadil.infradead.org>
+In-Reply-To: <Yh/g2BRPZC3370mX@bombadil.infradead.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 3 Mar 2022 19:15:05 +0800
+Message-ID: <CAMZfGtUCPAc2Ff7Cg1oxo=JYMaX1GM3HVNvK_Nka+4j5Xg3AtA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] mm: hugetlb: add hugetlb_free_vmemmap sysctl
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 1:04 PM, Paul Menzel wrote:
+On Thu, Mar 3, 2022 at 5:25 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Mar 02, 2022 at 04:37:58PM +0800, Muchun Song wrote:
+> > We must add "hugetlb_free_vmemmap=on" to boot cmdline and reboot the
+> > server to enable the feature of freeing vmemmap pages of HugeTLB
+> > pages. Rebooting usually taske a long time. Add a sysctl to enable
+> > the feature at runtime and do not need to reboot.
+> >
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >  Documentation/admin-guide/sysctl/vm.rst | 13 ++++++++++
+> >  include/linux/memory_hotplug.h          |  9 +++++++
+> >  mm/hugetlb_vmemmap.c                    | 42 ++++++++++++++++++++++++++++-----
+> >  mm/hugetlb_vmemmap.h                    |  4 +++-
+> >  mm/memory_hotplug.c                     |  5 ++++
+> >  5 files changed, 66 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> > index f4804ce37c58..01f18e6cc227 100644
+> > --- a/Documentation/admin-guide/sysctl/vm.rst
+> > +++ b/Documentation/admin-guide/sysctl/vm.rst
+> > @@ -561,6 +561,19 @@ Change the minimum size of the hugepage pool.
+> >  See Documentation/admin-guide/mm/hugetlbpage.rst
+> >
+> >
+> > +hugetlb_free_vmemmap
+> > +====================
+> > +
+> > +A toggle value indicating if vmemmap pages are allowed to be optimized.
+> > +If it is off (0), then it can be set true (1).  Once true, the vmemmap
+> > +pages associated with each HugeTLB page will be optimized, and the toggle
+> > +cannot be set back to false.  It only optimizes the subsequent allocation
+> > +of HugeTLB pages from buddy system, while already allocated HugeTLB pages
+> > +will not be optimized.
+>
+> The commit log or documentation does not descrie why its safe to toggle
+> one way and not the other?
+>
 
-> Some adapters d onot require the default 200 ms debounce delay in
+I thought it was easy to handle the transition from disable to enable
+(code is simple).  I might be wrong. I'll try to handle the other side in
+the next version if it is not hard to handle.
 
-   Do not. Perhaps could be fixed while applying...
-
-> `sata_link_resume()`. So, create the new board
-> `board_ahci_low_power_no_debounce_delay` with the link flag
-> `ATA_LFLAG_NO_DEBOUNCE_DELAY`.
-> 
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-[...]
-
-MBR, Sergey
+Thanks Luis.

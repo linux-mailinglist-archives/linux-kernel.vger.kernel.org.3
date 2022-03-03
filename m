@@ -2,186 +2,589 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083284CBD05
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD634CBCF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiCCLpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S232679AbiCCLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiCCLpg (ORCPT
+        with ESMTP id S229918AbiCCLmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:45:36 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12110BF7C;
-        Thu,  3 Mar 2022 03:44:51 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223AO3Bx028647;
-        Thu, 3 Mar 2022 11:44:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=DTIFQfAsQ9HRNExt3rNojfwxqI2Uht9mWifm6YtDZPE=;
- b=okXwPfgnbGSgqULZVsVUfhzfIHKPAosLCmSPzKTheuf0MzpUZhtnTUSqGF75a9MT77wD
- gQ7CJEYQcmpFB4io9LlyHmmqlHFYZcHreBApgUp8CQXk3AUHjvT7nkhLqz8Vr6zOailR
- dxqkaz1b/L6ieOcQK/GTRGg0kiv9Aca46XRVNNcFn5VApB2wA/T+HUThCHqViGwD4EP6
- oYUzPBhe8BQItVCtmAhcJa5tG2obw9qwojGj14L0qDSwfOc42cARFmFURshoz6GFuNzL
- 63OR+WVQK/TEgOCq/mGuxvb2hMrnQuQpsb1d/su1d/oVVXZ6c/rYBrKnUBEWCqu5la1d Ag== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejuvy9he4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 11:44:26 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 223Bcd9k010957;
-        Thu, 3 Mar 2022 11:44:26 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01wdc.us.ibm.com with ESMTP id 3efbua45ce-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 11:44:26 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 223BiP2u51446208
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 11:44:25 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29677AC062;
-        Thu,  3 Mar 2022 11:44:25 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 59E50AC05E;
-        Thu,  3 Mar 2022 11:44:18 +0000 (GMT)
-Received: from [9.43.91.43] (unknown [9.43.91.43])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Mar 2022 11:44:17 +0000 (GMT)
-Message-ID: <7223fa7d-56ef-ecee-218c-03d67c6aac4e@linux.vnet.ibm.com>
-Date:   Thu, 3 Mar 2022 17:11:15 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [next-20220225] powerpc boot broken with maple tree code ?
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     linux-next <linux-next@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        sachinp <sachinp@linux.vnet.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>
-References: <d36d1a56-7946-723b-a255-dab5a9a77592@linux.vnet.ibm.com>
- <20220302145225.5t2ia356ez3ewq2k@revolver>
-From:   Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-In-Reply-To: <20220302145225.5t2ia356ez3ewq2k@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6Dz7xnxTDhSZdCYqshQEzf4H57VB7Pau
-X-Proofpoint-ORIG-GUID: 6Dz7xnxTDhSZdCYqshQEzf4H57VB7Pau
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 3 Mar 2022 06:42:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336B45419E;
+        Thu,  3 Mar 2022 03:41:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC753B82503;
+        Thu,  3 Mar 2022 11:41:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C80C004E1;
+        Thu,  3 Mar 2022 11:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646307692;
+        bh=8SzrGpoAGKknnOs6IKUL2ql+FnAEdH9Cj5eAhELQ57E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LkEq8mwQyf7OUB9MdQ/oCHGiD4Cew4zyCujxJdx4KNxPHMrOML06bVWXgLPbKcJrd
+         flf2fvYV6PlDRruSa72ijrGQHgn7qNh+pCtMyazb+CIZhhfjLZIQvk5266AXpDa+Qp
+         Oa3r+eCYKVot6FVOq0bJNtYiESphFPRkYc8SWPbYuuODfl/pSFtPniLYAcuP/iW9Nj
+         /loIUgGV/yJJc430TbwDAUFq99jNFLkRFB6by14Et6jN5kN0Vox0Q/B9pgPejQMs+n
+         61vra4a0ilDwbq112X6Z8thmU1YfZWye+FjFunyirOZ1XpRMxs9y/Pt6mrd3H13lPB
+         WOW9Bg/gIFEVg==
+Date:   Thu, 3 Mar 2022 13:41:21 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+Message-ID: <YiCpYRwoUSmd/GE3@kernel.org>
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=992
- adultscore=0 mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203030055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220226110338.77547-10-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 8:22 PM, Liam Howlett wrote:
+On Sat, Feb 26, 2022 at 07:03:25PM +0800, Huacai Chen wrote:
+> This patch adds basic boot, setup and reset routines for LoongArch.
+> LoongArch uses UEFI-based firmware. The firmware uses ACPI and DMI/
+> SMBIOS to pass configuration information to the Linux kernel (in elf
+> format).
+> 
+> Now the boot information passed to kernel is like this:
+> 1, kernel get 3 register values (a0, a1 and a2) from bootloader.
+> 2, a0 is "argc", a1 is "argv", so "kernel cmdline" comes from a0/a1.
+> 3, a2 is "environ", which is a pointer to "struct bootparamsinterface".
+> 4, "struct bootparamsinterface" include a "systemtable" pointer, whose
+>    type is "efi_system_table_t". Most configuration information, include
+>    ACPI tables and SMBIOS tables, come from here.
+> 
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: linux-efi@vger.kernel.org
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
 
-> * Abdul Haleem <abdhalee@linux.vnet.ibm.com> [220302 01:22]:
->> Greeting's
->>
->> linux-next kernel 5.17.0-rc5-next-20220225 boot is broken on powerpc
->>
->> Is this due to Introduction of maple patch series ?
-> It could be - those are certainly maple tree functions.  I do have a
-> ppc64le VM booting here with a bunch of debug turned on.
->
-> Could you test the maple tree branch itself?
-> https://github.com/oracle/linux-uek/tree/howlett/maple/20220301
+...
 
-Kernel crash is not seen with howlett/maple/20220301 branch, boots fine on my powerpc box.
+> diff --git a/arch/loongarch/include/asm/dmi.h b/arch/loongarch/include/asm/dmi.h
+> new file mode 100644
+> index 000000000000..d2d4b89624f8
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/dmi.h
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_DMI_H
+> +#define _ASM_DMI_H
+> +
+> +#include <linux/io.h>
+> +#include <linux/memblock.h>
+> +
+> +#define dmi_early_remap(x, l)	dmi_remap(x, l)
+> +#define dmi_early_unmap(x, l)	dmi_unmap(x)
+> +#define dmi_alloc(l)		memblock_alloc_low(l, PAGE_SIZE)
 
-Thanks
+Are there any restrictions on addressing of the memory allocated with
+dmi_alloc()?
 
->> Kernel attempted to read user page (0) - exploit attempt? (uid: 0)
->>   BUG: Kernel NULL pointer dereference on read at 0x00000000
->>   Faulting instruction address: 0xc0000000006f1560
->>   Oops: Kernel access of bad area, sig: 11 [#1]
->>   LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
->>   Modules linked in: nfnetlink tcp_diag udp_diag inet_diag unix_diag af_packet_diag ibmvnic netlink_diag bonding rfkill sunrpc pseries_rng xts vmx_crypto gf128mul sch_fq_codel binfmt_misc ip_tables ext4 mbcache jbd2 dm_service_time sd_mod t10_pi sg ibmvfc scsi_transport_fc ibmveth dm_multipath dm_mirror dm_region_hash dm_log dm_mod fuse [last unloaded: ibmvnic]
->>   CPU: 31 PID: 7527 Comm: pmpost Not tainted 5.17.0-rc5-next-20220225-autotest #1
->>   NIP:  c0000000006f1560 LR: c0000000006f6f48 CTR: 0000000000000000
->>   REGS: c0000000251732f0 TRAP: 0300   Not tainted  (5.17.0-rc5-next-20220225-autotest)
->>   MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24422888  XER: 20040000
->>   CFAR: c0000000006f17a4 DAR: 0000000000000000 DSISR: 40000000 IRQMASK: 0
->>   GPR00: c0000000006feb04 c000000025173590 c0000000028d1400 c0000000251735b8
->>   GPR04: 0000000000000001 c000000028364200 c0000000251735b8 0000000000000000
->>   GPR08: 0000000000000004 0000000000000002 0000000000000000 c000000028364200
->>   GPR12: 0000000044422888 c0000013ffaa4e80 0000000000000003 c0000000355eef48
->>   GPR16: 00007ffff23ee710 00000000003a164c 0000000000000002 0000000000000001
->>   GPR20: 0000000000000000 0000000000000073 000000007fff8a79 0000000000000000
->>   GPR24: c000000018aade00 00007fff8a79ffff c000000025173680 0000000000000002
->>   GPR28: c000000000d448e8 0000000000000002 0000000000000001 c0000000251736c0
->>   NIP [c0000000006f1560] mas_ascend+0x60/0x2e0
->>   LR [c0000000006f6f48] mas_next_sibling+0xd8/0x290
->>   Call Trace:
->>   [c000000025173590] [c000000025173b18] 0xc000000025173b18 (unreliable)
->>   [c000000025173620] [c0000000006feb04] mas_wr_modify+0x6c4/0x910
->>   [c0000000251739a0] [c0000000006ff0b8] mas_wr_store_entry+0x198/0x3f0
->>   [c0000000251739d0] [c00000000070167c] mas_store_gfp+0x6c/0x190
->>   [c000000025173a80] [c0000000003b1164] mmap_region+0x304/0xda0
->>   [c000000025173bf0] [c0000000003b1fcc] do_mmap+0x3cc/0x5e0
->>   [c000000025173c90] [c000000000372ea0] vm_mmap_pgoff+0x130/0x1f0
->>   [c000000025173d20] [c0000000003adc8c] ksys_mmap_pgoff+0x6c/0x2c0
->>   [c000000025173d90] [c000000000013780] sys_mmap+0x40/0xb0
->>   [c000000025173db0] [c00000000002f7e8] system_call_exception+0x178/0x380
->>   [c000000025173e10] [c00000000000c64c] system_call_common+0xec/0x250
->>   --- interrupt: c00 at 0x7fff8a7678b8
->>   NIP:  00007fff8a7678b8 LR: 00007fff8a749e84 CTR: 0000000000000000
->>   REGS: c000000025173e80 TRAP: 0c00   Not tainted  (5.17.0-rc5-next-20220225-autotest)
->>   MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24422284  XER: 00000000
->>   IRQMASK: 0
->>   GPR00: 000000000000005a 00007ffff23ee680 00007fff8a797e00 00007fff8a790000
->>   GPR04: 0000000000000008 0000000000000003 0000000000000032 ffffffffffffffff
->>   GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->>   GPR12: 0000000000000000 0000000000000000 0000000000000003 00007ffff23ee740
->>   GPR16: 00007ffff23ee710 00000000003a164c 0000000000000002 0000000000000006
->>   GPR20: 0000000000000000 00007fff8a790000 00007fff8a5fa1eb 00007fff8a793d70
->>   GPR24: 00007fff8a791178 0000000000000000 0000000000000003 00007ffff23eea40
->>   GPR28: 0000000000000000 000000000000fd04 00007fff8a793d90 00007ffff23ee7d0
->>   NIP [00007fff8a7678b8] 0x7fff8a7678b8
->>   LR [00007fff8a749e84] 0x7fff8a749e84
->>   --- interrupt: c00
->>   Instruction dump:
->>   712a0002 e8a30000 552a067a 41820264 71290086 2ba90006 419e01a8 39200003
->>   7d4a4c36 61080004 99460039 f9060018 <e9270000> 792a07e0 2eaa0000 7d4c5378
->>   ---[ end trace 0000000000000000 ]---
->>   Kernel panic - not syncing: Fatal exception
->>
->> kernel config attached
->>
->> -- 
->> Regard's
->>
->> Abdul Haleem
->> IBM Linux Technology Center
+If no, please use memblock_alloc().
+
+> +
+> +static inline void *dmi_remap(u64 phys_addr, unsigned long size)
+> +{
+> +	return ((void *)TO_CAC(phys_addr));
+> +}
+> +
+> +static inline void dmi_unmap(void *addr)
+> +{
+> +}
+> +
+> +#endif /* _ASM_DMI_H */
+
+...
+
+> diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+> new file mode 100644
+> index 000000000000..3f2101fd19bd
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/acpi.c
+> @@ -0,0 +1,338 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * acpi.c - Architecture-Specific Low-Level ACPI Boot Support
+> + *
+> + * Author: Jianmin Lv <lvjianmin@loongson.cn>
+> + *         Huacai Chen <chenhuacai@loongson.cn>
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/acpi.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/memblock.h>
+> +#include <linux/serial_core.h>
+> +#include <asm/io.h>
+> +#include <asm/loongson.h>
+> +
+> +int acpi_disabled;
+> +EXPORT_SYMBOL(acpi_disabled);
+> +int acpi_noirq;
+> +int acpi_pci_disabled;
+> +EXPORT_SYMBOL(acpi_pci_disabled);
+> +int acpi_strict = 1; /* We have no workarounds on LoongArch */
+> +int num_processors;
+> +int disabled_cpus;
+> +enum acpi_irq_model_id acpi_irq_model = ACPI_IRQ_MODEL_PLATFORM;
+> +
+> +u64 acpi_saved_sp;
+> +
+> +#define MAX_CORE_PIC 256
+> +
+> +#define PREFIX			"ACPI: "
+> +
+> +int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+> +{
+> +	if (irqp != NULL)
+> +		*irqp = acpi_register_gsi(NULL, gsi, -1, -1);
+> +	return (*irqp >= 0) ? 0 : -EINVAL;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+> +
+> +int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+> +{
+> +	if (gsi)
+> +		*gsi = isa_irq;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * success: return IRQ number (>=0)
+> + * failure: return < 0
+> + */
+> +int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int polarity)
+> +{
+> +	int id;
+> +	struct irq_fwspec fwspec;
+> +
+> +	switch (gsi) {
+> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> +		fwspec.fwnode = liointc_domain->fwnode;
+> +		fwspec.param[0] = gsi - GSI_MIN_CPU_IRQ;
+> +		fwspec.param_count = 1;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +
+> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> +		if (!pch_lpc_domain)
+> +			return -EINVAL;
+> +
+> +		fwspec.fwnode = pch_lpc_domain->fwnode;
+> +		fwspec.param[0] = gsi - GSI_MIN_LPC_IRQ;
+> +		fwspec.param[1] = acpi_dev_get_irq_type(trigger, polarity);
+> +		fwspec.param_count = 2;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +
+> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> +		id = find_pch_pic(gsi);
+> +		if (id < 0)
+> +			return -EINVAL;
+> +
+> +		fwspec.fwnode = pch_pic_domain[id]->fwnode;
+> +		fwspec.param[0] = gsi - acpi_pchpic[id]->gsi_base;
+> +		fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
+> +		fwspec.param_count = 2;
+> +
+> +		return irq_create_fwspec_mapping(&fwspec);
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_register_gsi);
+> +
+> +void acpi_unregister_gsi(u32 gsi)
+> +{
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
+> +
+> +void __init __iomem * __acpi_map_table(unsigned long phys, unsigned long size)
+> +{
+> +
+> +	if (!phys || !size)
+> +		return NULL;
+> +
+> +	return early_memremap(phys, size);
+> +}
+> +void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
+> +{
+> +	if (!map || !size)
+> +		return;
+> +
+> +	early_memunmap(map, size);
+> +}
+> +
+> +void __init __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+> +{
+> +	if (!memblock_is_memory(phys))
+> +		return ioremap(phys, size);
+
+Is it possible that ACPI memory will be backed by a different *physical*
+device than system RAM?
+
+> +	else
+> +		return ioremap_cache(phys, size);
+
+If the address is in memory, why it needs to be ioremap'ed?
+
+> +}
+
+... 
+
+> +void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+> +{
+> +	memblock_mark_nomap(addr, size);
+> +}
+
+Is there any problem if the memory ranges used by ACPI will be mapped into
+the kernel page tables?
+
+If not, consider dropping this function.
+
+...
+
+> diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
+> new file mode 100644
+> index 000000000000..361d108a2b82
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/mem.c
+> @@ -0,0 +1,89 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/memblock.h>
+> +
+> +#include <asm/bootinfo.h>
+> +#include <asm/loongson.h>
+> +#include <asm/sections.h>
+> +
+> +void __init early_memblock_init(void)
+> +{
+> +	int i;
+> +	u32 mem_type;
+> +	u64 mem_start, mem_end, mem_size;
+> +
+> +	/* Parse memory information */
+> +	for (i = 0; i < loongson_mem_map->map_count; i++) {
+> +		mem_type = loongson_mem_map->map[i].mem_type;
+> +		mem_start = loongson_mem_map->map[i].mem_start;
+> +		mem_size = loongson_mem_map->map[i].mem_size;
+> +		mem_end = mem_start + mem_size;
+> +
+> +		switch (mem_type) {
+> +		case ADDRESS_TYPE_SYSRAM:
+> +			memblock_add(mem_start, mem_size);
+> +			if (max_low_pfn < (mem_end >> PAGE_SHIFT))
+> +				max_low_pfn = mem_end >> PAGE_SHIFT;
+> +			break;
+> +		}
+> +	}
+> +	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
+> +}
+> +
+> +void __init fw_init_memory(void)
+> +{
+> +	int i;
+> +	u32 mem_type;
+> +	u64 mem_start, mem_end, mem_size;
+> +	unsigned long start_pfn, end_pfn;
+> +	static unsigned long num_physpages;
+> +
+> +	/* Parse memory information */
+> +	for (i = 0; i < loongson_mem_map->map_count; i++) {
+> +		mem_type = loongson_mem_map->map[i].mem_type;
+> +		mem_start = loongson_mem_map->map[i].mem_start;
+> +		mem_size = loongson_mem_map->map[i].mem_size;
+> +		mem_end = mem_start + mem_size;
+
+I think this loop can be merged with loop in early_memblock_init() then ...
+
+> +
+> +		switch (mem_type) {
+> +		case ADDRESS_TYPE_SYSRAM:
+> +			mem_start = PFN_ALIGN(mem_start);
+> +			mem_end = PFN_ALIGN(mem_end - PAGE_SIZE + 1);
+> +			num_physpages += (mem_size >> PAGE_SHIFT);
+> +			memblock_set_node(mem_start, mem_size, &memblock.memory, 0);
+
+this will become memblock_add_node()
+
+> +			break;
+> +		case ADDRESS_TYPE_ACPI:
+> +			mem_start = PFN_ALIGN(mem_start);
+> +			mem_end = PFN_ALIGN(mem_end - PAGE_SIZE + 1);
+> +			num_physpages += (mem_size >> PAGE_SHIFT);
+> +			memblock_add(mem_start, mem_size);
+> +			memblock_set_node(mem_start, mem_size, &memblock.memory, 0);
+
+as well as this.
+
+> +			memblock_mark_nomap(mem_start, mem_size);
+
+You don't want to use MEMBLOCK_NOMAP unless there is a problem with normal
+accesses to this memory.
+
+> +			fallthrough;
+> +		case ADDRESS_TYPE_RESERVED:
+> +			memblock_reserve(mem_start, mem_size);
+> +			break;
+> +		}
+> +	}
+> +
+> +	get_pfn_range_for_nid(0, &start_pfn, &end_pfn);
+> +	pr_info("start_pfn=0x%lx, end_pfn=0x%lx, num_physpages:0x%lx\n",
+> +				start_pfn, end_pfn, num_physpages);
+> +
+> +	NODE_DATA(0)->node_start_pfn = start_pfn;
+> +	NODE_DATA(0)->node_spanned_pages = end_pfn - start_pfn;
+
+This is now handled by the generic code at free_area_init(), no need to
+keep it here.
+
+> +
+> +	/* used by finalize_initrd() */
+> +	max_low_pfn = end_pfn;
+> +
+> +	/* Reserve the first 2MB */
+> +	memblock_reserve(PHYS_OFFSET, 0x200000);
+> +
+> +	/* Reserve the kernel text/data/bss */
+> +	memblock_reserve(__pa_symbol(&_text),
+> +			 __pa_symbol(&_end) - __pa_symbol(&_text));
+> +}
+
+...
+
+> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+> new file mode 100644
+> index 000000000000..8dfe1d9b55f7
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/setup.c
+> @@ -0,0 +1,495 @@
+
+...
+
+> +/*
+> + * Manage initrd
+> + */
+> +#ifdef CONFIG_BLK_DEV_INITRD
+> +
+> +static unsigned long __init init_initrd(void)
+> +{
+> +	if (!phys_initrd_start || !phys_initrd_size)
+> +		goto disable;
+> +
+> +	initrd_start = (unsigned long)phys_to_virt(phys_initrd_start);
+> +	initrd_end   = (unsigned long)phys_to_virt(phys_initrd_start + phys_initrd_size);
+> +
+> +	if (!initrd_start || initrd_end <= initrd_start)
+> +		goto disable;
+> +
+> +	if (initrd_start & ~PAGE_MASK) {
+> +		pr_err("initrd start must be page aligned\n");
+> +		goto disable;
+> +	}
+> +	if (initrd_start < PAGE_OFFSET) {
+> +		pr_err("initrd start < PAGE_OFFSET\n");
+> +		goto disable;
+> +	}
+> +
+> +	ROOT_DEV = Root_RAM0;
+> +
+> +	return 0;
+> +disable:
+> +	initrd_start = 0;
+> +	initrd_end = 0;
+> +	return 0;
+> +}
+> +
+> +static void __init finalize_initrd(void)
+> +{
+
+Any reason to have this separate function from init_initrd?
+
+> +	unsigned long size = initrd_end - initrd_start;
+> +
+> +	if (size == 0) {
+> +		pr_info("Initrd not found or empty");
+> +		goto disable;
+> +	}
+> +	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
+> +		pr_err("Initrd extends beyond end of memory");
+> +		goto disable;
+> +	}
+> +
+> +
+> +	memblock_reserve(__pa(initrd_start), size);
+> +	initrd_below_start_ok = 1;
+> +
+> +	pr_info("Initial ramdisk at: 0x%lx (%lu bytes)\n",
+> +		initrd_start, size);
+> +	return;
+> +disable:
+> +	pr_cont(" - disabling initrd\n");
+> +	initrd_start = 0;
+> +	initrd_end = 0;
+> +}
+> +
+> +#else  /* !CONFIG_BLK_DEV_INITRD */
+> +
+> +static unsigned long __init init_initrd(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +#define finalize_initrd()	do {} while (0)
+> +
+> +#endif
+> +
+> +static int usermem __initdata;
+> +
+> +static int __init early_parse_mem(char *p)
+> +{
+> +	phys_addr_t start, size;
+> +
+> +	/*
+> +	 * If a user specifies memory size, we
+> +	 * blow away any automatically generated
+> +	 * size.
+> +	 */
+> +	if (usermem == 0) {
+> +		usermem = 1;
+> +		memblock_remove(memblock_start_of_DRAM(),
+> +			memblock_end_of_DRAM() - memblock_start_of_DRAM());
+> +	}
+> +	start = 0;
+> +	size = memparse(p, &p);
+> +	if (*p == '@')
+> +		start = memparse(p + 1, &p);
+> +
+> +	memblock_add(start, size);
+> +
+> +	return 0;
+> +}
+> +early_param("mem", early_parse_mem);
+> +
+> +static int __init early_parse_memmap(char *p)
+> +{
+> +	char *oldp;
+> +	u64 start_at, mem_size;
+> +
+> +	if (!p)
+> +		return -EINVAL;
+> +
+> +	if (!strncmp(p, "exactmap", 8)) {
+> +		pr_err("\"memmap=exactmap\" invalid on LoongArch\n");
+> +		return 0;
+> +	}
+> +
+> +	oldp = p;
+> +	mem_size = memparse(p, &p);
+> +	if (p == oldp)
+> +		return -EINVAL;
+> +
+> +	if (*p == '@') {
+> +		start_at = memparse(p+1, &p);
+> +		memblock_add(start_at, mem_size);
+> +	} else if (*p == '#') {
+> +		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on LoongArch\n");
+> +		return -EINVAL;
+> +	} else if (*p == '$') {
+> +		start_at = memparse(p+1, &p);
+> +		memblock_add(start_at, mem_size);
+> +		memblock_reserve(start_at, mem_size);
+> +	} else {
+> +		pr_err("\"memmap\" invalid format!\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (*p == '\0') {
+> +		usermem = 1;
+> +		return 0;
+> +	} else
+> +		return -EINVAL;
+> +}
+> +early_param("memmap", early_parse_memmap);
+
+The memmap= processing is a hack indented to workaround bugs in firmware
+related to the memory detection. Please don't copy if over unless there is
+really strong reason.
+
+...
+
+> +/*
+> + * arch_mem_init - initialize memory management subsystem
+> + */
+> +static void __init arch_mem_init(char **cmdline_p)
+> +{
+> +	if (usermem)
+> +		pr_info("User-defined physical RAM map overwrite\n");
+> +
+> +	check_kernel_sections_mem();
+> +
+> +	memblock_set_node(0, PHYS_ADDR_MAX, &memblock.memory, 0);
+> +
+> +	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
+> +
+> +	/*
+> +	 * In order to reduce the possibility of kernel panic when failed to
+> +	 * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
+> +	 * low memory as small as possible before plat_swiotlb_setup(), so
+> +	 * make sparse_init() using top-down allocation.
+> +	 */
+> +	memblock_set_bottom_up(false);
+> +	sparse_init();
+> +	memblock_set_bottom_up(true);
+
+Does loongarch have the same IO TLB requirements as MIPS?
+
+> +
+> +	swiotlb_init(1);
+> +
+> +	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
+> +
+> +	memblock_dump_all();
+> +
+> +	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
+> +}
 
 -- 
-Regard's
-
-Abdul Haleem
-IBM Linux Technology Center
-
+Sincerely yours,
+Mike.

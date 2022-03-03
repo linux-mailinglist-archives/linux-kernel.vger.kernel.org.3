@@ -2,73 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B014CC737
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BA84CC739
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236358AbiCCUn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S235914AbiCCUn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236334AbiCCUnx (ORCPT
+        with ESMTP id S236323AbiCCUnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Mar 2022 15:43:53 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC59EDF496
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5027635273
         for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 12:43:07 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id y6-20020a929506000000b002beffccab3bso4217519ilh.22
+Received: by mail-pj1-x1034.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso5495118pjb.0
         for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 12:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B07u8PwztIDT/t6XfdN5+sheHaP7KOymmsGZ6gm7cvQ=;
+        b=g35UOZ2H2BUbeBCNpKfxn2d++rHQqBdGKgSqyF9IlKxDEMjB8jqH4437yhcwo3v6DK
+         /ixM6hpQFMCxOspVS9T1nLyhrNFe64Nse3uB/kd9lmaMpglfhOZjzy6D2gpTfGw7IaRd
+         IR2HOKsex0l4U8co5RVxieOxvigwyso/QO0XcaAv0I+jKsLifYi6NH/jsnuah2oA2qE9
+         7RAt+Yv6W5MfXUL015UENVFuDxJzgGnbp613COC+mdTV0QghAy55Z1LNCsO68+YtYskv
+         WkY6tpu4MsMRSaiHjqzeri5UPzRrjRmBhiEdvn5L4Oj/BBNIbdSl/XHW2ug+rXQWoUi9
+         w5OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=lCbnp0c+ARU7aCR1dzzMJYL5adEdTpl2eSYsjAMtki8=;
-        b=qSUhWTxG5RHmzZAMyVwJnD+HoSx97E+QMKXedPvIgtraZz4o1qVRC86tFocPpOdwVb
-         eMND93ZS13KjO8/dNhHdJry4s+pk+pfUcWkC425Gq/C2x/CvXvGebsXGAbQFvuMd6kKy
-         ZgFqoFfrhblkNW9LeeuPItgFCcpo62ukaMrXXCHq267aCLui1vVcpKd3SuyTHRSqaAYk
-         50Nl8F07EXj8Hag7r/hrR339HBv8+1p94HBbYnlodH8A4WQw9a0UMusjVdDJpNMeRmxt
-         TYsvLTRTc79LwUWJRsIJOpi9iee9Tlyv6PA8pX55NCpMoZ9PR/jHOTWYmdDHsk5Vq1wX
-         aLZQ==
-X-Gm-Message-State: AOAM533xajYS48a7Yo6s5mkv87F/+5rFkUvaoco9JkMn4SuSlXZiErDE
-        yXIEEWOXKn9dMOo98G7TDZMEslq+43A57pTjBN+pRXAyBRn5
-X-Google-Smtp-Source: ABdhPJy0TdlkldIFbiSBr/Tp2J55fnwCTVN6aaQG/cQB9mSzw3hRWui/L5X6P7Xev64bFa/YddO8iqEITqPegxNLMKuO4T7RI0yX
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154d:b0:2bc:84c0:b255 with SMTP id
- j13-20020a056e02154d00b002bc84c0b255mr33769254ilu.87.1646340186916; Thu, 03
- Mar 2022 12:43:06 -0800 (PST)
-Date:   Thu, 03 Mar 2022 12:43:06 -0800
-In-Reply-To: <YiElaWLdXT+m/RJM@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000054cc905d95672fa@google.com>
-Subject: Re: [syzbot] WARNING in usbtmc_ioctl/usb_submit_urb
-From:   syzbot <syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=B07u8PwztIDT/t6XfdN5+sheHaP7KOymmsGZ6gm7cvQ=;
+        b=bjGPiQuHH+bU5zNHAJkUQpOqyciiIrScRv7gH9bfhXZd8T4AZYWHVDidIOX8TWnApK
+         OIi4gar4IhiygsvmGc8o9wfTIIXqzgUw+EbfYfK4A2rRSG86TyyMD2t0pf1eDdZrChMf
+         OI0r+PU9KsExDfXCCLnWFk2Y1t29TojdsPuBTqflPQnqRx9YxmVFMzRC+rU4i2yd/FLJ
+         F/2OnnNFQrda6KQcxNKV5t0qiYYawPErNslXeUZdYTVmOYXueNd9aHj3EF2IfUWyhIiW
+         S5Y7e0q9cOu+HaSR61KAAOmlr3P7x0GuEw2HBpZaiW7dnV7h6KpT4pw+LQ9KdudJ3iNd
+         TXhg==
+X-Gm-Message-State: AOAM532ixIbCsG5s3T27IX3XXW0NmAR/EfS6DZzczBCRn3TmCuF/NoMU
+        RhsqM9iiqBNJuWQ0oFuI1AvUog==
+X-Google-Smtp-Source: ABdhPJzqWrdGV/V4cZ9E62uIW3uerWRtG11PeC/+Dyn1oLPg/pGjvxJCA+OYLmguFq+xUhW6gSCO9g==
+X-Received: by 2002:a17:902:dacd:b0:150:4f5:1158 with SMTP id q13-20020a170902dacd00b0015004f51158mr37292546plx.67.1646340186649;
+        Thu, 03 Mar 2022 12:43:06 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id k190-20020a633dc7000000b0037c921abb5bsm268485pga.23.2022.03.03.12.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 12:43:06 -0800 (PST)
+Date:   Thu, 03 Mar 2022 12:43:06 -0800 (PST)
+X-Google-Original-Date: Thu, 03 Mar 2022 12:39:36 PST (-0800)
+Subject:     Re: [PATCH v5 3/3] dmaengine: sf-pdma: Get number of channel by device tree
+In-Reply-To: <CANXhq0p-Jv2HMNu9NaG=03yudanoqV6MH=LhiCspHbj5nTn+GQ@mail.gmail.com>
+CC:     vkoul@kernel.org, robh+dt@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        conor.dooley@microchip.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, green.wan@sifive.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     zong.li@sifive.com
+Message-ID: <mhng-956767d2-f9fc-4d96-8a05-f7a618e3a16b@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 15 Feb 2022 22:52:14 PST (-0800), zong.li@sifive.com wrote:
+> On Tue, Feb 15, 2022 at 8:06 PM Vinod Koul <vkoul@kernel.org> wrote:
+>>
+>> On 07-02-22, 14:30, Zong Li wrote:
+>> > It currently assumes that there are always four channels, it would
+>> > cause the error if there is actually less than four channels. Change
+>> > that by getting number of channel from device tree.
+>> >
+>> > For backwards-compatibility, it uses the default value (i.e. 4) when
+>> > there is no 'dma-channels' information in dts.
+>> >
+>> > Signed-off-by: Zong Li <zong.li@sifive.com>
+>> > ---
+>> >  drivers/dma/sf-pdma/sf-pdma.c | 21 ++++++++++++++-------
+>> >  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
+>> >  2 files changed, 16 insertions(+), 13 deletions(-)
+>> >
+>> > diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
+>> > index f12606aeff87..2ae10b61dfa1 100644
+>> > --- a/drivers/dma/sf-pdma/sf-pdma.c
+>> > +++ b/drivers/dma/sf-pdma/sf-pdma.c
+>> > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
+>> >  static int sf_pdma_probe(struct platform_device *pdev)
+>> >  {
+>> >       struct sf_pdma *pdma;
+>> > -     struct sf_pdma_chan *chan;
+>> >       struct resource *res;
+>> > -     int len, chans;
+>> >       int ret;
+>> >       const enum dma_slave_buswidth widths =
+>> >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+>> > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
+>> >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+>> >               DMA_SLAVE_BUSWIDTH_64_BYTES;
+>> >
+>> > -     chans = PDMA_NR_CH;
+>> > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
+>> > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+>> > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
+>> >       if (!pdma)
+>> >               return -ENOMEM;
+>> >
+>> > -     pdma->n_chans = chans;
+>> > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
+>> > +                                &pdma->n_chans);
+>> > +     if (ret) {
+>> > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
+>>
+>> This is useful for only debug i think, so dev_dbg perhaps
+>>
+>
+> Thanks for your suggestion, let me change it in the next version.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Not sure if I'm missing something, but I don't see a v6.  I'm going to 
+assume that one will be sent, but the suggested changes look minor 
+enough so 
 
-Reported-and-tested-by: syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Tested on:
+LMK if you guys were expecting this to go in via the RISC-V tree, 
+otherwise I'll assume this aimed at the dmaengine tree.  Probably best to keep
+all three together, so feel free to take the DTS updates as well -- having some
+shared tag never hurts, but the DTs don't move that much so any conflicts
+should be straight-forward to just fix at merge time.
 
-commit:         754e0b0e Linux 5.17-rc4
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc4
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f4cd52967afc7901
-dashboard link: https://syzkaller.appspot.com/bug?extid=a48e3d1a875240cab5de
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=140dcc16700000
+Thanks!
 
-Note: testing is done by a robot and is best-effort only.
+>> > +             pdma->n_chans = PDMA_MAX_NR_CH;
+>> > +     }
+>> > +
+>> > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
+>> > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
+>> > +             return -EINVAL;
+>> > +     }
+>> >
+>> >       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> >       pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+>> > @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+>> >       struct sf_pdma_chan *ch;
+>> >       int i;
+>> >
+>> > -     for (i = 0; i < PDMA_NR_CH; i++) {
+>> > +     for (i = 0; i < pdma->n_chans; i++) {
+>> >               ch = &pdma->chans[i];
+>> >
+>> >               devm_free_irq(&pdev->dev, ch->txirq, ch);
+>> > @@ -574,6 +580,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+>> >
+>> >  static const struct of_device_id sf_pdma_dt_ids[] = {
+>> >       { .compatible = "sifive,fu540-c000-pdma" },
+>> > +     { .compatible = "sifive,pdma0" },
+>> >       {},
+>> >  };
+>> >  MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
+>> > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
+>> > index 0c20167b097d..8127d792f639 100644
+>> > --- a/drivers/dma/sf-pdma/sf-pdma.h
+>> > +++ b/drivers/dma/sf-pdma/sf-pdma.h
+>> > @@ -22,11 +22,7 @@
+>> >  #include "../dmaengine.h"
+>> >  #include "../virt-dma.h"
+>> >
+>> > -#define PDMA_NR_CH                                   4
+>> > -
+>> > -#if (PDMA_NR_CH != 4)
+>> > -#error "Please define PDMA_NR_CH to 4"
+>> > -#endif
+>> > +#define PDMA_MAX_NR_CH                                       4
+>> >
+>> >  #define PDMA_BASE_ADDR                                       0x3000000
+>> >  #define PDMA_CHAN_OFFSET                             0x1000
+>> > @@ -118,7 +114,7 @@ struct sf_pdma {
+>> >       void __iomem            *membase;
+>> >       void __iomem            *mappedbase;
+>> >       u32                     n_chans;
+>> > -     struct sf_pdma_chan     chans[PDMA_NR_CH];
+>> > +     struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
+>>
+>> why waste memory allocating max, we know number of channels in probe,
+>> why not allocate runtime?
+>>
+>
+> I kept it there because I'd like to do minimum change in this patch
+> set. You're right, let me change it in the next version.
+>
+>> --
+>> ~Vinod

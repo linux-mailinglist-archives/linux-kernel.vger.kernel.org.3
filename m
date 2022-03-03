@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D13D4CC460
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF174CC467
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234641AbiCCRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
+        id S232105AbiCCRxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 12:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiCCRvE (ORCPT
+        with ESMTP id S229496AbiCCRxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:51:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ADD134DF1;
-        Thu,  3 Mar 2022 09:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CC56B8260E;
-        Thu,  3 Mar 2022 17:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3867EC004E1;
-        Thu,  3 Mar 2022 17:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646329816;
-        bh=51aBfP9l60XsWjT3AW2tScEWeXi7FkOMBaVOzj6T4U0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYepwbHZViE06tVzwTabGfx+dND6DkiOL5oHV2vCeJfXqPlEdeWpX+LsiInFpB65K
-         TuyTT/GKDIQCIq6JSFe6cHEpxrfX4l3R8xo+Agsk+JFo1k3m1I7k+tH5ho6fDUn5J1
-         s9fEggP0XzGvCSRZ5k67BIm7hbcSipLQWoWdalczzXwS5pTynVJrPxwpPcnRWmiqZ8
-         IFSdqp4oa0CTPNXmbmGpaZ9l+vON/lCKhqHPb5VRllJ2FeP6iAQvH5dRRJDCpdsgDc
-         SGc1FrzJrjWDIUaxWFjS9Z8nzyKfp0n/jL7UyFJ+uhrUXF/zz3mzTVjVi97nyl1Sk8
-         UXjter6yA6N+A==
-Date:   Thu, 3 Mar 2022 17:50:09 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/20] hda: cs35l41: Remove unnecessary log
-Message-ID: <YiD/0ZMcSGVRTZxx@sirena.org.uk>
-References: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
- <20220303173059.269657-16-tanureal@opensource.cirrus.com>
+        Thu, 3 Mar 2022 12:53:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4274ECCD
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FoSYhh+8GMMoPaKqHvmCVfeuwA9p77ql1l5blA4VkA8=; b=l/LIUKluOsswkZOwi66Ia8ud6h
+        JiFS46+YAkHlkpNGRuyO3/h66eNunvvI8hfq09GahcVJE7W108zWJRh3OFSWs/1qhkUYm6wqA4/dD
+        Nznvp01x64dBQJc47fkT5ouX2cNc5ZuhAOdsHpKEVuZ72T4q9OZB1yVWuuSbgeNeLt5UZXEgHfWNw
+        yzSQbIS+DyA6Yvza98rOyiDDymiHnwQG1LaDVpQj+AuoztzeNvEy9scMiRSAEvIDdwONFtKJH9xkH
+        GV2DzEJMpQ8mCWwqqXlfxWtXDlDmBo/DOeau7aQ8jOuTzIy8WKgI8KNukuz//DxlOYu0u2roJPKa1
+        jXkUAkww==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPpd2-00BrH1-5q; Thu, 03 Mar 2022 17:52:40 +0000
+Date:   Thu, 3 Mar 2022 17:52:40 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH mmotm] mm/munlock: mlock_vma_folio() check against
+ VM_SPECIAL
+Message-ID: <YiEAaPBhOw2wjdNe@casper.infradead.org>
+References: <9b95d366-1719-f8e2-a5a3-429f9e808288@google.com>
+ <YiDPeJ+7DVWpsuRv@casper.infradead.org>
+ <39f9e61b-c66c-a741-5118-997a48dd440@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wlaslmZqugs/gzML"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303173059.269657-16-tanureal@opensource.cirrus.com>
-X-Cookie: Password:
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <39f9e61b-c66c-a741-5118-997a48dd440@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 03, 2022 at 09:25:47AM -0800, Hugh Dickins wrote:
+> On Thu, 3 Mar 2022, Matthew Wilcox wrote:
+> > It looks like it fixes "mm/munlock: mlock_pte_range() when mlocking or
+> > munlocking", so I'll fold it into that patch?
+> 
+> No and yes.
+> 
+> That's great if you're prepared to move it back before the foliation.
+> I think that just involves editing every "folio" to "page", including
+> in the title - I very nearly sent it out with mlock_vma_page() in title.
 
---wlaslmZqugs/gzML
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the reminder to do the title and changelog ;-)
 
-On Thu, Mar 03, 2022 at 05:30:54PM +0000, Lucas Tanure wrote:
+> But I would prefer it to remain as a separate fix at the end of the
+> mm/munlock series: this case is too unusual, and only a "Bad page",
+> to mess with bisection prospects; and it's addressing an entirely
+> different issue from what the "mlock_pte_range()..." is dealing with.
+> Each of them needs its own explanation.
+> 
+> So I would prefer it as a separate fix about "page"s, on top of the
+> mm/munlock series, and you then adjust your foliation commit accordingly.
 
-> If regmap fails would fail during probe of the device.
+Done!  Pushed out.
 
-I'm pretty sure circumstances could arise which would break things at
-runtime.
+> Thank you: this is what I really wanted, but was afraid to ask of you
+> (and of course, other fixes may turn out to be required, too late to
+> adjust across the page<->folio barrier in this way: so it's nice to
+> be able to do it this way, but rather beyond the call of duty).
 
---wlaslmZqugs/gzML
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIg/9AACgkQJNaLcl1U
-h9Bwygf/Y5M+R1e68KG9SptbJokKsEqBQC7gRAujY/dvMRDKz/TJ2DkuYo4d2Gsq
-827x8cbebcmHHBCFlWP9ZReFuSFAeYY8n39eB3BAKAtuLPMCEasz6kUy4yWIr179
-Zbj9U/PMQL6DRIJOLdx9BHfq0Y95xk9dNd96InSsQwy9uVWcVYWSHxgNGnLRJfqW
-0lEmLhmGqMpIVDPVB96puHB2asziHmDJPjSTSk4gF0K7nIH/dFHLvn4H9GlAXvUw
-dc22X2SGYlPVzG2z8rzZHmGOLvc4qYyORC8b9ui93j8RJwFDqtTX8ZXz+yQD3v+6
-/mnzCZZESsxzpqCwqmr8GuOdw9mahg==
-=9o+e
------END PGP SIGNATURE-----
-
---wlaslmZqugs/gzML--
+Yes, once it's landed in Linus' tree, it's too late to edit, but I'm
+willing to insert patches like this.  It's a minor adjustment to my
+patch on top of it.

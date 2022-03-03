@@ -2,173 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884DF4CB3B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3F84CB369
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiCCAGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 19:06:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S230045AbiCCAIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiCCAGS (ORCPT
+        with ESMTP id S230027AbiCCAHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:06:18 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2068.outbound.protection.outlook.com [40.107.100.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0179D1FCC3;
-        Wed,  2 Mar 2022 16:05:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eGdc+KwxNrp0u/c0L36sHGogoY7qa12+QDwnHxT8seYwVYKXTWe2g9xfykc4iaCDW3fjdiPC0vDGs3cq7TVX4U3r9J583sxk8aMAG5gWNwOraqajPrXhGbfy3V7umkvUen9eHE0dEVMbVS6Ef6ocXVPIxyPxCduVlIcLkrdgYWmxjU0X5X6PUYwlHIVPg3+f2Ss5Q6VMKmUF+D2Os7qhEUEh0nLSf+GvnUa55Q9saURKAC1FTeArCJumE2qQ3QOgqy0fV+oLkMwtjG70mf8GiSRFXAt+KpyHnHRxOLjAudbpvS6mt5nCyGfPnU3b4LNqhht3pVIGl9A3Wzty6hmVuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3pOTCSv/0xG+8W9WNzd09eHKXeYodm0lVdd0OdR1enA=;
- b=ecc8VTj9H5+7lWU6ARXgK9cOa/Ozf1d+msEyMMKHO6KCAz9FIrtyefyCVUcpVIFCkpNYtoqLop0QXTXIxZapzI8K4BMYaCKS58JIfbjOl+RU4uQRwdDJ51jEnvrOgPDnAC20mFqfDXqS40MnRZaR+k6/tbIXzv3K3240qw6Jttn7pFmjkZ/qYz9yF1ImHHykW99kFjDgbK5AYPjcl4+LZuygpbPQiwZrKyCnV9N1UwC0M/3xenEL1OWTbBfLOT75adKM4xo6i59fcnimIN5+qnh5YijmX8gGv5lOCT2GvpPKI+aBLRDe/MUvKX+biAAy451XVyFFmkm1C7aN1qMAZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3pOTCSv/0xG+8W9WNzd09eHKXeYodm0lVdd0OdR1enA=;
- b=JWHi/NV5N0jZwKpYNBcT1QaT/nvSYvGl8BNs7nRlxOVF4giLDLg7kiszFi1Y6EtTD1RA5Mbnk4XHPFm1gfgXgdjrW5y5EejHYNG5piQZLrg6AI6nh2J0UM2COakVmjgslOblVvKSHVY0JIFwazsyOPsgqR9/3pEpv0WnYMHulSbHjfSMZMbK3MbVJMa4r5guzHBZnTUnX+WrlPCGalxr7iz5jFHRf3R3PS8oXSjsTdiUAfdCsybu/ZguX0ckZk3fStuexkp3CxUn4kMtmCgypjcuZGryIf0uAb4DdzBzfW/ZrKny8g7wDWzhuWIxIuxWKekE1eY49Nf0nz7vgwvpAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BL1PR12MB5801.namprd12.prod.outlook.com (2603:10b6:208:391::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
- 2022 00:05:31 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5038.015; Thu, 3 Mar 2022
- 00:05:30 +0000
-Date:   Wed, 2 Mar 2022 20:05:28 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
-        cohuck@redhat.com, mgurtovoy@nvidia.com, yishaih@nvidia.com,
-        linuxarm@huawei.com, liulongfang@huawei.com,
-        prime.zeng@hisilicon.com, jonathan.cameron@huawei.com,
-        wangzhou1@hisilicon.com
-Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol with
- PRE_COPY
-Message-ID: <20220303000528.GW219866@nvidia.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
- <20220302172903.1995-8-shameerali.kolothum.thodi@huawei.com>
- <20220302133159.3c803f56.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302133159.3c803f56.alex.williamson@redhat.com>
-X-ClientProxiedBy: YT1PR01CA0147.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2f::26) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 2 Mar 2022 19:07:48 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0878CB0EA2;
+        Wed,  2 Mar 2022 16:07:03 -0800 (PST)
+Received: from [192.168.43.69] (unknown [182.2.41.243])
+        by gnuweeb.org (Postfix) with ESMTPSA id E76197E29A;
+        Thu,  3 Mar 2022 00:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1646266023;
+        bh=FXJ5RIO8Oqa50icw+tN38pTqQ1lL1MDXri2vESEbOg0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Qs9kOFlmA24f/j91hiJ5vZ3XiNoZkicH8EA217zJ1ThsXNvKfiiqjO7jYUumaa7bZ
+         8/H1DD9nGRCQUQtxXuWMDRO8pyV6jPga/5rXM6xOWVIfSdwY6xfzf3BPsDmR8bhJqj
+         r1vIt6IKpd4bg6BbOZmYLO+J2y+J+SPtJ6f6tA4CneYu8CmiviamL/qocX7V4NgVmK
+         T6HlKHPP7BApNnUeNaZJcy7aorzSN5XKQgcE1m3nGdxj1jgUJc3Pcc62v3lVZUFaPO
+         ulS5kViDcEBZDYlGNUCLG2i0PIWua8fPKz8gZ+m4wS15XdA6sysccIAUZHPAuVIvSV
+         Mf7KExPwK02Ew==
+Message-ID: <4f7d2b07-c5e5-33dc-f6a7-c62b1c5329b9@gnuweeb.org>
+Date:   Thu, 3 Mar 2022 07:06:52 +0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d53a402d-d301-41ef-5813-08d9fca9879d
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5801:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB580119F331AB6DA10928E726C2049@BL1PR12MB5801.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zYI4JKQGeFVQM/GT53uVuOsWfIQYVeJzmdR9r4Dggdg16MJWYz70ZHEjpTZj/hC5cE3kNdfEp3KY7+St7RW2nFsRD5XFHXYGHJsO+Cg/tb961PFJRukw86D/x40HJkh6xHOdJH4pB54wUy4i06npteU2SxUe4Y5PIJaPA/098wuzhOdnvI3CESDa+wNlXX2viGTIO096XzFuraXqiVkBKe6BT0Llp1q79qrEVhpXFTUI07TDB5m2oWDMZ3CGv4ttB7p78bwrICjSwkAlkMRNgUi3kMelJIcMhFlOuor12Df9xKN8q9DQ81z6ANPXh8sCTsSfCwhUCWl3EVIlqLyRy9qx+Jg9md52l/ga/Dc4NRpn8Sbm+qvw8+cswfYqPKYUJTWA7kJmmsJ+2kE13N5pDPg+VioQy8lU2B07eLWsgfpTvnSytXCDlmjdZEuXv+0lhKAAheS2cFYS2ZQ84xV3k7rZxHTi25RzaqXN/o0F3cNLkWLLwAmKC6A7Hr0p5mkOzZBUb5AJhJEcnuyqKA7XR/5EVYBhL6pLkkMp5hIc61AGJSRO9EogbabetK1LlqdAK3lSjBWtWvIs7Y7c9tLQJXRm8+TvPFd51haiASFI8fTgvH0XjMjtH66AUwiWKs8ileZVRjYNDIdKlgUzIhgRdPrq7BtTNP/Do2TI6oRF/rPKivVU8+Nry4Kp9SexU9klfq7CKjYfCqkegD9DHR99bA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(2616005)(36756003)(8936002)(6512007)(1076003)(316002)(66556008)(8676002)(6506007)(2906002)(66946007)(7416002)(5660300002)(66476007)(4326008)(508600001)(38100700002)(86362001)(33656002)(6916009)(83380400001)(6486002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hAG2fBVcMfHYDlEC6p7YnJlG358hTwN9UE3dkPDgUn4eYNSEQ+JuYFGJsONL?=
- =?us-ascii?Q?fn1DVvZNa/T7L7xDpKFboyWvMkBPCTudUZDfOBW6+css84GQAwYJg75xsxfF?=
- =?us-ascii?Q?1D9I74qIUTqRoDLJvS3+tf3Q9ZUM3KBLIB06U3IZgTSIUIyNwOs+9ve9qQ/G?=
- =?us-ascii?Q?SseroG2J+aldjkjrDb1baXcm9NgevjgUoQDZXow3zh9S0UljjTILugQWwotL?=
- =?us-ascii?Q?WZgALtF7xjF2oW3YehkfMq5eJ409iYfJKSrIdcFvzmklbXh46TJHrUYbARjz?=
- =?us-ascii?Q?xtsPPFka4MO/PIPitN0QE4k9kjGLV77GfC3HK87soMdHL18vMt1pCvENQs59?=
- =?us-ascii?Q?boDebIIsSBpSRk08gq7I+y7LWzKK5+WNsxTanKV8OcUxwiD/l4cpwjBhaOfX?=
- =?us-ascii?Q?THosKA+7Zmw2Cb6XWju8SgK1U/1PTj/OfjeyLVzWWCbs6YPWdbODVM6H2RCv?=
- =?us-ascii?Q?KXrQF2fZmEOi2EaVOEYrwzTOYUY0JRTTa/t1xobWWo6y1I+lWZZCLqi869I8?=
- =?us-ascii?Q?UTxCqV4MmwuIlYm9EutG1WPZglHTgyoUbqOGitw8miy/JYS58hz1iazgiUog?=
- =?us-ascii?Q?PwoqGqDs5+jpAPT4FtJ8CsD2ybij44MaP77KG2sY1PDKdVhuYZntkfyIcnrJ?=
- =?us-ascii?Q?XNqBkK71GA00u94ipf6m+qzXPMUwPQ11w+7m3yeX2B5TarWt8lbGB/9qg87E?=
- =?us-ascii?Q?DBz+vAIYFtp2ASuXvvxihTUY91UJgWoKH9Ydy+TIDRslZYzPVVfMwVkvXD7k?=
- =?us-ascii?Q?5K/bySYFlWYuBqP7BJT+YznyRHu0PvBValyS9CK/N8LdTqHGOWBZKIlcMzhn?=
- =?us-ascii?Q?fSoTJKJTE7+mNX+f5pdOQpQs4jD2A+olhadvIlS7bFaJpK6CwdwMcZGTMeXA?=
- =?us-ascii?Q?SZayUmbDqBq2yoSK3oD3t1RJZGuFC80VMAZVIQ8yW/flT0AupDAtgUXeMoO0?=
- =?us-ascii?Q?rUmKs4on83mB1ZdqeF7HltocwakbSxXH0VXhuqXG6bA+IeJczxMmxSMrRsac?=
- =?us-ascii?Q?Oc0KisByYGa77GVQaV+BhAiNd1mmz/il2ppBqDjZH+emc4tbtFaFpm5U+QOz?=
- =?us-ascii?Q?0cSQBgLz4eT+2OIc60Q+sOWydAVEYnDhDJ0TjLqUk9IJQ0BzqrBRxp6njUT1?=
- =?us-ascii?Q?QQIjZzF9nXbW3Nx3avNfAgdXuU/tDsAazJtWKcWOnG6n50yHkTRc7Z4jaInF?=
- =?us-ascii?Q?Z1BkFRagozIlX26VfGGS931dSP6EUi2o+iFBpEyijf/F3uU52xfU7yjgmsh7?=
- =?us-ascii?Q?eQC3xmr+Gt/txGvyfU1mGn1cqaxlBOvRv1z4DTGZ3XgaJfSbTMddJm+RQKr/?=
- =?us-ascii?Q?F6sgD7/uAVFsZOTwkeyVcUZ4wDkTJS80+iufyE3Kz9A2TjW6zAdjqXGrOwXT?=
- =?us-ascii?Q?q0mvM/iSHMCgbd14JR7KIXZ/KCnmukcHmCg/t5iKQjyV6BFc2U40j93JgrIS?=
- =?us-ascii?Q?+AgUcBXfcielXRHe/29fvs6h+BdekJh3UYMV9glxJU5h1fqAEv2B/QHwGH6W?=
- =?us-ascii?Q?okkUlDTY1Vy3TirRFo4ay3T+4c1XiFD5KE3QWpHaNNyvJPaoyuDG1aFevQZK?=
- =?us-ascii?Q?qPltSDlrWeZCvS5Kikw=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d53a402d-d301-41ef-5813-08d9fca9879d
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 00:05:30.7667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BP1kRU+X3GRxNUFstlNxvZC0D9FftqmeRPVhzl9B/73awvSnMo/2vcaaO95YvVsJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5801
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+Content-Language: en-US
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86@kernel.org, stable@vger.kernel.org,
+        Jiri Hladky <hladky.jiri@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Laight <David.Laight@ACULAB.COM>
+References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
+ <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
+ <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 01:31:59PM -0700, Alex Williamson wrote:
-> > + * initial_bytes reflects the estimated remaining size of any initial mandatory
-> > + * precopy data transfer. When initial_bytes returns as zero then the initial
-> > + * phase of the precopy data is completed. Generally initial_bytes should start
-> > + * out as approximately the entire device state.
+On 3/1/22 6:33 PM, Alviro Iskandar Setiawan wrote:
+> hi sir, it might also be interesting to know that even if it never be
+> inlined, it's still potential to break.
 > 
-> What is "mandatory" intended to mean here?  The user isn't required to
-> collect any data from the device in the PRE_COPY states.
-
-If the data is split into initial,dirty,trailer then mandatory means
-that first chunk.
-
-> "The vfio_precopy_info data structure returned by this ioctl provides
->  estimates of data available from the device during the PRE_COPY states.
->  This estimate is split into two categories, initial_bytes and
->  dirty_bytes.
+> for example this code (https://godbolt.org/z/xWMTxhTET)
 > 
->  The initial_bytes field indicates the amount of static data available
->  from the device.  This field should have a non-zero initial value and
->  decrease as migration data is read from the device.
+>    __attribute__((__noinline__)) static void x(int a)
+>    {
+>        asm("xorl\t%%r8d, %%r8d"::"a"(a));
+>    }
+> 
+>    extern int p(void);
+> 
+>    int f(void)
+>    {
+>        int ret = p();
+>        x(ret);
+>        return ret;
+>    }
+> 
+> translates to this asm
+> 
+>    x:
+>            movl    %edi, %eax
+>            xorl    %r8d, %r8d
+>            ret
+>    f:
+>            subq    $8, %rsp
+>            call    p
+>            movl    %eax, %r8d
+>            movl    %eax, %edi
+>            call    x
+>            movl    %r8d, %eax
+>            addq    $8, %rsp
+>            ret
+> 
+> See the %r8d? It should be clobbered by a function call too. But since
+> no one tells the compiler that we clobber %r8d, it assumes %r8d never
+> changes after that call. The compiler thinks x() is static and will
+> not clobber %r8d, even the ABI says %r8d will be clobbered by a
+> function call. So i think it should be backported to the stable
+> kernel, it's still a fix
 
-static isn't great either, how about just say 'minimum data available'
+Thanks. I will add CC stable in the v5.
 
->  Userspace may use the combination of these fields to estimate the
->  potential data size available during the PRE_COPY phases, as well as
->  trends relative to the rate the device is dirtying it's internal
->  state, but these fields are not required to have any bearing relative
->  to the data size available during the STOP_COPY phase."
-
-That last is too strong. I would just drop starting at but.
-
-The message to communicate is the device should allow dirty_bytes to
-reach 0 during the PRE_COPY phases if everything is is idle. Which
-tells alot about how to calculate it.
-
-It is all better otherwise
-
-> > + * Drivers should attempt to return estimates so that initial_bytes +
-> > + * dirty_bytes matches the amount of data an immediate transition to STOP_COPY
-> > + * will require to be streamed.
->
-> I think previous discussions have proven this false, we expect trailing
-> data that is only available in STOP_COPY, we cannot bound the size of
-> that data, and dirty_bytes is not intended to expose data that cannot
-> be retrieved during the PRE_COPY phases.  Thanks,
-
-It was written assuming the stop_copy trailer is small.
-
-Thanks,
-Jason
+-- 
+Ammar Faizi

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE14C4CC6F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB3B4CC6F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 21:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbiCCUOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 15:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
+        id S234102AbiCCUOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 15:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbiCCUOM (ORCPT
+        with ESMTP id S236262AbiCCUOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 15:14:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C35DE338B;
-        Thu,  3 Mar 2022 12:13:25 -0800 (PST)
+        Thu, 3 Mar 2022 15:14:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9DAF5415;
+        Thu,  3 Mar 2022 12:13:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10CD2B826D6;
-        Thu,  3 Mar 2022 20:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A20FC340F0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09EFFB824B3;
+        Thu,  3 Mar 2022 20:13:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C38EC340EF;
         Thu,  3 Mar 2022 20:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646338402;
-        bh=dZHO/p8m6MQnWypS2pJPnPpbeNRInxd98s66q6Un0f4=;
+        s=k20201202; t=1646338403;
+        bh=aSWkxtTo9A2hDFZtDcKB478E3z1pgNTlMtwZ4W2VOzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pcno6l7yPs0otaY3tm21UOlhns4o7maAmvxOt9E1LJxsPRViirUV8P0a432upgcgE
-         mHblwxgFIl9n9DVXlGHcJ0DbHZb/M+JcfYvcpmEVWN5mvDtyt0cbsBdCzA4eUyi17G
-         JplsI285PZyzzbRusy9ryZInrUpBlpVjdTJ/iMfhjJfnf3vvTJzM4YNVQ8byHhiIuu
-         ypwUc+SNu+2Uc81KqxyYm8Lmes4K2U7rH6xprgjHHahSo07+pnab1hdZQEXMN+Y14/
-         NJw1EoJaScx/kK3T+FPh+zb4sYuy2D3lQ9rKZiVs58gP5i2Wn9mUQ/0QVDb80Pis1c
-         JkFqeUb3eOsvg==
+        b=LqRo8u+BlxL1SThH94HdrlRTUE7tkebpy+67sLo6zMXiJ5T46PCDVd7uOKfvqiGT4
+         V6045RnMgEbtaVA7OEhmGrDGL2Ao8w5w8CGwq0tqDz0NUzD4qpvYfFh+/Iqk7tv+rh
+         w7mYWKOBCZZtmWkNMtaaTxjdJenGBicIy7+Mbad2qxRvUlhIQOhQcUh+Fitoyhux+a
+         6BYUxilLsxb2l9EcAn/GRlOkX7YXMJAmeh3YfXVDjuHz03epfihL4GwbJAmW7Q+Ajz
+         HMr5u//Ndtx0Jg5NT4xO3PR5tBxtfuNCrsG2aagaypisndJfyuziddC/w7Lxtt9edy
+         GGbdcNlz5ON7A==
 From:   Keith Busch <kbusch@kernel.org>
 To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        Keith Busch <kbusch@kernel.org>, Hannes Reinecke <hare@suse.de>
-Subject: [PATCHv4 7/8] block: add pi for extended integrity
-Date:   Thu,  3 Mar 2022 12:13:11 -0800
-Message-Id: <20220303201312.3255347-8-kbusch@kernel.org>
+        Keith Busch <kbusch@kernel.org>,
+        Hannes Reinecke <hare@suse.de>,
+        Klaus Jensen <its@irrelevant.dk>
+Subject: [PATCHv4 8/8] nvme: add support for enhanced metadata
+Date:   Thu,  3 Mar 2022 12:13:12 -0800
+Message-Id: <20220303201312.3255347-9-kbusch@kernel.org>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20220303201312.3255347-1-kbusch@kernel.org>
 References: <20220303201312.3255347-1-kbusch@kernel.org>
@@ -55,279 +57,454 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NVMe specification defines new data integrity formats beyond the
-t10 tuple. Add support for the specification defined CRC64 formats,
-assuming the reference tag does not need to be split with the "storage
-tag".
+NVM Express ratified TP 4068 defines new protection information formats.
+Implement support for the CRC64 guard tags.
+
+Since the block layer doesn't support variable length reference tags,
+driver support for the Storage Tag space is not supported at this time.
 
 Cc: Hannes Reinecke <hare@suse.de>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Klaus Jensen <its@irrelevant.dk>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
 v3->v4:
 
-  Renamed nvme_ prefixes with ext_ for extended protection information.
+  Removed inline for setting ref_tag
 
-  Use _GPL for EXPORT_SYMBOL
+  Updated new exported names from prior patches
 
- block/Kconfig          |   1 +
- block/t10-pi.c         | 194 +++++++++++++++++++++++++++++++++++++++++
- include/linux/t10-pi.h |  20 +++++
- 3 files changed, 215 insertions(+)
+ drivers/nvme/host/core.c | 162 +++++++++++++++++++++++++++++++++------
+ drivers/nvme/host/nvme.h |   4 +-
+ include/linux/nvme.h     |  53 +++++++++++--
+ 3 files changed, 188 insertions(+), 31 deletions(-)
 
-diff --git a/block/Kconfig b/block/Kconfig
-index 7eb5d6d53b3f..50b17e260fa2 100644
---- a/block/Kconfig
-+++ b/block/Kconfig
-@@ -73,6 +73,7 @@ config BLK_DEV_INTEGRITY_T10
- 	tristate
- 	depends on BLK_DEV_INTEGRITY
- 	select CRC_T10DIF
-+	select CRC64_ROCKSOFT
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index ace5f30acaf6..f3f9d48e0d32 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -919,6 +919,30 @@ static blk_status_t nvme_setup_discard(struct nvme_ns *ns, struct request *req,
+ 	return BLK_STS_OK;
+ }
  
- config BLK_DEV_ZONED
- 	bool "Zoned block device support"
-diff --git a/block/t10-pi.c b/block/t10-pi.c
-index 758a76518854..3c35266edb66 100644
---- a/block/t10-pi.c
-+++ b/block/t10-pi.c
-@@ -7,8 +7,10 @@
- #include <linux/t10-pi.h>
- #include <linux/blk-integrity.h>
- #include <linux/crc-t10dif.h>
-+#include <linux/crc64.h>
- #include <linux/module.h>
- #include <net/checksum.h>
-+#include <asm/unaligned.h>
- 
- typedef __be16 (csum_fn) (void *, unsigned int);
- 
-@@ -278,4 +280,196 @@ const struct blk_integrity_profile t10_pi_type3_ip = {
- };
- EXPORT_SYMBOL(t10_pi_type3_ip);
- 
-+static __be64 ext_pi_crc64(void *data, unsigned int len)
++static void nvme_set_ref_tag(struct nvme_ns *ns, struct nvme_command *cmnd,
++			      struct request *req)
 +{
-+	return cpu_to_be64(crc64_rocksoft(data, len));
-+}
++	u32 upper, lower;
++	u64 ref48;
 +
-+static blk_status_t ext_pi_crc64_generate(struct blk_integrity_iter *iter,
-+					enum t10_dif_type type)
-+{
-+	unsigned int i;
++	/* both rw and write zeroes share the same reftag format */
++	switch (ns->guard_type) {
++	case NVME_NVM_NS_16B_GUARD:
++		cmnd->rw.reftag = cpu_to_le32(t10_pi_ref_tag(req));
++		break;
++	case NVME_NVM_NS_64B_GUARD:
++		ref48 = ext_pi_ref_tag(req);
++		lower = lower_32_bits(ref48);
++		upper = upper_32_bits(ref48);
 +
-+	for (i = 0 ; i < iter->data_size ; i += iter->interval) {
-+		struct crc64_pi_tuple *pi = iter->prot_buf;
-+
-+		pi->guard_tag = ext_pi_crc64(iter->data_buf, iter->interval);
-+		pi->app_tag = 0;
-+
-+		if (type == T10_PI_TYPE1_PROTECTION)
-+			put_unaligned_be48(iter->seed, pi->ref_tag);
-+		else
-+			put_unaligned_be48(0ULL, pi->ref_tag);
-+
-+		iter->data_buf += iter->interval;
-+		iter->prot_buf += iter->tuple_size;
-+		iter->seed++;
++		cmnd->rw.reftag = cpu_to_le32(lower);
++		cmnd->rw.cdw3 = cpu_to_le32(upper);
++		break;
++	default:
++		break;
 +	}
-+
-+	return BLK_STS_OK;
 +}
 +
-+static bool ext_pi_ref_escape(u8 *ref_tag)
-+{
-+	static u8 ref_escape[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-+
-+	return memcmp(ref_tag, ref_escape, sizeof(ref_escape)) == 0;
-+}
-+
-+static blk_status_t ext_pi_crc64_verify(struct blk_integrity_iter *iter,
-+				      enum t10_dif_type type)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < iter->data_size; i += iter->interval) {
-+		struct crc64_pi_tuple *pi = iter->prot_buf;
-+		u64 ref, seed;
-+		__be64 csum;
-+
-+		if (type == T10_PI_TYPE1_PROTECTION) {
-+			if (pi->app_tag == T10_PI_APP_ESCAPE)
-+				goto next;
-+
-+			ref = get_unaligned_be48(pi->ref_tag);
-+			seed = lower_48_bits(iter->seed);
-+			if (ref != seed) {
-+				pr_err("%s: ref tag error at location %llu (rcvd %llu)\n",
-+					iter->disk_name, seed, ref);
-+				return BLK_STS_PROTECTION;
-+			}
-+		} else if (type == T10_PI_TYPE3_PROTECTION) {
-+			if (pi->app_tag == T10_PI_APP_ESCAPE &&
-+			    ext_pi_ref_escape(pi->ref_tag))
-+				goto next;
-+		}
-+
-+		csum = ext_pi_crc64(iter->data_buf, iter->interval);
-+		if (pi->guard_tag != csum) {
-+			pr_err("%s: guard tag error at sector %llu " \
-+			       "(rcvd %016llx, want %016llx)\n",
-+				iter->disk_name, (unsigned long long)iter->seed,
-+				be64_to_cpu(pi->guard_tag), be64_to_cpu(csum));
-+			return BLK_STS_PROTECTION;
-+		}
-+
-+next:
-+		iter->data_buf += iter->interval;
-+		iter->prot_buf += iter->tuple_size;
-+		iter->seed++;
-+	}
-+
-+	return BLK_STS_OK;
-+}
-+
-+static blk_status_t ext_pi_type1_verify_crc64(struct blk_integrity_iter *iter)
-+{
-+	return ext_pi_crc64_verify(iter, T10_PI_TYPE1_PROTECTION);
-+}
-+
-+static blk_status_t ext_pi_type1_generate_crc64(struct blk_integrity_iter *iter)
-+{
-+	return ext_pi_crc64_generate(iter, T10_PI_TYPE1_PROTECTION);
-+}
-+
-+static void ext_pi_type1_prepare(struct request *rq)
-+{
-+	const int tuple_sz = rq->q->integrity.tuple_size;
-+	u64 ref_tag = ext_pi_ref_tag(rq);
-+	struct bio *bio;
-+
-+	__rq_for_each_bio(bio, rq) {
-+		struct bio_integrity_payload *bip = bio_integrity(bio);
-+		u64 virt = lower_48_bits(bip_get_seed(bip));
-+		struct bio_vec iv;
-+		struct bvec_iter iter;
-+
-+		/* Already remapped? */
-+		if (bip->bip_flags & BIP_MAPPED_INTEGRITY)
+ static inline blk_status_t nvme_setup_write_zeroes(struct nvme_ns *ns,
+ 		struct request *req, struct nvme_command *cmnd)
+ {
+@@ -940,8 +964,7 @@ static inline blk_status_t nvme_setup_write_zeroes(struct nvme_ns *ns,
+ 		switch (ns->pi_type) {
+ 		case NVME_NS_DPS_PI_TYPE1:
+ 		case NVME_NS_DPS_PI_TYPE2:
+-			cmnd->write_zeroes.reftag =
+-				cpu_to_le32(t10_pi_ref_tag(req));
++			nvme_set_ref_tag(ns, cmnd, req);
+ 			break;
+ 		}
+ 	}
+@@ -968,7 +991,8 @@ static inline blk_status_t nvme_setup_rw(struct nvme_ns *ns,
+ 	cmnd->rw.opcode = op;
+ 	cmnd->rw.flags = 0;
+ 	cmnd->rw.nsid = cpu_to_le32(ns->head->ns_id);
+-	cmnd->rw.rsvd2 = 0;
++	cmnd->rw.cdw2 = 0;
++	cmnd->rw.cdw3 = 0;
+ 	cmnd->rw.metadata = 0;
+ 	cmnd->rw.slba = cpu_to_le64(nvme_sect_to_lba(ns, blk_rq_pos(req)));
+ 	cmnd->rw.length = cpu_to_le16((blk_rq_bytes(req) >> ns->lba_shift) - 1);
+@@ -1002,7 +1026,7 @@ static inline blk_status_t nvme_setup_rw(struct nvme_ns *ns,
+ 					NVME_RW_PRINFO_PRCHK_REF;
+ 			if (op == nvme_cmd_zone_append)
+ 				control |= NVME_RW_APPEND_PIREMAP;
+-			cmnd->rw.reftag = cpu_to_le32(t10_pi_ref_tag(req));
++			nvme_set_ref_tag(ns, cmnd, req);
+ 			break;
+ 		}
+ 	}
+@@ -1654,33 +1678,58 @@ int nvme_getgeo(struct block_device *bdev, struct hd_geometry *geo)
+ }
+ 
+ #ifdef CONFIG_BLK_DEV_INTEGRITY
+-static void nvme_init_integrity(struct gendisk *disk, u16 ms, u8 pi_type,
++static void nvme_init_integrity(struct gendisk *disk, struct nvme_ns *ns,
+ 				u32 max_integrity_segments)
+ {
+ 	struct blk_integrity integrity = { };
+ 
+-	switch (pi_type) {
++	switch (ns->pi_type) {
+ 	case NVME_NS_DPS_PI_TYPE3:
+-		integrity.profile = &t10_pi_type3_crc;
+-		integrity.tag_size = sizeof(u16) + sizeof(u32);
+-		integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++		switch (ns->guard_type) {
++		case NVME_NVM_NS_16B_GUARD:
++			integrity.profile = &t10_pi_type3_crc;
++			integrity.tag_size = sizeof(u16) + sizeof(u32);
++			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
 +			break;
-+
-+		bip_for_each_vec(iv, bip, iter) {
-+			unsigned int j;
-+			void *p;
-+
-+			p = bvec_kmap_local(&iv);
-+			for (j = 0; j < iv.bv_len; j += tuple_sz) {
-+				struct crc64_pi_tuple *pi = p;
-+				u64 ref = get_unaligned_be48(pi->ref_tag);
-+
-+				if (ref == virt)
-+					put_unaligned_be48(ref_tag, pi->ref_tag);
-+				virt++;
-+				ref_tag++;
-+				p += tuple_sz;
-+			}
-+			kunmap_local(p);
++		case NVME_NVM_NS_64B_GUARD:
++			integrity.profile = &ext_pi_type3_crc64;
++			integrity.tag_size = sizeof(u16) + 6;
++			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++			break;
++		default:
++			integrity.profile = NULL;
++			break;
 +		}
-+
-+		bip->bip_flags |= BIP_MAPPED_INTEGRITY;
-+	}
-+}
-+
-+static void ext_pi_type1_complete(struct request *rq, unsigned int nr_bytes)
-+{
-+	unsigned intervals = nr_bytes >> rq->q->integrity.interval_exp;
-+	const int tuple_sz = rq->q->integrity.tuple_size;
-+	u64 ref_tag = ext_pi_ref_tag(rq);
-+	struct bio *bio;
-+
-+	__rq_for_each_bio(bio, rq) {
-+		struct bio_integrity_payload *bip = bio_integrity(bio);
-+		u64 virt = lower_48_bits(bip_get_seed(bip));
-+		struct bio_vec iv;
-+		struct bvec_iter iter;
-+
-+		bip_for_each_vec(iv, bip, iter) {
-+			unsigned int j;
-+			void *p;
-+
-+			p = bvec_kmap_local(&iv);
-+			for (j = 0; j < iv.bv_len && intervals; j += tuple_sz) {
-+				struct crc64_pi_tuple *pi = p;
-+				u64 ref = get_unaligned_be48(pi->ref_tag);
-+
-+				if (ref == ref_tag)
-+					put_unaligned_be48(virt, pi->ref_tag);
-+				virt++;
-+				ref_tag++;
-+				intervals--;
-+				p += tuple_sz;
-+			}
-+			kunmap_local(p);
+ 		break;
+ 	case NVME_NS_DPS_PI_TYPE1:
+ 	case NVME_NS_DPS_PI_TYPE2:
+-		integrity.profile = &t10_pi_type1_crc;
+-		integrity.tag_size = sizeof(u16);
+-		integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++		switch (ns->guard_type) {
++		case NVME_NVM_NS_16B_GUARD:
++			integrity.profile = &t10_pi_type1_crc;
++			integrity.tag_size = sizeof(u16);
++			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++			break;
++		case NVME_NVM_NS_64B_GUARD:
++			integrity.profile = &ext_pi_type1_crc64;
++			integrity.tag_size = sizeof(u16);
++			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
++			break;
++		default:
++			integrity.profile = NULL;
++			break;
 +		}
-+	}
-+}
+ 		break;
+ 	default:
+ 		integrity.profile = NULL;
+ 		break;
+ 	}
+-	integrity.tuple_size = ms;
 +
-+static blk_status_t ext_pi_type3_verify_crc64(struct blk_integrity_iter *iter)
-+{
-+	return ext_pi_crc64_verify(iter, T10_PI_TYPE3_PROTECTION);
-+}
-+
-+static blk_status_t ext_pi_type3_generate_crc64(struct blk_integrity_iter *iter)
-+{
-+	return ext_pi_crc64_generate(iter, T10_PI_TYPE3_PROTECTION);
-+}
-+
-+const struct blk_integrity_profile ext_pi_type1_crc64 = {
-+	.name			= "EXT-DIF-TYPE1-CRC64",
-+	.generate_fn		= ext_pi_type1_generate_crc64,
-+	.verify_fn		= ext_pi_type1_verify_crc64,
-+	.prepare_fn		= ext_pi_type1_prepare,
-+	.complete_fn		= ext_pi_type1_complete,
-+};
-+EXPORT_SYMBOL_GPL(ext_pi_type1_crc64);
-+
-+const struct blk_integrity_profile ext_pi_type3_crc64 = {
-+	.name			= "EXT-DIF-TYPE3-CRC64",
-+	.generate_fn		= ext_pi_type3_generate_crc64,
-+	.verify_fn		= ext_pi_type3_verify_crc64,
-+	.prepare_fn		= t10_pi_type3_prepare,
-+	.complete_fn		= t10_pi_type3_complete,
-+};
-+EXPORT_SYMBOL_GPL(ext_pi_type3_crc64);
-+
-+MODULE_LICENSE("GPL");
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/t10-pi.h b/include/linux/t10-pi.h
-index c635c2e014e3..bc2c365373b9 100644
---- a/include/linux/t10-pi.h
-+++ b/include/linux/t10-pi.h
-@@ -53,4 +53,24 @@ extern const struct blk_integrity_profile t10_pi_type1_ip;
- extern const struct blk_integrity_profile t10_pi_type3_crc;
- extern const struct blk_integrity_profile t10_pi_type3_ip;
++	integrity.tuple_size = ns->ms;
+ 	blk_integrity_register(disk, &integrity);
+ 	blk_queue_max_integrity_segments(disk->queue, max_integrity_segments);
+ }
+ #else
+-static void nvme_init_integrity(struct gendisk *disk, u16 ms, u8 pi_type,
++static void nvme_init_integrity(struct gendisk *disk, struct nvme_ns *ns,
+ 				u32 max_integrity_segments)
+ {
+ }
+@@ -1750,17 +1799,73 @@ static int nvme_setup_streams_ns(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	return 0;
+ }
  
-+struct crc64_pi_tuple {
-+	__be64 guard_tag;
-+	__be16 app_tag;
-+	__u8   ref_tag[6];
-+};
+-static void nvme_configure_metadata(struct nvme_ns *ns, struct nvme_id_ns *id)
++static int nvme_init_ms(struct nvme_ns *ns, struct nvme_id_ns *id)
+ {
++	bool first = id->dps & NVME_NS_DPS_PI_FIRST;
++	unsigned lbaf = nvme_lbaf_index(id->flbas);
+ 	struct nvme_ctrl *ctrl = ns->ctrl;
++	struct nvme_command c = { };
++	struct nvme_id_ns_nvm *nvm;
++	int ret = 0;
++	u32 elbaf;
 +
-+static inline u64 ext_pi_ref_tag(struct request *rq)
-+{
-+	unsigned int shift = ilog2(queue_logical_block_size(rq->q));
++	ns->pi_size = 0;
++	ns->ms = le16_to_cpu(id->lbaf[lbaf].ms);
++	if (!(ctrl->ctratt & NVME_CTRL_ATTR_ELBAS)) {
++		ns->pi_size = sizeof(struct t10_pi_tuple);
++		ns->guard_type = NVME_NVM_NS_16B_GUARD;
++		goto set_pi;
++	}
 +
-+#ifdef CONFIG_BLK_DEV_INTEGRITY
-+	if (rq->q->integrity.interval_exp)
-+		shift = rq->q->integrity.interval_exp;
-+#endif
-+	return lower_48_bits(blk_rq_pos(rq) >> (shift - SECTOR_SHIFT));
++	nvm = kzalloc(sizeof(*nvm), GFP_KERNEL);
++	if (!nvm)
++		return -ENOMEM;
+ 
+-	ns->ms = le16_to_cpu(id->lbaf[id->flbas & NVME_NS_FLBAS_LBA_MASK].ms);
+-	if (id->dps & NVME_NS_DPS_PI_FIRST ||
+-	    ns->ms == sizeof(struct t10_pi_tuple))
++	c.identify.opcode = nvme_admin_identify;
++	c.identify.nsid = cpu_to_le32(ns->head->ns_id);
++	c.identify.cns = NVME_ID_CNS_CS_NS;
++	c.identify.csi = NVME_CSI_NVM;
++
++	ret = nvme_submit_sync_cmd(ns->ctrl->admin_q, &c, nvm, sizeof(*nvm));
++	if (ret)
++		goto free_data;
++
++	elbaf = le32_to_cpu(nvm->elbaf[lbaf]);
++
++	/* no support for storage tag formats right now */
++	if (nvme_elbaf_sts(elbaf))
++		goto free_data;
++
++	ns->guard_type = nvme_elbaf_guard_type(elbaf);
++	switch (ns->guard_type) {
++	case NVME_NVM_NS_64B_GUARD:
++		ns->pi_size = sizeof(struct crc64_pi_tuple);
++		break;
++	case NVME_NVM_NS_16B_GUARD:
++		ns->pi_size = sizeof(struct t10_pi_tuple);
++		break;
++	default:
++		break;
++	}
++
++free_data:
++	kfree(nvm);
++set_pi:
++	if (ns->pi_size && (first || ns->ms == ns->pi_size))
+ 		ns->pi_type = id->dps & NVME_NS_DPS_PI_MASK;
+ 	else
+ 		ns->pi_type = 0;
+ 
++	return ret;
 +}
 +
-+extern const struct blk_integrity_profile ext_pi_type1_crc64;
-+extern const struct blk_integrity_profile ext_pi_type3_crc64;
++static void nvme_configure_metadata(struct nvme_ns *ns, struct nvme_id_ns *id)
++{
++	struct nvme_ctrl *ctrl = ns->ctrl;
 +
++	if (nvme_init_ms(ns, id))
++		return;
++
+ 	ns->features &= ~(NVME_NS_METADATA_SUPPORTED | NVME_NS_EXT_LBAS);
+ 	if (!ns->ms || !(ctrl->ops->flags & NVME_F_METADATA_SUPPORTED))
+ 		return;
+@@ -1877,7 +1982,7 @@ static void nvme_update_disk_info(struct gendisk *disk,
+ 	if (ns->ms) {
+ 		if (IS_ENABLED(CONFIG_BLK_DEV_INTEGRITY) &&
+ 		    (ns->features & NVME_NS_METADATA_SUPPORTED))
+-			nvme_init_integrity(disk, ns->ms, ns->pi_type,
++			nvme_init_integrity(disk, ns,
+ 					    ns->ctrl->max_integrity_segments);
+ 		else if (!nvme_ns_has_pi(ns))
+ 			capacity = 0;
+@@ -1932,7 +2037,7 @@ static void nvme_set_chunk_sectors(struct nvme_ns *ns, struct nvme_id_ns *id)
+ 
+ static int nvme_update_ns_info(struct nvme_ns *ns, struct nvme_id_ns *id)
+ {
+-	unsigned lbaf = id->flbas & NVME_NS_FLBAS_LBA_MASK;
++	unsigned lbaf = nvme_lbaf_index(id->flbas);
+ 	int ret;
+ 
+ 	blk_mq_freeze_queue(ns->disk->queue);
+@@ -2277,20 +2382,27 @@ static int nvme_configure_timestamp(struct nvme_ctrl *ctrl)
+ 	return ret;
+ }
+ 
+-static int nvme_configure_acre(struct nvme_ctrl *ctrl)
++static int nvme_configure_host_options(struct nvme_ctrl *ctrl)
+ {
+ 	struct nvme_feat_host_behavior *host;
++	u8 acre = 0, lbafee = 0;
+ 	int ret;
+ 
+ 	/* Don't bother enabling the feature if retry delay is not reported */
+-	if (!ctrl->crdt[0])
++	if (ctrl->crdt[0])
++		acre = NVME_ENABLE_ACRE;
++	if (ctrl->ctratt & NVME_CTRL_ATTR_ELBAS)
++		lbafee = NVME_ENABLE_LBAFEE;
++
++	if (!acre && !lbafee)
+ 		return 0;
+ 
+ 	host = kzalloc(sizeof(*host), GFP_KERNEL);
+ 	if (!host)
+ 		return 0;
+ 
+-	host->acre = NVME_ENABLE_ACRE;
++	host->acre = acre;
++	host->lbafee = lbafee;
+ 	ret = nvme_set_features(ctrl, NVME_FEAT_HOST_BEHAVIOR, 0,
+ 				host, sizeof(*host), NULL);
+ 	kfree(host);
+@@ -3132,7 +3244,7 @@ int nvme_init_ctrl_finish(struct nvme_ctrl *ctrl)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = nvme_configure_acre(ctrl);
++	ret = nvme_configure_host_options(ctrl);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -4846,12 +4958,14 @@ static inline void _nvme_check_size(void)
+ 	BUILD_BUG_ON(sizeof(struct nvme_id_ctrl) != NVME_IDENTIFY_DATA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct nvme_id_ns) != NVME_IDENTIFY_DATA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct nvme_id_ns_zns) != NVME_IDENTIFY_DATA_SIZE);
++	BUILD_BUG_ON(sizeof(struct nvme_id_ns_nvm) != NVME_IDENTIFY_DATA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct nvme_id_ctrl_zns) != NVME_IDENTIFY_DATA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct nvme_id_ctrl_nvm) != NVME_IDENTIFY_DATA_SIZE);
+ 	BUILD_BUG_ON(sizeof(struct nvme_lba_range_type) != 64);
+ 	BUILD_BUG_ON(sizeof(struct nvme_smart_log) != 512);
+ 	BUILD_BUG_ON(sizeof(struct nvme_dbbuf) != 64);
+ 	BUILD_BUG_ON(sizeof(struct nvme_directive_cmd) != 64);
++	BUILD_BUG_ON(sizeof(struct nvme_feat_host_behavior) != 512);
+ }
+ 
+ 
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 587d92df118b..77257e02ef03 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -454,9 +454,11 @@ struct nvme_ns {
+ 
+ 	int lba_shift;
+ 	u16 ms;
++	u16 pi_size;
+ 	u16 sgs;
+ 	u32 sws;
+ 	u8 pi_type;
++	u8 guard_type;
+ #ifdef CONFIG_BLK_DEV_ZONED
+ 	u64 zsze;
  #endif
+@@ -479,7 +481,7 @@ struct nvme_ns {
+ /* NVMe ns supports metadata actions by the controller (generate/strip) */
+ static inline bool nvme_ns_has_pi(struct nvme_ns *ns)
+ {
+-	return ns->pi_type && ns->ms == sizeof(struct t10_pi_tuple);
++	return ns->pi_type && ns->ms == ns->pi_size;
+ }
+ 
+ struct nvme_ctrl_ops {
+diff --git a/include/linux/nvme.h b/include/linux/nvme.h
+index 9dbc3ef4daf7..4f44f83817a9 100644
+--- a/include/linux/nvme.h
++++ b/include/linux/nvme.h
+@@ -244,6 +244,7 @@ enum {
+ enum nvme_ctrl_attr {
+ 	NVME_CTRL_ATTR_HID_128_BIT	= (1 << 0),
+ 	NVME_CTRL_ATTR_TBKAS		= (1 << 6),
++	NVME_CTRL_ATTR_ELBAS		= (1 << 15),
+ };
+ 
+ struct nvme_id_ctrl {
+@@ -399,8 +400,7 @@ struct nvme_id_ns {
+ 	__le16			endgid;
+ 	__u8			nguid[16];
+ 	__u8			eui64[8];
+-	struct nvme_lbaf	lbaf[16];
+-	__u8			rsvd192[192];
++	struct nvme_lbaf	lbaf[64];
+ 	__u8			vs[3712];
+ };
+ 
+@@ -418,8 +418,7 @@ struct nvme_id_ns_zns {
+ 	__le32			rrl;
+ 	__le32			frl;
+ 	__u8			rsvd20[2796];
+-	struct nvme_zns_lbafe	lbafe[16];
+-	__u8			rsvd3072[768];
++	struct nvme_zns_lbafe	lbafe[64];
+ 	__u8			vs[256];
+ };
+ 
+@@ -428,6 +427,30 @@ struct nvme_id_ctrl_zns {
+ 	__u8	rsvd1[4095];
+ };
+ 
++struct nvme_id_ns_nvm {
++	__le64	lbstm;
++	__u8	pic;
++	__u8	rsvd9[3];
++	__le32	elbaf[64];
++	__u8	rsvd268[3828];
++};
++
++enum {
++	NVME_ID_NS_NVM_STS_MASK		= 0x3f,
++	NVME_ID_NS_NVM_GUARD_SHIFT	= 7,
++	NVME_ID_NS_NVM_GUARD_MASK	= 0x3,
++};
++
++static inline __u8 nvme_elbaf_sts(__u32 elbaf)
++{
++	return elbaf & NVME_ID_NS_NVM_STS_MASK;
++}
++
++static inline __u8 nvme_elbaf_guard_type(__u32 elbaf)
++{
++	return (elbaf >> NVME_ID_NS_NVM_GUARD_SHIFT) & NVME_ID_NS_NVM_GUARD_MASK;
++}
++
+ struct nvme_id_ctrl_nvm {
+ 	__u8	vsl;
+ 	__u8	wzsl;
+@@ -478,6 +501,8 @@ enum {
+ 	NVME_NS_FEAT_IO_OPT	= 1 << 4,
+ 	NVME_NS_ATTR_RO		= 1 << 0,
+ 	NVME_NS_FLBAS_LBA_MASK	= 0xf,
++	NVME_NS_FLBAS_LBA_UMASK	= 0x60,
++	NVME_NS_FLBAS_LBA_SHIFT	= 1,
+ 	NVME_NS_FLBAS_META_EXT	= 0x10,
+ 	NVME_NS_NMIC_SHARED	= 1 << 0,
+ 	NVME_LBAF_RP_BEST	= 0,
+@@ -496,6 +521,18 @@ enum {
+ 	NVME_NS_DPS_PI_TYPE3	= 3,
+ };
+ 
++enum {
++	NVME_NVM_NS_16B_GUARD	= 0,
++	NVME_NVM_NS_32B_GUARD	= 1,
++	NVME_NVM_NS_64B_GUARD	= 2,
++};
++
++static inline __u8 nvme_lbaf_index(__u8 flbas)
++{
++	return (flbas & NVME_NS_FLBAS_LBA_MASK) |
++		((flbas & NVME_NS_FLBAS_LBA_UMASK) >> NVME_NS_FLBAS_LBA_SHIFT);
++}
++
+ /* Identify Namespace Metadata Capabilities (MC): */
+ enum {
+ 	NVME_MC_EXTENDED_LBA	= (1 << 0),
+@@ -842,7 +879,8 @@ struct nvme_rw_command {
+ 	__u8			flags;
+ 	__u16			command_id;
+ 	__le32			nsid;
+-	__u64			rsvd2;
++	__le32			cdw2;
++	__le32			cdw3;
+ 	__le64			metadata;
+ 	union nvme_data_ptr	dptr;
+ 	__le64			slba;
+@@ -996,11 +1034,14 @@ enum {
+ 
+ struct nvme_feat_host_behavior {
+ 	__u8 acre;
+-	__u8 resv1[511];
++	__u8 etdas;
++	__u8 lbafee;
++	__u8 resv1[509];
+ };
+ 
+ enum {
+ 	NVME_ENABLE_ACRE	= 1,
++	NVME_ENABLE_LBAFEE	= 1,
+ };
+ 
+ /* Admin commands */
 -- 
 2.25.4
 

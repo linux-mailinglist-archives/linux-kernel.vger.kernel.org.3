@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC744CB5CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEC14CB5CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 05:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiCCEEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 23:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S229631AbiCCEG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 23:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiCCEEa (ORCPT
+        with ESMTP id S229536AbiCCEG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 23:04:30 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF020163D6A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:03:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646280225; x=1677816225;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kz3LVF49hdsquqqC4+deZnBpfx1+hI0OpJ2X/TjO3ts=;
-  b=krlA5I0LI/TvIpoq0Yus8dg6I+OlFFIvLYEywleTCcqIJy7A2+0tsdS2
-   tR++FHnlmM50ozlmO3mSv89UamK6cEC1ebkws3bTU/YJBpbZa471Es3kl
-   jN0bq6pI0KpcnyKs4UHO0AiWe1xhDg8tNJ7V8tUFcamJb8VNbqlHrFh4v
-   7sa02hNRNe5xMi+xJmcJ2iuDXB+LvHMXDPNixgY2FvJDPOIs/hzcm/Uj1
-   kbUQVmZ8Ex70YsK07RCFZogOBLJR9Fi5+w2qbOmhnXsg77akivPOalM+t
-   Hh3YzcL9sgxlHPD7KkjFt8cTaoVWgroHBBYvL4CUHNKnmYisp9n/IIl55
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253300964"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="253300964"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 20:03:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="641957990"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2022 20:03:44 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPcgp-00008X-Da; Thu, 03 Mar 2022 04:03:43 +0000
-Date:   Thu, 3 Mar 2022 12:03:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.14-q-release
- 2605/9999] kernel/trace/ftrace.c:6567:6: warning: no previous declaration
- for 'ftrace_graph_return_stub'
-Message-ID: <202203031139.31glDHLy-lkp@intel.com>
+        Wed, 2 Mar 2022 23:06:27 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A237D163D6A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 20:05:42 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id bd1so3389814plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 20:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CIp7VVuWt9UyGTVpPLb7+VHA+YcMDNT9FMgsXkanxKg=;
+        b=PhEeZ5ArChIlaQ8fLKd1T3w/HxXGqb9unw7hAxYEkfPFOO3AUp6fQVUkY7rFiuBc8W
+         IFvXGH6wmPMkHdzJnzFqLt3fUZp/xc78RdLYhcpBdIcCPsWDIPWEE00/QOUwgI/3ytna
+         G2V8FQbuFxN16+jOFY3dApIAd+5FJ79cW4eAOF5BQDEX6yvuh+ueoFCB52QgutqmY5Je
+         uQRyuc4KMGrr9QRP0apbIso2Z0bx/6EdKgOzbBX66nsMi2J1tlhWHn63qj/4138mZP6H
+         CAJ8+f1Ss5TckSxzwocuIRZZqwrVzCmrtTUcxZ3+p0dsK72hHJwqINP7vvlkqp7DnZpy
+         YE7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CIp7VVuWt9UyGTVpPLb7+VHA+YcMDNT9FMgsXkanxKg=;
+        b=1ST1IevOgpy/2s/nhTQgFPIzLuQETCP2YYp8fJo+d+OOINpQiVmxbZycmUmmXy7tAi
+         D4IVgzYRM2iXC4rwykaAWIq41LGOVxhUSzRNa8nYzE/1BHs7Qiy9KDjZx6bTD0xhhnvy
+         VeaWwaLZDKlw/AhQy5d5kNZLO/K/iWjN4JEpw5Wx4VdWmii1Mm6J0qe/Qq5fTmdtgsFM
+         TBJk8dr1NXrRSzP6i3jsfpq82j0Xui0jaYDFHHMWfLG5HQz+lUsTh9KTnWGP+7XufjH/
+         jRcwPyNVmj2dbCf4a8vgViDVrqxX4TU9lcUBLKNXJ5HridpTd3YC/6wyA6J23/J8UGUQ
+         eB9Q==
+X-Gm-Message-State: AOAM530L/KqovOV+VitxH1yIDfzh1Z1jcsYWwkdvOwsWJRHMsnvnLJa8
+        D395kSj7WNgdxmmx0J1cwilNfQ==
+X-Google-Smtp-Source: ABdhPJxIGr193KVkbJwozHZtcGXgR2EUiiWeNS22x4PqNWxU3rWMb4wKTDN8yRE4MgGOUzHrJAJR7w==
+X-Received: by 2002:a17:90a:d90b:b0:1bc:4ec7:d867 with SMTP id c11-20020a17090ad90b00b001bc4ec7d867mr3226102pjv.226.1646280342001;
+        Wed, 02 Mar 2022 20:05:42 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id t5-20020a654b85000000b00373cbfbf965sm615600pgq.46.2022.03.02.20.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 20:05:41 -0800 (PST)
+Date:   Thu, 3 Mar 2022 09:35:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] Introduce "opp-microwatt" and Energy Model from DT
+Message-ID: <20220303040539.ocnslxyswnvua3o7@vireshk-i7>
+References: <20220302112917.27270-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220302112917.27270-1-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sami,
+On 02-03-22, 11:29, Lukasz Luba wrote:
+> Hi all,
+> 
+> This patch set solves a few issues:
+> 1. It allows to register EM from DT, when the voltage information is not
+>    available. (Some background of the issues present on Chromebook devices
+>    can be checked at [1].)
+> 2. It allows to register 'advanced' EM from the DT, which is more accurate
+>    and reflects total power (dynamic + static).
+> 
+> Implementation details:
+> Existing machinery in the OPP framework now handles "opp-microwatt", similarly
+> to "opp-microamp". It also has helper exported function to get power from OPP.
+> For the EM, it adds a new callback in OPP framework to use this new API and
+> read power while having an opp pointer. It's agreed to work with OPP-v2.
+> 
+> Comments, suggestions are very welcome.
+> 
+> changelog:
+> v5:
+> - added dual-macro to conditionally setup needed callback and compile
+>   on !EM kernel gently
+> - removed 'advanced' word from OPP patch header description
+> v4 [2]
 
-FYI, the error/warning still remains.
+Applied. Thanks.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.14-q-release
-head:   10b2283595d8504436650acaacae25859eb24bdc
-commit: 03002d0374dd37a1969c6c3aa5e16ffe9844af24 [2605/9999] ANDROID: ftrace: fix function type mismatches
-config: i386-randconfig-r024-20211019 (https://download.01.org/0day-ci/archive/20220303/202203031139.31glDHLy-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/03002d0374dd37a1969c6c3aa5e16ffe9844af24
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.14-q-release
-        git checkout 03002d0374dd37a1969c6c3aa5e16ffe9844af24
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/trace/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/trace/ftrace.c:2727:13: warning: no previous declaration for 'arch_ftrace_trampoline_free' [-Wmissing-declarations]
-    void __weak arch_ftrace_trampoline_free(struct ftrace_ops *ops)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c:3488:1: warning: no previous declaration for 'arch_ftrace_trampoline_func' [-Wmissing-declarations]
-    arch_ftrace_trampoline_func(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c:3726:15: warning: no previous declaration for 'arch_ftrace_match_adjust' [-Wmissing-declarations]
-    char * __weak arch_ftrace_match_adjust(char *str, const char *search)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c: In function 'process_mod_list':
-   kernel/trace/ftrace.c:4008:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     int ret;
-         ^~~
-   kernel/trace/ftrace.c: In function 'ftrace_regex_release':
-   kernel/trace/ftrace.c:5040:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     int ret;
-         ^~~
-   kernel/trace/ftrace.c: At top level:
-   kernel/trace/ftrace.c:5949:13: warning: no previous declaration for 'arch_ftrace_update_trampoline' [-Wmissing-declarations]
-    void __weak arch_ftrace_update_trampoline(struct ftrace_ops *ops)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:6567:6: warning: no previous declaration for 'ftrace_graph_return_stub' [-Wmissing-declarations]
-    void ftrace_graph_return_stub(struct ftrace_graph_ret *trace)
-         ^~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c:6571:5: warning: no previous declaration for 'ftrace_graph_entry_stub' [-Wmissing-declarations]
-    int ftrace_graph_entry_stub(struct ftrace_graph_ent *trace)
-        ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c:1093:27: warning: 'ftrace_swapper_pid' defined but not used [-Wunused-const-variable=]
-    static struct pid * const ftrace_swapper_pid = &init_struct_pid;
-                              ^~~~~~~~~~~~~~~~~~
-
-
-vim +/ftrace_graph_return_stub +6567 kernel/trace/ftrace.c
-
-  6566	
-> 6567	void ftrace_graph_return_stub(struct ftrace_graph_ret *trace)
-  6568	{
-  6569	}
-  6570	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+viresh

@@ -2,161 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7314CC85E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35C74CC86A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 22:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236657AbiCCVtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 16:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S232880AbiCCVxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 16:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiCCVtc (ORCPT
+        with ESMTP id S231610AbiCCVxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:49:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C8AAE5B;
-        Thu,  3 Mar 2022 13:48:45 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223LmgLV023479;
-        Thu, 3 Mar 2022 21:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=1pbqyUEw1bzH9TofM6xgfYFQ/n9JBpL9GVCRuT7xppI=;
- b=FtAQJ60BYY+PMN+N3G67foUKkyYTWhnM98Jm58W4h9Q+XHQkt4ge3AgF0BHdOm4YmRCi
- vawNOnSjR+i0VbD7WEa6UI2tnqWfNxEQkka8YOA8yysEBZz02g0JYu/1ZwTR8K+zoGN4
- Lu3ricPGLR7Gfqknu8zbC37/0zXGC6JwJlJC2LXSuX8fHnUMTMViorRWVU77zpJi9X2r
- HZaBZvQzTCh7Q+O3t1AuejLEBhjemddUGWri3JjnMYEaAUZTMT6pPunIYvSt29+CLzXZ
- MF1Qure8/DhNZX6SWFM0WbLsi8l39fMPkVtZi7YKnMKwmQ0JDQvir4xXDvUSrl6CrzgF Fg== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ek5ww8014-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 21:48:42 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 223Lbbiu028147;
-        Thu, 3 Mar 2022 21:48:41 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 3ek4kd0g5x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 21:48:40 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 223LmdtW14025356
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 21:48:39 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93FEB12405A;
-        Thu,  3 Mar 2022 21:48:39 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93A6B124055;
-        Thu,  3 Mar 2022 21:48:38 +0000 (GMT)
-Received: from [9.211.103.39] (unknown [9.211.103.39])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Mar 2022 21:48:38 +0000 (GMT)
-Message-ID: <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
-Date:   Thu, 3 Mar 2022 15:48:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>, Joel Stanley <joel@jms.id.au>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20220301224446.21236-1-eajames@linux.ibm.com>
- <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
- <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
- <YiCHPuNkMuO4uARu@hovoldconsulting.com>
- <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
- <YiCN+x2XPiawaweY@hovoldconsulting.com>
- <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
- <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Shm5Iy2_Dk68VoVDh6BUihLcMU3Q8uLU
-X-Proofpoint-ORIG-GUID: Shm5Iy2_Dk68VoVDh6BUihLcMU3Q8uLU
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 3 Mar 2022 16:53:10 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932AE53B63
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:52:24 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id i11so8348115eda.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GYiLJYYPJSjUhcXRGu1IuMA7OVQstg8mWS33iyknnRU=;
+        b=Zc/WF7ywL7MhnMKbU00JCToNkD/++ZgWE+Y89kS14vE0kJ93fDvXJU5KZ4j0/9sqRK
+         u9AjOEVVqB293uk/CyLW01XQKf8FgYoh55sm0DdlmYgEg1i9BkiLpKzZDXMyBcFxiTKe
+         r1vJZPhN00yxmarO4mEaCG8FJaDbFVV0xnbKY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GYiLJYYPJSjUhcXRGu1IuMA7OVQstg8mWS33iyknnRU=;
+        b=c/NEYykuoksU3pjsDIlHq6HIoqXg1hyni0unhHmD3XI++heWaov2UvjVOXsWwt2Z6m
+         RApcpyQVjGjz/3NKdWhWeH4Ge/oUL7jqtM55qX0ty7gFs2aTtGzN10PDhD8A8rQT9IQu
+         usG+mE6bmrPOYH/J6NP7FjWR2ItaZ00xiDwpCAkkDLpF1hp/eyOM9ulfHx9Ahsq/9q9+
+         P55o3H+okbmLrwiHQ/OjLvY16rZcUzGwNbItk2HO620pDlyVAi4Jm8ueS8tm6jHC6vAr
+         j6wS2Fv8zkJk31+hQn0cBnyb5KAhSX+JCqAat41QvgLSfMBHlUQopUwXVEjmHixEZ9/y
+         8X1w==
+X-Gm-Message-State: AOAM530ojjWrX/KSVjvKBP3BVnLTGuYeeZb9J9gUJxueo5yNJhCThKUz
+        +cRjP5MSxsvJnehM9KeAiMuRHK4sMFYi2duU
+X-Google-Smtp-Source: ABdhPJx949ynv3HiJ+nDvTacdFCtsqEz72joDgFmTpq884Kyygsi3XMLbaqs+IOTlUYTIhyhn1O1iQ==
+X-Received: by 2002:a05:6402:f2a:b0:415:a3b3:2019 with SMTP id i42-20020a0564020f2a00b00415a3b32019mr11363638eda.177.1646344342731;
+        Thu, 03 Mar 2022 13:52:22 -0800 (PST)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id r11-20020aa7cfcb000000b00412c58c43ccsm1328830edy.37.2022.03.03.13.52.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 13:52:21 -0800 (PST)
+Received: by mail-wr1-f48.google.com with SMTP id d3so9854218wrf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 13:52:21 -0800 (PST)
+X-Received: by 2002:a5d:64ed:0:b0:1f0:6672:f10c with SMTP id
+ g13-20020a5d64ed000000b001f06672f10cmr1142174wri.679.1646344341238; Thu, 03
+ Mar 2022 13:52:21 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_09,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 mlxscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203030097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220303015151.1711860-1-pgwipeout@gmail.com>
+In-Reply-To: <20220303015151.1711860-1-pgwipeout@gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 3 Mar 2022 13:52:08 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=W6O5TtOHdVCbOyu221HrQWB8CnvcKA-5G49UF6TJaaHQ@mail.gmail.com>
+Message-ID: <CAD=FV=W6O5TtOHdVCbOyu221HrQWB8CnvcKA-5G49UF6TJaaHQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Addy Ke <addy.ke@rock-chips.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/3/22 04:13, Johan Hovold wrote:
-> On Thu, Mar 03, 2022 at 09:46:05AM +0000, Joel Stanley wrote:
->> On Thu, 3 Mar 2022 at 09:44, Johan Hovold <johan@kernel.org> wrote:
->>> On Thu, Mar 03, 2022 at 09:24:51AM +0000, Joel Stanley wrote:
->>>> On Thu, 3 Mar 2022 at 09:15, Johan Hovold <johan@kernel.org> wrote:
->>>>> On Thu, Mar 03, 2022 at 08:52:29AM +0000, Joel Stanley wrote:
->>>>>> On Thu, 3 Mar 2022 at 08:25, Johan Hovold <johan@kernel.org> wrote:
->>>>>>> On Tue, Mar 01, 2022 at 04:44:46PM -0600, Eddie James wrote:
->>>>>>>> IBM manufactures a PL2303 device for UPS communications. Add the vendor
->>>>>>>> and product IDs so that the PL2303 driver binds to the device.
->>>>>>>>
->>>>>>>> Signed-off-by: Joel Stanley <joel@jms.id.au>
->>>>>>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>>>>>>> ---
->>>>>>>> Changes since v1:
->>>>>>>>   - Fix commit message Signed-off-by ordering.
->>>>>>> Almost there. You're still missing a Co-developed-by tag, a From line,
->>>>>>> or both.
->>>>>> It's neither. This patch was applied to a tree by myself, and I asked
->>>>>> Eddie to send it to mainline for merging.
->>>>> Then you are missing a From line. As the patch looks like know, Eddie is
->>>>> considered the author and not you.
->>>> You are incorrect. Eddie is the author.
->>> Then what is your SoB doing there in the first place? If Eddie is the
->>> sole author as well as the submitter, and you didn't touch the patch in
->>> between, then your SoB does not belong in the chain.
->>>
->>> If you applied Eddie's patch to your shared tree and Eddie generated a
->>> patch from there, then the chain should be:
->>>
->>>          SoB: E
->>>          SoB: J
->>>          SoB: E
->>>
->>> but this is starting to look a bit ridiculous.
->> I agree. I would appreciate it if you applied the patch, with or
->> without my sob in whatever order you deem fit.
-> Ok, I'll assume what you intended was E-J-E but that perhaps
-> git-format-patch swallowed the last SoB. Thanks for clarifying.
->
-> I was going to apply to the patch, but I see now that you didn't provide
-> any details about the product apart from it being a UPS and that's not
-> reflected in the define name.
->
-> Do you have a pointer to device (family) in question?
-
-
 Hi,
 
-
-It's a pretty generic pl2303 device and doesn't have to be used for UPS, 
-but that is our use-case. Here is a page with some detail about the 
-device: 
-https://www.ibm.com/docs/en/power9/9009-22A?topic=power-uninterruptible-supply
-
-
-Thanks,
-
-Eddie
-
-
+On Wed, Mar 2, 2022 at 5:52 PM Peter Geis <pgwipeout@gmail.com> wrote:
 >
-> Johan
+> The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
+> supports. This leads to a situation during card initialization where the
+> ciu clock is set lower than the clock driver can support. The
+> dw-mmc-rockchip driver spews errors when this happens.
+> For normal operation this only happens a few times during boot, but when
+> cd-broken is enabled (in cases such as the SoQuartz module) this fires
+> multiple times each poll cycle.
+>
+> Fix this by testing the minimum frequency the clock driver can support
+> that is within the mmc specification, then divide that by the internal
+> clock divider. Set the f_min frequency to this value, or if it fails,
+> set f_min to the downstream driver's default.
+>
+> Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
+
+I don't spend tons of time either Rockchip or dw-mmc these days, but
+your email tickled a memory in my mind and I swore that I remember
+this whole 400 kHz minimum thing, though I never dug into it myself.
+It actually looks like the 400 kHz minimum disappeared sometime in
+2016! See commit 6a8883d614c7 ("ARM: dts: rockchip: replace to
+"max-frequency" instead of "clock-freq-min-max"") which only accounted
+for the high end, not the low end?
+
+I'm pretty sure I've tested on veyron since then, though and I didn't
+see any errors, but perhaps this is because I was never using
+cd-broken and the 400 kHz always worked?
+
+-Doug

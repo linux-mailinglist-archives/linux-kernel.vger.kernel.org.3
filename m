@@ -2,44 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ED14CB72C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384CB4CB763
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiCCGtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S230049AbiCCHFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCCGs5 (ORCPT
+        with ESMTP id S229884AbiCCHFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:48:57 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520FD443E2;
-        Wed,  2 Mar 2022 22:48:12 -0800 (PST)
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K8M2h297fzBrW5;
-        Thu,  3 Mar 2022 14:46:20 +0800 (CST)
-Received: from localhost.localdomain (10.175.127.227) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 3 Mar 2022 14:48:09 +0800
-From:   Zhang Wensheng <zhangwensheng5@huawei.com>
-To:     <paolo.valente@linaro.org>
-CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <zhangwensheng5@huawei.com>
-Subject: [PATCH -next v4] bfq: fix use-after-free in bfq_dispatch_request
-Date:   Thu, 3 Mar 2022 15:03:34 +0800
-Message-ID: <20220303070334.3020168-1-zhangwensheng5@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 3 Mar 2022 02:05:35 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CF22D1D3;
+        Wed,  2 Mar 2022 23:04:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646291055;
+        bh=c8B08IuN0ueJ5P1Qw3m4mZcla5OpJNkiL6GjsRpN5GY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hZaujvICUT5hjdB6Lp+cImer0Md6B745NTlpYuexL6B27u5X4lYSDPsd0hI8v+bIK
+         yPqf87EaL996Qtg2ExqEUipUGTMS+Tw76vJ8zo4oYFxopgkNj2Fln1EDQon3qf1xIg
+         6Kn/358VgBKo66uqDsfkNTDjOzxUjMD3NQx0egj0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.154.125] ([217.61.154.125]) by web-mail.gmx.net
+ (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Thu, 3 Mar 2022
+ 08:04:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Message-ID: <trinity-1ca1f3fd-1eeb-4c8d-a7e2-65851eb8002b-1646291055736@3c-app-gmx-bs69>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Aw: Re: [PATCH v4 1/5] dt-bindings: Convert ahci-platform DT
+ bindings to yaml
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 3 Mar 2022 08:04:15 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <Yh+0B+iKx1gJXXCk@robh.at.kernel.org>
+References: <20220301152421.57281-1-linux@fw-web.de>
+ <20220301152421.57281-2-linux@fw-web.de>
+ <Yh+0B+iKx1gJXXCk@robh.at.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:/lChWm1rfjWQIQe56yrqiZm3Y/F+aYSHAhSYt2mbFXFdfKYmHyqTFxKsF/VidPyXBtz9B
+ 7wR4CfTQ9nqIidZ2bWyS+UF9dqeyvvZE2/0x1FomSQe+j0VjqQk3qexBjQPMLHCDlP2tXLZlBsGa
+ QBS9Jwxf2do9zTXbnkzKTXiO4L+/ZoCvP4wZU+z6gweuR97SP+Xko7O52mvTGmt5GwABhf5TKX1S
+ sn4TZYtnMs1L8cs9uic5xCqL37CC//+7ptb7BN6pk27+YDUeL8IF7+qKvIYDAwwZsuQX1d1WMIeB
+ A4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SKDpZk6cLk0=:qnvAElGXZA38EYbbf7iG9I
+ x2MFrBDk9KWc9CGfyaQZsF7A7x2AKK7Ouvkzd3x0QffCTeUq8uDrhHyLX7CX3UsTpwCep0Ygi
+ jsmF7gcb26NsqP2x9A8io9eRUKcwCyrbR8AKPy9ZtL0o5pYemEyv69QCA+kWjA9auq5AFqcfB
+ dIG8rN1+CAnc9A00+X9xI+3s5dJ9u7BCopnbU4pVk1EwO/IrLrB4ZLbJFhjxtf5Ttu8xCASHu
+ S1pOTckExZS0q97mVVkvC9T7A29bdqLoMSJ03LUm5acTAA3CvKw9NPn0GqwL8j0LinvOxR69Q
+ 3SP9rKd/4SsG3RkItDGFst67vJ/LaDvunXDC9aZC3p8tJlzmXLciVhAn5+xDxSaJafbKYUTQj
+ +oUxjVRc/A9aRtLRWpSdr3qeHOkolI4N7oG1tblp/QYIWhsMkY8MCb4lFj73+6O2q7hixksfy
+ RdUoDTH3jx9MZSrXZK1J/b1E4mrNBM43EOQ+E/eI5gncyuKCHmYEBU5bqWYllaDetkXfRvtmL
+ 9o9+OmDNq9XE1kQSk3YQUFLZ/YBEeB23Uw67FbkfFNzme/7EwHAyhi3E7vzPS39mF4lgAuaCl
+ XHvGJnosohw1/HakN7NvEkYiUz/rca4KxwjgFGyBU5vBsptZ+uFi7Xwe5bYLlCT2HpfSPk+DL
+ F4IBJ05JDDNSEA5P8greI8EiNEkU9fjYRFzrbrn65CkmRDKd+D6iotTQAw/H/+zUXhPR76Q9q
+ KIfhkZ8geKPHcoC91j3ORzXkOg6Uq2hJTG+O522WVVtnggvEutvX8thTE6nxBMcppqyN00bcr
+ SqvHZmg
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,174 +82,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reports a use-after-free report when doing normal scsi-mq test
+Hi Rob,
 
-[69832.239032] ==================================================================
-[69832.241810] BUG: KASAN: use-after-free in bfq_dispatch_request+0x1045/0x44b0
-[69832.243267] Read of size 8 at addr ffff88802622ba88 by task kworker/3:1H/155
-[69832.244656]
-[69832.245007] CPU: 3 PID: 155 Comm: kworker/3:1H Not tainted 5.10.0-10295-g576c6382529e #8
-[69832.246626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[69832.249069] Workqueue: kblockd blk_mq_run_work_fn
-[69832.250022] Call Trace:
-[69832.250541]  dump_stack+0x9b/0xce
-[69832.251232]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.252243]  print_address_description.constprop.6+0x3e/0x60
-[69832.253381]  ? __cpuidle_text_end+0x5/0x5
-[69832.254211]  ? vprintk_func+0x6b/0x120
-[69832.254994]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.255952]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.256914]  kasan_report.cold.9+0x22/0x3a
-[69832.257753]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.258755]  check_memory_region+0x1c1/0x1e0
-[69832.260248]  bfq_dispatch_request+0x1045/0x44b0
-[69832.261181]  ? bfq_bfqq_expire+0x2440/0x2440
-[69832.262032]  ? blk_mq_delay_run_hw_queues+0xf9/0x170
-[69832.263022]  __blk_mq_do_dispatch_sched+0x52f/0x830
-[69832.264011]  ? blk_mq_sched_request_inserted+0x100/0x100
-[69832.265101]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
-[69832.266206]  ? blk_mq_do_dispatch_ctx+0x570/0x570
-[69832.267147]  ? __switch_to+0x5f4/0xee0
-[69832.267898]  blk_mq_sched_dispatch_requests+0xdf/0x140
-[69832.268946]  __blk_mq_run_hw_queue+0xc0/0x270
-[69832.269840]  blk_mq_run_work_fn+0x51/0x60
-[69832.278170]  process_one_work+0x6d4/0xfe0
-[69832.278984]  worker_thread+0x91/0xc80
-[69832.279726]  ? __kthread_parkme+0xb0/0x110
-[69832.280554]  ? process_one_work+0xfe0/0xfe0
-[69832.281414]  kthread+0x32d/0x3f0
-[69832.282082]  ? kthread_park+0x170/0x170
-[69832.282849]  ret_from_fork+0x1f/0x30
-[69832.283573]
-[69832.283886] Allocated by task 7725:
-[69832.284599]  kasan_save_stack+0x19/0x40
-[69832.285385]  __kasan_kmalloc.constprop.2+0xc1/0xd0
-[69832.286350]  kmem_cache_alloc_node+0x13f/0x460
-[69832.287237]  bfq_get_queue+0x3d4/0x1140
-[69832.287993]  bfq_get_bfqq_handle_split+0x103/0x510
-[69832.289015]  bfq_init_rq+0x337/0x2d50
-[69832.289749]  bfq_insert_requests+0x304/0x4e10
-[69832.290634]  blk_mq_sched_insert_requests+0x13e/0x390
-[69832.291629]  blk_mq_flush_plug_list+0x4b4/0x760
-[69832.292538]  blk_flush_plug_list+0x2c5/0x480
-[69832.293392]  io_schedule_prepare+0xb2/0xd0
-[69832.294209]  io_schedule_timeout+0x13/0x80
-[69832.295014]  wait_for_common_io.constprop.1+0x13c/0x270
-[69832.296137]  submit_bio_wait+0x103/0x1a0
-[69832.296932]  blkdev_issue_discard+0xe6/0x160
-[69832.297794]  blk_ioctl_discard+0x219/0x290
-[69832.298614]  blkdev_common_ioctl+0x50a/0x1750
-[69832.304715]  blkdev_ioctl+0x470/0x600
-[69832.305474]  block_ioctl+0xde/0x120
-[69832.306232]  vfs_ioctl+0x6c/0xc0
-[69832.306877]  __se_sys_ioctl+0x90/0xa0
-[69832.307629]  do_syscall_64+0x2d/0x40
-[69832.308362]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[69832.309382]
-[69832.309701] Freed by task 155:
-[69832.310328]  kasan_save_stack+0x19/0x40
-[69832.311121]  kasan_set_track+0x1c/0x30
-[69832.311868]  kasan_set_free_info+0x1b/0x30
-[69832.312699]  __kasan_slab_free+0x111/0x160
-[69832.313524]  kmem_cache_free+0x94/0x460
-[69832.314367]  bfq_put_queue+0x582/0x940
-[69832.315112]  __bfq_bfqd_reset_in_service+0x166/0x1d0
-[69832.317275]  bfq_bfqq_expire+0xb27/0x2440
-[69832.318084]  bfq_dispatch_request+0x697/0x44b0
-[69832.318991]  __blk_mq_do_dispatch_sched+0x52f/0x830
-[69832.319984]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
-[69832.321087]  blk_mq_sched_dispatch_requests+0xdf/0x140
-[69832.322225]  __blk_mq_run_hw_queue+0xc0/0x270
-[69832.323114]  blk_mq_run_work_fn+0x51/0x60
-[69832.323942]  process_one_work+0x6d4/0xfe0
-[69832.324772]  worker_thread+0x91/0xc80
-[69832.325518]  kthread+0x32d/0x3f0
-[69832.326205]  ret_from_fork+0x1f/0x30
-[69832.326932]
-[69832.338297] The buggy address belongs to the object at ffff88802622b968
-[69832.338297]  which belongs to the cache bfq_queue of size 512
-[69832.340766] The buggy address is located 288 bytes inside of
-[69832.340766]  512-byte region [ffff88802622b968, ffff88802622bb68)
-[69832.343091] The buggy address belongs to the page:
-[69832.344097] page:ffffea0000988a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88802622a528 pfn:0x26228
-[69832.346214] head:ffffea0000988a00 order:2 compound_mapcount:0 compound_pincount:0
-[69832.347719] flags: 0x1fffff80010200(slab|head)
-[69832.348625] raw: 001fffff80010200 ffffea0000dbac08 ffff888017a57650 ffff8880179fe840
-[69832.354972] raw: ffff88802622a528 0000000000120008 00000001ffffffff 0000000000000000
-[69832.356547] page dumped because: kasan: bad access detected
-[69832.357652]
-[69832.357970] Memory state around the buggy address:
-[69832.358926]  ffff88802622b980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.360358]  ffff88802622ba00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.361810] >ffff88802622ba80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.363273]                       ^
-[69832.363975]  ffff88802622bb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
-[69832.375960]  ffff88802622bb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[69832.377405] ==================================================================
+thanks for review,
 
-In bfq_dispatch_requestfunction, it may have function call:
+have prepared the changes based on yours and krzysztof comments
 
-bfq_dispatch_request
-	__bfq_dispatch_request
-		bfq_select_queue
-			bfq_bfqq_expire
-				__bfq_bfqd_reset_in_service
-					bfq_put_queue
-						kmem_cache_free
-In this function call, in_serv_queue has beed expired and meet the
-conditions to free. In the function bfq_dispatch_request, the address
-of in_serv_queue pointing to has been released. For getting the value
-of idle_timer_disabled, it will get flags value from the address which
-in_serv_queue pointing to, then the problem of use-after-free happens;
+https://github=2Ecom/frank-w/BPI-R2-4=2E14/commits/5=2E17-next-20220225
 
-Fix the problem by check in_serv_queue == bfqd->in_service_queue, to
-get the value of idle_timer_disabled if in_serve_queue is equel to
-bfqd->in_service_queue. If the space of in_serv_queue pointing has
-been released, this judge will aviod use-after-free problem.
-And if in_serv_queue may be expired or finished, the idle_timer_disabled
-will be false which would not give effects to bfq_update_dispatch_stats.
+(just ignore the top 2 commits) i thought i had a size-cells-error, but di=
+d not get them again after reverting this part, seems they are fixed by inc=
+lusion of the sata-common binding
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
----
- block/bfq-iosched.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+> Gesendet: Mittwoch, 02=2E M=C3=A4rz 2022 um 19:14 Uhr
+> Von: "Rob Herring" <robh@kernel=2Eorg>
+> An: "Frank Wunderlich" <linux@fw-web=2Ede>
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 36a66e97e3c2..8735f075230f 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5181,7 +5181,7 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
- 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
- 	struct request *rq;
- 	struct bfq_queue *in_serv_queue;
--	bool waiting_rq, idle_timer_disabled;
-+	bool waiting_rq, idle_timer_disabled = false;
- 
- 	spin_lock_irq(&bfqd->lock);
- 
-@@ -5189,14 +5189,15 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
- 	waiting_rq = in_serv_queue && bfq_bfqq_wait_request(in_serv_queue);
- 
- 	rq = __bfq_dispatch_request(hctx);
--
--	idle_timer_disabled =
--		waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
-+	if (in_serv_queue == bfqd->in_service_queue) {
-+		idle_timer_disabled =
-+			waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
-+	}
- 
- 	spin_unlock_irq(&bfqd->lock);
--
--	bfq_update_dispatch_stats(hctx->queue, rq, in_serv_queue,
--				  idle_timer_disabled);
-+	bfq_update_dispatch_stats(hctx->queue, rq,
-+			idle_timer_disabled ? in_serv_queue : NULL,
-+				idle_timer_disabled);
- 
- 	return rq;
- }
--- 
-2.31.1
+> On Tue, Mar 01, 2022 at 04:24:17PM +0100, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files=2Ede>
+
+> > diff --git a/Documentation/devicetree/bindings/ata/ahci-platform=2Eyam=
+l b/Documentation/devicetree/bindings/ata/ahci-platform=2Eyaml
+> > new file mode 100644
+> > index 000000000000=2E=2Ecf67ddfc6afb
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/ata/ahci-platform=2Eyaml
+> > @@ -0,0 +1,162 @@
+> > +# SPDX-License-Identifier: GPL-2=2E0
+> > +%YAML 1=2E2
+> > +---
+> > +$id: http://devicetree=2Eorg/schemas/ata/ahci-platform=2Eyaml#
+> > +$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
+> > +
+> > +title: AHCI SATA Controller
+>=20
+> blank line=2E
+
+done
+=20
+> > +description:
+> > +  SATA nodes are defined to describe on-chip Serial ATA controllers=
+=2E
+> > +  Each SATA controller should have its own node=2E
+> > +
+> > +  It is possible, but not required, to represent each port as a sub-n=
+ode=2E
+> > +  It allows to enable each port independently when dealing with multi=
+ple
+> > +  PHYs=2E
+>=20
+> You need a '|' after 'description' if you want to maintain the=20
+> paragraphs=2E
+
+ok added | to all multiline descriptions
+
+> > +
+> > +maintainers:
+> > +  - Hans de Goede <hdegoede@redhat=2Ecom>
+> > +  - Jens Axboe <axboe@kernel=2Edk>
+> > +
+> > +allOf:
+> > +- $ref: "sata-common=2Eyaml#"
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +        - enum:
+> > +          - brcm,iproc-ahci
+> > +          - marvell,armada-8k-ahci
+> > +          - marvell,berlin2q-ahci
+> > +        - const: generic-ahci
+> > +      - enum:
+> > +        - brcm,iproc-ahci
+> > +        - cavium,octeon-7130-ahci
+> > +        - hisilicon,hisi-ahci
+> > +        - ibm,476gtr-ahci
+> > +        - marvell,armada-3700-ahci
+> > +        - marvell,armada-380-ahci
+> > +        - snps,dwc-ahci
+> > +        - snps,spear-ahci
+>=20
+> Install yamllint and run 'make dt_binding_check'=2E It's going to=20
+> complain about the indentation=2E
+
+you're right, i had no yamllint installed, so i have not seen these indent=
+ion errors
+
+> > +  ahci-supply:
+> > +    description:
+> > +      regulator for AHCI controller
+> > +
+> > +  clock-names:
+>=20
+> Group with 'clocks'
+
+ok, already done in my tree because of krzysztofs comment
+
+> > +  ports-implemented:
+> > +    $ref: '/schemas/types=2Eyaml#/definitions/uint32'
+> > +    description:
+> > +      Mask that indicates which ports that the HBA supports
+> > +      are available for software to use=2E Useful if PORTS_IMPL
+> > +      is not programmed by the BIOS, which is true with
+> > +      some embedded SoCs=2E
+> > +    maxItems: 1
+>=20
+> A uint32 is only ever 1 item=2E Drop=2E
+>=20
+> IIRC, isn't the max here 0xff? Add constraints=2E
+
+i've found it only set to 0x1 so i have currently set the maximum to 0x1, =
+is this ok?
+If some higher value is needed binding needs to be touched=2E=2E=2E
+
+> > +
+> > +  reg-names:
+> > +    maxItems: 1
+>=20
+> Group with 'reg'=2E
+
+ok
+
+> > +patternProperties:
+> > +  "^sata-port@[0-9a-f]+$":
+> > +    type: object
+>=20
+>        additionalProperties: false
+
+ok added to my tree
+
+and needed to add phy-names because some marvell boards using this
+
+arch/arm64/boot/dts/marvell/armada-8040-mcbin-singleshot=2Edt=2Eyaml: sata=
+@540000: sata-port@1: 'phy-names' does not match any of the regexes: 'pinct=
+rl-[0-9]+'
+
+now i have only the marvell-errors about incomplete sata-port subnode (wit=
+hout phy/target-supply) like i mention in the patch=2E=2E=2Ehow to proceed =
+with this?
+
+regards Frank
+
 

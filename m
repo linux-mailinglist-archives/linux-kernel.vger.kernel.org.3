@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3AA4CC58B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF1A4CC59B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiCCTBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S231503AbiCCTH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiCCTBm (ORCPT
+        with ESMTP id S229536AbiCCTH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:01:42 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD8E19F455;
-        Thu,  3 Mar 2022 11:00:56 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id 40-20020a9d032b000000b005b02923e2e6so5433472otv.1;
-        Thu, 03 Mar 2022 11:00:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=dEqyBR6kCW9UlA1zBsmnhStMOP8YHEJxcgst1aAegPQ=;
-        b=H9Bm1qDHs+wwHE0iRAblNg/OsVzOiZycfj62BffYX/R89swZKWOpLXtdjBAyE/tDTT
-         AjwpLg66J9bLD+6aO+glB/iB+AuWVdc+/qj3L0r4F16GfnaGo/DVcBEhqXNrboBYOcN5
-         vpH466Mk9Y0FCOFA9Ibg//x5r7b7o2qSPYkwhPFciyUga+ze0jqmx0R6s9H0njiEX67N
-         Y1WIq9Ij7RkNMrQ4NDmQTweShOQn6KNSahm0Jmy3MfeYAGkzbsDe4WkY5vvY9YDP1zLZ
-         Ugm8beTNRJFYLDzc1nXsAaXzC5GeFvOf815Vb111kiBfHmBLufgqpnWSxz2dj6yaVdGI
-         JLLQ==
-X-Gm-Message-State: AOAM530kAvBUxXgPWS4HKsktYVkM8cpSLCg8u3gudRjQH0Yki/W0P+ts
-        f4E7ZeO5oN8yCvSrcl27Jq4rPuiCmg==
-X-Google-Smtp-Source: ABdhPJzs7+4gMhuA2iPpZzX05xAcl9nkwd4vsQrGe/23G32SXPHyHmKj5dA92zRXVBLstlHcEeuVSA==
-X-Received: by 2002:a05:6830:2783:b0:5ac:e99f:70fe with SMTP id x3-20020a056830278300b005ace99f70femr20213907otu.122.1646334055673;
-        Thu, 03 Mar 2022 11:00:55 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056830409900b005af164235b4sm1318358ott.2.2022.03.03.11.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:00:54 -0800 (PST)
-Received: (nullmailer pid 2139596 invoked by uid 1000);
-        Thu, 03 Mar 2022 19:00:53 -0000
+        Thu, 3 Mar 2022 14:07:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5C419D751;
+        Thu,  3 Mar 2022 11:06:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D097F61A8A;
+        Thu,  3 Mar 2022 19:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F4FC340F3;
+        Thu,  3 Mar 2022 19:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646334401;
+        bh=2BtpIBsXVCJxVQ/oh3K2FgXEMXiekUDLQX9xD2gdbLM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o2c+ye5BqYrayS6wcIkhykEd9oMUM08fnMBunZ6ubqX+UPCADV0E3K1UilobnxEPQ
+         sjmgxT04DSYUChMdCZVaAVyy6CXFMzPmUDVfXCOHmMz1U7anuFgSLwFqFWWlO6vpm/
+         Ibuza1+FbskVwliS18eABoFLCDlTEAmnkV7CiQX7bG0YpjPE8COYneNTvKag0LoL5G
+         c4OqdEIfpQaaAiypnu9/cZpft0YHLK88txfnlhsoopUuEcX1UIDkDqZgGS03IL5Mn1
+         zqj05azs8MVzTuDztpZrpkyYk5qi0sb4Td1zcAw+k3CjFcSFYw7+6ijKAIPw82Etxz
+         DW+fCwyHjboxg==
+Received: by mail-ed1-f43.google.com with SMTP id q17so7878712edd.4;
+        Thu, 03 Mar 2022 11:06:41 -0800 (PST)
+X-Gm-Message-State: AOAM533+fFcS5jz4NiB3e3Sv6PMbcD1sMv/j2t9RTsYMeiOcyVRjKUSS
+        ukmku3Z0jTr2+zzBJZAWmeQc/vwG3WH+gRVCdQ==
+X-Google-Smtp-Source: ABdhPJwEoJqO4GxeRtl4C7IV0N8/KXSt+tovp2KwzQmA0QQzU7BNoyVpkRvxSAPAd3L4v7UJIYii2bTAUw20bGdm/cM=
+X-Received: by 2002:a05:6402:4384:b0:413:9e36:b56f with SMTP id
+ o4-20020a056402438400b004139e36b56fmr25115772edc.280.1646334399480; Thu, 03
+ Mar 2022 11:06:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20220215081334.788419-1-peng.fan@oss.nxp.com> <Yhj9joQkgTswMVcs@robh.at.kernel.org>
+ <DU0PR04MB94172264E2DCE759EE3B9A3688019@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB94172264E2DCE759EE3B9A3688019@DU0PR04MB9417.eurprd04.prod.outlook.com>
 From:   Rob Herring <robh@kernel.org>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        David Rhodes <drhodes@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        patches@opensource.cirrus.com, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220303173059.269657-21-tanureal@opensource.cirrus.com>
-References: <20220303173059.269657-1-tanureal@opensource.cirrus.com> <20220303173059.269657-21-tanureal@opensource.cirrus.com>
-Subject: Re: [PATCH 20/20] Documentation: devicetree: CS35l41 External Boost
-Date:   Thu, 03 Mar 2022 13:00:53 -0600
-Message-Id: <1646334053.475639.2139595.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Date:   Thu, 3 Mar 2022 13:06:27 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL_02Gw6hw59NdH_rCDmwy5f+OrCsifmuNkxo2OgTYnYg@mail.gmail.com>
+Message-ID: <CAL_JsqL_02Gw6hw59NdH_rCDmwy5f+OrCsifmuNkxo2OgTYnYg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: serial: fsl-lpuart: Add imx93 compatible string
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Mar 2022 17:30:59 +0000, Lucas Tanure wrote:
-> From: David Rhodes <drhodes@opensource.cirrus.com>
-> 
-> Document external boost feature on CS35L41
-> 
-> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
-> ---
->  .../bindings/sound/cirrus,cs35l41.yaml        | 42 +++++++++++++++++--
->  1 file changed, 39 insertions(+), 3 deletions(-)
-> 
+On Sun, Feb 27, 2022 at 6:44 PM Peng Fan <peng.fan@nxp.com> wrote:
+>
+> Hi Rob,
+>
+> > Subject: Re: [PATCH] dt-bindings: serial: fsl-lpuart: Add imx93 compatible
+> > string
+> >
+> > On Tue, Feb 15, 2022 at 04:13:34PM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > The lpuart on i.MX93 is derived from i.MX8ULP with some industrial
+> > > enhancements, it uses three compatible strings, so update the
+> >
+> > Looks like it's 2 compatible strings...
+>
+> Oh, yes. i.MX8ULP/7ULP is same uart IP.
+>
+> >
+> > > compatible string for i.MX93. But for a few instants,
+> >
+> > s/instants/instances/
+> >
+> > > DTR_B, DSR_B, DCD_B and RIN_B pins are supported, so use one
+> > > compatible string fsl,imx93-lpuart-v2
+> >
+> > If the differences are just what gets pinned out, then I think the differences
+> > should be handled with separate properties. We probably already have some.
+> >
+> > Plus, while you may have all the above signals, a board design may still only
+> > use a subset.
+>
+> It is SoC integration level with above features not support in some instances,
+> so no such signals connected to SoC pin.
+>
+> Saying LPUART IP itself support DTR/DSR/DCD/RIN, but instance A has the
+> feature disabled when doing SoC integration, instance B has the feature enabled
+> when doing SoC integration. What's your suggestion with such case?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Unless it changes the register interface in a non-compatible way that
+the driver needs to know about, I would not do a different compatible.
+For example, register offsets change.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/cirrus,cs35l41.example.dt.yaml: cs35l41@2: 'cirrus,gpio1-output-enable' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1600514
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Rob

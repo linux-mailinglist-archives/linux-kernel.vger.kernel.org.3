@@ -2,116 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAC24CB46C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A99D4CB46F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiCCBgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S231398AbiCCBhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiCCBgR (ORCPT
+        with ESMTP id S231322AbiCCBhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:36:17 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD9A1B127A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:35:33 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id s1-20020a056830148100b005acfdcb1f4bso3309481otq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:35:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=gkSN7ZvNvd/0m/mkYGWwCvWjNrGtNp3nzKCzQIc5Go4=;
-        b=Peqfovp4UGvowB6XN/lkQXan457qd0WjSWexd2I3wFuJGidEStuSmvMy7HbGPYCf1D
-         h0853GoGpbWoIgAglm4eHpy3WAj65EhHaF7M4kxjqccPCVaiuu2phP8eWfsrfSM4hA3T
-         YAf3Ff7T7IP2z6Xdb0yRq7K03bCb4uQzDr9ZOMx44OSR3aYaaWSnAmZddFNe8gA9Ygvq
-         CeZDJAPnPW/bGBg+W6yJY/PFmInaA9sa57Co9UfT0j5+EeWQFN51EDfjL0Q4+ShiyE6c
-         ZKbrCGkrAmwdR1UYOTf/psw3MXAVbceU4bKtkx8d+C7vW3lQNPDzj0Bf8DNsB1FM+W/c
-         fIiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=gkSN7ZvNvd/0m/mkYGWwCvWjNrGtNp3nzKCzQIc5Go4=;
-        b=5Oca4mgVOEWOCjwB2+k7e1R23fqIdg6FyDi2ON914PjCKhjjqPDLCHsf5sjUETGRyv
-         QRPoId7IiX0cz5STEEq9zQhgls51/1/AWmUA0SGD/n7+IyR3pHvXU4oDPTuW/S7kS1CH
-         T8aclsn50oIn8/x4I60skXvY0Ge5bh148miRIDshu+7mJKCrV82bUyNgHrICyJzZf67n
-         9/qpzbZ3NskQ6Cbo3/dXnbxpiUINKKHUpG5QWL/tFFRbvYh/2MHmBoF5tV9bkyXMx6VV
-         WFK7tyR5ynW0+eqJgnbeUvTkI2JdKH4S4jDEUJMcf4FYAuXbuaKS6W3m7CWOlxO96rAE
-         sudg==
-X-Gm-Message-State: AOAM533DkeJhZDDs/M0XMY3pazyHPUt/Xjt1THlU05/M/mAxnFFhYgaU
-        G5wXzeY4xTpDdPmW9Zu332ByfN9k5tavbA==
-X-Google-Smtp-Source: ABdhPJwtU441wydHepaGEFzGV3+hX4X6j7bgaDd+Ws05CmRj7iyeePVqs5IJFRZZ3Sq4J7i731b8jw==
-X-Received: by 2002:a05:6830:34a0:b0:5b0:37d7:ab38 with SMTP id c32-20020a05683034a000b005b037d7ab38mr6487277otu.40.1646271332947;
-        Wed, 02 Mar 2022 17:35:32 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b000d6cbaf589esm466018oap.40.2022.03.02.17.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 17:35:32 -0800 (PST)
-Date:   Wed, 2 Mar 2022 17:35:30 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH mmotm] mm/munlock: mlock_vma_folio() check against
- VM_SPECIAL
-Message-ID: <9b95d366-1719-f8e2-a5a3-429f9e808288@google.com>
+        Wed, 2 Mar 2022 20:37:45 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC9D01114
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:36:57 -0800 (PST)
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.52 with ESMTP; 3 Mar 2022 10:36:56 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.126 with ESMTP; 3 Mar 2022 10:36:56 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Thu, 3 Mar 2022 10:36:35 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Jan Kara <jack@suse.cz>, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.com, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220303013635.GC20752@X58A-UD3R>
+References: <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
+ <20220221190204.q675gtsb6qhylywa@quack3.lan>
+ <20220223003534.GA26277@X58A-UD3R>
+ <20220223144859.na2gjgl5efgw5zhn@quack3.lan>
+ <20220224011102.GA29726@X58A-UD3R>
+ <20220224102239.n7nzyyekuacgpnzg@quack3.lan>
+ <20220228092826.GA5201@X58A-UD3R>
+ <20220228101444.6frl63dn5vmgycbp@quack3.lan>
+ <Yh09sIsw5vh+qCeU@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh09sIsw5vh+qCeU@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although mmap_region() and mlock_fixup() take care that VM_LOCKED
-is never left set on a VM_SPECIAL vma, there is an interval while
-file->f_op->mmap() is using vm_insert_page(s), when VM_LOCKED may
-still be set while VM_SPECIAL bits are added: so mlock_vma_folio()
-should ignore VM_LOCKED while any VM_SPECIAL bits are set.
+On Mon, Feb 28, 2022 at 04:25:04PM -0500, Theodore Ts'o wrote:
+> On Mon, Feb 28, 2022 at 11:14:44AM +0100, Jan Kara wrote:
+> > > case 1. Code with an actual circular dependency, but not deadlock.
+> > > 
+> > >    A circular dependency can be broken by a rescue wakeup source e.g.
+> > >    timeout. It's not a deadlock. If it's okay that the contexts
+> > >    participating in the circular dependency and others waiting for the
+> > >    events in the circle are stuck until it gets broken. Otherwise, say,
+> > >    if it's not meant, then it's anyway problematic.
+> > > 
+> > >    1-1. What if we judge this code is problematic?
+> > >    1-2. What if we judge this code is good?
+> > > 
+> > > I've been wondering if the kernel guys esp. Linus considers code with
+> > > any circular dependency is problematic or not, even if it won't lead to
+> > > a deadlock, say, case 1. Even though I designed Dept based on what I
+> > > believe is right, of course, I'm willing to change the design according
+> > > to the majority opinion.
+> > > 
+> > > However, I would never allow case 1 if I were the owner of the kernel
+> > > for better stability, even though the code works anyway okay for now.
+> 
+> Note, I used the example of the timeout as the most obvious way of
+> explaining that a deadlock is not possible.  There is also the much
+> more complex explanation which Jan was trying to give, which is what
+> leads to the circular dependency.  It can happen that when trying to
+> start a handle, if either (a) there is not enough space in the journal
+> for new handles, or (b) the current transaction is so large that if we
+> don't close the transaction and start a new hone, we will end up
+> running out of space in the future, and so in that case,
+> start_this_handle() will block starting any more handles, and then
+> wake up the commit thread.  The commit thread then waits for the
+> currently running threads to complete, before it allows new handles to
+> start, and then it will complete the commit.  In the case of (a) we
+> then need to do a journal checkpoint, which is more work to release
+> space in the journal, and only then, can we allow new handles to start.
 
-This showed up as a "Bad page" still mlocked, when vfree()ing pages
-which had been vm_inserted by remap_vmalloc_range_partial(): while
-release_pages() and __page_cache_release(), and so put_page(), catch
-pages still mlocked when freeing (and clear_page_mlock() caught them
-when unmapping), the vfree() path is unprepared for them: fix it?
-but these pages should not have been mlocked in the first place.
+Thank you for the full explanation of how journal things work.
 
-I assume that an mlockall(MCL_FUTURE) had been done in the past; or
-maybe the user got to specify MAP_LOCKED on a vmalloc'ing driver mmap.
+> The botom line is (a) it works, (b) there aren't significant delays,
+> and for DEPT to complain that this is somehow wrong and we need to
+> completely rearchitect perfectly working code because it doesn't
+> confirm to DEPT's idea of what is "correct" is not acceptable.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-Diffed against top of next-20220301 or mmotm 2022-02-28-14-45.
-This patch really belongs as a fix to the mm/munlock series in
-Matthew's tree, so he might like to take it in there (but the patch
-here is the foliated version, so easiest to place it after foliation).
+Thanks to you and Jan Kara, I realized it's not a real dependency in the
+consumer and producer scenario but again *ONLY IF* there is a rescue
+wakeup source. Dept should track the rescue wakeup source instead in the
+case.
 
- mm/internal.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+I won't ask you to rearchitect the working code. The code looks sane.
 
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -421,8 +421,15 @@ extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
- static inline void mlock_vma_folio(struct folio *folio,
- 			struct vm_area_struct *vma, bool compound)
- {
--	/* VM_IO check prevents migration from double-counting during mlock */
--	if (unlikely((vma->vm_flags & (VM_LOCKED|VM_IO)) == VM_LOCKED) &&
-+	/*
-+	 * The VM_SPECIAL check here serves two purposes.
-+	 * 1) VM_IO check prevents migration from double-counting during mlock.
-+	 * 2) Although mmap_region() and mlock_fixup() take care that VM_LOCKED
-+	 *    is never left set on a VM_SPECIAL vma, there is an interval while
-+	 *    file->f_op->mmap() is using vm_insert_page(s), when VM_LOCKED may
-+	 *    still be set while VM_SPECIAL bits are added: so ignore it then.
-+	 */
-+	if (unlikely((vma->vm_flags & (VM_LOCKED|VM_SPECIAL)) == VM_LOCKED) &&
- 	    (compound || !folio_test_large(folio)))
- 		mlock_folio(folio);
- }
+Thanks a lot.
+
+Thanks,
+Byungchul
+
+> > We have a queue of work to do Q protected by lock L. Consumer process has
+> > code like:
+> > 
+> > while (1) {
+> > 	lock L
+> > 	prepare_to_wait(work_queued);
+> > 	if (no work) {
+> > 		unlock L
+> > 		sleep
+> > 	} else {
+> > 		unlock L
+> > 		do work
+> > 		wake_up(work_done)
+> > 	}
+> > }
+> > 
+> > AFAIU Dept will create dependency here that 'wakeup work_done' is after
+> > 'wait for work_queued'. Producer has code like:
+> > 
+> > while (1) {
+> > 	lock L
+> > 	prepare_to_wait(work_done)
+> > 	if (too much work queued) {
+> > 		unlock L
+> > 		sleep
+> > 	} else {
+> > 		queue work
+> > 		unlock L
+> > 		wake_up(work_queued)
+> > 	}
+> > }
+> > 
+> > And Dept will create dependency here that 'wakeup work_queued' is after
+> > 'wait for work_done'. And thus we have a trivial cycle in the dependencies
+> > despite the code being perfectly valid and safe.
+> 
+> Cheers,
+> 
+> 							- Ted

@@ -2,183 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA574CC251
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D204CC25B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 17:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbiCCQKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 11:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S234838AbiCCQMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 11:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiCCQK1 (ORCPT
+        with ESMTP id S234831AbiCCQM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:10:27 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316BB1795FA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:09:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1646323781; x=1677859781;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GpRawJriRF6isWjZeGSrbVsznzwhVcciAP7KisG1ixg=;
-  b=ZcBXnJPmIXOjNbzdjW7wgY/5QXyXKNZy8y84e1eL/uIdvrV5IoQ+xf71
-   RLJjN2ELyvQ2Ap0aw/zchzue4rpundqj75ilfteHOvwGbnUU6010E04Ei
-   MfIRSVk9WA6s/vcwwAm+3bW1RgwukaWTE2JE0BL0dIH0KcLDybB+I8Aps
-   mOnGikArKLx6pu9VO38gHA/eP5TZh/HLtjRz0qUEJ7EN1MOc2lHrCUpCt
-   RShyCC0AINRpGdxXKAEWBM88J/2Ci4N0az66YRdf5Hvkd8UUPpUhMycA1
-   qweG47jC7JcxyRMcerJGZklJythKGQ+Mnj7NlktdIGvQYCDrcSDaefFEc
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,151,1643644800"; 
-   d="scan'208";a="194403236"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 04 Mar 2022 00:09:07 +0800
-IronPort-SDR: IWbBZta4xR9y2gqdy9pyibnOHwmf/ZxOpc/9/swvP8YZZSccrN0oZLE62QmQVjduvwMR/OHG95
- K3UTtUQz/b+GSeTmAuIW0YOjBHwpTwoIw0Z5GnHNQCqsNDrzjgjVakxNtUnafz8+9QBo8igLFx
- ZsKIXe8XAWkof3Y2QW9hxrtFt3lbgVLvW2LnGkbjw6eblenp6SBOZaoFveO8c5x8fwJwLm5yis
- KxHiiKxovZlaqWgcKa+8KVLgoMynsVjAX6MOR4dkQ6D6RzMWdkZdhE90/Egp0PWqqJNre5/u+/
- jPxocayt9ZZN4b26xaGIduc1
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 07:41:31 -0800
-IronPort-SDR: OA5QLQfOgyhShpcXr3b69IsLSeQKYqiuhV8ifIWApl9ilw4Y0KoPp82IoKkjpt40DsK3SKTLm9
- wyOScAXPQuzYJwjgR1RRMs8koiS/gO6RMrYWPSfYgEdNSk1EMX+KlZcADtiS24lljNl6p4iIx/
- jxi6+RLfF46KvQo/qgeenokZWbs5E4H6Ut8ot54HiCo4VkjpQJWs88GutqIIjWFE9y4/P0jtGZ
- M46/Iw10VIfo+rVXdjBTDYDtTwFSR7MGqT0GALk+BWzXmtZaULny0Ww2OJuPc1wXJlWdHGUypZ
- 4mg=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 08:09:07 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K8bX335tnz1SHwl
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:09:07 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1646323746; x=1648915747; bh=GpRawJriRF6isWjZeGSrbVsznzwhVcciAP7
-        KisG1ixg=; b=PBkPB9D9zhQUoMzOI+TefdvrqE4IcZ6LQesZY/a/70NL1U82wFc
-        1WzIUi54WLcR7FqT7dkXG6UwnQf8ghzsPWrTjh/LqfFa384pWYOylb1+EjOyenjd
-        tGi8DIo/9f/6zgkNre2GOh0Mg50xEVZ2qVIzItR+CJVS/BfQt/jCIoEbu8RZA/lQ
-        c9WVoe0Nrcr4CcNNTb1DMH8d3i7zx37URv0s3B7Njj/uz1zXQwr0+G5IYQmWfBN7
-        E3duiLthsxlBMUndpPj8npurTL8SYl9hBfWaKNvuRxk23jop61p8gr+oXLICtlkM
-        nDgljm9aiFM8Dvg4xXfK2gOz/afao3zXoTg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mjFxx4yylLZJ for <linux-kernel@vger.kernel.org>;
-        Thu,  3 Mar 2022 08:09:06 -0800 (PST)
-Received: from [10.225.33.67] (unknown [10.225.33.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K8bX137zzz1Rvlx;
-        Thu,  3 Mar 2022 08:09:05 -0800 (PST)
-Message-ID: <18137b0c-ef7e-bce7-b3bc-9e19d6f1d2c7@opensource.wdc.com>
-Date:   Thu, 3 Mar 2022 18:09:03 +0200
+        Thu, 3 Mar 2022 11:12:29 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEEE198D37
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 08:11:43 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a8so11704038ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 08:11:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u+FSFzjUyL4tO84NqXDYnBQRJcBY+3fyVlESA0iCML0=;
+        b=sDUL18TKOrFy0EYFjbVgGUAo88xuwcWCafNF9Z3Qv5MK9RswflDq6wcvyZt7JjkBZ0
+         lCUKfKBRRzLvgGvwC04sE0vlxxbdFGK2JHeelVLIWZaYeAtcDRDoGjKH9VNzaXs2e24x
+         hgD56fllm3ElTxItXi6kOXjzLPrBbfOOojk4k4g8IO2cySSza2Cv8H1te2MPyyoju2cS
+         Hf+ZYtimQd9FLemaKAU2/PMPl8K17GgBfaoaTztT4N70cdeuMErbBkTFLTtvlhrc1YHj
+         9nEp5yOtOTbPNW3AZOwBdhMxNGWvdscHnjxfOwmYfm7zDDQibBPkhI7vn00KEVjnojD5
+         vPfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=u+FSFzjUyL4tO84NqXDYnBQRJcBY+3fyVlESA0iCML0=;
+        b=pzS016q6Lo/11FPGXggcPT6I2PD9ebuAcTcYJnN8Ha4A2l6OByo075dMQUqZvLyYp4
+         2UGhU09GTVNlM7YZp8oiwKBqPe75kzV9eZIgy8c71H+kajIJlud4ECUUqkRhPCVQ9+wn
+         8B9Od7LF3kMh482ELPtytPABFkscd8h+0mZjGL2Inhej8VtibnpaHuutctH3R+YDx3NW
+         DbJ22TngrgMRt3ZY088eTCAdqYZcyQ3FL6BNMMJkuvkoz96dZGMTjpXPSCiyxZ0HxLh/
+         6RPstlkkFEWNAVF7JlielkYpl9mC2lecIUcdFULgiSdrr3lrpo6MmPPx+9IY6deScAb/
+         IQkA==
+X-Gm-Message-State: AOAM532oLfI2m3GmhabKp8JAR7kuadCt/pT/YzGP/P9FKI8odi1Kk2ku
+        hB/Ji/xRDNjFqpo0x9UppMLdGbq4N9Lyeg==
+X-Google-Smtp-Source: ABdhPJztb420UBKT7kn2KUMnFMdp+OioG0SxxR0JgBDOl5FFeF6+8y/JW7c457/+xSm2ImS90VKlJw==
+X-Received: by 2002:a17:906:2ec6:b0:69f:286a:66ab with SMTP id s6-20020a1709062ec600b0069f286a66abmr27825769eji.684.1646323901445;
+        Thu, 03 Mar 2022 08:11:41 -0800 (PST)
+Received: from localhost ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm843289ejj.142.2022.03.03.08.11.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 03 Mar 2022 08:11:40 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Robert Hancock <robert.hancock@calian.com>,
+        Stefan Asserhall <stefan.asserhall@xilinx.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] irqchip: xilinx: Enable generic irq multi handler
+Date:   Thu,  3 Mar 2022 17:11:39 +0100
+Message-Id: <2a08d6c33e95d5da5d564ed3fbddc835983ef355.1646323896.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH 2/2] [RFC] ata: ahci: Skip debounce delay for AMD FCH SATA
- Controller
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220303100453.30018-1-pmenzel@molgen.mpg.de>
- <20220303100453.30018-2-pmenzel@molgen.mpg.de>
- <0a7c8ee9-1e09-75a4-3241-883fc8540561@opensource.wdc.com>
- <edd464f1-916e-191a-3683-45b623604e4b@amd.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <edd464f1-916e-191a-3683-45b623604e4b@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/03/03 15:19, Mario Limonciello wrote:
-> On 3/3/22 06:23, Damien Le Moal wrote:
->> On 2022/03/03 12:04, Paul Menzel wrote:
->>> AMD devices with the FCH SATA Controller 0x1022:0x7901 do not need th=
-e
->>> default debounce delay of 200 ms.
->>>
->>>      07:00.2 SATA controller [0106]: Advanced Micro Devices, Inc. [AM=
-D] FCH SATA Controller [AHCI mode] [1022:7901] (rev 51)
->>>
->>> So skip it, by mapping it to the board with no debounce delay.
->>>
->>> Tested on the MSI MS-7A37/B350M MORTAR (MS-7A37).
->>>
->>> To-do: Add test details and results.
->>
->> Please squash this patch together with patch 1. Since you are adding a=
- new board
->> entry definition, it is better to have a user for it in the same patch=
- (this
->> avoids reverts to leave unused code behind). >
->>>
->>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->>> Cc: Hans de Goede <hdegoede@redhat.com>
->>> Cc: Mario Limonciello <mario.limonciello@amd.com>
->>> ---
->>> I am travelling so could not test this exact patch just yet, but I ra=
-n
->>> something similar for several weeks already. It=E2=80=99d be great, i=
-f the
->>> desktop and AMD folks could also give this a try.
->=20
-> As we are trying to drop the low power definition for 5.18, maybe can=20
-> this wait until 5.19 so we can see if that sticks so this doesn't get=20
-> caught up in possible reverts?
+Register default arch handler via driver instead of directly pointing to
+xilinx intc controller. This patch makes architecture code more generic.
 
-The "no debounce delay" addition is a valid change regardless of the "low=
-_power
-is default" change. So I do not think this is an issue. But you will need=
- to
-rebase your patch to include this change :)
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Reviewed-by: Stefan Asserhall <stefan.asserhall@xilinx.com>
+---
 
-Going forward, I would also like to have the "no debounce delay" as the d=
-efault
-too, after the low power default change settles and hopefully sticks.
+ arch/microblaze/Kconfig           |  2 ++
+ arch/microblaze/include/asm/irq.h |  3 ---
+ arch/microblaze/kernel/irq.c      | 16 +---------------
+ drivers/irqchip/irq-xilinx-intc.c | 22 +++++++++++++++++++++-
+ 4 files changed, 24 insertions(+), 19 deletions(-)
 
->=20
->>>
->>>   drivers/ata/ahci.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
->>> index 0fc09b86a559..44b79fe43d13 100644
->>> --- a/drivers/ata/ahci.c
->>> +++ b/drivers/ata/ahci.c
->>> @@ -456,7 +456,7 @@ static const struct pci_device_id ahci_pci_tbl[] =
-=3D {
->>>   	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
->>>   	{ PCI_VDEVICE(AMD, 0x7801), board_ahci_no_debounce_delay }, /* AMD=
- Hudson-2 (AHCI mode) */
->>>   	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
->>> -	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_low_power }, /* AMD Green Sa=
-rdine */
->>> +	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_low_power_no_debounce_delay =
-}, /* AMD Green Sardine */
->>
->> Really long name, but I cannot think of anything better...
->>
->>>   	/* AMD is using RAID class only for ahci controllers */
->>>   	{ PCI_VENDOR_ID_AMD, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
->>>   	  PCI_CLASS_STORAGE_RAID << 8, 0xffffff, board_ahci },
->>
->>
->=20
+diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+index 59798e43cdb0..da568e981604 100644
+--- a/arch/microblaze/Kconfig
++++ b/arch/microblaze/Kconfig
+@@ -45,6 +45,8 @@ config MICROBLAZE
+ 	select SET_FS
+ 	select ZONE_DMA
+ 	select TRACE_IRQFLAGS_SUPPORT
++	select GENERIC_IRQ_MULTI_HANDLER
++	select HANDLE_DOMAIN_IRQ
+ 
+ # Endianness selection
+ choice
+diff --git a/arch/microblaze/include/asm/irq.h b/arch/microblaze/include/asm/irq.h
+index 0a28e80bbab0..cb6ab55d1d01 100644
+--- a/arch/microblaze/include/asm/irq.h
++++ b/arch/microblaze/include/asm/irq.h
+@@ -11,7 +11,4 @@
+ struct pt_regs;
+ extern void do_IRQ(struct pt_regs *regs);
+ 
+-/* should be defined in each interrupt controller driver */
+-extern unsigned int xintc_get_irq(void);
+-
+ #endif /* _ASM_MICROBLAZE_IRQ_H */
+diff --git a/arch/microblaze/kernel/irq.c b/arch/microblaze/kernel/irq.c
+index 903dad822fad..1f8cb4c4f74f 100644
+--- a/arch/microblaze/kernel/irq.c
++++ b/arch/microblaze/kernel/irq.c
+@@ -20,27 +20,13 @@
+ #include <linux/irqchip.h>
+ #include <linux/of_irq.h>
+ 
+-static u32 concurrent_irq;
+-
+ void __irq_entry do_IRQ(struct pt_regs *regs)
+ {
+-	unsigned int irq;
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+ 	trace_hardirqs_off();
+ 
+ 	irq_enter();
+-	irq = xintc_get_irq();
+-next_irq:
+-	BUG_ON(!irq);
+-	generic_handle_irq(irq);
+-
+-	irq = xintc_get_irq();
+-	if (irq != -1U) {
+-		pr_debug("next irq: %d\n", irq);
+-		++concurrent_irq;
+-		goto next_irq;
+-	}
+-
++	handle_arch_irq(regs);
+ 	irq_exit();
+ 	set_irq_regs(old_regs);
+ 	trace_hardirqs_on();
+diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
+index 356a59755d63..c6710190c152 100644
+--- a/drivers/irqchip/irq-xilinx-intc.c
++++ b/drivers/irqchip/irq-xilinx-intc.c
+@@ -110,7 +110,7 @@ static struct irq_chip intc_dev = {
+ 	.irq_mask_ack = intc_mask_ack,
+ };
+ 
+-unsigned int xintc_get_irq(void)
++static unsigned int xintc_get_irq(void)
+ {
+ 	unsigned int irq = -1;
+ 	u32 hwirq;
+@@ -164,6 +164,25 @@ static void xil_intc_irq_handler(struct irq_desc *desc)
+ 	chained_irq_exit(chip, desc);
+ }
+ 
++static u32 concurrent_irq;
++
++static void xil_intc_handle_irq(struct pt_regs *regs)
++{
++	unsigned int irq;
++
++	irq = xintc_get_irq();
++next_irq:
++	BUG_ON(!irq);
++	generic_handle_irq(irq);
++
++	irq = xintc_get_irq();
++	if (irq != -1U) {
++		pr_debug("next irq: %d\n", irq);
++		++concurrent_irq;
++		goto next_irq;
++	}
++}
++
+ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 					     struct device_node *parent)
+ {
+@@ -233,6 +252,7 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 	} else {
+ 		primary_intc = irqc;
+ 		irq_set_default_host(primary_intc->root_domain);
++		set_handle_irq(xil_intc_handle_irq);
+ 	}
+ 
+ 	return 0;
+-- 
+2.35.1
 
-
---=20
-Damien Le Moal
-Western Digital Research

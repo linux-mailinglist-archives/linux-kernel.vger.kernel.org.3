@@ -2,91 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEAE4CBE81
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE9F4CBE87
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiCCNGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S233524AbiCCNIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiCCNGs (ORCPT
+        with ESMTP id S231362AbiCCNIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:06:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0F651305;
-        Thu,  3 Mar 2022 05:06:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58B71B8253F;
-        Thu,  3 Mar 2022 13:06:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8CCC004E1;
-        Thu,  3 Mar 2022 13:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646312759;
-        bh=rH7GMRdryJ4vXOlSLW4fYujXOBHUP2yNPBkxdY3/pqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XKjBjXMyfVBu2K3GUcQCQc1njLV/s3+M4ZWtxKF4NAU5NxrVy9KXWuvtqBcyWdtqV
-         RezoeSmnvUU25H5afMgJ3RLNtTTER8TDPcItb9bade2MSwFELbeq4ZuW+iEsFBrFiZ
-         LrlNMt5fsW8+bsUFCaAE9Am+UU/TJn5iQDJYZ+Ok=
-Date:   Thu, 3 Mar 2022 14:05:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kbuild@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        llvm@lists.linux.dev, x86@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] UAPI: Introduce KUnit userspace compatibility
-Message-ID: <YiC9NBjFgGv5T+gF@kroah.com>
-References: <20220227184517.504931-1-keescook@chromium.org>
- <20220227184517.504931-8-keescook@chromium.org>
- <CABVgOSn6Oe8Ke=fnuVwgLh2r8HKjBW8pCe44Z35Qo1bVfz9A-A@mail.gmail.com>
+        Thu, 3 Mar 2022 08:08:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5E47186B8E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:07:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646312844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lj6VpxefHrxOOwhnhf4/p/2XcRsNuTwXL6WEnQsA11I=;
+        b=AFKMr6vLTJWojOBP40PvbVBn1m5IyHKXATf+pa5Hobu4V5OMP8sbaNFrn+rxqJIZMY15iN
+        DpEF1aJMLtM2sKgimKisKN0yB7SxGzq99mg2ISELIhDlyS9YhsahXYv2X/4KtBnimaT9GD
+        VzKKoNEgpTnrfsm+cqLLd7wlZiJ2S+w=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-oYzW5TAAPWSZWZTWOKdcgA-1; Thu, 03 Mar 2022 08:07:23 -0500
+X-MC-Unique: oYzW5TAAPWSZWZTWOKdcgA-1
+Received: by mail-wm1-f70.google.com with SMTP id l19-20020a05600c4f1300b003818783847eso1313204wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 05:07:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lj6VpxefHrxOOwhnhf4/p/2XcRsNuTwXL6WEnQsA11I=;
+        b=r69PDDubewmgTQzgdZNULLJ7V+DC4AwoMqTnk/2MC9XXFwh0P+ZPRxIs61oM0sp49w
+         nNUePKfR4EBsb9iAGvtidMFAKi1V7EWBqgukW2slTBwPGzOBuw7yu2e/B6ZfXcJhnvVJ
+         B9AZ6EQxbUdUUkwO362AvVTd2vLrkGPe1UYvRtB1yx/Q/vIK5ZULqRk1uPQIq9rdfgtl
+         Gh/wgj/hbnz3DpvHRo+TruOoz92ytRUdfNoY4dv0+9Vt4Eyy08D/iTmGYdDIJwTDOWzo
+         YO/8vl86pAZkih/Vruf+m25s7glS2cdiybvh+Ye46bcxfmk3iFnn9sWdSvvr2C6pTImB
+         wcJg==
+X-Gm-Message-State: AOAM531VFYuRuOXQtmCPNZMgCaRpc1X5e1Cj0WeGnjE2H7UGiGQFCHX9
+        9IE9M5c9NnQ8JacHPnBDEVIn03KBGF8cr+rAqnfbjAqMoxRWcmf7VA6otxIYXjbTfiysscG+Yb4
+        eZHdaJtW7igf+pf8XFE5Yc8KV
+X-Received: by 2002:a5d:5512:0:b0:1ef:5f08:29fb with SMTP id b18-20020a5d5512000000b001ef5f0829fbmr23412283wrv.653.1646312842498;
+        Thu, 03 Mar 2022 05:07:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwBprWCBbiaeng1f6eFEkBly6o9vzAc3MArh79lj54xDzLKMIA0Xs/dF3R5oQGH8dSoCNnPBA==
+X-Received: by 2002:a5d:5512:0:b0:1ef:5f08:29fb with SMTP id b18-20020a5d5512000000b001ef5f0829fbmr23412254wrv.653.1646312842242;
+        Thu, 03 Mar 2022 05:07:22 -0800 (PST)
+Received: from redhat.com ([2.55.143.133])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d4dc1000000b001eeadc98c0csm1908052wru.101.2022.03.03.05.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 05:07:20 -0800 (PST)
+Date:   Thu, 3 Mar 2022 08:07:16 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220303075426-mutt-send-email-mst@kernel.org>
+References: <20220302031738-mutt-send-email-mst@kernel.org>
+ <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+ <20220302074503-mutt-send-email-mst@kernel.org>
+ <Yh93UZMQSYCe2LQ7@zx2c4.com>
+ <20220302092149-mutt-send-email-mst@kernel.org>
+ <CAHmME9rf7hQP78kReP2diWNeX=obPem=f8R-dC7Wkpic2xmffg@mail.gmail.com>
+ <20220302101602-mutt-send-email-mst@kernel.org>
+ <Yh+PET49oHNpxn+H@zx2c4.com>
+ <20220302111737-mutt-send-email-mst@kernel.org>
+ <Yh+cB5bWarl8CFN1@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOSn6Oe8Ke=fnuVwgLh2r8HKjBW8pCe44Z35Qo1bVfz9A-A@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yh+cB5bWarl8CFN1@zx2c4.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:27:13PM +0800, David Gow wrote:
-> On Mon, Feb 28, 2022 at 2:45 AM Kees Cook <keescook@chromium.org> wrote:
-> > diff --git a/include/uapi/misc/kunit.h b/include/uapi/misc/kunit.h
-> > new file mode 100644
-> > index 000000000000..afdffda583ae
-> > --- /dev/null
-> > +++ b/include/uapi/misc/kunit.h
-> > @@ -0,0 +1,181 @@
-> > +#ifndef __UAPI_MISC_KUNIT_H__
-> > +#define __UAPI_MISC_KUNIT_H__
-> > +/*
-> > + * This is a light-weight userspace drop-in replacement for the in-kernel
+On Wed, Mar 02, 2022 at 05:32:07PM +0100, Jason A. Donenfeld wrote:
+> Hi Michael,
+> 
+> On Wed, Mar 02, 2022 at 11:22:46AM -0500, Michael S. Tsirkin wrote:
+> > > Because that 16 byte read of vmgenid is not atomic. Let's say you read
+> > > the first 8 bytes, and then the VM is forked.
+> > 
+> > But at this point when VM was forked plaintext key and nonce are all in
+> > buffer, and you previously indicated a fork at this point is harmless.
+> > You wrote "If it changes _after_ that point of check ... it doesn't
+> > matter:"
+> 
+> Ahhh, fair point. I think you're right.
+> 
+> Alright, so all we're talking about here is an ordinary 16-byte read,
+> and 16 bytes of storage per keypair, and a 16-byte comparison.
+> 
+> Still seems much worse than just having a single word...
+> 
+> Jason
 
-<snip>
+Oh I forgot about __int128.
 
-Someone forgot a SPDX license line for the new file.  Didn't checkpatch
-complain about this?  :(
 
-thanks,
 
-greg k-h
+#include <stdio.h>
+#include <assert.h>
+#include <limits.h>
+#include <string.h>
+
+struct lng {
+	__int128 l;
+};
+
+struct shrt {
+	unsigned long s;
+};
+
+
+struct lng l = { 1 };
+struct shrt s = { 3 };
+
+static void test1(volatile struct shrt *sp)
+{
+	if (sp->s != s.s) {
+		printf("short mismatch!\n");
+		s.s = sp->s;
+	}
+}
+static void test2(volatile struct lng *lp)
+{
+	if (lp->l != l.l) {
+		printf("long mismatch!\n");
+		l.l = lp->l;
+	}
+}
+
+int main(int argc, char **argv)
+{
+	volatile struct shrt sv = { 4 };
+	volatile struct lng lv = { 5 };
+
+	if (argc > 1) {
+		printf("test 1\n");
+		for (int i = 0; i < 100000000; ++i) 
+			test1(&sv);
+	} else {
+		printf("test 2\n");
+		for (int i = 0; i < 100000000; ++i)
+			test2(&lv);
+	}
+	return 0;
+}
+
+
+with that the compiler has an easier time to produce optimal
+code, so the difference is smaller.
+Note: compiled with
+gcc -O2 -mno-sse -mno-sse2 -ggdb bench3.c 
+
+since with sse there's no difference at all.
+
+
+[mst@tuck ~]$ perf stat -r 100 ./a.out 1 > /dev/null 
+
+
+ Performance counter stats for './a.out 1' (100 runs):
+
+             94.55 msec task-clock:u              #    0.996 CPUs utilized            ( +-  0.09% )
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+                52      page-faults:u             #  548.914 /sec                     ( +-  0.21% )
+       400,459,851      cycles:u                  #    4.227 GHz                      ( +-  0.03% )
+       500,147,935      instructions:u            #    1.25  insn per cycle           ( +-  0.00% )
+       200,032,462      branches:u                #    2.112 G/sec                    ( +-  0.00% )
+             1,810      branch-misses:u           #    0.00% of all branches          ( +-  0.73% )
+
+         0.0949732 +- 0.0000875 seconds time elapsed  ( +-  0.09% )
+
+[mst@tuck ~]$ 
+[mst@tuck ~]$ perf stat -r 100 ./a.out > /dev/null 
+
+ Performance counter stats for './a.out' (100 runs):
+
+            110.19 msec task-clock:u              #    1.136 CPUs utilized            ( +-  0.18% )
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+                52      page-faults:u             #  537.743 /sec                     ( +-  0.22% )
+       428,518,442      cycles:u                  #    4.431 GHz                      ( +-  0.07% )
+       900,147,986      instructions:u            #    2.24  insn per cycle           ( +-  0.00% )
+       200,032,505      branches:u                #    2.069 G/sec                    ( +-  0.00% )
+             2,139      branch-misses:u           #    0.00% of all branches          ( +-  0.77% )
+
+          0.096956 +- 0.000203 seconds time elapsed  ( +-  0.21% )
+
+-- 
+MST
+

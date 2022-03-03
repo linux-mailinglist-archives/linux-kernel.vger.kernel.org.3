@@ -2,286 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634144CC601
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D9B4CC608
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbiCCT2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
+        id S235151AbiCCTaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiCCT20 (ORCPT
+        with ESMTP id S232927AbiCCTaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:28:26 -0500
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E504AFD1D;
-        Thu,  3 Mar 2022 11:27:39 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id g1so12357027ybe.4;
-        Thu, 03 Mar 2022 11:27:39 -0800 (PST)
+        Thu, 3 Mar 2022 14:30:13 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F2918E430
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:29:27 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id c13-20020a5e8f0d000000b00644c39c4c69so4100690iok.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 11:29:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HdHDMFF2kdVDaRtLqe4g+qzFPUAjMQZJkBGYq3TkeN8=;
-        b=4iN13Vo5sWjUiWuErSTUtW/d4LA9nAbD4nrfwGmgCEO/quI7xcG9xeiN1BUoR5QhqN
-         uZir3Nyeo57zxOVC0q6DYbjOZ20U8QmksoUldmu9vUWP7nqCWA1aFQek+NKU+ubtNDa3
-         /7HLnez7qzNjBfLWaQYorBohf54ZOip5ABCHVXhEpb9xTWJ+emwFmvA9BbkmLoXUq4z6
-         R+/MBndGsDuGTNPKtq493+b9kdKlFXAtHGTWu/gDWMbW3+zUOzk+YmlS+erTXNUoPrVo
-         Ee1egQ51L94uUO95B4Zrm87j3utIH0Z1bPS9oF5TyofFWVIwADkX1pdZRUZ5MQPaDI+J
-         p2dg==
-X-Gm-Message-State: AOAM533yWEK+TZYArThCCNZWTj4Ejb1krJiz6huPTWecBXSrQEXYTN0W
-        p9wu8oHSgnHx1THPioesRQk4thD5hB5Sn1oIt5T5cHe9
-X-Google-Smtp-Source: ABdhPJyidoUIHRrRRyGejEbhZFI+Vfca8OZiMi/yIw2X1RjdEdt/4m1HGkDFofV5Asc24uuNz9cy4RSxc/Ay3S1OCh8=
-X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
- o185-20020a25d7c2000000b006289d06457bmr9396954ybg.137.1646335659111; Thu, 03
- Mar 2022 11:27:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RvfzRuIjzXeV56b1mRFLXFY+p/ycge3TMt6j8QIdRXg=;
+        b=Y/nK6I6UqSKswOtRnIQxmG3CMVNMoCbajvpHptg863vZXArpy0MH9/B9HgSxAGfn9z
+         AbqNFk/po+mWSd4WasxVlmWUYwF47u6pJsLVuMNpvod55XvTZi/S7+GkOmhvUMgEgdqC
+         9jmhGpQIYw9I8Bvi9oT+2ypq9o19A+EW3X7L4Y4lftfrSN42M6GYTG0KMb8HICtuWc4t
+         /n5p7Y1+2Uk3h1qKTKJjmPkYePyEH1AnDj4ubs7tDk3R7ps9LmDNy8i0COTPRGoeBhnJ
+         fz+lqPScFBOLOysfVZBH0+bKmoCPsZUgoCXsaJp6Kidnr9jmSqedY8vUuJno+D9gJBNY
+         PsLg==
+X-Gm-Message-State: AOAM530Hs1oTuw1P/u5574c3goumE59G0DoL/hLSc1R2kdGBcV5u9Cri
+        KEnWhSh96uljj+eH5mDPK1tiQJlNdLr1UeAqmYnl4QZVB1Ek
+X-Google-Smtp-Source: ABdhPJzUTAaA/byxOffRax7TszOB4dPGuWt1MdkQS0ngFiiHxVQpxAFrKZZu9OzlQwtoxwNuGlvNJDnknDD5HUyikzlUMeUyBzoc
 MIME-Version: 1.0
-References: <20211126070422.73234-1-xueshuai@linux.alibaba.com> <20220227122546.43307-1-xueshuai@linux.alibaba.com>
-In-Reply-To: <20220227122546.43307-1-xueshuai@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Mar 2022 20:27:28 +0100
-Message-ID: <CAJZ5v0jsPf=o9T0TpB85s0mqfB3Mr72y6BMxPf9ifvNm8XjNkA@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] ACPI: APEI: explicit init HEST and GHES in apci_init
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        luanshi <zhangliguang@linux.alibaba.com>,
-        zhuo.song@linux.alibaba.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
+X-Received: by 2002:a02:69cc:0:b0:314:3518:780b with SMTP id
+ e195-20020a0269cc000000b003143518780bmr29956636jac.133.1646335766948; Thu, 03
+ Mar 2022 11:29:26 -0800 (PST)
+Date:   Thu, 03 Mar 2022 11:29:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000091f0b805d9556a82@google.com>
+Subject: [syzbot] WARNING in usbtmc_ioctl/usb_submit_urb
+From:   syzbot <syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 1:26 PM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
->
-> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
-> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
-> the estatus memory pool. On the other hand, ghes_init() relies on
-> sdei_init() to detect the SDEI version and (un)register events. The
-> dependencies are as follows:
->
->     ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
->     ghes_init() => sdei_init()
->
-> HEST is not PCI-specific and initcall ordering is implicit and not
-> well-defined within a level.
->
-> Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
-> convert ghes_init() and sdei_init() from initcalls to explicit calls in the
-> following order:
->
->     acpi_hest_init()
->     ghes_init()
->         sdei_init()
->
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Hello,
 
-Applied as 5.18 material along with the [2/2], thanks!
+syzbot found the following issue on:
 
-> ---
->  drivers/acpi/apei/ghes.c    | 19 ++++++++-----------
->  drivers/acpi/bus.c          |  2 ++
->  drivers/acpi/pci_root.c     |  3 ---
->  drivers/firmware/Kconfig    |  1 +
->  drivers/firmware/arm_sdei.c | 13 ++-----------
->  include/acpi/apei.h         |  4 +++-
->  include/linux/arm_sdei.h    |  2 ++
->  7 files changed, 18 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254..aadc0a972f18 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -1457,33 +1457,35 @@ static struct platform_driver ghes_platform_driver = {
->         .remove         = ghes_remove,
->  };
->
-> -static int __init ghes_init(void)
-> +void __init ghes_init(void)
->  {
->         int rc;
->
-> +       sdei_init();
-> +
->         if (acpi_disabled)
-> -               return -ENODEV;
-> +               return;
->
->         switch (hest_disable) {
->         case HEST_NOT_FOUND:
-> -               return -ENODEV;
-> +               return;
->         case HEST_DISABLED:
->                 pr_info(GHES_PFX "HEST is not enabled!\n");
-> -               return -EINVAL;
-> +               return;
->         default:
->                 break;
->         }
->
->         if (ghes_disable) {
->                 pr_info(GHES_PFX "GHES is not enabled!\n");
-> -               return -EINVAL;
-> +               return;
->         }
->
->         ghes_nmi_init_cxt();
->
->         rc = platform_driver_register(&ghes_platform_driver);
->         if (rc)
-> -               goto err;
-> +               return;
->
->         rc = apei_osc_setup();
->         if (rc == 0 && osc_sb_apei_support_acked)
-> @@ -1494,9 +1496,4 @@ static int __init ghes_init(void)
->                 pr_info(GHES_PFX "APEI firmware first mode is enabled by APEI bit.\n");
->         else
->                 pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
-> -
-> -       return 0;
-> -err:
-> -       return rc;
->  }
-> -device_initcall(ghes_init);
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 07f604832fd6..3f403db20f69 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -1331,6 +1331,8 @@ static int __init acpi_init(void)
->
->         pci_mmcfg_late_init();
->         acpi_iort_init();
-> +       acpi_hest_init();
-> +       ghes_init();
->         acpi_scan_init();
->         acpi_ec_init();
->         acpi_debugfs_init();
-> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> index b76db99cced3..6f9e75d14808 100644
-> --- a/drivers/acpi/pci_root.c
-> +++ b/drivers/acpi/pci_root.c
-> @@ -22,8 +22,6 @@
->  #include <linux/slab.h>
->  #include <linux/dmi.h>
->  #include <linux/platform_data/x86/apple.h>
-> -#include <acpi/apei.h> /* for acpi_hest_init() */
-> -
->  #include "internal.h"
->
->  #define ACPI_PCI_ROOT_CLASS            "pci_bridge"
-> @@ -943,7 +941,6 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
->
->  void __init acpi_pci_root_init(void)
->  {
-> -       acpi_hest_init();
->         if (acpi_pci_disabled)
->                 return;
->
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index 75cb91055c17..e5cfb01353d8 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -40,6 +40,7 @@ config ARM_SCPI_POWER_DOMAIN
->  config ARM_SDE_INTERFACE
->         bool "ARM Software Delegated Exception Interface (SDEI)"
->         depends on ARM64
-> +       depends on ACPI_APEI_GHES
->         help
->           The Software Delegated Exception Interface (SDEI) is an ARM
->           standard for registering callbacks from the platform firmware
-> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
-> index a7e762c352f9..1e1a51510e83 100644
-> --- a/drivers/firmware/arm_sdei.c
-> +++ b/drivers/firmware/arm_sdei.c
-> @@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
->         return true;
->  }
->
-> -static int __init sdei_init(void)
-> +void __init sdei_init(void)
->  {
->         struct platform_device *pdev;
->         int ret;
->
->         ret = platform_driver_register(&sdei_driver);
->         if (ret || !sdei_present_acpi())
-> -               return ret;
-> +               return;
->
->         pdev = platform_device_register_simple(sdei_driver.driver.name,
->                                                0, NULL, 0);
-> @@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
->                 pr_info("Failed to register ACPI:SDEI platform device %d\n",
->                         ret);
->         }
-> -
-> -       return ret;
->  }
->
-> -/*
-> - * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
-> - * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
-> - * by device_initcall(). We want to be called in the middle.
-> - */
-> -subsys_initcall_sync(sdei_init);
-> -
->  int sdei_event_handler(struct pt_regs *regs,
->                        struct sdei_registered_event *arg)
->  {
-> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-> index ece0a8af2bae..4e60dd73c3bb 100644
-> --- a/include/acpi/apei.h
-> +++ b/include/acpi/apei.h
-> @@ -27,14 +27,16 @@ extern int hest_disable;
->  extern int erst_disable;
->  #ifdef CONFIG_ACPI_APEI_GHES
->  extern bool ghes_disable;
-> +void __init ghes_init(void);
->  #else
->  #define ghes_disable 1
-> +static inline void ghes_init(void) { }
->  #endif
->
->  #ifdef CONFIG_ACPI_APEI
->  void __init acpi_hest_init(void);
->  #else
-> -static inline void acpi_hest_init(void) { return; }
-> +static inline void acpi_hest_init(void) { }
->  #endif
->
->  int erst_write(const struct cper_record_header *record);
-> diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
-> index 0a241c5c911d..14dc461b0e82 100644
-> --- a/include/linux/arm_sdei.h
-> +++ b/include/linux/arm_sdei.h
-> @@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
->  /* For use by arch code when CPU hotplug notifiers are not appropriate. */
->  int sdei_mask_local_cpu(void);
->  int sdei_unmask_local_cpu(void);
-> +void __init sdei_init(void);
->  #else
->  static inline int sdei_mask_local_cpu(void) { return 0; }
->  static inline int sdei_unmask_local_cpu(void) { return 0; }
-> +static inline void sdei_init(void) { }
->  #endif /* CONFIG_ARM_SDE_INTERFACE */
->
->
-> --
-> 2.20.1.12.g72788fdb
->
+HEAD commit:    2293be58d6a1 Merge tag 'trace-v5.17-rc4' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=166215b6700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4b9a7fa580ff2b33
+dashboard link: https://syzkaller.appspot.com/bug?extid=a48e3d1a875240cab5de
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172cdd12700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170790e6700000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15f51482700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17f51482700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f51482700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+
+usb 5-1: BOGUS control dir, pipe 80001e80 doesn't match bRequestType 0
+WARNING: CPU: 0 PID: 3813 at drivers/usb/core/urb.c:412 usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 0 PID: 3813 Comm: syz-executor122 Not tainted 5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Code: 4c 24 38 8a 04 01 84 c0 0f 85 ad 05 00 00 45 0f b6 06 48 c7 c7 c0 f0 26 8b 48 8b 74 24 20 4c 89 e2 89 d9 31 c0 e8 3b 4b 58 fb <0f> 0b e9 0b f0 ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c a8 ed ff
+RSP: 0018:ffffc90002c3fa40 EFLAGS: 00010246
+RAX: 1323d10499d7ec00 RBX: 0000000080001e80 RCX: ffff88801c2c5700
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816aea02 R09: fffffbfff1ffbbde
+R10: fffffbfff1ffbbde R11: 0000000000000000 R12: ffff88801d757618
+R13: ffff88801d79d000 R14: ffff88801da98b18 R15: ffff88807a91f0a8
+FS:  00005555574a2300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa78ffa04d0 CR3: 00000000195f0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x113/0x530 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x2a5/0x4b0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1947 [inline]
+ usbtmc_ioctl+0x164e/0x20e0 drivers/usb/class/usbtmc.c:2090
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe3805832a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffec2198ee8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007fe3805832a9
+RDX: 0000000020000140 RSI: 00000000c0105b08 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 000000000000000f R11: 0000000000000246 R12: 00000000000530bd
+R13: 00007ffec2198efc R14: 00007ffec2198f10 R15: 00007ffec2198f00
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,191 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEE44CB80A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D1D4CB80D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiCCHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S230323AbiCCHqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHoh (ORCPT
+        with ESMTP id S229588AbiCCHqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:44:37 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A6F1637FF;
-        Wed,  2 Mar 2022 23:43:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0V66qjBS_1646293420;
-Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V66qjBS_1646293420)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 03 Mar 2022 15:43:46 +0800
-From:   Dan Li <ashimida@linux.alibaba.com>
-To:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        ashimida@linux.alibaba.com, gregkh@linuxfoundation.org,
-        linux@roeck-us.net, keescook@chromium.org,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Date:   Wed,  2 Mar 2022 23:43:39 -0800
-Message-Id: <20220303074339.86337-1-ashimida@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220303073340.86008-1-ashimida@linux.alibaba.com>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 3 Mar 2022 02:46:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33A515D3AD;
+        Wed,  2 Mar 2022 23:45:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87F94B81FEA;
+        Thu,  3 Mar 2022 07:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E574C004E1;
+        Thu,  3 Mar 2022 07:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646293522;
+        bh=M05nIcnpUn4WzPPLRyplVvMJBTOh9YoN2+KnItwoIfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zkwMolgG3+0fqKz+ZDMIOvb0TyBNK1wsJWJT/qrCP5PhefcN/zNiZHEqxKis5G1K5
+         VGQ77zV4WCONgV3h4JRtLxuu1X13vtDg5lCQjMr7w0XrMFwk+JhYm0VzGkCJDvjn6T
+         hJ8H7qorBPup/D8Os51jNWDfnd1wozqWZfUKPE/E=
+Date:   Thu, 3 Mar 2022 08:45:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH v3] serial: make uart_console_write->putchar()'s
+ character an unsigned char
+Message-ID: <YiByDgvP3epfDfhX@kroah.com>
+References: <20220302072732.1916-1-jslaby@suse.cz>
+ <1be133eb-bfe8-b644-6aad-00a0a606aa05@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1be133eb-bfe8-b644-6aad-00a0a606aa05@suse.cz>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for SCS (Shadow Call Stack) based
-backward CFI (as implemented by Clang and GCC).
+On Thu, Mar 03, 2022 at 07:32:59AM +0100, Jiri Slaby wrote:
+> On 02. 03. 22, 8:27, Jiri Slaby wrote:
+> > Currently, uart_console_write->putchar's second parameter (the
+> > character) is of type int. It makes little sense, provided uart_console_write()
+> > accepts the input string as "const char *s" and passes its content -- the
+> > characters -- to putchar(). So switch the character's type to unsigned
+> > char.
+> > 
+> > We don't use char as that is signed on some platforms. That would cause
+> > troubles for drivers which (implicitly) cast the char to u16 when
+> > writing to the device. Sign extension would happen in that case and the
+> > value written would be completely different to the provided char. DZ is
+> > an example of such a driver -- on MIPS, it uses u16 for dz_out in
+> > dz_console_putchar().
+> > 
+> > Note we do the char -> uchar conversion implicitly in
+> > uart_console_write(). Provided we do not change size of the data type,
+> > sign extension does not happen there, so the problem is void.
+> > 
+> > This makes the types consistent and unified with the rest of the uart
+> > layer, which uses unsigned char in most places already. One exception is
+> > xmit_buf, but that is going to be converted later.
+> 
+> Kbuild seems to serve me this one by one. So this patch is still incomplete:
+> > drivers/tty/serial/sunplus-uart.c:526:7: error: incompatible function
+> pointer types passing 'void (struct uart_port *, int)' to parameter of type
+> 'void (*)(struct uart_port *, unsigned char)'
 
-Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
----
- drivers/misc/lkdtm/Makefile             |  1 +
- drivers/misc/lkdtm/core.c               |  2 +
- drivers/misc/lkdtm/lkdtm.h              |  4 ++
- drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt |  2 +
- 5 files changed, 76 insertions(+)
- create mode 100644 drivers/misc/lkdtm/scs.c
+Let me just add this to my -testing branch, that will give us much
+quicker kbuild responses and handle stuff like this easier and I can fix
+the errors up when they are reported.
 
-diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-index 2e0aa74ac185..e2fb17868af2 100644
---- a/drivers/misc/lkdtm/Makefile
-+++ b/drivers/misc/lkdtm/Makefile
-@@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
- lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
- lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
- lkdtm-$(CONFIG_LKDTM)		+= cfi.o
-+lkdtm-$(CONFIG_LKDTM)		+= scs.o
- lkdtm-$(CONFIG_LKDTM)		+= fortify.o
- lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
- 
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index f69b964b9952..d0ce0bec117c 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
- 	CRASHTYPE(USERCOPY_KERNEL),
- 	CRASHTYPE(STACKLEAK_ERASING),
- 	CRASHTYPE(CFI_FORWARD_PROTO),
-+	CRASHTYPE(CFI_BACKWARD_SHADOW),
-+	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
- 	CRASHTYPE(FORTIFIED_OBJECT),
- 	CRASHTYPE(FORTIFIED_SUBOBJECT),
- 	CRASHTYPE(FORTIFIED_STRSCPY),
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index d6137c70ebbe..a23d32dfc10b 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
- /* cfi.c */
- void lkdtm_CFI_FORWARD_PROTO(void);
- 
-+/* scs.c */
-+void lkdtm_CFI_BACKWARD_SHADOW(void);
-+void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
-+
- /* fortify.c */
- void lkdtm_FORTIFIED_OBJECT(void);
- void lkdtm_FORTIFIED_SUBOBJECT(void);
-diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
-new file mode 100644
-index 000000000000..5922a55a8844
---- /dev/null
-+++ b/drivers/misc/lkdtm/scs.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This is for all the tests relating directly to Shadow Call Stack.
-+ */
-+#include "lkdtm.h"
-+
-+#ifdef CONFIG_ARM64
-+/* Function clears its return address. */
-+static noinline void lkdtm_scs_clear_lr(void)
-+{
-+	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-+
-+	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-+}
-+
-+/* Function with __noscs attribute clears its return address. */
-+static noinline void __noscs lkdtm_noscs_clear_lr(void)
-+{
-+	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-+
-+	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-+}
-+#endif
-+
-+/*
-+ * This tries to call a function protected by Shadow Call Stack,
-+ * which corrupts its own return address during execution.
-+ * Due to the protection, the corruption will not take effect
-+ * when the function returns.
-+ */
-+void lkdtm_CFI_BACKWARD_SHADOW(void)
-+{
-+#ifdef CONFIG_ARM64
-+	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-+		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-+		return;
-+	}
-+
-+	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-+	lkdtm_scs_clear_lr();
-+
-+	pr_err("ok: scs takes effect.\n");
-+#else
-+	pr_err("XFAIL: this test is arm64-only\n");
-+#endif
-+}
-+
-+/*
-+ * This tries to call a function not protected by Shadow Call Stack,
-+ * which corrupts its own return address during execution.
-+ */
-+void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
-+{
-+#ifdef CONFIG_ARM64
-+	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-+		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-+		return;
-+	}
-+
-+	pr_info("Trying to corrupt lr in a function with attribute __noscs ...\n");
-+	lkdtm_noscs_clear_lr();
-+
-+	pr_err("FAIL: __noscs attribute does not take effect!\n");
-+#else
-+	pr_err("XFAIL: this test is arm64-only\n");
-+#endif
-+}
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 6b36b7f5dcf9..c849765c8dcc 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -73,6 +73,8 @@ USERCOPY_STACK_BEYOND
- USERCOPY_KERNEL
- STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
- CFI_FORWARD_PROTO
-+CFI_BACKWARD_SHADOW ok: scs takes effect
-+CFI_BACKWARD_SHADOW_WITH_NOSCS
- FORTIFIED_STRSCPY
- FORTIFIED_OBJECT
- FORTIFIED_SUBOBJECT
--- 
-2.17.1
+thanks,
 
+greg k-h

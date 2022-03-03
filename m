@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3111A4CB74E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419554CB750
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiCCG6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S230078AbiCCG6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiCCG6Y (ORCPT
+        with ESMTP id S230035AbiCCG6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:58:24 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0563C2DE1;
-        Wed,  2 Mar 2022 22:57:32 -0800 (PST)
-X-UUID: f7c5010126da4c10ab3eecdea34ca2d6-20220303
-X-UUID: f7c5010126da4c10ab3eecdea34ca2d6-20220303
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 817523092; Thu, 03 Mar 2022 14:57:28 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Mar 2022 14:57:27 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Mar 2022 14:57:27 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <robh+dt@kernel.org>
-CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
-        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [RESEND V6 5/5] drm/mediatek: add display support for MT8186
-Date:   Thu, 3 Mar 2022 14:57:25 +0800
-Message-ID: <20220303065725.23384-6-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220303065725.23384-1-rex-bc.chen@mediatek.com>
-References: <20220303065725.23384-1-rex-bc.chen@mediatek.com>
+        Thu, 3 Mar 2022 01:58:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D8D013F7C;
+        Wed,  2 Mar 2022 22:57:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 671ED1424;
+        Wed,  2 Mar 2022 22:57:53 -0800 (PST)
+Received: from [10.57.21.106] (unknown [10.57.21.106])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68FBB3F66F;
+        Wed,  2 Mar 2022 22:57:51 -0800 (PST)
+Message-ID: <c2dabec3-ffdb-909a-a8dd-f8e77a8108ed@arm.com>
+Date:   Thu, 3 Mar 2022 06:57:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 0/5] Introduce "opp-microwatt" and Energy Model from DT
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220302112917.27270-1-lukasz.luba@arm.com>
+ <20220303040539.ocnslxyswnvua3o7@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220303040539.ocnslxyswnvua3o7@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.com>
 
-Add mmsys driver data and compatible for MT8186 in mtk_drm_drv.c.
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+On 3/3/22 04:05, Viresh Kumar wrote:
+> On 02-03-22, 11:29, Lukasz Luba wrote:
+>> Hi all,
+>>
+>> This patch set solves a few issues:
+>> 1. It allows to register EM from DT, when the voltage information is not
+>>     available. (Some background of the issues present on Chromebook devices
+>>     can be checked at [1].)
+>> 2. It allows to register 'advanced' EM from the DT, which is more accurate
+>>     and reflects total power (dynamic + static).
+>>
+>> Implementation details:
+>> Existing machinery in the OPP framework now handles "opp-microwatt", similarly
+>> to "opp-microamp". It also has helper exported function to get power from OPP.
+>> For the EM, it adds a new callback in OPP framework to use this new API and
+>> read power while having an opp pointer. It's agreed to work with OPP-v2.
+>>
+>> Comments, suggestions are very welcome.
+>>
+>> changelog:
+>> v5:
+>> - added dual-macro to conditionally setup needed callback and compile
+>>    on !EM kernel gently
+>> - removed 'advanced' word from OPP patch header description
+>> v4 [2]
+> 
+> Applied. Thanks.
+> 
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 56ff8c57ef8f..be582e64d067 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id mt8183_mtk_ddp_ext[] = {
- 	DDP_COMPONENT_DPI0,
- };
- 
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
-+	DDP_COMPONENT_OVL0,
-+	DDP_COMPONENT_RDMA0,
-+	DDP_COMPONENT_COLOR0,
-+	DDP_COMPONENT_CCORR,
-+	DDP_COMPONENT_AAL0,
-+	DDP_COMPONENT_GAMMA,
-+	DDP_COMPONENT_POSTMASK0,
-+	DDP_COMPONENT_DITHER,
-+	DDP_COMPONENT_DSI0,
-+};
-+
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
-+	DDP_COMPONENT_OVL_2L0,
-+	DDP_COMPONENT_RDMA1,
-+	DDP_COMPONENT_DPI0,
-+};
-+
- static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
- 	DDP_COMPONENT_OVL0,
- 	DDP_COMPONENT_OVL_2L0,
-@@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
- 	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
- };
- 
-+static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-+	.main_path = mt8186_mtk_ddp_main,
-+	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
-+	.ext_path = mt8186_mtk_ddp_ext,
-+	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
-+};
-+
- static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
- 	.main_path = mt8192_mtk_ddp_main,
- 	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
-@@ -463,6 +488,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8183-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
-+	{ .compatible = "mediatek,mt8186-disp-mutex",
-+	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8192-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8173-disp-od",
-@@ -511,12 +538,16 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8186-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8173-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8183-dsi",
- 	  .data = (void *)MTK_DSI },
-+	{ .compatible = "mediatek,mt8186-dsi",
-+	  .data = (void *)MTK_DSI },
- 	{ }
- };
- 
-@@ -533,6 +564,8 @@ static const struct of_device_id mtk_drm_of_ids[] = {
- 	  .data = &mt8173_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8183-mmsys",
- 	  .data = &mt8183_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt8186-mmsys",
-+	  .data = &mt8186_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8192-mmsys",
- 	  .data = &mt8192_mmsys_driver_data},
- 	{ }
--- 
-2.18.0
+Thank you Viresh for your reviews.
 
+Regards,
+Lukasz

@@ -2,221 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E38D4CC46D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB514CC46B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 18:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235506AbiCCRz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 12:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiCCRzY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233133AbiCCRzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 3 Mar 2022 12:55:24 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E9515470D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 09:54:36 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id i11so7604706eda.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 09:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
-        b=Cwet6+xm3v/FuUk7aMMFOzwkCxFlqIg+IXN/Es6pmj/8bjEUctLSG6QX85Nk7SNSHX
-         OAjh3lSun2PuLc+dQhVoaTX5dtgrMAbxuXJPHvIgU1PjmKeRdu8CsDIaOwECO63sf4v4
-         wN30/iPlbXr7RcfAtg8Igk2qVW4s+WQRc+/fgRBitdCmR1XGg1KxrH6USS1O0cc/Qmp6
-         4P3g0jz2aODU6+sgof2+vtDbZyXdVFEQQH6nj0Z3NlS68QKcLE0ukAgOr4Is3Xj1JYCR
-         lXJ113FpUGjltfa31Q1FKRIory/1DMJA0bcKB6+hOSGLZX7/IVs+cp9A7I75EF7tfH1s
-         icGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
-        b=FFj8KFmIz0qnG4gdfz1dqTBw6g/aiCV7zy4Gkwj4q/bo+KUYdBh7P91Iau/xzm5Rvr
-         gstepfAjjvo89Lz0s79ybA6OPLzw00wTBCcLC7V2DsnymXBySuJdoK33QYxaD2jKOhEj
-         P6IznMFJqf3hNPMhq+L+NH9VDvp9w4WR9l1t0cHhqVoQU/m4I8tTyMJeLnsPVwi+FXre
-         3I0gGDFRYNUq45krQEpCeDatEiyl/VKfut131e8vk74Ic3iIGo9s3W9V5B9ju8VQ4SrK
-         LjI2QgqIGKaZsS2n1SKGqr6rDNUDuic/ItJdpnYKu4p0ee7apUHlN7/mobPNjBQr8KTv
-         QZNg==
-X-Gm-Message-State: AOAM53397aH1mRcSMIp/k23wXFv49kLPtrPjlfMCFUp5Bhf4M2iQRgCU
-        ZYVM4FdsJfNrtvWhqxA5C9VHu6Sw7mejg25QA0FPkA==
-X-Google-Smtp-Source: ABdhPJx96NoKM7kiOq+mdIK5kt8YNcj4xxoTnWjFMDM//0/0jJNiszMwTp5lpcPnEmv1NbCtRQQwsQB91On+I/Qv5qY=
-X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id
- n7-20020aa7c687000000b00415eb438ff5mr2509400edq.74.1646330074426; Thu, 03 Mar
- 2022 09:54:34 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234039AbiCCRzM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Mar 2022 12:55:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E36D151D21;
+        Thu,  3 Mar 2022 09:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UV2hB1zkm4w2N/cVmxd2f8qUZG8NhtBV7uEZ+ZDD/j8=; b=5G9BjEnyNDNGU8wiwVpz6l9+v1
+        PUAzOVWDaQPbz5e1ScvAS27cYYNwAImal4U3tQy8gb4YlerafX+sFB4q+TzEgKWXjALQXItdxp65O
+        qgz3wYslIHyOYkkaEO81CJWDSqUcHfvaxsA1qoAyknGw/5r/E3g+oW1SRSXN/QUIOQEwTvJKm9Kem
+        8vpBRWyOWQmTEXjEImbVk/UaTXVBXTjbTHEdWMyasL2uxRROZwaI/b76goKiphRG3U13RkIq6B+Kf
+        bd6a8sItPaiPgMOo+oNYNrmjI8Dho5sHbQtX/Pv/dzX21HuI2U+NU/tQdjI7YKnqlVtlb+J05OMS/
+        vMCb0cJg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPpeY-007P9M-BJ; Thu, 03 Mar 2022 17:54:14 +0000
+Date:   Thu, 3 Mar 2022 09:54:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
+Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
+Message-ID: <YiEAxgVYx552UQFS@infradead.org>
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <20220228234322.2073104-14-atomlin@redhat.com>
+ <20220302161917.gx5icfszakoye4uh@maple.lan>
+ <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
+ <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+ <YiDEmRf3X0fxSayK@infradead.org>
+ <20220303145949.inaz2tecmfuek2hf@maple.lan>
 MIME-Version: 1.0
-References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
- <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
- <CAJZ5v0ipcdUqTEFn075NeioyHRDKy2j_pYZOBKgqnx_c1=q5Pw@mail.gmail.com> <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
-In-Reply-To: <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Thu, 3 Mar 2022 09:54:11 -0800
-Message-ID: <CAOvb9yhaV2Kx5R+BR9M_rcqw5XOo7AiLmNP1r7XX_qf5xOBCfQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303145949.inaz2tecmfuek2hf@maple.lan>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 3:21 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Tue, Mar 01, 2022 at 08:11:06PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Mar 1, 2022 at 7:57 PM Won Chung <wonchung@google.com> wrote:
-> > >
-> > > On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > Hi Won,
-> > > >
-> > > > On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> > > > > When ACPI table includes _PLD field for a Type C connector, share=
- _PLD
-> > > > > values in its sysfs. _PLD stands for physical location of device.
-> > > > >
-> > > > > Currently without connector's location information, when there ar=
-e
-> > > > > multiple Type C ports, it is hard to distinguish which connector
-> > > > > corresponds to which physical port at which location. For example=
-, when
-> > > > > there are two Type C connectors, it is hard to find out which con=
-nector
-> > > > > corresponds to the Type C port on the left panel versus the Type =
-C port
-> > > > > on the right panel. With location information provided, we can de=
-termine
-> > > > > which specific device at which location is doing what.
-> > > > >
-> > > > > _PLD output includes much more fields, but only generic fields ar=
-e added
-> > > > > and exposed to sysfs, so that non-ACPI devices can also support i=
-t in
-> > > > > the future. The minimal generic fields needed for locating a port=
- are
-> > > > > the following.
-> > > > > - panel
-> > > > > - vertical_position
-> > > > > - horizontal_position
-> > > > > - dock
-> > > > > - lid
-> > > > >
-> > > > > Signed-off-by: Won Chung <wonchung@google.com>
-> > > > > ---
-> > > > >
-> > > > > Changes in v2:
-> > > > > - Use string for location.
-> > > > > - Clarify get_pld() with naming and return type.
-> > > > >
-> > > > >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
-> > > > >  drivers/usb/typec/class.c                   | 113 ++++++++++++++=
-++++++
-> > > > >  drivers/usb/typec/class.h                   |   3 +
-> > > > >  3 files changed, 151 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Docume=
-ntation/ABI/testing/sysfs-class-typec
-> > > > > index 75088ecad202..4497a5aeb063 100644
-> > > > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > > > @@ -141,6 +141,41 @@ Description:
-> > > > >               - "reverse": CC2 orientation
-> > > > >               - "unknown": Orientation cannot be determined.
-> > > > >
-> > > > > +What:                /sys/class/typec/<port>/location/panel
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes which panel surface of the system=E2=80=
-=99s housing the
-> > > > > +             port resides on.
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/vertical_p=
-osition
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes vertical position of the port on the pane=
-l surface.
-> > > > > +             Valid values: upper, center, lower
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/horizontal=
-_position
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes horizontal position of the port on the pa=
-nel surface.
-> > > > > +             Valid values: left, center, right
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/dock
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Set as "yes" if the port resides in a docking stati=
-on or a port
-> > > > > +             replicator, otherwise set as "no".
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/lid
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Set as "yes" if the port resides on the lid of lapt=
-op system,
-> > > > > +             otherwise set as "no".
-> > > > > +
-> > > >
-> > > > I've probable lost track of the topic during my winter break, I'm
-> > > > sorry about that, but why are you proposing now that this should be
-> > > > made Type-C specific?
-> > > > This information is not Type-C specific, so it definitely does not
-> > > > belong here.
-> > > >
-> > > > Br,
-> > > >
-> > > > --
-> > > > heikki
-> > >
-> > > Hi Heikki,
-> > >
-> > > Thank you for the comment. Sorry that my description was not clear.
-> > > This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
-> > > support for _PLD" in which Rafael suggested to have generic location
-> > > in Type C connector than adding PLD specifically to ACPI device.
-> >
-> > Well, this doesn't have to be /sys/class/typec/<port>/location/ though.
-> >
-> > For example, the device location information can be exposed in a more
-> > generic way is /sys/devices/.../location/ for all devices for which it
-> > is available, somewhat in analogy to /sys/devices/.../power/.
->
-> Right, that's what I meant. These can be made generic.
+On Thu, Mar 03, 2022 at 02:59:49PM +0000, Daniel Thompson wrote:
+> 
+> One of the best ways that we can common up code might be to dust
+> off some code I wrote a while back to display seq_files from
+> kdb.
+> 
+> The basic idea worked well enough but it often needs special
+> start/stop operatings to ensure the start meeds kdb's rather
+> odd locking restrictions. If there is a willingness for
+> something like the below to be included in the module code then we
+> could replace kdb_lsmod() with something that reused the code to
+>  format /proc/modules.
 
-> thanks,
->
-> --
-> heikki
+Displaying seq_files sounds nice to have, but in the short term I'm
+just thinking of something like this:
 
-Hi Heikki and Rafael,
-
-Thank you for clarification and guidance. I created and sent a new
-patch on driver core for /sys/devices/.../location/.
-
-Won
+diff --git a/include/linux/kdb.h b/include/linux/kdb.h
+index ea0f5e580fac2..07dfb6a20a1c4 100644
+--- a/include/linux/kdb.h
++++ b/include/linux/kdb.h
+@@ -222,5 +222,6 @@ enum {
+ 
+ extern int kdbgetintenv(const char *, int *);
+ extern int kdb_set(int, const char **);
++int kdb_lsmod(int argc, const char **argv);
+ 
+ #endif	/* !_KDB_H */
+diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+index 0852a537dad4c..292a407118a4f 100644
+--- a/kernel/debug/kdb/kdb_main.c
++++ b/kernel/debug/kdb/kdb_main.c
+@@ -2004,54 +2004,6 @@ static int kdb_ef(int argc, const char **argv)
+ 	return 0;
+ }
+ 
+-#if defined(CONFIG_MODULES)
+-/*
+- * kdb_lsmod - This function implements the 'lsmod' command.  Lists
+- *	currently loaded kernel modules.
+- *	Mostly taken from userland lsmod.
+- */
+-static int kdb_lsmod(int argc, const char **argv)
+-{
+-	struct module *mod;
+-
+-	if (argc != 0)
+-		return KDB_ARGCOUNT;
+-
+-	kdb_printf("Module                  Size  modstruct     Used by\n");
+-	list_for_each_entry(mod, kdb_modules, list) {
+-		if (mod->state == MODULE_STATE_UNFORMED)
+-			continue;
+-
+-		kdb_printf("%-20s%8u  0x%px ", mod->name,
+-			   mod->core_layout.size, (void *)mod);
+-#ifdef CONFIG_MODULE_UNLOAD
+-		kdb_printf("%4d ", module_refcount(mod));
+-#endif
+-		if (mod->state == MODULE_STATE_GOING)
+-			kdb_printf(" (Unloading)");
+-		else if (mod->state == MODULE_STATE_COMING)
+-			kdb_printf(" (Loading)");
+-		else
+-			kdb_printf(" (Live)");
+-		kdb_printf(" 0x%px", mod->core_layout.base);
+-
+-#ifdef CONFIG_MODULE_UNLOAD
+-		{
+-			struct module_use *use;
+-			kdb_printf(" [ ");
+-			list_for_each_entry(use, &mod->source_list,
+-					    source_list)
+-				kdb_printf("%s ", use->target->name);
+-			kdb_printf("]\n");
+-		}
+-#endif
+-	}
+-
+-	return 0;
+-}
+-
+-#endif	/* CONFIG_MODULES */
+-
+ /*
+  * kdb_env - This function implements the 'env' command.  Display the
+  *	current environment variables.
+diff --git a/kernel/debug/kdb/kdb_private.h b/kernel/debug/kdb/kdb_private.h
+index 0d2f9feea0a46..1f8c519a5f81c 100644
+--- a/kernel/debug/kdb/kdb_private.h
++++ b/kernel/debug/kdb/kdb_private.h
+@@ -226,10 +226,6 @@ extern void kdb_kbd_cleanup_state(void);
+ #define kdb_kbd_cleanup_state()
+ #endif /* ! CONFIG_KDB_KEYBOARD */
+ 
+-#ifdef CONFIG_MODULES
+-extern struct list_head *kdb_modules;
+-#endif /* CONFIG_MODULES */
+-
+ extern char kdb_prompt_str[];
+ 
+ #define	KDB_WORD_SIZE	((int)sizeof(unsigned long))
+diff --git a/kernel/module.c b/kernel/module.c
+index 6cea788fd965c..754ec20aab4f1 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -57,6 +57,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
++#include <linux/kdb.h>
+ #include <uapi/linux/module.h>
+ #include "module-internal.h"
+ 
+@@ -252,10 +253,6 @@ static void mod_update_bounds(struct module *mod)
+ 		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
+ }
+ 
+-#ifdef CONFIG_KGDB_KDB
+-struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+-#endif /* CONFIG_KGDB_KDB */
+-
+ static void module_assert_mutex_or_preempt(void)
+ {
+ #ifdef CONFIG_LOCKDEP
+@@ -4808,3 +4805,45 @@ void module_layout(struct module *mod,
+ }
+ EXPORT_SYMBOL(module_layout);
+ #endif
++
++#ifdef CONFIG_KGDB_KDB
++int kdb_lsmod(int argc, const char **argv)
++{
++	struct module *mod;
++
++	if (argc != 0)
++		return KDB_ARGCOUNT;
++
++	kdb_printf("Module                  Size  modstruct     Used by\n");
++	list_for_each_entry(mod, &modules, list) {
++		if (mod->state == MODULE_STATE_UNFORMED)
++			continue;
++
++		kdb_printf("%-20s%8u  0x%px ", mod->name,
++			   mod->core_layout.size, (void *)mod);
++#ifdef CONFIG_MODULE_UNLOAD
++		kdb_printf("%4d ", module_refcount(mod));
++#endif
++		if (mod->state == MODULE_STATE_GOING)
++			kdb_printf(" (Unloading)");
++		else if (mod->state == MODULE_STATE_COMING)
++			kdb_printf(" (Loading)");
++		else
++			kdb_printf(" (Live)");
++		kdb_printf(" 0x%px", mod->core_layout.base);
++
++#ifdef CONFIG_MODULE_UNLOAD
++		{
++			struct module_use *use;
++			kdb_printf(" [ ");
++			list_for_each_entry(use, &mod->source_list,
++					    source_list)
++				kdb_printf("%s ", use->target->name);
++			kdb_printf("]\n");
++		}
++#endif
++	}
++
++	return 0;
++}
++#endif	/* CONFIG_KGDB_KDB */

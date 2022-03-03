@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B704CBA7C
+	by mail.lfdr.de (Postfix) with ESMTP id BD9C44CBA7D
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 10:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiCCJlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 04:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S232071AbiCCJlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 04:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiCCJlF (ORCPT
+        with ESMTP id S232022AbiCCJlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 04:41:05 -0500
+        Thu, 3 Mar 2022 04:41:07 -0500
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BC2177774;
-        Thu,  3 Mar 2022 01:40:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7811712BD;
+        Thu,  3 Mar 2022 01:40:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646300420; x=1677836420;
+  t=1646300423; x=1677836423;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=k18H4jQjqdXwe83FlKD0McInh52fikWbkf9CksAysLs=;
-  b=uQifG5gdB3Ww6ykw6uGQAD6NXiUHI8z4tw/zj0SSAhAKLqXBUGVeQWl6
-   Vk1G6NHzUMTTv2b/F4oInKF16NUGTsmB1vyrJ+TVLIn5o2/h9lT3X8Ory
-   k8ZH+GkfUMEDaOmT4vFSctiULUJrl9vg4Lj0ywJoOt10ZwRRZ27XGJQCU
-   g=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Mar 2022 01:40:20 -0800
+  bh=knGo+0I6kiExJnkYlOIMEDQ7SnglzfM6cRK2vpYjK+4=;
+  b=P3qy+8hU/FMWlGitcVy6Tr1ZwblsRQLkLqzxQbuAcz1lPddAkLM2OvFy
+   /6hP0/KmTWJNALEeJ5UsmGsulpm06RFqOhKIQYdwep8QizHojPHJqdmyl
+   U14OH7SsU39hyg1eibyBubz9AMvulIHnjnhiKbQcoUg7QW9iEyLbwLWvg
+   Q=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 03 Mar 2022 01:40:23 -0800
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Mar 2022 01:40:18 -0800
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Mar 2022 01:40:22 -0800
 X-QCInternal: smtphost
 Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Mar 2022 15:10:07 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Mar 2022 15:10:08 +0530
 Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id 732153565; Thu,  3 Mar 2022 15:10:06 +0530 (IST)
+        id C4B943565; Thu,  3 Mar 2022 15:10:07 +0530 (IST)
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         linux-kernel@vger.kernel.org, robdclark@gmail.com,
         dianders@chromium.org, swboyd@chromium.org,
         quic_kalyant@quicinc.com
-Subject: [PATCH v4 2/4] arm64/dts/qcom/sc7180: remove assigned-clock-rate property for mdp clk
-Date:   Thu,  3 Mar 2022 15:09:59 +0530
-Message-Id: <1646300401-9063-3-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v4 3/4] arm64/dts/qcom/sdm845: remove assigned-clock-rate property for mdp clk
+Date:   Thu,  3 Mar 2022 15:10:00 +0530
+Message-Id: <1646300401-9063-4-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646300401-9063-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1646300401-9063-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -65,19 +65,19 @@ beyond the assigned clock value.
 Drop the assigned clock rate property and vote on the mdp clock as per
 calculated value during the usecase.
 
-Fixes: a3db7ad1af("arm64: dts: qcom: sc7180: add display dt nodes")
+Fixes: 08c2a076d1("arm64: dts: qcom: sdm845: Add dpu to sdm845 dts file")
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 9 ++-------
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 9 ++-------
  1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index e1c46b8..eaab746 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2900,9 +2900,6 @@
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 0d6286d..80dc486 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -4181,9 +4181,6 @@
  				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
- 			clock-names = "iface", "ahb", "core";
+ 			clock-names = "iface", "core";
  
 -			assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
 -			assigned-clock-rates = <300000000>;
@@ -85,21 +85,19 @@ index e1c46b8..eaab746 100644
  			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
  			interrupt-controller;
  			#interrupt-cells = <1>;
-@@ -2932,12 +2929,10 @@
+@@ -4214,10 +4211,8 @@
  					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
- 				clock-names = "bus", "iface", "rot", "lut", "core",
- 					      "vsync";
+ 				clock-names = "gcc-bus", "iface", "bus", "core", "vsync";
+ 
 -				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
--						  <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
- 						  <&dispcc DISP_CC_MDSS_ROT_CLK>,
- 						  <&dispcc DISP_CC_MDSS_AHB_CLK>;
+-						  <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
 -				assigned-clock-rates = <300000000>,
--						       <19200000>,
-+				assigned-clock-rates = <19200000>,
- 						       <19200000>,
- 						       <19200000>;
+-						       <19200000>;
++				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				assigned-clock-rates = <19200000>;
  				operating-points-v2 = <&mdp_opp_table>;
+ 				power-domains = <&rpmhpd SDM845_CX>;
+ 
 -- 
 2.7.4
 

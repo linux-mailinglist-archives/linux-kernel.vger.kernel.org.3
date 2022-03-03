@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321C54CB437
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7414CB435
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 02:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiCCBTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 20:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S231297AbiCCBUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 20:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiCCBTl (ORCPT
+        with ESMTP id S231169AbiCCBUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 20:19:41 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3377A292
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:18:57 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id y5so2821311ill.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:18:57 -0800 (PST)
+        Wed, 2 Mar 2022 20:20:19 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15515D04B2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 17:19:36 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id c23so4101837ioi.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 17:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cI9hnRkRgND1nAn9UCiZL4IHWAfS5xa6p9XyZVM0jIQ=;
-        b=hwlCxjRFrjuY6CElpPLmzyx2+rkFQxN6FCSIvipOMLIbFKmfNA0vyxtM0sRtdcPmrm
-         xdrnBECeuTyeOr4Rle0SwrrjWs+7xiSzukDOZHsQ9EsLRUJ0q8Np7nEPqVAeXRRXVhKb
-         F15CfwFvFjREoS4ezN9q856jY0vv+XxMRkFa9/Symq3qcTFoQ91rCN2DzODYaXbVt2QO
-         GKXVm++Dr2v4nh+6nBhnrJPKFhd10EqROj129MUEKBM4G7IpdR7+RhZcbSR8c8imZIy3
-         sd0sZwnRPnKGmX+Mt+OGBs6yEUQAY4XH4gUFHJi+Fp4HBVGMRgI93wax8mMs2VYRm3tA
-         pCGQ==
+        bh=2BhmaRmYMwsDXMOGXqzs2oLmHsIhmCbTH9eQZva/pJw=;
+        b=kNw3rAoqo+2XZvdIHomz64pvqIfkAMETqMITBZyL8OEtmLeMoNoVWNzVPLbBi0uhn5
+         DuE/xYIl9e+9097UJrx+X8Xj7VPWKDmn+iOobdRNCxt4TqwU89WnizQsDjTJU0G3GxH6
+         b7EfiQqrvhlnyVrniLpJLx9Pqm5Uv2o0ZBB1mEq07C7Jm7fH63tl++Mzmi+vPYHpU+mj
+         c/pfp+wujPXvfwLHKW5nr6TbQSL43bk2FYA73c46W0OtUaMx/8qVXu+gf4u+zgI3YqoR
+         Lk0CY3Lwrd/93y6/+ihkjO2dWXw2FfyFeql+ZWv1cKY3/hpgswFaNv9qinPGg87fi4TR
+         RrYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cI9hnRkRgND1nAn9UCiZL4IHWAfS5xa6p9XyZVM0jIQ=;
-        b=fd43RW7IlCpmFjAXbkcKSmo8SaCg9yEpRkf2ekQQ9DWapuDEOQUW7KQyP8OuH8nKI/
-         nGVTSrZL6oa41QRaC3bOhUQuPt7589unh9cjlPWFRyRaOnD34aita2SPYsgkq5Czc0Zc
-         XcNNRToyGA71XEiDobIOIUhKmCvaNItFYq6mnKp6CZ+OphNddgkLddHWv0a/zrJOwIih
-         qDqwM33iR07ZR9n44e/xqzlnvjXtpOJJxy47M2Yna2OVDK2PSB19mgxx1bBiICwh45c9
-         FYYUSXk+220p8peiSSBjdBX3dOUNFSPM3nx3tu3PuVdVQhd3h1esbnJDnqnAvF9JoXhG
-         MyBg==
-X-Gm-Message-State: AOAM533hyM+PjjLxEZufJK9CTUHO91tQOj8lzYQMcCLxLQK2OqkGT1h3
-        iSsPpuUlPFBhmPVXhg1PJtOC86VKuzhOg+6EHnosbC+f
-X-Google-Smtp-Source: ABdhPJw6UF/NDC1bO/sl+wOqPz+B9k9ja352maEzhVypMkHFt9AhB41okw1311jL/bHmdUY8zi3z7s8FeAKfIUWW+fc=
-X-Received: by 2002:a05:6e02:1bc5:b0:2c2:7bc9:8e8f with SMTP id
- x5-20020a056e021bc500b002c27bc98e8fmr29704192ilv.5.1646270336576; Wed, 02 Mar
- 2022 17:18:56 -0800 (PST)
+        bh=2BhmaRmYMwsDXMOGXqzs2oLmHsIhmCbTH9eQZva/pJw=;
+        b=JHAWihW3nY81MxXIYdcasWUbvIX9TUr1Y4d0K+WcToRKvW2p6fR1nu596ANc4WXkWN
+         O062UaeUD57ua+p5Lf11dnshB22jIZHcxz47RqnzpaPZtYvTQYGLm1OHGK/Irwfmoo+S
+         UEwqQIFRb4xMLwnac0Lk39CeIxGoFCijLyBs3Qm+OpDgLfe4OQSW8ck8BkLZAiuUoXbA
+         EZNw5S2zL+QGV4Zv1I8Ul+pi4MBiDfmSRBtxGobpcZcOOnfUFRfGMqVoh5h+HoFnBmW/
+         JlvvPC+9jNtZgn4jkQbTGL4kXqnBjR+YTwxz/Qm/PRZh2ITozUfoodeqwm331TAW7Z2s
+         KLDg==
+X-Gm-Message-State: AOAM530dq3/4MDzojVdqP1fkERlOQtvkPTcLy4KFtRsqHBBVBRTFMsc9
+        PdB8cZf/tzT02R1fukSFqukvbH3GyPujoT883+Bf8W2+fnM=
+X-Google-Smtp-Source: ABdhPJzcwQ4PGFqO3cIk6IPiGPojtj10W5n1ah9y/D1T4iyI8Nw8gNbuJL47TYwmCjP5998JkHepATT0bRCcx/Eryw0=
+X-Received: by 2002:a05:6638:328b:b0:315:3802:697 with SMTP id
+ f11-20020a056638328b00b0031538020697mr27659220jav.308.1646270375499; Wed, 02
+ Mar 2022 17:19:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com>
+References: <20220223154718.83500-1-andriy.shevchenko@linux.intel.com> <20220223154718.83500-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220223154718.83500-2-andriy.shevchenko@linux.intel.com>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Mar 2022 02:18:45 +0100
-Message-ID: <CANiq72kNXwo7hpc0+XX_UsyT_3D9o=o0eVjqN-QtDd46kjdd6g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] auxdisplay: lcd2s: Fix lcd2s_redefine_char() feature
+Date:   Thu, 3 Mar 2022 02:19:24 +0100
+Message-ID: <CANiq72mkmDYm1bxryS0Yknm9=j+nK7RhDKP9oGf1-6vVNp_rbQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] auxdisplay: lcd2s: Fix memory leak in ->remove()
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
@@ -70,12 +70,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Feb 23, 2022 at 4:47 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> It seems that the lcd2s_redefine_char() has never been properly
-> tested. The buffer is filled by DEF_CUSTOM_CHAR command followed
-> by the character number (from 0 to 7), but immediately after that
-> these bytes are got rewritten by the decoded hex stream.
+> Once allocated the struct lcd2s_data is never freed.
+> Fix the memory leak by switching to devm_kzalloc().
 >
-> Fix the index to fill the buffer after the command and number.
+> Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
+> Cc: Lars Poeschel <poeschel@lemonage.de>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Thanks Andy, queued.
 

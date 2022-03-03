@@ -2,256 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096564CBEAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4714CBEAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbiCCNRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S233296AbiCCNR6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Mar 2022 08:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiCCNRU (ORCPT
+        with ESMTP id S229914AbiCCNRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:17:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC6D186BBB;
-        Thu,  3 Mar 2022 05:16:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF115B82541;
-        Thu,  3 Mar 2022 13:16:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76ADC004E1;
-        Thu,  3 Mar 2022 13:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646313366;
-        bh=UaYaEq+pX/N3FkTVSSi0NSINkxW2/wj3aygGq0naqdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NxPFm9Gbp/VMWnlo+La5qqdWFdPTBBvGyZVtnhF4vF3D66Q3Q2JrO4nA6t76l3qyl
-         ttqUonv074fY1l+GJ5piObSJmFOzVyn/JKp+oxTi6BXoRfNz4AC7FEkPH8HFm7vqJS
-         NEq//pdy0Fa6m/3YcD70oeClS44vyEnBrhBdh5iI=
-Date:   Thu, 3 Mar 2022 14:16:03 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, spronovo@linux.microsoft.com
-Subject: Re: [PATCH v3 02/30] drivers: hv: dxgkrnl: Driver initialization and
- loading
-Message-ID: <YiC/k1pKTUV12APe@kroah.com>
-References: <719fe06b7cbe9ac12fa4a729e810e3383ab421c1.1646163378.git.iourit@linux.microsoft.com>
- <739cf89e71ff72436d7ca3f846881dfb45d07a6a.1646163378.git.iourit@linux.microsoft.com>
- <Yh6F9cG6/SV6Fq8Q@kroah.com>
- <20220301222321.yradz24nuyhzh7om@liuwe-devbox-debian-v2>
- <Yh8ia7nJNN7ISR1l@kroah.com>
- <20220302115334.wemdkznokszlzcpe@liuwe-devbox-debian-v2>
- <6ac1dd87-3c78-66ca-c526-d1f6cf253400@linux.microsoft.com>
- <Yh/Rq9PwWZAN8Mu2@kroah.com>
- <78df3646-4df6-5e2b-2f6e-e14824b08d85@linux.microsoft.com>
+        Thu, 3 Mar 2022 08:17:55 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D521704CD;
+        Thu,  3 Mar 2022 05:17:08 -0800 (PST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K8Wh76J62z67r9d;
+        Thu,  3 Mar 2022 21:15:51 +0800 (CST)
+Received: from lhreml714-chm.china.huawei.com (10.201.108.65) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 14:17:05 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml714-chm.china.huawei.com (10.201.108.65) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Mar 2022 13:17:05 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Thu, 3 Mar 2022 13:17:05 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Topic: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Index: AQHYLltL2nbHr5hFZkexUhHVpQU6TqyszJkAgADNzBCAAAc9gIAAApOw
+Date:   Thu, 3 Mar 2022 13:17:05 +0000
+Message-ID: <f2172fa9f84447699cb0973bec3ca0da@huawei.com>
+References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
+ <20220302172903.1995-10-shameerali.kolothum.thodi@huawei.com>
+ <20220303002142.GE1026713@nvidia.com>
+ <19e294814f284755b207be3ba7054ec2@huawei.com>
+ <20220303130411.GY219866@nvidia.com>
+In-Reply-To: <20220303130411.GY219866@nvidia.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.82.4]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <78df3646-4df6-5e2b-2f6e-e14824b08d85@linux.microsoft.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 02:27:05PM -0800, Iouri Tarassov wrote:
+
+
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 03 March 2022 13:04
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org;
+> alex.williamson@redhat.com; cohuck@redhat.com; mgurtovoy@nvidia.com;
+> yishaih@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
+> <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+> Jonathan Cameron <jonathan.cameron@huawei.com>; Wangzhou (B)
+> <wangzhou1@hisilicon.com>
+> Subject: Re: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+> migration
 > 
-> On 3/2/2022 12:20 PM, Greg KH wrote:
-> > On Wed, Mar 02, 2022 at 10:49:15AM -0800, Iouri Tarassov wrote:
-> > > On 3/2/2022 3:53 AM, Wei Liu wrote:
-> > > > On Wed, Mar 02, 2022 at 08:53:15AM +0100, Greg KH wrote:
-> > > > > On Tue, Mar 01, 2022 at 10:23:21PM +0000, Wei Liu wrote:
-> > > > > > > > +struct dxgglobal *dxgglobal;
-> > > > > > > 
-> > > > > > > No, make this per-device, NEVER have a single device for your driver.
-> > > > > > > The Linux driver model makes it harder to do it this way than to do it
-> > > > > > > correctly.  Do it correctly please and have no global structures like
-> > > > > > > this.
-> > > > > > > 
-> > > > > > 
-> > > > > > This may not be as big an issue as you thought. The device discovery is
-> > > > > > still done via the normal VMBus probing routine. For all intents and
-> > > > > > purposes the dxgglobal structure can be broken down into per device
-> > > > > > fields and a global structure which contains the protocol versioning
-> > > > > > information -- my understanding is there will always be a global
-> > > > > > structure to hold information related to the backend, regardless of how
-> > > > > > many devices there are.
-> > > > > 
-> > > > > Then that is wrong and needs to be fixed.  Drivers should almost never
-> > > > > have any global data, that is not how Linux drivers work.  What happens
-> > > > > when you get a second device in your system for this?  Major rework
-> > > > > would have to happen and the code will break.  Handle that all now as it
-> > > > > takes less work to make this per-device than it does to have a global
-> > > > > variable.
-> > > > > 
-> > > >
-> > > > It is perhaps easier to draw parallel from an existing driver. I feel
-> > > > like we're talking past each other.
-> > > >
-> > > > Let's look at drivers/iommu/intel/iommu.c. There are a bunch of lists
-> > > > like `static LIST_HEAD(dmar_rmrr_units)`. During the probing phase, new
-> > > > units will be added to the list. I this the current code is following
-> > > > this model. dxgglobal fulfills the role of a list.
-> > > >
-> > > > Setting aside the question of whether it makes sense to keep a copy of
-> > > > the per-VM state in each device instance, I can see the code be changed
-> > > > to:
-> > > >
-> > > >     struct mutex device_mutex; /* split out from dxgglobal */
-> > > >     static LIST_HEAD(dxglist);
-> > > >     
-> > > >     /* Rename struct dxgglobal to struct dxgstate */
-> > > >     struct dxgstate {
-> > > >        struct list_head dxglist; /* link for dxglist */
-> > > >        /* ... original fields sans device_mutex */
-> > > >     }
-> > > >
-> > > >     /*
-> > > >      * Provide a bunch of helpers manipulate the list. Called in probe /
-> > > >      * remove etc.
-> > > >      */
-> > > >     struct dxgstate *find_dxgstate(...);
-> > > >     void remove_dxgstate(...);
-> > > >     int add_dxgstate(...);
-> > > >
-> > > > This model is well understood and used in tree. It is just that it
-> > > > doesn't provide much value in doing this now since the list will only
-> > > > contain one element. I hope that you're not saying we cannot even use a
-> > > > per-module pointer to quickly get the data structure we want to use,
-> > > > right?
-> > > >
-> > > > Are you suggesting Iouri use dev_set_drvdata to stash the dxgstate
-> > > > into the device object? I think that can be done too.
-> > > >
-> > > > The code can be changed as:
-> > > >
-> > > >     /* Rename struct dxgglobal to dxgstate and remove unneeded fields */
-> > > >     struct dxgstate { ... };
-> > > >
-> > > >     static int dxg_probe_vmbus(...) {
-> > > >
-> > > >         /* probe successfully */
-> > > >
-> > > > 	struct dxgstate *state = kmalloc(...);
-> > > > 	/* Fill in dxgstate with information from backend */
-> > > >
-> > > > 	/* hdev->dev is the device object from the core driver framework */
-> > > > 	dev_set_drvdata(&hdev->dev, state);
-> > > >     }
-> > > >
-> > > >     static int dxg_remove_vmbus(...) {
-> > > >         /* Normal stuff here ...*/
-> > > >
-> > > > 	struct dxgstate *state = dev_get_drvdata(...);
-> > > > 	dev_set_drvdata(..., NULL);
-> > > > 	kfree(state);
-> > > >     }
-> > > >
-> > > >     /* In all other functions */
-> > > >     void do_things(...) {
-> > > >         struct dxgstate *state = dev_get_drvdata(...);
-> > > >
-> > > > 	/* Use state in place of where dxgglobal was needed */
-> > > >
-> > > >     }
-> > > >
-> > > > Iouri, notice this doesn't change anything regarding how userspace is
-> > > > designed. This is about how kernel organises its data.
-> > > >
-> > > > I hope what I wrote above can bring our understanding closer.
-> > > >
-> > > > Thanks,
-> > > > Wei.
-> > > 
-> > > 
-> > > I can certainly remove dxgglobal and keep the  pointer to the global
-> > > state in the device object.
-> > > 
-> > > This will require passing of the global pointer to all functions, which
-> > > need to access it.
-> > > 
-> > > 
-> > > Maybe my understanding of the Greg's suggestion was not correct. I
-> > > thought the suggestion was
-> > > 
-> > > to have multiple /dev/dxgN devices (one per virtual compute device).
+> On Thu, Mar 03, 2022 at 12:57:29PM +0000, Shameerali Kolothum Thodi
+> wrote:
 > >
-> > You have one device per HV device, as the bus already provides you.
-> > That's all you really need, right?  Who would be opening the same device
-> > node multiple times?
-> > > This would change how the user mode
-> > > clients enumerate and communicate with compute devices.
 > >
-> > What does userspace have to do here?  It should just open the device
-> > node that is present when needed.  How will there be multiple userspace
-> > clients for a single HV device?
+> > > From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> > > Sent: 03 March 2022 00:22
+> > > To: Shameerali Kolothum Thodi
+> <shameerali.kolothum.thodi@huawei.com>
+> > > Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org;
+> > > alex.williamson@redhat.com; cohuck@redhat.com;
+> mgurtovoy@nvidia.com;
+> > > yishaih@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
+> > > <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+> > > Jonathan Cameron <jonathan.cameron@huawei.com>; Wangzhou (B)
+> > > <wangzhou1@hisilicon.com>
+> > > Subject: Re: [PATCH v7 09/10] hisi_acc_vfio_pci: Add support for VFIO live
+> > > migration
+> > >
+> > > On Wed, Mar 02, 2022 at 05:29:02PM +0000, Shameer Kolothum wrote:
+> > > > +static long hisi_acc_vf_save_unl_ioctl(struct file *filp,
+> > > > +				       unsigned int cmd, unsigned long arg)
+> > > > +{
+> > > > +	struct hisi_acc_vf_migration_file *migf = filp->private_data;
+> > > > +	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(migf,
+> > > > +			struct hisi_acc_vf_core_device, saving_migf);
+> > > > +	loff_t *pos = &filp->f_pos;
+> > > > +	struct vfio_precopy_info info;
+> > > > +	unsigned long minsz;
+> > > > +	int ret;
+> > > > +
+> > > > +	if (cmd != VFIO_MIG_GET_PRECOPY_INFO)
+> > > > +		return -ENOTTY;
+> > > > +
+> > > > +	minsz = offsetofend(struct vfio_precopy_info, dirty_bytes);
+> > > > +
+> > > > +	if (copy_from_user(&info, (void __user *)arg, minsz))
+> > > > +		return -EFAULT;
+> > > > +	if (info.argsz < minsz)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	mutex_lock(&hisi_acc_vdev->state_mutex);
+> > > > +	if (hisi_acc_vdev->mig_state != VFIO_DEVICE_STATE_PRE_COPY) {
+> > > > +		mutex_unlock(&hisi_acc_vdev->state_mutex);
+> > > > +		return -EINVAL;
+> > > > +	}
+> > >
+> > > IMHO it is easier just to check the total_length and not grab this
+> > > other lock
+> >
+> > The problem with checking the total_length here is that it is possible that
+> > in STOP_COPY the dev is not ready and there are no more data to be
+> transferred
+> > and the total_length remains at QM_MATCH_SIZE.
 > 
+> Tthere is a scenario that transfers only QM_MATCH_SIZE in stop_copy?
+> This doesn't seem like a good idea, I think you should transfer a
+> positive indication 'this device is not ready' instead of truncating
+> the stream. A truncated stream should not be a valid stream.
 > 
-> Dxgkrnl creates a single user mode visible device node /dev/dxg.
+> ie always transfer the whole struct.
 
-When you do that, you have a device to put all of your data on.  Use
-that.
+We could add a 'qm_state' and return the whole struct. But the rest
+of the struct is basically invalid if qm_state = QM_NOT_REDAY.
 
-> It has
-> nothing to do with a specific hardware compute device on the host. Its
-> purpose is to provide services (IOCTLs) to enumerate and manage virtual
-> compute devices, which represent hardware devices on the host. The VMBus
-> devices are not used directly by user mode clients in the current design.
+> 
+> > Looks like setting the total_length = 0 in STOP_COPY is a better
+> > solution(If there are no other issues with that) as it will avoid
+> > grabbing the state_mutex as you mentioned above.
+> 
+> That seems really weird, I wouldn't recommend doing that..
 
-That's horrid, why not just export the virtual compute devices properly
-through individual device nodes instead?
+Does that mean we don't support a zero data transfer in STOP_COPY?
+The concern is if we always transfer the whole struct, we end up reading
+and writing the whole thing even if most of the data is invalid.
 
-In essence, you are creating a new syscall here to manage and handle
-devices for just your driver with the use of this ioctl.  That's
-generally a bad idea.
-
-> Virtual compute devices are shared between processes. There could be a
-> Cuda application, Gimp and a Direct3D12 application working at the same
-> time.
-
-Why are all of those applications sharing anything?  How are they
-sharing anything?  If you need to share something across processes, use
-the existing inter-process ways of sharing stuff that we have today (12+
-different apis and counting).  Don't create yet-another-one just for
-your tiny little driver here.  That's rude to the rest of the kernel.
-
-> This is what I mean by saying that there are multiple user mode
-> clients who use the /dev/dxg driver interface. Each of this applications
-> will open the /dev/dxg device node and enumerate/use virtual compute
-> devices.
-
-That seems like an odd model to follow.  How many virtual devices do you
-support?  Is there a limit?  Why not just enumerate them all to start
-with?  Or if there are too many, why not do it like the raw device and
-have a single device node that is used to create the virtual devices you
-wish to use?
-
-> If we change the way how the virtual compute devices are visible to user
-> mode, the Cuda runtime, Direct3D runtime would need to be changed.
-
-We do not care about existing userspace code at this point in time, you
-are trying to get the kernel api correct here.  Once you have done that,
-then you can go fix up your userspace code to work properly.  Anything
-that came before today is pointless here, right?  :)
-
-> I think we agreed that I will keep the global driver state in the device
-> object as Wei suggested and remove global variables. There still will be
-> a single /dev/dxg device node. Correct?
-
-I do not know, as I can't figure out your goals here at all, sorry.
-
-Please go work with some experienced Linux developers in your company.
-They should be the ones answering these questions for you, not me :)
-
-thanks,
-
-greg k-h
+Thanks,
+Shameer

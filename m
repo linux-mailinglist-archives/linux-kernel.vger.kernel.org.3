@@ -2,123 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250EE4CB787
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20E74CB790
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 08:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiCCHPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 02:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S230145AbiCCHUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 02:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHPe (ORCPT
+        with ESMTP id S230103AbiCCHUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:15:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1CE0125C83
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 23:14:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646291688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WEqRPqaD5FWGRJv5e1sQSjcE5/2LakOMZH9spOXim5M=;
-        b=emvX3IbdPjhwp99IZs7YQgh0pqQn9hZgdqJ7mMLgo/SitcZbKv6Ijkziq3zBu0082Q2/h+
-        f2yqj1X39SegebACTlPE1OvE5NmIaKP6s2gxy0Q3wW9irmqULXNfJYOV6laOX4Ud8nZaGV
-        UHT+WLtLoDU38MRAq+1PMQRu7I2V/oQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-166-54qaAjvxM-uap_6f_xKt5Q-1; Thu, 03 Mar 2022 02:14:45 -0500
-X-MC-Unique: 54qaAjvxM-uap_6f_xKt5Q-1
-Received: by mail-wm1-f70.google.com with SMTP id v67-20020a1cac46000000b00383e71bb26fso921578wme.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 23:14:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WEqRPqaD5FWGRJv5e1sQSjcE5/2LakOMZH9spOXim5M=;
-        b=AM5DRcDrjj0UOUYczjHH0Hr3ihf0L4r9Bt4LC11puSIbtF8SH6iI9YFZTeflWJPgT/
-         CAevrw/mvVpb6ljPUuoKwQ05/g8XgfUxMUWpnGdmoTzIqHwijPvfCdDrrLnQLdJzuJi8
-         otbAvnLfdOSlHUT+BfLAj/q9ObEYLCDk4IoNlTNo8KEubwXFDTGBvxa7w9DxGu6vNQwv
-         MwdWYJGnq+25+U7aACl0sh8OuF6tGGG15ArAuMvTaNw+9LUocPRNNYJ0CMVCXYVqbbpO
-         uU0bvxDPpTJqm0OvTc8W+cgkjTphfmywktMlkYR5xcphbMEFceDwox1xVeOA4VL6XkZt
-         0Mhw==
-X-Gm-Message-State: AOAM531APSFl5DqPXcSrOGW886YwtjWHhmnWFyQVm+gvsXFLTgWBDiKR
-        Az2rJktenJxaporlIjR+NyjOrI/7Ul5hHYfjQGg0JxroFbwy8/1g3TqSq6QanIYDuI6JQfUXujw
-        PlduXs/y7BgVDfC4TAt0Bak/r
-X-Received: by 2002:a05:6000:143:b0:1f0:25a1:874c with SMTP id r3-20020a056000014300b001f025a1874cmr5296247wrx.191.1646291684429;
-        Wed, 02 Mar 2022 23:14:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwmjuyMNNC6DR/Bl4cLZuPvdIEPk0k/BS2RIKyITE+TQM+Zj5AHfzvYai86xVZe0dQU+DiiAA==
-X-Received: by 2002:a05:6000:143:b0:1f0:25a1:874c with SMTP id r3-20020a056000014300b001f025a1874cmr5296233wrx.191.1646291684224;
-        Wed, 02 Mar 2022 23:14:44 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id 11-20020a05600c22cb00b00382a960b17csm6127182wmg.7.2022.03.02.23.14.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 23:14:43 -0800 (PST)
-Message-ID: <0c22b156-10c5-1988-7256-a9db7871989d@redhat.com>
-Date:   Thu, 3 Mar 2022 08:14:42 +0100
+        Thu, 3 Mar 2022 02:20:23 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F31567B3
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 23:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646291978; x=1677827978;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=byfI6ZD/mTZQBtc8lg28DE8DSoO/IS2OKwGlLuNHLsI=;
+  b=fJ4KXuN70vpjr9DwxiINQWnixs+qOtcuVVXsvW1S0PHp4iy9J4AyRDSH
+   YOnpru15UKNKF3HuSxrspVNm4Zc7g3JaRIeaYEj67ZH35er0Ng/RbBgah
+   2XexCIUqEENwTDhMeuJCcsYxGdfWWSaZjXL4PU/k4U/FPWSzHQm2JAFx+
+   l+WN2VdatLkbi0NG98qUVvpbqGOtN3OC2aRMA2mRG/eAv9wM0nQxNuZH5
+   wG8Xh49HGqyv7bQhs+sE0IWc/6+kvPpIz9rZdyoKIGOpXXDrsQRXW9XLA
+   g+EWxXn/oWvWcTWH3mio7dT9HIADAm24iMfj/b02ICJz0gu38aI3+/B0V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="278280105"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="278280105"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:19:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="535712029"
+Received: from louislifei-optiplex-7090.sh.intel.com (HELO louislifei-OptiPlex-7090) ([10.239.146.211])
+  by orsmga007.jf.intel.com with ESMTP; 02 Mar 2022 23:19:36 -0800
+Date:   Thu, 3 Mar 2022 15:19:53 +0800
+From:   Li Fei1 <fei1.li@intel.com>
+To:     Xiaolong Huang <butterflyhuangxx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, fei1.li@intel.com
+Subject: Re: [RESEND PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Message-ID: <20220303071953.GA763961@louislifei-OptiPlex-7090>
+References: <20220303065401.259202-1-butterflyhuangxx@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 4/7] KVM: x86/mmu: Zap only obsolete roots if a root
- shadow page is zapped
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220225182248.3812651-1-seanjc@google.com>
- <20220225182248.3812651-5-seanjc@google.com>
- <40a22c39-9da4-6c37-8ad0-b33970e35a2b@redhat.com>
- <ee757515-4a0f-c5cb-cd57-04983f62f499@redhat.com>
- <Yh/JdHphCLOm4evG@google.com>
- <217cc048-8ca7-2b7b-141f-f44f0d95eec5@redhat.com>
- <Yh/1hPMhqeFKO0ih@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yh/1hPMhqeFKO0ih@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303065401.259202-1-butterflyhuangxx@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 23:53, Sean Christopherson wrote:
->>
->> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
->> index c5e3f219803e..7899ca4748c7 100644
->> --- a/arch/x86/kvm/svm/svm.c
->> +++ b/arch/x86/kvm/svm/svm.c
->> @@ -3857,6 +3857,9 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu,
->> hpa_t root_hpa,
->>          unsigned long cr3;
->>
->>          if (npt_enabled) {
->> +               if (is_tdp_mmu_root(root_hpa))
->> +                       svm->current_vmcb->asid_generation = 0;
->> +
->>                  svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
->>                  vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
->>
->> Why not just new_asid
-> My mental coin flip came up tails?  new_asid() is definitely more intuitive.
+On Thu, Mar 03, 2022 at 02:54:00PM +0800, Xiaolong Huang wrote:
+> The vm_param and cpu_regs need to be freed via kfree()
+> before return -EINVAL error.
 > 
+> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+> Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
+> Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+LGTM, thanks.
 
-Can you submit a patch (seems like 5.17+stable material)?
+Please add Signed-off-by: Fei Li <fei1.li@intel.com>
 
-Paolo
-
+> ---
+>  drivers/virt/acrn/hsm.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+> index 5419794fccf1..423ea888d79a 100644
+> --- a/drivers/virt/acrn/hsm.c
+> +++ b/drivers/virt/acrn/hsm.c
+> @@ -136,8 +136,10 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+>  		if (IS_ERR(vm_param))
+>  			return PTR_ERR(vm_param);
+>  
+> -		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
+> +		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
+> +			kfree(vm_param);
+>  			return -EINVAL;
+> +		}
+>  
+>  		vm = acrn_vm_create(vm, vm_param);
+>  		if (!vm) {
+> @@ -182,21 +184,29 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+>  			return PTR_ERR(cpu_regs);
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->reserved); i++)
+> -			if (cpu_regs->reserved[i])
+> +			if (cpu_regs->reserved[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_32); i++)
+> -			if (cpu_regs->vcpu_regs.reserved_32[i])
+> +			if (cpu_regs->vcpu_regs.reserved_32[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_64); i++)
+> -			if (cpu_regs->vcpu_regs.reserved_64[i])
+> +			if (cpu_regs->vcpu_regs.reserved_64[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.gdt.reserved); i++)
+>  			if (cpu_regs->vcpu_regs.gdt.reserved[i] |
+> -			    cpu_regs->vcpu_regs.idt.reserved[i])
+> +			    cpu_regs->vcpu_regs.idt.reserved[i]) {
+> +				kfree(cpu_regs);
+>  				return -EINVAL;
+> +			}
+>  
+>  		ret = hcall_set_vcpu_regs(vm->vmid, virt_to_phys(cpu_regs));
+>  		if (ret < 0)
+> 
+> base-commit: 5859a2b1991101d6b978f3feb5325dad39421f29
+> -- 
+> 2.25.1
+> 

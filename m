@@ -2,164 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963CD4CBE8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAA94CBE8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiCCNKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S233577AbiCCNKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiCCNKd (ORCPT
+        with ESMTP id S233524AbiCCNKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:10:33 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250B816A591;
-        Thu,  3 Mar 2022 05:09:46 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2238CPqK032368;
-        Thu, 3 Mar 2022 14:09:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=pkx2zGWPYrmHsy35xU9yJKQc3yW9y5fEcg/t+W/SnkU=;
- b=sC6ovMPOTEXe+30l/yJflYQQHj+2vmOsf96wQ/rTixDLGP3fvI6Ooh3N3I4kV4d/h7Oe
- KD9FbaawUGGJBOW8Nm5nnzO341bzj3RTmPCs4ButNosY+EsMaGBBjQAJUyAurUkbVCcz
- 8gds/mjiSvihkIeyLWHh38jH5KVu8xOGOzqNrVzNuv2xJy0NK4QOFJL40v6CVw9tCZfx
- nbhyHi9C2sWLuQguz2gzp+gdjE5fUpOWqyGIdRWvaAWhPjxG63IK5c5T+22OLQnAkhaS
- S9i1sXco1nWZBuLWsLZabmKXG32UuefhfI9Z2IlfU3JaldcjK0qwjY4X7Aey2u2bpejI OQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ejsy7hw3f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 14:09:21 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 70197100034;
-        Thu,  3 Mar 2022 14:09:18 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A18A22178A;
-        Thu,  3 Mar 2022 14:09:18 +0100 (CET)
-Received: from [10.201.22.79] (10.75.127.49) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 3 Mar
- 2022 14:09:17 +0100
-Message-ID: <65581f3a-3ae6-2dd3-7571-1e64982b5f50@foss.st.com>
-Date:   Thu, 3 Mar 2022 14:09:17 +0100
+        Thu, 3 Mar 2022 08:10:39 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F18186437
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:09:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B14DDCE2541
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 13:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8994EC004E1;
+        Thu,  3 Mar 2022 13:09:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646312989;
+        bh=L5rgshl6gX3zP6AuSBghYIYNUi7nQdU7yZUuh35MOY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ARl4yKSZhU5eWD8g74hZx+5N3vyzsc8AyO4D6zj23jX0sq1cA1XLFOnsoyZHE6PnR
+         mOtC4YU5JRZUl+uCAwWY+VABZ6TEFccoxmqTHDkm/mBv1+/evuC7pCM8YDQrKY4Y13
+         ekTADmlbMWHfEaA0DZ6nerzFfD9jsoAI1cy6LxEY=
+Date:   Thu, 3 Mar 2022 14:09:47 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Phi Nguyen <phind.uet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] samples/kobject: Use sysfs_emit instead of
+ snprintf
+Message-ID: <YiC+G4069cIFqHfO@kroah.com>
+References: <20220302120759.380932-1-phind.uet@gmail.com>
+ <Yh+EdGcsoF+lBjfX@kroah.com>
+ <32164620-9ba6-db62-bc61-95c7f255d087@gmail.com>
+ <Yh/SGeW1KPcbH4ob@kroah.com>
+ <4f3310b4-beab-9b5f-0cd4-f530559aa470@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Linux-stm32] [PATCH v2 12/13] ARM: dts: stm32: enable optee
- firmware and SCMI support on STM32MP13
-Content-Language: en-US
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
- <20220225133137.813919-13-gabriel.fernandez@foss.st.com>
- <1d90078d-e27f-539d-d010-78a3c4da565a@pengutronix.de>
-From:   Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
-In-Reply-To: <1d90078d-e27f-539d-d010-78a3c4da565a@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_07,2022-02-26_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f3310b4-beab-9b5f-0cd4-f530559aa470@gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 03, 2022 at 04:45:07PM +0800, Phi Nguyen wrote:
+> On 3/3/2022 4:22 AM, Greg KH wrote:
+> Am I right in thinking that you are the maintainer of these files?
 
-On 2/25/22 16:13, Ahmad Fatoum wrote:
-> Hello Gabriel,
->
-> On 25.02.22 14:31, gabriel.fernandez@foss.st.com wrote:
->> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
->>
->> Enable optee and SCMI clocks support.
->>
->> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
->> ---
->>   arch/arm/boot/dts/stm32mp131.dtsi | 37 +++++++++++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
->> index 262de4eeb4ed..78eac53224d4 100644
->> --- a/arch/arm/boot/dts/stm32mp131.dtsi
->> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
->> @@ -27,6 +27,43 @@ arm-pmu {
->>   		interrupt-parent = <&intc>;
->>   	};
->>   
->> +	scmi_sram: sram@2ffff000 {
->> +		compatible = "mmio-sram";
->> +		reg = <0x2ffff000 0x1000>;
->> +		#address-cells = <1>;
->> +		#size-cells = <1>;
->> +		ranges = <0 0x2ffff000 0x1000>;
->> +
->> +		scmi_shm: scmi_shm@0 {
->> +			compatible = "arm,scmi-shmem";
->> +			reg = <0 0x80>;
->> +		};
->> +	};
->> +
->> +	firmware {
->> +		optee {
->> +			method = "smc";
->> +			compatible = "linaro,optee-tz";
->> +		};
->> +
->> +		scmi: scmi {
->> +			compatible = "linaro,scmi-optee";
-> This compatible doesn't seem to be documented upstream. I am looking at v5.17-rc5.
-> Do you have a reference detailing the difference between this conduit and
-> plain arm,scmi-smc (as used with TF-A on the STM32MP151).
->
-> Cheers,
-> Ahmad
+Yes, I think so.
 
-Hi
+> Can I send a patch to add an entry to /linux/MAINTAINERS file?
 
-Ahmad,
+Please do.
 
-it's on going.
+thanks,
 
-https://lore.kernel.org/linux-arm-kernel/20211029102118.GG6526@e120937-lin/T/#mf46c83f0aadce3061ee93fa22159405f38d881a0
-
->
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +			linaro,optee-channel-id = <0>;
->> +			shmem = <&scmi_shm>;
->> +
->> +			scmi_clk: protocol@14 {
->> +				reg = <0x14>;
->> +				#clock-cells = <1>;
->> +			};
->> +
->> +			scmi_reset: protocol@16 {
->> +				reg = <0x16>;
->> +				#reset-cells = <1>;
->> +			};
->> +		};
->> +	};
->>   	clocks {
->>   		clk_axi: clk-axi {
->>   			#clock-cells = <0>;
->
+greg k-h

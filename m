@@ -2,174 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC20E4CC9DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAF14CC9E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiCCXN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S235298AbiCCXS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiCCXN6 (ORCPT
+        with ESMTP id S234030AbiCCXSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:13:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F92AEF33;
-        Thu,  3 Mar 2022 15:13:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25B3BB82702;
-        Thu,  3 Mar 2022 23:13:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A6BC004E1;
-        Thu,  3 Mar 2022 23:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646349188;
-        bh=jnUbHJnKeuwckYEvpMWc3F3NDtb/FHG6OBOmn7PIsWI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bdT3l8rJ6JeqEF5lrrsl1NKwVjbYqE7Dao4N+tDRG6YSTm37P8E+5lVo78RZky1WR
-         RxSii+QDHfY79q5OPqd24VH5y+RcZhQYzKwI3+t6JYoGa3ePKwMWjAliykKQf/zgXg
-         Oo6T3MrDQV42yAXCVz9ktJN8VJx+UqGrSvgBgcvSltgK8NfYypS3pSD6ydZt/dSMyT
-         QihU+dAXuAqjp/2XIoNrsd8BiJEE33TxDof1hBMrUO5UhQlxIdakgDoVOTw/LjNxdt
-         EXrtSTOfnePD9qGepPtMXsq3BM60+KKhsoq71ahdpKDfmd7C9WAepyNrLO1HhtDQ5i
-         8OeykNSq3s64w==
-Date:   Fri, 4 Mar 2022 01:12:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YiFLXABTitx85sfj@iki.fi>
-References: <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
- <YhLhoMFPyOFZ2fsX@iki.fi>
- <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <Yhy/GvJegnTqYdq6@iki.fi>
- <f6a256a6-a7d7-a8e7-c9a8-e232203c63af@intel.com>
- <Yh4fGORDaJyVrJQW@iki.fi>
- <Yh4i4hVcnfZ8QDAl@iki.fi>
- <2d2d3471-78ce-9faa-daf6-138078f5ffaa@intel.com>
- <Yh7Q5fbOtr+6YWaS@iki.fi>
- <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com>
+        Thu, 3 Mar 2022 18:18:25 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFAFDEB1;
+        Thu,  3 Mar 2022 15:17:37 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id k7so5254279ilo.8;
+        Thu, 03 Mar 2022 15:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
+        b=WdEq8Z/fW+RL+Ej4Z4MFuld6ZS/v8HLUbxQGRncbLZD49oQmlx/ygy9YpL76W4YMdG
+         dPTLPRcfVspo2oDtOcXWrBJGSLhVKZX4Tgv+EaQaDXxg8aILtMholWijNBkhpdkyukq9
+         /nmmMX4v5JORNe4LrGEY/f6RR4w0MsbZuj2V6VmtsZHrn8npzp4URUBhvys6mnUKUBn3
+         gQ5nCmY+DKZQm1yACzBkMPDp25V6e7YdkHZe/ebB9G0ktfy1tjmDfMkP9mslH4f36AOG
+         SmMICNRXWvf2YisP9UZx/ntekFAJBNN0LjJqH5dNr3jwP4+i4rqCC+vU28v9Ds5TS7Ad
+         /VfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IunjLamQyiN4ktCSVGqQoYbINqbAWtg7y28TD4hVajw=;
+        b=D+zGdkAmEAVPf/8m0BvtPyM8jm62pSTIpfey8KsfeNYeW+3RFzdzfltiozBcUKiBvU
+         sj4tSugLyjo3OFakISzonyGtOAvF3u1JZKE5SXSgAzhPeNQO0OOESxB+Q9TIig5g5rJs
+         qioD4a9iGY6zyl8SFo8PlW0Oh1P/Q3F0J8o3TaOfkYInF5vXwMV3BkKjxpJoX9haPR8u
+         +WbW00C5kkSLAQPQLEem3SN73MXr+eG4fW3U364wRJrDVEDvDRY5uo0SBuoBT0hS2sCd
+         +ILzzAWmdobpOii4TkG/xF24kwtSjZsOtNugMJGdw5E66OWkv04Dc4Bb2E3skNg2/PeU
+         v9vQ==
+X-Gm-Message-State: AOAM530lpxD82Wa6c/cau0od3jA45oLH0T0NkJKAqI2zn3ecL3OtiFNE
+        KywBVcYRcpBbQgJg+8+hEszx/Vz/gBvASYQV3L8=
+X-Google-Smtp-Source: ABdhPJxi8VypfVGr9Khjx8L28LU1hG/qzef02DaLMAkHfbs2sOCVurtw7fWFOlTYy2xjj36m0p2movbsKHKZ2XFic4Q=
+X-Received: by 2002:a92:c908:0:b0:2c1:a287:8868 with SMTP id
+ t8-20020a92c908000000b002c1a2878868mr32170001ilp.321.1646349456482; Thu, 03
+ Mar 2022 15:17:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
+ <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
+ <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
+ <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
+ <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
+In-Reply-To: <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 4 Mar 2022 00:17:25 +0100
+Message-ID: <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Konrad Wilhelm Kleine <kkleine@redhat.com>,
+        Tom Rix <trix@redhat.com>, Joe Perches <joe@perches.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 02:57:45PM -0800, Reinette Chatre wrote:
-> > What do you mean by "user space policy" anyway exactly? I'm sorry but I
-> > just don't fully understand this.
-> 
-> My apologies - I just assumed that you would need no reminder about this contentious
-> part of SGX history. Essentially it means that, yes, the kernel could theoretically
-> permit any kind of access to any file/page, but some accesses are known to generally
-> be a bad idea - like making memory executable as well as writable - and thus there
-> are additional checks based on what user space permits before the kernel allows
-> such accesses.
+On Thu, Mar 3, 2022 at 11:44 PM Finn Thain <fthain@linux-m68k.org> wrote:
+>
+> Others might argue that they should always be changed from,
+>
+> /*
+>  * this style
+>  * of multiline comment
+>  */
+>
+> to
+>
+> /* this style
+>  * of multiline comment
+>  */
 
-The device files are limited by a GID (in systemd upstream), which is a
-"user policy".
+In general, for things that the coding style guide talks about, we
+should follow them, even if some subsystems do not (they can always
+override in their folder if they really, really want it). So, here for
+instance, the first one should be used.
 
-What you want to add and why augmentation cannot be made complete before
-the unknown factor is added to the access control?
-
-> >>> I think the best way to move forward would be to do EAUG's explicitly with
-> >>> an ioctl that could also include secinfo for permissions. Then you can
-> >>> easily do the rest with EACCEPTCOPY inside the enclave.
-> >>
-> >> SGX_IOC_ENCLAVE_ADD_PAGES already exists and could possibly be used for
-> >> this purpose. It already includes SECINFO which may also be useful if
-> >> needing to later support EAUG of PT_SS* pages.
-> > 
-> > You could also simply add SGX_IOC_ENCLAVE_AUGMENT_PAGES and call it a day.
-> 
-> I could, yes.
-
-And this enables EACCEPTCOPY pattern nicely.
-
-E.g. you can implement mmap() with EAUG and then EACCEPTCOPY feeded with
-permissions and a zero page:
-
-1. enclave calls back to host to do mmap()
-2. host does eaug on given range and enter back to enclave.
-3. enclave does eacceptcopy with given permissions and a zero page.
-
-> > I don't like this type of re-use of the existing API.
-> 
-> I could proceed with SGX_IOC_ENCLAVE_AUGMENT_PAGES if there is consensus after
-> considering the user policy question (above) and performance trade-off (more below).
-
-Ok.
-
-If adding this would be a bottleneck it would be already persistent int
-"add pages", so whatever limitation there might be, it already exist.
-
-Thus, logically, that could be safely added without worrying about user
-policies all that much...
-
-> 
-> > 
-> >> The big question is whether communicating user policy after enclave initialization
-> >> via the SECINFO within SGX_IOC_ENCLAVE_ADD_PAGES is acceptable to all? I would
-> >> appreciate a confirmation on this direction considering the significant history
-> >> behind this topic.
-> > 
-> > I have no idea because I don't know what is user space policy.
-> 
-> This discussion is about some enclave usages needing RWX permissions
-> on dynamically added enclave pages. RWX permissions on dynamically added pages is
-
-I'm not sure if that is actually necessary, if you use EAUG-EACCEPTCOPY
-type of pattern. Please correct if I'm wrong.
-
-> not something that should blindly be allowed for all SGX enclaves but instead the user
-> needs to explicitly allow specific enclaves to have such ability. This is equivalent
-> to (but not the same as) what exists in Linux today with LSM. As seen in
-> mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect() Linux is able to make
-> files and memory be both writable and executable, but it would only do so for those
-> files and memory that the LSM (which is how user policy is communicated, like SELinux)
-> indicates it is allowed, not blindly do so for all files and all memory.
-
-We could also potentially make LSM hooks to ioctls, if that is ever needed.
-
-And as I said earlier, EAUG ioctl does not make things any worse they might
-be.
-
-> >>> Putting EAUG to the #PF handler and implicitly call it just too flakky and
-> >>> hard to make deterministic for e.g. JIT compiler in our use case (not to
-> >>> mention that JIT is not possible at all because inability to do RX pages).
-> 
-> I understand how SGX_IOC_ENCLAVE_AUGMENT_PAGES can be more deterministic but from
-> what I understand it would have a performance impact since it would require all memory
-> that may be needed by the enclave be pre-allocated from outside the enclave and not
-> just dynamically allocated from within the enclave at the time it is needed.
-> 
-> Would such a performance impact be acceptable?
-
-IMHO yes because bad behaving enclave can cause the same issue anyway,
-and more indeterministic manner.
-
-BR, Jarkko
+Cheers,
+Miguel

@@ -2,259 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1294CB98F
+	by mail.lfdr.de (Postfix) with ESMTP id D96B24CB990
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiCCIuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S231660AbiCCIuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiCCItq (ORCPT
+        with ESMTP id S231657AbiCCItv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:49:46 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95C6163071
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:48:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646297336; x=1677833336;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ynipcZ74M85A03dBzCI3LyLTYzhxnPdSRkmFTLt5DVo=;
-  b=dpvUmPxZJPMJ0+6eap8ZQ5XTtaI0BZ24o1gf/9+B1wPpf+tGfKHLMFDk
-   IGKEWRPRA7quR+peK3gXnMAuUIycYRZeoUyfrPCU+klyrz0CE7hyfoLxg
-   uB4l19BuQ9zWS7EpKaCdHOckGBrf+rMaHFkI/E3MU8bYZWFq6OjHdAUAj
-   DldPyZFCGvogIar2xz5ZPidGoCuxztpWceXQBMrf9VrxuCxkT8d1CWNaj
-   jAk93vO3U2cSbnJpvLOLnFo7DbnneaPejOELLNJWkLidvfE9dHsOnZKBE
-   tCVu3ppO4tnGn1aDsMJRl3XAyRTpI7M/eDamEIimDnKlL1PxYbg1wbWDQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="253346955"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="253346955"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 00:48:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="594319122"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Mar 2022 00:48:54 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPh8i-0000Kb-EY; Thu, 03 Mar 2022 08:48:48 +0000
-Date:   Thu, 3 Mar 2022 16:48:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Boris Kolpackov <boris@codesynthesis.com>
-Subject: [masahiroy:kbuild 9/9] include/uapi/sound/asound.h:570:14: error:
- conflicting types for '__pad_before_uframe'; have 'char[0]'
-Message-ID: <202203031649.dopk5HXO-lkp@intel.com>
+        Thu, 3 Mar 2022 03:49:51 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C5C175870
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 00:49:04 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id y5so3451003ill.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 00:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vmDFo76a8otWYPkle6/ziOHDKrQe2qvu7laZ0IuPxgk=;
+        b=pEPvESRJI48xS2elV5WAwPdzq79lbuEX0mJMGOriSO2nx/CR9KcY4gtRcZepohg2Vm
+         BQBqoDoc6A1EDnx683AOSc6TEv2MQduvgU6B4SMpIT7sKJ2Ja0Mw9FHvxtWOdm8fxpeY
+         2TNy82FUU+ChydePWan1n1msrKN3Wb3W2gGBFrOde4UtzJZ1H2+WN70JFuuYYFOcJyFp
+         DBsE7HV41lMc5dJ3gjQSreUppJok52JBMYaXYd7mIVLjz1tZ0EUuCSD50wSAmqg8YFb0
+         B4pd/xvHWSehk93qJXPdKMbd9wfke7hIN0tCQlkhSimcZHHPYkD0Tfs46YYI2qSbuLDe
+         vzhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vmDFo76a8otWYPkle6/ziOHDKrQe2qvu7laZ0IuPxgk=;
+        b=WPJMMv7mztysCRNyPrhncOoWMXphm3flxxiSqA8Y4U1/kqh2hr1dLNRtv4bEzEr6/q
+         gRueIJU6rKiW+D/lWnuT+aZeEctLotFCV/f4x/UkMjZFWMTcrxiDRwo4MoOWlYXuVDMP
+         5KGSHVUTT25oRIn6iDPldcJAAllt04/LS7Ah87RSU7SpkFpYbOXNJpcnGqbLw4TXoLQb
+         8Ukptb/Si8vriaV7qV9DHB1puDiZ//adB9RUxVuKd2mEPnvjuNuE7LXpyKwVSNNqC3Xx
+         Ah9MD+bJ6kYEUnlthQK5PCWqB7JjtOMA6+dRyR6Hve4Xw22dck6R9QSBy5g2IAfjTxLh
+         376A==
+X-Gm-Message-State: AOAM533iRzb8rFJO3WZpRrbetxaOTMbn0eianP/WfLFERHnaiOYtbHOk
+        UjFhb0KZ0+/kW+GHZ6x8vQITUQ==
+X-Google-Smtp-Source: ABdhPJy0qRkKTXUocNRK9zJolxu1WKIs0inaCacjClcTk+OetAPbdiTI3xUT1LzoDW6O8+WuN1ZiZA==
+X-Received: by 2002:a92:c246:0:b0:2c2:740d:1c12 with SMTP id k6-20020a92c246000000b002c2740d1c12mr29753994ilo.55.1646297343663;
+        Thu, 03 Mar 2022 00:49:03 -0800 (PST)
+Received: from localhost.localdomain ([182.64.85.91])
+        by smtp.gmail.com with ESMTPSA id m9-20020a923f09000000b002c2a1a3a888sm1480704ila.50.2022.03.03.00.48.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 00:49:03 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v3 5/6] arm64: dts: qcom: sm8150: add ethernet node
+Date:   Thu,  3 Mar 2022 14:18:23 +0530
+Message-Id: <20220303084824.284946-6-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
+References: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git kbuild
-head:   55de8686df7ed2b5237867b130e30c728bbd9db4
-commit: 55de8686df7ed2b5237867b130e30c728bbd9db4 [9/9] kconfig: change .config format to use =n instead of "is not set"
-config: arc-randconfig-r003-20220303 (https://download.01.org/0day-ci/archive/20220303/202203031649.dopk5HXO-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=55de8686df7ed2b5237867b130e30c728bbd9db4
-        git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-        git fetch --no-tags masahiroy kbuild
-        git checkout 55de8686df7ed2b5237867b130e30c728bbd9db4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/base/regmap/ drivers/rtc/ drivers/soundwire/ lib/lzo/
+From: Vinod Koul <vkoul@kernel.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+SM8150 SoC supports ethqos ethernet controller so add the node for it
 
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from kernel/bounds.c:13:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/arc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/rcupdate.h:27,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from drivers/rtc/rtc-fsl-ftm-alarm.c:10:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   drivers/rtc/rtc-fsl-ftm-alarm.c:315:36: warning: 'ftm_imx_acpi_ids' defined but not used [-Wunused-const-variable=]
-     315 | static const struct acpi_device_id ftm_imx_acpi_ids[] = {
-         |                                    ^~~~~~~~~~~~~~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/kernel.h:22,
-                    from include/linux/clk.h:13,
-                    from drivers/rtc/rtc-omap.c:13:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   drivers/rtc/rtc-omap.c:410:5: warning: no previous prototype for 'omap_rtc_power_off_program' [-Wmissing-prototypes]
-     410 | int omap_rtc_power_off_program(struct device *dev)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/arc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/delay.h:22,
-                    from drivers/soundwire/stream.c:8:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   In file included from include/sound/asound.h:24,
-                    from include/sound/pcm.h:11,
-                    from include/sound/soc.h:23,
-                    from drivers/soundwire/stream.c:16:
->> include/uapi/sound/asound.h:570:14: error: conflicting types for '__pad_before_uframe'; have 'char[0]'
-     570 | typedef char __pad_before_uframe[0];
-         |              ^~~~~~~~~~~~~~~~~~~
-   include/uapi/sound/asound.h:565:14: note: previous declaration of '__pad_before_uframe' with type '__pad_before_uframe' {aka 'char[4]'}
-     565 | typedef char __pad_before_uframe[sizeof(__u64) - sizeof(snd_pcm_uframes_t)];
-         |              ^~~~~~~~~~~~~~~~~~~
->> include/uapi/sound/asound.h:571:14: error: conflicting types for '__pad_after_uframe'; have 'char[4]'
-     571 | typedef char __pad_after_uframe[sizeof(__u64) - sizeof(snd_pcm_uframes_t)];
-         |              ^~~~~~~~~~~~~~~~~~
-   include/uapi/sound/asound.h:566:14: note: previous declaration of '__pad_after_uframe' with type '__pad_after_uframe' {aka 'char[0]'}
-     566 | typedef char __pad_after_uframe[0];
-         |              ^~~~~~~~~~~~~~~~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/kernel.h:22,
-                    from include/linux/clk.h:13,
-                    from drivers/base/regmap/regmap-mmio.c:7:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_gen_context':
->> drivers/base/regmap/regmap-mmio.c:348:9: error: duplicate case value
-     348 |         case REGMAP_ENDIAN_NATIVE:
-         |         ^~~~
-   drivers/base/regmap/regmap-mmio.c:300:9: note: previously used here
-     300 |         case REGMAP_ENDIAN_NATIVE:
-         |         ^~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/arc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/math64.h:6,
-                    from include/linux/time.h:6,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from lib/lzo/lzo1x_compress.c:15:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   In file included from lib/lzo/lzo1x_compress.c:19:
->> lib/lzo/lzodefs.h:33:2: error: #error "conflicting endian definitions"
-      33 | #error "conflicting endian definitions"
-         |  ^~~~~
---
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from kernel/bounds.c:13:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-   In file included from arch/arc/include/uapi/asm/byteorder.h:14,
-                    from include/asm-generic/bitops/le.h:6,
-                    from arch/arc/include/asm/bitops.h:192,
-                    from include/linux/bitops.h:33,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/arc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/rcupdate.h:27,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from arch/arc/kernel/asm-offsets.c:6:
->> include/linux/byteorder/big_endian.h:8:2: warning: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Wcpp]
-       8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-         |  ^~~~~~~
-
-
-vim +570 include/uapi/sound/asound.h
-
-80fe7430c708595 Arnd Bergmann 2018-04-24  568  
-80fe7430c708595 Arnd Bergmann 2018-04-24  569  #if defined(__BYTE_ORDER) ? __BYTE_ORDER == __LITTLE_ENDIAN : defined(__LITTLE_ENDIAN)
-80fe7430c708595 Arnd Bergmann 2018-04-24 @570  typedef char __pad_before_uframe[0];
-80fe7430c708595 Arnd Bergmann 2018-04-24 @571  typedef char __pad_after_uframe[sizeof(__u64) - sizeof(snd_pcm_uframes_t)];
-80fe7430c708595 Arnd Bergmann 2018-04-24  572  #endif
-80fe7430c708595 Arnd Bergmann 2018-04-24  573  
-
-:::::: The code at line 570 was first introduced by commit
-:::::: 80fe7430c7085951d1246d83f638cc17e6c0be36 ALSA: add new 32-bit layout for snd_pcm_mmap_status/control
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+[bhsharma: Correct ethernet interrupt numbers and add power-domain]
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 6012322a5984..2ed231767535 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -915,6 +915,33 @@ gpi_dma0: dma-controller@800000 {
+ 			status = "disabled";
+ 		};
+ 
++		ethernet: ethernet@20000 {
++			compatible = "qcom,sm8150-ethqos";
++			reg = <0x0 0x00020000 0x0 0x10000>,
++			      <0x0 0x00036000 0x0 0x100>;
++			reg-names = "stmmaceth", "rgmii";
++			clock-names = "stmmaceth", "pclk", "ptp_ref", "rgmii";
++			clocks = <&gcc GCC_EMAC_AXI_CLK>,
++				<&gcc GCC_EMAC_SLV_AHB_CLK>,
++				<&gcc GCC_EMAC_PTP_CLK>,
++				<&gcc GCC_EMAC_RGMII_CLK>;
++			interrupts = <GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 699 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "macirq", "eth_lpi";
++
++			power-domains = <&gcc EMAC_GDSC>;
++			resets = <&gcc GCC_EMAC_BCR>;
++
++			iommus = <&apps_smmu 0x3C0 0x0>;
++
++			snps,tso;
++			rx-fifo-depth = <4096>;
++			tx-fifo-depth = <4096>;
++
++			status = "disabled";
++		};
++
++
+ 		qupv3_id_0: geniqup@8c0000 {
+ 			compatible = "qcom,geni-se-qup";
+ 			reg = <0x0 0x008c0000 0x0 0x6000>;
+-- 
+2.35.1
+

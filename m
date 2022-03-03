@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9702C4CB70C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94BE4CB70F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiCCGa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S229997AbiCCGbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiCCGa4 (ORCPT
+        with ESMTP id S229830AbiCCGa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:30:56 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E701688F0;
-        Wed,  2 Mar 2022 22:30:00 -0800 (PST)
+        Thu, 3 Mar 2022 01:30:58 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927ED16922A;
+        Wed,  2 Mar 2022 22:30:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646289000; x=1677825000;
+  t=1646289005; x=1677825005;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=gUkffy8YdmHv4JqQTQk1nv6bVvOjhDHBLpFC5cP2Zhc=;
-  b=GXH49FWMo4shyygESaUgq8DVliCvWBYo5MXQzyRgoHH+q6eVaWv/uYTm
-   yakh6VixnJ8e96rF2yec4onlXdpPWyzKGKD/wymUXXhzx6OgmgBefXtyF
-   fXYahAnxpHHfLX0+p5jTZ/rkGLkQaU1njRchgGouzTiCO6bOXvorDNSZl
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Mar 2022 22:29:59 -0800
+  bh=jgWfAwXuuu0RIdbapJx7yHndhKxVFwzMF8fPwOYRIh4=;
+  b=OYyYz8eV7GvWku1kkKiO7zZiG01yHDx5p/qq1Mx3H7lro11ilQQapZEZ
+   nQJsrPpB1rm31reGZ2hRwq1osR80XGP6zLXIqUiVwu5ht+ejxGbXOu65f
+   Kp7yEdMNRtkNNt1RdPzW0fds1/ueNUHvms5XEf6eWCOSRR+GeO1T3dRks
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Mar 2022 22:30:04 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:29:59 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:30:03 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 2 Mar 2022 22:29:59 -0800
+ 15.2.986.15; Wed, 2 Mar 2022 22:30:03 -0800
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 2 Mar 2022 22:29:55 -0800
+ 15.2.986.15; Wed, 2 Mar 2022 22:29:59 -0800
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -49,9 +49,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Rajendra Nayak <quic_rjendra@codeaurora.org>,
         <vkoul@kernel.org>, <quic_schowdhu@quicinc.com>
-Subject: [PATCH V7 6/7] arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support node
-Date:   Thu, 3 Mar 2022 11:57:24 +0530
-Message-ID: <49e3bd5403514654ae57fe32fa8134c3e9062945.1646285069.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V7 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
+Date:   Thu, 3 Mar 2022 11:57:25 +0530
+Message-ID: <5f0bff9d042afbe74a93fa39a76d86784abf8d50.1646285069.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1646285069.git.quic_schowdhu@quicinc.com>
 References: <cover.1646285069.git.quic_schowdhu@quicinc.com>
@@ -75,26 +75,26 @@ the address of the register region.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 47b20ba..6e7221d 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2071,6 +2071,12 @@
- 			#power-domain-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index ff6bda1..ee13b5f 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -1968,6 +1968,12 @@
+ 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
  		};
  
 +		dma@10a2000 {
-+			compatible = "qcom,sc7180-dcc", "qcom,dcc";
++			compatible = "qcom,sdm845-dcc", "qcom,dcc";
 +			reg = <0x0 0x010a2000 0x0 0x1000>,
 +			      <0x0 0x010ae000 0x0 0x2000>;
 +		};
 +
- 		stm@6002000 {
- 			compatible = "arm,coresight-stm", "arm,primecell";
- 			reg = <0 0x06002000 0 0x1000>,
+ 		pcie0: pci@1c00000 {
+ 			compatible = "qcom,pcie-sdm845", "snps,dw-pcie";
+ 			reg = <0 0x01c00000 0 0x2000>,
 -- 
 2.7.4
 

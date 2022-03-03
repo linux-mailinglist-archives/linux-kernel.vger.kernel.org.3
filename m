@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B984CC9FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98004CCA02
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 00:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbiCCXYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 18:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S237182AbiCCXZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 18:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiCCXYX (ORCPT
+        with ESMTP id S229809AbiCCXZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:24:23 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D476710D0;
-        Thu,  3 Mar 2022 15:23:36 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id bg10so13941749ejb.4;
-        Thu, 03 Mar 2022 15:23:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9c2fVUpY7DyP3VgtwSVx0smNHNJcvslxILkoyROtr1w=;
-        b=ItflX7sdEXiW8zlZ4EFJkhQ4cvSrk29ApLzREKca8BMZ5SHJFf/LQLHc+vpa5ldKhD
-         gayzeFaCbaTmiA/r2El83NvflWOrzgHj9tQvgu32iQ263O9uefwrfR/T2TLtIrMnia2l
-         wpAwzTjXQTco2LnnHPLEbVGehHO6S69AjUmWcLpKmYAvSoc2J+p6TntH5uOqZDFLkH+n
-         qB9PqcYQlTnYLOWgh4UDBUCwtUoE+O565clRJFbAlDKu9FuvhPchofEH59jwPb1ThBh9
-         cJ5tyrMwE2nroYd4n098SepAGlo/xlYllHZ17bwqVd2C6LXLS8NeevZ3EPyx9FkA49w2
-         S7vg==
+        Thu, 3 Mar 2022 18:25:01 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D2710D0;
+        Thu,  3 Mar 2022 15:24:15 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so7542359oos.9;
+        Thu, 03 Mar 2022 15:24:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9c2fVUpY7DyP3VgtwSVx0smNHNJcvslxILkoyROtr1w=;
-        b=U7495zDFARigDXvWnQRRcrjWXtWw6zu+okh9eqYlKKDFuSOd/cX5w0InhAJIfldRbN
-         pPNQBNThjGSKulnB9EkoxPICBEKVS+ib7dTWZC7w5jRyQHef4POi0O8xMwwkwx+OiaCO
-         9bu868DgC7wLNB0BQ552tPIZwhgW1fjUO1ZU7pw9UkkDrXqLzS+8p00SFieoBno2bbsH
-         Y3WCe/9skyco1MlKC2dEVeQVrr+o/u73RceeuGhGZCcUD6CBb1Q3oYq7V2inwXQiwoat
-         VwZ1H2xOGXI+ikbNQtfUJPNhtmcBvcVSOphCusbgj/OtwxBJCVbKFC1qY8UlCCBOVuft
-         4mhQ==
-X-Gm-Message-State: AOAM533CKGqHCQg1j5jTvRxHonDRj8RW5mLF4eXRTJBmIOCdCLEFkNB4
-        Img6jh1U8HetsSQr/gYFn8D4S6VIO5bNAJpnOv5+M6ajbio=
-X-Google-Smtp-Source: ABdhPJxeMzRCXl3xo2gq478pKijm5mLzaTTem/4gSoCd9EheSFl4eBnXdb0Xyeuvp/fb3WCw46LNosphVQOF7BQsleU=
-X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
- sd1-20020a1709076e0100b006d0562ce389mr29813134ejc.497.1646349814940; Thu, 03
- Mar 2022 15:23:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vfm2jK+tU0YA9XVn2HUL++BRTsYSj8H0ghNLcRVI0aY=;
+        b=lF1M84G8Md/LQpNzWjJypf0LJm1j8AToDqmju4sbtk6VrdZ8lICzBDK3sD2OSB8Wsa
+         wnIWzSc8Doeun093xFHZ71pxqHpywVKk8jJImEj2kQZeBSpKXyDsHPWOufEXbKcyF2lQ
+         WpEH5ByIQmB+J1M6gI7coCB0qGG3WrzWrRgvOTzfGnxAQcNxthS4o8LCVeG9dpgzFcF3
+         m52fJ9nfQM4WjTt7vnOR+S7sewlKZk8g1FaJwFM5OaPMagt1QSHWfElp7A+H2pQc/Q2f
+         QlGle2OwYOHBVnrB9bT4ccyVIMV1Jgqg0WPKgKELBoH2WrJo9tkxxzMkOCtRLeXxRDFP
+         GSAA==
+X-Gm-Message-State: AOAM533JIrMLtZLlgy/TzRt8SzgOls6PWiaYSWsy9z6I2d87XvsCZZzu
+        D806gHQ/HYnejB0jOpFZquY56JEF9Q==
+X-Google-Smtp-Source: ABdhPJy/AfNGD3ko7bxz0ZgWRWoEoA/ewhRmp21gvsTgCpu1A+pig7QyPb5sbwgUIyO1QIXOWxOmYw==
+X-Received: by 2002:a05:6870:f286:b0:d7:84b:f1bf with SMTP id u6-20020a056870f28600b000d7084bf1bfmr6015116oap.179.1646349854971;
+        Thu, 03 Mar 2022 15:24:14 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id l6-20020a056870d3c600b000d75713938csm1724128oag.7.2022.03.03.15.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 15:24:14 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        - <patches@opensource.cirrus.com>
+Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: mfd: Fix pinctrl node name warnings
+Date:   Thu,  3 Mar 2022 17:23:49 -0600
+Message-Id: <20220303232350.2591143-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220303150610.47596-1-andriy.shevchenko@linux.intel.com> <YiDpKqwiwD8jZdFT@paasikivi.fi.intel.com>
-In-Reply-To: <YiDpKqwiwD8jZdFT@paasikivi.fi.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 4 Mar 2022 01:22:58 +0200
-Message-ID: <CAHp75Ve6k7zqy6Z+2cscV1xq_wh6gyRGBUuSy8ES0KU1g2cnow@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] device property: Allow error pointer for fwnode_handle_{get,put}()
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 11:34 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
-> On Thu, Mar 03, 2022 at 05:06:10PM +0200, Andy Shevchenko wrote:
-> > Some of the fwnode APIs might return an error pointer instead of NULL
-> > or valid fwnode handle. The result of such API call may be considered
-> > optional and hence the test for it is usually done in a form of
-> >
-> >       fwnode = fwnode_find_reference(...);
-> >       if (IS_ERR_OR_NULL(fwnode))
-> >               ...error handling...
-> >
-> > Nevertheless the resulting fwnode may have bumped reference count and
-> > hence caller of the above API is obliged to call fwnode_handle_put().
-> > Since fwnode may be not valid either as NULL or error pointer the check
-> > has to be performed there. This approach uglifies the code and adds
-> > a point of making a mistake, i.e. forgetting about error point case.
-> >
-> > To prevent this allow error pointer for fwnode_handle_get() and
-> > fwnode_handle_put().
+The recent addition pinctrl.yaml in commit c09acbc499e8 ("dt-bindings:
+pinctrl: use pinctrl.yaml") resulted in some node name warnings:
 
-Thanks for the review, my comments below.
+Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: \
+ lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+Documentation/devicetree/bindings/mfd/cirrus,madera.example.dt.yaml: \
+ codec@1a: $nodename:0: 'codec@1a' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
+Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: \
+ pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
 
-...
+Fix the node names to the preferred 'pinctrl'. For cirrus,madera,
+nothing from pinctrl.yaml schema is used, so just drop the reference.
 
-> I guess fwnode_find_reference() is the only fwnode API function returning
-> errors as pointers? If you changed it returning NULL on error, you'd lose
-> the error codes.
->
-> But I think this is a problem beyond fwnode_handle_{get,put}: fwnode
-> obtained this way could be passed to any fwnode function and they should
-> just work correctly with that.
->
-> How about moving the check to fwnode_has_op()? That function is responsible
-> for checking the fwnode is valid and has the op in question.
+Fixes: c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml")
+Cc: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Fix lochnagar-pinctrl nodename in example
+v3:
+ - And fix lochnagar-pinctrl nodename in 'required'. Sigh...
+---
+ Documentation/devicetree/bindings/mfd/brcm,cru.yaml         | 4 ++--
+ Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 6 +++---
+ .../devicetree/bindings/pinctrl/cirrus,madera.yaml          | 3 ---
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
-Yes, I was thinking about it (and I even have a local followup), so
-this version of the fix is (semi-)RFC. Moreover, we (wrongly!) do
-check in many already, but only _after_ trying to dereference error
-pointers.
-
-Letme prepare v2 tomorrow.
-
-> It also seems the explicit fwnode_has_op() call is redundant in
-> fwnode_handle_put() as fwnode_call_void_op() already calls fwnode_has_op().
-
-Then call_ptr_op should have the same check as well.
-
+diff --git a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
+index be4a2df71c25..b85819fbb07c 100644
+--- a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
++++ b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
+@@ -39,7 +39,7 @@ patternProperties:
+   '^phy@[a-f0-9]+$':
+     $ref: ../phy/bcm-ns-usb2-phy.yaml
+ 
+-  '^pin-controller@[a-f0-9]+$':
++  '^pinctrl@[a-f0-9]+$':
+     $ref: ../pinctrl/brcm,ns-pinmux.yaml
+ 
+   '^syscon@[a-f0-9]+$':
+@@ -94,7 +94,7 @@ examples:
+             reg = <0x180 0x4>;
+         };
+ 
+-        pin-controller@1c0 {
++        pinctrl@1c0 {
+             compatible = "brcm,bcm4708-pinmux";
+             reg = <0x1c0 0x24>;
+             reg-names = "cru_gpio_control";
+diff --git a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
+index c00ad3e21c21..ad285cb480c9 100644
+--- a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
++++ b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
+@@ -126,7 +126,7 @@ properties:
+       clock-frequency:
+         const: 12288000
+ 
+-  lochnagar-pinctrl:
++  pinctrl:
+     type: object
+     $ref: /schemas/pinctrl/cirrus,lochnagar.yaml#
+ 
+@@ -255,7 +255,7 @@ required:
+   - reg
+   - reset-gpios
+   - lochnagar-clk
+-  - lochnagar-pinctrl
++  - pinctrl
+ 
+ additionalProperties: false
+ 
+@@ -293,7 +293,7 @@ examples:
+                 clock-frequency = <32768>;
+             };
+ 
+-            lochnagar-pinctrl {
++            pinctrl {
+                 compatible = "cirrus,lochnagar-pinctrl";
+ 
+                 gpio-controller;
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+index c85f759ae5a3..8a90d8273767 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+@@ -107,9 +107,6 @@ properties:
+ 
+     additionalProperties: false
+ 
+-allOf:
+-  - $ref: "pinctrl.yaml#"
+-
+ required:
+   - pinctrl-0
+   - pinctrl-names
 -- 
-With Best Regards,
-Andy Shevchenko
+2.32.0
+

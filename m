@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9317C4CB334
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C178C4CB393
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 01:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiCCAL2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Mar 2022 19:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S230115AbiCCANV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 19:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiCCALY (ORCPT
+        with ESMTP id S230081AbiCCANN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:11:24 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D0CC10A7D4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:10:40 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-9-TaJDYF8zPkim1JgaaMOOTA-1; Thu, 03 Mar 2022 00:10:37 +0000
-X-MC-Unique: TaJDYF8zPkim1JgaaMOOTA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 3 Mar 2022 00:10:36 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 3 Mar 2022 00:10:36 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Krzysztof Kozlowski' <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-nfc@lists.01.org" <linux-nfc@lists.01.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RESEND PATCH v2 4/6] nfc: llcp: use test_bit()
-Thread-Topic: [RESEND PATCH v2 4/6] nfc: llcp: use test_bit()
-Thread-Index: AQHYLmtWg0E/2bVm5kqjDz1/h/f2VKysyObA
-Date:   Thu, 3 Mar 2022 00:10:36 +0000
-Message-ID: <7fc4cb250bb8406cadf80649e366b249@AcuMS.aculab.com>
-References: <20220302192523.57444-1-krzysztof.kozlowski@canonical.com>
- <20220302192523.57444-5-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220302192523.57444-5-krzysztof.kozlowski@canonical.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 2 Mar 2022 19:13:13 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CE4CB937
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 16:12:30 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso6243321pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Mar 2022 16:12:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Td4OZ3CGd5qbdkbgU7FY+nlkAv7YQKpmIhrzx/kUjzU=;
+        b=K1LcK7iCnXuheBWswh9IK28RiGD6oNWwq9sVu+D7heKHTJ4ArDuYccdpbxGNoDQ43z
+         rXucgFRTFwpkDDKm5q8FHQlbT0RXSWsJmBRhCeJJSoObX5ISY20k1epb5uXEBQZYsTJb
+         52fvKPWsR193DmcZ5aAKb8BoscIkjXmPWuQXX/lOKH5RWZMS2BnAJGOEFQpske8qx+Cc
+         dDHOja0t1ObCNHaLze4mbZjXZV1606kGCYyU7SZonkicuaWQhYa0vj0uuzdtryUta6HR
+         WawmlaAyb2plPEIyi/9iw1mS4soHJ7Xj7itbwm1xuWD/cr8F8Bua5JC7QN0AF4OE/GVX
+         ukUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Td4OZ3CGd5qbdkbgU7FY+nlkAv7YQKpmIhrzx/kUjzU=;
+        b=Iy9b3iNHyDoVhMGenfJ9KYDkAkVXRKW3lSLyGGyPT0Y4YKsrgbvMWro47IKUPladmW
+         Rg0gPPlBKpNIXyBaCvF9YVxrJRZ8WD8h3KPR9LS5rz49PU/nTA/SAdPtZp4oY365MRTy
+         m0jOKgxXrr9NUZDHuXexbRK3iahFh119q9EbByKOWVc0CsyqEFmgOvs/sW4y2lOHpyb5
+         TULBtfBPWUvdnke3ReVAfgrp74GjaiA7KhfxJ2KGCeFTQLLl9X0abjunvOhF4J5/MWXk
+         tXc7xXvnlbCXLY9DBJK+iCB6VRWnZ+/gnxfNJ+gbSMFsqemoChSgJM8wHsMk1uL42eQq
+         Y+XQ==
+X-Gm-Message-State: AOAM530WEknaYt0G3F7mN+F0E9SG6ffBYHsSzaZn0b6PZOWPJrD4dCSd
+        hU6JJLvS6q7+vi67eoBYU42TjQ==
+X-Google-Smtp-Source: ABdhPJwR7M4jonsW7a9xPbncoCR2AjvLpdLl9OviFtzwYaKQ+z+yJXD3Am1fuqU3JpL/ica97nb7ig==
+X-Received: by 2002:a17:90b:3d02:b0:1bc:85fa:e24 with SMTP id pt2-20020a17090b3d0200b001bc85fa0e24mr2354281pjb.239.1646266349430;
+        Wed, 02 Mar 2022 16:12:29 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056a00180500b004e1bea9c587sm323943pfa.67.2022.03.02.16.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 16:12:28 -0800 (PST)
+Date:   Thu, 3 Mar 2022 00:12:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 04/28] KVM: x86/mmu: Formalize TDP MMU's (unintended?)
+ deferred TLB flush logic
+Message-ID: <YiAH6UfSDyHeMP+s@google.com>
+References: <20220226001546.360188-1-seanjc@google.com>
+ <20220226001546.360188-5-seanjc@google.com>
+ <YiAE4ju0a3MWXr31@google.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiAE4ju0a3MWXr31@google.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski
-> Sent: 02 March 2022 19:25
+On Wed, Mar 02, 2022, Mingwei Zhang wrote:
+> On Sat, Feb 26, 2022, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 12866113fb4f..e35bd88d92fd 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -93,7 +93,15 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+> >  	list_del_rcu(&root->link);
+> >  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+> >  
+> > -	zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
+> > +	/*
+> > +	 * A TLB flush is not necessary as KVM performs a local TLB flush when
+> > +	 * allocating a new root (see kvm_mmu_load()), and when migrating vCPU
+> > +	 * to a different pCPU.  Note, the local TLB flush on reuse also
+> > +	 * invalidates any paging-structure-cache entries, i.e. TLB entries for
+> > +	 * intermediate paging structures, that may be zapped, as such entries
+> > +	 * are associated with the ASID on both VMX and SVM.
+> > +	 */
+> > +	(void)zap_gfn_range(kvm, root, 0, -1ull, false, false, shared);
 > 
-> Use test_bit() instead of open-coding it, just like in other places
-> touching the bitmap.
+> Understood that we could avoid the TLB flush here. Just curious why the
+> "(void)" is needed here? Is it for compile time reason?
 
-Except it isn't a bitmap, it is just a structure member that contains bits.
-So all the other places should be changes to use C shifts and masks (etc).
+Nope, no functional purpose, though there might be some "advanced" warning or
+static checkers that care.
 
-	David
-
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  net/nfc/llcp_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/nfc/llcp_core.c b/net/nfc/llcp_core.c
-> index 5ad5157aa9c5..b70d5042bf74 100644
-> --- a/net/nfc/llcp_core.c
-> +++ b/net/nfc/llcp_core.c
-> @@ -383,7 +383,7 @@ u8 nfc_llcp_get_sdp_ssap(struct nfc_llcp_local *local,
->  			pr_debug("WKS %d\n", ssap);
-> 
->  			/* This is a WKS, let's check if it's free */
-> -			if (local->local_wks & BIT(ssap)) {
-> +			if (test_bit(ssap, &local->local_wks)) {
->  				mutex_unlock(&local->sdp_lock);
-> 
->  				return LLCP_SAP_MAX;
-> --
-> 2.32.0
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+The "(void)" is to communicate to human readers that the result is intentionally
+ignored, e.g. to reduce the probability of someone "fixing" the code by acting on
+the result of zap_gfn_range().  The comment should suffice, but it's nice to have
+the code be self-documenting as much as possible.

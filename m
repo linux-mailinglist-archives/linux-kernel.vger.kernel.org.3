@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57194CB722
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7177C4CB726
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiCCGnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S229868AbiCCGrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 01:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiCCGnB (ORCPT
+        with ESMTP id S229480AbiCCGre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:43:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C11C1688CE
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:42:16 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPf9i-0000cS-G5; Thu, 03 Mar 2022 07:41:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPf9a-002MQZ-Jb; Thu, 03 Mar 2022 07:41:33 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nPf9Z-006eej-4Z; Thu, 03 Mar 2022 07:41:33 +0100
-Date:   Thu, 3 Mar 2022 07:41:30 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-riscv@lists.infradead.org, Vignesh R <vigneshr@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-rockchip@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jeff LaBundy <jeff@labundy.com>, linux-sunxi@lists.linux.dev,
-        linux-pwm@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
-Message-ID: <20220303064130.lzvptbq3hpny74ke@pengutronix.de>
-References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
- <211b3d35-1d8d-b71c-996a-b185324815f7@canonical.com>
+        Thu, 3 Mar 2022 01:47:34 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E25CF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646290009; x=1677826009;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RKz7lI9VwsOUnQol4JTL6gKfI3KbW217oCbu7ZsqHYc=;
+  b=FrzHLhglhbi8pMzj2vTj96B35bj5XzeRmjgwGZ3eonQrylo5XKPtYKQn
+   SvjT6FOwYgA3GQm1gFyLBOrd4T56h9Cfsmt33yekrC2xHimNBPIuEY8SG
+   1LP+etsZCOyGmauEOVsjE+WW6VVvMZJGeSVszdLHvhf84GubSrcEA03xm
+   T1lhQVU05ehwW2l1ZIjPa5kFkx6OT7bCxB0XGDzBu/6fnkPxyp49IUb93
+   D/cORNQjoTuCEIRMPzAbl0vpL0zAd9Zop7ey/qBC2p+ht9FCqJP3p0K2P
+   MDKTTmk1JnDG5luDEd4WCkP371zWi9IBBgaUQ9gz1mGHxuqVWa3Ro9/xN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="234207974"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="234207974"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 22:46:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="511306145"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2022 22:46:47 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPfEc-0000FV-Fd; Thu, 03 Mar 2022 06:46:46 +0000
+Date:   Thu, 3 Mar 2022 14:46:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Mark Salyzyn <salyzyn@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 782/9999] arch/mips/include/asm/vdso/gettimeofday.h:94:38: error:
+ '__NR_clock_getres_time64' undeclared
+Message-ID: <202203031405.oBHU6BPY-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="szkcsdi5ha36tvvv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <211b3d35-1d8d-b71c-996a-b185324815f7@canonical.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,63 +66,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Vincenzo,
 
---szkcsdi5ha36tvvv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-Hello,
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
+commit: 23dea1cf7ed3846719448e74feeb56c28e3a9019 [782/9999] UPSTREAM: mips: Add clock_getres entry point
+config: mips-randconfig-r016-20211028 (https://download.01.org/0day-ci/archive/20220303/202203031405.oBHU6BPY-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/23dea1cf7ed3846719448e74feeb56c28e3a9019
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout 23dea1cf7ed3846719448e74feeb56c28e3a9019
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ arch/mips/vdso/
 
-(dropped Anson Huang and Yash Shah from Cc, their addresses bounced last
-time I used them.)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, Mar 02, 2022 at 08:04:45PM +0100, Krzysztof Kozlowski wrote:
-> On 14/02/2022 22:21, Krzysztof Kozlowski wrote:
-> > Hi,
-> >=20
-> > Changes since v1:
-> > 1. Add tags.
-> > 2. Adjust subject (Uwe).
-> >=20
->=20
-> Hi Thierry, Uwe and Lee,
->=20
-> Any comments here? Rob acked all these, so these are clear to go via PWM
-> tree.
+All errors (new ones prefixed by >>):
 
-They are fine from my side:
+   In file included from lib/vdso/gettimeofday.c:26,
+                    from <command-line>:
+   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_gettime_fallback':
+   arch/mips/include/asm/vdso/gettimeofday.h:70:38: error: '__NR_clock_gettime64' undeclared (first use in this function)
+      70 |         register long nr asm("v0") = __NR_clock_gettime64;
+         |                                      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/include/asm/vdso/gettimeofday.h:70:38: note: each undeclared identifier is reported only once for each function it appears in
+   arch/mips/include/asm/vdso/gettimeofday.h: In function 'clock_getres_fallback':
+>> arch/mips/include/asm/vdso/gettimeofday.h:94:38: error: '__NR_clock_getres_time64' undeclared (first use in this function)
+      94 |         register long nr asm("v0") = __NR_clock_getres_time64;
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   lib/vdso/gettimeofday.c: In function '__cvdso_clock_gettime32':
+   lib/vdso/gettimeofday.c:113:20: error: invalid use of undefined type 'struct compat_timespec'
+     113 |                 res->tv_sec = ts.tv_sec;
+         |                    ^~
+   lib/vdso/gettimeofday.c:114:20: error: invalid use of undefined type 'struct compat_timespec'
+     114 |                 res->tv_nsec = ts.tv_nsec;
+         |                    ^~
+   lib/vdso/gettimeofday.c: In function '__cvdso_clock_getres_time32':
+   lib/vdso/gettimeofday.c:219:20: error: invalid use of undefined type 'struct compat_timespec'
+     219 |                 res->tv_sec = ts.tv_sec;
+         |                    ^~
+   lib/vdso/gettimeofday.c:220:20: error: invalid use of undefined type 'struct compat_timespec'
+     220 |                 res->tv_nsec = ts.tv_nsec;
+         |                    ^~
+   arch/mips/vdso/vgettimeofday.c: At top level:
+   arch/mips/vdso/vgettimeofday.c:14:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
+      14 | int __vdso_clock_gettime(clockid_t clock,
+         |     ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/vdso/vgettimeofday.c:20:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
+      20 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+         |     ^~~~~~~~~~~~~~~~~~~
+   arch/mips/vdso/vgettimeofday.c:26:5: warning: no previous prototype for '__vdso_clock_getres' [-Wmissing-prototypes]
+      26 | int __vdso_clock_getres(clockid_t clock_id,
+         |     ^~~~~~~~~~~~~~~~~~~
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-It's Thierry who is reponsible to pick these up and it seems he marked
-the series as accepted:
-	https://patchwork.ozlabs.org/project/linux-pwm/list/?series=3D286150&state=
-=3D*
+vim +/__NR_clock_getres_time64 +94 arch/mips/include/asm/vdso/gettimeofday.h
 
-So I would expect that it turns up in next after Thierry is done with
-his testing.
+    83	
+    84	static __always_inline int clock_getres_fallback(
+    85						clockid_t _clkid,
+    86						struct __kernel_timespec *_ts)
+    87	{
+    88		register struct __kernel_timespec *ts asm("a1") = _ts;
+    89		register clockid_t clkid asm("a0") = _clkid;
+    90		register long ret asm("v0");
+    91	#if _MIPS_SIM == _MIPS_SIM_ABI64
+    92		register long nr asm("v0") = __NR_clock_getres;
+    93	#else
+  > 94		register long nr asm("v0") = __NR_clock_getres_time64;
+    95	#endif
+    96		register long error asm("a3");
+    97	
+    98		asm volatile(
+    99		"       syscall\n"
+   100		: "=r" (ret), "=r" (error)
+   101		: "r" (clkid), "r" (ts), "r" (nr)
+   102		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+   103		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+   104	
+   105		return error ? -ret : ret;
+   106	}
+   107	
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---szkcsdi5ha36tvvv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIgYxYACgkQwfwUeK3K
-7AlLnwf/RtAHP6ySxnXSdGI6h/ICx3Q7FjK5zy2WDgciveSQhO92SP1TrQR8Ll0H
-CN5ftiC6uc/PqFXfnzno/ZKrQ+yhwuL3GNWl/tK070bXLkZS9rtZoo62p2DxK6/U
-V9GQpUSATRqU19pMkuje+qfbL5o5gTzehAAtQq/aQLEUqn0R46gk4DnYVuFK9ezV
-KLe6HD8NoNbclEkJwJ6NKZKgwxIck0g3HFqTwHD7PEHb1i1R1teL4M3lacIflRMB
-dNw2LCVgIFw/Su/sZWL/sj2vilOrKUQD+R+O4vOzxqEO7TrSOZgHitAHOWs2uBI6
-NeJ60SyXxmDSYCmuEiZVL1Fax6Dldg==
-=/r9+
------END PGP SIGNATURE-----
-
---szkcsdi5ha36tvvv--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

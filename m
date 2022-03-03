@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663904CB54D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7854CB55C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 04:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiCCDQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Mar 2022 22:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S232006AbiCCDSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Mar 2022 22:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiCCDQI (ORCPT
+        with ESMTP id S231975AbiCCDSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Mar 2022 22:16:08 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF2EF70E5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:15:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V650kGb_1646277315;
-Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V650kGb_1646277315)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 03 Mar 2022 11:15:15 +0800
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-To:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] kfence: Alloc kfence_pool after system startup
-Date:   Thu,  3 Mar 2022 11:15:05 +0800
-Message-Id: <20220303031505.28495-3-dtcccc@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220303031505.28495-1-dtcccc@linux.alibaba.com>
-References: <20220303031505.28495-1-dtcccc@linux.alibaba.com>
+        Wed, 2 Mar 2022 22:18:38 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE6488BD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 19:17:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=KmisOVaF/pydeRjPJ8LAOTaqZu2uZJoN0GlHrJ3jTgk=; b=ebHEJWpGVJe764hVenPrKMqYDl
+        xybnOjh9Ho0f26P+hLskJ3TyyvwnFvv/bWsiWUxyQkv1e/gtRg7d23qbYMcwiTt790A3bx7JNvWJL
+        b2wfKZ24AaCyvmUDgb8/aviLy/k2A8dWwUO3zt0KUC1STHdRbDVrhLsUu6n+fhQqk9W1ysz+wNgi4
+        uxPr58G/S4Qmr3p7Bguv0kNGI0a2kdVXf2edOp5cx7XT3A3dFGte3xzOyC7ZuvXja1/gvkFcXR5qe
+        O2y7LE6mB9zvZkX3yTg4V05Y4vBb+oZcPWDGoVRkMK/g18Ejent0Z2PGEj2gjmM8OGVGSb7FRQhnx
+        jlZezlYQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPbyL-0055ao-NU; Thu, 03 Mar 2022 03:17:45 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH] trace: fix return value of __setup handlers
+Date:   Wed,  2 Mar 2022 19:17:44 -0800
+Message-Id: <20220303031744.32356-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,210 +51,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KFENCE aims at production environments, but it does not allow enabling
-after system startup because kfence_pool only alloc pages from memblock.
-Consider the following production scene:
-At first, for performance considerations, production machines do not
-enable KFENCE.
-However, after running for a while, the kernel is suspected to have
-memory errors. (e.g., a sibling machine crashed.)
-So other production machines need to enable KFENCE, but it's hard for
-them to reboot.
+__setup() handlers should generally return 1 to indicate that the
+boot options have been handled.
 
-Allow enabling KFENCE by alloc pages after system startup, even if
-KFENCE is not enabled during booting.
+Using invalid option values causes the entire kernel boot option
+string to be reported as Unknown and added to init's environment
+strings, polluting it.
 
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
+    kprobe_event=p,syscall_any,$arg1 trace_options=quiet
+    trace_clock=jiffies", will be passed to user space.
+
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc6
+     kprobe_event=p,syscall_any,$arg1
+     trace_options=quiet
+     trace_clock=jiffies
+
+Return 1 from the __setup() handlers so that init's environment is not
+polluted with kernel boot options.
+
+Fixes: 7bcfaf54f591 ("tracing: Add trace_options kernel command line parameter")
+Fixes: e1e232ca6b8f ("tracing: Add trace_clock=<clock> kernel parameter")
+Fixes: 970988e19eb0 ("tracing/kprobe: Add kprobe_event= boot parameter")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
 ---
-This patch is similar to what the KFENCE(early version) do on ARM64.
-Instead of alloc_pages(), we'd prefer alloc_contig_pages() to get exact
-number of pages.
-I'm not sure about the impact of breaking __ro_after_init. I've tested
-with hackbench, and it seems no performance regression.
-Or any problem about security?
----
- mm/kfence/core.c | 96 ++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 76 insertions(+), 20 deletions(-)
+"trace_clock=" reports invalid parameter usage later, when it tries
+to use the value:
+  Trace clock jiffies not defined, going back to default
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 19eb123c0bba..ae69b2a113a4 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -93,7 +93,7 @@ static unsigned long kfence_skip_covered_thresh __read_mostly = 75;
- module_param_named(skip_covered_thresh, kfence_skip_covered_thresh, ulong, 0644);
- 
- /* The pool of pages used for guard pages and objects. */
--char *__kfence_pool __ro_after_init;
-+char *__kfence_pool __read_mostly;
- EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
- 
- /*
-@@ -534,17 +534,18 @@ static void rcu_guarded_free(struct rcu_head *h)
- 	kfence_guarded_free((void *)meta->addr, meta, false);
- }
- 
--static bool __init kfence_init_pool(void)
-+/*
-+ * The main part of init kfence pool.
-+ * Return 0 if succeed. Otherwise return the address where error occurs.
-+ */
-+static unsigned long __kfence_init_pool(void)
- {
- 	unsigned long addr = (unsigned long)__kfence_pool;
- 	struct page *pages;
- 	int i;
- 
--	if (!__kfence_pool)
--		return false;
--
- 	if (!arch_kfence_init_pool())
--		goto err;
-+		return addr;
- 
- 	pages = virt_to_page(addr);
- 
-@@ -562,7 +563,7 @@ static bool __init kfence_init_pool(void)
- 
- 		/* Verify we do not have a compound head page. */
- 		if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
--			goto err;
-+			return addr;
- 
- 		__SetPageSlab(&pages[i]);
- 	}
-@@ -575,7 +576,7 @@ static bool __init kfence_init_pool(void)
- 	 */
- 	for (i = 0; i < 2; i++) {
- 		if (unlikely(!kfence_protect(addr)))
--			goto err;
-+			return addr;
- 
- 		addr += PAGE_SIZE;
- 	}
-@@ -592,7 +593,7 @@ static bool __init kfence_init_pool(void)
- 
- 		/* Protect the right redzone. */
- 		if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
--			goto err;
-+			return addr;
- 
- 		addr += 2 * PAGE_SIZE;
- 	}
-@@ -605,9 +606,21 @@ static bool __init kfence_init_pool(void)
- 	 */
- 	kmemleak_free(__kfence_pool);
- 
--	return true;
-+	return 0;
-+}
-+
-+static bool __init kfence_init_pool(void)
-+{
-+	unsigned long addr;
-+
-+	if (!__kfence_pool)
-+		return false;
-+
-+	addr = __kfence_init_pool();
-+
-+	if (!addr)
-+		return true;
- 
--err:
- 	/*
- 	 * Only release unprotected pages, and do not try to go back and change
- 	 * page attributes due to risk of failing to do so as well. If changing
-@@ -620,6 +633,22 @@ static bool __init kfence_init_pool(void)
- 	return false;
- }
- 
-+static bool kfence_init_pool_late(void)
-+{
-+	unsigned long addr, free_pages;
-+
-+	addr = __kfence_init_pool();
-+
-+	if (!addr)
-+		return true;
-+
-+	/* Same as above. */
-+	free_pages = (KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool)) / PAGE_SIZE;
-+	free_contig_range(page_to_pfn(virt_to_page(addr)), free_pages);
-+	__kfence_pool = NULL;
-+	return false;
-+}
-+
- /* === DebugFS Interface ==================================================== */
- 
- static int stats_show(struct seq_file *seq, void *v)
-@@ -768,31 +797,58 @@ void __init kfence_alloc_pool(void)
- 		pr_err("failed to allocate pool\n");
- }
- 
-+static inline void __kfence_init(void)
-+{
-+	if (!IS_ENABLED(CONFIG_KFENCE_STATIC_KEYS))
-+		static_branch_enable(&kfence_allocation_key);
-+	WRITE_ONCE(kfence_enabled, true);
-+	queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
-+	pr_info("initialized - using %lu bytes for %d objects at 0x%p-0x%p\n", KFENCE_POOL_SIZE,
-+		CONFIG_KFENCE_NUM_OBJECTS, (void *)__kfence_pool,
-+		(void *)(__kfence_pool + KFENCE_POOL_SIZE));
-+}
-+
- void __init kfence_init(void)
- {
-+	stack_hash_seed = (u32)random_get_entropy();
-+
- 	/* Setting kfence_sample_interval to 0 on boot disables KFENCE. */
- 	if (!kfence_sample_interval)
- 		return;
- 
--	stack_hash_seed = (u32)random_get_entropy();
- 	if (!kfence_init_pool()) {
- 		pr_err("%s failed\n", __func__);
- 		return;
- 	}
- 
--	if (!IS_ENABLED(CONFIG_KFENCE_STATIC_KEYS))
--		static_branch_enable(&kfence_allocation_key);
--	WRITE_ONCE(kfence_enabled, true);
--	queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
--	pr_info("initialized - using %lu bytes for %d objects at 0x%p-0x%p\n", KFENCE_POOL_SIZE,
--		CONFIG_KFENCE_NUM_OBJECTS, (void *)__kfence_pool,
--		(void *)(__kfence_pool + KFENCE_POOL_SIZE));
-+	__kfence_init();
-+}
-+
-+static int kfence_init_late(void)
-+{
-+	struct page *pages;
-+	const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
-+
-+	pages = alloc_contig_pages(nr_pages, GFP_KERNEL, first_online_node, NULL);
-+
-+	if (!pages)
-+		return -ENOMEM;
-+
-+	__kfence_pool = page_to_virt(pages);
-+
-+	if (!kfence_init_pool_late()) {
-+		pr_err("%s failed\n", __func__);
-+		return -EBUSY;
-+	}
-+
-+	__kfence_init();
-+	return 0;
- }
- 
- static int kfence_enable_late(void)
- {
- 	if (!__kfence_pool)
--		return -EINVAL;
-+		return kfence_init_late();
- 
- 	WRITE_ONCE(kfence_enabled, true);
- 	queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
--- 
-2.27.0
+ kernel/trace/trace.c        |    4 ++--
+ kernel/trace/trace_kprobe.c |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+--- linux-next-20220302.orig/kernel/trace/trace.c
++++ linux-next-20220302/kernel/trace/trace.c
+@@ -235,7 +235,7 @@ static char trace_boot_options_buf[MAX_T
+ static int __init set_trace_boot_options(char *str)
+ {
+ 	strlcpy(trace_boot_options_buf, str, MAX_TRACER_SIZE);
+-	return 0;
++	return 1;
+ }
+ __setup("trace_options=", set_trace_boot_options);
+ 
+@@ -246,7 +246,7 @@ static int __init set_trace_boot_clock(c
+ {
+ 	strlcpy(trace_boot_clock_buf, str, MAX_TRACER_SIZE);
+ 	trace_boot_clock = trace_boot_clock_buf;
+-	return 0;
++	return 1;
+ }
+ __setup("trace_clock=", set_trace_boot_clock);
+ 
+--- linux-next-20220302.orig/kernel/trace/trace_kprobe.c
++++ linux-next-20220302/kernel/trace/trace_kprobe.c
+@@ -32,7 +32,7 @@ static int __init set_kprobe_boot_events
+ 	strlcpy(kprobe_boot_events_buf, str, COMMAND_LINE_SIZE);
+ 	disable_tracing_selftest("running kprobe events");
+ 
+-	return 0;
++	return 1;
+ }
+ __setup("kprobe_event=", set_kprobe_boot_events);
+ 

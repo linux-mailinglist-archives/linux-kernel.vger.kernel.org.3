@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322114CB88B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7344CB891
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 09:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiCCISg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 03:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S231262AbiCCITj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 03:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiCCISd (ORCPT
+        with ESMTP id S231233AbiCCITg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 03:18:33 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E42D5C34D;
-        Thu,  3 Mar 2022 00:17:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8P460kP7z4xdl;
-        Thu,  3 Mar 2022 19:17:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646295463;
-        bh=CPzmnLR+ho77uKWhDa8Y+eEe6N04grx16PnUHQlJvrs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q0LHXlNqsvbdzWe9vPg+d4bwteqv8ig69J0yGNuKSm9bXGRSf53/jyQo8HqrwqDls
-         3gAMxZMkW9AZIvneMIShH+NqGOT+lFr+iwG5jt5YzLCz+5oEl+EilmmGPHsQxeAa+Q
-         foDaJdbkJoPoIS3QpyE1F5GHO1PSAqOrCKQ3Q+ANgTD6U5iAxt6qobyVBcRvnjFxlC
-         hHErlkNsGDJhU0HK0h1xOPvXFdF4iEYSPSteb1L6zhBIYNfN7uaO8TYvuhiHKdyCfp
-         exAX5Z4tTt2rzxzCJ0g1gpNN+o1hFAA+spUrs4pHyv6Ph4TW+s98sy/5192OOUHolx
-         6y7CbH0LS16DA==
-Date:   Thu, 3 Mar 2022 19:17:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Alan Kao <alankao@andestech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stafford Horne <shorne@gmail.com>
-Subject: linux-next: manual merge of the akpm-current tree with the
- asm-generic tree
-Message-ID: <20220303191741.3055ac34@canb.auug.org.au>
+        Thu, 3 Mar 2022 03:19:36 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F9D1712B4;
+        Thu,  3 Mar 2022 00:18:51 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z16so4149026pfh.3;
+        Thu, 03 Mar 2022 00:18:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vU1b7wDDnqVNlq1Z3Hvkh5KsF871sfs1Pb9VrlvOM1A=;
+        b=qpwp/6D+p9CYtGRLDE/pjwu0ektMH0lMywmc/153ea/IKQFvTa0ijFGROHSzpG0ur2
+         0lxIRSCwR55CVXs3b4YkLKTlfXCLiaDoP9TEl0pHT65bK6dIkDIto8ztD28Fc6QR9e1G
+         94yRK/QPDODBgmyvQuwUcgpAimqi7ihlZsrXkPZVOz1Hz7F7DtUQCdrZgsx+h27uzd0O
+         ABRUNvI5dDHu7TcJ7Yx6tBpjMEVnXwl3RV80aHQEC6vbSJx6aIMqkTC3At0wd7wpcfFS
+         5OD7VtKzLqmjB/f5+Rs2HOIRipvXTg32g8OUFJ2JisK5njm6Dtl0MboQUoYb5nS9LjDD
+         08mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vU1b7wDDnqVNlq1Z3Hvkh5KsF871sfs1Pb9VrlvOM1A=;
+        b=3CyAXQFS0evdBRiUOyskkUERs+ipi1DxehTA7f6SQos8WWOBPVUrC9qQZne6cs1lK6
+         DqZdNMtz6FTFDzkFHHkc4qseECCW0gPSgZn5Gz2ZqY4BvOPSu53L/5UAyWbOoCeT/ZVh
+         zu7URgPZN6z8DNGmDwlKnyWXXFS2KGxRXtf2gNDGOGjCwO8w+1XXXmk3wH1ubSOGFG9Y
+         CdqpR0heBVzz2+p9oCpPrvAE18ablU580eAITUeEYZwI+boqXaeLy94VGu3qZ94C++3V
+         VUIaNcjYK24ndSQxajoL06VemzCr/eFOBY+kgKfQOzXAuNV+5WbyvsmPQouZP/asvVO0
+         Y5eg==
+X-Gm-Message-State: AOAM533mCvA0HzFDGRfWvtP6N036N+QI+q1glAIuomM9wwsq4LZh0EN/
+        mHlBuRWeCFYWGYnEZFutkInHuAVMxMnNCZOM
+X-Google-Smtp-Source: ABdhPJyaZ7N5WWHDTy0tfYJJ9BH5pHdFZMLr4vk8eCMjqLRRsNjkUIBSBREIrqJRHdC14YEzXyDjIg==
+X-Received: by 2002:a65:41c3:0:b0:363:5711:e234 with SMTP id b3-20020a6541c3000000b003635711e234mr29286766pgq.386.1646295530702;
+        Thu, 03 Mar 2022 00:18:50 -0800 (PST)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id k20-20020a056a00135400b004ecc81067b8sm1733592pfu.144.2022.03.03.00.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 00:18:50 -0800 (PST)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] bpf: Replace strncpy() with strscpy_pad()
+Date:   Thu,  3 Mar 2022 16:18:00 +0800
+Message-Id: <20220303081800.82653-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HLBxvijQmW7WCX/K3UnFyYe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,52 +74,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/HLBxvijQmW7WCX/K3UnFyYe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Using strncpy() on NUL-terminated strings is considered deprecated[1],
+replace it with strscpy_pad().
 
-Hi all,
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ kernel/bpf/helpers.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-  arch/nds32/mm/init.c
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index ae64110a98b5..d03b28761a67 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -225,13 +225,7 @@ BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
+ 	if (unlikely(!task))
+ 		goto err_clear;
+ 
+-	strncpy(buf, task->comm, size);
+-
+-	/* Verifier guarantees that size > 0. For task->comm exceeding
+-	 * size, guarantee that buf is %NUL-terminated. Unconditionally
+-	 * done here to save the size test.
+-	 */
+-	buf[size - 1] = 0;
++	strscpy_pad(buf, task->comm, size);
+ 	return 0;
+ err_clear:
+ 	memset(buf, 0, size);
+-- 
+2.35.1
 
-between commit:
-
-  9f15ac318b83 ("nds32: Remove the architecture")
-
-from the asm-generic tree and commit:
-
-  311ca692496e ("mm: remove mmu_gathers storage from remaining architecture=
-s")
-
-from the akpm-current tree.
-
-I fixed it up (I removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/HLBxvijQmW7WCX/K3UnFyYe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgeaUACgkQAVBC80lX
-0GyaxggAhcop8wjZXukrM3Q/Js1hZcLi8yhUYb4KyNq/nrTsa4EwCdXLYZgRl87b
-frYT3Igr7q92DLW9SDdzXvGdCfW8Gl1jNEQUdEQ1JWNO2JRL50EaSv1M6lX54VRl
-gM1hmCh4ljCwPV33E9YgceN4ufF1UpaCzSqHyDVrBfP61MMCuwTtPHdiGg27R65u
-1TsjDnTCWhjp3WQPc1Qc10MBwiV5f8CKyM2XW51h41CzMakh7PPVN+YvDJhdJURG
-ONnU4NlkVzafWk8jkh93MO3/ds6w5IFOXKNdjMJlLivYXd3fOW4IdR/h1lJAndgy
-G3pvJjFeC1wDGttoPv6zluX0i0DhkA==
-=U0YK
------END PGP SIGNATURE-----
-
---Sig_/HLBxvijQmW7WCX/K3UnFyYe--

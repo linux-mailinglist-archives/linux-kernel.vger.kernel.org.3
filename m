@@ -2,78 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A5B4CBEF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195E34CBEFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 14:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiCCNig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 08:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S233779AbiCCNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 08:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiCCNie (ORCPT
+        with ESMTP id S230272AbiCCNkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:38:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD64DE2EB;
-        Thu,  3 Mar 2022 05:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FEVhRqa2ocuKXeElJ1GV1u7yPCnknSobAGsnmju/L8Q=; b=GyK4t2LUht31zC1Z6nUue7H8w/
-        Q/7L17Z2aC/7NT7JzSGTEOn/NQyH1q1I6oLaU9Usc73YL1fBIl8Q09jKMusLp5fHJdV4BLFRNx5Xr
-        UaMqqcRlfc71q/moX4k2wR8I/w8iqGbE5hPJBxqA64L25MiTwWkc5XY+shoUllXWAFQGZ3giG1Bfd
-        tDav4bKlGo+bj6oimX7t2i6FrIX0KwshXQgKPhQptCUzjot4J/qt+gtzlTbgaROPqXeoc3y/NfpT/
-        atUwfWFrt+ifBtojbO7PsNCPZx9H8H3KMNAU+PEgQlzG4z36mUPbreH/Z4aHysPz6c5T06HDP+NAq
-        wHWm9IVQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPle5-006W8k-DL; Thu, 03 Mar 2022 13:37:29 +0000
-Date:   Thu, 3 Mar 2022 05:37:29 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <YiDEmRf3X0fxSayK@infradead.org>
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
- <20220302161917.gx5icfszakoye4uh@maple.lan>
- <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
- <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+        Thu, 3 Mar 2022 08:40:12 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF91E02D1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 05:39:27 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22385Y9M022391;
+        Thu, 3 Mar 2022 07:38:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=JAW0fd/250Z2ZV4LwtY5UFwBqx1Nr8e/Nox+ORPT4xU=;
+ b=n5VeAkk+Q7i1oO6OwNXDgJN3qKercMxKQDP6zJ1ajaCETX4GfrLuluymxmDMcuPJiu7O
+ GAUrlY77z/YP5dZeYyB8UeN/igmXlMCaOolA0pbb4sdFUy+wsRABMZyQgpBXOEd/jFe3
+ w9gefAR/S9zxXkXcgRAq3LCBmakVG0uzNnkAT7hmc1pua0yQfekQIOJiuenf4G5mBtO4
+ 5U2qTdrh7nc7jkcrBe59z1OUpAjwUo6oIOhBwTSQFc8gxyTow5F8ak/q5+LXW2BV4XZG
+ DmBv/MWF7I5JoVc65XKVoNcQvnLZGd7VjyzW6fMjkJV7vh0aZU89j7UKcSy4zar/lhcW VA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ejsv20cd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 03 Mar 2022 07:38:36 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
+ 2022 13:38:34 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 3 Mar 2022 13:38:34 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6B4107C;
+        Thu,  3 Mar 2022 13:38:34 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 13:38:34 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <patches@opensource.cirrus.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: wm8350: Handle error for wm8350_register_irq
+Message-ID: <20220303133834.GO38351@ediswmail.ad.cirrus.com>
+References: <20220303082154.264114-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220303082154.264114-1-jiasheng@iscas.ac.cn>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: HO9RCg_y3zgzSZioCpvPZkwTLQZigB_i
+X-Proofpoint-ORIG-GUID: HO9RCg_y3zgzSZioCpvPZkwTLQZigB_i
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
-> Do we really want to hide the 'struct list_head modules' from external 
-> world ?
+On Thu, Mar 03, 2022 at 04:21:54PM +0800, Jiasheng Jiang wrote:
+> As the potential failure of the wm8350_register_irq(),
+> it should be better to check it and return error if fails.
+> Also, use 'free_' in order to avoid the same code.
 > 
-> Otherwise we could declare it in include/linux/module.h ?
+> Fixes: a6ba2b2dabb5 ("ASoC: Implement WM8350 headphone jack detection")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  sound/soc/codecs/wm8350.c | 30 +++++++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
+> 
+> diff --git a/sound/soc/codecs/wm8350.c b/sound/soc/codecs/wm8350.c
+> index 15d42ce3b21d..0c70bbfbedb5 100644
+> --- a/sound/soc/codecs/wm8350.c
+> +++ b/sound/soc/codecs/wm8350.c
+> @@ -1483,7 +1483,7 @@ static  int wm8350_component_probe(struct snd_soc_component *component)
+>  	ret = devm_regulator_bulk_get(wm8350->dev, ARRAY_SIZE(priv->supplies),
+>  				 priv->supplies);
+>  	if (ret != 0)
+> -		return ret;
+> +		goto err;
 
-I'd just move the trivial code that uses it from kernel/kdb/ to
-kernel/module/ as it is tied to module internals and just uses the
-KDB interfaces exposed to other parts of the kernel.
+I would probably just leave this as a return, nothing is gained
+changing it to a goto.
+
+>  
+> +	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_R,
+>  			    wm8350_hpr_jack_handler, 0, "Right jack detect",
+>  			    priv);
+> -	wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_MICSCD,
+> +	if (ret != 0)
+> +		goto free_JCK_DET_L;
+
+Probably better to use non-caps here, having caps in a label is a
+little unusual.
+
+Otherwise I think this looks fine.
+
+Thanks,
+Charles

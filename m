@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5974CC624
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC9F4CC62A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 20:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbiCCTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 14:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S236113AbiCCTkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 14:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236030AbiCCTjn (ORCPT
+        with ESMTP id S236035AbiCCTjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:39:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8906476E11
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:38:57 -0800 (PST)
+        Thu, 3 Mar 2022 14:39:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94584A418C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 11:38:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646336336;
+        s=mimecast20190719; t=1646336337;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FlDxIdfvuhWS0CXMFQ/cPlPI27gcOld4vJ0GlmM2Eho=;
-        b=RqFCH72kf7BB7Xd4WTkzvQCjF5GUoAqlWGwRmcNYF2bv3LVHz6QI5dUZe9RIv1sxiVZF0X
-        XI0unBxPvmcDQzjp2XczJbjTTd/zm4BvAFCZ3OLoweynxnQP83aCcOEzOUNw1wmVLm+p5S
-        B+TRdtCrVSwi8pKRlw3gEGAytKifF5w=
+        bh=0fNhrnmYSSzM2kO4HqFimg6xN8a7RrrkG6VQ9M4m2J4=;
+        b=Wu65zFvqvI8g2D7vUnXRTrxUu035/2ZvkxTr4hhrgoX9zK78lzdGKBEzqyIjSi1w7WKFOz
+        8j0eGg//8snAOoFK6cg3EgTmozglNjN5XL7mGSWq+ARYKWRynRfjldrNUoqoEk/RaZL3TK
+        POWUJvsOFg6txiqX3PW3WVXWkqSODOQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-zmKCSHp6MEOVZ-whomMVUg-1; Thu, 03 Mar 2022 14:38:53 -0500
-X-MC-Unique: zmKCSHp6MEOVZ-whomMVUg-1
+ us-mta-117-CLLFXx--OqCLUJtZ5ZbWdw-1; Thu, 03 Mar 2022 14:38:54 -0500
+X-MC-Unique: CLLFXx--OqCLUJtZ5ZbWdw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B9BE1800D50;
-        Thu,  3 Mar 2022 19:38:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 087FC824FA8;
+        Thu,  3 Mar 2022 19:38:53 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 48D3D5DF2E;
-        Thu,  3 Mar 2022 19:38:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 362AF5DF2E;
+        Thu,  3 Mar 2022 19:38:52 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -49,9 +49,9 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         David Matlack <dmatlack@google.com>,
         Ben Gardon <bgardon@google.com>,
         Mingwei Zhang <mizhang@google.com>
-Subject: [PATCH v4 08/30] KVM: x86/mmu: Check for !leaf=>leaf, not PFN change, in TDP MMU SP removal
-Date:   Thu,  3 Mar 2022 14:38:20 -0500
-Message-Id: <20220303193842.370645-9-pbonzini@redhat.com>
+Subject: [PATCH v4 09/30] KVM: x86/mmu: Batch TLB flushes from TDP MMU for MMU notifier change_spte
+Date:   Thu,  3 Mar 2022 14:38:21 -0500
+Message-Id: <20220303193842.370645-10-pbonzini@redhat.com>
 In-Reply-To: <20220303193842.370645-1-pbonzini@redhat.com>
 References: <20220303193842.370645-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -69,44 +69,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Christopherson <seanjc@google.com>
 
-Look for a !leaf=>leaf conversion instead of a PFN change when checking
-if a SPTE change removed a TDP MMU shadow page.  Convert the PFN check
-into a WARN, as KVM should never change the PFN of a shadow page (except
-when its being zapped or replaced).
-
-From a purely theoretical perspective, it's not illegal to replace a SP
-with a hugepage pointing at the same PFN.  In practice, it's impossible
-as that would require mapping guest memory overtop a kernel-allocated SP.
-Either way, the check is odd.
+Batch TLB flushes (with other MMUs) when handling ->change_spte()
+notifications in the TDP MMU.  The MMU notifier path in question doesn't
+allow yielding and correcty flushes before dropping mmu_lock.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
-Message-Id: <20220226001546.360188-8-seanjc@google.com>
+Message-Id: <20220226001546.360188-9-seanjc@google.com>
 Reviewed-by: Mingwei Zhang <mizhang@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 79bc48ddb69d..53c7987198b7 100644
+index 53c7987198b7..9b1d64468d95 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -491,9 +491,12 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
- 
- 	/*
- 	 * Recursively handle child PTs if the change removed a subtree from
--	 * the paging structure.
-+	 * the paging structure.  Note the WARN on the PFN changing without the
-+	 * SPTE being converted to a hugepage (leaf) or being zapped.  Shadow
-+	 * pages are kernel allocations and should never be migrated.
- 	 */
--	if (was_present && !was_leaf && (pfn_changed || !is_present))
-+	if (was_present && !was_leaf &&
-+	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
- 		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
+@@ -1226,13 +1226,12 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+  */
+ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	bool flush = kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
+-
+-	/* FIXME: return 'flush' instead of flushing here. */
+-	if (flush)
+-		kvm_flush_remote_tlbs_with_address(kvm, range->start, 1);
+-
+-	return false;
++	/*
++	 * No need to handle the remote TLB flush under RCU protection, the
++	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
++	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
++	 */
++	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
  }
  
+ /*
 -- 
 2.31.1
 

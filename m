@@ -2,407 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972924CB6E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 07:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3A04CB69C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 06:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiCCGXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 01:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S229748AbiCCF5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 00:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiCCGXf (ORCPT
+        with ESMTP id S229746AbiCCF47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 01:23:35 -0500
-X-Greylist: delayed 1826 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 22:22:49 PST
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4348911E3C6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Mar 2022 22:22:48 -0800 (PST)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 222NViSk006265;
-        Wed, 2 Mar 2022 21:51:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=lljh0nmx0hEko7FVnmyRi43erlh+PvJOByRRwrsPDVo=;
- b=m9ap69mMPzoNOA+VKF55J3AeIQimZRuHyO7UB04+PDsn1Miqt7/Pd6vnxGnD+KGZiMjR
- EQJpnRCV/v+RPOI8HSxcm/K2wedzSIk51H45u59zmI9H683K3xBlEcOoj0qclLJAl4QX
- LN3w7amMPLjZYAgrvCGSlaT8JpIjpT6IlAE0970QCiJrF6ZifuO1dWxapofWI1Gg91Ir
- Pn42jB/knM70dgXdp54ZuNe7pBSQnVhNC3u+Eylblgvp3iaPZ5DRUnlT+86vWEJ1rSSR
- 3qt0BIE/HPpxlrcwE5X+aFc9IouqVPn0A5ZuPGSO9gr7QgC0qB3tWxmgHVY11BTFtRLc uw== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3eh6udqn2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 21:51:55 -0800
+        Thu, 3 Mar 2022 00:56:59 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D6211E3E2;
+        Wed,  2 Mar 2022 21:56:13 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2233GOuf028932;
+        Thu, 3 Mar 2022 05:55:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
+ b=yMs1LT8AT0kYoaK+Xo4RvKRvZZnEBFHwV7tzCFbDnar10j9nfoRjxav0jY1KVxS22KM1
+ IJGbHULnjNLDgyuHUhZ285b5NrCjNxktZ9PXNvrmfVauGCsIC3jHfCDfiWKIfySui26i
+ yJEHHQWbXFBLA2VY+rD3wvrOxVwczM1lA+N47pef3czm8FcYM5JDy9Fltl/uQrNGZsh+
+ FI7GlWAFd0S1XK+PtU0Ve5lbemZZWwwK2IccYQ9lEn2DHYuTv0FMYEmLMOyI13BPmQFj
+ 8qvATpD6HjdDpXmGdfVvwEcAOi49QTJwzlQz4LAIV3gBt1s0qF9cdGix9+jLGPl+Cgxr xg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14byvaf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 05:55:18 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2235fTvL176716;
+        Thu, 3 Mar 2022 05:55:17 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
+        by aserp3030.oracle.com with ESMTP id 3efa8he6t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 05:55:17 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OV62bwPx7Q85yI9f6M6dnVDgaTlkaCnVxuGefIxVLSJwRh02OQ1BZAxhlNTuXupwPgzEhnpFeDSVYnUH236S0IIgrTSQvQUM96seABqa9gu+iCjVx0G3YsUDQPA7ik+SprbP3QFHvUng27C88Onl9YVLBsJ+XuqtXPvgmSvkIGf5pwXwYWJ60njkYOxO2YxufMKGxV9FrZYPsLeAsWCFHb4gPJdaodwFrq0y27W3jVf3HHksNuNnXnCvVuuZMWME6yfSk/ZNgC3ICLTfHE1X0fNVj1uDcrgVxYcBjjPUWwpzAJTqL3LDeoaKfb41HbG79nkNDbdE0mHIqln3970huA==
+ b=BT0SIZe3fjdX+4fIGQEAs3hLac0AZViGLb5LcEhyddCtQknOGFL2tzX33PTlMuBG9/JhvC76H48GQfM1jH4PAQfbUeayehlUxbqZbrH5/YbbJpGDWyh2+WgaUrk2AA+ZmHzf6k4w2mU/c8Js5bf6RfneRF5htf9GprTMQpcgVIHgkL7LkxA3iYw9vxD+NOG2KRaMovsrCo3tV/it6mmHjtm85yKR7mG02JkRnahfcZktkz6BsCwj9aefNshrHhF98M5wleBBQFUWxN+CF8+TXmYprcAZ1HXfmMaRtl52GbRvn5svzw765Y3jyrCgLhEKOtnS0uAjZzyNURGT1r7yFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lljh0nmx0hEko7FVnmyRi43erlh+PvJOByRRwrsPDVo=;
- b=FC0A1wLef5tew3b8NPGq6Wjq4yIyMW6R3fvFjonDHEuud9hAdjlEQekcBDY0iExCfzM2MoOsCg2lupXCF7eMSQ7akG65a6iA+ZnOfNRcrsVOCOky/qRoim59ORv7cqUNRn5qOkHur6oMkzSRxWPnqf/MhKYgHAKo3J4S2cmSKtV6tMxaPwJf8k+6NPyi7TcoCzmWHpFJQqnZW5FzMAPdpKURtDo1yf6dNq3dEN0u7xJyhBiLu4bgmYvxlTaLY7cEdemCxG2kHuSZICgiEBzRH8AZs9LCDxwAf+3nJpK9iyxMzdVAMznV7MMe1vCLG7QM+LpKzm2egFzfbulaABtmAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 64.207.220.244) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com;
- dmarc=temperror action=none header.from=cadence.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
+ bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
+ b=nUkTvrZD8yombitsLK57TUIU/VhS3M3Qae3z7XvqhNPmeISq/usut1WE6WA3HwSkkDFm3P8KwDoiNOmHPk++9A2+vFlat4TmioYbABqc/UL1v5KRKc/DSq6Q7XY6G/7CW0VY44TnJxlsbDVHDeM2CVGdjK0pX2QTj42qFMKoFCEr4y/GbGOYgoQAhu6+9gSmeuIEoWopBpmD/1aG33LMtqNiX2iWnt9/lcT38fAH3YJuadAagXsnQWB/Eu5a5KPNW7z+Em9c7KBWVkzt1IHXWgOjwnV0fgYkUKQKReU7X2o/8fWoakRzrYg62/kEFh7JT8C2nNyDzKuTy27gjrYklw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lljh0nmx0hEko7FVnmyRi43erlh+PvJOByRRwrsPDVo=;
- b=jKUc6r0yq2XT2SXc640pHyg8eNbjh8Q6LHJ4bphKq4TMactN02jVBYYRvxqXNJHJuysQ6Q5MmkZmN4GR5BARK4phImN9xhd7Z5ir5MlRMNyXBtYUOx/UBL5CS7GdbjtcPTfEjjK4NUhJobQ+WWPZkddqWdAdlWZl8XPm/RCAKGw=
-Received: from DM6PR06CA0059.namprd06.prod.outlook.com (2603:10b6:5:54::36) by
- BYAPR07MB5429.namprd07.prod.outlook.com (2603:10b6:a03:5a::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.14; Thu, 3 Mar 2022 05:51:53 +0000
-Received: from DM6NAM12FT016.eop-nam12.prod.protection.outlook.com
- (2603:10b6:5:54:cafe::aa) by DM6PR06CA0059.outlook.office365.com
- (2603:10b6:5:54::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Thu, 3 Mar 2022 05:51:52 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 64.207.220.244) smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=cadence.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of cadence.com: DNS Timeout)
-Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
- DM6NAM12FT016.mail.protection.outlook.com (10.13.178.217) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5061.4 via Frontend Transport; Thu, 3 Mar 2022 05:51:51 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 2235pmva176699
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 2 Mar 2022 21:51:50 -0800
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Mar 2022 06:51:47 +0100
-Received: from vleu-orange.cadence.com (10.160.88.83) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2
- via Frontend Transport; Thu, 3 Mar 2022 06:51:47 +0100
-Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 2235oRrE024948;
-        Thu, 3 Mar 2022 06:50:59 +0100
-Received: (from sjakhade@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 2235oRTt024943;
-        Thu, 3 Mar 2022 06:50:27 +0100
-From:   Swapnil Jakhade <sjakhade@cadence.com>
-To:     <vkoul@kernel.org>, <kishon@ti.com>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <mparab@cadence.com>, <sjakhade@cadence.com>, <a-govindraju@ti.com>
-Subject: [PATCH] phy: cadence: Sierra: Add TI J721E specific PCIe multilink lane configuration
-Date:   Thu, 3 Mar 2022 06:50:26 +0100
-Message-ID: <20220303055026.24899-1-sjakhade@cadence.com>
-X-Mailer: git-send-email 2.15.0
+ bh=/CpbvVCjXdFLefCjaVVcG7fy2kSHmwjFDPEImNWAy9o=;
+ b=iUSYr9b17Hym8cNvTLbA9gtr2MrHf+xx7T68PQEs2ZTp/vw92KmIc5zGN9Dw32gtsT1OvIS4SiOV1YK/3FLDds+ukItvMY64u42WoaKqzPaXKLNviUNFfP6qtZKJa8FOYy3ScOob1OSWioEdH7bVkXTC3C+7YMI7AxNc7saVxuU=
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
+ by MWHPR1001MB2144.namprd10.prod.outlook.com (2603:10b6:301:2b::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Thu, 3 Mar
+ 2022 05:55:15 +0000
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
+ 05:55:15 +0000
+Subject: Re: [PATCH net-next v4 4/4] net: tun: track dropped skb via
+ kfree_skb_reason()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     dsahern@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
+        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
+References: <20220226084929.6417-1-dongli.zhang@oracle.com>
+ <20220226084929.6417-5-dongli.zhang@oracle.com>
+ <20220301185021.7cba195d@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <ca81687c-4943-6d58-34f9-fb0a858f6887@oracle.com>
+ <20220302111731.00746020@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <e3bc5ac4-e1db-584c-7219-54a09192a001@oracle.com>
+ <20220302212122.7863b690@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Dongli Zhang <dongli.zhang@oracle.com>
+Message-ID: <8daa7abc-c78f-3895-996f-6bb5ead5049a@oracle.com>
+Date:   Wed, 2 Mar 2022 21:55:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+In-Reply-To: <20220302212122.7863b690@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN4PR0201CA0048.namprd02.prod.outlook.com
+ (2603:10b6:803:2e::34) To BYAPR10MB2663.namprd10.prod.outlook.com
+ (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aed246fd-c1a3-4edc-3bc8-08d9fcd9ea14
-X-MS-TrafficTypeDiagnostic: BYAPR07MB5429:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR07MB54298F5EA35D9504270956F2C5049@BYAPR07MB5429.namprd07.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9158837e-03e2-4af4-7f35-08d9fcda6356
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2144:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB2144C4CF030003378E1A8A6EF0049@MWHPR1001MB2144.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N8MSw5Fw+QjfSj3ZH2g3Z95r0es+rT7lC3JILdcXRSpodzHZvvC4gcPRzHeLZFWy/UkOE+GoJnk5GgXVvKMTZchP1E789ijDaXYybDEqYa7iXEbBShUEj70o9EtdmZX4kl0cTFREYZIk4o6fvlpOir9zm4OWOBHNIceT8ZoLrdosU+x4TmjtT+y/g5mBAIjLHiomPhZBOEUsuEt6o8fVL1inDHaKrZ9PRonzYkc4VWBKS8UcHASFHeM6UGuV6da3WP2i7bpg9M1RNJmofjpahjm1Jx01VlKZorzYU+GMBmHlH7u3jRkbI9lDDbzhtVW3p1FVtfL4MjdQP2YGh5ZQ844fQS+iV/tbkpTDQPNRuXJZQYaQ5cWsOp/b/NL5bOU+3mjVLvI+JSl3M4mCB/dzx6kBmIbz99RG5HYQOYoN8eumr78Dzyac9U8ROv4GeRhP0LAadJqnAlExjwLVRiqfzDw4T/elaO+4HjhA4BsGhzu5d4HeqS6q4I/+ZhyM4/L+Ry4phwJwmKMCEM6dnLNAU0UW3CnX76FB2CYNL7bzFzHsm9oRup5KaVwhKmTdLQSblUpshlXWTGQgnO25Y7O0mxolDwTqVQxm9yoTHktn0/9FauK/8rYk8Rhd2l3wApqddMClKQhqPwjIVCMIao03OMnlqH07X+sJA4evsdrBYKAV+/jOIZ8VRUGfw4r9C0C9ZmJ7AuV85eoNj+6GyQmJyzUHChoQbPDX5c7MT1q40OZpSxwolBCwjubiPxhq13rgVmxglr2NFQUmc2Je2aCqb7JnC5Od593pqj3rnRUs94Q=
-X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230001)(4636009)(36092001)(40470700004)(46966006)(36840700001)(4326008)(5660300002)(40460700003)(70586007)(70206006)(47076005)(8676002)(30864003)(336012)(426003)(2616005)(63370400001)(63350400001)(36756003)(356005)(81166007)(1076003)(83380400001)(508600001)(8936002)(186003)(26005)(82310400004)(2906002)(54906003)(86362001)(110136005)(36860700001)(316002)(19627235002)(42186006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 05:51:51.3995
+X-Microsoft-Antispam-Message-Info: c5kQburEvTusd2twPY8SSBBgQ60pRQedUgvvZEyNIDgXUtvxX0f43x9mnD39TR7pIlAMFM+Ruqwqe2KdkhAcf+W+E/NgsksXprbpRZ7ZbS6ZcIWugQ0Z03xXt5HeliBqAFpXDu3wcXfMuWku/0wCln6LMhewPPwHSvKci7Aw9COI76AgUgxWFrkVDU6vlH94y5pEks3GpvWip8inkNQ8nysIZGU3J8DsUoD4fOGxKvFaDCI+TrbpWNuXDz173dTjeO+/luf8QtDH03R/7lwHfUfregCYhcYLfNdd2+4MgWGZkizwGP8IfEgvBFXeYAtyyv4rcxkV3ZbDShIfDZeXiwtx3nGd17AoYHzcH3DTDMEvUI8GD4jWu5quekjZOpEo4TNOfv7BUON0yJPvk3wt7rBkr+/WBSKr2NSmbuwpDIIA4CHx+B7hCDUSZFEmbZJInaGn1KbDDvfktTfOJIBTgkUlQatJl2WUjxRqnSGW7aQhGuR56ij9CHVVcfCRzkxCszP/BtnUcewwHnwfYx9Yq/2IoQKGSceaP36/rV/KV+ywliL7wQB7ia3/Sn25gKdGuM0WYLUj0nVcCuJxELu4f1Ym5WyZN+UTAtYQwfJRLjlkZXxlgAmkf4XbAFAO+TSDAm1r+3RMhSW5M99Rkmpo+cILIW+E3Ti/n4tSvdCi6RWZmlPYXrtSiY31BNgQKX6ti3uDkt+7ONOfYBJYDvhaF6Zhh1qumeb66jrY6WX2UAY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66556008)(36756003)(31686004)(4744005)(2906002)(44832011)(5660300002)(38100700002)(86362001)(6486002)(508600001)(31696002)(8936002)(316002)(6916009)(7416002)(186003)(6666004)(6506007)(6512007)(2616005)(53546011)(66946007)(4326008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmtBNE92ZFNoc0UzUEw3K2g1b2xPemh6b2NDVW5MN0ZDOCtITjgwUE9WaUlQ?=
+ =?utf-8?B?R21lQjhPMWlRVVN6UjJNS2Fwc3VEeU1PL09HUXYvM2V2aVFvTnE3b1I1SE42?=
+ =?utf-8?B?YmVZZEFQN29zUmgyWjI5OXMyQ1lBNGZldFRUdE1qVFpEdUJJNXhwb0oyQ1Ey?=
+ =?utf-8?B?ekpVdnNySkpiWFMwUXdtamNnUEx6dXJKWlZnMWdXdjlVbzE3S1RvSkdxYS94?=
+ =?utf-8?B?RVE3aUhwWjZsNjZVWjhUZWhTVVpwTk9uUXRSWXd4Zm9tMWRQcTNKbnRvZHU5?=
+ =?utf-8?B?SFVvTllWUnlKd3dmRDJtdGNlV2hmeG5vTVcwaDlWY0V2K1l3di9rU2w2MFhj?=
+ =?utf-8?B?dWVQVjFVQzRuZ2Z5elE3cHl0QkRNK1FCSEoyMmh1YU5HZ2J4N21kK3JZSVY5?=
+ =?utf-8?B?NURLVFJNSWxhci8walMySm1DN3J2WmtuWm1oclRrb2hZRVUwdnA5eFJ6Vkhz?=
+ =?utf-8?B?b2NlYllNSG5zV29NVVVPbmxvTjdaNU1CeEhmWVNKSHJVd2N5cWJ3NTZuTWlL?=
+ =?utf-8?B?QUtDdVJFUVlIaXlIZmFtZHN2aVBDVmdZdHRDSnliMGxiUkpJblMzZmhZNWYw?=
+ =?utf-8?B?WitFL3ZNTWJ4cUdXVUlDZ0JXYU1PMlpDcWVHTVFhTkVERUlvSGwrQldiMHMx?=
+ =?utf-8?B?UU1BckhoYi9kMEhZTW9oZUhnU256UkZJRUtNN0sxcG1vVndxaGtWNjRPL3Rl?=
+ =?utf-8?B?eWRtMytJTGhnQmdUbkptYkNBdXpwM3l1a0VDQkluT3BtNW9oVmdVekFCZzZK?=
+ =?utf-8?B?cGRiSUs2WlQ0WG9MRElWaWIxeXEybFIyWkxlbldvSWNGYjlJT29GSmNjM2gv?=
+ =?utf-8?B?NXcyZ0hqdEtlaW5iRWdFYjU1a3VQTjJOU3VYR0Fjb3ZIbTNyWFZmUVRDdWdY?=
+ =?utf-8?B?UGp4bWJ0WHAvWWhyR251dzZqZTVWaHNHRGlqQ1ZoSWxOdjNPM0dqUWxFR2Ux?=
+ =?utf-8?B?OVlyY3BITzB1ZlJkSmVmckduYmFPMjBTYkN6MVlFVGJIUnozTmJYMUhZSmlw?=
+ =?utf-8?B?VmdNaWhpeFgzT0orU1pqRmZiYWtGdTN0WTNNVDRadjVFZGVBZFpuM2xIK1g1?=
+ =?utf-8?B?SVVJZDlxS2hqZEZRRHAveVc5MjhKWnF4RTZHVUF4Ym9UUUVmT21VTVhqVmFU?=
+ =?utf-8?B?cU45RVFxSElmbEpEQkd1V04vQkpRbCtnSjhTcGk2K2JJdWowVUhaWnVrenJY?=
+ =?utf-8?B?YjNnUzY4VVd6R3Z2NGRXZmV5Nk1TODhJSU1nWXBTUUtEcGptdWg4cndBQVpx?=
+ =?utf-8?B?dFZsVXdpVXBKdVdYWjdIangxNEFPSkllRS9KdTdOOHZETGphb0ZNTThraXIr?=
+ =?utf-8?B?V0Y3KzI0bmVwdXZjUHFvalo0bmVNWVU2bkJkUjlmYjlVclVkSjlwQVNKK2Rs?=
+ =?utf-8?B?VzIxaHB5UWZTWXEzNks5b0lVRmZYRmZMUXdpRWd5dm9oazY3RXpXZ09ERE9V?=
+ =?utf-8?B?cmwza0FUZThuMWxZczErdUJ3TFE5dzVlZXZCaVA0cUxYODZPWndWWTg0aWhn?=
+ =?utf-8?B?MEsvaHl4THZkRzN4M1dRRVBHejlGb0hxdVY1VXBQekJMeU5Mdi9KSHRpUlB5?=
+ =?utf-8?B?VStGT1BsT3JZUzFXUXh5ZGYyam5VOGZLZ0xhQUZidmw5aEMxVTgzQk04eVMx?=
+ =?utf-8?B?UFZpTEhnaGFNeWlvNW8zNzFlQVZJL0FxMnNSaG1jaXVVaENEdllteGV4R29N?=
+ =?utf-8?B?MEticWpKSkxBN3lxeUVMWWNldDFEU1d5SDJ2bDEyRGFJS2F4ZkxwdkZnNDVt?=
+ =?utf-8?B?NHJNaDIwWE5UbXVvVFppZ3gySGZxSnRNY0lvbExOUy9LTFdxRzM3SWc2eHJ4?=
+ =?utf-8?B?SWR3dU1tVi9NbEoxOXRNblNJTTdvYjZ6N2gzVHI1ajRSYlRnNkFvZjY4TXpk?=
+ =?utf-8?B?a0FCdCsySG5meEl3L25hZW0yZGk1c1plMC91WUxUUVF3MXcrMW9ZbWhkSUhz?=
+ =?utf-8?B?eFh2TytSWWVPMkpBY0MyN05qa1U3MDlmcFlDSWNMYkZyT2FldWFHM0FHZXln?=
+ =?utf-8?B?bnM3eXRsV0owTTY0T1FVSlZGTmV5VldxMnd4SlF5clA2TVVzK1MrU1JHMGFm?=
+ =?utf-8?B?dTFMVzV4eFlPT0dIb1BKU05DWEp6NytIQS9WcGRQR1BDSXdEekY4bzFlMGhI?=
+ =?utf-8?B?TU4rcGNnb0RhY0JVQVAycmR4cml4dUdPQlc1dVUzcjdvalpTY04xWWE2azl0?=
+ =?utf-8?Q?wzAwbSd0NdVc+fmQ0HjihkcD9BYn6+F2RXg+CSC8ORte?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9158837e-03e2-4af4-7f35-08d9fcda6356
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 05:55:15.1818
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aed246fd-c1a3-4edc-3bc8-08d9fcd9ea14
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT016.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5429
-X-Proofpoint-GUID: NmuGXJcNyH6osv1C99-fCrG5mXdhxmqk
-X-Proofpoint-ORIG-GUID: NmuGXJcNyH6osv1C99-fCrG5mXdhxmqk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_01,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
- impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=776 phishscore=0
- clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203030028
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VHiezOTDoZN43zu1mtddYr+99fzh1EZR9eI7gHkFgb24fAcdiYfg2z8QZWEjYzrAnWrw2rXFVm4UDgjNh+pF5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2144
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203030028
+X-Proofpoint-GUID: m48DiFQBzOS86xzGJcpqt3c8SvQmxREx
+X-Proofpoint-ORIG-GUID: m48DiFQBzOS86xzGJcpqt3c8SvQmxREx
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds workaround for TI J721E errata i2183
-(https://www.ti.com/lit/er/sprz455a/sprz455a.pdf).
-PCIe fails to link up if SERDES lanes not used by PCIe are assigned to
-another protocol. For example, link training fails if lanes 2 and 3 are
-assigned to another protocol while lanes 0 and 1 are used for PCIe to
-form a two lane link. This failure is due to an incorrect tie-off on an
-internal status signal indicating electrical idle.
+Hi Jakub,
 
-Status signals going from SERDES to PCIe Controller are tied-off when a
-lane is not assigned to PCIe. Signal indicating electrical idle is
-incorrectly tied-off to a state that indicates non-idle. As a result,
-PCIe sees unused lanes to be out of electrical idle and this causes
-LTSSM to exit Detect.Quiet state without waiting for 12ms timeout to
-occur. If a receiver is not detected on the first receiver detection
-attempt in Detect.Active state, LTSSM goes back to Detect.Quiet and
-again moves forward to Detect.Active state without waiting for 12ms as
-required by PCIe base specification. Since wait time in Detect.Quiet is
-skipped, multiple receiver detect operations are performed back-to-back
-without allowing time for capacitance on the transmit lines to
-discharge. This causes subsequent receiver detection to always fail even
-if a receiver gets connected eventually.
+On 3/2/22 9:21 PM, Jakub Kicinski wrote:
+> On Wed, 2 Mar 2022 14:21:31 -0800 Dongli Zhang wrote:
+>>> because of OOM" is what should be reported. What we were trying to
+>>> allocate is not very relevant (and can be gotten from the stack trace 
+>>> if needed).  
+>>
+>> I think OOM is not enough. Although it may not be the case in this patchset,
+>> sometimes the allocation is failed because we are allocating a large chunk of
+>> physically continuous pages (kmalloc vs. vmalloc) while there is still plenty of
+>> memory pages available.
+>>
+>> As a kernel developer, it is very significant for me to identify the specific
+>> line/function and specific data structure that cause the error. E.g, the bug
+>> filer may be chasing which line is making trouble.
+>>
+>> It is less likely to SKB_TRIM more than once in a driver function, compared to
+>> ENOMEM.
+> 
+> Nack, trim is meaningless.
+> 
 
-The workaround only works for 1-lane PCIe configuration. This workaround
-involves enabling receiver detect override by setting TX_RCVDET_OVRD_PREG_j
-register of the lane running PCIe to 0x2. This causes SERDES to indicate
-successful receiver detect when LTSSM is in Detect.Active state, whether a
-receiver is actually present or not. If the receiver is present, LTSSM
-proceeds to link up as expected. However if receiver is not present, LTSSM
-will time out in Polling.Configuration substate since the expected training
-sequence packets will not be received.
+I will use SKB_DROP_REASON_NOMEM.
 
-Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
----
- drivers/phy/cadence/phy-cadence-sierra.c | 193 ++++++++++++++++++++++-
- 1 file changed, 190 insertions(+), 3 deletions(-)
+Thank you very much!
 
-diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
-index 6b917f7bddbe..73fb99ccd525 100644
---- a/drivers/phy/cadence/phy-cadence-sierra.c
-+++ b/drivers/phy/cadence/phy-cadence-sierra.c
-@@ -83,6 +83,7 @@
- #define SIERRA_DFE_BIASTRIM_PREG			0x04C
- #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
- #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
-+#define SIERRA_TX_RCVDET_OVRD_PREG			0x072
- #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
- #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
- #define SIERRA_RX_CREQ_FLTR_A_MODE2_PREG		0x086
-@@ -1684,6 +1685,66 @@ static struct cdns_sierra_vals ml_pcie_100_no_ssc_ln_vals = {
- 	.num_regs = ARRAY_SIZE(ml_pcie_100_no_ssc_ln_regs),
- };
- 
-+/*
-+ * TI J721E:
-+ * refclk100MHz_32b_PCIe_ln_no_ssc, multilink, using_plllc,
-+ * cmn_pllcy_anaclk0_1Ghz, xcvr_pllclk_fullrt_500mhz
-+ */
-+static const struct cdns_reg_pairs ti_ml_pcie_100_no_ssc_ln_regs[] = {
-+	{0xFC08, SIERRA_DET_STANDEC_A_PREG},
-+	{0x001D, SIERRA_PSM_A3IN_TMR_PREG},
-+	{0x0004, SIERRA_PSC_LN_A3_PREG},
-+	{0x0004, SIERRA_PSC_LN_A4_PREG},
-+	{0x0004, SIERRA_PSC_LN_IDLE_PREG},
-+	{0x1555, SIERRA_DFE_BIASTRIM_PREG},
-+	{0x9703, SIERRA_DRVCTRL_BOOST_PREG},
-+	{0x8055, SIERRA_RX_CREQ_FLTR_A_MODE3_PREG},
-+	{0x80BB, SIERRA_RX_CREQ_FLTR_A_MODE2_PREG},
-+	{0x8351, SIERRA_RX_CREQ_FLTR_A_MODE1_PREG},
-+	{0x8349, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x0002, SIERRA_CREQ_DCBIASATTEN_OVR_PREG},
-+	{0x9800, SIERRA_RX_CTLE_CAL_PREG},
-+	{0x5624, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-+	{0x000F, SIERRA_DEQ_EPIPWR_CTRL2_PREG},
-+	{0x00FF, SIERRA_DEQ_FAST_MAINT_CYCLES_PREG},
-+	{0x4C4C, SIERRA_DEQ_ERRCMP_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_OFFSET_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_GAIN_CTRL_PREG},
-+	{0x0041, SIERRA_DEQ_GLUT0},
-+	{0x0082, SIERRA_DEQ_GLUT1},
-+	{0x00C3, SIERRA_DEQ_GLUT2},
-+	{0x0145, SIERRA_DEQ_GLUT3},
-+	{0x0186, SIERRA_DEQ_GLUT4},
-+	{0x09E7, SIERRA_DEQ_ALUT0},
-+	{0x09A6, SIERRA_DEQ_ALUT1},
-+	{0x0965, SIERRA_DEQ_ALUT2},
-+	{0x08E3, SIERRA_DEQ_ALUT3},
-+	{0x00FA, SIERRA_DEQ_DFETAP0},
-+	{0x00FA, SIERRA_DEQ_DFETAP1},
-+	{0x00FA, SIERRA_DEQ_DFETAP2},
-+	{0x00FA, SIERRA_DEQ_DFETAP3},
-+	{0x00FA, SIERRA_DEQ_DFETAP4},
-+	{0x000F, SIERRA_DEQ_PRECUR_PREG},
-+	{0x0280, SIERRA_DEQ_POSTCUR_PREG},
-+	{0x8F00, SIERRA_DEQ_POSTCUR_DECR_PREG},
-+	{0x3C0F, SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG},
-+	{0x1C0C, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0100, SIERRA_DEQ_TAU_CTRL3_PREG},
-+	{0x5E82, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-+	{0x002B, SIERRA_CPI_TRIM_PREG},
-+	{0x0003, SIERRA_EPI_CTRL_PREG},
-+	{0x803F, SIERRA_SDFILT_H2L_A_PREG},
-+	{0x0004, SIERRA_RXBUFFER_CTLECTRL_PREG},
-+	{0x2010, SIERRA_RXBUFFER_RCDFECTRL_PREG},
-+	{0x4432, SIERRA_RXBUFFER_DFECTRL_PREG},
-+	{0x0002, SIERRA_TX_RCVDET_OVRD_PREG}
-+};
-+
-+static struct cdns_sierra_vals ti_ml_pcie_100_no_ssc_ln_vals = {
-+	.reg_pairs = ti_ml_pcie_100_no_ssc_ln_regs,
-+	.num_regs = ARRAY_SIZE(ti_ml_pcie_100_no_ssc_ln_regs),
-+};
-+
- /* refclk100MHz_32b_PCIe_cmn_pll_int_ssc, pcie_links_using_plllc, pipe_bw_3 */
- static const struct cdns_reg_pairs pcie_100_int_ssc_plllc_cmn_regs[] = {
- 	{0x000E, SIERRA_CMN_PLLLC_MODE_PREG},
-@@ -1765,6 +1826,69 @@ static struct cdns_sierra_vals ml_pcie_100_int_ssc_ln_vals = {
- 	.num_regs = ARRAY_SIZE(ml_pcie_100_int_ssc_ln_regs),
- };
- 
-+/*
-+ * TI J721E:
-+ * refclk100MHz_32b_PCIe_ln_int_ssc, multilink, using_plllc,
-+ * cmn_pllcy_anaclk0_1Ghz, xcvr_pllclk_fullrt_500mhz
-+ */
-+static const struct cdns_reg_pairs ti_ml_pcie_100_int_ssc_ln_regs[] = {
-+	{0xFC08, SIERRA_DET_STANDEC_A_PREG},
-+	{0x001D, SIERRA_PSM_A3IN_TMR_PREG},
-+	{0x0004, SIERRA_PSC_LN_A3_PREG},
-+	{0x0004, SIERRA_PSC_LN_A4_PREG},
-+	{0x0004, SIERRA_PSC_LN_IDLE_PREG},
-+	{0x1555, SIERRA_DFE_BIASTRIM_PREG},
-+	{0x9703, SIERRA_DRVCTRL_BOOST_PREG},
-+	{0x813E, SIERRA_CLKPATHCTRL_TMR_PREG},
-+	{0x8047, SIERRA_RX_CREQ_FLTR_A_MODE3_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE2_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE1_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x0002, SIERRA_CREQ_DCBIASATTEN_OVR_PREG},
-+	{0x9800, SIERRA_RX_CTLE_CAL_PREG},
-+	{0x033C, SIERRA_RX_CTLE_MAINTENANCE_PREG},
-+	{0x44CC, SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG},
-+	{0x5624, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-+	{0x000F, SIERRA_DEQ_EPIPWR_CTRL2_PREG},
-+	{0x00FF, SIERRA_DEQ_FAST_MAINT_CYCLES_PREG},
-+	{0x4C4C, SIERRA_DEQ_ERRCMP_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_OFFSET_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_GAIN_CTRL_PREG},
-+	{0x0041, SIERRA_DEQ_GLUT0},
-+	{0x0082, SIERRA_DEQ_GLUT1},
-+	{0x00C3, SIERRA_DEQ_GLUT2},
-+	{0x0145, SIERRA_DEQ_GLUT3},
-+	{0x0186, SIERRA_DEQ_GLUT4},
-+	{0x09E7, SIERRA_DEQ_ALUT0},
-+	{0x09A6, SIERRA_DEQ_ALUT1},
-+	{0x0965, SIERRA_DEQ_ALUT2},
-+	{0x08E3, SIERRA_DEQ_ALUT3},
-+	{0x00FA, SIERRA_DEQ_DFETAP0},
-+	{0x00FA, SIERRA_DEQ_DFETAP1},
-+	{0x00FA, SIERRA_DEQ_DFETAP2},
-+	{0x00FA, SIERRA_DEQ_DFETAP3},
-+	{0x00FA, SIERRA_DEQ_DFETAP4},
-+	{0x000F, SIERRA_DEQ_PRECUR_PREG},
-+	{0x0280, SIERRA_DEQ_POSTCUR_PREG},
-+	{0x8F00, SIERRA_DEQ_POSTCUR_DECR_PREG},
-+	{0x3C0F, SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG},
-+	{0x1C0C, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0100, SIERRA_DEQ_TAU_CTRL3_PREG},
-+	{0x5E82, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-+	{0x002B, SIERRA_CPI_TRIM_PREG},
-+	{0x0003, SIERRA_EPI_CTRL_PREG},
-+	{0x803F, SIERRA_SDFILT_H2L_A_PREG},
-+	{0x0004, SIERRA_RXBUFFER_CTLECTRL_PREG},
-+	{0x2010, SIERRA_RXBUFFER_RCDFECTRL_PREG},
-+	{0x4432, SIERRA_RXBUFFER_DFECTRL_PREG},
-+	{0x0002, SIERRA_TX_RCVDET_OVRD_PREG}
-+};
-+
-+static struct cdns_sierra_vals ti_ml_pcie_100_int_ssc_ln_vals = {
-+	.reg_pairs = ti_ml_pcie_100_int_ssc_ln_regs,
-+	.num_regs = ARRAY_SIZE(ti_ml_pcie_100_int_ssc_ln_regs),
-+};
-+
- /* refclk100MHz_32b_PCIe_cmn_pll_ext_ssc, pcie_links_using_plllc, pipe_bw_3 */
- static const struct cdns_reg_pairs pcie_100_ext_ssc_plllc_cmn_regs[] = {
- 	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG},
-@@ -1840,6 +1964,69 @@ static struct cdns_sierra_vals ml_pcie_100_ext_ssc_ln_vals = {
- 	.num_regs = ARRAY_SIZE(ml_pcie_100_ext_ssc_ln_regs),
- };
- 
-+/*
-+ * TI J721E:
-+ * refclk100MHz_32b_PCIe_ln_ext_ssc, multilink, using_plllc,
-+ * cmn_pllcy_anaclk0_1Ghz, xcvr_pllclk_fullrt_500mhz
-+ */
-+static const struct cdns_reg_pairs ti_ml_pcie_100_ext_ssc_ln_regs[] = {
-+	{0xFC08, SIERRA_DET_STANDEC_A_PREG},
-+	{0x001D, SIERRA_PSM_A3IN_TMR_PREG},
-+	{0x0004, SIERRA_PSC_LN_A3_PREG},
-+	{0x0004, SIERRA_PSC_LN_A4_PREG},
-+	{0x0004, SIERRA_PSC_LN_IDLE_PREG},
-+	{0x1555, SIERRA_DFE_BIASTRIM_PREG},
-+	{0x9703, SIERRA_DRVCTRL_BOOST_PREG},
-+	{0x813E, SIERRA_CLKPATHCTRL_TMR_PREG},
-+	{0x8047, SIERRA_RX_CREQ_FLTR_A_MODE3_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE2_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE1_PREG},
-+	{0x808F, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x0002, SIERRA_CREQ_DCBIASATTEN_OVR_PREG},
-+	{0x9800, SIERRA_RX_CTLE_CAL_PREG},
-+	{0x033C, SIERRA_RX_CTLE_MAINTENANCE_PREG},
-+	{0x44CC, SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG},
-+	{0x5624, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-+	{0x000F, SIERRA_DEQ_EPIPWR_CTRL2_PREG},
-+	{0x00FF, SIERRA_DEQ_FAST_MAINT_CYCLES_PREG},
-+	{0x4C4C, SIERRA_DEQ_ERRCMP_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_OFFSET_CTRL_PREG},
-+	{0x02FA, SIERRA_DEQ_GAIN_CTRL_PREG},
-+	{0x0041, SIERRA_DEQ_GLUT0},
-+	{0x0082, SIERRA_DEQ_GLUT1},
-+	{0x00C3, SIERRA_DEQ_GLUT2},
-+	{0x0145, SIERRA_DEQ_GLUT3},
-+	{0x0186, SIERRA_DEQ_GLUT4},
-+	{0x09E7, SIERRA_DEQ_ALUT0},
-+	{0x09A6, SIERRA_DEQ_ALUT1},
-+	{0x0965, SIERRA_DEQ_ALUT2},
-+	{0x08E3, SIERRA_DEQ_ALUT3},
-+	{0x00FA, SIERRA_DEQ_DFETAP0},
-+	{0x00FA, SIERRA_DEQ_DFETAP1},
-+	{0x00FA, SIERRA_DEQ_DFETAP2},
-+	{0x00FA, SIERRA_DEQ_DFETAP3},
-+	{0x00FA, SIERRA_DEQ_DFETAP4},
-+	{0x000F, SIERRA_DEQ_PRECUR_PREG},
-+	{0x0280, SIERRA_DEQ_POSTCUR_PREG},
-+	{0x8F00, SIERRA_DEQ_POSTCUR_DECR_PREG},
-+	{0x3C0F, SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG},
-+	{0x1C0C, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0100, SIERRA_DEQ_TAU_CTRL3_PREG},
-+	{0x5E82, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-+	{0x002B, SIERRA_CPI_TRIM_PREG},
-+	{0x0003, SIERRA_EPI_CTRL_PREG},
-+	{0x803F, SIERRA_SDFILT_H2L_A_PREG},
-+	{0x0004, SIERRA_RXBUFFER_CTLECTRL_PREG},
-+	{0x2010, SIERRA_RXBUFFER_RCDFECTRL_PREG},
-+	{0x4432, SIERRA_RXBUFFER_DFECTRL_PREG},
-+	{0x0002, SIERRA_TX_RCVDET_OVRD_PREG}
-+};
-+
-+static struct cdns_sierra_vals ti_ml_pcie_100_ext_ssc_ln_vals = {
-+	.reg_pairs = ti_ml_pcie_100_ext_ssc_ln_regs,
-+	.num_regs = ARRAY_SIZE(ti_ml_pcie_100_ext_ssc_ln_regs),
-+};
-+
- /* refclk100MHz_32b_PCIe_cmn_pll_no_ssc */
- static const struct cdns_reg_pairs cdns_pcie_cmn_regs_no_ssc[] = {
- 	{0x2105, SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG},
-@@ -2299,9 +2486,9 @@ static const struct cdns_sierra_data cdns_ti_map_sierra = {
- 				[INTERNAL_SSC] = &pcie_100_int_ssc_ln_vals,
- 			},
- 			[TYPE_QSGMII] = {
--				[NO_SSC] = &ml_pcie_100_no_ssc_ln_vals,
--				[EXTERNAL_SSC] = &ml_pcie_100_ext_ssc_ln_vals,
--				[INTERNAL_SSC] = &ml_pcie_100_int_ssc_ln_vals,
-+				[NO_SSC] = &ti_ml_pcie_100_no_ssc_ln_vals,
-+				[EXTERNAL_SSC] = &ti_ml_pcie_100_ext_ssc_ln_vals,
-+				[INTERNAL_SSC] = &ti_ml_pcie_100_int_ssc_ln_vals,
- 			},
- 		},
- 		[TYPE_USB] = {
--- 
-2.34.1
-
+Dongli Zhang

@@ -2,195 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53B24CC878
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C84D4CC876
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 23:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbiCCWBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 17:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
+        id S236701AbiCCWAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 17:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236709AbiCCWBA (ORCPT
+        with ESMTP id S236688AbiCCWAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:01:00 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222754832F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:00:12 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d23so10839959lfv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 14:00:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B/wWxO70VsbRWbkBNYeysd8PjZWhNsydI8SGtYmrmUE=;
-        b=OF7gv1/RXdd0nABLes0yv4StAtx74Mo5Ug13VUe6weTNGjuV4E4T0W88MozzXiY0fI
-         lV5XfBh4ZEzkEsC5SyBGXljO7ih/HoeEWLy64bQkjayhyNPqC/2F0mw879ii0ot5SPNb
-         Vdw8eSYN4EHalFhIyOtGmdEizcKf8TzwXSgUHUqKr8OOVjho0Eiy+TGi6RFNZ/C8sFGg
-         /N4V1k9mpLgY/stpOyklIbZdTzDgs085xW+qoG8ZhZKRvr7Am8hUo79RB+HA0gkivTmY
-         QZ1OfPZMOGC6/sZ+mD3K6hbPUUAOgLE7mOq9kBmM3wrDdEPGMMR2Rmma0s6sgKai/AuG
-         Gk6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B/wWxO70VsbRWbkBNYeysd8PjZWhNsydI8SGtYmrmUE=;
-        b=SNy3jGOJ8jW81S5HXWQNfj+/AHKajxYPDtMyF0sblUByGkqNjPII83LRMdUncKLwDO
-         mlQezRiDPuhbL0JZir6EP+DhKdso9WkUkrBnPf/pQx66zqr3CayxWmsCfkYepxqS+Mbo
-         7u/TQY5lVoHwrzIf+1YphbdTyX9zSc90NwRnbAOc9cKLI6u0Qzcmo751tKBUtV1y8vis
-         rjET0tvGaP1CaHqwMx3e7IayNtHSHusO4NMsatk4XsMnVk6F0eVzsiYFcwmhXs9Q2WoU
-         EdN+dpDF1c2cKcLnKLcYSB5HKu9Cll76Uy6zISouMXfp+q34A/dVMv4qMH8a8z6WdCKx
-         ht4g==
-X-Gm-Message-State: AOAM533Kl3ehlPjvSfNVSBuxP+C9+8B0/0giCMP3YcMwdj0ePief+k/j
-        0H4Qzf76nK1pDZg7RGWJWFtlEJR+Mg/V2fjXI3QBuw==
-X-Google-Smtp-Source: ABdhPJzwX9/pwl2KATvTK6EinGHCxhIoZPk7sG4YV/u64Zyckk8VI4lq/flRYvYh5sdUM6LasuIk7wDy/VD9cLVM45I=
-X-Received: by 2002:a05:6512:3d90:b0:437:73cb:8e76 with SMTP id
- k16-20020a0565123d9000b0043773cb8e76mr22691498lfv.187.1646344810110; Thu, 03
- Mar 2022 14:00:10 -0800 (PST)
+        Thu, 3 Mar 2022 17:00:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF494579B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 14:00:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF54261D33
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:00:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6D7C004E1;
+        Thu,  3 Mar 2022 22:00:01 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 17:00:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH 0/4 v2] tracing: Add a way to have custom events in the
+ tracefs directory
+Message-ID: <20220303170000.1f4f0f2e@gandalf.local.home>
+In-Reply-To: <20220303214832.031378059@goodmis.org>
+References: <20220303214832.031378059@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220303003034.1906898-1-jeffreyjilinux@gmail.com>
-In-Reply-To: <20220303003034.1906898-1-jeffreyjilinux@gmail.com>
-From:   Brian Vazquez <brianvv@google.com>
-Date:   Thu, 3 Mar 2022 13:59:58 -0800
-Message-ID: <CAMzD94SRmG12Zot+eZTDcSDaviceBqn6egCdGZBoy_cbJLa5xw@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next] net-core: add rx_otherhost_dropped counter
-To:     Jeffrey Ji <jeffreyjilinux@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jeffreyji <jeffreyji@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LGTM, thanks Jeffrey!
+On Thu, 03 Mar 2022 16:48:32 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Reviewed-by: Brian Vazquez <brianvv@google.com>
+> #define TRACE_INCLUDE_FILE trace_custom_sched
+> #include <trace/define_custom_trace.h>
+> ------------------------->%-------------------------  
 
-On Wed, Mar 2, 2022 at 4:30 PM Jeffrey Ji <jeffreyjilinux@gmail.com> wrote:
->
-> From: jeffreyji <jeffreyji@google.com>
->
-> Increment rx_otherhost_dropped counter when packet dropped due to
-> mismatched dest MAC addr.
->
-> An example when this drop can occur is when manually crafting raw
-> packets that will be consumed by a user space application via a tap
-> device. For testing purposes local traffic was generated using trafgen
-> for the client and netcat to start a server
->
-> Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-> with "{eth(daddr=$INCORRECT_MAC...}", verified that iproute2 showed the
-> counter was incremented. (Also had to modify iproute2 to show the stat,
-> additional patch for that coming next.)
->
-> changelog:
->
-> v2: add kdoc comment
->
-> Signed-off-by: jeffreyji <jeffreyji@google.com>
-> ---
->  include/linux/netdevice.h    | 3 +++
->  include/uapi/linux/if_link.h | 5 +++++
->  net/core/dev.c               | 2 ++
->  net/ipv4/ip_input.c          | 1 +
->  net/ipv6/ip6_input.c         | 1 +
->  5 files changed, 12 insertions(+)
->
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index c79ee2296296..e4073c38bd77 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -1741,6 +1741,8 @@ enum netdev_ml_priv_type {
->   *                     do not use this in drivers
->   *     @rx_nohandler:  nohandler dropped packets by core network on
->   *                     inactive devices, do not use this in drivers
-> + *     @rx_otherhost_dropped:  Dropped packets due to mismatch in packet dest
-> + *                             MAC address
->   *     @carrier_up_count:      Number of times the carrier has been up
->   *     @carrier_down_count:    Number of times the carrier has been down
->   *
-> @@ -2025,6 +2027,7 @@ struct net_device {
->         atomic_long_t           rx_dropped;
->         atomic_long_t           tx_dropped;
->         atomic_long_t           rx_nohandler;
-> +       atomic_long_t           rx_otherhost_dropped;
->
->         /* Stats to monitor link on/off, flapping */
->         atomic_t                carrier_up_count;
-> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-> index e315e53125f4..17e74385fca8 100644
-> --- a/include/uapi/linux/if_link.h
-> +++ b/include/uapi/linux/if_link.h
-> @@ -211,6 +211,9 @@ struct rtnl_link_stats {
->   * @rx_nohandler: Number of packets received on the interface
->   *   but dropped by the networking stack because the device is
->   *   not designated to receive packets (e.g. backup link in a bond).
-> + *
-> + * @rx_otherhost_dropped: Number of packets dropped due to mismatch in
-> + * packet's destination MAC address.
->   */
->  struct rtnl_link_stats64 {
->         __u64   rx_packets;
-> @@ -243,6 +246,8 @@ struct rtnl_link_stats64 {
->         __u64   rx_compressed;
->         __u64   tx_compressed;
->         __u64   rx_nohandler;
-> +
-> +       __u64   rx_otherhost_dropped;
->  };
->
->  /* The struct should be in sync with struct ifmap */
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 2d6771075720..d039d8fdc16a 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -10037,6 +10037,8 @@ struct rtnl_link_stats64 *dev_get_stats(struct net_device *dev,
->         storage->rx_dropped += (unsigned long)atomic_long_read(&dev->rx_dropped);
->         storage->tx_dropped += (unsigned long)atomic_long_read(&dev->tx_dropped);
->         storage->rx_nohandler += (unsigned long)atomic_long_read(&dev->rx_nohandler);
-> +       storage->rx_otherhost_dropped +=
-> +               (unsigned long)atomic_long_read(&dev->rx_otherhost_dropped);
->         return storage;
->  }
->  EXPORT_SYMBOL(dev_get_stats);
-> diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-> index d94f9f7e60c3..ef97b0a4c77f 100644
-> --- a/net/ipv4/ip_input.c
-> +++ b/net/ipv4/ip_input.c
-> @@ -450,6 +450,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
->          * that it receives, do not try to analyse it.
->          */
->         if (skb->pkt_type == PACKET_OTHERHOST) {
-> +               atomic_long_inc(&skb->dev->rx_otherhost_dropped);
->                 drop_reason = SKB_DROP_REASON_OTHERHOST;
->                 goto drop;
->         }
-> diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-> index d4b1e2c5aa76..3f0cbe126d82 100644
-> --- a/net/ipv6/ip6_input.c
-> +++ b/net/ipv6/ip6_input.c
-> @@ -150,6 +150,7 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->         struct inet6_dev *idev;
->
->         if (skb->pkt_type == PACKET_OTHERHOST) {
-> +               atomic_long_inc(&skb->dev->rx_otherhost_dropped);
->                 kfree_skb(skb);
->                 return NULL;
->         }
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
+It appears that I forgot to do a:
+
+  git add include/trace/trace_custom_events.h include/trace/define_custom_trace.h
+
+and those two very important files are missing from the last patch.
+
+Will send a v3.
+
+-- Steve

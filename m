@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E054CBCA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958734CBC9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Mar 2022 12:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbiCCLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 06:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        id S232198AbiCCLdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 06:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbiCCLbR (ORCPT
+        with ESMTP id S232787AbiCCLbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:31:17 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD8F17CC4F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:30:23 -0800 (PST)
+        Thu, 3 Mar 2022 06:31:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0642717CC6F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 03:30:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=6LYv8z1P2TeT6PK13PfrXbItNpDm78oXk5ltG6J3AXc=; b=YNd74qxIE/PrSWGebPZ5xAWiQg
-        5//2LH5IRa4Vt6u4D/MWwGVysfrWEFkV6Xmydn0AAX/Z/9JAQLRyazASIs3voEtjEArwi9x4ewcZF
-        B4ZYxWVMYWQ8q1BgpOHESVRY8woD5+UavRKEkg5NvrPiPgkWaVh3XzUuKyCTZG2K1cc97v9bBfZSJ
-        beCNtl2zxW8XJriCzDm8iYF/xgx2hOX/Lkr0PjzokE/12ZYySkVQTv1WUlQeit+vM+4kJaPn+yTJO
-        que5noppdNHrMM9l55ABh+DLgRFZolHbbR6B3ifSrjBPZm5/nrwkJPV7PHJdLowm90O5KW/s8tB7c
-        USJ2J+Vw==;
+        bh=bM/2CfoNUi7Kkgqfth4YTpf/0vnJo3PNRdu2me27tHQ=; b=Dnenwif0HTQXCPZJiegdxOTQ8Z
+        /LkarDm5GJVdZbpdRrHmg7ZUMeHzmfiNxNFx+7WFztRaBsEGdGy3PWrG+3hXmt+lkRtJzaMW7X0+d
+        3WE3tAaeHDg//k7hsQZRRxtsIZFW80MfWEY8Mw35RrIlAzDBszj0OGBDrsabN+jaawBdvKrRFuR+J
+        tFGhu+gqksqV+sLGlukokCH0JTv93tRgT3j9ZW8hp+mu0hSoCEQZfeygL609mBjLJmLYzefnq3YNQ
+        SkmNMRbby0nu2OQQmFjW0/5WXmYcafUuFOcmlLPRPvBTFdfZm7XqxenFKQcsRZPEXsWSfCJlIS44b
+        Iw2OofPg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPjei-00Etpx-Oo; Thu, 03 Mar 2022 11:30:00 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPjei-00BaHJ-Oq; Thu, 03 Mar 2022 11:30:00 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1602B302DD6;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 16A59302DD9;
         Thu,  3 Mar 2022 12:29:57 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AB4943012BCD3; Thu,  3 Mar 2022 12:29:56 +0100 (CET)
-Message-ID: <20220303112827.210703687@infradead.org>
+        id AF63C3012BCD7; Thu,  3 Mar 2022 12:29:56 +0100 (CET)
+Message-ID: <20220303112827.272113089@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 03 Mar 2022 12:23:58 +0100
+Date:   Thu, 03 Mar 2022 12:23:59 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v3 37/39] objtool: Optionally WARN about unused ANNOTATE_NOENDBR
+Subject: [PATCH v3 38/39] objtool: Find unused ENDBR instructions
 References: <20220303112321.422525803@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,143 +61,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate option because this option is somewhat prone to false
-positives since a bunch of symbols/annotations are not correctly
-#ifdef'ed, presumably to avoid clutter.
+Find all ENDBR instructions which are never referenced and stick them
+in a section such that the kernel can poison them, sealing the
+functions from ever being an indirect call target.
 
-Can be manually ran on allmodconfig builds using OBJTOOL_ARGS.
+This removes about 1-in-4 ENDBR instructions.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- tools/objtool/builtin-check.c           |    3 +-
- tools/objtool/check.c                   |   45 +++++++++++++++++++++++++++++---
- tools/objtool/include/objtool/builtin.h |    2 -
- tools/objtool/include/objtool/check.h   |    3 +-
- 4 files changed, 46 insertions(+), 7 deletions(-)
+ arch/x86/kernel/vmlinux.lds.S           |    9 ++++
+ tools/objtool/check.c                   |   69 +++++++++++++++++++++++++++++++-
+ tools/objtool/include/objtool/objtool.h |    1 
+ tools/objtool/objtool.c                 |    1 
+ 4 files changed, 78 insertions(+), 2 deletions(-)
 
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -21,7 +21,7 @@
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -285,6 +285,15 @@ SECTIONS
+ 	}
+ #endif
  
- bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
-      lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
--     ibt;
-+     ibt, ibt_warn;
- 
- static const char * const check_usage[] = {
- 	"objtool check [<options>] file.o",
-@@ -49,6 +49,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN('S', "sls", &sls, "validate straight-line-speculation"),
- 	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
- 	OPT_BOOLEAN(0, "ibt", &ibt, "validate ENDBR placement"),
-+	OPT_BOOLEAN(0, "ibt-warn", &ibt_warn, "warn about unused ANNOTATE_ENDBR"),
- 	OPT_END(),
- };
- 
++#ifdef CONFIG_X86_KERNEL_IBT
++	. = ALIGN(8);
++	.ibt_endbr_seal : AT(ADDR(.ibt_endbr_seal) - LOAD_OFFSET) {
++		__ibt_endbr_seal = .;
++		*(.ibt_endbr_seal)
++		__ibt_endbr_seal_end = .;
++	}
++#endif
++
+ 	/*
+ 	 * struct alt_inst entries. From the header (alternative.h):
+ 	 * "Alternative instructions for different CPU types or capabilities"
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -1814,6 +1814,19 @@ static void set_func_state(struct cfi_st
- 	state->stack_size = initial_func_cfi.cfa.offset;
- }
+@@ -380,6 +380,7 @@ static int decode_instructions(struct ob
+ 			memset(insn, 0, sizeof(*insn));
+ 			INIT_LIST_HEAD(&insn->alts);
+ 			INIT_LIST_HEAD(&insn->stack_ops);
++			INIT_LIST_HEAD(&insn->call_node);
  
-+static bool insn_is_endbr(struct instruction *insn)
-+{
-+	if (insn->type == INSN_ENDBR)
-+		return true;
-+
-+	if (insn->noendbr) {
-+		insn->noendbr_hit = 1;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static int read_unwind_hints(struct objtool_file *file)
- {
- 	struct cfi_state cfi = init_cfi;
-@@ -1860,8 +1873,7 @@ static int read_unwind_hints(struct objt
- 		if (ibt && hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
- 			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
+ 			insn->sec = sec;
+ 			insn->offset = offset;
+@@ -409,8 +410,9 @@ static int decode_instructions(struct ob
  
--			if (sym && sym->bind == STB_GLOBAL &&
--			    insn->type != INSN_ENDBR && !insn->noendbr) {
-+			if (sym && sym->bind == STB_GLOBAL && !insn_is_endbr(insn)) {
- 				WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
- 					  insn->sec, insn->offset);
- 			}
-@@ -3146,7 +3158,7 @@ static void validate_ibt_dest(struct obj
- 		return;
- 	}
- 
--	if (dest->noendbr)
-+	if (insn_is_endbr(dest))
- 		return;
- 
- 	warn_noendbr("", insn->sec, insn->offset, dest);
-@@ -3687,7 +3699,7 @@ static int validate_ibt(struct objtool_f
- 			struct instruction *dest;
- 
- 			dest = validate_ibt_reloc(file, reloc);
--			if (is_data && dest && !dest->noendbr) {
-+			if (is_data && dest && !insn_is_endbr(dest)) {
- 				warn_noendbr("data ", reloc->sym->sec,
- 					     reloc->sym->offset + reloc->addend,
- 					     dest);
-@@ -3695,6 +3707,31 @@ static int validate_ibt(struct objtool_f
- 		}
- 	}
- 
-+	if (ibt_warn) {
-+		struct symbol *hypercall_page = find_symbol_by_name(file->elf, "hypercall_page");
-+		struct instruction *insn;
-+
-+		for_each_insn(file, insn) {
-+			if (!insn->noendbr || insn->noendbr_hit)
-+				continue;
-+
-+			if (hypercall_page) {
-+				/*
-+				 * The Xen hypercall page contains many
-+				 * hypercalls (and unused slots) that are never
-+				 * indirectly called. Still every slot has an
-+				 * annotation. Suppress complaints.
-+				 */
-+				if (insn->sec == hypercall_page->sec &&
-+				    insn->offset >= hypercall_page->offset &&
-+				    insn->offset <  hypercall_page->offset + hypercall_page->len)
-+					continue;
-+			}
-+
-+			WARN_FUNC("unused ANNOTATE_NOENDBR", insn->sec, insn->offset);
-+		}
-+	}
-+
+ 			sym_for_each_insn(file, func, insn) {
+ 				insn->func = func;
+-				if (insn->type == INSN_ENDBR) {
++				if (insn->type == INSN_ENDBR && list_empty(&insn->call_node)) {
+ 					if (insn->offset == insn->func->offset) {
++						list_add_tail(&insn->call_node, &file->endbr_list);
+ 						file->nr_endbr++;
+ 					} else {
+ 						file->nr_endbr_int++;
+@@ -739,6 +741,58 @@ static int create_retpoline_sites_sectio
  	return 0;
  }
  
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -10,7 +10,7 @@
- extern const struct option check_options[];
- extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
- 	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
--	    ibt;
-+	    ibt, ibt_warn;
++static int create_ibt_endbr_seal_sections(struct objtool_file *file)
++{
++	struct instruction *insn;
++	struct section *sec;
++	int idx;
++
++	sec = find_section_by_name(file->elf, ".ibt_endbr_seal");
++	if (sec) {
++		WARN("file already has .ibt_endbr_seal, skipping");
++		return 0;
++	}
++
++	idx = 0;
++	list_for_each_entry(insn, &file->endbr_list, call_node)
++		idx++;
++
++	if (stats) {
++		printf("ibt: ENDBR at function start: %d\n", file->nr_endbr);
++		printf("ibt: ENDBR inside functions:  %d\n", file->nr_endbr_int);
++		printf("ibt: superfluous ENDBR:       %d\n", idx);
++	}
++
++	if (!idx)
++		return 0;
++
++	sec = elf_create_section(file->elf, ".ibt_endbr_seal", 0,
++				 sizeof(int), idx);
++	if (!sec) {
++		WARN("elf_create_section: .ibt_endbr_seal");
++		return -1;
++	}
++
++	idx = 0;
++	list_for_each_entry(insn, &file->endbr_list, call_node) {
++
++		int *site = (int *)sec->data->d_buf + idx;
++		*site = 0;
++
++		if (elf_add_reloc_to_insn(file->elf, sec,
++					  idx * sizeof(int),
++					  R_X86_64_PC32,
++					  insn->sec, insn->offset)) {
++			WARN("elf_add_reloc_to_insn: .ibt_endbr_seal");
++			return -1;
++		}
++
++		idx++;
++	}
++
++	return 0;
++}
++
+ static int create_mcount_loc_sections(struct objtool_file *file)
+ {
+ 	struct section *sec;
+@@ -3097,8 +3151,12 @@ validate_ibt_reloc(struct objtool_file *
+ 	if (!dest)
+ 		return NULL;
  
- extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
+-	if (dest->type == INSN_ENDBR)
++	if (dest->type == INSN_ENDBR) {
++		if (!list_empty(&dest->call_node))
++			list_del_init(&dest->call_node);
++
+ 		return NULL;
++	}
  
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -51,7 +51,8 @@ struct instruction {
- 	   ignore_alts	: 1,
- 	   hint		: 1,
- 	   retpoline_safe : 1,
--	   noendbr	: 1;
-+	   noendbr	: 1,
-+	   noendbr_hit  : 1;
- 		/* 2 bit hole */
- 	s8 instr;
- 	u8 visited;
+ 	if (reloc->sym->static_call_tramp)
+ 		return NULL;
+@@ -3805,6 +3863,13 @@ int check(struct objtool_file *file)
+ 		if (ret < 0)
+ 			goto out;
+ 		warnings += ret;
++	}
++
++	if (ibt) {
++		ret = create_ibt_endbr_seal_sections(file);
++		if (ret < 0)
++			goto out;
++		warnings += ret;
+ 	}
+ 
+ 	if (stats) {
+--- a/tools/objtool/include/objtool/objtool.h
++++ b/tools/objtool/include/objtool/objtool.h
+@@ -26,6 +26,7 @@ struct objtool_file {
+ 	struct list_head retpoline_call_list;
+ 	struct list_head static_call_list;
+ 	struct list_head mcount_loc_list;
++	struct list_head endbr_list;
+ 	bool ignore_unreachables, c_file, hints, rodata;
+ 
+ 	unsigned int nr_endbr;
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -128,6 +128,7 @@ struct objtool_file *objtool_open_read(c
+ 	INIT_LIST_HEAD(&file.retpoline_call_list);
+ 	INIT_LIST_HEAD(&file.static_call_list);
+ 	INIT_LIST_HEAD(&file.mcount_loc_list);
++	INIT_LIST_HEAD(&file.endbr_list);
+ 	file.c_file = !vmlinux && find_section_by_name(file.elf, ".comment");
+ 	file.ignore_unreachables = no_unreachable;
+ 	file.hints = false;
 
 

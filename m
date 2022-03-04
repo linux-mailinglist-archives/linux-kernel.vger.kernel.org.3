@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF954CDCB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C998D4CDCBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241763AbiCDSiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S232915AbiCDSid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241811AbiCDSiL (ORCPT
+        with ESMTP id S241545AbiCDSia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:38:11 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6171D63BA;
-        Fri,  4 Mar 2022 10:37:23 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id z30so5747034ybi.2;
-        Fri, 04 Mar 2022 10:37:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=kH85gqnn6HKN2yIx6qKbPhDt5W+hZrK5z7A40e9h+C8=;
-        b=H/u4Sb47ZTquQp5iolWgYh+OxyBIhSEsVJExjBbeHAQyv8PWLL9dLhRuTCdCoIo+wR
-         daRDdPJO93I9SMlA39wo2NdaYNaneKqKmHAE+isg/6aZbhdYGlSzheRRcNSNhC8Tu5nt
-         SZNAKDsWSrGJ7mDrW5owaXp9iKRxdx6FbCbng83OaoaW21EhjNlWdbUTP5j9DQ6rM54z
-         AsB2JWvwcAaM8RZOxX9kWe5cPy63ll+YIEvPMg+ok1Y1Q+w+zi+O8NlDEuY/WJ3nlsEz
-         A/2k0CdUSL1Gum3Qp6ZWCjUV5bq2zexI7nVUQbBtR/4WNsH4r0nRLcjdsoSJTKxAZ0Gt
-         GzwQ==
-X-Gm-Message-State: AOAM5329SasLSlCwijnYCvyHt0x9On/yP2F0POlkOnjkJ+PV9DljfaC7
-        g1grCMuExh2MWpO36jGoyyD5dR+eDh+UYY4/ajgtSHMx/nw=
-X-Google-Smtp-Source: ABdhPJxQInzwSF0JiR9eI8sJfFgNTuPaKTJPH5khW1t4YcbsVKYHyjZUWxi3jdzBM85ycntIsYdfCTcnr5bQXCqrL4c=
-X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
- o185-20020a25d7c2000000b006289d06457bmr14103994ybg.137.1646419042000; Fri, 04
- Mar 2022 10:37:22 -0800 (PST)
+        Fri, 4 Mar 2022 13:38:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4732A5370B;
+        Fri,  4 Mar 2022 10:37:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D874D616DF;
+        Fri,  4 Mar 2022 18:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0BCC340E9;
+        Fri,  4 Mar 2022 18:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646419061;
+        bh=WaRcga7Eg/bbAL2UzogdnEJpm6/3LfKVskH9KOpXwQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ntaTRqIIyqa8VAH0x41eMpPd2xEmMIdKOToN+x5AtVbQY5+PDo+j2r29hMcHwoLJ4
+         k2igqVIr0Al/qjlSreiPpDezZnR8qr0oDtKXTu7Fn5BO5kq/koFqbJbOh4K++sibzy
+         O4g6HF1BDA0qsElkAK9FgadPPVQwHlHAA8IBujgo=
+Date:   Fri, 4 Mar 2022 19:37:33 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
+Message-ID: <YiJcbTGdl/0CAkqU@kroah.com>
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-13-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Mar 2022 19:37:11 +0100
-Message-ID: <CAJZ5v0i=5YYvBQcMDb7-gRpC0f_R6KMegyQonN6=ca1ndYauxw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fix for v5.17-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304172852.274126-13-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Mar 04, 2022 at 06:28:36PM +0100, Benjamin Tissoires wrote:
+> When we process an incoming HID report, it is common to have to account
+> for fields that are not aligned in the report. HID is using 2 helpers
+> hid_field_extract() and implement() to pick up any data at any offset
+> within the report.
+> 
+> Export those 2 helpers in BPF programs so users can also rely on them.
+> The second net worth advantage of those helpers is that now we can
+> fetch data anywhere in the report without knowing at compile time the
+> location of it. The boundary checks are done in hid-bpf.c, to prevent
+> a memory leak.
+> 
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.17-rc7
-
-with top-most commit 5838a14832d447990827d85e90afe17e6fb9c175
-
- thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
-
-on top of commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
-
- Linux 5.17-rc6
-
-to receive a thermal control fix for 5.17-rc7.
-
-This fixes a NULL pointer dereference in the thermal netlink
-interface (Nicolas Cavallari).
-
-Thanks!
-
-
----------------
-
-Nicolas Cavallari (1):
-      thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
-
----------------
-
- drivers/thermal/thermal_netlink.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

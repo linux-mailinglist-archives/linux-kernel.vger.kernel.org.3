@@ -2,111 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD354CD550
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453054CD559
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbiCDNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S233634AbiCDNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiCDNkL (ORCPT
+        with ESMTP id S230061AbiCDNm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:40:11 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA710EC4A;
-        Fri,  4 Mar 2022 05:39:23 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id d64so3459187vsd.12;
-        Fri, 04 Mar 2022 05:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4cvMl/4qYoB0J9ZtKfUyo3O1j1h4wuQkE/ll5CQ0EvE=;
-        b=BOf+p0bXU0//OteVvJrqjfh2RxAMmJA0rI4mRyPA1+kD9F9k8jQUQKx9UUVW4JcAn0
-         R+u5HF9s+ires93EjvMO0Pxu2gO29z5cyOkS9RH69rN9sM7V7ndD0oBV7jQJaxKD79qk
-         vht7crtzrG+E20IUp79ds32p22VqMC/JSjiZj9U95mvGXdENjqYRxoytgXKQj9o68r0p
-         CeVfwkZ+svIlIELuLKPyG7LcqOdY+k7xJWPfJXF7QaWZF4WEl2T7zUtEa5fFDYkuI05O
-         SorVG79DepqQgC7qfq0LRF3X6NqSZGQVk9HS1Zizx2gd2NlYnkJIAjHtV1rYqihNfPLx
-         rvUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4cvMl/4qYoB0J9ZtKfUyo3O1j1h4wuQkE/ll5CQ0EvE=;
-        b=SEAwi52O3xWc3XcHErgseJIRdWUbhkyLqYRFmuF4g+ZVdxO6v60XVxf7uYNI3tGc4j
-         efGVUJCtQayuUUETxTglzF0lCR/BmzAT7v5/vzKFV96Jyi8MfHEnbjQLWvW+4fq0pCbt
-         0GVPP7T5NoY7ZHbrw1Ng7PLf7G6ZnoC3yGv9YCGyCgfyPokfdu0HAxIvXB7DSPq5ULVb
-         2dysHm94a2znhyxWxcanaJKvP8XZenhLTx2KnAaaOIce+q9blvh2CKgoQBvMS9g/SFDz
-         QKSlRQQuRurD7uNfYDIgb5Y8Wli4LBRenh1dttn3Xnw4UBycx1GGBgzOukD4KlBjv7lH
-         F3FQ==
-X-Gm-Message-State: AOAM532Jb/vwGaXvWJdT2Qlw+ghO9+5lbFYbkTyaJ/MdsyHnI3f3P8gQ
-        wmlZDa3TLxE6f15fcIdqSRyb+zWzX6xYUpVxaV634GavUA==
-X-Google-Smtp-Source: ABdhPJylHP1GmLWtcK6ibGHJi6U7Q9Nprg9MNaWs6QPNI9/RlRS8QJn5WasxlxNnf9ODDDxRXY2eEnX+GKY0yoC59SA=
-X-Received: by 2002:a05:6102:6d4:b0:320:7cd0:a5e3 with SMTP id
- m20-20020a05610206d400b003207cd0a5e3mr1575595vsg.84.1646401162809; Fri, 04
- Mar 2022 05:39:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-4-warp5tw@gmail.com>
- <YiCYshb354S9T5ev@smile.fi.intel.com>
-In-Reply-To: <YiCYshb354S9T5ev@smile.fi.intel.com>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Fri, 4 Mar 2022 21:39:11 +0800
-Message-ID: <CACD3sJZQJFvgNT2da+1Zx0UugoMRWNw4np3Ub3PTKejjS7X0Sg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] i2c: npcm: Fix client address calculation
+        Fri, 4 Mar 2022 08:42:27 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA251B84F7;
+        Fri,  4 Mar 2022 05:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646401298; x=1677937298;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=W8+cYexF94Vl6YzXjBdnxaTLtgugktdOPocSTG8FZjE=;
+  b=fgbVb8Lri4D8f/UrJBnB5Xx45w7rPzcFwsUcbVxtsX7Z28UYVhwk1ksT
+   8ZSpIqcwfu4s0BdQZ/V8hr3EJa9zhOX2GTSsEXWV27AnH8mCYEkP3TYY5
+   lK41hTtGsP7I9DpWDC3DflYs/U68HkQEOKmauknplI9vnHjdB77zBNvdk
+   v6BU59WYH6xVwcsQ55eDj/6LE72xBTSVLlwXO6Qd+i2t9bSGHdzxOkQG4
+   27U/IB8UIxIKgSq4v0N425err6QZhRQFV5k5cgepif0bI4yU9hJNVHvhc
+   AiVqvzHCmg+V+5KXSzPc84GhP2teRBB8c/VBb2d1WL9MEM/R6mUAonnmL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="314691021"
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="314691021"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:41:38 -0800
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="494331573"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:41:35 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 205D420087;
+        Fri,  4 Mar 2022 15:41:33 +0200 (EET)
+Date:   Fri, 4 Mar 2022 15:41:33 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
-        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v3 1/6] device property: Helper to match multiple
+ connections
+Message-ID: <YiIXDZnquRZj8dU5@paasikivi.fi.intel.com>
+References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
+ <YiIL/ejgxhfRhTDP@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YiIL/ejgxhfRhTDP@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy:
+Hi Andy, Björn,
 
-Thank you for your comment and it'll be addressed.
-
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
-3=E6=9C=883=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:31=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> On Thu, Mar 03, 2022 at 04:31:33PM +0800, Tyrone Ting wrote:
-> > From: Tali Perry <tali.perry1@gmail.com>
-> >
-> > Fix i2c client address by left-shifting 1 bit before
-> > applying it to the data register.
->
+On Fri, Mar 04, 2022 at 02:54:21PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 03, 2022 at 02:33:46PM -0800, Bjorn Andersson wrote:
+> > In some cases multiple connections with the same connection id
+> > needs to be resolved from a fwnode graph.
+> > 
+> > One such example is when separate hardware is used for performing muxing
+> > and/or orientation switching of the SuperSpeed and SBU lines in a USB
+> > Type-C connector. In this case the connector needs to belong to a graph
+> > with multiple matching remote endpoints, and the Type-C controller needs
+> > to be able to resolve them both.
+> > 
+> > Add a new API that allows this kind of lookup.
+> 
 > ...
->
-> > -     bus->dest_addr =3D slave_addr;
-> > +     bus->dest_addr =3D slave_addr << 1;
->
-> 1. Why this is not using i2c_8bit_addr_from_msg() helper?
-> 2. This is duplication of what npcm_i2c_master_start_xmit() does.
->
-> Taking 2 into account, what is this exactly fixing?
-> Sounds like a red herring.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+> 
+> > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
+> > +						const char *con_id, void *data,
+> > +						devcon_match_fn_t match,
+> > +						void **matches,
+> > +						unsigned int matches_len)
+> > +{
+> > +	struct fwnode_handle *node;
+> > +	struct fwnode_handle *ep;
+> > +	unsigned int count = 0;
+> > +	void *ret;
+> > +
+> > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
+> 
+> > +		if (count >= matches_len && matches) {
+> > +			fwnode_handle_put(ep);
+> > +			return count;
+> > +		}
+> 
+> Wouldn't be the same as
+> 
+> 		if (count >= matches_len) {
+> 			fwnode_handle_put(ep);
+> 			break;
+> 		}
 
-Best regards,
-Tyrone
+Don't you need to check for non-NULL matches here?
+
+I find return above easier to read.
+
+> 
+> ?
+> 
+> > +		node = fwnode_graph_get_remote_port_parent(ep);
+> > +		if (!fwnode_device_is_available(node)) {
+> > +			fwnode_handle_put(node);
+> > +			continue;
+> > +		}
+> > +
+> > +		ret = match(node, con_id, data);
+> > +		fwnode_handle_put(node);
+> > +		if (ret) {
+> > +			if (matches)
+> > +				matches[count] = ret;
+> > +			count++;
+> > +		}
+> > +	}
+> > +	return count;
+> > +}
+> 
+> ...
+> 
+> > +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
+> > +					  const char *con_id, void *data,
+> > +					  devcon_match_fn_t match,
+> > +					  void **matches,
+> > +					  unsigned int matches_len)
+> > +{
+> > +	struct fwnode_handle *node;
+> > +	unsigned int count = 0;
+> > +	unsigned int i;
+> > +	void *ret;
+> > +
+> > +	for (i = 0; ; i++) {
+> 
+> > +		if (count >= matches_len && matches)
+> > +			return count;
+> 
+> Ditto.
+> 
+> > +		node = fwnode_find_reference(fwnode, con_id, i);
+> > +		if (IS_ERR(node))
+> > +			break;
+> > +
+> > +		ret = match(node, NULL, data);
+> > +		fwnode_handle_put(node);
+> > +		if (ret) {
+> > +			if (matches)
+> > +				matches[count] = ret;
+> > +			count++;
+> > +		}
+> > +	}
+> > +
+> > +	return count;
+> > +}
+> 
+> ...
+> 
+> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > +				   const char *con_id, void *data,
+> > +				   devcon_match_fn_t match,
+> > +				   void **matches, unsigned int matches_len)
+> > +{
+> > +	unsigned int count_graph;
+> > +	unsigned int count_ref;
+> > +
+> > +	if (!fwnode || !match)
+> > +		return -EINVAL;
+> 
+> > +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
+> > +						  matches, matches_len);
+> 
+> > +	matches += count_graph;
+> > +	matches_len -= count_graph;
+> 
+> No, won't work when matches == NULL.
+> 
+> Also, matches_len is expected to be 0 in that case (or at least being ignored,
+> check with vsnprintf() behaviour in similar case).
+> 
+> So, something like this, perhaps
+> 
+> 	if (matches && matches_len) {
+> 		matches += count_graph;
+> 		matches_len -= count_graph;
+> 	}
+
+Good find!
+
+> 
+> > +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
+> > +					  matches, matches_len);
+> > +
+> > +	return count_graph + count_ref;
+> > +}
+> 
+> 
+
+-- 
+Regards,
+
+Sakari Ailus

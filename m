@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F7B4CDFDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290604CDFE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiCDVrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S229891AbiCDVs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiCDVrv (ORCPT
+        with ESMTP id S229940AbiCDVsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:47:51 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B517B2364FC;
-        Fri,  4 Mar 2022 13:47:02 -0800 (PST)
+        Fri, 4 Mar 2022 16:48:18 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBC4390
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:47:27 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id e2so8557172qte.12
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 13:47:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646430422; x=1677966422;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ntN3yl5eMGGkiNg9DiYAf56yeIsPRxv4Lrtu44Q+nhs=;
-  b=Hl3mzwXmyn7UZ3Re6DZnon2qX+15LRIqtA20sMq0KETBexMSJnTKFIBC
-   GOUfEM/tYqkbSy6ua6I8nikXXkiDXsmBKym0LkAwA0RIkpgf0KfU9NZRU
-   LIktaZz61LF7LDvIjdOIzBlbrECCDyZhy82aMVuAOX4I8OiIvd01kcOW6
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 Mar 2022 13:47:01 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:47:01 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 4 Mar 2022 13:47:01 -0800
-Received: from [10.226.58.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 4 Mar 2022
- 13:46:59 -0800
-Message-ID: <a7b08bec-1692-4b77-cd22-6177aaa95c5e@quicinc.com>
-Date:   Fri, 4 Mar 2022 14:46:59 -0700
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=07QUV/roAPX5T4vcJdRHGYdQI94K3C6oZepbJubN048=;
+        b=ZyQ0k5CWcpdtr4eC0/7b4Rznt5zb4XDOsarVR6S+cR1VoJ6KfH1s56A5+EZ5tRASZZ
+         aq/wddTwsm4FUsvSZKAsJALQCvCagM8jQ1E1K52lCcoGFEbInN7CTr0orGcbGAW7uCOW
+         uy+L6y+GIzRI+1IHMDUv4XuJF7DfO+LvVFAJl+qtGHVcO4Sh5iCgobpjofpA94KxeKA8
+         KFlJECZwlUrNgIRtpzLt35h8VGRxm7TFI07cLe4VcIcq9w7FUCghDT4L49vZl2Qn414R
+         kt2CXu3c7zwgOJETW3d/HYBv9JvzvJO9JWIO7qJPPxzTRtP1Xnyw063zMJwt0qPhKwOZ
+         fzdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=07QUV/roAPX5T4vcJdRHGYdQI94K3C6oZepbJubN048=;
+        b=rd5gveTKBOcqNOm2Op3Rpxu2gowNtVnp0sYOsieFnf2XerJjdzyxTi07d9yiNlkJzn
+         UXpKrPbKE1Ylna56iJNmzA+he3rmTPoPz7e9naW0r3tGA6Gxquq6TayGIS3AlOg0y+uw
+         HA5Ovhh0U9Ce4jsCXJ9TKK2Shmd1yExOGohUmFGX4FL5vZLTVh3pu9aXL+YX0eA6QX/Z
+         tSLXaeLNYvVSE8cUyaMkBgziZ6uaEFSTZrR43C8kiiIl/cQdecF4lPSvTJwaqagsJuF6
+         DHIu08Iv5XydMtexmhu2fGKwKhEkyXUVry6G87snTqTZBGMthfYjTARWA/5hiTBoZ8UB
+         ooYg==
+X-Gm-Message-State: AOAM532QAYccKUdjBzzvhS4mU+GA2Jt0/JYeMaM8g0aFd758WRnMFD6p
+        TdvKhKKMzU/LMECZNZAqRdnG4PUmYBOvwVYPmLoU3w==
+X-Google-Smtp-Source: ABdhPJz79U1gHypq9yZMvIBnhQSWouY8E2jvQI7JMuB03UuB1XxnCs8Hf/wSBrxsG1zxreEQkdCnmKSY5cuJydinrzQ=
+X-Received: by 2002:ac8:5b84:0:b0:2e0:234:73c1 with SMTP id
+ a4-20020ac85b84000000b002e0023473c1mr784457qta.62.1646430446705; Fri, 04 Mar
+ 2022 13:47:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3 08/25] bus: mhi: ep: Add support for registering MHI
- endpoint controllers
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alex Elder <elder@linaro.org>
-CC:     <mhi@lists.linux.dev>, <quic_hemantk@quicinc.com>,
-        <quic_bbhatt@quicinc.com>, <vinod.koul@linaro.org>,
-        <bjorn.andersson@linaro.org>, <dmitry.baryshkov@linaro.org>,
-        <quic_vbadigan@quicinc.com>, <quic_cang@quicinc.com>,
-        <quic_skananth@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-9-manivannan.sadhasivam@linaro.org>
- <4cc78936-b419-4738-b5b2-65c53be06f33@linaro.org>
- <20220217095319.GA11964@workstation>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20220217095319.GA11964@workstation>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220304202406.846485-1-robdclark@gmail.com>
+In-Reply-To: <20220304202406.846485-1-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 5 Mar 2022 00:47:15 +0300
+Message-ID: <CAA8EJprik57F+t0KicoYaRm=oDOgcQHyHSBjJKbekBKjO_-=0A@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,33 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/2022 2:53 AM, Manivannan Sadhasivam wrote:
-> On Tue, Feb 15, 2022 at 02:02:41PM -0600, Alex Elder wrote:
-> 
-> [...]
-> 
->>> +#define MHI_REG_OFFSET				0x100
->>> +#define BHI_REG_OFFSET				0x200
->>
->> Rather than defining the REG_OFFSET values here and adding
->> them to every definition below, why not have the base
->> address used (e.g., in mhi_write_reg_field()) be adjusted
->> by the constant amount?
->>
->> I'm just looking at mhi_init_mmio() (in the existing code)
->> as an example, but for example, the base address used
->> comes from mhi_cntrl->regs.  Can you instead just define
->> a pointer somewhere that is the base of the MHI register
->> range, which is already offset by the appropriate amount?
->>
-> 
-> I've defined two set of APIs for MHI and BHI read/write. They will add the
-> respective offsets.
-> 
+On Fri, 4 Mar 2022 at 23:23, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-While you are making changes, maybe don't have a set BHI_REG_OFFSET? 
-Sure, I think it is always 0x200, but that is a convention and nothing 
-I've seen in the spec mandates it.  You can derive it from the bhi 
-offset register.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+However see the comment below.
 
-This way, if it ever moves in some future chip, this code should just work.
+> ---
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 02b47977b5c3..6406d8c3411a 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -687,6 +687,7 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>
+>         BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+>         BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+> +       BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
+
+The magic number 32 and 48 are repeated through this code. I'd suggest
+to define them and use defined names.
+It can come up as a separate commit.
+
+>         if (adreno_is_a650(adreno_gpu)) {
+>                 regs = a650_protect;
+> --
+> 2.35.1
+>
+
+
+-- 
+With best wishes
+Dmitry

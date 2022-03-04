@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA2F4CD7AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDD34CD7B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240283AbiCDPY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        id S240216AbiCDPZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiCDPYY (ORCPT
+        with ESMTP id S229864AbiCDPZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:24:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12FC13CEC8;
-        Fri,  4 Mar 2022 07:23:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646407416; x=1677943416;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=8+CEXWwRwOMrbbF77tgElxSqFXtFdC2qH4kdmgKvO/8=;
-  b=Ku2PX1M7qTskpAJoDfaZfr44hYgwjmKLKSxPUiaMNC6RKTBTpgK1Ybbv
-   hjLNPXHdADnx24V3yH6fkiNiwLr36m723Q/khAKiOnaUuk+CyvbwFDdTD
-   FPwx5W3Bmw/9Q9RrJMkP/TfladthCf40q3UJ1/tAL5kyYWt4Qc40SEWBA
-   DBNxeIBj3fzZT+/w85PNIsfpGN1C1FEyW0XxEarqeFJpYFMiWjtX+VXqj
-   DJUnw2Na35dgNqhbVBX/WjubWXDXjezcy9i3yLLUfEIskSr2D2SXLuDww
-   LELWe4Js0Q2hrWLkQv/TSfW/KEi/byuJZBQVc5Ikm71v/0XkmUchFt2Bu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="241417941"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="241417941"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 07:23:36 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="640610291"
-Received: from eabada-mobl2.amr.corp.intel.com (HELO [10.209.6.252]) ([10.209.6.252])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 07:23:34 -0800
-Message-ID: <bd52a9ed-c44f-989f-60a0-f15dd4260e09@intel.com>
-Date:   Fri, 4 Mar 2022 07:23:28 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org
+        Fri, 4 Mar 2022 10:25:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983DF1C4B1E;
+        Fri,  4 Mar 2022 07:24:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 318B8B829FA;
+        Fri,  4 Mar 2022 15:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB397C340E9;
+        Fri,  4 Mar 2022 15:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646407485;
+        bh=Ugh1vrX5vQzasJmQI5hX7hdAPEuwOmRL+sYJJ6nVIrg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pp8TLvH/baKbl4BMBfu0G+pCaCAbcC5v1jqEuXOk9fwwlWOwP7GE2mIIBdFGZBqyy
+         as7i/yXY0WxscdIpvlhztFxmcjmkxPBCLLqHVWO/7LQ0Nwpnsqa/eLm3TUeEXHtGr1
+         FdF2HEpZD9Cd1NGtWG3w0kma1NGAhWRV5RHdXUBYW6e7J60T8OZSPHMuu5+Ponclop
+         KQUjQIlGRjZ/V/ISzCzVTz8iRoyB6XNVCXsfQP8Ylxm1EbuTgbqhxtafwBNOcVe0gi
+         NpLAXgWHkPdF2U+SyrGiwnue9+UzYPklmXLMFE72lAqdx/eUDimB6LMcnfxq30bRZo
+         xAVIpmMZTcvCg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQ9nP-00CFyk-EZ; Fri, 04 Mar 2022 15:24:43 +0000
+Date:   Fri, 04 Mar 2022 15:24:43 +0000
+Message-ID: <87lexp211g.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20220224165625.2175020-1-brijesh.singh@amd.com>
- <20220224165625.2175020-43-brijesh.singh@amd.com>
- <c85259c5-996c-902b-42b6-6b812282ee25@intel.com>
- <9c075b36-e450-831b-0ae2-3b680686beb4@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v11 42/45] virt: Add SEV-SNP guest driver
-In-Reply-To: <9c075b36-e450-831b-0ae2-3b680686beb4@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20220304082342.GO269879@dragon>
+References: <20220301062414.2987591-1-shawn.guo@linaro.org>
+        <20220301062414.2987591-3-shawn.guo@linaro.org>
+        <87ee3m2aed.wl-maz@kernel.org>
+        <20220302084028.GL269879@dragon>
+        <877d9c3b2u.wl-maz@kernel.org>
+        <20220302133441.GM269879@dragon>
+        <875yow31a0.wl-maz@kernel.org>
+        <20220303040229.GN269879@dragon>
+        <87fsnytagc.wl-maz@kernel.org>
+        <20220304082342.GO269879@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, sudeep.holla@arm.com, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 05:17, Brijesh Singh wrote:
->> BTW, this look like a generic allocator thingy.  But it's only ever used
->> to allocate a 'struct snp_guest_msg'.  Why all the trouble to allocate
->> and free one fixed-size structure?  The changelog and comments don't
->> shed any light.
-> The GHCB specification says that a guest must use shared memory for
-> request, response, and certificate blob. In this patch, you are seeing
-> that {alloc,free}_shared_pages() used only to alloc/free the request and
-> response page. In the last patch, we used the same generic function to
-> allocate the certificate blob with a different size (~16K) than 'struct
-> snp_guest_msg.'
+On Fri, 04 Mar 2022 08:23:42 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
+> 
+> On Fri, Mar 04, 2022 at 07:59:15AM +0000, Marc Zyngier wrote:
+> > On Thu, 03 Mar 2022 04:02:29 +0000,
+> > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > 
+> > > On Wed, Mar 02, 2022 at 01:57:27PM +0000, Marc Zyngier wrote:
+> > > > This code actually makes me ask more questions. Why is it programming
+> > > > 2 'pins' for each IRQ?
+> > > 
+> > > The mapping between MPM pin and GIC IRQ is not strictly 1-1.  There are
+> > > some rare case that up to 2 MPM pins map to a single GIC IRQ, for
+> > > example the last two in QC2290 'qcom,mpm-pin-map' below.
+> > > 
+> > > 	qcom,mpm-pin-map = <2 275>,     /* tsens0_tsens_upper_lower_int */
+> > > 			   <5 296>,     /* lpass_irq_out_sdc */
+> > > 			   <12 422>,    /* b3_lfps_rxterm_irq */
+> > > 			   <24 79>,     /* bi_px_lpi_1_aoss_mx */
+> > > 			   <86 183>,    /* mpm_wake,spmi_m */
+> > > 			   <90 260>,    /* eud_p0_dpse_int_mx */
+> > > 			   <91 260>;    /* eud_p0_dmse_int_mx */
+> > > 
+> > > 
+> > > The downstream uses a DT bindings that specifies GIC hwirq number in
+> > > client device nodes.  In that case, d->hwirq in the driver is GIC IRQ
+> > > number, and the driver will need to query mapping table, find out the
+> > > possible 2 MPM pins, and set them up.
+> > > 
+> > > The patches I'm posting here use a different bindings that specifies MPM
+> > > pin instead in client device nodes.  Thus the driver can simply get the
+> > > MPM pin from d->hwirq, so that the whole look-up procedure can be saved.
+> > 
+> > It still remains that there is no 1:1 mapping between input and
+> > output, which is the rule #1 to be able to use a hierarchical setup.
+> 
+> For direction of MPM pin -> GIC interrupt, it's a 1:1 mapping, i.e. for
+> given MPM pin, there is only one GIC interrupt.  And that's the
+> mapping MPM driver relies on.  For GIC interrupt -> MPM pin, it's not
+> a strict 1:1 mapping.
 
-It sounds like it's worth a sentence or two in the changelog to explain
-this new "allocator" and its future uses.
+Then this isn't a 1:1 mapping *AT ALL*. The hierarchical setup
+mandates that the mapping is a bijective function, and that's exactly
+what 1:1 means. There is no such thing a 1:1 in a single
+direction. When you take an interrupt, all you see is the GIC
+interrupt. How do you know which of the *two* pins interrupted you? Oh
+wait, you *can't* know. You end-up never servicing one of the two
+interrupts (and I suspect this results in memory corruption if you
+tear a hierarchy down).
+
+This HW deals with 2:1 mappings, i.e. it is a mux. So all the time
+spent on this driver is totally lost, because you have the wrong
+abstraction. And the QC driver is just as bad.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

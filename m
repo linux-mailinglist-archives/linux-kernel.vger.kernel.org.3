@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A657D4CCD8A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A09F4CCD8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237279AbiCDGEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        id S234745AbiCDGIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238281AbiCDGD3 (ORCPT
+        with ESMTP id S229962AbiCDGIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:03:29 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC23918A785;
-        Thu,  3 Mar 2022 22:02:26 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id e6so6665771pgn.2;
-        Thu, 03 Mar 2022 22:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YZbkpW2xKyTTQVG0byMXWAewCWAfEpaA/1L3B4lDmmY=;
-        b=A7frI2uSydGO/1AMxE9wse0pRdmM6SCrTeiSC4ks2zdnKTOoh79K11ogjz+dYrzatF
-         5SGOQG4TcrzA0vB0ZaFznZ9OL7oCYfF8OfDavaviKC3I3/jb4u8bZhdIu7Zxbi0viaiO
-         dj7rdX0opfA2OhKzhmMp/BLJAqcUXVAgAqgaqfTa79bJ6Sg2WDQlHDVmLwcqJQzS1nFz
-         yb/7EQ4+5yTyGXISzo0Of/SD4jKh+8rhYZfdO3DbYNHQD5f6Xr1yhhqWkJ5qMtEkZt76
-         C6UBw7+HdANoaTOuEl8Lr6zvAbPmhgCHBxA/1agdVvzcFJTyIsPHDr4Gl4bj5Jopb99I
-         fpJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YZbkpW2xKyTTQVG0byMXWAewCWAfEpaA/1L3B4lDmmY=;
-        b=KGEMiCIqlzZdz/YOQXuW6K35h3yjVWINy6xStTmH3Z0DTYvTHWGWycVKTs4BOXpa5X
-         S/KGFZwvMfrO9IIYcnhO0j8AkCnMZ1VvcCWBHRGlLClNHye6A5fBZb0jMTuondV5Ml3M
-         lHle7UATv5T7BkTf4GYFXt/d9x4kH96n89QPZeang3YLCy5lDSQ51EVRHtlCkZpe90MX
-         rQfr9SeDalW+/r5B3XmFsff6XDyE+nFGWzjD8sd6iw2zxdmjaskIMYKUIRi2QBDQfXtu
-         vxAqX1w2yJ95A9IXEEki3wilV46Froxnu02Jpua2mWq+EVkYSVfdWQFAME2k+fOevYce
-         XQgQ==
-X-Gm-Message-State: AOAM532TYftNmBv84resKbkKchGCVHuMXQ1qNClOytRRASe6ck9LD67I
-        +mAx7e0zUMbaCPZeMFOrYPs=
-X-Google-Smtp-Source: ABdhPJzmLM2E3rhp2SgsGu9pz4Do1FqlS0eTGN2KQSFic0NNqz1Z5lmft9TgfEh+k86XL63ysJGIsg==
-X-Received: by 2002:a05:6a00:1889:b0:4f6:ae19:130d with SMTP id x9-20020a056a00188900b004f6ae19130dmr3034130pfh.28.1646373745719;
-        Thu, 03 Mar 2022 22:02:25 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.116])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056a00190500b004f104b5350fsm4569073pfi.93.2022.03.03.22.02.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 22:02:24 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org, kuba@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, imagedong@tencent.com,
-        edumazet@google.com, talalahmad@google.com, keescook@chromium.org,
-        ilias.apalodimas@linaro.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com, atenart@kernel.org,
-        bigeasy@linutronix.de, memxor@gmail.com, arnd@arndb.de,
-        pabeni@redhat.com, willemb@google.com, vvs@virtuozzo.com,
-        cong.wang@bytedance.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v2 7/7] net: dev: use kfree_skb_reason() for __netif_receive_skb_core()
-Date:   Fri,  4 Mar 2022 14:00:46 +0800
-Message-Id: <20220304060046.115414-8-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220304060046.115414-1-imagedong@tencent.com>
-References: <20220304060046.115414-1-imagedong@tencent.com>
+        Fri, 4 Mar 2022 01:08:38 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2693027CD4;
+        Thu,  3 Mar 2022 22:07:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kzoe0XcOspvudSqD6V+zVHwV4f4uMkgMS24N3hc+IXMH0Nv9v5uHk6RF5Zh0iWSSnrDoGgFS2NpdtsbPEStv77T7fRumxiM8BDxjTg9zWIzEi+Mvhjh2+ZJ80vAwJrXXMl5V4spGR6BzpVDfROcV5TaFr5Gfb+3IUpF9vxqhM7fW2jeG2lYkIDtpJbPh4ApydwH7tiVuwRRTxyR/pUkR9kJ6TXGQOSBERmBG9uWUppR0GC66P7tC4VT7hoceSb/qyPUMqTuOWxPqmXigpJRPA1YtTZlfbaxYViguHUACLtBQ0NmMx4aSLTTJvf4GB1+jEqeKo7BU55eMzqBOOmEXAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dswItOAD4kxvG6RCbrehpzWCYfAXVsAC/C+7ltldqKo=;
+ b=h2/0VONN5Y/LnqrU3dIIcC7RIkRTZDq7JLUlKu6yXWvZTw1e4dVjVR3XGiBmBTlgWWI877IodWZaE79W6fn9yf2jbeqAF6HGBNkpVQs6cO7ZKqZB9LC0FeI2m9oxNrr8nIe2oWcPzvRpXDmHRjLCFQ/KtgH5eBV2HYtpOcglb9Lp8tze0MTEjUj0POr6c9HFoyawzccZeTQNsrTniL3mPdU6qm5kYhwttjQJgso8bpgPprR8nb0pKefbB8TkDeBbZok7wCKJ21jRO4kUMn8B4pQg6hSEhr1ms8mLVcND3NE7FH/fZlwpQjwAZ0E9Zj2jhSqpBnRp/Tc0p267nXjHYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=rjwysocki.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dswItOAD4kxvG6RCbrehpzWCYfAXVsAC/C+7ltldqKo=;
+ b=jG4LgLnob64ntfz+hrZSVbvK3LZfLL8jSdU8d0fKm9L8XdDMzEzvEEkxizPB+XABVcGQ/FVRrQwSfkir89rK625i+g6j0abfbXpmy8J/uwkHF4p2jS37hvFPp29Re48qZTqP8S6PQS17X0APr+102jvrZUQR9Jh6GWnWDYH09Bg=
+Received: from BN0PR04CA0037.namprd04.prod.outlook.com (2603:10b6:408:e8::12)
+ by CY4PR12MB1896.namprd12.prod.outlook.com (2603:10b6:903:124::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 06:07:46 +0000
+Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e8:cafe::5a) by BN0PR04CA0037.outlook.office365.com
+ (2603:10b6:408:e8::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
+ Transport; Fri, 4 Mar 2022 06:07:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Fri, 4 Mar 2022 06:07:46 +0000
+Received: from jinzhosu-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Fri, 4 Mar 2022 00:07:41 -0600
+From:   Jinzhou Su <Jinzhou.Su@amd.com>
+To:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>,
+        <srinivas.pandruvada@linux.intel.com>, <dsmythies@telus.net>
+CC:     <ray.huang@amd.com>, <viresh.kumar@linaro.org>,
+        <todd.e.brandt@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+        <deepak.sharma@amd.com>, <alexander.deucher@amd.com>,
+        <xiaojian.du@amd.com>, <perry.yuan@amd.com>, <li.meng@amd.com>,
+        <jinzhou.su@amd.com>, Jinzhou Su <Jinzhou.Su@amd.com>
+Subject: [PATCH V2 0/4] Add tracer tool for AMD P-State driver
+Date:   Fri, 4 Mar 2022 14:07:20 +0800
+Message-ID: <20220304060724.314582-1-Jinzhou.Su@amd.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 32e022e8-0988-4cf5-078a-08d9fda54d7b
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1896:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1896C9B938E0F50C7B54053990059@CY4PR12MB1896.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1NRiONrkPdvIT7kc1HihnpDt8w846QdwVwnADvuAAnvTcjava2diAtoNs7exDFtMlg9EElrwqQzqVay5vwbsqPjwZuqeE1W3OIaJHfQJJE91mtCmf7NM0TErok2bpHGWIYt0yynxSvQ0CucjkB8azIqk2tmeF7ZwHg3gaDll7UIisGGqjwdcdRW4CYbfJoILtVh3+brL1hT1oq7ivIJPbSM55nwV0iY5R2/RwwVbe7jb1gizEX8Ry74Tco9n2M6KwkmgJE6o9/uLrkdkPd7BZnQWYhQGaMA0IkyUferS6+tL+YhFe+Kc836AcTFizeZrLlwCltgyjSILBCiaE1XW48a+Nbpa84N/eywYoTHYkFfhiO72esY4xUXIbEek//m+YmgF3ObsxVZH40VhrLXZUd6YoCA/MSDsmeR4xCaMpEvXWzPz53S9iEhXK3T/4u2yNI2QMAzKCFgfXuRmwoUUqPTL5M6mon9k6NAR18HHdrZClniUisFoZNEmsQ+nV7/hHxy21PWFYkMvicBXx/SYU/Q6q5wIWR/30tX5VERkWUPP3Zz10N6khnpPynXEPpTVTCwttoVkyY8Deiw7Z3qX3x2agin5vCKI29ZJCFcOIQmsNDiSdEULy90oN3uF2KKubtpMryAsHZEJA0RfxC/B9YlCyXtIMB9+EJ2fm0Hnw+IJMn99wun0dGM8+QcqvT+VrhRdvT7HbepXsD5QzVlSVQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(36860700001)(356005)(81166007)(70586007)(2906002)(70206006)(36756003)(83380400001)(47076005)(16526019)(2616005)(82310400004)(26005)(508600001)(54906003)(186003)(110136005)(426003)(1076003)(316002)(336012)(7696005)(40460700003)(6666004)(86362001)(8936002)(5660300002)(8676002)(4326008)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:07:46.0350
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32e022e8-0988-4cf5-078a-08d9fda54d7b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1896
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,69 +102,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Hello,
 
-Add reason for skb drops to __netif_receive_skb_core() when packet_type
-not found to handle the skb. For this purpose, the drop reason
-SKB_DROP_REASON_PTYPE_ABSENT is introduced. Take ether packets for
-example, this case mainly happens when L3 protocol is not supported.
+intel_pstate_tracer is a useful tool to analyze the performance of
+intel_pstate driver. We upstream out AMD P-state driver into Linux
+kernel recently and like to use similar tool to tune the performance
+of the driver.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/skbuff.h     | 5 +++++
- include/trace/events/skb.h | 1 +
- net/core/dev.c             | 8 +++++---
- 3 files changed, 11 insertions(+), 3 deletions(-)
+I modified intel_pstate_tracer.py then it could import as a module to
+analyze AMD P-State trace event. Other trace event also can benifit from
+this change once they need this tool.
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index d0a10fa477be..070111aecfd3 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -407,6 +407,11 @@ enum skb_drop_reason {
- 					 */
- 	SKB_DROP_REASON_XDP,		/* dropped by XDP in input path */
- 	SKB_DROP_REASON_TC_INGRESS,	/* dropped in TC ingress HOOK */
-+	SKB_DROP_REASON_PTYPE_ABSENT,	/* not packet_type found to handle
-+					 * the skb. For an etner packet,
-+					 * this means that L3 protocol is
-+					 * not supported
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 514dd2de8776..c0769d943f8e 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -50,6 +50,7 @@
- 	EM(SKB_DROP_REASON_CPU_BACKLOG, CPU_BACKLOG)		\
- 	EM(SKB_DROP_REASON_XDP, XDP)				\
- 	EM(SKB_DROP_REASON_TC_INGRESS, TC_INGRESS)		\
-+	EM(SKB_DROP_REASON_PTYPE_ABSENT, PTYPE_ABSENT)		\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7eb293684871..c690c0f7b18c 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5329,11 +5329,13 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
- 		*ppt_prev = pt_prev;
- 	} else {
- drop:
--		if (!deliver_exact)
-+		if (!deliver_exact) {
- 			atomic_long_inc(&skb->dev->rx_dropped);
--		else
-+			kfree_skb_reason(skb, SKB_DROP_REASON_PTYPE_ABSENT);
-+		} else {
- 			atomic_long_inc(&skb->dev->rx_nohandler);
--		kfree_skb(skb);
-+			kfree_skb(skb);
-+		}
- 		/* Jamal, now you will not able to escape explaining
- 		 * me how you were going to use this. :-)
- 		 */
+intel_pstate_tracer could be used as the same way as before and the
+original functionality isn't broken.
+
+Changes from V1->V2
+-Add tracer documentation in amd-pstate RST
+-fix typo in amd_pstate_trace.py
+-add "Co-developed-by" in patch 1/4
+
+Thanks,
+Joe
+
+Jinzhou Su (4):
+  cpufreq: amd-pstate: Add more tracepoint for AMD P-State module
+  tools/power/x86/intel_pstate_tracer: make tracer as a module
+  tools/power/x86/amd_pstate_tracer: Add tracer tool for AMD P-state
+  Documentation: amd-pstate: add tracer tool introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   |  26 ++
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate-trace.h            |  22 +-
+ drivers/cpufreq/amd-pstate.c                  |  59 ++-
+ .../x86/amd_pstate_tracer/amd_pstate_trace.py | 354 ++++++++++++++++++
+ .../intel_pstate_tracer.py                    | 260 +++++++------
+ 6 files changed, 588 insertions(+), 134 deletions(-)
+ create mode 100755 tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+
 -- 
-2.35.1
+2.27.0
 

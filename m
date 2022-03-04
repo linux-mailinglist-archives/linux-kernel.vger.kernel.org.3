@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B613A4CD738
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35934CD768
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiCDPJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S239813AbiCDPNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240107AbiCDPJS (ORCPT
+        with ESMTP id S240245AbiCDPM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:09:18 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACBF13EFAA;
-        Fri,  4 Mar 2022 07:08:17 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2244w2hN013723;
-        Fri, 4 Mar 2022 09:07:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=GEv9qT1f52mVGZUhddgvUUHJMJPW1Ae8wHQRQufXyns=;
- b=QG1PrPybqd2HLHukhtNuQxQQ4gELVs/29DrwyxaSGeANw2uasdyvW345dMCHp9HASpS6
- 4erMNh79lXsoJ7qOryhoxXbOEK9dWykgsSLlSW90zqSMMmjw9VenkesOGHn5q5/CV27o
- 37BX8fMGuhOehby8d3YeIsP5yd6L9R0KKQYqm+xLWcrd6iTvy4UsBZM4lJiAcIaWYj4Y
- WJjJ12WTdFG39QzDKvLMMlxlIgdWS5W6VDGTwIlU19/Z2gYltQtYXsKT3lA4Pkjai0c2
- tSK29Ur1YfXXjebxtjq0UyMEawt/km7D5zknSdJmQIuVjxmpK43eYDbfqyAfN7ai63o+ Ew== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j3h414-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 04 Mar 2022 09:07:35 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
- 2022 15:07:30 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 4 Mar 2022 15:07:30 +0000
-Received: from aryzen.ad.cirrus.com (unknown [198.61.65.198])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A41517C;
-        Fri,  4 Mar 2022 15:07:30 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        David Rhodes <drhodes@opensource.cirrus.com>
-Subject: [PATCH v2 20/20] ASoC: cs35l41: Document CS35l41 External Boost
-Date:   Fri, 4 Mar 2022 15:07:21 +0000
-Message-ID: <20220304150721.3802-21-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
-References: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
+        Fri, 4 Mar 2022 10:12:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D03321C2F6D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646406728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pLZIQetNYZ2DwkDP8GPK5UW2NBMBrUIB6oP9QWy0kt0=;
+        b=FHHmP3xwVWCeVteHvgdRYElaksFjBiEX4YPfBC2jt+FIHXMrLWIEdV29kPNcQLHqDNiJ02
+        cFW8JptoKT7CU88rFAySNJUSCb9MJUQw5TzMsF8klZFWzBjSp6hk3BgH76HOMGn1/esgDU
+        mv8YfSis9OCh5oZ6+YKN3BM1JUSCP+o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-kipfy5HzNDyLEQ08Owwsgw-1; Fri, 04 Mar 2022 10:12:02 -0500
+X-MC-Unique: kipfy5HzNDyLEQ08Owwsgw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 672B81091DA1;
+        Fri,  4 Mar 2022 15:12:01 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4F5177DE5B;
+        Fri,  4 Mar 2022 15:11:56 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id A19DF416D862; Fri,  4 Mar 2022 12:08:46 -0300 (-03)
+Date:   Fri, 4 Mar 2022 12:08:46 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [patch v3] mm: lru_cache_disable: replace work queue
+ synchronization with synchronize_rcu
+Message-ID: <YiIrfgak8GKu19/7@fuller.cnet>
+References: <YhUI1wUtV8yguijO@fuller.cnet>
+ <YhUKRzEKxMvlGQ5n@fuller.cnet>
+ <20220303170323.82d8424d214fcb3a32155952@linux-foundation.org>
+ <20220304014930.GJ4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: o8ixPIuU6yT6JzdEqSm8p5Nrifm-qFt3
-X-Proofpoint-ORIG-GUID: o8ixPIuU6yT6JzdEqSm8p5Nrifm-qFt3
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304014930.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,84 +73,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Rhodes <drhodes@opensource.cirrus.com>
+On Thu, Mar 03, 2022 at 05:49:30PM -0800, Paul E. McKenney wrote:
+> On Thu, Mar 03, 2022 at 05:03:23PM -0800, Andrew Morton wrote:
+> > (Question for paulmck below, please)
+> > 
+> > On Tue, 22 Feb 2022 13:07:35 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > 
+> > > 
+> > > On systems that run FIFO:1 applications that busy loop 
+> > > on isolated CPUs, executing tasks on such CPUs under
+> > > lower priority is undesired (since that will either
+> > > hang the system, or cause longer interruption to the
+> > > FIFO task due to execution of lower priority task 
+> > > with very small sched slices).
+> > > 
+> > > Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU 
+> > > pagevec during the migration temporarily") relies on 
+> > > queueing work items on all online CPUs to ensure visibility
+> > > of lru_disable_count.
+> > > 
+> > > However, its possible to use synchronize_rcu which will provide the same
+> > > guarantees (see comment this patch modifies on lru_cache_disable).
+> > > 
+> > > Fixes:
+> > > 
+> > > [ 1873.243925] INFO: task kworker/u160:0:9 blocked for more than 622 seconds.
+> > > [ 1873.243927]       Tainted: G          I      --------- ---  5.14.0-31.rt21.31.el9.x86_64 #1
+> > > [ 1873.243929] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > > [ 1873.243929] task:kworker/u160:0  state:D stack:    0 pid:    9 ppid:     2 flags:0x00004000
+> > > [ 1873.243932] Workqueue: cpuset_migrate_mm cpuset_migrate_mm_workfn
+> > > [ 1873.243936] Call Trace:
+> > > [ 1873.243938]  __schedule+0x21b/0x5b0
+> > > [ 1873.243941]  schedule+0x43/0xe0
+> > > [ 1873.243943]  schedule_timeout+0x14d/0x190
+> > > [ 1873.243946]  ? resched_curr+0x20/0xe0
+> > > [ 1873.243953]  ? __prepare_to_swait+0x4b/0x70
+> > > [ 1873.243958]  wait_for_completion+0x84/0xe0
+> > > [ 1873.243962]  __flush_work.isra.0+0x146/0x200
+> > > [ 1873.243966]  ? flush_workqueue_prep_pwqs+0x130/0x130
+> > > [ 1873.243971]  __lru_add_drain_all+0x158/0x1f0
+> > > [ 1873.243978]  do_migrate_pages+0x3d/0x2d0
+> > > [ 1873.243985]  ? pick_next_task_fair+0x39/0x3b0
+> > > [ 1873.243989]  ? put_prev_task_fair+0x1e/0x30
+> > > [ 1873.243992]  ? pick_next_task+0xb30/0xbd0
+> > > [ 1873.243995]  ? __tick_nohz_task_switch+0x1e/0x70
+> > > [ 1873.244000]  ? raw_spin_rq_unlock+0x18/0x60
+> > > [ 1873.244002]  ? finish_task_switch.isra.0+0xc1/0x2d0
+> > > [ 1873.244005]  ? __switch_to+0x12f/0x510
+> > > [ 1873.244013]  cpuset_migrate_mm_workfn+0x22/0x40
+> > > [ 1873.244016]  process_one_work+0x1e0/0x410
+> > > [ 1873.244019]  worker_thread+0x50/0x3b0
+> > > [ 1873.244022]  ? process_one_work+0x410/0x410
+> > > [ 1873.244024]  kthread+0x173/0x190
+> > > [ 1873.244027]  ? set_kthread_struct+0x40/0x40
+> > > [ 1873.244031]  ret_from_fork+0x1f/0x30
+> > > 
+> > > ...
+> > >
+> > > --- a/mm/swap.c
+> > > +++ b/mm/swap.c
+> > > @@ -831,8 +831,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
+> > >  	for_each_online_cpu(cpu) {
+> > >  		struct work_struct *work = &per_cpu(lru_add_drain_work, cpu);
+> > >  
+> > > -		if (force_all_cpus ||
+> > > -		    pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
+> > > +		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
+> > >  		    data_race(pagevec_count(&per_cpu(lru_rotate.pvec, cpu))) ||
+> > >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate_file, cpu)) ||
+> > >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
+> > 
+> > This change appears to be "don't queue work on CPUs which don't have
+> > any work to do".  Correct?  This isn't changelogged?
 
-Document external boost feature on CS35L41
+Its replaced by synchronize_rcu, and its mentioned in the changelog:
 
-Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
----
- .../bindings/sound/cirrus,cs35l41.yaml        | 44 +++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
+"However, its possible to use synchronize_rcu which will provide the same
+ guarantees (see comment this patch modifies on lru_cache_disable)."
 
-diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-index 3235702ce402..2f60776b3e9b 100644
---- a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-+++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-@@ -75,6 +75,19 @@ properties:
-     maximum: 3
-     default: 2
- 
-+  cirrus,boost-type:
-+    description:
-+      Configures the type of Boost being used.
-+      Internal boost requires boost-peak-milliamp, boost-ind-nanohenry and
-+      boost-cap-microfarad.
-+      External Boost must have GPIO1 as GPIO output. GPIO1 will be set high to
-+      enable boost voltage.
-+      0 = Internal Boost
-+      1 = External Boost
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    minimum: 0
-+    maximum: 1
-+
-   cirrus,gpio1-polarity-invert:
-     description:
-       Boolean which specifies whether the GPIO1
-@@ -131,9 +144,32 @@ required:
-   - compatible
-   - reg
-   - "#sound-dai-cells"
--  - cirrus,boost-peak-milliamp
--  - cirrus,boost-ind-nanohenry
--  - cirrus,boost-cap-microfarad
-+
-+allOf:
-+  - if:
-+      properties:
-+        cirrus,boost-type:
-+          contains:
-+            const: 0
-+
-+    then:
-+      required:
-+        - cirrus,boost-peak-milliamp
-+        - cirrus,boost-ind-nanohenry
-+        - cirrus,boost-cap-microfarad
-+
-+  - if:
-+      properties:
-+        cirrus,boost-type:
-+          contains:
-+            const: 1
-+
-+    then:
-+      required:
-+        - cirrus,gpio1-output-enable
-+      properties:
-+        cirrus,gpio1-src-select:
-+          const: 1
- 
- additionalProperties: false
- 
-@@ -150,6 +186,8 @@ examples:
-           VA-supply = <&dummy_vreg>;
-           VP-supply = <&dummy_vreg>;
-           reset-gpios = <&gpio 110 0>;
-+
-+          cirrus,boost-type = <0>;
-           cirrus,boost-peak-milliamp = <4500>;
-           cirrus,boost-ind-nanohenry = <1000>;
-           cirrus,boost-cap-microfarad = <15>;
--- 
-2.35.1
+Will resend -v4 with a more verbose changelog.
+
+
+> > > @@ -876,14 +875,19 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
+> > >  void lru_cache_disable(void)
+> > >  {
+> > >  	atomic_inc(&lru_disable_count);
+> > > +	synchronize_rcu();
+> > >  #ifdef CONFIG_SMP
+> > >  	/*
+> > > -	 * lru_add_drain_all in the force mode will schedule draining on
+> > > -	 * all online CPUs so any calls of lru_cache_disabled wrapped by
+> > > -	 * local_lock or preemption disabled would be ordered by that.
+> > > -	 * The atomic operation doesn't need to have stronger ordering
+> > > -	 * requirements because that is enforced by the scheduling
+> > > -	 * guarantees.
+> > > +	 * synchronize_rcu() waits for preemption disabled
+> > > +	 * and RCU read side critical sections.
+> > > +	 * For the users of lru_disable_count:
+> > > +	 *
+> > > +	 * preempt_disable, local_irq_disable  [bh_lru_lock()]
+> > > +	 * rcu_read_lock		       [rt_spin_lock CONFIG_PREEMPT_RT]
+> > > +	 * preempt_disable		       [local_lock !CONFIG_PREEMPT_RT]
+> > > +	 *
+> > > +	 * so any calls of lru_cache_disabled wrapped by local_lock or
+> > > +	 * preemption disabled would be ordered by that.
+> > >  	 */
+> > >  	__lru_add_drain_all(true);
+> > >  #else
+> > 
+> > Does this also work with CONFIG_TINY_RCU?
+> > 
+> > This seems abusive of synchronize_rcu().  None of this code uses RCU,
+> > but it so happens that synchronize_rcu() happily provides the desired
+> > effects.  Changes in RCU's happy side-effects might break this. 
+> > Perhaps a formal API function which does whatever-you-want-it-to-do
+> > would be better.
+> 
+> I don't claim to understand the full lru_cache_disable() use case, but
+> since v5.1 synchronize_rcu() is guaranteed to wait on preempt_disable()
+> regions of code.  In contrast, back in the old days, you had to use
+> synchronize_sched() to wait on preempt_disable() regions, even in
+> CONFIG_PREEMPT=y kernels.  So if the comment is accurate, it is OK.
+
+OK, will add an additional comment regarding v5.1.
+
+> Just be careful what you backport past v5.1...
+> 
+> > And...  I really don't understand the fix.  What is it about
+> > synchronize_rcu() which guarantees that a work function which is queued
+> > on CPU N will now get executed even if CPU N is spinning in SCHED_FIFO
+> > userspace?
+> 
+> I don't understand this part, either.
+
+
+All CPUs should see lru_disable_count (and therefore not add pages
+to per-CPU LRU pvecs, otherwise the page migration bug fixed
+by d479960e44f27e0e52ba31b21740b703c538027c can occur.
+
+To do this, the commit above ("mm: disable LRU 
+pagevec during the migration temporarily") relies on 
+queueing work items on all online CPUs to ensure visibility
+of lru_disable_count:
+
+ */
++void lru_cache_disable(void)
++{
++       atomic_inc(&lru_disable_count);
++#ifdef CONFIG_SMP
++       /*
++        * lru_add_drain_all in the force mode will schedule draining on
++        * all online CPUs so any calls of lru_cache_disabled wrapped by
++        * local_lock or preemption disabled would be ordered by that.
++        * The atomic operation doesn't need to have stronger ordering
++        * requirements because that is enforeced by the scheduling
++        * guarantees.
++        */
++       __lru_add_drain_all(true);
++#else
+
+
+CPU-0					CPU-1
+
+					
+					local_lock(&lru_pvecs.lock);
+                			pvec = this_cpu_ptr(&lru_pvecs.lru_deactivate_file);
+					add page to per-CPU LRU pvec
+					if atomic_read(lru_disable_count) != 0
+						flush per-CPU LRU pvec
+atomic_inc(lru_disable_count)
+
+					local_unlock(&lru_pvec.lock)
+lru_add_drain_all(force_all_cpus=true)
+
+However queueing the work items disturbs isolated CPUs. To avoid it, its
+possible to use synchronize_rcu instead:
+
+CPU-0                                   CPU-1
+
+
+                                        local_lock(&lru_pvecs.lock);
+                                        pvec = this_cpu_ptr(&lru_pvecs.lru_deactivate_file);
+                                        add page to per-CPU LRU pvec
+                                        if atomic_read(lru_disable_count) != 0
+                                                flush per-CPU LRU pvec
+atomic_inc(lru_disable_count)
+
+                                        local_unlock(&lru_pvec.lock)
+synchronize_rcu()
+
+Which will wait for all preemption (or IRQ disabled) sections to
+complete, therefore ensuring visibilily of lru_disable_count.
 

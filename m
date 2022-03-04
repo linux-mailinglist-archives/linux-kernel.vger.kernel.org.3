@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F31C4CCFB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8897A4CCFC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiCDIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S231935AbiCDIOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiCDINY (ORCPT
+        with ESMTP id S232138AbiCDIOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:13:24 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DED639D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:12:34 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id i8so11431125wrr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:12:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PTdhZ6zTG/wMEQhhzfPXGyXVYLVkCG56MpdGyRnOBVI=;
-        b=Pmf2t9u+18kQH7IAPgSpCA8+P+Pr1LWI/Tnym4Tf38VqtV68KuJxIBW4bz4aPRJb7s
-         FotOKu54Ei94IvCyVqRrl3FPSfRUncnyiIlnU/gYuZnoq7Lp93cs41oeygcIV6cQWiQL
-         3MqAnA5QDBaQ76T9FM4jXL35WVoP0kdTjBo02o5U7BmCPeIfVlgf1fuVY/ZVIo6k/Bvm
-         /8rQrxARhXJyy5IhFazUmOWGxxwpnwpYZApUBX1LMBi+4TpzForlhGfpPZ1v06IHBqCo
-         vNZme2896fgkl8UDxpGKdaTOhqhgzNRhyfLG+ckucf1XBRWoKrlE9DureanSDGxQXV4j
-         0p2w==
+        Fri, 4 Mar 2022 03:14:16 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EBF54BEC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:13:27 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1B7FB3F5F2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646381606;
+        bh=KY3j6GzmOt8fX0p2jIG9irP/hzl+hjlDmh8fW9j6n1U=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=KY8QWKrF82+SkvP3oo2TOfv3JYT+CA3y3N+miIK9+t4DejY9z7WYFcofiwtPrm9Ht
+         irPjfd9QQuZCHTnsv7ILMsiiksvdFftbeMzhXJiY9js9GPaQwyTsxLmIcc36CXv3tv
+         EXNlH0+x0tNJ3Dx09P1tFl/f6dqmEXjPR3PLOml14XpXVad+tFD/mJfJ/uvdD2XxUX
+         uIniV9nK/xRFxOTOWyj6GIq/HiY72ULitevODQn6gvXlkpFzZD5ArVq503F1vcXvB0
+         dwMyPaORts/1RDzsGMqRB/XzgjY/Rv/6oEn544ILjHF6IMq1SXI5JM2I2nIyKkO4J6
+         aEcXonZiRcS5g==
+Received: by mail-ed1-f69.google.com with SMTP id x22-20020a05640226d600b0041380e16645so4244688edd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:13:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PTdhZ6zTG/wMEQhhzfPXGyXVYLVkCG56MpdGyRnOBVI=;
-        b=4WeRC6Kt+EB73emcLjx39zKMJrv1HH7vzlfb1GGcUdQjIj9Xu3kU8o5ZEsyyC0JzSB
-         QlZK+Akv3fhHie107r8pkMFk+cUv4llGRWq7cRbS9TYB0zhfs0UOwjSOMaW1PXmIuaAZ
-         o9zBrlcWJWoblEHlIoEACADOMWHa+H1U4ipAjQPENJvI6HogRdhyvaAaXVe9L4fQ2Bnp
-         m8z5tnMWmBCwLyZf97ghJtlwKVnuo3/EUs2kkj82lIo1amraRPmz+cKIOghGqpKsFAp2
-         GNSicw9zQDaMWUi4KFCj8e77Acba+3kT3RJRIDcWZCD4KAzWQRpTqSSVhI81u5trcP//
-         pHZw==
-X-Gm-Message-State: AOAM531PEQILzvjg3Xk68xh7MUoIRX6SlsVzbqhgNBX1kD5+dNdp36Gh
-        8KWyd4sSr6exEm+Joj5OrfD+1MvI5YWTx1ym
-X-Google-Smtp-Source: ABdhPJzVw968hxMEIY0q2+bwjpWc6NSOwZs/15JsNkWcbOqqbxojEzQRti0Lz26wnPm3h5o1K7KOTg==
-X-Received: by 2002:a05:6000:184e:b0:1f0:3569:ccac with SMTP id c14-20020a056000184e00b001f03569ccacmr8266477wri.680.1646381552773;
-        Fri, 04 Mar 2022 00:12:32 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b0037c0342cb62sm13850215wmq.4.2022.03.04.00.12.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KY3j6GzmOt8fX0p2jIG9irP/hzl+hjlDmh8fW9j6n1U=;
+        b=HsPEdx3B9dV6y9ESdeDhcROEWImIUtTnOmZ7XuoyClcYVAq5XaQ57MocNB/9TphIQ0
+         f/9tQQoXYwA7N2qs0zLFlPjvv/LJwmsvLsvfNMB5y6/ukfDpjqktLTA4tLRZ2SK7g+li
+         yHo/3/iK2d5NfcchV7Z60q2x8whBUK8G5YtFjmTL0ved9jV1yJFEZz+kYS/bpSCQW6QB
+         s6BAMlbEqa0JZUIEU0Cm2xLoOm384cv+26KASlCSWSwsY3F7Ogd9vlvecmOAhIznO1C/
+         jvy9DI87FkNF5gPxx3GN/p4SJMgVUAgMK2INFIOrFy0e/wivyO1KWI0dg6UxckJwUobH
+         FcjQ==
+X-Gm-Message-State: AOAM530MO8u4SiKe8FlDPLYP0qrojVcqqJ+dlVzNg4EZuYtADIwqa/P4
+        LEUwvTUjnFlzi8eEwf5+xtGyTrO1pgjOefjqFXMAGinbTgBwjO1dbbrfrOmHkyD/n2TYdrN/qo6
+        AB4z8PVH3LLqZmfrTlhxl5MX5Yv5P/DUIyJjpGMy2eg==
+X-Received: by 2002:a50:ee90:0:b0:40f:349f:7368 with SMTP id f16-20020a50ee90000000b0040f349f7368mr37957151edr.236.1646381605747;
+        Fri, 04 Mar 2022 00:13:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzuwab0krTL7gBqonB1LVsc2xM1c9M6xF1CmSuTXRpa2iDTLUYP7/dzn+sKB0U1ka+8rSwHJQ==
+X-Received: by 2002:a50:ee90:0:b0:40f:349f:7368 with SMTP id f16-20020a50ee90000000b0040f349f7368mr37957141edr.236.1646381605601;
+        Fri, 04 Mar 2022 00:13:25 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id z2-20020a05640235c200b00415cec386a5sm1889584edc.16.2022.03.04.00.13.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 00:12:32 -0800 (PST)
-Date:   Fri, 4 Mar 2022 08:12:30 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] vhost: Provide a kernel warning if mutex is held
- whilst clean-up in progress
-Message-ID: <YiHJ7qFgkcC7igwq@google.com>
-References: <20220303151929.2505822-1-lee.jones@linaro.org>
- <YiETnIcfZCLb63oB@unreal>
- <20220303155645-mutt-send-email-mst@kernel.org>
- <20220304075039.rewrf3gnbbh3sdfl@sgarzare-redhat>
+        Fri, 04 Mar 2022 00:13:24 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, ssantosh@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] memory: emif: check the pointer temp in get_device_details()
+Date:   Fri,  4 Mar 2022 09:13:21 +0100
+Message-Id: <164638154584.220122.2312358895225740646.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220225132552.27894-1-baijiaju1990@gmail.com>
+References: <20220225132552.27894-1-baijiaju1990@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220304075039.rewrf3gnbbh3sdfl@sgarzare-redhat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,61 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Mar 2022, Stefano Garzarella wrote:
-
-> On Thu, Mar 03, 2022 at 04:01:06PM -0500, Michael S. Tsirkin wrote:
-> > On Thu, Mar 03, 2022 at 09:14:36PM +0200, Leon Romanovsky wrote:
-> > > On Thu, Mar 03, 2022 at 03:19:29PM +0000, Lee Jones wrote:
-> > > > All workers/users should be halted before any clean-up should take place.
-> > > >
-> > > > Suggested-by:  Michael S. Tsirkin <mst@redhat.com>
-> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > ---
-> > > >  drivers/vhost/vhost.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > index bbaff6a5e21b8..d935d2506963f 100644
-> > > > --- a/drivers/vhost/vhost.c
-> > > > +++ b/drivers/vhost/vhost.c
-> > > > @@ -693,6 +693,9 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > >  	int i;
-> > > >
-> > > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > > +		/* Ideally all workers should be stopped prior to clean-up */
-> > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> > > > +
-> > > >  		mutex_lock(&dev->vqs[i]->mutex);
-> > > 
-> > > I know nothing about vhost, but this construction and patch looks
-> > > strange to me.
-> > > 
-> > > If all workers were stopped, you won't need mutex_lock(). The mutex_lock
-> > > here suggests to me that workers can still run here.
-> > > 
-> > > Thanks
-> > 
-> > 
-> > "Ideally" here is misleading, we need a bigger detailed comment
-> > along the lines of:
-> > 
-> > /*
-> > * By design, no workers can run here. But if there's a bug and the
-> > * driver did not flush all work properly then they might, and we
-> > * encountered such bugs in the past.  With no proper flush guest won't
-> > * work correctly but avoiding host memory corruption in this case
-> > * sounds like a good idea.
-> > */
+On Fri, 25 Feb 2022 05:25:52 -0800, Jia-Ju Bai wrote:
+> The pointer temp is allocated by devm_kzalloc(), so it should be
+> checked for error handling.
 > 
-> Can we use vhost_vq_get_backend() to check this situation?
 > 
-> IIUC all the vhost devices clear the backend to stop the workers.
-> This is not racy (if we do after the mutex_lock) and should cover all cases.
 
-I can look into this too if you like.
+Applied, thanks!
 
+[1/1] memory: emif: check the pointer temp in get_device_details()
+      commit: 5b5ab1bfa1898c6d52936a57c25c5ceba2cb2f87
+
+Best regards,
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

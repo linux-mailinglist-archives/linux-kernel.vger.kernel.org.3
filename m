@@ -2,144 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B3C4CD104
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E964CD106
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbiCDJ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S236914AbiCDJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbiCDJ3F (ORCPT
+        with ESMTP id S236851AbiCDJ3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:29:05 -0500
-Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5112A154D24;
-        Fri,  4 Mar 2022 01:28:16 -0800 (PST)
-Received: from math.uni-bielefeld.de (kvm01.math.uni-bielefeld.de [129.70.45.15])
+        Fri, 4 Mar 2022 04:29:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49B015C650
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:28:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 81F6760179;
-        Fri,  4 Mar 2022 10:28:12 +0100 (CET)
-Date:   Fri, 4 Mar 2022 10:28:11 +0100
-From:   Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Huijin Park <huijin.park@samsung.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Tony Lindgren <tony@atomide.com>
-Subject: Re: [BUG] mmc: core: adjust polling interval for CMD1
-Message-ID: <20220304092811.GA20284@math.uni-bielefeld.de>
-References: <27DDB061-1235-4F4C-B6A8-F035D77AC9CF@goldelico.com>
- <CAPDyKFrz_2Vp64SUzB8CiHJLTjO8Hx8m3QEhY1VU2ksZhVEx7A@mail.gmail.com>
- <20220302082034.GA5723@math.uni-bielefeld.de>
- <6715A5BE-CA64-4A3D-8EE5-5BEEB63F268A@goldelico.com>
- <CAPDyKFqMs6FsJHVOoVmZxzBPgUdLoqa-xeLfvkQi1pn=8k1h6Q@mail.gmail.com>
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E3AD61882
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:28:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98404C340E9;
+        Fri,  4 Mar 2022 09:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646386126;
+        bh=3ZyGHoh6IanTsSvqHkAqFuBcwQnAyxkVM3EI89FxsvQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J/veIj1vtbDybWYerGw3lXjK+ySuWAXxTr6gAZNl90zMlIWxoBGvmmyysLDTxUclj
+         qjUCOsPaZB2tkCm5McrasfHjow1XEeGNe9PCGx2wwcODeJqQm/03N3pasadBU2N31i
+         HhsIZ41i141/Eh8hDk5fCn6zelHz0bJCXHf6clQu+epx/E65joOgMhPY4BPzVg43zb
+         PTS4hy2Y+aqXNCIonWxEGu66sVnvE9U+IlOIPUENkuv3dh0ZCDcbHv8nq21YcnSwPh
+         /MoTmGt8/WSMyyK5Wu75F725f5nMq18insR+znYtTC1WNUKe+fWKUp+iwGtSBLitbF
+         pOe6fvmurTPOQ==
+Message-ID: <cac5624c-6338-b42a-346b-b6bfd86dda74@kernel.org>
+Date:   Fri, 4 Mar 2022 17:28:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqMs6FsJHVOoVmZxzBPgUdLoqa-xeLfvkQi1pn=8k1h6Q@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [f2fs-dev] [PATCH 2/2] f2fs: introduce F2FS_UNFAIR_RWSEM to
+ support unfair rwsem
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     kernel test robot <oliver.sang@intel.com>
+References: <20220304021955.2524246-1-jaegeuk@kernel.org>
+ <20220304021955.2524246-2-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220304021955.2524246-2-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ulf Hansson wrote on Thu  3/03/22 11:40:
-> On Wed, 2 Mar 2022 at 10:40, H. Nikolaus Schaller <hns@goldelico.com> wrote:
+On 2022/3/4 10:19, Jaegeuk Kim wrote:
+> Unfair rwsem should be used when blk-cg is on. Otherwise, there is regression.
 > 
-> Alright, it starts to sound like we might need a revert (or at least a
-> way to restore the previous behaviour) - even if that would just paper
-> over the real problem. The real problem is more likely related to how
-> the host driver manages restoring of the power to the card, which
-> happens when runtime resuming it.
+> FYI, we noticed a -26.7% regression of aim7.jobs-per-min due to commit:
 > 
-> In any case, just to make sure the loop timeout itself isn't the
-> problem, can you run the below debug patch please? The intent is to
-> figure out how long the worst case timeout is, when it's working with
-> CMD1. As soon as the timeout exceeds the worst case, there is a
-> message printed to the log.
+> commit: e4544b63a7ee49e7fbebf35ece0a6acd3b9617ae ("f2fs: move f2fs to use reader-unfair rwsems")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
 > 
-> The below patch is based upon that the offending commit has been reverted.
+> in testcase: aim7
+> on test machine: 88 threads 2 sockets Intel(R) Xeon(R) Gold 6238M CPU @ 2.10GHz with 128G memory
+> with following parameters:
 > 
-> Kind regards
-> Uffe
+> 	disk: 4BRD_12G
+> 	md: RAID0
+> 	fs: f2fs
+> 	test: sync_disk_rw
+> 	load: 100
+> 	cpufreq_governor: performance
+> 	ucode: 0x500320a
 > 
-> From: Ulf Hansson <ulf.hansson@linaro.org>
-> Date: Thu, 3 Mar 2022 11:00:04 +0100
-> Subject: [PATCH] mmc: core: DEBUG - Measure and log worst case CMD1 loop
+> test-description: AIM7 is a traditional UNIX system level benchmark suite which is used to test and measure the performance of multiuser system.
+> test-url: https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsourceforge.net%2Fprojects%2Faimbench%2Ffiles%2Faim-suite7%2F&amp;data=04%7C01%7Cchao.yu%40oppo.com%7C22ad61cc1e204e1d63e908d9fd858d65%7Cf1905eb1c35341c5951662b4a54b5ee6%7C0%7C0%7C637819572336831789%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=SMV5sGpVhSvjC8sbrKpKGT27J35Bm1%2B3KoM4yeraceA%3D&amp;reserved=0
 > 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/mmc/core/mmc_ops.c | 11 +++++++++++
->  include/linux/mmc/host.h   |  1 +
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
-> index 9946733a34c6..3f03d9e8a3a4 100644
-> --- a/drivers/mmc/core/mmc_ops.c
-> +++ b/drivers/mmc/core/mmc_ops.c
-> @@ -177,11 +177,15 @@ int mmc_send_op_cond(struct mmc_host *host, u32
-> ocr, u32 *rocr)
->  {
->         struct mmc_command cmd = {};
->         int i, err = 0;
-> +       s64 cmd1_ms;
-> +       ktime_t time_start;
-> 
->         cmd.opcode = MMC_SEND_OP_COND;
->         cmd.arg = mmc_host_is_spi(host) ? 0 : ocr;
->         cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R3 | MMC_CMD_BCR;
-> 
-> +       time_start = ktime_get();
-> +
->         for (i = 100; i; i--) {
->                 err = mmc_wait_for_cmd(host, &cmd, 0);
->                 if (err)
-> @@ -211,6 +215,13 @@ int mmc_send_op_cond(struct mmc_host *host, u32
-> ocr, u32 *rocr)
->                         cmd.arg = cmd.resp[0] | BIT(30);
->         }
-> 
-> +       cmd1_ms = ktime_to_ms(ktime_sub(ktime_get(), time_start));
-> +       if (!err && cmd1_ms > host->cmd1_ms) {
-> +               pr_warn("%s: CMD1 timeout increased to %lld ms, loop=%d\n",
-> +                       mmc_hostname(host), cmd1_ms, i);
-> +               host->cmd1_ms = cmd1_ms;
-> +       }
-> +
->         if (rocr && !mmc_host_is_spi(host))
->                 *rocr = cmd.resp[0];
-> 
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> index 7afb57cab00b..c2ca3bb05620 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -301,6 +301,7 @@ struct mmc_host {
->         unsigned int            f_min;
->         unsigned int            f_max;
->         unsigned int            f_init;
-> +       s64                     cmd1_ms;
->         u32                     ocr_avail;
->         u32                     ocr_avail_sdio; /* SDIO-specific OCR */
->         u32                     ocr_avail_sd;   /* SD-specific OCR */
-> -- 
-> 2.25.1
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Hi,
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-thanks. With this patch applied with reverted 76bfc7ccc2fa9d382576f6013b57a0ef93d5a722
-I don't get the "stuck" errors in __mmc_poll_for_busy and only one message of
-
-[    1.095194] mmc1: CMD1 timeout increased to 64 ms, loop=98
-
-Regards,
-Jean Rene Dawin
-
-
+Thanks,

@@ -2,180 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CC94CD173
+	by mail.lfdr.de (Postfix) with ESMTP id B1CBC4CD174
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiCDJmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S239345AbiCDJmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiCDJmF (ORCPT
+        with ESMTP id S239273AbiCDJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:42:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9C4198ED4;
-        Fri,  4 Mar 2022 01:41:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45B2D61631;
-        Fri,  4 Mar 2022 09:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25691C340EF;
-        Fri,  4 Mar 2022 09:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386871;
-        bh=GsbjS48QOHFFSAp2SabqgOJmfPKt9I0EStElgK6nMQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fomDQF5A9rnh36RT7aw30jgH/cQBXtUenObuO6wtIVvKx8ipvv/08NfrtlsSQ0WHq
-         JdlosL+veMPNu43zybuQhG4jQSR/cJI6G8LRQjGoK1boQHEiuobXqTkD1EqvJkqNRF
-         W96V/Hoh1QpctVVNY2JTP7JEEhquzhWCtHM09t5zZq5GsC+/SEBjY3vHn2DRph+iFb
-         +L6KmCRdONuvJLNclXNAaxpOnqp4/XaC3wUfJLjmAyiJCf4qYsQLHr56d6z8Po++kD
-         yxRftv6h0vHELudet6nPFmB8JkrWXOTLbsCH3PBrS3rG7D4O1TmVaCN6z0C+YqZ8K4
-         cluba7ELEMySw==
-Date:   Fri, 4 Mar 2022 11:40:31 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2.1 01/30] x86/sgx: Add short descriptions to ENCLS
- wrappers
-Message-ID: <YiHejzFlR+p14KHN@iki.fi>
-References: <20220304093524.397485-1-jarkko@kernel.org>
+        Fri, 4 Mar 2022 04:42:08 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A061606FF;
+        Fri,  4 Mar 2022 01:41:21 -0800 (PST)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K92rg2vJdz67tXN;
+        Fri,  4 Mar 2022 17:40:03 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 10:41:19 +0100
+Received: from [10.47.95.117] (10.47.95.117) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
+ 2022 09:41:17 +0000
+Message-ID: <966a1048-cd14-d796-8b9d-734605796652@huawei.com>
+Date:   Fri, 4 Mar 2022 09:41:22 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 3/4] scsi: pm8001: Use libsas internal abort support
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Ajish.Koshy@microchip.com>, <linuxarm@huawei.com>,
+        <Viswas.G@microchip.com>, <hch@lst.de>, <liuqi115@huawei.com>,
+        <chenxiang66@hisilicon.com>
+References: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
+ <1646309930-138960-4-git-send-email-john.garry@huawei.com>
+ <85a33515-043d-00f4-3bd3-ecb9a1349a68@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <85a33515-043d-00f4-3bd3-ecb9a1349a68@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.95.117]
+X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is just a bug fixed version of v2, and also the requirement
-to do obsolete round trip with EMODPE has been optimized away.
-I hope that v3 is rolled out quickly because now there is no
-comparison point. We can have speculative discussions whether
-ioctl or #PF is better but no means to benchmark. Thus, a quick
-patch set revision roll out would be such a great thing.
+On 03/03/2022 16:36, Damien Le Moal wrote:
+>> -	rc = send_task_abort(pm8001_ha, opc, device_id, flag,
+>> -		task_tag, cmd_tag);
+>> +	rc = send_task_abort(pm8001_ha, opc, device_id, abort->type,
+>> +		abort->tag, ccb->ccb_tag);
+> Nit: Can you indent this together with "(" ? I find it easier to read:)
 
-Based on https://lore.kernel.org/linux-sgx/20220304033918.361495-1-jarkko@kernel.org/T/#u
+ok, I can align it.
 
-BR, Jarkko
+> 
+>>   	if (rc != TMF_RESP_FUNC_COMPLETE)
+>>   		pm8001_dbg(pm8001_ha, EH, "rc= %d\n", rc);
+>>   	return rc;
+>> diff --git a/drivers/scsi/pm8001/pm8001_hwi.h b/drivers/scsi/pm8001/pm8001_hwi.h
+>> index d1f3aa93325b..961d0465b923 100644
+>> --- a/drivers/scsi/pm8001/pm8001_hwi.h
+>> +++ b/drivers/scsi/pm8001/pm8001_hwi.h
+>> @@ -434,11 +434,6 @@ struct task_abort_req {
+>>   	u32	reserved[11];
+>>   } __attribute__((packed, aligned(4)));
+>>   
+>> -/* These flags used for SSP SMP & SATA Abort */
+>> -#define ABORT_MASK		0x3
+>> -#define ABORT_SINGLE		0x0
+>> -#define ABORT_ALL		0x1
+>> -
+>>   /**
+>>    * brief the data structure of SSP SATA SMP Abort Response
+>>    * use to describe SSP SMP & SATA Abort Response ( 64 bytes)
+>> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+>> index ac9c40c95070..d1224674173e 100644
+>> --- a/drivers/scsi/pm8001/pm8001_sas.c
+>> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+>> @@ -324,6 +324,18 @@ static int pm8001_task_prep_ata(struct pm8001_hba_info *pm8001_ha,
+>>   	return PM8001_CHIP_DISP->sata_req(pm8001_ha, ccb);
+>>   }
+>>   
+>> +/**
+>> +  * pm8001_task_prep_internal_abort - the dispatcher function, prepare data
+>> +  *				      for internal abort task
+>> +  * @pm8001_ha: our hba card information
+>> +  * @ccb: the ccb which attached to sata task
+>> +  */
+>> +static int pm8001_task_prep_internal_abort(struct pm8001_hba_info *pm8001_ha,
+>> +					   struct pm8001_ccb_info *ccb)
+>> +{
+>> +	return PM8001_CHIP_DISP->task_abort(pm8001_ha, ccb);
+>> +}
+>> +
+>>   /**
+>>     * pm8001_task_prep_ssp_tm - the dispatcher function, prepare task management data
+>>     * @pm8001_ha: our hba card information
+>> @@ -367,6 +379,43 @@ static int sas_find_local_port_id(struct domain_device *dev)
+>>   #define DEV_IS_GONE(pm8001_dev)	\
+>>   	((!pm8001_dev || (pm8001_dev->dev_type == SAS_PHY_UNUSED)))
+>>   
+>> +
+>> +static int pm8001_deliver_command(struct pm8001_hba_info *pm8001_ha,
+>> +				  struct pm8001_ccb_info *ccb)
+>> +{
+>> +	struct sas_task *task = ccb->task;
+>> +	enum sas_protocol task_proto = task->task_proto;
+>> +	struct sas_tmf_task *tmf = task->tmf;
+>> +	int is_tmf = !!tmf;
+>> +	int rc;
+>> +
+>> +	switch (task_proto) {
+>> +	case SAS_PROTOCOL_SMP:
+>> +		rc = pm8001_task_prep_smp(pm8001_ha, ccb);
+>> +		break;
+>> +	case SAS_PROTOCOL_SSP:
+>> +		if (is_tmf)
+>> +			rc = pm8001_task_prep_ssp_tm(pm8001_ha, ccb, tmf);
+>> +		else
+>> +			rc = pm8001_task_prep_ssp(pm8001_ha, ccb);
+>> +		break;
+>> +	case SAS_PROTOCOL_SATA:
+>> +	case SAS_PROTOCOL_STP:
+>> +		rc = pm8001_task_prep_ata(pm8001_ha, ccb);
+>> +		break;
+>> +	case SAS_PROTOCOL_INTERNAL_ABORT:
+>> +		rc = pm8001_task_prep_internal_abort(pm8001_ha, ccb);
+>> +		break;
+>> +	default:
+>> +		dev_err(pm8001_ha->dev, "unknown sas_task proto: 0x%x\n",
+>> +			task_proto);
+>> +		rc = -EINVAL;
+>> +		break;
+>> +	}
+>> +
+>> +	return rc;
+> rc variable is not very useful here. Why not use return directly for each case ?
 
-On Fri, Mar 04, 2022 at 11:34:55AM +0200, Jarkko Sakkinen wrote:
-> From: Reinette Chatre <reinette.chatre@intel.com>
+
+ok, I can make that change.
+
 > 
-> The SGX ENCLS instruction uses EAX to specify an SGX function and
-> may require additional registers, depending on the SGX function.
-> ENCLS invokes the specified privileged SGX function for managing
-> and debugging enclaves. Macros are used to wrap the ENCLS
-> functionality and several wrappers are used to wrap the macros to
-> make the different SGX functions accessible in the code.
+>> +}
+>> +
+>>   /**
+>>     * pm8001_queue_command - register for upper layer used, all IO commands sent
+>>     * to HBA are from this interface.
+>> @@ -379,16 +428,15 @@ int pm8001_queue_command(struct sas_task *task, gfp_t gfp_flags)
+>>   	enum sas_protocol task_proto = task->task_proto;
+>>   	struct domain_device *dev = task->dev;
+>>   	struct pm8001_device *pm8001_dev = dev->lldd_dev;
+>> +	bool internal_abort = sas_is_internal_abort(task);
+>>   	struct pm8001_hba_info *pm8001_ha;
+>>   	struct pm8001_port *port = NULL;
+>>   	struct pm8001_ccb_info *ccb;
+>> -	struct sas_tmf_task *tmf = task->tmf;
+>> -	int is_tmf = !!task->tmf;
+>>   	unsigned long flags;
+>>   	u32 n_elem = 0;
+>>   	int rc = 0;
+>>   
+>> -	if (!dev->port) {
+>> +	if (!internal_abort && !dev->port) {
+>>   		ts->resp = SAS_TASK_UNDELIVERED;
+>>   		ts->stat = SAS_PHY_DOWN;
+>>   		if (dev->dev_type != SAS_SATA_DEV)
+>> @@ -410,7 +458,8 @@ int pm8001_queue_command(struct sas_task *task, gfp_t gfp_flags)
+>>   	pm8001_dev = dev->lldd_dev;
+>>   	port = &pm8001_ha->port[sas_find_local_port_id(dev)];
+>>   
+>> -	if (DEV_IS_GONE(pm8001_dev) || !port->port_attached) {
+>> +	if (!internal_abort && (DEV_IS_GONE(pm8001_dev) ||
+>> +				!port->port_attached)) {
+> Wrapping the line after "&&" would make this a lot cleaner and easier to read.
+
+Agreed, I can do it.
+
+But if you can see any neater ways to skip these checks for internal 
+abort in the common queue command path then I would be glad to hear it.
+
 > 
-> The wrappers of the supported SGX functions are cryptic. Add short
-> descriptions of each as a comment.
-> 
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
->  arch/x86/kernel/cpu/sgx/encls.h | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-> index fa04a73daf9c..0e22fa8f77c5 100644
-> --- a/arch/x86/kernel/cpu/sgx/encls.h
-> +++ b/arch/x86/kernel/cpu/sgx/encls.h
-> @@ -136,57 +136,71 @@ static inline bool encls_failed(int ret)
->  	ret;						\
->  	})
->  
-> +/* Initialize an EPC page into an SGX Enclave Control Structure (SECS) page. */
->  static inline int __ecreate(struct sgx_pageinfo *pginfo, void *secs)
->  {
->  	return __encls_2(ECREATE, pginfo, secs);
->  }
->  
-> +/* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
->  static inline int __eextend(void *secs, void *addr)
->  {
->  	return __encls_2(EEXTEND, secs, addr);
->  }
->  
-> +/*
-> + * Associate an EPC page to an enclave either as a REG or TCS page
-> + * populated with the provided data.
-> + */
->  static inline int __eadd(struct sgx_pageinfo *pginfo, void *addr)
->  {
->  	return __encls_2(EADD, pginfo, addr);
->  }
->  
-> +/* Finalize enclave build, initialize enclave for user code execution. */
->  static inline int __einit(void *sigstruct, void *token, void *secs)
->  {
->  	return __encls_ret_3(EINIT, sigstruct, secs, token);
->  }
->  
-> +/* Disassociate EPC page from its enclave and mark it as unused. */
->  static inline int __eremove(void *addr)
->  {
->  	return __encls_ret_1(EREMOVE, addr);
->  }
->  
-> +/* Copy data to an EPC page belonging to a debug enclave. */
->  static inline int __edbgwr(void *addr, unsigned long *data)
->  {
->  	return __encls_2(EDGBWR, *data, addr);
->  }
->  
-> +/* Copy data from an EPC page belonging to a debug enclave. */
->  static inline int __edbgrd(void *addr, unsigned long *data)
->  {
->  	return __encls_1_1(EDGBRD, *data, addr);
->  }
->  
-> +/* Track that software has completed the required TLB address clears. */
->  static inline int __etrack(void *addr)
->  {
->  	return __encls_ret_1(ETRACK, addr);
->  }
->  
-> +/* Load, verify, and unblock an EPC page. */
->  static inline int __eldu(struct sgx_pageinfo *pginfo, void *addr,
->  			 void *va)
->  {
->  	return __encls_ret_3(ELDU, pginfo, addr, va);
->  }
->  
-> +/* Make EPC page inaccessible to enclave, ready to be written to memory. */
->  static inline int __eblock(void *addr)
->  {
->  	return __encls_ret_1(EBLOCK, addr);
->  }
->  
-> +/* Initialize an EPC page into a Version Array (VA) page. */
->  static inline int __epa(void *addr)
->  {
->  	unsigned long rbx = SGX_PAGE_TYPE_VA;
-> @@ -194,6 +208,7 @@ static inline int __epa(void *addr)
->  	return __encls_2(EPA, rbx, addr);
->  }
->  
-> +/* Invalidate an EPC page and write it out to main memory. */
->  static inline int __ewb(struct sgx_pageinfo *pginfo, void *addr,
->  			void *va)
->  {
-> -- 
-> 2.35.1
-> 
+>>   		ts->resp = SAS_TASK_UNDELIVERED;
+>>   		ts->stat = SAS_PHY_DOWN;
+>>   		if (sas_protocol_ata(task_proto)) {
+>> @@ -448,27 +497,7 @@ int pm8001_queue_command(struct sas_task *task, gfp_t gfp_flags)
+>>   
+Thanks,
+John

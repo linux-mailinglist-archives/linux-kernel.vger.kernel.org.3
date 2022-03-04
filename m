@@ -2,195 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3344CCF25
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432E24CCF27
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238842AbiCDHgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S238845AbiCDHhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238549AbiCDHgm (ORCPT
+        with ESMTP id S234891AbiCDHhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:36:42 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2081.outbound.protection.outlook.com [40.107.212.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151AFA2F29;
-        Thu,  3 Mar 2022 23:35:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b9GZQRVTqmom0onir62HtYSJhlUO9SxoejKeV1aN5trNacowkjw78hCdD9dnErWFiYp+qwbmKNtnHmdYBki5dC8FGJc6jrHQn1PjqEK2QONZtmQ8JOgnGO+/HbLlTGzTnk+8kJYN6lwMkMp5OzLjxJhnaplW3YFSoEfUgAlqBVRNuT41yvUfDNSCgbVrai2D7ZG8lcSdDGacS7uw0LKVoD16572+ygaJW7ZR5x7qY/L0fdFKLm1qS029tCPzrLUDFUA0NhAwtOQar/sdcKwohnRJv43uPytNFnQZ6o1z9xmP7o1fzGJwpmxdbkl3+h0En+xGLls9Je1UhAXMQXaLzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jo9em+kGrQaLMjVMuZOCmPtHQaSySg5uC8Ody1xj6CE=;
- b=awDad9N3YcorzCyqFINP/JzC9QFybs2HrbIsmbTo/Pn3j7jnZ1lP7lAVu4u9W7o1j1Ht52qCIjKzkMSJ94oUGZDRHwj2xA8L/cf9B0539FNcpms8+ulpnfYvBP54QejFpQIBSu6qd1fnigTXJBrk2Pr0u537o0pZW3xaVJp0QUBB/6L8+0wuw48kSpNx2XjkQ3GFZFtumK15hImVLRlPU9se04P5biRhycUSNeHoirMdufn34bYYxKmBGSX43imFnbH/lXg+3vCTIdilv/tW3fTqeE0d2s5BomNGzvuRpfdY1Hw7RcQan3hP3VJaXiw/MjeQYE8MIxS/iXwibQDECQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jo9em+kGrQaLMjVMuZOCmPtHQaSySg5uC8Ody1xj6CE=;
- b=fgPatY5YShnpp1dfmogdeg2p6wnGbZ7+NoY4O/PgYhPxwx2v3O+zmCRheZqXlezhZ7JMMUdATgwkhYjMbE9oT8iLPFMBBoRVx1o49bho5kJ3fx0lA5D1drhqWu2xlzBfWq29gQ0r9DEuM+r2yIr6kZKz1TvFK99SA+q+L5kWrTg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BYAPR12MB3045.namprd12.prod.outlook.com (2603:10b6:a03:ac::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 4 Mar
- 2022 07:35:52 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.5038.014; Fri, 4 Mar 2022
- 07:35:51 +0000
-Message-ID: <fff424e7-247c-38d8-4151-8b0503a16a7d@amd.com>
-Date:   Fri, 4 Mar 2022 08:35:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] i2c: at91: use dma safe buffers
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        stable@vger.kernel.org
-References: <20220303161724.3324948-1-michael@walle.cc>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220303161724.3324948-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P193CA0130.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:209:85::35) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 4 Mar 2022 02:37:51 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0295192C8F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:37:00 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u10so9690607wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:37:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QDpARUPjQVw7yJZDfXexLC7oeaI8zkN2+sGqKTfu/k=;
+        b=X9p740h5bXiHbxxM+3aljlfLPoZUpJf+DsWfQs1Hndu7DTv782sK0v+e1iI/s7rKJX
+         1YTsRnvWAZgJxo5yJWWI718CxTKsHBj95KaqIo17RgoiDguWwyGDLzTKRwZ99+NZhdgW
+         iw0+taDTzNZPjJB9r/74N6itk+4URQdU3SlXip0ZP16CWXATSQDmsTkvxGQ09miGbhQo
+         QjZnY3IachQiCs6Y7dNygmKl0+T3+o/iW1nsR/1EVsNPlwZnb6oKWkjf+1RxHE34S5Vh
+         /QjcpxxEjx+aNauscgLz++os9TEh8vbQdvbDTnpMtfbC1O5x+k0wngZP40pCbGmRiLwL
+         tB+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QDpARUPjQVw7yJZDfXexLC7oeaI8zkN2+sGqKTfu/k=;
+        b=f5TRcQSCK67iyUk1aP25KNBv0cYszWvD8ZpP+AyUOi4rsWsNO5j++pVRQoxKOOCGBS
+         MvZNmb4XELrDJdID24tlXvu5isl5ZFLct/uch4/ESKqoM0fvlKL4PxkL+RZ5Xq1bz1ln
+         woAYNsiEtgTIrqHgyBMhwvxFM6S2g98B+r+D4y+qE4WjWiXz3dCbIAZgXZgE8xCqUqFs
+         ZGwtoajT0uhHqOHgOiXc6WdhPPoTxGBnOHDEOO07vL01jEPgIWf2wqJtIH5vlLW6/3Wn
+         hGx77xeqa6R5Vb6ovlBqYb8ojIvoyLgV77uZAVJSCEy483HLleEMTHyxD2EKoDwhUl5D
+         6z9g==
+X-Gm-Message-State: AOAM532okSgxQ3DZqh5UJDGmPzt8+8IO7YHplCDNzkZA20GFfT/rXcNc
+        78+uRkrQvqO0TfftS5hz3/sUiA==
+X-Google-Smtp-Source: ABdhPJw9AhNZkPaGQAVDTKf46zsYx95DYB4NtR6FCMra+tI3shjmjieHAP82lTmaoBv61pTMuEVSiA==
+X-Received: by 2002:a05:6000:2a7:b0:1f0:b26a:38b with SMTP id l7-20020a05600002a700b001f0b26a038bmr687506wry.23.1646379419286;
+        Thu, 03 Mar 2022 23:36:59 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id l12-20020a5d6d8c000000b001efd2c071dbsm4068002wrs.20.2022.03.03.23.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 23:36:58 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, harsha.harsha@xilinx.com,
+        herbert@gondor.apana.org.au, kalyani.akula@xilinx.com,
+        michal.simek@xilinx.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] crypto: xilinx: prevent probing on non-xilinx hardware
+Date:   Fri,  4 Mar 2022 07:36:48 +0000
+Message-Id: <20220304073648.972270-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6da3efe1-05ab-4d7f-5c1f-08d9fdb19b98
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3045:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3045F991C189E9DF85FE402D83059@BYAPR12MB3045.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O+KpSNg+VQuj8fXqfoiknauVU8TsPoL+JUBxFPfRoBX/1GwjyvmYboa6fd7Rx5NVWo/l4R6VfGJ+AtANgFpfxhnh9yHvpBcoLkQGcE9NK+SvTBJEJkvn1CBhlJVwcretT0Elk59HktdRDpsLh9uq2QC1RqDssYYvmiip13IpoRhrb7mmMWCh/lWQLQMiLL52PjueEtCEMdFRp4y/d5UTwejhGvysUg6G1jB3ETitUb1++WuHRdm2IQkGwGgsDdGwPW2Knmi98xsLptZFcgIrdHHgoTPWYU0vXjIY7lDw9lWpk64s3VsE51tgtzr8q4tx4Rin44rrfvRQHs7xv752AdJXoftldDuhnm2ze4MjCNJPVgE4/vidM6oNW+pJMZHEDW+WdfIbhmrNzn08VRuvWTcCv+rEDnv9C4Tn9HztouvDaUoFO9XY/2+Cm2tf2z4bZsIrhBv9rqOkX0jyESbecTTzTdXBpJYzOhcrtF3pzWMfVSZOywkTOS1T2U7dZeazovUUxgQMbjMs+yeFTpzaKTM+GmxRqhe2W5xTELMkIeMEs4NriXikgmHW9MBz5GaT4whHa7MCasXF9Cobb5tv2yclm6BGfByASJ2Se/q6VCDShAIArrQcwyeTVR6SgkTqEf1V17bUI4o1UZfQjj+ci+C3bhC9N0SwyB68EaHol9JLN1eRxWFGLjOZ7XaaBjLuZmmAno9/9QtnTcYiuBva9Riat4NEKxB/e1ld68y8/5M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(6666004)(36756003)(6506007)(31686004)(83380400001)(508600001)(110136005)(2906002)(4326008)(86362001)(316002)(6512007)(7416002)(31696002)(5660300002)(26005)(186003)(66476007)(66556008)(8676002)(2616005)(66946007)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGljZGFIa2pxWkVaWnZMcTNIajAxbkNvaEppNmkzZzVKdFBxalBnNHN6czFa?=
- =?utf-8?B?VEVYNUxDakZHL253VWJEdXBOSmxsNmoxNTVzUHdwQzJLSkpyNUV0SkowaU1O?=
- =?utf-8?B?eGFCVjQvMVVrT1ljclA3Z0laOWgzb2hTZnRtZC82bk8zNFZtUjJQanRPNnVt?=
- =?utf-8?B?Kzk5dDBxY20yZks4eHhuU0VSTmJnbTdnRmI3Ti9FeW1naWc4dVdsMHZMTkxi?=
- =?utf-8?B?OGg1U2tQMk1rKzR1Yzh0VWFUNGN2Nk9FNXhwWTZxNFJCcHgzYTN0dzhjMzhk?=
- =?utf-8?B?NVhIWHdJUmYvM1dyRTVITzZqMVJFS2Y3WDRVNG5QYVRvVStlTk5CaEJsdUNU?=
- =?utf-8?B?SFVKMWl3RERYZzFYczN3MFNvNm0zYkV5eHFERnByNEZuQURGNmIwRFRpcmFy?=
- =?utf-8?B?bWd5aFk3VDRqL3pwNzBnVVNvMjBhUUNlbGI4TDl2ekFXdWRoZUF0L2x3VDJy?=
- =?utf-8?B?L2g0N0FUMndsYXJxd3g4YzNGT3I5MXVQbXJab0JldlA1SW1nc005UzVWaDN2?=
- =?utf-8?B?YVozVmdKeGxYRVROVzVUOHIxWmgvWXdqMFFLUGMxY3hvUi9sZXNLbTNxYkE5?=
- =?utf-8?B?L1JuZ0JiTnpXMld0RHdHYUIrR1RUbWNqUEFPU2M5SFd5VTZrbndLNHZsci9K?=
- =?utf-8?B?OVk1VVdEd25UQlltZ0VsQ1FRTFN2QmpGTG10OWlRVlJveGxacnRjbndVVSty?=
- =?utf-8?B?R2l4R3dObE1XZVJNSmpBdExlSmVRR1RNU1JUMUFzSnpmVGZ2T0cvRHZJWFdv?=
- =?utf-8?B?Uk1ZZXZua1NCMHl0Y0MwNEJVWFBoQzNwakhKdkc0T281b3dTNlBESEhDL2RJ?=
- =?utf-8?B?NEt4ZjBEY0p0T3kyOWR3M0Y3Y29OQllsWmtVK3BudWpJaDNWbTAyRjhOZkRP?=
- =?utf-8?B?YVBodlp0TDZnMTg2bjMvdElwOHM2VUZNTEVBRysyenJzREQ5emttcFJMWG1x?=
- =?utf-8?B?aHV0dFdMVHNzUU1XNEhGK3lxekc5Y21vMm9TMXRvMkxOYjVGWDYyNGFyZXFY?=
- =?utf-8?B?SEtQOHVDSW9IcGdOdHN0aHRhL2FuaEdaTHMveExORFhMTGJlbk5JZjJCRjkx?=
- =?utf-8?B?Vjd5Y0w4RERCM0dVRlVtNDJqZ3lxekF4YzdsVjg1Q0x4R1FPeStmRXJNK2ZU?=
- =?utf-8?B?cmRPaDV1Tlh4dXcxNXBWSEtrOHFmVlcwTm1xUlZoS0tYdHpmZUlNMGZoczhv?=
- =?utf-8?B?OHA1bTF1eTF0MU9zNkpMNTgwdk9zcmpZbGFUdEhDazg5Q2pXZkpCOFFLakpi?=
- =?utf-8?B?dndZcTVRVnBpdGJuSjNQcnpLVG5SdTNQY0FzSzVNbitJMUxDak9DeVZhdkFv?=
- =?utf-8?B?SWpoRDU4U1JQNStKdDYzOUZjUnpJc3hibXozUlg1ZENMUWRseERXUzZLMmZt?=
- =?utf-8?B?QS9yL2F1dmVhUDN6NkJIU2VzdFlVMnJhTUdjalVkWVdYdEhLcmhQN1VqSWVm?=
- =?utf-8?B?MHhFZzNLVHRKZWdyem42eDN0Mk93R3FNdm0vaHJKZUtLM3BNN2VOTEVlZ0FN?=
- =?utf-8?B?VHNRbDRBN2F4VDNNZ2lCcFVmME1HbGd4aHNXT3B1eUlIamkwaklqN09oNDQw?=
- =?utf-8?B?bmdkekphRVgwN1JkN0MrUmJ2akpucjZpaCtFbERqOFJqVG1TOGR1aGcvWnFP?=
- =?utf-8?B?NWM2WmJ4bUFrOE5xam5HM3ZLOFpDa1lXaWs3VlF3aHNpQWR0YkxMK1ZrYi9G?=
- =?utf-8?B?UzQrRlovUnVsL2drTW8yc2xQQjl6R1czQ3dUQ1dCQlp1QWtIUlBiVFlqam5Q?=
- =?utf-8?B?ZnFzb01Bb1FHYnlYWjAvNVlQMFVhdFhQNUxRL3JTMFBoR043MldVNnN2WWpQ?=
- =?utf-8?B?MUY2ZG5Md0ZCVXZtOWJaaW90STRoOVRmc1l3Zms2cGdySlFCcHM3dDZGY3pV?=
- =?utf-8?B?S1lpbGpiV2xRcWtXU1dURkhoWWtYVHZadzFFaGlnNHlGUVhvZUVGU0VSRFVW?=
- =?utf-8?B?OS9vTWE2ZUFZb1JqaThZd0NIcXhyeG9hVVZra1VIYmdqVEd3VDFsTzRWWTFv?=
- =?utf-8?B?azk1bTlQU0t0N2lTSWNBVXBlQ1JNTVU4bUdpT29SZC8wRU1wQkxKREp5bVdF?=
- =?utf-8?B?dnZva3Jpd1ZwNUN1ZUpiS1AxZEt1dW9wYlUvTmsxdFVybURJakd0eVg4YzUw?=
- =?utf-8?Q?Pdb8=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6da3efe1-05ab-4d7f-5c1f-08d9fdb19b98
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 07:35:51.4096
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pu69Q1u5fSSgNOD/ALrmfaJwvtCXxCGyKdW+yRafzg0rkd0y5+mX2mvEo0y+lyw9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3045
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.03.22 um 17:17 schrieb Michael Walle:
-> The supplied buffer might be on the stack and we get the following error
-> message:
-> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
->
-> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-> necessary.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->
-> I'm not sure if or which Fixes: tag I should add to this patch. The issue
-> seems to be since a very long time, but nobody seem to have triggered it.
-> FWIW, I'm using the sff,sfp driver, which triggers this.
->
->   drivers/i2c/busses/i2c-at91-master.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index b0eae94909f4..a7a22fedbaba 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->   	unsigned int_addr_flag = 0;
->   	struct i2c_msg *m_start = msg;
->   	bool is_read;
-> +	u8 *dma_buf;
+The zynqmp-sha driver is always loaded and register its algorithm even on
+platform which do not have the proper hardware.
+This lead to a stacktrace due to zynqmp-sha3-384 failing its crypto
+self tests.
+So check if hardware is present via the firmware API call get_version.
 
-Maybe call your variable differently. DMA-buf is an inter driver buffer 
-sharing frame we use for GPU acceleration and V4L.
+While at it, simplify the platform_driver by using module_platform_driver()
 
-It doesn't cause any technical issues, but the maintainer regex now 
-triggers on that. So you are CCing people not related to this code in 
-any way.
+Furthermore the driver should depend on ZYNQMP_FIRMWARE since it cannot
+work without it.
 
-Regards,
-Christian.
+Fixes: 7ecc3e34474b ("crypto: xilinx - Add Xilinx SHA3 driver")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/crypto/Kconfig             |  2 +-
+ drivers/crypto/xilinx/zynqmp-sha.c | 35 +++++++-----------------------
+ 2 files changed, 9 insertions(+), 28 deletions(-)
 
->   
->   	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
->   
-> @@ -703,7 +704,18 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->   	dev->msg = m_start;
->   	dev->recv_len_abort = false;
->   
-> +	if (dev->use_dma) {
-> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> +		if (!dma_buf) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-> +		dev->buf = dma_buf;
-> +	}
-> +
-> +
->   	ret = at91_do_twi_transfer(dev);
-> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->   
->   	ret = (ret < 0) ? ret : num;
->   out:
+diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
+index 51df3cd9934f..52bb632a91d5 100644
+--- a/drivers/crypto/Kconfig
++++ b/drivers/crypto/Kconfig
+@@ -822,7 +822,7 @@ config CRYPTO_DEV_ZYNQMP_AES
+ 
+ config CRYPTO_DEV_ZYNQMP_SHA3
+ 	bool "Support for Xilinx ZynqMP SHA3 hardware accelerator"
+-	depends on ARCH_ZYNQMP
++	depends on ZYNQMP_FIRMWARE
+ 	select CRYPTO_SHA3
+ 	help
+ 	  Xilinx ZynqMP has SHA3 engine used for secure hash calculation.
+diff --git a/drivers/crypto/xilinx/zynqmp-sha.c b/drivers/crypto/xilinx/zynqmp-sha.c
+index 89549f4788ba..43ff170ff1c2 100644
+--- a/drivers/crypto/xilinx/zynqmp-sha.c
++++ b/drivers/crypto/xilinx/zynqmp-sha.c
+@@ -193,6 +193,13 @@ static int zynqmp_sha_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	int err;
++	u32 v;
++
++	/* Verify the hardware is present */
++	err = zynqmp_pm_get_api_version(&v);
++	if (err)
++		return err;
++
+ 
+ 	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(ZYNQMP_DMA_BIT_MASK));
+ 	if (err < 0) {
+@@ -251,33 +258,7 @@ static struct platform_driver zynqmp_sha_driver = {
+ 	},
+ };
+ 
+-static int __init sha_driver_init(void)
+-{
+-	struct platform_device *pdev;
+-	int ret;
+-
+-	ret = platform_driver_register(&zynqmp_sha_driver);
+-	if (ret)
+-		return ret;
+-
+-	pdev = platform_device_register_simple(zynqmp_sha_driver.driver.name,
+-					       0, NULL, 0);
+-	if (IS_ERR(pdev)) {
+-		ret = PTR_ERR(pdev);
+-		platform_driver_unregister(&zynqmp_sha_driver);
+-		pr_info("Failed to register ZynqMP SHA3 dvixe %d\n", ret);
+-	}
+-
+-	return ret;
+-}
+-
+-device_initcall(sha_driver_init);
+-
+-static void __exit sha_driver_exit(void)
+-{
+-	platform_driver_unregister(&zynqmp_sha_driver);
+-}
+-
++module_platform_driver(zynqmp_sha_driver);
+ MODULE_DESCRIPTION("ZynqMP SHA3 hardware acceleration support.");
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Harsha <harsha.harsha@xilinx.com>");
+-- 
+2.34.1
 

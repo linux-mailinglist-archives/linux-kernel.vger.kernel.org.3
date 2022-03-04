@@ -2,157 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432E24CCF27
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD474CCF29
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238845AbiCDHhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S238864AbiCDHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiCDHhv (ORCPT
+        with ESMTP id S232100AbiCDHi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:37:51 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0295192C8F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:37:00 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id u10so9690607wra.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:37:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0QDpARUPjQVw7yJZDfXexLC7oeaI8zkN2+sGqKTfu/k=;
-        b=X9p740h5bXiHbxxM+3aljlfLPoZUpJf+DsWfQs1Hndu7DTv782sK0v+e1iI/s7rKJX
-         1YTsRnvWAZgJxo5yJWWI718CxTKsHBj95KaqIo17RgoiDguWwyGDLzTKRwZ99+NZhdgW
-         iw0+taDTzNZPjJB9r/74N6itk+4URQdU3SlXip0ZP16CWXATSQDmsTkvxGQ09miGbhQo
-         QjZnY3IachQiCs6Y7dNygmKl0+T3+o/iW1nsR/1EVsNPlwZnb6oKWkjf+1RxHE34S5Vh
-         /QjcpxxEjx+aNauscgLz++os9TEh8vbQdvbDTnpMtfbC1O5x+k0wngZP40pCbGmRiLwL
-         tB+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0QDpARUPjQVw7yJZDfXexLC7oeaI8zkN2+sGqKTfu/k=;
-        b=f5TRcQSCK67iyUk1aP25KNBv0cYszWvD8ZpP+AyUOi4rsWsNO5j++pVRQoxKOOCGBS
-         MvZNmb4XELrDJdID24tlXvu5isl5ZFLct/uch4/ESKqoM0fvlKL4PxkL+RZ5Xq1bz1ln
-         woAYNsiEtgTIrqHgyBMhwvxFM6S2g98B+r+D4y+qE4WjWiXz3dCbIAZgXZgE8xCqUqFs
-         ZGwtoajT0uhHqOHgOiXc6WdhPPoTxGBnOHDEOO07vL01jEPgIWf2wqJtIH5vlLW6/3Wn
-         hGx77xeqa6R5Vb6ovlBqYb8ojIvoyLgV77uZAVJSCEy483HLleEMTHyxD2EKoDwhUl5D
-         6z9g==
-X-Gm-Message-State: AOAM532okSgxQ3DZqh5UJDGmPzt8+8IO7YHplCDNzkZA20GFfT/rXcNc
-        78+uRkrQvqO0TfftS5hz3/sUiA==
-X-Google-Smtp-Source: ABdhPJw9AhNZkPaGQAVDTKf46zsYx95DYB4NtR6FCMra+tI3shjmjieHAP82lTmaoBv61pTMuEVSiA==
-X-Received: by 2002:a05:6000:2a7:b0:1f0:b26a:38b with SMTP id l7-20020a05600002a700b001f0b26a038bmr687506wry.23.1646379419286;
-        Thu, 03 Mar 2022 23:36:59 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a5d6d8c000000b001efd2c071dbsm4068002wrs.20.2022.03.03.23.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 23:36:58 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     davem@davemloft.net, harsha.harsha@xilinx.com,
-        herbert@gondor.apana.org.au, kalyani.akula@xilinx.com,
-        michal.simek@xilinx.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] crypto: xilinx: prevent probing on non-xilinx hardware
-Date:   Fri,  4 Mar 2022 07:36:48 +0000
-Message-Id: <20220304073648.972270-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Mar 2022 02:38:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B9722BE3;
+        Thu,  3 Mar 2022 23:37:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4A28B8277C;
+        Fri,  4 Mar 2022 07:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89550C340E9;
+        Fri,  4 Mar 2022 07:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646379459;
+        bh=SmoE5UjCUd3W++2b9JAzb4pzBTmdPhYj9JV4FeqbwQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vvwa8W5hvQcan5zzohua0lgoPw3VZBVtg0hvKlj7SsrvmzpLqL8CohsxrLXmXrtW0
+         I0of4Aw/lIpl4s8unT+MbFrOOOGOtddERTK0vUsLcARNsu0Rt6/+aUPV0RelVs0R3c
+         Ez2U6pHgUsQy/qC2WFR5iJuZC9NdwK2JhjnIut0o=
+Date:   Fri, 4 Mar 2022 08:37:35 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v1 4/4] usb: host: add xhci-exynos module
+Message-ID: <YiHBv9j5fhhOBe/K@kroah.com>
+References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220304062618epcas2p2e3c73b5c4ed0c9bc0ca0c02aa658d3fb@epcas2p2.samsung.com>
+ <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The zynqmp-sha driver is always loaded and register its algorithm even on
-platform which do not have the proper hardware.
-This lead to a stacktrace due to zynqmp-sha3-384 failing its crypto
-self tests.
-So check if hardware is present via the firmware API call get_version.
+On Fri, Mar 04, 2022 at 03:23:58PM +0900, Daehwan Jung wrote:
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
 
-While at it, simplify the platform_driver by using module_platform_driver()
+I can not take patches without any changelog comments, sorry.
 
-Furthermore the driver should depend on ZYNQMP_FIRMWARE since it cannot
-work without it.
+Especially ones that do real things, like this, please describe what
+this does properly.
 
-Fixes: 7ecc3e34474b ("crypto: xilinx - Add Xilinx SHA3 driver")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/crypto/Kconfig             |  2 +-
- drivers/crypto/xilinx/zynqmp-sha.c | 35 +++++++-----------------------
- 2 files changed, 9 insertions(+), 28 deletions(-)
+thanks,
 
-diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-index 51df3cd9934f..52bb632a91d5 100644
---- a/drivers/crypto/Kconfig
-+++ b/drivers/crypto/Kconfig
-@@ -822,7 +822,7 @@ config CRYPTO_DEV_ZYNQMP_AES
- 
- config CRYPTO_DEV_ZYNQMP_SHA3
- 	bool "Support for Xilinx ZynqMP SHA3 hardware accelerator"
--	depends on ARCH_ZYNQMP
-+	depends on ZYNQMP_FIRMWARE
- 	select CRYPTO_SHA3
- 	help
- 	  Xilinx ZynqMP has SHA3 engine used for secure hash calculation.
-diff --git a/drivers/crypto/xilinx/zynqmp-sha.c b/drivers/crypto/xilinx/zynqmp-sha.c
-index 89549f4788ba..43ff170ff1c2 100644
---- a/drivers/crypto/xilinx/zynqmp-sha.c
-+++ b/drivers/crypto/xilinx/zynqmp-sha.c
-@@ -193,6 +193,13 @@ static int zynqmp_sha_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	int err;
-+	u32 v;
-+
-+	/* Verify the hardware is present */
-+	err = zynqmp_pm_get_api_version(&v);
-+	if (err)
-+		return err;
-+
- 
- 	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(ZYNQMP_DMA_BIT_MASK));
- 	if (err < 0) {
-@@ -251,33 +258,7 @@ static struct platform_driver zynqmp_sha_driver = {
- 	},
- };
- 
--static int __init sha_driver_init(void)
--{
--	struct platform_device *pdev;
--	int ret;
--
--	ret = platform_driver_register(&zynqmp_sha_driver);
--	if (ret)
--		return ret;
--
--	pdev = platform_device_register_simple(zynqmp_sha_driver.driver.name,
--					       0, NULL, 0);
--	if (IS_ERR(pdev)) {
--		ret = PTR_ERR(pdev);
--		platform_driver_unregister(&zynqmp_sha_driver);
--		pr_info("Failed to register ZynqMP SHA3 dvixe %d\n", ret);
--	}
--
--	return ret;
--}
--
--device_initcall(sha_driver_init);
--
--static void __exit sha_driver_exit(void)
--{
--	platform_driver_unregister(&zynqmp_sha_driver);
--}
--
-+module_platform_driver(zynqmp_sha_driver);
- MODULE_DESCRIPTION("ZynqMP SHA3 hardware acceleration support.");
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Harsha <harsha.harsha@xilinx.com>");
--- 
-2.34.1
-
+greg k-h

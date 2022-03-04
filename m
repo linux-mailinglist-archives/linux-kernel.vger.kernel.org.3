@@ -2,97 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F82F4CD9B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2394CD9BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240931AbiCDRGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S236099AbiCDRJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbiCDRGf (ORCPT
+        with ESMTP id S232153AbiCDRJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:06:35 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E59719CCD1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:05:47 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 39EED92009C; Fri,  4 Mar 2022 18:05:46 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 3295992009B;
-        Fri,  4 Mar 2022 17:05:46 +0000 (GMT)
-Date:   Fri, 4 Mar 2022 17:05:46 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-cc:     Mike Rapoport <rppt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-In-Reply-To: <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
-Message-ID: <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <Yh3tgr+g/6IElq0P@kernel.org> <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn> <Yh4uUoYT+YS5Jxsv@kernel.org> <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 4 Mar 2022 12:09:01 -0500
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3706FA1C;
+        Fri,  4 Mar 2022 09:08:11 -0800 (PST)
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 224H7TJn026744;
+        Sat, 5 Mar 2022 02:07:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 224H7TJn026744
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646413650;
+        bh=clO24AIUhkpLyHKt4VwOj26EUiZu3YGOoBgC6FInb/w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vB4mc9lpAxKTaSGWELa/nOh1eER5RXmvGF7p55+SnT7ikTNe9plFUaBfYVQ7fzjba
+         LQ8sCRqGJK/zb7OiTsnp2xJWM1ujBbPgS+VGP0XMoOjJbXnqwt4b48Hgx+BEsxVmS9
+         aN8FEp8ghkoXwcOHuIMW0GRdu/RV6/yhwOMUXd4qbgE910xr0dvbcCyjANMptc+Rv0
+         W27XEB3eapuE46Qa9AaMY/8Rni6g2lhDeADcXA7YUbfNQYs1cV2yOtG/9GASVMLAK/
+         eEaSlGm6/IhGaDunCqK6s/I2uU6T5Ugkz6YtUWIrez+5wx44ej39wIVYcGH81Eq2pD
+         YoUROA2Yq+f2g==
+X-Nifty-SrcIP: [209.85.216.51]
+Received: by mail-pj1-f51.google.com with SMTP id kx1-20020a17090b228100b001bf2dd26729so1351196pjb.1;
+        Fri, 04 Mar 2022 09:07:30 -0800 (PST)
+X-Gm-Message-State: AOAM5338GhUF5aYSbE9wP+sLR6Qxp5QtbEWxb7IW3+65ZT4wuouI4BAQ
+        08egsczkL0k3TSuDZ06iPYuyrpJcfAbQ773Qd0I=
+X-Google-Smtp-Source: ABdhPJzOgJ7utPN1EIWgXOch2+XWbpfDYZOzUWJE/LSSNuapKAXwaRM9iBI/Hm69pRw6cqUdD3+hLOutIyQrxQLQBA8=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr42721007plr.136.1646413649332; Fri, 04
+ Mar 2022 09:07:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <87k0dbosis.fsf@irisa.fr>
+In-Reply-To: <87k0dbosis.fsf@irisa.fr>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 5 Mar 2022 02:06:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARV4ax0t-drWMx0G==gDmcpXJoOvRuRQ6dS440245AwjQ@mail.gmail.com>
+Message-ID: <CAK7LNARV4ax0t-drWMx0G==gDmcpXJoOvRuRQ6dS440245AwjQ@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: add KCONFIG_ALLCONFIG support for tinyconfig
+To:     Randrianaina Georges Aaron <georges-aaron.randrianaina@irisa.fr>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mathieu Acher <mathieu.acher@irisa.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022, Tiezhu Yang wrote:
+On Fri, Mar 4, 2022 at 2:27 AM Randrianaina Georges Aaron
+<georges-aaron.randrianaina@irisa.fr> wrote:
+>
+> Since f8f0d06438e5, tinyconfig overrides KCONFIG_ALLCONFIG to
+> include kernel/configs/tiny-base.config. However, this ignores
+> user's preset if defined.
+>
+> This modification checks if the user has set KCONFIG_ALLCONFIG
+> and if so, concatenates it with kernel/configs/tiny-base.config
+> to be used as preset config symbols.
+>
+> Signed-off-by: Randrianaina Georges Aaron <georges-aaron.randrianaina@irisa.fr>
+> ---
+>  scripts/kconfig/Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
+> index b8ef0fb4bbef..337693fb4762 100644
+> --- a/scripts/kconfig/Makefile
+> +++ b/scripts/kconfig/Makefile
+> @@ -102,7 +102,13 @@ configfiles=$(wildcard $(srctree)/kernel/configs/$@ $(srctree)/arch/$(SRCARCH)/c
+>
+>  PHONY += tinyconfig
+>  tinyconfig:
+> +ifeq ($(KCONFIG_ALLCONFIG),)
+>         $(Q)KCONFIG_ALLCONFIG=kernel/configs/tiny-base.config $(MAKE) -f $(srctree)/Makefile allnoconfig
+> +else
+> +       $(Q)cat $(KCONFIG_ALLCONFIG) <(echo) kernel/configs/tiny-base.config > .tmp.config
 
-> > As for memmap= option, it does not specify the memory map but rather alters
-> > the memory map passed by the firmware. Particularity in MIPS implementation
-> > it allows to add a single range of available or reserved memory.
-> > 
-> > AFAIU, for the kdump use-case mem=X@Y should suffice.
-> 
-> We can modify some code to make mem=X@Y work well,
-> but according to Documentation/admin-guide/kernel-parameters.txt,
-> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
-> odd, the intention of this patchset is to make mem= and memmap=
-> work well and consistent with the other archs.
 
- It is not the MIPS implementation that is odd, it is the others that have 
-changed the semantics that are.
+I assume "<(echo)" exists here to insert a blank line.
+The process substitution is a bash'ism.
 
- When I added `mem=...' support to the MIPS platform, back on Dec 11th, 
-2000, which I needed for a system with with memory holes until I got 
-proper memory probing implemented, AFAIR the only other implementation was 
-for the x86 and naturally what I did for the MIPS platform was exactly the 
-same.  It used to be documented too, but the documentation was removed 
-sometime back in 2003 when someone has changed the x86 semantics for 
-reasons unknown to me and without letting people working on other 
-platforms know, so things diverged.
+If you execute it on Debian or its variants, where /bin/sh is a symlink
+to dash, it fails.
 
- Please review:
+masahiro@grover:~/ref/linux$ make  KCONFIG_ALLCONFIG=/tmp/dummy.config
+tinyconfig
+/bin/sh: 1: Syntax error: "(" unexpected
+make[1]: *** [scripts/kconfig/Makefile:108: tinyconfig] Error 2
+make: *** [Makefile:619: tinyconfig] Error 2
 
-<https://lore.kernel.org/linux-mips/alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org/>
 
-as it has been already discussed.
 
- If you have a system that hangs with `mem=3G' and which does have 
-contiguous RAM available for the kernel to use from 0 through to 3GiB, 
-then please either bisect the problem or try finding the root cause as it 
-used to work at least those 21 years ago.  Conversely if your system does 
-*not* have such RAM available, then use the correct option(s) instead that 
-reflect your memory map.
+We can delete '<(echo)', but another issue is that this does not work
+with O=<dir> option.
 
- It is preferable that the memory map be determined automatically either 
-by the firmware and then passed to the kernel somehow, or a device tree 
-entry, or probed by the kernel itself.  You shouldn't have to specify 
-`mem=...' by hand except for debugging or as a temporary workaround.
 
- For example I have an x86 system that Linux does not how to interrogate 
-for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the 
-x86 platform has a special exception to always exclude area between 640K 
-and 1M from being used even if not explicitly specified, but we do not 
-have a need for such legacy such legacy concerns with the MIPS port).  I 
-consider it an interim measure however until the kernel has been fixed.
+masahiro@grover:~/ref/linux$ make O=foo
+KCONFIG_ALLCONFIG=/tmp/dummy.config tinyconfig
+make[1]: Entering directory '/home/masahiro/ref/linux/foo'
+  GEN     Makefile
+  HOSTCC  scripts/basic/fixdep
+cat: kernel/configs/tiny-base.config: No such file or directory
+make[2]: *** [../scripts/kconfig/Makefile:108: tinyconfig] Error 1
+make[1]: *** [/home/masahiro/ref/linux/Makefile:619: tinyconfig] Error 2
+make[1]: Leaving directory '/home/masahiro/ref/linux/foo'
+make: *** [Makefile:219: __sub-make] Error 2
 
-  Maciej
+
+
+
+
+> +       $(Q)KCONFIG_ALLCONFIG=.tmp.config $(MAKE) -f $(srctree)/Makefile allnoconfig
+> +       $(Q)rm -f .tmp.config
+> +endif
+>         $(Q)$(MAKE) -f $(srctree)/Makefile tiny.config
+>
+>  # CHECK: -o cache_dir=<path> working?
+> --
+> 2.34.1
+
+
+
+--
+Best Regards
+Masahiro Yamada

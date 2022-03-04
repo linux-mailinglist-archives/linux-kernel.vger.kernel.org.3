@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790304CCCE4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1A54CCCE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbiCDFSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 00:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S238023AbiCDFS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 00:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238021AbiCDFSV (ORCPT
+        with ESMTP id S238013AbiCDFSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 00:18:21 -0500
+        Fri, 4 Mar 2022 00:18:23 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65DB81262D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:17:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40C1115A11
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:17:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646371047;
+        s=mimecast20190719; t=1646371053;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e0HRpvWMBQ8SLXvfPiOEp5b+QRkrUs7xMrgcNzBhT4w=;
-        b=L8mkktRCUOCM0EIFl8LPlzoYgyTTq+haz7o3RKZzpp465CzY/1QEnsVS0uu/NgTEAiinGk
-        9P0zD2FpV5RE3kuzsGcq6PKEt2NRfULmHV8h0IV6xxw1coKkwpOsyyMOMw0amFAgvLIKea
-        jNHwPHRFo88iDoYSgm/sU6O7Mk697/Q=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KCL3KButghAabZJudedPY5ytCZQMosbpyIRioh4blvI=;
+        b=OZ/8KC/oFGtaJEm8fgiGpsGBZhrH1+4xALXGN/2CI5z/peeeXH/nCSExQo4IJ7bO/Eex3R
+        YEv5vovVvN1mmu/JmYezjoIa9sESWR1cBlVvni1n3hlTeETOkUDB7iTwdEl6+G2xe2Lmkk
+        gACIp1bqia+c20/WKaWxcZFI8S+C/H8=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-Ghd2KU7LMi6L_flfhNkOgw-1; Fri, 04 Mar 2022 00:17:24 -0500
-X-MC-Unique: Ghd2KU7LMi6L_flfhNkOgw-1
-Received: by mail-pj1-f70.google.com with SMTP id mj19-20020a17090b369300b001bedc197c50so6439148pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:17:24 -0800 (PST)
+ us-mta-473-iqUB8XQHNZ-kYkVE-BhsYQ-1; Fri, 04 Mar 2022 00:17:32 -0500
+X-MC-Unique: iqUB8XQHNZ-kYkVE-BhsYQ-1
+Received: by mail-pf1-f200.google.com with SMTP id i72-20020a62874b000000b004f66c5b963cso2695112pfe.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:17:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e0HRpvWMBQ8SLXvfPiOEp5b+QRkrUs7xMrgcNzBhT4w=;
-        b=pewsA6dTfbLEbl/XBmHmLVvV2rB5J2bj4oQ8IMJL/I8h6unukroKUFgv4FZgY/SZGo
-         3jkpmpgPXO3BL5yNQJPCcJdLzyKKpyJCVzOcGb+g5w6YGEJdO1rxG/buW6tePisXVC/q
-         O4JGQ7Ake4gR9PUOdy+X6AuQ3YUARMXj/NcHSIQghwvcxEh1uhh6+6DOljfGXzBnUmR1
-         tz1hg2LEaAR3oWsmEK7YuMidUQwNSAxrpxIYJ+faOuWo4KkKScssg5zUjChzjl8EYtL7
-         gRW2nScoV9OvvszldMGwnsDAyfDWoIDW5pAAGHqjELBtHKCy/OEnKJt5txn56o+ltSnh
-         e8vg==
-X-Gm-Message-State: AOAM530uDn0TD0HsDhmfWjfXB/HyXd5SoNmfNnOFZF60H7OEmXUBb/Zc
-        a6loq56USb693lqg+TJH9eGu6OZWKyuPGztfE8yeVDWpGEO5c0GcL1tD46skr14ntuiKrc3BTvY
-        dziC5gOpT95zKsg2zPO/GjYcz
-X-Received: by 2002:a17:902:be0c:b0:14f:d9b3:92a9 with SMTP id r12-20020a170902be0c00b0014fd9b392a9mr39274937pls.53.1646371043079;
-        Thu, 03 Mar 2022 21:17:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzxSCA3qOeKysFG5xoACVzdh0Kg3/Srw376djx9Rs6fEWpfjBjo+w/2U4uStqvssmYX9OXKFA==
-X-Received: by 2002:a17:902:be0c:b0:14f:d9b3:92a9 with SMTP id r12-20020a170902be0c00b0014fd9b392a9mr39274911pls.53.1646371042604;
-        Thu, 03 Mar 2022 21:17:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KCL3KButghAabZJudedPY5ytCZQMosbpyIRioh4blvI=;
+        b=2oiGOQQ/XD404kg5qvo6lwGou3c09zn9tE6zigcdarx7B829caw9HIQ3izRu2qF6bn
+         RqJq3rf5/wAjhA/byw1nK6ZTEYJetk9n1kphbQOrglsjUawrIrPa1+ykXOE2aDpcYbda
+         FduD0adhmJSYaCBvjvsudoBVQ9nO1MxsknQ0aekiJZeAPWlbc5Rw/Akzh7fxu+fF2+RN
+         6D0XfhY7VfTXGZAjhHJ/3rxsVseZjIgjEXsTQFTfKen5UyzXE8CYdZ2WmDdCzecvQbiM
+         oB0i7Jf9m3iLGrU4wbwFVCfnVwSP7xa3PKPKW3ZMhdti2sFJiL2V3DWkTTZdcFiawIZc
+         kBuA==
+X-Gm-Message-State: AOAM532H5+cwnbyIJ/pN+5aGs7R0Wi3FDPm9I7KV3KdX3+mjYZPQSsAv
+        htSv7oD+QMJvSMdhdi/lrjeC92K7Sr7c0Kn/vBA3WJlm7HW6YUd20FjocUd8GTa7hAtWYMJ4+Y/
+        FD7qI0t/c00G2XP0pbUgD0QTG
+X-Received: by 2002:a63:2fc1:0:b0:374:9f30:9559 with SMTP id v184-20020a632fc1000000b003749f309559mr33022345pgv.278.1646371050818;
+        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJym7Td/RpnBv1y2IaKZPLGC+ETMIqu+l9tJA1ieJk002T9FcPI25/B0PQuSJLNVv/X4K+wkwg==
+X-Received: by 2002:a63:2fc1:0:b0:374:9f30:9559 with SMTP id v184-20020a632fc1000000b003749f309559mr33022332pgv.278.1646371050512;
+        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
 Received: from localhost.localdomain ([94.177.118.59])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.17.14
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.17.22
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Mar 2022 21:17:22 -0800 (PST)
+        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
@@ -68,11 +69,12 @@ Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
         Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v7 00/23] userfaultfd-wp: Support shmem and hugetlbfs
-Date:   Fri,  4 Mar 2022 13:16:45 +0800
-Message-Id: <20220304051708.86193-1-peterx@redhat.com>
+Subject: [PATCH v7 01/23] mm: Introduce PTE_MARKER swap entry
+Date:   Fri,  4 Mar 2022 13:16:46 +0800
+Message-Id: <20220304051708.86193-2-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220304051708.86193-1-peterx@redhat.com>
+References: <20220304051708.86193-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -85,256 +87,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is v7 of the series to add shmem+hugetlbfs support for userfaultfd
-write protection.  It is based on linux-next tag next-20220301.
+This patch introduces a new swap entry type called PTE_MARKER.  It can be
+installed for any pte that maps a file-backed memory when the pte is
+temporarily zapped, so as to maintain per-pte information.
 
-The whole tree can be found here for testing:
+The information that kept in the pte is called a "marker".  Here we define the
+marker as "unsigned long" just to match pgoff_t, however it will only work if
+it still fits in swp_offset(), which is e.g. currently 58 bits on x86_64.
 
-  https://github.com/xzpeter/linux/tree/uffd-wp-shmem-hugetlbfs
+A new config CONFIG_PTE_MARKER is introduced too; it's by default off.  A bunch
+of helpers are defined altogether to service the rest of the pte marker code.
 
-One tweak needed is to replace Nadav's v2 patch "userfaultfd: provide
-unmasked address on page-fault" with v3 to unbreak hugetlb in general.
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ include/asm-generic/hugetlb.h |  9 ++++
+ include/linux/swap.h          | 15 ++++++-
+ include/linux/swapops.h       | 78 +++++++++++++++++++++++++++++++++++
+ mm/Kconfig                    |  7 ++++
+ 4 files changed, 108 insertions(+), 1 deletion(-)
 
-There aren't a lot of changes comparing to v6, majorly rebase and retest to
-make sure nothing breaks.  Meanwhile should have addressed comments from
-Alistair.
-
-v7 changelog:
-- Rebased to next-20220301
-- Renamed s/is_pte_marker_uffd_wp/pte_marker_uffd_wp/, add another helper
-  pte_marker_entry_uffd_wp as suggested to operate on swp_entry_t [Alistair]
-- Drop pte_unmap_same() in pte_marker_handle_uffd_wp() [Alistair]
-- In finish_fault(), init vmf->orig_pte with pte_clear(), because some
-  pte_none() ptes are not really all zeros, e.g. xtensa and s390 [Alistair]
-
-Previous versions:
-
-  RFC: https://lore.kernel.org/lkml/20210115170907.24498-1-peterx@redhat.com/
-  v1:  https://lore.kernel.org/lkml/20210323004912.35132-1-peterx@redhat.com/
-  v2:  https://lore.kernel.org/lkml/20210427161317.50682-1-peterx@redhat.com/
-  v3:  https://lore.kernel.org/lkml/20210527201927.29586-1-peterx@redhat.com/
-  v4:  https://lore.kernel.org/lkml/20210714222117.47648-1-peterx@redhat.com/
-  v5:  https://lore.kernel.org/lkml/20210715201422.211004-1-peterx@redhat.com/
-  v6:  https://lore.kernel.org/lkml/20211115075522.73795-1-peterx@redhat.com/
-
-Overview
-========
-
-Userfaultfd-wp anonymous support was merged two years ago.  There're quite
-a few applications that started to leverage this capability either to take
-snapshots for user-app memory, or use it for full user controled swapping.
-
-This series tries to complete the feature for uffd-wp so as to cover all
-the RAM-based memory types.  So far uffd-wp is the only missing piece of
-the rest features (uffd-missing & uffd-minor mode).
-
-One major reason to do so is that anonymous pages are sometimes not
-satisfying the need of applications, and there're growing users of either
-shmem and hugetlbfs for either sharing purpose (e.g., sharing guest mem
-between hypervisor process and device emulation process, shmem local live
-migration for upgrades), or for performance on tlb hits.
-
-All these mean that if a uffd-wp app wants to switch to any of the memory
-types, it'll stop working.  I think it's worthwhile to have the kernel to
-cover all these aspects.
-
-This series chose to protect pages in pte level not page level.
-
-One major reason is safety.  I have no idea how we could make it safe if
-any of the uffd-privileged app can wr-protect a page that any other
-application can use.  It means this app can block any process potentially
-for any time it wants.
-
-The other reason is that it aligns very well with not only the anonymous
-uffd-wp solution, but also uffd as a whole.  For example, userfaultfd is
-implemented fundamentally based on VMAs.  We set flags to VMAs showing the
-status of uffd tracking.  For another per-page based protection solution,
-it'll be crossing the fundation line on VMA-based, and it could simply be
-too far away already from what's called userfaultfd.
-
-PTE markers
-===========
-
-The patchset is based on the idea called PTE markers.  It was discussed in
-one of the mm alignment sessions, proposed starting from v6, and this is
-the 2nd version of it using PTE marker idea.
-
-PTE marker is a new type of swap entry that is ony applicable to file
-backed memories like shmem and hugetlbfs.  It's used to persist some
-pte-level information even if the original present ptes in pgtable are
-zapped.
-
-Logically pte markers can store more than uffd-wp information, but so far
-only one bit is used for uffd-wp purpose.  When the pte marker is installed
-with uffd-wp bit set, it means this pte is wr-protected by uffd.
-
-It solves the problem on e.g. file-backed memory mapped ptes got zapped due
-to any reason (e.g. thp split, or swapped out), we can still keep the
-wr-protect information in the ptes.  Then when the page fault triggers
-again, we'll know this pte is wr-protected so we can treat the pte the same
-as a normal uffd wr-protected pte.
-
-The extra information is encoded into the swap entry, or swp_offset to be
-explicit, with the swp_type being PTE_MARKER.  So far uffd-wp only uses one
-bit out of the swap entry, the rest bits of swp_offset are still reserved
-for other purposes.
-
-There're two configs to enable/disable PTE markers:
-
-  CONFIG_PTE_MARKER
-  CONFIG_PTE_MARKER_UFFD_WP
-
-We can set !PTE_MARKER to completely disable all the PTE markers, along with
-uffd-wp support.  I made two config so we can also enable PTE marker but
-disable uffd-wp file-backed for other purposes.  At the end of current series,
-I'll enable CONFIG_PTE_MARKER by default, but that patch is standalone and if
-anyone worries about having it by default, we can also consider turn it off by
-dropping that oneliner patch.  So far I don't see a huge risk of doing so, so I
-kept that patch.
-
-In most cases, PTE markers should be treated as none ptes.  It is because that
-unlike most of the other swap entry types, there's no PFN or block offset
-information encoded into PTE markers but some extra well-defined bits showing
-the status of the pte.  These bits should only be used as extra data when
-servicing an upcoming page fault, and then we behave as if it's a none pte.
-
-I did spend a lot of time observing all the pte_none() users this time. It is
-indeed a challenge because there're a lot, and I hope I didn't miss a single of
-them when we should take care of pte markers.  Luckily, I don't think it'll
-need to be considered in many cases, for example: boot code, arch code
-(especially non-x86), kernel-only page handlings (e.g. CPA), or device driver
-codes when we're tackling with pure PFN mappings.
-
-I introduced pte_none_mostly() in this series when we need to handle pte
-markers the same as none pte, the "mostly" is the other way to write "either
-none pte or a pte marker".
-
-I didn't replace pte_none() to cover pte markers for below reasons:
-
-  - Very rare case of pte_none() callers will handle pte markers.  E.g., all
-    the kernel pages do not require knowledge of pte markers.  So we don't
-    pollute the major use cases.
-
-  - Unconditionally change pte_none() semantics could confuse people, because
-    pte_none() existed for so long a time.
-
-  - Unconditionally change pte_none() semantics could make pte_none() slower
-    even if in many cases pte markers do not exist.
-
-  - There're cases where we'd like to handle pte markers differntly from
-    pte_none(), so a full replace is also impossible.  E.g. khugepaged should
-    still treat pte markers as normal swap ptes rather than none ptes, because
-    pte markers will always need a fault-in to merge the marker with a valid
-    pte.  Or the smap code will need to parse PTE markers not none ptes.
-
-Patch Layout
-============
-
-Introducing PTE marker and uffd-wp bit in PTE marker:
-
-  mm: Introduce PTE_MARKER swap entry
-  mm: Teach core mm about pte markers
-  mm: Check against orig_pte for finish_fault()
-  mm/uffd: PTE_MARKER_UFFD_WP
-
-Adding support for shmem uffd-wp:
-
-  mm/shmem: Take care of UFFDIO_COPY_MODE_WP
-  mm/shmem: Handle uffd-wp special pte in page fault handler
-  mm/shmem: Persist uffd-wp bit across zapping for file-backed
-  mm/shmem: Allow uffd wr-protect none pte for file-backed mem
-  mm/shmem: Allows file-back mem to be uffd wr-protected on thps
-  mm/shmem: Handle uffd-wp during fork()
-
-Adding support for hugetlbfs uffd-wp:
-
-  mm/hugetlb: Introduce huge pte version of uffd-wp helpers
-  mm/hugetlb: Hook page faults for uffd write protection
-  mm/hugetlb: Take care of UFFDIO_COPY_MODE_WP
-  mm/hugetlb: Handle UFFDIO_WRITEPROTECT
-  mm/hugetlb: Handle pte markers in page faults
-  mm/hugetlb: Allow uffd wr-protect none ptes
-  mm/hugetlb: Only drop uffd-wp special pte if required
-  mm/hugetlb: Handle uffd-wp during fork()
-
-Misc handling on the rest mm for uffd-wp file-backed:
-
-  mm/khugepaged: Don't recycle vma pgtable if uffd-wp registered
-  mm/pagemap: Recognize uffd-wp bit for shmem/hugetlbfs
-
-Enabling of uffd-wp on file-backed memory:
-
-  mm/uffd: Enable write protection for shmem & hugetlbfs
-  mm: Enable PTE markers by default
-  selftests/uffd: Enable uffd-wp for shmem/hugetlbfs
-
-Tests
-=====
-
-- Compile test on x86_64 and aarch64 on different configs
-- Kernel selftests
-- uffd-test [0]
-- Umapsort [1,2] test for shmem/hugetlb, with swap on/off
-
-Please review, thanks.
-
-[0] https://github.com/xzpeter/clibs/tree/master/uffd-test
-[1] https://github.com/xzpeter/umap-apps/tree/peter
-[2] https://github.com/xzpeter/umap/tree/peter-shmem-hugetlbfs
-
-Peter Xu (23):
-  mm: Introduce PTE_MARKER swap entry
-  mm: Teach core mm about pte markers
-  mm: Check against orig_pte for finish_fault()
-  mm/uffd: PTE_MARKER_UFFD_WP
-  mm/shmem: Take care of UFFDIO_COPY_MODE_WP
-  mm/shmem: Handle uffd-wp special pte in page fault handler
-  mm/shmem: Persist uffd-wp bit across zapping for file-backed
-  mm/shmem: Allow uffd wr-protect none pte for file-backed mem
-  mm/shmem: Allows file-back mem to be uffd wr-protected on thps
-  mm/shmem: Handle uffd-wp during fork()
-  mm/hugetlb: Introduce huge pte version of uffd-wp helpers
-  mm/hugetlb: Hook page faults for uffd write protection
-  mm/hugetlb: Take care of UFFDIO_COPY_MODE_WP
-  mm/hugetlb: Handle UFFDIO_WRITEPROTECT
-  mm/hugetlb: Handle pte markers in page faults
-  mm/hugetlb: Allow uffd wr-protect none ptes
-  mm/hugetlb: Only drop uffd-wp special pte if required
-  mm/hugetlb: Handle uffd-wp during fork()
-  mm/khugepaged: Don't recycle vma pgtable if uffd-wp registered
-  mm/pagemap: Recognize uffd-wp bit for shmem/hugetlbfs
-  mm/uffd: Enable write protection for shmem & hugetlbfs
-  mm: Enable PTE markers by default
-  selftests/uffd: Enable uffd-wp for shmem/hugetlbfs
-
- arch/s390/include/asm/hugetlb.h          |  15 ++
- fs/hugetlbfs/inode.c                     |  15 +-
- fs/proc/task_mmu.c                       |   7 +
- fs/userfaultfd.c                         |  31 +---
- include/asm-generic/hugetlb.h            |  24 +++
- include/linux/hugetlb.h                  |  27 ++--
- include/linux/mm.h                       |  10 ++
- include/linux/mm_inline.h                |  43 +++++
- include/linux/shmem_fs.h                 |   4 +-
- include/linux/swap.h                     |  15 +-
- include/linux/swapops.h                  |  79 +++++++++
- include/linux/userfaultfd_k.h            |  71 ++++++++
- include/uapi/linux/userfaultfd.h         |  10 +-
- mm/Kconfig                               |  16 ++
- mm/filemap.c                             |   5 +
- mm/hmm.c                                 |   2 +-
- mm/hugetlb.c                             | 182 ++++++++++++++++-----
- mm/khugepaged.c                          |  14 +-
- mm/memcontrol.c                          |   8 +-
- mm/memory.c                              | 196 ++++++++++++++++++++---
- mm/mincore.c                             |   3 +-
- mm/mprotect.c                            |  75 ++++++++-
- mm/rmap.c                                |   8 +
- mm/shmem.c                               |   4 +-
- mm/userfaultfd.c                         |  54 +++++--
- tools/testing/selftests/vm/userfaultfd.c |   4 +-
- 26 files changed, 795 insertions(+), 127 deletions(-)
-
+diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+index 8e1e6244a89d..f39cad20ffc6 100644
+--- a/include/asm-generic/hugetlb.h
++++ b/include/asm-generic/hugetlb.h
+@@ -2,6 +2,9 @@
+ #ifndef _ASM_GENERIC_HUGETLB_H
+ #define _ASM_GENERIC_HUGETLB_H
+ 
++#include <linux/swap.h>
++#include <linux/swapops.h>
++
+ static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
+ {
+ 	return mk_pte(page, pgprot);
+@@ -80,6 +83,12 @@ static inline int huge_pte_none(pte_t pte)
+ }
+ #endif
+ 
++/* Please refer to comments above pte_none_mostly() for the usage */
++static inline int huge_pte_none_mostly(pte_t pte)
++{
++	return huge_pte_none(pte) || is_pte_marker(pte);
++}
++
+ #ifndef __HAVE_ARCH_HUGE_PTE_WRPROTECT
+ static inline pte_t huge_pte_wrprotect(pte_t pte)
+ {
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 42ebe2d6078d..20b4aceed920 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -55,6 +55,19 @@ static inline int current_is_kswapd(void)
+  * actions on faults.
+  */
+ 
++/*
++ * PTE markers are used to persist information onto PTEs that are mapped with
++ * file-backed memories.  As its name "PTE" hints, it should only be applied to
++ * the leaves of pgtables.
++ */
++#ifdef CONFIG_PTE_MARKER
++#define SWP_PTE_MARKER_NUM 1
++#define SWP_PTE_MARKER     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
++			    SWP_MIGRATION_NUM + SWP_DEVICE_NUM)
++#else
++#define SWP_PTE_MARKER_NUM 0
++#endif
++
+ /*
+  * Unaddressable device memory support. See include/linux/hmm.h and
+  * Documentation/vm/hmm.rst. Short description is we need struct pages for
+@@ -100,7 +113,7 @@ static inline int current_is_kswapd(void)
+ 
+ #define MAX_SWAPFILES \
+ 	((1 << MAX_SWAPFILES_SHIFT) - SWP_DEVICE_NUM - \
+-	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM)
++	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM - SWP_PTE_MARKER_NUM)
+ 
+ /*
+  * Magic header for a swap area. The first part of the union is
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index d356ab4047f7..5103d2a4ae38 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -247,6 +247,84 @@ static inline int is_writable_migration_entry(swp_entry_t entry)
+ 
+ #endif
+ 
++typedef unsigned long pte_marker;
++
++#define  PTE_MARKER_MASK     (0)
++
++#ifdef CONFIG_PTE_MARKER
++
++static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
++{
++	return swp_entry(SWP_PTE_MARKER, marker);
++}
++
++static inline bool is_pte_marker_entry(swp_entry_t entry)
++{
++	return swp_type(entry) == SWP_PTE_MARKER;
++}
++
++static inline pte_marker pte_marker_get(swp_entry_t entry)
++{
++	return swp_offset(entry) & PTE_MARKER_MASK;
++}
++
++static inline bool is_pte_marker(pte_t pte)
++{
++	return is_swap_pte(pte) && is_pte_marker_entry(pte_to_swp_entry(pte));
++}
++
++#else /* CONFIG_PTE_MARKER */
++
++static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
++{
++	/* This should never be called if !CONFIG_PTE_MARKER */
++	WARN_ON_ONCE(1);
++	return swp_entry(0, 0);
++}
++
++static inline bool is_pte_marker_entry(swp_entry_t entry)
++{
++	return false;
++}
++
++static inline pte_marker pte_marker_get(swp_entry_t entry)
++{
++	return 0;
++}
++
++static inline bool is_pte_marker(pte_t pte)
++{
++	return false;
++}
++
++#endif /* CONFIG_PTE_MARKER */
++
++static inline pte_t make_pte_marker(pte_marker marker)
++{
++	return swp_entry_to_pte(make_pte_marker_entry(marker));
++}
++
++/*
++ * This is a special version to check pte_none() just to cover the case when
++ * the pte is a pte marker.  It existed because in many cases the pte marker
++ * should be seen as a none pte; it's just that we have stored some information
++ * onto the none pte so it becomes not-none any more.
++ *
++ * It should be used when the pte is file-backed, ram-based and backing
++ * userspace pages, like shmem.  It is not needed upon pgtables that do not
++ * support pte markers at all.  For example, it's not needed on anonymous
++ * memory, kernel-only memory (including when the system is during-boot),
++ * non-ram based generic file-system.  It's fine to be used even there, but the
++ * extra pte marker check will be pure overhead.
++ *
++ * For systems configured with !CONFIG_PTE_MARKER this will be automatically
++ * optimized to pte_none().
++ */
++static inline int pte_none_mostly(pte_t pte)
++{
++	return pte_none(pte) || is_pte_marker(pte);
++}
++
+ static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
+ {
+ 	struct page *p = pfn_to_page(swp_offset(entry));
+diff --git a/mm/Kconfig b/mm/Kconfig
+index c313bad5167a..25bcbb89f8e5 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -900,6 +900,13 @@ config ANON_VMA_NAME
+ 	  area from being merged with adjacent virtual memory areas due to the
+ 	  difference in their name.
+ 
++config PTE_MARKER
++	def_bool n
++	bool "Marker PTEs support"
++
++	help
++	  Allows to create marker PTEs for file-backed memory.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
 -- 
 2.32.0
 

@@ -2,191 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAD84CCB6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEAD4CCB77
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiCDBuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 20:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S233995AbiCDB57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 20:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbiCDBuS (ORCPT
+        with ESMTP id S229672AbiCDB57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 20:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093AB109A44
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:49:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8799661917
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F4EC340E9;
-        Fri,  4 Mar 2022 01:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646358570;
-        bh=R9WMMaMmg2P7pHMAxSyUJ7SNyJnimavBlt8Nqsp6Zcs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ULo/C0V77t9P4vzefLOakW2jx1JgEYgxy6HPMNK8HbSJF5pkX5FY2zFvKkQvW+31p
-         qGGYDfjQjatg/Y8y+NRD+UNhhsTq72UMoykkTpyfrN6mqeaukhPnzcthyVUxNuk4La
-         k+tTyj59aM2i9cBzAIJ/fdHisUwtcCKzWn6qfN246r+e2v7cqDu68PsvOWjinsHzrq
-         tUZrn6+b2ZduN9OlN9xbTpYC5Si5tS8kXKt9KeU+NGp9Sjb5BxTGluF2adoAHnhHI6
-         M5m2bj4GFDxHviujp+Ri7sEqiIIzo1Un9BGq1vQc+nfBk0mqaAXjjRZz/sG1kpcM/J
-         JJBpr/pjY1wsA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 81BAE5C03DB; Thu,  3 Mar 2022 17:49:30 -0800 (PST)
-Date:   Thu, 3 Mar 2022 17:49:30 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
+        Thu, 3 Mar 2022 20:57:59 -0500
+Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40056.outbound.protection.outlook.com [40.107.4.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F92513D553
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:57:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eKUC5K2HusXw5edbxpJIfV1I7WZhLf7h+09s6eaDXohKkO6HbSH2JOqr+bgP6LiOVE3aMTTSPEcZwc0BE4lAiCtKt+6d9ZNuVECxBtuz2wAdjaVKdoGWtFYwM2lO0pTJ+YweYLcVJJc43ObE3eT6z+k97p8OO1a9zgsDAb1R35tsh2RU0xc2aghQBeRRVrzu6N7Tgj2qx6iAlMaKkWNFBiSNlWDN76UHfJlzLqFPd+c1iI+Y9BvjEL75BSJ17zHBXsho9OBPXdh63hBgigI/8cqE6Ugt1sKyCtRNm8mvBOALFp8PX2MvwNjE7nw99cLaWeub4mFaj55YzemDs7tbqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WVaQNysEKGyldpDMAif2619U++i1t/ASblcqty/3j4k=;
+ b=I9fsrRoMLzRv4oTrgeY99SD+ZZIA/e4R14epa1xpwt2iyBg8cy8u71kvyy7Em+vlK3q5ZyLPeLb5bYWGWz9yiMFeuChXIXZbyB6uNhwPdRdsTvNEkkND8iKZyX+iFalx33tVWuxRp8CnMLahsd7+7xkqpAvqmYu8nK6BEcg37HwNmX8KzuhKpiCU/vHiqBEdGYLhkBbQpvSrLH97qVHSX6/hCgyeD7JYMIW2GPD+hYAbtFTv9igEr2uLp7rItkLd8zejtnxgmLd4GX9fzBB8VrUvfulhS6uPdTX0hmecBvs3W3A1WOvpthXboJWNC10j4A1Ee07trEGhLB3lzSX1Kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WVaQNysEKGyldpDMAif2619U++i1t/ASblcqty/3j4k=;
+ b=IZE8qAzYNFivW+4SQ3NPdSKVFnAGn/PnE5D03MsgRSYxi3jsqdA02d6Im9sQH0oZy/olGzzxbJijbDGlN2ePg68K5nX2kSLb70QYycJLFl2106Hhg/dsLktIFKI3SZNqg9FkK+BfgLvSqlEqlHiEsnzEa6/SANVEhVhO9dq1L6o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB5771.eurprd04.prod.outlook.com (2603:10a6:10:af::27)
+ by AM6PR04MB4920.eurprd04.prod.outlook.com (2603:10a6:20b:9::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Fri, 4 Mar
+ 2022 01:56:44 +0000
+Received: from DB8PR04MB5771.eurprd04.prod.outlook.com
+ ([fe80::884:f2d3:1dfb:6669]) by DB8PR04MB5771.eurprd04.prod.outlook.com
+ ([fe80::884:f2d3:1dfb:6669%7]) with mapi id 15.20.5038.014; Fri, 4 Mar 2022
+ 01:56:44 +0000
+From:   Kane Jiang <jian.jiang@nxp.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [patch v3] mm: lru_cache_disable: replace work queue
- synchronization with synchronize_rcu
-Message-ID: <20220304014930.GJ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YhUI1wUtV8yguijO@fuller.cnet>
- <YhUKRzEKxMvlGQ5n@fuller.cnet>
- <20220303170323.82d8424d214fcb3a32155952@linux-foundation.org>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Kane Jiang <jian.jiang@nxp.com>
+Subject: [PATCH V2 0/2] About i.MX GPT input capture patches
+Date:   Fri,  4 Mar 2022 09:56:21 +0800
+Message-Id: <20220304015623.338645-1-jian.jiang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0006.apcprd02.prod.outlook.com
+ (2603:1096:4:194::8) To DB8PR04MB5771.eurprd04.prod.outlook.com
+ (2603:10a6:10:af::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303170323.82d8424d214fcb3a32155952@linux-foundation.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3907c39b-29fd-44d5-9821-08d9fd823c09
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4920:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4920C97415AB0B59D9FCED349A059@AM6PR04MB4920.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NthvJpHMtTSdk75u+Aym05kk7qDcc3Gxey4tb7EvUg6Uns+35NTCw0juBITCXWlWIT4ZWqnmCcQnhCQpkL/XQr+mrsqJeLUQfu3watFfGwznExbSOuk3N8o1FSbJcrAkqTscR7u9xlT8Ign+aulB/6m/yVp/O4RREwthFh4dhwbcKr2VPaYvMt/QPklPCilb5TEi53dffblGy5H6t6PznAZ/kZi36QIbQGDdBKt2fb0EeYT08E0PAFCIhCqN0CJVr4mqLlKCikq2zXg7dPaq54YuspsMtSPvv7PuZH9UKZF3ekranLYOXmOzEBdMz6iUQScqHlx7o1x9+sQ2sq7XDSCVLe0OAhcXggjjS+Iw5AqGBema7j0+DED2waTkQ+awRay/JMx4cex+4m+PcTSrLnu/RUI9+SDGvZd7Zs0hfkpsEymQO6UXi96IMBIp+FqF1kwZHdzFw8GxbWoBo46aBU+mVxnA42t2Ls8RgcOinmM1vmcV7Gx6hg8l5lvlTZv3KeZ1TG7BVdGXpMtoyLS0qF0tSYOIPXsCwqMvpMKUZwiyQh6/MpUGKOwrLsz+jTv7bmQEw94wmEAPOo7jF2AMbo2jPI542eRqYSX0Ie2rpcRldIK39HNgMlxUhy37Br9xnXiR4/gkNdGrdj24PhH9/H8xDemWVCu1yLGNYlNRC8Tp6ARtJdg3SKJzIQN7APvG3ZtlQKq8DMDAbCuhwmTGmdCGaV8CNXBWikaL1XrFPMkueF02htlGgOkSg3GakYoUMDXri5ehGzg4QuIm1DR6VII6QE8Qb8kYNT1PQx+VFeSZxaFKPwjtMGmJ9VHWbDsnmY2haE/EwYz5aBlS0wMzBR2w/nmN9vKXyDyUNXSQLVQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB5771.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(921005)(966005)(6486002)(2906002)(6506007)(52116002)(2616005)(36756003)(6666004)(6512007)(5660300002)(498600001)(1076003)(110136005)(83380400001)(186003)(26005)(8936002)(8676002)(4326008)(38100700002)(86362001)(66946007)(38350700002)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?//Up0OMOVw8v38eYQgC+muVvL8bgZQ0ZeHmM9EaxX+6gBJhExt3gdu1CYkRl?=
+ =?us-ascii?Q?5rsEMST0zEQ4rwMryi7PMW3KuK6nM8Xl3vy74y3Cj4wil2ZaafjROX1TbVtu?=
+ =?us-ascii?Q?Jo1r/1QC6eoWMIQuzZMJywMq3KBKwzt3zSC1d7o2IvmtcYvJqfqWs4KvXt0P?=
+ =?us-ascii?Q?aBsAKeJkkuAxQkfhijKWHMzdvX3b5fmtCNeOyMZliXbC4HawnTNL8buRREnf?=
+ =?us-ascii?Q?mv/kYB/pStjuu0d822KL59edyzUlxnObugu5zlhB9sDh04lphYWeYyxf8bqG?=
+ =?us-ascii?Q?MAQi2YGJUgggLm+xPAv5G8/bGaaiJ+XuQGqx+823WTv6HmTJe+Azm111tX/X?=
+ =?us-ascii?Q?kKWvn54R2Rh8e8aGnMF4jYLbWNSSddtbeg/TroaygfGdc1aqH2yWEDcjSwPX?=
+ =?us-ascii?Q?wRFP757qSAdUv8viNXk+YH152IpipNh2A4GdZyM64NGPYn9BOiWk8h3cjYxi?=
+ =?us-ascii?Q?jawkoasPSifzhaeTGhGQnf55Wku1QuHcMu5FDBEp2YDJNyAljN5IOiqJP60s?=
+ =?us-ascii?Q?DHgNsRwO4OlLQf0TG56NmTBIYwnuUWo7q5ab3ojEtz4dYiaRMXKhusQcimuP?=
+ =?us-ascii?Q?k8TzkTlFFPnDllbu2X301cNZ2i2z9YnVNK6iWv50NY1mIBuQDNUJ2Cwv+IZe?=
+ =?us-ascii?Q?eZ0D+6PB/HLX0quHggftMYqcm3gtPbfEejWJH4WZSFKqgGXkAs0x9tuEcfSB?=
+ =?us-ascii?Q?FILcP9Y+5/3mJqFPMWcMLdd1tcJJgr3bvfansoylYzVw6ZpdyxxKdIF7p7cq?=
+ =?us-ascii?Q?6CuRfHescl0jTAmZ61KRl6tRPuFaW3d3kZbij03LL/O7FgVfB15BoGFick0S?=
+ =?us-ascii?Q?OLXjZnqssCRdAL5iD1LCcwb9wnDFEv1Ggjb4TfqWU/iFBaMIkllCWbgY6Ujf?=
+ =?us-ascii?Q?g1eoQ6f+AAyv7/+PZKOTa8uYnOvr/ZPhLmB3sshXhisoNITa3QAaf0Q/3ndA?=
+ =?us-ascii?Q?HBN07EGhQB8F5H1rgKVPt7foQ9QhhuFyyttrrzDFul5YzfH7vcqn3hIJ2hrC?=
+ =?us-ascii?Q?50mK6tRq6W3Lt0Xh/5BEG7mS6G4MPSutzqx6I8PXkffYry0QexFlGXGLvpjc?=
+ =?us-ascii?Q?AzAEnSwSrlMfCZjVKRmEnot1o0AosDUwW4g125oA2y07Rq2FxFdoaNhRWq/Q?=
+ =?us-ascii?Q?cvUsCUYU+Aco28jixUcdhNpFcgWHoQf9WuAn4klYFW6T84L9BomOTUxSPb0N?=
+ =?us-ascii?Q?m/gLKsECB8el42UldMqCPTqZZlG4Rp9bgdp9frEpvUtD1wU9fPFcn6V3n4fZ?=
+ =?us-ascii?Q?MBTDrFttBd/zXmVTna7v2ueyups5qWuO/3WJxasEGvWN7eKnzlsh+owoQZ5y?=
+ =?us-ascii?Q?HZjIT1uHaVdU7u2HqBHSQNO4EvZM7LblK5dXGDKSdIIhtGAu6ktKSN/u1tAo?=
+ =?us-ascii?Q?IMA2ZAq2Zdh0lxdtsRVbMfq3HI7RiJslbe6zT/+i448uBYplhQaAUvTX6+ox?=
+ =?us-ascii?Q?/aetbycrTfV455vWfUJLV7j9Rg229yv214iNUV05Kn5VkZw6x5nlFmW3iRq/?=
+ =?us-ascii?Q?xUqsokmyYEaa7PPlurow8y+ImFNK1zOTklKLJ9/sdxk4acgNd9os2t8DMw+i?=
+ =?us-ascii?Q?Y2sj2KUNhdzVLhi7gZWRhq5nUB9xbQDTCQJki1TJPcLSu85haNtA5BijY9TC?=
+ =?us-ascii?Q?nTeotfc72arMWp9F/x80Ncc=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3907c39b-29fd-44d5-9821-08d9fd823c09
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB5771.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 01:56:44.8223
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xLkkGgwhoArJ55YWgNaWyiyvFz2ByVupbnLF4b0fF5O40OsBmGJcgRsUkEuxBvQPdzc49ETPlWorMnDCN01Ktg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4920
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 05:03:23PM -0800, Andrew Morton wrote:
-> (Question for paulmck below, please)
-> 
-> On Tue, 22 Feb 2022 13:07:35 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> 
-> > 
-> > On systems that run FIFO:1 applications that busy loop 
-> > on isolated CPUs, executing tasks on such CPUs under
-> > lower priority is undesired (since that will either
-> > hang the system, or cause longer interruption to the
-> > FIFO task due to execution of lower priority task 
-> > with very small sched slices).
-> > 
-> > Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU 
-> > pagevec during the migration temporarily") relies on 
-> > queueing work items on all online CPUs to ensure visibility
-> > of lru_disable_count.
-> > 
-> > However, its possible to use synchronize_rcu which will provide the same
-> > guarantees (see comment this patch modifies on lru_cache_disable).
-> > 
-> > Fixes:
-> > 
-> > [ 1873.243925] INFO: task kworker/u160:0:9 blocked for more than 622 seconds.
-> > [ 1873.243927]       Tainted: G          I      --------- ---  5.14.0-31.rt21.31.el9.x86_64 #1
-> > [ 1873.243929] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > [ 1873.243929] task:kworker/u160:0  state:D stack:    0 pid:    9 ppid:     2 flags:0x00004000
-> > [ 1873.243932] Workqueue: cpuset_migrate_mm cpuset_migrate_mm_workfn
-> > [ 1873.243936] Call Trace:
-> > [ 1873.243938]  __schedule+0x21b/0x5b0
-> > [ 1873.243941]  schedule+0x43/0xe0
-> > [ 1873.243943]  schedule_timeout+0x14d/0x190
-> > [ 1873.243946]  ? resched_curr+0x20/0xe0
-> > [ 1873.243953]  ? __prepare_to_swait+0x4b/0x70
-> > [ 1873.243958]  wait_for_completion+0x84/0xe0
-> > [ 1873.243962]  __flush_work.isra.0+0x146/0x200
-> > [ 1873.243966]  ? flush_workqueue_prep_pwqs+0x130/0x130
-> > [ 1873.243971]  __lru_add_drain_all+0x158/0x1f0
-> > [ 1873.243978]  do_migrate_pages+0x3d/0x2d0
-> > [ 1873.243985]  ? pick_next_task_fair+0x39/0x3b0
-> > [ 1873.243989]  ? put_prev_task_fair+0x1e/0x30
-> > [ 1873.243992]  ? pick_next_task+0xb30/0xbd0
-> > [ 1873.243995]  ? __tick_nohz_task_switch+0x1e/0x70
-> > [ 1873.244000]  ? raw_spin_rq_unlock+0x18/0x60
-> > [ 1873.244002]  ? finish_task_switch.isra.0+0xc1/0x2d0
-> > [ 1873.244005]  ? __switch_to+0x12f/0x510
-> > [ 1873.244013]  cpuset_migrate_mm_workfn+0x22/0x40
-> > [ 1873.244016]  process_one_work+0x1e0/0x410
-> > [ 1873.244019]  worker_thread+0x50/0x3b0
-> > [ 1873.244022]  ? process_one_work+0x410/0x410
-> > [ 1873.244024]  kthread+0x173/0x190
-> > [ 1873.244027]  ? set_kthread_struct+0x40/0x40
-> > [ 1873.244031]  ret_from_fork+0x1f/0x30
-> > 
-> > ...
-> >
-> > --- a/mm/swap.c
-> > +++ b/mm/swap.c
-> > @@ -831,8 +831,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
-> >  	for_each_online_cpu(cpu) {
-> >  		struct work_struct *work = &per_cpu(lru_add_drain_work, cpu);
-> >  
-> > -		if (force_all_cpus ||
-> > -		    pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> > +		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> >  		    data_race(pagevec_count(&per_cpu(lru_rotate.pvec, cpu))) ||
-> >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate_file, cpu)) ||
-> >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
-> 
-> This change appears to be "don't queue work on CPUs which don't have
-> any work to do".  Correct?  This isn't changelogged?
-> 
-> > @@ -876,14 +875,19 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
-> >  void lru_cache_disable(void)
-> >  {
-> >  	atomic_inc(&lru_disable_count);
-> > +	synchronize_rcu();
-> >  #ifdef CONFIG_SMP
-> >  	/*
-> > -	 * lru_add_drain_all in the force mode will schedule draining on
-> > -	 * all online CPUs so any calls of lru_cache_disabled wrapped by
-> > -	 * local_lock or preemption disabled would be ordered by that.
-> > -	 * The atomic operation doesn't need to have stronger ordering
-> > -	 * requirements because that is enforced by the scheduling
-> > -	 * guarantees.
-> > +	 * synchronize_rcu() waits for preemption disabled
-> > +	 * and RCU read side critical sections.
-> > +	 * For the users of lru_disable_count:
-> > +	 *
-> > +	 * preempt_disable, local_irq_disable  [bh_lru_lock()]
-> > +	 * rcu_read_lock		       [rt_spin_lock CONFIG_PREEMPT_RT]
-> > +	 * preempt_disable		       [local_lock !CONFIG_PREEMPT_RT]
-> > +	 *
-> > +	 * so any calls of lru_cache_disabled wrapped by local_lock or
-> > +	 * preemption disabled would be ordered by that.
-> >  	 */
-> >  	__lru_add_drain_all(true);
-> >  #else
-> 
-> Does this also work with CONFIG_TINY_RCU?
-> 
-> This seems abusive of synchronize_rcu().  None of this code uses RCU,
-> but it so happens that synchronize_rcu() happily provides the desired
-> effects.  Changes in RCU's happy side-effects might break this. 
-> Perhaps a formal API function which does whatever-you-want-it-to-do
-> would be better.
+The backgroud of this upstream is: I used to enable i.MX GPT input
+capture function for i.MX8MM. And I found patches following from Steve:
+https://lore.kernel.org/linux-arm-kernel/20191016010544.14561-2-slongerbeam@gmail.com/
+https://lore.kernel.org/linux-arm-kernel/20191016010544.14561-3-slongerbeam@gmail.com/
+After applied the patches and do some modification, GPT input capture
+function was enabled in i.MX8MM. When checked in latest BSP, seems the
+two patches are not included. I am not sure about the upstream status
+initiated by Steve. So as a latercomer, I am doing this upsteam again.
 
-I don't claim to understand the full lru_cache_disable() use case, but
-since v5.1 synchronize_rcu() is guaranteed to wait on preempt_disable()
-regions of code.  In contrast, back in the old days, you had to use
-synchronize_sched() to wait on preempt_disable() regions, even in
-CONFIG_PREEMPT=y kernels.  So if the comment is accurate, it is OK.
+---
+V2:
+ - delete the patch for i.MX8MM example in yaml file because of lots of
+   warnings due to chips missing, will add to it later
 
-Just be careful what you backport past v5.1...
+Kane Jiang (1):
+  clocksource/drivers/timer-imx-gpt: Change to cyclecounter for GPT
+    input capture.
 
-> And...  I really don't understand the fix.  What is it about
-> synchronize_rcu() which guarantees that a work function which is queued
-> on CPU N will now get executed even if CPU N is spinning in SCHED_FIFO
-> userspace?
+Steve Longerbeam (1):
+  clocksource/drivers/timer-imx-gpt: Support i.MX GPT input capture
+    function
 
-I don't understand this part, either.
+ drivers/clocksource/timer-imx-gpt.c | 480 +++++++++++++++++++++++++---
+ include/linux/mxc_icap.h            |  16 +
+ 2 files changed, 446 insertions(+), 50 deletions(-)
+ create mode 100644 include/linux/mxc_icap.h
 
-							Thanx, Paul
+-- 
+2.25.1
+

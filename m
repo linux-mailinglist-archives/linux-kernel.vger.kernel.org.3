@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763F84CD3B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F874CD3C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbiCDLoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S235845AbiCDLt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiCDLoT (ORCPT
+        with ESMTP id S233991AbiCDLt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:44:19 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0679EBD7DC;
-        Fri,  4 Mar 2022 03:43:31 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id j5so6346988ila.2;
-        Fri, 04 Mar 2022 03:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=4smpWMe7kSNBH0mRyoIMNTCTp8csrNBkurRrsmlpIPo=;
-        b=Ur9aq7eu3Eytryp1K22lJVyJFJLao0GT/R+/PN3J6sz5zlBiBu4s+f/HQFxo2H8Nm9
-         GP3Ros3dd5himrsMXzLzfpEiM9v8ea7hJpqgd6jOifMxgyXR/cpGRJCCY/OBlFApGf3A
-         RtfR0KBU/MgazXjpTwjeae0OQsTp3lUMJQgl27/xGVRRouUKBQxgb/Vfoe+BzyFyC3AK
-         /TlzntsQrj8hu0bsunpO1u2Q1NzK5ZUJEvuWr2NLFoGtiy9jwes569YIRxx+ZRLOZzcY
-         4Hxjl8pqBoOWxnLimr6+kOSjSGaQjskL7h1ahZxjTy+zFX1iNwqxmQHPz2XhtX7Gw/+/
-         dgKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=4smpWMe7kSNBH0mRyoIMNTCTp8csrNBkurRrsmlpIPo=;
-        b=d3gNyMon4o/rlr8uKdaqEnludvpoBPM+plU7kssEy+m9TNpKtAWluBXLCvLIf09en+
-         rrK2PFVyu7egcHerT/OlLQUwyBcJ9P3Qx1tL/hJA21XMiUtHK6qZGqYLw2HuN20v96Pi
-         X20XYktImwFG+DTMolZ+q6ZmREZ6MpTsFUvTEmwscVfo84Ljf1f3oo0AEWZpZPLDwg2Z
-         oc7XLDEhWrI+Qt2Fu4Fi8txz1kKVyxe5/vRUBS0dSeGj/F/PHYZBa3dUZ+EJtnAWgwoG
-         LFf4sB79YCl/vWXms/rB3fBaBJ0oAweXdG6ngynFrqtMJtej2UM4Y1icHfcPatPedpsv
-         DIKA==
-X-Gm-Message-State: AOAM533eSHEpHx90kdqXpcAPSgoOXQXwxKisBk9hD+Po+4yVzWgwfweQ
-        SU6l0yqS4nSMNa/7HzmR7pGqi4vS1E7pcRyJizI=
-X-Google-Smtp-Source: ABdhPJyBKRfl8PIOw+S6NEi0bCOL4PLN6OdToYMyK9eSpcrGOMTwep1WROvcrBL/LJenmf9yUE7+X4L3oo43anfTfUs=
-X-Received: by 2002:a05:6e02:164f:b0:2c6:1b85:b985 with SMTP id
- v15-20020a056e02164f00b002c61b85b985mr955047ilu.4.1646394210485; Fri, 04 Mar
- 2022 03:43:30 -0800 (PST)
+        Fri, 4 Mar 2022 06:49:58 -0500
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0751B1DD1;
+        Fri,  4 Mar 2022 03:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1646394544;
+        bh=AIDMXBc8l59dOY/mPpvQ/FWRUbozuV63c41/mFfvSC4=;
+        h=From:To:Cc:Subject:Date;
+        b=Iza5Lj9JE74WREUC+zbYWrNnApwfW5En6mpdwOknxeQIQCzYmGm1LrKYCnggqu2x/
+         pRD+ioCJMUer0oQIw863j0Pat3S75g0lofWKw33p5Un0MT/4cB/kr5BDzAnxsyzDYI
+         yyRll4hh2wNFBPykWMZOHZAETycNtJcAPWsNsavE=
+Received: from localhost.localdomain ([43.227.136.188])
+        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
+        id C3BA481B; Fri, 04 Mar 2022 19:48:59 +0800
+X-QQ-mid: xmsmtpt1646394539tj8y1kb28
+Message-ID: <tencent_E6A97F6B1009E6F65C230E070A9770612507@qq.com>
+X-QQ-XMAILINFO: ODdZrkDuTlAgNeTh1j/G2NL1AHblXm8Qf0chvyulSFxRRsk53IVVHln3BhaP3j
+         2x5HpnqX8bUwH3ycK+VgZkGcJTJhweMZum9+agjIf2ncDjQARXi4dawI+P27G8ZBH08KIEixBcYa
+         EznLl8Wd2lAcMF5R85X/Ygw0VMWvlKg0B2PWlFfsN3kIFOHplJ5syzyxBnJ7dJtF6bzqrUnFqf1k
+         XCAdRLu8WKnXOm+UidM9WcwlQCNO3m3RX26yZoeK3wMM93cLJddmnpAvYesw2Rocobulvp9qWHtv
+         F2Bpr5Ot9E6acH8nyfpr81Y2B4agNTqwMfnosbK1Hmr5HiPE79Cvy8qE2giNb6053C3owoTXuOMo
+         CIvh5LN14UalMBbz5WXVl1Xkp0yu1qcuGdftXuN6A7mF2mJwZwkKdZULfKgNLIQRKXFcB2dPagOG
+         MwwaROLOGV+9Lu8XqgylvdetCC9Jwv2jD5Y1r2OKlBZN8z9JJoVj7PVZArvqT/yX9yCE64wq6Etw
+         zfQQZEAIKDcnZJX9lNcvcuGxcnIflzVV92DdehSyldaWE4HeavEKx0KKMMpv4kR/stp84mt1iO9F
+         aZ0v7rbODV6StlE0zLOZ187lY62L8hFrdKitagf9+GHsU4YoTa7LyNkeBGE5xCWI+226T+rJ9I/O
+         3TYPHAoMrKIolhNM9ZbElkQB8YIHmSjod6Zwhk2OFQQ+1pNkvQ4qUk4Y1NKslU5BGR2yNGuq7i6K
+         L2TQU0U1tGwN6ax0kO7IP27NpYtBEm5vpptYuk3dzzkKRCpn3hv+Ic9oiOoiDAw7SGY+FfMHNyvr
+         Cfe+DfWs21W0nzdmkFT/sH5T0G7KXeVFtCB7B11sPjRlbuJnAc6sII+EW8HwoH6sPOR/bqTgcvKV
+         P0NKBOV4v2sFGWxPmdEVkZmRlACLENcKpq+Mx+EMROy1lFWgi34ca4uxy2sZ6hcgqF0CkrJ+4p8s
+         V5JyKPVHO01FhkM6AuUQ==
+From:   xkernel.wang@foxmail.com
+To:     laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] media: omap3isp: check the return of __ccp2_get_format()
+Date:   Fri,  4 Mar 2022 19:48:18 +0800
+X-OQ-MSGID: <20220304114819.5566-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-References: <20220303090643.241747-1-davidgow@google.com> <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
- <202203030947.E2FA3D9@keescook> <YiEISsoS/XrbEtbm@thelio-3990X> <CAKwvOdkA1c3U6+-6hB3Nj9m2Z8eYzsFWm5X4se2eq_cF3NB2jA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkA1c3U6+-6hB3Nj9m2Z8eYzsFWm5X4se2eq_cF3NB2jA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 4 Mar 2022 12:42:54 +0100
-Message-ID: <CA+icZUXf9m13GrqvCLkDRsnQt0X2VQ=yVrJRYz=6fhCJXR4-Xg@mail.gmail.com>
-Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:43 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Thu, Mar 3, 2022 at 10:26 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Mar 03, 2022 at 10:04:28AM -0800, Kees Cook wrote:
-> > > How does -mno-global-merge get KBUILD_CFLAGS in the first place? If it's
-> > > arm/arm64 only, shouldn't that get relocated to those architectures?
-> > >
-> > > *time travel* found it:
-> > >
-> > > 61163efae020 ("kbuild: LLVMLinux: Add Kbuild support for building kernel with Clang")
-> > >
-> > > So I think this may have been universally true long ago, and now only
-> > > arm/arm64 need it?
->
-> Looks like that's the case from LLVM sources.
->
-> <snip>
->
-> > > diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> > > index a2391b8de5a5..dcab28c44c26 100644
-> > > --- a/arch/arm/Makefile
-> > > +++ b/arch/arm/Makefile
-> > > @@ -48,6 +48,13 @@ CHECKFLAGS += -D__ARMEL__
-> > >  KBUILD_LDFLAGS       += -EL
-> > >  endif
-> > >
-> > > +ifdef CONFIG_CC_IS_CLANG
-> > > +# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-> > > +# source of a reference will be _MergedGlobals and not on of the whitelisted names.
->
-> I think there's a typo in the original comment.
-> s/on of/one of/ ?
->
-> Also, I'm not sure what's meant by _MergedGlobals. Perhaps this is an
-> opportunity to make this clearer?
->
-> "Clang's "global-merge" pass (implemented only for arm and aarch64)
-> may break modpost Pattern 2 if symbols are renamed and thus don't
-> appear on modpost's allowlist.
->
-> > > +# See modpost pattern 2
-> > > +KBUILD_CFLAGS        += -mno-global-merge
-> > > +endif
-> > > +
->
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-I can remember on x86-64 I was able to build and boot by dropping it entirely.
+__ccp2_get_format() returns format structure or NULL on error.
+So it is better to check the return value of it to prevent potential
+wrong memory access.
 
-- Sedat -
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/media/platform/omap3isp/ispccp2.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/omap3isp/ispccp2.c
+index acb58b6..81881b1 100644
+--- a/drivers/media/platform/omap3isp/ispccp2.c
++++ b/drivers/media/platform/omap3isp/ispccp2.c
+@@ -675,8 +675,10 @@ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
+ 		 */
+ 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
+ 					   which);
+-		memcpy(fmt, format, sizeof(*fmt));
+-		fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
++		if (format != NULL) {
++			memcpy(fmt, format, sizeof(*fmt));
++			fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
++		}
+ 		break;
+ 	}
+ 
+@@ -709,6 +711,9 @@ static int ccp2_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
+ 					   code->which);
++		if (format == NULL)
++			return -EINVAL;
++
+ 		code->code = format->code;
+ 	}
+ 
+@@ -792,6 +797,9 @@ static int ccp2_set_format(struct v4l2_subdev *sd,
+ 	if (fmt->pad == CCP2_PAD_SINK) {
+ 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SOURCE,
+ 					   fmt->which);
++		if (format == NULL)
++			return -EINVAL;
++
+ 		*format = fmt->format;
+ 		ccp2_try_format(ccp2, sd_state, CCP2_PAD_SOURCE, format,
+ 				fmt->which);
+-- 

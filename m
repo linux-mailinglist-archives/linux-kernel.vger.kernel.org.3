@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B7F4CCBBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5581C4CCBBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237690AbiCDCZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S237696AbiCDCZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiCDCZV (ORCPT
+        with ESMTP id S237677AbiCDCZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:25:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F477BA74C;
-        Thu,  3 Mar 2022 18:24:34 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K8s8149BczBrWT;
-        Fri,  4 Mar 2022 10:22:41 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 10:24:32 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 10:24:31 +0800
-Subject: Re: [PATCH 2/2] iscsi_tcp: Check if tcp_conn is valid in
-To:     Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>
-References: <20220304025608.1874516-1-haowenchao@huawei.com>
- <20220304025608.1874516-2-haowenchao@huawei.com>
- <85a64450-99c8-268d-1ac7-86e70cbb3562@oracle.com>
-From:   Wenchao Hao <haowenchao@huawei.com>
-Message-ID: <f6055c4a-b32f-8025-f096-f6abda03e2d4@huawei.com>
-Date:   Fri, 4 Mar 2022 10:24:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Thu, 3 Mar 2022 21:25:47 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FD21704FB
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 18:24:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6AHJDk_1646360695;
+Received: from 30.97.48.223(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V6AHJDk_1646360695)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 04 Mar 2022 10:24:56 +0800
+Message-ID: <7c14bb40-1e7b-9819-1634-e9e9051726fa@linux.alibaba.com>
+Date:   Fri, 4 Mar 2022 10:24:55 +0800
 MIME-Version: 1.0
-In-Reply-To: <85a64450-99c8-268d-1ac7-86e70cbb3562@oracle.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC PATCH 0/2] Alloc kfence_pool after system startup
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220303031505.28495-1-dtcccc@linux.alibaba.com>
+ <CAG_fn=Wd5GMFojbvdZkysBQ5Auy5YYRdmZfjSVMq8gpDMRZ_3w@mail.gmail.com>
+ <CANpmjNPBYgNMzQDKjNYFTkKnWwMe29gpXd2b9icFSnAwstW-jQ@mail.gmail.com>
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+In-Reply-To: <CANpmjNPBYgNMzQDKjNYFTkKnWwMe29gpXd2b9icFSnAwstW-jQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/3 22:59, Mike Christie wrote:
-> On 3/3/22 8:56 PM, Wenchao Hao wrote:
->> iscsi_create_conn() would add newly alloced iscsi_cls_conn to connlist,
->> it means when userspace sends ISCSI_UEVENT_SET_PARAM, iscsi_conn_lookup()
->> would found this iscsi_cls_conn and call the set_param callback which is
->> iscsi_sw_tcp_conn_set_param(). While the iscsi_conn's dd_data might not
->> been initialized.
->>
->> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
->> Signed-off-by: Wu Bo <wubo40@huawei.com>
->> ---
->>   drivers/scsi/iscsi_tcp.c | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
->> index 14db224486be..a42449df6156 100644
->> --- a/drivers/scsi/iscsi_tcp.c
->> +++ b/drivers/scsi/iscsi_tcp.c
->> @@ -716,13 +716,17 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
->>   {
->>   	struct iscsi_conn *conn = cls_conn->dd_data;
->>   	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
->> -	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
->> +	struct iscsi_sw_tcp_conn *tcp_sw_conn;
->>   
->>   	switch(param) {
->>   	case ISCSI_PARAM_HDRDGST_EN:
->>   		iscsi_set_param(cls_conn, param, buf, buflen);
->>   		break;
->>   	case ISCSI_PARAM_DATADGST_EN:
->> +		if (!tcp_conn || !tcp_conn->dd_data)
->> +			return -ENOTCONN;
->> +
->> +		tcp_sw_conn = tcp_conn->dd_data;
->>   		iscsi_set_param(cls_conn, param, buf, buflen);
->>   		tcp_sw_conn->sendpage = conn->datadgst_en ?
->>   			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
-> 
-> Is this something you hit or from code review?
-> 
+On 2022/3/3 17:30, Marco Elver wrote:
 
-It's from code review. I reviewed the code because the panic mentioned 
-in my first patch. The issue seems would not happen, so just ignore it.
+Thanks for your replies.
+I do see setting a large sample_interval means almost disabling KFENCE.
+In fact, my point is to provide a more “flexible” way. Since some Ops 
+may be glad to use something like on/off switch than 10000ms interval. :-)
 
-> We have those state checks:
+> On Thu, 3 Mar 2022 at 10:05, Alexander Potapenko <glider@google.com> wrote:
 > 
-> if ((conn->state == ISCSI_CONN_BOUND) ||
->      (conn->state == ISCSI_CONN_UP)) {
-> 	err = transport->set_param(conn, ev->u.set_param.param,
+> I share Alex's concerns.
 > 
-> so we don't call set_param until after we have bound the
-> connection which will be after ISCSI_UEVENT_CREATE_CONN has returned.
+>> On Thu, Mar 3, 2022 at 4:15 AM Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
+>>>
+>>> KFENCE aims at production environments, but it does not allow enabling
+>>> after system startup because kfence_pool only alloc pages from memblock.
+>>> Consider the following production scene:
+>>> At first, for performance considerations, production machines do not
+>>> enable KFENCE.
+>>
+>> What are the performance considerations you have in mind? Are you running KFENCE with a very aggressive sampling rate?
 > 
-> Also for this specific bug iscsi_if_recv_msg is called with the
-> rx_queue_mutex, so set_param can only be called after the
-> ISCSI_UEVENT_CREATE_CONN cmd has returned.
-> .
+> Indeed, what is wrong with simply starting up KFENCE with a sample
+> interval of 10000? However, I very much doubt that you'll notice any
+> performance issues above 500ms.
 > 
+> Do let us know what performance issues you have seen. It may be
+> related to an earlier version of KFENCE but has since been fixed (see
+> log).
+> 
+>>> However, after running for a while, the kernel is suspected to have
+>>> memory errors. (e.g., a sibling machine crashed.)
+>>
+>> I have doubts regarding this setup. It might be faster (although one can tune KFENCE to have nearly zero performance impact), but is harder to maintain.
+>> It will also catch fewer errors than if you just had KFENCE on from the very beginning:
+>>   - sibling machines may behave differently, and a certain bug may only occur once - in that case the secondary instances won't notice it, even with KFENCE;
+>>   - KFENCE also catches non-lethal corruptions (e.g. OOB reads), which may stay under radar for a very long time.
+>>
+>>>
+>>> So other production machines need to enable KFENCE, but it's hard for
+>>> them to reboot.
+>>>
+>>> The 1st patch allows re-enabling KFENCE if the pool is already
+>>> allocated from memblock.
+> 
+> Patch 1/2 might be ok by itself, but I still don't see the point
+> because you should just leave KFENCE enabled. There should be no
+> reason to have to turn it off. If anything, you can increase the
+> sample interval to something very large if needed.
 

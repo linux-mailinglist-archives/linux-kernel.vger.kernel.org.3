@@ -2,119 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99B14CD31A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 573234CD321
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238188AbiCDLNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:13:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S239043AbiCDLOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbiCDLNA (ORCPT
+        with ESMTP id S238057AbiCDLN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:13:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0799B1B01B6
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646392332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
-        b=MXy/d/EyCVeh9gmvu791clf5XToQGT5jqbm3RLdWBbOhtBxexlzXJjiVH0AfMKRY7tAfbR
-        vNai8biU1FthGNFmlk0p9rbzM4KxbsfySdZS/2irV3o2GfZ0qquhXS6jJuo/KgArL+qt8Y
-        pxZ8pO59XZ/qUmbtCCeW6WDv0u4JzkA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-fTHAwu5oMceetfMqD1akZA-1; Fri, 04 Mar 2022 06:12:10 -0500
-X-MC-Unique: fTHAwu5oMceetfMqD1akZA-1
-Received: by mail-wm1-f72.google.com with SMTP id l2-20020a1ced02000000b0038482a47e7eso2706592wmh.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 03:12:10 -0800 (PST)
+        Fri, 4 Mar 2022 06:13:58 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AC71B0BD5;
+        Fri,  4 Mar 2022 03:13:07 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id 9so6248938ily.11;
+        Fri, 04 Mar 2022 03:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=pix5KDHACk5xuaWSUAnT0P8xCzYZyA+b1xfvdOjbWuQ=;
+        b=iPZ/H1n3eyVmsRIMvk6KjphmQVML8dWniJcFydrYkBZnD8D/yr//2bAXTdLz+Ahs7D
+         PsVdZZS93PmFF8tea3XV/GmTiWf/pd/ReZ75FFbq11Xx3Y9cB+MXaz+vjBFzFWMj9K3S
+         IphB5/FbyBUL9+vvQkaYYZ8Jwh6bp4WF+vTlGmXNbfFxV7j12HwN9zsyRxRIZvqR6pgx
+         kjNvwPU4Sa91Qie372VTsa36PwkWzfsSEibQAXZhaWwCK6ErJW+smWPIEEI2KQK1SMLa
+         dtUIm2wIttSzC864Rc5cRjjJzRaJanrqLR7uy3GYsV50PuGMloSWavptw8SEIGp5k5/9
+         TBHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
-        b=StebT69mTidv6Vo5Fupp3rX4ZKT81G/tSzoISGWPu9H9+cEi3xXM1y2nZ6tkL3E/ig
-         mIWwKPr8t+eqThO4cKt2Oox+lL7dc029F0GuLqNPX+h2SzvsVsc40l48hubZL7PnItUh
-         5HW1U/Qeg+5191wyAruUVB3EWAnwE5Ap/Ms2c26VninEnl+L+07v/V35liJRSlC1IrRb
-         V+jhq/0FMhp1jwkZTb5CohNkv6emRJsELMaxnhnOXjbx023GwhGRmLRtoYlc+yBOkSvd
-         CT66zslfqJ29eC5hRIDuEUKWiJNwjy+pU0+asxehzp1Sv5zGmTOPYBlw5P3f3HxT1Nxp
-         TVSA==
-X-Gm-Message-State: AOAM530kZ779I6i2zQa/nBk3HBhVnCxDGIzpX5IuWG9berTTUjdk4MZ1
-        dPK4DkkuUmzP/GpWxn7Wt9wdTRSgXXS3QHV7TD8tEUzRbd9potxniYxq77yTjzuzc0WKHgpU4mk
-        p2zsxMfhCbZu8iECXm+LCkyg=
-X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074419wri.520.1646392329761;
-        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvcDuGsktUT/oYRoSqkT5GCN7ol05dt6eg/Yp3ZoumXCrcGzAwTCnCSrQyurvMrQV4T5HLjQ==
-X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074410wri.520.1646392329543;
-        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm5716793wmb.3.2022.03.04.03.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 03:12:08 -0800 (PST)
-Date:   Fri, 4 Mar 2022 11:12:07 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
- <20220302161917.gx5icfszakoye4uh@maple.lan>
- <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
- <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
- <YiDEmRf3X0fxSayK@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=pix5KDHACk5xuaWSUAnT0P8xCzYZyA+b1xfvdOjbWuQ=;
+        b=7rHWQv6D3oHGLEUKyKSfONydki0701wqyV+2DtZoFs9XABPGOjWG/2CbewiNDs0k9I
+         QcNUpnS8WhD+anYZC8GHwhxv/ZlrsA57RAIIXsT2zkWMfj3ZjV45/zxtv8Yj4iMrz92g
+         Fblj8v8Se60J5X7hSltiJHmXVj85YluiuMcoCIRmsrR8V+teFhuvNFoiC2iP7BsFNKyF
+         YX4+t7HG2NpqMgNnawPBxThacYm166w0MYAnrX5h6AFYq2R3WlYxyWL7iqFDQvbwJZ3k
+         +E5V5fE4MaPtA1ltZDgMaUo1JQ8+kES3r0VXZGpmupjMJ6dtn0p3vBiYFq3U389Uinbp
+         IDsA==
+X-Gm-Message-State: AOAM532Safx8WPRD/clHhHnKazb494L4VvoRdLn5C4afwGnIGVtiWZsX
+        vVsUh+aM1lfXzaXPLfZrLJJjCAdUvzVs0ouJHGs=
+X-Google-Smtp-Source: ABdhPJxVn0I1gYNcDyZWKfKxwXFubpSLDqDezcfdt+oRTcpIclWTeQb4GwhGqPoNLCc+9sUT94M0RiZ/tnc/M8p/P1o=
+X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
+ l4-20020a056e021c0400b002be4c6120f4mr35937854ilh.245.1646392386116; Fri, 04
+ Mar 2022 03:13:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YiDEmRf3X0fxSayK@infradead.org>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
+ <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
+ <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
+ <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com>
+ <YiD86pay2ENCebkR@dev-arch.thelio-3990X> <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
+ <CA+icZUXNtq3+cW6OBiO1TPhHT2xwXFe_D-Ja8HAO0XH2y6h=GA@mail.gmail.com>
+In-Reply-To: <CA+icZUXNtq3+cW6OBiO1TPhHT2xwXFe_D-Ja8HAO0XH2y6h=GA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 4 Mar 2022 12:12:30 +0100
+Message-ID: <CA+icZUVKJdtCWhhwcY5UkWwFA4TQAn+MF2w1DeZistYmG_ZEuQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-03-03 05:37 -0800, Christoph Hellwig wrote:
-> On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
-> > Do we really want to hide the 'struct list_head modules' from external 
-> > world ?
-> > 
-> > Otherwise we could declare it in include/linux/module.h ?
-> I'd just move the trivial code that uses it from kernel/kdb/ to
-> kernel/module/ as it is tied to module internals and just uses the
-> KDB interfaces exposed to other parts of the kernel.
+On Fri, Mar 4, 2022 at 8:18 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Mar 4, 2022 at 7:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> wr=
+ote:
+> > >
+> > > Hi Sedat,
+> > >
+> > > On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
+> > > > Hey Nick!
+> > > >
+> > > > This only applies 1/3.
+> > > >
+> > > > $ b4 --version
+> > > > 0.8.0
+> > > >
+> > > > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@=
+kernel.org/
+> > > > -o - | git am -3
+> > > > Analyzing 14 messages in the thread
+> > > > Will use the latest revision: v3
+> > > > You can pick other revisions using the -vN flag
+> > > > Checking attestation on all messages, may take a moment...
+> > > > ---
+> > > >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
+> > > >    =E2=9C=93 Signed: DKIM/kernel.org
+> > > >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 =
+DKIM/kernel.org)
+> > > >  ERROR: missing [2/3]!
+> > > >  ERROR: missing [3/3]!
+> > > >  ---
+> > > >  NOTE: install patatt for end-to-end signature verification
+> > > > ---
+> > > > Total patches: 1
+> > > > ---
+> > > > WARNING: Thread incomplete!
+> > > > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kerne=
+l.org
+> > > > Base: not specified
+> > > > Wende an: Kbuild: move to -std=3Dgnu11
+> > >
+> > > It looks like the threading somehow got broken, likely due to the [v3=
+]
+> > > on the first patch and not the second or third:
+> > >
+> > > This worked for me on v5.17-rc6:
+> > >
+> > > $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-=
+arnd@kernel.org; done
+> > >
+> > > "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
+> > > "-P _" tells b4 to only fetch that exact message ID, not the whole
+> > > thread.
+> > >
+> >
+> > Hmm, the universe is not good to me...
+> >
+> > $ for i in $(seq 1 3); do b4 shazam -P _
+> > 20220301145233.3689119-"$i"-arnd@kernel.org; done
+> > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+> > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+> > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+> > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+> > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+> > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+> > usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+> > b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+> > 'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+> >
+> > Do I need a higher version of b4 (here: v0.8.0)?
+> >
+> > Check myself... b4.git:
+> >
+> > commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
+> > ("shazam: change default behaviour to be "apply-here"")
+> >
+> > ...is post-v0.8.0.
+> >
+>
+> I brutally applied the post-v0.8.0 patches stolen from b4.git over my
+> local distro b4 files.
+>
+> And was able to apply the triple:
+>
+> $ git log --oneline --no-merges
+> 5.17.0-rc6-1-amd64-clang13-lto..5.17.0-rc6-2-amd64-clang13-lto
+> 96a4222bdd4c (for-5.17/kbuild-std_gnu11-arndb-20220301) Kbuild: use
+> -std=3Dgnu11 for KBUILD_USERCFLAGS
+> c4e8cef401a8 treewide: use -Wdeclaration-after-statement
+> 6a7cc105b238 Kbuild: move to -std=3Dgnu11
+>
 
-Hi Christoph,
+I was able to build and boot on bare metal.
 
-This is a great idea. I'll do this instead.
+No new warnings in my build-log here after switching to -std=3Dgnu11.
 
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13.0.0 x86-64
 
-Kind regards,
-
--- 
-Aaron Tomlin
-
+- sed@ -

@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C069E4CE02F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 23:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64514CE02A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 23:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiCDWUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 17:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S229913AbiCDWTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 17:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiCDWUv (ORCPT
+        with ESMTP id S229468AbiCDWTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 17:20:51 -0500
-X-Greylist: delayed 269 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 14:20:03 PST
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4740115B980
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 14:20:03 -0800 (PST)
-Received: from 1nQGCy-0002oo-VO by out3b.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nQGCz-0002s3-Vq; Fri, 04 Mar 2022 14:15:33 -0800
-Received: by emcmailer; Fri, 04 Mar 2022 14:15:33 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nQGCy-0002oo-VO; Fri, 04 Mar 2022 14:15:32 -0800
-Received: from tsdebian.ts-local.net (_gateway [192.168.0.64])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 017173A8F8;
-        Fri,  4 Mar 2022 15:15:31 -0700 (MST)
-From:   Kris Bahnsen <kris@embeddedTS.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Featherston <mark@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>
-Subject: [PATCH] gpio: ts4900: Do not set DAT and OE together
-Date:   Fri,  4 Mar 2022 14:15:17 -0800
-Message-Id: <20220304221517.30213-1-kris@embeddedTS.com>
-X-Mailer: git-send-email 2.11.0
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=8QQF6dKhkO+Z5X7/e+vXsxFm9xV9/q6QSNG67LdjZHs=;b=fODEx0ph/I0Bo9UrO6oHYrSzq7nqFvuhsC2DLPJLZRzQ+jhRuHD7OaGm9NrZgt9C1ihCBnqHWwiXNiGjZ/JQbEogu+ADftMAzT4L5W1A0AEHVpCQgxpx1ZMwUzEq8ELQZ5ihBMmpRROsVza1kHH9dvAno67zrapBtTn/fRKddWLRKzjVbVIQgmH4euVmFPVjW57KwTMS3k6YZ+wwqV9slbi3NW0LW3KQjkKP1n3ccsPoIrr4p80iYVu1KHrjNbnkkYTCiNRXUAqEdVHiZWH6UDjVTkdZwWxWpk2ssrRoj3qa6yGrsC3eRLQNmW/X0uJyJ70lxh4rOK/vGpCsl1tnjQ==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 4 Mar 2022 17:19:16 -0500
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B9C31BEB7;
+        Fri,  4 Mar 2022 14:18:27 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 6B2FC10E1C43;
+        Sat,  5 Mar 2022 09:18:26 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nQGFl-001Zzq-Nx; Sat, 05 Mar 2022 09:18:25 +1100
+Date:   Sat, 5 Mar 2022 09:18:25 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] vfs: do not try to evict inode when super is frozen
+Message-ID: <20220304221825.GM3927073@dread.disaster.area>
+References: <20220304022104.2525009-1-jaegeuk@kernel.org>
+ <20220304024843.GK3927073@dread.disaster.area>
+ <YiGgSmEOZUvgmSto@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiGgSmEOZUvgmSto@google.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=62229032
+        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
+        a=FCBBoiUPZGnDA3Uh:21 a=kj9zAlcOel0A:10 a=o8Y5sQTvuykA:10 a=7-415B0cAAAA:8
+        a=kobbvlOx0iqVO4J9MBYA:9 a=CjuIK1q_8ugA:10 a=ZXjPKerQ9QDAtgzuyCT9:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Featherston <mark@embeddedTS.com>
+On Thu, Mar 03, 2022 at 09:14:50PM -0800, Jaegeuk Kim wrote:
+> On 03/04, Dave Chinner wrote:
+> > On Thu, Mar 03, 2022 at 06:21:04PM -0800, Jaegeuk Kim wrote:
+> > > Otherwise, we will get a deadlock.
+> > 
+> > NACK.
+> > 
+> > We have to be able to evict clean inodes from memory on frozen
+> > inodes because we can still instantiate inodes while the filesytem
+> > is frozen. e.g. there's a find running when the filesystem is
+> > frozen. What happens if we can't evict clean cached inodes from
+> > memory when we run out of memory trying to instantiate new inodes?
+> 
+> Ok, that makes sense.
+> 
+> > 
+> > > 
+> > > [freeze test]                         shrinkder
+> > > freeze_super
+> > >  - pwercpu_down_write(SB_FREEZE_FS)
+> > >                                        - super_cache_scan
+> > >                                          - down_read(&sb->s_umount)
+> > >                                            - prune_icache_sb
+> > >                                             - dispose_list
+> > >                                              - evict
+> > >                                               - f2fs_evict_inode
+> > > thaw_super
+> > >  - down_write(&sb->s_umount);
+> > >                                               - __percpu_down_read(SB_FREEZE_FS)
+> > 
+> > That seems like a f2fs bug, not a generic problem.
+> > 
+> > Filesystems already have to handle stuff like this if an unlinked
+> > file is closed while the fs is frozen - we have to handle inode
+> > eviction needing to modify the file, and different filesystems
+> > handle this differently. Most filesystems simply block in
+> > ->evict_inode in this case, but this never occurs from the shrinker
+> > context.
+> > 
+> > IOWs, the shrinker should never be evicting inodes that require the
+> > filesystem to immediately block on frozen filesystems. If you have
+> > such inodes in cache at the time the filesystem is frozen, then they
+> > should be purged from the cache as part of the freeze process so the
+> > shrinker won't ever find inodes that it could deadlock on.
+> 
+> If so, is this a bug in drop_caches_sysctl_handler?
 
-This works around an issue with the hardware where both OE and
-DAT are exposed in the same register. If both are updated
-simultaneously, the harware makes no guarantees that OE or DAT
-will actually change in any given order and may result in a
-glitch of a few ns on a GPIO pin when changing direction and value
-in a single write.
+IMO, no.
 
-Setting direction to input now only affects OE bit. Setting
-direction to output updates DAT first, then OE.
+> Or, I shouldn't have
+> used "echo 3 > sysfs/drop_caches" with freezefs in xfstests?
 
-Signed-off-by: Mark Featherston <mark@embeddedTS.com>
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
----
- drivers/gpio/gpio-ts4900.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+That should just work.
 
-diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
-index d885032cf814..fbabfca030c0 100644
---- a/drivers/gpio/gpio-ts4900.c
-+++ b/drivers/gpio/gpio-ts4900.c
-@@ -1,7 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-  * Digital I/O driver for Technologic Systems I2C FPGA Core
-  *
-- * Copyright (C) 2015 Technologic Systems
-+ * Copyright (C) 2015-2018 Technologic Systems
-  * Copyright (C) 2016 Savoir-Faire Linux
-  *
-  * This program is free software; you can redistribute it and/or
-@@ -55,19 +56,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
- {
- 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
- 
--	/*
--	 * This will clear the output enable bit, the other bits are
--	 * dontcare when this is cleared
-+	/* Only clear the OE bit here, requires a RMW. Prevents potential issue
-+	 * with OE and data getting to the physical pin at different times.
- 	 */
--	return regmap_write(priv->regmap, offset, 0);
-+	return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
- }
- 
- static int ts4900_gpio_direction_output(struct gpio_chip *chip,
- 					unsigned int offset, int value)
- {
- 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
-+	unsigned int reg;
- 	int ret;
- 
-+	/* If changing from an input to an output, we need to first set the
-+	 * proper data bit to what is requested and then set OE bit. This
-+	 * prevents a glitch that can occur on the IO line
-+	 */
-+	regmap_read(priv->regmap, offset, &reg);
-+	if (!(reg & TS4900_GPIO_OE)) {
-+		if (value)
-+			reg = TS4900_GPIO_OUT;
-+		else
-+			reg &= ~TS4900_GPIO_OUT;
-+
-+		regmap_write(priv->regmap, offset, reg);
-+	}
-+
- 	if (value)
- 		ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
- 							 TS4900_GPIO_OUT);
+As I said above - if the filesystem cannot process eviction of
+certain types of inodes when the filesystem is frozen, it needs to
+take steps during the freeze process to ensure they can't be evicted
+when the fs is frozen....
+
+Cheers,
+
+Dave.
 -- 
-2.11.0
-
+Dave Chinner
+david@fromorbit.com

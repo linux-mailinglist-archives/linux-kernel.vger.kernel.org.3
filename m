@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D104CDED4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BC24CDED7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiCDU1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229473AbiCDU1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiCDU0z (ORCPT
+        with ESMTP id S229895AbiCDU1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:26:55 -0500
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A126B13CA2B;
-        Fri,  4 Mar 2022 12:26:04 -0800 (PST)
-Received: by mail-oo1-f50.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso10671984ooc.12;
-        Fri, 04 Mar 2022 12:26:04 -0800 (PST)
+        Fri, 4 Mar 2022 15:27:02 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772951E7A6C;
+        Fri,  4 Mar 2022 12:26:13 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so10710277ooa.10;
+        Fri, 04 Mar 2022 12:26:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VKUwEbVW5qva5LIGoRYiFCyDMYv3Hk5QudM2GDoBnd0=;
-        b=iDgeRUH2QGSF4I7bON5tYDPRyk4djb7ITptJNzOEa7sGDs4LmQwtnOp3/iYepR+gv0
-         Q3bYg7ZAOidEHnoS93uHXvSwsTke0exyCQiLqqFUlmpnosnLoszhNVJ/cRMTbe1+CMdp
-         7XIVU1uhtFiYC9Qv3otq+vXbuaxp9C1IMEEI0opza9tIuS5BxdqryFPkQIToAMAJxuuW
-         oewnJf6mZQJrW1SgybMXLQs0SWhVp2t+CtsIZjFMCl1hEB9JugtpbVeMLRWQUsqEQcu0
-         mmqzh8MIN+dlsEKhhVktPTuWTfbpYbtdMOmUfTtPJVzmZyfcInhRPBtnyJfdMGZ8xaOt
-         t31w==
-X-Gm-Message-State: AOAM531VoOgVxN2tB+vGHHsWKCeG8JzhUaWlEWyuZAvNxrqAqd7YD+A/
-        sjr+kDJIDyU+rnSsHvo0LlVW1QGw/w==
-X-Google-Smtp-Source: ABdhPJwSBGIHNUpRZ0bfIYe9CuLf2+8hnWW01T2QGbHOl3kTnWhsSEtfc97+93tC1NmqLkzw3HInpg==
-X-Received: by 2002:a05:6870:340c:b0:da:b3f:325a with SMTP id g12-20020a056870340c00b000da0b3f325amr104907oah.266.1646425563994;
-        Fri, 04 Mar 2022 12:26:03 -0800 (PST)
+        bh=9/hN8e4a43/QLz2i6lMzgZn6XDbc+w5WzcndHI+jnhw=;
+        b=I+x/dbemgT0T5Y5eI4Agg7DhNef4zEUyPzzfmProybjDT2b0bsepGHCwoPXkGKHwh0
+         pjwDxXPnTxpMDgwsHZpWrntgeUlkfmNSDx3umeUpsz0Zew08n4vexFy8TlomQHYKa34T
+         JRj6xMtgNrseqOykdDlaNXdc1MPndeikIik6tcIIH+S5DnrMx0ttDznI0QZgMguJWvUO
+         7tf6KtVT4Rjz+DC+/bFyQ9vB5kFjb0EWlL7djYckW88hCr8vz0OUEHrRrJBNKwz7hvYP
+         BdqZjCmx0TJdSfPjmBw6w3u1UQQxvPvr83UDtuev+CBPoGnewdiA+vxTG0AA0S1e7YXJ
+         wTpQ==
+X-Gm-Message-State: AOAM530Boj38geBM3AjiiP41o8N57/uBdAGvdXoHvxWrWZMlSugu2G9W
+        yLUT87RKfkfoX3UFjvN+9A==
+X-Google-Smtp-Source: ABdhPJxt9dNQmQOPXOGuqsdjcoj+0CZfKjqCLGlWC/9ueZPqjYuLgOB+F39C/q5Z11Zru6nHlNoYsA==
+X-Received: by 2002:a05:6870:96ac:b0:d9:cb7a:e382 with SMTP id o44-20020a05687096ac00b000d9cb7ae382mr3786739oaq.175.1646425572743;
+        Fri, 04 Mar 2022 12:26:12 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id s184-20020acaa9c1000000b002d97bda386asm2943377oie.47.2022.03.04.12.26.02
+        by smtp.googlemail.com with ESMTPSA id j10-20020a4ad2ca000000b0031c515672d0sm2707636oos.23.2022.03.04.12.26.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 12:26:03 -0800 (PST)
+        Fri, 04 Mar 2022 12:26:12 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: firefly: Fix SDIO regulator supply properties
-Date:   Fri,  4 Mar 2022 14:25:58 -0600
-Message-Id: <20220304202559.317749-1-robh@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: tegra: Fix boolean properties with values
+Date:   Fri,  4 Mar 2022 14:26:06 -0600
+Message-Id: <20220304202607.318086-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,29 +60,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A label reference without brackets is a path string, not a phandle as
-intended. Add the missing brackets.
+Boolean properties in DT are present or not present and don't take a value.
+A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
+matter.
+
+It may have been intended that 0 values are false, but there is no change
+in behavior with this patch.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-firefly.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
+ .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
+ arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
+ arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
+ 8 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-index c4dd2a6b4836..f81ce3240342 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-@@ -770,8 +770,8 @@ &sdio0 {
- 	sd-uhs-sdr104;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+index aff857df25cf..1df84335925b 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+@@ -262,25 +262,25 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
  
- 	/* Power supply */
--	vqmmc-supply = &vcc1v8_s3;	/* IO line */
--	vmmc-supply = &vcc_sdio;	/* card's power */
-+	vqmmc-supply = <&vcc1v8_s3>;	/* IO line */
-+	vmmc-supply = <&vcc_sdio>;	/* card's power */
+ 					gpio5 {
+ 						pins = "gpio5";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
  
- 	#address-cells = <1>;
- 	#size-cells = <0>;
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
+index 4631504c3c7a..1ab132c152bb 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
+@@ -462,25 +462,25 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio5 {
+ 						pins = "gpio5";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+index a7d7cfd66379..634d0f493c2e 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+@@ -174,19 +174,19 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
+index 0bd66f9c620b..0b219e72765e 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
+@@ -148,19 +148,19 @@ gpio3 {
+ 					gpio4 {
+ 						pins = "gpio4";
+ 						function = "32k-out1";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio6 {
+ 						pins = "gpio6";
+ 						function = "gpio";
+-						drive-push-pull = <1>;
++						drive-push-pull;
+ 					};
+ 
+ 					gpio7 {
+ 						pins = "gpio7";
+ 						function = "gpio";
+-						drive-push-pull = <0>;
++						drive-push-pull;
+ 					};
+ 				};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
+index 75eb743a7242..0fe772b04bd0 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
+@@ -59,7 +59,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <7>;
+ 					maxim,active-fps-power-down-slot = <0>;
+@@ -68,7 +68,7 @@ gpio1 {
+ 				gpio2_3 {
+ 					pins = "gpio2", "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+@@ -80,7 +80,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
+ 			};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
+index 10347b6e6e84..936a309e288c 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
+@@ -1351,7 +1351,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <7>;
+ 					maxim,active-fps-power-down-slot = <0>;
+@@ -1360,14 +1360,14 @@ gpio1 {
+ 				gpio2 {
+ 					pins = "gpio2";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 				};
+ 
+@@ -1379,7 +1379,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
+ 			};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+index 72c2dc3c14ea..f6446120c267 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+@@ -195,7 +195,7 @@ gpio0 {
+ 				gpio1 {
+ 					pins = "gpio1";
+ 					function = "fps-out";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_NONE>;
+ 					maxim,active-fps-power-up-slot = <0>;
+ 					maxim,active-fps-power-down-slot = <7>;
+@@ -204,7 +204,7 @@ gpio1 {
+ 				gpio2 {
+ 					pins = "gpio2";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <0>;
+ 					maxim,active-fps-power-down-slot = <7>;
+@@ -213,7 +213,7 @@ gpio2 {
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <4>;
+ 					maxim,active-fps-power-down-slot = <3>;
+@@ -227,7 +227,7 @@ gpio4 {
+ 				gpio5_6_7 {
+ 					pins = "gpio5", "gpio6", "gpio7";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
+ 			};
+ 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+index a263d51882ee..e42384f097d6 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+@@ -1386,7 +1386,7 @@ gpio0_1_2_7 {
+ 				gpio3 {
+ 					pins = "gpio3";
+ 					function = "fps-out";
+-					drive-open-drain = <1>;
++					drive-open-drain;
+ 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
+ 					maxim,active-fps-power-up-slot = <4>;
+ 					maxim,active-fps-power-down-slot = <2>;
+@@ -1395,7 +1395,7 @@ gpio3 {
+ 				gpio5_6 {
+ 					pins = "gpio5", "gpio6";
+ 					function = "gpio";
+-					drive-push-pull = <1>;
++					drive-push-pull;
+ 				};
+ 
+ 				gpio4 {
 -- 
 2.32.0
 

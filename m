@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD14A4CDEC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4054CDECB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiCDU0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S229816AbiCDU0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiCDU0E (ORCPT
+        with ESMTP id S229846AbiCDU0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:26:04 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA31D0070;
-        Fri,  4 Mar 2022 12:25:15 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so10741026ooi.0;
-        Fri, 04 Mar 2022 12:25:15 -0800 (PST)
+        Fri, 4 Mar 2022 15:26:14 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CFA1EC255;
+        Fri,  4 Mar 2022 12:25:24 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id j9-20020a9d7d89000000b005ad5525ba09so8305495otn.10;
+        Fri, 04 Mar 2022 12:25:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=N2leSR+w5bTctzREP5AnWxoEwKFay0mOm19jh++azBk=;
-        b=nbK7kqYN2YHK5xI76tQlbSP3S1uFTj64kfvvv31vlL3wlCenUv6wJs6So+hO/+skPo
-         CYVCymzw6MPCQaJMiDjuV228zmoeqr3IVIvbwm2YKO2cg/bYVI5gdZ8Rlmaw5S8v8J0w
-         S+tLKxZUv2clILrmVKIzUjZcM1yTlrgEJHcKKYr5czaKUTwZeddZnEQMR8CnSXmw1TTK
-         lUNHhpNqL0DVChv/ZVUH0U7+MWJHT6zWNbXeX6bsOgh0sKbf6oFTLbkotI0KauMy0S0k
-         jDqCjdmtJvsntHNrwiyvjCdcv8EutOJq3kreoZwWcy7KhRF47B2BI8MVr26yqpx9v1zM
-         YGKw==
-X-Gm-Message-State: AOAM532B0o6nylP7Tv4P7uSZ9+mA+WrUBr6sA0OdvVy85e9Xty/JvST/
-        VwV+HqcKosmCPdt6rJW8bpaifNhdTg==
-X-Google-Smtp-Source: ABdhPJyLpo2AhNqZ8/s2T2daPmQdsOu4VP0Zxnm76QtpOqDn0uZgHGyVGjzAJVxNT1OmzYVIrXVF4g==
-X-Received: by 2002:a05:6870:648a:b0:da:b3f:3264 with SMTP id cz10-20020a056870648a00b000da0b3f3264mr104650oab.276.1646425514795;
-        Fri, 04 Mar 2022 12:25:14 -0800 (PST)
+        bh=EY9hak+iu9fGJ+F3hWusD/srRz90e1L1jUM7ENmyTjs=;
+        b=l+DxP2oJjty/u46LNZs+Qi7LbA2CRhrNdrElLtawR3UjQjKTwV1S5Nvzu4rDiWJb3+
+         pR+/4GzKloIk6dxL5mtTtE1xL3KAqbF6cvE4eD3hTYl2cm9WN60ktAIEjCsC1wL21L3x
+         6MfiB3yS9nmfW+ly8T/AQ2r8xYBCsfD28CgI+chUczK/04sdUe7Hu3kyxUJVwMWA0XUz
+         jXDoSxk5xTIUhVnzXWCjqEXQoyO7FrWG6i3sHcCVFAKzOf6VroVk6HdTSXGXvS67997y
+         nwie4908Cx83uV/Uk/OgayzAWfQQSdKQxC7z9IjbgGSx9+DBlB4FoNEdhb3VaZpKcJ3m
+         PoBg==
+X-Gm-Message-State: AOAM531iz72SgVtBYjWvjam0rSUSvWmpLXQhXKfEUqKFSkrR0eJasB9H
+        CZEApikcuiT485mnhEoIhQ==
+X-Google-Smtp-Source: ABdhPJyI3sBYN7F8FzB/KuOuXSlwGVsJINPbqQfCsq0CFoblbCsISWpZWtB9rBhIXcQCO8PE8U1yXQ==
+X-Received: by 2002:a9d:4b17:0:b0:5af:a888:d0e1 with SMTP id q23-20020a9d4b17000000b005afa888d0e1mr202230otf.163.1646425523375;
+        Fri, 04 Mar 2022 12:25:23 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id x14-20020a05680801ce00b002d97bda386fsm2963324oic.52.2022.03.04.12.25.13
+        by smtp.googlemail.com with ESMTPSA id b15-20020a05687061cf00b000d17a5f0ee6sm2834507oah.11.2022.03.04.12.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 12:25:14 -0800 (PST)
+        Fri, 04 Mar 2022 12:25:22 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] arm: dts: at91: Fix boolean properties with values
-Date:   Fri,  4 Mar 2022 14:24:45 -0600
-Message-Id: <20220304202446.315085-1-robh@kernel.org>
+Subject: [PATCH] arm: dts: imx: Fix boolean properties with values
+Date:   Fri,  4 Mar 2022 14:25:18 -0600
+Message-Id: <20220304202518.316164-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,36 +72,158 @@ in behavior with this patch.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm/boot/dts/at91-kizbox3-hs.dts      | 2 +-
- arch/arm/boot/dts/at91-kizbox3_common.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi  | 32 +++++++++----------
+ .../dts/imx6ul-phytec-segin-peb-av-02.dtsi    |  4 +--
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
-index 2799b2a1f4d2..f7d90cf1bb77 100644
---- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
-+++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
-@@ -225,7 +225,7 @@ pinctrl_pio_zbe_rst: gpio_zbe_rst {
- 		pinctrl_pio_io_reset: gpio_io_reset {
- 			pinmux = <PIN_PB30__GPIO>;
- 			bias-disable;
--			drive-open-drain = <1>;
-+			drive-open-drain;
- 			output-low;
- 		};
- 		pinctrl_pio_input: gpio_input {
-diff --git a/arch/arm/boot/dts/at91-kizbox3_common.dtsi b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
-index abe27adfa4d6..465664628419 100644
---- a/arch/arm/boot/dts/at91-kizbox3_common.dtsi
-+++ b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
-@@ -211,7 +211,7 @@ pinctrl_flx4_default: flx4_i2c6_default {
- 		pinmux = <PIN_PD12__FLEXCOM4_IO0>, //DATA
- 		<PIN_PD13__FLEXCOM4_IO1>; //CLK
- 		bias-disable;
--		drive-open-drain = <1>;
-+		drive-open-drain;
- 	};
+diff --git a/arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi b/arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi
+index 563bf9d44fe0..0b90c3f59f89 100644
+--- a/arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi
+@@ -154,112 +154,112 @@ pmic@58 {
+ 		regulators {
+ 			bcore1 {
+ 				regulator-name = "bcore1";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
  
- 	pinctrl_pwm0 {
+ 			bcore2 {
+ 				regulator-name = "bcore2";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			bpro {
+ 				regulator-name = "bpro";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			bperi {
+ 				regulator-name = "bperi";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			bmem {
+ 				regulator-name = "bmem";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo2 {
+ 				regulator-name = "ldo2";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <1800000>;
+ 			};
+ 
+ 			ldo3 {
+ 				regulator-name = "ldo3";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo4 {
+ 				regulator-name = "ldo4";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo5 {
+ 				regulator-name = "ldo5";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo6 {
+ 				regulator-name = "ldo6";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo7 {
+ 				regulator-name = "ldo7";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo8 {
+ 				regulator-name = "ldo8";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo9 {
+ 				regulator-name = "ldo9";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo10 {
+ 				regulator-name = "ldo10";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo11 {
+ 				regulator-name = "ldo11";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <300000>;
+ 				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			bio {
+ 				regulator-name = "bio";
+-				regulator-always-on = <1>;
++				regulator-always-on;
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <1800000>;
+ 			};
+diff --git a/arch/arm/boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi b/arch/arm/boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi
+index 7cda6944501d..205e4d462702 100644
+--- a/arch/arm/boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi
++++ b/arch/arm/boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi
+@@ -72,8 +72,8 @@ stmpe_touchscreen {
+ 			st,settling = <2>;
+ 			st,fraction-z = <7>;
+ 			st,i-drive = <1>;
+-			touchscreen-inverted-x = <1>;
+-			touchscreen-inverted-y = <1>;
++			touchscreen-inverted-x;
++			touchscreen-inverted-y;
+ 		};
+ 	};
+ };
 -- 
 2.32.0
 

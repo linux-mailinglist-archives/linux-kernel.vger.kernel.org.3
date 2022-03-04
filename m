@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06DB4CCEEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9604CCEE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235401AbiCDHOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S235969AbiCDHOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238804AbiCDHLJ (ORCPT
+        with ESMTP id S239523AbiCDHNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:11:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB808190C14;
-        Thu,  3 Mar 2022 23:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 4 Mar 2022 02:13:45 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30339192E0C
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:09:40 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75862B8277B;
-        Fri,  4 Mar 2022 07:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE489C36AE2;
-        Fri,  4 Mar 2022 07:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646377690;
-        bh=yQYBzWouNWOyD9zM5WtI9fIV8Tp/PcZjsK5VYT69gEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G2dtgef9seu1rfUTmGaIXrWAUcOn2Gy1WhrcXurBrEpz4hhDxdQg7EuNpftnUXTtq
-         JBjN5h0HVmLOkCA8JyqebsGSz1ffWON8GKhccz7Q5MuDxS0yeif3v1gVvhTo9iy6Z4
-         Yw6NZHCj6bSAU0PEYw//6qnMTd2WRw8pJiHKGe6JiSFkn463dtBONTLAz/3Kg2qOg6
-         AdlvY4hZkaePiNMTjfX3xpLCbwh6s4cGOiFALYCVSglUJl2L8ebgwYO1lzaPPco9Q0
-         Vz3MokG1wkJrp38nUB/wBYXbGjM1z0dCF6Rn3lWXwku46vZjTmVwOoV0nx1hn+/02I
-         9AGKhomxWLQYw==
-Date:   Fri, 4 Mar 2022 09:08:05 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] vhost: Provide a kernel warning if mutex is held
- whilst clean-up in progress
-Message-ID: <YiG61RqXFvq/t0fB@unreal>
-References: <20220303151929.2505822-1-lee.jones@linaro.org>
- <YiETnIcfZCLb63oB@unreal>
- <20220303155645-mutt-send-email-mst@kernel.org>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 331413F5FC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646377762;
+        bh=XhhG0wWaf3K6yBJwDmPYA6VsKmLLMnPsayg6VQNoL9o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=vexEf/yPs8XqYl6NUtKiYIxtAC3tiCe3KZhrOCZUrIcps5ywTESoiosiThT+iAIYm
+         k8r0jBUhkzgk19/fRZe4zi4URwCetYByhlg4L7+olfPVVLoROrFEFF6r7pVNfGGRsH
+         W1Tq3Cpm9cW2a31WJCtZwx1xO0nCwmX0PnW+QsPQwT5PQdgegHD/MmjrCzHaTXbjc5
+         xwHFKWoZBpHVpwDjeXu7PAhO/CWZLlwc4J4BmQfmPZyyhXs/LFp9HWs6mQJKRdl8oX
+         g2YO7iSjMXtAfJg9pYzx3mXt6cDhQmqBojfLQJlbOP1HqdvwQd+awZMH1HFFzk4IHM
+         3mLQ6igsOF9oQ==
+Received: by mail-ed1-f72.google.com with SMTP id x22-20020a05640226d600b0041380e16645so4172338edd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:09:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XhhG0wWaf3K6yBJwDmPYA6VsKmLLMnPsayg6VQNoL9o=;
+        b=3WuiAJ2FieLzBb1qNtAIPJmUqxou9LCEF6rvt0jhzaOpmXf7YN34RSBJpmTSaM5lAQ
+         8YF2nmPmQlGYGme9+rf6tZqPG/sKY77gXHQu/vxEPYc6TVqyakGB4Ad58Ml2m/z3c+BW
+         Zi/mVZedppbkc6QCElpigmvF2JcYkTA+WxImmyGBPLZLCsUd5t510BRG+piL3cB0HO4P
+         +j/g53o6QYCajR1RNZpv5U5+mT0sWdb2harHpdx2ECnk4exMYe8TnXSNG4sVQxUBpFNX
+         6d8a+5wn3xJ4lIk042c54hX+Flee5lmx1nmKZmHmPo+i5fwrTbcWujqFHZqnAyYd0fdw
+         k/Og==
+X-Gm-Message-State: AOAM531j4w+Krdr1p3ym/6qLIprhQxApE+maxdKB/Gsv4iECFM2VemQj
+        DAVm4K5E13vNkl4uw/Z5EGSpAVnw1sNpPars/g2glxdl7P8S5ELMLjiVo/zE7Pf5bve6cDJrAo3
+        AEqa8xjEbcokULFw4wJTBfr2bgqTpmLdCYF6kbeGPPw==
+X-Received: by 2002:a17:907:72c1:b0:6da:be5e:dc98 with SMTP id du1-20020a17090772c100b006dabe5edc98mr607437ejc.283.1646377761658;
+        Thu, 03 Mar 2022 23:09:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZbPRGv5bnhCmhmW6GOxSNC610FEmnF8Qt69qFZsxgdxMOr5mYxC1tSKXc+KrPEdq7x4Y8iQ==
+X-Received: by 2002:a17:907:72c1:b0:6da:be5e:dc98 with SMTP id du1-20020a17090772c100b006dabe5edc98mr607430ejc.283.1646377761513;
+        Thu, 03 Mar 2022 23:09:21 -0800 (PST)
+Received: from [192.168.0.138] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id e8-20020a17090681c800b006d9f7b69649sm1425116ejx.32.2022.03.03.23.09.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 23:09:20 -0800 (PST)
+Message-ID: <d714afb4-0ecb-0caf-564a-b8cc1933d9d5@canonical.com>
+Date:   Fri, 4 Mar 2022 08:09:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303155645-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: kbuild: Print a warning if yamllint is not
+ found
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220303221417.2486268-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220303221417.2486268-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:01:06PM -0500, Michael S. Tsirkin wrote:
-> On Thu, Mar 03, 2022 at 09:14:36PM +0200, Leon Romanovsky wrote:
-> > On Thu, Mar 03, 2022 at 03:19:29PM +0000, Lee Jones wrote:
-> > > All workers/users should be halted before any clean-up should take place.
-> > > 
-> > > Suggested-by:  Michael S. Tsirkin <mst@redhat.com>
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  drivers/vhost/vhost.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > index bbaff6a5e21b8..d935d2506963f 100644
-> > > --- a/drivers/vhost/vhost.c
-> > > +++ b/drivers/vhost/vhost.c
-> > > @@ -693,6 +693,9 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > >  	int i;
-> > >  
-> > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > +		/* Ideally all workers should be stopped prior to clean-up */
-> > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> > > +
-> > >  		mutex_lock(&dev->vqs[i]->mutex);
-> > 
-> > I know nothing about vhost, but this construction and patch looks
-> > strange to me.
-> > 
-> > If all workers were stopped, you won't need mutex_lock(). The mutex_lock
-> > here suggests to me that workers can still run here.
-> > 
-> > Thanks
+On 03/03/2022 23:14, Rob Herring wrote:
+> Running yamllint is effectively required for binding schemas, so print a
+> warning if not found rather than silently skipping running it.
 > 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> "Ideally" here is misleading, we need a bigger detailed comment
-> along the lines of:
-> 
-> /* 
->  * By design, no workers can run here. But if there's a bug and the
->  * driver did not flush all work properly then they might, and we
->  * encountered such bugs in the past.  With no proper flush guest won't
->  * work correctly but avoiding host memory corruption in this case
->  * sounds like a good idea.
->  */
 
-This description looks better, but the check is inherently racy.
-Why don't you add a comment and mutex_lock()? The WARN_ON here is
-more distraction than actual help.
 
-Thanks
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-> 
-> > >  		if (dev->vqs[i]->error_ctx)
-> > >  			eventfd_ctx_put(dev->vqs[i]->error_ctx);
-> > > -- 
-> > > 2.35.1.574.g5d30c73bfb-goog
-> > > 
-> 
+
+Best regards,
+Krzysztof

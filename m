@@ -2,83 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57204CD964
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8934CD96A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbiCDQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S240816AbiCDQs0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Mar 2022 11:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240800AbiCDQrk (ORCPT
+        with ESMTP id S239119AbiCDQsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:47:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB7841C4B28
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646412411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=22jch4CQh+pTPL1FoGU31HpsJfvYTb0PvwQSeG+1PCc=;
-        b=Dl+xbleIsyq9NZ0edgh3u0AeG69bMuvgTNPGxd2V+3SxnN7+MRHFpE6PEOSqoIykTIlRMw
-        +Hec5c8Bvl6vDchWXw7Xa/R2hzhJrPa0+1T/SeQLtyQSIJWuXI1cIk73nKO148Fc61UGOv
-        HXk8RRZ9sFVbRaXHoc5fMRHYohSvTA8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-112-mAjSGA2lM6ykBa8urMOEXQ-1; Fri, 04 Mar 2022 11:46:48 -0500
-X-MC-Unique: mAjSGA2lM6ykBa8urMOEXQ-1
-Received: by mail-wm1-f69.google.com with SMTP id o207-20020a1ca5d8000000b0038977354e75so932471wme.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 08:46:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=22jch4CQh+pTPL1FoGU31HpsJfvYTb0PvwQSeG+1PCc=;
-        b=yNpLdRCn8FyWpksPOtS1XO8v1Ok33ddAjWJwHuXbRIMtd98f7emQ65DyBi+Ak5EjyI
-         4W7xy2/AM4NUid7gynWasmkRCohRUxlInBcSXByS0u014tgUilUw1G8ck2o1GVPH0HNj
-         k9b0V2LKl/mLZTPaNLyYs730pv3Sp7rPcWSmQhkVKpOzQi7QgrGgv7hoFb/7tkHtLSiO
-         ECw1L7FXTca648hcjrtCkL//TNvTfAFrsEjIhWdgXXd6okwsKbOSjOxMRbCgREjtf/9X
-         CfBdP2vJpSeLk7r1iA/rCy/Zx7yxG1ktSfLnmmXsEXrLk4XPHvaCr4QumrWOuPmVrhAw
-         ONtw==
-X-Gm-Message-State: AOAM533LztZAhMUI5dMjTVIhBueCfx1P8+0pA2p2TWDYRnY5/enH1H3V
-        vuCzlWth7Bg39/copidaok4gG3M5a8I+U/DdeTuQsKUMztZAwrkQKbjSCALsSuMxtulNjTBt4cq
-        gKwcZfZojGHw7kZT98KGUCH0U
-X-Received: by 2002:a1c:2544:0:b0:381:18a:a46d with SMTP id l65-20020a1c2544000000b00381018aa46dmr8406746wml.26.1646412407388;
-        Fri, 04 Mar 2022 08:46:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzFF5fKg+gUWYVS+WLhpkqM4ArBwfkdD8eN2+pKg3LaCYfmdFOoWkfdheE2gdrSD+91b0K/VA==
-X-Received: by 2002:a1c:2544:0:b0:381:18a:a46d with SMTP id l65-20020a1c2544000000b00381018aa46dmr8406732wml.26.1646412407138;
-        Fri, 04 Mar 2022 08:46:47 -0800 (PST)
-Received: from redhat.com ([2.52.16.157])
-        by smtp.gmail.com with ESMTPSA id l26-20020a05600c1d1a00b00380def7d3desm5711411wms.17.2022.03.04.08.46.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 08:46:46 -0800 (PST)
-Date:   Fri, 4 Mar 2022 11:46:42 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <20220304114606-mutt-send-email-mst@kernel.org>
-References: <20220302075421.2131221-1-lee.jones@linaro.org>
- <20220302093446.pjq3djoqi434ehz4@sgarzare-redhat>
- <20220302083413-mutt-send-email-mst@kernel.org>
- <20220302141121.sohhkhtiiaydlv47@sgarzare-redhat>
- <20220302094946-mutt-send-email-mst@kernel.org>
- <20220302153643.glkmvnn2czrgpoyl@sgarzare-redhat>
+        Fri, 4 Mar 2022 11:48:22 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5B39A;
+        Fri,  4 Mar 2022 08:47:31 -0800 (PST)
+Date:   Fri, 04 Mar 2022 16:47:19 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [Letux-kernel] [PATCH v16 1/4] drm/bridge: dw-hdmi: introduce
+ dw_hdmi_enable_poll()
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Message-Id: <VYB88R.ATGIVGZ13PFM1@crapouillou.net>
+In-Reply-To: <a52702bd-c929-8170-8896-d34ba82aba3c@baylibre.com>
+References: <cover.1645895582.git.hns@goldelico.com>
+        <e54838849f80454b863f9f5634dd10f79ef7bb8f.1645895582.git.hns@goldelico.com>
+        <983e9064-17ad-e646-f37d-ca9173ba0967@baylibre.com>
+        <C8AE9A7A-E288-4637-ACAD-40CD33CD5F8C@goldelico.com>
+        <3E620AF4-402E-45EA-9D92-92EAEA9647F5@goldelico.com>
+        <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
+        <ABC1BD09-383B-4499-B034-340CE88725B3@goldelico.com>
+        <RUI68R.Z009SPJAAD8N1@crapouillou.net>
+        <F0F8F36B-3A0A-476C-8C7D-566255C629C6@goldelico.com>
+        <a52702bd-c929-8170-8896-d34ba82aba3c@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302153643.glkmvnn2czrgpoyl@sgarzare-redhat>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,80 +59,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:36:43PM +0100, Stefano Garzarella wrote:
-> On Wed, Mar 02, 2022 at 09:50:38AM -0500, Michael S. Tsirkin wrote:
-> > On Wed, Mar 02, 2022 at 03:11:21PM +0100, Stefano Garzarella wrote:
-> > > On Wed, Mar 02, 2022 at 08:35:08AM -0500, Michael S. Tsirkin wrote:
-> > > > On Wed, Mar 02, 2022 at 10:34:46AM +0100, Stefano Garzarella wrote:
-> > > > > On Wed, Mar 02, 2022 at 07:54:21AM +0000, Lee Jones wrote:
-> > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > > > to vhost_get_vq_desc().  All we have to do is take the same lock
-> > > > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > > >
-> > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > >
-> > > > > This issue is similar to [1] that should be already fixed upstream by [2].
-> > > > >
-> > > > > However I think this patch would have prevented some issues, because
-> > > > > vhost_vq_reset() sets vq->private to NULL, preventing the worker from
-> > > > > running.
-> > > > >
-> > > > > Anyway I think that when we enter in vhost_dev_cleanup() the worker should
-> > > > > be already stopped, so it shouldn't be necessary to take the mutex. But in
-> > > > > order to prevent future issues maybe it's better to take them, so:
-> > > > >
-> > > > > Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > > >
-> > > > > [1]
-> > > > > https://syzkaller.appspot.com/bug?id=993d8b5e64393ed9e6a70f9ae4de0119c605a822
-> > > > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a58da53ffd70294ebea8ecd0eb45fd0d74add9f9
-> > > >
-> > > >
-> > > > Right. I want to queue this but I would like to get a warning
-> > > > so we can detect issues like [2] before they cause more issues.
-> > > 
-> > > I agree, what about moving the warning that we already have higher up, right
-> > > at the beginning of the function?
-> > > 
-> > > I mean something like this:
-> > > 
-> > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > index 59edb5a1ffe2..1721ff3f18c0 100644
-> > > --- a/drivers/vhost/vhost.c
-> > > +++ b/drivers/vhost/vhost.c
-> > > @@ -692,6 +692,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > >  {
-> > >         int i;
-> > > +       WARN_ON(!llist_empty(&dev->work_list));
-> > > +
-> > >         for (i = 0; i < dev->nvqs; ++i) {
-> > >                 if (dev->vqs[i]->error_ctx)
-> > >                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
-> > > @@ -712,7 +714,6 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > >         dev->iotlb = NULL;
-> > >         vhost_clear_msg(dev);
-> > >         wake_up_interruptible_poll(&dev->wait, EPOLLIN | EPOLLRDNORM);
-> > > -       WARN_ON(!llist_empty(&dev->work_list));
-> > >         if (dev->worker) {
-> > >                 kthread_stop(dev->worker);
-> > >                 dev->worker = NULL;
-> > > 
-> > 
-> > Hmm I'm not sure why it matters.
-> 
-> Because after this new patch, putting locks in the while loop, when we
-> finish the loop the workers should be stopped, because vhost_vq_reset() sets
-> vq->private to NULL.
-> 
-> But the best thing IMHO is to check that there is no backend set for each
-> vq, so the workers have been stopped correctly at this point.
-> 
-> Thanks,
-> Stefano
+Hi Neil,
 
-It's the list of workers waiting to run though. That is not affected by
-vq lock at all.
+Le ven., mars 4 2022 at 14:30:46 +0100, Neil Armstrong 
+<narmstrong@baylibre.com> a écrit :
+> Hi,
+> 
+> On 03/03/2022 18:59, H. Nikolaus Schaller wrote:
+>> Hi Paul, Neil,
+>> 
+>>> Am 03.03.2022 um 18:20 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>> 
+>>> Hi Nikolaus,
+>>> 
+>>> [snip]
+>>> 
+>>>>> Well he said "the Ingenic DRM core" aka ingenic-drm-drv.c. You do 
+>>>>> have access to the main drm_device in the ingenic_drm_bind() 
+>>>>> function, so you can add it there (with a cleanup function 
+>>>>> calling drm_kms_helper_poll_fini() registered with 
+>>>>> drmm_add_action_or_reset()).
+>>>> Well, do you really want to mix HPD detection between connector, 
+>>>> Synopsys bridge and Ingenic DRM core? These are independent...
+>>>> Or should be accessed only through the bridge chain pointers.
+>>>> IMHO we should keep separate functions separate.
+>>> 
+>>> The drm_kms_helper_poll_init() just says "this DRM device may have 
+>>> connectors that need to be polled" so it very well fits inside the 
+>>> main driver, IMHO.
+>> 
+>> As far as I understand, it has the side-effect to always set 
+>> dev->mode_config.poll_enabled and
+>> schedule_delayed_work() for all devices.
+>> I am not sure if this is intended for arbitrary ingenic-drm devices. 
+>> But you know better than me.
+>> 
+>> 
+>> Hm. But wait, I think I now finally remember why I have proposed it 
+>> the way it is!
+>> It is always better to go back to requirements and find the least 
+>> invasive solution.
+>> 
+>> - HPD IRQ works and calls dw_hdmi_irq() [as can be shown by adding 
+>> printk()]
+>> - it is just that the udevd is only notified if poll_enabled = true 
+>> (but no polling takes place!).
+>> 
+>> An earlier version (v4) to fix this proposed to add an explicit call 
+>> to drm_kms_helper_hotplug_event()
+>> in dw_hdmi_irq() but that was rejected a while ago because 
+>> drm_helper_hpd_irq_event() will already call it:
+>> 
+>> 	https://www.spinics.net/lists/dri-devel/msg316846.html
+>> 
+>> Since this did not take into account that 
+>> dev->mode_config.poll_enabled must be set true, I then proposed the
+>> enable_poll() mechanism just to set this bit for the ingenic-dw-hdmi 
+>> specialization.
+>> 
+>> So a HPD event is delivered to the dw-hdmi driver as dw_hdmi_irq() 
+>> and that calls drm_helper_hpd_irq_event()
+>> but not drm_kms_helper_hotplug_event() and user-space is not getting 
+>> aware.
+>> 
+>> It is all a hack because we mix the dw-hdmi driver which originally 
+>> did register its own connector
+>> with an explicit connector...
+>> 
+>> In summary I now thing that the v4 patch is the simplest and least 
+>> invasive solution.
+>> 
+>> We neither have to introduce a dw_hdmi_enable_poll() function or 
+>> call drm_kms_helper_poll_init() anywhere.
+>> 
+>> It is just a single line to add to dw-hdmi. And neither touches 
+>> ingenic-dw-hdmi nor ingenic-drm-drv.
+>> 
+>> So let's go back to v4 version (just modify commit message to better 
+>> describe why we have to call
+>> drm_kms_helper_hotplug_event() explicitly) and forget about 
+>> alternatives.
+> 
+> Please don't and add drm_kms_helper_poll_init() from the 
+> ingenic-drm-drv.c like every other DRM driver.
+> 
+> Adding drm_kms_helper_hotplug_event() in dw-hdmi will impact other 
+> drivers using dw-hdmi but correctly
+> calling drm_kms_helper_poll_init().
 
--- 
-MST
+ From what I understood in Nikolaus' last message, HDMI hotplug is 
+actually correctly detected, so there's no need for polling. What is 
+missing is the call to drm_kms_helper_hotplug_event *somewhere*, so 
+that the information is correctly relayed to userspace.
+
+I think this issue can be fixed by calling 
+drm_bridge_connector_enable_hpd() on the connector in ingenic-drm-drv.c.
+
+Cheers,
+-Paul
+
 

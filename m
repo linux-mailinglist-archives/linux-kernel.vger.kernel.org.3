@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF0B4CDB55
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF414CDB54
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbiCDRxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S241016AbiCDRxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241077AbiCDRws (ORCPT
+        with ESMTP id S241063AbiCDRws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Mar 2022 12:52:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C960DF540F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646416319;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA0213EF93;
+        Fri,  4 Mar 2022 09:52:00 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646416319;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=86mrUfY2a9ejGUqsBn3YNiqPHJtfi4XwtVYGZkB1VoI=;
-        b=Usxcnt/h1hIBmCqITwyCvJl/Q3giNCNcP7geVxUIj14ZGgKW7MsgMR0lFz+SqerlUUWJXb
-        9V5BYUi6LaA5I3OuVbnLOV5Y+YG6nw0hbwTkhJx9iX20qAD0M2TZ7nEcWjJUI+A7y5eFUZ
-        ygG07X6vRbrcc32Xe1a98UImLqvSDwA=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-tGefMWhJNB6Lhnwnuageow-1; Fri, 04 Mar 2022 12:51:58 -0500
-X-MC-Unique: tGefMWhJNB6Lhnwnuageow-1
-Received: by mail-qv1-f72.google.com with SMTP id kj16-20020a056214529000b00435218e0f0dso6963871qvb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 09:51:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=86mrUfY2a9ejGUqsBn3YNiqPHJtfi4XwtVYGZkB1VoI=;
-        b=RQRg94SztjhMXmiZqej2oXGM/fIUNHN4MkTGGOE4uBeJPASi+UZNhUb/sNnESAYfAq
-         nuKV7M+6/ly61pds3YO63vYNp9fl1B8EXxR3HRmvFKY8QM8pvvr8V8lQtDieGY7BfgQv
-         Vs6u6pXzgiVSXUwaeI1FFWi3h3kwD7UScszbY1m7e8ZgLkbWIVUvCk3PFuodcNydrCy8
-         jgyFQz1IAHymBTUnNh05Xz2bRIjJ/ignfdiX92D7g8a6QI1sCAW+FDkZ5wJebtYZrGt4
-         s7OXaK7/P/DjxQpB+5KotsYuSByvssN+c0/sfYyvIPKWm2e8oF/l1TbP8o0jFvVQ+wja
-         NbAg==
-X-Gm-Message-State: AOAM533CKN3b8ZYOyb4ap0XZZUQqdpPq2hSTdkJM+ofNwCT2YxguUgi0
-        MS1rmIW4ZGOjZiHWtRocjnv+/UZaOmejohr2yQvGcPaMMh53tQp3sryhDyXsgQSuGCpGcyZHh49
-        jnFPdY4dArNAch3IbHmFXsAGD
-X-Received: by 2002:ac8:5c81:0:b0:2dd:97b6:bcc7 with SMTP id r1-20020ac85c81000000b002dd97b6bcc7mr31957889qta.412.1646416318262;
-        Fri, 04 Mar 2022 09:51:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxrsDf+lFMFbKsg+RAf+Xo+xL1ldUCMaKwwpQ59zzfNS4Hn90y1mfeHGW9OAi0wwh9snVf8WA==
-X-Received: by 2002:ac8:5c81:0:b0:2dd:97b6:bcc7 with SMTP id r1-20020ac85c81000000b002dd97b6bcc7mr31957863qta.412.1646416317989;
-        Fri, 04 Mar 2022 09:51:57 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05620a040600b005f177d938dbsm2710224qkp.66.2022.03.04.09.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 09:51:57 -0800 (PST)
-Date:   Fri, 4 Mar 2022 09:51:54 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v3 18/39] x86/ibt,ftrace: Make function-graph play nice
-Message-ID: <20220304175154.l2otvmqd4r7ozsuy@treble>
-References: <20220303112321.422525803@infradead.org>
- <20220303112826.044301664@infradead.org>
+        bh=j8OFCPFSa6oQfjH+iv/tB8o6jAu2gKimlCc9TJAIFy4=;
+        b=zZo0ux5V+K2cHYZx+23tEprylvn8885sqVfywbNmkqh4PJt9ktHZfmbab7xedzO7x/z7zv
+        mM1k4p8UYnqBeX4x3Yqmzs0DiUtbl6lGEu8qT7o6S8Fp0h+mMlgnhsnOeiVDUXtLxHREm+
+        bsQRbGBZvjvJYS6qsQjnvf7Q8SJINPCk8l47XO/vxqJoKKYo9aYzmFx2CuAx9g4I87veLY
+        aEe7DGH7+Q0tklQByR+Bjm29+xPviSbL/3kUPXfX6rWoo7zAcrNMaEdTHlbK/v+mEd3N2D
+        BvullKcUGpqpJR9ECDrMqtn/BJCn70vPpcpPTsJ2VXg+1xDN5iuSOnEN+Up6ow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646416319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j8OFCPFSa6oQfjH+iv/tB8o6jAu2gKimlCc9TJAIFy4=;
+        b=m8wUOgmZAnt2ufWtq4MkGU/TECRfVyX9MQkTHQ3irsIx3NsvyFOgiMG1jE/wIlmEu7ZnqZ
+        i0CIcaePnxtZOgAQ==
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: Re: [PATCH V2 02/11] perf/x86: Add support for TSC as a perf event
+ clock
+In-Reply-To: <YiIGwyhOrYid5qyF@hirez.programming.kicks-ass.net>
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-3-adrian.hunter@intel.com>
+ <YiIGwyhOrYid5qyF@hirez.programming.kicks-ass.net>
+Date:   Fri, 04 Mar 2022 18:51:58 +0100
+Message-ID: <8735jxa9mp.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220303112826.044301664@infradead.org>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 12:23:39PM +0100, Peter Zijlstra wrote:
-> +
-> +	addq $16, %rsp
-> +	ANNOTATE_INTRA_FUNCTION_CALL
-> +	call .Ldo_rop
-> +	int3
-> +.Ldo_rop:
-> +	mov %rdi, (%rsp)
-> +	UNWIND_HINT_FUNC
-> +	RET
+On Fri, Mar 04 2022 at 13:32, Peter Zijlstra wrote:
+> On Mon, Feb 14, 2022 at 01:09:05PM +0200, Adrian Hunter wrote:
+>> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+>> index 82858b697c05..e8617efd552b 100644
+>> --- a/include/uapi/linux/perf_event.h
+>> +++ b/include/uapi/linux/perf_event.h
+>> @@ -290,6 +290,15 @@ enum {
+>>  	PERF_TXN_ABORT_SHIFT = 32,
+>>  };
+>>  
+>> +/*
+>> + * If supported, clockid value to select an architecture dependent hardware
+>> + * clock. Note this means the unit of time is ticks not nanoseconds.
+>> + * Requires ns_clockid to be set in addition to use_clockid.
+>> + * On x86, this clock is provided by the rdtsc instruction, and is not
+>> + * paravirtualized.
+>> + */
+>> +#define CLOCK_PERF_HW_CLOCK		0x10000000
+>> +
+>>  /*
+>>   * The format of the data returned by read() on a perf event fd,
+>>   * as specified by attr.read_format:
+>> @@ -409,7 +418,8 @@ struct perf_event_attr {
+>>  				inherit_thread :  1, /* children only inherit if cloned with CLONE_THREAD */
+>>  				remove_on_exec :  1, /* event is removed from task on exec */
+>>  				sigtrap        :  1, /* send synchronous SIGTRAP on event */
+>> -				__reserved_1   : 26;
+>> +				ns_clockid     :  1, /* non-standard clockid */
+>> +				__reserved_1   : 25;
+>>  
+>>  	union {
+>>  		__u32		wakeup_events;	  /* wakeup every n events */
+>
+> Thomas, do we want to gate this behind this magic flag, or can that
+> CLOCKID be granted unconditionally?
 
-Why the int3?
+I'm not seeing a point in that flag and please define the clock id where
+the other clockids are defined. We want a proper ID range for such
+magically defined clocks.
 
--- 
-Josh
+We use INT_MIN < id < 16 today. I have plans to expand the ID space past
+16, so using something like the above is fine.
+
+Thanks,
+
+        tglx
 

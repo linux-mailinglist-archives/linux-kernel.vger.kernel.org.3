@@ -2,126 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7481B4CD772
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A184CD77A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbiCDPOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S240199AbiCDPPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240075AbiCDPOl (ORCPT
+        with ESMTP id S240154AbiCDPPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:14:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E409F1B124C;
-        Fri,  4 Mar 2022 07:13:51 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98267143D;
-        Fri,  4 Mar 2022 07:13:51 -0800 (PST)
-Received: from lpieralisi (unknown [10.57.37.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96D4F3F73D;
-        Fri,  4 Mar 2022 07:13:49 -0800 (PST)
-Date:   Fri, 4 Mar 2022 15:13:44 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
-        james.morse@arm.com, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@amperecomputing.com, scott@os.amperecomputing.com,
-        darren@os.amperecomputing.com
-Subject: Re: [PATCH v5 RESEND 0/2] ACPI: Arm Generic Diagnostic Dump and
- Reset device
-Message-ID: <YiIsYzGeeYWPQKsp@lpieralisi>
-References: <20220304054003.152319-1-ilkka@os.amperecomputing.com>
+        Fri, 4 Mar 2022 10:15:15 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B71C3D0E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:14:26 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id o23so7736464pgk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 07:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xhFNSR/yOd/Vz2Wc1wvXRDHBYyMuBGWniHzjkl431mo=;
+        b=hZqCZVGG2Aw1yowZxJka1HJssTZXGRCsk53g2yvR0SODyOvwf/Elxr1eAcI0NP8w/P
+         BRDWVY2OXYvTkI05nb6CaZLDi8M4tfwFREo8tfWo3RcBYvU+nRJwzoMrogAapw+XAFqt
+         ucRdR6ma6mQtKOLch8k2c7d6q7eppyhx/GjM/pMapljT1kyYVlvGRVUEbw/Y/J2GAIAQ
+         H/W8p3rXzvOKbhlwBWE6s2bCCkFbZSO+ltnQ/DM81ItTC/ICR85g0BdzMn5vGbPGb1Tm
+         Llm+qe/OCV86hyLcMmc4t6rH03ovFSYNvLF56nIuv2jRARRe5rozks826lfRrlnriH3X
+         OzOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xhFNSR/yOd/Vz2Wc1wvXRDHBYyMuBGWniHzjkl431mo=;
+        b=LfC6IzNZlhAAAR3ejmtPimbmHDWjfqafVA8Pfj+IZN+ldZxt1JPiqGmcSUiGwmKR8K
+         ewcFHJcE8lywnhcJT/KP5a7ZhhM14adsXjrMylDZzeIrZfhMComFc69oShtIZasHlXQQ
+         pn2r5NdGNRCL5JvrIio0Y64oSL2zENwD/9vlfNvwo5bk/Ojs5HWjkS6F6kCFzxk41Bdf
+         GYMPngFcvzvAt2VlOHfK23wiByU0wgTh2iBuNn5Zlb4+cFdd2uuGVge1fAAGQ0v3AbId
+         CYsdrfjopO/6S4whX2KSZimCoZsp8PrTXP52pShv/VhpuxzJiBxNjxtbr6yVSGKAvcNN
+         WSvQ==
+X-Gm-Message-State: AOAM5301mHa9ebS7XHZ/IFgpEsHJTOsIWW9e00tLgnPmirElA8I+Lo+q
+        l9Mfoux8/Pg47cqcJw1KYN+rVQ==
+X-Google-Smtp-Source: ABdhPJzb5cC534BnnexfsDG8sjS4Ey8TsFio0KuvhUEFwq3AjNNBbWTwq1gSZOU15bdx3t7INixUwA==
+X-Received: by 2002:a05:6a00:1593:b0:4f6:6c38:f75d with SMTP id u19-20020a056a00159300b004f66c38f75dmr9260095pfk.81.1646406865430;
+        Fri, 04 Mar 2022 07:14:25 -0800 (PST)
+Received: from ?IPV6:2409:8a28:e6d:cc00:d089:89fd:5c33:f12? ([2409:8a28:e6d:cc00:d089:89fd:5c33:f12])
+        by smtp.gmail.com with ESMTPSA id on18-20020a17090b1d1200b001b9cfbfbf00sm4958261pjb.40.2022.03.04.07.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 07:14:25 -0800 (PST)
+Message-ID: <306a5d51-25e5-b7ce-cbdd-ca7e2f3a3ad5@bytedance.com>
+Date:   Fri, 4 Mar 2022 23:14:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304054003.152319-1-ilkka@os.amperecomputing.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [External] Re: [PATCH] livepatch: Only block the removal of
+ KLP_UNPATCHED forced transition patch
+Content-Language: en-US
+To:     Joe Lawrence <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, qirui.001@bytedance.com
+References: <20220301140840.29345-1-zhouchengming@bytedance.com>
+ <alpine.LSU.2.21.2203021052470.5895@pobox.suse.cz>
+ <fe2b9225-44c3-2041-f8a3-6f17f9d1be40@bytedance.com>
+ <alpine.LSU.2.21.2203030847430.704@pobox.suse.cz>
+ <1929669c-7674-035b-8cf1-5b5007ecccec@bytedance.com>
+ <c1ab3333-7fea-d2d5-272d-850f4c7afb74@redhat.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <c1ab3333-7fea-d2d5-272d-850f4c7afb74@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 09:40:01PM -0800, Ilkka Koskinen wrote:
-> Hi Lorenzo,
+On 2022/3/3 11:43 下午, Joe Lawrence wrote:
+> On 3/3/22 5:33 AM, Chengming Zhou wrote:
+>> On 2022/3/3 3:51 下午, Miroslav Benes wrote:
+>>> On Thu, 3 Mar 2022, Chengming Zhou wrote:
+>>>
+>>>> Hi,
+>>>>
+>>>> On 2022/3/2 5:55 下午, Miroslav Benes wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Tue, 1 Mar 2022, Chengming Zhou wrote:
+>>>>>
+>>>>>> module_put() is currently never called for a patch with forced flag, to block
+>>>>>> the removal of that patch module that might still be in use after a forced
+>>>>>> transition.
+>>>>>>
+>>>>>> But klp_force_transition() will flag all patches on the list to be forced, since
+>>>>>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
+>>>>>> has removed stack ordering of the livepatches, it will cause all other patches can't
+>>>>>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
+>>>>>>
+>>>>>> In fact, we don't need to flag a patch to forced if it's a KLP_PATCHED forced
+>>>>>> transition. It can still be unloaded only if it has passed through the consistency
+>>>>>> model in KLP_UNPATCHED transition.
+>>>>>>
+>>>>>> So this patch only set forced flag and block the removal of a KLP_UNPATCHED forced
+>>>>>> transition livepatch.
+>>>>>>
+>>>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>>>>> ---
+>>>>>>  kernel/livepatch/transition.c | 4 ++--
+>>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+>>>>>> index 5683ac0d2566..8b296ad9e407 100644
+>>>>>> --- a/kernel/livepatch/transition.c
+>>>>>> +++ b/kernel/livepatch/transition.c
+>>>>>> @@ -641,6 +641,6 @@ void klp_force_transition(void)
+>>>>>>  	for_each_possible_cpu(cpu)
+>>>>>>  		klp_update_patch_state(idle_task(cpu));
+>>>>>>  
+>>>>>> -	klp_for_each_patch(patch)
+>>>>>> -		patch->forced = true;
+>>>>>> +	if (klp_target_state == KLP_UNPATCHED)
+>>>>>> +		klp_transition_patch->forced = true;
+>>>>>
+>>>>> I do not think this would interact nicely with the atomic replace feature. 
+>>>>> If you force the transition of a patch with ->replace set to true, no 
+>>>>> existing patch would get ->forced set with this change, which means all 
+>>>>> patches will be removed at the end of klp_try_complete_transition(). And 
+>>>>> that is something we want to prevent.
+>>>>
+>>>> Good point, I should check if it's an atomic replace livepatch in the else
+>>>> branch, in which case we have to set all existing patches to forced.
+>>>
+>>> Yes, but that leads to a question if it then brings any value. Forcing a 
+>>> transition should be exceptional. If it is needed, there may be other 
+>>> issues involved which should probably be fixed. Have you come across a 
+>>> practical situation where the patch helped?
+>>
+>> Yes, you're right, the correct way is to find and fix the issues that
+>> make us to use this "force" transition interface, until we don't need
+>> to use it.
+>>
+>> Apart from this reason, another reason we may use "force" transition
+>> is that we want to speed up the transition process of some patches
+>> when load them, and we can make sure these patches are safe to do so.
+>> (just like a consistency model check disable option when load a patch)
+>>
 > 
-> Would you prefer this version, which doesn't have platform
-> device/driver any more?
+> Interesting use case.  Can you share any example livepatches where the
+> transition time was exceptionally long and that lead to requiring this
+> patch?
 
-I thought about that and in order to keep consistency it is better to
-keep the platform device model, so please resend the latest version
-platform device based and I will ACK it (hopefully it is not too late
-for v5.18).
-
-Please note before resending it that sdei_event_unregister() requires a
-retry loop since it can return -EINPROGRESS (see sdei_unregister_ghes()).
-
-Thanks,
-Lorenzo
+Sorry, I haven't easy reproducible testcase on hand, maybe I could try to
+make one to simulate the production environment later.
 
 > 
-> --Ilkka
+> From a kpatch developer's perspective, it would be interesting to read
+> how you go about ensuring forced livepatch safety.  We don't generally
+> build forced livepatches, so I'm curious how the dev/review process goes.
+
+We also use kpatch-build for some patches too, but for some other patches,
+which need to add new members to some struct type, or fix some kernel function
+bugs, we may need to rewrite the source patch to make a livepatch module.
+
+There are some types that don't need per-task consistency or even can replace
+the old functions when tasks stack in the old functions. We may want to use
+"force" transition in case load process timeout.
+
+Thanks.
+
 > 
-> 
-> ----
-> 
-> Arm Generic Diagnostic Dump and Reset device enables a maintainer to
-> request OS to perform a diagnostic dump and reset a system via SDEI
-> event or an interrupt. This patchset adds support for the SDEI path.
-> 
-> I do have a patch to enable the interrupt path as well but I'm holding
-> it back since AGDI table is missing interrupt configuration fields
-> (trigger type etc.).
-> 
-> The recently published specification is available at
-> https://developer.arm.com/documentation/den0093/latest
-> 
-> The patchset was tested on Ampere Altra/Mt. Jade.
-> 
-> The patchset applies on top of
->   git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm bleeding-edge (9db71e8e3027)
-> 
-> I also tested it works on top of Shuai Xue's new patches in bleeding-edge branch (c6f4ba2d2b9a)
-> 
-> From v1:
->      * Moved pdata to the stack and dropped unnecessary kzalloc() in agdi_init()
->      * Changed the ACPICA patch upstreaming order comment in the paragraph above
-> 
-> From v2:
->      * The first patch was split. The most of it was merged to ACPICA project
->        at first and later ported to linux-acpi
->        (fd919e37cb15914c6fe13e13d530a4f732407c6d). The rest are in the first
->        patch.
-> 
-> From v3:
->      Fixed:
-> 	* Moved header files in alphabetical order and removed unnecessary ones
-> 
-> From v4:
-> 	* Platform device/driver stuff removed
-> 	* acpi_agdi_init() call moved from device_initcall to acpi_init() 
-> 	* Slightly modified Kconfig text to keep checkpatch happy
-> 
-> Ilkka Koskinen (2):
->   ACPI: tables: Add AGDI to the list of known table signatures
->   ACPI: AGDI: Add support for Arm Generic Diagnostic Dump and Reset
->     device
-> 
->  drivers/acpi/arm64/Kconfig  | 10 +++++++
->  drivers/acpi/arm64/Makefile |  1 +
->  drivers/acpi/arm64/agdi.c   | 52 +++++++++++++++++++++++++++++++++++++
->  drivers/acpi/bus.c          |  2 ++
->  drivers/acpi/tables.c       |  2 +-
->  include/linux/acpi_agdi.h   | 13 ++++++++++
->  6 files changed, 79 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/acpi/arm64/agdi.c
->  create mode 100644 include/linux/acpi_agdi.h
-> 
-> -- 
-> 2.17.1
-> 
+> Thanks,

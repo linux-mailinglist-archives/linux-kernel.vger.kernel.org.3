@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14524CCCEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547A24CCCED
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238054AbiCDFTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 00:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S238075AbiCDFTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 00:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238110AbiCDFTQ (ORCPT
+        with ESMTP id S238082AbiCDFTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 00:19:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A2C7A94CE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:18:23 -0800 (PST)
+        Fri, 4 Mar 2022 00:19:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8925E9A995
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646371102;
+        s=mimecast20190719; t=1646371109;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1n551s1g6Vv5nncVOaasRljGy2eKMZ3v3Uj1KhN2rf0=;
-        b=fbGMxW8+6krHsDzGXXd3WKlWlY33GitFA0YVt/tQKg+Jj7W0kSY6FHznPdzJM0vEnfwiJB
-        gXqiMLCKoAI+aUb3Qihg6mSAGultsdfkhXHQqmpbQM5Z7A7Pl0FTpmC0FJn2khIR1/dNI7
-        vrXtkVIn6To7KAvrZrIujgdOtOSRtjU=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tQXe4rml5LknCAC9VWmfIhmJrE0oVG26j9HM2k7VJ/Y=;
+        b=QEW/oiNnGDnL8Fb07kMj0s66sF+eblaRjPoVOM7U8v/FPiRmXWddMNSievE3IpxDSc/9kE
+        ZUfNnFfvzUDdeKXoW2UO3DGUiqKWlSvOxYZVSDGrjjitmYYVhwObwisry6jqIjlGw+0dJi
+        IEatfeg5/MARZCpCHp0tsY4Xxlr3C7k=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-WQneyNI5M4OPZyUzEPG8fw-1; Fri, 04 Mar 2022 00:18:21 -0500
-X-MC-Unique: WQneyNI5M4OPZyUzEPG8fw-1
-Received: by mail-pj1-f72.google.com with SMTP id m14-20020a17090a4d8e00b001bf2d4926c5so65704pjh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:18:21 -0800 (PST)
+ us-mta-498-FOjqB8vdNTeTycsD9nA67A-1; Fri, 04 Mar 2022 00:18:28 -0500
+X-MC-Unique: FOjqB8vdNTeTycsD9nA67A-1
+Received: by mail-pl1-f197.google.com with SMTP id j3-20020a170902da8300b0014fdd4e979cso4095854plx.17
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:18:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1n551s1g6Vv5nncVOaasRljGy2eKMZ3v3Uj1KhN2rf0=;
-        b=FJ3QpLB5V4z7kiUkwhv+rE6Im2Dq1kZsq27QRWuOc/DG2Wq1l2pn5grJy42Bk+hdEX
-         3GrNBqweT2u6f69Paj/FIpTh9o8hKF4R4OKJqCR/7o+/eUVZUdn1XiTGwvalse70DEbg
-         jbc/BZhrGHDqj4XVk99c2AMn84BTJkGjoCfRUT6yxDiGpCVjPPB+DTSXw6kgdR/LvY27
-         oQPsp7B1X4SmFqLS5g3No6xZyooYXh9qqHPRp1e8xrLnEjDwwkJI4UBjytkmgS6aLZRg
-         waYncQSm64GWWv11D62UCoZkNusTRloNi/FjBIDVpAbNnvqOyOasivQ1ZNDAa4TYdu09
-         4AtQ==
-X-Gm-Message-State: AOAM5313I8VNSKPTSAoOnUmL9TTdgWq7AkkvO2vkUxikTraR+WNvpob/
-        4BzW3SqH3sF7aJWpT09lv5eXOzMvn+zAPcSlUJ7h+eI+dPhbZTSDG47FOujVIasf5gRhvRg1/Iv
-        yj/4nBXYXCloovaBkU1TXF4Lv
-X-Received: by 2002:a17:902:7c13:b0:151:a784:34c7 with SMTP id x19-20020a1709027c1300b00151a78434c7mr7469091pll.174.1646371099464;
-        Thu, 03 Mar 2022 21:18:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0fLWHy2rctiM2ENjL5ljsJ4tYkRpfVBiuZmQMy/vB+djlUOenh/QkOWrinBqK7A5FOggeSw==
-X-Received: by 2002:a17:902:7c13:b0:151:a784:34c7 with SMTP id x19-20020a1709027c1300b00151a78434c7mr7469075pll.174.1646371099075;
-        Thu, 03 Mar 2022 21:18:19 -0800 (PST)
+        bh=tQXe4rml5LknCAC9VWmfIhmJrE0oVG26j9HM2k7VJ/Y=;
+        b=Mr8eUexr9OaX69cj/z9dKG98bWAD3Sm+/TtrPt3a0ZVFEIfidv7TcVzjdX1qm29tbh
+         U+940Diod1ls8jlLbds26zbn5dGtSOZLCCpx7GaCp85lsZhDrPPw1BAxIDq6v9dJnPAM
+         v7FE2EX7F7GgFJU3PsmwDAruQ61Z3C8mNnh4bnK9cR/rB+gcReYeG/2RRkiQpSX5KxpK
+         cPn5rQ88SDS2iQQQdl3hx4YCKlkMt1Ptg4F1DW0iS1o13LvC0oZnu5rltxHU78hel7hJ
+         LxJnVpA0BRtUJwz1ZVmbc1TFBHpMf3wGC6fCCO1BeJJjL8fnyoVULNEFy7CwO2w6uXk6
+         +dGA==
+X-Gm-Message-State: AOAM531dJ1+OI2Y3Huh5845YI1BrSwZOudG4Il+E0Q7jz4ulHU7fr4sz
+        Zbd01w3OaFZnT3ANkx0mTQ2mtb+sK2gA2LtGJFUTJFJ5KuXE/4157kp/9pozYaOrssIXGhS7yqY
+        SdGu7aqPrwSB+oBisQjLgyG7M
+X-Received: by 2002:a17:903:2285:b0:151:4b38:298e with SMTP id b5-20020a170903228500b001514b38298emr29450205plh.36.1646371107399;
+        Thu, 03 Mar 2022 21:18:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxWOXIBo4RzUqL6IP5zCBIf1bLH01fWQdczZaceP2UrGilCNmkw3HF88pBzciWEi4lBzLO6HQ==
+X-Received: by 2002:a17:903:2285:b0:151:4b38:298e with SMTP id b5-20020a170903228500b001514b38298emr29450185plh.36.1646371107064;
+        Thu, 03 Mar 2022 21:18:27 -0800 (PST)
 Received: from localhost.localdomain ([94.177.118.59])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.18.10
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.18.19
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Mar 2022 21:18:18 -0800 (PST)
+        Thu, 03 Mar 2022 21:18:26 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
@@ -69,9 +69,9 @@ Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
         Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v7 07/23] mm/shmem: Persist uffd-wp bit across zapping for file-backed
-Date:   Fri,  4 Mar 2022 13:16:52 +0800
-Message-Id: <20220304051708.86193-8-peterx@redhat.com>
+Subject: [PATCH v7 08/23] mm/shmem: Allow uffd wr-protect none pte for file-backed mem
+Date:   Fri,  4 Mar 2022 13:16:53 +0800
+Message-Id: <20220304051708.86193-9-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220304051708.86193-1-peterx@redhat.com>
 References: <20220304051708.86193-1-peterx@redhat.com>
@@ -87,254 +87,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-File-backed memory is prone to being unmapped at any time.  It means all
-information in the pte will be dropped, including the uffd-wp flag.
+File-backed memory differs from anonymous memory in that even if the pte is
+missing, the data could still resides either in the file or in page/swap cache.
+So when wr-protect a pte, we need to consider none ptes too.
 
-To persist the uffd-wp flag, we'll use the pte markers.  This patch teaches the
-zap code to understand uffd-wp and know when to keep or drop the uffd-wp bit.
+We do that by installing the uffd-wp pte markers when necessary.  So when
+there's a future write to the pte, the fault handler will go the special path
+to first fault-in the page as read-only, then report to userfaultfd server with
+the wr-protect message.
 
-Add a new flag ZAP_FLAG_DROP_MARKER and set it in zap_details when we don't
-want to persist such an information, for example, when destroying the whole
-vma, or punching a hole in a shmem file.  For the rest cases we should never
-drop the uffd-wp bit, or the wr-protect information will get lost.
+On the other hand, when unprotecting a page, it's also possible that the pte
+got unmapped but replaced by the special uffd-wp marker.  Then we'll need to be
+able to recover from a uffd-wp pte marker into a none pte, so that the next
+access to the page will fault in correctly as usual when accessed the next
+time.
 
-The new ZAP_FLAG_DROP_MARKER needs to be put into mm.h rather than memory.c
-because it'll be further referenced in hugetlb files later.
+Special care needs to be taken throughout the change_protection_range()
+process.  Since now we allow user to wr-protect a none pte, we need to be able
+to pre-populate the page table entries if we see (!anonymous && MM_CP_UFFD_WP)
+requests, otherwise change_protection_range() will always skip when the pgtable
+entry does not exist.
+
+For example, the pgtable can be missing for a whole chunk of 2M pmd, but the
+page cache can exist for the 2M range.  When we want to wr-protect one 4K page
+within the 2M pmd range, we need to pre-populate the pgtable and install the
+pte marker showing that we want to get a message and block the thread when the
+page cache of that 4K page is written.  Without pre-populating the pmd,
+change_protection() will simply skip that whole pmd.
+
+Note that this patch only covers the small pages (pte level) but not covering
+any of the transparent huge pages yet.  That will be done later, and this patch
+will be a preparation for it too.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/linux/mm.h        | 10 ++++++++
- include/linux/mm_inline.h | 43 ++++++++++++++++++++++++++++++++++
- mm/memory.c               | 49 ++++++++++++++++++++++++++++++++++++---
- mm/rmap.c                 |  8 +++++++
- 4 files changed, 107 insertions(+), 3 deletions(-)
+ mm/mprotect.c | 64 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 62 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 0b9a0334d0f8..cdefbb078a73 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3385,4 +3385,14 @@ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
- }
- #endif
- 
-+typedef unsigned int __bitwise zap_flags_t;
-+
-+/*
-+ * Whether to drop the pte markers, for example, the uffd-wp information for
-+ * file-backed memory.  This should only be specified when we will completely
-+ * drop the page in the mm, either by truncation or unmapping of the vma.  By
-+ * default, the flag is not set.
-+ */
-+#define  ZAP_FLAG_DROP_MARKER        ((__force zap_flags_t) BIT(0))
-+
- #endif /* _LINUX_MM_H */
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index ac32125745ab..70e72ce85b25 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -6,6 +6,8 @@
- #include <linux/huge_mm.h>
- #include <linux/swap.h>
- #include <linux/string.h>
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 6d179c720089..4878b6b99df9 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -30,6 +30,7 @@
+ #include <linux/mm_inline.h>
+ #include <linux/pgtable.h>
+ #include <linux/sched/sysctl.h>
 +#include <linux/userfaultfd_k.h>
-+#include <linux/swapops.h>
- 
- /**
-  * folio_is_file_lru - Should the folio be on a file LRU or anon LRU?
-@@ -316,5 +318,46 @@ static inline bool mm_tlb_flush_nested(struct mm_struct *mm)
- 	return atomic_read(&mm->tlb_flush_pending) > 1;
- }
- 
-+/*
-+ * If this pte is wr-protected by uffd-wp in any form, arm the special pte to
-+ * replace a none pte.  NOTE!  This should only be called when *pte is already
-+ * cleared so we will never accidentally replace something valuable.  Meanwhile
-+ * none pte also means we are not demoting the pte so tlb flushed is not needed.
-+ * E.g., when pte cleared the caller should have taken care of the tlb flush.
-+ *
-+ * Must be called with pgtable lock held so that no thread will see the none
-+ * pte, and if they see it, they'll fault and serialize at the pgtable lock.
-+ *
-+ * This function is a no-op if PTE_MARKER_UFFD_WP is not enabled.
-+ */
-+static inline void
-+pte_install_uffd_wp_if_needed(struct vm_area_struct *vma, unsigned long addr,
-+			      pte_t *pte, pte_t pteval)
-+{
-+#ifdef CONFIG_PTE_MARKER_UFFD_WP
-+	bool arm_uffd_pte = false;
-+
-+	/* The current status of the pte should be "cleared" before calling */
-+	WARN_ON_ONCE(!pte_none(*pte));
-+
-+	if (vma_is_anonymous(vma))
-+		return;
-+
-+	/* A uffd-wp wr-protected normal pte */
-+	if (unlikely(pte_present(pteval) && pte_uffd_wp(pteval)))
-+		arm_uffd_pte = true;
-+
-+	/*
-+	 * A uffd-wp wr-protected swap pte.  Note: this should even cover an
-+	 * existing pte marker with uffd-wp bit set.
-+	 */
-+	if (unlikely(pte_swp_uffd_wp_any(pteval)))
-+		arm_uffd_pte = true;
-+
-+	if (unlikely(arm_uffd_pte))
-+		set_pte_at(vma->vm_mm, addr, pte,
-+			   make_pte_marker(PTE_MARKER_UFFD_WP));
-+#endif
-+}
- 
- #endif
-diff --git a/mm/memory.c b/mm/memory.c
-index f509ddf2ad39..e3e67e32eb8a 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -74,6 +74,7 @@
- #include <linux/perf_event.h>
- #include <linux/ptrace.h>
- #include <linux/vmalloc.h>
-+#include <linux/mm_inline.h>
- 
- #include <trace/events/kmem.h>
- 
-@@ -1310,6 +1311,7 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- struct zap_details {
- 	struct folio *single_folio;	/* Locked folio to be unmapped */
- 	bool even_cows;			/* Zap COWed private pages too? */
-+	zap_flags_t zap_flags;		/* Extra flags for zapping */
- };
- 
- /* Whether we should zap all COWed (private) pages too */
-@@ -1338,6 +1340,29 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
- 	return !PageAnon(page);
- }
- 
-+static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
-+{
-+	if (!details)
-+		return false;
-+
-+	return details->zap_flags & ZAP_FLAG_DROP_MARKER;
-+}
-+
-+/*
-+ * This function makes sure that we'll replace the none pte with an uffd-wp
-+ * swap special pte marker when necessary. Must be with the pgtable lock held.
-+ */
-+static inline void
-+zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
-+			      unsigned long addr, pte_t *pte,
-+			      struct zap_details *details, pte_t pteval)
-+{
-+	if (zap_drop_file_uffd_wp(details))
-+		return;
-+
-+	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
-+}
-+
- static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 				struct vm_area_struct *vma, pmd_t *pmd,
- 				unsigned long addr, unsigned long end,
-@@ -1375,6 +1400,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			ptent = ptep_get_and_clear_full(mm, addr, pte,
- 							tlb->fullmm);
- 			tlb_remove_tlb_entry(tlb, pte, addr);
-+			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
-+						      ptent);
- 			if (unlikely(!page))
- 				continue;
- 
-@@ -1405,6 +1432,13 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			page = pfn_swap_entry_to_page(entry);
- 			if (unlikely(!should_zap_page(details, page)))
- 				continue;
-+			/*
-+			 * Both device private/exclusive mappings should only
-+			 * work with anonymous page so far, so we don't need to
-+			 * consider uffd-wp bit when zap. For more information,
-+			 * see zap_install_uffd_wp_if_needed().
-+			 */
-+			WARN_ON_ONCE(!vma_is_anonymous(vma));
- 			rss[mm_counter(page)]--;
- 			if (is_device_private_entry(entry))
- 				page_remove_rmap(page, vma, false);
-@@ -1421,8 +1455,10 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			if (!should_zap_page(details, page))
- 				continue;
- 			rss[mm_counter(page)]--;
--		} else if (is_pte_marker_entry(entry)) {
--			/* By default, simply drop all pte markers when zap */
-+		} else if (pte_marker_entry_uffd_wp(entry)) {
-+			/* Only drop the uffd-wp marker if explicitly requested */
-+			if (!zap_drop_file_uffd_wp(details))
-+				continue;
- 		} else if (is_hwpoison_entry(entry)) {
- 			if (!should_zap_cows(details))
- 				continue;
-@@ -1431,6 +1467,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			WARN_ON_ONCE(1);
- 		}
- 		pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-+		zap_install_uffd_wp_if_needed(vma, addr, pte, details, ptent);
- 	} while (pte++, addr += PAGE_SIZE, addr != end);
- 
- 	add_mm_rss_vec(mm, rss);
-@@ -1641,12 +1678,17 @@ void unmap_vmas(struct mmu_gather *tlb,
- 		unsigned long end_addr)
- {
- 	struct mmu_notifier_range range;
-+	struct zap_details details = {
-+		.zap_flags = ZAP_FLAG_DROP_MARKER,
-+		/* Careful - we need to zap private pages too! */
-+		.even_cows = true,
-+	};
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma, vma->vm_mm,
- 				start_addr, end_addr);
- 	mmu_notifier_invalidate_range_start(&range);
- 	for ( ; vma && vma->vm_start < end_addr; vma = vma->vm_next)
--		unmap_single_vma(tlb, vma, start_addr, end_addr, NULL);
-+		unmap_single_vma(tlb, vma, start_addr, end_addr, &details);
- 	mmu_notifier_invalidate_range_end(&range);
- }
- 
-@@ -3391,6 +3433,7 @@ void unmap_mapping_folio(struct folio *folio)
- 
- 	details.even_cows = false;
- 	details.single_folio = folio;
-+	details.zap_flags = ZAP_FLAG_DROP_MARKER;
- 
- 	i_mmap_lock_write(mapping);
- 	if (unlikely(!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root)))
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 3d288a7c8c32..f83d812d0a5e 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -73,6 +73,7 @@
- #include <linux/page_idle.h>
- #include <linux/memremap.h>
- #include <linux/userfaultfd_k.h>
-+#include <linux/mm_inline.h>
- 
+ #include <asm/cacheflush.h>
+ #include <asm/mmu_context.h>
  #include <asm/tlbflush.h>
- 
-@@ -1526,6 +1527,13 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+@@ -184,8 +185,16 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 					newpte = pte_swp_mksoft_dirty(newpte);
+ 				if (pte_swp_uffd_wp(oldpte))
+ 					newpte = pte_swp_mkuffd_wp(newpte);
+-			} else if (is_pte_marker_entry(entry)) {
+-				/* Skip it, the same as none pte */
++			} else if (pte_marker_entry_uffd_wp(entry)) {
++				/*
++				 * If this is uffd-wp pte marker and we'd like
++				 * to unprotect it, drop it; the next page
++				 * fault will trigger without uffd trapping.
++				 */
++				if (uffd_wp_resolve) {
++					pte_clear(vma->vm_mm, addr, pte);
++					pages++;
++				}
+ 				continue;
+ 			} else {
+ 				newpte = oldpte;
+@@ -200,6 +209,20 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 				set_pte_at(vma->vm_mm, addr, pte, newpte);
+ 				pages++;
+ 			}
++		} else {
++			/* It must be an none page, or what else?.. */
++			WARN_ON_ONCE(!pte_none(oldpte));
++			if (unlikely(uffd_wp && !vma_is_anonymous(vma))) {
++				/*
++				 * For file-backed mem, we need to be able to
++				 * wr-protect a none pte, because even if the
++				 * pte is none, the page/swap cache could
++				 * exist.  Doing that by install a marker.
++				 */
++				set_pte_at(vma->vm_mm, addr, pte,
++					   make_pte_marker(PTE_MARKER_UFFD_WP));
++				pages++;
++			}
  		}
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
+ 	arch_leave_lazy_mmu_mode();
+@@ -233,6 +256,39 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
+ 	return 0;
+ }
  
-+		/*
-+		 * Now the pte is cleared.  If this is uffd-wp armed pte, we
-+		 * may want to replace a none pte with a marker pte if it's
-+		 * file-backed, so we don't lose the tracking information.
-+		 */
-+		pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
++/* Return true if we're uffd wr-protecting file-backed memory, or false */
++static inline bool
++uffd_wp_protect_file(struct vm_area_struct *vma, unsigned long cp_flags)
++{
++	return (cp_flags & MM_CP_UFFD_WP) && !vma_is_anonymous(vma);
++}
 +
- 		/* Set the dirty flag on the folio now the pte is gone. */
- 		if (pte_dirty(pteval))
- 			folio_mark_dirty(folio);
++/*
++ * If wr-protecting the range for file-backed, populate pgtable for the case
++ * when pgtable is empty but page cache exists.  When {pte|pmd|...}_alloc()
++ * failed it means no memory, we don't have a better option but stop.
++ */
++#define  change_pmd_prepare(vma, pmd, cp_flags)				\
++	do {								\
++		if (unlikely(uffd_wp_protect_file(vma, cp_flags))) {	\
++			if (WARN_ON_ONCE(pte_alloc(vma->vm_mm, pmd)))	\
++				break;					\
++		}							\
++	} while (0)
++/*
++ * This is the general pud/p4d/pgd version of change_pmd_prepare(). We need to
++ * have separate change_pmd_prepare() because pte_alloc() returns 0 on success,
++ * while {pmd|pud|p4d}_alloc() returns the valid pointer on success.
++ */
++#define  change_prepare(vma, high, low, addr, cp_flags)			\
++	do {								\
++		if (unlikely(uffd_wp_protect_file(vma, cp_flags))) {	\
++			low##_t *p = low##_alloc(vma->vm_mm, high, addr); \
++			if (WARN_ON_ONCE(p == NULL))			\
++				break;					\
++		}							\
++	} while (0)
++
+ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
+ 		pud_t *pud, unsigned long addr, unsigned long end,
+ 		pgprot_t newprot, unsigned long cp_flags)
+@@ -251,6 +307,7 @@ static inline unsigned long change_pmd_range(struct vm_area_struct *vma,
+ 
+ 		next = pmd_addr_end(addr, end);
+ 
++		change_pmd_prepare(vma, pmd, cp_flags);
+ 		/*
+ 		 * Automatic NUMA balancing walks the tables with mmap_lock
+ 		 * held for read. It's possible a parallel update to occur
+@@ -316,6 +373,7 @@ static inline unsigned long change_pud_range(struct vm_area_struct *vma,
+ 	pud = pud_offset(p4d, addr);
+ 	do {
+ 		next = pud_addr_end(addr, end);
++		change_prepare(vma, pud, pmd, addr, cp_flags);
+ 		if (pud_none_or_clear_bad(pud))
+ 			continue;
+ 		pages += change_pmd_range(vma, pud, addr, next, newprot,
+@@ -336,6 +394,7 @@ static inline unsigned long change_p4d_range(struct vm_area_struct *vma,
+ 	p4d = p4d_offset(pgd, addr);
+ 	do {
+ 		next = p4d_addr_end(addr, end);
++		change_prepare(vma, p4d, pud, addr, cp_flags);
+ 		if (p4d_none_or_clear_bad(p4d))
+ 			continue;
+ 		pages += change_pud_range(vma, p4d, addr, next, newprot,
+@@ -361,6 +420,7 @@ static unsigned long change_protection_range(struct vm_area_struct *vma,
+ 	inc_tlb_flush_pending(mm);
+ 	do {
+ 		next = pgd_addr_end(addr, end);
++		change_prepare(vma, pgd, p4d, addr, cp_flags);
+ 		if (pgd_none_or_clear_bad(pgd))
+ 			continue;
+ 		pages += change_p4d_range(vma, pgd, addr, next, newprot,
 -- 
 2.32.0
 

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1A54CCCE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067504CCCE7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238023AbiCDFS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 00:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S238036AbiCDFSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 00:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238013AbiCDFSX (ORCPT
+        with ESMTP id S238025AbiCDFSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 00:18:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40C1115A11
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:17:34 -0800 (PST)
+        Fri, 4 Mar 2022 00:18:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5894D35268
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:17:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646371053;
+        s=mimecast20190719; t=1646371061;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KCL3KButghAabZJudedPY5ytCZQMosbpyIRioh4blvI=;
-        b=OZ/8KC/oFGtaJEm8fgiGpsGBZhrH1+4xALXGN/2CI5z/peeeXH/nCSExQo4IJ7bO/Eex3R
-        YEv5vovVvN1mmu/JmYezjoIa9sESWR1cBlVvni1n3hlTeETOkUDB7iTwdEl6+G2xe2Lmkk
-        gACIp1bqia+c20/WKaWxcZFI8S+C/H8=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=1FpwyjJeS3X1Irq3CGuq+3W5FvpvI1rV+CjmQkx/pZ4=;
+        b=IkOEIYsOsbamxNpjtfm6RoJl0hO2lHGfW5hdNcU0QOWW8F46zeywR20lkOXbPNR9pAPcPU
+        EOei5coiiO3YKBki6VvPo7so1znX4nANLNNJtcHTg29dYJDrPU7nio9xcj3B3ZIvkejzgo
+        NfYyn5fVJcYIZhzNkjhPAfofv2kp8Yg=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-473-iqUB8XQHNZ-kYkVE-BhsYQ-1; Fri, 04 Mar 2022 00:17:32 -0500
-X-MC-Unique: iqUB8XQHNZ-kYkVE-BhsYQ-1
-Received: by mail-pf1-f200.google.com with SMTP id i72-20020a62874b000000b004f66c5b963cso2695112pfe.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:17:31 -0800 (PST)
+ us-mta-392-E4VfJAsPPdaRD1TSB4DAwQ-1; Fri, 04 Mar 2022 00:17:40 -0500
+X-MC-Unique: E4VfJAsPPdaRD1TSB4DAwQ-1
+Received: by mail-pl1-f198.google.com with SMTP id i7-20020a170902cf0700b0015163eb319eso4083600plg.18
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:17:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KCL3KButghAabZJudedPY5ytCZQMosbpyIRioh4blvI=;
-        b=2oiGOQQ/XD404kg5qvo6lwGou3c09zn9tE6zigcdarx7B829caw9HIQ3izRu2qF6bn
-         RqJq3rf5/wAjhA/byw1nK6ZTEYJetk9n1kphbQOrglsjUawrIrPa1+ykXOE2aDpcYbda
-         FduD0adhmJSYaCBvjvsudoBVQ9nO1MxsknQ0aekiJZeAPWlbc5Rw/Akzh7fxu+fF2+RN
-         6D0XfhY7VfTXGZAjhHJ/3rxsVseZjIgjEXsTQFTfKen5UyzXE8CYdZ2WmDdCzecvQbiM
-         oB0i7Jf9m3iLGrU4wbwFVCfnVwSP7xa3PKPKW3ZMhdti2sFJiL2V3DWkTTZdcFiawIZc
-         kBuA==
-X-Gm-Message-State: AOAM532H5+cwnbyIJ/pN+5aGs7R0Wi3FDPm9I7KV3KdX3+mjYZPQSsAv
-        htSv7oD+QMJvSMdhdi/lrjeC92K7Sr7c0Kn/vBA3WJlm7HW6YUd20FjocUd8GTa7hAtWYMJ4+Y/
-        FD7qI0t/c00G2XP0pbUgD0QTG
-X-Received: by 2002:a63:2fc1:0:b0:374:9f30:9559 with SMTP id v184-20020a632fc1000000b003749f309559mr33022345pgv.278.1646371050818;
-        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJym7Td/RpnBv1y2IaKZPLGC+ETMIqu+l9tJA1ieJk002T9FcPI25/B0PQuSJLNVv/X4K+wkwg==
-X-Received: by 2002:a63:2fc1:0:b0:374:9f30:9559 with SMTP id v184-20020a632fc1000000b003749f309559mr33022332pgv.278.1646371050512;
-        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
+        bh=1FpwyjJeS3X1Irq3CGuq+3W5FvpvI1rV+CjmQkx/pZ4=;
+        b=g29vU+y46chVDhvZqTdDt9uXG/Ojlbn3Utf0zl861Ftv47zlhkbgQHVjIs5AYUrKXr
+         jT0ZbJoxs+/TycQhp6OQ9LfKFAfG8z5sLw2nNkF7PEvk5tlrAnwEWSnP2nLvCV72UYnZ
+         6YGUXPwVmdYf5WgJaPMykF3higYPyV87uKSeSyPXsUdFotsmodXntHEv7XFA40N+Rdrb
+         H/eM2c+W/YMfTAac/wwFdhUl54AyYhSuTnoz4B7ZYiSPcCn+5aTe5PWQBzdOkminb7wD
+         Vhp4dS5shG9yErypJl6O1pzdJC46dFT6kUNBY+qEwCrdRpnIfm9Hbv4+hRBLZ5TeuXWB
+         g+fQ==
+X-Gm-Message-State: AOAM531HBusHbqVDAukKZFb4vlYta6C6lC7obwTH3BOQrEE/w5zLoZPK
+        NYyJlNUzCt0vNEiej2ZFjnt6FBusExZXC9QifjZvakqnPmcW+T9OcxIJj3E96hDS4QG8zNrPuNQ
+        go3/MNYgMor4OhhhcLuCJ/K5U
+X-Received: by 2002:a17:903:2285:b0:151:4b38:298e with SMTP id b5-20020a170903228500b001514b38298emr29448165plh.36.1646371058818;
+        Thu, 03 Mar 2022 21:17:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw9mrpZaTeSPHfY/AgvFnrkerVofenDGmydQIn76U/VF813c+ZQ9LQV59XdkRzKTOQM8WpPSg==
+X-Received: by 2002:a17:903:2285:b0:151:4b38:298e with SMTP id b5-20020a170903228500b001514b38298emr29448139plh.36.1646371058465;
+        Thu, 03 Mar 2022 21:17:38 -0800 (PST)
 Received: from localhost.localdomain ([94.177.118.59])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.17.22
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.17.30
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Mar 2022 21:17:30 -0800 (PST)
+        Thu, 03 Mar 2022 21:17:38 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
@@ -69,9 +69,9 @@ Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
         Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v7 01/23] mm: Introduce PTE_MARKER swap entry
-Date:   Fri,  4 Mar 2022 13:16:46 +0800
-Message-Id: <20220304051708.86193-2-peterx@redhat.com>
+Subject: [PATCH v7 02/23] mm: Teach core mm about pte markers
+Date:   Fri,  4 Mar 2022 13:16:47 +0800
+Message-Id: <20220304051708.86193-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220304051708.86193-1-peterx@redhat.com>
 References: <20220304051708.86193-1-peterx@redhat.com>
@@ -87,192 +87,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces a new swap entry type called PTE_MARKER.  It can be
-installed for any pte that maps a file-backed memory when the pte is
-temporarily zapped, so as to maintain per-pte information.
+This patch still does not use pte marker in any way, however it teaches the
+core mm about the pte marker idea.
 
-The information that kept in the pte is called a "marker".  Here we define the
-marker as "unsigned long" just to match pgoff_t, however it will only work if
-it still fits in swp_offset(), which is e.g. currently 58 bits on x86_64.
+For example, handle_pte_marker() is introduced that will parse and handle all
+the pte marker faults.
 
-A new config CONFIG_PTE_MARKER is introduced too; it's by default off.  A bunch
-of helpers are defined altogether to service the rest of the pte marker code.
+Many of the places are more about commenting it up - so that we know there's
+the possibility of pte marker showing up, and why we don't need special code
+for the cases.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/asm-generic/hugetlb.h |  9 ++++
- include/linux/swap.h          | 15 ++++++-
- include/linux/swapops.h       | 78 +++++++++++++++++++++++++++++++++++
- mm/Kconfig                    |  7 ++++
- 4 files changed, 108 insertions(+), 1 deletion(-)
+ fs/userfaultfd.c | 10 ++++++----
+ mm/filemap.c     |  5 +++++
+ mm/hmm.c         |  2 +-
+ mm/memcontrol.c  |  8 ++++++--
+ mm/memory.c      | 23 +++++++++++++++++++++++
+ mm/mincore.c     |  3 ++-
+ mm/mprotect.c    |  3 +++
+ 7 files changed, 46 insertions(+), 8 deletions(-)
 
-diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-index 8e1e6244a89d..f39cad20ffc6 100644
---- a/include/asm-generic/hugetlb.h
-+++ b/include/asm-generic/hugetlb.h
-@@ -2,6 +2,9 @@
- #ifndef _ASM_GENERIC_HUGETLB_H
- #define _ASM_GENERIC_HUGETLB_H
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index aa0c47cb0d16..8b4a94f5a238 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -249,9 +249,10 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
  
-+#include <linux/swap.h>
-+#include <linux/swapops.h>
+ 	/*
+ 	 * Lockless access: we're in a wait_event so it's ok if it
+-	 * changes under us.
++	 * changes under us.  PTE markers should be handled the same as none
++	 * ptes here.
+ 	 */
+-	if (huge_pte_none(pte))
++	if (huge_pte_none_mostly(pte))
+ 		ret = true;
+ 	if (!huge_pte_write(pte) && (reason & VM_UFFD_WP))
+ 		ret = true;
+@@ -330,9 +331,10 @@ static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
+ 	pte = pte_offset_map(pmd, address);
+ 	/*
+ 	 * Lockless access: we're in a wait_event so it's ok if it
+-	 * changes under us.
++	 * changes under us.  PTE markers should be handled the same as none
++	 * ptes here.
+ 	 */
+-	if (pte_none(*pte))
++	if (pte_none_mostly(*pte))
+ 		ret = true;
+ 	if (!pte_write(*pte) && (reason & VM_UFFD_WP))
+ 		ret = true;
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 8f7e6088ee2a..464b8f0f111a 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3379,6 +3379,11 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 		vmf->pte += xas.xa_index - last_pgoff;
+ 		last_pgoff = xas.xa_index;
+ 
++		/*
++		 * NOTE: If there're PTE markers, we'll leave them to be
++		 * handled in the specific fault path, and it'll prohibit the
++		 * fault-around logic.
++		 */
+ 		if (!pte_none(*vmf->pte))
+ 			goto unlock;
+ 
+diff --git a/mm/hmm.c b/mm/hmm.c
+index af71aac3140e..3fd3242c5e50 100644
+--- a/mm/hmm.c
++++ b/mm/hmm.c
+@@ -239,7 +239,7 @@ static int hmm_vma_handle_pte(struct mm_walk *walk, unsigned long addr,
+ 	pte_t pte = *ptep;
+ 	uint64_t pfn_req_flags = *hmm_pfn;
+ 
+-	if (pte_none(pte)) {
++	if (pte_none_mostly(pte)) {
+ 		required_fault =
+ 			hmm_pte_need_fault(hmm_vma_walk, pfn_req_flags, 0);
+ 		if (required_fault)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index f79bb3f25ce4..bba3b7e9f699 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5636,10 +5636,14 @@ static enum mc_target_type get_mctgt_type(struct vm_area_struct *vma,
+ 
+ 	if (pte_present(ptent))
+ 		page = mc_handle_present_pte(vma, addr, ptent);
++	else if (pte_none_mostly(ptent))
++		/*
++		 * PTE markers should be treated as a none pte here, separated
++		 * from other swap handling below.
++		 */
++		page = mc_handle_file_pte(vma, addr, ptent);
+ 	else if (is_swap_pte(ptent))
+ 		page = mc_handle_swap_pte(vma, ptent, &ent);
+-	else if (pte_none(ptent))
+-		page = mc_handle_file_pte(vma, addr, ptent);
+ 
+ 	if (!page && !ent.val)
+ 		return ret;
+diff --git a/mm/memory.c b/mm/memory.c
+index a0ca84756159..22d24ea7b87d 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -99,6 +99,8 @@ struct page *mem_map;
+ EXPORT_SYMBOL(mem_map);
+ #endif
+ 
++static vm_fault_t do_fault(struct vm_fault *vmf);
 +
- static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
- {
- 	return mk_pte(page, pgprot);
-@@ -80,6 +83,12 @@ static inline int huge_pte_none(pte_t pte)
+ /*
+  * A number of key systems in x86 including ioremap() rely on the assumption
+  * that high_memory defines the upper bound on direct map memory, then end
+@@ -1419,6 +1421,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			if (!should_zap_page(details, page))
+ 				continue;
+ 			rss[mm_counter(page)]--;
++		} else if (is_pte_marker_entry(entry)) {
++			/* By default, simply drop all pte markers when zap */
+ 		} else if (is_hwpoison_entry(entry)) {
+ 			if (!should_zap_cows(details))
+ 				continue;
+@@ -3508,6 +3512,23 @@ static inline bool should_try_to_free_swap(struct page *page,
+ 		page_count(page) == 2;
  }
- #endif
  
-+/* Please refer to comments above pte_none_mostly() for the usage */
-+static inline int huge_pte_none_mostly(pte_t pte)
++static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
 +{
-+	return huge_pte_none(pte) || is_pte_marker(pte);
-+}
++	swp_entry_t entry = pte_to_swp_entry(vmf->orig_pte);
++	unsigned long marker = pte_marker_get(entry);
 +
- #ifndef __HAVE_ARCH_HUGE_PTE_WRPROTECT
- static inline pte_t huge_pte_wrprotect(pte_t pte)
- {
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 42ebe2d6078d..20b4aceed920 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -55,6 +55,19 @@ static inline int current_is_kswapd(void)
-  * actions on faults.
-  */
- 
-+/*
-+ * PTE markers are used to persist information onto PTEs that are mapped with
-+ * file-backed memories.  As its name "PTE" hints, it should only be applied to
-+ * the leaves of pgtables.
-+ */
-+#ifdef CONFIG_PTE_MARKER
-+#define SWP_PTE_MARKER_NUM 1
-+#define SWP_PTE_MARKER     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
-+			    SWP_MIGRATION_NUM + SWP_DEVICE_NUM)
-+#else
-+#define SWP_PTE_MARKER_NUM 0
-+#endif
++	/*
++	 * PTE markers should always be with file-backed memories, and the
++	 * marker should never be empty.  If anything weird happened, the best
++	 * thing to do is to kill the process along with its mm.
++	 */
++	if (WARN_ON_ONCE(vma_is_anonymous(vmf->vma) || !marker))
++		return VM_FAULT_SIGBUS;
 +
- /*
-  * Unaddressable device memory support. See include/linux/hmm.h and
-  * Documentation/vm/hmm.rst. Short description is we need struct pages for
-@@ -100,7 +113,7 @@ static inline int current_is_kswapd(void)
- 
- #define MAX_SWAPFILES \
- 	((1 << MAX_SWAPFILES_SHIFT) - SWP_DEVICE_NUM - \
--	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM)
-+	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM - SWP_PTE_MARKER_NUM)
- 
- /*
-  * Magic header for a swap area. The first part of the union is
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index d356ab4047f7..5103d2a4ae38 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -247,6 +247,84 @@ static inline int is_writable_migration_entry(swp_entry_t entry)
- 
- #endif
- 
-+typedef unsigned long pte_marker;
-+
-+#define  PTE_MARKER_MASK     (0)
-+
-+#ifdef CONFIG_PTE_MARKER
-+
-+static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-+{
-+	return swp_entry(SWP_PTE_MARKER, marker);
-+}
-+
-+static inline bool is_pte_marker_entry(swp_entry_t entry)
-+{
-+	return swp_type(entry) == SWP_PTE_MARKER;
-+}
-+
-+static inline pte_marker pte_marker_get(swp_entry_t entry)
-+{
-+	return swp_offset(entry) & PTE_MARKER_MASK;
-+}
-+
-+static inline bool is_pte_marker(pte_t pte)
-+{
-+	return is_swap_pte(pte) && is_pte_marker_entry(pte_to_swp_entry(pte));
-+}
-+
-+#else /* CONFIG_PTE_MARKER */
-+
-+static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-+{
-+	/* This should never be called if !CONFIG_PTE_MARKER */
-+	WARN_ON_ONCE(1);
-+	return swp_entry(0, 0);
-+}
-+
-+static inline bool is_pte_marker_entry(swp_entry_t entry)
-+{
-+	return false;
-+}
-+
-+static inline pte_marker pte_marker_get(swp_entry_t entry)
-+{
++	/* TODO: handle pte markers */
 +	return 0;
 +}
 +
-+static inline bool is_pte_marker(pte_t pte)
-+{
-+	return false;
-+}
-+
-+#endif /* CONFIG_PTE_MARKER */
-+
-+static inline pte_t make_pte_marker(pte_marker marker)
-+{
-+	return swp_entry_to_pte(make_pte_marker_entry(marker));
-+}
-+
-+/*
-+ * This is a special version to check pte_none() just to cover the case when
-+ * the pte is a pte marker.  It existed because in many cases the pte marker
-+ * should be seen as a none pte; it's just that we have stored some information
-+ * onto the none pte so it becomes not-none any more.
-+ *
-+ * It should be used when the pte is file-backed, ram-based and backing
-+ * userspace pages, like shmem.  It is not needed upon pgtables that do not
-+ * support pte markers at all.  For example, it's not needed on anonymous
-+ * memory, kernel-only memory (including when the system is during-boot),
-+ * non-ram based generic file-system.  It's fine to be used even there, but the
-+ * extra pte marker check will be pure overhead.
-+ *
-+ * For systems configured with !CONFIG_PTE_MARKER this will be automatically
-+ * optimized to pte_none().
-+ */
-+static inline int pte_none_mostly(pte_t pte)
-+{
-+	return pte_none(pte) || is_pte_marker(pte);
-+}
-+
- static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
- {
- 	struct page *p = pfn_to_page(swp_offset(entry));
-diff --git a/mm/Kconfig b/mm/Kconfig
-index c313bad5167a..25bcbb89f8e5 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -900,6 +900,13 @@ config ANON_VMA_NAME
- 	  area from being merged with adjacent virtual memory areas due to the
- 	  difference in their name.
+ /*
+  * We enter with non-exclusive mmap_lock (to exclude vma changes,
+  * but allow concurrent faults), and pte mapped but not yet locked.
+@@ -3544,6 +3565,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 			ret = vmf->page->pgmap->ops->migrate_to_ram(vmf);
+ 		} else if (is_hwpoison_entry(entry)) {
+ 			ret = VM_FAULT_HWPOISON;
++		} else if (is_pte_marker_entry(entry)) {
++			ret = handle_pte_marker(vmf);
+ 		} else {
+ 			print_bad_pte(vma, vmf->address, vmf->orig_pte, NULL);
+ 			ret = VM_FAULT_SIGBUS;
+diff --git a/mm/mincore.c b/mm/mincore.c
+index 9122676b54d6..736869f4b409 100644
+--- a/mm/mincore.c
++++ b/mm/mincore.c
+@@ -121,7 +121,8 @@ static int mincore_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 	for (; addr != end; ptep++, addr += PAGE_SIZE) {
+ 		pte_t pte = *ptep;
  
-+config PTE_MARKER
-+	def_bool n
-+	bool "Marker PTEs support"
-+
-+	help
-+	  Allows to create marker PTEs for file-backed memory.
-+
- source "mm/damon/Kconfig"
- 
- endmenu
+-		if (pte_none(pte))
++		/* We need to do cache lookup too for pte markers */
++		if (pte_none_mostly(pte))
+ 			__mincore_unmapped_range(addr, addr + PAGE_SIZE,
+ 						 vma, vec);
+ 		else if (pte_present(pte))
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index b69ce7a7b2b7..6d179c720089 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -184,6 +184,9 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 					newpte = pte_swp_mksoft_dirty(newpte);
+ 				if (pte_swp_uffd_wp(oldpte))
+ 					newpte = pte_swp_mkuffd_wp(newpte);
++			} else if (is_pte_marker_entry(entry)) {
++				/* Skip it, the same as none pte */
++				continue;
+ 			} else {
+ 				newpte = oldpte;
+ 			}
 -- 
 2.32.0
 

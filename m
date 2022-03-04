@@ -2,143 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225A24CDD13
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 20:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1684CDD14
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 20:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiCDTCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 14:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S231297AbiCDTCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 14:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiCDTCC (ORCPT
+        with ESMTP id S231213AbiCDTCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 14:02:02 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367091D86DF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:01:14 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id z11so8561603pla.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 11:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QQXB5eKyYpG5vQk9wBbiRIz8N7tmcSgj6RBiMhN2WaY=;
-        b=nJt0PulthXit3IgmiSHjfSEjOW/u0S00+vxPPPieNMTCXKaijg5Cjk6aIBOfoSgjnE
-         CppbYHQ6Qonw6HCrBJ63uEqPfCeucSOUpQpsDy9RbUpsfao6YrrpHqWzo/zPV+uki9bh
-         UBEdcpzj3x0rC6uEAQss1L4h0Tq0Nmw9eBkcn69d0lBctvsm8hR7MGxvn8xAtQIna4A9
-         dDSYq6FR9TJ8WBO/x/VBUuJxlilnneuNYlQh4IVL4v2QWp40SnUkCxCjKYvqijRDKXGM
-         KgwTlnNAbDA/Ri0lXMuB4Ul+r+bmVwbgJ5NA9tuFQexQMC0mshoKFdzntubnb8k6ZYmj
-         E1oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QQXB5eKyYpG5vQk9wBbiRIz8N7tmcSgj6RBiMhN2WaY=;
-        b=ESYx4rwCM19Go+wEVSPv/ot7+pis8KfWzOMRDs2B97sEsqXSsWrVssGSROZ9Unh4G6
-         HsRbyK3e+6WKCDj+DBJSri0UiP2mNeuvtG23WH34WRn0itvbu5zBwhLZNb4nfT7Di2pg
-         +UvSmbuoD47eay77ccROXkG4BrOqoLPKYD1vA30NEiBldYjXGHNVZiUoIu98GlYOnujY
-         RAjpaC0Lm4s9p7lET1108l9IfPsaJd2DCKHoJBwxXks2k6+3BffkAF6KvRgYObTwKM4r
-         D7e/FbGfwE3inIbL2pO+FtB9NA3Bc5D4LHa5VH7a0r79RO/GWA4TG9qAmvnEFYdXAzLC
-         A4Yg==
-X-Gm-Message-State: AOAM533W8INXzYk7E2AQKQkJDqnMusPqpJBnHKCoGViwvhhlVnP798qp
-        JagCGh62WHMnRBcaIzNPQJSLLZtIza9PQXDgNEA=
-X-Google-Smtp-Source: ABdhPJxsOWT5hTiInL2/NAyxR64UevNatuCAu8IOGJEZeUOLuf+ewhvvLVLVMZlr9xTKy8Ot9pjAGlHQSEFafgIShuQ=
-X-Received: by 2002:a17:90b:1b0e:b0:1bf:1c4f:2bc4 with SMTP id
- nu14-20020a17090b1b0e00b001bf1c4f2bc4mr87820pjb.200.1646420473648; Fri, 04
- Mar 2022 11:01:13 -0800 (PST)
+        Fri, 4 Mar 2022 14:02:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909A31DBA9B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:01:22 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 192081F38A;
+        Fri,  4 Mar 2022 19:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646420481; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tt49sqFxCrGkXmPXZ9oMGkRFOU2rUQvc4pyyYVC4QWg=;
+        b=ibPrHdVXCSddMXrXx3xD0EDxeu/v84LxFsPVauKbTbydXSnx9NsRzaKbNtsYKsAL1beGT3
+        yvPHPfB3dNtBsaTtP1RysudxCHU5g8GjoHVEt3oPVOlTW+CJ+Cotz67ci0mRAOKfeVGNKU
+        /GqB1a/q2vc2Q/9RsTTd/aOhRSoi4Cg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646420481;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tt49sqFxCrGkXmPXZ9oMGkRFOU2rUQvc4pyyYVC4QWg=;
+        b=b1OsdYPquuc85r7XwG2CZX73jPE8d1SoPTyy3GDepmZbv6Gj07uzhpx9W3Wj5rzZCiYgYt
+        ZOPhsSfXfJxyf5Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6B8E13B5B;
+        Fri,  4 Mar 2022 19:01:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WXWpNwBiImLkDgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 04 Mar 2022 19:01:20 +0000
+Message-ID: <6763e97b-88bf-59b0-c80e-26c3846531fc@suse.cz>
+Date:   Fri, 4 Mar 2022 20:01:20 +0100
 MIME-Version: 1.0
-References: <20220303222014.517033-1-shy828301@gmail.com> <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
- <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com> <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
-In-Reply-To: <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 4 Mar 2022 11:01:02 -0800
-Message-ID: <CAHbLzkqkzxn0e+pkb-Y3qmSgBSn5va7TbiJG87QQLazRDQtvcg@mail.gmail.com>
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting PMD
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 5/5] mm/slub: refactor deactivate_slab()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+ <20220304063427.372145-6-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220304063427.372145-6-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 10:50 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 04.03.22 19:30, Yang Shi wrote:
-> > On Thu, Mar 3, 2022 at 9:06 PM David Hildenbrand <david@redhat.com> wrote:
-> >>
-> >> Hi,
-> >>
-> >> This probably bounces on the list due to html junk from the gmail app.
-> >>
-> >> What happened to
-> >>
-> >> https://lore.kernel.org/linux-mm/20220131162940.210846-10-david@redhat.com/
-> >>
-> >> Included in the very series mentioned below?
-> >>
-> >> Was this silently dropped due to folio conversion collisions? :/
-> >
-> > I really didn't notice you already proposed this. Maybe folio
-> > conversion, maybe mlock cleanup, I can't tell. But anyway this patch
-> > needs to get rebased. I will submit v2 to solve the comment, will add
-> > your signed-off-by.
-> >
->
-> Why a rebase? The folio change comes via another tree (unfortunately not
-> Andrews tree, I wish we would have a single MM tree for MM patches).
->
-> @Andrew, the last mail I received was
->
-> + mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-> added to -mm tree
->
-> The patch shows up in mmotm as
->
-> #[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
->
-> ... which shouldn't be true.
+On 3/4/22 07:34, Hyeonggon Yoo wrote:
+> Simplify deactivate_slab() by unlocking n->list_lock and retrying
+> cmpxchg_double() when cmpxchg_double() fails, and perform
+> add_{partial,full} only when it succeed.
+> 
+> Releasing and taking n->list_lock again here is not harmful as SLUB
+> avoids deactivating slabs as much as possible.
+> 
+> [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
+>   succeed. ]
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Yes, otherwise my patch can't be applied. What I saw on linux-next for
-mm/huge_memory.c looks like:
+Looks good, just noticed a tiny issue.
 
-bfede97b8d6d mm/huge_memory: remove stale page_trans_huge_mapcount()
-6c127ac2ff1d mm/huge_memory: streamline COW logic in do_huge_pmd_wp_page()
-cb63c1eb2a3c mm/migration: add trace events for THP migrations
-e65f964148fe Merge branch 'akpm-current/current'
-61435e1e267c mm/readahead: Align file mappings for non-DAX
-80ef527bf929 mm: Turn can_split_huge_page() into can_split_folio()
-8339af1d0a18 mm/rmap: Convert rmap_walk() to take a folio
-16f06327291e mm/migrate: Convert remove_migration_ptes() to folios
-bd23d3f12232 memory tiering: skip to scan fast memory
-47a3e10abb78 mm: thp: fix wrong cache flush in remove_migration_pmd()
-1de8566cca0a mm/rmap: Convert try_to_migrate() to folios
-5a470d51cb2b mm/rmap: Convert try_to_unmap() to take a folio
-1c760ad73a13 mm/huge_memory: Convert __split_huge_pmd() to take a folio
-82865a9e1187 mm: Add folio_mapcount()
-07ca76067308 mm/munlock: maintain page->mlock_count while unevictable
-cea86fe246b6 mm/munlock: rmap call mlock_vma_page() munlock_vma_page()
-b67bf49ce7aa mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE
-f56caedaf94f Merge branch 'akpm' (patches from Andrew)
+> ---
+>  mm/slub.c | 81 ++++++++++++++++++++++---------------------------------
+>  1 file changed, 32 insertions(+), 49 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index f9ae983a3dc6..c1a693ec5874 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2344,8 +2344,8 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  {
+>  	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
+>  	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> -	int lock = 0, free_delta = 0;
+> -	enum slab_modes l = M_NONE, m = M_NONE;
+> +	int free_delta = 0;
+> +	enum slab_modes mode = M_NONE;
+>  	void *nextfree, *freelist_iter, *freelist_tail;
+>  	int tail = DEACTIVATE_TO_HEAD;
+>  	unsigned long flags = 0;
+> @@ -2387,14 +2387,10 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  	 * Ensure that the slab is unfrozen while the list presence
+>  	 * reflects the actual number of objects during unfreeze.
+>  	 *
+> -	 * We setup the list membership and then perform a cmpxchg
+> -	 * with the count. If there is a mismatch then the slab
+> -	 * is not unfrozen but the slab is on the wrong list.
+> -	 *
+> -	 * Then we restart the process which may have to remove
+> -	 * the slab from the list that we just put it on again
+> -	 * because the number of objects in the slab may have
+> -	 * changed.
+> +	 * We first perform cmpxchg holding lock and insert to list
+> +	 * when it succeed. If there is mismatch then slub is not
+> +	 * unfrozen and number of objects in the slab may have changed.
+> +	 * Then release lock and retry cmpxchg again.
+>  	 */
+>  redo:
+>  
+> @@ -2414,57 +2410,44 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  	new.frozen = 0;
+>  
+>  	if (!new.inuse && n->nr_partial >= s->min_partial)
+> -		m = M_FREE;
+> +		mode = M_FREE;
+>  	else if (new.freelist) {
+> -		m = M_PARTIAL;
+> -		if (!lock) {
+> -			lock = 1;
+> -			/*
+> -			 * Taking the spinlock removes the possibility that
+> -			 * acquire_slab() will see a slab that is frozen
+> -			 */
+> -			spin_lock_irqsave(&n->list_lock, flags);
+> -		}
+> -	} else {
+> -		m = M_FULL;
+> -		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
 
-It looks like your series were rebased on top of mlock cleanup and
-folio. Anyway I will wait for Andrew. If he thought a new patch
-rebased on top of both mlock cleanup and folio would make his life
-easier, I will submit v2.
+This used to set m = M_FULL; always.
 
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+> -			lock = 1;
+> -			/*
+> -			 * This also ensures that the scanning of full
+> -			 * slabs from diagnostic functions will not see
+> -			 * any frozen slabs.
+> -			 */
+> -			spin_lock_irqsave(&n->list_lock, flags);
+> -		}
+> +		mode = M_PARTIAL;
+> +		/*
+> +		 * Taking the spinlock removes the possibility that
+> +		 * acquire_slab() will see a slab that is frozen
+> +		 */
+> +		spin_lock_irqsave(&n->list_lock, flags);
+> +	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> +		mode = M_FULL;
+
+Now you only set it for SLAB_STORE_USER caches.
+
+> +		/*
+> +		 * This also ensures that the scanning of full
+> +		 * slabs from diagnostic functions will not see
+> +		 * any frozen slabs.
+> +		 */
+> +		spin_lock_irqsave(&n->list_lock, flags);
+>  	}
+>  
+> -	if (l != m) {
+> -		if (l == M_PARTIAL)
+> -			remove_partial(n, slab);
+> -		else if (l == M_FULL)
+> -			remove_full(s, n, slab);
+> -
+> -		if (m == M_PARTIAL)
+> -			add_partial(n, slab, tail);
+> -		else if (m == M_FULL)
+> -			add_full(s, n, slab);
+> -	}
+>  
+> -	l = m;
+>  	if (!cmpxchg_double_slab(s, slab,
+>  				old.freelist, old.counters,
+>  				new.freelist, new.counters,
+> -				"unfreezing slab"))
+> +				"unfreezing slab")) {
+> +		if (mode == M_PARTIAL || mode == M_FULL)
+> +			spin_unlock_irqrestore(&n->list_lock, flags);
+>  		goto redo;
+> +	}
+>  
+> -	if (lock)
+> -		spin_unlock_irqrestore(&n->list_lock, flags);
+>  
+> -	if (m == M_PARTIAL)
+> +	if (mode == M_PARTIAL) {
+> +		add_partial(n, slab, tail);
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+>  		stat(s, tail);
+> -	else if (m == M_FULL)
+> +	} else if (mode == M_FULL) {
+> +		add_full(s, n, slab);
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+>  		stat(s, DEACTIVATE_FULL);
+
+As a result, full slabs without SLAB_STORE_USER will not count
+DEACTIVATE_FULL anymore.
+I guess the easiest way to solve it is to e.g. add a M_FULL_NOLIST mode that
+only does the DEACTIVATE_FULL counting.
+
+> -	else if (m == M_FREE) {
+> +	} else if (mode == M_FREE) {
+>  		stat(s, DEACTIVATE_EMPTY);
+>  		discard_slab(s, slab);
+>  		stat(s, FREE_SLAB);
+

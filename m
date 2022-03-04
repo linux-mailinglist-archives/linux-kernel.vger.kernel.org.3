@@ -2,40 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9F84CCFB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F31C4CCFB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiCDIOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S230499AbiCDIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiCDINp (ORCPT
+        with ESMTP id S230341AbiCDINY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:13:45 -0500
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8C11A839
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:12:42 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26037:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Fri, 04 Mar 2022 16:11:51 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v7 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Date:   Fri,  4 Mar 2022 16:12:09 +0800
-Message-Id: <20220304081209.672-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220304081209.672-1-xt.hu@cqplus1.com>
-References: <20220304081209.672-1-xt.hu@cqplus1.com>
+        Fri, 4 Mar 2022 03:13:24 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DED639D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:12:34 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id i8so11431125wrr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PTdhZ6zTG/wMEQhhzfPXGyXVYLVkCG56MpdGyRnOBVI=;
+        b=Pmf2t9u+18kQH7IAPgSpCA8+P+Pr1LWI/Tnym4Tf38VqtV68KuJxIBW4bz4aPRJb7s
+         FotOKu54Ei94IvCyVqRrl3FPSfRUncnyiIlnU/gYuZnoq7Lp93cs41oeygcIV6cQWiQL
+         3MqAnA5QDBaQ76T9FM4jXL35WVoP0kdTjBo02o5U7BmCPeIfVlgf1fuVY/ZVIo6k/Bvm
+         /8rQrxARhXJyy5IhFazUmOWGxxwpnwpYZApUBX1LMBi+4TpzForlhGfpPZ1v06IHBqCo
+         vNZme2896fgkl8UDxpGKdaTOhqhgzNRhyfLG+ckucf1XBRWoKrlE9DureanSDGxQXV4j
+         0p2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PTdhZ6zTG/wMEQhhzfPXGyXVYLVkCG56MpdGyRnOBVI=;
+        b=4WeRC6Kt+EB73emcLjx39zKMJrv1HH7vzlfb1GGcUdQjIj9Xu3kU8o5ZEsyyC0JzSB
+         QlZK+Akv3fhHie107r8pkMFk+cUv4llGRWq7cRbS9TYB0zhfs0UOwjSOMaW1PXmIuaAZ
+         o9zBrlcWJWoblEHlIoEACADOMWHa+H1U4ipAjQPENJvI6HogRdhyvaAaXVe9L4fQ2Bnp
+         m8z5tnMWmBCwLyZf97ghJtlwKVnuo3/EUs2kkj82lIo1amraRPmz+cKIOghGqpKsFAp2
+         GNSicw9zQDaMWUi4KFCj8e77Acba+3kT3RJRIDcWZCD4KAzWQRpTqSSVhI81u5trcP//
+         pHZw==
+X-Gm-Message-State: AOAM531PEQILzvjg3Xk68xh7MUoIRX6SlsVzbqhgNBX1kD5+dNdp36Gh
+        8KWyd4sSr6exEm+Joj5OrfD+1MvI5YWTx1ym
+X-Google-Smtp-Source: ABdhPJzVw968hxMEIY0q2+bwjpWc6NSOwZs/15JsNkWcbOqqbxojEzQRti0Lz26wnPm3h5o1K7KOTg==
+X-Received: by 2002:a05:6000:184e:b0:1f0:3569:ccac with SMTP id c14-20020a056000184e00b001f03569ccacmr8266477wri.680.1646381552773;
+        Fri, 04 Mar 2022 00:12:32 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b0037c0342cb62sm13850215wmq.4.2022.03.04.00.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 00:12:32 -0800 (PST)
+Date:   Fri, 4 Mar 2022 08:12:30 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] vhost: Provide a kernel warning if mutex is held
+ whilst clean-up in progress
+Message-ID: <YiHJ7qFgkcC7igwq@google.com>
+References: <20220303151929.2505822-1-lee.jones@linaro.org>
+ <YiETnIcfZCLb63oB@unreal>
+ <20220303155645-mutt-send-email-mst@kernel.org>
+ <20220304075039.rewrf3gnbbh3sdfl@sgarzare-redhat>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220304075039.rewrf3gnbbh3sdfl@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,294 +78,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sunplus SP7021 requires watchdog timer support.
-Add watchdog driver to enable this.
+On Fri, 04 Mar 2022, Stefano Garzarella wrote:
 
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
-Changes in v7:
- - Addressed all comments from Mr. Guenter Roeck.
-   Fix sp_wdt_ping() and add comment to explain the calculation.
+> On Thu, Mar 03, 2022 at 04:01:06PM -0500, Michael S. Tsirkin wrote:
+> > On Thu, Mar 03, 2022 at 09:14:36PM +0200, Leon Romanovsky wrote:
+> > > On Thu, Mar 03, 2022 at 03:19:29PM +0000, Lee Jones wrote:
+> > > > All workers/users should be halted before any clean-up should take place.
+> > > >
+> > > > Suggested-by:  Michael S. Tsirkin <mst@redhat.com>
+> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > ---
+> > > >  drivers/vhost/vhost.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > index bbaff6a5e21b8..d935d2506963f 100644
+> > > > --- a/drivers/vhost/vhost.c
+> > > > +++ b/drivers/vhost/vhost.c
+> > > > @@ -693,6 +693,9 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > >  	int i;
+> > > >
+> > > >  	for (i = 0; i < dev->nvqs; ++i) {
+> > > > +		/* Ideally all workers should be stopped prior to clean-up */
+> > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
+> > > > +
+> > > >  		mutex_lock(&dev->vqs[i]->mutex);
+> > > 
+> > > I know nothing about vhost, but this construction and patch looks
+> > > strange to me.
+> > > 
+> > > If all workers were stopped, you won't need mutex_lock(). The mutex_lock
+> > > here suggests to me that workers can still run here.
+> > > 
+> > > Thanks
+> > 
+> > 
+> > "Ideally" here is misleading, we need a bigger detailed comment
+> > along the lines of:
+> > 
+> > /*
+> > * By design, no workers can run here. But if there's a bug and the
+> > * driver did not flush all work properly then they might, and we
+> > * encountered such bugs in the past.  With no proper flush guest won't
+> > * work correctly but avoiding host memory corruption in this case
+> > * sounds like a good idea.
+> > */
+> 
+> Can we use vhost_vq_get_backend() to check this situation?
+> 
+> IIUC all the vhost devices clear the backend to stop the workers.
+> This is not racy (if we do after the mutex_lock) and should cover all cases.
 
- MAINTAINERS                    |   1 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/sunplus_wdt.c | 220 +++++++++++++++++++++++++++++++++
- 4 files changed, 233 insertions(+)
- create mode 100644 drivers/watchdog/sunplus_wdt.c
+I can look into this too if you like.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe6cc971c..a1b3d76e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-+F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 9d222ba17..d3dbe8695 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called msc313e_wdt.
- 
-+config SUNPLUS_WATCHDOG
-+	tristate "Sunplus watchdog support"
-+	depends on ARCH_SUNPLUS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  Say Y here to include support for the watchdog timer
-+	  in Sunplus SoCs.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sunplus_wdt.
-+
- # X86 (i386 + ia64 + x86_64) Architecture
- 
- config ACQUIRE_WDT
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 2ee970641..0fa548ee6 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
- obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
- obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
-+obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-new file mode 100644
-index 000000000..e2d8c532b
---- /dev/null
-+++ b/drivers/watchdog/sunplus_wdt.c
-@@ -0,0 +1,220 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * sunplus Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDT_CTRL		0x00
-+#define WDT_CNT			0x04
-+
-+#define WDT_STOP		0x3877
-+#define WDT_RESUME		0x4A4B
-+#define WDT_CLRIRQ		0x7482
-+#define WDT_UNLOCK		0xAB00
-+#define WDT_LOCK		0xAB01
-+#define WDT_CONMAX		0xDEAF
-+
-+/* TIMEOUT_MAX = ffff0/90kHz =11.65, so longer than 11 seconds will time out. */
-+#define SP_WDT_MAX_TIMEOUT	11U
-+#define SP_WDT_DEFAULT_TIMEOUT	10
-+
-+#define STC_CLK			90000
-+
-+#define DEVICE_NAME		"sunplus-wdt"
-+
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct sp_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static int sp_wdt_restart(struct watchdog_device *wdev,
-+			  unsigned long action, void *data)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+	writel(WDT_UNLOCK, base + WDT_CTRL);
-+	writel(0x0001, base + WDT_CNT);
-+	writel(WDT_LOCK, base + WDT_CTRL);
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 count;
-+
-+	if (wdev->timeout > SP_WDT_MAX_TIMEOUT) {
-+		/* WDT_CONMAX sets the count to the maximum (down-counting). */
-+		writel(WDT_CONMAX, base + WDT_CTRL);
-+	} else {
-+		writel(WDT_UNLOCK, base + WDT_CTRL);
-+		/*
-+		 * Watchdog timer is a 20-bit down-counting based on STC_CLK.
-+		 * This register bits[16:0] is from bit[19:4] of the watchdog
-+		 * timer counter.
-+		 */
-+		count = (wdev->timeout * STC_CLK) >> 4;
-+		writel(count, base + WDT_CNT);
-+		writel(WDT_LOCK, base + WDT_CTRL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 val;
-+
-+	val = readl(base + WDT_CNT);
-+	val &= 0xffff;
-+	val = val << 4;
-+
-+	return val;
-+}
-+
-+static const struct watchdog_info sp_wdt_info = {
-+	.identity	= DEVICE_NAME,
-+	.options	= WDIOF_SETTIMEOUT |
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops sp_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= sp_wdt_start,
-+	.stop		= sp_wdt_stop,
-+	.ping		= sp_wdt_ping,
-+	.get_timeleft	= sp_wdt_get_timeleft,
-+	.restart	= sp_wdt_restart,
-+};
-+
-+static void sp_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void sp_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int sp_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_wdt_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get clock\n");
-+
-+	ret = clk_prepare_enable(priv->clk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable clock\n");
-+
-+	ret = devm_add_action_or_reset(dev, sp_clk_disable_unprepare, priv->clk);
-+	if (ret)
-+		return ret;
-+
-+	/* The timer and watchdog shared the STC reset */
-+	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(dev, PTR_ERR(priv->rstc), "Failed to get reset\n");
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	ret = devm_add_action_or_reset(dev, sp_reset_control_assert, priv->rstc);
-+	if (ret)
-+		return ret;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->wdev.info = &sp_wdt_info;
-+	priv->wdev.ops = &sp_wdt_ops;
-+	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.parent = dev;
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+	watchdog_init_timeout(&priv->wdev, timeout, dev);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_stop_on_reboot(&priv->wdev);
-+	watchdog_set_restart_priority(&priv->wdev, 128);
-+
-+	return devm_watchdog_register_device(dev, &priv->wdev);
-+}
-+
-+static const struct of_device_id sp_wdt_of_match[] = {
-+	{.compatible = "sunplus,sp7021-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-+
-+static struct platform_driver sp_wdt_driver = {
-+	.probe = sp_wdt_probe,
-+	.driver = {
-+		   .name = DEVICE_NAME,
-+		   .of_match_table = sp_wdt_of_match,
-+	},
-+};
-+
-+module_platform_driver(sp_wdt_driver);
-+
-+MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-+MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-+MODULE_LICENSE("GPL");
 -- 
-2.33.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

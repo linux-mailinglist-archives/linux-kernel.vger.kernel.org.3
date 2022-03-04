@@ -2,213 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B5B4CD6A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2694CD6A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236935AbiCDOny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S239922AbiCDOoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237160AbiCDOns (ORCPT
+        with ESMTP id S239904AbiCDOoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:43:48 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EE2198D13
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 06:42:59 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 51B523F1CB
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 14:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646404971;
-        bh=QUzZG1KHFRSY8yqpaadJhb+c5sbI5/bUJrksOfy+R30=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=IwDM616Oxpm00HYIaDH5WtBhLkcbLwkQu5GmSZTXil0LQp0mJP0pHTraYG/FRrHYD
-         7jqiMeAjDlmQ8RiAAoAwcpBBIiyx5S4vb4Dwou8MCDsCf1xZNfJwyG+X1lBFDi+yYn
-         jmKBDGFvfiZGBsYtj+fQqY+iNK9nnq59RZ8byqpuLbOhWPIocvqoMNj7Xn9/3Si2Ue
-         nA5RSstsXQfQbTaQJGBgeH18LetrgIIz6OnNFxgXTTWKEBXYe0KRGyvCEt+zSUMMxb
-         qlsqMxCuiwl/0y3SQWimUV+jMVX7OlSDop4O0n5RJm5QdF8KLpa5fG4r1mKXOyc2eY
-         R03PEZqyJBjHQ==
-Received: by mail-ej1-f72.google.com with SMTP id ey18-20020a1709070b9200b006da9614af58so2467920ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 06:42:51 -0800 (PST)
+        Fri, 4 Mar 2022 09:44:01 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818511BD072
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 06:43:12 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso10771600pjj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 06:43:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ze2fqoG8Uv2ivOdemEby3h5mEqMYX8ZelC0Z+W02JsY=;
+        b=MByDOnLKlFXdAZczHK4WVBzn4RAn6PAHsHIoSaVTs0Hd0A9DZT3CFOy2QmicB40p5j
+         DyQT2LZiwFafH9eamIKEoh0PuIFAkMzhGsEHPz3VgijVEDjImTUWNn3mozIJp4QgnY27
+         276pkjtyHVm1SQY0FstynGu5/6sB0ML6eFEtcWccIgrlTJHhr8TTnrm4LfEwgtOXealL
+         tD1WrPbWEc8eDFGMgCY2rjJHVFUyEXMnHWQuv9H1xvDQ4rCi08c2njHZ26qCI5CR6mCM
+         +zHqtbNTXi6AzslQtMfQr4syff73Alj+suX1drdIzowGvnnE7J1T6oyNxdn0W2Uqs2O6
+         vPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QUzZG1KHFRSY8yqpaadJhb+c5sbI5/bUJrksOfy+R30=;
-        b=xyF8STUXf34q7Gw1EnM2/k1MkKnDLLaXz4Zv0xxRC4YnKJ7o3WdleKxhwcUfaefILI
-         io45QeiJFEJdwg9xbln2Ak84DveTMbkLpO6oWhvdrvjYmXCmTZiY8n/9GlUvG6GSb38t
-         CU10cnYsym03vjXPIE6NujRP3VtZjLOLeuYyOilr1gyI+uwdIW8Ye+cjrL6XMqbza+AY
-         iduFb62h8HtRW8Ffabf0jdwtJM5sTcZNVnhngVThrjoMVQAI4w0LvEOWycPFpu3Gp6UZ
-         KSu0s2GMzMZ83cB3ePOz4UVLYrzOxoyAa2Vh6MXTm5/SRaPS7f1Z5ktYQzzuo879ZcpL
-         PMYQ==
-X-Gm-Message-State: AOAM5300KXgH8F1tvv5+BemBPTmeF3BEZRM/kcv5rtYebEiEFHIN5uhT
-        6kA6dSzOqkQepMeJq5+JxqEkTtj5j2MU63SONcZGbOeoe8XSZ72SRJi2JgVekNXETEvAQvPJeli
-        X3wkrqKcU1IxXRqrQ4zTOb3RhQitlwhC1GOG1eO91aQ==
-X-Received: by 2002:a17:906:360a:b0:6a6:a997:8297 with SMTP id q10-20020a170906360a00b006a6a9978297mr30602324ejb.180.1646404970952;
-        Fri, 04 Mar 2022 06:42:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxrx2g3R6Ud68BvV4gWkPPo1k1U/MwisVmn7ju2xnZT/szKCRH0WkiBUxKJZAcmjTHeut8HyQ==
-X-Received: by 2002:a17:906:360a:b0:6a6:a997:8297 with SMTP id q10-20020a170906360a00b006a6a9978297mr30602297ejb.180.1646404970689;
-        Fri, 04 Mar 2022 06:42:50 -0800 (PST)
-Received: from [192.168.0.139] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id c6-20020a05640227c600b00415e926bbe1sm1806309ede.89.2022.03.04.06.42.49
+        bh=Ze2fqoG8Uv2ivOdemEby3h5mEqMYX8ZelC0Z+W02JsY=;
+        b=IFHsmeOBUql+LyEAy60bEJX0J+vdxp6RUwQKYfaScvqsvPc1coNpMNrSp2cy0PDf0W
+         HokcRuN+lpYU7vm1iJC2mz6Ki+0BlM+uZ4N+OMql111w3u475mCUkqZakRSaVQWswJDy
+         /DaxTT1iaE2S+UYTBnSDgSGTb4ughVtbMF8M8YK0Am2CJ9ldCat5UEqvq6163WPqIqo4
+         muFvQz+77Y/s3JQz6LMdJmIhmanom7L3S2r7SJd8cfgQkd6iTfRM71EfHr9q+88I1Iwb
+         KPWlxEXol6L9Hyi5g7taqaqQekbdws3R79Rs8+o8FS4hTFjeHFpQGCIIrAueJm7LTDZe
+         TSHA==
+X-Gm-Message-State: AOAM5318Y4TdQMH7e7FmgIVHBKiIH65HoSEN/63E+kmyIHQyScFRJtuV
+        nBDecBctClgEVbJBYypCRU49cw==
+X-Google-Smtp-Source: ABdhPJx2Krb3aVoml7oYDj/wYF2zHt9MFApRDg9L25cSW2GzVlZ0CxIxRFV7Ju0TLpp/Uo/PKUNvRg==
+X-Received: by 2002:a17:90a:a887:b0:1bc:388a:329f with SMTP id h7-20020a17090aa88700b001bc388a329fmr11106568pjq.17.1646404991696;
+        Fri, 04 Mar 2022 06:43:11 -0800 (PST)
+Received: from ?IPV6:2409:8a28:e6d:cc00:d089:89fd:5c33:f12? ([2409:8a28:e6d:cc00:d089:89fd:5c33:f12])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056a00195500b004f65b15b3a0sm6169814pfk.8.2022.03.04.06.43.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 06:42:49 -0800 (PST)
-Message-ID: <cc55b477-9f80-fc77-f07b-de0de4812188@canonical.com>
-Date:   Fri, 4 Mar 2022 15:42:48 +0100
+        Fri, 04 Mar 2022 06:43:11 -0800 (PST)
+Message-ID: <f649a2f1-1029-dd69-47c6-f61f0fcc4313@bytedance.com>
+Date:   Fri, 4 Mar 2022 22:43:01 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/5] dt-bindings: rtc: convert at91sam9 bindings to
- json-schema
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [External] Re: [PATCH] psi: remove CPU full metric at system
+ level
 Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220304142746.121947-1-sergiu.moga@microchip.com>
- <20220304142746.121947-4-sergiu.moga@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220304142746.121947-4-sergiu.moga@microchip.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        surenb@google.com, ebiggers@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        Martin Steigerwald <Martin.Steigerwald@proact.de>
+References: <20220303055814.93057-1-zhouchengming@bytedance.com>
+ <YiDB8pjzthSk0X7Q@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YiDB8pjzthSk0X7Q@cmpxchg.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/03/2022 15:27, Sergiu Moga wrote:
-> Convert RTC binding for Atmel/Microchip SoCs to Device Tree Schema
-> format.
+On 2022/3/3 9:26 下午, Johannes Weiner wrote:
+> On Thu, Mar 03, 2022 at 01:58:14PM +0800, Chengming Zhou wrote:
+>> Martin find it confusing when look at the /proc/pressure/cpu output,
+>> and found no hint about that CPU "full" line in psi Documentation.
+>>
+>> % cat /proc/pressure/cpu
+>> some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
+>> full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
+>>
+>> The PSI_CPU_FULL state is introduced by commit e7fcd7622823
+>> ("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
+>> but also counted at the system level as a side effect.
+>>
+>> Naturally, the FULL state doesn't exist for the CPU resource at
+>> the system level. These "full" numbers can come from CPU idle
+>> schedule latency. For example, t1 is the time when task wakeup
+>> on an idle CPU, t2 is the time when CPU pick and switch to it.
+>> The delta of (t2 - t1) will be in CPU_FULL state.
+>>
+>> Another case all processes can be stalled is when all cgroups
+>> have been throttled at the same time, which unlikely to happen.
+>>
+>> Anyway, CPU_FULL metric is meaningless and confusing at the
+>> system level. So this patch removed CPU full metric at the
+>> system level, and removed it's monitor function too. The psi
+>> Documentation has also been updated accordingly.
+>>
+>> Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
+>> Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
+>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>> ---
+>>  Documentation/accounting/psi.rst | 18 +++++++++++++++---
+>>  kernel/sched/psi.c               | 10 +++++++++-
+>>  2 files changed, 24 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+>> index 860fe651d645..519652c06d7d 100644
+>> --- a/Documentation/accounting/psi.rst
+>> +++ b/Documentation/accounting/psi.rst
+>> @@ -178,8 +178,20 @@ Cgroup2 interface
+>>  In a system with a CONFIG_CGROUP=y kernel and the cgroup2 filesystem
+>>  mounted, pressure stall information is also tracked for tasks grouped
+>>  into cgroups. Each subdirectory in the cgroupfs mountpoint contains
+>> -cpu.pressure, memory.pressure, and io.pressure files; the format is
+>> -the same as the /proc/pressure/ files.
+>> +cpu.pressure, memory.pressure, and io.pressure files; the format of
+>> +memory.pressure and io.pressure is the same as the /proc/pressure/ files.
+>> +
+>> +But the format of cpu.pressure is as such::
+>> +	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+>> +	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 > 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> ---
->  .../bindings/rtc/atmel,at91sam9-rtc.txt       | 25 --------
->  .../bindings/rtc/atmel,at91sam9-rtc.yaml      | 63 +++++++++++++++++++
->  2 files changed, 63 insertions(+), 25 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+> It's the format of cpu.pressure, except when it's
+> /sys/fs/cgroup/cpu.pressure... I think this is getting maybe a tad too
+> difficult to write parsers for. Plus, we added the line over a year
+> ago so we might break somebody by removing it again.
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
-> deleted file mode 100644
-> index 3f0e2a5950eb..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -Atmel AT91SAM9260 Real Time Timer
-> -
-> -Required properties:
-> -- compatible: should be one of the following:
-> -	- "atmel,at91sam9260-rtt"
-> -	- "microchip,sam9x60-rtt", "atmel,at91sam9260-rtt"
-> -- reg: should encode the memory region of the RTT controller
-> -- interrupts: rtt alarm/event interrupt
-> -- clocks: should contain the 32 KHz slow clk that will drive the RTT block.
-> -- atmel,rtt-rtc-time-reg: should encode the GPBR register used to store
-> -	the time base when the RTT is used as an RTC.
-> -	The first cell should point to the GPBR node and the second one
-> -	encode the offset within the GPBR block (or in other words, the
-> -	GPBR register used to store the time base).
-> -
-> -
-> -Example:
-> -
-> -rtt@fffffd20 {
-> -	compatible = "atmel,at91sam9260-rtt";
-> -	reg = <0xfffffd20 0x10>;
-> -	interrupts = <1 4 7>;
-> -	clocks = <&clk32k>;
-> -	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> new file mode 100644
-> index 000000000000..af25cc275356
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/atmel,at91sam9-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel AT91 RTT Device Tree Bindings
-> +
-> +allOf:
-> +  - $ref: "rtc.yaml#"
-> +
-> +maintainers:
-> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: atmel,at91sam9260-rtt
-> +      - items:
-> +          - const: microchip,sam9x60-rtt
-> +          - const: atmel,at91sam9260-rtt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  atmel,rtt-rtc-time-reg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      - items:
-> +          - description: Phandle to the GPBR node.
-> +          - description: Offset within the GPBR block.
-> +    description:
-> +      Should encode the GPBR register used to store the time base when the
-> +      RTT is used as an RTC. The first cell should point to the GPBR node
-> +      and the second one encodes the offset within the GPBR block (or in
-> +      other words, the GPBR register used to store the time base).
+> How about reporting zeroes at the system level?
 
-Don't duplicate in description what is already before, so entire part
-from "The first cell" is not needed. I mentioned it last time - Instead
-of describing cells here, use items. You have items, good, but you still
-have description.
+Ok, it's really better for userspace parsers, will change to this way
+and send later.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - atmel,rtt-rtc-time-reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    rtc@fffffd20 {
-> +        compatible = "atmel,at91sam9260-rtt";
-> +        reg = <0xfffffd20 0x10>;
-> +        interrupts = <1 4 7>;
+Thanks.
 
-Could you start acknowledging comments instead of ignoring them?
-
-> +        clocks = <&clk32k>;
-> +        atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-> +    };
-
-
-Best regards,
-Krzysztof
+> 
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index e14358178849..86824de404bc 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+>  	mutex_unlock(&group->avgs_lock);
+>  
+>  	for (full = 0; full < 2; full++) {
+> -		unsigned long avg[3];
+> -		u64 total;
+> +		unsigned long avg[3] = { 0, };
+> +		u64 total = 0;
+>  		int w;
+>  
+> -		for (w = 0; w < 3; w++)
+> -			avg[w] = group->avg[res * 2 + full][w];
+> -		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+> -				NSEC_PER_USEC);
+> +		/* CPU FULL is undefined at the system level */
+> +		if (!(group == &psi_system && res == PSI_CPU && full)) {
+> +			for (w = 0; w < 3; w++)
+> +				avg[w] = group->avg[res * 2 + full][w];
+> +			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+> +					NSEC_PER_USEC);
+> +		}
+>  
+>  		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+>  			   full ? "full" : "some",

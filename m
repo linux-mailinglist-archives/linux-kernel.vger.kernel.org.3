@@ -2,133 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF364CD81C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 842CA4CD81B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbiCDPkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S240465AbiCDPka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240461AbiCDPkc (ORCPT
+        with ESMTP id S232580AbiCDPk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:40:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF671C664A;
-        Fri,  4 Mar 2022 07:39:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a2oRDZsuNGrwg4ZW4QGeKyjKlKY/1cuXv9zPS2PZras=; b=SH/pl5Db9JCgKZpNoXynYkzcn9
-        K6K6kmc5uFDT2VLC/i9cnD7UaJF1TJXstrezlE8pLc32wryhkQXgePI9ZlhmBJfNgcWCJUkXPeNGS
-        PMReH4h6GJOWiV62TlogrsDyqr92faFaeuqOByZZF9l3+CdTMzAaK56nBoaocvD0nSQSNCBRTg+Qd
-        4BsHZpf5f+ha0hImA7vPhg55lw1LH4u24842SLUuIoO70Qxz6p5pQIPhYafclAoSjAgpZoI4Bn+n+
-        X+80sOHS8/rQe4lhz8B7Bqkd+HTk+x05nUaXMvXuJypgfUZwDY+yZyO0+Vrq2e15gW6XE0dDp8qHK
-        8n4SYstQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQA1f-00Ckbk-FB; Fri, 04 Mar 2022 15:39:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FAE73001EA;
-        Fri,  4 Mar 2022 16:39:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 507452012A02A; Fri,  4 Mar 2022 16:39:24 +0100 (CET)
-Date:   Fri, 4 Mar 2022 16:39:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wen Yang <simon.wy@alibaba-inc.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephane Eranian <eranian@google.com>,
-        mark rutland <mark.rutland@arm.com>,
-        jiri olsa <jolsa@redhat.com>,
-        namhyung kim <namhyung@kernel.org>,
-        borislav petkov <bp@alien8.de>, x86@kernel.org,
-        Wen Yang <wenyang@linux.alibaba.com>,
-        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
- avoid unnecessary pmu_stop/start
-Message-ID: <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
-References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
- <20220304110351.47731-2-simon.wy@alibaba-inc.com>
+        Fri, 4 Mar 2022 10:40:28 -0500
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397356E295;
+        Fri,  4 Mar 2022 07:39:41 -0800 (PST)
+Received: by mail-oo1-f41.google.com with SMTP id o7-20020a056820040700b003205d5eae6eso9256831oou.5;
+        Fri, 04 Mar 2022 07:39:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IO1zrbMJCIdW27ZYcLkomHz9MZD/3xTBxiCCeGbY4nY=;
+        b=ziCoo6WiQVWDIkZjm3cC80T9nAG0I8q2Bt/JaEZkId3WoMtoINNGWNUxpsBasbW7/R
+         eTAobw0Y3dGou/Pjkr2EbN1JLQAZvabx6xAKTRwls9aekQM9HX75FoKBorjhq/nDG7Xq
+         3bIDEOITjrNsyzX6s10nOxRFHPWPirRowLvr5fNAW91JM/7wGcqqFUbdJb6kBZnAmPr7
+         qV4Y/BgNvGT0hnj1zFy+vwu3cZTgER+hc3OVdoM7lbjFZhhlOCtrUjXHDI0ojYsN27Og
+         dkPBXmeKSVLodagbvtX9ss+err+oX5p5VQQCT+khs9LVGk7WFx02RBrR4vsU9X+zFqGd
+         zReA==
+X-Gm-Message-State: AOAM531xDKixJY3oRvTJ5R/aIBknOqMcbQE2KKlUm1JfogQPc1YdM2f6
+        fCwKGpL8zbiCsnJgrpkV5A==
+X-Google-Smtp-Source: ABdhPJzV3nnvTE6V/swPLdnnc8Rt2egbCzhY1OPkkrIIw8e54gAgN9Xe2bv5Gl3lRvSRncaFjcChng==
+X-Received: by 2002:a05:6870:248c:b0:d7:19f3:a52c with SMTP id s12-20020a056870248c00b000d719f3a52cmr8397016oaq.149.1646408380509;
+        Fri, 04 Mar 2022 07:39:40 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 35-20020a9d0026000000b005ad363440a2sm2376353ota.64.2022.03.04.07.39.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 07:39:39 -0800 (PST)
+Received: (nullmailer pid 3987557 invoked by uid 1000);
+        Fri, 04 Mar 2022 15:39:38 -0000
+Date:   Fri, 4 Mar 2022 09:39:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     jason-jh.lin@mediatek.com, daniel@ffwll.ch,
+        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
+        p.zabel@pengutronix.de, krzysztof.kozlowski@canonical.com,
+        robh+dt@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        jitao.shi@mediatek.com, ck.hu@mediatek.com,
+        alexandre.torgue@foss.st.com, mcoquelin.stm32@gmail.com,
+        devicetree@vger.kernel.org, matthias.bgg@gmail.com
+Subject: Re: [PATCH 3/3] dt-bindings: display: mediatek: Fix examples on new
+ bindings
+Message-ID: <YiIyupjEgdiaj0Dv@robh.at.kernel.org>
+References: <20220304095458.12409-1-angelogioacchino.delregno@collabora.com>
+ <20220304095458.12409-4-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220304110351.47731-2-simon.wy@alibaba-inc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220304095458.12409-4-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 07:03:51PM +0800, Wen Yang wrote:
-> this issue has been there for a long time, we could reproduce it as follows:
-
-What issue? You've not described an issue. So you cannot reference one.
-
-This is still completely unreadable gibberish.
-
-> 1, run a script that periodically collects perf data, eg:
-> while true
-> do
->     perf stat -e cache-misses,cache-misses,cache-misses -c 1 sleep 2
->     perf stat -e cache-misses -c 1 sleep 2
->     sleep 1
-> done
+On Fri, 04 Mar 2022 10:54:58 +0100, AngeloGioacchino Del Regno wrote:
+> To avoid failure of dt_binding_check perform a slight refactoring
+> of the examples: the main block is kept, but that required fixing
+> the address and size cells, plus the inclusion of missing dt-bindings
+> headers, required to parse some of the values assigned to various
+> properties.
 > 
-> 2, run another one to capture the ipc, eg:
-> perf stat -e cycles:d,instructions:d  -c 1 -i 1000
-
-<snip line noise>
-
-> the reason is that the nmi watchdog permanently consumes one fp
-> (*cycles*). therefore, when the above shell script obtains *cycles*
-> again, only one gp can be used, and its weight is 5.
-> but other events (like *cache-misses*) have a weight of 4,
-> so the counter used by *cycles* will often be taken away, as in
-> the raw data above:
-> [1]
->   n_events = 3
->   assign = {33, 1, 32, ...}
-> -->
->   n_events = 6
->   assign = {33, 3, 32, 0, 1, 2, ...}
-
-Again unreadable... what do any of those numbers mean?
-
+> Fixes: 4ed545e7d100 ("dt-bindings: display: mediatek: disp: split each block to individual yaml")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../display/mediatek/mediatek,aal.yaml        | 24 +++--
+>  .../display/mediatek/mediatek,ccorr.yaml      | 23 +++--
+>  .../display/mediatek/mediatek,color.yaml      | 23 +++--
+>  .../display/mediatek/mediatek,dither.yaml     | 23 +++--
+>  .../display/mediatek/mediatek,dpi.yaml        |  3 +-
+>  .../display/mediatek/mediatek,dsc.yaml        | 23 +++--
+>  .../display/mediatek/mediatek,ethdr.yaml      | 99 ++++++++++---------
+>  .../display/mediatek/mediatek,gamma.yaml      | 23 +++--
+>  .../display/mediatek/mediatek,merge.yaml      | 49 +++++----
+>  .../display/mediatek/mediatek,mutex.yaml      | 25 +++--
+>  .../display/mediatek/mediatek,od.yaml         | 14 ++-
+>  .../display/mediatek/mediatek,ovl-2l.yaml     | 26 +++--
+>  .../display/mediatek/mediatek,ovl.yaml        | 26 +++--
+>  .../display/mediatek/mediatek,postmask.yaml   | 23 +++--
+>  .../display/mediatek/mediatek,rdma.yaml       | 28 ++++--
+>  .../display/mediatek/mediatek,split.yaml      | 17 +++-
+>  .../display/mediatek/mediatek,ufoe.yaml       | 19 ++--
+>  .../display/mediatek/mediatek,wdma.yaml       | 26 +++--
+>  18 files changed, 316 insertions(+), 178 deletions(-)
 > 
-> so it will cause unnecessary pmu_stop/start and also cause abnormal cpi.
 
-How?!?
-
-> Cloud servers usually continuously monitor the cpi data of some important
-> services. This issue affects performance and misleads monitoring.
-> 
-> The current event scheduling algorithm is more than 10 years old:
-> commit 1da53e023029 ("perf_events, x86: Improve x86 event scheduling")
-
-irrelevant
-
-> we wish it could be optimized a bit.
-
-I wish for a unicorn ...
-
-> The fields msk_counters and msk_events are added to indicate currently
-> used counters and events so that the used ones can be skipped
-> in __perf_sched_find_counter and perf_sched_next_event functions to avoid
-> unnecessary pmu_stop/start.
-
-Still not sure what your actual problem is, nor what the actual proposal
-is.
-
-Why should I attempt to reverse engineer your code without basic
-understanding of what you're actually trying to achieve?
+Reviewed-by: Rob Herring <robh@kernel.org>

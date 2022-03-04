@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570C54CCE02
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDAE4CCDF5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238534AbiCDGr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S238415AbiCDGoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238504AbiCDGrs (ORCPT
+        with ESMTP id S229889AbiCDGoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:47:48 -0500
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76DA18E3C8;
-        Thu,  3 Mar 2022 22:46:59 -0800 (PST)
-IronPort-SDR: W5DvWfmPs12IvqWG86ZrLc83rxkCU44ifHFKiA6izxMc8uWLVtj6egUmZfi6M+8JEvEJsBQUa2
- nJB9ct7C5KLHOnG58h2YDjPAjNlyV9e1HXP8YpP5amwq72cdj4Zkc2G0woXcCC5tAeLZIDEarL
- AeQCX7P985Ig7kvw47efaanBS6z68pLTXaUGCBv0DXnHLeJyo+QFq/kU4z8alB8DhWd/wdiCz0
- wqqA52Q01EjlIeGhbDblYcGcNnTp9AMmML7BuYS0P64rog77AkDxUxvVMTBwJIOt/PT2+IywIF
- I1LEJ3H3JHpLwNkf77DhPpBS
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="44623374"
-X-IronPort-AV: E=Sophos;i="5.90,154,1643641200"; 
-   d="scan'208";a="44623374"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 15:45:53 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id A89D4C68B4;
-        Fri,  4 Mar 2022 15:45:52 +0900 (JST)
-Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 09B21D0420;
-        Fri,  4 Mar 2022 15:45:51 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om2.fujitsu.com (Postfix) with ESMTP id 838674007DEED;
-        Fri,  4 Mar 2022 15:45:50 +0900 (JST)
-From:   Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-To:     linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-        linux-serial@vger.kernel.org, sumit.garg@linaro.org
-Cc:     arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com,
-        will@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, peterz@infradead.org,
-        hasegawa-hitomi@fujitsu.com
-Subject: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt driver
-Date:   Fri,  4 Mar 2022 15:43:24 +0900
-Message-Id: <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
-References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
+        Fri, 4 Mar 2022 01:44:17 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6177139CE7;
+        Thu,  3 Mar 2022 22:43:29 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nQ1ey-0006TW-E5; Fri, 04 Mar 2022 07:43:28 +0100
+Message-ID: <ba16b515-80bc-626a-42ca-1083c78eb5aa@leemhuis.info>
+Date:   Fri, 4 Mar 2022 07:43:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+Content-Language: en-US
+To:     Steve French <smfrench@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Davyd McColl <davydm@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+ <CAH2r5mt_2f==5reyc0HmMLvYJVmP4Enykwauo+LQoFGFbVFeRQ@mail.gmail.com>
+ <CAJjP=BvNVOj3KRnhFgk6xiwnxVhxE-sN98-pr6e1Kzc5Xg5EvQ@mail.gmail.com>
+ <CAH2r5mvsetx5G+c=8ePh+X8ng7FvMrnuM9+FJ4Sid4b3E+T41Q@mail.gmail.com>
+ <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com>
+ <CAN05THSGwCKckQoeB6D91iBv0Sed+ethK7tde7GSc1UzS-0OYg@mail.gmail.com>
+ <CAJjP=BvcWrF-k_sFxak1mgHAHVVS7_JZow+h_47XB1VzG2+Drw@mail.gmail.com>
+ <ebf8c487-0377-834e-fbb7-725cceae1fbb@leemhuis.info>
+ <CAN05THRJJj48ueb34t18Yj=JYuhiwZ8hTvOssX4D6XhNpjx-bg@mail.gmail.com>
+ <f7eb4a3e-9799-3fe4-d464-d84dd9e64510@leemhuis.info>
+ <CAJjP=Bus1_ce4vbHXpiou1WrSe8a61U1NzGm4XvN5fYCPGNikA@mail.gmail.com>
+ <fe156bb6-c6d2-57da-7f62-57d2972bf1ae@leemhuis.info>
+ <CAHk-=wjSBvRk-ksUBOiQzJd=e19UZKvOSZs1UHahK5U0QVh6RQ@mail.gmail.com>
+ <CAH2r5mvQnQTDQaci-NbLBjRb=gCPtMewrKhLBOLGrN2_Zpc3Bg@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAH2r5mvQnQTDQaci-NbLBjRb=gCPtMewrKhLBOLGrN2_Zpc3Bg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646376209;23651f12;
+X-HE-SMSGID: 1nQ1ey-0006TW-E5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,247 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable diagnostic interrupts for the A64FX.
-This is done using a pseudo-NMI.
+On 03.03.22 02:27, Steve French wrote:
+> We have been looking to see if we could setup some VMs for something
+> that old, and we are willing to test against it if it could
+> realistically be setup, but it has been harder than expected.  Ronnie
+> had some ideas and we are willing to experiment more but realistically
+> it is very hard to deal with 'legacy museum style' unless we have some
+> VMs available for old systems.
+> 
+> Feel free to contact Ronnie and me or Shyam etc (offline if easier) if
+> you have ideas on how to setup something like this.   We don't want to
+> be encouraging SMB1, but certainly not NTLMv1 auth with SMB1 given its
+> security weaknesses (especially given the particular uses hackers have
+> made of 25+ year old NTLMv1 weaknesses).
 
-Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
----
- MAINTAINERS                      |   5 +
- drivers/soc/Kconfig              |   1 +
- drivers/soc/Makefile             |   1 +
- drivers/soc/fujitsu/Kconfig      |  13 +++
- drivers/soc/fujitsu/Makefile     |   3 +
- drivers/soc/fujitsu/a64fx-diag.c | 151 +++++++++++++++++++++++++++++++
- 6 files changed, 174 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
- create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+Linus, Steve, thx for your option on this. I not sure if "museum style
+equipment" really applies here, as the hardware seems to be sold in
+2013/2014 and according to the reporter even got a update in 2016. But
+whatever, yes, it's niche thing and what the hw manufacturer did there
+was a bad idea.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87ce6..e9663fa92a52 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -239,6 +239,11 @@ F:	include/trace/events/9p.h
- F:	include/uapi/linux/virtio_9p.h
- F:	net/9p/
- 
-+A64FX DIAG DRIVER
-+M:	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-+S:	Supported
-+F:	drivers/soc/fujitsu/a64fx-diag.c
-+
- A8293 MEDIA DRIVER
- M:	Antti Palosaari <crope@iki.fi>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index e8a30c4c5aec..0405ff0b3be6 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -8,6 +8,7 @@ source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/canaan/Kconfig"
- source "drivers/soc/fsl/Kconfig"
-+source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
- source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index a05e9fbcd3e0..86596405a39c 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-+obj-y				+= fujitsu/
- obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
- obj-y				+= imx/
- obj-y				+= ixp4xx/
-diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-new file mode 100644
-index 000000000000..b41cdac67637
---- /dev/null
-+++ b/drivers/soc/fujitsu/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "fujitsu SoC drivers"
-+
-+config A64FX_DIAG
-+	bool "A64FX diag driver"
-+	depends on ARM64
-+	help
-+	  Say Y here if you want to enable diag interrupt on A64FX.
-+	  This driver uses pseudo-NMI if available.
-+
-+	  If unsure, say N.
-+
-+endmenu
-diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
-new file mode 100644
-index 000000000000..945bc1c14ad0
---- /dev/null
-+++ b/drivers/soc/fujitsu/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_A64FX_DIAG)	+= a64fx-diag.o
-diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
-new file mode 100644
-index 000000000000..c6f895cf8912
---- /dev/null
-+++ b/drivers/soc/fujitsu/a64fx-diag.c
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * A64FX diag driver.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/sysrq.h>
-+
-+#define A64FX_DIAG_IRQ 1
-+#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
-+#define BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
-+#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
-+#define BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
-+
-+struct a64fx_diag_priv {
-+	int irq;
-+	void __iomem *mmsc_reg_base;
-+	bool has_nmi;
-+};
-+
-+static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
-+{
-+	handle_sysrq('c');
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_status_reg_addr;
-+
-+	diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
-+	mmsc = readl(diag_status_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_STATUS_MASK)
-+		writel(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
-+}
-+
-+static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl(diag_enable_reg_addr);
-+	if (!(mmsc & BMC_INTERRUPT_ENABLE_MASK)) {
-+		mmsc |= BMC_INTERRUPT_STATUS_MASK;
-+		writel(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl(diag_enable_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_ENABLE_MASK) {
-+		mmsc &= ~BMC_INTERRUPT_ENABLE_MASK;
-+		writel(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static int a64fx_diag_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	unsigned long irq_flags;
-+	struct device *dev = &pdev->dev;
-+	struct a64fx_diag_priv *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
-+	if (priv == NULL)
-+		return -ENOMEM;
-+
-+	priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->mmsc_reg_base))
-+		return PTR_ERR(priv->mmsc_reg_base);
-+
-+	priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
-+	if (priv->irq < 0)
-+		return priv->irq;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	a64fx_diag_interrupt_clear(priv);
-+	a64fx_diag_interrupt_enable(priv);
-+
-+	irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
-+		   IRQF_NO_THREAD;
-+	ret = request_nmi(priv->irq, &a64fx_diag_handler, irq_flags,
-+			"a64fx_diag_nmi", NULL);
-+	if (ret) {
-+		ret = request_irq(priv->irq, &a64fx_diag_handler,
-+				irq_flags, "a64fx_diag_irq", NULL);
-+		if (ret) {
-+			dev_err(dev, "cannot register IRQ %d\n", ret);
-+			return ret;
-+		}
-+		enable_irq(priv->irq);
-+		priv->has_nmi = false;
-+		dev_info(dev, "registered for IRQ %d\n", priv->irq);
-+	} else {
-+		enable_nmi(priv->irq);
-+		priv->has_nmi = true;
-+		dev_info(dev, "registered for NMI %d\n", priv->irq);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __exit a64fx_diag_remove(struct platform_device *pdev)
-+{
-+	struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
-+
-+	a64fx_diag_interrupt_disable(priv);
-+	a64fx_diag_interrupt_clear(priv);
-+
-+	if (priv->has_nmi)
-+		free_nmi(priv->irq, NULL);
-+	else
-+		free_irq(priv->irq, NULL);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id a64fx_diag_acpi_match[] = {
-+	{ "FUJI2007", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
-+
-+
-+static struct platform_driver a64fx_diag_driver = {
-+	.driver = {
-+		.name = "a64fx_diag_driver",
-+		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
-+	},
-+	.probe = a64fx_diag_probe,
-+	.remove = a64fx_diag_remove,
-+};
-+
-+module_platform_driver(a64fx_diag_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
-+MODULE_DESCRIPTION("A64FX diag driver");
--- 
-2.27.0
+Anyway, I'll stop tracking this then.
 
+#regzbot invalid: to niche/risky/old, see Linus and Steve's messages for
+details
+
+> On Wed, Mar 2, 2022 at 6:51 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> On Tue, Mar 1, 2022 at 10:58 PM Thorsten Leemhuis
+>> <regressions@leemhuis.info> wrote:
+>>>
+>>> Thx for the update. I pointed Linus towards this thread two times now,
+>>> but he didn't comment on it afaics. CCing him now, maybe that will to
+>>> the trick.
+>>
+>> So I have to admit that I think it's a 20+ year old legacy and
+>> insecure protocol that nobody should be using.
+>>
+>> When the maintainer can't really even test it, and it really has been
+>> deprecated that long, I get the feeling that somebody who wants it to
+>> be maintained will need to do that job himself.
+>>
+>> This seems to be a _very_ niche thing, possibly legacy museum style
+>> equipment, and maybe using an older kernel ends up being the answer if
+>> nobody steps up and maintains it as an external patch.
+>>
+>>              Linus
+> 
+> 
+> 

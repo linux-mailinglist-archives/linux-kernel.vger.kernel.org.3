@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962E24CCF1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D3F4CCF19
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbiCDHfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S238709AbiCDHfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238731AbiCDHfJ (ORCPT
+        with ESMTP id S232024AbiCDHe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:35:09 -0500
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B5EA2F29
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:34:21 -0800 (PST)
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2247XY0G007345
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Mar 2022 23:33:34 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 3 Mar 2022 23:33:34 -0800
-Received: from pek-lpd-ccm2.wrs.com (128.224.179.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Thu, 3 Mar 2022 23:33:31 -0800
-From:   Dongyang Wang <dongyang.wang@windriver.com>
-To:     <dongyang.wang@windriver.com>
-CC:     <akpm@linux-foundation.org>, <christian.brauner@ubuntu.com>,
-        <dave@stgolabs.net>, <ebiederm@xmission.com>, <legion@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <manfred@colorfullife.com>,
-        <varad.gautam@suse.com>
-Subject: Re: [PATCH] To fix the below failure of handling page fault caused by the invalid input from user.
-Date:   Fri, 4 Mar 2022 15:33:30 +0800
-Message-ID: <20220304073330.13587-1-dongyang.wang@windriver.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20220209072820.18238-1-dongyang.wang@windriver.com>
-References: <20220209072820.18238-1-dongyang.wang@windriver.com>
+        Fri, 4 Mar 2022 02:34:57 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F392D3D;
+        Thu,  3 Mar 2022 23:34:09 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 489941F462F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646379247;
+        bh=Np/FlMv0LvagWUomxrVN4lRvmbAry2baTlXCyY/V+0c=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=HcyOm/SsCuCpUsUrYY68ePamUb0QyNBDl9yFhEX7nZ8KCmGvFHygh400Kh8aPKhZX
+         P8Zpga8/MFWVKwf3Jlp68FfPM+xYHN76sYxNaY68PkkkUgBHdLNsmMse5/L0MH1uNA
+         GBkyAAR/xhdLNTK+G8H5fY3h4XWf8KQJ1XEivnq0YMlbFljKyxkY54dyuxTQleKEVt
+         v/qzu+uaI9HuvtdBQWsLXG2R529jx1/kDdj7xRxtViDQ18QyXUhbgvA434b7bY0cEg
+         msR49/PABocTbJMKgVJxnyv0dRGFKrnkQSlv6MCw3cVYAipHRA9fMiKQhTgjneQX1U
+         3bj2HILMQp2+Q==
+Message-ID: <660ad768-2437-92bb-d5ef-0ca8561499d4@collabora.com>
+Date:   Fri, 4 Mar 2022 12:34:00 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mic@digikod.net, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] selftests/interpreter: fix separate directory build
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220303110629.2072927-1-usama.anjum@collabora.com>
+ <b97fe611-0a2d-6907-b924-a9132e2d427f@linuxfoundation.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <b97fe611-0a2d-6907-b924-a9132e2d427f@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,64 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>> On 1/26/22 03:42, Andrew Morton wrote:
->>>>> On Tue, 18 Jan 2022 17:19:52 +0800 Dongyang Wang <dongyang.wang@windriver.com> wrote:
->>>>>
->>>>>> [786058.308965] Unable to handle kernel paging request at virtual address 01000004
->>>>>> [786058.316286] pgd = 38a99693
->>>>>> [786058.319080] [01000004] *pgd=07800003, *pmd=00000000
->>>>>> [786058.324056] Internal error: Oops: 206 [#1] PREEMPT SMP ARM
->>>>>> [786058.324100] CPU:  PID: Comm:  Tainted: G         C
->>>>>> [786058.324102] Hardware name:
->>>>>> [786058.324114] PC is at __copy_to_user_std+0x4c/0x3c4
->>>>>> [786058.324120] LR is at store_msg+0xc0/0xe8
->>>>>> [786058.324124] pc : [<c0c0587c>]    lr : [<c0871d04>]    psr: 20010013
->>>>>> [786058.324126] sp : c3503ec4  ip : 00000000  fp : b4c9a660
->>>>>> [786058.324129] r10: c4228dc0  r9 : c3502000  r8 : 00000ffc
->>>>>> [786058.324132] r7 : 01000000  r6 : 546d3f8b  r5 : b4911690  r4 : 00000ffc
->>>>>> [786058.324134] r3 : 00000000  r2 : 00000f7c  r1 : 01000004  r0 : b4911690
->>>>>> [786058.324139] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
->>>>>> [786058.324142] Control: 30c5387d  Table: 0edc2040  DAC: 55555555
->>>>>> [786058.324145] Process  (pid: , stack limit = 0x25018bdf)
->>>> Why is process and pid: empty? Is this some kind of kernel process calling?
->>> The pid is 8369, it's a userspace app.
->>>
->>>>>> [786058.324148] Stack: (0xc3503ec4 to 0xc3504000)
->>>>>> [786058.324153] 3ec0:          b4911690 546d3f8b 01000000 00000ffc b4911690 00000ffc 00000000
->>>>>> [786058.324157] 3ee0: 00000ffc c0871d04 546d4f73 c3407801 c3503f28 c3407800 00000000 b49106a8
->>>>>> [786058.324161] 3f00: c4228dc0 c087abd4 00000002 b49106a8 617b9d03 00000000 00000000 c121d508
->>>>>> [786058.324165] 3f20: 00000000 bf06a1a8 d1b634cc 16b26e77 c5af5280 00000100 00000200 db806540
->>>>>> [786058.324170] 3f40: 00000001 c121d508 00000008 0000005c 00000000 00010008 b49106a8 c0601208
->>>>>> [786058.324173] 3f60: c3502000 00000040 b4c9a660 c087b474 c3503f78 c121d508 617b9d03 00000000
->>>>>> [786058.324177] 3f80: 2303d6cc 00000115 c0601208 c121d508 b4c9a660 b4c9a660 00000001 b49106a8
->>>>>> [786058.324181] 3fa0: 00000115 c06011dc b4c9a660 00000001 0000005c b49106a8 00010008 00000000
->>>>>> [786058.324185] 3fc0: b4c9a660 00000001 b49106a8 00000115 00000000 b4c9b400 00000000 b4c9a660
->>>>>> [786058.324189] 3fe0: 00000115 b4c9a650 b6b253bd b6b254b6 800d0030 0000005c 00000000 00000000
->>>>>> [786058.324201] [<c0c0587c>] (__copy_to_user_std) from [<c0871d04>] (store_msg+0xc0/0xe8)
+On 3/4/22 2:39 AM, Shuah Khan wrote:
+> On 3/3/22 4:06 AM, Muhammad Usama Anjum wrote:
+>> Separate directory build fails of this test as headers include path isn't
+>> set correctly in that case. Fix it by including KHDR_INCLUDES.
 >>
->>I would search here: __copy_to_user_std should fail if the address is 
->>invalid.
+>> make -C tools/testing/selftests O=build1
+>> gcc -Wall -O2 -I../../../../usr/include    trust_policy_test.c -lcap
+>> -o /linux_mainline/build1/kselftest/interpreter/trust_policy_test
+>> trust_policy_test.c:14:10: fatal error: linux/trusted-for.h: No such
+>> file or directory
+>>     14 | #include <linux/trusted-for.h>
+>>        |          ^~~~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
 >>
->>For whatever reasons, it produces a page fault.
->
->Totally agree with you. 
->
->>First: Is this reproducible? Does it fail immediately if you pass an 
->>invalid value to mq_timedreceive()?
->
->This crash info is from another team. It can't be reproduced until now.
->Yesterday, I changed the 'u_msg_ptr' and 'msg_ptr->m_ts' to a wrong value, but don't cause crash. 
->I will watch this part. 
-
-Status update:
-Sorry, after changing the "u_msg_ptr", "msg_ptr->m_ts" to the wrong value, I still can't reproduce this issue. 
-
->>https://elixir.bootlin.com/linux/v4.18.20/source/arch/arm/include/asm/uaccess.h#L464
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   tools/testing/selftests/interpreter/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->>It seems ARM has special optimizations (CONFIG_UACCESS_WITH_MEMCPY), and 
->>I cannot see if this is MMU or NO_MMU
->
->This is MMU. 
+>> diff --git a/tools/testing/selftests/interpreter/Makefile
+>> b/tools/testing/selftests/interpreter/Makefile
+>> index 7402fdb6533f..51dde8e01e32 100644
+>> --- a/tools/testing/selftests/interpreter/Makefile
+>> +++ b/tools/testing/selftests/interpreter/Makefile
+>> @@ -1,6 +1,6 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   -CFLAGS += -Wall -O2 -I$(khdr_dir)
+>> +CFLAGS += -Wall -O2 -I$(khdr_dir) $(KHDR_INCLUDES)
+>>   LDLIBS += -lcap
+>>   
+> 
+> Change looks fine to me.
+> 
+>>   src_test := $(wildcard *_test.c)
+>>
+> 
+> I am not seeing this test in linux-kselftest next for sure. Which tree is
+> this patch based on? Please  add the repo info to the patch subject line
+> in the future.
+> 
+This patch is in linux-next and its build is failing from quite some time:
+https://storage.staging.kernelci.org/kernelci/staging-next/staging-next-20220301.0/x86_64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/logs/kselftest.log
 
-Best Regards,
-Dongyang
+I'm not sure in which tree selftests/interpreter is present. It was sent
+here:
+https://lore.kernel.org/lkml/20220104155024.48023-5-mic@digikod.net/
+
+How can I find the tree from which this patch is coming?
+
+> Either way I don't have the patch that added in liunx-kselftest repo:
+> 
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> thanks,
+> -- Shuah
+
+I forgot to add the tag:
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+
+--
+Muhammad Usama Anjum

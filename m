@@ -2,162 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CBE4CDE88
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1AE4CDE78
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiCDURV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S230498AbiCDULR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiCDURG (ORCPT
+        with ESMTP id S232277AbiCDUJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:17:06 -0500
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B66D107806
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:13:11 -0800 (PST)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id A8F9A80EAC;
-        Fri,  4 Mar 2022 19:28:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id D6DAF19;
-        Fri,  4 Mar 2022 19:27:34 +0000 (UTC)
-Message-ID: <451bb2c394b05928c815f1eb349a1281a687a608.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From:   Joe Perches <joe@perches.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Tom Rix <trix@redhat.com>, Finn Thain <fthain@linux-m68k.org>,
-        Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Date:   Fri, 04 Mar 2022 11:28:31 -0800
-In-Reply-To: <CANiq72kWJtOTmcXNO+t4NY22v6xM49Z-U2aSB4apNd96PYbD4Q@mail.gmail.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-         <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-         <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-         <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-         <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-         <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
-         <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-         <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
-         <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-         <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-         <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-         <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-         <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-         <ad3567301af7b1b24cf4ac447fec8d618231ea33.camel@perches.com>
-         <CANiq72kWJtOTmcXNO+t4NY22v6xM49Z-U2aSB4apNd96PYbD4Q@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 4 Mar 2022 15:09:04 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8620C2DA;
+        Fri,  4 Mar 2022 12:03:31 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id f37so15972832lfv.8;
+        Fri, 04 Mar 2022 12:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2feTJ8tP3DC/YFFoVPPzvKdizBU6tg9lhj95h2BK0Uk=;
+        b=M6uJy3jiqnYZQ0PUmcG9NFo1HLo/wJenMcAEDj8OcYlR9/RQqdhxHfSkm6Iz8Hh9j+
+         S2tVbOzWmTyNQWI7IehtdN0/doGOGBH+9z4AYvxiIUBQtm/oGDsIMDl/58jnglUsqcs6
+         4PG/NyJteifuVuoi41+Wbf2iHgHbzRXtxdFTI3sszlV8I+N/veBbFrR16u6uKEZzWuWT
+         YB8aIEu9GUS8lTNfvcjZ9yuYi6h33a3rVUp5BRkgiLUbna+Tq5TxZEFS5VJG9e5t2vUC
+         BsUnwJ8dXcPJk8VIQXlJjC6sYe8z8GsVkL68X9QTAQjrlf6qV+IkO1ovVHYW7UYuq3cp
+         wDjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2feTJ8tP3DC/YFFoVPPzvKdizBU6tg9lhj95h2BK0Uk=;
+        b=VkEohwuwCex97HTqNctxF6HRD2n31mM7U+S/HaDSMkguxXuIkBtfdWcGNjDFsA5mks
+         RtjjlGwA7UJQvRySBZ3vaZd0/M3T0/h/kMkLj5+kNOftnWCL/LPWVR04+HIro96Rro2o
+         CRMnKdT3erR9/HBsHTMitQmQue/7un8mmxFYWBzdsADgIMUDwCd3d3Gy3QuI4I/CnyCv
+         NmbMJlV9zjFyb5VK2yjxL8R56IRoe3qMjBHH5aeucRbl3Vc64gTO61UtbEFWVJMIybtL
+         StA9wzoizf2z7H/k8r5KJdVhzc+1WmXRlW7P4l3/EcfpWO1s7pGNi3Jbv1r43tE4QMzD
+         Dndg==
+X-Gm-Message-State: AOAM533EzWywU5wnqzyeIdTyCbzGPvotA7UytGmepImdx8cZ1/livitZ
+        lk4wVatPmJh+8dyAytt00tQ3X6bBXrPQ7w==
+X-Google-Smtp-Source: ABdhPJxDMYpnJkvbS4DeRXy/SlQQziXOQnVycA9teF/oaohkBhHHeN4VqtYX3TuB4i8JAUwVxLhqXg==
+X-Received: by 2002:a17:907:334c:b0:6cd:76b7:3948 with SMTP id yr12-20020a170907334c00b006cd76b73948mr262340ejb.55.1646422143286;
+        Fri, 04 Mar 2022 11:29:03 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.72.82])
+        by smtp.gmail.com with ESMTPSA id s15-20020a056402520f00b00415e50f8ce1sm2242179edd.54.2022.03.04.11.28.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 11:29:02 -0800 (PST)
+Subject: Re: [PATCH v4 16/24] locking/lockdep, cpu/hotplus: Use a weaker
+ annotation in AP thread
+To:     Byungchul Park <byungchul.park@lge.com>,
+        torvalds@linux-foundation.org
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
+ <1646377603-19730-17-git-send-email-byungchul.park@lge.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <aac81d30-ccc6-b351-729a-7265e8b6ec2c@gmail.com>
+Date:   Fri, 4 Mar 2022 22:28:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <1646377603-19730-17-git-send-email-byungchul.park@lge.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: hyg3dz78tn3se81k3zw45k8tm7sk1h45
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: D6DAF19
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+VgJSiCgMrlaHF7nxKS3V69xPErNMNUTw=
-X-HE-Tag: 1646422054-460497
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 19:48 +0100, Miguel Ojeda wrote:
-> On Fri, Mar 4, 2022 at 6:37 PM Joe Perches <joe@perches.com> wrote:
-> > 
-> > I rather doubt clang-format will ever be 'close enough'.
-> > 
-> > A human's sense of 'taste' for reading code is very different than
-> > what an automated tool produces.
+On 3/4/22 10:06 AM, Byungchul Park wrote:
+
+> cb92173d1f0 (locking/lockdep, cpu/hotplug: Annotate AP thread) was
+
+   You need to enclose the commit summary in (""), not just (). :-)
+
+> introduced to make lockdep_assert_cpus_held() work in AP thread.
 > 
-> Maybe,
-
-Hey again Miguel.
-
-Is that statement really disputable?
-
-> but it is a trade-off. If it is close enough, the benefits of
-> automatic formatting may overcome the downsides.
-
-IYO.  I think using an SCCS with better language understanding rather
-than a line oriented one could be an improvement.  Such a tool could
-allow arbitrary style reformatting at check-in/check-out.
-
-> > Also, try looking at the changes clang-format does on a file chosen
-> > at random:
-> > 
-> > o columnarized definitions -> not columnarized
-> > o odd line continuation placement using spaces and not tabs before \
-> > o odd array definition layouts
-> > o per line definitions with comments poorly laid out
-> > o individual line definitions rewrapped
-> > o enum definitions on multiple lines compressed to single lines
-> > o u8 array definition layouts where the first element has a separate
-> >   meaning than the subsequent elements are compressed and made
-> >   difficult to understand
+> However, the annotation is too strong for that purpose. We don't have to
+> use more than try lock annotation for that.
 > 
-> I am not sure what you are trying to show here -- some of these are
-> precisely the things that the tool could improve or have already
-> improved, and we may just need to use the new option.
-
-All of these existing code are more human readable than the code
-reformatted using clang-format.
-
-I used whatever is the latest clang-format here with today's -next.
-https://releases.llvm.org/download.html
-
-> For instance, for the columnarized macros case, it is possible to
-> align them since clang-format 9. For array of structures, there is
-> also a new alignment option since clang-format 13. Etc.
-
-Then perhaps you as the maintainer of the kernel's .clang-format file
-could update the entries for those new options.
-
-I believe the minimum clang version is already 11.  Maybe higher.
-I don't track clang or use it very much.  The clang version I use
-though is 13.
-
-> For the wrapping and related bits, now that the limit on 80 is a bit
-> more fuzzy, we could perhaps tweak the penalties to improve the
-> decision making.
-
-Please have at it.
-But perhaps tweaking will just improve some cases and worsen others.
-
-> In summary, what we should be trying to do is improve the tool
-> configuration and tool itself to see if we can get it to be close
-> enough to the kernel style to make it more widely used.
+> Furthermore, now that Dept was introduced, false positive alarms was
+> reported by that. Replaced it with try lock annotation.
 > 
-> > I think _some_ clang-format output is ok, but the concept of
-> > enabling/disabling specific reformatting bits would be quite useful.
-> > 
-> > And sprinkling "clang-format on/off" lines in the code is not good.
-> 
-> Definitely, but it is fine in some exceptional cases.
+> Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+[...]
 
-I don't think so.
-
-> > Any control codes that determine when source code layout might be
-> > immutable or allowed to be modified could be should be tool name
-> > agnostic.
-> 
-> I don't see why would that be a problem, and I don't understand why we
-> would use several different formatting tools (the point is to be
-> consistent, after all); but sure, we could propose an alternative
-> spelling.
-
-Thanks.
-
-There is no "one true editor".
-There will not be "one true source code formatter" either.
-
-cheers not jeers, just keep at it.  Joe
-
+MBR, Sergey

@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4864CDAF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CD94CDA73
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiCDRg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S241059AbiCDRbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241377AbiCDRge (ORCPT
+        with ESMTP id S240891AbiCDRbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:36:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B70661D21DC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:35:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646415317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NgcKpbYcf2hi8vkeeDFW+llAZ4317MhJ4ll5aBH+/Nc=;
-        b=NbBTL7qDSMD96vk8yqglIGrbhBg7Wi4lFtgAQrvDAMcYtUMxcE1oPIMMjbc+Myy2fNSC+X
-        2Zn1L72LTSdM/D9Dwb8WuxxPwpAVxEIKJ7EovfABpMZB/0or4C3RWOd5jlghfmCdx9b7Bm
-        hPFBpd8lOt2y1rDcCCuw+1KLcFjsdW0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-DY3KTqRHNQ-zHvi72pqlHg-1; Fri, 04 Mar 2022 12:35:12 -0500
-X-MC-Unique: DY3KTqRHNQ-zHvi72pqlHg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 333015EF;
-        Fri,  4 Mar 2022 17:35:10 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A8B886595;
-        Fri,  4 Mar 2022 17:35:02 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v2 28/28] samples/bpf: fix bpf_program__attach_hid() api change
-Date:   Fri,  4 Mar 2022 18:28:52 +0100
-Message-Id: <20220304172852.274126-29-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+        Fri, 4 Mar 2022 12:31:50 -0500
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C621CD9DA;
+        Fri,  4 Mar 2022 09:31:01 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id j2so18346985ybu.0;
+        Fri, 04 Mar 2022 09:31:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uDGIY2zwKZIzvKJRqnjWoDg4iEG13RBS5dNdwIAZJ6k=;
+        b=l/Gvj88ofCz3+AwTkSL6w9uUD05oERk2ON2eQQLhmo/jtjNwe5+nuM1gUCnAJFj7Jv
+         tHlQq/3hW/Lc4eOcz6qMIkRAvplVGDs66hvBmnpVSidWdpUkcl7I+RJvCIT/F4WD3O+7
+         T5YfXQJGPTjnMuGFQIWfWM9uvV4Ws35TRa1zXBvmrXjjFn8KTqtjGq1qxVJDsUcKEXMC
+         U2owLIxpL+j5rbcdVpXOl3HE1tIxsJRcEq9maBisBzzee55KBd8AZRki1kyQrqxCpJY0
+         ADYLF8AC6dpxQ9D7nqpSGBJQdXBHIHp8HwCglpeFA7EwtZvgA0nQbZuZ34N+He3FRfiB
+         I0Ig==
+X-Gm-Message-State: AOAM5333SWY8++vYNzq0jPfl7nQg+JKfieVtrphPU7ZdcIzEu3pVjYSE
+        9xBhTdeAS2lY1wmpEjbsb1RLZkU6kkOjqpbRgnY=
+X-Google-Smtp-Source: ABdhPJzGdcfDcFhvRMKBUtpb1WMOq7XyKvsFCnal9Pr7bWhUsMLATseb8bX5h5/YhPOZMlOzDnFyZoRdR5ff8Vm+E4Y=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr37227265ybe.365.1646415060952; Fri, 04
+ Mar 2022 09:31:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
+ <CAPDyKFrMu+zfsTzqEA-EtBdU4Wo5m=LwAEoYXPs5PFkxOERnfg@mail.gmail.com>
+In-Reply-To: <CAPDyKFrMu+zfsTzqEA-EtBdU4Wo5m=LwAEoYXPs5PFkxOERnfg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Mar 2022 18:30:49 +0100
+Message-ID: <CAJZ5v0hOQS66hSWEFVSGsnpeoHCe_0UqHn3vQ_K9NhKv-HK3UQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new flag parameter.
+On Fri, Mar 4, 2022 at 11:04 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Wed, 23 Feb 2022 at 17:35, Douglas Anderson <dianders@chromium.org> wrote:
+> >
+> > The PM Runtime docs say:
+> >   Drivers in ->remove() callback should undo the runtime PM changes done
+> >   in ->probe(). Usually this means calling pm_runtime_disable(),
+> >   pm_runtime_dont_use_autosuspend() etc.
+> >
+> > From grepping code, it's clear that many people aren't aware of the
+> > need to call pm_runtime_dont_use_autosuspend().
+> >
+> > When brainstorming solutions, one idea that came up was to leverage
+> > the new-ish devm_pm_runtime_enable() function. The idea here is that:
+> > * When the devm action is called we know that the driver is being
+> >   removed. It's the perfect time to undo the use_autosuspend.
+> > * The code of pm_runtime_dont_use_autosuspend() already handles the
+> >   case of being called when autosuspend wasn't enabled.
+> >
+> > Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>
+> Okay, this provides an improvement from the short term perspective.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+I agree.
 
----
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-new in v2
----
- samples/bpf/hid_mouse_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+And so I've queued up the patch (for 5.18).
 
-diff --git a/samples/bpf/hid_mouse_user.c b/samples/bpf/hid_mouse_user.c
-index d4f37caca2fa..bfae25e7b659 100644
---- a/samples/bpf/hid_mouse_user.c
-+++ b/samples/bpf/hid_mouse_user.c
-@@ -98,7 +98,7 @@ int main(int argc, char **argv)
- 	bpf_object__for_each_program(prog, obj) {
- 		progs[prog_count].fd = bpf_program__fd(prog);
- 		progs[prog_count].type = bpf_program__get_expected_attach_type(prog);
--		progs[prog_count].link = bpf_program__attach_hid(prog, sysfs_fd);
-+		progs[prog_count].link = bpf_program__attach_hid(prog, sysfs_fd, 0);
- 		if (libbpf_get_error(progs[prog_count].link)) {
- 			fprintf(stderr, "bpf_prog_attach: err=%m\n");
- 			progs[prog_count].fd = 0;
--- 
-2.35.1
-
+Thanks!

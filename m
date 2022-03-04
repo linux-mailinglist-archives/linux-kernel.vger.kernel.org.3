@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1514CD955
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4004CD95A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbiCDQnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S240747AbiCDQpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240713AbiCDQnh (ORCPT
+        with ESMTP id S231743AbiCDQpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:43:37 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227F86E7A2
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:42:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 4 Mar 2022 11:45:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A581C46B0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:44:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C720C1F38A;
-        Fri,  4 Mar 2022 16:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646412167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h+2Itu7S1crpuZV7anehYym0zMXdq6gIiMgw+mWxVb4=;
-        b=aKUeVXsAibm8DTcJS4p3Odp8T2pRYvkHDAatPXKAO4xM83rIJhLiCnbFNqOozShOI9w2dy
-        9/xHRBjevpgP3lT1A3TLp0I7srrfJuGil31hUkVvS4dW7WtHSfFOIMHpcLOtICIMb4zMfE
-        In2ePdyWDb4C1Rsm5j/aI+8skosaPWY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646412167;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h+2Itu7S1crpuZV7anehYym0zMXdq6gIiMgw+mWxVb4=;
-        b=HdfV+Xl8PhkuhtYO3gxqiy4fR7yefPCrGWo/VKV5Wo4R1iooE+5j5g/z7CWSNK29C1IaaR
-        1ZH9rGQE/j1ptMCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DF0813CE6;
-        Fri,  4 Mar 2022 16:42:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bLbFJYdBImIpUwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 04 Mar 2022 16:42:47 +0000
-Message-ID: <b9adf3a8-a260-c3ae-58a3-feefab40a651@suse.cz>
-Date:   Fri, 4 Mar 2022 17:42:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
- <CANpmjNNv8+frHPdvT=0ZNuz5phUy1WRanJ6DkiiNvDTBtFraAQ@mail.gmail.com>
- <YiH/6MeYNaEehXmj@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <CANpmjNNYt9AG8RrGF0pq2dPbFc=vw2kaOnL2k5+8kfJeEMGuwg@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 0/5] slab cleanups
-In-Reply-To: <CANpmjNNYt9AG8RrGF0pq2dPbFc=vw2kaOnL2k5+8kfJeEMGuwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D515461DA1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1E8C340E9;
+        Fri,  4 Mar 2022 16:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646412275;
+        bh=O/rYuApC0mWYwuhxZoGy9dgi/jdtzvUbyF59nA1gQPw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hz/roOLF1RLzsMLwHPnGcjc08FiVUts+qgqtIxUGNvM7K5JMBg6L0gU4TydNhqLUU
+         Km9B6kIU6pc/THyWfnATx8vb623YLxtECdDfF6tj1Pao9qBlxYwdn5YyfNM02PDW2Z
+         IGQA7qpyNw9kqGTG7YPmL6b+7eB1jz4bUKwmVdk+SZvJAbXyPKUMTDHhXQ7ajFjwgl
+         Jt38aYCJ1yCzXbKL3GyPYGWIJpX1mptdLPZcUdQz6DdJuqSPKg1XvDakkNK2pwEKHc
+         SCDAqV3zywmoAg40qOMSD765ocaA8DP8MBMnq+x4003pxc68cqh5FceLjFmhigTe/u
+         4lW/CwgXxXXbg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQB2e-00CHEk-Tv; Fri, 04 Mar 2022 16:44:33 +0000
+Date:   Fri, 04 Mar 2022 16:44:32 +0000
+Message-ID: <87k0d91xcf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linu Cherian <lcherian@marvell.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuc.decode@gmail.com" <linuc.decode@gmail.com>
+Subject: Re: [EXT] Re: [PATCH V2] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+In-Reply-To: <PH0PR18MB50021922303A495B997648FACE059@PH0PR18MB5002.namprd18.prod.outlook.com>
+References: <20220304014301.2515-1-lcherian@marvell.com>
+        <87ilsutb6w.wl-maz@kernel.org>
+        <PH0PR18MB50021922303A495B997648FACE059@PH0PR18MB5002.namprd18.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lcherian@marvell.com, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuc.decode@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,60 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 14:11, Marco Elver wrote:
-> On Fri, 4 Mar 2022 at 13:02, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->>
->> On Fri, Mar 04, 2022 at 12:50:21PM +0100, Marco Elver wrote:
->> > On Fri, 4 Mar 2022 at 07:34, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->> > >
->> > > Changes from v1:
->> > >         Now SLAB passes requests larger than order-1 page
->> > >         to page allocator.
->> > >
->> > >         Adjusted comments from Matthew, Vlastimil, Rientjes.
->> > >         Thank you for feedback!
->> > >
->> > >         BTW, I have no idea what __ksize() should return when an object that
->> > >         is not allocated from slab is passed. both 0 and folio_size()
->> > >         seems wrong to me.
->> >
->> > Didn't we say 0 would be the safer of the two options?
->> > https://lkml.kernel.org/r/0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz
->> >
->>
->> Oh sorry, I didn't understand why 0 was safer when I was reading it.
->>
->> Reading again, 0 is safer because kasan does not unpoison for
->> wrongly passed object, right?
+Hi Linu,
+
+On Fri, 04 Mar 2022 13:25:42 +0000,
+Linu Cherian <lcherian@marvell.com> wrote:
 > 
-> Not quite. KASAN can tell if something is wrong, i.e. invalid object.
-> Similarly, if you are able to tell if the passed pointer is not a
-> valid object some other way, you can do something better - namely,
-> return 0.
-
-Hmm, but how paranoid do we have to be? Patch 1 converts SLAB to use
-kmalloc_large(). So it's now legitimate to have objects allocated by SLAB's
-kmalloc() that don't have a slab folio flag set, and their size is
-folio_size(). It would be more common than getting a bogus pointer, so
-should we return 0 just because a bogus pointer is possible? If we do that,
-then KASAN will fail to unpoison legitimate kmalloc_large() objects, no?
-What I suggested earlier is we could make the checks more precise - if
-folio_size() is smaller or equal order-1 page, then it's bogus because we
-only do kmalloc_large() for >order-1. If the object pointer is not to the
-beginning of the folio, then it's bogus, because kmalloc_large() returns the
-beginning of the folio. Then in these case we return 0, but otherwise we
-should return folio_size()?
-
-> The intuition here is that the caller has a pointer to an
-> invalid object, and wants to use ksize() to determine its size, and
-> most likely access all those bytes. Arguably, at that point the kernel
-> is already in a degrading state. But we can try to not let things get
-> worse by having ksize() return 0, in the hopes that it will stop
-> corrupting more memory. It won't work in all cases, but should avoid
-> things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
-> bounds the memory accessed corrupting random memory.
+> Hi Marc,
 > 
-> The other reason is that a caller could actually check the size, and
-> if 0, do something else. Few callers will do so, because nobody
-> expects that their code has a bug. :-)
+> > >  static inline u64 gic_read_iar_cavium_thunderx(void)
+> > >  {
+> > > -	u64 irqstat;
+> > > +	u64 irqstat, apr;
+> > >
+> > > +	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
+> > 
+> > Why only AP1R0? Does the HW only support 5 bits of priority? If it supports
+> > more, you need to check all the registers that may contain an active priority
+> > (0xa0 for a standard interrupt, 0x20 for a pNMI).
+> > 
+> 
+> Yes correct. HW supports only 5 bits of priority groups.
+> Will note this in the comment.
 
+Thanks.
+
+> 
+> > >  	nops(8);
+> > >  	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
+> > >  	nops(4);
+> > >  	mb();
+> > >
+> > > -	return irqstat;
+> > > +	if (likely(apr != read_sysreg_s(SYS_ICC_AP1R0_EL1)))
+> > > +		return irqstat;
+> > > +
+> > > +	return 0x3ff;
+> > 
+> > This should be ICC_IAR1_EL1_SPURIOUS.
+> 
+> Looks like we need fixes like below in couple of files to make use
+> of this macro.
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 5bc01e62c08a..d02b7339d21a 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -18,7 +18,7 @@
+>  #include <linux/kvm_types.h>
+>  #include <linux/percpu.h>
+>  #include <linux/psci.h>
+> -#include <asm/arch_gicv3.h>
+> +#include <linux/irqchip/arm-gic-v3.h>
+> 
+> Should I consider fixing these ? 
+> At least  its builds fine for me with similar header fixes.
+
+Ah, crap. I'd like to avoid dragging too much of the linux/*.h into
+asm/*.h, as this eventually leads to a pretty terrible mess. Never
+mind then. I'll look into fixing it independently, and we'll live with
+the 0x3ff for now.
+
+> > > +#define CAVIUM_CPU_PART_THUNDERX_OTX_GEN 0x0A0
+> > 
+> > Is this an actual part number? What does 'GEN' stand for?
+> > 
+> 
+> No, this is not an actual part number. GEN was meant to be generic
+> to cover a group of part numbers.
+
+The problem with that is that it eventually clashes with part numbers
+that are allocated later, and your old kernel tries to apply a
+workaround on the new HW... Sticking to the actual parts is a lot
+safer.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE7F4CDE9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152EF4CDE8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiCDUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S231344AbiCDUQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiCDUPh (ORCPT
+        with ESMTP id S231416AbiCDUPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:15:37 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF18210460
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:11:26 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id bt3so8415065qtb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:11:26 -0800 (PST)
+        Fri, 4 Mar 2022 15:15:35 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C9323A63
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:11:27 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id v5so7345441qkj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:11:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qsIO2ya+cektsJMcKlRJepNqbeDF38Da8NmtSJ8s3gU=;
-        b=N8FaQlw5OIEM3nPnrnG5ZP2TJJy/b2ccHKMgsAFTjSQD2qsuFgofIv2+b3o9BK1ZpN
-         //j8EXvZd85ZIPGjHfXBgbqKRWSWnxfdpuL+fQK0aZMczrozI6OmH95uiuITNr3tToBt
-         yo+IBGiuJ9MYEMUby4Y+iz940dgwRcjRcLlEM7LTUPJ0t2jcHcO6JqIo+/zKqJ0GRl60
-         kROrc93K3cYxxoudnV2HZfdlRMDAkvxBsaT0Z5V1O3vN9b05UwxF9kyv7DdQRgFoCRC6
-         YDEKxgc2mwGeYdA9wU3GErE1QEoOLqHp0DXpEukTcS8Ks0s/Bm36xscy4D8XcNBCJLSL
-         7Lpg==
+        bh=VGU3lDVBq59QqjYsyRxQH4/VHY2UtoMa8BpyGMZ/FLo=;
+        b=ogou+8r1Nf1Cv1Sqo2avgI+ufHZcUQqdvKyABGfz/Jgc+M/SCWUFQ0E9dIfKtMXMSR
+         2NCi9Iv5Kpn5fzA3h8CIk/bNHWE8Pd3sJFOVKnlj7MJz78TxbTRnE5g4Mcc+97U5oUKg
+         YsSPgos3H5hG5PVLOeekfix7+oR8CaU/8TXW+4p6m9nrW0hwiLMccODAxdIO5ktxqlRZ
+         bq+2ViShK8qFFgqxSRwbWKq9b342rrny35pRQuSHIYK6CthnEhj/yd246vKtmYptSbkn
+         jGrrst+bhQetTjyhauFJIwklZA6Do1cl2pH1QzrR0SQexPffkJrEqVl0xMQN+lqPhZUb
+         C3rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qsIO2ya+cektsJMcKlRJepNqbeDF38Da8NmtSJ8s3gU=;
-        b=zV5AVE/oVBRPQNovoutJ3tt8McJQi8LmfRJCq/LOvlNf2ChguK9T0bEKscbtjHvgwv
-         dLwJspVvk/euQQz/LkgZ8jXf4HXmqDODOinMo04rBsGuykjH0Ft/+lW2Uw1fpudV7VsL
-         86UhuacsSVixr3OrhMZtJ2YTizRnCam8h1NbvqUgCuYUyHGRmxDDN6KyiFW5pG3Wa/yi
-         SoxMqP85v42l2L9vqLQIZZEOGcvP5aWinmTn321UO20gW2o8KmU88yppXJNEOUPfo4ro
-         t1KPBI2o4clhpTxbm4J0Cwse8wt2fhuWinF2ssqbMR8Onrt+fSuzCoM0iwXL6xbSs+aQ
-         WHog==
-X-Gm-Message-State: AOAM533Kxhiulc7CI4g8FzBIiMr+jWDa4Ci8AZV5yWBHNOv0oex9vWtJ
-        ghg9JgMJrmczFEpcE2vzFT2xV5rsZO131A==
-X-Google-Smtp-Source: ABdhPJyBu28CBsOFIzyM9DOgbXjnNnxtobqGHxzYB0P4cAzhg/+V3vQ13sjTBnimNgfPW2IUppEExQ==
-X-Received: by 2002:a05:622a:1b8d:b0:2d1:38ca:6b1 with SMTP id bp13-20020a05622a1b8d00b002d138ca06b1mr396609qtb.688.1646424645574;
-        Fri, 04 Mar 2022 12:10:45 -0800 (PST)
+        bh=VGU3lDVBq59QqjYsyRxQH4/VHY2UtoMa8BpyGMZ/FLo=;
+        b=IPO23NBjbsi8WFOJYQSPHIjuEjrmww+kfZ5PveNs5aGCtNg1c7T6uBjI/BOXe8D1MM
+         gqlbLrnN5IwjNq4GAH64lDMYyVeUugfTLC+yhozXiyoq24ToJIqoIek/D1/wtp9nVAKe
+         Ig6A7nQ8KKhMnU3OeXSyHZ9AF4JX7KopnFmZ1N8z+pV7wcmN5xxPIsAl/S7+a64A3Yxi
+         knPbVo7Ez7A6F8LZ2Ou08y5kYV3oz/wpdeeuI2mSHi0F40o30jjBo3HlOrTsM+WbGiXl
+         Fx3zVVcWsST/XCAMevXZZGFFtI4vqc3C51Z+NC6mx+JmW0lwYU+JuYQ8e1N7ASmVfx2w
+         CYMQ==
+X-Gm-Message-State: AOAM533ln9jggleQEtiIKVLM9bhLWhv+JcX6f0u2dIyJtqkYScryVi3r
+        vTQEkIugfxHfqXw4OPvwX17HkRXkCedLHQ==
+X-Google-Smtp-Source: ABdhPJziAT+GkcoKPwD8VK1mQG+Q81feZ7J2fFcV4cs55xPUicqo70tLtaLMRp0qMRbF9AiUkgGugw==
+X-Received: by 2002:a37:c06:0:b0:49b:7a31:cd54 with SMTP id 6-20020a370c06000000b0049b7a31cd54mr230310qkm.358.1646424647390;
+        Fri, 04 Mar 2022 12:10:47 -0800 (PST)
 Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac84e94000000b002de8f564305sm4605481qtp.1.2022.03.04.12.10.43
+        by smtp.gmail.com with ESMTPSA id 20-20020ac84e94000000b002de8f564305sm4605481qtp.1.2022.03.04.12.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 12:10:45 -0800 (PST)
+        Fri, 04 Mar 2022 12:10:46 -0800 (PST)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -60,9 +60,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [RFC PATCH v2 4/7] RISC-V: KVM: Remove 's' & 'u' as valid ISA extension
-Date:   Fri,  4 Mar 2022 12:10:17 -0800
-Message-Id: <20220304201020.810380-5-atishp@rivosinc.com>
+Subject: [RFC PATCH v2 5/7] RISC-V: KVM: Restrict the extensions that can be disabled
+Date:   Fri,  4 Mar 2022 12:10:18 -0800
+Message-Id: <20220304201020.810380-6-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220304201020.810380-1-atishp@rivosinc.com>
 References: <20220304201020.810380-1-atishp@rivosinc.com>
@@ -78,32 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no ISA extension defined as 's' & 'u' in RISC-V specifications.
-The misa register defines 's' & 'u' bit as Supervisor/User privilege mode
-enabled. But it should not appear in the ISA extension in the device tree.
-
-Remove those from the allowed ISA extension for kvm.
+Currently, the config reg register allows to disable all allowed
+single letter ISA extensions. It shouldn't be the case as vmm
+shouldn't be able disable base extensions (imac).
+These extensions should always be enabled as long as they are enabled
+in the host ISA.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/vcpu.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/riscv/kvm/vcpu.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 624166004e36..3ae545e7b398 100644
+index 3ae545e7b398..388e83857ced 100644
 --- a/arch/riscv/kvm/vcpu.c
 +++ b/arch/riscv/kvm/vcpu.c
-@@ -43,9 +43,7 @@ const struct kvm_stats_header kvm_vcpu_stats_header = {
- 				 riscv_isa_extension_mask(d) | \
- 				 riscv_isa_extension_mask(f) | \
- 				 riscv_isa_extension_mask(i) | \
--				 riscv_isa_extension_mask(m) | \
--				 riscv_isa_extension_mask(s) | \
--				 riscv_isa_extension_mask(u))
-+				 riscv_isa_extension_mask(m))
+@@ -38,12 +38,16 @@ const struct kvm_stats_header kvm_vcpu_stats_header = {
+ 		       sizeof(kvm_vcpu_stats_desc),
+ };
+ 
+-#define KVM_RISCV_ISA_ALLOWED	(riscv_isa_extension_mask(a) | \
+-				 riscv_isa_extension_mask(c) | \
+-				 riscv_isa_extension_mask(d) | \
+-				 riscv_isa_extension_mask(f) | \
+-				 riscv_isa_extension_mask(i) | \
+-				 riscv_isa_extension_mask(m))
++#define KVM_RISCV_ISA_DISABLE_ALLOWED	(riscv_isa_extension_mask(d) | \
++					riscv_isa_extension_mask(f))
++
++#define KVM_RISCV_ISA_DISABLE_NOT_ALLOWED	(riscv_isa_extension_mask(a) | \
++						riscv_isa_extension_mask(c) | \
++						riscv_isa_extension_mask(i) | \
++						riscv_isa_extension_mask(m))
++
++#define KVM_RISCV_ISA_ALLOWED (KVM_RISCV_ISA_DISABLE_ALLOWED | \
++			       KVM_RISCV_ISA_DISABLE_NOT_ALLOWED)
  
  static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
  {
+@@ -217,9 +221,10 @@ static int kvm_riscv_vcpu_set_reg_config(struct kvm_vcpu *vcpu,
+ 	switch (reg_num) {
+ 	case KVM_REG_RISCV_CONFIG_REG(isa):
+ 		if (!vcpu->arch.ran_atleast_once) {
+-			vcpu->arch.isa = reg_val;
++			/* Ignore the disable request for these extensions */
++			vcpu->arch.isa = reg_val | KVM_RISCV_ISA_DISABLE_NOT_ALLOWED;
+ 			vcpu->arch.isa &= riscv_isa_extension_base(NULL);
+-			vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
++			vcpu->arch.isa &= KVM_RISCV_ISA_DISABLE_ALLOWED;
+ 			kvm_riscv_vcpu_fp_reset(vcpu);
+ 		} else {
+ 			return -EOPNOTSUPP;
 -- 
 2.30.2
 

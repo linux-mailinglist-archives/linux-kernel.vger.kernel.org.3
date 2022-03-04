@@ -2,582 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455F64CCBE4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495794CCBEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbiCDCn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S236572AbiCDCof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiCDCny (ORCPT
+        with ESMTP id S231310AbiCDCod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:43:54 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA245D5FB;
-        Thu,  3 Mar 2022 18:43:01 -0800 (PST)
-X-UUID: ddcd53243d804e7dac19bd61d4c6cad4-20220304
-X-UUID: ddcd53243d804e7dac19bd61d4c6cad4-20220304
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1831687328; Fri, 04 Mar 2022 10:42:55 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 4 Mar 2022 10:42:53 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 4 Mar
- 2022 10:42:53 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Mar 2022 10:42:53 +0800
-Message-ID: <5c86954704df2c4e71cca2ce10c35641b65c78f1.camel@mediatek.com>
-Subject: Re: [PATCH v8 15/19] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>,
-        <chunfeng.yun@mediatek.com>, <kishon@ti.com>, <vkoul@kernel.org>,
-        <deller@gmx.de>, <jitao.shi@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>
-Date:   Fri, 4 Mar 2022 10:42:53 +0800
-In-Reply-To: <20220218145437.18563-16-granquet@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
-         <20220218145437.18563-16-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 3 Mar 2022 21:44:33 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9C66107099;
+        Thu,  3 Mar 2022 18:43:45 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADHztrffCFiGDUYAg--.9975S2;
+        Fri, 04 Mar 2022 10:43:43 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ckeepax@opensource.cirrus.com
+Cc:     sre@kernel.org, patches@opensource.cirrus.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] power: supply: Handle error for wm8350_register_irq
+Date:   Fri,  4 Mar 2022 10:43:42 +0800
+Message-Id: <20220304024342.392044-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHztrffCFiGDUYAg--.9975S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYO7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
+        xwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7VUbxpnPUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
-
-On Fri, 2022-02-18 at 15:54 +0100, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Thu, Mar 03, 2022 at 09:41:03PM +0800, Charles Keepax wrote:
+>> +	if (ret)
+>> +		goto free_CHG_BAT_HOT;
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> hot-plug-detection and DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/gpu/drm/mediatek/Kconfig       |    7 +
->  drivers/gpu/drm/mediatek/Makefile      |    2 +
->  drivers/gpu/drm/mediatek/mtk_dp.c      | 2358
-> ++++++++++++++++++++++++
->  drivers/gpu/drm/mediatek/mtk_dp_reg.h  |  568 ++++++
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c |    1 +
->  drivers/gpu/drm/mediatek/mtk_drm_drv.h |    1 +
->  6 files changed, 2937 insertions(+)
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> 
-> 
+> Probably be nicer to use non-caps for the labels, otherwise looks
+> good to me.
 
-[snip]
+Thanks, I have submitted a v2 to fix them.
 
-> +
-> +struct mtk_dp_train_info {
-> +	bool tps3;
-> +	bool tps4;
-> +	bool sink_ssc;
-> +	bool cable_plugged_in;
-
-Move to external display port patch.
-
-> +	bool cable_state_change;
-
-Move to external display port patch.
-
-> +	bool cr_done;
-> +	bool eq_done;
-> +
-> +	// link_rate is in multiple of 0.27Gbps
-> +	int link_rate;
-> +	int lane_count;
-> +
-> +	int irq_status;
-
-Move to external display port patch.
-
-> +	int check_cap_count;
-> +};
-> +
-> 
-
-[snip]
-
-> +
-> +// Same values as used for DP Spec MISC0 bits 5,6,7
-> +enum mtk_dp_color_depth {
-> +	MTK_DP_COLOR_DEPTH_6BIT = 0,
-> +	MTK_DP_COLOR_DEPTH_8BIT = 1,
-
-Only 8bits is used, so drop other definition.
-
-> +	MTK_DP_COLOR_DEPTH_10BIT = 2,
-> +	MTK_DP_COLOR_DEPTH_12BIT = 3,
-> +	MTK_DP_COLOR_DEPTH_16BIT = 4,
-> +	MTK_DP_COLOR_DEPTH_UNKNOWN = 5,
-> +};
-> +
-> 
-
-[snip]
-
-> +
-> +struct mtk_dp {
-> +	struct device *dev;
-> +	struct platform_device *phy_dev;
-> +	struct phy *phy;
-> +	struct dp_cal_data cal_data;
-> +
-> +	struct drm_device *drm_dev;
-> +	struct drm_bridge bridge;
-> +	struct drm_bridge *next_bridge;
-> +	struct drm_dp_aux aux;
-> +
-> +	/* Protects edid as it is used in both bridge ops and IRQ
-> handler */
-> +	struct mutex edid_lock;
-> +	struct edid *edid;
-> +
-> +	u8 rx_cap[DP_RECEIVER_CAP_SIZE];
-> +
-> +	struct mtk_dp_info info;
-> +	enum mtk_dp_state state;
-> +
-> +	struct mtk_dp_train_info train_info;
-> +	enum mtk_dp_train_state train_state;
-> +	unsigned int input_fmt;
-> +
-> +	struct regmap *regs;
-> +	struct clk *dp_tx_clk;
-> +
-> +	bool enabled;
-> +
-> +	bool has_fec;
-> +	/* Protects the mtk_dp struct */
-> +	struct mutex dp_lock;
-> +
-> +	hdmi_codec_plugged_cb plugged_cb;
-> +	struct device *codec_dev;
-> +	u8 connector_eld[MAX_ELD_BYTES];
-
-Move this to dp audio patch.
-
-> +	struct drm_connector *conn;
-> +};
-> +
-> 
-
-[snip]
-
-> +
-> +static void mtk_dp_set_color_format(struct mtk_dp *mtk_dp,
-> +				    enum mtk_dp_color_format
-> color_format)
-> +{
-> +	u32 val;
-> +
-> +	mtk_dp->info.format = color_format;
-
-When call into this function from mtk_dp_video_config(), it calls
-
-mtk_dp_set_color_format(mtk_dp, mtk_dp->info.format);
-
-It looks weird that you pass mtk_dp->info.format into this function and
-set it to it. So I would like this function to be pure register
-setting, and move this variable keeping out of this function.
-
-
-> +
-> +	// Update MISC0
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> +			   color_format << DP_TEST_COLOR_FORMAT_SHIFT,
-> +			   DP_TEST_COLOR_FORMAT_MASK);
-> +
-> +	switch (color_format) {
-> +	case MTK_DP_COLOR_FORMAT_YUV_422:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR422;
-> +		break;
-> +	case MTK_DP_COLOR_FORMAT_YUV_420:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR420;
-> +		break;
-> +	case MTK_DP_COLOR_FORMAT_YONLY:
-> +	case MTK_DP_COLOR_FORMAT_RAW:
-> +	case MTK_DP_COLOR_FORMAT_RESERVED:
-> +	case MTK_DP_COLOR_FORMAT_UNKNOWN:
-> +		drm_warn(mtk_dp->drm_dev, "Unsupported color format:
-> %d\n",
-> +			 color_format);
-> +		fallthrough;
-> +	case MTK_DP_COLOR_FORMAT_RGB_444:
-> +	case MTK_DP_COLOR_FORMAT_YUV_444:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_RGB;
-> +		break;
-> +	}
-> +
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
-> +			   PIXEL_ENCODE_FORMAT_DP_ENC0_P0_MASK);
-> +}
-> +
-> 
-
-[snip]
-
-> +
-> +static void mtk_dp_pg_disable(struct mtk_dp *mtk_dp)
-> +{
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3038, 0,
-> +			   VIDEO_SOURCE_SEL_DP_ENC0_P0_MASK);
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_31B0,
-> +			   4 << PGEN_PATTERN_SEL_SHIFT,
-> PGEN_PATTERN_SEL_MASK);
-> +}
-> +
-> +static bool mtk_dp_plug_state(struct mtk_dp *mtk_dp)
-
-Move this function to external dp patch.
-
-> +{
-> +	return !!(mtk_dp_read(mtk_dp, MTK_DP_TRANS_P0_3414) &
-> +		  HPD_DB_DP_TRANS_P0_MASK);
-> +}
-> +
-> 
-
-[snip]
-
-> +
-> +static void mtk_dp_train_set_pattern(struct mtk_dp *mtk_dp, int
-> pattern)
-> +{
-> +	if (pattern < 0 || pattern > 4) {
-
-Never happen, remove this checking.
-
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Implementation error, no such pattern %d\n",
-> pattern);
-> +		return;
-> +	}
-> +
-> +	if (pattern == 1) // TPS1
-> +		mtk_dp_set_idle_pattern(mtk_dp, false);
-> +
-> +	mtk_dp_update_bits(mtk_dp,
-> +			   MTK_DP_TRANS_P0_3400,
-> +			   pattern ? BIT(pattern - 1) <<
-> PATTERN1_EN_DP_TRANS_P0_SHIFT : 0,
-> +			   PATTERN1_EN_DP_TRANS_P0_MASK |
-> PATTERN2_EN_DP_TRANS_P0_MASK |
-> +			   PATTERN3_EN_DP_TRANS_P0_MASK |
-> +			   PATTERN4_EN_DP_TRANS_P0_MASK);
-> +}
-> +
-> 
-
-[snip]
-
-> +
-> +static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
-> +{
-> +	u32 sram_read_start = MTK_DP_TBC_BUF_READ_START_ADDR;
-
-It's not necessary to have a initial value.
-
-> +
-> +	if (mtk_dp->train_info.lane_count > 0) {
-> +		sram_read_start = min_t(u32,
-> +					MTK_DP_TBC_BUF_READ_START_ADDR,
-> +					mtk_dp->info.timings.vm.hactive 
-> /
-> +					(mtk_dp->train_info.lane_count
-> * 4 * 2 * 2));
-> +		mtk_dp_set_sram_read_start(mtk_dp, sram_read_start);
-> +	}
-> +
-> +	mtk_dp_setup_encoder(mtk_dp);
-> +}
-> +
-> 
-
-[snip]
-
-> +static void mtk_dp_train_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	int ret = 0;
-> +	int i = 50;
-> +
-> +	do {
-> +		if (mtk_dp->train_state == MTK_DP_TRAIN_STATE_NORMAL)
-> +			continue;
-> +
-> +		switch (mtk_dp->train_state) {
-> +		case MTK_DP_TRAIN_STATE_STARTUP:
-> +			mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_CHECKCAP;
-> +			break;
-> +
-> +		case MTK_DP_TRAIN_STATE_CHECKCAP:
-> +			if (mtk_dp_parse_capabilities(mtk_dp)) {
-> +				mtk_dp->train_info.check_cap_count = 0;
-> +				mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_CHECKEDID;
-> +			} else {
-> +				mtk_dp->train_info.check_cap_count++;
-> +
-> +				if (mtk_dp->train_info.check_cap_count
-> >
-> +					MTK_DP_CHECK_SINK_CAP_TIMEOUT_C
-> OUNT) {
-> +					mtk_dp-
-> >train_info.check_cap_count = 0;
-> +					mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_DPIDLE;
-> +					ret = -ETIMEDOUT;
-> +				}
-> +			}
-> +			break;
-> +
-> +		case MTK_DP_TRAIN_STATE_CHECKEDID:
-> +			mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_TRAINING_PRE;
-> +			break;
-> +
-> +		case MTK_DP_TRAIN_STATE_TRAINING_PRE:
-> +			mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_TRAINING;
-> +			break;
-> +
-> +		case MTK_DP_TRAIN_STATE_TRAINING:
-> +			ret = mtk_dp_train_start(mtk_dp);
-> +			if (!ret) {
-> +				mtk_dp_video_mute(mtk_dp, true);
-> +				mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_NORMAL;
-> +				mtk_dp_fec_enable(mtk_dp, mtk_dp-
-> >has_fec);
-> +			} else if (ret != -EAGAIN) {
-> +				mtk_dp->train_state =
-> MTK_DP_TRAIN_STATE_DPIDLE;
-> +			}
-> +
-> +			ret = 0;
-> +			break;
-> +
-> +		case MTK_DP_TRAIN_STATE_NORMAL:
-> +			break;
-> +		case MTK_DP_TRAIN_STATE_DPIDLE:
-> +			break;
-> +		default:
-
-You have list all 7 states, why need default?
-
-> +			break;
-> +		}
-> +	} while (ret && i--);
-
-Why keep in this loop while error happen?
-
-> +
-> +	if (ret)
-> +		drm_err(mtk_dp->drm_dev, "Train handler failed %d\n",
-> ret);
-> +}
-> +
-> 
-
-[snip]
-
-> +static void mtk_dp_state_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	switch (mtk_dp->state) {
-> +	case MTK_DP_STATE_INITIAL:
-> +		mtk_dp_video_mute(mtk_dp, true);
-> +		mtk_dp->state = MTK_DP_STATE_IDLE;
-> +		break;
-> +
-> +	case MTK_DP_STATE_IDLE:
-> +		if (mtk_dp->train_state == MTK_DP_TRAIN_STATE_NORMAL)
-> +			mtk_dp->state = MTK_DP_STATE_PREPARE;
-> +		break;
-> +
-> +	case MTK_DP_STATE_PREPARE:
-> +		mtk_dp_video_config(mtk_dp);
-> +		mtk_dp_video_enable(mtk_dp, true);
-> +
-> +		mtk_dp->state = MTK_DP_STATE_NORMAL;
-> +		break;
-> +
-> +	case MTK_DP_STATE_NORMAL:
-> +		if (mtk_dp->train_state != MTK_DP_TRAIN_STATE_NORMAL) {
-> +			mtk_dp_video_mute(mtk_dp, true);
-> +			mtk_dp->state = MTK_DP_STATE_IDLE;
-> +		}
-> +		break;
-> +
-> +	default:
-
-There is no default case, so remove this.
-
-> +		break;
-> +	}
-> +}
-> +
-> 
-
-[snip]
-
-> +
-> +static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
-> +				    struct drm_connector *connector)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +	bool enabled = mtk_dp->enabled;
-> +	struct edid *new_edid = NULL;
-> +
-> +	if (!enabled)
-
-Would DRM core make this happen?
-
-> +		drm_bridge_chain_pre_enable(bridge);
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> DP_SET_POWER_D0);
-> +	usleep_range(2000, 5000);
-> +
-> +	if (mtk_dp_plug_state(mtk_dp))
-> +		new_edid = drm_get_edid(connector, &mtk_dp->aux.ddc);
-> +
-> +	if (!enabled)
-> +		drm_bridge_chain_post_disable(bridge);
-> +
-> +	mutex_lock(&mtk_dp->edid_lock);
-> +	kfree(mtk_dp->edid);
-> +	mtk_dp->edid = NULL;
-> +
-> +	if (!new_edid) {
-> +		mutex_unlock(&mtk_dp->edid_lock);
-> +		return NULL;
-> +	}
-> +
-> +	mtk_dp->edid = drm_edid_duplicate(new_edid);
-> +	mutex_unlock(&mtk_dp->edid_lock);
-> +
-> +	return new_edid;
-> +}
-> +
-> 
-
-[snip]
-
-> +
-> +static void mtk_dp_bridge_atomic_enable(struct drm_bridge *bridge,
-> +					struct drm_bridge_state
-> *old_state)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +	struct drm_connector_state *conn_state;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *crtc_state;
-> +
-> +	mtk_dp->conn =
-> drm_atomic_get_new_connector_for_encoder(old_state->base.state,
-> +								bridge-
-> >encoder);
-> +	if (!mtk_dp->conn) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as connector is
-> missing\n");
-> +		return;
-> +	}
-> +
-> +	memcpy(mtk_dp->connector_eld, mtk_dp->conn->eld,
-> MAX_ELD_BYTES);
-> +
-> +	conn_state =
-> +		drm_atomic_get_new_connector_state(old_state-
-> >base.state, mtk_dp->conn);
-> +	if (!conn_state) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as connector state is
-> missing\n");
-> +		return;
-> +	}
-> +
-> +	crtc = conn_state->crtc;
-> +	if (!crtc) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as connector state doesn't
-> have a crtc\n");
-> +		return;
-> +	}
-> +
-> +	crtc_state = drm_atomic_get_new_crtc_state(old_state-
-> >base.state, crtc);
-> +	if (!crtc_state) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as crtc state is
-> missing\n");
-> +		return;
-> +	}
-> +
-> +	mtk_dp_parse_drm_mode_timings(mtk_dp, &crtc_state-
-> >adjusted_mode);
-
-I think this bridge should implement mode_set() and these code is moved
-to mode_set().
-
-Regards,
-CK
-
-> +	if (!mtk_dp_parse_capabilities(mtk_dp)) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as nothing is plugged
-> in\n");
-> +		return;
-> +	}
-> +
-> +	/* Training */
-> +	mtk_dp_train_handler(mtk_dp);
-> +	mtk_dp_state_handler(mtk_dp);
-> +	mtk_dp->enabled = true;
-> +}
-> +
-> 
+Jiang
 

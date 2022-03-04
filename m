@@ -2,217 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3B74CD099
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6CB4CD09F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiCDJBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S233797AbiCDJEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235492AbiCDJBI (ORCPT
+        with ESMTP id S231620AbiCDJES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:01:08 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A726B12B76C;
-        Fri,  4 Mar 2022 01:00:19 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3EEEC1BF213;
-        Fri,  4 Mar 2022 09:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646384418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MoznkUIec7VAQY3ImNmY3IHeuYJ/S05cBMHdD+Wm4Nc=;
-        b=F9tvU0ozNsPeQ9lftznClBeZfJB6PRNXxUPQuKwyUpT+KlQKi1Nt6H6ki+H9T74PtC15GX
-        mEICPAhXiahTCeW0RAjDqf9QHMqxP63CmickbbG9Wiyp9qId8qFcZGrK6aWmhmVw7/aGt2
-        yLlqqcQDFBjV1yRkmHN+eaunAwYFhRpPb7msRMR/CGFHaJhhUappIX1EW+O1P7k1yliwnB
-        M5V5bFFMXlCKDVfIyrkqNeKa0olTvBeJQCCkrxzrIJUMmqwnsXU1BEtxyIGQsumhssIw9L
-        Zlau+iKBkap+qVKAuIzvu4o1YBw/r/7qV5t3A4pr5bmRcw1uqeMrjAN3qNgwTQ==
-Date:   Fri, 4 Mar 2022 10:00:12 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 30/66] media: sun6i-csi: Add bridge v4l2 subdev with
- port management
-Message-ID: <YiHVHM53GUQ1jxco@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
- <YgqbqVRinNxQ8+WV@paasikivi.fi.intel.com>
- <Yh+GZv9/rKQ2WbI2@aptenodytes>
- <YiFEq1liAnBy0fkq@paasikivi.fi.intel.com>
+        Fri, 4 Mar 2022 04:04:18 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABAECEA0D;
+        Fri,  4 Mar 2022 01:03:29 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K91x03kyvz1GCL3;
+        Fri,  4 Mar 2022 16:58:44 +0800 (CST)
+Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
+ 2022 17:03:26 +0800
+Message-ID: <e819f99e-ddc6-018a-3a8a-53804b7f58f1@hisilicon.com>
+Date:   Fri, 4 Mar 2022 17:03:20 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dwUOJP15b315kF0b"
-Content-Disposition: inline
-In-Reply-To: <YiFEq1liAnBy0fkq@paasikivi.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v8 1/9] crypto: hisilicon/qm: Move the QM header to
+ include/linux
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
+        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
+        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
+        <jonathan.cameron@huawei.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-2-shameerali.kolothum.thodi@huawei.com>
+From:   Zhou Wang <wangzhou1@hisilicon.com>
+In-Reply-To: <20220303230131.2103-2-shameerali.kolothum.thodi@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.22]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Since we are going to introduce VFIO PCI HiSilicon ACC driver for live
+> migration in subsequent patches, move the ACC QM header file to a
+> common include dir.
+> 
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
 
---dwUOJP15b315kF0b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Shameer,
 
-Hi Sakari,
+It looks good to me for this movement.
 
-On Fri 04 Mar 22, 00:43, Sakari Ailus wrote:
-> Hi Paul,
->=20
-> On Wed, Mar 02, 2022 at 03:59:50PM +0100, Paul Kocialkowski wrote:
-> > > > +static int
-> > > > +sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifi=
-er,
-> > > > +				struct v4l2_subdev *remote_subdev,
-> > > > +				struct v4l2_async_subdev *async_subdev)
-> > > > +{
-> > > > +	struct sun6i_csi_device *csi_dev =3D
-> > > > +		container_of(notifier, struct sun6i_csi_device,
-> > > > +			     bridge.notifier);
-> > > > +	struct sun6i_csi_bridge *bridge =3D &csi_dev->bridge;
-> > > > +	struct sun6i_csi_bridge_source *source =3D NULL;
-> > > > +	struct fwnode_handle *fwnode =3D dev_fwnode(csi_dev->dev);
-> > > > +	struct fwnode_handle *handle =3D NULL;
-> > > > +	bool enabled;
-> > > > +	int ret;
-> > > > +
-> > > > +	while ((handle =3D fwnode_graph_get_next_endpoint(fwnode, handle)=
-)) {
-> > >=20
-> > > I'd instead store the information you need here in struct sun6i_csi_b=
-ridge.
-> > > You could remove the loop here.
-> >=20
-> > Is there a different method for matching a remote subdev to a local por=
-t?
-> > The rationale here is that I need the handle for fwnode_graph_parse_end=
-point
-> > but cannot get that handle from the remote subdev's fwnode pointer dire=
-ctly.
->=20
-> You generally shouldn't try to match fwnodes here as the V4L2 async
-> framework has already done that job. This information can be found behind
-> the async_subdev pointer.
->=20
-> See e.g. drivers/media/pci/intel/ipu3/ipu3-cio2-main.c for an example.
-
-Thanks for the feedback, I'll look into that.
-
-> >=20
-> > > > +		struct fwnode_endpoint endpoint =3D { 0 };
-> > > > +		struct fwnode_handle *remote_fwnode;
-> > > > +
-> > > > +		remote_fwnode =3D fwnode_graph_get_remote_port_parent(handle);
-> > > > +		if (!remote_fwnode)
-> > > > +			continue;
-> > > > +
-> > > > +		if (remote_fwnode !=3D remote_subdev->fwnode)
-> > > > +			goto next;
-> > > > +
-> > > > +		ret =3D fwnode_graph_parse_endpoint(handle, &endpoint);
-> > > > +		if (ret < 0)
-> > > > +			goto next;
-> > > > +
-> > > > +		switch (endpoint.port) {
-> > > > +		case SUN6I_CSI_PORT_PARALLEL:
-> > > > +			source =3D &bridge->source_parallel;
-> > > > +			enabled =3D true;
-> > > > +			break;
-> > > > +		default:
-> > > > +			break;
-> > > > +		}
-> > > > +
-> > > > +next:
-> > > > +		fwnode_handle_put(remote_fwnode);
-> > > > +	}
-> > > > +
-> > > > +	if (!source)
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	source->subdev =3D remote_subdev;
-> > > > +
-> > > > +	return sun6i_csi_bridge_link(csi_dev, SUN6I_CSI_BRIDGE_PAD_SINK,
-> > > > +				     remote_subdev, enabled);
-> > > > +}
-> > > > +
-> > > > +static int
-> > > > +sun6i_csi_bridge_notifier_complete(struct v4l2_async_notifier *not=
-ifier)
-> > > > +{
-> > > > +	struct sun6i_csi_device *csi_dev =3D
-> > > > +		container_of(notifier, struct sun6i_csi_device,
-> > > > +			     bridge.notifier);
-> > > > +
-> > > > +	return sun6i_csi_v4l2_complete(csi_dev);
-> > >=20
-> > > You could call v4l2_device_register_subdev_nodes() here.
-> >=20
-> > That's definitely what sun6i_csi_v4l2_complete does (the diff is probab=
-ly not
-> > very clear). Note that the wrapper is extended later on to register the=
- capture
-> > video device for the no-isp path.
->=20
-> I could be missing something... Do you need to call
-> sun6i_csi_v4l2_complete() in multiple places or not? If not, then I think
-> it'd be probably better to just move the code here.
-
-No this is only called here so I guess we can avoid it entirely.
+Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
 
 Thanks,
+Zhou
 
-Paul
-
-> >=20
-> > Maybe the capture registration could be kept in sun6i_csi_probe for the=
- non-isp
-> > path and then the wrapper wouldn't be needed. I don't mind either way.
->=20
-> --=20
-> Kind regards,
->=20
-> Sakari Ailus
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---dwUOJP15b315kF0b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIh1RwACgkQ3cLmz3+f
-v9Ha5Qf+Lz13XAEQwduMjvaJ3V4PK+23t0taf6Fv0+Peh5fnTfFagFYbMtBdFsbo
-q/6i5Zt3JaRdXe+5SixAINP00cflNxpxuAN+MRbjP4wfaRBxNRGqhIGjXWzJYLZe
-jn4lX8W49l8iafyCstJ5jhccMEn/LSo1mO3pAyjc3pMXK+6HabgMe5UEETWvm5n3
-XX1j/KBu1PtgQUNKbBxKGpGVmlmBjMEfM+DIx19h70AeeG7OW4wUq37IJ5i6AiuX
-Q7da7pWZMzdesWbjon3l5X5rPbfimGXqNLJYUa86zFBrk/nO+10HhU1udx4du5AW
-4e/50RP2kNoRQ9bvpvarQtS8gN0BGg==
-=Nf6c
------END PGP SIGNATURE-----
-
---dwUOJP15b315kF0b--
+> ---
+>  drivers/crypto/hisilicon/hpre/hpre.h                         | 2 +-
+>  drivers/crypto/hisilicon/qm.c                                | 2 +-
+>  drivers/crypto/hisilicon/sec2/sec.h                          | 2 +-
+>  drivers/crypto/hisilicon/sgl.c                               | 2 +-
+>  drivers/crypto/hisilicon/zip/zip.h                           | 2 +-
+>  drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h | 0
+>  6 files changed, 5 insertions(+), 5 deletions(-)
+>  rename drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h (100%)
+> 
+> diff --git a/drivers/crypto/hisilicon/hpre/hpre.h b/drivers/crypto/hisilicon/hpre/hpre.h
+> index e0b4a1982ee9..9a0558ed82f9 100644
+> --- a/drivers/crypto/hisilicon/hpre/hpre.h
+> +++ b/drivers/crypto/hisilicon/hpre/hpre.h
+> @@ -4,7 +4,7 @@
+>  #define __HISI_HPRE_H
+>  
+>  #include <linux/list.h>
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>  
+>  #define HPRE_SQE_SIZE			sizeof(struct hpre_sqe)
+>  #define HPRE_PF_DEF_Q_NUM		64
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index c5b84a5ea350..ed23e1d3fa27 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -15,7 +15,7 @@
+>  #include <linux/uacce.h>
+>  #include <linux/uaccess.h>
+>  #include <uapi/misc/uacce/hisi_qm.h>
+> -#include "qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>  
+>  /* eq/aeq irq enable */
+>  #define QM_VF_AEQ_INT_SOURCE		0x0
+> diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+> index d97cf02b1df7..c2e9b01187a7 100644
+> --- a/drivers/crypto/hisilicon/sec2/sec.h
+> +++ b/drivers/crypto/hisilicon/sec2/sec.h
+> @@ -4,7 +4,7 @@
+>  #ifndef __HISI_SEC_V2_H
+>  #define __HISI_SEC_V2_H
+>  
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>  #include "sec_crypto.h"
+>  
+>  /* Algorithm resource per hardware SEC queue */
+> diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+> index 057273769f26..f7efc02b065f 100644
+> --- a/drivers/crypto/hisilicon/sgl.c
+> +++ b/drivers/crypto/hisilicon/sgl.c
+> @@ -1,9 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (c) 2019 HiSilicon Limited. */
+>  #include <linux/dma-mapping.h>
+> +#include <linux/hisi_acc_qm.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> -#include "qm.h"
+>  
+>  #define HISI_ACC_SGL_SGE_NR_MIN		1
+>  #define HISI_ACC_SGL_NR_MAX		256
+> diff --git a/drivers/crypto/hisilicon/zip/zip.h b/drivers/crypto/hisilicon/zip/zip.h
+> index 517fdbdff3ea..3dfd3bac5a33 100644
+> --- a/drivers/crypto/hisilicon/zip/zip.h
+> +++ b/drivers/crypto/hisilicon/zip/zip.h
+> @@ -7,7 +7,7 @@
+>  #define pr_fmt(fmt)	"hisi_zip: " fmt
+>  
+>  #include <linux/list.h>
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>  
+>  enum hisi_zip_error_type {
+>  	/* negative compression */
+> diff --git a/drivers/crypto/hisilicon/qm.h b/include/linux/hisi_acc_qm.h
+> similarity index 100%
+> rename from drivers/crypto/hisilicon/qm.h
+> rename to include/linux/hisi_acc_qm.h
+> 

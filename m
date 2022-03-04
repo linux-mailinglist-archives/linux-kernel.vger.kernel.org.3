@@ -2,100 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EA44CD26D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2658C4CD271
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiCDKbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S235184AbiCDKcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbiCDKbo (ORCPT
+        with ESMTP id S230023AbiCDKcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:31:44 -0500
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7169716BFAC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:30:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1646389850;
-        bh=lWyaumg3DAV6K6mwQJGodMoZXgiEDM6A7q29hCzQNEM=;
-        h=From:To:Cc:Subject:Date;
-        b=ZxzzA7kk36YTYHZb6KJqWR4mfTA7eV2ol13wKwIKW9cW6/jb7ww+qIVdlHfFMxkMB
-         rWTwb+NdPwNVAlZeURtx9r07l5Kautyv6Zdr6Seyw+QuQ2GZ1KsKykNffIu3fycCYc
-         ds7eM5+fpJ80tnodLyI7DHouFenvykSt+ZGY9KUw=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id 7AF34219; Fri, 04 Mar 2022 18:30:47 +0800
-X-QQ-mid: xmsmtpt1646389847tppgzcpa0
-Message-ID: <tencent_5585FF0A904C66C5DC1D8E120AC0F0002507@qq.com>
-X-QQ-XMAILINFO: OKkKo7I1HxIe9JbE8Y6zN8gmAhbqYsL8XRbKtldCSvGqt/3CKmVFBJ9ln5uZzs
-         Yi+pXIZ6FswivyrvBbAxbTXGiMBY+ReqstIi1N8etvOmUAOuaTbPzcb/gCdod+tI28/osT+GXToa
-         5uzUnwU8RGUwSNS+w7O+V/UPOzmSeMEEZJJ3KPCFnC0xOjZFZjtknX6mk4zwJ4hteofgg9sGDCCS
-         +ukl6JoWDID8nwQlN86TPuHQVQ2cZeD9SyUKXyhU51KHjeexKxwB8LaZOrDY6c98WIYwNlS2OjeU
-         gI26ew9ON5tTnACbAUs1Fi8Yn5/TRqDFqCRhCp2JEZqiJav+Pl8rrpL4LBIAhbAbV0bGLNOHS/3L
-         qrsWEAykVxZSIwRECDsnQCtyJUEHZM1rcYnxrsAd+Sneqo6ZoTskzCA1LKWxZ3egNSr9p7/fj6Jb
-         6X/0aHHJ+sR+ssPplqiGqQsx97ijxQ3dPa4LNtWUs11UnQc2E1gznsH+mT43j6vNXElo49em/+6o
-         b0QIk2cDvoZOyRh51zlTjJ8qhvL6zCZV5lWZPza+IZrwNiLot0tavUxRkrP24hLtwPMVpjfKrooI
-         5usuWvxIGj8PsY29tdsZxl3By4y+tIl2SubvuH6Vde4mWI3Sko7KyQ8D5hxcb/JwurJxnH/gpKFh
-         fOKftAJX6IXI7vendijqYvnd8+vR+24qMqLyjJ1YZe7alGAopTilLHRbAEq9ylCve8b3QPkf4s+m
-         X7HxpzT9UnPd56qwE/hieFEAQIUSkna+sC0KC6dkMAXh9i5wVwpPd5ySeajuwGkC93ULvE+oZM/I
-         vvJ9BmlRpLmhUm8Wppj9hV/gvHX14CooMhnnVO/3CW0d5GdiA6vEF3st66sPaEm1MR5tEDGqQOZx
-         hnpVowlpDQ8RsfzmTYpy/iD5Ur1TbiX4VqkZKbOre3HH8v2K8KyO0AhyUeiuYAjAmhxMvtTGPj
-From:   xkernel.wang@foxmail.com
-To:     keescook@chromium.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] lkdtm: add checks for the return of memory allocation functions
-Date:   Fri,  4 Mar 2022 18:30:35 +0800
-X-OQ-MSGID: <20220304103035.5389-1-xkernel.wang@foxmail.com>
+        Fri, 4 Mar 2022 05:32:31 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8450416BFAC;
+        Fri,  4 Mar 2022 02:31:43 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5C74A1F46518
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646389902;
+        bh=+Q25/NgNVE68oIuS3bZoss/fJ3ewI6fEylYzejB/9ds=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cTl18Lgrip5Dv9ssmao9SIBcXHb9e6McbV97dfYnRK9v5KeOpOYrEewLzcZmbL+u1
+         dpaQ7t0LlNigs987LCZNAdKpwK6mmRpRWLXt/AlatiUhDsfBfy6NZYtbdY3y3L9f7T
+         OV1/9cyDnGaMI85XdZ5W7o6SplMb3VcmSRqov2UrRMBZj7LhsLZNyYiXlRBlYcSvTX
+         45FuczS/BFZbkVwRupeeIyu1zsT1FkCA//t1aLrw07xgrXREKZHuYVh5ifLpp5IIV4
+         YD0R13ux/Rc4fBCESmfzwLwdPdK7DzLZDimv+6JUTcERfiu0CiavetH72LBZ6Jctsa
+         zVyOoavf161ww==
+Message-ID: <300114e2-6794-db3c-a51c-3f900b6476f9@collabora.com>
+Date:   Fri, 4 Mar 2022 11:31:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v21 2/3] Input: mt6779-keypad - Add MediaTek keypad driver
+Content-Language: en-US
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fengping Yu <fengping.yu@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220303154302.252041-1-mkorpershoek@baylibre.com>
+ <20220303154302.252041-3-mkorpershoek@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220303154302.252041-3-mkorpershoek@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Il 03/03/22 16:43, Mattijs Korpershoek ha scritto:
+> From: "fengping.yu" <fengping.yu@mediatek.com>
+> 
+> This patch adds matrix keypad support for Mediatek SoCs.
+> 
+> Signed-off-by: fengping.yu <fengping.yu@mediatek.com>
+> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-kmalloc() and vmalloc() are all memory allocation functions which can
-return NULL when some internal errors happen. So it is better to check
-the return value of it for better testing the preset purpose.
+Hello Mattijs,
+thanks for the patch!
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/misc/lkdtm/perms.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+However, to make it perfect, there's something to improve....
 
-diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
-index 2dede2e..3eabc6f 100644
---- a/drivers/misc/lkdtm/perms.c
-+++ b/drivers/misc/lkdtm/perms.c
-@@ -138,6 +138,10 @@ void lkdtm_EXEC_STACK(void)
- void lkdtm_EXEC_KMALLOC(void)
- {
- 	u32 *kmalloc_area = kmalloc(EXEC_SIZE, GFP_KERNEL);
-+	if (!kmalloc_area) {
-+		pr_warn("Failed to allocate memory\n");
-+		return;
-+	}
- 	execute_location(kmalloc_area, CODE_WRITE);
- 	kfree(kmalloc_area);
- }
-@@ -145,6 +149,10 @@ void lkdtm_EXEC_KMALLOC(void)
- void lkdtm_EXEC_VMALLOC(void)
- {
- 	u32 *vmalloc_area = vmalloc(EXEC_SIZE);
-+	if (!vmalloc_area) {
-+		pr_warn("Failed to allocate memory\n");
-+		return;
-+	}
- 	execute_location(vmalloc_area, CODE_WRITE);
- 	vfree(vmalloc_area);
- }
--- 
+> ---
+>   drivers/input/keyboard/Kconfig         |  12 ++
+>   drivers/input/keyboard/Makefile        |   1 +
+>   drivers/input/keyboard/mt6779-keypad.c | 215 +++++++++++++++++++++++++
+>   3 files changed, 228 insertions(+)
+>   create mode 100644 drivers/input/keyboard/mt6779-keypad.c
+> 
+> diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+> index 0c607da9ee10..03a9530f620e 100644
+> --- a/drivers/input/keyboard/Kconfig
+> +++ b/drivers/input/keyboard/Kconfig
+> @@ -779,6 +779,18 @@ config KEYBOARD_BCM
+>   	  To compile this driver as a module, choose M here: the
+>   	  module will be called bcm-keypad.
+>   
+> +config KEYBOARD_MT6779
+> +	tristate "MediaTek Keypad Support"
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	select REGMAP_MMIO
+> +	select INPUT_MATRIXKMAP
+> +	help
+> +	  Say Y here if you want to use the keypad on MediaTek SoCs.
+> +	  If unsure, say N.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called mt6779-keypad.
+> +
+>   config KEYBOARD_MTK_PMIC
+>   	tristate "MediaTek PMIC keys support"
+>   	depends on MFD_MT6397
+> diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
+> index e3c8648f834e..721936e90290 100644
+> --- a/drivers/input/keyboard/Makefile
+> +++ b/drivers/input/keyboard/Makefile
+> @@ -44,6 +44,7 @@ obj-$(CONFIG_KEYBOARD_MATRIX)		+= matrix_keypad.o
+>   obj-$(CONFIG_KEYBOARD_MAX7359)		+= max7359_keypad.o
+>   obj-$(CONFIG_KEYBOARD_MCS)		+= mcs_touchkey.o
+>   obj-$(CONFIG_KEYBOARD_MPR121)		+= mpr121_touchkey.o
+> +obj-$(CONFIG_KEYBOARD_MT6779)		+= mt6779-keypad.o
+>   obj-$(CONFIG_KEYBOARD_MTK_PMIC) 	+= mtk-pmic-keys.o
+>   obj-$(CONFIG_KEYBOARD_NEWTON)		+= newtonkbd.o
+>   obj-$(CONFIG_KEYBOARD_NOMADIK)		+= nomadik-ske-keypad.o
+> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+> new file mode 100644
+> index 000000000000..b207acdd1e2a
+> --- /dev/null
+> +++ b/drivers/input/keyboard/mt6779-keypad.c
+> @@ -0,0 +1,215 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
+> + * Author Fengping Yu <fengping.yu@mediatek.com>
+> + */
+> +#include <linux/bitops.h>
+> +#include <linux/clk.h>
+> +#include <linux/input/matrix_keypad.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/property.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#define MTK_KPD_NAME		"mt6779-keypad"
+> +#define MTK_KPD_MEM		0x0004
+> +#define MTK_KPD_DEBOUNCE	0x0018
+> +#define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
+> +#define MTK_KPD_DEBOUNCE_MAX_MS	256
+> +#define MTK_KPD_NUM_MEMS	5
+> +#define MTK_KPD_NUM_BITS	136	/* 4*32+8 MEM5 only use 8 BITS */
+> +
+> +struct mt6779_keypad {
+> +	struct regmap *regmap;
+> +	struct input_dev *input_dev;
+> +	struct clk *clk;
+> +	void __iomem *base;
+> +	u32 n_rows;
+> +	u32 n_cols;
+> +	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
+> +};
+> +
+> +static const struct regmap_config mt6779_keypad_regmap_cfg = {
+> +	.reg_bits = 32,
+> +	.val_bits = 32,
+> +	.reg_stride = sizeof(u32),
+> +	.max_register = 36,
+
+Are you sure that you can't use .fast_io = true?
+
+Another version for the same question:
+Are you sure that you need to lock with a mutex here, and not with a spinlock?
+
+Since you're performing reads over a MMIO, I think that there's a very good
+chance that you can use fast_io.
+
+> +};
+> +
+> +static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct mt6779_keypad *keypad = dev_id;
+> +	unsigned short *keycode = keypad->input_dev->keycode;
+> +	DECLARE_BITMAP(new_state, MTK_KPD_NUM_BITS);
+> +	DECLARE_BITMAP(change, MTK_KPD_NUM_BITS);
+> +	int bit_nr;
+> +	int pressed;
+> +	unsigned short code;
+> +	int row, col;
+> +	int row_shift = get_count_order(keypad->n_cols);
+> +
+> +	regmap_bulk_read(keypad->regmap, MTK_KPD_MEM,
+> +			 new_state, MTK_KPD_NUM_MEMS);
+> +
+> +	bitmap_xor(change, new_state, keypad->keymap_state, MTK_KPD_NUM_BITS);
+> +
+> +	for_each_set_bit(bit_nr, change, MTK_KPD_NUM_BITS) {
+> +	/* For 32bits register, only bits [15:0] use to indicate key status */
+> +		if (bit_nr % 32 >= 16)
+> +			continue;
+> +
+> +		/* 1: not pressed, 0: pressed */
+> +		pressed = !test_bit(bit_nr, new_state);
+> +		dev_dbg(&keypad->input_dev->dev, "%s",
+> +			pressed ? "pressed" : "released");
+> +
+> +		row = bit_nr / 32;
+> +		col = bit_nr % 32;
+> +
+> +		code = keycode[MATRIX_SCAN_CODE(row, col, row_shift)];
+> +
+> +		input_report_key(keypad->input_dev, code, pressed);
+> +		input_sync(keypad->input_dev);
+> +
+> +		dev_dbg(&keypad->input_dev->dev,
+> +			"report Linux keycode = %d\n", code);
+> +	}
+> +
+> +	bitmap_copy(keypad->keymap_state, new_state, MTK_KPD_NUM_BITS);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void mt6779_keypad_clk_disable(void *data)
+> +{
+> +	clk_disable_unprepare(data);
+> +}
+> +
+> +static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6779_keypad *keypad;
+> +	unsigned int irq;
+> +	u32 debounce;
+> +	bool wakeup;
+> +	int error;
+> +
+> +	keypad = devm_kzalloc(&pdev->dev, sizeof(*keypad), GFP_KERNEL);
+> +	if (!keypad)
+> +		return -ENOMEM;
+> +
+> +	keypad->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(keypad->base))
+> +		return PTR_ERR(keypad->base);
+> +
+> +	keypad->regmap = devm_regmap_init_mmio(&pdev->dev,
+> +					       keypad->base,
+> +					       &mt6779_keypad_regmap_cfg);
+
+Please use dev_err_probe() to simplify error handling in probe functions: you've
+done a great job with adding a devm action for the error cases, avoiding gotos to
+get out cleanly.. it would be a pity to not finish this to perfection.
+
+I'll give you two examples for this, so that you'll be all set.
+
+	if (IS_ERR(keypad->regmap))
+		return dev_err_probe(&pdev->dev, PTR_ERR(keypad->regmap),
+				     "regmap init failed\n");
+
+P.S.: No need for %pe here, as dev_err_probe prints the error number for you!
+
+> +	if (IS_ERR(keypad->regmap)) {
+> +		dev_err(&pdev->dev,
+> +			"regmap init failed:%pe\n", keypad->regmap);
+> +		return PTR_ERR(keypad->regmap);
+> +	}
+> +
+> +	bitmap_fill(keypad->keymap_state, MTK_KPD_NUM_BITS);
+> +
+> +	keypad->input_dev = devm_input_allocate_device(&pdev->dev);
+
+	if (!keypad->input_dev)
+		return dev_err_probe(&pdev->dev, -ENOMEM,
+				     "Cannot allocate input device\n");
+
+> +	if (!keypad->input_dev) {
+> +		dev_err(&pdev->dev, "Failed to allocate input dev\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	keypad->input_dev->name = MTK_KPD_NAME;
+> +	keypad->input_dev->id.bustype = BUS_HOST;
+> +
+> +	error = matrix_keypad_parse_properties(&pdev->dev, &keypad->n_rows,
+> +					       &keypad->n_cols);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Failed to parse keypad params\n");
+> +		return error;
+> +	}
+> +
+> +	if (device_property_read_u32(&pdev->dev, "debounce-delay-ms",
+> +				     &debounce))
+> +		debounce = 16;
+> +
+> +	if (debounce > MTK_KPD_DEBOUNCE_MAX_MS) {
+> +		dev_err(&pdev->dev, "Debounce time exceeds the maximum allowed time %dms\n",
+> +			MTK_KPD_DEBOUNCE_MAX_MS);
+> +		return -EINVAL;
+> +	}
+> +
+> +	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
+> +
+> +	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
+> +		keypad->n_rows, keypad->n_cols, debounce);
+> +
+> +	error = matrix_keypad_build_keymap(NULL, NULL,
+> +					   keypad->n_rows,
+> +					   keypad->n_cols,
+> +					   NULL,
+> +					   keypad->input_dev);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Failed to build keymap\n");
+> +		return error;
+> +	}
+> +
+> +	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
+> +		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
+> +
+> +	keypad->clk = devm_clk_get(&pdev->dev, "kpd");
+> +	if (IS_ERR(keypad->clk))
+> +		return PTR_ERR(keypad->clk);
+> +
+> +	error = clk_prepare_enable(keypad->clk);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "cannot prepare/enable keypad clock\n");
+> +		return error;
+> +	}
+> +
+> +	error = devm_add_action_or_reset(&pdev->dev, mt6779_keypad_clk_disable, keypad->clk);
+> +	if (error)
+> +		return error;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	error = devm_request_threaded_irq(&pdev->dev, irq, NULL, mt6779_keypad_irq_handler,
+> +					  IRQF_ONESHOT, MTK_KPD_NAME, keypad);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Failed to request IRQ#%d:%d\n", irq, error);
+> +		return error;
+> +	}
+> +
+> +	error = input_register_device(keypad->input_dev);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Failed to register device\n");
+> +		return error;
+> +	}
+> +
+> +	error =  device_init_wakeup(&pdev->dev, wakeup);
+
+Whoops! Two spaces here! Please fix this typo.
+
+P.S.: Please add my email to the Cc's when you'll send the next version, so that
+       I will be able to timely give you a R-b tag.
+
+Cheers,
+Angelo
+
+

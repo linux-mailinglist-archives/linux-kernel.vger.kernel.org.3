@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548874CCB42
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6A04CCB44
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbiCDBWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 20:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S237557AbiCDB1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 20:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbiCDBWK (ORCPT
+        with ESMTP id S232093AbiCDB1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 20:22:10 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E33A17B0F9;
-        Thu,  3 Mar 2022 17:21:22 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K8ql5442CzBrJg;
-        Fri,  4 Mar 2022 09:19:29 +0800 (CST)
-Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
- 2022 09:21:20 +0800
-Subject: Re: [PATCH v4 1/2] fs/proc: optimize exactly register one ctl_table
-To:     Meng Tang <tangmeng@uniontech.com>, <mcgrof@kernel.org>,
-        <keescook@chromium.org>, <yzaikin@google.com>,
-        <ebiederm@xmission.com>, <willy@infradead.org>
-CC:     <nizhen@uniontech.com>, <zhanglianjie@uniontech.com>,
-        <sujiaxun@uniontech.com>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20220303070847.28684-1-tangmeng@uniontech.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <624f92f0-c2a1-c7d9-a4ed-6d72c48d3ab3@huawei.com>
-Date:   Fri, 4 Mar 2022 09:21:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
+        Thu, 3 Mar 2022 20:27:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E808F171292;
+        Thu,  3 Mar 2022 17:26:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A6B161888;
+        Fri,  4 Mar 2022 01:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC14C004E1;
+        Fri,  4 Mar 2022 01:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646357175;
+        bh=Pu1MMfmwC9iIuz+gVEbbM9+dicZ7uaZ7KkbdQTfmTDA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=to7zvWpAY9gKHTQ85n82BzpgBlxQSPChqtgjwP1nhPbWkh+VF/8Zfp4eMrrjJkY1P
+         CLPQfkXqb69CurDkAuwEKaPH70loKbiy/fG/nVA3hzssCW3+xTCh8fvu/7CAXDS2Qy
+         KkLAvSQ8IBuNvik56AWdaFOxACVeIFV3FmOM4rAMEZilGVU+g5w12dfLeq0W2E1J1v
+         /IPO5P20WpZBSiERfOjfkwQEMxA6f+7bBQScWbS5UDjQMcR3X+xCRxn/5WeOqjZS6P
+         6zMnSygGgDzbZa/9ziRn/OLQIymprBqqi6CPtyTgryiKFr9yHcZbTHrtTap6yglZbr
+         Hm7FMVTODvK+w==
+Date:   Fri, 4 Mar 2022 03:25:35 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/sgx: Do not limit EAUG'd pages by pre-initialization
+ policy
+Message-ID: <YiFqj/Y+Nor/TJND@iki.fi>
+References: <20220304011636.327511-1-jarkko@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220303070847.28684-1-tangmeng@uniontech.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304011636.327511-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/3 15:08, Meng Tang wrote:
-> Sysctls are being moved out of kernel/sysctl.c and out to
-> their own respective subsystems / users to help with easier
-> maintance and avoid merge conflicts. But when we move just
-> one entry and to its own new file the last entry for this
-> new file must be empty, so we are essentialy bloating the
-> kernel one extra empty entry per each newly moved sysctl.
+On Fri, Mar 04, 2022 at 03:16:35AM +0200, Jarkko Sakkinen wrote:
+> Pre-initialization policy is meant for EADD'd pages because they are
+> part of the enclave identity. It's a good practice to not let touch the
+> permissions after initialization, and does provide guarantees to e.g.
+> LSM's about the enclave.
 > 
-> To help with this, this adds support for registering just
-> one ctl_table, therefore not bloating the kernel when we
-> move a single ctl_table to its own file.
+> For EAUG'd pages it should be sufficient to let mmap(), mprotect() and
+> SGX opcodes to control the permissions. Thus effectively disable
+> pre-initialization policy by setting vm_max_prot_bit and
+> vm_run_prot_bits to RWX.
 > 
-> Since the process of registering just one single table is the
-> same as that of registering an array table, so the code is
-> similar to registering an array table. The difference between
-> registering just one table and registering an array table is
-> that we no longer traversal through pointers when registering
-> a single table. These lead to that we have to add a complete
-> implementation process for register just one ctl_table, so we
-> have to add so much code.
-> 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Nathaniel McCallum <nathaniel@profian.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
->   fs/proc/proc_sysctl.c  | 159 +++++++++++++++++++++++++++++------------
->   include/linux/sysctl.h |   9 ++-
->   2 files changed, 121 insertions(+), 47 deletions(-)
+>  arch/x86/kernel/cpu/sgx/encl.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
 > 
-> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> index 6c87c99f0856..e06d2094457a 100644
-> --- a/fs/proc/proc_sysctl.c
-> +++ b/fs/proc/proc_sysctl.c
-> @@ -19,6 +19,8 @@
->   #include <linux/kmemleak.h>
->   #include "internal.h"
->   
-> +#define REGISTER_SINGLE_ONE (register_single_one ? true : false)
-> +
->   static const struct dentry_operations proc_sys_dentry_operations;
->   static const struct file_operations proc_sys_file_operations;
->   static const struct inode_operations proc_sys_inode_operations;
-> @@ -100,8 +102,8 @@ static DEFINE_SPINLOCK(sysctl_lock);
->   static void drop_sysctl_table(struct ctl_table_header *header);
->   static int sysctl_follow_link(struct ctl_table_header **phead,
->   	struct ctl_table **pentry);
-> -static int insert_links(struct ctl_table_header *head);
-> -static void put_links(struct ctl_table_header *header);
-> +static int insert_links(struct ctl_table_header *head, bool register_single_one);
-> +static void put_links(struct ctl_table_header *header, bool register_single_one);
->   
->   static void sysctl_print_dir(struct ctl_dir *dir)
->   {
-> @@ -200,7 +202,7 @@ static void erase_entry(struct ctl_table_header *head, struct ctl_table *entry)
->   
->   static void init_header(struct ctl_table_header *head,
->   	struct ctl_table_root *root, struct ctl_table_set *set,
-> -	struct ctl_node *node, struct ctl_table *table)
-> +	struct ctl_node *node, struct ctl_table *table, bool register_single_one)
->   {
->   	head->ctl_table = table;
->   	head->ctl_table_arg = table;
-> @@ -215,19 +217,26 @@ static void init_header(struct ctl_table_header *head,
->   	INIT_HLIST_HEAD(&head->inodes);
->   	if (node) {
->   		struct ctl_table *entry;
-> -		for (entry = table; entry->procname; entry++, node++)
-> +		for (entry = table; entry->procname; entry++, node++) {
->   			node->header = head;
-> +			if (register_single_one)
-The scalability is reduced.
-If you add a file interface in the future, you need to make at least two 
-code changes.
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> index 5fe7189eac9d..17feb6fa5578 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -200,13 +200,7 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
+>  	encl_page->desc = addr;
+>  	encl_page->encl = encl;
+>  
+> -	/*
+> -	 * Adding a regular page that is architecturally allowed to only
+> -	 * be created with RW permissions.
+> -	 * TBD: Interface with user space policy to support max permissions
+> -	 * of RWX.
+> -	 */
+> -	prot = PROT_READ | PROT_WRITE;
+> +	prot = PROT_READ | PROT_WRITE | PROT_EXEC;
+>  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
+>  	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
+>  
+> -- 
+> 2.35.1
+> 
 
-Instead of having each consumer keep the current table size in mind, you 
-can obtain the table size by ARRAY_SIZE() in the API interface.
+This does not break any existing ABI and at least makes the current
+patch set usable.
 
-For example,
-
-+ #define register_sysctl_init(path, table) 
-__register_sysctl_init(path, table, ARRAY_SIZE(table))
-...
--		for (entry = table; entry->procname; entry++, node++)
-+		for (entry = table; entry->procname && num > 0; entry++, node++, num--) {
-
-
-Xiaoming Ni
-thanks
+BR, Jarkko

@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FFF4CD002
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3AF4CD048
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbiCDIhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S234501AbiCDIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiCDIhu (ORCPT
+        with ESMTP id S235197AbiCDIkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:37:50 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D55119BE67;
-        Fri,  4 Mar 2022 00:37:01 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6Bs-JA_1646383014;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V6Bs-JA_1646383014)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 04 Mar 2022 16:36:59 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, gustavoars@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] net: ethernet: sun: Remove redundant code
-Date:   Fri,  4 Mar 2022 16:36:53 +0800
-Message-Id: <20220304083653.66238-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 4 Mar 2022 03:40:00 -0500
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC51A41C0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:38:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1646383126;
+        bh=VhTKKyAhQFqLXrwmbMwbMaF9x5HZIH2oU44KJBELClQ=;
+        h=From:To:Cc:Subject:Date;
+        b=jTTonvd+Gqp7il2o4Dt6VecIFDvZnAYQFo/HJ6MP+smS9kO/jmvGDdPGe/szxAw6X
+         2HEv+6tObxoAh8co9AP3itUIdn1BIy1wQLuHIxbfxWNG3PpCKWf8PAZMWqglrTGV2s
+         +PSG+RPenI0jdqDVBIGHN+htoBQQ19GM1j7IqY+A=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
+        id 9AB026B7; Fri, 04 Mar 2022 16:38:43 +0800
+X-QQ-mid: xmsmtpt1646383123txww0qwx1
+Message-ID: <tencent_4221FC4089F6DF01C48F192E5784038BA205@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQww2mZ0zeqm2zgwoQjyTa62EicOQuEEZvwAXJNVniFcmgXAouBPt
+         X3wiozJpRIdopfA+s4aNJVEFr+kXchO9S1w/gMpl8GBJY81NBpF1wkl3jl/rdwoHRQohHP4zzKbZ
+         tuxM//p0BJDkeFfMWdUMelUHQn0Ot/S1iLVUY/Bcy5300esWq2CI19ZwR89NoxQy4sD2d+W3zECQ
+         pvHONYi5yLsbsEU77yc1UTwxGFXZiDyxMrankNm6MeOt69l3VUkZ0qROkq3TOpSk9/ugOA2f73Hi
+         aTiLOYji3RvBdFhtpWyF1MfOsbxyhe4Oayf8Yv9FStXeNoHHpyR7YyPJQdila+OMva15SQnAG0FY
+         LXEQJWnqDNZ4/iT6DnDFraJaQKrlaKHYcnomzzAa8NaunqAGZjH13DleayC+Mj+NK2+YuYi4Iqgk
+         UEjWwNGun0x9FTCreEe1wxEjwN2w1mntY+y70TlIAQcQAyK2yiZb1i/pCRu2sH5sjMxRbKqIA6cz
+         nLur0eB7tQ9vEWO+XmUNZ8AiPHinKv018u0eIduxJE86FBxQ7GolMSWenbcQ0EnBGjdJe4w5TrwR
+         jLhEUtoUF6MF991x5j1XDSKMArrPG7ZhEo/4mdkGPv4H8MSJGtFgNGid5dfAdmEhNH9LdAvjjuiG
+         w3QxYWB7EJauH0J1xxO2seXPEBRaInLmMU/OQa4CeTmdXCWvdfZScKC++sOJ+hnUXxbAHjyFCYV0
+         wRAi0JvKxMR+tj3pugUwyMpTLu2PEwPQ3alD2LRPBnJfwYX6cx1D72pj/z0ENcRVvSa/KKuU8Jfv
+         279RRdRL9d3L2P7VA7/RLGD0P7Gxy4VLYCixzZOGyopjLpAkg2ESRE5E9DCAUQ3QmcXOTLakJw0O
+         5Dq+tYn3sFpSgG8/KgKcxtEYDTGfL0uW4ipGZ04H8Qnc6HMCZKdrspOkcIwpCoNWD0lO64bloj
+From:   xkernel.wang@foxmail.com
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] ALSA: lola: add a check for the return of vmalloc()
+Date:   Fri,  4 Mar 2022 16:38:20 +0800
+X-OQ-MSGID: <20220304083820.4914-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the starting value in the for loop is greater than or equal to 1,
-the restriction is CAS_FLAG_REG_PLUS is in the file cassini.h is
-defined as 0x1 by macro, and the for loop and if condition is not
-satisfied, so the code here is redundant.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Clean up the following smatch warning:
+vmalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to check the return
+of it to catch the error in time.
 
-drivers/net/ethernet/sun/cassini.c:3513 cas_start_dma() warn: we never
-enter this loop.
-
-drivers/net/ethernet/sun/cassini.c:1239 cas_init_rx_dma() warn: we never
-enter this loop.
-
-drivers/net/ethernet/sun/cassini.c:1247 cas_init_rx_dma() warn: we never
-enter this loop.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
-Changes in v2:
-  -Expand this comment.
+ sound/pci/lola/lola_mixer.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/net/ethernet/sun/cassini.c | 16 ----------------
- 1 file changed, 16 deletions(-)
-
-diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
-index 947a76a788c7..153edc5eadad 100644
---- a/drivers/net/ethernet/sun/cassini.c
-+++ b/drivers/net/ethernet/sun/cassini.c
-@@ -1235,19 +1235,6 @@ static void cas_init_rx_dma(struct cas *cp)
- 	 */
- 	readl(cp->regs + REG_INTR_STATUS_ALIAS);
- 	writel(INTR_RX_DONE | INTR_RX_BUF_UNAVAIL, cp->regs + REG_ALIAS_CLEAR);
--	if (cp->cas_flags & CAS_FLAG_REG_PLUS) {
--		for (i = 1; i < N_RX_COMP_RINGS; i++)
--			readl(cp->regs + REG_PLUS_INTRN_STATUS_ALIAS(i));
--
--		/* 2 is different from 3 and 4 */
--		if (N_RX_COMP_RINGS > 1)
--			writel(INTR_RX_DONE_ALT | INTR_RX_BUF_UNAVAIL_1,
--			       cp->regs + REG_PLUS_ALIASN_CLEAR(1));
--
--		for (i = 2; i < N_RX_COMP_RINGS; i++)
--			writel(INTR_RX_DONE_ALT,
--			       cp->regs + REG_PLUS_ALIASN_CLEAR(i));
--	}
+diff --git a/sound/pci/lola/lola_mixer.c b/sound/pci/lola/lola_mixer.c
+index e2c8f14..6b16248 100644
+--- a/sound/pci/lola/lola_mixer.c
++++ b/sound/pci/lola/lola_mixer.c
+@@ -121,6 +121,8 @@ int lola_init_mixer_widget(struct lola *chip, int nid)
  
- 	/* set up pause thresholds */
- 	val  = CAS_BASE(RX_PAUSE_THRESH_OFF,
-@@ -3509,9 +3496,6 @@ static inline void cas_start_dma(struct cas *cp)
- 		if (N_RX_DESC_RINGS > 1)
- 			writel(RX_DESC_RINGN_SIZE(1) - 4,
- 			       cp->regs + REG_PLUS_RX_KICK1);
--
--		for (i = 1; i < N_RX_COMP_RINGS; i++)
--			writel(0, cp->regs + REG_PLUS_RX_COMPN_TAIL(i));
- 	}
- }
+ 	/* reserve memory to copy mixer data for sleep mode transitions */
+ 	chip->mixer.array_saved = vmalloc(sizeof(struct lola_mixer_array));
++	if (!chip->mixer.array_saved)
++		return -ENOMEM;
  
+ 	/* mixer matrix sources are physical input data and play streams */
+ 	chip->mixer.src_stream_outs = chip->pcm[PLAY].num_streams;
 -- 
-2.20.1.7.g153144c
-

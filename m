@@ -2,226 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481CE4CDCBE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9A4CDCC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241545AbiCDSiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S241454AbiCDSkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiCDSiu (ORCPT
+        with ESMTP id S232347AbiCDSj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:38:50 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FBF5BE70
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:38:00 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id u10so12303111wra.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:38:00 -0800 (PST)
+        Fri, 4 Mar 2022 13:39:58 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4B64BFEB
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:39:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id o8so8216458pgf.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1PsjmwZ7wPNO/sJ0EQSCs1v5VwJYm3XrJ4Rza4PWy+c=;
-        b=UAIliSWqX+pV0t9ELcbITJPMm/CYkQTcfgO8SW3VSKjUj3H5+Gn0aROKgexNQta44r
-         /9LY2LMJGTZIlmP6OMfN5GUN3AVl3s9C3TRZD4zZbk8HTqeLC2a5d24LhV04sj109ywi
-         VblOZZvECHecxZSWikE1L6W1CeNyZlH7glI9N+vKoPqmmnBjNXBepMAsJw+6JO+lGva4
-         8q1Xr+oz5wEtsfCP0LiG3I3Qm0NfXUsYUknDXwz8RdNi1/qmuMOtW59PDJp0kNH9Thmm
-         C09kfQ0uBKg+MPlukA/oI5kuPWdwyMVs2H48n0iwyk2peouBL/KF7HXsFoAD6Pj1K4ul
-         eV9w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BknUbfqpfPqnNnTE+wwFbcKTHVg6JII8p6R6OPkErWY=;
+        b=ZCkewWppykr0MiRvRFbknZoyCTjtESq7kkoPzMl6Is5pYS9yZsBRbCLVerWeLLwgb8
+         i0vuPZ1TS56CC1gHV7BkRfXmnkzGAGl3TDV4WaCiryLP2O+al2vGyBnpYmWxrzXY1Vo1
+         NO1ecgjZ3SbgQidh6hWMWb8U1M3/gXyKTQ5aiyJzv4Vq49LqQO4kElvdd4polzp76+Oj
+         3N6S2EFV0C7a9pwyyH0ugdpapME2bQajDVRL/pTKS5ufx9d7gEGyHMvcnxsJr/SfH3tm
+         mX6JGyDPp0F/i1x1/knZh0E2h1p2EdN/XG+9PLjJUQKszIDxi/NldgeorOzCC3rZNtYO
+         6VXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1PsjmwZ7wPNO/sJ0EQSCs1v5VwJYm3XrJ4Rza4PWy+c=;
-        b=q+xrZGQRp2e6AyeLSlTcULMa6kUxtdhT2Ko3kEKMeCoT2KexFacxIDZH7xs9vFaYKE
-         p7KJ4Lk+QNMgW0SZklLHwfsj1Y1pKjxFuEBl3OWwPyMOMBVW9k/Ejt3S8siWmcDyEyNQ
-         6pWsCxTE7miGM4ffTBoOly048dLS0MJK1cXnDdfYmBZrnL/8Vk3paV/DMKs5uq7lipUC
-         yBIOpfPg8/FptNJZ393pXr8+dSPlz6i05BefurKvyld5NZnaiBa9oSOPEu1yfJu0S3cS
-         T/Ul3HCcOn/QhSvDfSwzLw3QsMFr9K0OoQddPwoJjdATWVstZj6yzhKXZiyHqhrKdyO1
-         SWmw==
-X-Gm-Message-State: AOAM530H7lMAddZUk/nySJ5ktKrYuLdrtt9ztvxRsyxNrtd8sVW2NMBH
-        BFUePOWUbUnx3r5Y4qRSMMoAWQfI90p4eIOOrNGlHQ==
-X-Google-Smtp-Source: ABdhPJzPKppQL0G+1sCTZ52f5TA2F99NYFEEvDwh7mmcFf6Td1sejwpGxXQfg806pJ5lagLK4NR3VvSV/2FfeRvlgwg=
-X-Received: by 2002:adf:f18f:0:b0:1f0:761:491d with SMTP id
- h15-20020adff18f000000b001f00761491dmr24154wro.505.1646419078903; Fri, 04 Mar
- 2022 10:37:58 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BknUbfqpfPqnNnTE+wwFbcKTHVg6JII8p6R6OPkErWY=;
+        b=ZL8vrIItBrW3UEgfrtuqUyqGUf3H135/tQ+vjQ+Rq+X8hNYhTDcxzWDBAn+RfL5KW8
+         fCP11OYrrpRUX2sRci33ZclS31SysTeVpOxN7mxOrowapUo12oihEM+cehXaeishL9Mr
+         CIlxaDUHTHpedtByg5bHeBSGzor7smVJPNFvJwae+7xGlcX9heBEu1+KKg9g1HvMDtIk
+         1WbiDyygRD8GjD0s9gKc4xi5V1BxpcI6Mg5jYv8Z4VGw6PMEXKLplPA2b400R8ODzf2L
+         GuKsSrnvaorXdy90uSSkJH/QsqhP6V0Fv0PjdsX7ZJjViAqwlea69ibXrW+KnKFtzY0I
+         jltg==
+X-Gm-Message-State: AOAM530iss424ERu+Ui4GRTj0c71n1rmi3gBZ/ssJNA8QguYkx5+J879
+        L7R+4lQIH7eEprkNL7x2gNhHWw==
+X-Google-Smtp-Source: ABdhPJwA3j+lTHK7E6P90nb3FKhZ6vQBDbdWWZuTY3m0lJH1/Lfqf6QPxfOgSxCeb6S1qI9lk5rcaw==
+X-Received: by 2002:a63:3487:0:b0:373:4c14:59b1 with SMTP id b129-20020a633487000000b003734c1459b1mr35543410pga.68.1646419149402;
+        Fri, 04 Mar 2022 10:39:09 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id w16-20020a056a0014d000b004e12fd48047sm6887711pfu.35.2022.03.04.10.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 10:39:07 -0800 (PST)
+Date:   Fri, 4 Mar 2022 11:39:05 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [RFC PATCH v3 2/4] remoteproc: core: Introduce
+ rproc_register_rvdev function
+Message-ID: <20220304183905.GB1660165@p14s>
+References: <20220126162405.1131323-1-arnaud.pouliquen@foss.st.com>
+ <20220126162405.1131323-3-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
- <20220227051821.fwrmeu7r6bab6tio@apollo.legion> <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
- <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com> <CA+khW7goNwmt2xJb8SMaagXcsZdquQha8kax-LF033wFexKCcA@mail.gmail.com>
-In-Reply-To: <CA+khW7goNwmt2xJb8SMaagXcsZdquQha8kax-LF033wFexKCcA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 4 Mar 2022 10:37:47 -0800
-Message-ID: <CA+khW7hK9JKU3be7gDDJ9DsOeaUS3RxCGJOJAUrZwvyVJiSSSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126162405.1131323-3-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 10:50 AM Hao Luo <haoluo@google.com> wrote:
->
-> On Wed, Mar 2, 2022 at 11:34 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Feb 28, 2022 at 02:10:39PM -0800, Hao Luo wrote:
-> > > Hi Kumar,
-> > >
-> > > On Sat, Feb 26, 2022 at 9:18 PM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > On Sat, Feb 26, 2022 at 05:13:31AM IST, Hao Luo wrote:
-> > > > > This patch allows bpf_syscall prog to perform some basic filesystem
-> > > > > operations: create, remove directories and unlink files. Three bpf
-> > > > > helpers are added for this purpose. When combined with the following
-> > > > > patches that allow pinning and getting bpf objects from bpf prog,
-> > > > > this feature can be used to create directory hierarchy in bpffs that
-> > > > > help manage bpf objects purely using bpf progs.
-> > > > >
-> > > > > The added helpers subject to the same permission checks as their syscall
-> > > > > version. For example, one can not write to a read-only file system;
-> > > > > The identity of the current process is checked to see whether it has
-> > > > > sufficient permission to perform the operations.
-> > > > >
-> > > > > Only directories and files in bpffs can be created or removed by these
-> > > > > helpers. But it won't be too hard to allow these helpers to operate
-> > > > > on files in other filesystems, if we want.
-> > > > >
-> > > > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > > > ---
-> > > > > + *
-> > > > > + * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
-> > > > > + *   Description
-> > > > > + *           Attempts to create a directory name *pathname*. The argument
-> > > > > + *           *pathname_sz* specifies the length of the string *pathname*.
-> > > > > + *           The argument *mode* specifies the mode for the new directory. It
-> > > > > + *           is modified by the process's umask. It has the same semantic as
-> > > > > + *           the syscall mkdir(2).
-> > > > > + *   Return
-> > > > > + *           0 on success, or a negative error in case of failure.
-> > > > > + *
-> > > > > + * long bpf_rmdir(const char *pathname, int pathname_sz)
-> > > > > + *   Description
-> > > > > + *           Deletes a directory, which must be empty.
-> > > > > + *   Return
-> > > > > + *           0 on sucess, or a negative error in case of failure.
-> > > > > + *
-> > > > > + * long bpf_unlink(const char *pathname, int pathname_sz)
-> > > > > + *   Description
-> > > > > + *           Deletes a name and possibly the file it refers to. It has the
-> > > > > + *           same semantic as the syscall unlink(2).
-> > > > > + *   Return
-> > > > > + *           0 on success, or a negative error in case of failure.
-> > > > >   */
-> > > > >
-> > > >
-> > > > How about only introducing bpf_sys_mkdirat and bpf_sys_unlinkat? That would be
-> > > > more useful for other cases in future, and when AT_FDCWD is passed, has the same
-> > > > functionality as these, but when openat/fget is supported, it would work
-> > > > relative to other dirfds as well. It can also allow using dirfd of the process
-> > > > calling read for a iterator (e.g. if it sets the fd number using skel->bss).
-> > > > unlinkat's AT_REMOVEDIR flag also removes the need for a bpf_rmdir.
-> > > >
-> > > > WDYT?
-> > > >
-> > >
-> > > The idea sounds good to me, more flexible. But I don't have a real use
-> > > case for using the added 'dirfd' at this moment. For all the use cases
-> > > I can think of, absolute paths will suffice, I think. Unless other
-> > > reviewers have opposition, I will try switching to mkdirat and
-> > > unlinkat in v2.
-> >
-> > I'm surprised you don't need "at" variants.
-> > I thought your production setup has a top level cgroup controller and
-> > then inner tasks inside containers manage cgroups on their own.
-> > Since containers are involved they likely run inside their own mountns.
-> > cgroupfs mount is single. So you probably don't even need to bind mount it
-> > inside containers, but bpffs is not a single mount. You need
-> > to bind mount top bpffs inside containers for tasks to access it.
-> > Now for cgroupfs the abs path is not an issue, but for bpffs
-> > the AT_FDCWD becomes a problem. AT_FDCWD is using current mount ns.
-> > Inside container that will be different. Unless you bind mount into exact
-> > same path the full path has different meanings inside and outside of the container.
-> > It seems to me the bpf progs attached to cgroup sleepable events should
-> > be using FD of bpffs. Then when these tracepoints are triggered from
-> > different containers in different mountns they will get the right dir prefix.
-> > What am I missing?
-> >
->
-> Alexei, you are perfectly right. To be honest, I failed to see the
-> fact that the sleepable tp prog is in the container's mount ns. I
-> think we can bind mount the top bpffs into exactly the same path
-> inside container, right? But I haven't tested this idea. Passing FDs
-> should be better.
->
+On Wed, Jan 26, 2022 at 05:24:03PM +0100, Arnaud Pouliquen wrote:
+> The rproc structure contains a list of registered rproc_vdev structure.
+> To be able to move the management of the rproc_vdev structure in
+> remoteproc_virtio.c (i.e rproc_rvdev_add_device and
+> rproc_rvdev_remove_device functions), introduce the rproc_register_rvdev
+> and rproc_unregister_rvdev functions.
+> These functions will be exported by the remoteproc_core.c.
 
-I gave this question more thought. We don't need to bind mount the top
-bpffs into the container, instead, we may be able to overlay a bpffs
-directory into the container. Here is the workflow in my mind:
+This last sentence is very confusing... I kept an eye out for the EXPORT_SYMBOL()
+tag but never found it.  Please remove.
 
-For each job, let's say A, the container runtime can create a
-directory in bpffs, for example
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 83ff44a6a4db..7a091f860c82 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -491,6 +491,18 @@ static int copy_dma_range_map(struct device *to, struct device *from)
+>  	return 0;
+>  }
+>  
+> +static void rproc_register_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
+> +{
+> +	if (rvdev && rproc)
+> +		list_add_tail(&rvdev->node, &rproc->rvdevs);
+> +}
 
-  /sys/fs/bpf/jobs/A
+I would call those rproc_add_rvdev() and rproc_remove_rvdev() to follow in the
+footsteps of rproc_add_subdev() and rproc_remove_subdev().
 
-and then create the cgroup for A. The sleepable tracing prog will
-create the file:
-
-  /sys/fs/bpf/jobs/A/100/stats
-
-100 is the created cgroup's id. Then the container runtime overlays
-the bpffs directory into container A in the same path:
-
-  [A's container path]/sys/fs/bpf/jobs/A.
-
-A can see the stats at the path within its mount ns:
-
-  /sys/fs/bpf/jobs/A/100/stats
-
-When A creates cgroup, it is able to write to the top layer of the
-overlayed directory. So it is
-
-  /sys/fs/bpf/jobs/A/101/stats
-
-Some of my thoughts:
-  1. Compared to bind mount top bpffs into container, overlaying a
-directory avoids exposing other jobs' stats. This gives better
-isolation. I already have a patch for supporting laying bpffs over
-other fs, it's not too hard.
-  2. Once the container runtime has overlayed directory into the
-container, it has no need to create more cgroups for this job. It
-doesn't need to track the stats of job-created cgroups, which are
-mainly for inspection by the job itself. Even if it needs to collect
-the stats from those cgroups, it can read from the path in the
-container.
-  3. The overlay path in container doesn't have to be exactly the same
-as the path in root mount ns. In the sleepable tracing prog, we may
-select paths based on current process's ns. If we choose to do this,
-we can further avoid exposing cgroup id and job name to the container.
-
-
-> > I think non-AT variants are not needed. The prog can always pass AT_FDCWD
-> > if it's really the intent, but passing actual FD seems more error-proof.
->
-> Let's have the AT version. Passing FD seems the right approach, when
-> we use it in the context of container.
+> +
+> +static void rproc_unregister_rvdev(struct rproc_vdev *rvdev)
+> +{
+> +	if (rvdev)
+> +		list_del(&rvdev->node);
+> +}
+> +
+>  static struct rproc_vdev *
+>  rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+>  {
+> @@ -554,7 +566,7 @@ rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
+>  			goto unwind_vring_allocations;
+>  	}
+>  
+> -	list_add_tail(&rvdev->node, &rproc->rvdevs);
+> +	rproc_register_rvdev(rproc, rvdev);
+>  
+>  	rvdev->subdev.start = rproc_vdev_do_start;
+>  	rvdev->subdev.stop = rproc_vdev_do_stop;
+> @@ -583,7 +595,7 @@ static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
+>  	}
+>  
+>  	rproc_remove_subdev(rproc, &rvdev->subdev);
+> -	list_del(&rvdev->node);
+> +	rproc_unregister_rvdev(rvdev);
+>  	device_unregister(&rvdev->dev);
+>  }
+>  
+> -- 
+> 2.25.1
+> 

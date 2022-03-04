@@ -2,132 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649D54CCDEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2DD4CCDF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiCDGhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S237244AbiCDGnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238479AbiCDGh3 (ORCPT
+        with ESMTP id S229889AbiCDGnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:37:29 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2041.outbound.protection.outlook.com [40.107.22.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1353D18CC0C;
-        Thu,  3 Mar 2022 22:36:42 -0800 (PST)
+        Fri, 4 Mar 2022 01:43:23 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1334E3AA;
+        Thu,  3 Mar 2022 22:42:32 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SsfpVJ5zMAPPJCp91Ge4/ja4DPffqpIpD2ih+Lx5SYo9X6wbdG3ZT/bTa8HhiH7iwi1yxQpiWVhbfpcJA06vfQzE0xGl3MU+QbUcQpCraXqeSe56Rngzem5u3XMpJKyL/1V5lkFV2d6zQsgRFvJ/BfMvV2vit20SDdXmrp3u/NX7zemuBKBj6EvDEPlw7SyByfCIFeD6+KhSp3DqawWzQ5j2sLu2tUOuXw5EVFtMzQJhgh0iyTjNBaP24c/LkBHTClKPsm9BdfmLz26XY/8ZyTP2n4UHt/tGk8dSQWtBZX3Xn8RIvXJEn943aoDEKcOUxaKkQ8j3Zp5KdpPgSsM+Ow==
+ b=STBGzAH8iAxHvdMl5yUfqo0vKRDFw6BPHPxftPLGdoYBwJkLwcmGRyA8ilf8lFKRRMyK5YypCxAhCZXfYJ8lQBeRSVHw5lpXxBVr2BOWwx+JgmL4lsKEr95al7+smbra1IcLkdE2+V1gKcTlURXy4uoKM4ajDvzoI51p60QcV3ZH3Z4NKhrjAluQvGSbEiKs5eiKgZmprJjFLAea8EO6PT5pPw5FTKXuZ5lydtsoepYDhbtRMCu36KDc86G4vsOcc9KVq6l9ltNOzKkw6dXzNXH5wDBRljVlb6V9A7XOwEeBQqda4NOQex4dTe6SvM6tlP1E/ngKApT9R+1EEIX1sA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ucv9KOqezzVtY7dl0ACi2OUlllz3kxbIzfeKXHwz+Q8=;
- b=LfoQTbZ9JaFja/lYy1fHP6neAwULkNhIim916Hc58Xisj0+O4/ZdWupXe/7RtqVlNhDxLBeavD5/0gS6q2kBBZt7g0NxG7zdJo0+hg02hQKAux2Q1sDXJh1SXQp3m4gRdkB+PuHA9cN8qkuPZdOmlEpN6CQbM1KkEtXOIb2/M+ZMAwvgmJEJu2GpeQV6y/ZeyQCZcqzTCJN1YNuu5CsJmMwRxR2a/SHExbEHICokGE0zXC9RYRWaqJnzMHso6Qskkh6M0yHKs5xiVs7DYseoQNMIs1AZ9IJDYlHRQqnG60gucJYYSvBCJjyl0onEEGPNxpDWqTpLK4QkgeGaDy77+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.70) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ bh=2aiWRld1LQgEEA+a7dxMLE2dj2WmunMPJLCupQJoJNI=;
+ b=EOVeixejQMXWz+zaPy1Yg4DtpzRFH8BMuJ677xw+vZ/+eThRGiupXQThwojSYGGPyULImCJsEyL/A/KtckSbk4EJFAvRAqCfgpgj4yWclUvZ4ssRwaJVj3qYjn5OW6y4ETQz/LszqWNOAZgAyhGDvzrAyeK1cDwlxg4MgA/4KWXS8Giy6GcxDhShG31Y76Pe4q5Y+7Z7Gg108j9ZtA0+XjRpUnKu/zTBbKoMGkGhyB29e77FKWUNLBXTNrlwpSpYWA5KSFy4CGjt8/iqVhhrtG/ZEkvuFBVV5+7/XKaG1K0SCW9jsVAnPau3wx2pu9y52uJoAvwAg9fe53CWuk1D+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ucv9KOqezzVtY7dl0ACi2OUlllz3kxbIzfeKXHwz+Q8=;
- b=t7bQR5pizRmd1dYRK6s1k4PntfRU4xA5/XahbHevY5+pIKT8+4UL2SSPYqKMzpAvEHxKHLV70mV40yPOP4fNmQiOzWYdS/qAuhIolU4nsALiFuOt/QnvEFb1pZ5rVIAoo6hFOYrsKFm5ApH0NGQu35IR+QY68VknLpDegpQvKu9KxMM3Fumvdgb2KpMa8BGR9obxCbqmXCXsBADrq1xIIj21f0cpPt6vGwvLJv3yfGuBzKKZUisVjJulgeUwkpiNGHs3bnP1XhAwhFTFEIu1DjRfy1kzlSF8yJz3aB1LP0uzslNkk+mwFJ/iw0DCmuoakcw0u+rsgOe1rhpxxXmzug==
-Received: from OL1P279CA0028.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:13::15)
- by AM9PR10MB4580.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:271::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
- 2022 06:36:40 +0000
-Received: from HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:e10:13:cafe::74) by OL1P279CA0028.outlook.office365.com
- (2603:10a6:e10:13::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15 via Frontend
- Transport; Fri, 4 Mar 2022 06:36:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.70)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.70 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.70; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.70) by
- HE1EUR01FT043.mail.protection.outlook.com (10.152.0.207) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Fri, 4 Mar 2022 06:36:39 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SJA.ad011.siemens.net (194.138.21.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Fri, 4 Mar 2022 07:36:39 +0100
-Received: from [167.87.0.77] (167.87.0.77) by DEMCHDC8A0A.ad011.siemens.net
- (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
- 2022 07:36:38 +0100
-Message-ID: <c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com>
-Date:   Fri, 4 Mar 2022 07:36:37 +0100
+ bh=2aiWRld1LQgEEA+a7dxMLE2dj2WmunMPJLCupQJoJNI=;
+ b=NbdlWpHWEP9RVoBJF9k3AgyhfxptRPlMO1TNI5UpzOOG8kdJiaCSU40ZE/ZpxEEJxVzomQRG/Tcn+cyVGDSukwyOLptOwHHTlSl4cA6JD7m+mNAnxJ/bADnJpvAqazICmlx7TPhhjYFslVgViZW1Xzogi/XemL++e2VUxlwYg4M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ SA0PR12MB4414.namprd12.prod.outlook.com (2603:10b6:806:9a::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Fri, 4 Mar 2022 06:42:30 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 06:42:29 +0000
+Date:   Fri, 4 Mar 2022 14:42:02 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "dsmythies@telus.net" <dsmythies@telus.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Subject: Re: [PATCH V2 1/4] cpufreq: amd-pstate: Add more tracepoint for AMD
+ P-State module
+Message-ID: <YiG0uqa+Ho7XyuHJ@amd.com>
+References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
+ <20220304060724.314582-2-Jinzhou.Su@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304060724.314582-2-Jinzhou.Su@amd.com>
+X-ClientProxiedBy: SG2PR06CA0202.apcprd06.prod.outlook.com (2603:1096:4:1::34)
+ To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH] efi: Add missing prototype for efi_capsule_setup_info
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.0.77]
-X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 79410c4a-daf9-413d-4323-08d9fda956d0
-X-MS-TrafficTypeDiagnostic: AM9PR10MB4580:EE_
-X-Microsoft-Antispam-PRVS: <AM9PR10MB4580A8E1EAB9F67137E2D8BA95059@AM9PR10MB4580.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Office365-Filtering-Correlation-Id: 249ff8e6-bc66-4810-c216-08d9fdaa2729
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4414:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB4414336B2559BC0F2A9B7A95EC059@SA0PR12MB4414.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hAb4s4ML5eNS6eJbEyatIMxAOpBPxG1dMUITZz9BvPQn9uRljsIaidWiScc67zVhCZvZ8DbsK0xUT29Q5oyHEoYa55DvfVXuDjy6yAZeeo478H7T2IadyPH2389NqfG1xKf35c0C9TbbRLeANF8rU4U+OFTkiJRGOc7AVaSRJVRATAzJfMUXDVbSJe3Q733jTjteUjVvtxQh+Tl6t1Wjm+Hpi3uMUMxuhgpJ6GCowXJequ7iUNzuCi8HD5A6YBUEqGZ7RpFcuf0Pqd8XdrOm/hGSzfeZzdESLjUxT3MXz9Vc6FXDrvNHgG0IXnrh3h7sEXQns+YMU+hDGM8FGIcbQark6/ZF3+pyQXl9CEUBtQ5EZSEqdzqAtdhLFWf0PvmttQS7+7GKH2Q6EXvi3hMU0LiJAaEPVtkR0uuG8Wx3i1Dmj3RWIM5o28TdbPPYAz4/JQtfcJImOQTAVxou3rqK0nn+VLftnbHI0yiRKTeWhu6u3BiVjtXuNbl7/ZXqT9olVfZk6DYUr4ed+EA1knEt4j3s/O0HE5Je8BF/TyQ0ZVRvtyM/47UjiFnSnXlVAs+zF1YSWJ4rPibRQvrEzkxU8rgVgxQMHaIb+Mp9D9BhBSRY7Oo0WelCSv9Pu6J7KQS9sjtB4nKf/7y8jyhXYPX8SG8ghwU0aPVcrHHGAFnwNPquL4nlBNq3Hk1I8diPCMFlBVRBsIDZT8GjaocnsOAhToiPjKJnORnZZn/TJa9TGhBtSLF/qY1zgLqSRPe/sYym
-X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(36860700001)(956004)(336012)(186003)(2616005)(16526019)(31686004)(83380400001)(47076005)(40460700003)(7636003)(356005)(7596003)(26005)(82960400001)(8936002)(508600001)(2906002)(82310400004)(44832011)(5660300002)(70206006)(70586007)(316002)(4326008)(110136005)(36756003)(6706004)(16576012)(8676002)(31696002)(86362001)(4744005)(3940600001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:36:39.6644
+X-Microsoft-Antispam-Message-Info: X+gjnYCOX28CHJ3P2TzVa0R2TPFM7MjvN+IjwiFUIH6Ar05rvAyftWAM53d/IzK019hME4S6JdXzaxy/ujt9NpBgEiOh6+bhH/yDyNzcJGQ08ax4aDgEJAf9nheOIDY15SGM5ZOgUXybPAQWQfsar0NrozeMsH1gy/dWySReQOUdAC7HXCWh9/fEAf8glX2swHrqGi1OJo79c1OgA6IViKTHmeawZbjCsKgEBet88AM7grM6MWCWpF9BvC4Q6dPqhafg9nsl3lk9cwJqpfC23cjdwsYR51RUsrafTKfTXca3znY/PLNMnRgwXP56+MdL3LJ8cH5r6r3PxBoVKSZ2lbjPzM56l6I9IQH0+JJVmtwd/VooeBlhFenta4zuPd5Y4824hi2NcmxmOGAz0oqFuPI4okYVgJkXd5fO4S+5PuVf0ZpRQLjTYE7mngvmlx47zTvlDG1BWoVLdGwKpTuWmcckRmy246+7+KBdfLG2iyUgaNgswiDCIeiouPe8/7ex1PbHyoqp2I0CEJ+OWhJsPZaTNbdN4LmosWjmupLrcBs59t7U+nsbNISFkf7zCSlN7bbG9yZ6ErgPGqu6Z3ONfoWmBmOk1zK+WYM+D0Ee0gDc209rO/T8Tb1jK8aJMggColhlAlKeOmHRs0TbnQzIjmXNyPGt3boildfyUVPIIPbmgeeQPXX+WfW2S2A2JMArlCRJTOCw3ZPSFpwOfYImRg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(2906002)(6506007)(6666004)(36756003)(2616005)(6512007)(5660300002)(508600001)(316002)(6636002)(54906003)(37006003)(83380400001)(26005)(186003)(8936002)(8676002)(38100700002)(4326008)(6862004)(86362001)(66556008)(66946007)(66476007)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/dMPxkPgLySXwhQXlZfjTEV7vaHKuIFeAXLRZ4xN0NijZNVpZrEEsnxPunaN?=
+ =?us-ascii?Q?6/YCAgxmJfghjkoZgJanH53j7N8lrgQjiuPZ+YEOhxqiHgzsNgh1ksoPFVa8?=
+ =?us-ascii?Q?WRWxbZEHDgyGW1k11a64H5m9pUKNczIfpvXfUPnb0Hns9T4VNqkesntQhMuy?=
+ =?us-ascii?Q?6Ny73AskQGe7xXo7jk9RofjV1r3pTYPoTgRk/t7Z0zyGra6QkZ4OftlYAy2q?=
+ =?us-ascii?Q?ZvUYLrG/zRT7QHDq/n5/cTn36grDNwhltjLfSr92nQDccSwm2YtETljR5yHR?=
+ =?us-ascii?Q?t9sB5//NTSs6b24c0Bijqf2ii6RKuJSKcPuG1Xm1UrfDFBVNWoFUUItZzidb?=
+ =?us-ascii?Q?dSfzsMThDlorwblqCisv3O/soyTYATW2voo+snnt6g1p+H5kbtEn2HCwBeda?=
+ =?us-ascii?Q?YW4nnEkWN52vJw/N8LCWXw/ClbBrloXeRdSKM6kgZmo1hJ+jdVlyW4oKwrSv?=
+ =?us-ascii?Q?FdsnOHGJGfeqyWXiJ7F5UcJE5Q+rEdUepQNsL8e8F08gJ5vUstyGZc9Wi41N?=
+ =?us-ascii?Q?VKk0tsnAAym7mffm95eT1RDvJ1gOZnZJcE3SYG5eLWbGClJtWP2ip18P5bxc?=
+ =?us-ascii?Q?MQJ6jfDFYtXNsFOE6MOOwVvK2QnOKZ+eqzfd6eH7NKApo1KsPx2O9bYQjZEC?=
+ =?us-ascii?Q?kWBjM3MDX6UkB1TifX9u6/jrVc5hoNSd9mBBoYGXr9zmHbVtiHy3zjlDWToT?=
+ =?us-ascii?Q?wiQVQnHLKa9IB0KCgh/dPyw0Ge79HuMHeC3ANV2IW7H/UmGx+KtwckekZJTo?=
+ =?us-ascii?Q?4zlHlU/p5INx5Y9epzjlHnCor299BZK9v+2ggFYipQuY98k9+zZse/HQeXgB?=
+ =?us-ascii?Q?14gnAi18AKiOjT8+impWAAPxzRjF4QaQcLOmA+SYwRWF537L8pm6iVRGsvFn?=
+ =?us-ascii?Q?pFLV5GE4MDjmOLDVQVNMcvZC5py8Z23KFxls4O06ONHMzOQDT6k4/ehD+jHq?=
+ =?us-ascii?Q?tDz2kPn8GxixoP/u2eX+uLe3+350k8f84SLb5Wf0+WuorDXoNhX8RHXemOKQ?=
+ =?us-ascii?Q?qfyvBAfBklcv6PcImVLp/7q6PR7mzR+XRVKM92RrmDFXGJQ8wmIywL4ikJ1x?=
+ =?us-ascii?Q?9P2mSi9AXTsHWwHrCRpdR/GfZ9rDIeG3Wzur6sbH6e8mJGD8wowq2dZ9he2K?=
+ =?us-ascii?Q?Qu7zco0fD3tFe+zViPWWwRKpYynyOUg+U8OCivuo8JecZTghOS73QPa9GAer?=
+ =?us-ascii?Q?5wv7pdi+ttRZrmAjiPeonLb6hLA1aNIM4ItXgAFdb3hSAWO36eO36auUOVl1?=
+ =?us-ascii?Q?K7BVwyOs/OBYOYC6fZjI+8KHerzU+iNI4hDHi9rJNOBpWWsN6QnrooyCOO/G?=
+ =?us-ascii?Q?lDV0vhpCS5iRC2Q+gzLRJZQVHhGK1sazJcBs9BDOt0T6Y7s+pqYP2lUdtUty?=
+ =?us-ascii?Q?klH8ZRFI2xTwGC7cdyiHCVuTLx0RNzqubYbUnZxaw90AcnlriNqu5PERjvsn?=
+ =?us-ascii?Q?4NbR/sjiP9ZmZz7aLELaMG/cvtyKYG29Q6LWHtbojCVVUvHWalN2ki7vHEht?=
+ =?us-ascii?Q?rHnxX/ROzwda3Jm78yh1Ur6s/lLJp8/4PuSYWv173Lv86Oz/Flkpwxho1OlO?=
+ =?us-ascii?Q?RaQT6GT8RD/drUOTyQJhlKWn3K+Sqb0+GgjYxhpF+Sb5ZJNiveVOxG5ineS/?=
+ =?us-ascii?Q?iyIuNlo4vqA+2Lco1syLXiM=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 249ff8e6-bc66-4810-c216-08d9fdaa2729
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:42:29.7482
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79410c4a-daf9-413d-4323-08d9fda956d0
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.70];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4580
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zIN3MtDT+Ht3lCXLOmgpSIldYha41vKD0kseCDd8es9S8ZtvGZO3dVlSx++AZnuMePqD3N6xnsxwgS+wyEwz5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4414
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+On Fri, Mar 04, 2022 at 02:07:21PM +0800, Su, Jinzhou (Joe) wrote:
+> Add frequency, mperf, aperf and tsc in the trace. This can be used
+> to debug and tune the performance of AMD P-state driver.
+> 
+> Use the time difference between amd_pstate_update to calculate CPU
+> frequency. There could be sleep in arch_freq_get_on_cpu, so do not
+> use it here.
+> 
+> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> Co-developed-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
 
-Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings 
-under W=1.
+Let's remove "Signed-off-by" of me, just leave "Co-developed-by".
 
-Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
----
- include/linux/efi.h | 2 ++
- 1 file changed, 2 insertions(+)
+> ---
+>  drivers/cpufreq/amd-pstate-trace.h | 22 ++++++++++-
+>  drivers/cpufreq/amd-pstate.c       | 59 +++++++++++++++++++++++++++++-
+>  2 files changed, 78 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
+> index 647505957d4f..35f38ae67fb1 100644
+> --- a/drivers/cpufreq/amd-pstate-trace.h
+> +++ b/drivers/cpufreq/amd-pstate-trace.h
+> @@ -27,6 +27,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  	TP_PROTO(unsigned long min_perf,
+>  		 unsigned long target_perf,
+>  		 unsigned long capacity,
+> +		 u64 freq,
+> +		 u64 mperf,
+> +		 u64 aperf,
+> +		 u64 tsc,
+>  		 unsigned int cpu_id,
+>  		 bool changed,
+>  		 bool fast_switch
+> @@ -35,6 +39,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  	TP_ARGS(min_perf,
+>  		target_perf,
+>  		capacity,
+> +		freq,
+> +		mperf,
+> +		aperf,
+> +		tsc,
+>  		cpu_id,
+>  		changed,
+>  		fast_switch
+> @@ -44,6 +52,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  		__field(unsigned long, min_perf)
+>  		__field(unsigned long, target_perf)
+>  		__field(unsigned long, capacity)
+> +		__field(unsigned long long, freq)
+> +		__field(unsigned long long, mperf)
+> +		__field(unsigned long long, aperf)
+> +		__field(unsigned long long, tsc)
+>  		__field(unsigned int, cpu_id)
+>  		__field(bool, changed)
+>  		__field(bool, fast_switch)
+> @@ -53,15 +65,23 @@ TRACE_EVENT(amd_pstate_perf,
+>  		__entry->min_perf = min_perf;
+>  		__entry->target_perf = target_perf;
+>  		__entry->capacity = capacity;
+> +		__entry->freq = freq;
+> +		__entry->mperf = mperf;
+> +		__entry->aperf = aperf;
+> +		__entry->tsc = tsc;
+>  		__entry->cpu_id = cpu_id;
+>  		__entry->changed = changed;
+>  		__entry->fast_switch = fast_switch;
+>  		),
+>  
+> -	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu cpu_id=%u changed=%s fast_switch=%s",
+> +	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u changed=%s fast_switch=%s",
+>  		  (unsigned long)__entry->min_perf,
+>  		  (unsigned long)__entry->target_perf,
+>  		  (unsigned long)__entry->capacity,
+> +		  (unsigned long long)__entry->freq,
+> +		  (unsigned long long)__entry->mperf,
+> +		  (unsigned long long)__entry->aperf,
+> +		  (unsigned long long)__entry->tsc,
+>  		  (unsigned int)__entry->cpu_id,
+>  		  (__entry->changed) ? "true" : "false",
+>  		  (__entry->fast_switch) ? "true" : "false"
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9ce75ed11f8e..7be38bc6a673 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -65,6 +65,18 @@ MODULE_PARM_DESC(shared_mem,
+>  
+>  static struct cpufreq_driver amd_pstate_driver;
+>  
+> +/**
+> + * struct  amd_aperf_mperf
+> + * @aperf: actual performance frequency clock count
+> + * @mperf: maximum performance frequency clock count
+> + * @tsc:   time stamp counter
+> + */
+> +struct amd_aperf_mperf {
+> +	u64 aperf;
+> +	u64 mperf;
+> +	u64 tsc;
+> +};
+> +
+>  /**
+>   * struct amd_cpudata - private CPU data for AMD P-State
+>   * @cpu: CPU number
+> @@ -81,6 +93,9 @@ static struct cpufreq_driver amd_pstate_driver;
+>   * @min_freq: the frequency that mapped to lowest_perf
+>   * @nominal_freq: the frequency that mapped to nominal_perf
+>   * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
+> + * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+> + * @prev: Last Aperf/Mperf/tsc count value read from register
+> + * @freq: current cpu frequency value
+>   * @boost_supported: check whether the Processor or SBIOS supports boost mode
+>   *
+>   * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
+> @@ -102,6 +117,10 @@ struct amd_cpudata {
+>  	u32	nominal_freq;
+>  	u32	lowest_nonlinear_freq;
+>  
+> +	struct amd_aperf_mperf cur;
+> +	struct amd_aperf_mperf prev;
+> +
+> +	u64 freq;
+>  	bool	boost_supported;
+>  };
+>  
+> @@ -211,6 +230,39 @@ static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
+>  					    max_perf, fast_switch);
+>  }
+>  
+> +static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
+> +{
+> +	u64 aperf, mperf, tsc;
+> +	unsigned long flags;
+> +
+> +	local_irq_save(flags);
+> +	rdmsrl(MSR_IA32_APERF, aperf);
+> +	rdmsrl(MSR_IA32_MPERF, mperf);
+> +	tsc = rdtsc();
+> +
+> +	if (cpudata->prev.mperf == mperf || cpudata->prev.tsc == tsc) {
+> +		local_irq_restore(flags);
+> +		return false;
+> +	}
+> +
+> +	local_irq_restore(flags);
+> +
+> +	cpudata->cur.aperf = aperf;
+> +	cpudata->cur.mperf = mperf;
+> +	cpudata->cur.tsc =  tsc;
+> +	cpudata->cur.aperf -= cpudata->prev.aperf;
+> +	cpudata->cur.mperf -= cpudata->prev.mperf;
+> +	cpudata->cur.tsc -= cpudata->prev.tsc;
+> +
+> +	cpudata->prev.aperf = aperf;
+> +	cpudata->prev.mperf = mperf;
+> +	cpudata->prev.tsc = tsc;
+> +
+> +	cpudata->freq = div64_u64((cpudata->cur.aperf * cpu_khz), cpudata->cur.mperf);
+> +
+> +	return true;
+> +}
+> +
+>  static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  			      u32 des_perf, u32 max_perf, bool fast_switch)
+>  {
+> @@ -226,8 +278,11 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  	value &= ~AMD_CPPC_MAX_PERF(~0L);
+>  	value |= AMD_CPPC_MAX_PERF(max_perf);
+>  
+> -	trace_amd_pstate_perf(min_perf, des_perf, max_perf,
+> -			      cpudata->cpu, (value != prev), fast_switch);
+> +	if (trace_amd_pstate_perf_enabled() && amd_pstate_sample(cpudata)) {
+> +		trace_amd_pstate_perf(min_perf, des_perf, max_perf, cpudata->freq,
+> +			cpudata->cur.mperf, cpudata->cur.aperf, cpudata->cur.tsc,
+> +				cpudata->cpu, (value != prev), fast_switch);
 
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index ccd4d3f91c98..cc6d2be2ffd5 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -213,6 +213,8 @@ struct capsule_info {
- 	size_t			page_bytes_remain;
- };
- 
-+int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
-+                           size_t hdr_bytes);
- int __efi_capsule_setup_info(struct capsule_info *cap_info);
- 
- /*
--- 
-2.34.1
+How about using struct amd_aperf_mperf pointer as one input:
+
+trace_amd_pstate_perf(min_perf, des_perf, max_perf, &cpudata->cur, ...);
+
+You can refer the members of struct amd_aperf_mperf in the
+amd-pstate-trace.h:
+
+	__entry->mperf = cur->mperf;
+	__entry->aperf = cur->aperf;
+	__entry->tsc = cur->tsc;
+
+Thanks,
+Ray

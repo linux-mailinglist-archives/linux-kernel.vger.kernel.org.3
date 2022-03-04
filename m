@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204804CD127
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C8F4CD126
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237333AbiCDJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S237919AbiCDJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiCDJfw (ORCPT
+        with ESMTP id S237400AbiCDJfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:35:52 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09F175603
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:35:05 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K92hm6g18zBrt1;
-        Fri,  4 Mar 2022 17:33:12 +0800 (CST)
+        Fri, 4 Mar 2022 04:35:53 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7075603
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:35:06 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K92dV2pXQzbcJP;
+        Fri,  4 Mar 2022 17:30:22 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
- 2022 17:35:03 +0800
+ 2022 17:35:04 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
@@ -33,9 +33,9 @@ CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
         <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 07/16] mm/migration: use helper macro min_t in do_pages_stat
-Date:   Fri, 4 Mar 2022 17:34:00 +0800
-Message-ID: <20220304093409.25829-8-linmiaohe@huawei.com>
+Subject: [PATCH 08/16] mm/migration: avoid unneeded nodemask_t initialization
+Date:   Fri, 4 Mar 2022 17:34:01 +0800
+Message-ID: <20220304093409.25829-9-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220304093409.25829-1-linmiaohe@huawei.com>
 References: <20220304093409.25829-1-linmiaohe@huawei.com>
@@ -55,29 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We could use helper macro min_t to help set the chunk_nr to simplify
-the code.
+Avoid unneeded next_pass and this_pass initialization as they're always
+set before using to save possible cpu cycles when there are plenty of
+nodes in the system.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/migrate.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ mm/migrate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index bc79d7338780..c84eec19072a 100644
+index c84eec19072a..abb0c6715e1f 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1858,9 +1858,7 @@ static int do_pages_stat(struct mm_struct *mm, unsigned long nr_pages,
- 	while (nr_pages) {
- 		unsigned long chunk_nr;
+@@ -2378,8 +2378,8 @@ static int establish_migrate_target(int node, nodemask_t *used,
+  */
+ static void __set_migration_target_nodes(void)
+ {
+-	nodemask_t next_pass	= NODE_MASK_NONE;
+-	nodemask_t this_pass	= NODE_MASK_NONE;
++	nodemask_t next_pass;
++	nodemask_t this_pass;
+ 	nodemask_t used_targets = NODE_MASK_NONE;
+ 	int node, best_distance;
  
--		chunk_nr = nr_pages;
--		if (chunk_nr > DO_PAGES_STAT_CHUNK_NR)
--			chunk_nr = DO_PAGES_STAT_CHUNK_NR;
-+		chunk_nr = min_t(unsigned long, nr_pages, DO_PAGES_STAT_CHUNK_NR);
- 
- 		if (in_compat_syscall()) {
- 			if (get_compat_pages_array(chunk_pages, pages,
 -- 
 2.23.0
 

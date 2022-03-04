@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446664CD13E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848434CD164
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiCDJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S237878AbiCDJk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239141AbiCDJhv (ORCPT
+        with ESMTP id S239176AbiCDJhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:37:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB841A8CBA;
-        Fri,  4 Mar 2022 01:36:17 -0800 (PST)
+        Fri, 4 Mar 2022 04:37:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9216C1A8CA7;
+        Fri,  4 Mar 2022 01:36:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68681617F0;
-        Fri,  4 Mar 2022 09:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8B3C340E9;
-        Fri,  4 Mar 2022 09:36:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39749B827C2;
+        Fri,  4 Mar 2022 09:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8B9C340F2;
+        Fri,  4 Mar 2022 09:36:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386576;
-        bh=4uTKe1JGywslwsGE4l2G1XqtfPGk1rXc/fU95S0qp2Q=;
+        s=k20201202; t=1646386579;
+        bh=YqYLCqwD1X+T8L25kJJyKxL+NMAHdYWK/JIwR/cXnBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VDZkk7dwNX7PG02qC7JlFPOXH5SQq2Ddek8pRIqFQcdvipsS1KfXIv2JJBDIoxH2w
-         RcrS3gvIEZ/8JoIBwvrOMIeMfqJzci2ISDFNGzFljtekKNPEPR8FHvYBhkl6LIQTS2
-         GwAe5WiFK9v0PMlo/BaNuQVU1diE7WTekeQOchBb6PbnhbBWSRBNn+7DXlepVhWELa
-         NhVPOqdqVYKHZPUUv16lOvtdQT2wjeUJgLZdCqvjj7xxrrK7LyHK4olPC4bTvh+YQY
-         iFRhmNuEDjlu+63nOYB/LXXSGrOjTLdd1cgZOjcimOjn4EmsI1A3+LcdbFwgBpcb8F
-         qLSuzxVq1W/LQ==
+        b=JbT6mvPetxwI+bSP+GZPmjh3Uzzs2CSOrzimmPw9QbUiBNKg+ZkH6yrgrr7ali3iI
+         eRPqG5eYu/2eYotVCyFrSLAW+u2pSDyoeZm7ctMqYP9RpPT7xmxAInDtUnmWQiHEvG
+         52bG3hmR4flXpkgoc5QW3TvYD7JCDwbk5J6ucZ+D95HrSJUW8igkb5vwfbc5qr0oa9
+         +ieoXqqTrunJGLA8ITbGw2Ou97GpY+geAlyVVubyq5rPuqVZIN7HAw6o38JzVLkpy4
+         zLAU3St2g/UAdKe3lXRKKN+7c0alIf2Ge8CyWMKNLMDeaTFUrWeChtuSVVRYCdz3gX
+         xHSoW2fBUzsNA==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Nathaniel McCallum <nathaniel@profian.com>,
@@ -44,9 +44,9 @@ Cc:     Nathaniel McCallum <nathaniel@profian.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
         64-BIT))
-Subject: [RFC PATCH v2.1 02/30] x86/sgx: Add wrapper for SGX2 EMODPR function
-Date:   Fri,  4 Mar 2022 11:34:56 +0200
-Message-Id: <20220304093524.397485-2-jarkko@kernel.org>
+Subject: [RFC PATCH v2.1 03/30] x86/sgx: Add wrapper for SGX2 EMODT function
+Date:   Fri,  4 Mar 2022 11:34:57 +0200
+Message-Id: <20220304093524.397485-3-jarkko@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
 References: <20220304093524.397485-1-jarkko@kernel.org>
@@ -64,76 +64,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Reinette Chatre <reinette.chatre@intel.com>
 
-Add a wrapper for the EMODPR ENCLS leaf function used to
-restrict enclave page permissions as maintained in the
+Add a wrapper for the EMODT ENCLS leaf function used to
+change the type of an enclave page as maintained in the
 SGX hardware's Enclave Page Cache Map (EPCM).
 
-EMODPR:
-1) Updates the EPCM permissions of an enclave page by treating
-   the new permissions as a mask - supplying a value that relaxes
-   EPCM permissions has no effect.
-2) Sets the PR bit in the EPCM entry of the enclave page to
-   indicate that permission restriction is in progress. The bit
-   is reset by the enclave by invoking ENCLU leaf function
-   EACCEPT or EACCEPTCOPY.
+EMODT:
+1) Updates the EPCM page type of the enclave page.
+2) Sets the MODIFIED bit in the EPCM entry of the enclave page.
+   This bit is reset by the enclave by invoking ENCLU leaf
+   function EACCEPT or EACCEPTCOPY.
 
-The enclave may access the page throughout the entire process
-if conforming to the EPCM permissions for the enclave page.
+Access from within the enclave to the enclave page is not possible
+while the MODIFIED bit is set.
 
-After performing the permission restriction by issuing EMODPR
-the kernel needs to collaborate with the hardware to ensure that
-all logical processors sees the new restricted permissions. This
-is required for the enclave's EACCEPT/EACCEPTCOPY to succeed and
-is accomplished with the ETRACK flow.
-
-Expand enum sgx_return_code with the possible EMODPR return
-values.
+After changing the enclave page type by issuing EMODT the kernel
+needs to collaborate with the hardware to ensure that no logical
+processor continues to hold a reference to the changed page. This
+is required to ensure no required security checks are circumvented
+and is required for the enclave's EACCEPT/EACCEPTCOPY to succeed.
+Ensuring that no references to the changed page remain is
+accomplished with the ETRACK flow.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- arch/x86/include/asm/sgx.h      | 5 +++++
  arch/x86/kernel/cpu/sgx/encls.h | 6 ++++++
- 2 files changed, 11 insertions(+)
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
-index 3f9334ef67cd..d67810b50a81 100644
---- a/arch/x86/include/asm/sgx.h
-+++ b/arch/x86/include/asm/sgx.h
-@@ -65,17 +65,22 @@ enum sgx_encls_function {
- 
- /**
-  * enum sgx_return_code - The return code type for ENCLS, ENCLU and ENCLV
-+ * %SGX_EPC_PAGE_CONFLICT:	Page is being written by other ENCLS function.
-  * %SGX_NOT_TRACKED:		Previous ETRACK's shootdown sequence has not
-  *				been completed yet.
-  * %SGX_CHILD_PRESENT		SECS has child pages present in the EPC.
-  * %SGX_INVALID_EINITTOKEN:	EINITTOKEN is invalid and enclave signer's
-  *				public key does not match IA32_SGXLEPUBKEYHASH.
-+ * %SGX_PAGE_NOT_MODIFIABLE:	The EPC page cannot be modified because it
-+ *				is in the PENDING or MODIFIED state.
-  * %SGX_UNMASKED_EVENT:		An unmasked event, e.g. INTR, was received
-  */
- enum sgx_return_code {
-+	SGX_EPC_PAGE_CONFLICT		= 7,
- 	SGX_NOT_TRACKED			= 11,
- 	SGX_CHILD_PRESENT		= 13,
- 	SGX_INVALID_EINITTOKEN		= 16,
-+	SGX_PAGE_NOT_MODIFIABLE		= 20,
- 	SGX_UNMASKED_EVENT		= 128,
- };
- 
 diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-index 0e22fa8f77c5..2b091912f038 100644
+index 2b091912f038..7a1ecf704ec1 100644
 --- a/arch/x86/kernel/cpu/sgx/encls.h
 +++ b/arch/x86/kernel/cpu/sgx/encls.h
-@@ -215,4 +215,10 @@ static inline int __ewb(struct sgx_pageinfo *pginfo, void *addr,
- 	return __encls_ret_3(EWB, pginfo, addr, va);
+@@ -221,4 +221,10 @@ static inline int __emodpr(struct sgx_secinfo *secinfo, void *addr)
+ 	return __encls_ret_2(EMODPR, secinfo, addr);
  }
  
-+/* Restrict the EPCM permissions of an EPC page. */
-+static inline int __emodpr(struct sgx_secinfo *secinfo, void *addr)
++/* Change the type of an EPC page. */
++static inline int __emodt(struct sgx_secinfo *secinfo, void *addr)
 +{
-+	return __encls_ret_2(EMODPR, secinfo, addr);
++	return __encls_ret_2(EMODT, secinfo, addr);
 +}
 +
  #endif /* _X86_ENCLS_H */

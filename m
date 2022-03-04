@@ -2,360 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3488E4CD35F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D604CD35B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239543AbiCDLZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S239466AbiCDLZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiCDLZk (ORCPT
+        with ESMTP id S234966AbiCDLZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:25:40 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DEF19E01F;
-        Fri,  4 Mar 2022 03:24:50 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id t11so9167006ioi.7;
-        Fri, 04 Mar 2022 03:24:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=K2uq6BqMHyE8TYAS3wZdOo2HiCEVN5UP4iV20fzlvDk=;
-        b=XXGp8g+kPgb7YZjdD8F3+U8iocHTSknJkUzMC6kn60uNVmYt4KJwBErkZNDDGVpD0T
-         Ber1FJUfJ+Pta8NC/P8LEv8trFPu1Z+f6E/2/psM3qkYw2wB2U8DEKAgjXn0vFLsFaKV
-         xHM9dDepL708tineQNpg0HHqXX+1KmDj8YG/BAmMlFyqrIBu9FsXczaSQddkNOaiWdjI
-         GjvZZKV/h18LXjerx8fkVg05QUQYEm+Vfq9SLCEAbVdqEFbUsB+8/9cULS1kGlIBq4Fg
-         2EtSYs6IA0FvdOcyr0xxz3opD1zscPbHJwmWb40Qn3OgDrVZp6zXYU7hgT1lbx1Dr5km
-         WnFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=K2uq6BqMHyE8TYAS3wZdOo2HiCEVN5UP4iV20fzlvDk=;
-        b=4VoEIVhqkAaM+LpwLHexub+YkyJ5St7/VWDsx4MAtxtdXTinAae7q7Kpi1HMKXWvoI
-         WXj0MD/mH8aCrwUhsoeaMR46sFXoteEA98cwQC+ZkG1B8nF4y/Nhr1cCfHU9itwX1BCL
-         8sGychm9+2K3D5qHpTuRUF8gi0FG3ZcTI4k8dWVcHYboKX05fwCrAp29nUiVRf3NDXPk
-         Y/9hRQdK2M+vrHpcwKNsCyJcHTFmkneuQG8BwhSFfG9XuIu+uJOJ7ve7tyurX6HV2eP+
-         mwIcY/7z6Ne1rKnyPhQ1bc0c5wyQm7lMkA4mHYJ/pkgB3Sj+YqxfYESb7pX/SMtkUNqI
-         pKpw==
-X-Gm-Message-State: AOAM5309qM9l1lF4n4PHytsw3GNHkwaKHoNnRCUmDs5fsL6hGKjS30LP
-        jc3muxQEQT8UoW1aRJpwtZt8Pt6C+bC+jM9oiQA=
-X-Google-Smtp-Source: ABdhPJz+HjdEuv13zIsRu2XSdANbMAEJSpP85nmMFD6AWLPLU4PARMUXLcHlEKTLtlXgmlajPm6ivvh+j9eDTUzRwBc=
-X-Received: by 2002:a05:6602:26d3:b0:63d:aa17:8742 with SMTP id
- g19-20020a05660226d300b0063daa178742mr31280282ioo.198.1646393090054; Fri, 04
- Mar 2022 03:24:50 -0800 (PST)
+        Fri, 4 Mar 2022 06:25:27 -0500
+Received: from mg.sunplus.com (mswedge2.sunplus.com [60.248.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B91F619E738;
+        Fri,  4 Mar 2022 03:24:29 -0800 (PST)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(59933:0:AUTH_RELAY)
+        (envelope-from <edwin.chiu@sunplus.com>); Fri, 04 Mar 2022 19:24:38 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Fri, 4 Mar 2022 19:24:32 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Fri, 4 Mar 2022 19:24:32 +0800
+From:   =?utf-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Edwin Chiu <edwinchiu0505tw@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Thread-Topic: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Thread-Index: AQHYJvM6KsEFetK2rkm3Rlg2+5O/D6ydsX4AgAybu1D//588AIADfEqg//+HA4CAAAfdAIACKqbA
+Date:   Fri, 4 Mar 2022 11:24:32 +0000
+Message-ID: <ffdcb88f0ea240f68b5e5ec40f0f525c@sphcmbx02.sunplus.com.tw>
+References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
+ <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+ <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
+ <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
+ <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
+ <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
+ <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org> <YiCSQCG4NkepeZKs@bogus>
+In-Reply-To: <YiCSQCG4NkepeZKs@bogus>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org>
-In-Reply-To: <20220301145233.3689119-1-arnd@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 4 Mar 2022 12:24:13 +0100
-Message-ID: <CA+icZUXpagsHcqNt3NDcn_sF9ygHnke1KPP88oiy3A23QEy50A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 5:29 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> During a patch discussion, Linus brought up the option of changing
-> the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standard=
-s
-> introduce many other features, most of these are already available in
-> gnu89 as GNU extensions as well.
->
-> An earlier attempt to do this when gcc-5 started defaulting to
-> -std=3Dgnu11 failed because at the time that caused warnings about
-> designated initializers with older compilers. Now that gcc-5.1 is
-> the minimum compiler version used for building kernels, that is no
-> longer a concern. Similarly, the behavior of 'inline' functions changes
-> between gnu89 using gnu_inline behavior and gnu11 using standard c99+
-> behavior, but this was taken care of by defining 'inline' to include
-> __attribute__((gnu_inline)) in order to allow building with clang a
-> while ago.
->
-> One minor issue that remains is an added gcc warning for shifts of
-> negative integers when building with -Wextra, which happens with the
-> 'make W=3D1' option, as well as for three drivers in the kernel that alwa=
-ys
-> enable -Wextra, but it was only observed with the i915 driver so far.
-> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
-> in a Makefile.
->
-> Nathan Chancellor reported an additional -Wdeclaration-after-statement
-> warning that appears in a system header on arm, this still needs a
-> workaround.
->
-> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
-> minimal and mainly impact warnings at the -Wpedantic level that the
-> kernel never enables. Between these, gnu11 is the newest version
-> that is supported by all supported compiler versions, though it is
-> only the default on gcc-5, while all other supported versions of
-> gcc or clang default to gnu1x/gnu17.
->
-> Link: https://lore.kernel.org/lkml/CAHk-=3DwiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdK=
-pcovt8fYbVFW3TA@mail.gmail.com/
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Acked-by: Marco Elver <elver@google.com>
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Acked-by: David Sterba <dsterba@suse.com>
-> Reviewed-by: Alex Shi <alexs@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> [v3]
->  - split out USERCFLAGS to a separate patch
->  - add -Wdeclaration-after-statement patch from Mark Rutland
->  - leave out C17 reference
->  - more rewording the descrption
->
-
-I was able to build and boot on bare metal.
-
-No new warnings in my build-log here after switching to -std=3Dgnu11.
-
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13.0.0 x86-64
-
-- sed@ -
-
-> [v2]
->  - added -std=3Dgnu11 back, rather than just relying on the default
->  - minor changes to changelog text
-> ---
->  Documentation/process/programming-language.rst              | 6 +++---
->  .../translations/it_IT/process/programming-language.rst     | 4 ++--
->  .../translations/zh_CN/process/programming-language.rst     | 3 +--
->  .../translations/zh_TW/process/programming-language.rst     | 3 +--
->  Makefile                                                    | 4 ++--
->  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
->  drivers/gpu/drm/i915/Makefile                               | 1 +
->  drivers/staging/greybus/tools/Makefile                      | 3 ++-
->  fs/btrfs/Makefile                                           | 1 +
->  scripts/Makefile.extrawarn                                  | 1 +
->  10 files changed, 15 insertions(+), 13 deletions(-)
->
-> diff --git a/Documentation/process/programming-language.rst b/Documentati=
-on/process/programming-language.rst
-> index ec474a70a02f..5fc9160ca1fa 100644
-> --- a/Documentation/process/programming-language.rst
-> +++ b/Documentation/process/programming-language.rst
-> @@ -5,9 +5,9 @@ Programming Language
->
->  The kernel is written in the C programming language [c-language]_.
->  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
-> -under ``-std=3Dgnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
-C90
-> -(including some C99 features). ``clang`` [clang]_ is also supported, see
-> -docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-> +under ``-std=3Dgnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
-C11.
-> +``clang`` [clang]_ is also supported, see docs on
-> +:ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
->
->  This dialect contains many extensions to the language [gnu-extensions]_,
->  and many of them are used within the kernel as a matter of course.
-> diff --git a/Documentation/translations/it_IT/process/programming-languag=
-e.rst b/Documentation/translations/it_IT/process/programming-language.rst
-> index 41db2598ce11..c1a9b481a6f9 100644
-> --- a/Documentation/translations/it_IT/process/programming-language.rst
-> +++ b/Documentation/translations/it_IT/process/programming-language.rst
-> @@ -10,8 +10,8 @@ Linguaggio di programmazione
->
->  Il kernel =C3=A8 scritto nel linguaggio di programmazione C [it-c-langua=
-ge]_.
->  Pi=C3=B9 precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ u=
-sando
-> -l'opzione ``-std=3Dgnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
-> -dello standard ISO C90 (con l'aggiunta di alcune funzionalit=C3=A0 da C9=
-9).
-> +l'opzione ``-std=3Dgnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
-> +dello standard ISO C11.
->  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
->  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
->
-> diff --git a/Documentation/translations/zh_CN/process/programming-languag=
-e.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-> index 2a47a1d2ec20..fabdc338dbfb 100644
-> --- a/Documentation/translations/zh_CN/process/programming-language.rst
-> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
-> @@ -9,8 +9,7 @@
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  =E5=86=85=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AF=AD=E8=A8=80 :ref:`c-language=
- <cn_c-language>` =E7=BC=96=E5=86=99=E7=9A=84=E3=80=82=E6=9B=B4=E5=87=86=E7=
-=A1=AE=E5=9C=B0=E8=AF=B4=EF=BC=8C=E5=86=85=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
-=AF=E7=94=A8 :ref:`gcc <cn_gcc>`
-> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
--options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
-U =E6=96=B9=E8=A8=80=EF=BC=88
-> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
-> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
--options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
-U =E6=96=B9=E8=A8=80
->
->  =E8=BF=99=E7=A7=8D=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=AF=B9=E8=AF=AD=
-=E8=A8=80 :ref:`gnu-extensions <cn_gnu-extensions>` =E7=9A=84=E8=AE=B8=E5=
-=A4=9A=E6=89=A9=E5=B1=95=EF=BC=8C=E5=BD=93=E7=84=B6=EF=BC=8C=E5=AE=83=E4=BB=
-=AC=E8=AE=B8=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E4=BD=BF=
-=E7=94=A8=E3=80=82
->
-> diff --git a/Documentation/translations/zh_TW/process/programming-languag=
-e.rst b/Documentation/translations/zh_TW/process/programming-language.rst
-> index 54e3699eadf8..144bdaf81a41 100644
-> --- a/Documentation/translations/zh_TW/process/programming-language.rst
-> +++ b/Documentation/translations/zh_TW/process/programming-language.rst
-> @@ -12,8 +12,7 @@
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  =E5=85=A7=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AA=9E=E8=A8=80 :ref:`c-language=
- <tw_c-language>` =E7=B7=A8=E5=AF=AB=E7=9A=84=E3=80=82=E6=9B=B4=E6=BA=96=E7=
-=A2=BA=E5=9C=B0=E8=AA=AA=EF=BC=8C=E5=85=A7=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
-=AF=E7=94=A8 :ref:`gcc <tw_gcc>`
-> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
--options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
-U =E6=96=B9=E8=A8=80=EF=BC=88
-> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
-> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
--options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
-U =E6=96=B9=E8=A8=80
->
->  =E9=80=99=E7=A8=AE=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=B0=8D=E8=AA=9E=
-=E8=A8=80 :ref:`gnu-extensions <tw_gnu-extensions>` =E7=9A=84=E8=A8=B1=E5=
-=A4=9A=E6=93=B4=E5=B1=95=EF=BC=8C=E7=95=B6=E7=84=B6=EF=BC=8C=E5=AE=83=E5=80=
-=91=E8=A8=B1=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=85=A7=E6=A0=B8=E4=B8=AD=E4=BD=BF=
-=E7=94=A8=E3=80=82
->
-> diff --git a/Makefile b/Makefile
-> index 289ce2be8032..94fa9a849a7a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -515,7 +515,7 @@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werror=3Dstrict-p=
-rototypes -Wno-trigraphs \
->                    -fno-strict-aliasing -fno-common -fshort-wchar -fno-PI=
-E \
->                    -Werror=3Dimplicit-function-declaration -Werror=3Dimpl=
-icit-int \
->                    -Werror=3Dreturn-type -Wno-format-security \
-> -                  -std=3Dgnu89
-> +                  -std=3Dgnu11
->  KBUILD_CPPFLAGS :=3D -D__KERNEL__
->  KBUILD_AFLAGS_KERNEL :=3D
->  KBUILD_CFLAGS_KERNEL :=3D
-> @@ -782,7 +782,7 @@ KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMP=
-LICIT_FALLTHROUGH)
->
->  ifdef CONFIG_CC_IS_CLANG
->  KBUILD_CPPFLAGS +=3D -Qunused-arguments
-> -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is acce=
-ptable.
-> +# The kernel builds with '-std=3Dgnu11' so use of GNU extensions is acce=
-ptable.
->  KBUILD_CFLAGS +=3D -Wno-gnu
->  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, =
-as the
->  # source of a reference will be _MergedGlobals and not on of the whiteli=
-sted names.
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32=
-/Makefile
-> index 6c01b63ff56d..9378ea055bf2 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -68,7 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -Wno=
--trigraphs \
->                 -fno-strict-aliasing -fno-common \
->                 -Werror-implicit-function-declaration \
->                 -Wno-format-security \
-> -               -std=3Dgnu89
-> +               -std=3Dgnu11
->  VDSO_CFLAGS  +=3D -O2
->  # Some useful compiler-dependent flags from top-level Makefile
->  VDSO_CFLAGS +=3D $(call cc32-option,-Wdeclaration-after-statement,)
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefil=
-e
-> index 1b62b9f65196..1618a6e0af4e 100644
-> --- a/drivers/gpu/drm/i915/Makefile
-> +++ b/drivers/gpu/drm/i915/Makefile
-> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D -Wno-unused-parameter
->  subdir-ccflags-y +=3D -Wno-type-limits
->  subdir-ccflags-y +=3D -Wno-missing-field-initializers
->  subdir-ccflags-y +=3D -Wno-sign-compare
-> +subdir-ccflags-y +=3D -Wno-shift-negative-value
->  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable=
-)
->  subdir-ccflags-y +=3D $(call cc-disable-warning, frame-address)
->  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) +=3D -Werror
-> diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/gre=
-ybus/tools/Makefile
-> index ad0ae8053b79..a3bbd73171f2 100644
-> --- a/drivers/staging/greybus/tools/Makefile
-> +++ b/drivers/staging/greybus/tools/Makefile
-> @@ -12,7 +12,8 @@ CFLAGS        +=3D -std=3Dgnu99 -Wall -Wextra -g \
->             -Wredundant-decls \
->             -Wcast-align \
->             -Wsign-compare \
-> -           -Wno-missing-field-initializers
-> +           -Wno-missing-field-initializers \
-> +           -Wno-shift-negative-value
->
->  CC     :=3D $(CROSS_COMPILE)gcc
->
-> diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
-> index 4188ba3fd8c3..99f9995670ea 100644
-> --- a/fs/btrfs/Makefile
-> +++ b/fs/btrfs/Makefile
-> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D $(condflags)
->  subdir-ccflags-y +=3D -Wno-missing-field-initializers
->  subdir-ccflags-y +=3D -Wno-sign-compare
->  subdir-ccflags-y +=3D -Wno-type-limits
-> +subdir-ccflags-y +=3D -Wno-shift-negative-value
->
->  obj-$(CONFIG_BTRFS_FS) :=3D btrfs.o
->
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 8be892887d71..650d0b8ceec3 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -36,6 +36,7 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncat=
-ion)
->  KBUILD_CFLAGS +=3D -Wno-missing-field-initializers
->  KBUILD_CFLAGS +=3D -Wno-sign-compare
->  KBUILD_CFLAGS +=3D -Wno-type-limits
-> +KBUILD_CFLAGS +=3D -Wno-shift-negative-value
->
->  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
->
-> --
-> 2.29.2
->
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFN1ZGVlcCBIb2xsYSA8c3Vk
+ZWVwLmhvbGxhQGFybS5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBNYXJjaCAzLCAyMDIyIDY6MDMg
+UE0NCj4gVG86IEtyenlzenRvZiBLb3psb3dza2kgPGtyemtAa2VybmVsLm9yZz4NCj4gQ2M6IEVk
+d2luIENoaXUg6YKx5Z6C5bOwIDxlZHdpbi5jaGl1QHN1bnBsdXMuY29tPjsgRWR3aW4gQ2hpdSA8
+ZWR3aW5jaGl1MDUwNXR3QGdtYWlsLmNvbT47DQo+IFN1ZGVlcCBIb2xsYSA8c3VkZWVwLmhvbGxh
+QGFybS5jb20+OyByb2JoK2R0QGtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3Jn
+Ow0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9yZzsgZGFu
+aWVsLmxlemNhbm9AbGluYXJvLm9yZzsgbGludXgtcG1Admdlci5rZXJuZWwub3JnDQo+IFN1Ympl
+Y3Q6IFJlOiBbUEFUQ0ggdjVdIGNwdWlkbGU6IHN1bnBsdXM6IENyZWF0ZSBjcHVpZGxlIGRyaXZl
+ciBmb3Igc3VucGx1cyBzcDcwMjENCj4gDQo+IE9uIFRodSwgTWFyIDAzLCAyMDIyIGF0IDEwOjM0
+OjMxQU0gKzAxMDAsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+ID4gT24gMDMvMDMvMjAy
+MiAxMDowMSwgRWR3aW4gQ2hpdSDpgrHlnoLls7Agd3JvdGU6DQo+ID4gPg0KPiA+ID4NCj4gPiA+
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4+IEZyb206IEtyenlzenRvZiBLb3ps
+b3dza2kgPGtyemtAa2VybmVsLm9yZz4NCj4gPiA+PiBTZW50OiBUdWVzZGF5LCBNYXJjaCAxLCAy
+MDIyIDc6MzQgUE0NCj4gPiA+PiBUbzogRWR3aW4gQ2hpdSDpgrHlnoLls7AgPGVkd2luLmNoaXVA
+c3VucGx1cy5jb20+OyBFZHdpbiBDaGl1DQo+ID4gPj4gPGVkd2luY2hpdTA1MDV0d0BnbWFpbC5j
+b20+Ow0KPiA+ID4+IHJvYmgrZHRAa2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
+cmc7DQo+ID4gPj4gcm9iaCtsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2Vy
+bmVsLm9yZzsNCj4gPiA+PiBkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3JnOyBsaW51eC1wbUB2Z2Vy
+Lmtlcm5lbC5vcmcNCj4gPiA+PiBTdWJqZWN0OiBSZTogW1BBVENIIHY1XSBjcHVpZGxlOiBzdW5w
+bHVzOiBDcmVhdGUgY3B1aWRsZSBkcml2ZXIgZm9yDQo+ID4gPj4gc3VucGx1cyBzcDcwMjENCj4g
+PiA+Pg0KPiA+ID4+IE9uIDAxLzAzLzIwMjIgMTA6MzAsIEVkd2luIENoaXUg6YKx5Z6C5bOwIHdy
+b3RlOg0KPiA+ID4+Pg0KPiA+ID4+Pg0KPiA+ID4+Pj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCj4gPiA+Pj4+IEZyb206IEtyenlzenRvZiBLb3psb3dza2kgPGtyemtAa2VybmVsLm9yZz4N
+Cj4gPiA+Pj4+IFNlbnQ6IFR1ZXNkYXksIEZlYnJ1YXJ5IDIyLCAyMDIyIDEyOjQ4IEFNDQo+ID4g
+Pj4+PiBUbzogRWR3aW4gQ2hpdSA8ZWR3aW5jaGl1MDUwNXR3QGdtYWlsLmNvbT47IEVkd2luIENo
+aXUg6YKx5Z6C5bOwDQo+ID4gPj4+PiA8ZWR3aW4uY2hpdUBzdW5wbHVzLmNvbT47DQo+ID4gPj4+
+PiByb2JoK2R0QGtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOw0KPiA+ID4+
+Pj4gcm9iaCtsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9yZzsN
+Cj4gPiA+Pj4+IGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVs
+Lm9yZw0KPiA+ID4+Pj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NV0gY3B1aWRsZTogc3VucGx1czog
+Q3JlYXRlIGNwdWlkbGUgZHJpdmVyDQo+ID4gPj4+PiBmb3Igc3VucGx1cyBzcDcwMjENCj4gPiA+
+Pj4+DQo+ID4gPj4+PiBPbiAyMS8wMi8yMDIyIDA4OjI2LCBFZHdpbiBDaGl1IHdyb3RlOg0KPiA+
+ID4+Pj4+IENyZWF0ZSBjcHVpZGxlIGRyaXZlciBmb3Igc3VucGx1cyBzcDcwMjEgY2hpcA0KPiA+
+ID4+Pj4+DQo+ID4gPj4+Pj4gU2lnbmVkLW9mZi1ieTogRWR3aW4gQ2hpdSA8ZWR3aW5jaGl1MDUw
+NXR3QGdtYWlsLmNvbT4NCj4gPiA+Pj4+PiAtLS0NCj4gPiA+Pj4+PiBDaGFuZ2VzIGluIHYzDQo+
+ID4gPj4+Pj4gIC0gUmVhcnJhbmdlbWVudCAjaW5jbHVkZSBzZXF1ZW5jZQ0KPiA+ID4+Pj4+ICAt
+IENoYW5nZSByZW1hcmsgc3R5bGUgdG8gLyp+Ki8NCj4gPiA+Pj4+PiAgLSBBbGlnbiBhdXRob3Ig
+ZW1haWwgYWRkcmVzcyB0byBzYW1lIGFzIHNvYg0KPiA+ID4+Pj4+ICAtIE9wdGltYWwgY29kZQ0K
+PiA+ID4+Pj4+IENoYW5nZXMgaW4gdjQNCj4gPiA+Pj4+PiAgLSBBY2NvcmRpbmcgUm9iIEhlcnJp
+bmdyb2JoJ3MgY29tbWVudA0KPiA+ID4+Pj4+ICAgIFRoZXJlIGlzIG5vIG5lZWQgZm9yIHRoaXMg
+YmluZGluZy4NCj4gPiA+Pj4+PiAgICBKdXN0IHdhbnRpbmcgYSBkaWZmZXJlbnQgZHJpdmVyIGlz
+IG5vdCBhIHJlYXNvbg0KPiA+ID4+Pj4+ICAgIGZvciBhIGR1cGxpY2F0ZSBzY2hlbWEuDQo+ID4g
+Pj4+Pj4gICAgU28gcmVtb3ZlIHlhbWwgZmlsZSBhbmQgc3VibWl0IGRyaXZlciBhZ2Fpbi4NCj4g
+PiA+Pj4+PiBDaGFuZ2VzIGluIHY1DQo+ID4gPj4+Pj4gIC0gQWNjb3JkaW5nIEtyenlzenRvZidz
+IGNvbW1lbnQNCj4gPiA+Pj4+PiAgICBZb3UgZWl0aGVyIHVzZSBhcHByb3ByaWF0ZSBjb21wYXRp
+YmxlIGluIERUDQo+ID4gPj4+Pj4gICAgb3IgYWRkIHlvdXIgY29tcGF0aWJsZSB0byBjcHVpZGxl
+LWFybS4NCj4gPiA+Pj4+PiAgICBFdmVuIGlmIHRoaXMgZGlkIG5vdCB3b3JrLCB0aGVuIHRoZSBz
+b2x1dGlvbiBpcyB0bw0KPiA+ID4+Pj4+ICAgIHVzZSBjb21tb24gcGFydHMsIG5vdCB0byBkdXBs
+aWNhdGUgZW50aXJlIGRyaXZlci4NCj4gPiA+Pj4+PiAgICBBY2NvcmRpbmcgU3VkZWVwJ3MgY29t
+bWVudA0KPiA+ID4+Pj4+ICAgIEluIHNob3J0IE5BQ0sgZm9yIGFueSBkZWRpY2F0ZWQgZHJpdmVy
+IGZvciB0aGlzIHBsYXRmb3JtLA0KPiA+ID4+Pj4+ICAgIHVzZSB0aGUgZ2VuZXJpYyBjcHVpZGxl
+LWFybSBkcml2ZXIgd2l0aCBhcHByb3ByaWF0ZSBwbGF0Zm9ybSBob29rcw0KPiA+ID4+Pj4+ICAg
+IENyZWF0ZSBjcHVpZGxlLXN1bnBsdXMuYyBpbiBhcmNoL2FybS9tYWNoLXN1bnBsdXMvDQo+ID4g
+Pj4+Pj4gICAgZm9yIGhvb2sgZ2VuZXJpYyBjcHVpZGxlLWFybSBkcml2ZXINCj4gPiA+Pj4+Pg0K
+PiA+ID4+Pj4+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgNiArKw0KPiA+ID4+Pj4+ICBhcmNoL2FybS9tYWNoLXN1bnBsdXMvY3B1aWRsZS1zdW5wbHVz
+LmMgICAgICAgfCA4OCArKysrKysrKysrKysrKysrKw0KPiA+ID4+Pj4+ICBpbmNsdWRlL2xpbnV4
+L3BsYXRmb3JtX2RhdGEvY3B1aWRsZS1zdW5wbHVzLmggfCAxMiArKysrDQo+ID4gPj4+Pj4gIDMg
+ZmlsZXMgY2hhbmdlZCwgMTA2IGluc2VydGlvbnMoKykgIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+
+ID4+Pj4+IGFyY2gvYXJtL21hY2gtc3VucGx1cy9jcHVpZGxlLXN1bnBsdXMuYw0KPiA+ID4+Pj4+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPiA+Pj4+PiBpbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2Rh
+dGEvY3B1aWRsZS1zdW5wbHVzLmgNCj4gPiA+Pj4+Pg0KPiA+ID4+Pj4+IGRpZmYgLS1naXQgYS9N
+QUlOVEFJTkVSUyBiL01BSU5UQUlORVJTIGluZGV4IGUwZGNhOGYuLjVjOTY0MjgNCj4gPiA+Pj4+
+PiAxMDA2NDQNCj4gPiA+Pj4+PiAtLS0gYS9NQUlOVEFJTkVSUw0KPiA+ID4+Pj4+ICsrKyBiL01B
+SU5UQUlORVJTDQo+ID4gPj4+Pj4gQEAgLTE4MjUyLDYgKzE4MjUyLDEyIEBAIEw6CW5ldGRldkB2
+Z2VyLmtlcm5lbC5vcmcNCj4gPiA+Pj4+PiAgUzoJTWFpbnRhaW5lZA0KPiA+ID4+Pj4+ICBGOglk
+cml2ZXJzL25ldC9ldGhlcm5ldC9kbGluay9zdW5kYW5jZS5jDQo+ID4gPj4+Pj4NCj4gPiA+Pj4+
+PiArU1VOUExVUyBDUFVJRExFIERSSVZFUg0KPiA+ID4+Pj4+ICtNOglFZHdpbiBDaGl1IDxlZHdp
+bmNoaXUwNTA1dHdAZ21haWwuY29tPg0KPiA+ID4+Pj4+ICtTOglNYWludGFpbmVkDQo+ID4gPj4+
+Pj4gK0Y6CWFyY2gvYXJtL21hY2gtc3VucGx1cy9jcHVpZGxlLXN1bnBsdXMuYw0KPiA+ID4+Pj4+
+ICtGOglpbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEvY3B1aWRsZS1zdW5wbHVzLmgNCj4gPiA+
+Pj4+PiArDQo+ID4gPj4+Pj4gIFNVUEVSSA0KPiA+ID4+Pj4+ICBNOglZb3NoaW5vcmkgU2F0byA8
+eXNhdG9AdXNlcnMuc291cmNlZm9yZ2UuanA+DQo+ID4gPj4+Pj4gIE06CVJpY2ggRmVsa2VyIDxk
+YWxpYXNAbGliYy5vcmc+DQo+ID4gPj4+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL21hY2gtc3Vu
+cGx1cy9jcHVpZGxlLXN1bnBsdXMuYw0KPiA+ID4+Pj4+IGIvYXJjaC9hcm0vbWFjaC1zdW5wbHVz
+L2NwdWlkbGUtc3VucGx1cy5jDQo+ID4gPj4+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiA+
+Pj4+PiBpbmRleCAwMDAwMDAwLi5lOWQ5NzM4DQo+ID4gPj4+Pj4gLS0tIC9kZXYvbnVsbA0KPiA+
+ID4+Pj4+ICsrKyBiL2FyY2gvYXJtL21hY2gtc3VucGx1cy9jcHVpZGxlLXN1bnBsdXMuYw0KPiA+
+ID4+Pj4+IEBAIC0wLDAgKzEsODggQEANCj4gPiA+Pj4+PiArLy8gU1BEWC1MaWNlbnNlLUlkZW50
+aWZpZXI6IEdQTC0yLjAtb25seQ0KPiA+ID4+Pj4+ICsvKg0KPiA+ID4+Pj4+ICsgKiBTUDcwMjEg
+Y3B1IGlkbGUgRHJpdmVyLg0KPiA+ID4+Pj4+ICsgKiBDb3B5cmlnaHQgKEMpIFN1bnBsdXMgVGVj
+aCAvIFRpYmJvIFRlY2guDQo+ID4gPj4+Pj4gKyAqLw0KPiA+ID4+Pj4+ICsjZGVmaW5lIHByX2Zt
+dChmbXQpICJDUFVpZGxlIGFybTogIiBmbXQNCj4gPiA+Pj4+PiArDQo+ID4gPj4+Pj4gKyNpbmNs
+dWRlIDxsaW51eC9jcHVpZGxlLmg+DQo+ID4gPj4+Pj4gKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZp
+Y2UuaD4NCj4gPiA+Pj4+PiArI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtX2RhdGEvY3B1aWRsZS1z
+dW5wbHVzLmg+DQo+ID4gPj4+Pj4gKw0KPiA+ID4+Pj4+ICsjaW5jbHVkZSA8YXNtL2NwdWlkbGUu
+aD4NCj4gPiA+Pj4+PiArDQo+ID4gPj4+Pj4gK3R5cGVkZWYgaW50ICgqaWRsZV9mbikodm9pZCk7
+DQo+ID4gPj4+Pj4gKw0KPiA+ID4+Pj4+ICtzdGF0aWMgREVGSU5FX1BFUl9DUFUoaWRsZV9mbios
+IHNwNzAyMV9pZGxlX29wcyk7DQo+ID4gPj4+Pj4gKw0KPiA+ID4+Pj4+ICtzdGF0aWMgaW50IHNw
+NzAyMV9jcHVpZGxlX2VudGVyKHVuc2lnbmVkIGxvbmcgaW5kZXgpIHsNCj4gPiA+Pj4+PiArCXJl
+dHVybiBfX3RoaXNfY3B1X3JlYWQoc3A3MDIxX2lkbGVfb3BzKVtpbmRleF0oKTsNCj4gPiA+Pj4+
+PiArfQ0KPiA+ID4+Pj4+ICtzdGF0aWMgaW50IHNwNzAyMV9jcHVfc3BjKHZvaWQpIHsNCj4gPiA+
+Pj4+PiArCWNwdV92N19kb19pZGxlKCk7ICAgLyogaWRsZSB0byBXRkkgKi8NCj4gPiA+Pj4+PiAr
+CXJldHVybiAwOw0KPiA+ID4+Pj4+ICt9DQo+ID4gPj4+Pj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qg
+b2ZfZGV2aWNlX2lkIHNwNzAyMV9pZGxlX3N0YXRlX21hdGNoW10gPSB7DQo+ID4gPj4+Pj4gKwl7
+IC5jb21wYXRpYmxlID0gImFybSxpZGxlLXN0YXRlIiwgLmRhdGEgPSBzcDcwMjFfY3B1X3NwYyB9
+LA0KPiA+ID4+Pj4+ICsJeyB9LA0KPiA+ID4+Pj4+ICt9Ow0KPiA+ID4+Pj4NCj4gPiA+Pj4+IFRo
+aXMgaXMgY29uZnVzaW5nLiBZb3Ugd2FudCB0byBoYXZlIHR3byBkcml2ZXJzIHRvIGJpbmQgdG8g
+dGhlDQo+ID4gPj4+PiBzYW1lIGNvbXBhdGlibGU/IEFzIEkgd3JvdGUgaW4gdGhlIHByZXZpb3Vz
+IG1lc3NhZ2VzLCB5b3Ugc2hvdWxkDQo+ID4gPj4+PiBzaW1wbHkgdXNlIGFybSxpZGxlLXN0YXRl
+IGp1c3QgbGlrZSBmZXcNCj4gPiA+PiBvdGhlciBhcmNoaXRlY3R1cmVzLg0KPiA+ID4+Pj4NCj4g
+PiA+Pj4+DQo+ID4gPj4+PiBCZXN0IHJlZ2FyZHMsDQo+ID4gPj4+PiBLcnp5c3p0b2YNCj4gPiA+
+Pj4NCj4gPiA+Pj4NCj4gPiA+Pj4gVGhlIHBhdGNoIHY1IGltcGxlbWVudGVkIGFjY29yZGluZyB5
+b3VyIGNvbW1lbnQuDQo+ID4gPj4+IFVzZWQgY29tbW9uIHBhcnQgb2YgYXJtLGlkbGUtc3RhdGUu
+DQo+ID4gPj4+IENyZWF0ZSBuZXcgZW5hYmxlLW1ldGhvZCBmb3IgY3B1aWRsZS5vcHMgZnVuY3Rp
+b24uDQo+ID4gPj4+IEl0IG9ubHkgaGF2ZSBhcm0gY3B1aWRsZSBkcml2ZXIgZXhpc3Qgbm93LCBu
+byB0d28gZHJpdmVycyB0byBiaW5kIHRvIHRoZSBzYW1lIGNvbXBhdGlibGUuDQo+ID4gPj4+DQo+
+ID4gPj4+IFdoYXQgZG8geW91IG1lYW4gIiBzaW1wbHkgdXNlIGFybSxpZGxlLXN0YXRlIGp1c3Qg
+bGlrZSBmZXcgb3RoZXIgYXJjaGl0ZWN0dXJlcyAiPw0KPiA+ID4+Pg0KPiA+ID4+DQo+ID4gPj4g
+SSBtZWFuLCBkbyBpdCBzaW1pbGFybHkgKGJ5IHVzaW5nIGFybSxpZGxlLXN0YXRlIGFuZCBvdGhl
+ciByZWxhdGVkDQo+ID4gPj4gcHJvcGVydGllcykgdG8gZm9yIGV4YW1wbGUgdGksYW00MzcyL3Rp
+LGFtMzM1Mi4NCj4gPiA+Pg0KPiA+ID4+IEJlc3QgcmVnYXJkcywNCj4gPiA+PiBLcnp5c3p0b2YN
+Cj4gPiA+DQo+ID4gPg0KPiA+ID4gVGhlIGFtMzM1MiBjcHVpZGxlIGNvZGUgc3RydWN0dXJlIGlz
+IHZlcnkgc2ltaWxhciB0byBvdXJzLg0KPiA+ID4gVXNlZCBlbmFibGUtbWV0aG9kID0gInRpLGFt
+MzM1MiIgYW5kIGNvbXBhdGlibGUgPSAiYXJtLGlkbGUtc3RhdGUiDQo+ID4gPiBpbiBhbTMzeHgu
+ZHRzaSBVc2VkIENQVUlETEVfTUVUSE9EX09GX0RFQ0xBUkUocG0zM3h4X2lkbGUsDQo+ID4gPiAi
+dGksYW0zMzUyIiwgJmFteDNfY3B1aWRsZV9vcHMpIGluIHBtMzN4eC1jb3JlLmMNCj4gPiA+DQo+
+ID4gPiBUaGUgZGlmZmVyZW5jZSBhcmUNCj4gPiA+IGFtMzM1Mg0KPiA+ID4gYW14M19pZGxlX2lu
+aXQofikgYXNzaWduIGlkbGVfc3RhdGVzW2ldLndmaV9mbGFncyA9DQo+ID4gPiBzdGF0ZXNbaV0u
+d2ZpX2ZsYWdzOw0KPiA+ID4gYW14M19pZGxlX2VudGVyKH4pIGNhbGwgaWRsZV9mbihpZGxlX3N0
+YXRlLT53ZmlfZmxhZ3MpDQo+ID4gPg0KPiA+ID4gc3VucGx1cy1zcDcwMjENCj4gPiA+IHNwNzAy
+MV9jcHVpZGxlX2luaXQofikgYXNzaWduIGZuc1tpXSA9IGlkbGVfZm5zW2ldOw0KPiA+ID4gc3A3
+MDIxX2NwdWlkbGVfZW50ZXIofikgY2FsbA0KPiA+ID4gX190aGlzX2NwdV9yZWFkKHNwNzAyMV9p
+ZGxlX29wcylbaW5kZXhdKCk7DQo+ID4gPg0KPiA+ID4gSSBkb24ndCB0aGluayBhbTMzNTIgY3B1
+aWRsZSBjb2RlIGFyY2hpdGVjdHVyZSBzaW1wbGVyIHRoYW4gb3Vycy4NCj4gPiA+IFRoZSBpZGxl
+X2ZuIGZ1bmN0aW9uIG5lZWQgbW9yZSBjb21wbGV4IG1ldGhvZCB0byBiZSBhc3NpZ24uDQo+ID4g
+PiBIb3cgZG8geW91IHRoaW5rPw0KPiA+DQo+ID4gWW91IGR1cGxpY2F0ZWQgYSBkcml2ZXIsIGVu
+dGlyZSBwaWVjZXMgb2YgY29kZS4gVGhpcyBpcyBub3QgYWNjZXB0YWJsZS4NCj4gPiBUaGVyZWZv
+cmUgaXQgZG9lcyBub3QgcmVhbGx5IG1ha2Ugc2Vuc2UgdG8gZGlzY3VzcyB3aGV0aGVyIGR1cGxp
+Y2F0ZWQNCj4gPiBzb2x1dGlvbiBzZWVtcyBzaW1wbGVyIG9yIG5vdC4uLiBXZSB3b24ndCBhY2Nl
+cHQgZHVwbGljYXRlZCBjb2RlLg0KPiA+IEVzcGVjaWFsbHkgZm9yIFdGSS1vbmx5IGRyaXZlci4N
+Cj4gPg0KPiANCj4gKzEgZm9yIGFib3ZlIGNvbW1lbnQuDQo+IA0KPiBJbiBhZGRpdGlvbiwgdGhl
+IHJlZmVyZW5jZSBwbGF0Zm9ybSBhbTMzeHgqIGRvZXNuJ3Qgc2VlbSB0byBzdXBwb3J0IGhvdHBs
+dWcgKG1heSBiZSBJIGFtIG1pc3NpbmcgdG8NCj4gc2VlIGJ1dCBxdWljayBncmVwIGdhdmUgbm8g
+cmVzdWx0cykgYW5kIHRoZWlyIGlkbGUgaXMgZGVmaW5pdGVseSBub3QganVzdCBXRkkuIFNvIHdo
+YXQgSSBhc2tlZCBpcyB0aGF0IHBsZWFzZQ0KPiBkb2N1bWVudCB0aGUgY2hvc2VuICJzdW5wbHVz
+LHNjLXNtcCIgYXMgYm90IGNwdSBpZGxlIGFuZCBob3RwbHVnIG1ldGhvZHMgYW5kIHdoZW4geW91
+IHN1cHBvcnQgbm9uDQo+IFdGSSBzdGF0ZXMsIHdlIGNhbiByZXZpc2l0IHRoaXMuIEFsc28geW91
+IG11c3Qgc3RpY2sgdG8gdGhpcyBob3RwbHVnIG1ldGhvZCB3aGVuZXZlciB5b3UgZGVjaWRlZCB0
+bw0KPiBzdXBwb3J0IGl0Lg0KPiANCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0KDQoN
+ClRoYW5rcyB5b3VyIGFkdmljZS4NCkxvb2sgbGlrZSBrZXkgcG9pbnQgc3RpbGwgb25seSBXRkkg
+ZnVuY3Rpb24gd2hlbiBjcHVpZGxlLg0KQXMgSSBleHBsYWluIGJlZm9yZSwgb25seSBlbmFibGUg
+Z2VuZXJpYyBBUk0gY3B1aWRsZSBkcml2ZXIgaXMgbm90IHdvcmsuDQpJdCBuZWVkIGVuYWJsZS1t
+ZXRob2QgY29kZSB0byBhc3NpZ24gY3B1aWRsZV9vcHMgZnVuY3Rpb25zLg0KInBzY2kiIGlzIG9u
+ZSBvZiBlbmFibGUtbWV0aG9kLCBidXQgdGhlcmUgaGF2ZSBwcm9ibGVtIGluIG15IHNpZGUgZHVl
+IHRvIHNtYyBvciBzZWN1cmUgY29kZSB1bnN1cHBvcnRlZC4NClNvIEkgY3JlYXRlIGNwdWlkbGUt
+c3VucGx1cy5jIGNvZGUgd2l0aCAic3VucGx1cyxzYy1zbXAiIHRvIGxldCBjcHVpZGxlIGNvZGUg
+Y29tcGxldGUgZm9yIG91ciBzb3VyY2UgY29kZS4gDQpXaXRoIHRoaXMgc3RydWN0dXJlLCBJIGNh
+biBhZGQgbW9yZSBjdXN0b20gbG93IHBvd2VyIGNvZGUgaW4gdGhlIGZ1dHVyZS4NCg0KV2hhdCBk
+b2VzIGl0IG1lYW4gZm9yICJwbGVhc2UgZG9jdW1lbnQgdGhlIGNob3NlbiAic3VucGx1cyxzYy1z
+bXAiIGFzIGJvdCBjcHUgaWRsZSBhbmQgaG90cGx1ZyBtZXRob2RzIiA/DQpEb2VzIGl0IG1lYW4g
+ImVkaXQgeWFtbCBmaWxlIj8gKFByZXZpb3VzbHksIEkgc3VibWl0IHlhbWwgZmlsZSBhbHNvLCBi
+dXQgUm9iIHNheSBJIGRvbid0IG5lZWQgc3VibWl0IHdoZW4gSSB1c2UgY29tcGF0aWJsZT0iYXJt
+LGlkbGUtc3RhdGUiKQ0KDQoNCumCseWeguWzsCBFZHdpbkNoaXUNCuaZuuiDvemBi+eul+WwiOah
+iA0KVDogKzg4Ni0zLTU3ODYwMDUgZXh0LjI1OTANCmVkd2luLmNoaXVAc3VucGx1cy5jb20NCjMw
+MCDmlrDnq7nnp5HlrbjlnJLljYDlibXmlrDkuIDot68xOeiZnw0KDQoNCg==

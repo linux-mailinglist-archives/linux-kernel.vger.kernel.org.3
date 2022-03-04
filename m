@@ -2,431 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761434CCF0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07384CCF0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238645AbiCDH21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S238673AbiCDH3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbiCDH2X (ORCPT
+        with ESMTP id S233932AbiCDH3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:28:23 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8781172;
-        Thu,  3 Mar 2022 23:27:31 -0800 (PST)
-X-UUID: b8ce8015f59e4995a16062fe6f0c4e52-20220304
-X-UUID: b8ce8015f59e4995a16062fe6f0c4e52-20220304
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 380931885; Fri, 04 Mar 2022 15:27:25 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 4 Mar 2022 15:27:24 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 4 Mar
- 2022 15:27:22 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Mar 2022 15:27:21 +0800
-Message-ID: <1f7d63dd5d8ae426791d4e901231dba6ab94d2c2.camel@mediatek.com>
-Subject: Re: [PATCH v7, 07/15] media: mtk-vcodec: Refactor supported vdec
- formats and framesizes
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 4 Mar 2022 15:27:21 +0800
-In-Reply-To: <777ced91106f5aba06e7cac6b6b1c80f42d25a1f.camel@ndufresne.ca>
-References: <20220223034008.15781-1-yunfei.dong@mediatek.com>
-         <20220223034008.15781-8-yunfei.dong@mediatek.com>
-         <777ced91106f5aba06e7cac6b6b1c80f42d25a1f.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 4 Mar 2022 02:29:43 -0500
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3D165A1;
+        Thu,  3 Mar 2022 23:28:52 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id m14so12638410lfu.4;
+        Thu, 03 Mar 2022 23:28:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YgcBgxM/33mXus47pIGMzwpsQpru5dt8KhwXXP66SyI=;
+        b=K4Q8TCU7BSm/H+PF3eNN9Ibb+tYUhXk8XSbhBSo2U/2DHwN71N50ljFmr2Fmhxf1tH
+         IjS4liuKbH9I+Nvko14moUMuHirAQzbt4IDEjXf/kVvEMLfSR0L4eg8vcYLIrCXSKoLX
+         iLLPs7dSMBrEseCo3195NVmC3T36dRktcHhu86VXQf0eryw7zrdbRKp/cPXC7++/oEBF
+         a6+GQkwj4cNSJfOnecOdku5+6+ziqDJbFfEep1seThPtk/g6h5+2I4VQWJXPih4ie59Q
+         RU5DUYIeazeWbYdtiF6xioqwtAMgs3RccTvvrSCpzguiu0RKAuJ9NKL/82ha4lCJ1oBo
+         A8HA==
+X-Gm-Message-State: AOAM530KF62D+PF95nUd5hIo+H4I+WDPuEnYhrJ8tSrEbsQte0KTNAbr
+        MY5yf30y8OfXkpELp3UiJO+CfeP+9YJpgQP+JRs=
+X-Google-Smtp-Source: ABdhPJxDY6x4O+YoxOBjIVgvcNrjoQxKXoMzBc4XWqzvtRyFNrqvqedcF2/GV9/jRLHOkv4+W9wBJzzgEgL7a7xB4p4=
+X-Received: by 2002:a05:6512:33d6:b0:43b:8dc3:130f with SMTP id
+ d22-20020a05651233d600b0043b8dc3130fmr24512452lfg.47.1646378930321; Thu, 03
+ Mar 2022 23:28:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220301010412.431299-1-namhyung@kernel.org> <20220301010412.431299-4-namhyung@kernel.org>
+ <Yh3hyIIHLJEXZND3@hirez.programming.kicks-ass.net> <20220301095354.0c2b7008@gandalf.local.home>
+ <20220301194720.GJ11184@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220301194720.GJ11184@worktop.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 3 Mar 2022 23:28:38 -0800
+Message-ID: <CAM9d7chroDP+UGfjEq+Cis4N6Y=ukNGJssNN8dQsLW-CTRZZpg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] locking/mutex: Pass proper call-site ip
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Radoslaw Burny <rburny@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+On Tue, Mar 1, 2022 at 11:47 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Mar 01, 2022 at 09:53:54AM -0500, Steven Rostedt wrote:
+> > On Tue, 1 Mar 2022 10:05:12 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > > On Mon, Feb 28, 2022 at 05:04:11PM -0800, Namhyung Kim wrote:
+> > > > The __mutex_lock_slowpath() and friends are declared as noinline and
+> > > > _RET_IP_ returns its caller as mutex_lock which is not meaningful.
+> > > > Pass the ip from mutex_lock() to have actual caller info in the trace.
+> > >
+> > > Blergh, can't you do a very limited unwind when you do the tracing
+> > > instead? 3 or 4 levels should be plenty fast and sufficient.
+> >
+> > Is there a fast and sufficient way that works across architectures?
+>
+> The normal stacktrace API? Or the fancy new arch_stack_walk() which is
+> already available on most architectures you actually care about and
+> risc-v :-)
+>
+> Remember, this is the contention path, we're going to stall anyway,
+> doing a few levels of unwind shouldn't really hurt at that point.
+>
+> Anyway; when I wrote that this morning, I was thinking:
+>
+>         unsigned long ips[4];
+>         stack_trace_save(ips, 4, 0);
 
-Thanks for your suggestion.
+When I collected stack traces in a BPF, it already consumed 3 or 4
+entries in the BPF so I had to increase the size to 8 and skip 4.
+But it didn't add noticeable overheads in my test.
 
-On Tue, 2022-03-01 at 09:34 -0500, Nicolas Dufresne wrote:
-> Le mercredi 23 février 2022 à 11:40 +0800, Yunfei Dong a écrit :
-> > Supported output and capture format types for mt8192 are different
-> > with mt8183. Needs to get format types according to decoder
-> > capability.
-> 
-> This patch is both refactoring and changing the behaviour. Can you
-> please split
-> the non-functional changes from the functional one. This ensure we
-> can proceed
-> with a good review of the functional changes.
-> 
-I will split this patch. Thanks.
-
-> regards,
-> Nicolas
-> 
-Best Regards,
-Yunfei Dong
-> > 
-> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> > ---
-> >  .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   8 +-
-> >  .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  13 +-
-> >  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 117 +++++++++++++-
-> > ----
-> >  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  13 +-
-> >  4 files changed, 107 insertions(+), 44 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > index 304f5afbd419..bae43938ee37 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-> > @@ -26,7 +26,7 @@ mtk_vdec_find_format(struct v4l2_format *f,
-> >  	const struct mtk_video_fmt *fmt;
-> >  	unsigned int k;
-> >  
-> > -	for (k = 0; k < dec_pdata->num_formats; k++) {
-> > +	for (k = 0; k < *dec_pdata->num_formats; k++) {
-> >  		fmt = &dec_pdata->vdec_formats[k];
-> >  		if (fmt->fourcc == f->fmt.pix_mp.pixelformat)
-> >  			return fmt;
-> > @@ -525,7 +525,7 @@ static int vidioc_enum_framesizes(struct file
-> > *file, void *priv,
-> >  	if (fsize->index != 0)
-> >  		return -EINVAL;
-> >  
-> > -	for (i = 0; i < dec_pdata->num_framesizes; ++i) {
-> > +	for (i = 0; i < *dec_pdata->num_framesizes; ++i) {
-> >  		if (fsize->pixel_format != dec_pdata-
-> > >vdec_framesizes[i].fourcc)
-> >  			continue;
-> >  
-> > @@ -564,7 +564,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc
-> > *f, void *priv,
-> >  	const struct mtk_video_fmt *fmt;
-> >  	int i, j = 0;
-> >  
-> > -	for (i = 0; i < dec_pdata->num_formats; i++) {
-> > +	for (i = 0; i < *dec_pdata->num_formats; i++) {
-> >  		if (output_queue &&
-> >  		    dec_pdata->vdec_formats[i].type != MTK_FMT_DEC)
-> >  			continue;
-> > @@ -577,7 +577,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc
-> > *f, void *priv,
-> >  		++j;
-> >  	}
-> >  
-> > -	if (i == dec_pdata->num_formats)
-> > +	if (i == *dec_pdata->num_formats)
-> >  		return -EINVAL;
-> >  
-> >  	fmt = &dec_pdata->vdec_formats[i];
-> > diff --git a/drivers/media/platform/mtk-
-> > vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-
-> > vcodec/mtk_vcodec_dec_stateful.c
-> > index 7966c132be8f..3f33beb9c551 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-> > @@ -37,7 +37,9 @@ static const struct mtk_video_fmt
-> > mtk_video_formats[] = {
-> >  	},
-> >  };
-> >  
-> > -#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
-> > +static const unsigned int num_supported_formats =
-> > +	ARRAY_SIZE(mtk_video_formats);
-> > +
-> >  #define DEFAULT_OUT_FMT_IDX 0
-> >  #define DEFAULT_CAP_FMT_IDX 3
-> >  
-> > @@ -59,7 +61,8 @@ static const struct mtk_codec_framesizes
-> > mtk_vdec_framesizes[] = {
-> >  	},
-> >  };
-> >  
-> > -#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
-> > +static const unsigned int num_supported_framesize =
-> > +	ARRAY_SIZE(mtk_vdec_framesizes);
-> >  
-> >  /*
-> >   * This function tries to clean all display buffers, the buffers
-> > will return
-> > @@ -235,7 +238,7 @@ static void mtk_vdec_update_fmt(struct
-> > mtk_vcodec_ctx *ctx,
-> >  	unsigned int k;
-> >  
-> >  	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
-> > -	for (k = 0; k < NUM_FORMATS; k++) {
-> > +	for (k = 0; k < num_supported_formats; k++) {
-> >  		fmt = &mtk_video_formats[k];
-> >  		if (fmt->fourcc == pixelformat) {
-> >  			mtk_v4l2_debug(1, "Update cap fourcc(%d ->
-> > %d)",
-> > @@ -617,11 +620,11 @@ const struct mtk_vcodec_dec_pdata
-> > mtk_vdec_8173_pdata = {
-> >  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
-> >  	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
-> >  	.vdec_formats = mtk_video_formats,
-> > -	.num_formats = NUM_FORMATS,
-> > +	.num_formats = &num_supported_formats,
-> >  	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
-> >  	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
-> >  	.vdec_framesizes = mtk_vdec_framesizes,
-> > -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> > +	.num_framesizes = &num_supported_framesize,
-> >  	.worker = mtk_vdec_worker,
-> >  	.flush_decoder = mtk_vdec_flush_decoder,
-> >  	.is_subdev_supported = false,
-> > diff --git a/drivers/media/platform/mtk-
-> > vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-
-> > vcodec/mtk_vcodec_dec_stateless.c
-> > index 6d481410bf89..e51d935bd21d 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-> > @@ -81,33 +81,23 @@ static const struct mtk_stateless_control
-> > mtk_stateless_controls[] = {
-> >  
-> >  #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
-> >  
-> > -static const struct mtk_video_fmt mtk_video_formats[] = {
-> > -	{
-> > -		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-> > -		.type = MTK_FMT_DEC,
-> > -		.num_planes = 1,
-> > -	},
-> > -	{
-> > -		.fourcc = V4L2_PIX_FMT_MM21,
-> > -		.type = MTK_FMT_FRAME,
-> > -		.num_planes = 2,
-> > -	},
-> > +static struct mtk_video_fmt mtk_video_formats[2];
-> > +static struct mtk_codec_framesizes mtk_vdec_framesizes[1];
-> > +
-> > +static struct mtk_video_fmt default_out_format;
-> > +static struct mtk_video_fmt default_cap_format;
-> > +static unsigned int num_formats;
-> > +static unsigned int num_framesizes;
-> > +
-> > +static struct v4l2_frmsize_stepwise stepwise_fhd = {
-> > +	.min_width = MTK_VDEC_MIN_W,
-> > +	.max_width = MTK_VDEC_MAX_W,
-> > +	.step_width = 16,
-> > +	.min_height = MTK_VDEC_MIN_H,
-> > +	.max_height = MTK_VDEC_MAX_H,
-> > +	.step_height = 16
-> >  };
-> >  
-> > -#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
-> > -#define DEFAULT_OUT_FMT_IDX    0
-> > -#define DEFAULT_CAP_FMT_IDX    1
-> > -
-> > -static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
-> > -	{
-> > -		.fourcc	= V4L2_PIX_FMT_H264_SLICE,
-> > -		.stepwise = {  MTK_VDEC_MIN_W, MTK_VDEC_MAX_W, 16,
-> > -				MTK_VDEC_MIN_H, MTK_VDEC_MAX_H, 16 },
-> > -	},
-> > -};
-> > -
-> > -#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
-> > -
-> >  static void mtk_vdec_stateless_out_to_done(struct mtk_vcodec_ctx
-> > *ctx,
-> >  					   struct mtk_vcodec_mem *bs,
-> > int error)
-> >  {
-> > @@ -350,6 +340,62 @@ const struct media_device_ops
-> > mtk_vcodec_media_ops = {
-> >  	.req_queue	= v4l2_m2m_request_queue,
-> >  };
-> >  
-> > +static void mtk_vcodec_add_formats(unsigned int fourcc,
-> > +				   struct mtk_vcodec_ctx *ctx)
-> > +{
-> > +	struct mtk_vcodec_dev *dev = ctx->dev;
-> > +	const struct mtk_vcodec_dec_pdata *pdata = dev->vdec_pdata;
-> > +	int count_formats = *pdata->num_formats;
-> > +	int count_framesizes = *pdata->num_framesizes;
-> > +
-> > +	switch (fourcc) {
-> > +	case V4L2_PIX_FMT_H264_SLICE:
-> > +			[count_formats].fourcc = fourcc;
-> > +		mtk_video_formats[count_formats].type = MTK_FMT_DEC;
-> > +		mtk_video_formats[count_formats].num_planes = 1;
-> > +
-> > +		mtk_vdec_framesizes[count_framesizes].fourcc = fourcc;
-> > +		mtk_vdec_framesizes[count_framesizes].stepwise =
-> > stepwise_fhd;
-> > +		num_framesizes++;
-> > +		break;
-> > +	case V4L2_PIX_FMT_MM21:
-> > +		mtk_video_formats[count_formats].fourcc = fourcc;
-> > +		mtk_video_formats[count_formats].type = MTK_FMT_FRAME;
-> > +		mtk_video_formats[count_formats].num_planes = 2;
-> > +		break;
-> > +	default:
-> > +		mtk_v4l2_err("Can not add unsupported format type");
-> > +		return;
-> > +	}
-> > +
-> > +	num_formats++;
-> > +	mtk_v4l2_debug(3, "num_formats: %d num_frames:%d
-> > dec_capability: 0x%x",
-> > +		       count_formats, count_framesizes, ctx->dev-
-> > >dec_capability);
-> > +}
-> > +
-> > +static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_ctx
-> > *ctx)
-> > +{
-> > +	int cap_format_count = 0, out_format_count = 0;
-> > +
-> > +	if (num_formats && num_framesizes)
-> > +		return;
-> > +
-> > +	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_MM21) {
-> > +		mtk_vcodec_add_formats(V4L2_PIX_FMT_MM21, ctx);
-> > +		cap_format_count++;
-> > +	}
-> > +	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_H264_SLICE) {
-> > +		mtk_vcodec_add_formats(V4L2_PIX_FMT_H264_SLICE, ctx);
-> > +		out_format_count++;
-> > +	}
-> > +
-> > +	if (cap_format_count)
-> > +		default_cap_format = mtk_video_formats[cap_format_count
-> > - 1];
-> > +	if (out_format_count)
-> > +		default_out_format =
-> > +			mtk_video_formats[cap_format_count +
-> > out_format_count - 1];
-> > +}
-> > +
-> >  static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
-> >  {
-> >  	struct vb2_queue *src_vq;
-> > @@ -360,6 +406,11 @@ static void mtk_init_vdec_params(struct
-> > mtk_vcodec_ctx *ctx)
-> >  	if (ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-> >  		v4l2_m2m_set_dst_buffered(ctx->m2m_ctx, 1);
-> >  
-> > +	if (!ctx->dev->vdec_pdata->is_subdev_supported)
-> > +		ctx->dev->dec_capability |=
-> > +			MTK_VDEC_FORMAT_H264_SLICE |
-> > MTK_VDEC_FORMAT_MM21;
-> > +	mtk_vcodec_get_supported_formats(ctx);
-> > +
-> >  	/* Support request api for output plane */
-> >  	src_vq->supports_requests = true;
-> >  	src_vq->requires_requests = true;
-> > @@ -393,11 +444,11 @@ const struct mtk_vcodec_dec_pdata
-> > mtk_vdec_8183_pdata = {
-> >  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
-> >  	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
-> >  	.vdec_formats = mtk_video_formats,
-> > -	.num_formats = NUM_FORMATS,
-> > -	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
-> > -	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
-> > +	.num_formats = &num_formats,
-> > +	.default_out_fmt = &default_out_format,
-> > +	.default_cap_fmt = &default_cap_format,
-> >  	.vdec_framesizes = mtk_vdec_framesizes,
-> > -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> > +	.num_framesizes = &num_framesizes,
-> >  	.uses_stateless_api = true,
-> >  	.worker = mtk_vdec_worker,
-> >  	.flush_decoder = mtk_vdec_flush_decoder,
-> > @@ -413,11 +464,11 @@ const struct mtk_vcodec_dec_pdata
-> > mtk_lat_sig_core_pdata = {
-> >  	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
-> >  	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
-> >  	.vdec_formats = mtk_video_formats,
-> > -	.num_formats = NUM_FORMATS,
-> > -	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
-> > -	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
-> > +	.num_formats = &num_formats,
-> > +	.default_out_fmt = &default_out_format,
-> > +	.default_cap_fmt = &default_cap_format,
-> >  	.vdec_framesizes = mtk_vdec_framesizes,
-> > -	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
-> > +	.num_framesizes = &num_framesizes,
-> >  	.uses_stateless_api = true,
-> >  	.worker = mtk_vdec_worker,
-> >  	.flush_decoder = mtk_vdec_flush_decoder,
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > index 9fcaf69549dd..270c73c05285 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > @@ -344,6 +344,15 @@ enum mtk_vdec_hw_arch {
-> >  	MTK_VDEC_LAT_SINGLE_CORE,
-> >  };
-> >  
-> > +/*
-> > + * struct mtk_vdec_format_types - Structure used to get supported
-> > + *		  format types according to decoder capability
-> > + */
-> > +enum mtk_vdec_format_types {
-> > +	MTK_VDEC_FORMAT_MM21 = 0x20,
-> > +	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
-> > +};
-> > +
-> >  /**
-> >   * struct mtk_vcodec_dec_pdata - compatible data for each IC
-> >   * @init_vdec_params: init vdec params
-> > @@ -379,12 +388,12 @@ struct mtk_vcodec_dec_pdata {
-> >  	struct vb2_ops *vdec_vb2_ops;
-> >  
-> >  	const struct mtk_video_fmt *vdec_formats;
-> > -	const int num_formats;
-> > +	const int *num_formats;
-> >  	const struct mtk_video_fmt *default_out_fmt;
-> >  	const struct mtk_video_fmt *default_cap_fmt;
-> >  
-> >  	const struct mtk_codec_framesizes *vdec_framesizes;
-> > -	const int num_framesizes;
-> > +	const int *num_framesizes;
-> >  
-> >  	enum mtk_vdec_hw_arch hw_arch;
-> >  
-> 
-> 
-
+Thanks,
+Namhyung

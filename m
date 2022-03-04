@@ -2,166 +2,510 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AB74CD89B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF204CD89E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbiCDQIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S239423AbiCDQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiCDQIe (ORCPT
+        with ESMTP id S234650AbiCDQKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:08:34 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B455E14C;
-        Fri,  4 Mar 2022 08:07:42 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 224Bs97E032089;
-        Fri, 4 Mar 2022 08:07:28 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=s64K5vt/OGe0DiEGvksjfU3/NxMbARsQ9JwvHLZerts=;
- b=Icw9nA2mEGOdrx9YfRhXiCkN5p2hCfYZrlVIyTqc6Ii++CeKii722dUA+6VAFjl8GNF6
- +jk1YrCacDPzBr28bmXW2Q4v1StcMVEkondBvndcYyY9JO3dZE5fibBLAynsu6HumJKJ
- L9+5rpjrue8koenlaN6Y9qw+5YM2/R8gQI4= 
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ek4hpp0et-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 08:07:27 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Iqgok8+Lpnojj7ZsG8tm///OURWVa6irdPL+4+OZOaVydo+WlNONbB/HXx8+9//X5/xLGPdZMZqI0W2ctr663RImrZsHyZJT2bE/TAiseZNUFc4eg/mNjdQseoQz3I4SjSOSXVaCp5AAV6rfMGVn+5NVCZ6pvEIfQBs5fJw8MsWmx00ncOE/r9vMiilxWt6wPHk7+ek/y2vbu3lAhYKbqBUwpZtqOxha3R6XOVtVHSPHbtybtt+FP95KEx0BkioQSagzp6RUJhcNtk5h8tKolDuYJPB8+8mxdIPGrsXUEh92HBWuXaHD51yOmo6YSi/TQkbnT19tTiogdi3FQpJdcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s64K5vt/OGe0DiEGvksjfU3/NxMbARsQ9JwvHLZerts=;
- b=XXznOcWr59A3zNCTWvypvaVtzwg/uBN9bfEQMDFjTe0Zr1pKYRW7dViwSj9kR7Vw3agymtMTWleEb/nBR6jvwCQSLFLcTWV3YSUP8fozfwpDzS6C8XDCR4XlcrwLeFDjIoIzvIulluiDtbsW9qsjWkECDt09UDDc8b0JRPVHWTV2BCJ9B8n7SqtFOoi0wIW93jS+vz5M9aFWwSw6lax334RFAJsQLh3xFdfkN6T7mNju7KucRR6kIXuy8fX0TOAd+CotajUqReooUVHl5+xrYsDbM+dlc10QwC3/8QtFeNm45wPgkuvCKWxTPkQpfjy4En9Q4MtHUqogMH+50YFvlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BN6PR15MB1554.namprd15.prod.outlook.com (2603:10b6:404:c4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
- 2022 16:07:25 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::91dd:facd:e7a5:a8d1]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::91dd:facd:e7a5:a8d1%3]) with mapi id 15.20.5017.029; Fri, 4 Mar 2022
- 16:07:25 +0000
-Message-ID: <9e940637-1381-f51c-afef-9c78d463ace1@fb.com>
-Date:   Fri, 4 Mar 2022 08:07:21 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH bpf-next v2] bpf: Replace strncpy() with strscpy()
-Content-Language: en-US
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com
-References: <e1e060a0-898f-1969-abec-ca01c2eb2049@fb.com>
- <20220304070408.233658-1-ytcoode@gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220304070408.233658-1-ytcoode@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: MWHPR02CA0023.namprd02.prod.outlook.com
- (2603:10b6:300:4b::33) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0bd16590-c1c9-4762-b7f1-08d9fdf912cf
-X-MS-TrafficTypeDiagnostic: BN6PR15MB1554:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR15MB15547DFCADC3D9FD27B3BFF1D3059@BN6PR15MB1554.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sx8UxeWO8pcZd33Y4Bk7h7SBQ7f+LRIHwj3jT8j7ltPVG/t4Wh3YD1tlKxubaEFPkCok2KBgVJoeAzlhWZnqnbs7TqS8Ckd+yzTVUXVzAU9Z2IyZCLsA/Xa7omNsagrjh5LwQ+sAlGA9fKG0ID82Nt5uT3AhqR8kHdX9M9DqStQRelOgrEzMGE0QlGlgQxqnviwGk+ZgHQmsU/mzNFXSNzwCddOmmNg0delq1u55i5H6+fWaCnjKAZcggeKWOo9pTsMVFtacoU4KptfQgibtPT3ShqmpOFqvhiTLs84QPkBWFNIBpaaw0uzxfjmY9pdUbFFQtvA9DuWISSoFOv98XA22kzRde7AQNBZDdtY5JJfxyF2/pOrpBfhcqJaWAR3LSDx46+rQVXhSlVvrF8eRbTLG1FP/lsQDjgbahCvg0ezLntvTKhRMOqdUYx7nBhJB1TxC5dCKWBQ5uI+ZXA+YMqTH2ZYVFHNheR2gZvEhgWhpSq4eNn7hBVvUO7ULPluzvHNzqgkOLc0YdyoCyKQNNLs5q77n45n/CNtqUI9PYxNURe3a95kFcj2TaBHEvjfBtGZmAzz1SJd5vhhWzmYc8hSg+whIxh3Th7gWDixARQ76QKrDEHqLkrsaqRF4FcZJE+HgoSaM6VZRuM1VrWc+cPTuqrG9jki/20jXsqVPLFB9JirjrJ7ICLmizu6CMqPoSOmx2o3ljzOp2ZWWtVplvW1l/+efYak0tjJ84xvRTETSsZgeSBw5Am/j9GTQbWJ7zIc5fsu3QN6RT2/Ux2h0btyZS78L4kTsewEuNgMFomtgCz8YfUou+lsN46+/ktgP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(2616005)(5660300002)(31696002)(86362001)(2906002)(4326008)(8676002)(6916009)(316002)(66946007)(66476007)(6666004)(6512007)(6506007)(53546011)(52116002)(4744005)(36756003)(8936002)(38100700002)(6486002)(966005)(508600001)(31686004)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U09PSXZONVk3dTdxQi9PYXZuaUN5TVlXaklTcno0QnMyamlTb1RvYXl6U0NH?=
- =?utf-8?B?MThLK1RyNGtmSnZJYlZuRkVHMmIxNi83clVGL21tQ0ZRd1hJcG1Ob3ZUaDEz?=
- =?utf-8?B?bXBWRmtlWW1vNlIrVG9aUnArQU9GelNzd0JxOFNpR21iOG1rSFpKOVBBOXds?=
- =?utf-8?B?QngrTWNjWGxQZ0cxRlBWVEFXMWxsM3QrOTFBeXVmQjNxUzQvalplZzRJckhO?=
- =?utf-8?B?OWdCbTNvY1dPMTFEZUppaUo3aUlCaklKcnprM2NadlUzNHVNdEZDdlEzN3Uy?=
- =?utf-8?B?d2FieDNxVUx2NW9sVThRV3BIK2NPTDVleUtJL0t4RXdEU2oxeGlTeVRxUVh4?=
- =?utf-8?B?SGxpblh3eG83Sy9uNVZaRXBrM3NGYm02UTVUVHdXQkkwd2ZNamNZS05lc2FS?=
- =?utf-8?B?cGxEMjYzWE9PZGUvQUkvaC9Ed3VOWDNITXBvL2ZDbEwvczhpMEhkbW9tTzRS?=
- =?utf-8?B?azIzV2hzOE9BaVZzVkxiR1ZqNXdPK1hrcXl6NVB4TjZ0OThDbytkN3UzTGdp?=
- =?utf-8?B?cDJwWlVlZkxpd1UrM3pDSWNQWE92WVZMa0hKZENEVVZjV1VQRCtGYlh5S3Jp?=
- =?utf-8?B?U2ZrcWRxUjduNVlUckJLdDNGTjdlaFVLL1lWY29tZFNqQ25veTVTVGI5dXhi?=
- =?utf-8?B?K094djd1Szd5Z3R6SndyME5UZ0w3N0NTZ0hCdUNxcFZ4ZTk4TnlNeFRYcHRM?=
- =?utf-8?B?NHNtRUdSMEJJbDNLMlY1K0lhdXRZemhUTStWeFpWQnJMNUcvSFZBeDhaV2c2?=
- =?utf-8?B?WVlUcldDdXJBMFlxeG1wTXptL2t2RFA3U3NvUGZTSDZienFVSG9ad1diTkRG?=
- =?utf-8?B?Q3pNNzY1T3BtdkxQMmd1Q1ZOTXdEckdTU1JKUzNlQjd1dm1ZQXJMSm9YZW16?=
- =?utf-8?B?NXVzd1JuRWhFR0tVQjRnZWtlVWNHZU1YY2Z6Sk53RG9BbEFMTldRZHhtd1Rt?=
- =?utf-8?B?cnBCNldCSnVzY1NCOFh3MUVaa2J1VjZ4eEhMb096TzluZkp6VHEzWmI4bVJ1?=
- =?utf-8?B?MWxRb0lacTBHbU4vcW53bktDdG40V2M1WEtKS3g2RUViQXNlaDY5ejNLLzg1?=
- =?utf-8?B?WUVxekN0Z3h1Y3BVZUZyREpKWkZtM2VhaWJOUCszMlNycHRBWisxckRzTWFH?=
- =?utf-8?B?VzdnRFpaeC9tY0NocU55dGVNYUhxTExKbUx1bkFSb2pSMU5SeDZDTWRDN2lE?=
- =?utf-8?B?VnRCaEduaFdTb2tqQTBzN0dQbFd3Yys4RndGa2diZXJSVk1XQkVIVEE4TURK?=
- =?utf-8?B?elV3N2Fubm5DV05UaTJsSnp3SVpiOFVqaURGTVV1ellZQWdSZjdjNUVBcWhX?=
- =?utf-8?B?aDUrWGo3clJrSFpKU2dFY0NWcWt6MXdZYkYxcHdKZjB4VG10UThsVEhWUkpL?=
- =?utf-8?B?SXdhQzRPTWlXTVd5bklZV1BGQkZNdUxuK1l4N1p2RS9kZCtzekt1eTE4YXNk?=
- =?utf-8?B?b0pKTk9tRTEzTlZLQ0NRVThhTnJBVFZDRWZnZDE5eFhBempiL2QyVzdWOVdS?=
- =?utf-8?B?Zlp0Q2NlSFlWV2h4MjJlVi9QYmhaTDRPcTU2TjRxemNpTjgzMWRFZ2xxWHd4?=
- =?utf-8?B?R085cnNEUWtneDR4OHlyVHI0YWlHWUdRQjZSU053OWEvVkt6ZlJWd1NiRWR6?=
- =?utf-8?B?NWdEOGxKc3YvV1dFQ1B1VkhEQm1HNldWM3hTSjVidXBUTHJvd0RlNWdWL2xR?=
- =?utf-8?B?bnNKOGUvWnYvK2daYkNSdU5BTHBhRW9weU1ORWo3QVRjNGk3UHI5dmZTeUhN?=
- =?utf-8?B?WXVXQWtzd0ZsOEp3dTlCWFV2eHlXdE1LZmZ1Rmt2dXRmd004L3lTQWtOd3d3?=
- =?utf-8?B?d3FGbERxTldpeUd4YktjLzY2eGNHMTI2dW9LZmlTQ21jVHA5em1JS0ZEYVpo?=
- =?utf-8?B?MmJlNStwZGxUa01WSkZaWWlzamtCQk1nZFRIOEN5aW0zbmFiSU9kUE9uZnJY?=
- =?utf-8?B?OXR6TnBMdncxVi9sb05KLzRNM1FGaSs5amZVWmVOUCtsd0tNVVRQSUhTTmFQ?=
- =?utf-8?B?ZVhjZ1BzNW1IL29MZmpqNXlmM2JtbkY3b3BHcmlUUWFjSDQ3aW5nbVBodjJN?=
- =?utf-8?B?enpYY3B2aVk1SUgwNjZLMWJwcVV2dGtGRjFtZUJ6RFJKNzNna1Q5WGdncUZ3?=
- =?utf-8?Q?t3BEer7oiNo1U3MKlY9DTmSaI?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bd16590-c1c9-4762-b7f1-08d9fdf912cf
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 16:07:25.5641
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N6d4JdHP3F11BP8uKzd/rDL4tTFWjI6iFVUCPLuziN8frNpct1FY38BsLHoDidUR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1554
-X-Proofpoint-ORIG-GUID: IsHM_Krlf66cr5594AuAmNRF2dFTgpvM
-X-Proofpoint-GUID: IsHM_Krlf66cr5594AuAmNRF2dFTgpvM
+        Fri, 4 Mar 2022 11:10:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3314D247
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:09:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9476861D0D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3CAC340E9;
+        Fri,  4 Mar 2022 16:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646410174;
+        bh=KepA0D1IwXIiiEZquAX2B9brUfwANczZ/JcpF4ps4Ks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dNgYHWA3VfwZOvIGkY4GJXYiz4ivyViRzyh5MG5cZXpvvY9z3iUquFpto7jDXZxAY
+         WfhEmauhXhXrl30KkwnKi13zctvaxe/ENnpSIC4Z/aIgV5e+jm3ItVtUSQjQVqP+6w
+         UmcAsD9ZBtskLmCTMnRwBYan5/JkHCOOdcYbckh2UzD+HHazXq/xaVWTVWRbx7DJqq
+         9Ri5q8MIIzAnk2cQESV2TGg37OAjgYjMRjNzVELcG8wxmoMxDZOvC0/tV7MgCuGTFl
+         j3+7KrWrnJkcm51qYgqwwpgTrrQv8/mrQIFnsTjHePTk7Bvuewfc3PUSQujMk7v4Ut
+         LtQnd1qnL8eNQ==
+Date:   Sat, 5 Mar 2022 01:09:30 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH 2/4 v3] tracing: Add sample code for custom trace events
+Message-Id: <20220305010930.ff114dbd48cc267d242a74ed@kernel.org>
+In-Reply-To: <20220303220625.369226746@goodmis.org>
+References: <20220303220530.058538533@goodmis.org>
+        <20220303220625.369226746@goodmis.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-04_07,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=507
- spamscore=0 phishscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 clxscore=1015 mlxscore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040083
-X-FB-Internal: deliver
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 03 Mar 2022 17:05:32 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> Add sample code to show how to create custom trace events in the tracefs
+> directory that can be enabled and modified like any event in tracefs
+> (including triggers, histograms, synthetic events and event probes).
+> 
+> The example is creating a custom sched_switch and a sched_waking to limit
+> what is recorded:
+> 
+> If the custom sched switch only records the prev_prio, next_prio and
+> next_pid, it can bring the size from 64 bytes per event, down to just 16
+> bytes!
+> 
+> If sched_waking only records the prio and pid of the woken event, it will
+> bring the size down from 36 bytes to 12 bytes per event.
+> 
+> This will allow for a much smaller footprint into the ring buffer and keep
+> more events from dropping.
+> 
+> Suggested-by: Joel Fernandes <joel@joelfernandes.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  arch/x86/kernel/kprobes/core.c            |   4 +-
+>  kernel/trace/ftrace.c                     |  33 ++-
+>  samples/Kconfig                           |   8 +-
+>  samples/Makefile                          |   1 +
+>  samples/trace_events/Makefile             |   2 +
+>  samples/trace_events/trace_custom_sched.c | 271 ++++++++++++++++++++++
+>  6 files changed, 314 insertions(+), 5 deletions(-)
+>  create mode 100644 samples/trace_events/trace_custom_sched.c
+> 
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index 6290712cb36d..2ea1ecd6f60b 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -202,8 +202,10 @@ __recover_probed_insn(kprobe_opcode_t *buf, unsigned long addr)
+>  	 * arch_check_ftrace_location(). Something went terribly wrong
+>  	 * if such an address is checked here.
+>  	 */
+> -	if (WARN_ON(faddr && faddr != addr))
+> +	if (WARN_ON(faddr && faddr != addr)) {
+> +		printk("faddr=%pS (%lx) addr=%pS (%lx)\n", (void*)faddr, faddr, (void*)addr, addr);
+>  		return 0UL;
+> +	}
+
+This part seems not related to this patch.
+Can you drop this?
+
+Thank you,
+
+>  	/*
+>  	 * Use the current code if it is not modified by Kprobe
+>  	 * and it cannot be modified by ftrace.
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index a4b462b6f944..cb67527e1203 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -1578,7 +1578,24 @@ unsigned long ftrace_location_range(unsigned long start, unsigned long end)
+>   */
+>  unsigned long ftrace_location(unsigned long ip)
+>  {
+> -	return ftrace_location_range(ip, ip);
+> +	struct dyn_ftrace *rec;
+> +	unsigned long offset;
+> +	unsigned long size;
+> +
+> +	rec = lookup_rec(ip, ip);
+> +	if (!rec) {
+> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
+> +			goto out;
+> +
+> +		if (!offset)
+> +			rec = lookup_rec(ip - offset, (ip - offset) + size - 1);
+> +	}
+> +
+> +	if (rec)
+> +		return rec->ip;
+> +
+> +out:
+> +	return 0;
+>  }
+>  
+>  /**
+> @@ -4962,7 +4979,8 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+>  {
+>  	struct ftrace_func_entry *entry;
+>  
+> -	if (!ftrace_location(ip))
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+>  		return -EINVAL;
+>  
+>  	if (remove) {
+> @@ -5110,11 +5128,16 @@ int register_ftrace_direct(unsigned long ip, unsigned long addr)
+>  	struct ftrace_func_entry *entry;
+>  	struct ftrace_hash *free_hash = NULL;
+>  	struct dyn_ftrace *rec;
+> -	int ret = -EBUSY;
+> +	int ret = -ENODEV;
+>  
+>  	mutex_lock(&direct_mutex);
+>  
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	/* See if there's a direct function at @ip already */
+> +	ret = -EBUSY;
+>  	if (ftrace_find_rec_direct(ip))
+>  		goto out_unlock;
+>  
+> @@ -5222,6 +5245,10 @@ int unregister_ftrace_direct(unsigned long ip, unsigned long addr)
+>  
+>  	mutex_lock(&direct_mutex);
+>  
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	entry = find_direct_entry(&ip, NULL);
+>  	if (!entry)
+>  		goto out_unlock;
+> diff --git a/samples/Kconfig b/samples/Kconfig
+> index 22cc921ae291..10e021c72282 100644
+> --- a/samples/Kconfig
+> +++ b/samples/Kconfig
+> @@ -14,7 +14,13 @@ config SAMPLE_TRACE_EVENTS
+>  	tristate "Build trace_events examples -- loadable modules only"
+>  	depends on EVENT_TRACING && m
+>  	help
+> -	  This build trace event example modules.
+> +	  This builds the trace event example module.
+> +
+> +config SAMPLE_TRACE_CUSTOM_EVENTS
+> +	tristate "Build custom trace event example -- loadable modules only"
+> +	depends on EVENT_TRACING && m
+> +	help
+> +	  This builds the custom trace event example module.
+>  
+>  config SAMPLE_TRACE_PRINTK
+>          tristate "Build trace_printk module - tests various trace_printk formats"
+> diff --git a/samples/Makefile b/samples/Makefile
+> index 1ae4de99c983..448343e8faeb 100644
+> --- a/samples/Makefile
+> +++ b/samples/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_SAMPLE_RPMSG_CLIENT)	+= rpmsg/
+>  subdir-$(CONFIG_SAMPLE_SECCOMP)		+= seccomp
+>  subdir-$(CONFIG_SAMPLE_TIMER)		+= timers
+>  obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+= trace_events/
+> +obj-$(CONFIG_SAMPLE_TRACE_CUSTOM_EVENTS) += trace_events/
+>  obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= trace_printk/
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+= ftrace/
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT_MULTI) += ftrace/
+> diff --git a/samples/trace_events/Makefile b/samples/trace_events/Makefile
+> index b78344e7bbed..e98afc447fe1 100644
+> --- a/samples/trace_events/Makefile
+> +++ b/samples/trace_events/Makefile
+> @@ -13,3 +13,5 @@
+>  CFLAGS_trace-events-sample.o := -I$(src)
+>  
+>  obj-$(CONFIG_SAMPLE_TRACE_EVENTS) += trace-events-sample.o
+> +
+> +obj-$(CONFIG_SAMPLE_TRACE_CUSTOM_EVENTS) += trace_custom_sched.o
+> diff --git a/samples/trace_events/trace_custom_sched.c b/samples/trace_events/trace_custom_sched.c
+> new file mode 100644
+> index 000000000000..70a12c32ff99
+> --- /dev/null
+> +++ b/samples/trace_events/trace_custom_sched.c
+> @@ -0,0 +1,271 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * event tracer
+> + *
+> + * Copyright (C) 2022 Google Inc, Steven Rostedt <rostedt@goodmis.org>
+> + */
+> +
+> +#define pr_fmt(fmt) fmt
+> +
+> +#include <linux/trace_events.h>
+> +#include <linux/version.h>
+> +#include <linux/module.h>
+> +#include <linux/sched.h>
+> +#include <trace/events/sched.h>
+> +
+> +#define THIS_SYSTEM "custom_sched"
+> +
+> +#define SCHED_PRINT_FMT							\
+> +	C("prev_prio=%d next_pid=%d next_prio=%d", REC->prev_prio, REC->next_pid, \
+> +	  REC->next_prio)
+> +
+> +#define SCHED_WAKING_FMT				\
+> +	C("pid=%d prio=%d", REC->pid, REC->prio)
+> +
+> +#undef C
+> +#define C(a, b...) a, b
+> +
+> +static struct trace_event_fields sched_switch_fields[] = {
+> +	{
+> +		.type = "unsigned short",
+> +		.name = "prev_prio",
+> +		.size = sizeof(short),
+> +		.align = __alignof__(short),
+> +		.is_signed = 0,
+> +		.filter_type = FILTER_OTHER,
+> +	},
+> +	{
+> +		.type = "unsigned short",
+> +		.name = "next_prio",
+> +		.size = sizeof(short),
+> +		.align = __alignof__(short),
+> +		.is_signed = 0,
+> +		.filter_type = FILTER_OTHER,
+> +	},
+> +	{
+> +		.type = "unsigned int",
+> +		.name = "next_prio",
+> +		.size = sizeof(int),
+> +		.align = __alignof__(int),
+> +		.is_signed = 0,
+> +		.filter_type = FILTER_OTHER,
+> +	},
+> +	{}
+> +};
+> +
+> +struct sched_event {
+> +	struct trace_entry	ent;
+> +	unsigned short		prev_prio;
+> +	unsigned short		next_prio;
+> +	unsigned int		next_pid;
+> +};
+> +
+> +static struct trace_event_fields sched_waking_fields[] = {
+> +	{
+> +		.type = "unsigned int",
+> +		.name = "pid",
+> +		.size = sizeof(int),
+> +		.align = __alignof__(int),
+> +		.is_signed = 0,
+> +		.filter_type = FILTER_OTHER,
+> +	},
+> +	{
+> +		.type = "unsigned short",
+> +		.name = "prio",
+> +		.size = sizeof(short),
+> +		.align = __alignof__(short),
+> +		.is_signed = 0,
+> +		.filter_type = FILTER_OTHER,
+> +	},
+> +	{}
+> +};
+> +
+> +struct wake_event {
+> +	struct trace_entry	ent;
+> +	unsigned int		pid;
+> +	unsigned short		prio;
+> +};
+> +
+> +static void sched_switch_probe(void *data, bool preempt, struct task_struct *prev,
+> +			       struct task_struct *next)
+> +{
+> +	struct trace_event_file *trace_file = data;
+> +	struct trace_event_buffer fbuffer;
+> +	struct sched_event *entry;
+> +
+> +	if (trace_trigger_soft_disabled(trace_file))
+> +		return;
+> +
+> +	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
+> +					   sizeof(*entry));
+> +
+> +	if (!entry)
+> +		return;
+> +
+> +	entry->prev_prio = prev->prio;
+> +	entry->next_prio = next->prio;
+> +	entry->next_pid = next->pid;
+> +
+> +	trace_event_buffer_commit(&fbuffer);
+> +}
+> +
+> +static struct trace_event_class sched_switch_class = {
+> +	.system			= THIS_SYSTEM,
+> +	.reg			= trace_event_reg,
+> +	.fields_array		= sched_switch_fields,
+> +	.fields			= LIST_HEAD_INIT(sched_switch_class.fields),
+> +	.probe			= sched_switch_probe,
+> +};
+> +
+> +static void sched_waking_probe(void *data, struct task_struct *t)
+> +{
+> +	struct trace_event_file *trace_file = data;
+> +	struct trace_event_buffer fbuffer;
+> +	struct wake_event *entry;
+> +
+> +	if (trace_trigger_soft_disabled(trace_file))
+> +		return;
+> +
+> +	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
+> +					   sizeof(*entry));
+> +
+> +	if (!entry)
+> +		return;
+> +
+> +	entry->prio = t->prio;
+> +	entry->pid = t->pid;
+> +
+> +	trace_event_buffer_commit(&fbuffer);
+> +}
+> +
+> +static struct trace_event_class sched_waking_class = {
+> +	.system			= THIS_SYSTEM,
+> +	.reg			= trace_event_reg,
+> +	.fields_array		= sched_waking_fields,
+> +	.fields			= LIST_HEAD_INIT(sched_waking_class.fields),
+> +	.probe			= sched_waking_probe,
+> +};
+> +
+> +static enum print_line_t sched_switch_output(struct trace_iterator *iter, int flags,
+> +					     struct trace_event *trace_event)
+> +{
+> +	struct trace_seq *s = &iter->seq;
+> +	struct sched_event *REC = (struct sched_event *)iter->ent;
+> +	int ret;
+> +
+> +	ret = trace_raw_output_prep(iter, trace_event);
+> +	if (ret != TRACE_TYPE_HANDLED)
+> +		return ret;
+> +
+> +	trace_seq_printf(s, SCHED_PRINT_FMT);
+> +	trace_seq_putc(s, '\n');
+> +
+> +	return trace_handle_return(s);
+> +}
+> +
+> +static struct trace_event_functions sched_switch_funcs = {
+> +	.trace			= sched_switch_output,
+> +};
+> +
+> +static enum print_line_t sched_waking_output(struct trace_iterator *iter, int flags,
+> +					     struct trace_event *trace_event)
+> +{
+> +	struct trace_seq *s = &iter->seq;
+> +	struct wake_event *REC = (struct wake_event *)iter->ent;
+> +	int ret;
+> +
+> +	ret = trace_raw_output_prep(iter, trace_event);
+> +	if (ret != TRACE_TYPE_HANDLED)
+> +		return ret;
+> +
+> +	trace_seq_printf(s, SCHED_WAKING_FMT);
+> +	trace_seq_putc(s, '\n');
+> +
+> +	return trace_handle_return(s);
+> +}
+> +
+> +static struct trace_event_functions sched_waking_funcs = {
+> +	.trace			= sched_waking_output,
+> +};
+> +
+> +#undef C
+> +#define C(a, b...) #a "," __stringify(b)
+> +
+> +static struct trace_event_call sched_switch_call = {
+> +	.class			= &sched_switch_class,
+> +	.event			= {
+> +		.funcs			= &sched_switch_funcs,
+> +	},
+> +	.print_fmt		= SCHED_PRINT_FMT,
+> +	.module			= THIS_MODULE,
+> +	.flags			= TRACE_EVENT_FL_TRACEPOINT,
+> +};
+> +
+> +static struct trace_event_call sched_waking_call = {
+> +	.class			= &sched_waking_class,
+> +	.event			= {
+> +		.funcs			= &sched_waking_funcs,
+> +	},
+> +	.print_fmt		= SCHED_WAKING_FMT,
+> +	.module			= THIS_MODULE,
+> +	.flags			= TRACE_EVENT_FL_TRACEPOINT,
+> +};
+> +
+> +static void fct(struct tracepoint *tp, void *priv)
+> +{
+> +	if (tp->name && strcmp(tp->name, "sched_switch") == 0)
+> +		sched_switch_call.tp = tp;
+> +	else if (tp->name && strcmp(tp->name, "sched_waking") == 0)
+> +		sched_waking_call.tp = tp;
+> +}
+> +
+> +static int add_event(struct trace_event_call *call)
+> +{
+> +	int ret;
+> +
+> +	ret = register_trace_event(&call->event);
+> +	if (WARN_ON(!ret))
+> +		return -ENODEV;
+> +
+> +	ret = trace_add_event_call(call);
+> +	if (WARN_ON(ret))
+> +		unregister_trace_event(&call->event);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __init trace_sched_init(void)
+> +{
+> +	int ret;
+> +
+> +	check_trace_callback_type_sched_switch(sched_switch_probe);
+> +	check_trace_callback_type_sched_waking(sched_waking_probe);
+> +
+> +	for_each_kernel_tracepoint(fct, NULL);
+> +
+> +	ret = add_event(&sched_switch_call);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = add_event(&sched_waking_call);
+> +	if (ret)
+> +		trace_remove_event_call(&sched_switch_call);
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit trace_sched_exit(void)
+> +{
+> +	trace_set_clr_event(THIS_SYSTEM, "sched_switch", 0);
+> +	trace_set_clr_event(THIS_SYSTEM, "sched_waking", 0);
+> +
+> +	trace_remove_event_call(&sched_switch_call);
+> +	trace_remove_event_call(&sched_waking_call);
+> +}
+> +
+> +module_init(trace_sched_init);
+> +module_exit(trace_sched_exit);
+> +
+> +MODULE_AUTHOR("Steven Rostedt");
+> +MODULE_DESCRIPTION("Custom scheduling events");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.34.1
 
 
-On 3/3/22 11:04 PM, Yuntao Wang wrote:
-> Using strncpy() on NUL-terminated strings is considered deprecated[1].
-> Moreover, if the length of 'task->comm' is less than the destination buffer
-> size, strncpy() will NUL-pad the destination buffer, which is a needless
-> performance penalty.
-> 
-> Replacing strncpy() with strscpy() fixes all these issues.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
-> 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-
-Acked-by: Yonghong Song <yhs@fb.com>
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

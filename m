@@ -2,143 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3324CD6DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D994CD6F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240002AbiCDO5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:57:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S239993AbiCDO7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiCDO5N (ORCPT
+        with ESMTP id S233249AbiCDO7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:57:13 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50E1BD9AC;
-        Fri,  4 Mar 2022 06:56:25 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224EFZuS011976;
-        Fri, 4 Mar 2022 14:55:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
- b=nissb5D7vXCkM7b3UMa4Fz1zik+RCMIVm7xgOenj9WsXmV93siFwhWGz/SATMfQkwI9H
- 2RFq5jw+Uq/3hFYhp0WQDRoKDoKQVJ9UAEwd8kdA138ZIC5mLtofJ5xR4TU/2Yh3cooA
- Aye7NnxXHavwBgvlxJkXFtc7jtRDlPZnLYfq895RSqDvDtw5WRnoqz+RmP8v//T/+pia
- OD7ABQ9+Drs2OPOMaYWsdWvkfm+imYZi2wl4V4zZljuJbI0p40QxzFpz7AXc/mm7oyOD
- QchFwX0tzOsyq8AgS6DbvAEoiZifmF5PUzWJRDAJIoeIUFeqgE0t+ZH1Hn/aKsT7/w5B Aw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ek4hvhxxa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 14:55:23 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 224EZTP6129989;
-        Fri, 4 Mar 2022 14:55:22 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2044.outbound.protection.outlook.com [104.47.57.44])
-        by userp3020.oracle.com with ESMTP id 3ek4jh0869-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 14:55:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LvPwjchPoq0rbq11DNrGAKxKlUb/4HpXg54sv2BCDbWhTm11PfSq7ioFAAVeVN0RPYEjwjZCPSuN48XTfyx+40Hs5Kwt/ADrph5tCfPL86dRUEwJ0Xf2E96eAHRMO8btF4wOaVaP/0mGWPlmEa1ncT/yDaTgoVvqZC/AyjE1g2Jf1nTzOcTsMm7iTtgCv5kEw1AyjvRT0+q+PEr4awmU9eJb0x81KO6X+smhRVPCaumQfGCOm20lrCUBEKiXEH18GHZ7Rgu/qaseTMuxU7PzhX72FQFPIZqPEdFKT4OjXIc++HTdPp8XxkWJVWaSq243VDJWBB+m5wT2Rw2WjWYpTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
- b=euBeqJAUz6Blp2zd6W1JlbXV7mJ64OSI+AMOuAVCYfyF87IQRa/F6oWDUbDI7XDNaA1zv9XZPjz/TTJOxHyAcOi9TvzFFYqwACEW4Agf8a+qxGqiCJsOdzDhydGQZjiP0SGN5krONc2eGgEBuFG2Exk5X19x1Go1/KYkOtHtc2rY7oo/aYtzXsm+rd6YqBwHnTUdAGbQXdZ1PJ+beD/qfmma+QMzSxRDSYKCSMP38ZRsRxvc95MqN8iRpo4vIeic1giYdr6LelL3crLDr762ATSqvPudl59plz995Lkx8TMlTiBqVDw5yIxQcMC25NJ1MvMQMJQauKHr2oMuBPcVUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
- b=c3u/lCyrZKikmbKcUNqFQut7qyqP7kqtXIYGsxpoAknm3Oe7M8yWwLVeEgd1AyVjqyNYazMAP7lHbFpVWC0DnCUHutfQI7pTdfKECdEqI/FoE3gLMm+/JZ8QIaUWj3LCeYELcPjiLh6wGunO0jQN6Pn1mP50mw4i4WBtrNzJkwQ=
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
- by DM6PR10MB3977.namprd10.prod.outlook.com (2603:10b6:5:1d0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Fri, 4 Mar
- 2022 14:55:18 +0000
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
- 14:55:18 +0000
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, dsahern@gmail.com,
-        edumazet@google.com
-Subject: [PATCH net-next v6 3/3] net: tun: track dropped skb via kfree_skb_reason()
-Date:   Fri,  4 Mar 2022 06:55:07 -0800
-Message-Id: <20220304145507.1883-4-dongli.zhang@oracle.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220304145507.1883-1-dongli.zhang@oracle.com>
-References: <20220304145507.1883-1-dongli.zhang@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0034.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::47) To BYAPR10MB2663.namprd10.prod.outlook.com
- (2603:10b6:a02:a9::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7078ffa6-a4c9-4087-dd53-08d9fdeefee4
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3977:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB39776900D8F9645D1CE65DD0F0059@DM6PR10MB3977.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8wBtCXJ3uFHtmAGOhcLBRD91d/7dERGNKfpmQQnT+zl5hs1l05Vh1JuHzC3eQ7SQ4CIGb+5Mkw8wgke9z01o9iOs2+4YUv87qb3q+ZrW9yOVUie9POf+gqYaIjBmc2NkKaHfOTMRaAYCgeVzTXzF9ZhAhkwRTJWrpFc256m0JHnBGASDSxI5vRadpcbI+FFaYig0j2MRLqtK7brj+H4OoKL/DooBV3zx2wCQFIaduwM+3SDBI9m0ZZ8ISAIfbAogt+JQt9ezDig1cuV6YpwhfQRb9jQ2F21UG6j/6jHxGll98bPtEZkQKllv4KfnLwR/tSNd1EzcBCfiPkfvtDAqnOctJwVqaR/TGKE+q3IqUK2TbqQt4d2ionG2ZEA6xKdtwu8x1U9kuQOxpGkbN2Nz6UCb1LNmFjymGSfYv4uUmnMFDuCqisywFNsQCYi+s/yiGXZPnUKlar498egnqVZw3QJg+nszZ5owZY7EwgRwYP0XJ1iw4S8ZvihPpskOls0MkQ6kBcpmLCLXjT0kl1Gl7LCiEXr22JimjAsSSCiSLeGEZbZ/gcnYFPYPUCC8fyepFkNkWpRCVJAOXSGEesM3s26+zO02dH6B2S7jmGN1KJifKXg8XkP82PsRNOHRNctntW3D/HSDK5Vvituaf4ChERPqT5XT7CKuVKAk6OdYqpoIqMqwdrU0P4JkWa5S36OcsBvgUSZK4e4/nhzQtYp3dA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6486002)(316002)(86362001)(38100700002)(52116002)(1076003)(2616005)(6666004)(38350700002)(6512007)(6506007)(83380400001)(66556008)(66476007)(44832011)(66946007)(7416002)(4326008)(2906002)(36756003)(8936002)(5660300002)(8676002)(26005)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XsZJFWYJP5Ilr0zPO6alzpVjzK5knGJVuCcOBaBQpFuRCPZtc4LJhx9p3vBn?=
- =?us-ascii?Q?vP8leycAarMt2nWEOBL2+hfo9Kc+82r1yA6QWsbk4vk/IC/RO83RYhN6SJUu?=
- =?us-ascii?Q?2rk+IfIzQJlt0AVm5Ysv5yIjxVi75l1qCOPoge8mO9O22GQZMQRBHUc8rN7n?=
- =?us-ascii?Q?5ShKNQjOk4bUZL3moMCKYDgYcKfmYj1fvMWg+y6q8d/8oyaKJNVr3bzw615/?=
- =?us-ascii?Q?RpBsoNRgP9RWoWHstjNuhCVgFM/w4/QqKz2GyH8KswFnR2cEfSC/JVrHdyl4?=
- =?us-ascii?Q?AsMBcvPHd/wZz3Qrv9jI1QhWPjSCs5AmyA07cuikxGcTl35St7iFZkxEOBEs?=
- =?us-ascii?Q?Y34PPvdTgPF9wZnlraA3To0GaFgBJgzreeZ1Q3VSOlbqfE4S+JGgnjVdaTJ1?=
- =?us-ascii?Q?nCp2E9zI9E50Yl1TZEs0zOrGoM8oT1U5l6GFnYvXPx0eS9ix+BlWEdbvcW6p?=
- =?us-ascii?Q?F+Jef/dwEieDZcsniV78dT5DPDZGAI8Tg6Jw0RLPt3obEoREz81WhHv0x1TE?=
- =?us-ascii?Q?PC+rY5A8Mpu/XatE9RNvdwG2165xo3N+5lSyGghV6ocHIRdh9iLNu59GphYS?=
- =?us-ascii?Q?XKyxZVAsmOKDymny8CbKp+xHhIWxr4l5LaGHUK0B70jUbACKQvxQ1rKIeHtR?=
- =?us-ascii?Q?mF/X/iF5/nM3nF6ZJvkri9Gm2bMFuxSXhSU3qesrwawvnpvzDVWLvgeizIP3?=
- =?us-ascii?Q?IytNv//L9rB5QIPawbb103peLVwKmwJITUrVdIGfYQbvx71UF5tyJUMESJ1a?=
- =?us-ascii?Q?zCoLMle5TNOKsYo4nzrAiNA6KCLWrkeYFB2eGzfvzx2fCbKVtH5IUryb0D8E?=
- =?us-ascii?Q?O+2Hsnq1IWi0coC2I/fmYKlFh1cV60c2P7RASGCK1O546YrYEx3mtyItUiTc?=
- =?us-ascii?Q?qF6zOuEJRgM/PiOisZqBZsFYiRZ2IYuq0wrvQsXykFKCrrJuCBRSyVHp3rvZ?=
- =?us-ascii?Q?PV8pdpV8yzXOYRQAjD5I/42nrgV1TxxIJmY83aeb0kSXS2kWv1s2yNPIfLRm?=
- =?us-ascii?Q?dinVGFhQx/PRck9O353wYeTXiLUCtzp2VkBI87AzLyKO3+0fYbRPT46g2SQ5?=
- =?us-ascii?Q?WLtchFXPg4rfe+GdU5+jRq1XOMNAnXNd4iAIA8LwURZ818GH+TARB97h3jmU?=
- =?us-ascii?Q?tmGA7tO72kFI2JWKsDvrMdvK/HgPfHBOPRVw9CToDDRrHWlxwUepZ1FZbyGi?=
- =?us-ascii?Q?Zq6JBhX83grMTASKKtyz796fuyxccEnbe5BZChjOFy3D/Ud9+4Y3nyeAppjp?=
- =?us-ascii?Q?vBIeS7yDoVEWNGiidN7jiDEq65neLYkqr2MfSAkJKxXXMl63E1xwd3nh+zlN?=
- =?us-ascii?Q?Hnt8WOB/8t7jKNkH9GCUjt1sVgm4m26hq+mBFU18MTiRG/8XOCu5wjFXwmR1?=
- =?us-ascii?Q?wQVuV6Rfc0LVnZuibhrbHS7Zq5Fvtv9sfGJZKavcUViXhbz1zda2JsvzXHEO?=
- =?us-ascii?Q?SW7bVlg8FzCL+H8fC/U9zzG/lCKtAWszBkY1KQSA8MnEWx4j3Fne3ecZOmlF?=
- =?us-ascii?Q?S6x6jzyKaZSB0BhhFwBrV1OAiZQRISEUUNDUm01MT/g6TGH8AClzyrMBroku?=
- =?us-ascii?Q?XAfUL7y/heyWHNf4Db7/zSahditsyqRyj577nwJTZ144yxyDZk+EQD0ot02t?=
- =?us-ascii?Q?uer5bnltpSjwB0kJYDwFelY=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7078ffa6-a4c9-4087-dd53-08d9fdeefee4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 14:55:17.1653
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xY9Zzbt8TzZKY309Onb1n9CucJq2gCLTbavV+Ewfe7brg2/+HAazETX5tLrQsd2+DnypaeeWpfv0z0NVrlyMVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3977
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10276 signatures=690470
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- adultscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040080
-X-Proofpoint-ORIG-GUID: C08cUcD-gz7Btndm792AiSkD97cmXIWo
-X-Proofpoint-GUID: C08cUcD-gz7Btndm792AiSkD97cmXIWo
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Fri, 4 Mar 2022 09:59:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2C5C6242;
+        Fri,  4 Mar 2022 06:58:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A88EBB82A0A;
+        Fri,  4 Mar 2022 14:58:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A63C340E9;
+        Fri,  4 Mar 2022 14:58:37 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.26-rt34
+Date:   Fri, 04 Mar 2022 14:57:36 -0000
+Message-ID: <164640585679.2515407.11386806545644926124@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,209 +47,539 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TUN can be used as vhost-net backend. E.g, the tun_net_xmit() is the
-interface to forward the skb from TUN to vhost-net/virtio-net.
+Hello RT-list!
 
-However, there are many "goto drop" in the TUN driver. Therefore, the
-kfree_skb_reason() is involved at each "goto drop" to help userspace
-ftrace/ebpf to track the reason for the loss of packets.
+I'm pleased to announce the 5.15.26-rt34 stable release.
 
-The below reasons are introduced:
+You can get this release via the git tree at:
 
-- SKB_DROP_REASON_DEV_READY
-- SKB_DROP_REASON_NOMEM
-- SKB_DROP_REASON_HDR_TRUNC
-- SKB_DROP_REASON_TAP_FILTER
-- SKB_DROP_REASON_TAP_TXFILTER
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Cc: Joao Martins <joao.m.martins@oracle.com>
-Cc: Joe Jin <joe.jin@oracle.com>
-Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+  branch: v5.15-rt
+  Head SHA1: 7b6478f5666ec9f06ced1285b8d6ff5f422f1326
+
+Or to build 5.15.26-rt34 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.26.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.26-rt34.patch.xz
+
+
+You can also build from 5.15.25-rt33 by applying the incremental patch:
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.25-rt33-rt34.patch.xz
+
+Enjoy!
+Clark
+
+Changes from v5.15.25-rt33:
 ---
-Changed since v1:
-  - revise the reason name
-Changed since v2:
-  - declare drop_reason as type "enum skb_drop_reason"
-Changed since v3:
-  - rename to TAP_FILTER and TAP_TXFILTER
-  - honor reverse xmas tree style declaration for 'drop_reason' in
-    tun_net_xmit()
-Changed since v4:
-  - expand comment on DEV_READY
-  - change SKB_TRIM to NOMEM
-  - chnage SKB_PULL to HDR_TRUNC
 
- drivers/net/tun.c          | 37 ++++++++++++++++++++++++++++---------
- include/linux/skbuff.h     | 18 ++++++++++++++++++
- include/trace/events/skb.h |  5 +++++
- 3 files changed, 51 insertions(+), 9 deletions(-)
+Alexey Bayduraev (1):
+      perf data: Fix double free in perf_session__delete()
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 6e06c846fe82..bab92e489fba 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1058,6 +1058,7 @@ static unsigned int run_ebpf_filter(struct tun_struct *tun,
- static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct tun_struct *tun = netdev_priv(dev);
-+	enum skb_drop_reason drop_reason;
- 	int txq = skb->queue_mapping;
- 	struct netdev_queue *queue;
- 	struct tun_file *tfile;
-@@ -1067,8 +1068,10 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
- 	tfile = rcu_dereference(tun->tfiles[txq]);
- 
- 	/* Drop packet if interface is not attached */
--	if (!tfile)
-+	if (!tfile) {
-+		drop_reason = SKB_DROP_REASON_DEV_READY;
- 		goto drop;
-+	}
- 
- 	if (!rcu_dereference(tun->steering_prog))
- 		tun_automq_xmit(tun, skb);
-@@ -1078,22 +1081,32 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
- 	/* Drop if the filter does not like it.
- 	 * This is a noop if the filter is disabled.
- 	 * Filter can be enabled only for the TAP devices. */
--	if (!check_filter(&tun->txflt, skb))
-+	if (!check_filter(&tun->txflt, skb)) {
-+		drop_reason = SKB_DROP_REASON_TAP_TXFILTER;
- 		goto drop;
-+	}
- 
- 	if (tfile->socket.sk->sk_filter &&
--	    sk_filter(tfile->socket.sk, skb))
-+	    sk_filter(tfile->socket.sk, skb)) {
-+		drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
- 		goto drop;
-+	}
- 
- 	len = run_ebpf_filter(tun, skb, len);
--	if (len == 0)
-+	if (len == 0) {
-+		drop_reason = SKB_DROP_REASON_TAP_FILTER;
- 		goto drop;
-+	}
- 
--	if (pskb_trim(skb, len))
-+	if (pskb_trim(skb, len)) {
-+		drop_reason = SKB_DROP_REASON_NOMEM;
- 		goto drop;
-+	}
- 
--	if (unlikely(skb_orphan_frags_rx(skb, GFP_ATOMIC)))
-+	if (unlikely(skb_orphan_frags_rx(skb, GFP_ATOMIC))) {
-+		drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
- 		goto drop;
-+	}
- 
- 	skb_tx_timestamp(skb);
- 
-@@ -1104,8 +1117,10 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
- 
- 	nf_reset_ct(skb);
- 
--	if (ptr_ring_produce(&tfile->tx_ring, skb))
-+	if (ptr_ring_produce(&tfile->tx_ring, skb)) {
-+		drop_reason = SKB_DROP_REASON_FULL_RING;
- 		goto drop;
-+	}
- 
- 	/* NETIF_F_LLTX requires to do our own update of trans_start */
- 	queue = netdev_get_tx_queue(dev, txq);
-@@ -1122,7 +1137,7 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
- drop:
- 	atomic_long_inc(&dev->tx_dropped);
- 	skb_tx_error(skb);
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, drop_reason);
- 	rcu_read_unlock();
- 	return NET_XMIT_DROP;
- }
-@@ -1720,6 +1735,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 	u32 rxhash = 0;
- 	int skb_xdp = 1;
- 	bool frags = tun_napi_frags_enabled(tfile);
-+	enum skb_drop_reason drop_reason;
- 
- 	if (!(tun->flags & IFF_NO_PI)) {
- 		if (len < sizeof(pi))
-@@ -1823,9 +1839,10 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 
- 		if (err) {
- 			err = -EFAULT;
-+			drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
- drop:
- 			atomic_long_inc(&tun->dev->rx_dropped);
--			kfree_skb(skb);
-+			kfree_skb_reason(skb, drop_reason);
- 			if (frags) {
- 				tfile->napi.skb = NULL;
- 				mutex_unlock(&tfile->napi_mutex);
-@@ -1872,6 +1889,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 	case IFF_TAP:
- 		if (frags && !pskb_may_pull(skb, ETH_HLEN)) {
- 			err = -ENOMEM;
-+			drop_reason = SKB_DROP_REASON_HDR_TRUNC;
- 			goto drop;
- 		}
- 		skb->protocol = eth_type_trans(skb, tun->dev);
-@@ -1925,6 +1943,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 	if (unlikely(!(tun->dev->flags & IFF_UP))) {
- 		err = -EIO;
- 		rcu_read_unlock();
-+		drop_reason = SKB_DROP_REASON_DEV_READY;
- 		goto drop;
- 	}
- 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 67cfff4065b6..34f572271c0c 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -424,7 +424,25 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_DEV_HDR,	/* device driver specific
- 					 * header/metadata is invalid
- 					 */
-+	/* the device is not ready to xmit/recv due to any of its data
-+	 * structure that is not up/ready/initialized, e.g., the IFF_UP is
-+	 * not set, or driver specific tun->tfiles[txq] is not initialized
-+	 */
-+	SKB_DROP_REASON_DEV_READY,
- 	SKB_DROP_REASON_FULL_RING,	/* ring buffer is full */
-+	SKB_DROP_REASON_NOMEM,		/* error due to OOM */
-+	SKB_DROP_REASON_HDR_TRUNC,      /* failed to trunc/extract the header
-+					 * from networking data, e.g., failed
-+					 * to pull the protocol header from
-+					 * frags via pskb_may_pull()
-+					 */
-+	SKB_DROP_REASON_TAP_FILTER,     /* dropped by (ebpf) filter directly
-+					 * attached to tun/tap, e.g., via
-+					 * TUNSETFILTEREBPF
-+					 */
-+	SKB_DROP_REASON_TAP_TXFILTER,	/* dropped by tx filter implemented
-+					 * at tun/tap, e.g., check_filter()
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 240e7e7591fc..e1670e1e4934 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -55,7 +55,12 @@
- 	EM(SKB_DROP_REASON_SKB_GSO_SEG, SKB_GSO_SEG)		\
- 	EM(SKB_DROP_REASON_SKB_UCOPY_FAULT, SKB_UCOPY_FAULT)	\
- 	EM(SKB_DROP_REASON_DEV_HDR, DEV_HDR)			\
-+	EM(SKB_DROP_REASON_DEV_READY, DEV_READY)		\
- 	EM(SKB_DROP_REASON_FULL_RING, FULL_RING)		\
-+	EM(SKB_DROP_REASON_NOMEM, NOMEM)			\
-+	EM(SKB_DROP_REASON_HDR_TRUNC, HDR_TRUNC)		\
-+	EM(SKB_DROP_REASON_TAP_FILTER, TAP_FILTER)		\
-+	EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)		\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
--- 
-2.17.1
+Andy Lutomirski (1):
+      x86/ptrace: Fix xfpregs_set()'s incorrect xmm clearing
 
+Ariel Levkovich (1):
+      net/mlx5: Fix wrong limitation of metadata match on ecpf
+
+Bart Van Assche (1):
+      RDMA/ib_srp: Fix a deadlock
+
+Baruch Siach (1):
+      net: mdio-ipq4019: add delay after clock enable
+
+Bas Nieuwenhuizen (1):
+      drm/amd/display: Protect update_bw_bounding_box FPU code.
+
+Brett Creeley (1):
+      ice: Fix race conditions between virtchnl handling and VF ndo ops
+
+Changbin Du (1):
+      riscv: fix oops caused by irqsoff latency tracer
+
+Chen Gong (1):
+      drm/amdgpu: do not enable asic reset for raven2
+
+ChenXiaoSong (1):
+      configfs: fix a race in configfs_{,un}register_subsystem()
+
+Chris Mi (1):
+      net/mlx5: Fix tc max supported prio for nic mode
+
+Christoph Hellwig (1):
+      nvme: also mark passthrough-only namespaces ready in nvme_update_ns_info
+
+Christophe JAILLET (2):
+      nfp: flower: Fix a potential leak in nfp_tunnel_add_shared_mac()
+      iio: adc: men_z188_adc: Fix a resource leak in an error handling path
+
+Christophe Kerello (2):
+      nvmem: core: Fix a conflict between MTD and NVMEM on wp-gpios property
+      mtd: core: Fix a conflict between MTD and NVMEM on wp-gpios property
+
+Christophe Leroy (1):
+      net: Force inlining of checksum functions in net/checksum.h
+
+Chuansheng Liu (1):
+      thermal: int340x: fix memory leak in int3400_notify()
+
+Clark Williams (2):
+      Merge tag 'v5.15.26' into v5.15-rt
+      Linux 5.15.26-rt34
+
+Cosmin Tanislav (1):
+      iio: adc: ad7124: fix mask used for setting AIN_BUFP & AIN_BUFM bits
+
+Daehwan Jung (1):
+      usb: gadget: rndis: add spinlock for rndis response list
+
+Damien Le Moal (1):
+      riscv: fix nommu_k210_sdcard_defconfig
+
+Dan Carpenter (3):
+      tipc: Fix end of loop tests for list_for_each_entry()
+      udp_tunnel: Fix end of loop test in udp_tunnel_nic_unregister()
+      pinctrl: fix loop in k210_pinconf_get_drive()
+
+Daniel Bristot de Oliveira (1):
+      tracing: Dump stacktrace trigger to the corresponding instance
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910R1 compositions
+
+Dmytro Bagrii (1):
+      Revert "USB: serial: ch341: add new Product ID for CH341A"
+
+Dylan Yudaken (1):
+      io_uring: disallow modification of rsrc_data during quiesce
+
+Dāvis Mosāns (1):
+      btrfs: prevent copying too big compressed lzo segment
+
+Eric Dumazet (5):
+      netfilter: xt_socket: fix a typo in socket_mt_destroy()
+      bpf: Add schedule points in batch ops
+      io_uring: add a schedule point in io_add_buffers()
+      net: __pskb_pull_tail() & pskb_carve_frag_list() drop_monitor friends
+      net-timestamp: convert sk->sk_tskey to atomic_t
+
+Evan Quan (2):
+      drm/amd/pm: fix some OEM SKU specific stability issues
+      drm/amdgpu: disable MMHUB PG for Picasso
+
+Fabio M. De Francesco (1):
+      net/smc: Use a mutex for locking "struct smc_pnettable"
+
+Fabrice Gasnier (1):
+      usb: dwc2: drd: fix soft connect when gadget is unconfigured
+
+Felix Maurer (2):
+      bpf: Do not try bpf_msg_push_data with len 0
+      selftests: bpf: Check bpf_msg_push_data return value
+
+Florian Westphal (1):
+      netfilter: nf_tables: fix memory leak during stateful obj update
+
+Gal Pressman (1):
+      net/mlx5e: Fix wrong return value on ioctl EEPROM query failure
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.26
+
+Guenter Roeck (1):
+      hwmon: Handle failure to register sensor with thermal zone correctly
+
+Hans de Goede (3):
+      surface: surface3_power: Fix battery readings on batteries without a serial number
+      usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
+      usb: dwc3: pci: Fix Bay Trail phy GPIO mappings
+
+Helge Deller (2):
+      parisc/unaligned: Fix fldd and fstd unaligned handlers on 32-bit kernel
+      parisc/unaligned: Fix ldw() and stw() unalignment handlers
+
+Hongyu Xie (1):
+      xhci: Prevent futile URB re-submissions due to incorrect return value.
+
+Jacob Keller (1):
+      ice: fix concurrent reset and removal of VFs
+
+Jason Gunthorpe (1):
+      RDMA/cma: Do not change route.addr.src_addr outside state checks
+
+Jens Axboe (2):
+      io_uring: don't convert to jiffies for waiting on timeouts
+      tps6598x: clear int mask on probe failure
+
+Jens Wiklander (2):
+      tee: export teedev_open() and teedev_close_context()
+      optee: use driver internal tee_context for some rpc
+
+Kumar Kartikeya Dwivedi (1):
+      bpf: Fix crash due to incorrect copy_map_value
+
+Liang Zhang (1):
+      KVM: x86/mmu: make apf token non-zero to fix bug
+
+Lorenzo Bianconi (1):
+      iio: imu: st_lsm6dsx: wait for settling time in st_lsm6dsx_read_oneshot
+
+Maher Sanalla (1):
+      net/mlx5: Update log_max_qp value to be 17 at most
+
+Manish Chopra (1):
+      bnx2x: fix driver load from initrd
+
+Maor Dickman (1):
+      net/mlx5e: MPLSoUDP decap, fix check for unsupported matches
+
+Maor Gottlieb (1):
+      net/mlx5: Fix possible deadlock on rule deletion
+
+Marc Zyngier (1):
+      gpio: tegra186: Fix chip_data type confusion
+
+Mario Limonciello (1):
+      drm/amd: Check if ASPM is enabled from PCIe subsystem
+
+Mateusz Palczewski (1):
+      Revert "i40e: Fix reset bw limit when DCB enabled with 1 TC"
+
+Matt Roper (1):
+      drm/i915/dg2: Print PHY name properly on calibration error
+
+Matthew Wilcox (Oracle) (1):
+      mm/filemap: Fix handling of THPs in generic_file_buffered_read()
+
+Mauri Sandberg (1):
+      net: mv643xx_eth: process retval from of_get_mac_address
+
+Maxime Ripard (2):
+      drm/edid: Always set RGB444
+      drm/vc4: crtc: Fix runtime_pm reference counting
+
+Md Haris Iqbal (2):
+      RDMA/rtrs-clt: Fix possible double free in error case
+      RDMA/rtrs-clt: Move free_permit from free_clt to rtrs_clt_close
+
+Meir Lichtinger (1):
+      net/mlx5: Update the list of the PCI supported devices
+
+Miaohe Lin (1):
+      memblock: use kfree() to release kmalloced memblock regions
+
+Miaoqian Lin (1):
+      iio: Fix error handling for PM
+
+Michael Chan (2):
+      bnxt_en: Fix offline ethtool selftest with RDMA enabled
+      bnxt_en: Increase firmware message response DMA wait time
+
+Michal Koutný (1):
+      cgroup-v1: Correct privileges check in release_agent writes
+
+Mike Marciniszyn (1):
+      IB/qib: Fix duplicate sysfs directory name
+
+Mikko Perttunen (1):
+      gpu: host1x: Always return syncpoint value when waiting
+
+Mårten Lindahl (1):
+      driver core: Free DMA range map when device is released
+
+Nuno Sá (1):
+      iio:imu:adis16480: fix buffering for devices with no burst mode
+
+Oleksij Rempel (1):
+      iio: adc: tsc2046: fix memory corruption by preventing array overflow
+
+Oliver Graute (1):
+      staging: fbtft: fb_st7789v: reset display before initialization
+
+Oliver Neukum (3):
+      sr9700: sanity check for packet length
+      USB: zaurus: support another broken Zaurus
+      CDC-NCM: avoid overflow in sanity checking
+
+Ondrej Mosnacek (1):
+      selinux: fix misuse of mutex_is_locked()
+
+Pablo Neira Ayuso (3):
+      netfilter: xt_socket: missing ifdef CONFIG_IP6_NF_IPTABLES dependency
+      netfilter: nf_tables_offload: incorrect flow offload action array size
+      netfilter: nf_tables: unregister flowtable hooks on netns exit
+
+Paolo Abeni (4):
+      mptcp: fix race in incoming ADD_ADDR option processing
+      mptcp: add mibs counter for ignored incoming options
+      selftests: mptcp: fix diag instability
+      selftests: mptcp: be more conservative with cookie MPJ limits
+
+Paul Blakey (2):
+      openvswitch: Fix setting ipv6 fields causing hw csum failure
+      net/sched: act_ct: Fix flow table lookup after ct clear or switching zones
+
+Pavan Chebbi (1):
+      bnxt_en: Fix incorrect multicast rx mask setting when not requested
+
+Phil Elwell (1):
+      sc16is7xx: Fix for incorrect data being transmitted
+
+Prasad Kumpatla (1):
+      regmap-irq: Update interrupt clear register for proper reset
+
+Puma Hsu (1):
+      xhci: re-initialize the HC during resume if HCE was set
+
+Samuel Holland (1):
+      gpio: rockchip: Reset int_bothedge when changing trigger
+
+Sean Anderson (1):
+      pinctrl: k210: Fix bias-pull-up
+
+Sean Nyekjaer (1):
+      iio: accel: fxls8962af: add padding to regmap for SPI
+
+Sebastian Andrzej Siewior (1):
+      usb: dwc3: gadget: Let the interrupt handler disable bottom halves.
+
+Sergey Shtylyov (1):
+      ata: pata_hpt37x: disable primary channel on HPT371
+
+Siarhei Volkau (1):
+      clk: jz4725b: fix mmc0 clock gating
+
+Slark Xiao (1):
+      USB: serial: option: add support for DW5829e
+
+Somnath Kotur (1):
+      bnxt_en: Fix active FEC reporting to ethtool
+
+Stefano Garzarella (1):
+      vhost/vsock: don't check owner in vhost_vsock_stop() while releasing
+
+Steven Rostedt (Google) (2):
+      tracing: Have traceon and traceoff trigger honor the instance
+      tracefs: Set the group ownership in apply_options() not parse_options()
+
+Su Yue (2):
+      btrfs: tree-checker: check item_size for inode_item
+      btrfs: tree-checker: check item_size for dev_item
+
+Sukadev Bhattiprolu (1):
+      ibmvnic: schedule failover only if vioctl fails
+
+Szymon Heidrich (1):
+      USB: gadget: validate endpoint index for xilinx udc
+
+Tao Liu (1):
+      gso: do not skip outer ip header in case of ipip and net_failover
+
+Tariq Toukan (1):
+      net/mlx5e: kTLS, Use CHECKSUM_UNNECESSARY for device-offloaded packets
+
+Tom Rix (2):
+      ice: check the return of ice_ptp_gettimex64
+      ice: initialize local variable 'tlv'
+
+Ville Syrjälä (3):
+      drm/i915: Widen the QGV point mask
+      drm/i915: Correctly populate use_sagv_wm for all pipes
+      drm/i915: Fix bw atomic check when switching between SAGV vs. no SAGV
+
+Xiaoke Wang (1):
+      net: ll_temac: check the return value of devm_kmalloc()
+
+Xin Long (1):
+      ping: remove pr_err from ping_lookup
+
+Yevgeny Kliteynik (3):
+      net/mlx5: DR, Cache STE shadow memory
+      net/mlx5: DR, Don't allow match on IP w/o matching on full ethertype/ip_version
+      net/mlx5: DR, Fix the threshold that defines when pool sync is initiated
+
+Yonghong Song (1):
+      bpf: Fix a bpf_timer initialization issue
+
+Zhang Qiao (1):
+      cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug
+
+Zhengjun Xing (1):
+      perf evlist: Fix failed to use cpu list for uncore events
+
+Zhou Qingyang (1):
+      spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
+
+daniel.starke@siemens.com (6):
+      tty: n_gsm: fix encoding of control signal octet bit DV
+      tty: n_gsm: fix proper link termination after failed open
+      tty: n_gsm: fix NULL pointer access due to DLCI release
+      tty: n_gsm: fix wrong tty control line for flow control
+      tty: n_gsm: fix wrong modem processing in convergence layer type 2
+      tty: n_gsm: fix deadlock in gsmtty_open()
+---
+Makefile                                           |   2 +-
+ arch/parisc/kernel/unaligned.c                     |  14 +--
+ arch/riscv/configs/nommu_k210_sdcard_defconfig     |   2 +-
+ arch/riscv/kernel/Makefile                         |   2 +
+ arch/riscv/kernel/entry.S                          |  10 +-
+ arch/riscv/kernel/trace_irq.c                      |  27 +++++
+ arch/riscv/kernel/trace_irq.h                      |  11 ++
+ arch/x86/kernel/fpu/regset.c                       |   9 +-
+ arch/x86/kernel/ptrace.c                           |   4 +-
+ arch/x86/kvm/mmu/mmu.c                             |  13 ++-
+ drivers/ata/pata_hpt37x.c                          |  14 +++
+ drivers/base/dd.c                                  |   5 +
+ drivers/base/regmap/regmap-irq.c                   |  20 ++--
+ drivers/clk/ingenic/jz4725b-cgu.c                  |   3 +-
+ drivers/gpio/gpio-rockchip.c                       |  56 +++++-----
+ drivers/gpio/gpio-tegra186.c                       |  14 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   3 +
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 |   9 +-
+ .../amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c   |   2 +
+ drivers/gpu/drm/amd/display/dc/core/dc.c           |   7 +-
+ .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c    |  32 +++++-
+ drivers/gpu/drm/drm_edid.c                         |   2 +-
+ drivers/gpu/drm/i915/display/intel_bw.c            |  18 +++-
+ drivers/gpu/drm/i915/display/intel_bw.h            |   8 +-
+ drivers/gpu/drm/i915/display/intel_snps_phy.c      |   2 +-
+ drivers/gpu/drm/i915/intel_pm.c                    |  22 ++--
+ drivers/gpu/drm/vc4/vc4_crtc.c                     |   8 +-
+ drivers/gpu/host1x/syncpt.c                        |  19 +---
+ drivers/hwmon/hwmon.c                              |  14 +--
+ drivers/iio/accel/bmc150-accel-core.c              |   5 +-
+ drivers/iio/accel/fxls8962af-core.c                |  12 ++-
+ drivers/iio/accel/fxls8962af-i2c.c                 |   2 +-
+ drivers/iio/accel/fxls8962af-spi.c                 |   2 +-
+ drivers/iio/accel/fxls8962af.h                     |   3 +-
+ drivers/iio/accel/kxcjk-1013.c                     |   5 +-
+ drivers/iio/accel/mma9551.c                        |   5 +-
+ drivers/iio/accel/mma9553.c                        |   5 +-
+ drivers/iio/adc/ad7124.c                           |   2 +-
+ drivers/iio/adc/men_z188_adc.c                     |   9 +-
+ drivers/iio/adc/ti-tsc2046.c                       |   4 +-
+ drivers/iio/gyro/bmg160_core.c                     |   5 +-
+ drivers/iio/imu/adis16480.c                        |   7 +-
+ drivers/iio/imu/kmx61.c                            |   5 +-
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c       |   6 +-
+ drivers/iio/magnetometer/bmc150_magn.c             |   5 +-
+ drivers/infiniband/core/cma.c                      |  40 ++++---
+ drivers/infiniband/hw/qib/qib_sysfs.c              |   2 +-
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c             |  39 +++----
+ drivers/infiniband/ulp/srp/ib_srp.c                |   6 +-
+ drivers/mtd/mtdcore.c                              |   2 +
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c   |   3 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  23 ++--
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |  15 ++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c     |  12 ++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h     |   2 +-
+ drivers/net/ethernet/ibm/ibmvnic.c                 |   6 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |  12 +--
+ drivers/net/ethernet/intel/ice/ice.h               |   1 -
+ drivers/net/ethernet/intel/ice/ice_common.c        |   2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c          |   2 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c           |   5 +-
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c   |  65 ++++++++---
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h   |   5 +
+ drivers/net/ethernet/marvell/mv643xx_eth.c         |  24 +++--
+ .../mellanox/mlx5/core/en/tc_tun_mplsoudp.c        |  28 ++---
+ .../net/ethernet/mellanox/mlx5/core/en_ethtool.c   |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c    |   3 +-
+ .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   4 -
+ drivers/net/ethernet/mellanox/mlx5/core/fs_core.c  |   2 +
+ .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |   3 +
+ drivers/net/ethernet/mellanox/mlx5/core/main.c     |   4 +-
+ .../mellanox/mlx5/core/steering/dr_icm_pool.c      | 120 ++++++++++++++-------
+ .../mellanox/mlx5/core/steering/dr_matcher.c       |  20 +---
+ .../ethernet/mellanox/mlx5/core/steering/dr_ste.c  |  32 +++++-
+ .../mellanox/mlx5/core/steering/dr_types.h         |  10 ++
+ .../ethernet/mellanox/mlx5/core/steering/mlx5dr.h  |   5 +
+ .../ethernet/netronome/nfp/flower/tunnel_conf.c    |   4 +-
+ drivers/net/ethernet/xilinx/ll_temac_main.c        |   2 +
+ drivers/net/mdio/mdio-ipq4019.c                    |   6 +-
+ drivers/net/usb/cdc_ether.c                        |  12 +++
+ drivers/net/usb/cdc_ncm.c                          |   8 +-
+ drivers/net/usb/sr9700.c                           |   2 +-
+ drivers/net/usb/zaurus.c                           |  12 +++
+ drivers/nvme/host/core.c                           |   6 +-
+ drivers/nvmem/core.c                               |   2 +-
+ drivers/pinctrl/pinctrl-k210.c                     |   4 +-
+ drivers/platform/surface/surface3_power.c          |  13 ++-
+ drivers/spi/spi-zynq-qspi.c                        |   3 +
+ drivers/staging/fbtft/fb_st7789v.c                 |   2 +
+ drivers/tee/optee/core.c                           |   8 ++
+ drivers/tee/optee/optee_private.h                  |   2 +
+ drivers/tee/optee/rpc.c                            |   8 +-
+ drivers/tee/tee_core.c                             |   6 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |   4 +
+ drivers/tty/n_gsm.c                                |  45 +++++---
+ drivers/tty/serial/sc16is7xx.c                     |   3 +
+ drivers/usb/dwc2/core.h                            |   2 +
+ drivers/usb/dwc2/drd.c                             |   6 +-
+ drivers/usb/dwc3/dwc3-pci.c                        |  17 ++-
+ drivers/usb/dwc3/gadget.c                          |   2 +
+ drivers/usb/gadget/function/rndis.c                |   8 ++
+ drivers/usb/gadget/function/rndis.h                |   1 +
+ drivers/usb/gadget/udc/udc-xilinx.c                |   6 ++
+ drivers/usb/host/xhci.c                            |  28 +++--
+ drivers/usb/serial/ch341.c                         |   1 -
+ drivers/usb/serial/option.c                        |  12 +++
+ drivers/usb/typec/tipd/core.c                      |   7 +-
+ drivers/vhost/vsock.c                              |  21 ++--
+ fs/btrfs/lzo.c                                     |  11 ++
+ fs/btrfs/tree-checker.c                            |  15 +++
+ fs/configfs/dir.c                                  |  14 +++
+ fs/io_uring.c                                      |  24 +++--
+ fs/tracefs/inode.c                                 |   5 +-
+ include/linux/bpf.h                                |   9 +-
+ include/linux/nvmem-provider.h                     |   4 +-
+ include/linux/tee_drv.h                            |  14 +++
+ include/net/checksum.h                             |  50 +++++----
+ include/net/netfilter/nf_tables.h                  |   2 +-
+ include/net/netfilter/nf_tables_offload.h          |   2 -
+ include/net/sock.h                                 |   4 +-
+ kernel/bpf/syscall.c                               |   3 +
+ kernel/cgroup/cgroup-v1.c                          |   6 +-
+ kernel/cgroup/cpuset.c                             |   2 +
+ kernel/trace/trace_events_trigger.c                |  59 ++++++++--
+ localversion-rt                                    |   2 +-
+ mm/filemap.c                                       |   8 +-
+ mm/memblock.c                                      |  10 +-
+ net/can/j1939/transport.c                          |   2 +-
+ net/core/filter.c                                  |   3 +
+ net/core/skbuff.c                                  |   6 +-
+ net/core/sock.c                                    |   4 +-
+ net/ipv4/af_inet.c                                 |   5 +-
+ net/ipv4/ip_output.c                               |   2 +-
+ net/ipv4/ping.c                                    |   1 -
+ net/ipv4/udp_tunnel_nic.c                          |   2 +-
+ net/ipv6/ip6_offload.c                             |   2 +
+ net/ipv6/ip6_output.c                              |   2 +-
+ net/mptcp/mib.c                                    |   2 +
+ net/mptcp/mib.h                                    |   2 +
+ net/mptcp/pm.c                                     |   8 +-
+ net/mptcp/pm_netlink.c                             |  19 +++-
+ net/netfilter/nf_tables_api.c                      |  16 ++-
+ net/netfilter/nf_tables_offload.c                  |   3 +-
+ net/netfilter/nft_dup_netdev.c                     |   6 ++
+ net/netfilter/nft_fwd_netdev.c                     |   6 ++
+ net/netfilter/nft_immediate.c                      |  12 ++-
+ net/netfilter/xt_socket.c                          |   4 +-
+ net/openvswitch/actions.c                          |  46 ++++++--
+ net/sched/act_ct.c                                 |   5 -
+ net/smc/smc_pnet.c                                 |  42 ++++----
+ net/smc/smc_pnet.h                                 |   2 +-
+ net/tipc/name_table.c                              |   2 +-
+ net/tipc/socket.c                                  |   2 +-
+ security/selinux/ima.c                             |   4 +-
+ tools/perf/util/data.c                             |   7 +-
+ tools/perf/util/evlist-hybrid.c                    |   4 +-
+ .../selftests/bpf/progs/test_sockmap_kern.h        |  26 +++--
+ tools/testing/selftests/net/mptcp/diag.sh          |  44 ++++++--
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    |  15 ++-
+ 159 files changed, 1225 insertions(+), 521 deletions(-)
+---

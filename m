@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC84CCF97
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF3D4CCF9B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiCDIFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S231126AbiCDIGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiCDIFV (ORCPT
+        with ESMTP id S233499AbiCDIFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:05:21 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387B125514
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:04:12 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 4 Mar 2022 03:05:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0288515B98A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:04:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 711A43F5F5
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:04:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646381050;
-        bh=rlX9LT2Ku3zafWWNfSgPawKn9LilfNFaq1DtAqUhXpM=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=dtsHTDX9flbhuXj8NHivyMW3Z1q/30OtO3SR5JW/BKH+TtEkRYFaNqzRilJCVui8y
-         I92T6UsU7ywcnF9cEBMTLqGgoxGcavAyPyjSUuuS9Plf/c7NS5MkvUQgOfLtP7T+Je
-         n8hsf566Ky37oxIPzJZvspw9j8fUDFHss+fumrdSOh9NhPRh5sv46MxF2V1Sot5Yzp
-         eltQsyTYRhsRUqTR9+ipE7zFp1ooQ5+0v7afB5oQN3lAs34febe/cDoeVwWqTeLrij
-         7xl8eaCKv14SVQVwbzkOOzmUhTRwNIJ292E+rFYhIRL+XkZF9OV/IEcpz+PqW/4Nlc
-         uXxMjRHgS87Nw==
-Received: by mail-ed1-f69.google.com with SMTP id l14-20020a056402344e00b0041593c729adso4202792edc.18
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:04:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rlX9LT2Ku3zafWWNfSgPawKn9LilfNFaq1DtAqUhXpM=;
-        b=lVuw8Ksw4J24W4K4/I47Sab+9cUjT34NQZOwmBQcKSv8ZEVMUDIT0UriGTS8bLKjOH
-         yv43H8xN4I1FNcp7K5XoCZVGAkH5P7F2ijPJiZlBXnCYpK3E1QsUTip76/cHxgTZ8ohe
-         KfJl2o+jLLTjhQDBttVz5vHYkYitgR/zSl4G7D+pssNnQKIsscfrxF4tYQyvuosIPoDb
-         X0eCkwh55qBS8rtFzspEv064/2N6mka33sGs1cz5EEOo2LgkE4LPfJrEpWNeIn8BOnTv
-         0O1AtTLVAGq7zX/Od7w6SfTDqhuXKpc0KkC/9mTgAg8nbuwZLaZ94kLUHx7OZ8Zowg+1
-         iFAw==
-X-Gm-Message-State: AOAM531DbMkQx4NfGWgrxYs37yiSOxlx5oSN3IbDWxBxVPgUqdeXwDgs
-        +JWtOuyUmYSfp7qZpt2/3i8HNz4kndswKpKRUB4/b2pTFPYkvMhdC0PKA4Ku+1L9ziv3QnRxnky
-        WCphY/UF2MrAE056cSiJxJFMePXhRACblZLU1MEhvAQ==
-X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr29023909ejm.70.1646381047109;
-        Fri, 04 Mar 2022 00:04:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw9NTQ5aaCe/mw4aEV5jifd4tz1CDgIbNknK5DSvctYEEFyUW63B8TVoeIxQGRv9fsptQj8Sw==
-X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr29023896ejm.70.1646381046879;
-        Fri, 04 Mar 2022 00:04:06 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm1481465ejb.82.2022.03.04.00.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 00:04:06 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] tty: serial: samsung: simplify getting OF match data
-Date:   Fri,  4 Mar 2022 09:03:48 +0100
-Message-Id: <20220304080348.218581-7-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220304080348.218581-1-krzysztof.kozlowski@canonical.com>
-References: <20220304080348.218581-1-krzysztof.kozlowski@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        by ams.source.kernel.org (Postfix) with ESMTPS id B75CDB827A1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:04:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6E2C340F1;
+        Fri,  4 Mar 2022 08:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646381093;
+        bh=l69ZdbW1Spjoj7wr618Laos+FDuTVKY39Zk8tBMS2QY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bk9VbTH2K3/BZQBDbeVDta+ZSANz6J5FDeJmGA5qGCV7nT0vqRTZ2drLlkicJeO+9
+         3b/4KuLwManSyKKfpUUniBQyGXlD2eOsHndEmzzPHhM1d4FubO2N1kIj9B9cjYqp0q
+         9auHvc05jxVOCFnCxKlDBewYT5hRlPoo0lK59VOfwbyYBRQ4hBiRBNhTuBCC8rUU10
+         yM1K7yuBWE1ZK1onTyLQj0kWM1xJabE4wsFKzpsqruAeQsBKmFl4zzhBkZJCHsz2XJ
+         r85t9GC7BhiAC+HsjMcqp6ZuZymLYshpqvmYArreUGfLFu9DmwZ7i+Frs0JGEj3Vl7
+         o+wsezaa6h+Hw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQ2vj-00C9OH-1u; Fri, 04 Mar 2022 08:04:51 +0000
+Date:   Fri, 04 Mar 2022 08:04:48 +0000
+Message-ID: <87ee3ita73.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/6] RISC-V: Treat IPIs as normal Linux IRQs
+In-Reply-To: <CAAhSdy3ACa-447MrLs=5GLjSSWKiKyR585RFWP_ycM3RZ+RTQg@mail.gmail.com>
+References: <20220301042722.401113-1-apatel@ventanamicro.com>
+        <20220301042722.401113-4-apatel@ventanamicro.com>
+        <87czj53fjq.wl-maz@kernel.org>
+        <CAAhSdy3ACa-447MrLs=5GLjSSWKiKyR585RFWP_ycM3RZ+RTQg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,44 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify the code with of_device_get_match_data().
+On Tue, 01 Mar 2022 17:40:55 +0000,
+Anup Patel <anup@brainfault.org> wrote:
+> 
+> On Tue, Mar 1, 2022 at 8:07 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > +struct ipi_mux {
+> > > +     struct irq_domain *domain;
+> > > +     int parent_virq;
+> > > +     void (*clear_ipi)(void);
+> > > +     void (*send_ipi)(const struct cpumask *mask);
+> > > +};
+> >
+> > Why do you need this in the arch code? It really looks like something
+> > that is irqchip specific (single IPI signal on which actual IPIs are
+> > overlayed). It is also something that other irqchips are already
+> > implementing, so there is potential for consolidation.
+> 
+> I agree we can share the IPI muxing among irqchip drivers.
+> 
+> I was not sure where to place this IPI muxing so I made it
+> RISC-V specific initially.
+> 
+> Can we place a simplified IPI muxing (with no RISC-V specific
+> stuff) under drivers/irqchip or kernel/irq ??
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/tty/serial/samsung_tty.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+We already have IPI-specific code in kernel/irq, so it should probably
+live there.
 
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 00e7c34fad46..76f7afd1b7f7 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -2150,23 +2150,16 @@ static int s3c24xx_serial_init_port(struct s3c24xx_uart_port *ourport,
- 
- /* Device driver serial port probe */
- 
--#ifdef CONFIG_OF
--static const struct of_device_id s3c24xx_uart_dt_match[];
--#endif
--
- static int probe_index;
- 
- static inline const struct s3c24xx_serial_drv_data *
- s3c24xx_get_driver_data(struct platform_device *pdev)
- {
- #ifdef CONFIG_OF
--	if (pdev->dev.of_node) {
--		const struct of_device_id *match;
--
--		match = of_match_node(s3c24xx_uart_dt_match, pdev->dev.of_node);
--		return (struct s3c24xx_serial_drv_data *)match->data;
--	}
-+	if (pdev->dev.of_node)
-+		return of_device_get_match_data(&pdev->dev);
- #endif
-+
- 	return (struct s3c24xx_serial_drv_data *)
- 			platform_get_device_id(pdev)->driver_data;
- }
+> > > +struct irq_domain *riscv_ipi_mux_create(bool use_soft_irq,
+> > > +                     void (*clear_ipi)(void),
+> > > +                     void (*send_ipi)(const struct cpumask *mask))
+> > > +{
+> >
+> > There really shouldn't be a need for such a registration interface
+> > anyway (the current idiom is to allocate IPIs in the root irqchip, and
+> > pass them to the arch code).
+> >
+> > Why can't you model it after the existing architectures?
+> 
+> I ended up with a lot of duplicate code between SBI IPI driver and
+> SiFive CLINT driver so I factored out the IPI muxing as separate
+> sources. We also have RISC-V AIA drivers using the same IPI muxing.
+> 
+> If we simplify the IPI muxing and move it out of arch/riscv then
+> changes in this patch are straight forward to review.
+
+It isn't only about making things easier to review. It is about having
+consistent interfaces across architecture and reducing the amount of
+glue between arch code and random drivers. If there is a lot of
+similar code between your various irqchips, then it can be made common
+between the irqchips. But the interface between arch code and those
+should not be arch-specific.
+
+	M.
+
 -- 
-2.32.0
-
+Without deviation from the norm, progress is not possible.

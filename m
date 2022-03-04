@@ -2,87 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6B74CCBB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B7F4CCBBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiCDCYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S237690AbiCDCZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiCDCYN (ORCPT
+        with ESMTP id S232705AbiCDCZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:24:13 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3668565820;
-        Thu,  3 Mar 2022 18:23:26 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 977441F382;
-        Fri,  4 Mar 2022 02:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646360604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E85sAoXCaTA9rJMXOcKl8Th+xCpRXA0b8EAqZxwZ8A0=;
-        b=OHMBIepyGZT5p2vUzh9m6EF2ADllsCUvjfoI6pTTrXo7Yz0B7BDN+ge9IdtF+2ZYydZGCQ
-        8WoB5pAABgNBYEPVBbEaEnFFjU93OJpcylm9mmoQGVwXSBRAGZ9mDxUgC5aU5qlMH9Ckr8
-        8JdQlmMLB5FGrAN6piwNc9Z7wosEfx8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646360604;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E85sAoXCaTA9rJMXOcKl8Th+xCpRXA0b8EAqZxwZ8A0=;
-        b=gt1xKH0idJAvV5toxul/AJtWemJaGkXOxCg34os0vjwsTU/KiA45a4f222DhjpE4Y5De+j
-        w3347cZDZ/LwPhDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CAE41340A;
-        Fri,  4 Mar 2022 02:23:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Wj8UEhV4IWIXewAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 04 Mar 2022 02:23:17 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 3 Mar 2022 21:25:21 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F477BA74C;
+        Thu,  3 Mar 2022 18:24:34 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K8s8149BczBrWT;
+        Fri,  4 Mar 2022 10:22:41 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 10:24:32 +0800
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 10:24:31 +0800
+Subject: Re: [PATCH 2/2] iscsi_tcp: Check if tcp_conn is valid in
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>
+References: <20220304025608.1874516-1-haowenchao@huawei.com>
+ <20220304025608.1874516-2-haowenchao@huawei.com>
+ <85a64450-99c8-268d-1ac7-86e70cbb3562@oracle.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+Message-ID: <f6055c4a-b32f-8025-f096-f6abda03e2d4@huawei.com>
+Date:   Fri, 4 Mar 2022 10:24:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Miklos Szeredi" <miklos@szeredi.hu>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Jan Kara" <jack@suse.cz>, "Wu Fengguang" <fengguang.wu@intel.com>,
-        "Jaegeuk Kim" <jaegeuk@kernel.org>, "Chao Yu" <chao@kernel.org>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "Ilya Dryomov" <idryomov@gmail.com>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "Philipp Reisner" <philipp.reisner@linbit.com>,
-        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Jens Axboe" <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        "linux-mm" <linux-mm@kvack.org>, linux-nilfs@vger.kernel.org,
-        "Linux NFS list" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        "Ext4" <linux-ext4@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/11] MM: improve cleanup when ->readpages doesn't
- process all pages.
-In-reply-to: <CAJfpegs=DhCO62EFV0Q_i2fmqJnziJy1t4itP9deS=FuWEA=TQ@mail.gmail.com>
-References: <164549971112.9187.16871723439770288255.stgit@noble.brown>,
- <164549983736.9187.16755913785880819183.stgit@noble.brown>,
- <CAJfpegs=DhCO62EFV0Q_i2fmqJnziJy1t4itP9deS=FuWEA=TQ@mail.gmail.com>
-Date:   Fri, 04 Mar 2022 13:23:14 +1100
-Message-id: <164636059432.13165.6442580674358743838@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <85a64450-99c8-268d-1ac7-86e70cbb3562@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,69 +62,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Mar 2022, Miklos Szeredi wrote:
-> On Tue, 22 Feb 2022 at 04:18, NeilBrown <neilb@suse.de> wrote:
-> >
-> > If ->readpages doesn't process all the pages, then it is best to act as
-> > though they weren't requested so that a subsequent readahead can try
-> > again.
-> > So:
-> >   - remove any 'ahead' pages from the page cache so they can be loaded
-> >     with ->readahead() rather then multiple ->read()s
-> >   - update the file_ra_state to reflect the reads that were actually
-> >     submitted.
-> >
-> > This allows ->readpages() to abort early due e.g.  to congestion, which
-> > will then allow us to remove the inode_read_congested() test from
-> > page_Cache_async_ra().
-> >
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> > ---
-> >  mm/readahead.c |   19 +++++++++++++++++--
-> >  1 file changed, 17 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/readahead.c b/mm/readahead.c
-> > index 73b2bc5302e0..8a97bd408cf6 100644
-> > --- a/mm/readahead.c
-> > +++ b/mm/readahead.c
-> > @@ -104,7 +104,13 @@
-> >   * for necessary resources (e.g.  memory or indexing information) to
-> >   * become available.  Pages in the final ``async_size`` may be
-> >   * considered less urgent and failure to read them is more acceptable.
-> > - * They will eventually be read individually using ->readpage().
-> > + * In this case it is best to use delete_from_page_cache() to remove the
-> > + * pages from the page cache as is automatically done for pages that
-> > + * were not fetched with readahead_page().  This will allow a
-> > + * subsequent synchronous read ahead request to try them again.  If they
-> > + * are left in the page cache, then they will be read individually using
-> > + * ->readpage().
-> > + *
-> >   */
-> >
-> >  #include <linux/kernel.h>
-> > @@ -226,8 +232,17 @@ static void read_pages(struct readahead_control *rac=
-, struct list_head *pages,
-> >
-> >         if (aops->readahead) {
-> >                 aops->readahead(rac);
-> > -               /* Clean up the remaining pages */
-> > +               /*
-> > +                * Clean up the remaining pages.  The sizes in ->ra
-> > +                * maybe be used to size next read-ahead, so make sure
-> > +                * they accurately reflect what happened.
-> > +                */
-> >                 while ((page =3D readahead_page(rac))) {
-> > +                       rac->ra->size -=3D 1;
-> > +                       if (rac->ra->async_size > 0) {
-> > +                               rac->ra->async_size -=3D 1;
-> > +                               delete_from_page_cache(page);
-> > +                       }
->=20
-> Does the  above imply that filesystem should submit at least ra->size
-> pages, regardless of congestion?
+On 2022/3/3 22:59, Mike Christie wrote:
+> On 3/3/22 8:56 PM, Wenchao Hao wrote:
+>> iscsi_create_conn() would add newly alloced iscsi_cls_conn to connlist,
+>> it means when userspace sends ISCSI_UEVENT_SET_PARAM, iscsi_conn_lookup()
+>> would found this iscsi_cls_conn and call the set_param callback which is
+>> iscsi_sw_tcp_conn_set_param(). While the iscsi_conn's dd_data might not
+>> been initialized.
+>>
+>> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+>> Signed-off-by: Wu Bo <wubo40@huawei.com>
+>> ---
+>>   drivers/scsi/iscsi_tcp.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+>> index 14db224486be..a42449df6156 100644
+>> --- a/drivers/scsi/iscsi_tcp.c
+>> +++ b/drivers/scsi/iscsi_tcp.c
+>> @@ -716,13 +716,17 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
+>>   {
+>>   	struct iscsi_conn *conn = cls_conn->dd_data;
+>>   	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+>> -	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+>> +	struct iscsi_sw_tcp_conn *tcp_sw_conn;
+>>   
+>>   	switch(param) {
+>>   	case ISCSI_PARAM_HDRDGST_EN:
+>>   		iscsi_set_param(cls_conn, param, buf, buflen);
+>>   		break;
+>>   	case ISCSI_PARAM_DATADGST_EN:
+>> +		if (!tcp_conn || !tcp_conn->dd_data)
+>> +			return -ENOTCONN;
+>> +
+>> +		tcp_sw_conn = tcp_conn->dd_data;
+>>   		iscsi_set_param(cls_conn, param, buf, buflen);
+>>   		tcp_sw_conn->sendpage = conn->datadgst_en ?
+>>   			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
+> 
+> Is this something you hit or from code review?
+> 
 
-   ra->size - ra_async_size=20
-pages should be submitted reguardless of congestion.
+It's from code review. I reviewed the code because the panic mentioned 
+in my first patch. The issue seems would not happen, so just ignore it.
 
-NeilBrown
+> We have those state checks:
+> 
+> if ((conn->state == ISCSI_CONN_BOUND) ||
+>      (conn->state == ISCSI_CONN_UP)) {
+> 	err = transport->set_param(conn, ev->u.set_param.param,
+> 
+> so we don't call set_param until after we have bound the
+> connection which will be after ISCSI_UEVENT_CREATE_CONN has returned.
+> 
+> Also for this specific bug iscsi_if_recv_msg is called with the
+> rx_queue_mutex, so set_param can only be called after the
+> ISCSI_UEVENT_CREATE_CONN cmd has returned.
+> .
+> 
 

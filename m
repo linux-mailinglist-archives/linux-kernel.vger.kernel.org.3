@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E954CD26C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882024CD25B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbiCDKbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S234247AbiCDK07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbiCDKbo (ORCPT
+        with ESMTP id S234093AbiCDK04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:31:44 -0500
-X-Greylist: delayed 328 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 02:30:57 PST
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3780116BCE6
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:30:57 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 889845C0368;
-        Fri,  4 Mar 2022 05:25:27 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 04 Mar 2022 05:25:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=XPo646Lh4bAU5kxG3smqO0CDWOi5eh
-        E4dmIoAiLUrjE=; b=aM+zvgewHBBuWFY0jI9+VlTD5h0RwmPbUhfGfTQ875169S
-        O/BYkm+f5Gmh0+1nJAEguccAKlCOeHgN+WyDmBLOXvw6W0fHeCdeGvjfv8kEw2y6
-        WMPRu10tUbVb6DPVS2rePVjVKL26hcWdAxv4xnwqdLpLxgmnZWHooGamvB5/oYhm
-        f3L0eFRmy8TxWhmJBgiM5vgvMzWQz1Pbo13diU2XcTFCy8jxlD0srDc4979q8ts+
-        oTHBXZHxG55avJ8xpFbQKLqbikhWzJzqNIBkG0y4OWt3GQ+wWID+agVcVNfddmp7
-        ND3ShSGYHMQ0cF82D0MIYBQCyc5ZcIyxWPz2FVsg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=XPo646Lh4bAU5kxG3
-        smqO0CDWOi5ehE4dmIoAiLUrjE=; b=dvG6jG9BHHGf8pbvATEXsXL0EgPg+I63O
-        fpUgKLr5PR93kcEbr5Vh19kj32UK071+iOADjRiN3qO1m3y1p+jv0ePdFsj9vd12
-        HEBboxKVy4aKLV0yjAbrrqe9cP6ertJ3Qw1+pvAypax8Dmv6dwXMOs9P6iQ2FGDr
-        6vgfZdrhpYj/XKj5KZFkA3fvEJDqRSqoviy24GGhnV4d3RRGC+mz+XGPN2m/4mia
-        z/t927NflYaQOI/+1CH+30FT6CPa6A8Tn/Kavb068rnNjGoLhwTBu6cw3GZkxfaE
-        fz0M23begueXYjGXu+JkNDhgk0QwQJuPsc2O5vXHJ4HzFzUykVppg==
-X-ME-Sender: <xms:F-khYnSlAk2AHNGxI9qwfvBx0FqUfmrIqDiIZreYzRjTSA712LSKsA>
-    <xme:F-khYozGrJHorvQGcfJ-N5ESqUeC5053XmB-SLmJSjlKZGvIV_DUocETDrp6Etxwy
-    dSuejlA-QK8QbHHUn4>
-X-ME-Received: <xmr:F-khYs2pYqmROiZMCSYedglBy8zCIFk61APgKUBZZELyKhpcQBhvUKEHOM8G_flyF-4BU7J2rj37G20maM8MWSq0WKNGZ0ARIw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtkedgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
-    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
-    hpqeenucggtffrrghtthgvrhhnpeelhfeugedvjefgjefgudekfedutedvtddutdeuieev
-    tddtgeetjeekvdefgeefhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:F-khYnDmb1dBzGmfx37UD6KyOM8WxKekyzd_AOsRJiiBQz8zdEvclQ>
-    <xmx:F-khYgiCMY90qq-IAGPBpie3nvR7dFPscSq6yTZktqXfT6yWnMMOUA>
-    <xmx:F-khYropLsOvZC9uDB2sUUK-TszRxBoq51syJW4RGBHT3O9JuWw5Tw>
-    <xmx:F-khYsZPE79YVHAJEB3snnjBLdzKxw7N0z6QAMcF0jmEZX-4ryKrkA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 4 Mar 2022 05:25:26 -0500 (EST)
-Date:   Fri, 4 Mar 2022 19:25:23 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Niels Dossche <dossche.niels@gmail.com>
-Cc:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] firewire: core: extend card->lock in
- fw_core_handle_bus_reset
-Message-ID: <YiHpEx/1LaGuzEMC@workstation>
-Mail-Followup-To: Niels Dossche <dossche.niels@gmail.com>,
-        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-References: <20220303183038.54126-1-dossche.niels@gmail.com>
+        Fri, 4 Mar 2022 05:26:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168EC1AA057
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646389568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dg2DjhTzspXnkPdxQ4L1gE7F4LBl/cnUsJCfA7PY7HU=;
+        b=GjoSA7vwD353jDcuo6/J4baUOGUFsWiJWlU5O4uhbcYZ9gygiUsD89AdCJVuORN35h31FH
+        oEHsDAc3vdwRDhwYfx9QJwzbKacsPPOtejKQmI+9KO5Kj26HWG39VglhsEqmyV3CsGVLvQ
+        fyF7+Yi8O1BUMOprDPF22CleNT+AB2A=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-IaUsO2SDMZi6fXPWBwozhA-1; Fri, 04 Mar 2022 05:26:05 -0500
+X-MC-Unique: IaUsO2SDMZi6fXPWBwozhA-1
+Received: by mail-qk1-f199.google.com with SMTP id a15-20020a05620a066f00b0060c66d84489so5182220qkh.19
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 02:26:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dg2DjhTzspXnkPdxQ4L1gE7F4LBl/cnUsJCfA7PY7HU=;
+        b=TXNygLgpm95KenpF6bzSKqE91dwxVWKU+jOLnmmFx2yHCwICQK/fdGxPsl8YdxBJKC
+         5CTyE9KZzSSrYdwpjxgrasLGrKdNi6Ny7u0c5NhymVRkGDJuPsSTSzQ73oqM4+yZ+CIl
+         Ywu10V6LO8rf+yF9SwyTvdMmuwbbO4+yUf1CazzD0Ihf/2hMFEfTe7uw9kaAdJbvJ3Aj
+         k1UvV271+JMdokhGSbD/6IYB3IqtPlhMxXD5lUF0kQ+DSCYSOXRK2s4CEctkQAOGzqZ5
+         thq/3kKNpIPIpBPTiTyL66DS8hzA00GrbUG3dadDAjE/UKRtqxX9bbny+h+b1UxS9Bm+
+         qtEA==
+X-Gm-Message-State: AOAM533JTzPx+FDMSytVnxWKgIUmDM7nQXGT7QQEvhrGbo9B5BMYB1XS
+        QRhcTppJWq2PrZagDEwSiw9R3szevwHIK/BoYIOrcEzS1n9BF4VPHPgju3xIV4RWY8uQg4uwbf3
+        J8RSh2cAKmqcWJtyTgYODYOz4EOdu9Utn5Nv74a9u
+X-Received: by 2002:a05:620a:22a6:b0:662:e97d:c7bc with SMTP id p6-20020a05620a22a600b00662e97dc7bcmr2045273qkh.486.1646389564504;
+        Fri, 04 Mar 2022 02:26:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx1kvpYAW//FncPCrmWqRNA2ZHLRo4go2ItEjZkcWjMdDDeSf32X9DZm+GH63oF+p5dNcZRS3Kz9G/HtkiuCqU=
+X-Received: by 2002:a05:620a:22a6:b0:662:e97d:c7bc with SMTP id
+ p6-20020a05620a22a600b00662e97dc7bcmr2045261qkh.486.1646389564236; Fri, 04
+ Mar 2022 02:26:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303183038.54126-1-dossche.niels@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20201216064818.48239-1-jasowang@redhat.com> <20220224212314.1326-1-gdawar@xilinx.com>
+ <20220224212314.1326-10-gdawar@xilinx.com>
+In-Reply-To: <20220224212314.1326-10-gdawar@xilinx.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Fri, 4 Mar 2022 11:25:28 +0100
+Message-ID: <CAJaqyWe=o=JLM800oxn8_wa3hOnMBB0MCTut_vturfpHi9+hbw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/19] vhost: support ASID in IOTLB API
+To:     Gautam Dawar <gautam.dawar@xilinx.com>
+Cc:     Gautam Dawar <gdawar@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>, tanujk@xilinx.com,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Longpeng <longpeng2@huawei.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kvm list <kvm@vger.kernel.org>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,115 +87,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Mar 03, 2022 at 07:30:38PM +0100, Niels Dossche wrote:
-> card->local_node and card->bm_retries are both always accessed under
-> card->lock.
-> fw_core_handle_bus_reset has a check whose condition depends on
-> card->local_node and whose body writes to card->bm_retries.
-> Both of these accesses are not under card->lock. Move the lock acquiring
-> of card->lock to before this check such that these accesses do happen
-> when card->lock is held.
-> fw_destroy_nodes is called inside the check.
-> Since fw_destroy_nodes already acquires card->lock inside its function
-> body, move this out to the callsites of fw_destroy_nodes.
-> Also add a comment to indicate which locking is necessary when calling
-> fw_destroy_nodes.
-> 
-> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+On Thu, Feb 24, 2022 at 10:26 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
+>
+> This patches allows userspace to send ASID based IOTLB message to
+> vhost. This idea is to use the reserved u32 field in the existing V2
+> IOTLB message. Vhost device should advertise this capability via
+> VHOST_BACKEND_F_IOTLB_ASID backend feature.
+>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
 > ---
->  drivers/firewire/core-card.c     | 3 +++
->  drivers/firewire/core-topology.c | 9 +++------
->  2 files changed, 6 insertions(+), 6 deletions(-)
- 
-It looks good to me and is preferable as Niels said.
-
-Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Tested-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-
-
-I think the patch is for minor code refactoring rather than bug fix
-since it is unlikely that the rate condition occurs. The bus_reset_work
-is synchronously canceled in the beginning of pci_remove().
-
-```
-pci_remove()
-->cancel_work_sync(&ohci->bus_reset_work);
-->fw_core_remove_card(&ohci->card);
-->software_reset(ohci);
-->free_irq(dev->irq, ohci);
-```
-
-But I have no confidence that the above calls are done in the order by
-processor...
-
-> diff --git a/drivers/firewire/core-card.c b/drivers/firewire/core-card.c
-> index 54be88167c60..f3b3953cac83 100644
-> --- a/drivers/firewire/core-card.c
-> +++ b/drivers/firewire/core-card.c
-> @@ -668,6 +668,7 @@ EXPORT_SYMBOL_GPL(fw_card_release);
->  void fw_core_remove_card(struct fw_card *card)
->  {
->  	struct fw_card_driver dummy_driver = dummy_driver_template;
-> +	unsigned long flags;
->  
->  	card->driver->update_phy_reg(card, 4,
->  				     PHY_LINK_ACTIVE | PHY_CONTENDER, 0);
-> @@ -682,7 +683,9 @@ void fw_core_remove_card(struct fw_card *card)
->  	dummy_driver.stop_iso		= card->driver->stop_iso;
->  	card->driver = &dummy_driver;
->  
-> +	spin_lock_irqsave(&card->lock, flags);
->  	fw_destroy_nodes(card);
-> +	spin_unlock_irqrestore(&card->lock, flags);
->  
->  	/* Wait for all users, especially device workqueue jobs, to finish. */
->  	fw_card_put(card);
-> diff --git a/drivers/firewire/core-topology.c b/drivers/firewire/core-topology.c
-> index b63d55f5ebd3..f40c81534381 100644
-> --- a/drivers/firewire/core-topology.c
-> +++ b/drivers/firewire/core-topology.c
-> @@ -375,16 +375,13 @@ static void report_found_node(struct fw_card *card,
->  	card->bm_retries = 0;
+>  drivers/vhost/vdpa.c             |  5 ++++-
+>  drivers/vhost/vhost.c            | 23 ++++++++++++++++++-----
+>  drivers/vhost/vhost.h            |  4 ++--
+>  include/uapi/linux/vhost_types.h |  6 +++++-
+>  4 files changed, 29 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 6bf755f84d26..d0aacc0cc79a 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -836,7 +836,7 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
+>                                  msg->perm);
 >  }
->  
-> +/* Must be called with card->lock held */
->  void fw_destroy_nodes(struct fw_card *card)
+>
+> -static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev,
+> +static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+>                                         struct vhost_iotlb_msg *msg)
 >  {
-> -	unsigned long flags;
-> -
-> -	spin_lock_irqsave(&card->lock, flags);
->  	card->color++;
->  	if (card->local_node != NULL)
->  		for_each_fw_node(card, card->local_node, report_lost_node);
->  	card->local_node = NULL;
-> -	spin_unlock_irqrestore(&card->lock, flags);
->  }
->  
->  static void move_tree(struct fw_node *node0, struct fw_node *node1, int port)
-> @@ -510,6 +507,8 @@ void fw_core_handle_bus_reset(struct fw_card *card, int node_id, int generation,
->  	struct fw_node *local_node;
->  	unsigned long flags;
->  
-> +	spin_lock_irqsave(&card->lock, flags);
+>         struct vhost_vdpa *v = container_of(dev, struct vhost_vdpa, vdev);
+> @@ -847,6 +847,9 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev,
+>
+>         mutex_lock(&dev->mutex);
+>
+> +       if (asid != 0)
+> +               return -EINVAL;
 > +
->  	/*
->  	 * If the selfID buffer is not the immediate successor of the
->  	 * previously processed one, we cannot reliably compare the
-> @@ -521,8 +520,6 @@ void fw_core_handle_bus_reset(struct fw_card *card, int node_id, int generation,
->  		card->bm_retries = 0;
->  	}
->  
-> -	spin_lock_irqsave(&card->lock, flags);
-> -
->  	card->broadcast_channel_allocated = card->broadcast_channel_auto_allocated;
->  	card->node_id = node_id;
->  	/*
-> -- 
-> 2.35.1
 
+Should we check for asid != 0 before acquiring the mutex? Otherwise
+the code never releases it.
 
-Regards
+>         r = vhost_dev_check_owner(dev);
+>         if (r)
+>                 goto unlock;
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe2..1f514d98f0de 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -468,7 +468,7 @@ void vhost_dev_init(struct vhost_dev *dev,
+>                     struct vhost_virtqueue **vqs, int nvqs,
+>                     int iov_limit, int weight, int byte_weight,
+>                     bool use_worker,
+> -                   int (*msg_handler)(struct vhost_dev *dev,
+> +                   int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+>                                        struct vhost_iotlb_msg *msg))
+>  {
+>         struct vhost_virtqueue *vq;
+> @@ -1090,11 +1090,14 @@ static bool umem_access_ok(u64 uaddr, u64 size, int access)
+>         return true;
+>  }
+>
+> -static int vhost_process_iotlb_msg(struct vhost_dev *dev,
+> +static int vhost_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+>                                    struct vhost_iotlb_msg *msg)
+>  {
+>         int ret = 0;
+>
+> +       if (asid != 0)
+> +               return -EINVAL;
+> +
+>         mutex_lock(&dev->mutex);
+>         vhost_dev_lock_vqs(dev);
+>         switch (msg->type) {
+> @@ -1141,6 +1144,7 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
+>         struct vhost_iotlb_msg msg;
+>         size_t offset;
+>         int type, ret;
+> +       u32 asid = 0;
+>
+>         ret = copy_from_iter(&type, sizeof(type), from);
+>         if (ret != sizeof(type)) {
+> @@ -1156,7 +1160,16 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
+>                 offset = offsetof(struct vhost_msg, iotlb) - sizeof(int);
+>                 break;
+>         case VHOST_IOTLB_MSG_V2:
+> -               offset = sizeof(__u32);
+> +               if (vhost_backend_has_feature(dev->vqs[0],
+> +                                             VHOST_BACKEND_F_IOTLB_ASID)) {
+> +                       ret = copy_from_iter(&asid, sizeof(asid), from);
+> +                       if (ret != sizeof(asid)) {
+> +                               ret = -EINVAL;
+> +                               goto done;
+> +                       }
+> +                       offset = sizeof(__u16);
+> +               } else
+> +                       offset = sizeof(__u32);
+>                 break;
+>         default:
+>                 ret = -EINVAL;
+> @@ -1171,9 +1184,9 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
+>         }
+>
+>         if (dev->msg_handler)
+> -               ret = dev->msg_handler(dev, &msg);
+> +               ret = dev->msg_handler(dev, asid, &msg);
+>         else
+> -               ret = vhost_process_iotlb_msg(dev, &msg);
+> +               ret = vhost_process_iotlb_msg(dev, asid, &msg);
+>         if (ret) {
+>                 ret = -EFAULT;
+>                 goto done;
+> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+> index 638bb640d6b4..9f238d6c7b58 100644
+> --- a/drivers/vhost/vhost.h
+> +++ b/drivers/vhost/vhost.h
+> @@ -161,7 +161,7 @@ struct vhost_dev {
+>         int byte_weight;
+>         u64 kcov_handle;
+>         bool use_worker;
+> -       int (*msg_handler)(struct vhost_dev *dev,
+> +       int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+>                            struct vhost_iotlb_msg *msg);
+>  };
+>
+> @@ -169,7 +169,7 @@ bool vhost_exceeds_weight(struct vhost_virtqueue *vq, int pkts, int total_len);
+>  void vhost_dev_init(struct vhost_dev *, struct vhost_virtqueue **vqs,
+>                     int nvqs, int iov_limit, int weight, int byte_weight,
+>                     bool use_worker,
+> -                   int (*msg_handler)(struct vhost_dev *dev,
+> +                   int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+>                                        struct vhost_iotlb_msg *msg));
+>  long vhost_dev_set_owner(struct vhost_dev *dev);
+>  bool vhost_dev_has_owner(struct vhost_dev *dev);
+> diff --git a/include/uapi/linux/vhost_types.h b/include/uapi/linux/vhost_types.h
+> index 76ee7016c501..634cee485abb 100644
+> --- a/include/uapi/linux/vhost_types.h
+> +++ b/include/uapi/linux/vhost_types.h
+> @@ -87,7 +87,7 @@ struct vhost_msg {
+>
+>  struct vhost_msg_v2 {
+>         __u32 type;
+> -       __u32 reserved;
+> +       __u32 asid;
+>         union {
+>                 struct vhost_iotlb_msg iotlb;
+>                 __u8 padding[64];
+> @@ -157,5 +157,9 @@ struct vhost_vdpa_iova_range {
+>  #define VHOST_BACKEND_F_IOTLB_MSG_V2 0x1
+>  /* IOTLB can accept batching hints */
+>  #define VHOST_BACKEND_F_IOTLB_BATCH  0x2
+> +/* IOTLB can accept address space identifier through V2 type of IOTLB
+> + * message
+> + */
+> +#define VHOST_BACKEND_F_IOTLB_ASID  0x3
+>
+>  #endif
+> --
+> 2.25.0
+>
 
-Takashi Sakamoto

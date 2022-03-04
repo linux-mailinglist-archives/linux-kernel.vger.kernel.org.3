@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5560D4CCF3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D994CCF40
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238957AbiCDHsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S238962AbiCDHts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbiCDHsE (ORCPT
+        with ESMTP id S235758AbiCDHtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:48:04 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54C6194161;
-        Thu,  3 Mar 2022 23:47:17 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 0A3102B001D7;
-        Fri,  4 Mar 2022 02:47:12 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 04 Mar 2022 02:47:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=JFmveES9yGraX8tcj
-        DkZfjs9hZsHUkbzqHVDGYMDG+0=; b=bq8QbjhFSiTRXSpG6SIKROYvFt/3W6M4c
-        5CV3tDTrUoA1J482bDNdXZjDdwhc6f5h2ucr23D24AWw4Wp6pA6K9L/1lsUCbgth
-        DjcdNgcljNZGXMYFSM1E2Ta1KRe4gzsp5gN+IiU5RAomsF7LJmhMCIow5dAZI23J
-        TFEmp3vAD2NzP7qhkP+9wfRBx7Oo8T/GJGfP0NXqlOyzaBkIvr5YSBdybksEZSk8
-        lWHyTlH8+fSvcKGjq0NN1SofajUb6YXN7GLcpH7lOCmaRKRZSzw5DDkr5VOo/Npp
-        MnlAaLFYaQuQ9/8SHATYHt3EOXe++snxcUBTTJPVblxW1mJi5+FBA==
-X-ME-Sender: <xms:AMQhYqzEdc1-jX8s308ofiOWQM-0jSnh4VUhISpWPx9OOqlGeaoMfQ>
-    <xme:AMQhYmRhXQicOf3qF4LugcgXBJYsrNWpgSZ50hKUpDNOZ193VdRlcyJXP6w4dGBx-
-    Y9pKoOTsSQ6bm37YKI>
-X-ME-Received: <xmr:AMQhYsWn0uxdaPehSQ26qh5LBezBJw8SC9nKA3GH2wOTArUTTomrhN-dUUodh5dwvwVmUsQFcD-ktdOyLoizJzAl_OfCcwZ7HSg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtjedguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeffudfhgeefvdeitedugfelueegheekkeefveffhfeiveetledvhfdtveff
-    teeuudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:AMQhYgjZ69wZsVi294Sc0s1Dd4NOZBq2AJueI-IpcFeNZTLabmVY4g>
-    <xmx:AMQhYsBcDDXE4HZvE0QkB_qV4TMRptBoM6Ct8vuOttXSZknYjSbgug>
-    <xmx:AMQhYhKafjOrhv9lEK06EGwKXTLyCfVgnLYvD9viD5UEflHrkTCkQw>
-    <xmx:AMQhYgwTuB5Fs3ylXV5myNO1XmcJ0VWzqO3Xyq04uzrAKdf_JWhE8iY2RGA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 4 Mar 2022 02:47:09 -0500 (EST)
-Date:   Fri, 4 Mar 2022 18:47:06 +1100 (AEDT)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Joe Perches <joe@perches.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-cc:     Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Tom Rix <trix@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-In-Reply-To: <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-Message-ID: <1dccb035-5f85-d9fd-7c10-3f9cd395deeb@linux-m68k.org>
-References: <20220127151945.1244439-1-trix@redhat.com>  <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>  <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>  <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>  <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-  <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>  <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>  <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>  <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> 
- <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com> <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
+        Fri, 4 Mar 2022 02:49:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC84070904
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:48:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nQ2gG-0006mM-9H; Fri, 04 Mar 2022 08:48:52 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nQ2gF-002ZDA-KG; Fri, 04 Mar 2022 08:48:50 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nQ2gE-006sEV-4C; Fri, 04 Mar 2022 08:48:50 +0100
+Date:   Fri, 4 Mar 2022 08:48:46 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Mubin Usman Sayyed <MUBINUSM@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, michal.simek@xilinx.com,
+        Alvaro Gamez <alvaro.gamez@hazent.com>
+Subject: Re: [PATCH v14 2/2] pwm: Add support for Xilinx AXI Timer
+Message-ID: <20220304074846.bkzwn4c3voaxxqzu@pengutronix.de>
+References: <20220303223544.2810594-1-sean.anderson@seco.com>
+ <20220303223544.2810594-2-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p2h2j3kov6vozmcs"
+Content-Disposition: inline
+In-Reply-To: <20220303223544.2810594-2-sean.anderson@seco.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022, Joe Perches wrote:
 
-> On Fri, 2022-03-04 at 00:17 +0100, Miguel Ojeda wrote:
-> > On Thu, Mar 3, 2022 at 11:44 PM Finn Thain wrote:
-> > > 
-> > > Others might argue that they should always be changed from,
-> > > 
-> > > /*
-> > >  * this style
-> > >  * of multiline comment
-> > >  */
-> > > 
-> > > to
-> > > 
-> > > /* this style
-> > >  * of multiline comment
-> > >  */
-> > 
-> > In general, for things that the coding style guide talks about, we 
-> > should follow them, even if some subsystems do not (they can always 
-> > override in their folder if they really, really want it). So, here for 
-> > instance, the first one should be used.
-> 
-> It's up to individual maintainers to each decide on what might be 
-> considered unnecessary churn for the subsystems they control.
-> 
-> One argument is that churn leads to difficulty in backporting fixes to 
-> older 'stable' versions.
-> 
-> I think the churn argument is overstated.
-> 
+--p2h2j3kov6vozmcs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you would have clang-format override the committer and retrospectively 
-apply subsystem style rules (rather than the rules used by a majority of 
-subsystems or those preferred by Linus for example) it would add friction 
-to code re-use, movement, comparison, any tree-wide program 
-transformation, and also subsystem boundary changes.
+Hello,
 
-Per-subsystem style rules are inherently contentious and therefore good 
-candidates for the "leave alone" functionality discussed in the issue 
-tracker.
+On Thu, Mar 03, 2022 at 05:35:43PM -0500, Sean Anderson wrote:
+> This adds PWM support for Xilinx LogiCORE IP AXI soft timers commonly
+> found on Xilinx FPGAs. At the moment clock control is very basic: we
+> just enable the clock during probe and pin the frequency. In the future,
+> someone could add support for disabling the clock when not in use.
+>=20
+> Some common code has been specially demarcated. While currently only
+> used by the PWM driver, it is anticipated that it may be split off in
+> the future to be used by the timer driver as well.
+>=20
+> This driver was written with reference to Xilinx DS764 for v1.03.a [1].
+>=20
+> [1] https://www.xilinx.com/support/documentation/ip_documentation/axi_tim=
+er/v1_03_a/axi_timer_ds764.pdf
+>=20
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Acked-by: Michal Simek <michal.simek@xilinx.com>
+
+One little thing below. Not worth respinning for just that though, so:
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+> +	/*
+> +	 * 100% duty cycle results in constant low output. This may be (very)
+> +	 * wrong if rate >=3D 1 GHz, so fix this if you have such hardware :)
+> +	 */
+
+In v13 I asked for s/>=3D 1GHz/> 1 GHz/. You seem to have missed, that
+this contains two suggested changes. So there is s/>=3D/>/ left.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--p2h2j3kov6vozmcs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIhxFsACgkQwfwUeK3K
+7AkAGggAgfyHW1Ixgq5HpEFxU/VPYVbIaB6tfSzia/O45pIYTLinozrOQE5YD9dn
+/++33kt9jTX9M7dkV4sxLtFhgV1l3qVYaptN0TxGcwykyphzw6Q+FK28SdUegS1O
++HMlKJndbPwMp5ek+SoPzgXhkwsKg464tE0YwvLryt91/mJ6zwujhLC+R6VIh2lS
+61/fNKMVGN5PgW8NrRS6ILHR/NChzhmo4rcoTf2Q0j3sMHJ1hexMoIMmDSTyz5MU
+kpd3hPH8Wol4XUjfH12mJLEMlGbLhSxMMm1he2FquW+e2Z7gvvaEu43TJHbwUanu
+SRvWTydNi7ItVmT2wZrS7HLuXJWtsA==
+=KEN0
+-----END PGP SIGNATURE-----
+
+--p2h2j3kov6vozmcs--

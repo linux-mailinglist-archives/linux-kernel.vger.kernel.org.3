@@ -2,186 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C0F4CCC4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796784CCC51
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236573AbiCDD3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S237420AbiCDDfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:35:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiCDD33 (ORCPT
+        with ESMTP id S232299AbiCDDfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:29:29 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A667485F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:28:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646364522; x=1677900522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qhqM0wTLtPPZL2LBIfN1EQS8DLyl5brGVgQ13YNGIIA=;
-  b=Ukm9Wn5kVgtviI8dm9eJTjTT50fz9zScetCDpARBLbLl3r3/QrH75UbZ
-   v+X+zIkmdCrECxutwyfW3zo3eBImTwhW5uAF4U2v42F2ItwgjlxiS/CE9
-   +jDRdYR4K3rQmf5xra/7xoj1p5u2593ewwCVskid/sr1hW4TT59F4gpk9
-   v2jobxqWJ5UZk+Flsv7qrZ0Oayz3hc8orFgVzdEXT0xkVHhtDUJvejQrv
-   8JCE9r9+byz/fM7SAImbAj/gHGV6Q9EwfjC+GLuay0ofEy5Fz4zHtWZNC
-   I8fT1W9j2hxN6oFlEr2GnB8h18NxCTKWN1JU6paDuni37g9elw5Oz7oe6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="317108689"
-X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
-   d="scan'208";a="317108689"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 19:28:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
-   d="scan'208";a="508847819"
-Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Mar 2022 19:28:39 -0800
-Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPycR-0001EM-2W; Fri, 04 Mar 2022 03:28:39 +0000
-Date:   Fri, 4 Mar 2022 11:28:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.14-p-release
- 137/6167] security/commoncap.c:75:5: sparse: sparse: symbol '__cap_capable'
- was not declared. Should it be static?
-Message-ID: <202203041153.II8SFndk-lkp@intel.com>
+        Thu, 3 Mar 2022 22:35:36 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB5EBB8D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:34:49 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id q17so9135656edd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 19:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=WcXHhklBNGyAi1Fm2zsLjVuAug9s+ql0EDjZsbPKYAI=;
+        b=E1FpFJLB7abJxZed1WCMQcULZn9hQTMbGxiNPi0CCVnGiIdUpD+xXROcHfApd0/lhy
+         Fj8d3Tr13RwSsb2kdxmdA2eb2hZRt4zK1ql7T4hz1+YKU36UXfm141BQ8dAfNWF9unc+
+         XzFCDq2JChZ6YhsZxAz4pOLc8l6nuIuu4cjDXLs4EOuoK9lhb+ayiN1eBrOaUNLwohVq
+         QMbQKbEMuHG87cggJq/oVgE8YdyOPZZga7JQMPOs2dCT4KD10W9joDxIKV6BQMpwJPXs
+         8IcXc+FPkt5hzKMTw5xGyka1VDAoxaBX2m8/m7Ikqstkdd+fN1mjXZ5WG7aMkNLfO7qF
+         OCSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=WcXHhklBNGyAi1Fm2zsLjVuAug9s+ql0EDjZsbPKYAI=;
+        b=55vLftKA3RgOFpKaBmnft6LXPZu/E3Esf83H9WjQGf1FTuMNyEbhIXGrSXVGkn2je4
+         ATAgOnQtu2kBlQs8gFPhEmJR9b32/WDI/wnbDQXRkneGGx12j2VjkxEQMZK1fAtD/CYA
+         WNIGbPwKaNgsPuo/iFDMzA8nkJCxvGNhd5KVP/FqfybCH0+jrpXi3IWU9mc0+90ZnpRl
+         +0mfozjc5OL0/6L2Y7d3WV1Vpf6SefxmYFXCp9SS+VE6gkc0z2cFbfpYZyVTF9rv4Eum
+         5sgeRj/OWnfrSh/WI2sEFsF6Xv90fBdff559DnpfkInvIrvmiK9Eqdt9b96z9Ibubp9V
+         KfDg==
+X-Gm-Message-State: AOAM533tUh6jIaDTqP/d7KzKfD0e4Ez4aBckupb7aOVgUrkkAL6eQgl9
+        vd6oZOPv7680kY7E59RC3sBebhNLS0GX1SmMxCo=
+X-Google-Smtp-Source: ABdhPJyXRTi7eberRDwVlKzM1WsiDZWyFjob4oE6YkzfUlvwNJGcVLVLAZaRhQfnUp4HRm6+9FZDwJgMnGvbfsNN/+s=
+X-Received: by 2002:a05:6402:f0b:b0:415:ec3c:68aa with SMTP id
+ i11-20020a0564020f0b00b00415ec3c68aamr4186570eda.86.1646364887656; Thu, 03
+ Mar 2022 19:34:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 4 Mar 2022 13:34:36 +1000
+Message-ID: <CAPM=9txdUAqhJOhz+09qtFLJNOThDMNQxLu6kV-v6o1bopXhNA@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.17-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.14-p-release
-head:   0ca5d5ac9152d01b3494fb2efb5390319eb9904a
-commit: 2b02b4ab89b9cba5aec936046d8538962c5142fc [137/6167] ANDROID: net: paranoid: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants
-config: i386-randconfig-s001-20211101 (https://download.01.org/0day-ci/archive/20220304/202203041153.II8SFndk-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/2b02b4ab89b9cba5aec936046d8538962c5142fc
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.14-p-release
-        git checkout 2b02b4ab89b9cba5aec936046d8538962c5142fc
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi Linus,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Things are quieting down as expected, just a small set of fixes, i915,
+exynos, amdgpu, vrr, bridge and hdlcd. Nothing scary at all.
 
+Dave.
 
-sparse warnings: (new ones prefixed by >>)
->> security/commoncap.c:75:5: sparse: sparse: symbol '__cap_capable' was not declared. Should it be static?
-   security/commoncap.c:474:31: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] magic @@     got int @@
-   security/commoncap.c:474:31: sparse:     expected restricted __le32 [usertype] magic
-   security/commoncap.c:474:31: sparse:     got int
-   security/commoncap.c:475:33: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] nsmagic @@     got unsigned int [usertype] @@
-   security/commoncap.c:475:33: sparse:     expected restricted __le32 [usertype] nsmagic
-   security/commoncap.c:475:33: sparse:     got unsigned int [usertype]
-   security/commoncap.c:476:29: sparse: sparse: restricted __le32 degrades to integer
-   security/commoncap.c:477:39: sparse: sparse: invalid assignment: |=
-   security/commoncap.c:477:39: sparse:    left side has type restricted __le32
-   security/commoncap.c:477:39: sparse:    right side has type int
-   security/commoncap.c:479:42: sparse: sparse: cast from restricted __le32
-   security/commoncap.c:1226:41: sparse: sparse: dubious: !x | y
-   security/commoncap.c:1307:27: sparse: sparse: symbol 'capability_hooks' was not declared. Should it be static?
-   security/commoncap.c:75:5: warning: no previous declaration for '__cap_capable' [-Wmissing-declarations]
-    int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
-        ^~~~~~~~~~~~~
-   In file included from include/linux/capability.h:16:0,
-                    from security/commoncap.c:10:
-   security/commoncap.c: In function 'cap_prctl_drop':
-   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:1112:7: note: in expansion of macro 'cap_valid'
-     if (!cap_valid(cap))
-          ^~~~~~~~~
-   security/commoncap.c: In function 'cap_task_prctl':
-   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:1142:8: note: in expansion of macro 'cap_valid'
-      if (!cap_valid(arg2))
-           ^~~~~~~~~
-   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
-                              ^
-   security/commoncap.c:1226:10: note: in expansion of macro 'cap_valid'
-      if (((!cap_valid(arg3)) | arg4 | arg5))
-             ^~~~~~~~~
+drm-fixes-2022-03-04:
+drm fixes for 5.17-rc7
 
-vim +/__cap_capable +75 security/commoncap.c
+i915:
+- Fix GuC SLPC unset command
+- Fix misidentification of some Apple MacBook Pro laptops as Jasper Lake.
 
-    59	
-    60	/**
-    61	 * __cap_capable - Determine whether a task has a particular effective capability
-    62	 * @cred: The credentials to use
-    63	 * @ns:  The user namespace in which we need the capability
-    64	 * @cap: The capability to check for
-    65	 * @audit: Whether to write an audit message or not
-    66	 *
-    67	 * Determine whether the nominated task has the specified capability amongst
-    68	 * its effective set, returning 0 if it does, -ve if it does not.
-    69	 *
-    70	 * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
-    71	 * and has_capability() functions.  That is, it has the reverse semantics:
-    72	 * cap_has_capability() returns 0 when a task has a capability, but the
-    73	 * kernel's capable() and has_capability() returns 1 for this case.
-    74	 */
-  > 75	int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
-    76			int cap, int audit)
-    77	{
-    78		struct user_namespace *ns = targ_ns;
-    79	
-    80		/* See if cred has the capability in the target user namespace
-    81		 * by examining the target user namespace and all of the target
-    82		 * user namespace's parents.
-    83		 */
-    84		for (;;) {
-    85			/* Do we have the necessary capabilities? */
-    86			if (ns == cred->user_ns)
-    87				return cap_raised(cred->cap_effective, cap) ? 0 : -EPERM;
-    88	
-    89			/*
-    90			 * If we're already at a lower level than we're looking for,
-    91			 * we're done searching.
-    92			 */
-    93			if (ns->level <= cred->user_ns->level)
-    94				return -EPERM;
-    95	
-    96			/* 
-    97			 * The owner of the user namespace in the parent of the
-    98			 * user namespace has all caps.
-    99			 */
-   100			if ((ns->parent == cred->user_ns) && uid_eq(ns->owner, cred->euid))
-   101				return 0;
-   102	
-   103			/*
-   104			 * If you have a capability in a parent user ns, then you have
-   105			 * it over all children user namespaces as well.
-   106			 */
-   107			ns = ns->parent;
-   108		}
-   109	
-   110		/* We never get here */
-   111	}
-   112	
+amdgpu:
+- Suspend regression fix
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+exynos:
+- irq handling fixes.
+- Fix two regressions to TE-gpio handling.
+
+arm/hdlcd:
+- Select DRM_GEM_CMEA_HELPER for HDLCD
+
+bridge:
+- ti-sn65dsi86: Properly undo autosuspend
+
+vrr:
+- Fix potential NULL-pointer deref
+The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3=
+:
+
+  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-03-04
+
+for you to fetch changes up to 8fdb19679722a02fe21642d39710c701d2ed567a:
+
+  Merge tag 'drm-misc-fixes-2022-03-03' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-03-04
+13:04:11 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.17-rc7
+
+i915:
+- Fix GuC SLPC unset command
+- Fix misidentification of some Apple MacBook Pro laptops as Jasper Lake.
+
+amdgpu:
+- Suspend regression fix
+
+exynos:
+- irq handling fixes.
+- Fix two regressions to TE-gpio handling.
+
+arm/hdlcd:
+- Select DRM_GEM_CMEA_HELPER for HDLCD
+
+bridge:
+- ti-sn65dsi86: Properly undo autosuspend
+
+vrr:
+- Fix potential NULL-pointer deref
+
+----------------------------------------------------------------
+Carsten Haitzler (1):
+      drm/arm: arm hdlcd select DRM_GEM_CMA_HELPER
+
+Dave Airlie (4):
+      Merge tag 'exynos-drm-fixes-v5.17-rc6' of
+git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+drm-fixes
+      Merge tag 'drm-intel-fixes-2022-03-03' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-5.17-2022-03-02' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-03-03' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+Douglas Anderson (1):
+      drm/bridge: ti-sn65dsi86: Properly undo autosuspend
+
+Lad Prabhakar (5):
+      drm/exynos/exynos7_drm_decon: Use platform_get_irq_byname() to
+get the interrupt
+      drm/exynos: mixer: Use platform_get_irq() to get the interrupt
+      drm/exynos/exynos_drm_fimd: Use platform_get_irq_byname() to get
+the interrupt
+      drm/exynos/fimc: Use platform_get_irq() to get the interrupt
+      drm/exynos: gsc: Use platform_get_irq() to get the interrupt
+
+Manasi Navare (1):
+      drm/vrr: Set VRR capable prop only if it is attached to connector
+
+Marek Szyprowski (2):
+      drm/exynos: Don't fail if no TE-gpio is defined for DSI driver
+      drm/exynos: Search for TE-gpio in DSI panel's node
+
+Qiang Yu (1):
+      drm/amdgpu: fix suspend/resume hang regression
+
+Ville Syrj=C3=A4l=C3=A4 (1):
+      drm/i915: s/JSP2/ICP2/ PCH
+
+Vinay Belgaumkar (1):
+      drm/i915/guc/slpc: Correct the param count for unset param
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c      |  3 ++-
+ drivers/gpu/drm/arm/Kconfig                 |  1 +
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c       |  5 +++--
+ drivers/gpu/drm/drm_connector.c             |  3 +++
+ drivers/gpu/drm/exynos/exynos7_drm_decon.c  | 12 +++---------
+ drivers/gpu/drm/exynos/exynos_drm_dsi.c     |  6 ++++--
+ drivers/gpu/drm/exynos/exynos_drm_fimc.c    | 13 +++++--------
+ drivers/gpu/drm/exynos/exynos_drm_fimd.c    | 13 ++++---------
+ drivers/gpu/drm/exynos/exynos_drm_gsc.c     | 10 +++-------
+ drivers/gpu/drm/exynos/exynos_mixer.c       | 14 ++++++--------
+ drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c |  2 +-
+ drivers/gpu/drm/i915/intel_pch.c            |  2 +-
+ drivers/gpu/drm/i915/intel_pch.h            |  2 +-
+ 13 files changed, 37 insertions(+), 49 deletions(-)

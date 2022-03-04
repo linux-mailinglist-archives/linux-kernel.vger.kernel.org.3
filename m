@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9199A4CD497
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6794CD49D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbiCDM5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 07:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S235099AbiCDM7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 07:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiCDM5k (ORCPT
+        with ESMTP id S231825AbiCDM7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 07:57:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6CA81567B1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 04:56:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E072143D;
-        Fri,  4 Mar 2022 04:56:52 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 30EEE3F70D;
-        Fri,  4 Mar 2022 04:56:51 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>, peterz@infradead.org
-Cc:     aubrey.li@linux.intel.com, efault@gmx.de, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        mingo@kernel.org, song.bao.hua@hisilicon.com,
-        srikar@linux.vnet.ibm.com, vincent.guittot@linaro.org
-Subject: Re: [PATCH] sched/topology: Remove redundant variable and fix incorrect type in build_sched_domains
-In-Reply-To: <20220218162743.1134-1-kprateek.nayak@amd.com>
-References: <20220218162743.1134-1-kprateek.nayak@amd.com>
-Date:   Fri, 04 Mar 2022 12:56:44 +0000
-Message-ID: <87k0d9510z.mognet@arm.com>
+        Fri, 4 Mar 2022 07:59:39 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A58516E7D2;
+        Fri,  4 Mar 2022 04:58:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646398732; x=1677934732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Btv+CYeKwUyKPv5JPjPWjvpuR50skIoOrrEn+RtgT8w=;
+  b=idIpOnDTIiC9oc1zcUv9+5uIubDgfVSBjFkohxwPoEqaV5FHeccAEGbh
+   CDMxSpyAHcTVY43ELjq+SMKIKidBdJOwEaa22LLV+FDTW82wBYZOhCUmb
+   MkgbciD3BHbxpy+bcOFMghFtItQsyybqV/29V2HqWGDFJ1/vdHc+sT21E
+   W14WaDcZUJdGsPcDYkNJCVEAwgvjrWQ37K+LRkL6CHxsj7sxqigXueZR+
+   J/vxClD1+pxPtWI1Gq1ExkruAJX1inoOxVmnnSTz97quWlnbMrgDmAuhy
+   9QVqN9D1mkKPWfjfLOLEu1Mn+9ubYLTwmfJ0oypCq4Z6YsaTwcek2RJP+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="314684644"
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="314684644"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 04:58:51 -0800
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="642503282"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 04:58:48 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nQ7VS-00BE1b-FY;
+        Fri, 04 Mar 2022 14:58:02 +0200
+Date:   Fri, 4 Mar 2022 14:58:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v3 3/6] typec: mux: Introduce indirection
+Message-ID: <YiIM2rBHcyRAIY0y@smile.fi.intel.com>
+References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
+ <20220303223351.141238-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303223351.141238-3-bjorn.andersson@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/22 21:57, K Prateek Nayak wrote:
-> While investigating the sparse warning reported by the LKP bot [1],
-> observed that we have a redundant variable "top" in the function
-> build_sched_domains that was introduced in the recent commit
-> e496132ebedd ("sched/fair: Adjust the allowed NUMA imbalance when
-> SD_NUMA spans multiple LLCs")
->
-> The existing variable "sd" suffices which allows us to remove the
-> redundant variable "top" while annotating the other variable "top_p"
-> with the "__rcu" annotation to silence the sparse warning.
->
-> [1] https://lore.kernel.org/lkml/202202170853.9vofgC3O-lkp@intel.com/
->
-> Fixes: e496132ebedd ("sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
-> ---
->  kernel/sched/topology.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index e6cd55951304..4b757fb8f661 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -2255,7 +2255,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
->
->                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
->                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
-> -				struct sched_domain *top, *top_p;
-> +				struct sched_domain __rcu *top_p;
->                               unsigned int nr_llcs;
->
->                               /*
-> @@ -2280,11 +2280,9 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
->                               sd->imb_numa_nr = imb;
->
->                               /* Set span based on the first NUMA domain. */
-> -				top = sd;
-> -				top_p = top->parent;
-> +				top_p = sd->parent;
->                               while (top_p && !(top_p->flags & SD_NUMA)) {
-> -					top = top->parent;
-> -					top_p = top->parent;
-> +					top_p = top_p->parent;
->                               }
->                               imb_span = top_p ? top_p->span_weight : sd->span_weight;
+On Thu, Mar 03, 2022 at 02:33:48PM -0800, Bjorn Andersson wrote:
+> Rather than directly exposing the implementation's representation of the
+> typec muxes to the controller/clients, introduce an indirection object.
+> 
+> This enables the introduction of turning this relationship into a
+> one-to-many in the following patch.
+
+...
+
+> +	dev_set_name(&sw_dev->dev, "%s-switch",
+>  		     desc->name ? desc->name : dev_name(parent));
+
+Besides a possible shorten form of
+
+	dev_set_name(&sw_dev->dev, "%s-switch", desc->name ?: dev_name(parent));
+
+this lacks of the error checking (it seems in original code like this and
+should be fixed as preparatory patch for easy backporting).
+
+...
+
+> +	dev_set_name(&mux_dev->dev, "%s-mux",
+>  		     desc->name ? desc->name : dev_name(parent));
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-So sd starts as the first domain without SD_SHARE_PKG_RESOURCES (but its
-direct child has it), and the loop searches upward for a NUMA domain. This
-indeed shouldn't require two variables.
-
-I was going to say that while you're at it, you could init top_p to sd
-rather than sd->parent in case someone runs a non-default
-sched_domain_topology[], but NODE should have neither
-SD_SHARE_PKG_RESOURCES nor SD_NUMA, so that doesn't seem required.
-
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-
->                       } else {
-> --
-> 2.25.1

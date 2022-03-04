@@ -2,126 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAF34CD350
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F86B4CD353
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiCDLXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S235717AbiCDLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237281AbiCDLXH (ORCPT
+        with ESMTP id S230096AbiCDLYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:23:07 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2064.outbound.protection.outlook.com [40.107.220.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280A2137776;
-        Fri,  4 Mar 2022 03:22:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mqhs2+3SceH3DxAZod4dieMj0Qh3Wl080lXDrQndHPrR8db6im8ktwdW7RzOks5XdK19GXdnnrMx8pouTtKVUxCHB3j+GcAj1vk1w5SZjRKc9Z1hHB+80HkG3ql9IiM2/km6dCpDEu56Q3Pg1ml9B+scOCk9+Q/ovg5TcSon4Co7JoAicP3iQOqtAfNiY4pP3CbRDef2aGTaxS9n1BxcT9bW988VZXV43haCAgN7cOw3QfuHsWPctygNCqhVezVpQ3dt5vo22IiGz+IrH3phErGAM/kg3RwzDSY5UkxttHjpyPJQXwkrXmcy9196Ab2QFVn6xhWG9CET9lCG25D54w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XTmVjO29G0niBlfnYbftvVF5x2QRhPnZBGeyLcwscHw=;
- b=GIyE7lJhn9tAJa7kyiyErR3WIlhWKZHidEDPyQ1PJD8UZaGip4QKQZdWb226DQZyPJr5sFT1SfvY2DUvlGdjFNOHSQBLqKNHHXXtLr8myj2pujI6G3bJAxz31YSDLrfiEuWCUUcU4e8nq8Z0NybtDUzEQPQJFkc/32EhFRJYBpgAI2ydXqs8dnE043nBO/ago3Fe9dwI5pajCGEQ0LP8M04060ZhExMDO/nMtFPY3JlkvLnM4nAc1tYKXGJRYT32uJbeC1OFQgu4PGRA+tBQj37zCw5yxpsJX4y+Ec/sHmkkSzFC60V4LbYvN6Yii0GMGAqx1VWCux/nHpNeoGy6fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XTmVjO29G0niBlfnYbftvVF5x2QRhPnZBGeyLcwscHw=;
- b=IhtKVRYajfTyZmVcOE4rSdt+vejzOitRQs+U030U+IQiwc750P22ne4XludlhrBdSprVWBVT1eaaVzHMFXweQrNSxJQwpv/2oU2WHQUwVlondrMn1wrcrCFSYLp39+hzbUPt2XFj83jZujGfpmdSEC0unj7cdpl7RKKg1wuUFFU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- SJ0PR12MB5485.namprd12.prod.outlook.com (2603:10b6:a03:305::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 4 Mar
- 2022 11:22:17 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::6807:3c6c:a619:3527]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::6807:3c6c:a619:3527%5]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
- 11:22:17 +0000
-Message-ID: <6ff5a6ce-780b-0234-aec5-ef5cff290feb@amd.com>
-Date:   Fri, 4 Mar 2022 18:22:06 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH 11/13] KVM: SVM: Add logic to switch between APIC and
- x2APIC virtualization mode
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
- <20220221021922.733373-12-suravee.suthikulpanit@amd.com>
- <5f3b7d10e63126073fa4c17ba4e095b0fa0795e8.camel@redhat.com>
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-In-Reply-To: <5f3b7d10e63126073fa4c17ba4e095b0fa0795e8.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR02CA0200.apcprd02.prod.outlook.com
- (2603:1096:201:20::12) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Fri, 4 Mar 2022 06:24:52 -0500
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927D18A780
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:24:02 -0800 (PST)
+X-QQ-mid: bizesmtp91t1646393029tw1bsme9
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 04 Mar 2022 19:23:42 +0800 (CST)
+X-QQ-SSF: 00400000002000C0G000000A0000000
+X-QQ-FEAT: dpyQmELDBxEFTv1ES0F605CBas6bRFMCszmKDjmg2GbiKM45ScSeFVFoGNSoc
+        2nb5dxAg/c74wYb7Kozv3VbtZlySEbfW7FfCF3bEOCC0ZkxhbYqPSA8ShdKcU+0LsJD1BHM
+        nLxkmtFkD8qhqEHBKxJEEXaWbuBeb8kMA2RueE5nzJhERucgpTqmQeZYHi5/EX6HyE7qhXg
+        TF5Ota84G3/CgiABuPyaCyts6MOvACesK1TYj6aS/HDQ0aGlobSzR+dh8ESUY2X5wQZl1N8
+        KvKtV6RiZ/E1nvztEceGSweyjIL+NGLMoqU6Nw7fP++iDCSw5DQmjw2IL21TEreonoBr8p7
+        MDz2xy2rKfQcXF3uxtBGunSEg5TOv7xizgU8sX4aN5C9ZIyAEs=
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        ebiederm@xmission.com, willy@infradead.org
+Cc:     nixiaoming@huawei.com, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH v5 1/2] fs/proc: optimize register ctl_tables
+Date:   Fri,  4 Mar 2022 19:23:40 +0800
+Message-Id: <20220304112341.19528-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3801cc7d-441c-486d-3463-08d9fdd13d41
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5485:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR12MB5485B0A40A8278CC7079477BF3059@SJ0PR12MB5485.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GmApfPfjP8hMtLoHrWYmkL+iL8Ii7vIkuaXU/5aWxhPNlu3sRRL+d8nlcNzkCRXMA2Kmakg4ude5nsZAgGB6bOefAmh5BsZML3YyJF2IKp1EreCpxt/AybA+BGwFKdpBuCLoWIfXNj6PGhQDo5n6tLNCiqBXbH2u/HlpXn3jf/xZIWv6lamajwE5ceiXlkPfk6TFEwrrdXjLyQQyzAP/sacrWQ81tJ4lm0XTs6+3c3ZAyfPABifth2A9mvtZsgD3F87MusSrZCPbeALUWZM1C2xt9Hu/EdAgdk8C9U5X5Rj/0oDK250k4EZQGKk0or895vAfdzEaXfspnLzT8CSVPsJTW+XXxcr3lW770Kad50Dt2VfytkMB4lfUYRxotH8HGh+9qCq2UlcksrUDbwg5Nq4IB8HoaNuEmQHdQxDei9o0j1fvcmYqdB+Z/g8csYk6uU4ygy6gcO0lhDRZ6OoLSxKY3D1y1QD6T7CgnvsdSZVHlPofuZSgMHzhAgcHzk4tq5bX2+8X2IgyN7l5csuO2L82ji0m5bviUvwrl/JLZh41anrKudzajL/COCFoMdGUgQMg3zbJAbUxGb+swIy75vC+04MSys+rfBW6Mi/VjOHHpt8eFysJNmsQqC82QwaMqFdrcJ+hMm4/ydfGdsKdfwHOutijrJfjeQaC52UDc/j13Rj9k7upXgYxxDam8i9uJF1jqJlaen7/v/G/nukTBzZCYtAdQWtIjs1qIW3m3+0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(508600001)(66946007)(6506007)(66476007)(66556008)(31696002)(6512007)(8676002)(4326008)(86362001)(316002)(6666004)(2616005)(6486002)(36756003)(31686004)(2906002)(5660300002)(83380400001)(38100700002)(186003)(8936002)(44832011)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTZyZmN4d2VsbUhvNkdQQUQ5UXRkT2Z6UVNha3NmTEI4MXhVV1JYR1BpS2Fn?=
- =?utf-8?B?eDJYSjY5RlZ2NTdFQkcvQWs2V3E5TzZYL0paejFUZlpWeFFCaTFPOGhyVEI1?=
- =?utf-8?B?cldKNWk1dFVJODFJaGtQbnRqRGdKM1QyMzhFelhrQkpVUUdwZTVSd2dLN1JF?=
- =?utf-8?B?K1Arbk43azJTaldtZFhqSWswdmQxY0wydVZ0cjJtOVYxVXNkY1lLeXZ3NjBD?=
- =?utf-8?B?ZnRUcGZ4MnRGb1lRc2hydWo3dXBSS2wyVGh5a3p2VnRXMEdhMCs5Y0J3Y04z?=
- =?utf-8?B?Q1Y3SWE3cVQ0dzRlL3hKSExabDlMK1FUK2dWeWJ6Z0RaTDZQUGNVeXVlOHJk?=
- =?utf-8?B?SjV3dmt4N3QyZGxNVXlxL1RYNkdHdGZ0ZVJiWVpsdzN4TnlTbVgxd3FSL1JO?=
- =?utf-8?B?R1FUZzdGOUVnRFdKU2RGZVhCaVRVdncyUUwrcDdaaUdiNVRtcUtBeGhGRlNI?=
- =?utf-8?B?dnVJUWY3cGJMNWtIYlRmb0hTVi9tS0cxS1c4Y1g2WGJwQW4xUkV5emNLTERM?=
- =?utf-8?B?TzhIUmNZNUVuSndjNDNCWE41dDlTMjVNWmlKT0tQdnhtMVFWZTdJU0FtUEtE?=
- =?utf-8?B?YzAxZW8yNlZNUkRZSmtyQklYVmZUTTdoZXdTMnNMV3p3cUYrQTVvclltSGVs?=
- =?utf-8?B?eG5zSTRmaDg2WlYycyt1K2EycTk5Yks3WTQweHd0OGZWS2FUTmhuVVVFSzVn?=
- =?utf-8?B?bXlsanh1WWx5RWhCY1YvZmxmZ0NjemtMaloyN1p3UTdIQjRMdU1CZy92ZUM4?=
- =?utf-8?B?ZU1PU3dncUZVWVhsVm9KOEJNSUJCRjR4bjc5S3QzeGxRSnFiaEhqVWhNMHoy?=
- =?utf-8?B?aGZONjN0YW1NSzRtYUpCVUxkVUIzZ1c0VE9TdlNNNnRGOXBkcmd4Z3dkMk14?=
- =?utf-8?B?clBKblNDVVlnazhQYWJXSG0vaVpFckkvcU85QlRhZll5VlBwUjcvTmtHL3Jw?=
- =?utf-8?B?L0JDVjZWSFZlVFdLTkRBQXRzRTZBa2RtcUM3OUVPWHdFVDFIQmlYVTM0c2Jk?=
- =?utf-8?B?WU9LV3lwemNvOHRVN0kvenpsUXFRRDNvZEh4MWRkMTZ3Z1pnQk92bEg2UStQ?=
- =?utf-8?B?RFozVEtQeEVEbGtZczhJTTZOb1k4RG1pcUN1NHVBTlk2NVdVMUhPWjVqZU5o?=
- =?utf-8?B?VGZsczZSNlkzeGtGeXZWRnQvZzc4eTVFY3lqbVY3Vm52S2xMbnU1MnBRVWE2?=
- =?utf-8?B?bXVUNXNxOHpYY1pOSlZqdTVVQ2FGTjVqTlQvN25QK1NqT2svMlN5YjR3d2xr?=
- =?utf-8?B?ZFNMWHFwdWdYTUZscDk3YVA4VGoraE1aMnNicnc3SFczOWxDWDQ5RGhRelJj?=
- =?utf-8?B?V1gvaHdPWjMwTEl3eFp1V3Y0Tk12WFl0SUlEeENJbjE3OFZ4d0p3R2x0d2s3?=
- =?utf-8?B?ZHRCdE8wVXo5K0FFOHN3Um9nV0JieXRwQWZCcTY4WnhMU1JkaitQQldZRmNR?=
- =?utf-8?B?UkI0a0VWNmZBaGdLb281c2owVzNjL29lUk5tNVFKZzdYUWxiYldYSmhCdzIv?=
- =?utf-8?B?ZjhVWVJDbVpwdTlEc1JyYjFhdDRJVk1vaDJsTkRGOVRiNm55cndtaEpFTGd6?=
- =?utf-8?B?byt1ZVFueEhFUS9wVEo1ZGh4dytQY3NUUG44R3JNUWFZeEdacUQ4dlIrblNX?=
- =?utf-8?B?NVBoWlNCQkxwa1BYWkNwY1d2L0F4UXkxVHhmS1pwWEUvWU5xaS83d0lMWFh1?=
- =?utf-8?B?WUc4Q013RVRNb1ZEelBKb0RIak41Z3E1TFo0R1hoa3RMb0dXUnpnVnQvTEVE?=
- =?utf-8?B?MG9DK0hNVnA3Z0dua0ZScWgxTStwcFNMZmRodS9iVHpzVnJXVHV3a1lrYUZk?=
- =?utf-8?B?alA0cFYzRVBJY1NpZWZ3V05XR3paWGkyUUlmazI4OXhraDhUYTY3ZFQrWVR4?=
- =?utf-8?B?MTV0K2VaczBIa0U3OWJ4TjN0Z2xTZnZtNk51ZDhlU0ppVXdPcnQ5UzlyS3A3?=
- =?utf-8?B?Skp6M0ZaZTdCNFM4YkI4ZWRrbk9IMnJ4Q3dkMVVXejhEVFRpRDk1WkNtOVNa?=
- =?utf-8?B?RWNmaElZeVlMYk1OTTBESkpSV1YxZ0wrakFVTEhLdUJia3NFUTFBakR6S29p?=
- =?utf-8?B?d0NpL0FqY1lEeUlnVElObTJBZE1PakJydUpUNGdxcGQwZURjZ3dMSk45dHAx?=
- =?utf-8?B?UVM4b0lmNjBzbklGcUhMTFkwUFd5WmRTY2w3bC9JSGQ0QlliMGdFR1U1Z0ls?=
- =?utf-8?Q?K2SfTeCSjUU84Durm+SNZSU=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3801cc7d-441c-486d-3463-08d9fdd13d41
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 11:22:16.9186
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 19P6+y3aZ+t7Onlc8lNKH23g4ml9246MwM7ejp5kb68Mq9K+9MZBgXNwtsLzJ3TpzodRiCABCCDo3uV3aUQ9kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5485
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -130,145 +53,642 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim,
+Sysctls are being moved out of kernel/sysctl.c and out to
+their own respective subsystems / users to help with easier
+maintance and avoid merge conflicts. But when we move entries
+and to its own new file the last entry for this new file must
+be empty, so we are essentialy bloating the kernel one extra
+empty entry per each newly moved sysctl.
 
-On 2/25/22 3:03 AM, Maxim Levitsky wrote:
-> On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
->> ....
->>
->> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
->> index 3543b7a4514a..3306b74f1d8b 100644
->> --- a/arch/x86/kvm/svm/avic.c
->> +++ b/arch/x86/kvm/svm/avic.c
->> @@ -79,6 +79,50 @@ static inline enum avic_modes avic_get_vcpu_apic_mode(struct vcpu_svm *svm)
->>   		return AVIC_MODE_NONE;
->>   }
->>   
->> +static inline void avic_set_x2apic_msr_interception(struct vcpu_svm *svm, bool disable)
->> +{
->> +	int i;
->> +
->> +	for (i = 0x800; i <= 0x8ff; i++)
->> +		set_msr_interception(&svm->vcpu, svm->msrpm, i,
->> +				     !disable, !disable);
->> +}
->> +
->> +void avic_activate_vmcb(struct vcpu_svm *svm)
->> +{
->> +	struct vmcb *vmcb = svm->vmcb01.ptr;
->> +
->> +	vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
->> +
->> +	if (svm->x2apic_enabled) {
-> Use apic_x2apic_mode here as well
+To help with this, this adds support for registering ctl_tables
+by register nums, therefore not bloating the kernel when we
+move ctl_tables to its own file.
 
-Okay
+Due to child, empty table and other scenarios that use pointers,
+some scenarios cannot obtain the value of ARRAY_SIZE(), so two
+loop conditions are currently used. The newly added num is used
+as a judgment condition. I use the writing method of
+‘if(--num == 0)‘ to realize the function and reduce code changes
+as much as possible. After that, when 'register_by_num > 0', exit
+the loop until register_by_num is decreased to 0.
+when 'register_by_num = 0', 'if(--num == 0)' will never hold and
+will not affect the original loop condition.
 
-> 
->> +		vmcb->control.int_ctl |= X2APIC_MODE_MASK;
->> +		vmcb->control.avic_physical_id &= ~X2AVIC_MAX_PHYSICAL_ID;
->> +		vmcb->control.avic_physical_id |= X2AVIC_MAX_PHYSICAL_ID;
-> Why not just use
-> 
-> phys_addr_t ppa = __sme_set(page_to_phys(kvm_svm->avic_physical_id_table_page));;
-> vmcb->control.avic_physical_id = ppa | X2AVIC_MAX_PHYSICAL_ID;
-> 
+However, due to the particularity of child, if a child table needs
+to be registered, the child table still needs to end with an empty
+one. But this will save space for most scenarios anyway.
 
-Sorry, I don't quiet understand this part. We just want to update certain bits in the VMCB register.
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Suggested-by: Xiaoming Ni <nixiaoming@huawei.com>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ fs/proc/proc_sysctl.c  | 177 ++++++++++++++++++++++++++++-------------
+ include/linux/sysctl.h |  15 ++--
+ 2 files changed, 131 insertions(+), 61 deletions(-)
 
->> ...
->> +void avic_deactivate_vmcb(struct vcpu_svm *svm)
->> +{
->> +	struct vmcb *vmcb = svm->vmcb01.ptr;
->> +
->> +	vmcb->control.int_ctl &= ~(AVIC_ENABLE_MASK | X2APIC_MODE_MASK);
->> +
->> +	if (svm->x2apic_enabled)
->> +		vmcb->control.avic_physical_id &= ~X2AVIC_MAX_PHYSICAL_ID;
->> +	else
->> +		vmcb->control.avic_physical_id &= ~AVIC_MAX_PHYSICAL_ID;
->> +
->> +	/* Enabling MSR intercept for x2APIC registers */
->> +	avic_set_x2apic_msr_interception(svm, true);
->> +}
->> +
->>   /* Note:
->>    * This function is called from IOMMU driver to notify
->>    * SVM to schedule in a particular vCPU of a particular VM.
->> @@ -195,13 +239,12 @@ void avic_init_vmcb(struct vcpu_svm *svm)
->>   	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
->>   	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
->>   	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
->> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->>   	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
->>   
->>   	if (kvm_apicv_activated(svm->vcpu.kvm))
->> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
->> +		avic_activate_vmcb(svm);
-> Why not set AVIC_ENABLE_MASK in avic_activate_vmcb ?
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 6c87c99f0856..407c88847a6a 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -100,8 +100,8 @@ static DEFINE_SPINLOCK(sysctl_lock);
+ static void drop_sysctl_table(struct ctl_table_header *header);
+ static int sysctl_follow_link(struct ctl_table_header **phead,
+ 	struct ctl_table **pentry);
+-static int insert_links(struct ctl_table_header *head);
+-static void put_links(struct ctl_table_header *header);
++static int insert_links(struct ctl_table_header *head, int register_by_num);
++static void put_links(struct ctl_table_header *header, int register_by_num);
+ 
+ static void sysctl_print_dir(struct ctl_dir *dir)
+ {
+@@ -200,7 +200,7 @@ static void erase_entry(struct ctl_table_header *head, struct ctl_table *entry)
+ 
+ static void init_header(struct ctl_table_header *head,
+ 	struct ctl_table_root *root, struct ctl_table_set *set,
+-	struct ctl_node *node, struct ctl_table *table)
++	struct ctl_node *node, struct ctl_table *table, int register_by_num)
+ {
+ 	head->ctl_table = table;
+ 	head->ctl_table_arg = table;
+@@ -212,25 +212,34 @@ static void init_header(struct ctl_table_header *head,
+ 	head->set = set;
+ 	head->parent = NULL;
+ 	head->node = node;
++
+ 	INIT_HLIST_HEAD(&head->inodes);
+ 	if (node) {
+ 		struct ctl_table *entry;
+-		for (entry = table; entry->procname; entry++, node++)
++		for (entry = table; entry->procname; entry++, node++) {
+ 			node->header = head;
++			if (--register_by_num == 0)
++				break;
++		}
+ 	}
+ }
+ 
+-static void erase_header(struct ctl_table_header *head)
++static void erase_header(struct ctl_table_header *head, int register_by_num)
+ {
+ 	struct ctl_table *entry;
+-	for (entry = head->ctl_table; entry->procname; entry++)
++
++	for (entry = head->ctl_table; entry->procname; entry++) {
+ 		erase_entry(head, entry);
++		if (--register_by_num == 0)
++			break;
++	}
+ }
+ 
+-static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
++static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header,
++	int register_by_num)
+ {
+ 	struct ctl_table *entry;
+-	int err;
++	int err, num;
+ 
+ 	/* Is this a permanently empty directory? */
+ 	if (is_empty_dir(&dir->header))
+@@ -245,18 +254,23 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ 
+ 	dir->header.nreg++;
+ 	header->parent = dir;
+-	err = insert_links(header);
++	err = insert_links(header, register_by_num);
++
+ 	if (err)
+ 		goto fail_links;
++
++	num = register_by_num;
+ 	for (entry = header->ctl_table; entry->procname; entry++) {
+ 		err = insert_entry(header, entry);
+ 		if (err)
+ 			goto fail;
++		if (--num == 0)
++			break;
+ 	}
+ 	return 0;
+ fail:
+-	erase_header(header);
+-	put_links(header);
++	erase_header(header, register_by_num);
++	put_links(header, register_by_num);
+ fail_links:
+ 	if (header->ctl_table == sysctl_mount_point)
+ 		clear_empty_dir(dir);
+@@ -315,7 +329,7 @@ static void start_unregistering(struct ctl_table_header *p)
+ 	 * list in do_sysctl() relies on that.
+ 	 */
+ 	spin_lock(&sysctl_lock);
+-	erase_header(p);
++	erase_header(p, 0);
+ }
+ 
+ static struct ctl_table_header *sysctl_head_grab(struct ctl_table_header *head)
+@@ -981,7 +995,7 @@ static struct ctl_dir *new_dir(struct ctl_table_set *set,
+ 	new_name[namelen] = '\0';
+ 	table[0].procname = new_name;
+ 	table[0].mode = S_IFDIR|S_IRUGO|S_IXUGO;
+-	init_header(&new->header, set->dir.header.root, set, node, table);
++	init_header(&new->header, set->dir.header.root, set, node, table, 0);
+ 
+ 	return new;
+ }
+@@ -1027,7 +1041,7 @@ static struct ctl_dir *get_subdir(struct ctl_dir *dir,
+ 		goto failed;
+ 
+ 	/* Nope.  Use the our freshly made directory entry. */
+-	err = insert_header(dir, &new->header);
++	err = insert_header(dir, &new->header, 0);
+ 	subdir = ERR_PTR(err);
+ 	if (err)
+ 		goto failed;
+@@ -1128,7 +1142,8 @@ static int sysctl_check_table_array(const char *path, struct ctl_table *table)
+ 	return err;
+ }
+ 
+-static int sysctl_check_table(const char *path, struct ctl_table *table)
++static int sysctl_check_table(const char *path, struct ctl_table *table,
++		int register_by_num)
+ {
+ 	int err = 0;
+ 	for (; table->procname; table++) {
+@@ -1159,24 +1174,30 @@ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ 		if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
+ 			err |= sysctl_err(path, table, "bogus .mode 0%o",
+ 				table->mode);
++		if (--register_by_num == 0)
++			break;
+ 	}
+ 	return err;
+ }
+ 
+ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table *table,
+-	struct ctl_table_root *link_root)
++	struct ctl_table_root *link_root, int register_by_num)
+ {
+ 	struct ctl_table *link_table, *entry, *link;
+ 	struct ctl_table_header *links;
+ 	struct ctl_node *node;
+ 	char *link_name;
+-	int nr_entries, name_bytes;
++	int nr_entries, name_bytes, num;
+ 
+ 	name_bytes = 0;
+ 	nr_entries = 0;
++	num = register_by_num;
++
+ 	for (entry = table; entry->procname; entry++) {
+ 		nr_entries++;
+ 		name_bytes += strlen(entry->procname) + 1;
++		if (--num == 0)
++			break;
+ 	}
+ 
+ 	links = kzalloc(sizeof(struct ctl_table_header) +
+@@ -1191,6 +1212,7 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 	node = (struct ctl_node *)(links + 1);
+ 	link_table = (struct ctl_table *)(node + nr_entries);
+ 	link_name = (char *)&link_table[nr_entries + 1];
++	num = register_by_num;
+ 
+ 	for (link = link_table, entry = table; entry->procname; link++, entry++) {
+ 		int len = strlen(entry->procname) + 1;
+@@ -1199,42 +1221,56 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 		link->mode = S_IFLNK|S_IRWXUGO;
+ 		link->data = link_root;
+ 		link_name += len;
++		if (--num == 0)
++			break;
+ 	}
+-	init_header(links, dir->header.root, dir->header.set, node, link_table);
++	init_header(links, dir->header.root, dir->header.set, node, link_table,
++		    register_by_num);
+ 	links->nreg = nr_entries;
+ 
+ 	return links;
+ }
+ 
+ static bool get_links(struct ctl_dir *dir,
+-	struct ctl_table *table, struct ctl_table_root *link_root)
++	struct ctl_table *table, struct ctl_table_root *link_root,
++	int register_by_num)
+ {
+ 	struct ctl_table_header *head;
+ 	struct ctl_table *entry, *link;
+ 
++	int num = register_by_num;
+ 	/* Are there links available for every entry in table? */
+ 	for (entry = table; entry->procname; entry++) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		if (!link)
+ 			return false;
+-		if (S_ISDIR(link->mode) && S_ISDIR(entry->mode))
++		if (S_ISDIR(link->mode) && S_ISDIR(entry->mode)) {
++			if (--num == 0)
++				break;
+ 			continue;
+-		if (S_ISLNK(link->mode) && (link->data == link_root))
++		}
++		if (S_ISLNK(link->mode) && (link->data == link_root)) {
++			if (--num == 0)
++				break;
+ 			continue;
++		}
+ 		return false;
+ 	}
+ 
++	num = register_by_num;
+ 	/* The checks passed.  Increase the registration count on the links */
+ 	for (entry = table; entry->procname; entry++) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		head->nreg++;
++		if (--num == 0)
++			break;
+ 	}
+ 	return true;
+ }
+ 
+-static int insert_links(struct ctl_table_header *head)
++static int insert_links(struct ctl_table_header *head, int register_by_num)
+ {
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+ 	struct ctl_dir *core_parent = NULL;
+@@ -1248,13 +1284,13 @@ static int insert_links(struct ctl_table_header *head)
+ 	if (IS_ERR(core_parent))
+ 		return 0;
+ 
+-	if (get_links(core_parent, head->ctl_table, head->root))
++	if (get_links(core_parent, head->ctl_table, head->root, register_by_num))
+ 		return 0;
+ 
+ 	core_parent->header.nreg++;
+ 	spin_unlock(&sysctl_lock);
+ 
+-	links = new_links(core_parent, head->ctl_table, head->root);
++	links = new_links(core_parent, head->ctl_table, head->root, register_by_num);
+ 
+ 	spin_lock(&sysctl_lock);
+ 	err = -ENOMEM;
+@@ -1262,12 +1298,12 @@ static int insert_links(struct ctl_table_header *head)
+ 		goto out;
+ 
+ 	err = 0;
+-	if (get_links(core_parent, head->ctl_table, head->root)) {
++	if (get_links(core_parent, head->ctl_table, head->root, register_by_num)) {
+ 		kfree(links);
+ 		goto out;
+ 	}
+ 
+-	err = insert_header(core_parent, links);
++	err = insert_header(core_parent, links, register_by_num);
+ 	if (err)
+ 		kfree(links);
+ out:
+@@ -1276,13 +1312,15 @@ static int insert_links(struct ctl_table_header *head)
+ }
+ 
+ /**
+- * __register_sysctl_table - register a leaf sysctl table
++ * __register_sysctl_table_with_num - register a leaf sysctl table
+  * @set: Sysctl tree to register on
+  * @path: The path to the directory the sysctl table is in.
+  * @table: the top-level table structure
++ * @register_by_num: register single one and table must be without child
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+- * array. A completely 0 filled entry terminates the table.
++ * array. If there is child in the table. A completely 0 filled entry terminates
++ * the child table.
+  *
+  * The members of the &struct ctl_table structure are used as follows:
+  *
+@@ -1317,9 +1355,9 @@ static int insert_links(struct ctl_table_header *head)
+  * This routine returns %NULL on a failure to register, and a pointer
+  * to the table header on success.
+  */
+-struct ctl_table_header *__register_sysctl_table(
++struct ctl_table_header *__register_sysctl_table_with_num(
+ 	struct ctl_table_set *set,
+-	const char *path, struct ctl_table *table)
++	const char *path, struct ctl_table *table, int register_by_num)
+ {
+ 	struct ctl_table_root *root = set->dir.header.root;
+ 	struct ctl_table_header *header;
+@@ -1328,9 +1366,13 @@ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table *entry;
+ 	struct ctl_node *node;
+ 	int nr_entries = 0;
++	int num = register_by_num;
+ 
+-	for (entry = table; entry->procname; entry++)
++	for (entry = table; entry->procname; entry++) {
+ 		nr_entries++;
++		if (--num == 0)
++			break;
++	}
+ 
+ 	header = kzalloc(sizeof(struct ctl_table_header) +
+ 			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL);
+@@ -1338,8 +1380,8 @@ struct ctl_table_header *__register_sysctl_table(
+ 		return NULL;
+ 
+ 	node = (struct ctl_node *)(header + 1);
+-	init_header(header, root, set, node, table);
+-	if (sysctl_check_table(path, table))
++	init_header(header, root, set, node, table, register_by_num);
++	if (sysctl_check_table(path, table, register_by_num))
+ 		goto fail;
+ 
+ 	spin_lock(&sysctl_lock);
+@@ -1367,7 +1409,7 @@ struct ctl_table_header *__register_sysctl_table(
+ 	}
+ 
+ 	spin_lock(&sysctl_lock);
+-	if (insert_header(dir, header))
++	if (insert_header(dir, header, register_by_num))
+ 		goto fail_put_dir_locked;
+ 
+ 	drop_sysctl_table(&dir->header);
+@@ -1388,23 +1430,26 @@ struct ctl_table_header *__register_sysctl_table(
+  * register_sysctl - register a sysctl table
+  * @path: The path to the directory the sysctl table is in.
+  * @table: the table structure
++ * @register_by_num: register single one and table must be without child
+  *
+  * Register a sysctl table. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
+  *
+  * See __register_sysctl_table for more details.
+  */
+-struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table)
++struct ctl_table_header *register_sysctl_with_num(const char *path,
++		struct ctl_table *table, int register_by_num)
+ {
+-	return __register_sysctl_table(&sysctl_table_root.default_set,
+-					path, table);
++	return __register_sysctl_table_with_num(&sysctl_table_root.default_set,
++					path, table, register_by_num);
+ }
+-EXPORT_SYMBOL(register_sysctl);
++EXPORT_SYMBOL(register_sysctl_with_num);
+ 
+ /**
+  * __register_sysctl_init() - register sysctl table to path
+  * @path: path name for sysctl base
+  * @table: This is the sysctl table that needs to be registered to the path
++ * @register_by_num: register single one and table must be without child
+  * @table_name: The name of sysctl table, only used for log printing when
+  *              registration fails
+  *
+@@ -1422,9 +1467,9 @@ EXPORT_SYMBOL(register_sysctl);
+  * sysctl_init_bases().
+  */
+ void __init __register_sysctl_init(const char *path, struct ctl_table *table,
+-				 const char *table_name)
++				 int register_by_num, const char *table_name)
+ {
+-	struct ctl_table_header *hdr = register_sysctl(path, table);
++	struct ctl_table_header *hdr = register_sysctl_with_num(path, table, register_by_num);
+ 
+ 	if (unlikely(!hdr)) {
+ 		pr_err("failed when register_sysctl %s to %s\n", table_name, path);
+@@ -1446,10 +1491,11 @@ static char *append_path(const char *path, char *pos, const char *name)
+ 	return pos;
+ }
+ 
+-static int count_subheaders(struct ctl_table *table)
++static int count_subheaders(struct ctl_table *table, int register_by_num)
+ {
+ 	int has_files = 0;
+ 	int nr_subheaders = 0;
++	int num = register_by_num;
+ 	struct ctl_table *entry;
+ 
+ 	/* special case: no directory and empty directory */
+@@ -1458,28 +1504,33 @@ static int count_subheaders(struct ctl_table *table)
+ 
+ 	for (entry = table; entry->procname; entry++) {
+ 		if (entry->child)
+-			nr_subheaders += count_subheaders(entry->child);
++			nr_subheaders += count_subheaders(entry->child, 0);
+ 		else
+ 			has_files = 1;
++		if (--num == 0)
++			break;
+ 	}
+ 	return nr_subheaders + has_files;
+ }
+ 
+ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 	struct ctl_table_header ***subheader, struct ctl_table_set *set,
+-	struct ctl_table *table)
++	struct ctl_table *table, int register_by_num)
+ {
+ 	struct ctl_table *ctl_table_arg = NULL;
+ 	struct ctl_table *entry, *files;
+ 	int nr_files = 0;
+ 	int nr_dirs = 0;
+ 	int err = -ENOMEM;
++	int num = register_by_num;
+ 
+ 	for (entry = table; entry->procname; entry++) {
+ 		if (entry->child)
+ 			nr_dirs++;
+ 		else
+ 			nr_files++;
++		if (--num == 0)
++			break;
+ 	}
+ 
+ 	files = table;
+@@ -1492,18 +1543,24 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 			goto out;
+ 
+ 		ctl_table_arg = files;
++		num = register_by_num;
+ 		for (new = files, entry = table; entry->procname; entry++) {
+-			if (entry->child)
++			if (entry->child) {
++				if (--num == 0)
++					break;
+ 				continue;
++			}
+ 			*new = *entry;
+ 			new++;
++			if (--num == 0)
++				break;
+ 		}
+ 	}
+ 
+ 	/* Register everything except a directory full of subdirectories */
+ 	if (nr_files || !nr_dirs) {
+ 		struct ctl_table_header *header;
+-		header = __register_sysctl_table(set, path, files);
++		header = __register_sysctl_table_with_num(set, path, files, register_by_num);
+ 		if (!header) {
+ 			kfree(ctl_table_arg);
+ 			goto out;
+@@ -1515,12 +1572,16 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 		(*subheader)++;
+ 	}
+ 
++	num = register_by_num;
+ 	/* Recurse into the subdirectories. */
+ 	for (entry = table; entry->procname; entry++) {
+ 		char *child_pos;
+ 
+-		if (!entry->child)
++		if (!entry->child) {
++			if (--num == 0)
++				break;
+ 			continue;
++		}
+ 
+ 		err = -ENAMETOOLONG;
+ 		child_pos = append_path(path, pos, entry->procname);
+@@ -1528,10 +1589,12 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 			goto out;
+ 
+ 		err = register_leaf_sysctl_tables(path, child_pos, subheader,
+-						  set, entry->child);
++						  set, entry->child, 0);
+ 		pos[0] = '\0';
+ 		if (err)
+ 			goto out;
++		if (--num == 0)
++			break;
+ 	}
+ 	err = 0;
+ out:
+@@ -1555,7 +1618,7 @@ struct ctl_table_header *__register_sysctl_paths(
+ 	const struct ctl_path *path, struct ctl_table *table)
+ {
+ 	struct ctl_table *ctl_table_arg = table;
+-	int nr_subheaders = count_subheaders(table);
++	int nr_subheaders = count_subheaders(table, 0);
+ 	struct ctl_table_header *header = NULL, **subheaders, **subheader;
+ 	const struct ctl_path *component;
+ 	char *new_path, *pos;
+@@ -1591,7 +1654,7 @@ struct ctl_table_header *__register_sysctl_paths(
+ 		header->ctl_table_arg = ctl_table_arg;
+ 
+ 		if (register_leaf_sysctl_tables(new_path, pos, &subheader,
+-						set, table))
++						set, table, 0))
+ 			goto err_register_leaves;
+ 	}
+ 
+@@ -1655,13 +1718,14 @@ int __register_sysctl_base(struct ctl_table *base_table)
+ 	return 0;
+ }
+ 
+-static void put_links(struct ctl_table_header *header)
++static void put_links(struct ctl_table_header *header, int register_by_num)
+ {
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+ 	struct ctl_table_root *root = header->root;
+ 	struct ctl_dir *parent = header->parent;
+ 	struct ctl_dir *core_parent;
+ 	struct ctl_table *entry;
++	int num;
+ 
+ 	if (header->set == root_set)
+ 		return;
+@@ -1669,7 +1733,7 @@ static void put_links(struct ctl_table_header *header)
+ 	core_parent = xlate_dir(root_set, parent);
+ 	if (IS_ERR(core_parent))
+ 		return;
+-
++	num = register_by_num;
+ 	for (entry = header->ctl_table; entry->procname; entry++) {
+ 		struct ctl_table_header *link_head;
+ 		struct ctl_table *link;
+@@ -1680,12 +1744,13 @@ static void put_links(struct ctl_table_header *header)
+ 		    ((S_ISDIR(link->mode) && S_ISDIR(entry->mode)) ||
+ 		     (S_ISLNK(link->mode) && (link->data == root)))) {
+ 			drop_sysctl_table(link_head);
+-		}
+-		else {
++		} else {
+ 			pr_err("sysctl link missing during unregister: ");
+ 			sysctl_print_dir(parent);
+ 			pr_cont("%s\n", name);
+ 		}
++		if (--num == 0)
++			break;
+ 	}
+ }
+ 
+@@ -1697,7 +1762,7 @@ static void drop_sysctl_table(struct ctl_table_header *header)
+ 		return;
+ 
+ 	if (parent) {
+-		put_links(header);
++		put_links(header, 0);
+ 		start_unregistering(header);
+ 	}
+ 
+@@ -1723,7 +1788,7 @@ void unregister_sysctl_table(struct ctl_table_header * header)
+ 	if (header == NULL)
+ 		return;
+ 
+-	nr_subheaders = count_subheaders(header->ctl_table_arg);
++	nr_subheaders = count_subheaders(header->ctl_table_arg, 0);
+ 	if (unlikely(nr_subheaders > 1)) {
+ 		struct ctl_table_header **subheaders;
+ 		int i;
+@@ -1751,7 +1816,7 @@ void setup_sysctl_set(struct ctl_table_set *set,
+ {
+ 	memset(set, 0, sizeof(*set));
+ 	set->is_seen = is_seen;
+-	init_header(&set->dir.header, root, set, NULL, root_table);
++	init_header(&set->dir.header, root, set, NULL, root_table, 0);
+ }
+ 
+ void retire_sysctl_set(struct ctl_table_set *set)
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 644fd53ad5f1..cd6048f471e3 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -218,13 +218,17 @@ extern void setup_sysctl_set(struct ctl_table_set *p,
+ 	int (*is_seen)(struct ctl_table_set *));
+ extern void retire_sysctl_set(struct ctl_table_set *set);
+ 
+-struct ctl_table_header *__register_sysctl_table(
++#define __register_sysctl_table(set, path, table) \
++	__register_sysctl_table_with_num(set, path, table, 0)
++struct ctl_table_header *__register_sysctl_table_with_num(
+ 	struct ctl_table_set *set,
+-	const char *path, struct ctl_table *table);
++	const char *path, struct ctl_table *table, int register_by_num);
+ struct ctl_table_header *__register_sysctl_paths(
+ 	struct ctl_table_set *set,
+ 	const struct ctl_path *path, struct ctl_table *table);
+-struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table);
++#define register_sysctl(path, table) register_sysctl_with_num(path, table, ARRAY_SIZE(table))
++struct ctl_table_header *register_sysctl_with_num(const char *path,
++	struct ctl_table *table, int register_by_num);
+ struct ctl_table_header *register_sysctl_table(struct ctl_table * table);
+ struct ctl_table_header *register_sysctl_paths(const struct ctl_path *path,
+ 						struct ctl_table *table);
+@@ -233,8 +237,9 @@ void unregister_sysctl_table(struct ctl_table_header * table);
+ 
+ extern int sysctl_init_bases(void);
+ extern void __register_sysctl_init(const char *path, struct ctl_table *table,
+-				 const char *table_name);
+-#define register_sysctl_init(path, table) __register_sysctl_init(path, table, #table)
++				 int register_by_num, const char *table_name);
++#define register_sysctl_init(path, table) \
++	__register_sysctl_init(path, table, ARRAY_SIZE(table), #table)
+ extern struct ctl_table_header *register_sysctl_mount_point(const char *path);
+ 
+ void do_sysctl_args(void);
+-- 
+2.20.1
 
-It's already doing "vmcb->control.int_ctl |= X2APIC_MODE_MASK;" in avic_activate_vmcb().
 
->>   	else
->> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
->> +		avic_deactivate_vmcb(svm);
->>   }
->>   
->>   static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
->> @@ -657,6 +700,13 @@ void avic_update_vapic_bar(struct vcpu_svm *svm, u64 data)
->>   		 svm->x2apic_enabled ? "x2APIC" : "xAPIC");
->>   	vmcb_mark_dirty(svm->vmcb, VMCB_AVIC);
->>   	kvm_vcpu_update_apicv(&svm->vcpu);
->> +
->> +	/*
->> +	 * The VM could be running w/ AVIC activated switching from APIC
->> +	 * to x2APIC mode. We need to all refresh to make sure that all
->> +	 * x2AVIC configuration are being done.
->> +	 */
->> +	svm_refresh_apicv_exec_ctrl(&svm->vcpu);
-> 
-> 
-> That also should be done in avic_set_virtual_apic_mode  instead, but otherwise should be fine.
 
-Agree, and will be updated to use svm_set_virtual_apic_mode() in v2.
-
-> Also it seems that .avic_set_virtual_apic_mode will cover you on the case when x2apic is disabled
-> in the guest cpuid - kvm_set_apic_base checks if the guest cpuid has x2apic support and refuses
-> to enable it if it is not set.
-> 
-> But still a WARN_ON_ONCE won't hurt to see that you are not enabling x2avic when not supported.
-
-Not sure if we need this. The logic for activating x2AVIC in VMCB already
-check if the guest x2APIC mode is set, which can only happen if x2APIC CPUID
-is set.
-
->>   }
->>   
->>   void svm_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
->> @@ -722,9 +772,9 @@ void svm_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->>   		 * accordingly before re-activating.
->>   		 */
->>   		avic_post_state_restore(vcpu);
->> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
->> +		avic_activate_vmcb(svm);
->>   	} else {
->> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
->> +		avic_deactivate_vmcb(svm);
->>   	}
->>   	vmcb_mark_dirty(vmcb, VMCB_AVIC);
->>   
->> @@ -1019,7 +1069,6 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->>   		return;
->>   
->>   	entry = READ_ONCE(*(svm->avic_physical_id_cache));
->> -	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
-> Why?
-
-For AVIC, this WARN_ON is designed to catch the scenario when the vCPU is calling
-avic_vcpu_load() while it is already running. However, with x2AVIC support,
-the vCPU can switch from xAPIC to x2APIC mode while in running state
-(i.e. the AVIC is_running is set). This warning is currently observed due to
-the call from svm_refresh_apicv_exec_ctrl().
-
-Regards,
-Suravee

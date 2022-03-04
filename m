@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3584CDFD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C267B4CDFD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiCDVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S229923AbiCDVkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCDVkP (ORCPT
+        with ESMTP id S229541AbiCDVko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:40:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8301FE03B;
-        Fri,  4 Mar 2022 13:39:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 60126CE2E93;
-        Fri,  4 Mar 2022 21:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F326C340E9;
-        Fri,  4 Mar 2022 21:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646429963;
-        bh=SiMjJ9jBV8ROvPmd0OEnr3Kp8dWUAEessFwe8ZvnA6M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Bor1/1NAwIkRN3ZaChj8O+obgU1xNF6m03CRDThEMPJxRRZkoAo4EzQzfS7pHmlWn
-         uQ8izIhUewIzMa/knus/VzINT0/qTG8FLnld7jb2XfHabPJelM87fzFWmASnispIgy
-         5uXYgQC9aYOEzlGjK9VvdIIuU/ku851KG1nYmxvXJ6waQ1M2J+joGsTm4VIcKwdrFD
-         eGiVuyEKZvLXTuEhH9qtr9HrThS2sYfCMAILmQaWubZBLgQEm1TUG+USfCLwCWe1In
-         1DWbf6a+hkA10Z+lCtZ7eoYaax6AHYwC3qT7qVgex4s6SKAMvVfHAQQiC53m+548tR
-         sTEhA52e06NTA==
-Date:   Fri, 4 Mar 2022 15:39:21 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Zhangjiantao(Kirin,Nanjing)" <water.zhangjiantao@huawei.com>
-Cc:     "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "gustavo.pimentel@synopsys.com" <gustavo.pimentel@synopsys.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Caiyadong <caiyadong@huawei.com>,
-        guhengsheng <guhengsheng@hisilicon.com>,
-        "zhangjianrong (E)" <zhangjianrong5@huawei.com>
-Subject: Re: [PATCH] PCI: dwc: solve returning success but actually failed
-Message-ID: <20220304213921.GA1056382@bhelgaas>
+        Fri, 4 Mar 2022 16:40:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9711FE565
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:39:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+It/rMNXjbIO9eivSq4MdRYjnhWglySliEF32xrALSQ=; b=L7gH6IMAsYIpuf/D9W9mgVxAqK
+        oC3YkNNPg1SLm+6WBfdET5n0uI2fyP63SlaHqDho+OB8KP8SM8DmYUReIrQ1jmLACPuhxwjDxaHte
+        9BLgGbKxf9jRgaOL0i/HFXwNpLd+vmtCANaqACeGGHvOSuzwl1x1OrFlvItSXUcpAS/syxELXeEou
+        76vxeGNbWJYU9HnYTDdRFIOhmU0nLNYcx8b5wgdOISe50SPeq9HueHl33M5fKjsZIn/vjiswedH1V
+        NnVDZVsw+zB8tRpb4YTUN8wtmQpwReSpAWBx7mnNg+rXCNtA+PbHsdC8y9lie7sCVe81cl/9Q2o70
+        V7B/bTdQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nQFe7-00D3AU-R7; Fri, 04 Mar 2022 21:39:31 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3070A986ACA; Fri,  4 Mar 2022 22:39:30 +0100 (CET)
+Date:   Fri, 4 Mar 2022 22:39:30 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v3 00/39] x86: Kernel IBT
+Message-ID: <20220304213930.GS11184@worktop.programming.kicks-ass.net>
+References: <20220303112321.422525803@infradead.org>
+ <20220304190958.comlw5wt7zdgeakc@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6d26f16646294836b87611f4dc5fe763@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220304190958.comlw5wt7zdgeakc@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 12:06:10PM +0000, Zhangjiantao(Kirin,Nanjing) wrote:
-> When dma_mapping_error returns error because of no enough memory available, dw_pcie_host_init will return success, which will mislead the callers.
-
-Wrap to fit in 75 columns, add "()" after function names.
+On Fri, Mar 04, 2022 at 11:09:58AM -0800, Josh Poimboeuf wrote:
+> On Thu, Mar 03, 2022 at 12:23:21PM +0100, Peter Zijlstra wrote:
+> > Hi, another week, another series.
+> > 
+> > Since last time:
+> > 
+> >  - fixed and tested kexec (redgecomb)
+> >  - s/4*HAS_KERNEL_IBT/ENDBR_INSN_SIZE/ (jpoimboe)
+> >  - re-arranged Xen patches to avoid churn (andyhpp)
+> >  - folded IBT_SEAL Kconfig and objtool options (jpoimboe)
+> >  - dropped direct call/jmp rewrite from objtool (jpoimboe)
+> >  - dropped UD1 poison (jpoimboe)
+> >  - fixed kprobe selftests (masami,naveen)
+> >  - fixed ftrace selftests (rostedt)
+> >  - simplified CET/INT3 selftests (jpoimboe)
+> >  - boot time msg on IBT (kees)
+> >  - objtool WARN_FUNC sym+off fallback (jpoimboe)
+> >  - picked up tags for unchanged patches
+> >  - probably more
+> > 
+> > Supposedly clang-14-rc2 will work on this series, I'll validate the moment the
+> > Debian package gets updated.
+> > 
+> > Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
 > 
-> Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
-> Signed-off-by: zhangjiantao <water.zhangjiantao@huawei.com>
+> I'm getting some warnings with CONFIG_X86_KERNEL_IBT=n:
 > 
-> ---
->   drivers/pci/controller/dwc/pcie-designware-host.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
-> b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index f4755f3a03be..ac691d733848 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -393,6 +393,7 @@ int dw_pcie_host_init(struct pcie_port *pp)
->               if (dma_mapping_error(pci->dev, pp->msi_data)) {
->                   dev_err(pci->dev, "Failed to map MSI data\n");
->                   pp->msi_data = 0;
-> +                ret = -1;
+>   arch/x86/entry/entry_64.o: warning: objtool: irq_entries_start()+0x7: unreachable instruction
+>   arch/x86/kernel/ftrace_64.o: warning: objtool: return_to_handler()+0x2a: unreachable instruction
 
-We should save the return value from dma_mapping_error() and return
-*that*, not -1.
+Blergh, those are INT3 instructions, the first is the LDT stub padding
+while the second is that INT3 you asked about earlier.
 
-Whitespace error (indent with tabs, same as the surrounding code).
+I can mark then all using SLS style rules, but that then triggers:
 
->                   goto err_free_msi;
->               }
->           }
-> --
-> 2.17.1
-> 
+arch/x86/kernel/reboot.o: warning: objtool: native_machine_emergency_restart()+0x8f: BUG: why am I validating an ignored function?
+
+which does horrible things on purpose to tickle a tripple fault in order
+to reboot the machine.
+
+Perhaps we should ignore INT3 by default, just like NOP ?

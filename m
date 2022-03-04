@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFF04CD86A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0824E4CD86D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240466AbiCDQBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S240541AbiCDQDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbiCDQBb (ORCPT
+        with ESMTP id S234317AbiCDQDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:01:31 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52291B0BCE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646409643; x=1677945643;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=m1ChR7M0tuClOXVONifHVOA2VcoI0G6cdp50B0K6wFI=;
-  b=f6RevXHBt1i7JzGdGKLnSp6sFjXV/VlpYiNqQwHXmL01d+YOe6ukqt2i
-   ZxILCd8nY7JCMWt11yJCD3mFnpvgAU3S6NEtfBtVAeVaJaikDiTcGy2av
-   01malZJOW/uzkFAw0S4Cd4lexwstGInKCq9ZjvRvkGOFuEFsmzJoXPn8Y
-   yhEtnulmftN3JxVhCpwq/1sRVh4lmvcdpV6cZVCqJxcZJRnck9yfCcdLS
-   iIIpnthUIXJ+w9ej1zLu0vIrbT8XwALM/Bg2OwlFmqFR9MAVwc2Axopyl
-   8tx2+HYqnh3j0G82E/+sBwp90xxo4MAqa3B8VQR7TnyKwJNhd7oKWY0XT
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="164553996"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 09:00:43 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 09:00:42 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 09:00:40 -0700
-From:   <nicolas.ferre@microchip.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Subject: [GIT PULL] ARM: at91: dt for 5.18 #2
-Date:   Fri, 4 Mar 2022 17:00:36 +0100
-Message-ID: <20220304160036.27392-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 4 Mar 2022 11:03:03 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0583F1B0BCC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:02:16 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so7209747pju.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 08:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iKXCjtCLyBd5SB18xoMWfCbBK72dJBo8wk/xWeD+1ow=;
+        b=NPSSv1f3NiH3nTbPR/NPI7t4q8iZbNmkZSqGP9caRbEBz5GMNW0dupYVnfkr37GxHS
+         uFRR9axd85c3A3GQCeoJhLNRGbuxmdhoAcMDmoyqJzz2oRZCQw6e1paiySPVS6maVjPJ
+         z56hr2HqCwbGSKMjr8VVTO57uRlOcFK9ZcpG95v5Tnja6WV6VrdtZVr170asTMeevLmD
+         dDtqEFxoENq2TJp1f5ug93p6pcYTrMrhkjT800eDh4d93ZQ9VZh3mQIF6gNoy8KEEmTN
+         BZfTAleX/3o18B5/t/PuP1d2ULiF0mSXHp2xD9T37gcWn6coO+NCArTWDz15iq/fuwLO
+         CqmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iKXCjtCLyBd5SB18xoMWfCbBK72dJBo8wk/xWeD+1ow=;
+        b=aG+U2YqMQ2+wRw4snjYEs1SSw8g59GFcfo3+un+annk//53jUXOUR43qwcDdhwmylw
+         utQwrlVnqyqCptqr/JciDpWNCj5erAwwpShgwuBswEIHkL+dJmKL276ghdplGxu4ahnt
+         +DIYpLjRYXBqQsDRa5AJF/sbYBD5MS5l0gGTgvAvLJVW/xtbhgcBgAojZ/OjZnekcVTe
+         CoPnfNkHX9p6JNXoIQC2lZiXRYxpC066VU6NVlAwh6rZH8GvfFsVw9yAB9/PKUb6deyv
+         lYUPqvbjbSsTDqNlItoOxho56fuVAbt8WrkvpbSlwnMXEL2wUnFI76n1DP2FzQEV9LPJ
+         Ku2g==
+X-Gm-Message-State: AOAM531Z+QYpDb5Qtl/9FJsieCDS+M0NZalwYM2EdJewpEBDPGjnoyhA
+        SUQsfEF8MH7bj+I1ENqdsS8Uug==
+X-Google-Smtp-Source: ABdhPJzeXnsVXGYYR1+7nVhiTHXCnWwr/9Bmg9y2srKh/JAflfqdxZMKubdlTRKrOS03r16N1ZvbBw==
+X-Received: by 2002:a17:902:6841:b0:150:9b8c:3a67 with SMTP id f1-20020a170902684100b001509b8c3a67mr36997799pln.151.1646409735126;
+        Fri, 04 Mar 2022 08:02:15 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b004f6c30d84cfsm1641711pfe.155.2022.03.04.08.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 08:02:14 -0800 (PST)
+Date:   Fri, 4 Mar 2022 16:02:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
+ asynchronous worker
+Message-ID: <YiI4AmYkm2oiuiio@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-22-pbonzini@redhat.com>
+ <YiExLB3O2byI4Xdu@google.com>
+ <YiEz3D18wEn8lcEq@google.com>
+ <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
 MIME-Version: 1.0
-Organization: microchip
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Fri, Mar 04, 2022, Paolo Bonzini wrote:
+> On 3/3/22 22:32, Sean Christopherson wrote:
+> I didn't remove the paragraph from the commit message, but I think it's
+> unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and
+> kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to take
+> a reference to the VM.
+> 
+> I think I don't even need to check kvm->users_count in the defunct root
+> case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the workqueue
+> before it checks that the lists are empty.
 
-Arnd, Olof,
-
-Some more dt changes for 5.18.
-I had to modify one patch to remove a dependency with the clock tree because of
-a modification of the header file in [1] which is already in linux-next.
-I tought it would be the simplest solution as I didn't manage to get an
-inmutable branch (which could be an overkill solution for such a small change).
-
-I verified that there is no conflict when merging this content with linux-next.
-Anyway, tell me if you prefer to not proceed like this.
-
-Thanks, best regards,
-  Nicolas
-
-[1]: https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
-
-The following changes since commit 3c8a9c2e2daf51bd3dcaedd321ecc79f10227c41:
-
-  ARM: dts: at91: sama7g5: add opps (2022-02-25 11:32:22 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.18-2
-
-for you to fetch changes up to 92499dec3aa9c251e605b42e1024e805bbaa50ad:
-
-  ARM: dts: at91: sama7g5: Add NAND support (2022-03-04 15:03:53 +0100)
-
-----------------------------------------------------------------
-AT91 DT #2 for 5.18:
-
-- Align one sam9x60ek regulator with reality at vdd_1v15
-- Clean sama7g5 i2c nodes
-- Add EIC and NAND nodes to sama7g5
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      ARM: dts: at91: sama7g5: add eic node
-
-Mihai Sain (1):
-      ARM: dts: at91: sam9x60ek: modify vdd_1v5 regulator to vdd_1v15
-
-Tudor Ambarus (2):
-      ARM: dts: at91: sama7g5: Remove unused properties in i2c nodes
-      ARM: dts: at91: sama7g5: Add NAND support
-
- arch/arm/boot/dts/at91-sam9x60ek.dts |  8 ++--
- arch/arm/boot/dts/sama7g5.dtsi       | 74 ++++++++++++++++++++++++++++++++---
- include/dt-bindings/clock/at91.h     |  1 +
- 3 files changed, 73 insertions(+), 10 deletions(-)
-
--- 
-Nicolas Ferre
+Yes, that should work.  IIRC, the WARN_ONs will tell us/you quite quickly if
+we're wrong :-)  mmu_notifier_unregister() will call the "slow" kvm_mmu_zap_all()
+and thus ensure all non-root pages zapped, but "leaking" a worker will trigger
+the WARN_ON that there are no roots on the list.

@@ -2,87 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E3A4CE089
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3624CE093
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiCDXHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 18:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S229615AbiCDXJR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Mar 2022 18:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbiCDXHV (ORCPT
+        with ESMTP id S229436AbiCDXJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 18:07:21 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D34425ABC0;
-        Fri,  4 Mar 2022 15:06:33 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id z8so6030435oix.3;
-        Fri, 04 Mar 2022 15:06:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ATA11vRf0zeVLMjaFmKZ4cxLi5HueUdNVm0c6ug1+pQ=;
-        b=7FZTs6e7kIaV1H4ClhZT1kPxHxiU7KhbJRgjH/zPBQornf77tu8KL+fy23OGnYyTMl
-         gULTPnhg5waPke0O7NIOqYnRT6kBuA0723xyjmUtw3aaZhP7S78XajwfH+zhi1P3eWLo
-         5Ael0ypNR6gF+hI4lCDEKk0UOgosl/1uI2A21KX8cYGVCSPL3Heu7VSun4JtS+1cZ6FT
-         ZLKSw3S3xQlM/kVJWTwMsusA0tgXrefaGmYzvZhV5yP1lAMHgwji8xYsbeSFTpXSUtUj
-         QrmrgeF9mks9h750CQUPcJeFV4xVnqlwhdrx82ZUal/mA4i0BJFJ12NhwzRtD4fdlTe+
-         5hzA==
-X-Gm-Message-State: AOAM532niMTr8KJ5TKyC9c7eWmSGg5r+VsIiDRt2t2v+fsn/cw5C9Y3J
-        eGuUHa6vhkcb1rMX5uSWFQ==
-X-Google-Smtp-Source: ABdhPJzdp9EJcfPN5djd1vxXYjKLskxK/4pozXmqkHEOZkKsqdM4MGm2KnaauDBCC70eUdFaJv6PJA==
-X-Received: by 2002:a05:6808:3020:b0:2d7:2d3d:b651 with SMTP id ay32-20020a056808302000b002d72d3db651mr11024147oib.139.1646435192431;
-        Fri, 04 Mar 2022 15:06:32 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bc24-20020a056808171800b002d722aead50sm3215928oib.27.2022.03.04.15.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 15:06:31 -0800 (PST)
-Received: (nullmailer pid 626767 invoked by uid 1000);
-        Fri, 04 Mar 2022 23:06:30 -0000
-Date:   Fri, 4 Mar 2022 17:06:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [RESEND v5 1/2] dt-bindings: remoteproc: mediatek: Add binding
- for mt8186 scp
-Message-ID: <YiKbdtiLHDuyOmL2@robh.at.kernel.org>
-References: <20220225132747.31808-1-allen-kh.cheng@mediatek.com>
- <20220225132747.31808-2-allen-kh.cheng@mediatek.com>
+        Fri, 4 Mar 2022 18:09:16 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E69ED1C65CB
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 15:08:26 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-79-s1JfIF8fNSGP8Xuomzx6qA-1; Fri, 04 Mar 2022 23:08:24 +0000
+X-MC-Unique: s1JfIF8fNSGP8Xuomzx6qA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 4 Mar 2022 23:08:23 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 4 Mar 2022 23:08:23 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
+Subject: RE: [PATCH v3 18/39] x86/ibt,ftrace: Make function-graph play nice
+Thread-Topic: [PATCH v3 18/39] x86/ibt,ftrace: Make function-graph play nice
+Thread-Index: AQHYMAI0GSxiDHFGBEWPBcynSqueEKyv1g9g
+Date:   Fri, 4 Mar 2022 23:08:23 +0000
+Message-ID: <d995569898fb40609f2f73f7b29d96ed@AcuMS.aculab.com>
+References: <20220303112321.422525803@infradead.org>
+ <20220303112826.044301664@infradead.org>
+ <20220304175154.l2otvmqd4r7ozsuy@treble>
+ <20220304194853.GN11184@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220304194853.GN11184@worktop.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225132747.31808-2-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Feb 2022 21:27:46 +0800, Allen-KH Cheng wrote:
-> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+From: Peter Zijlstra
+> Sent: 04 March 2022 19:49
 > 
-> Add mt8186 compatible to binding document.
+> On Fri, Mar 04, 2022 at 09:51:54AM -0800, Josh Poimboeuf wrote:
+> > On Thu, Mar 03, 2022 at 12:23:39PM +0100, Peter Zijlstra wrote:
+> > > +
+> > > +	addq $16, %rsp
+> > > +	ANNOTATE_INTRA_FUNCTION_CALL
+> > > +	call .Ldo_rop
+> > > +	int3
+> > > +.Ldo_rop:
+> > > +	mov %rdi, (%rsp)
+> > > +	UNWIND_HINT_FUNC
+> > > +	RET
+> >
+> > Why the int3?
 > 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+> Speculation trap :-) Either I'm too paranoid or not paranoid enough; but
+> without it it's just too close to a retpoline and it doesn't feel right.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Isn't 'jmps .' good enough for a speculation trap?
+I'm sure there is a potential issue using 'int 3' because
+it is a slow instruction and might take some time to abort.
+
+I actually remember something from a very old Intel doc that
+told you not to mix code and data because you didn't want to
+'accidentally' execute something like 'atan'.
+I can't remember the full context - but it may have been
+speculatively executing code after unconditional jumps!
+There were certainly bigger problems because the cpu at that
+time wouldn't abort the atan - so you had to wait for it to
+finish.
+
+I suspect you do need something between the call and label.
+The sequence:
+	call 1f
+1:	pop %rax
+is used to get the %pc (especially on 32bit) and is detected
+so that it doesn't mess up the return stack.
+So you probably want to avoid a call to the next instruction.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

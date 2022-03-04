@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F6A4CD85E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D080B4CD861
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240530AbiCDP4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S240544AbiCDP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiCDPz7 (ORCPT
+        with ESMTP id S236071AbiCDP4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:55:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D46D1C57F7
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:55:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646409310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uch525PNzzW/J3vJE1xnSUNTO3TZySaL5iNLrnWYiN8=;
-        b=gVtSI+KuVbS2BNvREDoQwo+1IHutc+03r6dFogqBC4IcxxhFr5XsKkU1ssy7Se8QewThzw
-        CoUAxwPy0QflQ939Gr6I5baEegLs5GcXjXtb1nCFJD7K2VFZGW1zYubiGL7qiTs+8+ylwL
-        r5QIOOPWSGNd0Go4Le5rKDFxJQgGrc4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-m-Dg4_WZPAqXYX8TI4jajA-1; Fri, 04 Mar 2022 10:55:09 -0500
-X-MC-Unique: m-Dg4_WZPAqXYX8TI4jajA-1
-Received: by mail-wm1-f69.google.com with SMTP id v67-20020a1cac46000000b00383e71bb26fso2442515wme.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 07:55:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Uch525PNzzW/J3vJE1xnSUNTO3TZySaL5iNLrnWYiN8=;
-        b=D/s8tEPobD/RDu4zGuIAD8QcgD7fEGG29g/eG+GkmCEbYLJt2l6v+32mGv/aY50F2d
-         XVDIU8yL0Zb0KHY5/gOk0ambXvc8fEvEH9Tln0ZWqrePaHbOeSzuWzjyL0R7fG2ynl51
-         WR2oEGARkfclq3HbI+ICWTKRkkvMO5gNuOZ5nBurjaS9WyPk6ZihHldje63X+JFaipNO
-         FDyLgWPH7Uk41hofI2fsE3RopozBF3j7258VeLrRuuGdXeJcX8A0AbM0ooBlHukHOBkS
-         GVw5FQhORBJ8L0UoLUbmOiRCACIVkV4mMECAn1ikSEOTtELwrTMda3PfXfRydXix+Svo
-         E1rw==
-X-Gm-Message-State: AOAM530E/apdvi3wq6E/FS0bnKg/sqQR+9X+dvIaqE6XlOHqkrmVbW5B
-        da9xPdgWYQ6UmFXKZ0nNYFvB8SQW+hP+HDnUDVwOQnMrctF0cRHhH6tnNRGp+uwz99SDF7iXzLw
-        Vng1rj7dD8VgxMhsjp9Apx/Xn
-X-Received: by 2002:a5d:6852:0:b0:1f0:98e7:a963 with SMTP id o18-20020a5d6852000000b001f098e7a963mr2244689wrw.646.1646409307762;
-        Fri, 04 Mar 2022 07:55:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyJcGPsQgyi0xlwPiC3QwSn+wMpjkPFk3GJKUBiMtrkUOc3OvwgWUVHrxOyndsunz6WuZ3MEQ==
-X-Received: by 2002:a5d:6852:0:b0:1f0:98e7:a963 with SMTP id o18-20020a5d6852000000b001f098e7a963mr2244667wrw.646.1646409307612;
-        Fri, 04 Mar 2022 07:55:07 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8? ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05600c1d1000b003816edb5711sm12563176wms.26.2022.03.04.07.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 07:55:07 -0800 (PST)
-Message-ID: <34833549a995fa3325f4ceb9b42cd01de0921c14.camel@redhat.com>
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        mtosatti@redhat.com, paulmck@kernel.org, rostedt@goodmis.org,
-        Juri Lelli <juri.lelli@redhat.com>
-Date:   Fri, 04 Mar 2022 16:55:06 +0100
-In-Reply-To: <bc048c18-0ba7-1cb9-90a0-0bc049997c23@kernel.org>
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
-         <78d798aa-388c-70bc-4227-985ba76c1d7e@kernel.org>
-         <b5e1f0d14a48c0815863af623cedbdc8c1bc255f.camel@redhat.com>
-         <abb789c3-0d1a-28e9-3b8d-e4a68e3f57f5@kernel.org>
-         <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
-         <bc048c18-0ba7-1cb9-90a0-0bc049997c23@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 10:56:36 -0500
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930BF1BD04D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1646409336;
+        bh=64ZefWM5dwMmiNlcoKhgsp/mQ1Q5iCEwT0OzjB//AQY=;
+        h=In-Reply-To:References:From:To:Cc:Subject:Date;
+        b=HWydGXzFtUVR7T7c6iQEKtnnxVLkAXQiL+fkzIpokfQJkgGDXlFb3G4lb2f48tlOa
+         W0s5ejGfgfNrVd3y+2Hl1i/mGDx3w9aT89BSf5zFbHZckbJPaIJ4P5k7FOHZ2BJ9Kl
+         b7aPCC0cQWXHZ+H/YOkQzdGkw1uJEtM1Q0HFUiPY=
+X-QQ-FEAT: oHWrrGTW1dDsKNFxPRHuucU0bvjgjO7B
+X-QQ-SSF: 00000000000000F000000000000000Z
+X-QQ-XMAILINFO: N46sULEd9DYDcUHZOTEFVVjF+Czl8cDVCiMmgxSp8pp4tYRZjkiPZ9bQ1AElxJ
+         dET+wEQAjcpk+R+gVCl2bpECJnOJuOqdiJoz9I/ah5WYguWj5ALiRfPR0gEOG62liToV4DgLLz6J+
+         Rzze/PlyoB2uOFnLu61Gg0iAbn90zKBH6gC/Ce47+KxZaALZAorzEQgh7GOMIodJOnmdg8VkAj8pX
+         +qmvmXtr6incxKAunCfx2zh7MvnW9VsJTvnWG7Viz0sNmm8cpguosl4wgaaCJAA6S6ySEj3ddu3dO
+         5/Xtjo9rthH/cj43aVMEeGgoHkb/WKm8yVvwFURd0E6GpEhFhVjSxN8gcTCHBp99DaNXPSeNVdu1x
+         v3tw3emgcSDZKSXM+wVpxFd1UaYELWmAF47doVmLf9d7g+E7R+GCxd7RgUvAFrI4ZCpZFqpWqWdzG
+         ov1aevipHHtgPOhnVP+cbNEHwhRUnSb7N2Xzp57m6lJCqAHX+7ENCwiEk0l0Bglxqtg+F+hxn4/65
+         rEHaUPitBjxf8PTFIOOhKTOLugZRfd23yB9Ub7uWdg1TnRAlGHSXWFIQGp+7e9ZrXgY+zGflyL56M
+         bvcsrO5VlZCk9MQHvtlRllcPEY+XfZBRDuJK+gd6Ds3n7TIV5NCW9+efzXzdl2HRLJD1ylfrLBNEw
+         Wg8W6PaQGNkCeTJWOy0Rgp9dEmBG3KGLI/30OgdENwrtPycA5hK0KfRcButOb/wAEmph8dbIjiRxE
+         IHJqRLqv5v8TkzfTl2mkfzoZLvwmpBuevgpfLGjVPNZ2TG796BbJKQfyOIZ0GfR0tI+5rYyM2SHd4
+         Nj65j3YBBs2ZWwbujWnM5sc3Sxj7jI2+WkZMSZGr40icrYKUPrEXXK/eo7Hkece0TQYg/xlAgQTTe
+         /bxA6VE899mjOU5A4tArB366G9q6QPgT1MBtAfHWqM=
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 111.47.122.156
+In-Reply-To: <YiIesoVGiVm2KcUD@kroah.com>
+References: <tencent_DE1C3D1422E1DD4A35FFDE2048CC48B94E08@qq.com>
+        <YiIesoVGiVm2KcUD@kroah.com>
+X-QQ-STYLE: 
+X-QQ-mid: webmail813t1646409336t1400708
+From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
+To:     "=?ISO-8859-1?B?R3JlZyBLSA==?=" <gregkh@linuxfoundation.org>
+Cc:     "=?ISO-8859-1?B?bGludXg=?=" <linux@dominikbrodowski.net>,
+        "=?ISO-8859-1?B?YWtwbQ==?=" <akpm@linux-foundation.org>,
+        "=?ISO-8859-1?B?cG9tYnJlZGFubmU=?=" <pombredanne@nexb.com>,
+        "=?ISO-8859-1?B?YXJuZA==?=" <arnd@arndb.de>,
+        "=?ISO-8859-1?B?bHVjLnZhbm9vc3RlbnJ5Y2s=?=" 
+        <luc.vanoostenryck@gmail.com>,
+        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] init/initramfs.c: check the return value of kstrdup()
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
+Date:   Fri, 4 Mar 2022 23:55:35 +0800
+X-Priority: 3
+Message-ID: <tencent_72848F2829FCD381DC30F3E7DA737050880A@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_EXCESS_BASE64,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 16:37 +0100, Daniel Bristot de Oliveira wrote:
-> On 3/4/22 16:28, Nicolas Saenz Julienne wrote:
-> > Some comments:
-> >  - You're not exiting/entering EQS on IRQ/NMI entry/exit. See
-> >    irqentry_{enter,exit}() and irqentry_nmi_{enter,exit}().
-> 
-> hummm, right!
-> 
-> >  - See this series[1], if we ever pursue this approach, it's important we got
-> >    through context tracking, instead of poking at RCU directly.
-> 
-> I had a test patch with context_tracking as well... entering and leaving using
-> it. Lemme find it.... but it basically works in the same way as for RCU (or
-> pretend to work).
-
-Yes, agree, it's fundamentally the same.
-
--- 
-Nicolás Sáenz
+T24gRnJpLCAwNCBNYXIgMjAyMiAyMjoxNDoyMSArMDgwMCwgR3JlZyBLSCA8Z3JlZ2toQGxp
+bnV4Zm91bmRhdGlvbi5vcmc+IHdyb3RlOgo+PiBzdHJ1Y3QgZGlyX2VudHJ5ICpkZSA9IGtt
+YWxsb2Moc2l6ZW9mKHN0cnVjdCBkaXJfZW50cnkpLCBHRlBfS0VSTkVMKTsKPj4gaWYgKCFk
+ZSkKPj4gIHBhbmljX3Nob3dfbWVtKCJjYW4ndCBhbGxvY2F0ZSBkaXJfZW50cnkgYnVmZmVy
+Iik7Cj4+IC0gSU5JVF9MSVNUX0hFQUQoJmRlLT5saXN0KTsKPj4gZGUtPm5hbWUgPSBrc3Ry
+ZHVwKG5hbWUsIEdGUF9LRVJORUwpOwo+PiArIGlmICghZGUtPm5hbWUpIHsKPgo+IEhvdyBj
+YW4gdGhpcyBmYWlsPyAgSGF2ZSB5b3UgZXZlciBoaXQgdGhpcyBpbiByZWFsIGxpZmU/Cj4K
+Pj4gK2tmcmVlKGRlKTsKPj4gK3BhbmljX3Nob3dfbWVtKCJjYW4ndCBkdXBsaWNhdGUgZGly
+IG5hbWUiKTsKPgo+IFdoeSBhcmUgeW91IGZyZWVpbmcgbWVtb3J5IGlmIHlvdSBhcmUgcGFu
+aWNpbmc/Cj4KPiBIb3cgd2FzIHRoaXMgdGVzdGVkPwoKVGhhbmsgeW91IGZvciB0YWtpbmcg
+dGhlIHRpbWUuCkkgZm91bmQgdGhpcyB3aXRoIGEgc3RhdGljIHRvb2wsIHdpdGhvdXQgZHlu
+YW1pYyB0ZXN0aW5nLgprc3RyZHVwKCkgYWxsb2NhdGVzIG1lbW9yeSBmb3IgY29weWluZyB0
+aGUgc3RyaW5nIGFuZCBJIG5vdGljZWQgYWxsIHRoZQpvdGhlciBhbGxvY2F0aW9uIGZ1bmN0
+aW9ucyBpbiB0aGlzIGZpbGUgaGF2ZSB0aGUgY2hlY2sgZm9yIHRoZWlyIHJldHVybgp2YWx1
+ZSBzdWNoIGFzIGBkZWAgb24gdGhlIGFib3ZlIGNvZGUuIFNvIEkgc3VwcG9zZSB0aGlzIGlz
+IGFsc28gbmVlZGVkCnRvIGJlIGNoZWNrZWQgYW5kIEkgaW50dWl0aXZlbHkgYWRkIGtmcmVl
+KCkgb24gdGhlIGVycm9yIHBhdGguCkknbSBzb3JyeSB0byBib3RoZXIgeW91IGlmIHRoaXMg
+aXMgYWN0dWFsbHkgdW5uZWNlc3NhcnkuCgpSZWdhcmRzLApYaWFva2UgV2FuZw==
 

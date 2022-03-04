@@ -2,112 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F874CD3C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75954CD3C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbiCDLt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S233210AbiCDLtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbiCDLt6 (ORCPT
+        with ESMTP id S229574AbiCDLtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:49:58 -0500
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0751B1DD1;
-        Fri,  4 Mar 2022 03:49:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1646394544;
-        bh=AIDMXBc8l59dOY/mPpvQ/FWRUbozuV63c41/mFfvSC4=;
-        h=From:To:Cc:Subject:Date;
-        b=Iza5Lj9JE74WREUC+zbYWrNnApwfW5En6mpdwOknxeQIQCzYmGm1LrKYCnggqu2x/
-         pRD+ioCJMUer0oQIw863j0Pat3S75g0lofWKw33p5Un0MT/4cB/kr5BDzAnxsyzDYI
-         yyRll4hh2wNFBPykWMZOHZAETycNtJcAPWsNsavE=
-Received: from localhost.localdomain ([43.227.136.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id C3BA481B; Fri, 04 Mar 2022 19:48:59 +0800
-X-QQ-mid: xmsmtpt1646394539tj8y1kb28
-Message-ID: <tencent_E6A97F6B1009E6F65C230E070A9770612507@qq.com>
-X-QQ-XMAILINFO: ODdZrkDuTlAgNeTh1j/G2NL1AHblXm8Qf0chvyulSFxRRsk53IVVHln3BhaP3j
-         2x5HpnqX8bUwH3ycK+VgZkGcJTJhweMZum9+agjIf2ncDjQARXi4dawI+P27G8ZBH08KIEixBcYa
-         EznLl8Wd2lAcMF5R85X/Ygw0VMWvlKg0B2PWlFfsN3kIFOHplJ5syzyxBnJ7dJtF6bzqrUnFqf1k
-         XCAdRLu8WKnXOm+UidM9WcwlQCNO3m3RX26yZoeK3wMM93cLJddmnpAvYesw2Rocobulvp9qWHtv
-         F2Bpr5Ot9E6acH8nyfpr81Y2B4agNTqwMfnosbK1Hmr5HiPE79Cvy8qE2giNb6053C3owoTXuOMo
-         CIvh5LN14UalMBbz5WXVl1Xkp0yu1qcuGdftXuN6A7mF2mJwZwkKdZULfKgNLIQRKXFcB2dPagOG
-         MwwaROLOGV+9Lu8XqgylvdetCC9Jwv2jD5Y1r2OKlBZN8z9JJoVj7PVZArvqT/yX9yCE64wq6Etw
-         zfQQZEAIKDcnZJX9lNcvcuGxcnIflzVV92DdehSyldaWE4HeavEKx0KKMMpv4kR/stp84mt1iO9F
-         aZ0v7rbODV6StlE0zLOZ187lY62L8hFrdKitagf9+GHsU4YoTa7LyNkeBGE5xCWI+226T+rJ9I/O
-         3TYPHAoMrKIolhNM9ZbElkQB8YIHmSjod6Zwhk2OFQQ+1pNkvQ4qUk4Y1NKslU5BGR2yNGuq7i6K
-         L2TQU0U1tGwN6ax0kO7IP27NpYtBEm5vpptYuk3dzzkKRCpn3hv+Ic9oiOoiDAw7SGY+FfMHNyvr
-         Cfe+DfWs21W0nzdmkFT/sH5T0G7KXeVFtCB7B11sPjRlbuJnAc6sII+EW8HwoH6sPOR/bqTgcvKV
-         P0NKBOV4v2sFGWxPmdEVkZmRlACLENcKpq+Mx+EMROy1lFWgi34ca4uxy2sZ6hcgqF0CkrJ+4p8s
-         V5JyKPVHO01FhkM6AuUQ==
-From:   xkernel.wang@foxmail.com
-To:     laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] media: omap3isp: check the return of __ccp2_get_format()
-Date:   Fri,  4 Mar 2022 19:48:18 +0800
-X-OQ-MSGID: <20220304114819.5566-1-xkernel.wang@foxmail.com>
+        Fri, 4 Mar 2022 06:49:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680F818CC29;
+        Fri,  4 Mar 2022 03:48:52 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3A43951C;
+        Fri,  4 Mar 2022 12:48:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646394530;
+        bh=Tpmci2229+d69SIklAmDsEQusgFyc/vp2PTOJIMLm2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mn7A7sk9koDrV8kFK7nOrLrJz4m5dHtM1/DeQzlt/y3cqkV0pcKzwQO18olJzNJbt
+         AnjrfaRVlWXsDgZJCGTBtWG1wnIbPv+tA4png3K5nU6+BNuwX0wMXH/76ehXTptVHq
+         5kLuAQW656aszJpVgIgsLGLK7dcVyltzcjHN71m8=
+Date:   Fri, 4 Mar 2022 13:48:37 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: kbuild: Pass DT_SCHEMA_FILES to
+ dt-validate
+Message-ID: <YiH8lWq8gOnaQ+7G@pendragon.ideasonboard.com>
+References: <20220303224237.2497570-1-robh@kernel.org>
+ <20220303224237.2497570-2-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220303224237.2497570-2-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Thu, Mar 03, 2022 at 04:42:36PM -0600, Rob Herring wrote:
+> In preparation for supporting validation of DTB files, the full
+> processed schema will always be needed in order to extract type
+> information from it. Therefore, the processed schema containing only
+> what DT_SCHEMA_FILES specifies won't work. Instead, dt-validate has
+> gained an option, -l or --limit, to specify which schema(s) to use for
+> validation.
+> 
+> As the command line option is new, we the minimum dtschema version must be
+> updated.
+> 
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/Makefile | 28 +++-------------------
+>  scripts/Makefile.lib                       |  3 +--
+>  2 files changed, 4 insertions(+), 27 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
+> index 61ec18ecc931..246ba0ecab64 100644
+> --- a/Documentation/devicetree/bindings/Makefile
+> +++ b/Documentation/devicetree/bindings/Makefile
+> @@ -6,7 +6,7 @@ DT_MK_SCHEMA ?= dt-mk-schema
+>  DT_SCHEMA_LINT := $(shell which yamllint || \
+>    echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
+>  
+> -DT_SCHEMA_MIN_VERSION = 2021.2.1
+> +DT_SCHEMA_MIN_VERSION = 2022.3
+>  
+>  PHONY += check_dtschema_version
+>  check_dtschema_version:
+> @@ -25,9 +25,6 @@ quiet_cmd_extract_ex = DTEX    $@
+>  $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
+>  	$(call if_changed,extract_ex)
+>  
+> -# Use full schemas when checking %.example.dts
+> -DT_TMP_SCHEMA := $(obj)/processed-schema-examples.json
+> -
+>  find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
+>  		-name 'processed-schema*' ! \
+>  		-name '*.example.dt.yaml' \)
+> @@ -70,29 +67,10 @@ override DTC_FLAGS := \
+>  # Disable undocumented compatible checks until warning free
+>  override DT_CHECKER_FLAGS ?=
+>  
+> -$(obj)/processed-schema-examples.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
+> +$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
+>  	$(call if_changed_rule,chkdt)
+>  
+> -ifeq ($(DT_SCHEMA_FILES),)
+> -
+> -# Unless DT_SCHEMA_FILES is specified, use the full schema for dtbs_check too.
+> -# Just copy processed-schema-examples.json
+> -
+> -$(obj)/processed-schema.json: $(obj)/processed-schema-examples.json FORCE
+> -	$(call if_changed,copy)
+> -
+> -else
+> -
+> -# If DT_SCHEMA_FILES is specified, use it for processed-schema.json
+> -
+> -$(obj)/processed-schema.json: DT_MK_SCHEMA_FLAGS := -u
+> -$(obj)/processed-schema.json: $(CHK_DT_DOCS) check_dtschema_version FORCE
+> -	$(call if_changed,mk_schema)
+> -
+> -endif
+> -
+> -always-$(CHECK_DT_BINDING) += processed-schema-examples.json
+> -always-$(CHECK_DTBS)       += processed-schema.json
+> +always-y += processed-schema.json
+>  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
+>  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dt.yaml, $(CHK_DT_DOCS))
+>  
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 79be57fdd32a..9f1e8442564e 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -361,9 +361,8 @@ $(multi-dtb-y): FORCE
+>  $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
+>  
+>  DT_CHECKER ?= dt-validate
+> -DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),,-m)
+> +DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
+>  DT_BINDING_DIR := Documentation/devicetree/bindings
+> -# DT_TMP_SCHEMA may be overridden from Documentation/devicetree/bindings/Makefile
+>  DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
 
-__ccp2_get_format() returns format structure or NULL on error.
-So it is better to check the return value of it to prevent potential
-wrong memory access.
+This could now use := instead of ?=
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/media/platform/omap3isp/ispccp2.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Apart from the fact that 2022.3 hasn't been tagged yet as pointed out by
+Geert, this looks fine to me (but I'm no expert in this area).
 
-diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/omap3isp/ispccp2.c
-index acb58b6..81881b1 100644
---- a/drivers/media/platform/omap3isp/ispccp2.c
-+++ b/drivers/media/platform/omap3isp/ispccp2.c
-@@ -675,8 +675,10 @@ static void ccp2_try_format(struct isp_ccp2_device *ccp2,
- 		 */
- 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
- 					   which);
--		memcpy(fmt, format, sizeof(*fmt));
--		fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+		if (format != NULL) {
-+			memcpy(fmt, format, sizeof(*fmt));
-+			fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+		}
- 		break;
- 	}
- 
-@@ -709,6 +711,9 @@ static int ccp2_enum_mbus_code(struct v4l2_subdev *sd,
- 
- 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SINK,
- 					   code->which);
-+		if (format == NULL)
-+			return -EINVAL;
-+
- 		code->code = format->code;
- 	}
- 
-@@ -792,6 +797,9 @@ static int ccp2_set_format(struct v4l2_subdev *sd,
- 	if (fmt->pad == CCP2_PAD_SINK) {
- 		format = __ccp2_get_format(ccp2, sd_state, CCP2_PAD_SOURCE,
- 					   fmt->which);
-+		if (format == NULL)
-+			return -EINVAL;
-+
- 		*format = fmt->format;
- 		ccp2_try_format(ccp2, sd_state, CCP2_PAD_SOURCE, format,
- 				fmt->which);
+>  
+>  quiet_cmd_dtb_check =	CHECK   $@
+
 -- 
+Regards,
+
+Laurent Pinchart

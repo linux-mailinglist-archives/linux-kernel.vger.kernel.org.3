@@ -2,133 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0218B4CD674
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FE84CD67C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236143AbiCDObv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S233397AbiCDOfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiCDObt (ORCPT
+        with ESMTP id S230076AbiCDOf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:31:49 -0500
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0C1B6E05;
-        Fri,  4 Mar 2022 06:31:01 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id a6so7962523oid.9;
-        Fri, 04 Mar 2022 06:31:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1PRcoDd6e5pTSWSDNB57phipwxCHGJPb3RfLFoPodZQ=;
-        b=QGnafN8gNDseAT3enl8/d4EcrT0wBouxT07iNMEMqKYtbGOINa4bvdP9AZCrWkFBBK
-         DNw3KwOj4gq7owdO5NfEAmFffk/GKWnmjy9eZzFpXgrHkkpylevav9OB+8hTZ+HuU0TA
-         sCuiAD+WY81sj7DJGuBt7jxcuGnE9s06HwXtdBOk/z6zhPbQQH7HQN/50E6On6e1NLGC
-         vAk9SMilcm/u6Yax4zdA/MzhJKn11BlG6F7JWdNbitia1D2xOderEn1Zfq/OOXrSEkxP
-         C/b/zeEyTS1SR3CvBhZKEwC/ld33EBcgOT8baUo+rCCvZUatREa/odqjE4hJ3PBVXh/y
-         0MUw==
-X-Gm-Message-State: AOAM533DsiwSlvd6NNsmU6TXpi/Auy87QXwjLlhsj6twA6kRYZc9v4fa
-        RPA7tAV2eL2EUSsLEi3mUPrbP8rZ2g==
-X-Google-Smtp-Source: ABdhPJxgFjet6DHJYjwSA/CVxxo72Wc5mEvkMEFHT26L/8KvHO9PM+GrI9tTCN8bOrkkfts2nI26Ag==
-X-Received: by 2002:a05:6808:2095:b0:2d5:328d:f61b with SMTP id s21-20020a056808209500b002d5328df61bmr9500712oiw.9.1646404260980;
-        Fri, 04 Mar 2022 06:31:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r18-20020a056830081200b005ad10dfcf60sm2347847ots.67.2022.03.04.06.30.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 06:31:00 -0800 (PST)
-Received: (nullmailer pid 3877594 invoked by uid 1000);
-        Fri, 04 Mar 2022 14:30:59 -0000
-Date:   Fri, 4 Mar 2022 08:30:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: kbuild: Pass DT_SCHEMA_FILES to
- dt-validate
-Message-ID: <YiIio1dJd5mvMr0v@robh.at.kernel.org>
-References: <20220303224237.2497570-1-robh@kernel.org>
- <20220303224237.2497570-2-robh@kernel.org>
- <CAMuHMdU6g7c9YX0mBAGWbCWgA8exkUSfqn8ZGi_2N+Nz1WT+BA@mail.gmail.com>
- <YiIa3Ox7UBLyBtoR@robh.at.kernel.org>
- <CAMuHMdU9yzpLh+S821osed5nuHfc0rONB+i4sPjXsGuKLumgfQ@mail.gmail.com>
+        Fri, 4 Mar 2022 09:35:28 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6186C93C;
+        Fri,  4 Mar 2022 06:34:38 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6Cl-OW_1646404471;
+Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6Cl-OW_1646404471)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 04 Mar 2022 22:34:32 +0800
+Message-ID: <56217d87-84eb-000c-6773-93971f316fbe@linux.alibaba.com>
+Date:   Fri, 4 Mar 2022 06:34:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU9yzpLh+S821osed5nuHfc0rONB+i4sPjXsGuKLumgfQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <202203031010.0A492D114@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 03:05:13PM +0100, Geert Uytterhoeven wrote:
-> Hi Rob,
-> 
-> On Fri, Mar 4, 2022 at 2:57 PM Rob Herring <robh@kernel.org> wrote:
-> > On Fri, Mar 04, 2022 at 10:32:29AM +0100, Geert Uytterhoeven wrote:
-> > > On Thu, Mar 3, 2022 at 11:43 PM Rob Herring <robh@kernel.org> wrote:
-> > > > In preparation for supporting validation of DTB files, the full
-> > > > processed schema will always be needed in order to extract type
-> > > > information from it. Therefore, the processed schema containing only
-> > > > what DT_SCHEMA_FILES specifies won't work. Instead, dt-validate has
-> > > > gained an option, -l or --limit, to specify which schema(s) to use for
-> > > > validation.
-> > > >
-> > > > As the command line option is new, we the minimum dtschema version must be
-> > > > updated.
-> > > >
-> > > > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > --- a/Documentation/devicetree/bindings/Makefile
-> > > > +++ b/Documentation/devicetree/bindings/Makefile
-> > > > @@ -6,7 +6,7 @@ DT_MK_SCHEMA ?= dt-mk-schema
-> > > >  DT_SCHEMA_LINT := $(shell which yamllint || \
-> > > >    echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
-> > > >
-> > > > -DT_SCHEMA_MIN_VERSION = 2021.2.1
-> > > > +DT_SCHEMA_MIN_VERSION = 2022.3
-> > >
-> > > This doesn't work as-is, as that version hasn't been tagged yet ;-)
-> >
-> > I had to make sure people are paying attention. You win the prize. :)
-> >
-> > It's there now.
-> 
-> Thanks, confirmed.
-> 
-> With this series applied, the various salvator-xs DTS files are now
-> throwing up:
-> 
->     sata: size (19) error for type phandle
->     backlight: size (11) error for type phandle
 
-Those come from the code decoding the properties[1]. Unfortunately, I 
-haven't come up with a prettier way to report those with the filename. I 
-may just remove it because if decoding the property fails, we'll get 
-schema errors later on anyways.
 
-But I don't see any 'sata' properties in the DTS files and 'backlight' 
-is a node. Are you building with '-@'? I probably need to skip 
-__symbols__ nodes. The overlay side is handled because examples are 
-built as overlays (to allow unresolved phandles).
+On 3/3/22 10:42, Kees Cook wrote:
+> On Wed, Mar 02, 2022 at 11:43:39PM -0800, Dan Li wrote:
+>> Add tests for SCS (Shadow Call Stack) based
+>> backward CFI (as implemented by Clang and GCC).
+> 
+> Cool; thanks for writing these!
+> 
+>> +lkdtm-$(CONFIG_LKDTM)		+= scs.o
+> 
+> I'd expect these to be in cfi.c, rather than making a new source file.
+> 
 
-Rob
+Got it.
 
-[1] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/dtb.py#L149
+>> +static noinline void lkdtm_scs_clear_lr(void)
+>> +{
+>> +	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+>> +
+>> +	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
+> 
+> Is the asm needed here? Why not:
+> 
+> 	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
+> 
+> 	*lr = 0;
+> 
+
+Yeah, with "volatile", this one looks better.
+
+>> +
+>> +/*
+>> + * This tries to call a function protected by Shadow Call Stack,
+>> + * which corrupts its own return address during execution.
+>> + * Due to the protection, the corruption will not take effect
+>> + * when the function returns.
+>> + */
+>> +void lkdtm_CFI_BACKWARD_SHADOW(void)
+> 
+> I think these two tests should be collapsed into a single one.
+> 
+
+It seems that there is currently no cross-line matching in
+selftests/lkdtm/run.sh, if we put these two into one function and
+assume we could make noscs_set_lr _survivable_ (like in your example).
+
+Then we could only match "CFI_BACKWARD_SHADOW ok: scs takes effect."
+in texts.txt
+
+But if the test result is:
+XPASS: Unexpectedly survived lr corruption without scs?
+ok: scs takes effect.
+
+It may not be a real pass, but the xxx_set_lr function doesn't work.
+
+>> +{
+>> +#ifdef CONFIG_ARM64
+>> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+>> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
+>> +		return;
+>> +	}
+>> +
+>> +	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+>> +	lkdtm_scs_clear_lr();
+>> +
+>> +	pr_err("ok: scs takes effect.\n");
+>> +#else
+>> +	pr_err("XFAIL: this test is arm64-only\n");
+>> +#endif
+> 
+> This is slightly surprising -- we have no detection when a function has
+> its non-shadow-stack return address corrupted: it just _ignores_ the
+> value stored there. That seems like a missed opportunity for warning
+> about an unexpected state.
+> 
+
+Yes.
+Actually I used to try in the plugin to add a detection before the function
+returns, and call a callback when a mismatch is found. But since almost
+every function has to be instrumented, the performance penalty is
+improved from <3% to ~20% (rough calculation, should still be optimized).
+
+>> +}
+>> +
+>> +/*
+>> + * This tries to call a function not protected by Shadow Call Stack,
+>> + * which corrupts its own return address during execution.
+>> + */
+>> +void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
+>> +{
+>> +#ifdef CONFIG_ARM64
+>> +	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+>> +		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
+>> +		return;
+> 
+> Other tests try to give some hints about failures, e.g.:
+> 
+> 		pr_err("FAIL: cannot change for SCS\n");
+> 		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> 
+> Though, having the IS_ENABLED in there makes me wonder if this test
+> should instead be made _survivable_ on failure. Something like this,
+> completely untested:
+> 
+> 
+> #ifdef CONFIG_ARM64
+> static noinline void lkdtm_scs_set_lr(unsigned long *addr)
+> {
+> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 	*lr = addr;
+> }
+> 
+> /* Function with __noscs attribute clears its return address. */
+> static noinline void __noscs lkdtm_noscs_set_lr(unsigned long *addr)
+> {
+> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 	*lr = addr;
+> }
+> #endif
+> 
+> 
+> void lkdtm_CFI_BACKWARD_SHADOW(void)
+> {
+> #ifdef CONFIG_ARM64
+> 
+> 	/* Verify the "normal" condition of LR corruption working. */
+> 	do {
+> 		/* Keep label in scope to avoid compiler warning. */
+> 		if ((volatile int)0)
+> 			goto unexpected;
+> 
+> 		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
+> 		lkdtm_noscs_set_lr(&&expected);
+> 
+> unexpected:
+> 		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
+> 		break;
+> 
+> expected:
+> 		pr_err("ok: lr corruption redirected without scs.\n");
+> 	} while (0);
+> 
+> 
+> 	do {
+> 		/* Keep labe in scope to avoid compiler warning. */
+> 		if ((volatile int)0)
+> 			goto good_scs;
+> 
+> 		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+> 		lkdtm_scs_set_lr(&&bad_scs);
+> 
+> good_scs:
+> 		pr_info("ok: scs takes effect.\n");
+> 		break;
+> 
+> bad_scs:
+> 		pr_err("FAIL: return address rewritten!\n");
+> 		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> 	} while (0);
+> #else
+> 	pr_err("XFAIL: this test is arm64-only\n");
+> #endif
+> }
+> 
+
+Thanks for the example, Kees :)
+This code (with a little modification) works correctly with clang 12,
+but to make sure it's always correct, I think we might need to add the
+__attribute__((optnone)) attribute to it, because under -O2 the result
+doesn't seem to be "very stable" (as in your example in the next email).
+
+> And we should, actually, be able to make the "set_lr" functions be
+> arch-specific, leaving the test itself arch-agnostic....
+> 
+
+I'm not sure if my understanding is correct, do it means we should
+remove the "#ifdef CONFIG_ARM64" in lkdtm_CFI_BACKWARD_SHADOW?
+
+Then we may not be able to distinguish between failures caused by
+platform unsupported (XFAIL) and features not enabled (or not
+working properly).
+
+Thanks,
+Dan.

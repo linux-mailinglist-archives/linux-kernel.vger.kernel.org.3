@@ -2,43 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65A44CD945
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1514CD955
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbiCDQmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S240730AbiCDQnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240715AbiCDQmF (ORCPT
+        with ESMTP id S240713AbiCDQnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:42:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DA4E1B7619
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:41:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99903143D;
-        Fri,  4 Mar 2022 08:41:16 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 073C73F73D;
-        Fri,  4 Mar 2022 08:41:14 -0800 (PST)
-Date:   Fri, 4 Mar 2022 16:41:12 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
-        igor.skalkin@opensynergy.com
-Subject: Re: [PATCH v5 0/8] Add SCMI Virtio & Clock atomic support
-Message-ID: <YiJBFwnhqy2krQJs@e120937-lin>
-References: <20220217131234.50328-1-cristian.marussi@arm.com>
- <20220304111032-mutt-send-email-mst@kernel.org>
+        Fri, 4 Mar 2022 11:43:37 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227F86E7A2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:42:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C720C1F38A;
+        Fri,  4 Mar 2022 16:42:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646412167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+2Itu7S1crpuZV7anehYym0zMXdq6gIiMgw+mWxVb4=;
+        b=aKUeVXsAibm8DTcJS4p3Odp8T2pRYvkHDAatPXKAO4xM83rIJhLiCnbFNqOozShOI9w2dy
+        9/xHRBjevpgP3lT1A3TLp0I7srrfJuGil31hUkVvS4dW7WtHSfFOIMHpcLOtICIMb4zMfE
+        In2ePdyWDb4C1Rsm5j/aI+8skosaPWY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646412167;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+2Itu7S1crpuZV7anehYym0zMXdq6gIiMgw+mWxVb4=;
+        b=HdfV+Xl8PhkuhtYO3gxqiy4fR7yefPCrGWo/VKV5Wo4R1iooE+5j5g/z7CWSNK29C1IaaR
+        1ZH9rGQE/j1ptMCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DF0813CE6;
+        Fri,  4 Mar 2022 16:42:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bLbFJYdBImIpUwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 04 Mar 2022 16:42:47 +0000
+Message-ID: <b9adf3a8-a260-c3ae-58a3-feefab40a651@suse.cz>
+Date:   Fri, 4 Mar 2022 17:42:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304111032-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+ <CANpmjNNv8+frHPdvT=0ZNuz5phUy1WRanJ6DkiiNvDTBtFraAQ@mail.gmail.com>
+ <YiH/6MeYNaEehXmj@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <CANpmjNNYt9AG8RrGF0pq2dPbFc=vw2kaOnL2k5+8kfJeEMGuwg@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 0/5] slab cleanups
+In-Reply-To: <CANpmjNNYt9AG8RrGF0pq2dPbFc=vw2kaOnL2k5+8kfJeEMGuwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,77 +83,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 11:13:47AM -0500, Michael S. Tsirkin wrote:
-> On Thu, Feb 17, 2022 at 01:12:26PM +0000, Cristian Marussi wrote:
-> > Hi,
-> > 
-> > This small series is the tail-subset of the previous V8 series about atomic
-> > support in SCMI [1], whose 8-patches head-subset has now been queued on
-> > [2]; as such, it is based on [2] on top of tag scmi-updates-5.17:
-> > 
-> > commit 94d0cd1da14a ("firmware: arm_scmi: Add new parameter to
-> > 		     mark_txdone")
-> > 
-> > Patch [1/8] substitute virtio-scmi ready flag and lock with a reference
-> > counter to keep track of vio channels lifetime while removing the need of
-> > a wide spinlocked section (that would cause issues with introduction of
-> > virtio polling support)
-> > 
-> > Patch [2/8] adds a few helpers to handle the TX free_list and a dedicated
-> > spinlock to reduce the reliance on the main one.
-> > 
-> > Patch [3/8] adds polling mode to SCMI VirtIO transport in order to support
-> > atomic operations on such transport.
-> > 
-> > Patches [4,5/8] introduce a new optional SCMI binding, atomic-threshold-us,
-> > to configure a platform specific time threshold used in the following
-> > patches to select with a finer grain which SCMI resources should be
-> > eligible for atomic operations when requested.
-> > 
-> > Patch [6/8] exposes new SCMI Clock protocol operations to allow an SCMI
-> > user to request atomic mode on clock enable commands.
-> > 
-> > Patch [7/8] adds support to SCMI Clock protocol for a new clock attributes
-> > field which advertises typical enable latency for a specific resource.
-> > 
-> > Finally patch [8/8] add support for atomic operations to the SCMI clock
-> > driver; the underlying logic here is that we register with the Clock
-> > framework atomic-capable clock resources if and only if the backing SCMI
-> > transport is capable of atomic operations AND the specific clock resource
-> > has been advertised by the SCMI platform as having:
-> > 
-> > 	clock_enable_latency <= atomic-threshold-us
-> > 
-> > The idea is to avoid costly atomic busy-waiting for resources that have
-> > been advertised as 'slow' to operate upon. (i.e. a PLL vs a gating clock)
-> > 
-> > To ease testing the whole series can be find at [3].
-> > 
-> > Any feedback/testing welcome as usual.
-> > 
-> > Thanks,
-> > Cristian
+On 3/4/22 14:11, Marco Elver wrote:
+> On Fri, 4 Mar 2022 at 13:02, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>>
+>> On Fri, Mar 04, 2022 at 12:50:21PM +0100, Marco Elver wrote:
+>> > On Fri, 4 Mar 2022 at 07:34, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>> > >
+>> > > Changes from v1:
+>> > >         Now SLAB passes requests larger than order-1 page
+>> > >         to page allocator.
+>> > >
+>> > >         Adjusted comments from Matthew, Vlastimil, Rientjes.
+>> > >         Thank you for feedback!
+>> > >
+>> > >         BTW, I have no idea what __ksize() should return when an object that
+>> > >         is not allocated from slab is passed. both 0 and folio_size()
+>> > >         seems wrong to me.
+>> >
+>> > Didn't we say 0 would be the safer of the two options?
+>> > https://lkml.kernel.org/r/0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz
+>> >
+>>
+>> Oh sorry, I didn't understand why 0 was safer when I was reading it.
+>>
+>> Reading again, 0 is safer because kasan does not unpoison for
+>> wrongly passed object, right?
 > 
+> Not quite. KASAN can tell if something is wrong, i.e. invalid object.
+> Similarly, if you are able to tell if the passed pointer is not a
+> valid object some other way, you can do something better - namely,
+> return 0.
+
+Hmm, but how paranoid do we have to be? Patch 1 converts SLAB to use
+kmalloc_large(). So it's now legitimate to have objects allocated by SLAB's
+kmalloc() that don't have a slab folio flag set, and their size is
+folio_size(). It would be more common than getting a bogus pointer, so
+should we return 0 just because a bogus pointer is possible? If we do that,
+then KASAN will fail to unpoison legitimate kmalloc_large() objects, no?
+What I suggested earlier is we could make the checks more precise - if
+folio_size() is smaller or equal order-1 page, then it's bogus because we
+only do kmalloc_large() for >order-1. If the object pointer is not to the
+beginning of the folio, then it's bogus, because kmalloc_large() returns the
+beginning of the folio. Then in these case we return 0, but otherwise we
+should return folio_size()?
+
+> The intuition here is that the caller has a pointer to an
+> invalid object, and wants to use ksize() to determine its size, and
+> most likely access all those bytes. Arguably, at that point the kernel
+> is already in a degrading state. But we can try to not let things get
+> worse by having ksize() return 0, in the hopes that it will stop
+> corrupting more memory. It won't work in all cases, but should avoid
+> things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
+> bounds the memory accessed corrupting random memory.
 > 
-> SCMI specific stuff so I don't have anything to add here.
-> 
-> By the way, it does not look like anything regarding SCMI atomic support
-> is needed in the virtio spec - is it true the interface with the device
-> is unaffected?
-> 
+> The other reason is that a caller could actually check the size, and
+> if 0, do something else. Few callers will do so, because nobody
+> expects that their code has a bug. :-)
 
-Yes SCMI atomic uses the existing VirtIO SCMI Device specification and the
-existing  VirtIO common API for polling.
-
-The only addition on the implementation side is the polling ABA problem
-mitigation that I proposed as an addiional mechanism (wrap counters) in
-the Virtio core with:
-
-https://lore.kernel.org/linux-arm-kernel/20220208152520.52983-1-cristian.marussi@arm.com/#r
-
-I'll repost soon this latter series about wrap counters on top of the merged
-SCMI atomic series so as to make use of this mitigation from SCMI while in
-polling mode.
-
-Thanks for the feedback,
-Cristian

@@ -2,177 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976884CDE46
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFF44CDED9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiCDUCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S229934AbiCDU1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiCDUBu (ORCPT
+        with ESMTP id S229720AbiCDU1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:01:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A52E28672E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646423775;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 4 Mar 2022 15:27:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394F23CA6A;
+        Fri,  4 Mar 2022 12:26:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7CA1B21129;
+        Fri,  4 Mar 2022 20:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646424022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=P9DhVtnRsmc3RlPCIzZyvuWYNlBf0BRlzJacAYcnL5k=;
-        b=dOlX/8D3oBAnQOcGa6KKoVokU+mEDdVIzLWEShKe0ms+pcG7/6R3nrprkYRUSI+V5Tg6Tx
-        cNqr9cVPNXo7gwW2FW5wjbNEmmCKY+ez8880uPr7/hOJ4T97oPe75qXzfk8XtJiOLss644
-        ROU48G/x7emhwgAvDWbNslGlpYG51Do=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-Gq_ame4eMiCe_fCONGwKMw-1; Fri, 04 Mar 2022 14:56:14 -0500
-X-MC-Unique: Gq_ame4eMiCe_fCONGwKMw-1
-Received: by mail-ot1-f71.google.com with SMTP id s12-20020a056830438c00b005b03f4dcd5eso6585102otv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 11:56:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=P9DhVtnRsmc3RlPCIzZyvuWYNlBf0BRlzJacAYcnL5k=;
-        b=70WFBBTncEFxMg9bDP1ti1KueU5m7ylJF8R6GyreIAMb4G0qxITRIGO1r9xGVcPxQc
-         4Svg1xcff0DiJLWjdflSobpxLLm4o+DIc83nb7Kz/IRReBGgM4mRlgFELgLts29Dj69c
-         BuyIouh/5dREIEnrY6X3nhCm4eKQyv1IwDsDoO9mkiv0oAanj4V6slpvWTddofMuh3hq
-         P/hct6NLU+gn/j4IdW9xhZClJt651YdaaKaRSqfRN0QXFqvmU0Z/NsPvS/tvP4aJbfpo
-         w/5K7CT39Qap4Y8TSZ9/jEtgbXQEobW+oTdh4d+qNPueAWGXBLGxy2DYu/yULc34swq0
-         R7DA==
-X-Gm-Message-State: AOAM531aU0s+COW+bdXKqchny1NcYqRzLadu+1QhT/NNv9d0+lwWAhly
-        ABm2yHB/f6fZ005AcIHC1/xw+sbfYndoyUdl9+HR29eD07UVVykkb8Qwz1BSr1lSDTqzxo2dAKJ
-        X+TJvNF7oBypbIh3SlF5xXUP5
-X-Received: by 2002:aca:aa4e:0:b0:2d4:eabf:6c9e with SMTP id t75-20020acaaa4e000000b002d4eabf6c9emr102337oie.45.1646423773346;
-        Fri, 04 Mar 2022 11:56:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxaDyZjmGDO18UlrzMqzMCLrub8I+E0Ci/YjgAOICgYNLJHKHnp9ckx1d9BYSV5FmaGmN0opw==
-X-Received: by 2002:aca:aa4e:0:b0:2d4:eabf:6c9e with SMTP id t75-20020acaaa4e000000b002d4eabf6c9emr102326oie.45.1646423773090;
-        Fri, 04 Mar 2022 11:56:13 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id m26-20020a05680806da00b002d797266870sm2981345oih.9.2022.03.04.11.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 11:56:12 -0800 (PST)
-Date:   Fri, 4 Mar 2022 12:56:11 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v7 07/10] vfio: Extend the device migration protocol
- with PRE_COPY
-Message-ID: <20220304125611.7659eccb.alex.williamson@redhat.com>
-In-Reply-To: <20220303234951.GB219866@nvidia.com>
-References: <20220302172903.1995-1-shameerali.kolothum.thodi@huawei.com>
-        <20220302172903.1995-8-shameerali.kolothum.thodi@huawei.com>
-        <20220302133159.3c803f56.alex.williamson@redhat.com>
-        <20220303000528.GW219866@nvidia.com>
-        <20220302204752.71ea8b32.alex.williamson@redhat.com>
-        <20220303130124.GX219866@nvidia.com>
-        <20220303082040.1f88e24c.alex.williamson@redhat.com>
-        <0cee64d555624e669028ba17d04b8737@huawei.com>
-        <20220303125930.43d9940b.alex.williamson@redhat.com>
-        <20220303234951.GB219866@nvidia.com>
-Organization: Red Hat
+        bh=2SG4NM4EVrSS3exMfsZrC7gWoyjIGrnlFGBQMDfIamY=;
+        b=Jd9EyHzq5QAYWn3c4QnQ5glYw7TicrR1pYGl0FNMyYjwHRK61JGK96cZTE6sgEluHUOXp4
+        v8CzYJk/YLqYFFEArxqT4MBAJKcj+N+Kmm2Pe/N9X9uXR7M5UOXGr5a+gMljQDXt+hq1go
+        lmbk1zPBxMov5fgHjWhyq/cTxFCFSBo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646424022;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2SG4NM4EVrSS3exMfsZrC7gWoyjIGrnlFGBQMDfIamY=;
+        b=Ilf7bd059vX8aWwcu1Y0LM1FCnaQg35LPVANN5CcFkQNtEipjG35plXZ88U2a3DEHiJEYs
+        Jh1WqziBgNXz8TCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1785C13B74;
+        Fri,  4 Mar 2022 20:00:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /zu3BNZvImJAIwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 04 Mar 2022 20:00:22 +0000
+Message-ID: <81f87874-4aa8-265d-a0ed-c8a67708a92a@suse.de>
+Date:   Fri, 4 Mar 2022 21:00:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc:     linux-fbdev@vger.kernel.org, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-video@atrey.karlin.mff.cuni.cz,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Mack <daniel@zonque.org>
+References: <20220218093334.24830-1-msuchanek@suse.de>
+ <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+ <20220302193846.GT3113@kunlun.suse.cz>
+ <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------9YQkqF7dRSWVmMuP7AhZgAw4"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 19:49:51 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------9YQkqF7dRSWVmMuP7AhZgAw4
+Content-Type: multipart/mixed; boundary="------------isOeU2gFLokjvcP9fJJxe08j";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc: linux-fbdev@vger.kernel.org, x86@kernel.org, Arnd Bergmann
+ <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
+ <deller@gmx.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-video@atrey.karlin.mff.cuni.cz, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Maxime Ripard <maxime@cerno.tech>,
+ "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sam Ravnborg <sam@ravnborg.org>, Daniel Mack <daniel@zonque.org>
+Message-ID: <81f87874-4aa8-265d-a0ed-c8a67708a92a@suse.de>
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+References: <20220218093334.24830-1-msuchanek@suse.de>
+ <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+ <20220302193846.GT3113@kunlun.suse.cz>
+ <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
+In-Reply-To: <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
 
-> On Thu, Mar 03, 2022 at 12:59:30PM -0700, Alex Williamson wrote:
-> 
-> > > > If it's an abuse, then let's not do it.  It was never my
-> > > > impression or intention  
-> 
-> So maybe abuse is the wrong word, but I don't want to mess up this
-> interface, which is intended to support real pre-copy devices, just
-> because devices that don't actually implement true precopy might do
-> silly things.
+--------------isOeU2gFLokjvcP9fJJxe08j
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Abuse... silly... either way, you're clearly not comfortable misusing
-PRE_COPY for this purpose.  
+SGksDQoNCkkndmUgbWVyZ2VkIHRoZSBwYXRjaGVzIGludG8gZHJtLW1pc2MtZml4ZXMuIFRo
+YW5rcyBhIGxvdCB0byBib3RoIG9mIHlvdS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
+QW0gMDIuMDMuMjIgdW0gMjA6NDcgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXM6
+DQo+IEhlbGxvLA0KPiANCj4gT24gMy8yLzIyIDIwOjM4LCBNaWNoYWwgU3VjaMOhbmVrIHdy
+b3RlOg0KPj4gSGVsbG8sDQo+Pg0KPj4gT24gV2VkLCBNYXIgMDIsIDIwMjIgYXQgMDg6MzE6
+MjVQTSArMDEwMCwgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4gSGksDQo+Pj4NCj4+
+PiBpcyB0aGlzIHJlYWR5IHRvIGJlIG1lcmdlZD8NCj4+DQo+PiBUaGUgb2JqZWN0aW9ucyBy
+YWlzZWQgc28gZmFyIGhhdmUgYmVlbiBhZGRyZXNzZWQgaW4gdjQuDQo+Pg0KPj4gSSB0aGlu
+ayB0aGlzIGlzIGdvb2QgdG8gbWVyZ2UuDQo+Pg0KPiANCj4gVGhlIHY0IHBhdGNoZXMgbG9v
+a3MgZ29vZCB0byBtZSBhbmQgaGF2ZSBwcm92aWRlZCBteSBSZXZpZXdlZC1ieSB0byBhbGwg
+b2YgdGhlbS4NCj4gICANCj4+IFRoYW5rcw0KPj4NCj4+IE1pY2hhbA0KPj4NCj4+Pg0KDQot
+LSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNF
+IFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5
+IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jD
+pGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-> The vGPU case you imagine will still work and qemu will switch to
-> STOP_COPY with a huge trailer and be slow. That is unavoidable and I
-> think it is fine.
+--------------isOeU2gFLokjvcP9fJJxe08j--
 
-It's not really fine, but I think it will require some better defined
-interfaces and userspace support to give a clear picture of how data is
-partitioned.
+--------------9YQkqF7dRSWVmMuP7AhZgAw4
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> > > > Furthermore the acc driver was explicitly directed not to indicate any degree
-> > > > of trailing data size in dirty_bytes, so while trailing data may be small for acc,
-> > > > this interface is explicitly not intended to provide any indication of trailing
-> > > > data size.  Thanks,   
-> 
-> Yes, trailing data is not what this is for. This is only to help
-> decide when to switch from PRE_COPY to STOP_COPY. If the device can
-> execute STOP_COPY in the right time is a completely different
-> discussion/interface.
-> 
-> > > Just to clarify, so the suggestion here is not to use PRE_COPY for compatibility
-> > > check at all and have a different proper infrastructure for that later as Jason
-> > > suggested?
-> > > 
-> > > If so, I will remove this patch from this series and go back to the old revision
-> > > where we only have STOP_COPY and do the compatibility check during the final
-> > > load data operation.  
-> > 
-> > Hi Shameer,
-> > 
-> > I think NVIDIA has a company long weekend, so I'm not sure how quickly
-> > we'll hear a rebuttal from Jason, but at this point I'd rather not
-> > move  
-> 
-> Yes, company long weekend.
-> 
-> > forward with using PRE_COPY exclusively for compatibility testing if
-> > that is seen as an abuse of the interface, regardless of the size of
-> > the remaining STOP_COPY data.  It might be most expedient to respin
-> > without PRE_COPY and we'll revisit methods to perform early
-> > compatibility testing in the future.  Thanks,  
-> 
-> Shameerali has talked about wanting this compat check early from the
-> start, and done all the work to implement it. I think it is pretty
-> extreme to blow up his series over trailing_data.
-> 
-> To me acc is fine to use it this way until we get a better solution
-> for compatability. We all need this, but I expect it to be complicated
-> to define.
+-----BEGIN PGP SIGNATURE-----
 
-It was only in v7 that we made this switch to use PRE_COPY for this
-purpose, I wouldn't call it blowing up his series to step back and
-decide that was a poor choice and clearly v8 exists without this.  This
-isn't the end of the discussion regarding early compatibility testing,
-but I'm not going to rush a PRE_COPY interface to support that early
-compatibility testing if we're not agreed that it's a valid use case,
-and not just a marginally acceptable one due to the trailing data being
-inconsequential.  Let's focus on v8 and we can talk about further
-extensions later.  Thanks,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIib9UFAwAAAAAACgkQlh/E3EQov+Bz
+cxAAuToEBb/XS3yHnuR6bd6s5rHKDeUZujJnQKLo1eN+UuJoEgw9rvfVzEhDHyqUHw63wZx8jU71
+754UtF5AXu5N71HoeJ9dqFV/hoM5F+g2KJyHhosT97+LhFTQaCauzouK0iGJFIric1/T0O9h1/MM
+odHcor3nfcrf5fhNmqauqNNkpj9QEdj6IJ8B5Ki3Bc/LzipgoErN6MhDYQIiSGH8jTjmk3vW3b7J
+ur1jTCOaVAMTMmuoPqsPwZMqKGwWKqW1aVb2Sr+w6ikUmsjEyTJw/wxX5M0tDJ2z/5h39cXQs7Pv
+bs2do3S3mVIpt5vO+ZLso1l/Yo9NaJt8louon1uwC09I1Wm/cQdnuEyoICpaDiYMcvHtytkwtpbN
+c64GcwNbbp1bK6+kmXMCeBiFYo+YtDaOE1XwgO+gc6v2t+p8WOQGt/gaUBNGwOOxy+hhVLhdf4FW
+YQ67IQnerCUk/432vjiKwVPdrw9mgApeEK34HjHy2IWl1TKx+oigOvSIbLsBeXqMC65nDuqIrgse
+gmZRKM/2L9joWrZu7bOD9omMTHGWdC5VATbQmqSTEHwSEeCYkFTznNrNubrh6gaWOmIRWaKng+2f
+9W6TtfetZ2+Gw12/Prjp4PWoTyYK8Xt8VOrSnOVmv/Gc37YAIONDVIH3ESXV/ho0y84yyhjhw0Iw
+nNw=
+=qzB5
+-----END PGP SIGNATURE-----
 
-Alex
-
+--------------9YQkqF7dRSWVmMuP7AhZgAw4--

@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6964CD4FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E111E4CD4E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiCDNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S233099AbiCDNLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiCDNRc (ORCPT
+        with ESMTP id S238428AbiCDNLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:17:32 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE871B50E8
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:16:45 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id j8-20020a056830014800b005ad00ef6d5dso7448210otp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c9/jSKEYWvjLYNnnhLPXkny4KyJtY1E3bTqXKWbpe38=;
-        b=Jtoc93twUP7xt3r79Uyv6rhXGAGErLwtgbpDV0TdhEQLZukQFNjpRDFDC/bJ3XS64t
-         Qya/0WpS5ZGuoPxfr6xXDfYrQK4PkM6ukAxxg/9Hb0JnTX+wmPVE+D/XqOTL2GrmI6qe
-         LO4Qgwe3oa4I9Wr5CYJ7nf+FNizvb0WCsCQOLQ2pnOOpe57bQ/ck3w8uTo6LlxdAAMrf
-         9cDNTJb7heD08la654ZqIdA3m4wqVwkE2TfSzZk0hdWrqIGtsB3Qm5AvHAHSh9xUX+5y
-         48zipgUTasJF4JXa9uW/2YjQgag6duDl3fn4LeEN8AOrirH0Peq/Nq+1t6ltkdRAlJYM
-         nV+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c9/jSKEYWvjLYNnnhLPXkny4KyJtY1E3bTqXKWbpe38=;
-        b=QjMmxn+33mq1Mq3nxG2tpBtEIfzoFCHDqftlEfapbf7l33VHLkfMfhR8EjbwfE+UoL
-         QAfSTGTqLSrcl4auiTpEEdFVzNp263kgB702VIfnvLmcwHgTOCBiRiHq1stxmFjtiGOP
-         ecf8WpoPk0/Q/X5h1V+6/7LYMzAkiFt1CjcyrgCdGSSzCsxTNVDrkhr6deMPbznoWShk
-         ZIPIYSPdnFNWHGb5e956mIUT4BgyPq9TpHXAqalTuQsaloRK+3MQP9IFoOxx1B+I4GQG
-         Bz5isFWNXXOEirYTc67gSm5AMu/4RpQxhTj9KObfKSx5YsAf7+yby3thY+ggJymyesTE
-         svtw==
-X-Gm-Message-State: AOAM530iJSXESccLgaiswGU//pqiCvhUA4S4q1NHXdsun/aFGe7lXzgT
-        Ta/zBWUrRX4K9VkDVEc7UwCue32mt4I/AGvvW/jrTA==
-X-Google-Smtp-Source: ABdhPJyEyS19l/rBk/OtEhxkYjWkowMwfjtY+zPzabBZVyeCZ2VNTvSFAtUJyFOigXbcTktkrJa6rpE3ZN3Azh4mQq8=
-X-Received: by 2002:a9d:6e09:0:b0:5ad:1fcd:bfd0 with SMTP id
- e9-20020a9d6e09000000b005ad1fcdbfd0mr22496944otr.312.1646399804477; Fri, 04
- Mar 2022 05:16:44 -0800 (PST)
+        Fri, 4 Mar 2022 08:11:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56CB18885A;
+        Fri,  4 Mar 2022 05:10:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BB2CB82943;
+        Fri,  4 Mar 2022 13:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E5675C340F1;
+        Fri,  4 Mar 2022 13:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646399413;
+        bh=P/mrzfKDo2Y3uAtXmoJw/uuehBQI3zLd+itMRIU6Zgo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YPONCs3Syy60CW4ost9nOknBCvmG5dDECTH2GV7qGZncWk6AZMqoGElxrQkPrL7i+
+         I0P/VR4OAUrO5cxcvY6rdjOVolsggJ60BHqv3Ax1smYHxPpgTjLX5GI2U3rFt+IHOq
+         eCiHHk0UoXmysfqLBmOkJQ6Pb5Ldd/1E7vqw4dDexlLYQdDD1274F54Wrldfc5v+7T
+         szHo40Nlzdz9LU9NtSKbtNetz5HgWl3rPDF+QHw9AtyMZm17+xSHLpUTZvzfvrjIx/
+         zDis5osJSmpk1Y3j+OqmkMdU0Z/uwP8pQIfXFOhl2eTZ3JI+lV+Ss2n4YgT3ut5w4Z
+         EUimVNA8xF6WQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9F28E6D4BB;
+        Fri,  4 Mar 2022 13:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220222120054.400208-4-andrew@daynix.com> <202202230342.HPYe6dHA-lkp@intel.com>
- <20220304030742-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220304030742-mutt-send-email-mst@kernel.org>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Fri, 4 Mar 2022 15:09:02 +0200
-Message-ID: <CABcq3pF9566uzh2oQF1u8EF_LgFQ0azhzD+2xX4CfqB=MhKCOQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] drivers/net/virtio_net: Added RSS hash report.
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>, kbuild-all@lists.01.org,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/9] net: sparx5: Add PTP Hardware Clock support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164639941282.4305.10123541557120406446.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Mar 2022 13:10:12 +0000
+References: <20220304110900.3199904-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220304110900.3199904-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        UNGLinuxDriver@microchip.com, casper.casan@gmail.com,
+        richardcochran@gmail.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-Yes, I'll prepare a new commit later.
+Hello:
 
-On Fri, Mar 4, 2022 at 10:08 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Wed, Feb 23, 2022 at 03:15:28AM +0800, kernel test robot wrote:
-> > Hi Andrew,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on mst-vhost/linux-next]
-> > [also build test WARNING on net/master horms-ipvs/master net-next/master linus/master v5.17-rc5 next-20220217]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch]
->
->
-> Andrew,
-> do you plan to fix this?
->
-> > url:    https://github.com/0day-ci/linux/commits/Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-> > config: i386-randconfig-s002-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230342.HPYe6dHA-lkp@intel.com/config)
-> > compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> > reproduce:
-> >         # apt-get install sparse
-> >         # sparse version: v0.6.4-dirty
-> >         # https://github.com/0day-ci/linux/commit/4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
-> >         git remote add linux-review https://github.com/0day-ci/linux
-> >         git fetch --no-tags linux-review Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
-> >         git checkout 4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > sparse warnings: (new ones prefixed by >>)
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-> > >> drivers/net/virtio_net.c:1178:35: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] hash @@     got restricted __le32 const [usertype] hash_value @@
-> >    drivers/net/virtio_net.c:1178:35: sparse:     expected unsigned int [usertype] hash
-> >    drivers/net/virtio_net.c:1178:35: sparse:     got restricted __le32 const [usertype] hash_value
-> >
-> > vim +1178 drivers/net/virtio_net.c
-> >
-> >   1151
-> >   1152        static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
-> >   1153                                        struct sk_buff *skb)
-> >   1154        {
-> >   1155                enum pkt_hash_types rss_hash_type;
-> >   1156
-> >   1157                if (!hdr_hash || !skb)
-> >   1158                        return;
-> >   1159
-> >   1160                switch (hdr_hash->hash_report) {
-> >   1161                case VIRTIO_NET_HASH_REPORT_TCPv4:
-> >   1162                case VIRTIO_NET_HASH_REPORT_UDPv4:
-> >   1163                case VIRTIO_NET_HASH_REPORT_TCPv6:
-> >   1164                case VIRTIO_NET_HASH_REPORT_UDPv6:
-> >   1165                case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
-> >   1166                case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
-> >   1167                        rss_hash_type = PKT_HASH_TYPE_L4;
-> >   1168                        break;
-> >   1169                case VIRTIO_NET_HASH_REPORT_IPv4:
-> >   1170                case VIRTIO_NET_HASH_REPORT_IPv6:
-> >   1171                case VIRTIO_NET_HASH_REPORT_IPv6_EX:
-> >   1172                        rss_hash_type = PKT_HASH_TYPE_L3;
-> >   1173                        break;
-> >   1174                case VIRTIO_NET_HASH_REPORT_NONE:
-> >   1175                default:
-> >   1176                        rss_hash_type = PKT_HASH_TYPE_NONE;
-> >   1177                }
-> > > 1178                skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
-> >   1179        }
-> >   1180
-> >
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 4 Mar 2022 12:08:51 +0100 you wrote:
+> Add support for PTP Hardware Clock (PHC) for sparx5.
+> 
+> Horatiu Vultur (9):
+>   net: sparx5: Move ifh from port to local variable
+>   dt-bindings: net: sparx5: Extend with the ptp interrupt
+>   dts: sparx5: Enable ptp interrupt
+>   net: sparx5: Add registers that are used by ptp functionality
+>   net: sparx5: Add support for ptp clocks
+>   net: sparx5: Implement SIOCSHWTSTAMP and SIOCGHWTSTAMP
+>   net: sparx5: Update extraction/injection for timestamping
+>   net: sparx5: Add support for ptp interrupts
+>   net: sparx5: Implement get_ts_info
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/9] net: sparx5: Move ifh from port to local variable
+    https://git.kernel.org/netdev/net-next/c/8f68f53a9325
+  - [net-next,2/9] dt-bindings: net: sparx5: Extend with the ptp interrupt
+    https://git.kernel.org/netdev/net-next/c/b066ad26ebf2
+  - [net-next,3/9] dts: sparx5: Enable ptp interrupt
+    https://git.kernel.org/netdev/net-next/c/6015fb905d89
+  - [net-next,4/9] net: sparx5: Add registers that are used by ptp functionality
+    https://git.kernel.org/netdev/net-next/c/3193a6118140
+  - [net-next,5/9] net: sparx5: Add support for ptp clocks
+    https://git.kernel.org/netdev/net-next/c/0933bd04047c
+  - [net-next,6/9] net: sparx5: Implement SIOCSHWTSTAMP and SIOCGHWTSTAMP
+    https://git.kernel.org/netdev/net-next/c/589a07b8eb49
+  - [net-next,7/9] net: sparx5: Update extraction/injection for timestamping
+    https://git.kernel.org/netdev/net-next/c/70dfe25cd866
+  - [net-next,8/9] net: sparx5: Add support for ptp interrupts
+    https://git.kernel.org/netdev/net-next/c/d31d37912ea7
+  - [net-next,9/9] net: sparx5: Implement get_ts_info
+    https://git.kernel.org/netdev/net-next/c/608111fc580f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

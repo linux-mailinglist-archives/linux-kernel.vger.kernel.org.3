@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6264CD69B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275174CD69C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiCDOnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S239914AbiCDOnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239889AbiCDOnL (ORCPT
+        with ESMTP id S239904AbiCDOnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:43:11 -0500
+        Fri, 4 Mar 2022 09:43:13 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02921BD04B;
-        Fri,  4 Mar 2022 06:42:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5FDC5F;
+        Fri,  4 Mar 2022 06:42:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646404943; x=1677940943;
+  t=1646404945; x=1677940945;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zlHFHwW7mYn6Pe7YF0bXGzbThYPa0Mv9pWYRze3Df2w=;
-  b=Xv5oN8eyDYn5f8wgrvzTV/97iWEgRQroKG6iQHdV3Ih6vJ8Wz+5qTj/7
-   v578yop/1VJbjmXTrSKyL/eSpbfILX0jOqWyUWPOGtN0HE4vMTH5clD09
-   VMZnBFy7+1EgMHRx94cvZNW4DeK2/QoH47FJtGcC80beWhn54BXdvZWVw
-   STwoimyW1XE6DWq3Sqn2kjRqvgwyMsEjz+pGMOE6rwl6r9/Raef3PI361
-   4IIiYPbaYzMJ3yN3yS7huNIxaz+h/KAzWOBI9919WMZp0y0TAKYUkOFVU
-   Hw3jECSpBvAU5ioqGg+W4AEfh2sjblXErH7xUhNCvGwasH8/YYhgvnpvi
+  bh=uSXhUa1TK6x4EhT0rMumawhzMV00/FO2bC40apPpfOA=;
+  b=wFP8mdvZ06O7CBG8KEV4xi074HlugzhU0LYSDnKdPA7M9xryVT46lPiq
+   Pi+22oGzLW9ZFabDTbxIU6QQ63q8ExyQtsaT31bb+0MYdPVb5Tg7hjgdl
+   9Xv9y3XsPg9moOjl6Xhq5utsUIUk96BjAzbIxhhX6WCDlgwADV0JY07zb
+   lwjheRGcQOieQOGJSnfNuQertZDZPVBKw3A28plufeNaaSy8xFP4dgq1I
+   V6RWYCdNEZpmNh2/zotmtgI5YT4u//IjZMItMo6TfddIuTmGzO7q20urc
+   cxhycDBxyyvY1aa1uiuayt5kAheQsuOW3Cut7goqbXRugA8W/YEa5iN+t
    g==;
 X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="150870204"
+   d="scan'208";a="150870208"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:42:23 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:42:25 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 07:42:23 -0700
+ 15.1.2375.17; Fri, 4 Mar 2022 07:42:25 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 07:42:20 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 07:42:23 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <linus.walleij@linaro.org>, <colin.foster@in-advantage.com>,
         <andriy.shevchenko@linux.intel.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH v2 1/2] pinctrl: ocelot: Fix the pincfg resource.
-Date:   Fri, 4 Mar 2022 15:44:31 +0100
-Message-ID: <20220304144432.3397621-2-horatiu.vultur@microchip.com>
+Subject: [PATCH v2 2/2] pinctrl: ocelot: Fix interrupt parsing
+Date:   Fri, 4 Mar 2022 15:44:32 +0100
+Message-ID: <20220304144432.3397621-3-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220304144432.3397621-1-horatiu.vultur@microchip.com>
 References: <20220304144432.3397621-1-horatiu.vultur@microchip.com>
@@ -63,30 +63,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pincfg resources are in the second memory resource. But the driver
-still tries to access the first memory resource to get the pincfg. This
-is wrong therefore fix to access the second memory resource.
+In the blamed commit, it removes the duplicate of_node assignment in the
+driver. But the driver uses this before calling into of_gpio_dev_init to
+determine if it needs to assign an IRQ chip to the GPIO. The fixes
+consists in using the platform_get_irq_optional
 
-Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
-Fixes: ad96111e658a95 ("pinctrl: ocelot: combine get resource and ioremap into single call")
+Fixes: 8a8d6bbe1d3bc7 ("pinctrl: Get rid of duplicate of_node assignment in the drivers")
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/pinctrl/pinctrl-ocelot.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/pinctrl-ocelot.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 685c79e08d40..a859fbcb09af 100644
+index a859fbcb09af..e8501dac2f04 100644
 --- a/drivers/pinctrl/pinctrl-ocelot.c
 +++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -1892,7 +1892,7 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
- 		.max_register = 32,
- 	};
+@@ -1851,8 +1851,8 @@ static int ocelot_gpiochip_register(struct platform_device *pdev,
+ 	gc->base = -1;
+ 	gc->label = "ocelot-gpio";
  
--	base = devm_platform_ioremap_resource(pdev, 0);
-+	base = devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(base)) {
- 		dev_dbg(&pdev->dev, "Failed to ioremap config registers (no extended pinconf)\n");
- 		return NULL;
+-	irq = irq_of_parse_and_map(gc->of_node, 0);
+-	if (irq) {
++	irq = platform_get_irq_optional(pdev, 0);
++	if (irq > 0) {
+ 		girq = &gc->irq;
+ 		girq->chip = &ocelot_irqchip;
+ 		girq->parent_handler = ocelot_irq_handler;
 -- 
 2.33.0
 

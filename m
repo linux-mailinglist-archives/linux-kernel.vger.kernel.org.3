@@ -2,123 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857294CCE18
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACB64CCE1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiCDGuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S236967AbiCDGwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiCDGuP (ORCPT
+        with ESMTP id S234866AbiCDGwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:50:15 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDA514A200;
-        Thu,  3 Mar 2022 22:49:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oTLbpJb0+txVgGWplO3/QNIfjtsrE0ixQ0yBbSl6x1JQ8Vpfj2AwOpya98SQkldwSNqoMAZmmcxl1nABgjT1rRvVQ6WwGLejwhJfTsmvvFtwXBVkqya2PZXjrLKisGZMJVRbQ75ji4LWcIs4HIVDjPC3MH3iCCtBWrrns5Qu5y5nQYnnXaN5THHhUqFdxFCct67vNZovNvUBEaMoyW6u5PdsrwLLlEJPxOMci1kRfMdIt+dSkPJKPciEzAAOdMdcZcnACLPOLbk/3fzl48XFEAVIPVTPWCG1bas76lK83UCcGrWMSs1IPmMsfHzHCYbbBPAxlovLK6dGmpYSLi4VAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ul1j1pNN/9ZMcIlMOqZeWH2/++HXGLSXFpLSTKwsOvo=;
- b=fqiiJudA0hTZI4xlccz+6p3Mxxs6VjM6LUUnto+ItvTxsrse9hA29acYP8No76Ga5LvJRMg/7S5HCZvuMMdzwEDtXazw3MYcG/p5waSheYN4FX08qFb76dAGPMGL5jYEsce4g1q5Ajv9cD0/uwRp25IGyQWg27NDu0uOTeQwT8wVyq79DcmNxbTbxwQbTA15LKSSkJABYfN2JJH5aWXKwhLiW86+q4/XXefi+9Ni9So3Xy4pMXJhE/suQ6LDwL6Lwk2p49L+4DOQowG/obwZ0D+dEWJ7sLYt2eIfFFTtH6Sz5edngWUmtes8SHT/zeD5ODXmTJpCHmfIsIDahV5IPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ul1j1pNN/9ZMcIlMOqZeWH2/++HXGLSXFpLSTKwsOvo=;
- b=W6/2NaDOOhZWy3CdvNRW5uQyvWV3FZAHWkdXh97HhnAZ7HjRYexe4WD6cQBGdq5aleBEl97NwlzZA87vL/H/P6zjytvkrC9uZ++jiPC+jiGJ3DSscDt0mp9sCsYOtA/jDuL/iSP0jtDWsSO3RqqvSRtxF844/W2MwaSULuLWliA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- SN1PR12MB2384.namprd12.prod.outlook.com (2603:10b6:802:25::25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.17; Fri, 4 Mar 2022 06:49:24 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
- 06:49:24 +0000
-Date:   Fri, 4 Mar 2022 14:48:58 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "dsmythies@telus.net" <dsmythies@telus.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Subject: Re: [PATCH V2 3/4] tools/power/x86/amd_pstate_tracer: Add tracer
- tool for AMD P-state
-Message-ID: <YiG2Wja1D0EJpmG7@amd.com>
-References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
- <20220304060724.314582-4-Jinzhou.Su@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304060724.314582-4-Jinzhou.Su@amd.com>
-X-ClientProxiedBy: SG2PR06CA0211.apcprd06.prod.outlook.com
- (2603:1096:4:68::19) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Fri, 4 Mar 2022 01:52:17 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343F118E3D5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:51:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bk29so11211559wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:51:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GRZSImiH7Wss3a2faHehvfqVy9T4SH0ZG+g8SuIj5A8=;
+        b=UEhxPLytUhCPSOLtYfNjeMJ73Nqs2iCDCinLvHxtTcSLdJjlxzqasuly8aOshP5MtA
+         xGy4DQMC+agAgL/KaYLVBb/8UskiPw/kD4OOCQANXau9vPkV8KZYlen+UsJYFNHnLuG+
+         PpTOxiqLmznpwpaeKe77vgcIexcXpsbqOsPH4B3PFUAHrJAD+RvY4uAFJpODYoNnGYBK
+         UFPJ4bSISo01fbWTKujxv1R5aQp7UWFbPc71n/m5tWowcK1Aegt8PJZa3upIcgRHVK+p
+         RhDrBnofYOEtGUh163Tw0luqESH0j1Yq5lnma5PDFLpZRICuJWlRO2Kwccurs+JX2i2E
+         dXjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GRZSImiH7Wss3a2faHehvfqVy9T4SH0ZG+g8SuIj5A8=;
+        b=Ij0txTmOZYQtiDorri7Y638EIOYg8F9NUGzziMBZWU49vEQBjZZtwhlJqfgpyPX5i9
+         FT5/sovv58426QIlib2W1iLCu8V1rNrOC087zNwxSznIxRAkAEWe6fW32ZwOBzLQYNR9
+         fHzpEwq0sDBPuQdUqhq29GE7cr2pTfgV7AFAq55G1BcO2yMNUgdayrG2VDQO3Uc8Ig0b
+         NR85YROZ+3s+Z6aww5xYgNw1F9JpIX6yGx0j99vflOoW3anyqwfAtktbJaL8YQqhuRwL
+         wAEuRadF7uapo4r8MyOLFD4etDXaSLf8GH30bZRUBZSSHhV3/z4MScXuyZiCAP/19FDQ
+         rAkg==
+X-Gm-Message-State: AOAM532KKsOGLCCE61n1cgsJDma2sg+qOjHMtKsTbQrVeQLt4wecTRsZ
+        RJ5R60sIpJQrSu1zvifIk7CXes0UF6FCap07chWing==
+X-Google-Smtp-Source: ABdhPJxiVAtU1A7z1i59IHCoGvemYK4OIg1qA96J/v4q3pxraY3oW56Zz4BtnLSZ2OAKjPIQoPXo/xJwv+/P/w68Q8k=
+X-Received: by 2002:adf:fd0a:0:b0:1f0:25fd:4082 with SMTP id
+ e10-20020adffd0a000000b001f025fd4082mr8680894wrr.501.1646376687561; Thu, 03
+ Mar 2022 22:51:27 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a7905b67-d2e1-4d20-a604-08d9fdab1e41
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2384:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB238409A67FEE9090B2A9EB26EC059@SN1PR12MB2384.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KLpDaNRS+omVQwhDyqk8Z83MV5UfNoBEIi56BYRimUe9DeWq01xubLmcokqxH29d8OnCQXGKnAjDcJMeUL8cdwY9SgAiGUExRbt7Oei1ASJAeUNN0lljiHUpb+6K1MyarkT2Ha7bj6EBW3f72JwC6ejmgU/LucYkvZkTCoyE07/ESHl+vbXgTMF2z/LTti1uBmec/g8In2KmNnYK83sU8hmbLslDu70ltup+OXbgWUBM5oeq/rRpHbGBZVpqkUgG3rBxEIn5vv1uFULfP+BgWnQTFrbixJ08+W6SQGhmgSs9IYFKDNXY4JLCAW5gvxpt1fbOLlRiQM7Yq+KO+yq2GGkPMI0yWE2YmBdpK8pp4wmX8bxYCwHpWZ3w3YVvBpU/oqm63Ry/vRvV5SbtxIRlZDdkehTh7ieGeVO+0eaitCT3V7rbmmCtaL89AluEO5hKsVSGzvodwRo2kKUw2iFWsCKvGoJyISUDdDd9GmZOdR51V/7NiGAxNQ/nqDbd9nErzKKIV4TUWHyzzgEoyNwKT58RcQhZJfv4uJMqyT4/X3U91gkKMFylisb86WIAIaA71Y/ZHQRyDsbbiHLkTN/L9mOV7iSLWkCzbQe+5DqUxRAdiBAIHA6QhXhw4PpUq5+311VlW2OsaDrNsVxXFnlHiQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6636002)(66946007)(86362001)(6486002)(2906002)(8676002)(6862004)(66556008)(66476007)(4326008)(83380400001)(5660300002)(316002)(30864003)(54906003)(36756003)(37006003)(8936002)(508600001)(38100700002)(6506007)(6512007)(6666004)(2616005)(186003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8cOoLNzCg3MbP48Bounq/xC9X3x2heDiTcS8Q+rxZxdB2gvkfsp2YoKvQnPm?=
- =?us-ascii?Q?LEwRFPPSLz/J7iyZLmRiSGpAFurwbnot6bm2jjKHrhFOixXVbJtIylYywaBN?=
- =?us-ascii?Q?deLPe5BShGR06xi/I78mAfd0PBkkSfoS3teNSy5k0AUJJ5ojI+GnWH2Vx6BB?=
- =?us-ascii?Q?vVZKhGM9EvayPOXzSu7FGF8k50Bw1S7TACgWHZI6yiteXPeY70AXQHrKN013?=
- =?us-ascii?Q?Q2r2JDXc87GaCLZCaXQYp5drqneMY/BumHVsSItpNmzNW/Xo8gm1IMlQ25ay?=
- =?us-ascii?Q?n3K8m16L/KquQLo4xPKaE+jHiCrwJ6FRYcYM9nM/0twQyeht76qH5J+HBM0B?=
- =?us-ascii?Q?ND5afCkTnMr9QubBF0guczthpmW9MHp5mkyrFinGj/kYoM7qShGtktdUYfOT?=
- =?us-ascii?Q?Dj1sAgX5P//OWEvYlQxM+ILrhO1fpGg2yuks8Tvydwc9Bjkhg051PKSepNFx?=
- =?us-ascii?Q?t+Wm8F/dCUfoRMy1MuWhh4oaQ7w2Tgpt9ONP0sj2BD00vd/tTfKkA5IZQZiX?=
- =?us-ascii?Q?VXzzGFu1ULxcd1k3nvu5RTNCsWgHuJx0GrTfOsHjjl0RIvnrqqBQzZJJfdjQ?=
- =?us-ascii?Q?qJuG8FgbNmEJH6svaizuQqh8JYATr7t2g+qYvcE9nFn04+2AGow0tcdZL4zu?=
- =?us-ascii?Q?C0PHVP+bfG8V9iYJSWTJicE7nxUQ6UFFg4ov34EXaUV+PE+U1eJxm9xRBF0v?=
- =?us-ascii?Q?wTikjjdoZTxlAPfAhLvZFh9ehOe8+m2Uz4p9pY4xpIkiaTZzPCBDQasN1HHA?=
- =?us-ascii?Q?E+AHXvbdlK7rBhSmMsnaxaSHUL2CZjXEoiScNraU4mCFxc3dXWLgByTs8cIl?=
- =?us-ascii?Q?EmrqdPItQI3Ib7CXK/HlT+S7MhStYsm7QFrNrlo/bCAZDBicHs58TmaammIp?=
- =?us-ascii?Q?MwE6AR9iaNKKK34mq6OGUhQgjd3Xom6SllaMDvjkkV053O4IpNrlTF79gDJa?=
- =?us-ascii?Q?8bRVybmuCqXuCFYPUT6dM+XZpfWtn2D44xJHGKVIdaMS8yRXp4vCQal6cOH4?=
- =?us-ascii?Q?lUsw3aTgpG2sR3SC5i6sTe7lJsUIctVdKTKHDUml+9bdi4DPQ1QfPLHLcish?=
- =?us-ascii?Q?3w4iHFqLWeogjoMYnqo0mWG5/v9DeY2oNdLLP/gnkgefXP5PAzOjC5Owx/Jb?=
- =?us-ascii?Q?bAGQQe+n/lhLA91AQZORWjVeq/vkb4I/yvPHls2lf7eks4JOtD27EcaHcmyN?=
- =?us-ascii?Q?WIHqkWLvkfz3rIgl536cHTgYjQ1kGsowtLefTuBg+usfjXCs3zLO8ro2CBDU?=
- =?us-ascii?Q?bIQFgM0KcETZAm8ONl+1R7+T4l5ehaKxFXn397MDGxLKuvdYSiNJRjCxQEy9?=
- =?us-ascii?Q?rj03dcMa+e/S0Rxs53/sGoZeG3e22bJ+M7MuovF9fGNXIVzV2XM6xq62RtGW?=
- =?us-ascii?Q?iSzohsY5i+jbTEO63skVGCJCRL026BWVVVkUrLQ1FNrp0S1rorWLomrAKn2r?=
- =?us-ascii?Q?8wUa1BS/peV47BQKyMT+OOIySMOVnc2rtb8xS4JaSkj/s0ObaYT1+bHOJHbt?=
- =?us-ascii?Q?pNi1lJ+4GLBs2FNAIECWeA6T+mCG5ZAgGu0gc3Gy/57qt3YJY8vwFyU/HLw9?=
- =?us-ascii?Q?ZfswtaDOPYiPf30KVr+s89bT9kE1Qk/811YuW92ZNWs8zWv9I4/DBXJYeLxy?=
- =?us-ascii?Q?cFH30YWHkRsYSPPlG2/hw0w=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7905b67-d2e1-4d20-a604-08d9fdab1e41
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:49:24.0989
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BJrG3Eatmjb/TaZnJkzuToMX9z5fxYHniwBySDHU+lzKhaLGbXQj1TyBsTGObgmiZnGnK94rlsJTDsnLoeV/Nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2384
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220303090643.241747-1-davidgow@google.com> <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+In-Reply-To: <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 4 Mar 2022 14:51:16 +0800
+Message-ID: <CABVgOSkQPNK59vvhAMFM_5jWF-hNPZXdou8UC31RM0TEXT-=Fg@mail.gmail.com>
+Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kbuild@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a6863805d95ef127"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,395 +79,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 02:07:23PM +0800, Su, Jinzhou (Joe) wrote:
-> Intel P-state tracer is a useful tool to tune and debug Intel P-state
-> driver. AMD P-state tracer import intel pstate tracer. This tool can
-> be used to analyze the performance of AMD P-state tracer.
-> 
-> Now CPU frequency, load and desired perf can be traced.
-> 
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+--000000000000a6863805d95ef127
+Content-Type: text/plain; charset="UTF-8"
 
-Reviewed-by: Huang Rui <ray.huang@amd.com>
+On Fri, Mar 4, 2022 at 1:30 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi David,
+>
+> On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
+> > The things built with USER_CFLAGS don't seem to recognise it as a
+> > compiler option, and print a warning:
+> > clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
+> >
+> > Fixes: 744814d2fa ("um: Allow builds with Clang")
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+> >
+> > This warning shows up after merging:
+> > https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
+> >
+> > I'm not 100% sure why this is necessary, but it does seem to work. All
+> > the attempts to get rid of -mno-global-merge entirely have been met with
+> > skepticism, but I'm guessing that it's not a problem for just the UML
+> > "user" files, as they shouldn't(?) interact too much with modules.
+>
+> Thank you for the patch! I think it is correct, as this flag only works
+> for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
+> and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
+> which are obviously never called with UML. I am not sure why we do not
+> see warning during regular kernel builds, maybe something about how UML
+> objects are compiled exposes this?
 
-> ---
->  MAINTAINERS                                   |   1 +
->  .../x86/amd_pstate_tracer/amd_pstate_trace.py | 354 ++++++++++++++++++
->  2 files changed, 355 insertions(+)
->  create mode 100755 tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4f9acc183cdc..01ac42504dcd 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1002,6 +1002,7 @@ L:	linux-pm@vger.kernel.org
->  S:	Supported
->  F:	Documentation/admin-guide/pm/amd-pstate.rst
->  F:	drivers/cpufreq/amd-pstate*
-> +F:	tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->  
->  AMD PTDMA DRIVER
->  M:	Sanjay R Mehta <sanju.mehta@amd.com>
-> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> new file mode 100755
-> index 000000000000..2dea4032ac56
-> --- /dev/null
-> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> @@ -0,0 +1,354 @@
-> +#!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# -*- coding: utf-8 -*-
-> +#
-> +""" This utility can be used to debug and tune the performance of the
-> +AMD P-State driver. It imports intel_pstate_tracer to analyze AMD P-State
-> +trace event.
-> +
-> +Prerequisites:
-> +    Python version 2.7.x or higher
-> +    gnuplot 5.0 or higher
-> +    gnuplot-py 1.8 or higher
-> +    (Most of the distributions have these required packages. They may be called
-> +     gnuplot-py, phython-gnuplot or phython3-gnuplot, gnuplot-nox, ... )
-> +
-> +    Kernel config for Linux trace is enabled
-> +
-> +    see print_help(): for Usage and Output details
-> +
-> +"""
-> +from __future__ import print_function
-> +from datetime import datetime
-> +import subprocess
-> +import os
-> +import time
-> +import re
-> +import signal
-> +import sys
-> +import getopt
-> +import Gnuplot
-> +from numpy import *
-> +from decimal import *
-> +sys.path.append('../intel_pstate_tracer')
-> +#import intel_pstate_tracer
-> +import intel_pstate_tracer as ipt
-> +
-> +__license__ = "GPL version 2"
-> +
-> +MAX_CPUS = 256
-> +# Define the csv file columns
-> +C_COMM = 15
-> +C_ELAPSED = 14
-> +C_SAMPLE = 13
-> +C_DURATION = 12
-> +C_LOAD = 11
-> +C_TSC = 10
-> +C_APERF = 9
-> +C_MPERF = 8
-> +C_FREQ = 7
-> +C_MAX_PERF = 6
-> +C_DES_PERF = 5
-> +C_MIN_PERF = 4
-> +C_USEC = 3
-> +C_SEC = 2
-> +C_CPU = 1
-> +
-> +global sample_num, last_sec_cpu, last_usec_cpu, start_time, test_name, trace_file
-> +
-> +getcontext().prec = 11
-> +
-> +sample_num =0
-> +last_sec_cpu = [0] * MAX_CPUS
-> +last_usec_cpu = [0] * MAX_CPUS
-> +
-> +def plot_per_cpu_freq(cpu_index):
-> +    """ Plot per cpu frequency """
-> +
-> +    file_name = 'cpu{:0>3}.csv'.format(cpu_index)
-> +    if os.path.exists(file_name):
-> +        output_png = "cpu%03d_frequency.png" % cpu_index
-> +        g_plot = ipt.common_gnuplot_settings()
-> +        g_plot('set output "' + output_png + '"')
-> +        g_plot('set yrange [0:7]')
-> +        g_plot('set ytics 0, 1')
-> +        g_plot('set ylabel "CPU Frequency (GHz)"')
-> +        g_plot('set title "{} : frequency : CPU {:0>3} : {:%F %H:%M}"'.format(test_name, cpu_index, datetime.now()))
-> +        g_plot('set ylabel "CPU frequency"')
-> +        g_plot('set key off')
-> +        ipt.set_4_plot_linestyles(g_plot)
-> +        g_plot('plot "' + file_name + '" using {:d}:{:d} with linespoints linestyle 1 axis x1y1'.format(C_ELAPSED, C_FREQ))
-> +
-> +def plot_per_cpu_des_perf(cpu_index):
-> +    """ Plot per cpu desired perf """
-> +
-> +    file_name = 'cpu{:0>3}.csv'.format(cpu_index)
-> +    if os.path.exists(file_name):
-> +        output_png = "cpu%03d_des_perf.png" % cpu_index
-> +        g_plot = ipt.common_gnuplot_settings()
-> +        g_plot('set output "' + output_png + '"')
-> +        g_plot('set yrange [0:255]')
-> +        g_plot('set ylabel "des perf"')
-> +        g_plot('set title "{} : cpu des perf : CPU {:0>3} : {:%F %H:%M}"'.format(test_name, cpu_index, datetime.now()))
-> +        g_plot('set key off')
-> +        ipt.set_4_plot_linestyles(g_plot)
-> +        g_plot('plot "' + file_name + '" using {:d}:{:d} with linespoints linestyle 1 axis x1y1'.format(C_ELAPSED, C_DES_PERF))
-> +
-> +def plot_per_cpu_load(cpu_index):
-> +    """ Plot per cpu load """
-> +
-> +    file_name = 'cpu{:0>3}.csv'.format(cpu_index)
-> +    if os.path.exists(file_name):
-> +        output_png = "cpu%03d_load.png" % cpu_index
-> +        g_plot = ipt.common_gnuplot_settings()
-> +        g_plot('set output "' + output_png + '"')
-> +        g_plot('set yrange [0:100]')
-> +        g_plot('set ytics 0, 10')
-> +        g_plot('set ylabel "CPU load (percent)"')
-> +        g_plot('set title "{} : cpu load : CPU {:0>3} : {:%F %H:%M}"'.format(test_name, cpu_index, datetime.now()))
-> +        g_plot('set key off')
-> +        ipt.set_4_plot_linestyles(g_plot)
-> +        g_plot('plot "' + file_name + '" using {:d}:{:d} with linespoints linestyle 1 axis x1y1'.format(C_ELAPSED, C_LOAD))
-> +
-> +def plot_all_cpu_frequency():
-> +    """ Plot all cpu frequencies """
-> +
-> +    output_png = 'all_cpu_frequencies.png'
-> +    g_plot = ipt.common_gnuplot_settings()
-> +    g_plot('set output "' + output_png + '"')
-> +    g_plot('set ylabel "CPU Frequency (GHz)"')
-> +    g_plot('set title "{} : cpu frequencies : {:%F %H:%M}"'.format(test_name, datetime.now()))
-> +
-> +    title_list = subprocess.check_output('ls cpu???.csv | sed -e \'s/.csv//\'',shell=True).decode('utf-8').replace('\n', ' ')
-> +    plot_str = "plot for [i in title_list] i.'.csv' using {:d}:{:d} pt 7 ps 1 title i".format(C_ELAPSED, C_FREQ)
-> +    g_plot('title_list = "{}"'.format(title_list))
-> +    g_plot(plot_str)
-> +
-> +def plot_all_cpu_des_perf():
-> +    """ Plot all cpu desired perf """
-> +
-> +    output_png = 'all_cpu_des_perf.png'
-> +    g_plot = ipt.common_gnuplot_settings()
-> +    g_plot('set output "' + output_png + '"')
-> +    g_plot('set ylabel "des perf"')
-> +    g_plot('set title "{} : cpu des perf : {:%F %H:%M}"'.format(test_name, datetime.now()))
-> +
-> +    title_list = subprocess.check_output('ls cpu???.csv | sed -e \'s/.csv//\'',shell=True).decode('utf-8').replace('\n', ' ')
-> +    plot_str = "plot for [i in title_list] i.'.csv' using {:d}:{:d} pt 255 ps 1 title i".format(C_ELAPSED, C_DES_PERF)
-> +    g_plot('title_list = "{}"'.format(title_list))
-> +    g_plot(plot_str)
-> +
-> +def plot_all_cpu_load():
-> +    """ Plot all cpu load  """
-> +
-> +    output_png = 'all_cpu_load.png'
-> +    g_plot = ipt.common_gnuplot_settings()
-> +    g_plot('set output "' + output_png + '"')
-> +    g_plot('set yrange [0:100]')
-> +    g_plot('set ylabel "CPU load (percent)"')
-> +    g_plot('set title "{} : cpu load : {:%F %H:%M}"'.format(test_name, datetime.now()))
-> +
-> +    title_list = subprocess.check_output('ls cpu???.csv | sed -e \'s/.csv//\'',shell=True).decode('utf-8').replace('\n', ' ')
-> +    plot_str = "plot for [i in title_list] i.'.csv' using {:d}:{:d} pt 255 ps 1 title i".format(C_ELAPSED, C_LOAD)
-> +    g_plot('title_list = "{}"'.format(title_list))
-> +    g_plot(plot_str)
-> +
-> +def store_csv(cpu_int, time_pre_dec, time_post_dec, min_perf, des_perf, max_perf, freq_ghz, mperf, aperf, tsc, common_comm, load, duration_ms, sample_num, elapsed_time, cpu_mask):
-> +    """ Store master csv file information """
-> +
-> +    global graph_data_present
-> +
-> +    if cpu_mask[cpu_int] == 0:
-> +        return
-> +
-> +    try:
-> +        f_handle = open('cpu.csv', 'a')
-> +        string_buffer = "CPU_%03u, %05u, %06u, %u, %u, %u, %.4f, %u, %u, %u, %.2f, %.3f, %u, %.3f, %s\n" % (cpu_int, int(time_pre_dec), int(time_post_dec), int(min_perf), int(des_perf), int(max_perf), freq_ghz, int(mperf), int(aperf), int(tsc), load, duration_ms, sample_num, elapsed_time, common_comm)
-> +        f_handle.write(string_buffer)
-> +        f_handle.close()
-> +    except:
-> +        print('IO error cpu.csv')
-> +        return
-> +
-> +    graph_data_present = True;
-> +
-> +
-> +def cleanup_data_files():
-> +    """ clean up existing data files """
-> +
-> +    if os.path.exists('cpu.csv'):
-> +        os.remove('cpu.csv')
-> +    f_handle = open('cpu.csv', 'a')
-> +    f_handle.write('common_cpu, common_secs, common_usecs, min_perf, des_perf, max_perf, freq, mperf, aperf, tsc, load, duration_ms, sample_num, elapsed_time, common_comm')
-> +    f_handle.write('\n')
-> +    f_handle.close()
-> +
-> +def read_trace_data(file_name, cpu_mask):
-> +    """ Read and parse trace data """
-> +
-> +    global current_max_cpu
-> +    global sample_num, last_sec_cpu, last_usec_cpu, start_time
-> +
-> +    try:
-> +        data = open(file_name, 'r').read()
-> +    except:
-> +        print('Error opening ', file_name)
-> +        sys.exit(2)
-> +
-> +    for line in data.splitlines():
-> +        search_obj = \
-> +            re.search(r'(^(.*?)\[)((\d+)[^\]])(.*?)(\d+)([.])(\d+)(.*?amd_min_perf=)(\d+)(.*?amd_des_perf=)(\d+)(.*?amd_max_perf=)(\d+)(.*?freq=)(\d+)(.*?mperf=)(\d+)(.*?aperf=)(\d+)(.*?tsc=)(\d+)'
-> +                      , line)
-> +
-> +        if search_obj:
-> +            cpu = search_obj.group(3)
-> +            cpu_int = int(cpu)
-> +            cpu = str(cpu_int)
-> +
-> +            time_pre_dec = search_obj.group(6)
-> +            time_post_dec = search_obj.group(8)
-> +            min_perf = search_obj.group(10)
-> +            des_perf = search_obj.group(12)
-> +            max_perf = search_obj.group(14)
-> +            freq = search_obj.group(16)
-> +            mperf = search_obj.group(18)
-> +            aperf = search_obj.group(20)
-> +            tsc = search_obj.group(22)
-> +
-> +            common_comm = search_obj.group(2).replace(' ', '')
-> +
-> +            if sample_num == 0 :
-> +                start_time = Decimal(time_pre_dec) + Decimal(time_post_dec) / Decimal(1000000)
-> +            sample_num += 1
-> +
-> +            if last_sec_cpu[cpu_int] == 0 :
-> +                last_sec_cpu[cpu_int] = time_pre_dec
-> +                last_usec_cpu[cpu_int] = time_post_dec
-> +            else :
-> +                duration_us = (int(time_pre_dec) - int(last_sec_cpu[cpu_int])) * 1000000 + (int(time_post_dec) - int(last_usec_cpu[cpu_int]))
-> +                duration_ms = Decimal(duration_us) / Decimal(1000)
-> +                last_sec_cpu[cpu_int] = time_pre_dec
-> +                last_usec_cpu[cpu_int] = time_post_dec
-> +                elapsed_time = Decimal(time_pre_dec) + Decimal(time_post_dec) / Decimal(1000000) - start_time
-> +                load = Decimal(int(mperf)*100)/ Decimal(tsc)
-> +                freq_ghz = Decimal(freq)/Decimal(1000000)
-> +                store_csv(cpu_int, time_pre_dec, time_post_dec, min_perf, des_perf, max_perf, freq_ghz, mperf, aperf, tsc, common_comm, load, duration_ms, sample_num, elapsed_time, cpu_mask)
-> +
-> +            if cpu_int > current_max_cpu:
-> +                current_max_cpu = cpu_int
-> +# Now separate the main overall csv file into per CPU csv files.
-> +    ipt.split_csv(current_max_cpu, cpu_mask)
-> +
-> +
-> +def signal_handler(signal, frame):
-> +    print(' SIGINT: Forcing cleanup before exit.')
-> +    if interval:
-> +        ipt.disable_trace(trace_file)
-> +        ipt.clear_trace_file()
-> +        ipt.free_trace_buffer()
-> +        sys.exit(0)
-> +
-> +trace_file = "/sys/kernel/debug/tracing/events/amd_cpu/enable"
-> +signal.signal(signal.SIGINT, signal_handler)
-> +
-> +interval = ""
-> +file_name = ""
-> +cpu_list = ""
-> +test_name = ""
-> +memory = "10240"
-> +graph_data_present = False;
-> +
-> +valid1 = False
-> +valid2 = False
-> +
-> +cpu_mask = zeros((MAX_CPUS,), dtype=int)
-> +
-> +
-> +try:
-> +    opts, args = getopt.getopt(sys.argv[1:],"ht:i:c:n:m:",["help","trace_file=","interval=","cpu=","name=","memory="])
-> +except getopt.GetoptError:
-> +    ipt.print_help('amd_pstate')
-> +    sys.exit(2)
-> +for opt, arg in opts:
-> +    if opt == '-h':
-> +        print()
-> +        sys.exit()
-> +    elif opt in ("-t", "--trace_file"):
-> +        valid1 = True
-> +        location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-> +        file_name = os.path.join(location, arg)
-> +    elif opt in ("-i", "--interval"):
-> +        valid1 = True
-> +        interval = arg
-> +    elif opt in ("-c", "--cpu"):
-> +        cpu_list = arg
-> +    elif opt in ("-n", "--name"):
-> +        valid2 = True
-> +        test_name = arg
-> +    elif opt in ("-m", "--memory"):
-> +        memory = arg
-> +
-> +if not (valid1 and valid2):
-> +    ipt.print_help('amd_pstate')
-> +    sys.exit()
-> +
-> +if cpu_list:
-> +    for p in re.split("[,]", cpu_list):
-> +        if int(p) < MAX_CPUS :
-> +            cpu_mask[int(p)] = 1
-> +else:
-> +    for i in range (0, MAX_CPUS):
-> +        cpu_mask[i] = 1
-> +
-> +if not os.path.exists('results'):
-> +    os.mkdir('results')
-> +    ipt.fix_ownership('results')
-> +
-> +os.chdir('results')
-> +if os.path.exists(test_name):
-> +    print('The test name directory already exists. Please provide a unique test name. Test re-run not supported, yet.')
-> +    sys.exit()
-> +os.mkdir(test_name)
-> +ipt.fix_ownership(test_name)
-> +os.chdir(test_name)
-> +
-> +cur_version = sys.version_info
-> +print('python version (should be >= 2.7):')
-> +print(cur_version)
-> +
-> +cleanup_data_files()
-> +
-> +if interval:
-> +    file_name = "/sys/kernel/debug/tracing/trace"
-> +    ipt.clear_trace_file()
-> +    ipt.set_trace_buffer_size(memory)
-> +    ipt.enable_trace(trace_file)
-> +    time.sleep(int(interval))
-> +    ipt.disable_trace(trace_file)
-> +
-> +current_max_cpu = 0
-> +
-> +read_trace_data(file_name, cpu_mask)
-> +
-> +if interval:
-> +    ipt.clear_trace_file()
-> +    ipt.free_trace_buffer()
-> +
-> +if graph_data_present == False:
-> +    print('No valid data to plot')
-> +    sys.exit(2)
-> +
-> +for cpu_no in range(0, current_max_cpu + 1):
-> +    plot_per_cpu_freq(cpu_no)
-> +    plot_per_cpu_des_perf(cpu_no)
-> +    plot_per_cpu_load(cpu_no)
-> +
-> +plot_all_cpu_des_perf()
-> +plot_all_cpu_frequency()
-> +plot_all_cpu_load()
-> +
-> +for root, dirs, files in os.walk('.'):
-> +    for f in files:
-> +        ipt.fix_ownership(f)
-> +
-> +os.chdir('../../')
-> -- 
-> 2.27.0
-> 
+Yeah: this only seems to show up with UML source compiled as "user"
+files (i.e., talking to the host system). Most of the kernel source
+doesn't show the warning because -Qunused-arguments is set somewhere,
+probably in KBUILD_CPPFLAGS, which doesn't filter down into
+USER_CFLAGS:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?id=7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3#n784
+
+Is this flag supposed to only work on ARM/AArch64, or is it just
+currently not implemented anywhere else. If it's actually
+ARM-specific, then moving it to the arch/arm{,64} makefile as in Kees'
+patch definitely makes more sense. If it's going to show up on other
+architectures at some point anyway, maybe something like this makes
+sense.
+
+>
+> Regardless, I would definitely like to clean up this instance of the
+> warning because I would like to make this warning a hard error so that
+> we do not get cryptic cc-option failures:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1587
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> One small comment below.
+>
+> >  arch/um/Makefile | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/arch/um/Makefile b/arch/um/Makefile
+> > index f2fe63bfd819..320b09cd513c 100644
+> > --- a/arch/um/Makefile
+> > +++ b/arch/um/Makefile
+> > @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+> >               -D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+> >               -idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+> >
+> > +ifdef CONFIG_CC_IS_CLANG
+>
+> Is this ifdef needed?
+>
+No: it works fine without the ifdef: I just wanted to limit the damage
+I could do playing with things I didn't fully understand. :-)
+
+> > +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
+> > +endif
+> > +
+> >  #This will adjust *FLAGS accordingly to the platform.
+> >  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+> >
+
+Cheers,
+-- David
+
+--000000000000a6863805d95ef127
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCo
+gZZNfyHC7gt32VURB7bs1waIRwAVDcFVg+WAp+4WPzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMDQwNjUxMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT4EZ9MXnq6fg9Dha0yqy
+ueRk6qFYjNDrL33X/dy8jrP2j4Z+SCgRWnxM73PN4kGbQUksGTqkOl3uBJ5gF96+DHphqLQJFCxZ
+8I+MMkY9XQ1hK6sxugoNxwDXGsBbXFBuRYCKAUIeDM2wel2nj/foSO8kf+O5wbzIx5gBXJa4SdWu
+JAVKmSJtjlspiPZOKvtsWPM2EyetLWOf29VX+fT2LHHn2sO/zCqmrtrgn306Zl629PMDBVG+j//k
+mPZHPc9hijjliTjp5MvzCtqH5eAX/kT4MfE85F3tJM2fPJ/+Iq0f8reHT/TdCS59CGEYg++SZunD
+qfwkhyGcsIj0Ha9zDg==
+--000000000000a6863805d95ef127--

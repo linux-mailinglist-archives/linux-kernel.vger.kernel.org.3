@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21804CD37A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2264CD37D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbiCDLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S235641AbiCDLb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbiCDLaz (ORCPT
+        with ESMTP id S230364AbiCDLb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:30:55 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4AD1B1246;
-        Fri,  4 Mar 2022 03:30:08 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so7581816pjb.3;
-        Fri, 04 Mar 2022 03:30:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4LBAgln/GTDCgFddRUfBtYbCF94Dwa8Tf8rpkYV3Zu4=;
-        b=f2IFFTXBjqENHVE+jMpnpS6onFgxg06DQr1mV2sTlTMhRgbLiXJN+/BV1r/4Yd/au7
-         4/0jee32mNK2eFmTKOSUdGTZKW56ApBQwMDyGlF5qNciq4ej3D+WcpDxKoQgIRWSsjMi
-         /Ue+5sZ05CuW4+rr8s8FekT2+Kv7I70oXtdLniMmZcQOCoUs+yAbKNJMVxmvtCld96o4
-         MXeYgV/6fAWSX6lVHK+X0mC0YSJIokrTvSopLV4qtD/TNimOLys7+4mB51z9kcxFBzLC
-         mm/7vs8ryo68hedq9NTu0LuXdLaOGpYErh0EDxxc0irC6hfHnDET85VnlKZfXD6a5QkC
-         /cmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4LBAgln/GTDCgFddRUfBtYbCF94Dwa8Tf8rpkYV3Zu4=;
-        b=hofYsQn2G09cHtvGpObBCyXYnrtbLxfSs98E29IHibjzqa3zv/YzspJWQVK7721swm
-         hWgKeO+857dX7dpqJzFOvaU4+JrBoS0GIMHeUvmzbNLpRb1ar1kd/mq7UJt7xiEsH+Ll
-         9BNWAGUzEnLyX6HLT/w7+5T6WENFFJb2ML1kL7D3HrVdPhGZVUbmzHRfs38jmBpuH3Fq
-         G3/VqDON1UB/NV1NcWjTLKasm4cxDzjWAoQIxnuvP3JyIP+neDQORSza29TTy4owbsm9
-         kchp4+o2NY95yx/zgPNib6EWC5Ar0wVRdJho9Z4T2bHHdsOw/WAnUgRZSzxNYtaJsGEK
-         xB0w==
-X-Gm-Message-State: AOAM533n7eLpGfmzKBZf5gqeHvKfzLlCHbKL7B5BUtXxW574LiKgpfWg
-        8UiZaKlwiKaPkpu8hiChp1o=
-X-Google-Smtp-Source: ABdhPJzbURJna5xflbKpiUyuF0V7e/LYW6LhnViq8N4feeUwjDue3k1I//GQ7Gi/br2sFq+1/ltIqA==
-X-Received: by 2002:a17:903:40c3:b0:151:c8a2:1c46 with SMTP id t3-20020a17090340c300b00151c8a21c46mr3500pld.141.1646393407609;
-        Fri, 04 Mar 2022 03:30:07 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a056a00170300b004f104c635e4sm5718237pfc.99.2022.03.04.03.30.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Mar 2022 03:30:07 -0800 (PST)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v1 2/2] dt-bindings: phy: Add bindings doc for Sunplus USB2 PHY driver
-Date:   Fri,  4 Mar 2022 19:30:18 +0800
-Message-Id: <1646393418-26421-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646393418-26421-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1646393418-26421-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 06:31:56 -0500
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E49165C12
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:31:09 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id AA9A9E0173;
+        Fri,  4 Mar 2022 03:31:08 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ee-NXvcVodfn; Fri,  4 Mar 2022 03:31:08 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     kernel@puri.sm, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module parameter
+Date:   Fri,  4 Mar 2022 12:30:57 +0100
+Message-Id: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings doc for Sunplus USB2 PHY driver
+On the Librem 5 imx8mq system we've seen the stop endpoint command
+time out regularly which results in the hub dying.
 
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+While on the one hand we see "Port resume timed out, port 1-1: 0xfe3"
+before this and on the other hand driver-comments suggest that the driver
+might be able to recover instead of dying here, Sarah seemed to have a
+workaround for this particulator problem in mind already:
+
+Make it a module parameter. So while it might not be the root cause for
+the problem, do this to give users a workaround.
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
- .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      | 73 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ drivers/usb/host/xhci-ring.c | 2 +-
+ drivers/usb/host/xhci.c      | 8 +++++++-
+ drivers/usb/host/xhci.h      | 3 +--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-new file mode 100644
-index 0000000..52cf20e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/phy/sunplus,sp7021-usb2-phy.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d0b6806275e0..e631d408e6b2 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1133,7 +1133,7 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 				xhci_stop_watchdog_timer_in_irq(xhci, ep);
+ 
+ 			mod_timer(&ep->stop_cmd_timer,
+-				  jiffies + XHCI_STOP_EP_CMD_TIMEOUT * HZ);
++				  jiffies + xhci->stop_ep_cmd_timeout * HZ);
+ 			xhci_queue_stop_endpoint(xhci, command, slot_id, ep_index, 0);
+ 			xhci_ring_cmd_db(xhci);
+ 
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index a1c781f70d02..37fd05e75dcf 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -37,6 +37,11 @@ static unsigned long long quirks;
+ module_param(quirks, ullong, S_IRUGO);
+ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+ 
++static unsigned int stop_ep_cmd_timeout = 5;
++module_param(stop_ep_cmd_timeout, uint, S_IRUGO | S_IWUSR);
++MODULE_PARM_DESC(stop_ep_cmd_timeout,
++		 "Stop endpoint command timeout (secs) for URB cancel watchdog. default=5");
 +
-+title: Sunplus SP7021 USB 2.0 PHY Controller Device Tree bindings
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb2-phy
-+
-+  reg:
-+    items:
-+      - description: UPHY register region
-+      - description: MOON4 register region
-+
-+  reg-names:
-+    items:
-+      - const: phy
-+      - const: moon4
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cell-names:
-+    description: names corresponding to the nvmem cells of disconnect voltage
-+    const: disc_vol
-+
-+  nvmem-cells:
-+    description: nvmem cell address of disconnect voltage
-+    maxItems: 1
-+
-+  sunplus,disc-vol-addr-off:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: the otp address offset of disconnect voltage
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - resets
-+  - "#phy-cells"
-+  - nvmem-cell-names
-+  - nvmem-cells
-+  - sunplus,disc-vol-addr-off
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    sp_uphy0: uphy@9c004a80 {
-+      compatible = "sunplus,sp7021-usb2-phy";
-+      reg = <0x9c004a80 0x80>, <0x9c000248 0x10>;
-+      reg-names = "phy", "moon4";
-+      clocks = <&clkc 0x3d>;
-+      resets = <&rstc 0x2d>;
-+      #phy-cells = <0>;
-+      nvmem-cell-names = "disc_vol";
-+      nvmem-cells = <&disc_vol>;
-+      sunplus,disc-vol-addr-off = <0>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a3bb35e..ec6beb3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17951,6 +17951,7 @@ SUNPLUS USB2 PHY DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
- F:	drivers/phy/sunplus/Kconfig
- F:	drivers/phy/sunplus/Makefile
- F:	drivers/phy/sunplus/phy-sunplus-usb2.c
+ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+ {
+ 	struct xhci_segment *seg = ring->first_seg;
+@@ -1849,7 +1854,7 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		}
+ 		ep->ep_state |= EP_STOP_CMD_PENDING;
+ 		ep->stop_cmd_timer.expires = jiffies +
+-			XHCI_STOP_EP_CMD_TIMEOUT * HZ;
++			xhci->stop_ep_cmd_timeout * HZ;
+ 		add_timer(&ep->stop_cmd_timer);
+ 		xhci_queue_stop_endpoint(xhci, command, urb->dev->slot_id,
+ 					 ep_index, 0);
+@@ -5288,6 +5293,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+ 		xhci->hcc_params2 = readl(&xhci->cap_regs->hcc_params2);
+ 
+ 	xhci->quirks |= quirks;
++	xhci->stop_ep_cmd_timeout = stop_ep_cmd_timeout;
+ 
+ 	get_quirks(dev, xhci);
+ 
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 8a0026ee9524..80c9ced4a276 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1674,8 +1674,6 @@ struct urb_priv {
+ #define	ERST_NUM_SEGS	1
+ /* Poll every 60 seconds */
+ #define	POLL_TIMEOUT	60
+-/* Stop endpoint command timeout (secs) for URB cancellation watchdog timer */
+-#define XHCI_STOP_EP_CMD_TIMEOUT	5
+ /* XXX: Make these module parameters */
+ 
+ struct s3_save {
+@@ -1899,6 +1897,7 @@ struct xhci_hcd {
+ #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
+ #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
+ 
++	unsigned int		stop_ep_cmd_timeout;
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+ 	struct xhci_port	*hw_ports;
 -- 
-2.7.4
+2.30.2
 

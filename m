@@ -2,88 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351A44CDCF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3034CDCF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiCDSvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S241845AbiCDSwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241837AbiCDSvC (ORCPT
+        with ESMTP id S236781AbiCDSwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:51:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ECF81D683D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646419812;
+        Fri, 4 Mar 2022 13:52:39 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA491C1ECC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:51:51 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 1D1E722175;
+        Fri,  4 Mar 2022 19:51:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1646419909;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mmu2/MJWkduXbhCk1Ykv/xaI9FSQg18IJV+b9NPI6qk=;
-        b=bwjpZed4KZt172BDEQzqPLJoTqWNJqTlJkuKqpjoLOFK5aQUaLAA9QYV+cXvNBR4gZ0IB/
-        dFJsq0wFTro4VC9TWlA9ym7ZRnrxItq/O+HoJ8Su//bzckgOPsbelhzlKd6ITs0Wszj2Vb
-        pAwOOBmy7EOG8UaovEdrCzmq3UPOyDg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-67xfxQzIPK6XAxwERYROhw-1; Fri, 04 Mar 2022 13:50:11 -0500
-X-MC-Unique: 67xfxQzIPK6XAxwERYROhw-1
-Received: by mail-wm1-f72.google.com with SMTP id j42-20020a05600c1c2a00b00381febe402eso4033971wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:50:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Mmu2/MJWkduXbhCk1Ykv/xaI9FSQg18IJV+b9NPI6qk=;
-        b=2FcvQL2YVTC1d088jBjGTn77lBZuE3tyq14C98lWdVdzm+7zSZ61vTQCw4BaH2UXph
-         L2stlOA4C510rM8SwCSCpA6PusV9YCETPTRQ1Or43cwqDY6o9EvvPUVE1nyTwy3FRPwc
-         Z6W/at552vLsi3idjx+opkFUn4fbht0nxuSlTuytEIoMx8d4fRt8+B1FjyTkzkO1V1aT
-         OIkWBE7Sd0AxrWS3yOzhqUgYFOCSPIjxgkf52qUGHy0qGMiceuZwQXmm/Z+etBxxUVHw
-         lLOJif7b5YSaOie5wQ+Q0yTyy5VTEdvDoVt56UUtLDWzspG3b4HaaR/kPmDTP5sOe7h9
-         1f4A==
-X-Gm-Message-State: AOAM532tQUmTVfuwfK9/GZOBwrfGs6XKowUSuv42gVXq5vXRQAxt81cw
-        DLu0RsmsTtdTyQl4743uPZEGfZMTa+myWoAz+l+BD3/QXkLEszdNTa6niKX23a4o9/pEunON6Ay
-        JRsAwvXgjLW4pdei68PEhGL/V
-X-Received: by 2002:adf:e44b:0:b0:1f0:250a:d3ef with SMTP id t11-20020adfe44b000000b001f0250ad3efmr93705wrm.402.1646419809890;
-        Fri, 04 Mar 2022 10:50:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/YyaYNjCSltEDDDSbD09ZoT/SOumsdrUNzVER/VcVldWBZr9luJE8t3fiZySZcHShGgCzOg==
-X-Received: by 2002:adf:e44b:0:b0:1f0:250a:d3ef with SMTP id t11-20020adfe44b000000b001f0250ad3efmr93690wrm.402.1646419809640;
-        Fri, 04 Mar 2022 10:50:09 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:4600:7355:df2c:f6ff:94d? (p200300cbc70946007355df2cf6ff094d.dip0.t-ipconnect.de. [2003:cb:c709:4600:7355:df2c:f6ff:94d])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm5203344wrv.79.2022.03.04.10.50.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 10:50:09 -0800 (PST)
-Message-ID: <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
-Date:   Fri, 4 Mar 2022 19:50:08 +0100
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U/LuT+rONVQX6VgKjgRIoVDXdEdfsqzHnymPhpyq4D4=;
+        b=p0ydG4ZHJrTNCFyMchvneiY8zMwWkmVxx/Crv8uDPltk8wA868yjn3+C+ogMxsPWIqyZlX
+        3WGQ5xnDiiHt6H6+nYQVbXNm6V6n/J9FEb8/fnnusNo32FOXZdXZF8SH/aWKi4MJLQeFi3
+        oou8fMQmz8o7w/t8FNtIYMTAGlzP2sc=
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        heiko.thiery@gmail.com, Michael Walle <michael@walle.cc>
+Subject: [PATCH v1] mtd: spi-nor: unset quad_enable if SFDP doesn't specify it
+Date:   Fri,  4 Mar 2022 19:51:37 +0100
+Message-Id: <20220304185137.3376011-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220303222014.517033-1-shy828301@gmail.com>
- <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
- <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting
- PMD
-In-Reply-To: <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,43 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.03.22 19:30, Yang Shi wrote:
-> On Thu, Mar 3, 2022 at 9:06 PM David Hildenbrand <david@redhat.com> wrote:
->>
->> Hi,
->>
->> This probably bounces on the list due to html junk from the gmail app.
->>
->> What happened to
->>
->> https://lore.kernel.org/linux-mm/20220131162940.210846-10-david@redhat.com/
->>
->> Included in the very series mentioned below?
->>
->> Was this silently dropped due to folio conversion collisions? :/
-> 
-> I really didn't notice you already proposed this. Maybe folio
-> conversion, maybe mlock cleanup, I can't tell. But anyway this patch
-> needs to get rebased. I will submit v2 to solve the comment, will add
-> your signed-off-by.
-> 
+While the first version of JESD216 specify the opcode for 4 bit I/O
+accesses, it lacks information on how to actually enable this mode.
 
-Why a rebase? The folio change comes via another tree (unfortunately not
-Andrews tree, I wish we would have a single MM tree for MM patches).
+For now, the one set in spi_nor_init_default_params() will be used.
+But this one is likely wrong for some flashes, in particular the
+Macronix MX25L12835F. Thus we need to clear the enable method when
+parsing the SFDP. Flashes with such an SFDP revision will have to use a
+flash (and SFDP revision) specific fixup.
 
-@Andrew, the last mail I received was
+This might break quad I/O for some flashes which relied on the
+spi_nor_sr2_bit1_quad_enable() that was formerly set. If your bisect
+turns up this commit, you'll probably have to set the proper
+quad_enable method in a post_bfpt() fixup for your flash.
 
-+ mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-added to -mm tree
+Signed-off-by: Michael Walle <michael@walle.cc>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+changes since RFC:
+ - reworded commit message
+ - added comment about post_bfpt hook
 
-The patch shows up in mmotm as
+Tudor, I'm not sure what you meant with
+  Maybe you can update the commit message and explain why would some
+  flashes fail to enable quad mode, similar to what I did.
 
-#[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
+It doesn't work because the wrong method is chosen? ;)
 
-... which shouldn't be true.
+ drivers/mtd/spi-nor/sfdp.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
+index a5211543d30d..6bba9b601846 100644
+--- a/drivers/mtd/spi-nor/sfdp.c
++++ b/drivers/mtd/spi-nor/sfdp.c
+@@ -549,6 +549,16 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
+ 	map->uniform_erase_type = map->uniform_region.offset &
+ 				  SNOR_ERASE_TYPE_MASK;
+ 
++	/*
++	 * The first JESD216 revision doesn't specify a method to enable
++	 * quad mode. spi_nor_init_default_params() will set a legacy
++	 * default method to enable quad mode. We have to disable it
++	 * again.
++	 * Flashes with this JESD216 revision need to set the quad_enable
++	 * method in their post_bfpt() fixup if they want to use quad I/O.
++	 */
++	params->quad_enable = NULL;
++
+ 	/* Stop here if not JESD216 rev A or later. */
+ 	if (bfpt_header->length == BFPT_DWORD_MAX_JESD216)
+ 		return spi_nor_post_bfpt_fixups(nor, bfpt_header, &bfpt);
+@@ -562,7 +572,6 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
+ 	/* Quad Enable Requirements. */
+ 	switch (bfpt.dwords[BFPT_DWORD(15)] & BFPT_DWORD15_QER_MASK) {
+ 	case BFPT_DWORD15_QER_NONE:
+-		params->quad_enable = NULL;
+ 		break;
+ 
+ 	case BFPT_DWORD15_QER_SR2_BIT1_BUGGY:
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 

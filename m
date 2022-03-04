@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6774CCC45
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5974CCC25
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbiCDD0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S237817AbiCDDVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbiCDD0I (ORCPT
+        with ESMTP id S232140AbiCDDVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:26:08 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349517F692
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:25:21 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id q8so8180701iod.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 19:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=riAePIdOHWyX+kWI5kEIlQkDYdGowAInsgUw4gn0/e4=;
-        b=BlrpAc0LSalr08lxLvWHUF9xqsdrYeT/1mov5HdmySdHvY7zpjGGpvRBzSVE7uyStd
-         RFfWon9VgWK3xggfoUkXejf4U8sLAeW88vzXIDjUl4CZZ63tpT4qE6fUpp5hRy5ZbDrt
-         nV+6kcnrv5q7GtjDy8B4cuC/te60S6o70rBXya6sDNs0UKra6WerMmeR5cPU5qB4Yn7K
-         Zr+hE8G4Zd67A2sks8WC/4yo6JcqOJvYva1NS8pJKDTSj4Ln2MgUpNcvSXvHCgd6yfHw
-         dBnvBaKOXYA3nV5h24Uy8mbxbdXBqVBFiOe45hX4Q/scfBbfLF16+Gi4pk+w2DDsMGpJ
-         T5Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=riAePIdOHWyX+kWI5kEIlQkDYdGowAInsgUw4gn0/e4=;
-        b=sxKzrNOL4bm9/0b0BpWujVDZKMZqNUCOH3QvWP1EaATG/tmy8/UKF9BI3sDMhkcgPd
-         oghIIqha0CaNMKinz/ehkBt27a+fsxgTy7ky2stziuwpQDlmcFvOvfAyu93rr7/1sRSM
-         56DfywEeSOmCD+BpnvsS3Z+/r2QwPnlTfifiAFpS3OZ34kVBB212HMfA8MGfkTDFaqmC
-         2+jAj0B7nxZ/T1diS7oU7OKu6zu85wFN0I7g25rGWWydHajnh3vatymXM45pfkwQnJjb
-         YFtzKql3lYjcwVsuBDThmSZoAJesgBE/LX+soukVeBXQN4xu5Y35IOTxKk+3rG7ikqRH
-         fgvw==
-X-Gm-Message-State: AOAM532WBy6/WY9gdBgyQemoLowwvg5RpoqH2TBT+LXl8kX+29uBRiXb
-        PfcMsd2VUq5jy0xNBWFlI0Q=
-X-Google-Smtp-Source: ABdhPJz78E3vx6SBHXiEi1GHfCNZ5vzWX8+ufbWBvKEaxufsqAfodAKhOc+yxeeg/AGwmU7KQpmD/Q==
-X-Received: by 2002:a02:ccea:0:b0:314:8504:cdd8 with SMTP id l10-20020a02ccea000000b003148504cdd8mr32604002jaq.117.1646364321340;
-        Thu, 03 Mar 2022 19:25:21 -0800 (PST)
-Received: from localhost.localdomain (118-208-215-36.tpgi.com.au. [118.208.215.36])
-        by smtp.gmail.com with ESMTPSA id a13-20020a056e02180d00b002c25b51d5ecsm4114751ilv.55.2022.03.03.19.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 19:25:21 -0800 (PST)
-From:   Sam Zeter <samuelzeter@gmail.com>
-To:     mhiramat@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Samuel Zeter <samuelzeter@gmail.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] arch/x86/tools/objdump_reformat.awk: Allow for spaces
-Date:   Fri,  4 Mar 2022 14:16:11 +1100
-Message-Id: <20220304031611.5763-3-samuelzeter@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220304031611.5763-1-samuelzeter@gmail.com>
-References: <YdeGWyzvsXxntcAT@archlinux-ax161>
- <20220304031611.5763-1-samuelzeter@gmail.com>
+        Thu, 3 Mar 2022 22:21:15 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82D6417ED99
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:20:27 -0800 (PST)
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.53 with ESMTP; 4 Mar 2022 12:20:25 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.125 with ESMTP; 4 Mar 2022 12:20:24 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Fri, 4 Mar 2022 12:20:02 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220304032002.GD6112@X58A-UD3R>
+References: <YiAow5gi21zwUT54@mit.edu>
+ <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
+ <YiDSabde88HJ/aTt@mit.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiDSabde88HJ/aTt@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Zeter <samuelzeter@gmail.com>
+On Thu, Mar 03, 2022 at 09:36:25AM -0500, Theodore Ts'o wrote:
+> On Thu, Mar 03, 2022 at 02:23:33PM +0900, Byungchul Park wrote:
+> > I totally agree with you. *They aren't really locks but it's just waits
+> > and wakeups.* That's exactly why I decided to develop Dept. Dept is not
+> > interested in locks unlike Lockdep, but fouces on waits and wakeup
+> > sources itself. I think you get Dept wrong a lot. Please ask me more if
+> > you have things you doubt about Dept.
+> 
+> So the question is this --- do you now understand why, even though
+> there is a circular dependency, nothing gets stalled in the
+> interactions between the two wait channels?
 
-objdump and llvm-objdump have differing output formats. Specifically,
-objump will format its output as: address:<tab>hex, whereas
-llvm-objdump displays its output as address:<space>hex.
+I found a point that the two wait channels don't lead a deadlock in
+some cases thanks to Jan Kara. I will fix it so that Dept won't
+complain it.
 
-objdump_reformat.awk incorrectly handles this discrepancy due to
-the unexpected space and as a result insn_decoder_test fails, as
-its input is garbled.
+Thanks,
+Byungchul
 
-The instruction line being tokenized now handles a space and colon,
-or tab delimiter.
-
-Signed-off-by: Samuel Zeter <samuelzeter@gmail.com>
----
- arch/x86/tools/objdump_reformat.awk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/tools/objdump_reformat.awk b/arch/x86/tools/objdump_reformat.awk
-index 276e572a6..a4120d907 100644
---- a/arch/x86/tools/objdump_reformat.awk
-+++ b/arch/x86/tools/objdump_reformat.awk
-@@ -22,7 +22,7 @@ BEGIN {
- }
- 
- /^ *[0-9a-f]+:/ {
--	if (split($0, field, "\t") < 3) {
-+	if (split($0, field, /: |\t/) < 3) {
- 		# This is a continuation of the same insn.
- 		prev_hex = prev_hex field[2]
- 	} else {
--- 
-2.35.1
-
+> 
+> 						- Ted

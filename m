@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034124CD165
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05D14CD14C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239240AbiCDJks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S231650AbiCDJiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239367AbiCDJiE (ORCPT
+        with ESMTP id S239377AbiCDJiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:38:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B991AC284;
-        Fri,  4 Mar 2022 01:36:48 -0800 (PST)
+        Fri, 4 Mar 2022 04:38:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484681AC296;
+        Fri,  4 Mar 2022 01:36:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD8EB827BE;
-        Fri,  4 Mar 2022 09:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D75C340E9;
-        Fri,  4 Mar 2022 09:36:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C19B06197F;
+        Fri,  4 Mar 2022 09:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA714C340E9;
+        Fri,  4 Mar 2022 09:36:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386606;
-        bh=q8pqqOEI7ayWuSh5x4Y1jlB8BVxBB20xk/YPxulohaY=;
+        s=k20201202; t=1646386609;
+        bh=GIXXvHUCjsNwfokUE4YhJH42Rc0GvtvU/kUuFqoC1JU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f7n1UFcN/J0zCiEl/D83rTS0ODcmTuUY/1xKn3quJD9iaFrROzg/DQZfvWqHFPyrB
-         T84pqn+NymP2bICBF2JfsD+3H9gQqmkWMYDUXbkL1HoC+Rvy6t1UYuxCgRcA8w8INb
-         wstW9A9jcuwrTYBbDIg1ax/20dYXaieJRTuYMBL8ZGSC9YTpcqAzRMmNAAvvZGcK8N
-         WcDADyAEJmaNF3zoBjexM7bhZI0qq25QdWutll7Oblk/7KUWB75Sn601qZpgzmsrIe
-         SM/1Xuu7c8IFR2KWDzC0kf9ksRzBB4BKTd+LEUP/wCIlClskZoORmye9PRtIxA1rzQ
-         Q4oOwYS5mPDjw==
+        b=ta7ivz106BJGA+gQ8JvbWucWxO0Qp7UOccO63ppI72sxKNAeFj05Yhi0o6g/PmClN
+         3EX/V9WLW45ZNbj7uT7bKKEOITH4VtOHkoquh/vHHs8azxEVBfYXilv9Fye6OGFUBA
+         Jq0RFuIhZhosrRzRHSSxbyVZAuZcr/yYbWq7Z7PHgIrvSVyicRajbAV2nWp9KAViG6
+         3Sy9M9NCK1cty+pDtVAsVgFDiWvYKAQBdMdqB/TXUQE8n06psZhjsis3MIWJbPMFBb
+         pFlHKsyY09UOaJ50wS8M9HBgpfFR7FM7TqLpmZUeRltSn3GeJPgtPMW1K3JNSfcNTs
+         txD/A54yikRrQ==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Nathaniel McCallum <nathaniel@profian.com>,
@@ -44,9 +44,9 @@ Cc:     Nathaniel McCallum <nathaniel@profian.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
         64-BIT))
-Subject: [RFC PATCH v2.1 12/30] x86/sgx: Create utility to validate user provided offset and length
-Date:   Fri,  4 Mar 2022 11:35:06 +0200
-Message-Id: <20220304093524.397485-12-jarkko@kernel.org>
+Subject: [RFC PATCH v2.1 13/30] x86/sgx: Keep record of SGX page type
+Date:   Fri,  4 Mar 2022 11:35:07 +0200
+Message-Id: <20220304093524.397485-13-jarkko@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
 References: <20220304093524.397485-1-jarkko@kernel.org>
@@ -64,64 +64,83 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Reinette Chatre <reinette.chatre@intel.com>
 
-User provided offset and length is validated when parsing the parameters
-of the SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Extract this validation
-into a utility that can be used by the SGX2 ioctl()s that will
-also provide these values.
+SGX2 functions are not allowed on all page types. For example,
+ENCLS[EMODPR] is only allowed on regular SGX enclave pages and
+ENCLS[EMODPT] is only allowed on TCS and regular pages. If these
+functions are attempted on another type of page the hardware would
+trigger a fault.
 
+Keep a record of the SGX page type so that there is more
+certainty whether an SGX2 instruction can succeed and faults
+can be treated as real failures.
+
+The page type is a property of struct sgx_encl_page
+and thus does not cover the VA page type. VA pages are maintained
+in separate structures and their type can be determined in
+a different way. The SGX2 instructions needing the page type do not
+operate on VA pages and this is thus not a scenario needing to
+be covered at this time.
+
+With the protection bits consuming 16 bits of the unsigned long
+there is room available in the bitfield to include the page type
+information without increasing the space consumed by the struct.
+
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- arch/x86/kernel/cpu/sgx/ioctl.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/sgx.h      | 3 +++
+ arch/x86/kernel/cpu/sgx/encl.h  | 3 ++-
+ arch/x86/kernel/cpu/sgx/ioctl.c | 2 ++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
+index d67810b50a81..eae20fa52b93 100644
+--- a/arch/x86/include/asm/sgx.h
++++ b/arch/x86/include/asm/sgx.h
+@@ -239,6 +239,9 @@ struct sgx_pageinfo {
+  * %SGX_PAGE_TYPE_REG:	a regular page
+  * %SGX_PAGE_TYPE_VA:	a VA page
+  * %SGX_PAGE_TYPE_TRIM:	a page in trimmed state
++ *
++ * Make sure when making changes to this enum that its values can still fit
++ * in the bitfield within &struct sgx_encl_page
+  */
+ enum sgx_page_type {
+ 	SGX_PAGE_TYPE_SECS,
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+index e760991762e4..94ccea8fbbf2 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.h
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -27,7 +27,8 @@
+ 
+ struct sgx_encl_page {
+ 	unsigned long desc;
+-	unsigned long vm_max_prot_bits;
++	u32 vm_max_prot_bits;
++	enum sgx_page_type type:32;
+ 	struct sgx_epc_page *epc_page;
+ 	struct sgx_encl *encl;
+ 	struct sgx_va_page *va_page;
 diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 83df20e3e633..f487549bccba 100644
+index f487549bccba..0c211af8e948 100644
 --- a/arch/x86/kernel/cpu/sgx/ioctl.c
 +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -372,6 +372,26 @@ static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long src,
- 	return ret;
- }
+@@ -107,6 +107,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
+ 		set_bit(SGX_ENCL_DEBUG, &encl->flags);
  
-+/*
-+ * Ensure user provided offset and length values are valid for
-+ * an enclave.
-+ */
-+static int sgx_validate_offset_length(struct sgx_encl *encl,
-+				      unsigned long offset,
-+				      unsigned long length)
-+{
-+	if (!IS_ALIGNED(offset, PAGE_SIZE))
-+		return -EINVAL;
-+
-+	if (!length || length & (PAGE_SIZE - 1))
-+		return -EINVAL;
-+
-+	if (offset + length - PAGE_SIZE >= encl->size)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /**
-  * sgx_ioc_enclave_add_pages() - The handler for %SGX_IOC_ENCLAVE_ADD_PAGES
-  * @encl:       an enclave pointer
-@@ -425,14 +445,10 @@ static long sgx_ioc_enclave_add_pages(struct sgx_encl *encl, void __user *arg)
- 	if (copy_from_user(&add_arg, arg, sizeof(add_arg)))
- 		return -EFAULT;
+ 	encl->secs.encl = encl;
++	encl->secs.type = SGX_PAGE_TYPE_SECS;
+ 	encl->base = secs->base;
+ 	encl->size = secs->size;
+ 	encl->attributes = secs->attributes;
+@@ -344,6 +345,7 @@ static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long src,
+ 	 */
+ 	encl_page->encl = encl;
+ 	encl_page->epc_page = epc_page;
++	encl_page->type = (secinfo->flags & SGX_SECINFO_PAGE_TYPE_MASK) >> 8;
+ 	encl->secs_child_cnt++;
  
--	if (!IS_ALIGNED(add_arg.offset, PAGE_SIZE) ||
--	    !IS_ALIGNED(add_arg.src, PAGE_SIZE))
--		return -EINVAL;
--
--	if (!add_arg.length || add_arg.length & (PAGE_SIZE - 1))
-+	if (!IS_ALIGNED(add_arg.src, PAGE_SIZE))
- 		return -EINVAL;
- 
--	if (add_arg.offset + add_arg.length - PAGE_SIZE >= encl->size)
-+	if (sgx_validate_offset_length(encl, add_arg.offset, add_arg.length))
- 		return -EINVAL;
- 
- 	if (copy_from_user(&secinfo, (void __user *)add_arg.secinfo,
+ 	if (flags & SGX_PAGE_MEASURE) {
 -- 
 2.35.1
 

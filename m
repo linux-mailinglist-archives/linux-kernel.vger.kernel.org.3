@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38A34CD482
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F834CD48D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiCDMvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 07:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
+        id S234137AbiCDMza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 07:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiCDMvn (ORCPT
+        with ESMTP id S231825AbiCDMz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 07:51:43 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25A51B1DE4;
-        Fri,  4 Mar 2022 04:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=3zSYmUfILo42NmKSIeBACpJ1qTOzQlDChMK4Lpf3/Lo=; b=BAXE8OUEXSqnQ+UMkLbA9OD6K+
-        lWA7nqaB6ANdF0z0U3qkln/ZC3Ya9OgavSDUoDhW5khEhAeLm/ULSHaCTXPKOXK03kL7SfJVWcn38
-        L+flw+wgdz5xnEps2SkfuUJjiObsU9LSSwFiz9FALOh9XxiLiEmt5Fxu7mC24iPM8O2Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nQ7OR-009EGH-DJ; Fri, 04 Mar 2022 13:50:47 +0100
-Date:   Fri, 4 Mar 2022 13:50:47 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     netdev@vger.kernel.org, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        richardcochran@gmail.com, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, madhuri.sripada@microchip.com,
-        manohar.puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <YiILJ3tXs9Sba42B@lunn.ch>
-References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
- <20220304093418.31645-3-Divya.Koppera@microchip.com>
+        Fri, 4 Mar 2022 07:55:28 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B09CE8695
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 04:54:39 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id 5so12050308lfz.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 04:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VRhT9ifLMxDJ5IabGicl6XqHaEU8Ks5ZJGYgqwJqGwA=;
+        b=hDPAhA8repavaxUJtbdf4L32y02IDzMELyfpe9MaQUdmm6gBI17FLk6fxNh4iIVADX
+         F6O9vVw3Iy75iGQOHdk8Hy7EAOmpEUcy9Fcx00LiTuRY5pZE6tOqbA0gk896G7ppbzDf
+         w4/OsdLuMKmbsGHwUebT/OYznI7Pf5KLVnAFICpSf7p/Ecrw9qUfFCmjsZoQZqloKZmk
+         eOkxQOrvPVIDnj5SKNPD91A1XlK8uQDz7oo+zKEAq81+BFKmjO7NsswAF4c4+M139NUy
+         57DyjZLTMeq4V7njp1B/ijbjxkXH6d3kvW1OMiQKxhFUH43Gh6tP+P7XmP4zZmiOBYpH
+         eECQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VRhT9ifLMxDJ5IabGicl6XqHaEU8Ks5ZJGYgqwJqGwA=;
+        b=r+o6NeUn0340la6xnBDV37zUSY+AGrA5R/ccYAJVvGuFQNEdzp5fFVSUyTMR7MlBRa
+         CultT6UvRLXIRZ1tJ2lAj4fcXn8ThV85vIPskFDOKI+BOjtEEwbNTQiRZL3KwhTdGkJg
+         uZ1epnd1cavnaX3G5Vy8BBDaivLX2NyeGTI8/7XrXQT5newzbYUlpIgRNWpm5cYmOqBC
+         lfwELTm1/zZ7PtFvqL68Ef9EXYT3zTXNWzokrqHY9ZOcJDlOfkgV/QFHnMlYMQdhOh90
+         XHNSKL6VDU3+VLXC8teIAYSClznu+QNMomp5lMxRbqCk6ABshtIn240fyvVJPhVAPfux
+         xCvg==
+X-Gm-Message-State: AOAM530ZdvHt0nl6o8RpRScK2vjlNs+kMK+NuJ8HlEL2KuPkslr+Agox
+        Pb5+z2OU+9AXKYH1pc9ZL+jZ2QrJuPI=
+X-Google-Smtp-Source: ABdhPJw3S6r+dScC0Fu+hyur/qZyKZLixrkUWXfCapeEbuhXrL+ZJTxly+pZmnsfiDT9twfTmIzdkg==
+X-Received: by 2002:a05:6512:22c8:b0:447:fb92:ded3 with SMTP id g8-20020a05651222c800b00447fb92ded3mr1853833lfu.459.1646398477752;
+        Fri, 04 Mar 2022 04:54:37 -0800 (PST)
+Received: from elysium.toya.net.pl (staticline-31-183-165-244.toya.net.pl. [31.183.165.244])
+        by smtp.gmail.com with ESMTPSA id w27-20020ac2599b000000b004481e254f08sm95547lfn.240.2022.03.04.04.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 04:54:37 -0800 (PST)
+From:   Karolina Drobnik <karolinadrobnik@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     rppt@kernel.org, linux-kernel@vger.kernel.org,
+        Karolina Drobnik <karolinadrobnik@gmail.com>
+Subject: [PATCH] memblock tests: Fix testing with 32-bit physical addresses
+Date:   Fri,  4 Mar 2022 13:52:49 +0100
+Message-Id: <20220304125249.253578-1-karolinadrobnik@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304093418.31645-3-Divya.Koppera@microchip.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 03:04:17PM +0530, Divya Koppera wrote:
-> Supports configuring latency values and also adds
-> check for phy timestamping feature.
-> 
-> Signed-off-by: Divya Koppera<Divya.Koppera@microchip.com>
-> ---
->  .../devicetree/bindings/net/micrel.txt          | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/micrel.txt b/Documentation/devicetree/bindings/net/micrel.txt
-> index 8d157f0295a5..c5ab62c39133 100644
-> --- a/Documentation/devicetree/bindings/net/micrel.txt
-> +++ b/Documentation/devicetree/bindings/net/micrel.txt
-> @@ -45,3 +45,20 @@ Optional properties:
->  
->  	In fiber mode, auto-negotiation is disabled and the PHY can only work in
->  	100base-fx (full and half duplex) modes.
-> +
-> + - lan8814,ignore-ts: If present the PHY will not support timestamping.
-> +
-> +	This option acts as check whether Timestamping is supported by
-> +	hardware or not. LAN8814 phy support hardware tmestamping.
+Building memblock simulator on x86_64 with 32BIT_PHYS_ADDR_T=1
+produces "cast to pointer from integer of different size" warnings.
+Fix them by building the binary in 32-bit environment when using
+32-bit physical addresses.
 
-Does this mean the hardware itself cannot tell you it is missing the
-needed hardware? What happens when you forget to add this flag? Does
-the driver timeout waiting for hardware which does not exists?
+Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
+---
 
-> + - lan8814,latency_rx_10: Configures Latency value of phy in ingress at 10 Mbps.
-> +
-> + - lan8814,latency_tx_10: Configures Latency value of phy in egress at 10 Mbps.
-> +
-> + - lan8814,latency_rx_100: Configures Latency value of phy in ingress at 100 Mbps.
-> +
-> + - lan8814,latency_tx_100: Configures Latency value of phy in egress at 100 Mbps.
-> +
-> + - lan8814,latency_rx_1000: Configures Latency value of phy in ingress at 1000 Mbps.
-> +
-> + - lan8814,latency_tx_1000: Configures Latency value of phy in egress at 1000 Mbps.
+This patch is on the top of memblock/for-next.
 
-Why does this need to be configured, rather than hard coded? Why would
-the latency for a given speed change? I would of thought though you
-would take the average length of a PTP packet and divide is by the
-link speed.
+ tools/testing/memblock/scripts/Makefile.include | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-     Andrew
+diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
+index 699b0d6cda07..393655310324 100644
+--- a/tools/testing/memblock/scripts/Makefile.include
++++ b/tools/testing/memblock/scripts/Makefile.include
+@@ -11,7 +11,9 @@ ifeq ($(MOVABLE_NODE), 1)
+ 	CFLAGS += -D MOVABLE_NODE
+ endif
+
+-# Use 32 bit physical addresses
++# Use 32 bit physical addresses.
++# Remember to install 32-bit version of dependencies.
+ ifeq ($(32BIT_PHYS_ADDR_T), 1)
+-	CFLAGS += -U CONFIG_PHYS_ADDR_T_64BIT
++	CFLAGS += -m32 -U CONFIG_PHYS_ADDR_T_64BIT
++	LDFLAGS += -m32
+ endif
+--
+2.30.2
+

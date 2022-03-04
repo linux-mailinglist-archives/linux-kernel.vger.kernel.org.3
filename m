@@ -2,135 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30C34CCF44
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FF34CCF48
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbiCDHvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        id S238973AbiCDHwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236655AbiCDHvg (ORCPT
+        with ESMTP id S236903AbiCDHwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:51:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4E62190B42
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646380247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RHT38EAK8wYUL1DGHAhrEW8RVwO4xAs9c9L8nS+s5yk=;
-        b=htaabeUWVHhM4SqgizHuWQ7X4Q3HSuw4oixJk7tQj6y0SE58Uq4vXYXnVMT6jZUeo2daCy
-        nNr3yJP8/I/RlGrkC/srKXgHx2k/3BS8zdqPQgDy9We0Jg7wF2bLa2zCdiiKpGPHJjP4qU
-        WXFNy+jAyuAcoE+2LBiAXttwy47eS0s=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-h8TD83mPPQSoSvYswpNqfA-1; Fri, 04 Mar 2022 02:50:46 -0500
-X-MC-Unique: h8TD83mPPQSoSvYswpNqfA-1
-Received: by mail-qk1-f197.google.com with SMTP id i189-20020a3786c6000000b00646d7b30998so4973514qkd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:50:46 -0800 (PST)
+        Fri, 4 Mar 2022 02:52:23 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF32E190B4B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:51:35 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id d10so15696885eje.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:51:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vz7l809wHa5Fftg5BtJ8l6brERiXH+s22ojtiPizhug=;
+        b=bqYgHQoJVx2jDn9ok2STWrbnLOKzeu5YSD/Wr+ohdqUidpzPjRNOl/y6jkSuDDct5Y
+         WduNlOSq+WNDwPskdd1mMZXhD05/LC8rl+Y9+Fsi64SHbecWXeOqXgDM3F4k34e7rVHb
+         TY+fUz9+MIvS48axBh9IRZze89cjs4kj5gDb+yGp6wJ9S9q+YUfsaSwjx32YOoGGrKap
+         kJs209V9cJYtAuGt4SCEbTrfPg7HFfsqI37pG1nJt4zwuQu1xhVR8fBe8ruUfuQw3utw
+         AZhs9BhjZxtchrI0P1s5UeJ474Rb065KgapWevvEKYwmMvIzCsSgKYp6XTMJZCYecfG5
+         QTjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RHT38EAK8wYUL1DGHAhrEW8RVwO4xAs9c9L8nS+s5yk=;
-        b=Y7o3C3Mu2Ay0jpBf8+648pgdAamBtRUd8xsPh3JfGcA0+qJVIX/IkQNu+6nzjODtCN
-         28L7927WLtx6VdcKssUEWLnjUdXUi5BTP/UwLEc9HFCuEHAUB5D7Jal9wHeu5mVXB1nE
-         QvL8PQwsMoCXGfjYgkUGT+XbK2EiG0GbvbnKGpziCOXtlKteIUcdCLZiYkptXjzIyuys
-         E2oMbieziOJrvpW8cQAkG1MF9eXDvBTuXvZ9Ymi4bh4sluNn9RuqlW1nslFYsMHLlih9
-         8nkYE7aK0v72cbiDWardQJ3KzSYqQycMzxuLCkPzdYbEDknsTcNOv+s3u1Y3ybmv3NSB
-         c6hQ==
-X-Gm-Message-State: AOAM5336Jn5IYz+KoVYKGatwRBfz2xdiQRUz3Kx3yskUkAeXltjPoHGQ
-        5N4XkdYV5eGt911VbK+4a3pFsJEDTZ5Oo6HucgYe2j8e9McxO7iLC7Y5HWKPeIJXqBp8BJXo61m
-        8b4EkaMkQngIc8Lu4fR362UCP
-X-Received: by 2002:a37:6808:0:b0:46c:e3c1:7247 with SMTP id d8-20020a376808000000b0046ce3c17247mr1770383qkc.770.1646380246247;
-        Thu, 03 Mar 2022 23:50:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzMCSQfDu5Agxl+Zrju4icTbzmVnYv6E0GbiwcmRYdI77zGTFN/asNZoAGZHw/6BhY/xu+7Bg==
-X-Received: by 2002:a37:6808:0:b0:46c:e3c1:7247 with SMTP id d8-20020a376808000000b0046ce3c17247mr1770377qkc.770.1646380245984;
-        Thu, 03 Mar 2022 23:50:45 -0800 (PST)
-Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
-        by smtp.gmail.com with ESMTPSA id z14-20020a05622a028e00b002dc8e843596sm2953032qtw.61.2022.03.03.23.50.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 23:50:45 -0800 (PST)
-Date:   Fri, 4 Mar 2022 08:50:39 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] vhost: Provide a kernel warning if mutex is held
- whilst clean-up in progress
-Message-ID: <20220304075039.rewrf3gnbbh3sdfl@sgarzare-redhat>
-References: <20220303151929.2505822-1-lee.jones@linaro.org>
- <YiETnIcfZCLb63oB@unreal>
- <20220303155645-mutt-send-email-mst@kernel.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=vz7l809wHa5Fftg5BtJ8l6brERiXH+s22ojtiPizhug=;
+        b=jii/5CGw446pWEp5MrDGQw/0/C63hJMS0PeLHHLz2oF2bQkGU0KfPXYGhwU+Mw2stL
+         FakRfaNNoXpteLdRY82ge8WgxpqFyuRHDIg46Md22p7yONI7VB+q7QtvIF23djEOmXSz
+         d5buyBGPeKG+BvDF+9Xd6YiaGD0lssIaoUaCPvRgRbh+mA6/Gl4SwAzD3Ylb55rUdKzi
+         yUCy7HNVugotRNXoRt3H3LRlvkQNpl4HBvdNRyKigowJrwTrL6o96S7ivRQ9L6bqh6vg
+         DJFHpCrLpoyPwzCuonN4ZTkTOSFrJEdKhUMiq+2C/xdZwEwDlnSmnKlhXOc4ODgtbLPG
+         1dvw==
+X-Gm-Message-State: AOAM530CaxeCvtVelTEDs6adDGCdfeptQqDBqwIaisLB7/QdKk9bDlGZ
+        Z9ula6MXxf1PNAsEnd/13H1oYrGOB6VOoQ==
+X-Google-Smtp-Source: ABdhPJx71Gte/J9uqyoORu4fghnzOUu7G/X5LmAlDLfQe1KP51rNEaq4zK2+USNa8RcA2g3Opg8YEg==
+X-Received: by 2002:a17:906:3ad3:b0:6cd:382b:86e5 with SMTP id z19-20020a1709063ad300b006cd382b86e5mr28762195ejd.145.1646380294245;
+        Thu, 03 Mar 2022 23:51:34 -0800 (PST)
+Received: from localhost ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id qw18-20020a1709066a1200b006d6e5c56dd9sm1428638ejc.212.2022.03.03.23.51.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 03 Mar 2022 23:51:33 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Robert Hancock <robert.hancock@calian.com>,
+        Stefan Asserhall <stefan.asserhall@xilinx.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] irqchip: xilinx: Enable generic irq multi handler
+Date:   Fri,  4 Mar 2022 08:51:29 +0100
+Message-Id: <e6c6595a81f662bf839cee3109d0fa58a596ea47.1646380284.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220303155645-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:01:06PM -0500, Michael S. Tsirkin wrote:
->On Thu, Mar 03, 2022 at 09:14:36PM +0200, Leon Romanovsky wrote:
->> On Thu, Mar 03, 2022 at 03:19:29PM +0000, Lee Jones wrote:
->> > All workers/users should be halted before any clean-up should take place.
->> >
->> > Suggested-by:  Michael S. Tsirkin <mst@redhat.com>
->> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
->> > ---
->> >  drivers/vhost/vhost.c | 3 +++
->> >  1 file changed, 3 insertions(+)
->> >
->> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->> > index bbaff6a5e21b8..d935d2506963f 100644
->> > --- a/drivers/vhost/vhost.c
->> > +++ b/drivers/vhost/vhost.c
->> > @@ -693,6 +693,9 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->> >  	int i;
->> >
->> >  	for (i = 0; i < dev->nvqs; ++i) {
->> > +		/* Ideally all workers should be stopped prior to clean-up */
->> > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
->> > +
->> >  		mutex_lock(&dev->vqs[i]->mutex);
->>
->> I know nothing about vhost, but this construction and patch looks
->> strange to me.
->>
->> If all workers were stopped, you won't need mutex_lock(). The mutex_lock
->> here suggests to me that workers can still run here.
->>
->> Thanks
->
->
->"Ideally" here is misleading, we need a bigger detailed comment
->along the lines of:
->
->/*
-> * By design, no workers can run here. But if there's a bug and the
-> * driver did not flush all work properly then they might, and we
-> * encountered such bugs in the past.  With no proper flush guest won't
-> * work correctly but avoiding host memory corruption in this case
-> * sounds like a good idea.
-> */
+Register default arch handler via driver instead of directly pointing to
+xilinx intc controller. This patch makes architecture code more generic.
 
-Can we use vhost_vq_get_backend() to check this situation?
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Reviewed-by: Stefan Asserhall <stefan.asserhall@xilinx.com>
+---
 
-IIUC all the vhost devices clear the backend to stop the workers.
-This is not racy (if we do after the mutex_lock) and should cover all 
-cases.
+Changes in v2:
+- Remove concurrent_irq variable
+- Use generic_handle_domain_irq() - layout by Marc
 
-Thanks,
-Stefano
+ arch/microblaze/Kconfig           |  2 ++
+ arch/microblaze/include/asm/irq.h |  3 ---
+ arch/microblaze/kernel/irq.c      | 16 +---------------
+ drivers/irqchip/irq-xilinx-intc.c | 30 ++++++++++++++++--------------
+ 4 files changed, 19 insertions(+), 32 deletions(-)
+
+diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+index 59798e43cdb0..da568e981604 100644
+--- a/arch/microblaze/Kconfig
++++ b/arch/microblaze/Kconfig
+@@ -45,6 +45,8 @@ config MICROBLAZE
+ 	select SET_FS
+ 	select ZONE_DMA
+ 	select TRACE_IRQFLAGS_SUPPORT
++	select GENERIC_IRQ_MULTI_HANDLER
++	select HANDLE_DOMAIN_IRQ
+ 
+ # Endianness selection
+ choice
+diff --git a/arch/microblaze/include/asm/irq.h b/arch/microblaze/include/asm/irq.h
+index 0a28e80bbab0..cb6ab55d1d01 100644
+--- a/arch/microblaze/include/asm/irq.h
++++ b/arch/microblaze/include/asm/irq.h
+@@ -11,7 +11,4 @@
+ struct pt_regs;
+ extern void do_IRQ(struct pt_regs *regs);
+ 
+-/* should be defined in each interrupt controller driver */
+-extern unsigned int xintc_get_irq(void);
+-
+ #endif /* _ASM_MICROBLAZE_IRQ_H */
+diff --git a/arch/microblaze/kernel/irq.c b/arch/microblaze/kernel/irq.c
+index 903dad822fad..1f8cb4c4f74f 100644
+--- a/arch/microblaze/kernel/irq.c
++++ b/arch/microblaze/kernel/irq.c
+@@ -20,27 +20,13 @@
+ #include <linux/irqchip.h>
+ #include <linux/of_irq.h>
+ 
+-static u32 concurrent_irq;
+-
+ void __irq_entry do_IRQ(struct pt_regs *regs)
+ {
+-	unsigned int irq;
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+ 	trace_hardirqs_off();
+ 
+ 	irq_enter();
+-	irq = xintc_get_irq();
+-next_irq:
+-	BUG_ON(!irq);
+-	generic_handle_irq(irq);
+-
+-	irq = xintc_get_irq();
+-	if (irq != -1U) {
+-		pr_debug("next irq: %d\n", irq);
+-		++concurrent_irq;
+-		goto next_irq;
+-	}
+-
++	handle_arch_irq(regs);
+ 	irq_exit();
+ 	set_irq_regs(old_regs);
+ 	trace_hardirqs_on();
+diff --git a/drivers/irqchip/irq-xilinx-intc.c b/drivers/irqchip/irq-xilinx-intc.c
+index 356a59755d63..238d3d344949 100644
+--- a/drivers/irqchip/irq-xilinx-intc.c
++++ b/drivers/irqchip/irq-xilinx-intc.c
+@@ -32,6 +32,8 @@
+ #define MER_ME (1<<0)
+ #define MER_HIE (1<<1)
+ 
++#define SPURIOUS_IRQ	(-1U)
++
+ static DEFINE_STATIC_KEY_FALSE(xintc_is_be);
+ 
+ struct xintc_irq_chip {
+@@ -110,20 +112,6 @@ static struct irq_chip intc_dev = {
+ 	.irq_mask_ack = intc_mask_ack,
+ };
+ 
+-unsigned int xintc_get_irq(void)
+-{
+-	unsigned int irq = -1;
+-	u32 hwirq;
+-
+-	hwirq = xintc_read(primary_intc, IVR);
+-	if (hwirq != -1U)
+-		irq = irq_find_mapping(primary_intc->root_domain, hwirq);
+-
+-	pr_debug("irq-xilinx: hwirq=%d, irq=%d\n", hwirq, irq);
+-
+-	return irq;
+-}
+-
+ static int xintc_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+ {
+ 	struct xintc_irq_chip *irqc = d->host_data;
+@@ -164,6 +152,19 @@ static void xil_intc_irq_handler(struct irq_desc *desc)
+ 	chained_irq_exit(chip, desc);
+ }
+ 
++static void xil_intc_handle_irq(struct pt_regs *regs)
++{
++	u32 hwirq;
++
++	do {
++		hwirq = xintc_read(primary_intc, IVR);
++		if (unlikely(hwirq == SPURIOUS_IRQ))
++			break;
++
++		generic_handle_domain_irq(primary_intc->root_domain, hwirq);
++	} while (true);
++}
++
+ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 					     struct device_node *parent)
+ {
+@@ -233,6 +234,7 @@ static int __init xilinx_intc_of_init(struct device_node *intc,
+ 	} else {
+ 		primary_intc = irqc;
+ 		irq_set_default_host(primary_intc->root_domain);
++		set_handle_irq(xil_intc_handle_irq);
+ 	}
+ 
+ 	return 0;
+-- 
+2.35.1
 

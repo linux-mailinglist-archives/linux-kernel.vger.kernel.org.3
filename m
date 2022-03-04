@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C99D4CDA32
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4C04CDA34
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240309AbiCDRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S241121AbiCDRXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241184AbiCDRXI (ORCPT
+        with ESMTP id S241116AbiCDRXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:23:08 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBB51520DF;
-        Fri,  4 Mar 2022 09:22:20 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A8EB62C0;
-        Fri,  4 Mar 2022 17:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A8EB62C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1646414539; bh=oxqXpFYHpIv/m/1a18AtruSu7jdnaHfA1jf9v/hyMxc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=IuNBJ/vCvpz4WPzgxJh1rF8qnaiA6UOVPqBlG7Wul0TcLAUqL34b6xFpj3O5EELVw
-         /YHCLJtElqC3aOpiPsIDDTDUeoMKMhBC70l4Lq+vSSRYwcKrNLU3EaEldjb0OPB8Vb
-         MnM6fT+HBSp1zwGFWdf+reJyta4fJXo+WGojEfQNBnL9MP8J0SBluoeps6BOAxzP0Z
-         o8uqp0cYTa03INFYNY3PA4LskGXWSjttrembjacwl9XeSTHaHU/GDHcmqhrpe4uqwS
-         vHuDsJgA1u9skxLatY6r7Poby1AGhXNNfa9eo9dt+PTGZnovr011rYySkY0gbOwHQm
-         HNxMiUqSetkcg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>, Will Deacon <will@kernel.org>,
-        John Garry <john.garry@huawei.com>, linux-doc@vger.kernel.org,
+        Fri, 4 Mar 2022 12:23:36 -0500
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C4C735DE7;
+        Fri,  4 Mar 2022 09:22:44 -0800 (PST)
+Received: from smtpclient.apple (p5b3d2910.dip0.t-ipconnect.de [91.61.41.16])
+        by mail.holtmann.org (Postfix) with ESMTPSA id ED3C5CECCF;
+        Fri,  4 Mar 2022 18:22:43 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH] Bluetooth: btusb: Add another Realtek 8761BU
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <YhpF0JdpCmRXZtrG@alf.mars>
+Date:   Fri, 4 Mar 2022 18:22:43 +0100
+Cc:     linux-bluetooth@vger.kernel.org,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
         linux-kernel@vger.kernel.org
-Cc:     jiabing.wan@qq.com
-Subject: Re: [PATCH] docs: fix 'make htmldocs' warning in perf
-In-Reply-To: <20220228031700.1669086-1-wanjiabing@vivo.com>
-References: <20220228031700.1669086-1-wanjiabing@vivo.com>
-Date:   Fri, 04 Mar 2022 10:22:19 -0700
-Message-ID: <87tucdfx9w.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Message-Id: <C762B96C-E06D-476A-B947-D694617C160E@holtmann.org>
+References: <YhpF0JdpCmRXZtrG@alf.mars>
+To:     Helmut Grohne <helmut@subdivi.de>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wan Jiabing <wanjiabing@vivo.com> writes:
+Hi Helmut,
 
-> Fix following 'make htmldocs' warnings:
-> ./Documentation/admin-guide/perf/hisi-pcie-pmu.rst: WARNING:
-> document isn't included in any toctree
->
-> Fixes: c8602008e247 ("docs: perf: Add description for HiSilicon PCIe PMU driver")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> This device is sometimes wrapped with a label "EDUP".
+> 
+> T:  Bus=01 Lev=02 Prnt=02 Port=02 Cnt=03 Dev#=107 Spd=12   MxCh= 0
+> D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2550 ProdID=8761 Rev= 2.00
+> S:  Manufacturer=Realtek
+> S:  Product=Bluetooth Radio
+> S:  SerialNumber=00E04C239987
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> 
+> Signed-off-by: Helmut Grohne <helmut@subdivi.de>
+> Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1955351
 > ---
->  Documentation/admin-guide/perf/index.rst | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-> index 5a8f2529a033..69b23f087c05 100644
-> --- a/Documentation/admin-guide/perf/index.rst
-> +++ b/Documentation/admin-guide/perf/index.rst
-> @@ -8,6 +8,7 @@ Performance monitor support
->     :maxdepth: 1
->  
->     hisi-pmu
-> +   hisi-pcie-pmu
->     imx-ddr
+> drivers/bluetooth/btusb.c | 2 ++
+> 1 file changed, 2 insertions(+)
 
-Applied, thanks.
+patch has been applied to bluetooth-next tree.
 
-jon
+Regards
+
+Marcel
+

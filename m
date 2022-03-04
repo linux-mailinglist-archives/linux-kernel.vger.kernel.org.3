@@ -2,349 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808504CDF33
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D494CDF61
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiCDUbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S230483AbiCDUev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiCDUbd (ORCPT
+        with ESMTP id S231699AbiCDUd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:31:33 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6931E482C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:30:43 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id h126so19172273ybc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:30:43 -0800 (PST)
+        Fri, 4 Mar 2022 15:33:26 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C521F487E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:32:22 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id u61so19098399ybi.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:32:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
          :cc;
-        bh=ketSkMCmDgphN6eJBfFEUz8Zxz1RJ3nAz1fm2gHdOIE=;
-        b=aVp3F1SSGchsfdDXiebOzEgvgrssbOuvCyDTC/y9ZWZHua/1tx7G6uj7i95CITCt7c
-         lDv1WWtpRWNGXbPddt6Kjnfl63WAKRLr7Jmv7A55TdkAl+vEggYUYTqzk9YyTMerxlfy
-         IjqdbZY9znsNfURoi0XEpLdSN4xcDrV3z5NkuCYmaSzCxTjvQuiCCkI/SWvAcMbx75IM
-         2HM3GAp7DQQeJypG2Cq088zHsSuyvqjQaoMPzYQP1DOjgueq6V7RbumTn+jZafIQ4RY8
-         iZUecxy25vvx8clrXmXvD8FsncKV749SjUW7wqBAq9NvrwYQfe3UnySfERM4O9V6ea1s
-         tq3A==
+        bh=5Va0AzpfFrj2CIxQZYECbB+NvfeYwGm1BAKxA+n6QB4=;
+        b=aqiySkX9xXwyx0pXK5VRBPZs+THKKNzuz8P4dXhtgCvyYD83k10XEbPITizjiFC5+1
+         +uJJ/WstvMVQTxU+LxuP8XvWADlDCdusBlVQa6BMMZVrW+OvyLaQ8uvd5/vC5a3PIP7E
+         7y8BB4T4piZJGQnj00J7i5/x2Tvr9Q2Vswp09xESARUUFkWHsHOeWImu8+bTyTXXx/eQ
+         bg48wFjeuxt3dXnyUZI9XGuyC+9UU7Mxo4DmQDp55ReOUMP1xATcFBsHN4NlsMWvv7SO
+         XFJtejMlR6DmbxBbJo6wJuIsEUUP9J9LGUSnI+XbbgA5eFTL5pRLbzkWbAK92pr+ZBX7
+         OlDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
          :message-id:subject:to:cc;
-        bh=ketSkMCmDgphN6eJBfFEUz8Zxz1RJ3nAz1fm2gHdOIE=;
-        b=6Icff+9nu1SzjafFRbUCT+qu63rsD4cDDTtHUGtEy4fgdghPx9TV+2kQzZptqt9zTJ
-         gg7+b3Hd731LxTAc8NZC+rly31TWfGgZny22NR1BElihN3E8lWSJsO+HgP56rvjcdvJu
-         TiAmM9RsJ00oziRC58jHOjFjVIWv8QgiVBFz2Dc5OkTeDkKKabFUMybi0yvY1G8ZNeyq
-         BWnVqXqIfp/KapXLtdlnkxnHd+SGPxGk8JxWBIdIHj5pUJTMM7Jm1JAi5+tnfT9mUDjp
-         EL4jBNBTrDM4BOLH+rd5X+RLIWTDVF+95ghNvS2SE3D1ujEZyxF/PleKAcpOQUwrvrkM
-         dqKw==
-X-Gm-Message-State: AOAM5311iiUMOr1JR/Gg7Y+LXZ0FxAtcCLa66XNagUQZYwXzvfjIL4ej
-        Czuu3hHnaPGY2CecuagcFIAqOsHvMVYPVLdat2EOaQ==
-X-Google-Smtp-Source: ABdhPJxIUW1iojA/De28P636oj862zICxsKZSvLpVQO0Np7mvaK7NcdO8Wp6fG5wWHFTU0IpadQMSYmcjGS/1XJLXXo=
-X-Received: by 2002:a25:8c8b:0:b0:627:f4a2:5a47 with SMTP id
- m11-20020a258c8b000000b00627f4a25a47mr184713ybl.543.1646425842648; Fri, 04
- Mar 2022 12:30:42 -0800 (PST)
+        bh=5Va0AzpfFrj2CIxQZYECbB+NvfeYwGm1BAKxA+n6QB4=;
+        b=vFdMvs37CB+NDE9XsddHl2KEcddRQZKkdbIh2K5NmFvToLomi4i1x42baRi25KhRNo
+         WaweP82Ss4yeyiMR8c9A7Zs1zHFpVmv6ujFwyAgMLkPVG+eKpZIfPFSRhMYeGfMzk8Ym
+         WsSqKgMxmXjbYh3s5FRAUhH7vg+QZjUnya/rMJ/Q3348uPqCI9XE8dOJo+OEV/lSLZMk
+         gaOQDpgXl/8tfqWykpUmunBTPykCrJWfcW9/rNez8soagKiRf8lQ9/4XkzZzZAdrJkDX
+         D8TXSh7/q6QiC2Y/mUC8Bz1na6LvABpeH9K8aLQ8vYtNeV6joAz8FsKMpibWvtaUXwjT
+         XRug==
+X-Gm-Message-State: AOAM532cP3DQiJCzPCa3INhdaKp2nK8pZG7bZe1/JQKCMYm+RWc/ENRY
+        Vz/q9RIN9vwXw0z/XqvVJhEcyeUczT2wcqhuxWG6Dw==
+X-Google-Smtp-Source: ABdhPJzxs23o8/HFTUjwCIU9Csa6E4rXqxc9gfNR5DpVCPks40rysm/OfOjtL91itmtSRi55jiNUior2jV/kxeE11DA=
+X-Received: by 2002:a25:c487:0:b0:61d:9570:e77f with SMTP id
+ u129-20020a25c487000000b0061d9570e77fmr202540ybf.229.1646425927962; Fri, 04
+ Mar 2022 12:32:07 -0800 (PST)
 MIME-Version: 1.0
-References: <1644572051-24091-1-git-send-email-quic_charante@quicinc.com>
-In-Reply-To: <1644572051-24091-1-git-send-email-quic_charante@quicinc.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 4 Mar 2022 12:30:31 -0800
-Message-ID: <CAJuCfpGAaqZv68q-jrBuFArq+6wKBsNys+b=eaBr+03KZf-EHA@mail.gmail.com>
-Subject: Re: [PATCH v4] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, markhemm@googlemail.com,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a0d:df06:0:0:0:0:0 with HTTP; Fri, 4 Mar 2022 12:32:07 -0800 (PST)
+In-Reply-To: <202202071325.F8450B3B2D@keescook>
+References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+ <20220203164328.203629-4-martin.fernandez@eclypsium.com> <202202071325.F8450B3B2D@keescook>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Fri, 4 Mar 2022 17:32:07 -0300
+Message-ID: <CAKgze5ZXzVYHK+iR0RMRy+M9ws6kFiq0XY55+fmxmo3baUu+Bw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] x86/e820: Refactor range_update and range_remove
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Charan,
-Couple nits inline.
+On 2/7/22, Kees Cook <keescook@chromium.org> wrote:
+> Something I think would be really amazing here is if you could add KUnit
+> tests here to exercise the corner cases and validate the changes. It
+> should be pretty easy to add. Here's a quick example for the boilerplate
+> and testing a bit of __e820__range_add():
+>
+> #ifdef CONFIG_E820_KUNIT_TEST
+> #include <kunit/test.h>
+>
+> static void __init test_e820_range_add(struct kunit *context)
+> {
+> 	struct e820_table table;
+> 	u32 full;
+>
+> 	full = ARRAY_SIZE(table.entries);
+> 	/* Add last entry. */
+> 	table->nr_entries = full - 1;
+> 	__e820__range_add(&table, 0, 15, 0);
+> 	KUNIT_EXPECT_EQ(table->nr_entries, full)
+> 	/* Skip new entry when full. */
+> 	__e820__range_add(&table, 0, 15, 0);
+> 	KUNIT_EXPECT_EQ(table->nr_entries, full)
+> }
+>
+> static void __init test_e820_update(struct kunit *context)
+> {
+> ...
+> }
+>
+> static struct kunit_case __refdata e820_test_cases[] = {
+>         KUNIT_CASE(test_e820_range_add),
+>         KUNIT_CASE(test_e820_update),
+> 	...
+>         {}
+> };
+>
+> static struct kunit_suite e820_test_suite = {
+>         .name = "e820",
+>         .test_cases = e820_test_cases,
+> };
+>
+> kunit_test_suites(&e820_test_suite);
+> #endif
 
-On Fri, Feb 11, 2022 at 1:34 AM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> Currently fadvise(2) is supported only for the files that doesn't
-> associated with noop_backing_dev_info thus for the files, like shmem,
-> fadvise results into NOP. But then there is file_operations->fadvise()
-> that lets the file systems to implement their own fadvise
-> implementation. Use this support to implement some of the POSIX_FADV_XXX
-> functionality for shmem files.
->
-> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
-> advices to shmem files which can be helpful for the drivers who may want
-> to manage the shmem pages of the files that are created through
-> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
-> can create the shmem file of the size equal to its requirements and
-> map the pages for DMA and then pass the fd to user. The user who knows
-> well about the usage of these pages can now decide when these pages are
-> not required push them to swap through DONTNEED thus free up memory well
-> in advance rather than relying on the reclaim and use WILLNEED when it
-> decide that they are useful in the near future. IOW, it lets the clients
-> to free up/read the memory when it wants to. Another usecase is that GEM
-> objets which are currenlty allocated and managed through shmem files can
+I almost got it. Although when added the tests I have a warning
+when compiling, because KUnit doens't want to deal with __init things:
 
-s/objets/objects
-s/currenlty/currently
+    WARNING: modpost: vmlinux.o(.data+0x26800): Section mismatch in
+reference from the variable __UNIQUE_ID_array286 to the variable
+.init.data:e820_test_suite
+    The variable __UNIQUE_ID_array286 references
+    the variable __initdata e820_test_suite
+    If the reference is valid then annotate the
+    variable with __init* or __refdata (see linux/init.h) or name the variable:
+    *_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
+
+I need to test __init functions. I couldn't find any other similar
+cases in existant code. Is there a nice way to solve this?
+
+I'm adding the file that contains the tests just in case..
 
 
-> use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
-> know(like through some hints from user space) that GEM objects are not
-> going to use/will need in the near future.
->
-> Some questions asked while reviewing this patch:
->
-> Q) Can the same thing be achieved with FD mapped to user and use
-> madvise?
-> A) All drivers are not mapping all the shmem fd's to user space and want
-> to manage them with in the kernel. Ex: shmem memory can be mapped to the
-> other subsystems and they fill in the data and then give it to other
-> subsystem for further processing, where, the user mapping is not at all
-> required.  A simple example, memory that is given for gpu subsystem
-> which can be filled directly and give to display subsystem. And the
-> respective drivers know well about when to keep that memory in ram or
-> swap based on may be a user activity.
->
-> Q) Should we add the documentation section in Manual pages?
-> A) The man[1] pages for the fadvise() whatever says is also applicable
-> for shmem files. so couldn't feel it correct to add specific to shmem
-> files separately.
-> [1] https://linux.die.net/man/2/fadvise
->
-> Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
-> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
-> and this difference will cause confusion?
-> A) man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
-> pages associated with the specified region." This means on issuing this
-> FADV, it is expected to free the file cache pages. And it is
-> implementation defined If the dirty pages may be attempted to writeback.
-> And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
-> covers the semantics of MADV_PAGEOUT for file pages and there is no
-> purpose of PAGEOUT for file pages.
-> [1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
->
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-> ---
-> Changes in V4:
->   -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
->   -- Addressed comments from Mark Hemment and Matthew.
->   -- fadvise() on shmem file may even unmap a page.
->
-> Changes in V3:
->   -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
->   -- xarray used properly, as identified by Matthew.
->   -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
->   -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
->
-> Changes in V2:
->   -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
->   -- Addressed the comments from Suren.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
->
-> changes in V1:
->   -- Created the interface for fadvise(2) to work on shmem files.
->   -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
->
->  mm/shmem.c | 129 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 129 insertions(+)
->
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 18f93c2..fe475af 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -39,6 +39,9 @@
->  #include <linux/frontswap.h>
->  #include <linux/fs_parser.h>
->  #include <linux/swapfile.h>
-> +#include <linux/mm_inline.h>
-> +#include <linux/fadvise.h>
-> +#include <linux/page_idle.h>
->
->  static struct vfsmount *shm_mnt;
->
-> @@ -2275,6 +2278,131 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
->         return 0;
->  }
->
-> +static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
-> +                               loff_t end, struct list_head *list)
-> +{
-> +       XA_STATE(xas, &mapping->i_pages, start);
-> +       struct page *page;
-> +
-> +       rcu_read_lock();
-> +       xas_for_each(&xas, page, end) {
-> +               if (xas_retry(&xas, page))
-> +                       continue;
-> +               if (xa_is_value(page))
-> +                       continue;
-> +
-> +               if (!get_page_unless_zero(page))
-> +                       continue;
-> +               if (isolate_lru_page(page)) {
-> +                       put_page(page);
-> +                       continue;
-> +               }
-> +               put_page(page);
-> +
-> +               if (PageUnevictable(page) || page_mapcount(page) > 1) {
-> +                       putback_lru_page(page);
-> +                       continue;
-> +               }
-> +
-> +               /*
-> +                * Prepare the page to be passed to the reclaim_pages().
-> +                * VM couldn't reclaim the page unless we clear PG_young.
-> +                * Also, to ensure that the pages are written before
-> +                * reclaiming, page is set to dirty.
-> +                * Since we are not clearing the pte_young in the mapped
-> +                * page pte's, its reclaim may not be attempted.
-> +                */
-> +               ClearPageReferenced(page);
-> +               test_and_clear_page_young(page);
-> +               SetPageDirty(page);
+#include <kunit/test.h>
 
-I asked Hugh about how clean shmem pages are handled during normal
-reclaim and his reply is:
+#include <asm/e820/api.h>
+#include <asm/setup.h>
 
-Clean shmem pages are rare: they correspond to where a hole in a
-sparse file has been mapped read-only to userspace. Those get dropped
-from pagecache without being written to swap, when memory pressure
-comes to reclaim them. Otherwise, shmem pages are dirty: as soon as
-they've been read from swap and identified as shmem (moved from swap
-cache to page cache), that swap is freed so they're no longer clean
-representations of anything on swap. (Our use of "swap cache" and/or
-"page cache" may have inconsistencies in what I've written: sometimes
-we use them interchangeably, sometimes we're making a distinction.)
+#define KUNIT_EXPECT_E820_ENTRY_EQ(test, entry, _addr, _size, _type,           \
+				   _crypto_capable)                            \
+	do {                                                                   \
+		KUNIT_EXPECT_EQ((test), (entry).addr, (_addr));                \
+		KUNIT_EXPECT_EQ((test), (entry).size, (_size));                \
+		KUNIT_EXPECT_EQ((test), (entry).type, (_type));                \
+		KUNIT_EXPECT_EQ((test), (entry).crypto_capable,                \
+				(_crypto_capable));                            \
+	} while (0)
 
-So, IIUC his explanation, you don't really need to mark clean shmem
-pages dirty for FADV_DONTNEED since normal reclaim does not do that
-either.
+struct e820_table test_table __initdata;
 
-> +               list_add(&page->lru, list);
-> +               if (need_resched()) {
-> +                       xas_pause(&xas);
-> +                       cond_resched_rcu();
-> +               }
-> +       }
-> +       rcu_read_unlock();
-> +}
-> +
-> +static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
-> +                               loff_t end)
-> +{
-> +       LIST_HEAD(list);
-> +
-> +       if (!shmem_mapping(mapping))
-> +               return -EINVAL;
-> +
-> +       if (!total_swap_pages)
-> +               return 0;
-> +
-> +       lru_add_drain();
-> +       shmem_isolate_pages_range(mapping, start, end, &list);
-> +       reclaim_pages(&list);
-> +
-> +       return 0;
-> +}
-> +
-> +static int shmem_fadvise_willneed(struct address_space *mapping,
-> +                                pgoff_t start, pgoff_t long end)
-> +{
-> +       struct page *page;
-> +       pgoff_t index;
-> +
-> +       xa_for_each_range(&mapping->i_pages, index, page, start, end) {
-> +               if (!xa_is_value(page))
-> +                       continue;
-> +               page = shmem_read_mapping_page(mapping, index);
-> +               if (!IS_ERR(page))
-> +                       put_page(page);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
-> +{
-> +       loff_t endbyte;
-> +       pgoff_t start_index;.
-> +       pgoff_t end_index;
-> +       struct address_space *mapping;
-> +       int ret = 0;
-> +
-> +       mapping = file->f_mapping;
-> +       if (!mapping || len < 0)
-> +               return -EINVAL;
-> +
-> +       endbyte = (u64)offset + (u64)len;
-> +       if (!len || endbyte < len)
-> +               endbyte = -1;
-> +       else
-> +               endbyte--;
+static void __init test_e820_range_add(struct kunit *test)
+{
+        u32 full;
 
-The above block is exactly the same as in
-https://elixir.bootlin.com/linux/latest/source/mm/fadvise.c#L73 with
-the exception that generic_fadvise has comments with explanations of
-this math. You might consider consolidating them into a helper
-function to calculate the endbyte.
+        full = ARRAY_SIZE(test_table.entries);
+        /* Add last entry. */
+        test_table.nr_entries = full - 1;
+        __e820__range_add(&test_table, 0, 15, 0, 0);
+        KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
+        /* Skip new entry when full. */
+        __e820__range_add(&test_table, 0, 15, 0, 0);
+        KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
+}
 
-> +
-> +
-> +       start_index = offset >> PAGE_SHIFT;
-> +       end_index   = endbyte >> PAGE_SHIFT;
-> +       switch (advice) {
-> +       case POSIX_FADV_DONTNEED:
-> +               ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
-> +               break;
-> +       case POSIX_FADV_WILLNEED:
-> +               ret = shmem_fadvise_willneed(mapping, start_index, end_index);
-> +               break;
-> +       case POSIX_FADV_NORMAL:
-> +       case POSIX_FADV_RANDOM:
-> +       case POSIX_FADV_SEQUENTIAL:
-> +       case POSIX_FADV_NOREUSE:
-> +               /*
-> +                * No bad return value, but ignore advice. May have to
-> +                * implement in future.
-> +                */
-> +               break;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  static struct inode *shmem_get_inode(struct super_block *sb, const struct inode *dir,
->                                      umode_t mode, dev_t dev, unsigned long flags)
->  {
-> @@ -3777,6 +3905,7 @@ static const struct file_operations shmem_file_operations = {
->         .splice_write   = iter_file_splice_write,
->         .fallocate      = shmem_fallocate,
->  #endif
-> +       .fadvise        = shmem_fadvise,
->  };
->
->  static const struct inode_operations shmem_inode_operations = {
-> --
-> 2.7.4
->
->
+static void __init test_e820_range_update(struct kunit *test)
+{
+	u64 entry_size = 15;
+	u64 updated_size = 0;
+	/* Initialize table */
+	test_table.nr_entries = 0;
+	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size * 2, entry_size,
+			  E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
+
+	updated_size = __e820__range_update(&test_table, 0, entry_size * 2,
+					    E820_TYPE_RAM, E820_TYPE_RESERVED);
+	/* The first 2 regions were updated */
+	KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
+				   E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
+				   entry_size, E820_TYPE_RESERVED,
+				   E820_NOT_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
+				   entry_size, E820_TYPE_ACPI,
+				   E820_NOT_CRYPTO_CAPABLE);
+
+	updated_size = __e820__range_update(&test_table, 0, entry_size * 3,
+					    E820_TYPE_RESERVED, E820_TYPE_RAM);
+	/* Only the first 2 regions were updated */
+	KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
+				   E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
+				   entry_size, E820_TYPE_RAM,
+				   E820_NOT_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
+				   entry_size, E820_TYPE_ACPI,
+				   E820_NOT_CRYPTO_CAPABLE);
+}
+
+static void __init test_e820_range_remove(struct kunit *test)
+{
+	u64 entry_size = 15;
+	u64 removed_size = 0;
+
+	struct e820_entry_updater updater = {
+		.should_update = remover__should_update,
+		.update = remover__update,
+		.new = remover__new
+	};
+
+	struct e820_remover_data data = {
+		.check_type = true,
+		.old_type = E820_TYPE_RAM
+	};
+
+	/* Initialize table */
+	test_table.nr_entries = 0;
+	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size * 2, entry_size,
+			  E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
+
+	/*
+	 * Need to use __e820__handle_range_update because
+	 * e820__range_remove doesn't ask for the table
+	 */
+	removed_size = __e820__handle_range_update(&test_table,
+						   0, entry_size * 2,
+						   &updater, &data);
+	/* The first two regions were removed */
+	KUNIT_EXPECT_EQ(test, removed_size, entry_size * 2);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
+
+	removed_size = __e820__handle_range_update(&test_table,
+						   0, entry_size * 3,
+						   &updater, &data);
+	/* Nothing was removed */
+	KUNIT_EXPECT_EQ(test, removed_size, 0);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
+				   entry_size, E820_TYPE_ACPI,
+				   E820_NOT_CRYPTO_CAPABLE);
+}
+
+static void __init test_e820_range_crypto_update(struct kunit *test)
+{
+	u64 entry_size = 15;
+	u64 updated_size = 0;
+	/* Initialize table */
+	test_table.nr_entries = 0;
+	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
+			  E820_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+	__e820__range_add(&test_table, entry_size * 2, entry_size,
+			  E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
+
+	updated_size = __e820__range_update_crypto(&test_table, 0, entry_size * 3,
+						   E820_CRYPTO_CAPABLE);
+	/* Only the region in the middle was updated */
+	KUNIT_EXPECT_EQ(test, updated_size, entry_size);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
+				   E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
+				   entry_size, E820_TYPE_RAM,
+				   E820_CRYPTO_CAPABLE);
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
+				   entry_size, E820_TYPE_RAM,
+				   E820_CRYPTO_CAPABLE);
+}
+
+static void __init test_e820_handle_range_update_intersection(struct
+kunit *test)
+{
+	struct e820_entry_updater updater = {
+		.should_update = type_updater__should_update,
+		.update = type_updater__update,
+		.new = type_updater__new
+	};
+
+	struct e820_type_updater_data data = {
+		.old_type = E820_TYPE_RAM,
+		.new_type = E820_TYPE_RESERVED
+	};
+
+	u64 entry_size = 15;
+	u64 updated_size = 0;
+	/* Initialize table */
+	test_table.nr_entries = 0;
+	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+
+	updated_size = __e820__handle_range_update(&test_table,
+						   0, entry_size - 2,
+						   &updater, &data);
+
+	KUNIT_EXPECT_EQ(test, updated_size, entry_size - 2);
+
+	/* There is a new entry */
+	KUNIT_EXPECT_EQ(test, test_table.nr_entries, 2);
+
+	/* The original entry now is moved */
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], entry_size - 2,
+				   2, E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
+
+	/* The new entry has the correct values */
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 13,
+				   E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
+}
+
+static void __init test_e820_handle_range_update_inside(struct kunit *test)
+{
+	struct e820_entry_updater updater = {
+		.should_update = type_updater__should_update,
+		.update = type_updater__update,
+		.new = type_updater__new
+	};
+
+	struct e820_type_updater_data data = {
+		.old_type = E820_TYPE_RAM,
+		.new_type = E820_TYPE_RESERVED
+	};
+
+	u64 entry_size = 15;
+	u64 updated_size = 0;
+	/* Initialize table */
+	test_table.nr_entries = 0;
+	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
+			  E820_NOT_CRYPTO_CAPABLE);
+
+	updated_size = __e820__handle_range_update(&test_table,
+						   5, entry_size - 10,
+						   &updater, &data);
+
+	KUNIT_EXPECT_EQ(test, updated_size, entry_size - 10);
+
+	/* There are two new entrie */
+	KUNIT_EXPECT_EQ(test, test_table.nr_entries, 3);
+
+	/* The original entry now shrinked */
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 5,
+				   E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
+
+	/* The new entries have the correct values */
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 5,
+				   entry_size - 10, E820_TYPE_RESERVED,
+				   E820_NOT_CRYPTO_CAPABLE);
+	/* Left over of the original region */
+	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size - 5,
+				   5, E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
+}
+
+static struct kunit_case e820_test_cases[] __initdata = {
+        KUNIT_CASE(test_e820_range_add),
+        KUNIT_CASE(test_e820_range_update),
+        KUNIT_CASE(test_e820_range_remove),
+        KUNIT_CASE(test_e820_range_crypto_update),
+        KUNIT_CASE(test_e820_handle_range_update_intersection),
+        KUNIT_CASE(test_e820_handle_range_update_inside),
+        {}
+};
+
+static struct kunit_suite e820_test_suite __initdata = {
+        .name = "e820",
+        .test_cases = e820_test_cases,
+};
+
+kunit_test_suite(e820_test_suite);

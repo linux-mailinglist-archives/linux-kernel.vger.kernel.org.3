@@ -2,148 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664794CD61C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CD84CD61F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiCDOQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S237187AbiCDOQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiCDOQK (ORCPT
+        with ESMTP id S232093AbiCDOQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:16:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6E0062E0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 06:15:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646403320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/bGymhB6617r1a5UtR5SmVs04n4Hj/5Nxc0lgsmBP4E=;
-        b=H+raRbN+AMIsMdPwuxDAm48pRqQXjpeVnlsvm5ZIDsSMSqvyThkgxBCS31gNRCniUr7ro0
-        48aRGK0LQBE4B3kT4dNxAojKasR+PJNNqpXhNv4BcBBesdbChMcn0OMtCkP0ZbKR0dkeDO
-        WMGBrIZJMxyjTK5R38xn22Q82gWQhig=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-uZVexlnCPn6iXm4BUyng0A-1; Fri, 04 Mar 2022 09:15:19 -0500
-X-MC-Unique: uZVexlnCPn6iXm4BUyng0A-1
-Received: by mail-ej1-f70.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso4480850ejs.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 06:15:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/bGymhB6617r1a5UtR5SmVs04n4Hj/5Nxc0lgsmBP4E=;
-        b=tuHE3XFa7CafZ+hvXHPTuqmee+z0F+EpCtFH3DCFGfkMjrCOSa+YCq/sm7/YtXkxSA
-         pBJyBc8Z8KQjn8Rucp1sphLr+3JtkFrUSayQpeIpgkb6fPt1O0H4We+gX+lGekYdScgz
-         zatq2ygbosCBedKWG/ro25ecN8xsSLIa+dNYfmMMzOGAIrqQ2/9Weg8860aP0vuZRggg
-         PRtovMWYNtUjBFsJHE4qNX9PfzF5VEFS4CmEdW4/8+yxNWhzSGHHYOHUWE0MFAKswYYX
-         5rnlLUewoj3OkqGFT8oRla8pnjvVAVQ0pEY9pIWPSfhPLZsWQw9QP9Kx2mTqD90L18/G
-         HGPg==
-X-Gm-Message-State: AOAM531UONdWx+mK0EpucP9a2VbNQzZJj0FR2Yq237Sr5Ag/qDSrm24z
-        vVODNhN+D7k4iClsyfFNpnxbEqIw9xsY2OInBlF7p8OqRLLn1hJp2PqfE7GgTSHpbAMNQbP8MvE
-        xTij7oV8kE9Kk6pJW0XsyJ/D9
-X-Received: by 2002:a17:907:a0c9:b0:6da:9614:2626 with SMTP id hw9-20020a170907a0c900b006da96142626mr5831162ejc.100.1646403318287;
-        Fri, 04 Mar 2022 06:15:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzuq8suB3cekzKdmKk+8QL/Qxz4QVcdLRr5yO92DMAEEF4jcJL9bcL7SgOMYa4YtQzq1wpoMg==
-X-Received: by 2002:a17:907:a0c9:b0:6da:9614:2626 with SMTP id hw9-20020a170907a0c900b006da96142626mr5831141ejc.100.1646403317995;
-        Fri, 04 Mar 2022 06:15:17 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id da19-20020a056402177300b00413583e0996sm2124494edb.14.2022.03.04.06.15.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 06:15:17 -0800 (PST)
-Message-ID: <4836963c-7a1e-7452-eb88-454f2b75e407@redhat.com>
-Date:   Fri, 4 Mar 2022 15:15:16 +0100
+        Fri, 4 Mar 2022 09:16:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F692DD9;
+        Fri,  4 Mar 2022 06:15:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D07A1B829B6;
+        Fri,  4 Mar 2022 14:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E4BC340E9;
+        Fri,  4 Mar 2022 14:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646403341;
+        bh=F/2k6eMz7hjrqupMnq2HXK2Ni/do4IC0NA+XuZbZvas=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MmypJgGCGUl/emlFcDJzUGubEK7b7oBjFc1mRmB+l2cd2gwMSLzGA25gj/Zd6DGTL
+         wzblPBFeJvUmAVRN5F605CDamY//QnfktqAH1KfD7s+P2845ZGMVOVR6TkhwerHWOa
+         4v2FH5BUBDQvzZJxhasUstxhoAxkZXxKaS9UoCYk=
+Date:   Fri, 4 Mar 2022 15:15:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Deadlock at reboot?
+Message-ID: <YiIfCDjOIBoM+KlB@kroah.com>
+References: <20220304104942.lypg3wvlgk2ywi2t@houat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 0/3] x86/PCI: Clip only partial E820 overlaps
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220304035110.988712-1-helgaas@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220304035110.988712-1-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304104942.lypg3wvlgk2ywi2t@houat>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On 3/4/22 04:51, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On Fri, Mar 04, 2022 at 11:49:42AM +0100, Maxime Ripard wrote:
+> Hi,
 > 
-> This is based on Hans' extensive debugging and patch at
-> https://lore.kernel.org/r/20220228105259.230903-1-hdegoede@redhat.com
-> and applies on 7e57714cd0ad ("Linux 5.17-rc6").
+> I'm not entirely sure who I'm supposed to send this to, so apologies if
+> I forgot somebody.
 > 
-> This is basically the same idea (applying the 4dc2287c1805 workaround only
-> when an E820 region *partially* overlaps a host bridge window), but I think
-> it's a little simpler.
+> I've had an issue when rebooting on and off for a couple of monthes, but
+> I got a stacktrace from lockdep today:
 > 
-> This also adds a little dmesg output when clipping, which should make
-> future debugging easier.
-> 
-> I bcc'd several folks who didn't have public email addresses in the RedHat
-> bugzilla or Launchpad.  If you review or test this, I'd be happy to
-> acknowledge that.
-> 
-> Bjorn Helgaas (3):
->   x86/PCI: Eliminate remove_e820_regions() common subexpressions
->   x86/PCI: Log host bridge window clipping for E820 regions
->   x86/PCI: Preserve host bridge windows completely covered by E820
+> [71721.872904] reboot: Restarting system
+> [71721.876743] ------------[ cut here ]------------
+> [71721.877081]
+> [71721.877084] ======================================================
+> [71721.877086] WARNING: possible circular locking dependency detected
+> [71721.877088] 5.17.0-rc6-next-20220303-v8+ #10 Not tainted
 
-Thanks, I agree that this is better then my fix I also like the logging
-added to 2/3 which lets us know if the commit 4dc2287c1805 workaround
-is active.
+This is linux-next, does this also happen on Linus's tree?
 
-I have one small remark on 3/3. Regardless of that getting addressed
-the entire series is:
+If not, can you bisect to find the offending commit?
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+thanks,
 
-I've done a Fedora test kernel build of 5.16.12 with these 3 patches
-added and asked the reporters of:
-
-https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-(ideapad touchpad bug)
-
-and:
-
-https://bugzilla.redhat.com/show_bug.cgi?id=2029207
-(Lenovo x1 carbon gen 2 regression with my bios-data based fix_
-
-to test the rpms and to collect dmesg. On the X1C2 this should show
-the new logging from 2/3 "in action" and on the ideapad the touchpad
-should still work...
-
-Regards,
-
-Hans
-
-
+greg k-h

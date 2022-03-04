@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFFB4CDBD1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA63B4CDBD2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241530AbiCDSJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S241538AbiCDSKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:10:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241512AbiCDSJx (ORCPT
+        with ESMTP id S241491AbiCDSKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:09:53 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6961C60DF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:09:04 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d187so8233303pfa.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:09:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yqxK85bZK7xDyQw2uCXi3loaqdFYPJjcAinZfxqk6do=;
-        b=ocz1+Iw2gQLaJb2kUh6BCjlQE8FtpZ7onQytZBB4oTiku41XTQb2azH+A6m4FymENh
-         NAhz4xCeV1dpJWdXtIOLKucZqrbpLU3XDDZnZu/knH/ZFLtyGFMioPHgUmN5h2xuI5s6
-         CMoiAVi/wR7mULEHHgmDBVlensKUZylG60Y1U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yqxK85bZK7xDyQw2uCXi3loaqdFYPJjcAinZfxqk6do=;
-        b=1CBsHqixUlF4EfFTg3MEupOotjsPu/JT28jZAQQ4TpVWPvE8njPDIiGQJsgvP05ID5
-         65+N1G1TyhDuutdYcLwGoUww6i2TBd/NifVyhJoD7QBW7421Z2DFTmZxTobEqqtr7w8+
-         gVO2AT5A4m+HRlqvQyyxsob8obXXKr9QymnP/sz2v+7N+vM2rzYHcbjqJH+jOyuP4w21
-         X3GH6TdSm7eE7JK7JZFHHiaY2InFxDXDdeXh1KyS4UJujw+/j4t5GzsF7yfo9FZkNHoe
-         Q2GD3UMjSJICI5ug8WkYw6WdL36yV4YgIQzimzrKFpDaTO9Q1ql2RlmLSBOwytJLqUAE
-         IztA==
-X-Gm-Message-State: AOAM533dwbVUT/xAUnGKKmOFQtUgk3f34Kb8ZFUqT9VeVxeuk17EE3iM
-        lKn+c5SmLV62g5yHmoSAWC9b2g==
-X-Google-Smtp-Source: ABdhPJx0NCCGjOT8EpZGR6/1/fL3PG5CbdMIqYeA3vaoHL7EPfBcyJQ0doJAvVQog4jtN8Af1IBekQ==
-X-Received: by 2002:a05:6a00:1312:b0:4e1:58c4:ddfd with SMTP id j18-20020a056a00131200b004e158c4ddfdmr44651556pfu.65.1646417344203;
-        Fri, 04 Mar 2022 10:09:04 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n18-20020a056a00213200b004e17d967d13sm6276262pfj.124.2022.03.04.10.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 10:09:03 -0800 (PST)
-Date:   Fri, 4 Mar 2022 10:09:03 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-Message-ID: <202203041005.A3B985C@keescook>
-References: <20220304170813.1689186-1-nathan@kernel.org>
+        Fri, 4 Mar 2022 13:10:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A421CA5E4;
+        Fri,  4 Mar 2022 10:09:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646417350; x=1677953350;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=V/bZBUMsYnI85haLHW2qBk7fMPvFA3wzMy4PTN+iSoA=;
+  b=tNfk8EABYo1yLD/z/pOhGPasey3ZMDOZKw72gWEm9mJ81VD9wZJ6Ghl9
+   TzNDlWLfPj+S3aVgk0L8hzLvT2LlFLvCNR1rEQEC9sAiPoRONIAfdGD95
+   sQzaGuaT08UQ+98F89+wFpPE5OVs0AhdAZP2pjQDyg87GnH833B571ZH0
+   szjO2Q9JkP5dMjrlPqQ+u3CO/XX8KfNeInJCZyNyVTjURG2VcueQMRnRt
+   z19JOrs/dw0KZcOdt2SN82MalFSUMnPbBgQvbZW78agIOww355NCX2M7S
+   Gdsd+BRjlRL7H914fJEwk5eGFyUJQ6i9rleCg4EbImYS8+bm3xlMq9s43
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="164568479"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 11:09:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 11:09:08 -0700
+Received: from [10.12.73.230] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 11:09:06 -0700
+Message-ID: <d3dfbe45-00d4-2131-9d42-32ce11b5c2f5@microchip.com>
+Date:   Fri, 4 Mar 2022 19:09:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304170813.1689186-1-nathan@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and
+ referenced in DT
+Content-Language: en-US
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <claudiu.beznea@microchip.com>, <mturquette@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+CC:     <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
+        <rdunlap@infradead.org>, <unixbhaskar@gmail.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220111125310.902856-1-tudor.ambarus@microchip.com>
+ <20220125010554.BB92BC340E4@smtp.kernel.org>
+ <deb6ace6-adfc-bbaa-d31f-16d02a5f762b@microchip.com>
+Organization: microchip
+In-Reply-To: <deb6ace6-adfc-bbaa-d31f-16d02a5f762b@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 10:08:14AM -0700, Nathan Chancellor wrote:
-> [...]
+On 25/02/2022 at 11:31, Nicolas Ferre wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> Update and reorder the documentation to reflect these new additions.
-> At the same time, notate that LLVM=0 is not the same as just omitting it
-> altogether, which has confused people in the past.
+> On 25/01/2022 at 02:05, Stephen Boyd wrote:
+>> Quoting Tudor Ambarus (2022-01-11 04:53:10)
+>>> MCK1 feeds the External Bus Interface (EBI). EBI's clock rate is used
+>>> to translate EBI's timmings to SMC timings, thus we need to handle MCK1
+>>> in the EBI driver. Allow MCK1 to be referenced as a PMC_TYPE_CORE clock
+>>> from phandle in DT.
+>>>
+>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>> ---
+>>
+>> Applied to clk-next
+> 
+> Hi Stephen,
+> 
+> I depend on the PMC_MCK1 definition for some of the DT patches that I
+> must queue for my pull request to arm-soc, for 5.18.
+> 
+> Would you mind doing an immutable branch for me to pull from, so that
+> the build doesn't crash while the clock tree is not integrated yet with
+> my patches?
 
-Is it worth making LLVM=0 actually act the way it's expected to?
+Stephen,
 
-> Link: https://lore.kernel.org/r/20200317215515.226917-1-ndesaulniers@google.com/
-> Link: https://lore.kernel.org/r/20220224151322.072632223@infradead.org/
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+I added the needed chunk in the DT patch. I don't need this anymore.
 
-Looks good; minor .rst nit below...
+Best regards,
+   Nicolas
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> Tell me if there's a better way, as well.
+> 
+> Thanks, best regards,
+>     Nicolas
+> 
+> --
+> Nicolas Ferre
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
-> [...]
-> -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> -to enable them. ::
-> -
-> -	make LLVM=1
-> -
-> -They can be enabled individually. The full list of the parameters: ::
-> +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> +The full list of supported make variables: ::
-
-": ::" and "::" yield the same result. I think the latter is more
-readable in non-rendered form. *shrug*
-
--Kees
 
 -- 
-Kees Cook
+Nicolas Ferre

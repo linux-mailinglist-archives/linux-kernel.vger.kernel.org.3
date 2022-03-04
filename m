@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A814CD646
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544C44CD650
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238443AbiCDOYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S239851AbiCDO2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiCDOYE (ORCPT
+        with ESMTP id S239834AbiCDO15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:24:04 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA0FEBAD9;
-        Fri,  4 Mar 2022 06:23:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646403797; x=1677939797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U4D+rWZDzGJXpcju3PJJJDSxJtaedGVbYtfFx7f1Xio=;
-  b=wx+UegTL2z1UHegJM4dmqz1WGCQQhKF4/ayfK8Zf5yvHoUTK3Oy/VJFs
-   I7N77c995k52aYl73jtMOkWB+XlpYlhreTDZkDUgyuEaieBS8AbT9+lPw
-   0JCw585xUIz9m+xf0vTnwkWvrJ4JD4a7LL5MdobvgU//hZRJXDK3ZAZ3h
-   qmFcRNgVyKvEaxWzWSIu6bwb3w3I/i0VtMGLhyoSYrUxwnkdMF7e5yetF
-   w36+JyuAqtjBHI60PM4a+eEtGeH9LS3/Bp2nFCqEehaaV2s4GfiuCPURD
-   ZS0wTdMb6U0+oapsx9/M+xMQXa9J+54pP/tBUYQZAMM4csVPJyZCtRnjB
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="164545832"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:23:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 07:23:16 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 07:23:16 -0700
-Date:   Fri, 4 Mar 2022 15:26:06 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <colin.foster@in-advantage.com>
-Subject: Re: [PATCH 2/2] pinctrl: ocelot: Fix interrupt parsing
-Message-ID: <20220304142606.3yxwah4k36deqa3e@soft-dev3-1.localhost>
-References: <20220303203716.3012703-1-horatiu.vultur@microchip.com>
- <20220303203716.3012703-3-horatiu.vultur@microchip.com>
- <YiIIxXemSB8LIq8L@smile.fi.intel.com>
- <YiII4mMembqLiX5D@smile.fi.intel.com>
+        Fri, 4 Mar 2022 09:27:57 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4DE1BAF25;
+        Fri,  4 Mar 2022 06:27:08 -0800 (PST)
+Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nQ8tR-000Foa-Vf; Fri, 04 Mar 2022 15:26:54 +0100
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     torvalds@linux-foundation.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Willy Tarreau <w@1wt.eu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH] mm: Consider __GFP_NOWARN flag for oversized kvmalloc() calls
+Date:   Fri,  4 Mar 2022 15:26:32 +0100
+Message-Id: <8a99a175d25f4bcce6b78cee8fa536e40b987b0a.1646403182.git.daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <YiII4mMembqLiX5D@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26471/Fri Mar  4 10:24:47 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/04/2022 14:41, Andy Shevchenko wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On Fri, Mar 04, 2022 at 02:40:38PM +0200, Andy Shevchenko wrote:
-> > On Thu, Mar 03, 2022 at 09:37:16PM +0100, Horatiu Vultur wrote:
-> > > In the blamed commit, it removes the duplicate of_node assignment in the
-> > > driver. But the driver uses this before calling into of_gpio_dev_init to
-> > > determine if it needs to assign an IRQ chip to the GPIO. The fixes
-> > > consists in using of_node from dev.
-> >
-> > ...
-> >
-> > > -   irq = irq_of_parse_and_map(gc->of_node, 0);
-> > > +   irq = irq_of_parse_and_map(info->dev->of_node, 0);
-> >
-> > Why platform_get_irq() can't be used?
-> 
-> Or actually _optional() variant of it?
+syzkaller was recently triggering an oversized kvmalloc() warning via
+xdp_umem_create().
 
-It can be used. I will update this in the next series.
+The triggered warning was added back in 7661809d493b ("mm: don't allow
+oversized kvmalloc() calls"). The rationale for the warning for huge
+kvmalloc sizes was as a reaction to a security bug where the size was
+more than UINT_MAX but not everything was prepared to handle unsigned
+long sizes.
 
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Anyway, the AF_XDP related call trace from this syzkaller report was:
 
+  kvmalloc include/linux/mm.h:806 [inline]
+  kvmalloc_array include/linux/mm.h:824 [inline]
+  kvcalloc include/linux/mm.h:829 [inline]
+  xdp_umem_pin_pages net/xdp/xdp_umem.c:102 [inline]
+  xdp_umem_reg net/xdp/xdp_umem.c:219 [inline]
+  xdp_umem_create+0x6a5/0xf00 net/xdp/xdp_umem.c:252
+  xsk_setsockopt+0x604/0x790 net/xdp/xsk.c:1068
+  __sys_setsockopt+0x1fd/0x4e0 net/socket.c:2176
+  __do_sys_setsockopt net/socket.c:2187 [inline]
+  __se_sys_setsockopt net/socket.c:2184 [inline]
+  __x64_sys_setsockopt+0xb5/0x150 net/socket.c:2184
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Björn mentioned that requests for >2GB allocation can still be valid:
+
+  The structure that is being allocated is the page-pinning accounting.
+  AF_XDP has an internal limit of U32_MAX pages, which is *a lot*, but
+  still fewer than what memcg allows (PAGE_COUNTER_MAX is a LONG_MAX/
+  PAGE_SIZE on 64 bit systems). [...]
+
+  I could just change from U32_MAX to INT_MAX, but as I stated earlier
+  that has a hacky feeling to it. [...] From my perspective, the code
+  isn't broken, with the memcg limits in consideration. [...]
+
+Linus says:
+
+  [...] Pretty much every time this has come up, the kernel warning has
+  shown that yes, the code was broken and there really wasn't a reason
+  for doing allocations that big.
+
+  Of course, some people would be perfectly fine with the allocation
+  failing, they just don't want the warning. I didn't want __GFP_NOWARN
+  to shut it up originally because I wanted people to see all those
+  cases, but these days I think we can just say "yeah, people can shut
+  it up explicitly by saying 'go ahead and fail this allocation, don't
+  warn about it'".
+
+  So enough time has passed that by now I'd certainly be ok with [it].
+
+Thus allow call-sites to silence such userspace triggered splats if the
+allocation requests have __GFP_NOWARN. For xdp_umem_pin_pages()'s call
+to kvcalloc() this is already the case, so nothing else needed there.
+
+Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
+Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
+Cc: Björn Töpel <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+Cc: Willy Tarreau <w@1wt.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/bpf/CAJ+HfNhyfsT5cS_U9EC213ducHs9k9zNxX9+abqC0kTrPbQ0gg@mail.gmail.com
+Link: https://lore.kernel.org/bpf/20211201202905.b9892171e3f5b9a60f9da251@linux-foundation.org
+---
+ [ Hi Linus, just to follow-up on the discussion from here [0], I've cooked
+   up proper and tested patch. Feel free to take it directly to your tree if
+   you prefer, or we could also either route it via bpf or mm, whichever way
+   is best. Thanks!
+   [0] https://lore.kernel.org/bpf/CAHk-=wiRq+_jd_O1gz3J6-ANtXMY7iLpi8XFUcmtB3rBixvUXQ@mail.gmail.com/ ]
+
+ mm/util.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/mm/util.c b/mm/util.c
+index 7e43369064c8..d3102081add0 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -587,8 +587,10 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+ 		return ret;
+ 
+ 	/* Don't even allow crazy sizes */
+-	if (WARN_ON_ONCE(size > INT_MAX))
++	if (unlikely(size > INT_MAX)) {
++		WARN_ON_ONCE(!(flags & __GFP_NOWARN));
+ 		return NULL;
++	}
+ 
+ 	return __vmalloc_node(size, 1, flags, node,
+ 			__builtin_return_address(0));
 -- 
-/Horatiu
+2.21.0
+

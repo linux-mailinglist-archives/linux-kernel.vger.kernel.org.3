@@ -2,138 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF52A4CD29C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53904CD297
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbiCDKmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
+        id S236955AbiCDKlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237463AbiCDKmX (ORCPT
+        with ESMTP id S234714AbiCDKlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:42:23 -0500
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AD41AAFDE;
-        Fri,  4 Mar 2022 02:41:35 -0800 (PST)
-IronPort-SDR: sNKOLv2BAlkibgeIIZSso01JBiPWq9hMk8+Zc8u/1hGej2VX84Y9wPdMXj4DlBuTxw9FddHGj4
- 7wZVCHpuhHyU8I/7hZ7ftE7uCBDq+zTCLfPbHhOVDv3CpBpGa6lRnNcufWF/hR69Hw34uUI3me
- HlhvSg/+UpwJ/nmdsSvtiPuC8ypOOBZo05b7WZc0t55wbG7Ge6TexFys1gQMwSIpG8lTI22dlh
- xDAwy1EHCmzG1RT36+LqyuVNaJSq0MQrWROZUjayCd7Barlbo66iwbbFZ58jlQoTVJpAXvRs2v
- ZBQ3MpLGlQpl8J9IL0USEkNv
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="53044773"
-X-IronPort-AV: E=Sophos;i="5.90,154,1643641200"; 
-   d="scan'208";a="53044773"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 19:40:29 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 92D2CC68A8;
-        Fri,  4 Mar 2022 19:40:28 +0900 (JST)
-Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 38230E679E;
-        Fri,  4 Mar 2022 19:40:27 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om2.fujitsu.com (Postfix) with ESMTP id 0C38C403884E6;
-        Fri,  4 Mar 2022 19:40:27 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v3] selftests/resctrl: Print a message if the result of MBM&CMT tests is failed on Intel cpu
-Date:   Fri,  4 Mar 2022 19:39:57 +0900
-Message-Id: <20220304103957.487660-1-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 4 Mar 2022 05:41:15 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F771AA4A3;
+        Fri,  4 Mar 2022 02:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646390427; x=1677926427;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MWHad0oWvKdIlSW1yZteYqB1ECrM7vqKBkt0Z55LL/M=;
+  b=RY8fCTR1tDhQ8CEixF2j2uHnXoR/7HDyPAj79zaCuFGEclP0lWfy6VZw
+   dgIPAlfMRB4jwMjF2+X8ISzMxPW7n33gmPAW45pmOdENPcTt8bEQ4kXLZ
+   Zp8P3iCLBonBw2ikpJpvREaEidsG4lAV4Ambz6jLJddHhm3uLl1oGMFek
+   xcbybYM9XFKxghprzb+dR/cqbmiywWQhZcAs5AcAR6VYinZ9Ci5V0UNgI
+   rZjfQSSQ/66katabP8QM3fOifpP8Zgor92wBmc+2CKDlH3oM4AWd+U4uI
+   puRZoa3rsrt/rl5FEj/V/eJQQG3/PvelLnAev9VCpEe/ifs0cmi+phmxu
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,154,1643698800"; 
+   d="scan'208";a="148086332"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 03:40:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 03:40:26 -0700
+Received: from [10.12.72.98] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 03:40:23 -0700
+Message-ID: <03c0ed9e-73b6-5325-3034-ae9930ffd063@microchip.com>
+Date:   Fri, 4 Mar 2022 11:40:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ARM: dts: at91: sama7g5: Remove unused properties in i2c
+ nodes
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <claudiu.beznea@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <robh+dt@kernel.org>, <eugen.hristev@microchip.com>,
+        <codrin.ciubotariu@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sergiu.moga@microchip.com>, <stable@vger.kernel.org>
+References: <20220302161854.32177-1-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220302161854.32177-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to "Intel Resource Director Technology (Intel RDT) on 
-2nd Generation Intel Xeon Scalable Processors Reference Manual",
-When the Intel Sub-NUMA Clustering(SNC) feature is enabled,
-Intel CMT and MBM counters may not be accurate.
+On 02/03/2022 at 17:18, Tudor Ambarus wrote:
+> The "atmel,use-dma-rx", "atmel,use-dma-rx" dt properties are not used by
+> the i2c-at91 driver, nor they are defined in the bindings file, thus remove
+> them.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-However, there does not seem to be an architectural way to detect
-if SNC is enabled.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-If the result of MBM&CMT test fails on Intel CPU,
-print a message to let users know a possible cause of failure.
+Added in at91-dt for 5.18 as a 2nd batch of DT patches.
+Thanks, best regards,
+   Nicolas
 
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
----
-Hello,
+> ---
+>   arch/arm/boot/dts/sama7g5.dtsi | 6 ------
+>   1 file changed, 6 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+> index 1dc0631e9fd4..e626f6bd920a 100644
+> --- a/arch/arm/boot/dts/sama7g5.dtsi
+> +++ b/arch/arm/boot/dts/sama7g5.dtsi
+> @@ -591,8 +591,6 @@ i2c1: i2c@600 {
+>   				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
+>   					<&dma0 AT91_XDMAC_DT_PERID(8)>;
+>   				dma-names = "rx", "tx";
+> -				atmel,use-dma-rx;
+> -				atmel,use-dma-tx;
+>   				status = "disabled";
+>   			};
+>   		};
+> @@ -778,8 +776,6 @@ i2c8: i2c@600 {
+>   				dmas = <&dma0 AT91_XDMAC_DT_PERID(21)>,
+>   					<&dma0 AT91_XDMAC_DT_PERID(22)>;
+>   				dma-names = "rx", "tx";
+> -				atmel,use-dma-rx;
+> -				atmel,use-dma-tx;
+>   				status = "disabled";
+>   			};
+>   		};
+> @@ -804,8 +800,6 @@ i2c9: i2c@600 {
+>   				dmas = <&dma0 AT91_XDMAC_DT_PERID(23)>,
+>   					<&dma0 AT91_XDMAC_DT_PERID(24)>;
+>   				dma-names = "rx", "tx";
+> -				atmel,use-dma-rx;
+> -				atmel,use-dma-tx;
+>   				status = "disabled";
+>   			};
+>   		};
 
-In PATCH V2, I tried to detect whether SNC is enabled by NUMA info and
-cpuinfo(socket_num), but it is not reliable and no future-proof.
 
-I just print a message to let users know a possible cause of "not ok",
-When CMT or MBM test runs on Intel CPU, and the result is "not ok".
-
-This patch is based on v5.16.
-
- tools/testing/selftests/resctrl/resctrl_tests.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 973f09a66e1e..ec2bdce7b85f 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -14,8 +14,9 @@
- #define BENCHMARK_ARG_SIZE	64
- 
- bool is_amd;
-+bool is_intel;
- 
--void detect_amd(void)
-+void detect_vendor(void)
- {
- 	FILE *inf = fopen("/proc/cpuinfo", "r");
- 	char *res;
-@@ -29,6 +30,7 @@ void detect_amd(void)
- 		char *s = strchr(res, ':');
- 
- 		is_amd = s && !strcmp(s, ": AuthenticAMD\n");
-+		is_intel = s && !strcmp(s, ": GenuineIntel\n");
- 		free(res);
- 	}
- 	fclose(inf);
-@@ -70,6 +72,8 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 		sprintf(benchmark_cmd[5], "%s", MBA_STR);
- 	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
- 	ksft_test_result(!res, "MBM: bw change\n");
-+	if (is_intel && res)
-+		ksft_print_msg("Intel CMT and MBM counters may be inaccurate when Sub-NUMA Clustering (SNC) is enabled. Ensure SNC is disabled in the BIOS if this system supports SNC.\n");
- 	mbm_test_cleanup();
- }
- 
-@@ -106,6 +110,8 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
- 		sprintf(benchmark_cmd[5], "%s", CMT_STR);
- 	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
- 	ksft_test_result(!res, "CMT: test\n");
-+	if (is_intel && res)
-+		ksft_print_msg("Intel CMT and MBM counters may be inaccurate when Sub-NUMA Clustering (SNC) is enabled. Ensure SNC is disabled in the BIOS if this system supports SNC.\n");
- 	cmt_test_cleanup();
- }
- 
-@@ -207,8 +213,8 @@ int main(int argc, char **argv)
- 	if (geteuid() != 0)
- 		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
- 
--	/* Detect AMD vendor */
--	detect_amd();
-+	/* Detect AMD/INTEL vendor */
-+	detect_vendor();
- 
- 	if (has_ben) {
- 		/* Extract benchmark command from command line. */
 -- 
-2.27.0
-
+Nicolas Ferre

@@ -2,548 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD8F4CDDAD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 20:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E924CDE44
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiCDUAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S229917AbiCDUBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiCDT7M (ORCPT
+        with ESMTP id S230039AbiCDUBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 14:59:12 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189C2335DD;
-        Fri,  4 Mar 2022 11:50:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646423450; x=1677959450;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1PpX8N+UtPKELHeFXsQeqxaYDLTtDxMh7cp1fH2RAAs=;
-  b=gdW9ex0cIH4NbZvjJS76cMdASSXDsNgebMEBKgPjwHB5Bw7cvENr+KGB
-   rSQ1MWhpicbRBr1j8joqSm407KBKZsGbSCqBY87K/EBLUwHVNme7sJpCn
-   Kg8rwIgspkqoAizgKSxn27asGsOwjh/lHQKZ6mbUohqPunS5e0NSXms+Z
-   2PJCm0NlxImsRNRf6Prj36RFHEbfuG48nFJdm59luicYLz/CiwxFRDufB
-   WWF/1ECYKYUKPEctloEh/299JKUEb2HGtcUXxt7h/WKuOkwdUgGx3cBSb
-   SYDZA2bfpoogiebwQLc2Yr+tfGfDYU/I1AUZRjPr8rWpwKlPpDvxBjxuz
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="253779671"
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="253779671"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 11:50:49 -0800
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="552344633"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 11:50:49 -0800
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [RFC PATCH v5 104/104] KVM: x86: design documentation on TDX support of x86 KVM TDP MMU
-Date:   Fri,  4 Mar 2022 11:50:00 -0800
-Message-Id: <8dec2b13f0099495993e0fd6142cfceb4d37ba7e.1646422845.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 15:01:17 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9157223D02C
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:52:50 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc44b6dc9dso47594327b3.23
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 11:52:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=n2NqcUHbJsWardOwH6kbWHzl6hZnl0/7q7/h4tOTkqg=;
+        b=brNL5BLowTA5Lbs7SQfkYniaerH4AtPVOQyQtLOhaKCY+l1sZObrIKaasUtJdUshpz
+         l5GtEpc7cEqUNN4fTLs2aVsDy7MSdip6q1Y6KrqiLZrbhcKQWz2hiNcluZVqTmwNN+t3
+         Sx60dpGknsXUv9EI3xsoZC7cR2ExQu6dml82GFAgLfs94MIVQ8w32ld6wyYnVT3YlrEs
+         EuQFRD3g526TZxoRI/QZM2xr3pSmQ8xVE44t4hpsc5YGwdFq7V4owU5iBw3Nkgz95u7u
+         ArbzhhNSNMKFB+uv0mfVwgePqhyxBXGGWLzKUdyxKgXGZoS5Rn7JmKSMZh4e8sdg/wDG
+         T1yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=n2NqcUHbJsWardOwH6kbWHzl6hZnl0/7q7/h4tOTkqg=;
+        b=Lssohv0atmNAEmjELWsAmuYBjr4b9/3sJoEiy8MG4s/DFmUWoyANB41IPg4nCm6vdt
+         H7NFExbQlgVrBtNdDce3Z89mlZQQuHQNLYKc+MIO4C1+uP8Y9kct0hsGdiUeu2ujzy85
+         SB/48E4hjbh99Z89sBlPRZPpj0fKxR60KuuxOV2bfDWOwuJ+ytA8lUmcJ9DNT5oKGr5d
+         PVSMa9UXMyFW8tAGEFAke81P181JPc+kBhOCdyL1CSny2u4DSj7Yaf16p4sYac9J6fcZ
+         kor9PVVGCnO7Aj5BEdqAKGylCxpWA3NOy/lKcyRgoKS7xFngpEXr7/XP4NXlcgvz9F9m
+         mYzA==
+X-Gm-Message-State: AOAM5303hxO0+RaENj8aKIAtgJsMExH/7HRBbTtHMhTY1yxTUX8TaxT8
+        kEdiXXeogv6IuUGkeZegStgf4mK+4g==
+X-Google-Smtp-Source: ABdhPJyc9COjNjk++hBy8X04xgiuTrsxUwxw4yNtOBmi2JhrnOMaTg5HtQuo6HkG1pLfJbiDlQcPlToz2Q==
+X-Received: from decot.svl.corp.google.com ([2620:15c:2c5:11:5d36:3405:ac8a:5148])
+ (user=decot job=sendgmr) by 2002:a5b:7c6:0:b0:60b:a0ce:19b with SMTP id
+ t6-20020a5b07c6000000b0060ba0ce019bmr42008ybq.407.1646423569785; Fri, 04 Mar
+ 2022 11:52:49 -0800 (PST)
+Date:   Fri,  4 Mar 2022 11:52:38 -0800
+Message-Id: <20220304195238.1141725-1-decot+git@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v1 1/1] irqchip/gic-v3-its: fixup IRQ affinities to account
+ for online CPUs
+From:   David Decotigny <decot+git@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     David Decotigny <ddecotig@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+From: David Decotigny <ddecotig@google.com>
 
-Add a high level design document on TDX changes to TDP MMU.
+In some cases (eg. when booting with maxcpus=X), it is possible that
+the preset IRQ affinity masks don't intersect with the set of online
+CPUs. This patch extends the fallback strategy implemented when
+IRQD_AFFINITY_MANAGED is not set to all cases. This is logged the
+first time that happens.
 
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Fixes: c5d6082d35e0 ("irqchip/gic-v3-its: Balance initial LPI affinity across CPUs")
+
 ---
- Documentation/virt/kvm/tdx-tdp-mmu.rst | 466 +++++++++++++++++++++++++
- 1 file changed, 466 insertions(+)
- create mode 100644 Documentation/virt/kvm/tdx-tdp-mmu.rst
+ drivers/irqchip/irq-gic-v3-its.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/virt/kvm/tdx-tdp-mmu.rst b/Documentation/virt/kvm/tdx-tdp-mmu.rst
-new file mode 100644
-index 000000000000..3f69d178f2e4
---- /dev/null
-+++ b/Documentation/virt/kvm/tdx-tdp-mmu.rst
-@@ -0,0 +1,466 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Design of TDP MMU for TDX support
-+=================================
-+This document describes a (high level) design for TDX support of KVM TDP MMU of
-+x86 KVM.
-+
-+In this document, we use "TD" or "guest TD" to differentiate it from the current
-+"VM" (Virtual Machine), which is supported by KVM today.
-+
-+
-+Background of TDX
-+=================
-+TD private memory is designed to hold TD private content, encrypted by the CPU
-+using the TD ephemeral key.  An encryption engine holds a table of encryption
-+keys, and an encryption key is selected for each memory transaction based on a
-+Host Key Identifier (HKID).  By design, the host VMM does not have access to the
-+encryption keys.
-+
-+In the first generation of MKTME, HKID is "stolen" from the physical address by
-+allocating a configurable number of bits from the top of the physical address.
-+The HKID space is partitioned into shared HKIDs for legacy MKTME accesses and
-+private HKIDs for SEAM-mode-only accesses.  We use 0 for the shared HKID on the
-+host so that MKTME can be opaque or bypassed on the host.
-+
-+During TDX non-root operation (i.e. guest TD), memory accesses can be qualified
-+as either shared or private, based on the value of a new SHARED bit in the Guest
-+Physical Address (GPA).  The CPU translates shared GPAs using the usual VMX EPT
-+(Extended Page Table) or "Shared EPT" (in this document), which resides in the
-+host VMM memory.  The Shared EPT is directly managed by the host VMM - the same
-+as with the current VMX.  Since guest TDs usually require I/O, and the data
-+exchange needs to be done via shared memory, thus KVM needs to use the current
-+EPT functionality even for TDs.
-+
-+The CPU translates private GPAs using a separate Secure EPT.  The Secure EPT
-+pages are encrypted and integrity-protected with the TD's ephemeral private key.
-+Secure EPT can be managed _indirectly_ by the host VMM, using the TDX interface
-+functions (SEAMCALLs), and thus conceptually Secure EPT is a subset of EPT
-+because not all functionalities are available.
-+
-+Since the execution of such interface functions takes much longer time than
-+accessing memory directly, in KVM we use the existing TDP code to mirror the
-+Secure EPT for the TD. And we think there are at least two options today in
-+terms of the timing for executing such SEAMCALLs:
-+
-+1. synchronous, i.e. while walking the TDP page tables, or
-+2. post-walk, i.e. record what needs to be done to the real Secure EPT during
-+   the walk, and execute SEAMCALLs later.
-+
-+The option 1 seems to be more intuitive and simpler, but the Secure EPT
-+concurrency rules are different from the ones of the TDP or EPT. For example,
-+MEM.SEPT.RD acquire shared access to the whole Secure EPT tree of the target
-+
-+Secure EPT(SEPT) operations
-+---------------------------
-+Secure EPT is an Extended Page Table for GPA-to-HPA translation of TD private
-+HPA.  A Secure EPT is designed to be encrypted with the TD's ephemeral private
-+key. SEPT pages are allocated by the host VMM via Intel TDX functions, but their
-+content is intended to be hidden and is not architectural.
-+
-+Unlike the conventional EPT, the CPU can't directly read/write its entry.
-+Instead, TDX SEAMCALL API is used.  Several SEAMCALLs correspond to operation on
-+the EPT entry.
-+
-+* TDH.MEM.SEPT.ADD():
-+  Add a secure EPT page from the secure EPT tree.  This corresponds to updating
-+  the non-leaf EPT entry with present bit set
-+
-+* TDH.MEM.SEPT.REMOVE():
-+  Remove the secure page from the secure EPT tree.  There is no corresponding
-+  to the EPT operation.
-+
-+* TDH.MEM.SEPT.RD():
-+  Read the secure EPT entry.  This corresponds to reading the EPT entry as
-+  memory.  Please note that this is much slower than direct memory reading.
-+
-+* TDH.MEM.PAGE.ADD() and TDH.MEM.PAGE.AUG():
-+  Add a private page to the secure EPT tree.  This corresponds to updating the
-+  leaf EPT entry with present bit set.
-+
-+* THD.MEM.PAGE.REMOVE():
-+  Remove a private page from the secure EPT tree.  There is no corresponding
-+  to the EPT operation.
-+
-+* TDH.MEM.RANGE.BLOCK():
-+  This (mostly) corresponds to clearing the present bit of the leaf EPT entry.
-+  Note that the private page is still linked in the secure EPT.  To remove it
-+  from the secure EPT, TDH.MEM.SEPT.REMOVE() and TDH.MEM.PAGE.REMOVE() needs to
-+  be called.
-+
-+* TDH.MEM.TRACK():
-+  Increment the TLB epoch counter. This (mostly) corresponds to EPT TLB flush.
-+  Note that the private page is still linked in the secure EPT.  To remove it
-+  from the secure EPT, tdh_mem_page_remove() needs to be called.
-+
-+
-+Adding private page
-+-------------------
-+The procedure of populating the private page looks as follows.
-+
-+1. TDH.MEM.SEPT.ADD(512G level)
-+2. TDH.MEM.SEPT.ADD(1G level)
-+3. TDH.MEM.SEPT.ADD(2M level)
-+4. TDH.MEM.PAGE.AUG(4K level)
-+
-+Those operations correspond to updating the EPT entries.
-+
-+Dropping private page and TLB shootdown
-+---------------------------------------
-+The procedure of dropping the private page looks as follows.
-+
-+1. TDH.MEM.RANGE.BLOCK(4K level)
-+   This mostly corresponds to clear the present bit in the EPT entry.  This
-+   prevents (or blocks) TLB entry from creating in the future.  Note that the
-+   private page is still linked in the secure EPT tree and the existing cache
-+   entry in the TLB isn't flushed.
-+2. TDH.MEM.TRACK(range) and TLB shootdown
-+   This mostly corresponds to the EPT TLB shootdown.  Because all vcpus share
-+   the same Secure EPT, all vcpus need to flush TLB.
-+   * TDH.MEM.TRACK(range) by one vcpu.  It increments the global internal TLB
-+     epoch counter.
-+   * send IPI to remote vcpus
-+   * Other vcpu exits to VMM from guest TD and then re-enter. TDH.VP.ENTER().
-+   * TDH.VP.ENTER() checks the TLB epoch counter and If its TLB is old, flush
-+     TLB.
-+   Note that only single vcpu issues tdh_mem_track().
-+   Note that the private page is still linked in the secure EPT tree, unlike the
-+   conventional EPT.
-+3. TDH.MEM.PAGE.PROMOTE, TDH.MEM.PAGEDEMOTE(), TDH.MEM.PAGE.RELOCATE(), or
-+   TDH.MEM.PAGE.REMOVE()
-+   There is no corresponding operation to the conventional EPT.
-+   * When changing page size (e.g. 4K <-> 2M) TDH.MEM.PAGE.PROMOTE() or
-+     TDH.MEM.PAGE.DEMOTE() is used.  During those operation, the guest page is
-+     kept referenced in the Secure EPT.
-+   * When migrating page, TDH.MEM.PAGE.RELOCATE().  This requires both source
-+     page and destination page.
-+   * when destroying TD, TDH.MEM.PAGE.REMOVE() removes the private page from the
-+     secure EPT tree.  In this case TLB shootdown is not needed because vcpus
-+     don't run any more.
-+
-+The basic idea for TDX support
-+==============================
-+Because shared EPT is the same as the existing EPT, use the existing logic for
-+shared EPT.  On the other hand, secure EPT requires additional operations
-+instead of directly reading/writing of the EPT entry.
-+
-+On EPT violation, The KVM mmu walks down the EPT tree from the root, determines
-+the EPT entry to operate, and updates the entry. If necessary, a TLB shootdown
-+is done.  Because it's very slow to directly walk secure EPT by TDX SEAMCALL,
-+TDH.MEM.SEPT.RD(), the mirror of secure EPT is created and maintained.  Add
-+hooks to KVM MMU to reuse the existing code.
-+
-+EPT violation on shared GPA
-+---------------------------
-+(1) EPT violation on shared GPA or zapping shared GPA
-+    walk down shared EPT tree (the existing code)
-+        |
-+        |
-+        V
-+shared EPT tree (CPU refers.)
-+(2) update the EPT entry. (the existing code)
-+    TLB shootdown in the case of zapping.
-+
-+
-+EPT violation on private GPA
-+----------------------------
-+(1) EPT violation on private GPA or zapping private GPA
-+    walk down the mirror of secure EPT tree (mostly same as the existing code)
-+        |
-+        |
-+        V
-+mirror of secure EPT tree (KVM MMU software only. reuse of the existing code)
-+(2) update the (mirrored) EPT entry. (mostly same as the existing code)
-+(3) call the hooks with what EPT entry is changed
-+        |
-+        NEW: hooks in KVM MMU
-+        |
-+        V
-+secure EPT root(CPU refers)
-+(4) the TDX backend calls necessary TDX SEAMCALLs to update real secure EPT.
-+
-+The major modification is to add hooks for the TDX backend for additional
-+operations and to pass down which EPT, shared EPT, or private EPT is used, and
-+twist the behavior if we're operating on private EPT.
-+
-+The following depicts the relationship.
-+::
-+
-+                    KVM                             |       TDX module
-+                     |                              |           |
-+        -------------+----------                    |           |
-+        |                      |                    |           |
-+        V                      V                    |           |
-+     shared GPA           private GPA               |           |
-+  CPU shared EPT pointer  KVM private EPT pointer   |  CPU secure EPT pointer
-+        |                      |                    |           |
-+        |                      |                    |           |
-+        V                      V                    |           V
-+  shared EPT                private EPT<-------mirror----->Secure EPT
-+        |                      |                    |           |
-+        |                      \--------------------+------\    |
-+        |                                           |      |    |
-+        V                                           |      V    V
-+  shared guest page                                 |    private guest page
-+                                                    |
-+                                                    |
-+                              non-encrypted memory  |    encrypted memory
-+                                                    |
-+
-+shared EPT: CPU and KVM walk with shared GPA
-+            Maintained by the existing code
-+private EPT: KVM walks with private GPA
-+             Maintained by the twisted existing code
-+secure EPT: CPU walks with private GPA.
-+            Maintained by TDX module with TDX SEAMCALLs via hooks
-+
-+
-+Tracking private EPT page
-+=========================
-+Shared EPT pages are managed by struct kvm_mmu_page.  They are linked in a list
-+structure.  When necessary, the list is traversed to operate on.  Private EPT
-+pages have different characteristics.  For example, private pages can't be
-+swapped out.  When shrinking memory, we'd like to traverse only shared EPT pages
-+and skip private EPT pages.  Likewise, page migration isn't supported for
-+private pages (yet).  Introduce an additional list to track shared EPT pages and
-+track private EPT pages independently.
-+
-+At the beginning of EPT violation, the fault handler knows fault GPA, thus it
-+knows which EPT to operate on, private or shared.  If it's private EPT,
-+an additional task is done.  Something like "if (private) { callback a hook }".
-+Since the fault handler has deep function calls, it's cumbersome to hold the
-+information of which EPT is operating.  Options to mitigate it are
-+
-+1. Pass the information as an argument for the function call.
-+2. Record the information in struct kvm_mmu_page somehow.
-+3. Record the information in vcpu structure.
-+
-+Option 2 was chosen.  Because option 1 requires modifying all the functions.  It
-+would affect badly to the normal case.  Option 3 doesn't work well because in
-+some cases, we need to walk both private and shared EPT.
-+
-+The role of the EPT page can be utilized and one bit can be curved out from
-+unused bits in struct kvm_mmu_page_role.  When allocating the EPT page,
-+initialize the information. Mostly struct kvm_mmu_page is available because
-+we're operating on EPT pages.
-+
-+
-+The conversion of private GPA and shared GPA
-+============================================
-+A page of a given GPA can be assigned to only private GPA xor shared GPA at one
-+time.  The GPA can't be accessed simultaneously via both private GPA and shared
-+GPA.  On guest startup, all the GPAs are assigned as private.  Guest converts
-+the range of GPA to shared (or private) from private (or shared) by MapGPA
-+hypercall.  MapGPA hypercall takes the start GPA and the size of the region.  If
-+the given start GPA is shared, VMM converts the region into shared (if it's
-+already shared, nop).  If the start GPA is private, VMM converts the region into
-+private.  It implies the guest won't access the unmapped region. private(or
-+shared) region after converting to shared(or private).
-+
-+If the guest TD triggers an EPT violation on the already converted region, the
-+access won't be allowed (loop in EPT violation) until other vcpu converts back
-+the region.
-+
-+KVM MMU records which GPA is allowed to access, private or shared.  It steals
-+software usable bit from MMU present mask.  SEPT_PRIVATE_PROHIBIT.  The bit is
-+recorded in both shared EPT and the mirror of secure EPT.
-+
-+* If SEPT_PRIVATE_PROHIBIT cleared in the shared EPT and the mirror of secure EPT:
-+  Private GPA is allowed. Shared GPA is not allowed.
-+
-+* SEPT_PRIVATE_PROHIBIT set in the shared EPT and the mirror of secure EPT:
-+  Private GPA is not allowed. Shared GPA is allowed.
-+
-+The default is that SEPT_PRIVATE_PROHIBIT is cleared so that the existing KVM
-+MMU code (mostly) works.
-+
-+The reason why the bit is recorded in both shared and private EPT is to optimize
-+for EPT violation path by penalizing MapGPA hypercall.
-+
-+The state machine of EPT entry
-+------------------------------
-+(private EPT entry, shared EPT entry) =
-+        (non-present, non-present):             private mapping is allowed
-+        (present, non-present):                 private mapping is mapped
-+        (non-present | PRIVATE_PROHIBIT, non-present | PRIVATE_PROHIBIT):
-+                                                shared mapping is allowed
-+        (non-present | PRIVATE_PROHIBIT, present | PRIVATE_PROHIBIT):
-+                                                shared mapping is mapped
-+        (present | PRIVATE_PROHIBIT, any)       invalid combination
-+
-+* map_gpa(private GPA): Mark the region that private GPA is allowed(NEW)
-+        private EPT entry: clear PRIVATE_PROHIBIT
-+          present: nop
-+          non-present: nop
-+          non-present | PRIVATE_PROHIBIT -> non-present (clear PRIVATE_PROHIBIT)
-+
-+        shared EPT entry: zap the entry, clear PRIVATE_PROHIBIT
-+          present: invalid
-+          non-present -> non-present: nop
-+          present | PRIVATE_PROHIBIT -> non-present
-+          non-present | PRIVATE_PROHIBIT -> non-present
-+
-+* map_gpa(shared GPA): Mark the region that shared GPA is allowed(NEW)
-+        private EPT entry: zap and set PRIVATE_PROHIBIT
-+          present     -> non-present | PRIVATE_PROHIBIT
-+          non-present -> non-present | PRIVATE_PROHIBIT
-+          non-present | PRIVATE_PROHIBIT: nop
-+
-+        shared EPT entry: set PRIVATE_PROHIBIT
-+          present: invalid
-+          non-present -> non-present | PRIVATE_PROHIBIT
-+          present | PRIVATE_PROHIBIT -> present | PRIVATE_PROHIBIT: nop
-+          non-present | PRIVATE_PROHIBIT -> non-present | PRIVATE_PROHIBIT: nop
-+
-+* map(private GPA)
-+        private EPT entry
-+          present: nop
-+          non-present -> present
-+          non-present | PRIVATE_PROHIBIT: nop. looping on EPT violation(NEW)
-+
-+        shared EPT entry: nop
-+
-+* map(shared GPA)
-+        private EPT entry: nop
-+
-+        shared EPT entry
-+          present: invalid
-+          present | PRIVATE_PROHIBIT: nop
-+          non-present | PRIVATE_PROHIBIT -> present | PRIVATE_PROHIBIT
-+          non-present: nop. looping on EPT violation(NEW)
-+
-+* zap(private GPA)
-+        private EPT entry: zap the entry with keeping PRIVATE_PROHIBIT
-+          present -> non-present
-+          present | PRIVATE_PROHIBIT: invalid
-+          non-present: nop as is_shadow_present_pte() is checked
-+          non-present | PRIVATE_PROHIBIT: nop as is_shadow_present_pte() is
-+                                          checked
-+
-+        shared EPT entry: nop
-+
-+* zap(shared GPA)
-+        private EPT entry: nop
-+
-+        shared EPT entry: zap
-+          any -> non-present
-+          present: invalid
-+          present | PRIVATE_PROHIBIT -> non-present | PRIVATE_PROHIBIT
-+          non-present: nop as is_shadow_present_pte() is checked
-+          non-present | PRIVATE_PROHIBIT: nop as is_shadow_present_pte() is
-+                                          checked
-+
-+
-+The original TDP MMU and race condition
-+=======================================
-+Because vcpus share the EPT, once the EPT entry is zapped, we need to shootdown
-+TLB.  Send IPI to remote vcpus.  Remote vcpus flush their down TLBs.  Until TLB
-+shootdown is done, vcpus may reference the zapped guest page.
-+
-+TDP MMU uses read lock of mmu_lock to mitigate vcpu contention.  When read lock
-+is obtained, it depends on the atomic update of the EPT entry.  (On the other
-+hand legacy MMU uses write lock.)  When vcpu is populating/zapping the EPT entry
-+with a read lock held, other vcpu may be populating or zapping the same EPT
-+entry at the same time.
-+
-+To avoid the race condition, the entry is frozen.  It means the EPT entry is set
-+to the special value, REMOVED_SPTE which clears the present bit.  And then after
-+TLB shootdown, update the EPT entry to the final value.
-+
-+Concurrent zapping
-+------------------
-+1. read lock
-+2. freeze the EPT entry (atomically set the value to REMOVED_SPTE)
-+   If other vcpu froze the entry, restart page fault.
-+3. TLB shootdown
-+   * send IPI to remote vcpus
-+   * TLB flush (local and remote)
-+   For each entry update, TLB shootdown is needed because of the
-+   concurrency.
-+4. atomically set the EPT entry to the final value
-+5. read unlock
-+
-+Concurrent populating
-+---------------------
-+In the case of populating the non-present EPT entry, atomically update the EPT
-+entry.
-+1. read lock
-+2. atomically update the EPT entry
-+   If other vcpu frozen the entry or updated the entry, restart page fault.
-+3. read unlock
-+
-+In the case of updating the present EPT entry (e.g. page migration), the
-+operation is split into two.  Zapping the entry and populating the entry.
-+1. read lock
-+2. zap the EPT entry.  follow the concurrent zapping case.
-+3. populate the non-present EPT entry.
-+4. read unlock
-+
-+Non-concurrent batched zapping
-+------------------------------
-+In some cases, zapping the ranges is done exclusively with a write lock held.
-+In this case, the TLB shootdown is batched into one.
-+
-+1. write lock
-+2. zap the EPT entries by traversing them
-+3. TLB shootdown
-+4. write unlock
-+
-+
-+For Secure EPT, TDX SEAMCALLs are needed in addition to updating the mirrored
-+EPT entry.
-+
-+TDX concurrent zapping
-+----------------------
-+Add a hook for TDX SEAMCALLs at the step of the TLB shootdown.
-+
-+1. read lock
-+2. freeze the EPT entry(set the value to REMOVED_SPTE)
-+3. TLB shootdown via a hook
-+   * TLB.MEM.RANGE.BLOCK()
-+   * TLB.MEM.TRACK()
-+   * send IPI to remote vcpus
-+4. set the EPT entry to the final value
-+5. read unlock
-+
-+TDX concurrent populating
-+-------------------------
-+TDX SEAMCALLs are required in addition to operating the mirrored EPT entry.  The
-+frozen entry is utilized by following the zapping case to avoid the race
-+condition.  A hook can be added.
-+
-+1. read lock
-+2. freeze the EPT entry
-+3. hook
-+   * TDH_MEM_SEPT_ADD() for non-leaf or TDH_MEM_PAGE_AUG() for leaf.
-+4. set the EPT entry to the final value
-+5. read unlock
-+
-+Without freezing the entry, the following race can happen.  Suppose two vcpus
-+are faulting on the same GPA and the 2M and 4K level entries aren't populated
-+yet.
-+
-+* vcpu 1: update 2M level EPT entry
-+* vcpu 2: update 4K level EPT entry
-+* vcpu 2: TDX SEAMCALL to update 4K secure EPT entry => error
-+* vcpu 1: TDX SEAMCALL to update 2M secure EPT entry
-+
-+
-+TDX non-concurrent batched zapping
-+----------------------------------
-+For simplicity, the procedure of concurrent populating is utilized.  The
-+procedure can be optimized later.
-+
-+
-+Co-existing with unmapping guest private memory
-+===============================================
-+TODO.  This needs to be addressed.
-+
-+
-+Restrictions or future work
-+===========================
-+The following features aren't supported yet at the moment.
-+
-+* optimizing non-concurrent zap
-+* Large page
-+* Page migration
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index cd772973114a..de862fd9ad73 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -1618,11 +1618,6 @@ static int its_select_cpu(struct irq_data *d,
+ 		/* Try the intersection of the affinity and online masks */
+ 		cpumask_and(tmpmask, aff_mask, cpu_online_mask);
+ 
+-		/* If that doesn't fly, the online mask is the last resort */
+-		if (cpumask_empty(tmpmask))
+-			cpumask_copy(tmpmask, cpu_online_mask);
+-
+-		cpu = cpumask_pick_least_loaded(d, tmpmask);
+ 	} else {
+ 		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+ 
+@@ -1630,9 +1625,13 @@ static int its_select_cpu(struct irq_data *d,
+ 		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+ 		    node != NUMA_NO_NODE)
+ 			cpumask_and(tmpmask, tmpmask, cpumask_of_node(node));
+-
+-		cpu = cpumask_pick_least_loaded(d, tmpmask);
+ 	}
++
++	/* If that doesn't fly, the online mask is the last resort */
++	if (WARN_ON_ONCE(cpumask_empty(tmpmask)))
++		cpumask_copy(tmpmask, cpu_online_mask);
++
++	cpu = cpumask_pick_least_loaded(d, tmpmask);
+ out:
+ 	free_cpumask_var(tmpmask);
+ 
 -- 
-2.25.1
+2.35.1.616.g0bdcbb4464-goog
 

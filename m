@@ -2,157 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B9F4CDBDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A0C4CDBEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241523AbiCDSMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S241514AbiCDSPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbiCDSMr (ORCPT
+        with ESMTP id S239955AbiCDSPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:12:47 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0701C666E;
-        Fri,  4 Mar 2022 10:11:59 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id p4so11832903edi.1;
-        Fri, 04 Mar 2022 10:11:59 -0800 (PST)
+        Fri, 4 Mar 2022 13:15:11 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14351C60CE
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:14:22 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dc28791ecbso86949337b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tIN13TWuIqVkdYdqAGwqsk2ezDcrMTPKsAwAdQHKKcE=;
-        b=hRj9oqN8hOctWayWpATxG/nIqDH10fnWP899wm8utzM3mCf6Fqcsd659YYKCgTrCi2
-         bdacqOg/pXaHec7TKEA4PoSJvutAwRNVFNLDT/uoyjrnIUAopz6BrSt5RcKXaaEsssnX
-         EAs3udeSFgirMjKk1Qamysb+AwTWYGDiGYgAoqQdF2vqztqI2zm6cfvVwKy7TxiXIjuU
-         i/681TXZpPDDLeS49EnpTgjcD0drM77sb6SfPikxzc4lNf+twPlXHl8uQtsrwqHV1obH
-         E10h7AIPzFEZCX3RyiIXyGdNw3pOyefwT0gKgg4aFOk467ZQQf87H17SCKTMdd5HbDQW
-         KbrA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=roOvrpzRBBuu6X1VnPdwFDfTIg5X39LNxw0wRlde0q0=;
+        b=iVNEGaLsI/oTddyIVfrof90wANBQmPt96gurLud4I8iwWZs9qalXO+7UcXMzuIO8tw
+         7aTcVPEoqPanpkJ5vOenbgiPMHiUFwBA+J6Y9a7abdyfG4RC+c7JozAJeOaNhw2+F34U
+         M5XFCqasPH3yPIp8UOZOo5Q/FdGuuqhycyAXdMnBcIWDnLoO/PBloBz+xFZYO8JtgrCf
+         WxenyT5JVS0BzVwF24Rgzlz8pUmwHIiDtOey4RH6ixTRoqmNjI3UUiHPqD9Ctg1H1EaT
+         oARIUNVfbQR1mFIqSQx8YPcEFMRvWgBCJgIjGbRuJZHKPqjJ/x8SA/USAfkbkRBvkG8k
+         htAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tIN13TWuIqVkdYdqAGwqsk2ezDcrMTPKsAwAdQHKKcE=;
-        b=RoEPxECGBJUFEfaBaJc1gkNyHSUtQIB/1WQP2H0h5f3SXzxhRvmy1uLr+GFgzcqBih
-         t2mspp5uJej9GVWFVu+ANyZtIk/RFBOHifp8exPbGB2qHmZxdX8G2FW6d/BV10j37j8Z
-         WhyR0kYOMP2at1FwgPYBeFUrKvqrN2mBhCWteupqSe/PMGGDvb4ApbRatIzBMBJFi1ah
-         R266suldzekUnn4KO4qgseGC5xx5Z6dG6NAN3zvmDtEMSlRquHH4o5h5Yp94vkuloilK
-         tCF1i9n8OL1oW/7uB0PMMARdwSAM7WvKiTvQCCB+LGMUxfNIqo4ZPVyhANN3IvsXrW/4
-         qtVQ==
-X-Gm-Message-State: AOAM531qk3C1S9aM7ExqBMpWRjSW6lJ5Tj31nWVE24+DOMzGvwxJyFh8
-        Defb2idZQ71nFhgrXToCFrI=
-X-Google-Smtp-Source: ABdhPJyTwzLBayjlRop8xK9BoE2ZyRz1Cy6Kl+/tNQcC0TuDDerswyibHvSKORzTQK309VATWxg0cQ==
-X-Received: by 2002:a05:6402:34c5:b0:411:f082:d69 with SMTP id w5-20020a05640234c500b00411f0820d69mr40707510edc.65.1646417517569;
-        Fri, 04 Mar 2022 10:11:57 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id bx1-20020a0564020b4100b00410f01a91f0sm2450758edb.73.2022.03.04.10.11.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 10:11:56 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
-Date:   Fri, 4 Mar 2022 19:11:55 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=roOvrpzRBBuu6X1VnPdwFDfTIg5X39LNxw0wRlde0q0=;
+        b=cL4hB7fosIH9VXo8tUiKLTOoREoh1dKmH3Ub9Tzmydu4Rib/zlRo+kSJXMhGK6PZW1
+         6P4zlFFf27/KDP9yYIM7Yu0cFYRxI94xq/vpapwbGxB1leuMRNX4Rudp/9Qrdl8MpITB
+         7cNROwniCff6hRh+dh3P/57lJuTc5FLPR/flZBdD1ZDGRutyKBYMmJdr/b1DykkWOBVC
+         DIccUTMUImJOPy78eIjZwFRTJPXJyt7wZ5RZuPty4bpK7TMUzn7C9Fw5sK94n8KbvELf
+         LxiMdsR6NDBcR+kAjgpcE7Y7HVj3nMQizj7mU2n3Coy1r118BsmRL+UUDHfVk3IM0bml
+         ioSw==
+X-Gm-Message-State: AOAM533CfjH8C2HgZBUDkQ150CxjRDyVGCn8Z7bXlIErJEF6sHZqL6Ff
+        VBsgFP7xfE8gVWKsve1CeL7T9OphY9F0Oc86A9FAXw==
+X-Google-Smtp-Source: ABdhPJxV/T1UYsvhtBW/QXPyM+sLHYNKaGr4+8JbGihlbMoplFbfcKOi8eRcdtTJRFYgJ5n5azU1Y2E87jPi6aBBgSg=
+X-Received: by 2002:a81:9ad7:0:b0:2db:f000:32e7 with SMTP id
+ r206-20020a819ad7000000b002dbf00032e7mr17923054ywg.412.1646417661910; Fri, 04
+ Mar 2022 10:14:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
- asynchronous worker
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-22-pbonzini@redhat.com> <YiExLB3O2byI4Xdu@google.com>
- <YiEz3D18wEn8lcEq@google.com>
- <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
- <YiI4AmYkm2oiuiio@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YiI4AmYkm2oiuiio@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220303031505.28495-1-dtcccc@linux.alibaba.com> <20220303031505.28495-2-dtcccc@linux.alibaba.com>
+In-Reply-To: <20220303031505.28495-2-dtcccc@linux.alibaba.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 4 Mar 2022 19:13:45 +0100
+Message-ID: <CANpmjNOOkg=OUmgwdcRus2gdPXT41Y7GkFrgzuBv+o8KHKXyEA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] kfence: Allow re-enabling KFENCE after system startup
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 17:02, Sean Christopherson wrote:
-> On Fri, Mar 04, 2022, Paolo Bonzini wrote:
->> On 3/3/22 22:32, Sean Christopherson wrote:
->> I didn't remove the paragraph from the commit message, but I think it's
->> unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and
->> kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to take
->> a reference to the VM.
->>
->> I think I don't even need to check kvm->users_count in the defunct root
->> case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the workqueue
->> before it checks that the lists are empty.
-> 
-> Yes, that should work.  IIRC, the WARN_ONs will tell us/you quite quickly if
-> we're wrong :-)  mmu_notifier_unregister() will call the "slow" kvm_mmu_zap_all()
-> and thus ensure all non-root pages zapped, but "leaking" a worker will trigger
-> the WARN_ON that there are no roots on the list.
+On Thu, 3 Mar 2022 at 04:15, Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
+>
+> If once KFENCE is disabled by:
+> echo 0 > /sys/module/kfence/parameters/sample_interval
+> KFENCE could never be re-enabled until next rebooting.
+>
+> Allow re-enabling it by writing a positive num to sample_interval.
+>
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
 
-Good, for the record these are the commit messages I have:
+The only problem I see with this is if KFENCE was disabled because of
+a KFENCE_WARN_ON(). See below.
 
-     KVM: x86/mmu: Zap invalidated roots via asynchronous worker
-     
-     Use the system worker threads to zap the roots invalidated
-     by the TDP MMU's "fast zap" mechanism, implemented by
-     kvm_tdp_mmu_invalidate_all_roots().
-     
-     At this point, apart from allowing some parallelism in the zapping of
-     roots, the workqueue is a glorified linked list: work items are added and
-     flushed entirely within a single kvm->slots_lock critical section.  However,
-     the workqueue fixes a latent issue where kvm_mmu_zap_all_invalidated_roots()
-     assumes that it owns a reference to all invalid roots; therefore, no
-     one can set the invalid bit outside kvm_mmu_zap_all_fast().  Putting the
-     invalidated roots on a linked list... erm, on a workqueue ensures that
-     tdp_mmu_zap_root_work() only puts back those extra references that
-     kvm_mmu_zap_all_invalidated_roots() had gifted to it.
+> ---
+>  mm/kfence/core.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index 13128fa13062..19eb123c0bba 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -55,6 +55,7 @@ EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
+>  #endif
+>  #define MODULE_PARAM_PREFIX "kfence."
+>
+> +static int kfence_enable_late(void);
+>  static int param_set_sample_interval(const char *val, const struct kernel_param *kp)
+>  {
+>         unsigned long num;
+> @@ -65,10 +66,11 @@ static int param_set_sample_interval(const char *val, const struct kernel_param
+>
+>         if (!num) /* Using 0 to indicate KFENCE is disabled. */
+>                 WRITE_ONCE(kfence_enabled, false);
+> -       else if (!READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
+> -               return -EINVAL; /* Cannot (re-)enable KFENCE on-the-fly. */
+>
+>         *((unsigned long *)kp->arg) = num;
+> +
+> +       if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
 
-and
+Should probably have an 'old_sample_interval = *((unsigned long
+*)kp->arg)' somewhere before, and add a '&& !old_sample_interval',
+because if old_sample_interval!=0 then KFENCE was disabled due to a
+KFENCE_WARN_ON(). Also in this case, it should return -EINVAL. So you
+want a flow like this:
 
-     KVM: x86/mmu: Zap defunct roots via asynchronous worker
-     
-     Zap defunct roots, a.k.a. roots that have been invalidated after their
-     last reference was initially dropped, asynchronously via the existing work
-     queue instead of forcing the work upon the unfortunate task that happened
-     to drop the last reference.
-     
-     If a vCPU task drops the last reference, the vCPU is effectively blocked
-     by the host for the entire duration of the zap.  If the root being zapped
-     happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
-     being active, the zap can take several hundred seconds.  Unsurprisingly,
-     most guests are unhappy if a vCPU disappears for hundreds of seconds.
-     
-     E.g. running a synthetic selftest that triggers a vCPU root zap with
-     ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
-     Offloading the zap to a worker drops the block time to <100ms.
-     
-     There is an important nuance to this change.  If the same work item
-     was queued twice before the work function has run, it would only
-     execute once and one reference would be leaked.  Therefore, now that
-     queueing items is not anymore protected by write_lock(&kvm->mmu_lock),
-     kvm_tdp_mmu_invalidate_all_roots() has to check root->role.invalid and
-     skip already invalid roots.  On the other hand, kvm_mmu_zap_all_fast()
-     must return only after those skipped roots have been zapped as well.
-     These two requirements can be satisfied only if _all_ places that
-     change invalid to true now schedule the worker before releasing the
-     mmu_lock.  There are just two, kvm_tdp_mmu_put_root() and
-     kvm_tdp_mmu_invalidate_all_roots().
+old_sample_interval = ...;
+...
+if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
+  return old_sample_interval ? -EINVAL : kfence_enable_late();
+...
 
-Paolo
+Thanks,
+-- Marco

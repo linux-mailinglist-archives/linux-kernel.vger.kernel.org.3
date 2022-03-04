@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3494CE06B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 23:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C1C4CE06C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 23:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiCDWtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 17:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S229960AbiCDWvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 17:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiCDWtA (ORCPT
+        with ESMTP id S229662AbiCDWvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 17:49:00 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4171D0D57
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 14:48:11 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id f18so8708115qtb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 14:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=5emkd5LN3iz45QwA5eikenlMR4B/YLdOVVv/kxARc4U=;
-        b=BQJXzgwmnmO72nx2ay7XKV3KU0f1milmJfwfFQFTWJr1NrPt1uHy6Ks0NXfgVyW1ay
-         GLwmiTFsG8Ax5LovsNGPaVXKc9sxFLhH6g1SnfoK4k7M0nuY2CusLoGlb+8b745do1iu
-         QkZPdIPQs+LIG55flB+pi46y10ZZ145XaDOLfhbKikHxmPMHOWMlcj7BNPV+zVSYDcfV
-         u1Y8RDMbUYFxXYvq6kPnRWpOapGlYh9r+FA1f8O27XwkQuiuuSXEtQGEtiuA77JCRtS5
-         9FoHYvO36YzbwVVWQZwBoRvN5uVMZFNy8p2pMxfRlcgGh4yFH8VEHHgdZO3a5nCsbS6L
-         vFpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=5emkd5LN3iz45QwA5eikenlMR4B/YLdOVVv/kxARc4U=;
-        b=Nez2LpgSdrVu90pK0M1Wc/BhYkS/FNG7P1kkALg8iUC9Om719qiS13kyXDOD6Hfa1w
-         7FTNSis0LZDCG1dpFqYw70bsXCBFCpRLvPwo5tO6rFwNG+m7AwzjVm5RVDMm1dITBfvh
-         KGcRfnZE0SXJBXgtKluAvua1NhAcoT/SC3GLCA4bhryjoQOT9Yls/6XqsrGUM4ibffH/
-         i0QBMXkqn+fAQ7KNx/OP3WCmX5A+LhbRmyIoI0qNRZpCxMHgJ5ytPo8JDTEU7GMWs2gs
-         xGP6ev5hOJrU6qS/COp8SZnegBDdcGObbKy4Yy6WFggwiocHWNBOO3xbqVqL8z92jp6r
-         OL3w==
-X-Gm-Message-State: AOAM533Pr0bMVznDWevauSbfRK+cf/abQkbLbPoaf6MdEuNH81Xc9mxW
-        iSgUaVPZn5bKxxNT/OkSrlvUyLdOp+91oA==
-X-Google-Smtp-Source: ABdhPJzGU5wfgg930jiiTt/2mcbEnL96neukBIFhR5li/iZLy7lw07ftq2X9E8tF71sAmeuA1cD/Jg==
-X-Received: by 2002:a05:622a:14c8:b0:2de:175c:fa1b with SMTP id u8-20020a05622a14c800b002de175cfa1bmr891329qtx.543.1646434090542;
-        Fri, 04 Mar 2022 14:48:10 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id z3-20020ac87f83000000b002deae661c08sm4106469qtj.33.2022.03.04.14.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 14:48:10 -0800 (PST)
-Date:   Fri, 4 Mar 2022 14:48:08 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Liam Howlett <liam.howlett@oracle.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH mmotm] mempolicy: mbind_range() set_policy() after
- vma_merge()
-In-Reply-To: <20220304190531.6giqbnnaka4xhovx@revolver>
-Message-ID: <6038ebc2-bc88-497d-a3f3-5936726fb023@google.com>
-References: <319e4db9-64ae-4bca-92f0-ade85d342ff@google.com> <20220304184927.vkq6ewn6uqtcesma@revolver> <20220304190531.6giqbnnaka4xhovx@revolver>
+        Fri, 4 Mar 2022 17:51:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651831F6BD4
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 14:50:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A00BB82A7B
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 22:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1585FC340E9;
+        Fri,  4 Mar 2022 22:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646434218;
+        bh=f4c73Qb2h5VbumIRsVZDFSfPv+BHp7PeoO32syj+yas=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ihFYXDmH/fe7OCq5j3R0AHd2fnHrkL+SA7ygnr7lwfZlwKFKdrYgrR1dG+y8zZnUq
+         k7h9hVLORJjw3XUWvdakviSZFEnl0Ejk/LlZ+QnjXXPL9WoxNBd2cGkWsN4WHmrImr
+         bco3H6Z2kPUpYFPR+vR4XE7/gmZNg4WwQtDitR9wlScbuXHTi9YhPyY0MqAVvNgl32
+         L0n/YDAdl1O3M5JBDCRbdTejzmO/hp+6d65Z+bXU0xMWka4mEAdv4imNOenA3JA0kc
+         b82wt3/IsZwbOHb8tKxpje1IbPGzuU3KliJRU5rDiI4s3qUC/nTxbgntjvQZubHqrn
+         z8Knvh6Lhjt3Q==
+Message-ID: <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
+Date:   Sat, 5 Mar 2022 00:50:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
+ configuration and build error
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220220004415.GA1519274@roeck-us.net>
+ <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
+ <20220304165451.0129012e@xps13>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20220304165451.0129012e@xps13>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +62,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022, Liam Howlett wrote:
-> * Liam R. Howlett <Liam.Howlett@Oracle.com> [220304 13:49]:
-> > * Hugh Dickins <hughd@google.com> [220303 23:36]:
+Hi Miquel,
+
+On 04/03/2022 17:54, Miquel Raynal wrote:
+> Hi Guenter, Roger,
 > 
-> I just thought of something after my initial email
+> rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
 > 
-> How does the ->set_policy() requirement on tmpfs play out for the
-> mpol_equal() check earlier in that for loop?
+>> On 2/19/22 16:44, Guenter Roeck wrote:
+>>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:  
+>>>> The root of the problem is that we are selecting symbols that have
+>>>> dependencies. This can cause random configurations that can fail.
+>>>> The cleanest solution is to avoid using select.
+>>>>
+>>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
+>>>> depend on it instead.
+>>>>
+>>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configuration and build error")
+>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>  
+>>>
+>>> Tested-by: Guenter Roeck <linux@roeck-us.net>  
+>>
+>> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Sorry for noticing that just now, but there is still a problem with
+> this patch: we now always compile-in the OMAP_GPMC driver whenever we
+> need the NAND controller, even though it is not needed. This grows the
+> kernel for no reason.
 
-It took me a while to page all this back in (and remind myself of
-what is case 8) to answer that question!
+Sorry, I did not understand what you meant.
 
-The answer is that the mpol_equal() check at the top of the loop is on
-an existing, unmodified vma; so it's right to assume that any necessary
-set_policy() has already been done.
+We no longer explicitly enable OMAP_GPMC since we dropped the "select".
+This fixes all build issues that were reported recently.
 
-Whereas the mpol_equal() check being removed in this patch, is being
-done on a vma which may have just been extended to cover a greater range:
-so although the relevant set_policy() may have already been done on a part
-of its range, there is now another part which needs the policy applied.
+MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
+the "depends on". This fixes the original build issue that we started to
+fix with select initially.
 
-> > Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> 
+> In fact, Roger once said:
+> 
+> 	"We will figure out how to enable OMAP_GPMC for K3 architecture
+> 	some other way."
+> 
+> It turns out this is not what was finally proposed. Could we try yet
+> another solution?
 
-Thank you, your review is very welcome (but mainly I Cc'ed to alert
-you to how I'm probably stepping on your toes a little here - sorry).
+This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 driver on
+K3 platform since OMAP_GPMC config is hidden and not select-able
+by user or defconfig file.
 
-Hugh
+But it is not yet a deal breaker since NAND on K3 is not yet enabled upstream.
+
+For this I think OMAP_GPMC has to be a visible config entry and select-able
+from a defconfig file as I had done initially [1].
+
+Now we have a lot of explanation to write as to why we need to do it ;)
+
+[1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kernel.org/
+
+> 
+>>
+>> Thanks.
+>>
+>>>   
+>>>> ---
+>>>>  drivers/mtd/nand/raw/Kconfig | 3 +--
+>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+>>>> index 36e697456ec4..9b078e78f3fa 100644
+>>>> --- a/drivers/mtd/nand/raw/Kconfig
+>>>> +++ b/drivers/mtd/nand/raw/Kconfig
+>>>> @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
+>>>>  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+>>>>  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+>>>>  	depends on HAS_IOMEM
+>>>> -	select MEMORY
+>>>> -	select OMAP_GPMC
+>>>> +	depends on OMAP_GPMC
+>>>>  	help
+>>>>  	  Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
+>>>>  	  and Keystone platforms.
+>>>> -- 
+>>>> 2.17.1
+>>>>  
+>>
+> 
+> Thanks,
+> Miquèl
+
+
+cheers,
+-roger

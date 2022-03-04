@@ -2,144 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B59B4CCDB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A365A4CCDB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbiCDG0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S238374AbiCDG1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiCDG0m (ORCPT
+        with ESMTP id S232071AbiCDG1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:26:42 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2099.outbound.protection.outlook.com [40.107.255.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89D3AF1DA;
-        Thu,  3 Mar 2022 22:25:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HTuc7Xm0bkBK15BBvE4ibpb+pR61Cq7TgE5vq7wSmI6PPkMGeIQLbgY3WS95ZtJ6C99oGykT2bWZ9fzjlcKmmr99SF0dYjT2UGkLvWPL3Tt/xsS3uFE/LGwomzlAHM2wyR/V30wEFrShy+FEF7gsy3S0OK9cJgjHQAzmndV56AFPsE0+Fwba1FSZorwXKSjIUsxouuNrJucH9MxW9SJrecEdbUIr7/cQeFKY9/fCsBO/BIa8dWJ6/l91IM0T1yXvhRDZKc9G1RhvK+lbJs/9e+8BwF6Ti4y8yBfV29NT1RwVWRkf0wa5PqaIA8sQY0LKswz3Y1mXiBxcoOdWl9AlEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W9UjCJhrMFHgrzhto+GR0opGkPZr2TkaqDOvMk6GKNM=;
- b=bLocSLgF8XwIkv1KHBZM2T/gmi+EBXCzoRqsA/iY/LHWT0rjPN27zSMtKMt6Sycaoz3LL+XSGTxVsfX1XBZ9fGHjl1L4HfzjtLj5DFDyWfX5eUp5wB1W26YPffMXojMCCWYfGY+m/RbYB2WyPn1RECE6iz/hDrkb3pV1om0RhXRsOmB3js1gpGzTWcM0xabefNEM1UopsZgoaCU5mAycRCCTDnU7UXK/DGk3f6rd6GdWsKU//BAavxa4nuCYI+iF0InqG2bb3B4JiZMRRvdim9jbtE9Pv5AD86GkqzhiaQg1IDsat0I5203AIXb1oJPWsrx+CD9gPpeJZrlxO5i39w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W9UjCJhrMFHgrzhto+GR0opGkPZr2TkaqDOvMk6GKNM=;
- b=XnyUhd4Wohmf8/RC/tKLSeh7eATlKQ30s/fiw8NvGhxqzUKJ6CpVyM8eorUzLRGVVow5e512XsxY3IpldBCESis9gqz+1TqGfukm8JZvwiatVdMgtsk7wgWnq8tUqqoH2PsVJTrlmzqTVRu7izkoaReZjt88/H7EQfyR+WPPB9Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- KL1PR0601MB3767.apcprd06.prod.outlook.com (2603:1096:820:17::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16; Fri, 4 Mar
- 2022 06:25:48 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5017.026; Fri, 4 Mar 2022
- 06:25:47 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rohith Surabattula <rohiths@microsoft.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@qq.com
-Subject: [PATCH] netfs: rename read_helper.c to io.c in netfs_library.rst
-Date:   Fri,  4 Mar 2022 14:25:21 +0800
-Message-Id: <20220304062526.336853-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR0401CA0005.apcprd04.prod.outlook.com
- (2603:1096:3:1::15) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Fri, 4 Mar 2022 01:27:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A18AF1DA;
+        Thu,  3 Mar 2022 22:26:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C982861BA0;
+        Fri,  4 Mar 2022 06:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F150AC340F1;
+        Fri,  4 Mar 2022 06:26:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646375209;
+        bh=7kRqqkqaEHkF8LnEDS+MH7rY+yorRusmisgzWiGDk0w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d7V3tjXBt9oDx4P1dP+YBiL1loFC6JCFZ+ylCEdspPiVrmDwzC1DJo+xAkBrshXVH
+         V9yX0OR+YlpN9sz1nL/3A8Jat7g3yAbXnqQ3ssynKatifAk3Y4BvPtztiVVmwwZwJW
+         qLiVIBx/sEDJ6PlrImV6c8CwJg5vpUJWrtVerDiOM+jzQZ6YN7jpThxec9c9UbBakW
+         CDVO4aVRrqEW3f4JfTTkkTd0+uYeLSR2tB4vPQAoDQK17chqyzk3zGD6GjRQuVSO1a
+         Xu6s9bCByvaNoR7qoQR8qiAMoQSH+bBLaGBxqMh5qjiZJbxE3RxxRguuIHKfi5dB1M
+         I8LPG/ThTh7WA==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2dbfe58670cso80669587b3.3;
+        Thu, 03 Mar 2022 22:26:48 -0800 (PST)
+X-Gm-Message-State: AOAM53178KtfJPETUEpzAVtolYmpcY24bHVj8gohT4hH/eyaVSMxGJzQ
+        U406WkWtusgf9tQzLkRNf8CQpWaVkWz974qPl7E=
+X-Google-Smtp-Source: ABdhPJzJYC1MgHBQAyHDYRHMs4ZCQQ8XjtVsnn1M7jofJNO/3UTyz173Ko3wwPGC5j7LGGgxtZ91xVO7qNi7iOO07lM=
+X-Received: by 2002:a0d:fb45:0:b0:2d0:d09a:576c with SMTP id
+ l66-20020a0dfb45000000b002d0d09a576cmr39572056ywf.447.1646375207955; Thu, 03
+ Mar 2022 22:26:47 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1a00b180-539d-41be-a61c-08d9fda7d1bb
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB3767:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR0601MB3767E53F758284A2B4D2CFEAAB059@KL1PR0601MB3767.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nRieriuo1JZ5JgbQbCSXeIVX04DA+C6pfxNBGyXLA7fIENwjHd4R823zEVA4DEds2s9OPfXB9tyj2fFH3IJzhpY717PaAv0sjGwajxXp+S8wGu9ytzZI83AlAiolkb5j428iBjMhFW8j1BAxAoXIlsGhBiSAVmUQSSn3+VBE8pVsn9Cd+0yF7HakRpkE+PU1rAMPGO125QKVabB0pp/y5NahG1Xi7QD0j0//RZZhVTsA66EAcw0w83APqDbtKDMiHbhmTN7zcvTxA/czErglTHs8j2vGiBiHDBR83lIjY0F2eY8RHtdSUKEHXJxF78PUq/LjCL4UVZ8ufQ6TF7RE1iIfMqcWMx2+kMwi8Oj+bPkpUDOojIlfYjQrUAxe92eWg7tHi6p2IkzL22Gy0FRetYXavseUXadKImmgAXzKlHneq0gibDDVuH5LmjQaGQx5WIeZPY/3ksKSq57ZtuW5fJWHn+rFjdcKgILx+Qyd1Dr0r1S5AMvJzza1oli/Hdu8ONbl8fNVq/qUfta1jbNlmw3pKv57hmrJTHlEwnm0F79At3qbT5shFdzIKv4v4THxZWEPIe2TCPuqzUI/T/Y+f/kt0nTcAyFlAk5nvxQ19nw7ZK3GaOniQXU5cqWPHHaecu6M9ySvkGVcqXyewxr+fhd9FQJNGhD0yumMvBhC+QYY/3+r79f+cJc+xckPzL6g
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(38350700002)(508600001)(6486002)(86362001)(4326008)(8676002)(66556008)(66476007)(8936002)(316002)(5660300002)(4744005)(110136005)(66946007)(83380400001)(26005)(186003)(1076003)(2616005)(6512007)(6666004)(6506007)(2906002)(52116002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1hNTEMaNPjNVkO+s8QHOkOnAALBqKNBpTADuppCEzDXudofPVyda8TKOXv5M?=
- =?us-ascii?Q?usLQGi2g6Jhi+Og4VMJdu4a/VEFHxhUpzL0cLXTXQnf0wVKD7R6/oPCWGo2s?=
- =?us-ascii?Q?tbYtjPUkkL6T5/1XDXmJXzhA9KiLxoi4RTF0HqKSf1sf380s2XCadm9XoXIU?=
- =?us-ascii?Q?JabJ0xRTfRxzlMIUCnIpL0WE78eqcxKwImkF2mGSU8x6kKSC+jwbxKAi+Za9?=
- =?us-ascii?Q?u1IcmY2G6U5/8uD9jKgUn26xD+/QVHrhSgbodNU6Fhfv3Nqa7um+LTJteFyE?=
- =?us-ascii?Q?jPHNOuHY1fbfQ+nKI6cD7PwzAtMNq4zq9QZqn2HZXmQNoARsazae0tK0jnFU?=
- =?us-ascii?Q?ysdnb9bnjs6REBPIX9ZSRkObL2u+IHIL0OAdWn+ErzvdhYyUKl8Gvvxj/YCN?=
- =?us-ascii?Q?wtlzx3Enk8EuyfEQJglL5dTRNcrP+aciEe3OnZLndzaADKafzgXuu5HPBqnj?=
- =?us-ascii?Q?kj3B29W6IiAJjuPPDZpAmc5ks0BB31MDOJfwivNgZQC5tL65Ozkm7I2nAFW1?=
- =?us-ascii?Q?j8Wp9e6fvnfSjSTBnGWDLIf4F6og4HcQhUb0OK+e1GW6d+WQYYh9VyfmUjpQ?=
- =?us-ascii?Q?PS4Pwqxl5TPWSirYK8kQetkhP1+V1LmO/JouxUiNe4TGPp8K2LR84OifvQbT?=
- =?us-ascii?Q?Nb378p6Pj2YtBDy2x58RMzYaVSVCYSR/qoc/YnCqhYRZh4jO/QMixPFIFU2c?=
- =?us-ascii?Q?pLIkLlSlFbmTIOUtzJW8f2AmblBU4DnDtx1Rq82d++/4VDeENnjPhioYqWHm?=
- =?us-ascii?Q?8gEHmkolBHeljASI7v60nqPc5ZuSBvygC3OcYX82KEPV6lFAj+wLtxFx7hsN?=
- =?us-ascii?Q?e/497rxXcfiuKjG1JTCCnIYGw/oUb9TOxSAQ2UbH9Tus5sBlNLIYGkW/38ke?=
- =?us-ascii?Q?MM4yEtUd/7AG0RIjffVDu84wLs3tlDKb7WucDAih6pUc/VRngNaCQbHPVLvK?=
- =?us-ascii?Q?yoULo9EQCbNewH7LHCLGpVcz7rEIgt7G8ki4VZDANMm0a+WMF7o8B7efaT75?=
- =?us-ascii?Q?rKrDcx8y2KGY4mgFZj67a7QInGjoR4tsn9K9SxRjHpIuk4pYeTiLMa7U/Jgp?=
- =?us-ascii?Q?6pTmqrOc/v1WHbjzINLgJxvC79NUA62Su00/uLl/zyFs9nvt0SqL8+LRjJdj?=
- =?us-ascii?Q?sICC5PsjPXpWARLJd2JAi5zWUiBSVggjuys4/j8836LywAVszWivi1MqTr8t?=
- =?us-ascii?Q?vDxEUYYuWx0ZlyJOzOLgaASqJIPQb/CwGDRMfQmMRRsKFtzwz+rhXiqiFeH3?=
- =?us-ascii?Q?7y08eqnKy6ipEJ/st8zCA13PGeEs5s+hGohFwauTqc5EI+ODBeeIH2inZjKX?=
- =?us-ascii?Q?rW1Z1wjbgY8RX1Xmx0BxTcy2ZzIZwTapa3Vrr+GQDFnjMbWSf4Q+e84/FvEs?=
- =?us-ascii?Q?0zkbMtF3IiNLLxHtFJFMdBkVmUe85V5ti2xrcgtkmjKe3SM6z6LVZvUoEj+L?=
- =?us-ascii?Q?zglFkGJWeOuXoJjIND+CM4F+Ft0qwNY0OicwKJqzr32JAa/OoFIe74TSXj/A?=
- =?us-ascii?Q?sflhp3Tj9jgbbl96Cpp7O9VOSqi/UjIPLPdXNufb58mvbpBpqq/k8TkRFrhY?=
- =?us-ascii?Q?xeyG/N9C/T/M/tTNjD6NunxSUTm81AxEpZYJe5DTz9lbXNFPXUcWnb1gElV/?=
- =?us-ascii?Q?kYAo1uTcC3J0/vQl+iFokWY=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a00b180-539d-41be-a61c-08d9fda7d1bb
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:25:47.4893
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PQsHxhpTx1VIrOVKsbvqz5u5bJtbFZSZCL7ek3/T8U+4mjF9rXsoUR111HQ4ADJgQEYowt9do+LNEmYLNVMBWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3767
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info>
+ <35bafd68-b340-dfaa-dd5f-d45843104f91@leemhuis.info> <CAPhsuW44tX0rBpy5c63HgTtRSF=UAAsgv8ZuYE_QTLhi6syXaA@mail.gmail.com>
+ <Yh/nbZYmYD6SpZV9@sakura.greysector.net>
+In-Reply-To: <Yh/nbZYmYD6SpZV9@sakura.greysector.net>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 3 Mar 2022 22:26:37 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4otwSDcOr8NWFhmecM4AfKim5jQ8aoZO-CY4KkwDFCgg@mail.gmail.com>
+Message-ID: <CAPhsuW4otwSDcOr8NWFhmecM4AfKim5jQ8aoZO-CY4KkwDFCgg@mail.gmail.com>
+Subject: Re: Bug 215605 - [5.14 regression] BUG: unable to handle page fault
+ while running badblocks (fsck.ext4 -c) on a raid5 md array
+To:     Dominik Mierzejewski <dominik@greysector.net>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following 'make htmldocs' error:
-Error: Cannot open file ./fs/netfs/read_helper.c
-WARNING: kernel-doc './scripts/kernel-doc -rst -enable-lineno
--sphinx-version 2.4.4 ./fs/netfs/read_helper.c' failed with return code 1
+On Wed, Mar 2, 2022 at 1:54 PM Dominik Mierzejewski
+<dominik@greysector.net> wrote:
+>
+> Hello!
+>
+> On Tuesday, 01 March 2022 at 01:24, Song Liu wrote:
+> > On Mon, Feb 28, 2022 at 1:43 AM Thorsten Leemhuis
+> > <regressions@leemhuis.info> wrote:
+> > >
+> > > [CCing Jens]
+> > >
+> > > Hi, this is your Linux kernel regression tracker. Top-posting for onc=
+e,
+> > > to make this easily accessible to everyone.
+> > >
+> > > What's up here? Below regression was reported two weeks ago and I
+> > > forwarded it nearly a week ago, nevertheless the reporter afaics didn=
+'t
+> > > get a single reply. Is the issue discussed somewhere else and I just
+> > > missed it? Is the report not accurate for some reason or missing
+> > > something important? Or did the report fall throug the cracks?
+> >
+> > Sorry for the late reply. I was on vacation last week.
+>
+> No problem, thanks for responding.
+>
+> [...]
+> > > On 22.02.22 09:59, Thorsten Leemhuis wrote:
+> > > > Hi, this is your Linux kernel regression tracker.
+> > > >
+> > > > I noticed a regression report in bugzilla.kernel.org that afaics no=
+body
+> > > > acted upon since it was reported about a week ago, that's why I dec=
+ided
+> > > > to forward it to the lists and add a few relevant people to the CC.=
+ To
+> > > > quote from https://bugzilla.kernel.org/show_bug.cgi?id=3D215605
+> > > >
+> > > >>  Dominik Mierzejewski 2022-02-14 10:36:36 UTC
+> > > >>
+> > > >> Created attachment 300450 [details]
+> > > >> kernel-5.16.8 dmesg with crash
+> > > >>
+> > > >> I'm experiencing kernel crash when running badblocks (fsck.ext4 -c=
+) on a raid5 md array in my Intel Atom-based NAS box (Thecus N5550):
+> > > >> [  720.911993] kernel: BUG: unable to handle page fault for addres=
+s: ffffdbc681023bc8
+> > > >> [  720.912073] kernel: #PF: supervisor read access in kernel mode
+> > > >> [  720.912120] kernel: #PF: error_code(0x0000) - not-present page
+> > > >> [  720.912166] kernel: PGD 11ffc6067 P4D 11ffc6067 PUD 0
+> > > >> [  720.912213] kernel: Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > > >> [  720.912256] kernel: CPU: 1 PID: 1406 Comm: badblocks Not tainte=
+d 5.16.8-200.fc35.x86_64 #1
+> > > >> [  720.912321] kernel: Hardware name: Intel Corporation Milstead P=
+latform/Granite Well, BIOS CDV W Series 05 08/27/2015
+> > > >> [  720.912400] kernel: RIP: 0010:kfree+0x58/0x3e0
+> > > >> [  720.912449] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c=
+0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2=
+d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 4
+> > > >> 8 8b 55 08 48 8d 42 ff
+> > > >> [  720.912598] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
+> > > >> [  720.912648] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800=
+ RCX: ffff9284c3758ff8
+> > > >> [  720.912708] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091=
+ RDI: ffff9db4008efd58
+> > > >> [  720.912767] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88=
+ R09: ffff9284c3759000
+> > > >> [  720.912826] kernel: R10: 0000000000000028 R11: ffff9284c213db48=
+ R12: ffff9db4008efd58
+> > > >> [  720.912885] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000=
+ R15: ffff9db4008efd58
+> > > >> [  720.912945] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc8=
+0000(0000) knlGS:0000000000000000
+> > > >> [  720.913012] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080=
+050033
+> > > >> [  720.913062] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000=
+ CR4: 00000000000006e0
+> > > >> [  720.913122] kernel: Call Trace:
+> > > >> [  720.913150] kernel:  <TASK>
+> > > >> [  720.913179] kernel:  raid5_make_request+0xb31/0xb90 [raid456]
+> > > >> [  720.913247] kernel:  ? do_wait_intr_irq+0xa0/0xa0
+> > > >> [  720.913292] kernel:  ? __blk_queue_split+0x30a/0x470
+> > > >> [  720.913339] kernel:  md_handle_request+0x119/0x180
+> > > >> [  720.913386] kernel:  md_submit_bio+0x67/0xa0
+> > > >> [  720.913425] kernel:  __submit_bio_fops+0x91/0x160
+> > > >> [  720.913468] kernel:  submit_bio_noacct+0xd7/0x2c0
+> > > >> [  720.913510] kernel:  __blkdev_direct_IO_simple+0x198/0x290
+> > > >> [  720.913576] kernel:  ? __fpu_restore_sig+0x193/0x570
+> > > >> [  720.913623] kernel:  ? sysvec_apic_timer_interrupt+0xaf/0xd0
+> > > >> [  720.913676] kernel:  ? __blkdev_direct_IO_simple+0x290/0x290
+> > > >> [  720.913728] kernel:  generic_file_read_iter+0x9b/0x160
+> > > >> [  720.913775] kernel:  new_sync_read+0x105/0x180
+> > > >> [  720.913820] kernel:  vfs_read+0xf1/0x190
+> > > >> [  720.913858] kernel:  ksys_read+0x4f/0xc0
+> > > >> [  720.913896] kernel:  do_syscall_64+0x38/0x90
+> > > >> [  720.913936] kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > >> [  720.913985] kernel: RIP: 0033:0x7f73e676d772
+> > > >> [  720.914024] kernel: Code: c0 e9 b2 fe ff ff 50 48 8d 3d da 2e 0=
+c 00 e8 b5 f9 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c=
+0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89=
+ 54 24
+> > > >> [  720.914166] kernel: RSP: 002b:00007fff1b8fcbb8 EFLAGS: 00000246=
+ ORIG_RAX: 0000000000000000
+> > > >> [  720.914231] kernel: RAX: ffffffffffffffda RBX: 0000000000000040=
+ RCX: 00007f73e676d772
+> > > >> [  720.917149] kernel: RDX: 0000000000040000 RSI: 00007f73e65d3000=
+ RDI: 0000000000000004
+> > > >> [  720.920078] kernel: RBP: 0000000000001000 R08: 00000000015105c0=
+ R09: 0000000000000080
+> > > >> [  720.922980] kernel: R10: 00007fff1b8fca00 R11: 0000000000000246=
+ R12: 00000015105c0000
+> > > >> [  720.925875] kernel: R13: 0000000000000004 R14: 00007f73e65d3000=
+ R15: 0000000000040000
+> > > >> [  720.928795] kernel:  </TASK>
+> > > >> [  720.931704] kernel: Modules linked in: sctp ip6_udp_tunnel udp_=
+tunnel rpcrdma rdma_cm iw_cm ib_cm ib_core sit tunnel4 ip_tunnel rfkill ipt=
+_REJECT nf_reject_ipv4 iptable_filter xt_nat iptable_nat nf_nat iptable_man=
+gle nf_conntrack_pptp xt_CT iptable_raw xt_multiport xt_set ip6t_REJECT nf_=
+reject_ipv6 xt_LOG nf_log_syslog xt_limit xt_state xt_conntrack nf_conntrac=
+k nf_defrag_ipv6 nf_defrag_ipv4 ip6table_filter ip6_tables ip_set_hash_netp=
+ort ip_set_hash_net ip_set drivetemp it87 nfnetlink hwmon_vid vfat fat iTCO=
+_wdt intel_pmc_bxt iTCO_vendor_support at24 raid456 async_raid6_recov async=
+_memcpy async_pq async_xor async_tx intel_powerclamp raid1 coretemp snd_hda=
+_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi snd_h=
+da_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd=
+_usb_audio i2c_i801 gma500_gfx i2c_smbus snd_usbmidi_lib joydev snd_hwdep s=
+nd_rawmidi snd_seq_device mc snd_pcm lpc_ich i2c_algo_bit snd_timer drm_kms=
+_helper snd cec soundcore nfsd auth_rpcgss
+> > > >> [  720.931885] kernel:  nfs_acl lockd grace drm fuse sunrpc zram i=
+p_tables hid_logitech_hidpp serio_raw r8152 sata_sil24 video mii hid_jabra =
+e1000e hid_logitech_dj
+> > > >> [  720.952122] kernel: CR2: ffffdbc681023bc8
+> > > >> [  720.955651] kernel: ---[ end trace de2c3d5b971ae71d ]---
+> > > >> [  720.959186] kernel: RIP: 0010:kfree+0x58/0x3e0
+> > > >> [  720.962723] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c=
+0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2=
+d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 48 8b 55 08 48 8d=
+ 42 ff
+> > > >> [  720.966472] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
+> > > >> [  720.970238] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800=
+ RCX: ffff9284c3758ff8
+> > > >> [  720.973993] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091=
+ RDI: ffff9db4008efd58
+> > > >> [  720.977723] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88=
+ R09: ffff9284c3759000
+> > > >> [  720.981464] kernel: R10: 0000000000000028 R11: ffff9284c213db48=
+ R12: ffff9db4008efd58
+> > > >> [  720.985228] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000=
+ R15: ffff9db4008efd58
+> > > >> [  720.988995] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc8=
+0000(0000) knlGS:0000000000000000
+> > > >> [  720.992774] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080=
+050033
+> > > >> [  720.996535] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000=
+ CR4: 00000000000006e0
+> >
+> > I tried a few things (injecting badblocks, etc.) but still could not
+> > reproduce this issue.
+> >
+> > Hi Dominik,
+> >
+> > Could you please share more information about the array?
+>
+> Please note that I repaired the array by stopping it and reassembling
+> without badblocks maps:
+> # mdadm --assemble -U force-no-bbl /dev/md126 /dev/sdb1 /dev/sdc1 /dev/sd=
+d1 /dev/sde1 /dev/sdf1
+>
+> I ran fsck on it and repaired multiple-owned blocks. It's been running
+> smoothly since then, even under kernel 5.16.9. I'm not sure the
+> following information will be useful now.
 
-Fixes: ad9e5adb388f ("netfs: Rename rename read_helper.c to io.c")
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- Documentation/filesystems/netfs_library.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for these information. I will try to repro with some similar setup.
 
-diff --git a/Documentation/filesystems/netfs_library.rst b/Documentation/filesystems/netfs_library.rst
-index 5e1b25349c41..d3123348d2a2 100644
---- a/Documentation/filesystems/netfs_library.rst
-+++ b/Documentation/filesystems/netfs_library.rst
-@@ -562,4 +562,4 @@ API Function Reference
- ======================
- 
- .. kernel-doc:: include/linux/netfs.h
--.. kernel-doc:: fs/netfs/read_helper.c
-+.. kernel-doc:: fs/netfs/io.c
--- 
-2.35.1
+Song
 
+[..]

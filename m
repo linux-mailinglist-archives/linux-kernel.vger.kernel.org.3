@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5AC4CD9FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 805754CDA01
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240998AbiCDRUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
+        id S241004AbiCDRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240981AbiCDRUM (ORCPT
+        with ESMTP id S240991AbiCDRUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:20:12 -0500
+        Fri, 4 Mar 2022 12:20:15 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AF1A143445
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:19:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DDDE14CDA3
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:19:27 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 613C31478;
-        Fri,  4 Mar 2022 09:19:24 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BCDD14BF;
+        Fri,  4 Mar 2022 09:19:27 -0800 (PST)
 Received: from e121896.arm.com (unknown [10.57.42.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BC6463F73D;
-        Fri,  4 Mar 2022 09:19:22 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6965C3F73D;
+        Fri,  4 Mar 2022 09:19:25 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
         mike.leach@linaro.org, anshuman.khandual@arm.com
@@ -28,9 +28,9 @@ Cc:     mathieu.poirier@linaro.org, leo.yan@linaro.com,
         James Clark <james.clark@arm.com>,
         Leo Yan <leo.yan@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 01/15] coresight: etm4x: Cleanup TRCIDR0 register accesses
-Date:   Fri,  4 Mar 2022 17:18:58 +0000
-Message-Id: <20220304171913.2292458-2-james.clark@arm.com>
+Subject: [PATCH v3 02/15] coresight: etm4x: Cleanup TRCIDR2 register accesses
+Date:   Fri,  4 Mar 2022 17:18:59 +0000
+Message-Id: <20220304171913.2292458-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220304171913.2292458-1-james.clark@arm.com>
 References: <20220304171913.2292458-1-james.clark@arm.com>
@@ -52,84 +52,40 @@ allows for grepping for fields by name rather than using magic numbers.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- .../coresight/coresight-etm4x-core.c          | 36 +++++--------------
- drivers/hwtracing/coresight/coresight-etm4x.h | 13 +++++++
- 2 files changed, 21 insertions(+), 28 deletions(-)
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
+ drivers/hwtracing/coresight/coresight-etm4x.h      | 4 ++++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 7f416a12000e..9120390a7613 100644
+index 9120390a7613..fd44231e9d8a 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
 +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -1097,41 +1097,21 @@ static void etm4_init_arch_data(void *info)
- 	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
- 
- 	/* INSTP0, bits[2:1] P0 tracing support field */
--	if (BMVAL(etmidr0, 1, 2) == 0b11)
--		drvdata->instrp0 = true;
--	else
--		drvdata->instrp0 = false;
--
-+	drvdata->instrp0 = !!(FIELD_GET(TRCIDR0_INSTP0_MASK, etmidr0) == 0b11);
- 	/* TRCBB, bit[5] Branch broadcast tracing support bit */
--	if (BMVAL(etmidr0, 5, 5))
--		drvdata->trcbb = true;
--	else
--		drvdata->trcbb = false;
--
-+	drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
- 	/* TRCCOND, bit[6] Conditional instruction tracing support bit */
--	if (BMVAL(etmidr0, 6, 6))
--		drvdata->trccond = true;
--	else
--		drvdata->trccond = false;
--
-+	drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
- 	/* TRCCCI, bit[7] Cycle counting instruction bit */
--	if (BMVAL(etmidr0, 7, 7))
--		drvdata->trccci = true;
--	else
--		drvdata->trccci = false;
--
-+	drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
- 	/* RETSTACK, bit[9] Return stack bit */
--	if (BMVAL(etmidr0, 9, 9))
--		drvdata->retstack = true;
--	else
--		drvdata->retstack = false;
--
-+	drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
- 	/* NUMEVENT, bits[11:10] Number of events field */
--	drvdata->nr_event = BMVAL(etmidr0, 10, 11);
-+	drvdata->nr_event = FIELD_GET(TRCIDR0_NUMEVENT_MASK, etmidr0);
- 	/* QSUPP, bits[16:15] Q element support field */
--	drvdata->q_support = BMVAL(etmidr0, 15, 16);
-+	drvdata->q_support = FIELD_GET(TRCIDR0_QSUPP_MASK, etmidr0);
- 	/* TSSIZE, bits[28:24] Global timestamp size field */
--	drvdata->ts_size = BMVAL(etmidr0, 24, 28);
-+	drvdata->ts_size = FIELD_GET(TRCIDR0_TSSIZE_MASK, etmidr0);
- 
+@@ -1116,11 +1116,11 @@ static void etm4_init_arch_data(void *info)
  	/* maximum size of resources */
  	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+ 	/* CIDSIZE, bits[9:5] Indicates the Context ID size */
+-	drvdata->ctxid_size = BMVAL(etmidr2, 5, 9);
++	drvdata->ctxid_size = FIELD_GET(TRCIDR2_CIDSIZE_MASK, etmidr2);
+ 	/* VMIDSIZE, bits[14:10] Indicates the VMID size */
+-	drvdata->vmid_size = BMVAL(etmidr2, 10, 14);
++	drvdata->vmid_size = FIELD_GET(TRCIDR2_VMIDSIZE_MASK, etmidr2);
+ 	/* CCSIZE, bits[28:25] size of the cycle counter in bits minus 12 */
+-	drvdata->ccsize = BMVAL(etmidr2, 25, 28);
++	drvdata->ccsize = FIELD_GET(TRCIDR2_CCSIZE_MASK, etmidr2);
+ 
+ 	etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
+ 	/* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 3c4d69b096ca..300741fbc0de 100644
+index 300741fbc0de..cfdf966016b7 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x.h
 +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -130,6 +130,19 @@
+@@ -143,6 +143,10 @@
+ #define TRCIDR0_QSUPP_MASK			GENMASK(16, 15)
+ #define TRCIDR0_TSSIZE_MASK			GENMASK(28, 24)
  
- #define TRCRSR_TA			BIT(12)
- 
-+/*
-+ * Bit positions of registers that are defined above, in the sysreg.h style
-+ * of _MASK for multi bit fields and BIT() for single bits.
-+ */
-+#define TRCIDR0_INSTP0_MASK			GENMASK(2, 1)
-+#define TRCIDR0_TRCBB				BIT(5)
-+#define TRCIDR0_TRCCOND				BIT(6)
-+#define TRCIDR0_TRCCCI				BIT(7)
-+#define TRCIDR0_RETSTACK			BIT(9)
-+#define TRCIDR0_NUMEVENT_MASK			GENMASK(11, 10)
-+#define TRCIDR0_QSUPP_MASK			GENMASK(16, 15)
-+#define TRCIDR0_TSSIZE_MASK			GENMASK(28, 24)
++#define TRCIDR2_CIDSIZE_MASK			GENMASK(9, 5)
++#define TRCIDR2_VMIDSIZE_MASK			GENMASK(14, 10)
++#define TRCIDR2_CCSIZE_MASK			GENMASK(28, 25)
 +
  /*
   * System instructions to access ETM registers.

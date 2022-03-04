@@ -2,171 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6CC4CD5D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C9B4CD5DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239775AbiCDOEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S234080AbiCDOGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbiCDOEm (ORCPT
+        with ESMTP id S229586AbiCDOGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:04:42 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8F0C42B4;
-        Fri,  4 Mar 2022 06:03:54 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id x6-20020a4a4106000000b003193022319cso9492384ooa.4;
-        Fri, 04 Mar 2022 06:03:54 -0800 (PST)
+        Fri, 4 Mar 2022 09:06:14 -0500
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D431B8FFE;
+        Fri,  4 Mar 2022 06:05:27 -0800 (PST)
+Received: by mail-vs1-f54.google.com with SMTP id d11so9156128vsm.5;
+        Fri, 04 Mar 2022 06:05:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YTCaqh1O5XZhW/tijBJV7Ss/XPMf3dURen6yyNYb0EQ=;
-        b=xiDkQfQMiEuUg9DEPiVEkdYQqhBhYG5VB3pNF1Wp8JnrJfQlhZScaitAsbq4cFr6KD
-         PEL9IoLTWDXJhIiLISFUZBVrBL350fKhVU9wR9mG6SCkUyif85eYa2/wTWv8wRoNWpyX
-         N4BmsrzMBbRTfGJ9gn+idoBv9SstUdDBzUJ8+SKOPZ0qDt0kt6LGcW5Idz449fR0c9zl
-         XezI2WU0Yj4iHryaVIQJU5LQ/5Bb4USvm4Y8eo1tySqctfnXijQSgTGC9NzvtobtV6uN
-         v0+0W57n0p9HqjiAc/ccY8KaWL+2UcXs2yUAnAqyr7p9HwYhUQ2yK8q1/OhNc5NW1laO
-         sm7A==
-X-Gm-Message-State: AOAM53207xy8L+I9w9xkky1T3clMKlcXWxVRFaw8Y5GpAjNBu/dDTh+L
-        VOF0g6Z5Bhp9g47uybUOQQ==
-X-Google-Smtp-Source: ABdhPJzlcguZd7/kRywp7vnasuZ98v2l+ZlfGdO34EqRbIxBXgOkpq9Li2lPIWptMOUgquTIzJcfDA==
-X-Received: by 2002:a4a:3447:0:b0:31b:f530:bc52 with SMTP id n7-20020a4a3447000000b0031bf530bc52mr21697770oof.74.1646402633607;
-        Fri, 04 Mar 2022 06:03:53 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i28-20020a056808055c00b002d51e377248sm2664769oig.33.2022.03.04.06.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 06:03:52 -0800 (PST)
-Received: (nullmailer pid 3837496 invoked by uid 1000);
-        Fri, 04 Mar 2022 14:03:51 -0000
-Date:   Fri, 4 Mar 2022 08:03:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sh/UsdLtl5esoC6iW6GtfHfa3gbA1m4Kn/Ru4w1jxfc=;
+        b=lii4qe0Bm/WBecxqeoKj2dKKmLGx95kb615ofXuLxXcQzgveonMVYtVXhvEu1q6LIM
+         P9IZER3rqMU8o+pVSLSmdIq3hbm5Nrr/FRPygvYLOUlDJLQgbR80tVadzygy90c7rDIj
+         pCBlzLw93vt7z4Bj3bp6JPMir5pIzhYjhDuDMTLYfzRXFCqLHShUcuFneo3n/ynpdRB+
+         foxCtgLtuRnuC5GzKBv3mgPXECgxfuFKJ9ud6u1jcqMU0DvQKwxBHaIeC81kR6JTHovM
+         r0quwVth3ttSqqkJ7Z/MU+ADTIq63nCnzjUuYzmAUD734JPR1pTFnMEALr3Mp5P8y1uj
+         hwSA==
+X-Gm-Message-State: AOAM5314CJei7oBPdrnfGMCySP8qG4QVI9+2jg6+nxUcy4adokV6GZ8/
+        WPS/AS4TQ3XhL8O04fhwK5MdUNgttrQPFw==
+X-Google-Smtp-Source: ABdhPJyH1P+a55lhlnnwoEKcKHiJGP4Q3+hHPMw4BKComFhFigadnBnTHylRB15Ad8bZ7CjDo/ldTg==
+X-Received: by 2002:a05:6102:a21:b0:31c:c1e:6bd4 with SMTP id 1-20020a0561020a2100b0031c0c1e6bd4mr16036413vsb.25.1646402725993;
+        Fri, 04 Mar 2022 06:05:25 -0800 (PST)
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
+        by smtp.gmail.com with ESMTPSA id u6-20020ac5c926000000b00330e8c9b1d6sm741617vkl.39.2022.03.04.06.05.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 06:05:25 -0800 (PST)
+Received: by mail-vk1-f173.google.com with SMTP id f12so4412766vkl.2;
+        Fri, 04 Mar 2022 06:05:25 -0800 (PST)
+X-Received: by 2002:a05:6122:8ca:b0:332:64b4:8109 with SMTP id
+ 10-20020a05612208ca00b0033264b48109mr17830506vkg.7.1646402725242; Fri, 04 Mar
+ 2022 06:05:25 -0800 (PST)
+MIME-Version: 1.0
+References: <20220303224237.2497570-1-robh@kernel.org> <20220303224237.2497570-2-robh@kernel.org>
+ <CAMuHMdU6g7c9YX0mBAGWbCWgA8exkUSfqn8ZGi_2N+Nz1WT+BA@mail.gmail.com> <YiIa3Ox7UBLyBtoR@robh.at.kernel.org>
+In-Reply-To: <YiIa3Ox7UBLyBtoR@robh.at.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 4 Mar 2022 15:05:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU9yzpLh+S821osed5nuHfc0rONB+i4sPjXsGuKLumgfQ@mail.gmail.com>
+Message-ID: <CAMuHMdU9yzpLh+S821osed5nuHfc0rONB+i4sPjXsGuKLumgfQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
+To:     Rob Herring <robh@kernel.org>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <maxime@cerno.tech>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: kbuild: Pass DT_SCHEMA_FILES to
- dt-validate
-Message-ID: <YiIcRzBjuCgY7OMV@robh.at.kernel.org>
-References: <20220303224237.2497570-1-robh@kernel.org>
- <20220303224237.2497570-2-robh@kernel.org>
- <YiH8lWq8gOnaQ+7G@pendragon.ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiH8lWq8gOnaQ+7G@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 01:48:37PM +0200, Laurent Pinchart wrote:
-> On Thu, Mar 03, 2022 at 04:42:36PM -0600, Rob Herring wrote:
-> > In preparation for supporting validation of DTB files, the full
-> > processed schema will always be needed in order to extract type
-> > information from it. Therefore, the processed schema containing only
-> > what DT_SCHEMA_FILES specifies won't work. Instead, dt-validate has
-> > gained an option, -l or --limit, to specify which schema(s) to use for
-> > validation.
-> > 
-> > As the command line option is new, we the minimum dtschema version must be
-> > updated.
-> > 
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/Makefile | 28 +++-------------------
-> >  scripts/Makefile.lib                       |  3 +--
-> >  2 files changed, 4 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-> > index 61ec18ecc931..246ba0ecab64 100644
-> > --- a/Documentation/devicetree/bindings/Makefile
-> > +++ b/Documentation/devicetree/bindings/Makefile
-> > @@ -6,7 +6,7 @@ DT_MK_SCHEMA ?= dt-mk-schema
-> >  DT_SCHEMA_LINT := $(shell which yamllint || \
-> >    echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
-> >  
-> > -DT_SCHEMA_MIN_VERSION = 2021.2.1
-> > +DT_SCHEMA_MIN_VERSION = 2022.3
-> >  
-> >  PHONY += check_dtschema_version
-> >  check_dtschema_version:
-> > @@ -25,9 +25,6 @@ quiet_cmd_extract_ex = DTEX    $@
-> >  $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
-> >  	$(call if_changed,extract_ex)
-> >  
-> > -# Use full schemas when checking %.example.dts
-> > -DT_TMP_SCHEMA := $(obj)/processed-schema-examples.json
-> > -
-> >  find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
-> >  		-name 'processed-schema*' ! \
-> >  		-name '*.example.dt.yaml' \)
-> > @@ -70,29 +67,10 @@ override DTC_FLAGS := \
-> >  # Disable undocumented compatible checks until warning free
-> >  override DT_CHECKER_FLAGS ?=
-> >  
-> > -$(obj)/processed-schema-examples.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
-> > +$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
-> >  	$(call if_changed_rule,chkdt)
-> >  
-> > -ifeq ($(DT_SCHEMA_FILES),)
-> > -
-> > -# Unless DT_SCHEMA_FILES is specified, use the full schema for dtbs_check too.
-> > -# Just copy processed-schema-examples.json
-> > -
-> > -$(obj)/processed-schema.json: $(obj)/processed-schema-examples.json FORCE
-> > -	$(call if_changed,copy)
-> > -
-> > -else
-> > -
-> > -# If DT_SCHEMA_FILES is specified, use it for processed-schema.json
-> > -
-> > -$(obj)/processed-schema.json: DT_MK_SCHEMA_FLAGS := -u
-> > -$(obj)/processed-schema.json: $(CHK_DT_DOCS) check_dtschema_version FORCE
-> > -	$(call if_changed,mk_schema)
-> > -
-> > -endif
-> > -
-> > -always-$(CHECK_DT_BINDING) += processed-schema-examples.json
-> > -always-$(CHECK_DTBS)       += processed-schema.json
-> > +always-y += processed-schema.json
-> >  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
-> >  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dt.yaml, $(CHK_DT_DOCS))
-> >  
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index 79be57fdd32a..9f1e8442564e 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -361,9 +361,8 @@ $(multi-dtb-y): FORCE
-> >  $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
-> >  
-> >  DT_CHECKER ?= dt-validate
-> > -DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),,-m)
-> > +DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
-> >  DT_BINDING_DIR := Documentation/devicetree/bindings
-> > -# DT_TMP_SCHEMA may be overridden from Documentation/devicetree/bindings/Makefile
-> >  DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
-> 
-> This could now use := instead of ?=
+Hi Rob,
 
-Yes, though I think it is possible we may still want to override it. 
-Other than debugging perhaps, I don't have an immediate reason.
+On Fri, Mar 4, 2022 at 2:57 PM Rob Herring <robh@kernel.org> wrote:
+> On Fri, Mar 04, 2022 at 10:32:29AM +0100, Geert Uytterhoeven wrote:
+> > On Thu, Mar 3, 2022 at 11:43 PM Rob Herring <robh@kernel.org> wrote:
+> > > In preparation for supporting validation of DTB files, the full
+> > > processed schema will always be needed in order to extract type
+> > > information from it. Therefore, the processed schema containing only
+> > > what DT_SCHEMA_FILES specifies won't work. Instead, dt-validate has
+> > > gained an option, -l or --limit, to specify which schema(s) to use for
+> > > validation.
+> > >
+> > > As the command line option is new, we the minimum dtschema version must be
+> > > updated.
+> > >
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> >
+> > Thanks for your patch!
+> >
+> > > --- a/Documentation/devicetree/bindings/Makefile
+> > > +++ b/Documentation/devicetree/bindings/Makefile
+> > > @@ -6,7 +6,7 @@ DT_MK_SCHEMA ?= dt-mk-schema
+> > >  DT_SCHEMA_LINT := $(shell which yamllint || \
+> > >    echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
+> > >
+> > > -DT_SCHEMA_MIN_VERSION = 2021.2.1
+> > > +DT_SCHEMA_MIN_VERSION = 2022.3
+> >
+> > This doesn't work as-is, as that version hasn't been tagged yet ;-)
+>
+> I had to make sure people are paying attention. You win the prize. :)
+>
+> It's there now.
 
-> Apart from the fact that 2022.3 hasn't been tagged yet as pointed out by
-> Geert, this looks fine to me (but I'm no expert in this area).
+Thanks, confirmed.
 
-It's now there.
+With this series applied, the various salvator-xs DTS files are now
+throwing up:
 
-Rob
+    sata: size (19) error for type phandle
+    backlight: size (11) error for type phandle
+
+I tried to find out what caused that, but couldn't find it.
+Do you have a clue?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

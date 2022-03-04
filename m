@@ -2,457 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22AA4CCC54
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E8B4CCC59
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbiCDDkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S235149AbiCDDq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiCDDku (ORCPT
+        with ESMTP id S229984AbiCDDqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:40:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7140D17B0E2;
-        Thu,  3 Mar 2022 19:40:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E81EDB82740;
-        Fri,  4 Mar 2022 03:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA83C340E9;
-        Fri,  4 Mar 2022 03:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646365200;
-        bh=cUyVCfN6pHKsw5cMYLC1/A2lzAsx6jCsMC6j+zAFTs8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ydm49RA2zDS/eLCh+BlLeml8B7r9HZkv+Re/BWJP13/GzUeGqlw0zDasbZ1xP4wqz
-         BkHqlQKnKMP5FmCvJ2Az4jnNgKEjpNGIKwflwZ4gbzcmaRyCDZZ8OYpPzO3PSdjvx0
-         BmGOtAySquVDEnMKP/TePYEqO9KShhiS+K0XTjcWdEVMLnEB9N9PkhG8PyyzcBFza9
-         LQvNpl5RGb2xEkzZ/nIdSKX77Iya8DIY88AOpT7llcPBqdEVizQBSWxuy5x5eVrfx4
-         eNvfJPscm7Gd8Xqn4yZVxdamyr/veukcQ/LhIeykAuQuUu8yCfECi7Za8X34NjBe9k
-         d+p5OS/A46K2w==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH v3] x86/sgx: Do not limit EAUG'd pages by pre-initialization policy
-Date:   Fri,  4 Mar 2022 05:39:18 +0200
-Message-Id: <20220304033918.361495-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Mar 2022 22:46:24 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2075.outbound.protection.outlook.com [40.107.95.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A517128A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:45:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jbIlonBI61he1EJKkXNyIb3CluPe1ZexnQLOMxSDtYtU1ykPqDPqdAyIMLmDnTooHT/Y4NZafUiZcTB8dLetB0l7/iIIhLHMUDQB0AbPgcBHxemhtw10lYxER9f35ziS2zr4nR5f0eunro1RP71VjOTKv8Gk/nOoecNf1INPZqvDJQKgbmymhZ1fi2I6vhyAI23MwTDiTWP+KKImToXx3wpV4w9QyJeXEw4lDh586TYhLdHNNppVrneUcKh2fIduHhoIeuC8/btb0NKNe2xGSMrdxLaEMfRGil65msqYfXZwLed0OFAYLlzaJh4a9kAOF65TL311aGyAiRX2en4nVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yUUonELMPbEWoCFdCvMq5yEmGO05p98t7wXpUricpK4=;
+ b=BzcnPGlU0aHbxh/wZb2LjQgRZJ7smTJJj3/5YCAET7tt5UHYTW5/ThLaC+gGAoA0FvReoF+4Kk7Fam27gw3x0OxKcY4hY/l0tjsE52z3l2SQtSrGmUDolYCETD/azBTe6kUF66mQn/9faJDz/3UvRNwA57IYkqPBX4HNvyma/TMiuzSWPuq/4+t6q+XpugCUviszlqanW+Neoac47W4k3ox4+7xmyMepb4/nRGbG6zTSu4XGbdX/TwK1eGYaPwqBSv7EdwNlpYXm0v1PuIplXQvZYsf6TBYO+UNLUG9X+LVP7+BuKzZjHi7ZiJ7HPD01UD11nh+18beeHUDjmrTJNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yUUonELMPbEWoCFdCvMq5yEmGO05p98t7wXpUricpK4=;
+ b=u2EYTUQUBWEa9zKKN23aOQt5+Ngih0KfoMS6b180Wi7YnUwtflMtYc5KJVQ5v1GipyuZHZF1Cq2MA+qTUmzhbBCXeJlVVuZ9LQLD92x6Amark1hRtE8bQ+bVgs3Qw6PuVdKQ+r6OBcBM4FE6qf5Z/FnViQHml2CXxBJsC1RSeqk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
+ by BL0PR12MB2337.namprd12.prod.outlook.com (2603:10b6:207:45::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 4 Mar
+ 2022 03:45:30 +0000
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::a094:81bc:148a:fc38]) by MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::a094:81bc:148a:fc38%5]) with mapi id 15.20.5017.026; Fri, 4 Mar 2022
+ 03:45:30 +0000
+Message-ID: <579e0023-09b8-8fae-355f-7182e7c8214f@amd.com>
+Date:   Fri, 4 Mar 2022 09:15:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, song.bao.hua@hisilicon.com,
+        srikar@linux.vnet.ibm.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+References: <20220222102133.2956-1-kprateek.nayak@amd.com>
+ <20220222132722.GC4423@techsingularity.net>
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20220222132722.GC4423@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR0101CA0041.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:d::27) To MW2PR12MB2379.namprd12.prod.outlook.com
+ (2603:10b6:907:9::24)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d936d39c-7b58-4017-2a82-08d9fd916d39
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2337:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB23377CD7CB26C65EDB53643698059@BL0PR12MB2337.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qpQpK1zrrLkGgX3HYVSe8oE8C1LO9QKwEVpUzgbkXnCLqrqa6dumQTjGwUEVHgjz6PJHIaacOuk24X9C7yfOGHPw06/uTLu9XXi5w/1aL1O3EhV7xHJ8E3NrYiqg4Yix0t4TKIBM1jD8tA+hGqvVhZ/yx/VZNoHlixiV/RU3XeDvGQNJel2nMVZeFDq8nX9U+UPITbHQLfbLId7emXE0gsJQA61LRiOHLjd2q3rEBzWxdXjR4EbluPTSYVpKJ0xBcqxo29oc+TO9EUnGcBv0fzgaT7XhdkpfkGu3X8COmQha5gtknPWdHsFWB0CSjQM9k4GwWWP4nCoE6v9aSy427atpIJEvk2549Dgnd0VfPPvFPt5we3/A4GqbJSZ2cVyuAVPzax/yfJW23jAZNxh86WlGHai5hKbIqjb6ZfAjb9zmkk4gNlBgVtigLIzLkikFjWw8lz2YuEzSkDWzoiRCqlQnIqYJP3acsZHlZ9o3hDuKQIzEVY+X2Y71DR9txHauWSpMHT0kcsBAXn9bq1jSPcn8U7RJlJ7OQJf36TZbWJmLsTTbor4Zv4nWU/9eIcUHSZtMvVmUkdwTochoisymWRSGx43a/82Fqhq+lVCjeaNGHQDCidj9afyZsiTpXSyiH0asFgaGjsZ8daSoK8YgOhuEZ5Ii4QWyponXLvIQE7OrmSwp/lm4PZqsnqSo0efDJU7GAlpqUSo1VJq+8GcmQTd8mVsRJfLeSdsqEBsHdXo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(4326008)(5660300002)(66476007)(8676002)(26005)(66556008)(7416002)(8936002)(38100700002)(2906002)(66946007)(36756003)(4744005)(2616005)(6512007)(6666004)(53546011)(316002)(6916009)(6506007)(83380400001)(31696002)(86362001)(6486002)(508600001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFlLN3Y4K3NVZnk3K1FEUCsvOG0wbEhUOW1KN1pjN2ZNQkYycWZ4UHFTMDNU?=
+ =?utf-8?B?SnBuSXRieXk3eDBseGZSMUFpZnhLcUNlMVRaZitneVFPS0VPdmQ3ZG1YYmpu?=
+ =?utf-8?B?L2lIT0dLbkFWQnVpRWFXbXdDVzBqYWhBMktKYzV0ZkVRU0xvM2t4bEdORWt0?=
+ =?utf-8?B?S3lDWWh4cG4wNEVDTEVIbitZOEx6a08rV3phdW5GNVg3QzU3bWFacXBNdlgx?=
+ =?utf-8?B?dTgwYURvaDl6djFPNnduTENjZUdpS042MFdSNjdsdlJlOVlUR0JIbUgyVE1K?=
+ =?utf-8?B?eWJCYkNWK2RDTUIyVmNLUzJZZitWOHpKN1RVa0grUlluQVp5U1MzVS9Jc2tp?=
+ =?utf-8?B?ZGRPd0dPL2ZsRm9idkgxcEhLaFd6RCs0R2owS3NBUk5DYkppT200bEtiblpW?=
+ =?utf-8?B?eDQyYnd2eTY1aXJ3TGJsRU5wNE9qOGNnSlZyKzNzdUdqbXNLcXZDZ2Q1ands?=
+ =?utf-8?B?dWxQRXorUis5cHJuOWFVNE9HZVkxMlhVZDVZNmkrOEZyUUFDckkvWUR0WGdU?=
+ =?utf-8?B?YWt1WnBFcjQwRUt1WFYrU3luMXl6NDJ1TmlUR1dPRFRjMXdLY3JmYy9KN1NY?=
+ =?utf-8?B?cVlDZzhzQjJ4YncyUkJuY2crUFpUQUtPSEloUDhEZG9RUk51VmY2WmhPclB0?=
+ =?utf-8?B?VmtIdXEwVlI5UzFXd2d6MkVOZEtZTlFYekJMVTZZVGYxQllPaWxmZjZNYjFH?=
+ =?utf-8?B?c1FHQ1NwUURCMmpCZDlJNURxSm52V1lXWm5JbnA1b0Y2RGprRkx3YnRxVDNt?=
+ =?utf-8?B?ZFl5Wm45SUlrdmoxeCtwdm4xQzBEWjRiTmw5VFBSMklFVm5Vc2Q1MUd4WUdk?=
+ =?utf-8?B?SU8xS3E3KzZEOEwzRkE3cFd4ZWFCb29QTzNpak0zT3pRU2U1TTNCTlN5N1o3?=
+ =?utf-8?B?eS91dGkvMEVjamd0QlV0Sjd5dEZ3SG9OMWlLNlp5S1RlMmFONko4WHBnTlJH?=
+ =?utf-8?B?L242K0YrZDVUZk5GN1NpSW03dXpEeFh2WE1PZnhNcDltQjQxQnU0cVJqRUlY?=
+ =?utf-8?B?YVcvMEExYnFRRHI1dWk3OXpHdE1WWlFMeEdDcjlxZ2V2NFNWazBjdEJBMjh6?=
+ =?utf-8?B?TXFHR0ZjemdaZFlGeHdVUytmTDREL3A3aThMSjRyVnRkeWFmV2FNTi9mOCtU?=
+ =?utf-8?B?Q3pBN0h6QzFvM2pvQ1B3cGhqRC9uOXBvREdOeFNZdnJ2VmNiSkQrNkhTd0ds?=
+ =?utf-8?B?cENQdEJSbUJVNTNvQlRQU2RiN2RudlRNRFBXZ1hFUlhQc0pPM0UrUld3QTNh?=
+ =?utf-8?B?MnVqSHVtb0FhTEZPM2ovcy9COTBWVWtwQnQxOGI0cjI1WVRYeEEvNXI4QW8r?=
+ =?utf-8?B?NVJBd1lMMFlNQ09vZWZxSnVyS1JkTkl2Z3RsTUxrUDIwZzlZQ1lWTi9OSWF3?=
+ =?utf-8?B?U3ZXbGpRMUkzTlkyQXA4cnVlSnZzQ3I1RUJkYi9zaGIzVStjRlExZmtKTjhu?=
+ =?utf-8?B?dTdYT1lQT2R0M3NoZ2k1SmhSSW55MEJTc050aDBmcVRNaitBVWN3V29pMDFp?=
+ =?utf-8?B?ZWkxVzFIQVVRSzJ0Q2ZmOFkybUFuTE9USEZ6cmJQOXJFMlBhK1NkL1d0SDFJ?=
+ =?utf-8?B?Yjc2Vy9xOXQvWElrL1NlZ1hyRDdPbWU4MVVBMzR3azh1NGRLSFVmWXVOZTNY?=
+ =?utf-8?B?M2R0UGZjNzZwQkZWK1p0aUViZFZwbTFZSUJVVkZQV0VGRUw0bWdGdzluMGJw?=
+ =?utf-8?B?K3k4TnFYaWxvY3FveFRaR0gvTTUzcWN4TlpBK0s2cUJmY1dhVSs4MGRvWGQr?=
+ =?utf-8?B?N1NtRlUySERaeTFIYWNvQUIxMFhzOFQ1SlI1M3czQ3BoVERaVTM1Q2t5MnRL?=
+ =?utf-8?B?RmxIRFNTVkhhN2x3Z3BNajdCVWtIOEhHNTdra2FHTWcrWk5qckhTZEI0bnFp?=
+ =?utf-8?B?N0tpUzNvcjQ4b0NRQkM5VU84VXlmemFiVWRRam1icmxUQllGemxtczduQUha?=
+ =?utf-8?B?TmtsQVhzOHpvM1g0QnVxOWZ2TzZYR0hQSTZ5NlVLc0w3bjhTTDZSNXhPYnJ1?=
+ =?utf-8?B?S1p0c0FaeVBFVmw2ZE5VQlFxeU52RmN2OFpOZXNpMStMeFRjQVpqaHRNVWFE?=
+ =?utf-8?B?T2dZK0xBSFBDVTA3RVRZRTkweWpkWTMzRW9GbSsrZ2VGdUZVZU9GU1lTbGpR?=
+ =?utf-8?B?VjFrUWpBOGEwdTdCN0diR3hGZXdKK2J0VHdlS20xejlBZm1jL0lnRDloazk2?=
+ =?utf-8?Q?1QQ6tROjhHrOho8pyHB8jCg=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d936d39c-7b58-4017-2a82-08d9fd916d39
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 03:45:29.9652
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A5wJdlFnMbDguGYQ/sc+XALfXUDUxDFfcbVHZYkJljnouJtOvJdKhGFNZ8N17tiorYRLQnE/NnbSvFueSIgM4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2337
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pre-initialization policy is meant for EADD'd pages because they are
-part of the enclave identity. It's a good practice to not let touch the
-permissions after initialization, and does provide guarantees to e.g.
-LSM's about the enclave.
+Hello Mel,
 
-For EAUG'd pages it should be sufficient to let mmap(), mprotect() and
-SGX opcodes to control the permissions. Thus effectively disable
-pre-initialization policy by setting vm_max_prot_bits to RWX.
+On 2/22/2022 6:57 PM, Mel Gorman wrote:
+> [..snip..]
+> Only minor nit would that the cpumask can be declared within the if
+> block to limit scope but that is just being picky so
+Small oversight on my part. I'll wait for Peter's response on the
+same and create a v6 if necessary.
+Peter, any thoughts?
+> Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
-Then, remove vm_run_prot_bits. For EADD'd pages the roof is where
-it was during construction, for EAUG'd we don't simply care. This
-hard to keep in-sync variable adds only a layer of complexity and
-nothing else.
+Thanks for the ack :)
 
-Without vm_run_prot_bits existing, SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-does absolutely nothing. Therefore, it can be safely removed.
-
-Link: https://lore.kernel.org/linux-sgx/YiFkDVhBBYj9zo1N@iki.fi/T/#t
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Nathaniel McCallum <nathaniel@profian.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v3:
-Remove SGX_IOC_ENCLAVE_RELAX_PERMISSIONS.
-v2:
-Remove vm_run_prot_bits.
----
- arch/x86/include/uapi/asm/sgx.h |  19 ----
- arch/x86/kernel/cpu/sgx/encl.c  |  17 +---
- arch/x86/kernel/cpu/sgx/encl.h  |   1 -
- arch/x86/kernel/cpu/sgx/ioctl.c | 168 +-------------------------------
- 4 files changed, 9 insertions(+), 196 deletions(-)
-
-diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-index db969a2a1874..6cfdd89d3076 100644
---- a/arch/x86/include/uapi/asm/sgx.h
-+++ b/arch/x86/include/uapi/asm/sgx.h
-@@ -29,8 +29,6 @@ enum sgx_page_flags {
- 	_IOW(SGX_MAGIC, 0x03, struct sgx_enclave_provision)
- #define SGX_IOC_VEPC_REMOVE_ALL \
- 	_IO(SGX_MAGIC, 0x04)
--#define SGX_IOC_ENCLAVE_RELAX_PERMISSIONS \
--	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_relax_perm)
- #define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
- 	_IOWR(SGX_MAGIC, 0x06, struct sgx_enclave_restrict_perm)
- #define SGX_IOC_ENCLAVE_MODIFY_TYPE \
-@@ -84,23 +82,6 @@ struct sgx_enclave_provision {
- 	__u64 fd;
- };
- 
--/**
-- * struct sgx_enclave_relax_perm - parameters for ioctl
-- *                                 %SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-- * @offset:	starting page offset (page aligned relative to enclave base
-- *		address defined in SECS)
-- * @length:	length of memory (multiple of the page size)
-- * @secinfo:	address for the SECINFO data containing the new permission bits
-- *		for pages in range described by @offset and @length
-- * @count:	(output) bytes successfully changed (multiple of page size)
-- */
--struct sgx_enclave_relax_perm {
--	__u64 offset;
--	__u64 length;
--	__u64 secinfo;
--	__u64 count;
--};
--
- /**
-  * struct sgx_enclave_restrict_perm - parameters for ioctl
-  *                                    %SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 5fe7189eac9d..c350fb987a11 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -200,15 +200,8 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
- 	encl_page->desc = addr;
- 	encl_page->encl = encl;
- 
--	/*
--	 * Adding a regular page that is architecturally allowed to only
--	 * be created with RW permissions.
--	 * TBD: Interface with user space policy to support max permissions
--	 * of RWX.
--	 */
--	prot = PROT_READ | PROT_WRITE;
--	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
--	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
-+	prot = PROT_READ | PROT_WRITE | PROT_EXEC;
-+	encl_page->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
- 
- 	epc_page = sgx_alloc_epc_page(encl_page, true);
- 	if (IS_ERR(epc_page)) {
-@@ -338,7 +331,7 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
- 	 * exceed the VMA permissions.
- 	 */
- 	vm_prot_bits = vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
--	page_prot_bits = entry->vm_run_prot_bits & vm_prot_bits;
-+	page_prot_bits = entry->vm_max_prot_bits & vm_prot_bits;
- 	/*
- 	 * Add VM_SHARED so that PTE is made writable right away if VMA
- 	 * and EPCM are writable (no COW in SGX).
-@@ -391,7 +384,7 @@ static vm_fault_t sgx_vma_pfn_mkwrite(struct vm_fault *vmf)
- 		goto out;
- 	}
- 
--	if (!(entry->vm_run_prot_bits & VM_WRITE))
-+	if (!(entry->vm_max_prot_bits & VM_WRITE))
- 		ret = VM_FAULT_SIGBUS;
- 
- out:
-@@ -459,7 +452,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
- 	mutex_lock(&encl->lock);
- 	xas_lock(&xas);
- 	xas_for_each(&xas, page, PFN_DOWN(end - 1)) {
--		if (~page->vm_run_prot_bits & vm_prot_bits) {
-+		if (~page->vm_max_prot_bits & vm_prot_bits) {
- 			ret = -EACCES;
- 			break;
- 		}
-diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index 1b6ce1da7c92..241e302e7a72 100644
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -28,7 +28,6 @@
- struct sgx_encl_page {
- 	unsigned long desc;
- 	unsigned long vm_max_prot_bits:8;
--	unsigned long vm_run_prot_bits:8;
- 	enum sgx_page_type type:16;
- 	struct sgx_epc_page *epc_page;
- 	struct sgx_encl *encl;
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index d8c3c07badb3..3ad4320ff6ae 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -198,12 +198,6 @@ static struct sgx_encl_page *sgx_encl_page_alloc(struct sgx_encl *encl,
- 	/* Calculate maximum of the VM flags for the page. */
- 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
- 
--	/*
--	 * At time of allocation, the runtime protection bits are the same
--	 * as the maximum protection bits.
--	 */
--	encl_page->vm_run_prot_bits = encl_page->vm_max_prot_bits;
--
- 	return encl_page;
- }
- 
-@@ -710,85 +704,6 @@ static unsigned long vm_prot_from_secinfo(u64 secinfo_perm)
- 	return vm_prot;
- }
- 
--/**
-- * sgx_enclave_relax_perm() - Update OS after permissions relaxed by enclave
-- * @encl:	Enclave to which the pages belong.
-- * @modp:	Checked parameters from user on which pages need modifying.
-- * @secinfo_perm: New validated permission bits.
-- *
-- * Return:
-- * - 0:		Success.
-- * - -errno:	Otherwise.
-- */
--static long sgx_enclave_relax_perm(struct sgx_encl *encl,
--				   struct sgx_enclave_relax_perm *modp,
--				   u64 secinfo_perm)
--{
--	struct sgx_encl_page *entry;
--	unsigned long vm_prot;
--	unsigned long addr;
--	unsigned long c;
--	int ret;
--
--	vm_prot = vm_prot_from_secinfo(secinfo_perm);
--
--	for (c = 0 ; c < modp->length; c += PAGE_SIZE) {
--		addr = encl->base + modp->offset + c;
--
--		mutex_lock(&encl->lock);
--
--		entry = xa_load(&encl->page_array, PFN_DOWN(addr));
--		if (!entry) {
--			ret = -EFAULT;
--			goto out_unlock;
--		}
--
--		/*
--		 * Changing EPCM permissions is only supported on regular
--		 * SGX pages.
--		 */
--		if (entry->type != SGX_PAGE_TYPE_REG) {
--			ret = -EINVAL;
--			goto out_unlock;
--		}
--
--		/*
--		 * Do not accept permissions that are more relaxed
--		 * than vetted permissions.
--		 * If this check fails then EPCM permissions may be more
--		 * relaxed that what would be allowed by the kernel via
--		 * PTEs.
--		 */
--		if ((entry->vm_max_prot_bits & vm_prot) != vm_prot) {
--			ret = -EPERM;
--			goto out_unlock;
--		}
--
--		/*
--		 * Change runtime protection before zapping PTEs to ensure
--		 * any new #PF uses new permissions.
--		 */
--		entry->vm_run_prot_bits = vm_prot;
--
--		mutex_unlock(&encl->lock);
--		/*
--		 * Do not keep encl->lock because of dependency on
--		 * mmap_lock acquired in sgx_zap_enclave_ptes().
--		 */
--		sgx_zap_enclave_ptes(encl, addr);
--	}
--
--	ret = 0;
--	goto out;
--
--out_unlock:
--	mutex_unlock(&encl->lock);
--out:
--	modp->count = c;
--
--	return ret;
--}
--
- /*
-  * Ensure enclave is ready for SGX2 functions. Readiness is checked
-  * by ensuring the hardware supports SGX2 and the enclave is initialized
-@@ -835,65 +750,6 @@ static int sgx_perm_from_user_secinfo(void __user *_secinfo, u64 *secinfo_perm)
- 	return 0;
- }
- 
--/**
-- * sgx_ioc_enclave_relax_perm() - handler for
-- *                                %SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-- * @encl:	an enclave pointer
-- * @arg:	userspace pointer to a &struct sgx_enclave_relax_perm instance
-- *
-- * SGX2 distinguishes between relaxing and restricting the enclave page
-- * permissions maintained by the hardware (EPCM permissions) of pages
-- * belonging to an initialized enclave (after %SGX_IOC_ENCLAVE_INIT).
-- *
-- * EPCM permissions can be relaxed anytime directly from within the enclave
-- * with no visibility from the kernel. This is accomplished with
-- * ENCLU[EMODPE] run from within the enclave. Accessing pages with
-- * the new, relaxed permissions requires the kernel to update the PTE
-- * to handle the subsequent #PF correctly.
-- *
-- * Enclave page permissions are not allowed to exceed the
-- * maximum vetted permissions maintained in
-- * &struct sgx_encl_page->vm_max_prot_bits. If the enclave
-- * exceeds these permissions by running ENCLU[EMODPE] from within the enclave
-- * the kernel will prevent access to the pages via PTE and
-- * VMA permissions.
-- *
-- * Return:
-- * - 0:		Success
-- * - -errno:	Otherwise
-- */
--static long sgx_ioc_enclave_relax_perm(struct sgx_encl *encl, void __user *arg)
--{
--	struct sgx_enclave_relax_perm params;
--	u64 secinfo_perm;
--	long ret;
--
--	ret = sgx_ioc_sgx2_ready(encl);
--	if (ret)
--		return ret;
--
--	if (copy_from_user(&params, arg, sizeof(params)))
--		return -EFAULT;
--
--	if (sgx_validate_offset_length(encl, params.offset, params.length))
--		return -EINVAL;
--
--	ret = sgx_perm_from_user_secinfo((void __user *)params.secinfo,
--					 &secinfo_perm);
--	if (ret)
--		return ret;
--
--	if (params.count)
--		return -EINVAL;
--
--	ret = sgx_enclave_relax_perm(encl, &params, secinfo_perm);
--
--	if (copy_to_user(arg, &params, sizeof(params)))
--		return -EFAULT;
--
--	return ret;
--}
--
- /*
-  * Some SGX functions require that no cached linear-to-physical address
-  * mappings are present before they can succeed. Collaborate with
-@@ -946,9 +802,9 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
- 				      struct sgx_enclave_restrict_perm *modp,
- 				      u64 secinfo_perm)
- {
--	unsigned long vm_prot, run_prot_restore;
- 	struct sgx_encl_page *entry;
- 	struct sgx_secinfo secinfo;
-+	unsigned long vm_prot;
- 	unsigned long addr;
- 	unsigned long c;
- 	void *epc_virt;
-@@ -1002,14 +858,6 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
- 			goto out_unlock;
- 		}
- 
--		/*
--		 * Change runtime protection before zapping PTEs to ensure
--		 * any new #PF uses new permissions. EPCM permissions (if
--		 * needed) not changed yet.
--		 */
--		run_prot_restore = entry->vm_run_prot_bits;
--		entry->vm_run_prot_bits = vm_prot;
--
- 		mutex_unlock(&encl->lock);
- 		/*
- 		 * Do not keep encl->lock because of dependency on
-@@ -1033,12 +881,12 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
- 			pr_err_once("EMODPR encountered exception %d\n",
- 				    ENCLS_TRAPNR(ret));
- 			ret = -EFAULT;
--			goto out_prot_restore;
-+			goto out_reclaim;
- 		}
- 		if (encls_failed(ret)) {
- 			modp->result = ret;
- 			ret = -EFAULT;
--			goto out_prot_restore;
-+			goto out_reclaim;
- 		}
- 
- 		ret = sgx_enclave_etrack(encl);
-@@ -1054,8 +902,6 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
- 	ret = 0;
- 	goto out;
- 
--out_prot_restore:
--	entry->vm_run_prot_bits = run_prot_restore;
- out_reclaim:
- 	sgx_mark_page_reclaimable(entry->epc_page);
- out_unlock:
-@@ -1136,7 +982,7 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
- 			     struct sgx_enclave_modt *modt,
- 			     enum sgx_page_type page_type)
- {
--	unsigned long max_prot_restore, run_prot_restore;
-+	unsigned long max_prot_restore;
- 	struct sgx_encl_page *entry;
- 	struct sgx_secinfo secinfo;
- 	unsigned long prot;
-@@ -1182,7 +1028,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
- 		}
- 
- 		max_prot_restore = entry->vm_max_prot_bits;
--		run_prot_restore = entry->vm_run_prot_bits;
- 
- 		/*
- 		 * Once a regular page becomes a TCS page it cannot be
-@@ -1200,7 +1045,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
- 			}
- 			prot = PROT_READ | PROT_WRITE;
- 			entry->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
--			entry->vm_run_prot_bits = entry->vm_max_prot_bits;
- 
- 			/*
- 			 * Prevent page from being reclaimed while mutex
-@@ -1262,7 +1106,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
- 
- out_entry_changed:
- 	entry->vm_max_prot_bits = max_prot_restore;
--	entry->vm_run_prot_bits = run_prot_restore;
- out_unlock:
- 	mutex_unlock(&encl->lock);
- out:
-@@ -1498,9 +1341,6 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	case SGX_IOC_ENCLAVE_PROVISION:
- 		ret = sgx_ioc_enclave_provision(encl, (void __user *)arg);
- 		break;
--	case SGX_IOC_ENCLAVE_RELAX_PERMISSIONS:
--		ret = sgx_ioc_enclave_relax_perm(encl, (void __user *)arg);
--		break;
- 	case SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS:
- 		ret = sgx_ioc_enclave_restrict_perm(encl, (void __user *)arg);
- 		break;
--- 
-2.35.1
+--
+Thanks and Regards,
+Prateek
 

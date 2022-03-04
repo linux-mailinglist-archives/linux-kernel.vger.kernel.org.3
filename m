@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1AF4CD166
+	by mail.lfdr.de (Postfix) with ESMTP id 034124CD165
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239286AbiCDJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S239240AbiCDJks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239358AbiCDJiE (ORCPT
+        with ESMTP id S239367AbiCDJiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Mar 2022 04:38:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C54E1AAFD7;
-        Fri,  4 Mar 2022 01:36:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B991AC284;
+        Fri,  4 Mar 2022 01:36:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A571B827BA;
-        Fri,  4 Mar 2022 09:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1354C340E9;
-        Fri,  4 Mar 2022 09:36:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD8EB827BE;
+        Fri,  4 Mar 2022 09:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D75C340E9;
+        Fri,  4 Mar 2022 09:36:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386603;
-        bh=55zyzQl0Utut0R3HWtDL9uTt0ymhG7PO+ZXLPy+52CY=;
+        s=k20201202; t=1646386606;
+        bh=q8pqqOEI7ayWuSh5x4Y1jlB8BVxBB20xk/YPxulohaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tnj7wGX5mtfbPPE8l/IusJSbXGvTBWmDF/6tMYQ0mFiUW6ru9fGw2jG6h21LDY+Qt
-         20ACoJLcGOj1MbECyj9yxBr5RL4RInSAna8JyBgZ5OuucK1U8MbBGhKPZ+ievtR6bp
-         fP57LaSQOyyliv9NY456JQZqv5Fo8HiCT8COZNScHOn3EDmlUT8Ey860wvy0ShzAJ/
-         vgv+xdhqoq1YU4Hj4+yIlnMsa5BjuD6G8RjAgMP3OwFP5Gg3Xwwtzk6FoKTx4+phWH
-         FiHck6GE0OtBOPIx3HQNfonufc6EQ0m3gayXWI3W4LLpdZmpTff2IlJDJvJhfUmHxz
-         iMjke9QhulTpQ==
+        b=f7n1UFcN/J0zCiEl/D83rTS0ODcmTuUY/1xKn3quJD9iaFrROzg/DQZfvWqHFPyrB
+         T84pqn+NymP2bICBF2JfsD+3H9gQqmkWMYDUXbkL1HoC+Rvy6t1UYuxCgRcA8w8INb
+         wstW9A9jcuwrTYBbDIg1ax/20dYXaieJRTuYMBL8ZGSC9YTpcqAzRMmNAAvvZGcK8N
+         WcDADyAEJmaNF3zoBjexM7bhZI0qq25QdWutll7Oblk/7KUWB75Sn601qZpgzmsrIe
+         SM/1Xuu7c8IFR2KWDzC0kf9ksRzBB4BKTd+LEUP/wCIlClskZoORmye9PRtIxA1rzQ
+         Q4oOwYS5mPDjw==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Nathaniel McCallum <nathaniel@profian.com>,
@@ -44,9 +44,9 @@ Cc:     Nathaniel McCallum <nathaniel@profian.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
         64-BIT))
-Subject: [RFC PATCH v2.1 11/30] x86/sgx: Make sgx_ipi_cb() available internally
-Date:   Fri,  4 Mar 2022 11:35:05 +0200
-Message-Id: <20220304093524.397485-11-jarkko@kernel.org>
+Subject: [RFC PATCH v2.1 12/30] x86/sgx: Create utility to validate user provided offset and length
+Date:   Fri,  4 Mar 2022 11:35:06 +0200
+Message-Id: <20220304093524.397485-12-jarkko@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
 References: <20220304093524.397485-1-jarkko@kernel.org>
@@ -64,44 +64,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Reinette Chatre <reinette.chatre@intel.com>
 
-The ETRACK function followed by an IPI to all CPUs within an enclave
-is a common pattern with more frequent use in support of SGX2.
-
-Make the (empty) IPI callback function available internally in
-preparation for usage by SGX2.
+User provided offset and length is validated when parsing the parameters
+of the SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Extract this validation
+into a utility that can be used by the SGX2 ioctl()s that will
+also provide these values.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- arch/x86/kernel/cpu/sgx/main.c | 2 +-
- arch/x86/kernel/cpu/sgx/sgx.h  | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/sgx/ioctl.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 06492dcffcf1..1a3014aec490 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -172,7 +172,7 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index 83df20e3e633..f487549bccba 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -372,6 +372,26 @@ static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long src,
  	return ret;
  }
  
--static void sgx_ipi_cb(void *info)
-+void sgx_ipi_cb(void *info)
- {
- }
- 
-diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
-index 0f17def9fe6f..b30cee4de903 100644
---- a/arch/x86/kernel/cpu/sgx/sgx.h
-+++ b/arch/x86/kernel/cpu/sgx/sgx.h
-@@ -90,6 +90,8 @@ void sgx_mark_page_reclaimable(struct sgx_epc_page *page);
- int sgx_unmark_page_reclaimable(struct sgx_epc_page *page);
- struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim);
- 
-+void sgx_ipi_cb(void *info);
++/*
++ * Ensure user provided offset and length values are valid for
++ * an enclave.
++ */
++static int sgx_validate_offset_length(struct sgx_encl *encl,
++				      unsigned long offset,
++				      unsigned long length)
++{
++	if (!IS_ALIGNED(offset, PAGE_SIZE))
++		return -EINVAL;
 +
- #ifdef CONFIG_X86_SGX_KVM
- int __init sgx_vepc_init(void);
- #else
++	if (!length || length & (PAGE_SIZE - 1))
++		return -EINVAL;
++
++	if (offset + length - PAGE_SIZE >= encl->size)
++		return -EINVAL;
++
++	return 0;
++}
++
+ /**
+  * sgx_ioc_enclave_add_pages() - The handler for %SGX_IOC_ENCLAVE_ADD_PAGES
+  * @encl:       an enclave pointer
+@@ -425,14 +445,10 @@ static long sgx_ioc_enclave_add_pages(struct sgx_encl *encl, void __user *arg)
+ 	if (copy_from_user(&add_arg, arg, sizeof(add_arg)))
+ 		return -EFAULT;
+ 
+-	if (!IS_ALIGNED(add_arg.offset, PAGE_SIZE) ||
+-	    !IS_ALIGNED(add_arg.src, PAGE_SIZE))
+-		return -EINVAL;
+-
+-	if (!add_arg.length || add_arg.length & (PAGE_SIZE - 1))
++	if (!IS_ALIGNED(add_arg.src, PAGE_SIZE))
+ 		return -EINVAL;
+ 
+-	if (add_arg.offset + add_arg.length - PAGE_SIZE >= encl->size)
++	if (sgx_validate_offset_length(encl, add_arg.offset, add_arg.length))
+ 		return -EINVAL;
+ 
+ 	if (copy_from_user(&secinfo, (void __user *)add_arg.secinfo,
 -- 
 2.35.1
 

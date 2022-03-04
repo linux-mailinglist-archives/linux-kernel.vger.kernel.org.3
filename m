@@ -2,141 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170D34CD175
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CC94CD173
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbiCDJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S239142AbiCDJmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239173AbiCDJl6 (ORCPT
+        with ESMTP id S239360AbiCDJmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:41:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75AA1AF8FF;
-        Fri,  4 Mar 2022 01:40:33 -0800 (PST)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K92q431BSzBrl8;
-        Fri,  4 Mar 2022 17:38:40 +0800 (CST)
-Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
- 2022 17:40:31 +0800
-Message-ID: <a7d41c01-9032-14a1-b16f-a4a6a954addf@hisilicon.com>
-Date:   Fri, 4 Mar 2022 17:40:31 +0800
+        Fri, 4 Mar 2022 04:42:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9C4198ED4;
+        Fri,  4 Mar 2022 01:41:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45B2D61631;
+        Fri,  4 Mar 2022 09:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25691C340EF;
+        Fri,  4 Mar 2022 09:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646386871;
+        bh=GsbjS48QOHFFSAp2SabqgOJmfPKt9I0EStElgK6nMQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fomDQF5A9rnh36RT7aw30jgH/cQBXtUenObuO6wtIVvKx8ipvv/08NfrtlsSQ0WHq
+         JdlosL+veMPNu43zybuQhG4jQSR/cJI6G8LRQjGoK1boQHEiuobXqTkD1EqvJkqNRF
+         W96V/Hoh1QpctVVNY2JTP7JEEhquzhWCtHM09t5zZq5GsC+/SEBjY3vHn2DRph+iFb
+         +L6KmCRdONuvJLNclXNAaxpOnqp4/XaC3wUfJLjmAyiJCf4qYsQLHr56d6z8Po++kD
+         yxRftv6h0vHELudet6nPFmB8JkrWXOTLbsCH3PBrS3rG7D4O1TmVaCN6z0C+YqZ8K4
+         cluba7ELEMySw==
+Date:   Fri, 4 Mar 2022 11:40:31 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2.1 01/30] x86/sgx: Add short descriptions to ENCLS
+ wrappers
+Message-ID: <YiHejzFlR+p14KHN@iki.fi>
+References: <20220304093524.397485-1-jarkko@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v8 6/9] hisi_acc_vfio_pci: Add helper to retrieve the
- struct pci_driver
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
-From:   Zhou Wang <wangzhou1@hisilicon.com>
-In-Reply-To: <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.22]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> struct pci_driver pointer is an input into the pci_iov_get_pf_drvdata().> Introduce helpers to retrieve the ACC PF dev struct pci_driver pointers
-> as we use this in ACC vfio migration driver.
+This is just a bug fixed version of v2, and also the requirement
+to do obsolete round trip with EMODPE has been optimized away.
+I hope that v3 is rolled out quickly because now there is no
+comparison point. We can have speculative discussions whether
+ioctl or #PF is better but no means to benchmark. Thus, a quick
+patch set revision roll out would be such a great thing.
+
+Based on https://lore.kernel.org/linux-sgx/20220304033918.361495-1-jarkko@kernel.org/T/#u
+
+BR, Jarkko
+
+On Fri, Mar 04, 2022 at 11:34:55AM +0200, Jarkko Sakkinen wrote:
+> From: Reinette Chatre <reinette.chatre@intel.com>
 > 
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-
-Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
-
-Best,
-Zhou
-
+> The SGX ENCLS instruction uses EAX to specify an SGX function and
+> may require additional registers, depending on the SGX function.
+> ENCLS invokes the specified privileged SGX function for managing
+> and debugging enclaves. Macros are used to wrap the ENCLS
+> functionality and several wrappers are used to wrap the macros to
+> make the different SGX functions accessible in the code.
+> 
+> The wrappers of the supported SGX functions are cryptic. Add short
+> descriptions of each as a comment.
+> 
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
->  drivers/crypto/hisilicon/hpre/hpre_main.c | 6 ++++++
->  drivers/crypto/hisilicon/sec2/sec_main.c  | 6 ++++++
->  drivers/crypto/hisilicon/zip/zip_main.c   | 6 ++++++
->  include/linux/hisi_acc_qm.h               | 5 +++++
->  4 files changed, 23 insertions(+)
+>  arch/x86/kernel/cpu/sgx/encls.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> index 3589d8879b5e..36ab30e9e654 100644
-> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> @@ -1190,6 +1190,12 @@ static struct pci_driver hpre_pci_driver = {
->  	.driver.pm		= &hpre_pm_ops,
->  };
+> diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
+> index fa04a73daf9c..0e22fa8f77c5 100644
+> --- a/arch/x86/kernel/cpu/sgx/encls.h
+> +++ b/arch/x86/kernel/cpu/sgx/encls.h
+> @@ -136,57 +136,71 @@ static inline bool encls_failed(int ret)
+>  	ret;						\
+>  	})
 >  
-> +struct pci_driver *hisi_hpre_get_pf_driver(void)
-> +{
-> +	return &hpre_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_hpre_get_pf_driver);
-> +
->  static void hpre_register_debugfs(void)
+> +/* Initialize an EPC page into an SGX Enclave Control Structure (SECS) page. */
+>  static inline int __ecreate(struct sgx_pageinfo *pginfo, void *secs)
 >  {
->  	if (!debugfs_initialized())
-> diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
-> index 311a8747b5bf..421a405ca337 100644
-> --- a/drivers/crypto/hisilicon/sec2/sec_main.c
-> +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
-> @@ -1088,6 +1088,12 @@ static struct pci_driver sec_pci_driver = {
->  	.driver.pm = &sec_pm_ops,
->  };
+>  	return __encls_2(ECREATE, pginfo, secs);
+>  }
 >  
-> +struct pci_driver *hisi_sec_get_pf_driver(void)
-> +{
-> +	return &sec_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_sec_get_pf_driver);
-> +
->  static void sec_register_debugfs(void)
+> +/* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
+>  static inline int __eextend(void *secs, void *addr)
 >  {
->  	if (!debugfs_initialized())
-> diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-> index 66decfe07282..4534e1e107d1 100644
-> --- a/drivers/crypto/hisilicon/zip/zip_main.c
-> +++ b/drivers/crypto/hisilicon/zip/zip_main.c
-> @@ -1012,6 +1012,12 @@ static struct pci_driver hisi_zip_pci_driver = {
->  	.driver.pm		= &hisi_zip_pm_ops,
->  };
+>  	return __encls_2(EEXTEND, secs, addr);
+>  }
 >  
-> +struct pci_driver *hisi_zip_get_pf_driver(void)
-> +{
-> +	return &hisi_zip_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_zip_get_pf_driver);
-> +
->  static void hisi_zip_register_debugfs(void)
+> +/*
+> + * Associate an EPC page to an enclave either as a REG or TCS page
+> + * populated with the provided data.
+> + */
+>  static inline int __eadd(struct sgx_pageinfo *pginfo, void *addr)
 >  {
->  	if (!debugfs_initialized())
-> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-> index 6a6477c34666..00f2a4db8723 100644
-> --- a/include/linux/hisi_acc_qm.h
-> +++ b/include/linux/hisi_acc_qm.h
-> @@ -476,4 +476,9 @@ void hisi_qm_pm_init(struct hisi_qm *qm);
->  int hisi_qm_get_dfx_access(struct hisi_qm *qm);
->  void hisi_qm_put_dfx_access(struct hisi_qm *qm);
->  void hisi_qm_regs_dump(struct seq_file *s, struct debugfs_regset32 *regset);
-> +
-> +/* Used by VFIO ACC live migration driver */
-> +struct pci_driver *hisi_sec_get_pf_driver(void);
-> +struct pci_driver *hisi_hpre_get_pf_driver(void);
-> +struct pci_driver *hisi_zip_get_pf_driver(void);
->  #endif
+>  	return __encls_2(EADD, pginfo, addr);
+>  }
+>  
+> +/* Finalize enclave build, initialize enclave for user code execution. */
+>  static inline int __einit(void *sigstruct, void *token, void *secs)
+>  {
+>  	return __encls_ret_3(EINIT, sigstruct, secs, token);
+>  }
+>  
+> +/* Disassociate EPC page from its enclave and mark it as unused. */
+>  static inline int __eremove(void *addr)
+>  {
+>  	return __encls_ret_1(EREMOVE, addr);
+>  }
+>  
+> +/* Copy data to an EPC page belonging to a debug enclave. */
+>  static inline int __edbgwr(void *addr, unsigned long *data)
+>  {
+>  	return __encls_2(EDGBWR, *data, addr);
+>  }
+>  
+> +/* Copy data from an EPC page belonging to a debug enclave. */
+>  static inline int __edbgrd(void *addr, unsigned long *data)
+>  {
+>  	return __encls_1_1(EDGBRD, *data, addr);
+>  }
+>  
+> +/* Track that software has completed the required TLB address clears. */
+>  static inline int __etrack(void *addr)
+>  {
+>  	return __encls_ret_1(ETRACK, addr);
+>  }
+>  
+> +/* Load, verify, and unblock an EPC page. */
+>  static inline int __eldu(struct sgx_pageinfo *pginfo, void *addr,
+>  			 void *va)
+>  {
+>  	return __encls_ret_3(ELDU, pginfo, addr, va);
+>  }
+>  
+> +/* Make EPC page inaccessible to enclave, ready to be written to memory. */
+>  static inline int __eblock(void *addr)
+>  {
+>  	return __encls_ret_1(EBLOCK, addr);
+>  }
+>  
+> +/* Initialize an EPC page into a Version Array (VA) page. */
+>  static inline int __epa(void *addr)
+>  {
+>  	unsigned long rbx = SGX_PAGE_TYPE_VA;
+> @@ -194,6 +208,7 @@ static inline int __epa(void *addr)
+>  	return __encls_2(EPA, rbx, addr);
+>  }
+>  
+> +/* Invalidate an EPC page and write it out to main memory. */
+>  static inline int __ewb(struct sgx_pageinfo *pginfo, void *addr,
+>  			void *va)
+>  {
+> -- 
+> 2.35.1
 > 

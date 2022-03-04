@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D54CD89F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEDE4CD8A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiCDQKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        id S240343AbiCDQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240150AbiCDQKc (ORCPT
+        with ESMTP id S231372AbiCDQLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:10:32 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C9F150404
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:09:44 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id x15so13362486wru.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 08:09:44 -0800 (PST)
+        Fri, 4 Mar 2022 11:11:23 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E779E1B0C75
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:10:35 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id j10-20020a17090a7e8a00b001bbef243093so7615829pjl.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 08:10:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mpcaFFM4Vlil9J8sKnIMDV3zVV5Y4u+XZLqTyb1B72k=;
-        b=rkdCrZjmyS/RXcib6D6bM3pF7QZLt8bqrNCOt3MH3NGpjgzQNxvLEBsFXyfon8z7zT
-         OGEJTdpnHH5Q0RVO4gKNmrXIvcA5xCNdRPNZHpJfeABZn/9VeC0UqkVFumhHce1fGjBD
-         tlqjw3aasK96+a73ofc0GYsB44dTRHopnqC1HcwMBLUbmnVpwAtqDHkcYmS3GnOKT7Mv
-         dPnOzmJECWkyDDds8fiUokCXgI0jA/KEGTAB8F1kyhjEd19fJZ3J/yrtPBZJ84fQWn+D
-         B/6PPv+alt+3hW3wyAI0hpFI+oJYmFFRRC/ggKLBn/TWTRfqlaE7wU5Dc5r4E686eAMH
-         MItg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7g/ezXRkUePVHzxAmU7TrSdmaet2aJR4hjHRm264YDA=;
+        b=mJQPI1UesYIFKVN6p6er/YNCnb2xSe79Zwvcfc/PHObkfznrFxErekv9iFoCnRdGwp
+         r+1riJYsF6PkSj9m6fJmZhfnVXYiebeX3keLZNX+zNJQYlfbJtVqi2JCSUzeVNUaUl1m
+         CXymFTXegyXeWTeZYn+pu/Ew9C3z7hYd9mR5piitqdaUJ6FMEFxVrHn9xzwqDjF7UxSs
+         pe642OAUGcQoh7hYdrUouCLeY07VZKND/nRWrKSz6qakGmynWsYDPhfbWxhsFxIf3FYu
+         AbjtnCKYMfDK7yoA5M/kR3iAeD1+vGBXueStALl+0KC9J/1kpTvaO7OvLSviBlco783r
+         yeXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mpcaFFM4Vlil9J8sKnIMDV3zVV5Y4u+XZLqTyb1B72k=;
-        b=de3fCmDM/4OedSu5hM40JLXb5LSMoTsM9mD/7AHBP6SO2TKNd0CJlU87ABHHTGk17C
-         0EVeE+Osm5XQoCXsnOJHV3FB6Tovx4xVLHow5eQDAOgV4+pesB8IwUsoafbu4dAH6fdk
-         vi9ttm4lSGztQbtDSQS9mJxuhanub4FgQLL3onqgMrWPk84ZurHtmgxFhpocrIGllQ4/
-         U5MBQOLgRuV5j0BmSS9raGToq95vkBuqw0N+4Kn4elsmZiZbqQ4goEEDWTUYFaLGP8Hz
-         mtFOl7yvnTEDBkyj4K1lnK5FV7EOVjqxBD+gAGubbfogvGhlP8BJscuFAcDG6I/p0OZO
-         qWmw==
-X-Gm-Message-State: AOAM533oz5x8+QDJujCmmgYG8CXECXv9gjqv5O5uQ2e46cQKkp9PtsUo
-        vrOgYEtWUBmHmRTrTTVnmYwupg==
-X-Google-Smtp-Source: ABdhPJyGwmzyIoQ9ro/TZ+vxg/5BiF5i9Kky2BCfEyUx0I0fCDIdJ2pVlz+q5Scz0R5Q4+qf1ka2nQ==
-X-Received: by 2002:a05:6000:1b07:b0:1f0:248d:bc1d with SMTP id f7-20020a0560001b0700b001f0248dbc1dmr10801281wrz.534.1646410182680;
-        Fri, 04 Mar 2022 08:09:42 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c22cb00b00382a960b17csm10275145wmg.7.2022.03.04.08.09.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 08:09:41 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] ASoC: qcom: select correct WCD938X config for SC7280
-Date:   Fri,  4 Mar 2022 16:09:34 +0000
-Message-Id: <20220304160934.32010-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7g/ezXRkUePVHzxAmU7TrSdmaet2aJR4hjHRm264YDA=;
+        b=8IpdR+DGqFxZDOZAjTVOYedRgOQi9OGmLXOkOSBcNDn7hVIZRb7j35qZIYxH3Ejczf
+         H/8YjAUi94jeJPiZXue6T/Ox0HTOz6iwsQkPjzyTKSRihr3A5jYAmUVL7+OeyFyGI17e
+         AGpNaW4zg30CxAAUCTR5JIgz87F2F8x1hF2b/HdldVNA6Jh8EZAiG3rGVm17NCrwOr8b
+         ddaWNei3FtKZq1bu4ULpcDRTApR1NwJKM+WH0RnyOb56XnMMT8NsfC+JkPf3XjV/TTO6
+         zwr/krXIA/fGyooPF5tondArcd56uPcyog9QTL1fsXygoabkndMNgyXXWMsbyW6w5v1j
+         aKTA==
+X-Gm-Message-State: AOAM532/KTbOSMnZPeQzwc3bftcRpzyEZO+QrmaXcpN1ZPNmH1CMkPN8
+        C5YnW6itu/rGiVQVuwImmaon0KPjld0=
+X-Google-Smtp-Source: ABdhPJxb81xCCsYdx8G4+8O3wneI79w3fn9sUPWii8tb85zALFJlG7WfTwEihyej9GeXDNGBWeF68KdwK5c=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:9a79:ce7a:f894:68d2])
+ (user=pgonda job=sendgmr) by 2002:a05:6a00:1aca:b0:4e1:a2b6:5b9 with SMTP id
+ f10-20020a056a001aca00b004e1a2b605b9mr43761413pfv.4.1646410235407; Fri, 04
+ Mar 2022 08:10:35 -0800 (PST)
+Date:   Fri,  4 Mar 2022 08:10:32 -0800
+Message-Id: <20220304161032.2270688-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH V2] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC7280 config selected WCD938X instead of WCD938X_SDW Soundwire codecs.
-WCD938X_SDW actually selects WCD938X, so directly selecting WCD938X results
-in unmet dependencies and below warning
+Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
+which is referenced by nested_svm_virtualize_tpr() in svm.h. Remove
+include from svm_onhpyerv.c which was done only because of lack of
+include in svm.h.
 
-WARNING: unmet direct dependencies detected for SND_SOC_WCD938X
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=m]
- && SND_SOC_WCD938X_SDW [=n] && (SOUNDWIRE [=n] || !SOUNDWIRE [=n])
-  Selected by [m]:
-  - SND_SOC_SC7280 [=m] && SOUND [=y] && !UML && SND [=y]
- && SND_SOC [=m] && SND_SOC_QCOM [=m] && (I2C [=y] && SOUNDWIRE [=n] ||
- COMPILE_TEST [=y])
+Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
 
-Fix this issue by selecting WCD SoundWire codecs instead of component driver.
-
-Fixes: 57350bd41c3a ("ASoC: qcom: SC7280: Add machine driver")
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
 ---
- sound/soc/qcom/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Just compile tested.
+---
+ arch/x86/kvm/svm/svm.h          | 2 ++
+ arch/x86/kvm/svm/svm_onhyperv.c | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
-index 0cd0dae5c545..82f5eafb2f6c 100644
---- a/sound/soc/qcom/Kconfig
-+++ b/sound/soc/qcom/Kconfig
-@@ -193,7 +193,7 @@ config SND_SOC_SC7280
- 	select SND_SOC_QCOM_COMMON
- 	select SND_SOC_LPASS_SC7280
- 	select SND_SOC_MAX98357A
--	select SND_SOC_WCD938X
-+	select SND_SOC_WCD938X_SDW
- 	select SND_SOC_LPASS_MACRO_COMMON
- 	select SND_SOC_LPASS_RX_MACRO
- 	select SND_SOC_LPASS_TX_MACRO
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index e45b5645d5e0..396d60e36b82 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -22,6 +22,8 @@
+ #include <asm/svm.h>
+ #include <asm/sev-common.h>
+ 
++#include "kvm_cache_regs.h"
++
+ #define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
+ 
+ #define	IOPM_SIZE PAGE_SIZE * 3
+diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
+index 98aa981c04ec..8cdc62c74a96 100644
+--- a/arch/x86/kvm/svm/svm_onhyperv.c
++++ b/arch/x86/kvm/svm/svm_onhyperv.c
+@@ -4,7 +4,6 @@
+  */
+ 
+ #include <linux/kvm_host.h>
+-#include "kvm_cache_regs.h"
+ 
+ #include <asm/mshyperv.h>
+ 
 -- 
-2.21.0
+2.35.1.574.g5d30c73bfb-goog
 

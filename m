@@ -2,118 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A507D4CDFA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A9B4CDFB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiCDVSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S229779AbiCDVW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiCDVSW (ORCPT
+        with ESMTP id S229475AbiCDVW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:18:22 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30432C673
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:17:32 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id z66so7441751qke.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 13:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=K7s2cmmk7Zg+rBGEFOdp9bOvWs4Cpnx7T7LFDlbjDDI=;
-        b=NM06JldRsvN5yOo5aVlrIGwoeXFHRza3IRXqmQgmSFRdqRRZz8cb8kYdOEBCGC/oTD
-         CrLX8zKRFgQ+lpMsCoD3Fj5FWgxIQUK8PcaiOj9JbTZbFJJDB4af8KRp/j1V/QbVFJQN
-         VILc9J7ZsRGj5pExFgmGr6gqmR5mDjXsYBJlF0i1tCH5isIzCrGmF7IqKnNLgFeH5m/Q
-         ojmNDqDwoDJadwvgV1Ruu1uJPsCFJgWFeasmLlzSFB+qLm91F7hTLq5Xyi8NHf5ABkTk
-         kl/o1T928AesayH/2KclMaBvPcpasVbva4wh8uGwsCi3Z/1L0O8Ul6VzHqAe3ddaxXFp
-         NdTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=K7s2cmmk7Zg+rBGEFOdp9bOvWs4Cpnx7T7LFDlbjDDI=;
-        b=7Z+H8Nwno4ZNmEEtGF+9Lfs3ZDxiIb7yBiwhIOKgvx9A6lkhrgGSXF4LOdnVxauGrQ
-         ESrfbRpD362L5yTnYaf/wnaPApxOn5nljEeaNno5rMTN1dCoLg7rggRCFlStiywtB9v2
-         t/EcQ7jBRQFJO8bX8JVUcdBoTirvJoAEQmQzOhHcZaAIAxDAWwrNhuki+juT85qyBDjx
-         1JeMykRZyAk4cXUVSi128m7PlsVQ8Vlj95COADWREMeZfOqRvpgHHUoT/lNdRh7g8sVD
-         gsTELNzVj3slxy+vvuFuuv2+yI+vWfnjkKC09cnTvv8rcq+YG30FmE+7tGlM5peEdoiq
-         bPmQ==
-X-Gm-Message-State: AOAM533k0BEyYTDJcSNAHmEoSg684ixF1v/xQByvzkSL3Ov8ntq9BpNz
-        +yNFOcKXbbW1rX8sjBjNR+2akQ==
-X-Google-Smtp-Source: ABdhPJzvawwGSPRBEMdoX1Rm2eL5dwC68GJUJnEWjdQXlC41Os+q5QY5QNd7/CvMGUtsRhnUkz/ceg==
-X-Received: by 2002:a05:620a:1005:b0:640:7d6f:cacf with SMTP id z5-20020a05620a100500b006407d6fcacfmr374537qkj.557.1646428651714;
-        Fri, 04 Mar 2022 13:17:31 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id z196-20020a3765cd000000b0050848cdb596sm2956151qkb.101.2022.03.04.13.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 13:17:31 -0800 (PST)
-Date:   Fri, 4 Mar 2022 13:17:21 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     David Hildenbrand <david@redhat.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, Yang Shi <shy828301@gmail.com>,
-        Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH mmotm] mm: delete __ClearPageWaiters()
-In-Reply-To: <90aafe84-fe7d-c70e-8e15-c222869f30fc@redhat.com>
-Message-ID: <6e5262ff-8596-a86-7388-eddb2b2c53c@google.com>
-References: <351df0af-78f2-c20-2a6d-e5f978e5ca1@google.com> <a2f6aa01-8003-6791-718d-3898f77ef643@redhat.com> <9dda55d5-eafa-3177-2a4c-32ccb7e146e3@google.com> <90aafe84-fe7d-c70e-8e15-c222869f30fc@redhat.com>
+        Fri, 4 Mar 2022 16:22:57 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B824ECC1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:22:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646428928; x=1677964928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=FBq4YMXkDCMDlmkSi28XJCFzFJEgkEgL4Rj6jX5JxjY=;
+  b=SibayvhT5WA8vBIqwj05Dqx4fqvzny6FbH4cTAFTx6xv4qXIO6+VRamL
+   Gtjzu6ofzaY/sSk/O5+q6qY7G1w36JjE65xiE9cKBsZ69h3JGI67wszp7
+   naSWEtB4mq2FpUGQh3J2v6Ibn7xnaaedAmXesGBqCpwITDY0fMeyseflL
+   /ST7i6oc6oSJJSI8pzvCGv/89t6d1lIWsWMWFwRBrFavyPuwbgd3DSwZD
+   HSVBDnSujy35opZgOtA1+Hl7ys8d2aOuTvxFERQF0Y0Bg0cbioWb4vvPL
+   qW6zNTewJlhsG+ACrmIngWirht0gjzDRa5eHCzOYSsGDGi3WxMLkf9jP0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="234673224"
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="234673224"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:22:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="536412656"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
+  by orsmga007.jf.intel.com with SMTP; 04 Mar 2022 13:22:02 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Fri, 04 Mar 2022 23:22:01 +0200
+Date:   Fri, 4 Mar 2022 23:22:01 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     trix@redhat.com
+Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
+        ndesaulniers@google.com, matthew.d.roper@intel.com,
+        lucas.demarchi@intel.com, airlied@redhat.com, imre.deak@intel.com,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/i915: rework the error handling in *_dpll_params
+Message-ID: <YiKC+Zb2pHxQOLpO@intel.com>
+References: <20220304210355.608898-1-trix@redhat.com>
+ <YiKAmhXEye0fpAyF@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YiKAmhXEye0fpAyF@intel.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022, David Hildenbrand wrote:
+On Fri, Mar 04, 2022 at 11:11:54PM +0200, Ville Syrjälä wrote:
+> On Fri, Mar 04, 2022 at 01:03:55PM -0800, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> > 
+> > Clang static analysis reports this issue
+> > intel_dpll.c:472:31: warning: The left operand of '-'
+> >   is a garbage value [core.UndefinedBinaryOperatorResult]
+> >   this_err = abs(clock.dot - target);
+> >                  ~~~~~~~~~ ^
+> > 
+> > In a loop clock.dot is set on successful call to
+> > i9xx_calc_dpll_params().  If the call fails, the later
+> > *is_valid() will use the previous loop's clock.dot.
 > 
-> In this context we can consider ZONE_DEVICE pages just like any other
-> pages that, although getting freed, are not returned to the buddy, but
-> instead are returned to another pool. So PAGE_FLAGS_CHECK_AT_PREP won't
-> apply and free_pages_prepare() won't apply.
-> 
-> Another example would be hugetlb pages, that are returned to the hugetlb
-> pool, but not back to the buddy unless the huge page pool is shrunk.
-> 
-> 
-> So I feel like the underlying principle here is: we don't *care* if
-> PG_waiter is cleared when a page gets freed, because it will simply get
-> cleared by the next waker if it sticks around.
+> I don't think this can happen. intel_pll_is_valid() validates
+> all the dividers first and bails out if they are junk.
 
-I think we were focused on different issues here.  I was focused on
-how it was redundant for those places to clear the bit, because it
-was going to get cleared anyway just after (in the buddy case).
-Whereas you are focused on how it doesn't matter at all whether
-it gets cleared when freeing.  Both valid points.
+Hmm. That said, there is actually a case to be made for fully
+initializing the struct, and even removing the WARN. If the
+BIOS (or whatever was doing stuff before i915 takes over)
+has misprogrammed the DPLL then we could potentially have
+garbage dividers on our hands, and during readout we'd just
+blindly call *_calc_dpll_params() on them.
+
+So I'm thinking something along the lines of
+ clock->vco = <divisor> ? DIV_ROUND_CLOSEST(...) : 0;
+ clock->dot = <divisor> ? DIV_ROUND_CLOSEST(...) : 0;
+might be what we should do here.
+
+To make it a bit less ugly a small helper function might
+be in order. intel_pll_div() perhaps?
 
 > 
-> Then, I agree, we can just drop the comment regarding
-> PAGE_FLAGS_CHECK_AT_PREP and instead have something like
-
-Okay, the reference to PAGE_FLAGS_CHECK_AT_PREP in the commit message is
-good enough for me, no need to make a point of it in the code comment.
-
+> > 
+> > The *_dpll_params functions return an arithmetic statement
+> > with the clock.dot as the variable.  Change the error handler
+> > to set clock.dot to 0 and jump to the return statement.
+> > 
+> > Fixes: dccbea3b0704 ("drm/i915: calculate the port clock rate along with other PLL params")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_dpll.c | 32 ++++++++++++++---------
+> >  1 file changed, 20 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/intel_dpll.c b/drivers/gpu/drm/i915/display/intel_dpll.c
+> > index 0ae37fdbf2a5b..ba7cada704288 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_dpll.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_dpll.c
+> > @@ -309,11 +309,13 @@ int pnv_calc_dpll_params(int refclk, struct dpll *clock)
+> >  {
+> >  	clock->m = clock->m2 + 2;
+> >  	clock->p = clock->p1 * clock->p2;
+> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
+> > -		return 0;
+> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
+> > +		clock->dot = 0;
+> > +		goto end;
+> > +	}
+> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
+> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
+> > -
+> > +end:
+> >  	return clock->dot;
+> >  }
+> >  
+> > @@ -326,11 +328,13 @@ int i9xx_calc_dpll_params(int refclk, struct dpll *clock)
+> >  {
+> >  	clock->m = i9xx_dpll_compute_m(clock);
+> >  	clock->p = clock->p1 * clock->p2;
+> > -	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0))
+> > -		return 0;
+> > +	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0)) {
+> > +		clock->dot = 0;
+> > +		goto end;
+> > +	}
+> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n + 2);
+> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
+> > -
+> > +end:
+> >  	return clock->dot;
+> >  }
+> >  
+> > @@ -338,11 +342,13 @@ int vlv_calc_dpll_params(int refclk, struct dpll *clock)
+> >  {
+> >  	clock->m = clock->m1 * clock->m2;
+> >  	clock->p = clock->p1 * clock->p2;
+> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
+> > -		return 0;
+> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
+> > +		clock->dot = 0;
+> > +		goto end;
+> > +	}
+> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
+> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
+> > -
+> > +end:
+> >  	return clock->dot / 5;
+> >  }
+> >  
+> > @@ -350,12 +356,14 @@ int chv_calc_dpll_params(int refclk, struct dpll *clock)
+> >  {
+> >  	clock->m = clock->m1 * clock->m2;
+> >  	clock->p = clock->p1 * clock->p2;
+> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
+> > -		return 0;
+> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
+> > +		clock->dot = 0;
+> > +		goto end;
+> > +	}
+> >  	clock->vco = DIV_ROUND_CLOSEST_ULL(mul_u32_u32(refclk, clock->m),
+> >  					   clock->n << 22);
+> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
+> > -
+> > +end:
+> >  	return clock->dot / 5;
+> >  }
+> >  
+> > -- 
+> > 2.26.3
 > 
-> 
-> "
-> That's okay, it's a rare case and the next waker will just clear it.
-> Note that, depending on the page pool (buddy, ZONE_DEVICE, hugetlb), we
-> might clear the flag while freeing the page, however, this is not
-> required for correctness.
-> "
+> -- 
+> Ville Syrjälä
+> Intel
 
-Okay, v2 coming up: I've taken largely your wording (but not exactly).
-
-Thanks,
-Hugh
+-- 
+Ville Syrjälä
+Intel

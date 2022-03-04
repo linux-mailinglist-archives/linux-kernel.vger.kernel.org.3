@@ -2,357 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C834CDC7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 105124CDC80
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241655AbiCDSai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S241671AbiCDSbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbiCDSag (ORCPT
+        with ESMTP id S236086AbiCDSbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:30:36 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4FC151D0C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:29:48 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso8225874pjq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:29:48 -0800 (PST)
+        Fri, 4 Mar 2022 13:31:36 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F081D3AE2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:30:47 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id bd1so8464529plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:30:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eB1jIuAccQ4/HmBZop9BegzVAWQrTNNBpIbjngKx9XM=;
-        b=JPFWcrCBsq29SFW0LwimNqZam9XVgkpDjl5BmHUu/5Pl6EfOFOII8keLdq9Z1oRGTx
-         5jPtX6B5cGwHgoKxoyJsw0vfX7FH7iBvENyNFfUrrsBq32fMYZ8Idzqv+0gKz2it73VI
-         dWOq0wEIFwmuq3DFVWsoEgF9Jp+h9fUktf82HxT7/cAlF1AtLt6nD7yahqOBcEtmXBrW
-         cIHSyMmKq3AWrSF6J9W3iceUbNIeMjsWdLNJg//Y3eNuCga8Nv/fxwdXUhTkw3fLFcL9
-         wwTLn5KLhQuNtcTxWb00dlmqowzsyWRvS5YD6HXFcxUVcht7VOBp48+v7BThMarw9Mg2
-         rwcg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4TXeZfUVYIjCnHQMV6GLGvwrY0CWJzDnslUJHUckzkQ=;
+        b=JbrcThimgiaKc5S2YQMaLPzVI7b4VpmiL4LZyRwYBbYzH35zGMw49m0tLZRCurJ9QP
+         F74959iH9i2Rkb6nxh59Zu2oQp03sindhh36rPwErHSj6CBwRTlbz740QEXrOfLk7GpE
+         oOUJdvhK3UCpAqWFjXQiZ4vDwG5gMQUgz2H9LKLieqiMmteTFE1ZOOhVWGZIWa3NSgZC
+         qXFk0I7pPC73+c3IqozDVhvEgAr7JgDlPGG+ZEWmN5bzWPhftUdk3B+cWpwJsKLfXgjS
+         WCaMdevWEJGtkqmlgREDvYSdNsedckjjpxhS07+ERSFtstRzWvWwvWOt9jS0/oC7gOSP
+         xxfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eB1jIuAccQ4/HmBZop9BegzVAWQrTNNBpIbjngKx9XM=;
-        b=bOwB7/mmMhdORwuQnb6Lh339FjKyv3YawdR79UCM0HBlXeNCiXY+sAEi/l4H/f+ESA
-         kdiv+P+44qMkw+wAaqiwnCt8olQE5vtF4gMpwDx07zulnwByx6njWoUj7tqFoyoiuVU7
-         cstxNovDl6jCCr+blfyxcVEmPn+0wj6pCMbJYf1BbiuA0aAyGZ+xFjdu+vR6fuIHvdx4
-         2giShwcIDl2wrCr7wBG1FpldexSt23jskQ4o3ssaxjANKfjdy17ThznGmYq1zo7AgmEK
-         HR6eEXyrpihozG7C6DYiHJJO497wxwofqYNCFUXWy1ApwdjgzQoHw0DNFCcT90GYw4vi
-         xE1w==
-X-Gm-Message-State: AOAM531QbR9hpxH+BgfBDxzShGJisdQZq8bYaKyJj4Q1+Dpo2AS8KFFU
-        edFOi/5PAWfdFyjDG55Dun381g==
-X-Google-Smtp-Source: ABdhPJwbd2ZkS01dwp3AFBUXPivo+wuGgeZK4FTBsRTVjobratgvXIhhED3IJBu5U4xPhcTmPyPTOg==
-X-Received: by 2002:a17:90a:7147:b0:1bd:24ac:13bd with SMTP id g7-20020a17090a714700b001bd24ac13bdmr11964684pjs.70.1646418587477;
-        Fri, 04 Mar 2022 10:29:47 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id h22-20020a056a00231600b004e1784925e5sm6714404pfh.97.2022.03.04.10.29.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 10:29:46 -0800 (PST)
-Date:   Fri, 4 Mar 2022 11:29:44 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-Subject: Re: [RFC PATCH v3 1/4] remoteproc: core: Introduce virtio device
- add/remove functions
-Message-ID: <20220304182944.GA1660165@p14s>
-References: <20220126162405.1131323-1-arnaud.pouliquen@foss.st.com>
- <20220126162405.1131323-2-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4TXeZfUVYIjCnHQMV6GLGvwrY0CWJzDnslUJHUckzkQ=;
+        b=zw5oJKmE1u4tijcfm4Gnpf8ao22G1/NgP7SbfSrrQ4TIoXl8ziZswN1NynjaCN/tJu
+         byBnHIgSoOMdez61wWoHXqRxq5xrLPwE9+jJWK3tkFjW29TgBoOklcqC9BhmBSy7WVpE
+         6wLnhyI2Uo6RH50rhSskI72lncwgw6dAbcOvCvhtH5/Qh4/w1z8pfgzbl5tln54uxQJh
+         PFP9dHbOq3owpB3uzGRdAEipg3nwfvc98gIK/spKzERCsPjVRK5ZgsNsnF6R9+RjsopI
+         jENymKcyyLqVFoHSl3P8iWqCxEaOoRrPnanMaCKsxP8kUkXA39SmkC3NGbcRwgz7oEYo
+         wgxQ==
+X-Gm-Message-State: AOAM530hHdHF3sGNqBcUgH/prk0MTUcO2cO+XSS6Mhxc7yF/Xg7CX/yY
+        cSGWkWzTt5ObcBYBbIjMvXXzpy6kee01RqomwzjwU4h4
+X-Google-Smtp-Source: ABdhPJx6A0futcYkk5JbU5g+4xbv7vqSLzojRm+OEOU8dYMdPjKY5ewTBjlJRcXONf/pStKwe/8/5CfaySChj1JsAxk=
+X-Received: by 2002:a17:90b:4f8f:b0:1bf:ac1:2016 with SMTP id
+ qe15-20020a17090b4f8f00b001bf0ac12016mr10854185pjb.21.1646418647497; Fri, 04
+ Mar 2022 10:30:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126162405.1131323-2-arnaud.pouliquen@foss.st.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220303222014.517033-1-shy828301@gmail.com> <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
+In-Reply-To: <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 4 Mar 2022 10:30:35 -0800
+Message-ID: <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
+Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting PMD
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning,
-
-It took longer than expected to review this set as I wanted to make sure the
-unwind path was handled properly.
-
-On Wed, Jan 26, 2022 at 05:24:02PM +0100, Arnaud Pouliquen wrote:
-> In preparation of the migration of the management of rvdev in
-> remoteproc_virtio.c, this patch spins off new functions to manage the
-> remoteproc virtio device.
->  - rproc_rvdev_add_device
->  - rproc_rvdev_remove_device
-> 
-> The rproc_rvdev_add_device and rproc_rvdev_remove_device will be
-> moved to remoteproc_virtio.c.
-> 
-> The rproc_vdev_data structure is introduced to provide information for
-> the rvdev creation. This structure allows to manage the rvdev and vrings
-> allocation in the rproc_rvdev_add_device function.
-> Then the rproc_vdev_data structure will be reused in a next patch as
-> platform data structure when the rvdev will rely on a platform device.
+On Thu, Mar 3, 2022 at 9:06 PM David Hildenbrand <david@redhat.com> wrote:
 >
+> Hi,
+>
+> This probably bounces on the list due to html junk from the gmail app.
+>
+> What happened to
+>
+> https://lore.kernel.org/linux-mm/20220131162940.210846-10-david@redhat.co=
+m/
+>
+> Included in the very series mentioned below?
+>
+> Was this silently dropped due to folio conversion collisions? :/
 
-The last sentence is not needed, please remove.
+I really didn't notice you already proposed this. Maybe folio
+conversion, maybe mlock cleanup, I can't tell. But anyway this patch
+needs to get rebased. I will submit v2 to solve the comment, will add
+your signed-off-by.
 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
-> update vs previous revision:
->  - rework rproc_rvdev_add_device function to better manage error cases
-> 	- introduce rproc_vdev_data struct
-> 	- allocate rvdev in rproc_rvdev_add_device
-> ---
->  drivers/remoteproc/remoteproc_core.c | 164 ++++++++++++++++-----------
->  1 file changed, 98 insertions(+), 66 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 69f51acf235e..83ff44a6a4db 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -66,6 +66,13 @@ static const char * const rproc_crash_names[] = {
->  	[RPROC_FATAL_ERROR]	= "fatal error",
->  };
->  
-> +struct rproc_vdev_data {
-> +	struct fw_rsc_vdev *rsc;
-> +	u32 rsc_offset;
-> +	unsigned int id;
-> +	unsigned int index;
-> +};
-
-Here this structure is introduced without documentation and in patch 3/4 it is
-moved to remoteproc_internal.h where documentation is added.  Please added there
-(with documentation) in the first place.  That way it doesn't have to be moved
-again.
-
-> +
->  /* translate rproc_crash_type to string */
->  static const char *rproc_crash_to_string(enum rproc_crash_type type)
->  {
-> @@ -484,74 +491,23 @@ static int copy_dma_range_map(struct device *to, struct device *from)
->  	return 0;
->  }
->  
-> -/**
-> - * rproc_handle_vdev() - handle a vdev fw resource
-> - * @rproc: the remote processor
-> - * @ptr: the vring resource descriptor
-> - * @offset: offset of the resource entry
-> - * @avail: size of available data (for sanity checking the image)
-> - *
-> - * This resource entry requests the host to statically register a virtio
-> - * device (vdev), and setup everything needed to support it. It contains
-> - * everything needed to make it possible: the virtio device id, virtio
-> - * device features, vrings information, virtio config space, etc...
-> - *
-> - * Before registering the vdev, the vrings are allocated from non-cacheable
-> - * physically contiguous memory. Currently we only support two vrings per
-> - * remote processor (temporary limitation). We might also want to consider
-> - * doing the vring allocation only later when ->find_vqs() is invoked, and
-> - * then release them upon ->del_vqs().
-> - *
-> - * Note: @da is currently not really handled correctly: we dynamically
-> - * allocate it using the DMA API, ignoring requested hard coded addresses,
-> - * and we don't take care of any required IOMMU programming. This is all
-> - * going to be taken care of when the generic iommu-based DMA API will be
-> - * merged. Meanwhile, statically-addressed iommu-based firmware images should
-> - * use RSC_DEVMEM resource entries to map their required @da to the physical
-> - * address of their base CMA region (ouch, hacky!).
-> - *
-> - * Return: 0 on success, or an appropriate error code otherwise
-> - */
-> -static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
-> -			     int offset, int avail)
-> +static struct rproc_vdev *
-> +rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
->  {
-> -	struct fw_rsc_vdev *rsc = ptr;
-> -	struct device *dev = &rproc->dev;
->  	struct rproc_vdev *rvdev;
-> -	int i, ret;
-> +	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
->  	char name[16];
-> -
-> -	/* make sure resource isn't truncated */
-> -	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
-> -			avail) {
-> -		dev_err(dev, "vdev rsc is truncated\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	/* make sure reserved bytes are zeroes */
-> -	if (rsc->reserved[0] || rsc->reserved[1]) {
-> -		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
-> -		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
-> -
-> -	/* we currently support only two vrings per rvdev */
-> -	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
-> -		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
-> -		return -EINVAL;
-> -	}
-> +	int i, ret;
->  
->  	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
->  	if (!rvdev)
-> -		return -ENOMEM;
-> +		return ERR_PTR(-ENOMEM);
->  
->  	kref_init(&rvdev->refcount);
->  
-> -	rvdev->id = rsc->id;
-> +	rvdev->id = rvdev_data->id;
->  	rvdev->rproc = rproc;
-> -	rvdev->index = rproc->nb_vdev++;
-> +	rvdev->index = rvdev_data->index;
->  
->  	/* Initialise vdev subdevice */
->  	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
-> @@ -563,7 +519,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	ret = device_register(&rvdev->dev);
->  	if (ret) {
->  		put_device(&rvdev->dev);
-> -		return ret;
-> +		return ERR_PTR(ret);
->  	}
->  
->  	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
-> @@ -576,7 +532,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
->  					   dma_get_mask(rproc->dev.parent));
->  	if (ret) {
-> -		dev_warn(dev,
-> +		dev_warn(&rvdev->dev,
->  			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
->  			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
->  	}
-> @@ -589,7 +545,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	}
->  
->  	/* remember the resource offset*/
-> -	rvdev->rsc_offset = offset;
-> +	rvdev->rsc_offset = rvdev_data->rsc_offset;
->  
->  	/* allocate the vring resources */
->  	for (i = 0; i < rsc->num_of_vrings; i++) {
-> @@ -605,21 +561,20 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  
->  	rproc_add_subdev(rproc, &rvdev->subdev);
->  
-> -	return 0;
-> +	return rvdev;
->  
->  unwind_vring_allocations:
->  	for (i--; i >= 0; i--)
->  		rproc_free_vring(&rvdev->vring[i]);
->  free_rvdev:
->  	device_unregister(&rvdev->dev);
-> -	return ret;
-> +	return ERR_PTR(ret);
->  }
->  
-> -void rproc_vdev_release(struct kref *ref)
-> +static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
->  {
-> -	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
-> -	struct rproc_vring *rvring;
->  	struct rproc *rproc = rvdev->rproc;
-> +	struct rproc_vring *rvring;
->  	int id;
->  
->  	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
-> @@ -632,6 +587,83 @@ void rproc_vdev_release(struct kref *ref)
->  	device_unregister(&rvdev->dev);
->  }
->  
-> +/**
-> + * rproc_handle_vdev() - handle a vdev fw resource
-> + * @rproc: the remote processor
-> + * @ptr: the vring resource descriptor
-> + * @offset: offset of the resource entry
-> + * @avail: size of available data (for sanity checking the image)
-> + *
-> + * This resource entry requests the host to statically register a virtio
-> + * device (vdev), and setup everything needed to support it. It contains
-> + * everything needed to make it possible: the virtio device id, virtio
-> + * device features, vrings information, virtio config space, etc...
-> + *
-> + * Before registering the vdev, the vrings are allocated from non-cacheable
-> + * physically contiguous memory. Currently we only support two vrings per
-> + * remote processor (temporary limitation). We might also want to consider
-> + * doing the vring allocation only later when ->find_vqs() is invoked, and
-> + * then release them upon ->del_vqs().
-> + *
-> + * Note: @da is currently not really handled correctly: we dynamically
-> + * allocate it using the DMA API, ignoring requested hard coded addresses,
-> + * and we don't take care of any required IOMMU programming. This is all
-> + * going to be taken care of when the generic iommu-based DMA API will be
-> + * merged. Meanwhile, statically-addressed iommu-based firmware images should
-> + * use RSC_DEVMEM resource entries to map their required @da to the physical
-> + * address of their base CMA region (ouch, hacky!).
-> + *
-> + * Return: 0 on success, or an appropriate error code otherwise
-> + */
-> +static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
-> +			     int offset, int avail)
-> +{
-> +	struct fw_rsc_vdev *rsc = ptr;
-> +	struct device *dev = &rproc->dev;
-> +	struct rproc_vdev *rvdev;
-> +	struct rproc_vdev_data rvdev_data;
-> +
-> +	/* make sure resource isn't truncated */
-> +	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
-> +			avail) {
-> +		dev_err(dev, "vdev rsc is truncated\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* make sure reserved bytes are zeroes */
-> +	if (rsc->reserved[0] || rsc->reserved[1]) {
-> +		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
-> +		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
-> +
-> +	/* we currently support only two vrings per rvdev */
-> +	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
-> +		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rvdev_data.id = rsc->id;
-> +	rvdev_data.index = rproc->nb_vdev++;
-> +	rvdev_data.rsc_offset = offset;
-> +	rvdev_data.rsc = rsc;
-> +
-> +	rvdev = rproc_rvdev_add_device(rproc, &rvdev_data);
-> +	if (IS_ERR(rvdev))
-> +		return PTR_ERR(rvdev);
-> +
-> +	return 0;
-> +}
-> +
-> +void rproc_vdev_release(struct kref *ref)
-> +{
-> +	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
-> +
-> +	rproc_rvdev_remove_device(rvdev);
-> +}
-> +
->  /**
->   * rproc_handle_trace() - handle a shared trace buffer resource
->   * @rproc: the remote processor
-> -- 
-> 2.25.1
-> 
+>
+> Yang Shi <shy828301@gmail.com> schrieb am Do. 3. M=C3=A4rz 2022 um 23:20:
+>>
+>> The commit c444eb564fb1 ("mm: thp: make the THP mapcount atomic against
+>> __split_huge_pmd_locked()") locked the page for PMD split to make
+>> mapcount stable for reuse_swap_page(), then commit 1c2f67308af4 ("mm:
+>> thp: fix MADV_REMOVE deadlock on shmem THP") reduce the scope to
+>> anonymous page only.
+>>
+>> However COW has not used mapcount to determine if the page is shared or
+>> not anymore due to the COW fixes [1] from David Hildenbrand and the
+>> reuse_swap_page() was removed as well.  So PMD split doesn't have to
+>> lock the page anymore.  This patch basically reverted the above two
+>> commits.
+>>
+>> [1] https://lore.kernel.org/linux-mm/20220131162940.210846-1-david@redha=
+t.com/
+>>
+>> Cc: David Hildenbrand <david@redhat.com>
+>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>> Cc: Hugh Dickins <hughd@google.com>
+>> Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+>> Signed-off-by: Yang Shi <shy828301@gmail.com>
+>> ---
+>>  mm/huge_memory.c | 44 +++++---------------------------------------
+>>  1 file changed, 5 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index b49e1a11df2e..daaa698bd273 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -2134,8 +2134,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, =
+pmd_t *pmd,
+>>  {
+>>         spinlock_t *ptl;
+>>         struct mmu_notifier_range range;
+>> -       bool do_unlock_folio =3D false;
+>> -       pmd_t _pmd;
+>>
+>>         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->v=
+m_mm,
+>>                                 address & HPAGE_PMD_MASK,
+>> @@ -2148,48 +2146,16 @@ void __split_huge_pmd(struct vm_area_struct *vma=
+, pmd_t *pmd,
+>>          * pmd against. Otherwise we can end up replacing wrong folio.
+>>          */
+>>         VM_BUG_ON(freeze && !folio);
+>> -       if (folio) {
+>> -               VM_WARN_ON_ONCE(!folio_test_locked(folio));
+>> -               if (folio !=3D page_folio(pmd_page(*pmd)))
+>> -                       goto out;
+>> -       }
+>> +       if (folio && folio !=3D page_folio(pmd_page(*pmd)))
+>> +               goto out;
+>>
+>> -repeat:
+>> -       if (pmd_trans_huge(*pmd)) {
+>> -               if (!folio) {
+>> -                       folio =3D page_folio(pmd_page(*pmd));
+>> -                       /*
+>> -                        * An anonymous page must be locked, to ensure t=
+hat a
+>> -                        * concurrent reuse_swap_page() sees stable mapc=
+ount;
+>> -                        * but reuse_swap_page() is not used on shmem or=
+ file,
+>> -                        * and page lock must not be taken when zap_pmd_=
+range()
+>> -                        * calls __split_huge_pmd() while i_mmap_lock is=
+ held.
+>> -                        */
+>> -                       if (folio_test_anon(folio)) {
+>> -                               if (unlikely(!folio_trylock(folio))) {
+>> -                                       folio_get(folio);
+>> -                                       _pmd =3D *pmd;
+>> -                                       spin_unlock(ptl);
+>> -                                       folio_lock(folio);
+>> -                                       spin_lock(ptl);
+>> -                                       if (unlikely(!pmd_same(*pmd, _pm=
+d))) {
+>> -                                               folio_unlock(folio);
+>> -                                               folio_put(folio);
+>> -                                               folio =3D NULL;
+>> -                                               goto repeat;
+>> -                                       }
+>> -                                       folio_put(folio);
+>> -                               }
+>> -                               do_unlock_folio =3D true;
+>> -                       }
+>> -               }
+>> -       } else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
+>> +       if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
+>>                 goto out;
+>> +
+>>         __split_huge_pmd_locked(vma, pmd, range.start, freeze);
+>>  out:
+>>         spin_unlock(ptl);
+>> -       if (do_unlock_folio)
+>> -               folio_unlock(folio);
+>> +
+>>         /*
+>>          * No need to double call mmu_notifier->invalidate_range() callb=
+ack.
+>>          * They are 3 cases to consider inside __split_huge_pmd_locked()=
+:
+>> --
+>> 2.26.3
+>>

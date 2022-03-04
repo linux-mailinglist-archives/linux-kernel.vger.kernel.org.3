@@ -2,433 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBD94CDC4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6A54CDC4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbiCDSWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S241604AbiCDSXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241596AbiCDSWr (ORCPT
+        with ESMTP id S241576AbiCDSXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:22:47 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4501D3050
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:21:55 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z13-20020a1709027e8d00b001518de7a06cso5088753pla.14
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:21:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=ahaL2dP2bZkoJj+gEDVYwPqi0qSBfQNaQNWk62u5wf8=;
-        b=b+yFJAiJz7erSr7C+4U3ydT9F225o171aYSFJp68TrMDQmlMfEVvc5ep+RUyOXG7Q3
-         IdP9lNYl/YExLLAwJoDiE9GuK0DteSUre/kVPsUfkFYs2kU2enZi8wiwrasYhcCj3xpw
-         +0FYGWXmH4W+D/BejaEk7P/f4Stf2i4jptaqM5GznytPo3BT9nSvkoslyegnTznviw6M
-         juy/zOUl4T/z0tP7bpiEl6hjkYDd0bGhnlUlizRSexzyWmA1mQQNcR29rcgZ5IZWTlkQ
-         FrC57Yp1jwIVz91bZTOAx4WOImf18V7fmbpGrWSVKH8/teXoMuQaoZuBn8fvAUTU7os3
-         ix3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=ahaL2dP2bZkoJj+gEDVYwPqi0qSBfQNaQNWk62u5wf8=;
-        b=t1Q6H9ppt5zsZ9dphpXveI74F9TICh54Rad1oFVwai97bDU0SWuYqsH9T2eOtmRJ5p
-         PrGdGgmHYc6elw/DkPKokGkEM4l74mvFAsRzO628pbqHK6Zr/1GeJMOvBtfVLPsHk1eF
-         KqvNf1RkDLhcAj4/ZvH5v+0PX3TeWqf+ES7Jhi9oaSDqnSQfgoHHLuTRpsz87JhpzhHa
-         sXTZCDU+bpuV7wtQcCqUj8wxGxIq52ZQCeTC5/nW44i9WU3DRbVU1LyhPtq1dMzZms04
-         5nCprgbgKnHw0PcZMLAjy+ss6/NS+m0oAWXOranKze7fmlCOVmlPng6kCH3JyQdGd9Rr
-         +ukg==
-X-Gm-Message-State: AOAM5300cY+jtpYidEN3jTBBr12Ce//ZX79d0h3139p9uuBKxXkFNvTT
-        N+TIzHTB9XmqHwLFAxjdv80p6cwSkStKEA==
-X-Google-Smtp-Source: ABdhPJwqnJwT9gWCLObcQN7lR5QEjB7TDTasHOIJTK3ya7Eg2wdgryqq4tNXTOTmydZJCRQYhl67XRG+yPEuqQ==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90a:4411:b0:1bc:99b0:acad with SMTP
- id s17-20020a17090a441100b001bc99b0acadmr12127129pjg.25.1646418115256; Fri,
- 04 Mar 2022 10:21:55 -0800 (PST)
-Date:   Fri,  4 Mar 2022 18:21:52 +0000
-Message-Id: <20220304182152.2038961-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH v2] driver core: Add sysfs support for physical location of a device
-From:   Won Chung <wonchung@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 4 Mar 2022 13:23:17 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-eus2azon11021023.outbound.protection.outlook.com [52.101.57.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97708FEB;
+        Fri,  4 Mar 2022 10:22:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KJhzUxNJ3pFhAk2kNergmaVHFAD5qDc5u7cGMRFWmmVRQ3H1qxHcXGLe5TzpW5ZxElGUiDPmoiGg4w3ariMgfcp3gT/fEqKbmNF1tbInVgAKLyfsbnrBh4RK3AQjCXaP29jbdL59tlFDmnK6QZoF2SI3U/z7GDs0CWDihiputE12JEnmuthzKJilR5+u/41+dRh+1RfW/yK2Xf1sJFEahcvvtx5YPxwseBueKoYKPrctlsc6dWb0PIo9VbMnc/vGeIqDApyGNFM2ulbx41vsA2SjdAfCHhLlwsYp3wsvuhernKbPKNtzlys+gVP4SamJYbeyo+4spJqqQXWRZNXfxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R6OctvuttFA4ofmCTH5DUcgF1vihquh9jjAHl+pd2Cw=;
+ b=DS6buJurgV6sF/LQmz5Gvr1iQ7t7vKiKAR4yP8ym65CMm7m2BcuyEJBkIPHj4C8z2S/2PhkN9TVBIk5NvIzF4GXUN0+xDIagVJZ9TqPSO/kQNpRQuwBF6JeElicE/wegPvZqd4ns2Lzcqqx6sMwNiZhcwQaQmAaFLACfp+FDWBlYlP+2Fe7yScFSttmbEAByXCjtqlmXY60WlnOXVEeEiycZm4L+jHN9my3nMU02zIyRLJyepEMxtV04uhH0r67TNgrLkGzQV98XOoAGjZ6Y1KVnUpC2kt9YKWAucDO7JT9ecRfw1BDxia7NyD5CTIFILBp8sT+9kFBZvVat8lo6Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R6OctvuttFA4ofmCTH5DUcgF1vihquh9jjAHl+pd2Cw=;
+ b=JjRW/uYa+4vKqqH9g60OMIuuRAD2Vmi9Q56aeF1d92xF3R5GHeE3sGR01TClVKHUVS4jATErNu69ieyujIBkQt5AoQzOyN9SOrswXJuSWvlwaPvA44EaQW4LcyfiP6AnoYAVl6GXkPV50U3sIS91smKG7uNAd26j6qwguIpuh7o=
+Received: from MN0PR21MB3098.namprd21.prod.outlook.com (2603:10b6:208:376::14)
+ by DM5PR2101MB1031.namprd21.prod.outlook.com (2603:10b6:4:9e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.1; Fri, 4 Mar
+ 2022 18:22:26 +0000
+Received: from MN0PR21MB3098.namprd21.prod.outlook.com
+ ([fe80::a0b3:c840:b085:5d7b]) by MN0PR21MB3098.namprd21.prod.outlook.com
+ ([fe80::a0b3:c840:b085:5d7b%8]) with mapi id 15.20.5061.008; Fri, 4 Mar 2022
+ 18:22:25 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     vkuznets <vkuznets@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] arm64: hyperv: make the format of 'Hyper-V: Host Build'
+ output match x86
+Thread-Topic: [PATCH] arm64: hyperv: make the format of 'Hyper-V: Host Build'
+ output match x86
+Thread-Index: AQHYL8LQL41ZzF55KkyfGoaa5iiK06yvh+Lw
+Date:   Fri, 4 Mar 2022 18:22:25 +0000
+Message-ID: <MN0PR21MB309826D5A9E262A65E0E07F9D7059@MN0PR21MB3098.namprd21.prod.outlook.com>
+References: <20220304122425.1638370-1-vkuznets@redhat.com>
+In-Reply-To: <20220304122425.1638370-1-vkuznets@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=491fc4c7-ed6b-4cee-8d16-5888f4cfbe87;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-03-04T18:14:35Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 67f62ee6-e1a9-47b8-5e3c-08d9fe0bef17
+x-ms-traffictypediagnostic: DM5PR2101MB1031:EE_
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <DM5PR2101MB103110F3449332E6ACBEB60ED7059@DM5PR2101MB1031.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1WoAiPpcoh+Y1fMaMAtifEJkDF9qZFiMy8ULewrtkT/eNcGE+HDulBV340NR/PeTTSDQiNUxTIMkQE+IfDtkA0vXJRMmGDIc3miCwrYYoWJI1AcqTWDdc4Mju36kyTxNtjFM+WILvYTilGtVTJcIy8UEQ1phEBDngstLa1l6/0FIm5gWdouQGIMQYAVeft0KjoPJhIqT+LnZyv+KCjfyNYNAlw4HAM3Ww3otZHNLsneqsi+8WFokkn2/ysYHvA5xU268n3rhp6SNV7Z9b6fQkcSTNkGjBkCuctAONMdDzBW3WKbaV9GcFsOiZMq0w4a2RThBJE+1accmzI08EpxHdm3s9PzekZWM9XDtaCjP+NVZf3e2X7j8nsPU4ohty5XEfNkbC2JWRU4L7R3/NCle1wRGgkgfIG1n6V4OF3EwI7D+OlYqMQeDAxA+wpRjNsxJF1fDr+8Oo0aYMo06xRpTd1yt0IjV/Mt5h+F0cc/akKVvS7bmTSaIVHCO1fcw7PKc4tZksjd0QcPx6MFR987PkX+qbNCVu3NAMdtxeEcV6Z8NizSaNZzzjKmy7SUNVJUhtYEtusbLBFEBzheLnTjOvO4zAun3SiavCtCoBDbaTFzLGrOwvhuxf2p8F7OIID+q/ivTI8zswK0LI9x3yLQqhfSoX1GRcoDMIcyOnED6rAiY3JULN3ivK+psJPL8cH+9CEvqmX4P7e4sP7riVtusK0wGT4YsCS++rQdl5a7Htq1S1sdBmbXtYJ/Wo8yWYqGQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR21MB3098.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(66446008)(82960400001)(10290500003)(66946007)(66556008)(64756008)(2906002)(66476007)(508600001)(122000001)(82950400001)(110136005)(4326008)(86362001)(54906003)(8936002)(76116006)(55016003)(52536014)(8676002)(316002)(38100700002)(38070700005)(6506007)(83380400001)(8990500004)(33656002)(7696005)(9686003)(71200400001)(26005)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5h9eD0xa1b9kcKr58b4h3J5RvQ3DYRnF5pfPYogLfPThzWx8cJttNjU4CDfH?=
+ =?us-ascii?Q?YpfBoAAR0vkjiFHBFisYF7pjUo9Qk4xPmeCsUtW7zRf6rtaAQERiG1sX+9mW?=
+ =?us-ascii?Q?xqu3WU1rQZylQwpAdmga8tL83BaaPsiym5kvY09Zv50tkIc5PA6JI0wrQdnf?=
+ =?us-ascii?Q?xzHVPnxWeE8WYjHCXItJoyRYfKoANAW7IRIgKBs41JnoGJ4+AtlaRJLRKlCv?=
+ =?us-ascii?Q?h1Jk/bzDaQhoXd/4Yg5Ukto54ux5LdLLGtnmWlCk5O06OsiEi64hYY9hPUhP?=
+ =?us-ascii?Q?FvwlSi9n/BgXToIO6lUEef+QNFLUlBUBf+5aBVDv7TB7Ib4nG0N9jX4TtHeg?=
+ =?us-ascii?Q?mq3QVESqv9hCYaX1fDS7wOGR/i3VlHdv9x8j4WASAvbKIK4zs7PQFqce1wA6?=
+ =?us-ascii?Q?/dnM6JXQTAFSnRvqq2l6csoNNljIFHH2dvvNss27NQJcZ7YClXAEO+OxhlYz?=
+ =?us-ascii?Q?iv5shImYtDajDzUNoEsABK6iRvYBI+K/ouWlvkuQ/1f1np4uGJMP4ct0tUIH?=
+ =?us-ascii?Q?kpkKb5m9PkiG8EU45WqB08EN+zHr0k9D+R8dDFfaTzOGqz8Ixeu7qnJQNU7o?=
+ =?us-ascii?Q?ehFAW6/YDBo6ZALAoKixHy6Crl4JZi5AYxpEwO077rRcEaQ/LzG5iGEwSG5K?=
+ =?us-ascii?Q?56Sbc/TcVtAa9TuxQgVQw2EFWyGaND/oYRlcxuRr/ZnAN6JgsAqZWh9vrwmt?=
+ =?us-ascii?Q?fObtkbI5dxTfvIism9PNSDLyuB7PlLQ4n+RakIBsad8TDLRqptjZU67gfEpl?=
+ =?us-ascii?Q?k9qy+EH5YunFIj9ZQmyDqHI/2AVdqNZ4kVgq1zmh98ljPAgJWUjho0xfb9zr?=
+ =?us-ascii?Q?aqe61L7muV2TdYKNdQdE7YO+FT3TdHd+h2Dues8yTAG2AmgzfnEypNEFtGw3?=
+ =?us-ascii?Q?zVgyclBHJH5xLzasnJpV8IzMLyyzyHjkkRwrQNsELKcr1b3vUNdAWTKh2qqJ?=
+ =?us-ascii?Q?jXiBZ71YvfgEwtMx39od3qNuXfORzyCgrzjyny1qp70d8ekxhq/I/V8bnC83?=
+ =?us-ascii?Q?5MAAdRfLlHhv1RpZ8iQ7L83SLu6bUAGGb3V+sHTpIGW2zD3XEbCx0ZdNJRZ1?=
+ =?us-ascii?Q?a2FVYpuP0ZNtnmcb6TCqMGnJLW7Erof3wsVhF+yXWe9knGPXMxeqhAu/9Dd8?=
+ =?us-ascii?Q?guia/qOGRAN6RgMWYnonn6OHTc945INAyEfVT9AUww4lKqcDeS8gL/PSRfIQ?=
+ =?us-ascii?Q?B7+Xdk8hm8RE7JNdjdvqSHO7HzGXqnjT+KubWiM1bcIwlAlGUINNj3Qwgz+Y?=
+ =?us-ascii?Q?8mh3P/H6+Llp8nsjMvyhS/FuGke1XNbf640Yi3SEQ9L7+Mek+HkFPqrviUoW?=
+ =?us-ascii?Q?3bZggXXCrmFvoKRvvuq85ZpuR07N8gYm+siro+e6JZaT8oNSwzcHES6DfwxO?=
+ =?us-ascii?Q?IdzbWT6Q4gAw2ypoa278+0qcDcyevAvbL8sQo559uGf4Jd8lzbQ0YiasXXRM?=
+ =?us-ascii?Q?9wvo3w1usnff3D+QiFylhMjDm+WDV/QGqPRr5pIYsCsikZYmc/bIDg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR21MB3098.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67f62ee6-e1a9-47b8-5e3c-08d9fe0bef17
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 18:22:25.7217
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gx++tlXYXsc1M/MtlpBcVGVYN7Q4EX9YF9SGDEQ2mNlUUVnJnnnYbW6JZefEBiT/OyOsWk6merxXi8HWEGB4d7AK+eWfg6g6sE45JkrPoJk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR2101MB1031
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ACPI table includes _PLD fields for a device, create a new
-directory (physical_location) in sysfs to share _PLD fields.
+From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Friday, March 4, 2022 4:=
+24 AM
+>=20
+> Currently, the following is observed on Hyper-V/ARM:
+>=20
+>  Hyper-V: Host Build 10.0.22477.1061-1-0
+>=20
+> This differs from similar output on x86:
+>=20
+>  Hyper-V Host Build:20348-10.0-1-0.1138
+>=20
+> and this is inconvenient. As x86 was the first to introduce the current
+> format and to not break existing tools parsing it, change the format on
+> ARM to match.
 
-Currently without PLD information, when there are multiple of same
-devices, it is hard to distinguish which device corresponds to which
-physical device at which location. For example, when there are two Type
-C connectors, it is hard to find out which connector corresponds to the
-Type C port on the left panel versus the Type C port on the right panel.
-With PLD information provided, we can determine which specific device at
-which location is doing what.
+Interesting.  I had explicitly output this line differently on ARM64 so
+that the output is in the standard form of a Windows version number,
+which is what the Host Build value actually is.  My intent is to fix the
+x86 side as well.  I had not anticipated there being automated parsing
+of these strings.
 
-_PLD output includes much more fields, but only generic fields are added
-and exposed to sysfs, so that non-ACPI devices can also support it in
-the future. The minimal generic fields needed for locating a device are
-the following.
-- panel
-- vertical_position
-- horizontal_position
-- dock
-- lid
+I had also put the colon in the place to be consistent with most
+other Hyper-V messages.  I know:  picky, picky. :-)
 
-Signed-off-by: Won Chung <wonchung@google.com>
----
- .../testing/sysfs-devices-physical_location   |  42 ++++++
- drivers/base/core.c                           | 139 ++++++++++++++++++
- include/linux/device.h                        |  73 +++++++++
- 3 files changed, 254 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
-on
+What's the impact of changing the tools that parse it so that
+either version could be handled?
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
-cumentation/ABI/testing/sysfs-devices-physical_location
-new file mode 100644
-index 000000000000..1b2c6edb791b
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-physical_location
-@@ -0,0 +1,42 @@
-+What:		/sys/devices/.../physical_location
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		This directory contains information on physical location of
-+		the device connection point with respect to the system's
-+		housing.
-+
-+What:           /sys/devices/.../physical_location/panel
-+Date:           March 2022
-+Contact:        Won Chung <wonchung@google.com>
-+Description:
-+		Describes which panel surface of the system=E2=80=99s housing the
-+		device connection point resides on.
-+
-+What:           /sys/devices/.../physical_location/vertical_position
-+Date:           March 2022
-+Contact:        Won Chung <wonchung@google.com>
-+Description:
-+		Describes vertical position of the device connection point on
-+		the panel surface.
-+
-+What:           /sys/devices/.../physical_location/horizontal_position
-+Date:           March 2022
-+Contact:        Won Chung <wonchung@google.com>
-+Description:
-+		Describes horizontal position of the device connection point on
-+		the panel surface.
-+
-+What:           /sys/devices/.../physical_location/dock
-+Date:           March 2022
-+Contact:        Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides in a docking
-+		station or a port replicator. "No" otherwise.
-+
-+What:           /sys/devices/.../physical_location/lid
-+Date:           March 2022
-+Contact:        Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides on the lid of
-+		laptop system. "No" otherwise.
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7bb957b11861..96147e5951f4 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, s=
-truct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(removable);
-=20
-+static int dev_add_physical_location(struct device *dev)
-+{
-+#if defined(CONFIG_ACPI)
-+	struct acpi_pld_info *pld;
-+	acpi_status status;
-+
-+	if (!has_acpi_companion(dev))
-+		return 0;
-+
-+	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-+	if (ACPI_FAILURE(status) || !pld)
-+		return 0;
-+
-+	dev->location =3D (struct device_location) {
-+		.panel =3D pld->panel,
-+		.vertical_position =3D pld->vertical_position,
-+		.horizontal_position =3D pld->horizontal_position,
-+		.dock =3D pld->dock,
-+		.lid =3D pld->lid,
-+	};
-+
-+	return 1;
-+#else
-+	return 0;
-+#endif
-+}
-+
-+static ssize_t panel_show(struct device *dev, struct device_attribute *att=
-r,
-+	char *buf)
-+{
-+	const char *panel;
-+
-+	switch (dev->location.panel) {
-+	case DEVICE_PANEL_TOP:
-+		panel =3D "top";
-+		break;
-+	case DEVICE_PANEL_BOTTOM:
-+		panel =3D "bottom";
-+		break;
-+	case DEVICE_PANEL_LEFT:
-+		panel =3D "left";
-+		break;
-+	case DEVICE_PANEL_RIGHT:
-+		panel =3D "right";
-+		break;
-+	case DEVICE_PANEL_FRONT:
-+		panel =3D "front";
-+		break;
-+	case DEVICE_PANEL_BACK:
-+		panel =3D "back";
-+		break;
-+	default:
-+		panel =3D "unknown";
-+	}
-+	return sprintf(buf, "%s\n", panel);
-+}
-+static DEVICE_ATTR_RO(panel);
-+
-+static ssize_t vertical_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *vertical_position;
-+
-+	switch (dev->location.vertical_position) {
-+	case DEVICE_VERT_POS_UPPER:
-+		vertical_position =3D "upper";
-+		break;
-+	case DEVICE_VERT_POS_CENTER:
-+		vertical_position =3D "center";
-+		break;
-+	case DEVICE_VERT_POS_LOWER:
-+		vertical_position =3D "lower";
-+		break;
-+	default:
-+		vertical_position =3D "unknown";
-+	}
-+	return sprintf(buf, "%s\n", vertical_position);
-+}
-+static DEVICE_ATTR_RO(vertical_position);
-+
-+static ssize_t horizontal_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *horizontal_position;
-+
-+	switch (dev->location.horizontal_position) {
-+	case DEVICE_HORI_POS_LEFT:
-+		horizontal_position =3D "left";
-+		break;
-+	case DEVICE_HORI_POS_CENTER:
-+		horizontal_position =3D "center";
-+		break;
-+	case DEVICE_HORI_POS_RIGHT:
-+		horizontal_position =3D "right";
-+		break;
-+	default:
-+		horizontal_position =3D "unknown";
-+	}
-+	return sprintf(buf, "%s\n", horizontal_position);
-+}
-+static DEVICE_ATTR_RO(horizontal_position);
-+
-+static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
-,
-+	char *buf)
-+{
-+	return sprintf(buf, "%s\n", dev->location.dock ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(dock);
-+
-+static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
-+	char *buf)
-+{
-+	return sprintf(buf, "%s\n", dev->location.lid ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(lid);
-+
-+static struct attribute *dev_attr_physical_location[] =3D {
-+	&dev_attr_panel.attr,
-+	&dev_attr_vertical_position.attr,
-+	&dev_attr_horizontal_position.attr,
-+	&dev_attr_dock.attr,
-+	&dev_attr_lid.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group dev_attr_physical_location_group =3D {
-+	.name =3D "physical_location",
-+	.attrs =3D dev_attr_physical_location,
-+};
-+
- int device_add_groups(struct device *dev, const struct attribute_group **g=
-roups)
- {
- 	return sysfs_create_groups(&dev->kobj, groups);
-@@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
- 			goto err_remove_dev_waiting_for_supplier;
- 	}
-=20
-+	if (dev_add_physical_location(dev)) {
-+		error =3D device_add_group(dev,
-+			&dev_attr_physical_location_group);
-+		if (error)
-+			goto err_remove_dev_physical_location;
-+	}
-+
- 	return 0;
-=20
-+ err_remove_dev_physical_location:
-+	device_remove_group(dev, &dev_attr_physical_location_group);
-  err_remove_dev_waiting_for_supplier:
- 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
-  err_remove_dev_online:
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 93459724dcde..424be9cb735e 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -386,6 +386,75 @@ struct dev_msi_info {
- #endif
- };
-=20
-+/**
-+ * enum device_location_panel - Describes which panel surface of the syste=
-m's
-+ * housing the device connection point resides on.
-+ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
-+ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
-+ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
-+ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
-+ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
-+ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
-+ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
-n.
-+ */
-+enum device_location_panel {
-+	DEVICE_PANEL_TOP,
-+	DEVICE_PANEL_BOTTOM,
-+	DEVICE_PANEL_LEFT,
-+	DEVICE_PANEL_RIGHT,
-+	DEVICE_PANEL_FRONT,
-+	DEVICE_PANEL_BACK,
-+	DEVICE_PANEL_UNKNOWN,
-+};
-+
-+/**
-+ * enum device_location_vertical_position - Describes vertical position of=
- the
-+ * device connection point on the panel surface.
-+ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
-el.
-+ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
-el.
-+ */
-+enum device_location_vertical_position {
-+	DEVICE_VERT_POS_UPPER,
-+	DEVICE_VERT_POS_CENTER,
-+	DEVICE_VERT_POS_LOWER,
-+};
-+
-+/**
-+ * enum device_location_horizontal_position - Describes horizontal positio=
-n of
-+ * the device connection point on the panel surface.
-+ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
-.
-+ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
-el.
-+ */
-+enum device_location_horizontal_position {
-+	DEVICE_HORI_POS_LEFT,
-+	DEVICE_HORI_POS_CENTER,
-+	DEVICE_HORI_POS_RIGHT,
-+};
-+
-+/**
-+ * struct device_location - Device data related to physical location of th=
-e
-+ * device connection point.
-+ * @panel: Panel surface of the system's housing that the device connectio=
-n
-+ *         point resides on.
-+ * @vertical_position: Vertical position of the device connection point wi=
-thin
-+ *                     the panel.
-+ * @horizontal_position: Horizontal position of the device connection poin=
-t
-+ *                       within the panel.
-+ * @dock: Set if the device connection point resides in a docking station =
-or
-+ *        port replicator.
-+ * @lid: Set if this device connection point resides on the lid of laptop
-+ *       system.
-+ */
-+struct device_location {
-+	enum device_location_panel panel;
-+	enum device_location_vertical_position vertical_position;
-+	enum device_location_horizontal_position horizontal_position;
-+	bool dock;
-+	bool lid;
-+};
-+
- /**
-  * struct device - The basic device structure
-  * @parent:	The device's "parent" device, the device to which it is attach=
-ed.
-@@ -456,6 +525,8 @@ struct dev_msi_info {
-  * @removable:  Whether the device can be removed from the system. This
-  *              should be set by the subsystem / bus driver that discovere=
-d
-  *              the device.
-+ * @location:	Describes physical location of the device connection point i=
-n
-+ *		the system housing.
-  *
-  * @offline_disabled: If set, the device is permanently online.
-  * @offline:	Set after successful invocation of bus type's .offline().
-@@ -569,6 +640,8 @@ struct device {
-=20
- 	enum device_removable	removable;
-=20
-+	struct device_location	location;
-+
- 	bool			offline_disabled:1;
- 	bool			offline:1;
- 	bool			of_node_reused:1;
---=20
-2.35.1.616.g0bdcbb4464-goog
+Michael
 
+>=20
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/arm64/hyperv/mshyperv.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index bbbe351e9045..7b9c1c542a77 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -60,8 +60,8 @@ static int __init hyperv_init(void)
+>  	b =3D result.as32.b;
+>  	c =3D result.as32.c;
+>  	d =3D result.as32.d;
+> -	pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
+> -		b >> 16, b & 0xFFFF, a,	d & 0xFFFFFF, c, d >> 24);
+> +	pr_info("Hyper-V Host Build:%d-%d.%d-%d-%d.%d\n",
+> +		a, b >> 16, b & 0xFFFF, c, d >> 24, d & 0xFFFFFF);
+>=20
+>  	ret =3D hv_common_init();
+>  	if (ret)
+> --
+> 2.35.1

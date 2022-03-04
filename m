@@ -2,175 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7AF4CCB47
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B391D4CCB4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbiCDB1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 20:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S237568AbiCDBbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 20:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237560AbiCDB1p (ORCPT
+        with ESMTP id S229934AbiCDBbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 20:27:45 -0500
-Received: from sonic301-36.consmr.mail.ne1.yahoo.com (sonic301-36.consmr.mail.ne1.yahoo.com [66.163.184.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B1517B8AE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1646357217; bh=6uWnuI7AdpEwS0XCUGVPovGTc/yyeEj7T7l1RyagDZE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=nMWEZnWLBrWzJ7hAX7oO8fCCTG5uRX3ynDKZfHIwGYkwPdlwk556E2JLqBgPyK13yB12nOP5Jl2yfSFJB3/nxYCuZWnD2npNXY7bwxGrtb5TcFR245lGZFErXF+uine65z/qX3mGpyuNlewB79kLCIMwXztK7ag3/z1hSBVGXN+iwAJVgSbQaNRKZ9p5KRdc+1bBBLOx8AfKvEyBu4EJ8EYNIMGc/l6n+Vf43Cf5249jN4ezvHyOpFCVChi1Ia8PGkwdcRS1RNIDfO7kaCHV4D2/7pW+WR9T8DvrcKSUD+j37Bqdflv8ccqS+zKNXhq84Hn+5+sMMREj5YJMeF1niA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1646357217; bh=3szUmKguUmL85OUn4VzosRmckMaoAngiMgsLlFp725g=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=FPY9FPXHgTpC7227wNkyqByRuMlajNLLjjiQ3GuY/tkBpy5hLNXI3PNd04AvKvJjF2LmtoaUyQdeRx8pGNWLnn5M1eOQh2e5Tv8882SYsHo2bs2ACUBKjYHyIaAW+qJ7iTEwwPk7JhFg/vFOwDqJcf0+TJPNqpnw8ctNRW8sVXYwManszcdw8hsfrcOOOQeViGRmzZVvMQbH+SYkp+QqzkUhUD9/tgLwKtOKLjtzP8SeZssOjLYWNixSIyOuxEpD1ri0XdiLT/R+isqRI2RxFeXKeESsr0DRdkH3oe28a18z83EeId0j3a78WrOoIRns4VqfEeklq/7HE/memOo9iQ==
-X-YMail-OSG: uAVAj6MVM1lAGPtJIYEsbxv5DqIna1GK_3Mx3klJ9vHZEibEhjgGJxt9jymqone
- dJr2R4kHOc7DADAR.lDSSkyAoOdG1_QJvhkAUP4ybpk8YFhAgmoeYRP0r9mq4EbP59ouKJiJ5wGv
- MmDTu_Mc3lOqJDOLUNCUdU7lUuf611QYUG_UKgP42L.sF5OWyCZJNL4t2YAJl3M0r0doVydTVUq3
- 9mK5ZrS82YeE06sQB.3sWz2.6PUfrE_Q_WYwcDL9alxYmvZbVekXRVZHOW7mRvbj9aaV3x3TC9Yv
- f.gprv0jKL4hqbPK0CwvEtFeF_stZ681gGuUtUPmQJh6509IdU2n7Fj6hwUFYl_FN5qpvNSkY57h
- MlqahoqgEgq.KUNRj9j_veN9dlF8ZqPlwZjDvp7RpDq22.LfzJ7e0H3PnSyxWwPId_fQYLaq4Isi
- 0trCOyn_IWeOI0Q3FqvenEBy6wu8oLChk.UZGMVv18erq_H3te4FaoCVyA1Vo1TxN1VcPC3vqRrQ
- 2xCnnnR5s8npUl01YfjaIZNVIb64HcM_pmHTEGSC_OrFmQHRcugrKe.fHgRcV__dTLUfcw26ZnVQ
- sjXNxBJJhc48fw6WrrZQAnNyDZm2AhQgCh4_3t1wSkMzDfr8jP.mCnRTL3YvjSJgY3xZNuYfZvu0
- lwgmVjTu1KpffnuJ93MP22NDmWmK9wce2C4sYgBdDd9JumKK1LnevjRi1GlD2leeXSpNd4g7nKdO
- e4fS5vFMbP7mkarsFTFps40YeGbcCjVOFyAvSL.8GO6bbBnYd1U36pj0KSWNSliC2eIHjDceS4kV
- 1pGl8MKStrCuSg8yeSpcNe3URwOH5NmLyNWN1ZafMWoVAviFHBWo9nza0ZSBVIeGKydX95NoyIPQ
- rEIdhKH4SNHBv8x26Rf9dAZZkjQ1Y8Y0tMZFxo9OSvaYKn9nOYjr6Pw1Is6eLLd_Cq4NK.5NYUia
- P_odNufY1oJVx967lriYgJ2jQrTdVDpUFBHSCOaURLMNRYc2tjnaW25.RSM3lAI12jpm0Q_q7oTz
- QBS_RR9oLgJdMWg9pBARfBMXMBIMYtpFg3CejMQZqLUptrcWr4lAws_driTGX1dBXL7VYqEl5dwr
- bufjI1WIxg9d25Ed2AWEFMpSUGxdJVZwPtCFJRIrx9pCAv.dOk0hwSlXz6T75.OPLIgGQuymhg11
- cbnGC2Rh5if4tGBUuK7SncVsQ6zrPXcPBAbgyHe5HpWP4mDuKw_20zjjahU2AT4aSf7Xi3l_u5Ns
- .huoWE4PtFiy2mi41mt8lJ.HcVD5vhQTH56FLgyW8eFHvzr8fCduZhGa.OywAPLud9XjBr2PuUb7
- lnRWiVYhMkrnTQ.Zgg9_wdi.K6oSQ5OOEJ_Mk7mL3OMy9aBjEiPBzjPTZtzUkvn6SpPXEPXGF.wf
- uVFZZBYwa_z6zPSCvWUQmG4xQT2sg0ilxFNDdq_fVrZjKmtGGlVA4xJwjHr7h7DASH9McXEbQ3nP
- QoIO3xoEVeGnPsu9ZGavTKjLJS1gAsc7Tj5tjMtbbT9_IHsa0iznUCoF7cH309ukH2Y50DHSY9x9
- pP8WJb2bF6fFFLMOnCYIvjxxLY11rpdwSVEBZpamloph6rLpuUYS7eksJxVgwYnh9D6ujHuIcjsJ
- qJAQct9q2uFu6DzxrQZzdu2i5uOGeeI.kYea_zoUdg1ScFblxQ3s3tT2T_eafe6foDm.F2Y0CNqj
- BXz47tXpkiCD0vRkfgGbnP7MLtEaUFY1oAUpF_EXR33hZgCAzJnNETfRwUrUgLwaqp04ePtQzMPB
- zPz5CAHAqFI1wjmzwK0qeceVmnTz.kxhzhFakgE94p9chklfur7Ni0ugH3uMuiePR2YeX0.2Z289
- 9jR6y8TuHUm3oyniLfIb1ao02lZJm7eq4QDMmlXQQrM4dR.68eht0cwUstY_BDSFJOL2MqYVmkbE
- sZ53JpWg.r7zoRT0tMApe7apGwwY961Pan_3ZeHHU1yk7RjWGo.raeQ0_BR2LgBWo8ezrnDiKZ2M
- jibCb1R5Fw2q5XzQXmxfh03oqC2SjwKfwzufXpAt4OpW20EItI0KcCKG4UpQzts3hWTPIyRZMBAI
- qnhymgdIu1dVl4KR68n5wwfkkg0RApt2IQnhnAh3ATWboK3Au.PMNR555gq9xY46L.q74DYdhazl
- m_vPbRWmtjARmXfLryUgoqO12e9MGoNd70OMPF_dGwyDNuCAbKkAi8rzBi38wPLDagbV5ZGeG1bM
- KG1zzFEUjiBMBjCTcHZRpBnWJhAMJoyZ2K7D7TxSXFilPES26AzTk5qpiLxmqYGfLAND2iTOIeg-
- -
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 4 Mar 2022 01:26:57 +0000
-Received: by kubenode536.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID a537123eb6bfd1b2089ac85d04211ff7;
-          Fri, 04 Mar 2022 01:26:55 +0000 (UTC)
-Message-ID: <0dad94cc-2f4a-536a-94a9-c74e99c2f4ef@schaufler-ca.com>
-Date:   Thu, 3 Mar 2022 17:26:54 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v32 26/28] Audit: Add record for multiple object security
- contexts
+        Thu, 3 Mar 2022 20:31:23 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9C47E5BB
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:30:36 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 15AB12C0B90;
+        Fri,  4 Mar 2022 01:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1646357430;
+        bh=WxWNOPjRdYh/JVu+ZBp7sF5khIVMCO6Kbl2Q4xhS05I=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=H/hL4xEraAETeTp3XP76WqXjt5cbu8Y6dcynjlOoSwP5GZ1CID+jTJlLBMmubTmq8
+         yXH6XRf5cBvqNIi9Yb8J/xAeOaY48h/diDQZgJeGRvYAGXSGJ/RzU97XwXRJyCxYg7
+         GbZnyBV9Ftiaz3Wkx8b5u+fB6ULERNP8lZjA0YjpPu23jhZrpuwGOxXhIksplkBPOj
+         62NBRduDnMBy0yIkuYG4fZWfnEr7MTKzVLwUiHfEUsz0XYrtEDrcfeBgkUd8fZ/5k7
+         rnt3uDwWOpeHLTYTlOoPm2RoDPi1H/CSNFwtdfRa/GUlKLtGneIO9GKjSeYj0+VBUf
+         kamMqNze3wX9A==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B62216bb50001>; Fri, 04 Mar 2022 14:30:29 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.28; Fri, 4 Mar 2022 14:30:29 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.028; Fri, 4 Mar 2022 14:30:29 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mark Tomlinson <Mark.Tomlinson@alliedtelesis.co.nz>
+CC:     "ray.jui@broadcom.com" <ray.jui@broadcom.com>,
+        "sbranden@broadcom.com" <sbranden@broadcom.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] PCI: Reduce warnings on possible RW1C corruption
+Thread-Topic: [PATCH v4] PCI: Reduce warnings on possible RW1C corruption
+Thread-Index: AQHYL2duvQH9Acig/EShRiGLv00N8w==
+Date:   Fri, 4 Mar 2022 01:30:29 +0000
+Message-ID: <679ac5f4-d6b7-5c94-39d5-441c68576911@alliedtelesis.co.nz>
+References: <20200820221142.GA1571008@bjorn-Precision-5520>
+In-Reply-To: <20200820221142.GA1571008@bjorn-Precision-5520>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        sds@tycho.nsa.gov, linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220202235323.23929-1-casey@schaufler-ca.com>
- <20220202235323.23929-27-casey@schaufler-ca.com>
- <CAHC9VhR3d23Zd8=cP1=Sh5DjTEgEAyTc71M-zca4Beuiw7bywQ@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhR3d23Zd8=cP1=Sh5DjTEgEAyTc71M-zca4Beuiw7bywQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.19797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8674ECF46E283A43A0823E9CE0923816@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=c43Vvi1l c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=73XRR-X3sCTW9Fgc-S8A:9 a=QEXdDO2ut3YA:10 a=XuX4-iSP0wQA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/2022 3:36 PM, Paul Moore wrote:
-> On Wed, Feb 2, 2022 at 7:23 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Create a new audit record AUDIT_MAC_OBJ_CONTEXTS.
->> An example of the MAC_OBJ_CONTEXTS (1421) record is:
->>
->>      type=MAC_OBJ_CONTEXTS[1421]
->>      msg=audit(1601152467.009:1050):
->>      obj_selinux=unconfined_u:object_r:user_home_t:s0
->>
->> When an audit event includes a AUDIT_MAC_OBJ_CONTEXTS record
->> the "obj=" field in other records in the event will be "obj=?".
->> An AUDIT_MAC_OBJ_CONTEXTS record is supplied when the system has
->> multiple security modules that may make access decisions based
->> on an object security context.
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> ---
->>   include/linux/audit.h      |  5 ++++
->>   include/uapi/linux/audit.h |  1 +
->>   kernel/audit.c             | 59 ++++++++++++++++++++++++++++++++++++++
->>   kernel/auditsc.c           | 37 ++++--------------------
->>   4 files changed, 70 insertions(+), 32 deletions(-)
-> ...
->
->> diff --git a/kernel/audit.c b/kernel/audit.c
->> index e8744e80ef21..3b9ce617b150 100644
->> --- a/kernel/audit.c
->> +++ b/kernel/audit.c
->> @@ -2199,6 +2200,43 @@ int audit_log_task_context(struct audit_buffer *ab)
->>   }
->>   EXPORT_SYMBOL(audit_log_task_context);
->>
->> +void audit_log_object_context(struct audit_buffer *ab, struct lsmblob *blob)
->> +{
->> +       struct audit_context_entry *ace;
->> +       struct lsmcontext context;
->> +       int error;
->> +
->> +       if (!lsm_multiple_contexts()) {
->> +               error = security_secid_to_secctx(blob, &context, LSMBLOB_FIRST);
->> +               if (error) {
->> +                       if (error != -EINVAL)
->> +                               goto error_path;
->> +                       return;
->> +               }
->> +               audit_log_format(ab, " obj=%s", context.context);
->> +               security_release_secctx(&context);
->> +       } else {
->> +               /*
->> +                * If there is more than one security module that has a
->> +                * object "context" it's necessary to put the object data
->> +                * into a separate record to maintain compatibility.
->> +                */
-> I know this is nitpicky, but I'm going to say it anyway ... the
-> separate record isn't purely for compatibility reasons, it's for size
-> reasons.  There is a fear that multiple LSM labels could blow past the
-> record size limit when combined with other fields, so putting them in
-> their own dedicated record gives us more room.  If that wasn't the
-> case we could just tack them on the end of existing records.
-
-Fair enough. I have no objection to adding commentary that will
-help the next developer who comes into this code.
-
->
-> However, converting the existing "obj=" field into "obj=?" when
-> multiple LSM labels are present *is* a compatibility nod as it allows
-> existing userspace tooling that expects a single "obj=" field to
-> continue to work.
-
-Likewise here.
-
->
->> +               audit_log_format(ab, " obj=?");
->> +               ace = kzalloc(sizeof(*ace), ab->gfp_mask);
->> +               if (!ace)
->> +                       goto error_path;
->> +               INIT_LIST_HEAD(&ace->list);
->> +               ace->type = AUDIT_MAC_OBJ_CONTEXTS;
->> +               ace->lsm_objs = *blob;
->> +               list_add(&ace->list, &ab->aux_records);
->> +       }
->> +       return;
->> +
->> +error_path:
->> +       audit_panic("error in audit_log_object_context");
->> +}
->> +EXPORT_SYMBOL(audit_log_object_context);
->> +
+SGkgQWxsLA0KDQpPbiAyMS8wOC8yMCAxMDoxMSwgQmpvcm4gSGVsZ2FhcyB3cm90ZToNCj4gT24g
+VGh1LCBBdWcgMDYsIDIwMjAgYXQgMDQ6MTQ6NTVQTSArMTIwMCwgTWFyayBUb21saW5zb24gd3Jv
+dGU6DQo+PiBGb3IgaGFyZHdhcmUgdGhhdCBvbmx5IHN1cHBvcnRzIDMyLWJpdCB3cml0ZXMgdG8g
+UENJIHRoZXJlIGlzIHRoZQ0KPj4gcG9zc2liaWxpdHkgb2YgY2xlYXJpbmcgUlcxQyAod3JpdGUt
+b25lLXRvLWNsZWFyKSBiaXRzLiBBIHJhdGUtbGltaXRlZA0KPj4gbWVzc2FnZXMgd2FzIGludHJv
+ZHVjZWQgYnkgZmIyNjU5MjMwMTIwLCBidXQgcmF0ZS1saW1pdGluZyBpcyBub3QgdGhlDQo+PiBi
+ZXN0IGNob2ljZSBoZXJlLiBTb21lIGRldmljZXMgbWF5IG5vdCBzaG93IHRoZSB3YXJuaW5ncyB0
+aGV5IHNob3VsZCBpZg0KPj4gYW5vdGhlciBkZXZpY2UgaGFzIGp1c3QgcHJvZHVjZWQgYSBidW5j
+aCBvZiB3YXJuaW5ncy4gQWxzbywgdGhlIG51bWJlcg0KPj4gb2YgbWVzc2FnZXMgY2FuIGJlIGEg
+bnVpc2FuY2Ugb24gZGV2aWNlcyB3aGljaCBhcmUgb3RoZXJ3aXNlIHdvcmtpbmcNCj4+IGZpbmUu
+DQo+Pg0KPj4gVGhpcyBwYXRjaCBjaGFuZ2VzIHRoZSByYXRlbGltaXQgdG8gYSBzaW5nbGUgd2Fy
+bmluZyBwZXIgYnVzLiBUaGlzDQo+PiBlbnN1cmVzIG5vIGJ1cyBpcyAnc3RhcnZlZCcgb2YgZW1p
+dHRpbmcgYSB3YXJuaW5nIGFuZCBhbHNvIHRoYXQgdGhlcmUNCj4+IGlzbid0IGEgY29udGludW91
+cyBzdHJlYW0gb2Ygd2FybmluZ3MuIEl0IHdvdWxkIGJlIHByZWZlcmFibGUgdG8gaGF2ZSBhDQo+
+PiB3YXJuaW5nIHBlciBkZXZpY2UsIGJ1dCB0aGUgcGNpX2RldiBzdHJ1Y3R1cmUgaXMgbm90IGF2
+YWlsYWJsZSBoZXJlLCBhbmQNCj4+IGEgbG9va3VwIGZyb20gZGV2Zm4gd291bGQgYmUgZmFyIHRv
+byBzbG93Lg0KPj4NCj4+IFN1Z2dlc3RlZC1ieTogQmpvcm4gSGVsZ2FhcyA8aGVsZ2Fhc0BrZXJu
+ZWwub3JnPg0KPj4gRml4ZXM6IGZiMjY1OTIzMDEyMCAoIlBDSTogV2FybiBvbiBwb3NzaWJsZSBS
+VzFDIGNvcnJ1cHRpb24gZm9yIHN1Yi0zMiBiaXQgY29uZmlnIHdyaXRlcyIpDQo+PiBTaWduZWQt
+b2ZmLWJ5OiBNYXJrIFRvbWxpbnNvbiA8bWFyay50b21saW5zb25AYWxsaWVkdGVsZXNpcy5jby5u
+ej4NCj4gQXBwbGllZCB3aXRoIGNvbGxlY3RlZCByZXZpZXdzL2Fja3MgdG8gcGNpL2VudW1lcmF0
+aW9uIGZvciB2NS4xMCwNCj4gdGhhbmtzIQ0KDQpXaGF0ZXZlciBoYXBwZW5lZCB0byB0aGlzIGNo
+YW5nZT8NCg0KSSdtIGp1c3QgZ29pbmcgdGhyb3VnaCBvdXIgcXVldWUgb2YgcGF0Y2hlcyB0aGF0
+IGhhdmUgYmVlbiBzZW50IHVwc3RyZWFtIA0KYW5kIGV4cGVjdGVkIHRoaXMgb25lIHRvIGJlIGdv
+bmUgYWZ0ZXIgd2UgcHVsbGVkIHY1LjEwLiBMb29raW5nIGF0IA0KTGludXMncyB0cmVlIEkgZG9u
+J3Qgc2VlIGl0IGV2ZXIgaGF2aW5nIGJlZW4gYXBwbGllZC4gSSBjb3VsZG4ndCBzZWUgDQphbnl0
+aGluZyBvbiB0aGUgcmVsZXZhbnQgbWFpbGluZyBsaXN0cyBzdWdnZXN0aW5nIHRoYXQgdGhlcmUg
+d2FzIGEgDQpwcm9ibGVtIHdpdGggdGhpcyBjaGFuZ2Ugc28gSSdtIGp1c3Qgd29uZGVyaW5nIHdo
+YXQncyBoYXBwZW5lZCB0byBpdD8NCg0KPj4gLS0tDQo+PiBjaGFuZ2VzIGluIHY0Og0KPj4gICAt
+IFVzZSBiaXRmaWVsZCByYXRoZXIgdGhhbiBib29sIHRvIHNhdmUgbWVtb3J5ICh3YXMgbWVhbnQg
+dG8gYmUgaW4gdjMpLg0KPj4NCj4+ICAgZHJpdmVycy9wY2kvYWNjZXNzLmMgfCA5ICsrKysrKy0t
+LQ0KPj4gICBpbmNsdWRlL2xpbnV4L3BjaS5oICB8IDEgKw0KPj4gICAyIGZpbGVzIGNoYW5nZWQs
+IDcgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9wY2kvYWNjZXNzLmMgYi9kcml2ZXJzL3BjaS9hY2Nlc3MuYw0KPj4gaW5kZXggNzljNGEy
+ZWYyNjlhLi5iNDUyNDY3ZmQxMzMgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL3BjaS9hY2Nlc3Mu
+Yw0KPj4gKysrIGIvZHJpdmVycy9wY2kvYWNjZXNzLmMNCj4+IEBAIC0xNjAsOSArMTYwLDEyIEBA
+IGludCBwY2lfZ2VuZXJpY19jb25maWdfd3JpdGUzMihzdHJ1Y3QgcGNpX2J1cyAqYnVzLCB1bnNp
+Z25lZCBpbnQgZGV2Zm4sDQo+PiAgIAkgKiB3cml0ZSBoYXBwZW4gdG8gaGF2ZSBhbnkgUlcxQyAo
+d3JpdGUtb25lLXRvLWNsZWFyKSBiaXRzIHNldCwgd2UNCj4+ICAgCSAqIGp1c3QgaW5hZHZlcnRl
+bnRseSBjbGVhcmVkIHNvbWV0aGluZyB3ZSBzaG91bGRuJ3QgaGF2ZS4NCj4+ICAgCSAqLw0KPj4g
+LQlkZXZfd2Fybl9yYXRlbGltaXRlZCgmYnVzLT5kZXYsICIlZC1ieXRlIGNvbmZpZyB3cml0ZSB0
+byAlMDR4OiUwMng6JTAyeC4lZCBvZmZzZXQgJSN4IG1heSBjb3JydXB0IGFkamFjZW50IFJXMUMg
+Yml0c1xuIiwNCj4+IC0JCQkgICAgIHNpemUsIHBjaV9kb21haW5fbnIoYnVzKSwgYnVzLT5udW1i
+ZXIsDQo+PiAtCQkJICAgICBQQ0lfU0xPVChkZXZmbiksIFBDSV9GVU5DKGRldmZuKSwgd2hlcmUp
+Ow0KPj4gKwlpZiAoIWJ1cy0+dW5zYWZlX3dhcm4pIHsNCj4+ICsJCWRldl93YXJuKCZidXMtPmRl
+diwgIiVkLWJ5dGUgY29uZmlnIHdyaXRlIHRvICUwNHg6JTAyeDolMDJ4LiVkIG9mZnNldCAlI3gg
+bWF5IGNvcnJ1cHQgYWRqYWNlbnQgUlcxQyBiaXRzXG4iLA0KPj4gKwkJCSBzaXplLCBwY2lfZG9t
+YWluX25yKGJ1cyksIGJ1cy0+bnVtYmVyLA0KPj4gKwkJCSBQQ0lfU0xPVChkZXZmbiksIFBDSV9G
+VU5DKGRldmZuKSwgd2hlcmUpOw0KPj4gKwkJYnVzLT51bnNhZmVfd2FybiA9IDE7DQo+PiArCX0N
+Cj4+ICAgDQo+PiAgIAltYXNrID0gfigoKDEgPDwgKHNpemUgKiA4KSkgLSAxKSA8PCAoKHdoZXJl
+ICYgMHgzKSAqIDgpKTsNCj4+ICAgCXRtcCA9IHJlYWRsKGFkZHIpICYgbWFzazsNCj4+IGRpZmYg
+LS1naXQgYS9pbmNsdWRlL2xpbnV4L3BjaS5oIGIvaW5jbHVkZS9saW51eC9wY2kuaA0KPj4gaW5k
+ZXggMzRjMWM0ZjQ1Mjg4Li44NTIxMWE3ODdmOGIgMTAwNjQ0DQo+PiAtLS0gYS9pbmNsdWRlL2xp
+bnV4L3BjaS5oDQo+PiArKysgYi9pbmNsdWRlL2xpbnV4L3BjaS5oDQo+PiBAQCAtNjI2LDYgKzYy
+Niw3IEBAIHN0cnVjdCBwY2lfYnVzIHsNCj4+ICAgCXN0cnVjdCBiaW5fYXR0cmlidXRlCSpsZWdh
+Y3lfaW87CS8qIExlZ2FjeSBJL08gZm9yIHRoaXMgYnVzICovDQo+PiAgIAlzdHJ1Y3QgYmluX2F0
+dHJpYnV0ZQkqbGVnYWN5X21lbTsJLyogTGVnYWN5IG1lbSAqLw0KPj4gICAJdW5zaWduZWQgaW50
+CQlpc19hZGRlZDoxOw0KPj4gKwl1bnNpZ25lZCBpbnQJCXVuc2FmZV93YXJuOjE7CS8qIHdhcm5l
+ZCBhYm91dCBSVzFDIGNvbmZpZyB3cml0ZSAqLw0KPj4gICB9Ow0KPj4gICANCj4+ICAgI2RlZmlu
+ZSB0b19wY2lfYnVzKG4pCWNvbnRhaW5lcl9vZihuLCBzdHJ1Y3QgcGNpX2J1cywgZGV2KQ0KPj4g
+LS0gDQo+PiAyLjI4LjANCj4+

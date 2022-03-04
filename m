@@ -2,303 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4C74CCC7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 05:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA7F4CCC98
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 05:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237875AbiCDENP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 23:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S237909AbiCDEhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 23:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiCDENM (ORCPT
+        with ESMTP id S233524AbiCDEhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 23:13:12 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCA117FD25
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 20:12:21 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so9628031pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 20:12:21 -0800 (PST)
+        Thu, 3 Mar 2022 23:37:36 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0EE17ED99
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 20:36:49 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id r13-20020a25ac4d000000b00628b47f44afso5326934ybd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 20:36:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id;
-        bh=+d5M5Lb/1zkG36m0uGpnpPesPt+KsHy1eBe0GK/XMwc=;
-        b=CkkA0/mouPXvKxUd3YxzJ5m4xo9WUwlpAqWfyuwr/cbcBOjnHVzlZDM/xlZ0d0ENSM
-         C7Fau+6H4rDje2AS8qTyaRNBj0uG3HGJYm6En5wqXqUSJdhdyMT5DxkioaTFUj+N3BuN
-         smwMX2GXVkvuLQdPCkswKlU4EIfzUgIfUWeyC9hQon88WOEvS959J1CK3ax4iKdMdLep
-         dLCJk9yemy28QBa4T4aw5o5v+rrvInjenaF5XCOnXy0IavdHPXL9lNgc8COhqKe+xseg
-         pazVacQhjHalPdfpGCt5KxRDVsn2ZVRB2lXWGaAAZyKrXJwyBO9EJISn5anl8gbJjOOK
-         YAsw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hVhp0B9PQwo3QVpUi+NI1HAAHxq+/43f5jq0h0ON3rc=;
+        b=FExUDM+QtGlrpOx9rGz2Fa+bDQpFmka6zCE/rTKzwCcAWIfnoZcXeXrKFxNhFsnE2C
+         E6l8TXSOLYl+5HB7NA1NFgtEFjaxCkwRJ42gOFxorun060VHOvwG4dO7+/BFj6P1XBBp
+         nnNqyUkTruTkTLp+7GFYOf9jPip2hwzfByNoweGhp1Yt6rqDAcdoNKtbx1MoMT0ytTV3
+         w53+7zlLjb5noE0qE49+yuSbpUgIu5MIBlWjYMHaKBHDBc9rcCbm9jI50ZVw73N5mmlk
+         Kmfnx62thJdUrj68w3MZObD0sXEixf/K7lcKb3+iemG1wJPFZsf1Mm5aoSazkRYutnH7
+         jn2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id;
-        bh=+d5M5Lb/1zkG36m0uGpnpPesPt+KsHy1eBe0GK/XMwc=;
-        b=p4NPjfr2MsdoZ7X+An2RhxXgWOpyNlOcEpo+Cc0G9b1tOgtOd2CmZ//VpivR94mSZz
-         EwDAeWQmDFDLGnVlnCfuLu+/xuSBJaXplrqSbA6sd+C06Vuh2KwV+RBAmB2adfAWC6BQ
-         pnOayfJjKVzBHmIUgBw8MldMmMIITu7abC7W3AvpDVqCvYSsaRDAgXX9v3Dh4aVXzffD
-         PLiG6oVowQvvKKxuWfu2UXjuszlyNGi7QZKS4vGG03PbQcn5JzrOK8am/GeZuw1UfE1Y
-         0vEqRaeXgj+XPPXlQ7UjBMXvzHO+VS2rqrJ6UcdRGaPnMViFTipRYMq1WkDEZCGNh8Az
-         1fCw==
-X-Gm-Message-State: AOAM530IYU1AYzyX6UV4tXBNdTR1DG24Gq35mbZFw+3C1pphiPAaYx3o
-        /cET9hPE6fqINlKOSOVNZwO3Dg==
-X-Google-Smtp-Source: ABdhPJwk/aE9ZV2E0IeEwWLejVf0b7LnvK5v9Cia+nWX3T1a9QlOU8bJXE16cd5hnokM5m6R/5MLXw==
-X-Received: by 2002:a17:90a:7385:b0:1b9:6492:c107 with SMTP id j5-20020a17090a738500b001b96492c107mr8682494pjg.103.1646367140345;
-        Thu, 03 Mar 2022 20:12:20 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id z7-20020a056a00240700b004e1cde37bc1sm4075952pfh.84.2022.03.03.20.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 20:12:19 -0800 (PST)
-Date:   Thu, 03 Mar 2022 20:12:19 -0800 (PST)
-X-Google-Original-Date: Thu, 03 Mar 2022 20:03:24 PST (-0800)
-Subject:     Re: [PATCH -fixes v3 0/6] Fixes KASAN and other along the way
-In-Reply-To: <mhng-ffd5d5c5-9894-4dec-b332-5176d508bcf9@palmer-mbp2014>
-CC:     elver@google.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, ryabinin.a.a@gmail.com,
-        andreyknvl@gmail.com, dvyukov@google.com, nogikh@google.com,
-        nickhu@andestech.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     glider@google.com, alexandre.ghiti@canonical.com
-Message-ID: <mhng-ef0f4bac-b55e-471e-8e3d-8ea597081b74@palmer-ri-x1c9>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hVhp0B9PQwo3QVpUi+NI1HAAHxq+/43f5jq0h0ON3rc=;
+        b=s+tbjBP/HVRu9EuZuur+h+0fclJ0n30iGi+dh3Pvv0qQLsOkpojimQxlsv0uElupsr
+         DOB8T9PJJuoNLLYz65NBqeLexhi/J56WdXDGmn/YPmIuM0k0k5pAMG2HS+EdUkIaU/bj
+         qS9kbITqSJdjaOqq1R4758e3y2TU9VgqH5hGOOdTdtg/yUcf+C1IO7rRLanKaoiR6goX
+         WF7raXZhJc+hpiosH/kaRANrhqirhbVo+Z2WiylfIEFUeXo7tcrEkdnpBcUNqiHkVv8g
+         X1g0kQ5GYOmGemNbBpHX6WcewscEJM/xmhINJwnupZKs1lo6Xo0OV26I4E9hNSBIowO6
+         /TYw==
+X-Gm-Message-State: AOAM530igF/xt3dwYOYKEzFtx9bF5AfHaCyzDJF6aE1JWtC7bhJN/xOR
+        lp1m6+dbgDhNLsnMy5mNAmFtHSBww0I=
+X-Google-Smtp-Source: ABdhPJxVVZFZHqAwY1fPRX9HI0yIhKH2iiN9GsYqQS6rzxP15cyYglv/sh4CkSy/3rdozBTmFM9ySxJLa2U=
+X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:306])
+ (user=ctshao job=sendgmr) by 2002:a25:3252:0:b0:628:a874:e41e with SMTP id
+ y79-20020a253252000000b00628a874e41emr9969830yby.484.1646368608392; Thu, 03
+ Mar 2022 20:36:48 -0800 (PST)
+Date:   Fri,  4 Mar 2022 04:14:51 +0000
+Message-Id: <20220304041449.939308-1-ctshao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v3] config: Allow kernel installation packaging to override pkg-config
+From:   Chun-Tse Shao <ctshao@google.com>
+To:     rostedt@goodmis.org, ndesaulniers@google.com
+Cc:     ctshao@google.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Mar 2022 09:39:54 PST (-0800), Palmer Dabbelt wrote:
-> On Fri, 25 Feb 2022 07:00:23 PST (-0800), glider@google.com wrote:
->> On Fri, Feb 25, 2022 at 3:47 PM Alexandre Ghiti <
->> alexandre.ghiti@canonical.com> wrote:
->>
->>> On Fri, Feb 25, 2022 at 3:31 PM Alexander Potapenko <glider@google.com>
->>> wrote:
->>> >
->>> >
->>> >
->>> > On Fri, Feb 25, 2022 at 3:15 PM Alexandre Ghiti <
->>> alexandre.ghiti@canonical.com> wrote:
->>> >>
->>> >> On Fri, Feb 25, 2022 at 3:10 PM Alexander Potapenko <glider@google.com>
->>> wrote:
->>> >> >
->>> >> >
->>> >> >
->>> >> > On Fri, Feb 25, 2022 at 3:04 PM Alexandre Ghiti <
->>> alexandre.ghiti@canonical.com> wrote:
->>> >> >>
->>> >> >> On Fri, Feb 25, 2022 at 2:06 PM Marco Elver <elver@google.com>
->>> wrote:
->>> >> >> >
->>> >> >> > On Fri, 25 Feb 2022 at 13:40, Alexandre Ghiti
->>> >> >> > <alexandre.ghiti@canonical.com> wrote:
->>> >> >> > >
->>> >> >> > > As reported by Aleksandr, syzbot riscv is broken since commit
->>> >> >> > > 54c5639d8f50 ("riscv: Fix asan-stack clang build"). This commit
->>> actually
->>> >> >> > > breaks KASAN_INLINE which is not fixed in this series, that will
->>> come later
->>> >> >> > > when found.
->>> >> >> > >
->>> >> >> > > Nevertheless, this series fixes small things that made the syzbot
->>> >> >> > > configuration + KASAN_OUTLINE fail to boot.
->>> >> >> > >
->>> >> >> > > Note that even though the config at [1] boots fine with this
->>> series, I
->>> >> >> > > was not able to boot the small config at [2] which fails because
->>> >> >> > > kasan_poison receives a really weird address 0x4075706301000000
->>> (maybe a
->>> >> >> > > kasan person could provide some hint about what happens below in
->>> >> >> > > do_ctors -> __asan_register_globals):
->>> >> >> >
->>> >> >> > asan_register_globals is responsible for poisoning redzones around
->>> >> >> > globals. As hinted by 'do_ctors', it calls constructors, and in
->>> this
->>> >> >> > case a compiler-generated constructor that calls
->>> >> >> > __asan_register_globals with metadata generated by the compiler.
->>> That
->>> >> >> > metadata contains information about global variables. Note, these
->>> >> >> > constructors are called on initial boot, but also every time a
->>> kernel
->>> >> >> > module (that has globals) is loaded.
->>> >> >> >
->>> >> >> > It may also be a toolchain issue, but it's hard to say. If you're
->>> >> >> > using GCC to test, try Clang (11 or later), and vice-versa.
->>> >> >>
->>> >> >> I tried 3 different gcc toolchains already, but that did not fix the
->>> >> >> issue. The only thing that worked was setting asan-globals=0 in
->>> >> >> scripts/Makefile.kasan, but ok, that's not a fix.
->>> >> >> I tried to bisect this issue but our kasan implementation has been
->>> >> >> broken quite a few times, so it failed.
->>> >> >>
->>> >> >> I keep digging!
->>> >> >>
->>> >> >
->>> >> > The problem does not reproduce for me with GCC 11.2.0: kernels built
->>> with both [1] and [2] are bootable.
->>> >>
->>> >> Do you mean you reach userspace? Because my image boots too, and fails
->>> >> at some point:
->>> >>
->>> >> [    0.000150] sched_clock: 64 bits at 10MHz, resolution 100ns, wraps
->>> >> every 4398046511100ns
->>> >> [    0.015847] Console: colour dummy device 80x25
->>> >> [    0.016899] printk: console [tty0] enabled
->>> >> [    0.020326] printk: bootconsole [ns16550a0] disabled
->>> >>
->>> >
->>> > In my case, QEMU successfully boots to the login prompt.
->>> > I am running QEMU 6.2.0 (Debian 1:6.2+dfsg-2) and an image Aleksandr
->>> shared with me (guess it was built according to this instruction:
->>> https://github.com/google/syzkaller/blob/master/docs/linux/setup_linux-host_qemu-vm_riscv64-kernel.md
->>> )
->>> >
->>>
->>> Nice thanks guys! I always use the latest opensbi and not the one that
->>> is embedded in qemu, which is the only difference between your command
->>> line (which works) and mine (which does not work). So the issue is
->>> probably there, I really need to investigate that now.
->>>
->>> Great to hear that!
->>
->>
->>> That means I only need to fix KASAN_INLINE and we're good.
->>>
->>> I imagine Palmer can add your Tested-by on the series then?
->>>
->> Sure :)
->
-> Do you mind actually posting that (i, the Tested-by tag)?  It's less
-> likely to get lost that way.  I intend on taking this into fixes ASAP,
-> my builds have blown up for some reason (I got bounced between machines,
-> so I'm blaming that) so I need to fix that first.
+[ Resending as a separate thread ]
 
-This is on fixes (with a "Tested-by: Alexander Potapenko 
-<glider@google.com>"), along with some trivial commit message fixes.
+Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
+what pkg-config and parameters are used.
 
-Thanks!
+Signed-off-by: Chun-Tse Shao <ctshao@google.com>
+---
+Changes from v2: https://lore.kernel.org/all/20220302193638.11034-1-ctshao@google.com/
+  - Fix more open coded instance of pkg-config in scripts and certs
+  - Tested with make allmodconfig
 
->
->>
->>>
->>> Thanks again!
->>>
->>> Alex
->>>
->>> >>
->>> >> It traps here.
->>> >>
->>> >> > FWIW here is how I run them:
->>> >> >
->>> >> > qemu-system-riscv64 -m 2048 -smp 1 -nographic -no-reboot \
->>> >> >   -device virtio-rng-pci -machine virt -device \
->>> >> >   virtio-net-pci,netdev=net0 -netdev \
->>> >> >   user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:12529-:22 -device \
->>> >> >   virtio-blk-device,drive=hd0 -drive \
->>> >> >   file=${IMAGE},if=none,format=raw,id=hd0 -snapshot \
->>> >> >   -kernel ${KERNEL_SRC_DIR}/arch/riscv/boot/Image -append
->>> "root=/dev/vda
->>> >> >   console=ttyS0 earlyprintk=serial"
->>> >> >
->>> >> >
->>> >> >>
->>> >> >> Thanks for the tips,
->>> >> >>
->>> >> >> Alex
->>> >> >
->>> >> >
->>> >> >
->>> >> > --
->>> >> > Alexander Potapenko
->>> >> > Software Engineer
->>> >> >
->>> >> > Google Germany GmbH
->>> >> > Erika-Mann-Straße, 33
->>> >> > 80636 München
->>> >> >
->>> >> > Geschäftsführer: Paul Manicle, Liana Sebastian
->>> >> > Registergericht und -nummer: Hamburg, HRB 86891
->>> >> > Sitz der Gesellschaft: Hamburg
->>> >> >
->>> >> > Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise
->>> erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
->>> weiter, löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte
->>> wissen, dass die E-Mail an die falsche Person gesendet wurde.
->>> >> >
->>> >> >
->>> >> >
->>> >> > This e-mail is confidential. If you received this communication by
->>> mistake, please don't forward it to anyone else, please erase all copies
->>> and attachments, and please let me know that it has gone to the wrong
->>> person.
->>> >>
->>> >> --
->>> >> You received this message because you are subscribed to the Google
->>> Groups "kasan-dev" group.
->>> >> To unsubscribe from this group and stop receiving emails from it, send
->>> an email to kasan-dev+unsubscribe@googlegroups.com.
->>> >> To view this discussion on the web visit
->>> https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCsQPVYSV7CdhKnvjujXkMXuRQd%3DVPok1awb20xifYmidw%40mail.gmail.com
->>> .
->>> >
->>> >
->>> >
->>> > --
->>> > Alexander Potapenko
->>> > Software Engineer
->>> >
->>> > Google Germany GmbH
->>> > Erika-Mann-Straße, 33
->>> > 80636 München
->>> >
->>> > Geschäftsführer: Paul Manicle, Liana Sebastian
->>> > Registergericht und -nummer: Hamburg, HRB 86891
->>> > Sitz der Gesellschaft: Hamburg
->>> >
->>> > Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise erhalten
->>> haben sollten, leiten Sie diese bitte nicht an jemand anderes weiter,
->>> löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte wissen,
->>> dass die E-Mail an die falsche Person gesendet wurde.
->>> >
->>> >
->>> >
->>> > This e-mail is confidential. If you received this communication by
->>> mistake, please don't forward it to anyone else, please erase all copies
->>> and attachments, and please let me know that it has gone to the wrong
->>> person.
->>>
->>> --
->>> You received this message because you are subscribed to the Google Groups
->>> "kasan-dev" group.
->>> To unsubscribe from this group and stop receiving emails from it, send an
->>> email to kasan-dev+unsubscribe@googlegroups.com.
->>> To view this discussion on the web visit
->>> https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCuJw8N0dUmQNdFqDM96bzKqPDjRe4FUnOCbjhJtO0R8Hg%40mail.gmail.com
->>> .
->>>
->>
->>
->> --
->> Alexander Potapenko
->> Software Engineer
->>
->> Google Germany GmbH
->> Erika-Mann-Straße, 33
->> 80636 München
->>
->> Geschäftsführer: Paul Manicle, Liana Sebastian
->> Registergericht und -nummer: Hamburg, HRB 86891
->> Sitz der Gesellschaft: Hamburg
->>
->> Diese E-Mail ist vertraulich. Falls Sie diese fälschlicherweise erhalten
->> haben sollten, leiten Sie diese bitte nicht an jemand anderes weiter,
->> löschen Sie alle Kopien und Anhänge davon und lassen Sie mich bitte wissen,
->> dass die E-Mail an die falsche Person gesendet wurde.
->>
->>
->>
->> This e-mail is confidential. If you received this communication by mistake,
->> please don't forward it to anyone else, please erase all copies and
->> attachments, and please let me know that it has gone to the wrong person.
+Changes from v1: https://lore.kernel.org/all/20220301230629.1892828-1-ctshao@google.com/
+  - Make the commit message more clearer.
+---
+
+ Makefile                     |  3 ++-
+ certs/Makefile               |  4 ++--
+ scripts/Makefile             |  4 ++--
+ scripts/dtc/Makefile         |  6 +++---
+ scripts/kconfig/gconf-cfg.sh | 10 +++++-----
+ scripts/kconfig/mconf-cfg.sh | 14 +++++++-------
+ scripts/kconfig/nconf-cfg.sh | 14 +++++++-------
+ scripts/kconfig/qconf-cfg.sh | 14 +++++++-------
+ tools/objtool/Makefile       |  4 ++--
+ 9 files changed, 37 insertions(+), 36 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index daeb5c88b50b..f6c5bef7e141 100644
+--- a/Makefile
++++ b/Makefile
+@@ -430,6 +430,7 @@ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+ endif
++HOSTPKG_CONFIG	= pkg-config
+
+ export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+ 			      -O2 -fomit-frame-pointer -std=gnu89
+@@ -525,7 +526,7 @@ KBUILD_LDFLAGS_MODULE :=
+ KBUILD_LDFLAGS :=
+ CLANG_FLAGS :=
+
+-export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
++export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
+ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
+ export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+ export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+diff --git a/certs/Makefile b/certs/Makefile
+index 3ea7fe60823f..fa540d14ef2d 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -89,5 +89,5 @@ targets += x509_revocation_list
+
+ hostprogs := extract-cert
+
+-HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+diff --git a/scripts/Makefile b/scripts/Makefile
+index ce5aa9030b74..f084f08ed176 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -14,8 +14,8 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+ HOSTLDLIBS_sorttable = -lpthread
+ HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
+-HOSTCFLAGS_sign-file.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
+-HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
++HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+
+ ifdef CONFIG_UNWINDER_ORC
+ ifeq ($(ARCH),x86_64)
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 95aaf7431bff..743fc08827ea 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -18,7 +18,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
+ # Source files need to get at the userspace version of libfdt_env.h to compile
+ HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
+
+-ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
++ifeq ($(shell $(HOSTPKG_CONFIG) --exists yaml-0.1 2>/dev/null && echo yes),)
+ ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
+ $(error dtc needs libyaml for DT schema validation support. \
+ 	Install the necessary libyaml development package.)
+@@ -27,9 +27,9 @@ HOST_EXTRACFLAGS += -DNO_YAML
+ else
+ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+-HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
++HOSTCFLAGS_yamltree.o := $(shell $(HOSTPKG_CONFIG) --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell $(HOSTPKG_CONFIG) yaml-0.1 --libs)
+ endif
+
+ # Generated files need one more search path to include headers in source tree
+diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
+index 480ecd8b9f41..267ef6012203 100755
+--- a/scripts/kconfig/gconf-cfg.sh
++++ b/scripts/kconfig/gconf-cfg.sh
+@@ -3,14 +3,14 @@
+
+ PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v $(HOSTPKG_CONFIG))" ]; then
+ 	echo >&2 "*"
+ 	echo >&2 "* 'make gconfig' requires 'pkg-config'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if ! pkg-config --exists $PKG; then
++if ! $(HOSTPKG_CONFIG) --exists $PKG; then
+ 	echo >&2 "*"
+ 	echo >&2 "* Unable to find the GTK+ installation. Please make sure that"
+ 	echo >&2 "* the GTK+ 2.0 development package is correctly installed."
+@@ -19,12 +19,12 @@ if ! pkg-config --exists $PKG; then
+ 	exit 1
+ fi
+
+-if ! pkg-config --atleast-version=2.0.0 gtk+-2.0; then
++if ! $(HOSTPKG_CONFIG) --atleast-version=2.0.0 gtk+-2.0; then
+ 	echo >&2 "*"
+ 	echo >&2 "* GTK+ is present but version >= 2.0.0 is required."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-echo cflags=\"$(pkg-config --cflags $PKG)\"
+-echo libs=\"$(pkg-config --libs $PKG)\"
++echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
+index b520e407a8eb..21e40e9a7cd6 100755
+--- a/scripts/kconfig/mconf-cfg.sh
++++ b/scripts/kconfig/mconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw"
+ PKG2="ncurses"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v $(HOSTPKG_CONFIG))" ]; then
++	if $(HOSTPKG_CONFIG) --exists $PKG; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if $(HOSTPKG_CONFIG) --exists $PKG2; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG2)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
+index c212255070c0..eec46e627e5c 100755
+--- a/scripts/kconfig/nconf-cfg.sh
++++ b/scripts/kconfig/nconf-cfg.sh
+@@ -4,16 +4,16 @@
+ PKG="ncursesw menuw panelw"
+ PKG2="ncurses menu panel"
+
+-if [ -n "$(command -v pkg-config)" ]; then
+-	if pkg-config --exists $PKG; then
+-		echo cflags=\"$(pkg-config --cflags $PKG)\"
+-		echo libs=\"$(pkg-config --libs $PKG)\"
++if [ -n "$(command -v $(HOSTPKG_CONFIG))" ]; then
++	if $(HOSTPKG_CONFIG) --exists $PKG; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
+ 		exit 0
+ 	fi
+
+-	if pkg-config --exists $PKG2; then
+-		echo cflags=\"$(pkg-config --cflags $PKG2)\"
+-		echo libs=\"$(pkg-config --libs $PKG2)\"
++	if $(HOSTPKG_CONFIG) --exists $PKG2; then
++		echo cflags=\"$($(HOSTPKG_CONFIG) --cflags $PKG2)\"
++		echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG2)\"
+ 		exit 0
+ 	fi
+ fi
+diff --git a/scripts/kconfig/qconf-cfg.sh b/scripts/kconfig/qconf-cfg.sh
+index fa564cd795b7..839b45b5746e 100755
+--- a/scripts/kconfig/qconf-cfg.sh
++++ b/scripts/kconfig/qconf-cfg.sh
+@@ -3,22 +3,22 @@
+
+ PKG="Qt5Core Qt5Gui Qt5Widgets"
+
+-if [ -z "$(command -v pkg-config)" ]; then
++if [ -z "$(command -v $(HOSTPKG_CONFIG))" ]; then
+ 	echo >&2 "*"
+-	echo >&2 "* 'make xconfig' requires 'pkg-config'. Please install it."
++	echo >&2 "* 'make xconfig' requires '$(HOSTPKG_CONFIG)'. Please install it."
+ 	echo >&2 "*"
+ 	exit 1
+ fi
+
+-if pkg-config --exists $PKG; then
+-	echo cflags=\"-std=c++11 -fPIC $(pkg-config --cflags $PKG)\"
+-	echo libs=\"$(pkg-config --libs $PKG)\"
+-	echo moc=\"$(pkg-config --variable=host_bins Qt5Core)/moc\"
++if $(HOSTPKG_CONFIG) --exists $PKG; then
++	echo cflags=\"-std=c++11 -fPIC $($(HOSTPKG_CONFIG) --cflags $PKG)\"
++	echo libs=\"$($(HOSTPKG_CONFIG) --libs $PKG)\"
++	echo moc=\"$($(HOSTPKG_CONFIG) --variable=host_bins Qt5Core)/moc\"
+ 	exit 0
+ fi
+
+ echo >&2 "*"
+-echo >&2 "* Could not find Qt5 via pkg-config."
++echo >&2 "* Could not find Qt5 via $(HOSTPKG_CONFIG)."
+ echo >&2 "* Please install Qt5 and make sure it's in PKG_CONFIG_PATH"
+ echo >&2 "*"
+ exit 1
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 92ce4fce7bc7..549acc5859e9 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -19,8 +19,8 @@ LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
+ OBJTOOL    := $(OUTPUT)objtool
+ OBJTOOL_IN := $(OBJTOOL)-in.o
+
+-LIBELF_FLAGS := $(shell pkg-config libelf --cflags 2>/dev/null)
+-LIBELF_LIBS  := $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
++LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+
+ all: $(OBJTOOL)
+
+--
+2.35.1.616.g0bdcbb4464-goog
+

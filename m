@@ -2,63 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C49E4CD3CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053274CD3CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbiCDLwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S238409AbiCDLxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbiCDLwx (ORCPT
+        with ESMTP id S234628AbiCDLxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:52:53 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D31B2AF5
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:52:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646394722; x=1677930722;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=8qonJSlfQ2SH4N0PAPavG8blHvf2Yzd8yazg7xcB6rs=;
-  b=SeORZTKkLh5g+ur3PinurIwlqvJ4NkBxEmEwYz/JHrCLjIM2PqkmJ+a0
-   puMUv2VH8RZVjhKy5VKEetsOGzcJKIfZFDuEEyiYMkJT2bGMXo/it1g84
-   CmNrZuWXMnKjRSPQzaY+x5/NJqRbbw6uAN4L20147+L2elb/amVeGpt1w
-   +FGoYUbVPLEnTnQAm1jnG1/ByMvuCgRKuPMnhmoEwwxOL9a7DY5ie8gJR
-   Xo7bh022g52Q3cT7a2EH22VZTnA90N+4uqf7o2THmK5/lBmbImO96/yOF
-   dZcp+z5aoXXhU5YPiPZ26ECsxRpVs9Adps3JnneZuAerlE0eP7fgNDvOf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="254153117"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="254153117"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 03:52:02 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="511827595"
-Received: from pruilobx-mobl.ger.corp.intel.com (HELO localhost) ([10.252.28.174])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 03:51:57 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        matthias.bgg@gmail.com
-Cc:     jitao.shi@mediatek.com, allen-kh.cheng@mediatek.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org, rex-bc.chen@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: Re: [PATCH v2, 0/4] Cooperate with DSI RX devices to modify dsi
- funcs and delay mipi high to cooperate with panel sequence
-In-Reply-To: <1646388956-8033-1-git-send-email-xinlei.lee@mediatek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <1646388956-8033-1-git-send-email-xinlei.lee@mediatek.com>
-Date:   Fri, 04 Mar 2022 13:51:55 +0200
-Message-ID: <87lexq2aw4.fsf@intel.com>
+        Fri, 4 Mar 2022 06:53:16 -0500
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A5A1DA6A;
+        Fri,  4 Mar 2022 03:52:27 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 3149CE01B2;
+        Fri,  4 Mar 2022 03:52:27 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7O4kloNyIJsJ; Fri,  4 Mar 2022 03:52:26 -0800 (PST)
+Message-ID: <4c1f1852832843198945fdb9ed01d90190a31b81.camel@puri.sm>
+Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
+ parameter
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     kernel@puri.sm, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 04 Mar 2022 12:52:22 +0100
+In-Reply-To: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
+References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +44,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Freitag, dem 04.03.2022 um 12:30 +0100 schrieb Martin Kepplinger:
+> On the Librem 5 imx8mq system we've seen the stop endpoint command
+> time out regularly which results in the hub dying.
 
-Please also prefix cover letters with drm/mediatek if that's the only
-place you're touching.
+sorry this is pretty useless information. We see this on an internal
+USB2642 USB 2.0 Hub by Microchip.
 
-BR,
-Jani.
+> 
+> While on the one hand we see "Port resume timed out, port 1-1: 0xfe3"
+> before this and on the other hand driver-comments suggest that the
+> driver
+> might be able to recover instead of dying here, Sarah seemed to have
+> a
+> workaround for this particulator problem in mind already:
+> 
+> Make it a module parameter. So while it might not be the root cause
+> for
+> the problem, do this to give users a workaround.
+> 
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  drivers/usb/host/xhci-ring.c | 2 +-
+>  drivers/usb/host/xhci.c      | 8 +++++++-
+>  drivers/usb/host/xhci.h      | 3 +--
+>  3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-
+> ring.c
+> index d0b6806275e0..e631d408e6b2 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1133,7 +1133,7 @@ static void xhci_handle_cmd_stop_ep(struct
+> xhci_hcd *xhci, int slot_id,
+>                                 xhci_stop_watchdog_timer_in_irq(xhci,
+> ep);
+>  
+>                         mod_timer(&ep->stop_cmd_timer,
+> -                                 jiffies + XHCI_STOP_EP_CMD_TIMEOUT
+> * HZ);
+> +                                 jiffies + xhci->stop_ep_cmd_timeout
+> * HZ);
+>                         xhci_queue_stop_endpoint(xhci, command,
+> slot_id, ep_index, 0);
+>                         xhci_ring_cmd_db(xhci);
+>  
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index a1c781f70d02..37fd05e75dcf 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -37,6 +37,11 @@ static unsigned long long quirks;
+>  module_param(quirks, ullong, S_IRUGO);
+>  MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as
+> default");
+>  
+> +static unsigned int stop_ep_cmd_timeout = 5;
+> +module_param(stop_ep_cmd_timeout, uint, S_IRUGO | S_IWUSR);
+> +MODULE_PARM_DESC(stop_ep_cmd_timeout,
+> +                "Stop endpoint command timeout (secs) for URB cancel
+> watchdog. default=5");
+> +
+>  static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+>  {
+>         struct xhci_segment *seg = ring->first_seg;
+> @@ -1849,7 +1854,7 @@ static int xhci_urb_dequeue(struct usb_hcd
+> *hcd, struct urb *urb, int status)
+>                 }
+>                 ep->ep_state |= EP_STOP_CMD_PENDING;
+>                 ep->stop_cmd_timer.expires = jiffies +
+> -                       XHCI_STOP_EP_CMD_TIMEOUT * HZ;
+> +                       xhci->stop_ep_cmd_timeout * HZ;
+>                 add_timer(&ep->stop_cmd_timer);
+>                 xhci_queue_stop_endpoint(xhci, command, urb->dev-
+> >slot_id,
+>                                          ep_index, 0);
+> @@ -5288,6 +5293,7 @@ int xhci_gen_setup(struct usb_hcd *hcd,
+> xhci_get_quirks_t get_quirks)
+>                 xhci->hcc_params2 = readl(&xhci->cap_regs-
+> >hcc_params2);
+>  
+>         xhci->quirks |= quirks;
+> +       xhci->stop_ep_cmd_timeout = stop_ep_cmd_timeout;
+>  
+>         get_quirks(dev, xhci);
+>  
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 8a0026ee9524..80c9ced4a276 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1674,8 +1674,6 @@ struct urb_priv {
+>  #define        ERST_NUM_SEGS   1
+>  /* Poll every 60 seconds */
+>  #define        POLL_TIMEOUT    60
+> -/* Stop endpoint command timeout (secs) for URB cancellation
+> watchdog timer */
+> -#define XHCI_STOP_EP_CMD_TIMEOUT       5
+>  /* XXX: Make these module parameters */
+>  
+>  struct s3_save {
+> @@ -1899,6 +1897,7 @@ struct xhci_hcd {
+>  #define XHCI_BROKEN_D3COLD     BIT_ULL(41)
+>  #define XHCI_EP_CTX_BROKEN_DCS BIT_ULL(42)
+>  
+> +       unsigned int            stop_ep_cmd_timeout;
+>         unsigned int            num_active_eps;
+>         unsigned int            limit_active_eps;
+>         struct xhci_port        *hw_ports;
 
 
-On Fri, 04 Mar 2022, <xinlei.lee@mediatek.com> wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
->
-> In upstream-v5.8, dsi_enable will operate panel_enable, but this
-> modification has been moved in v5.9. In order to ensure the timing of
-> dsi_power_on/off and the timing of pulling up/down the MIPI signal,
-> the modification of v5.9 is synchronized in this series of patches.
->
-> Changes since v1:
-> 1. Dsi sequence marked with patch adjustment
-> 2. Fixes: mtk_dsi: Use the drm_panel_bridge
->
-> Jitao Shi (3):
->   drm/mediatek: Adjust the timing of mipi signal from LP00 to LP11
->   drm/mediatek: Separate poweron/poweroff from enable/disable and define
->     new funcs
->   drm/mediatek: keep dsi as LP00 before dcs cmds transfer
->
-> Xinlei Lee (1):
->   drm/mediatek: Add pull-down MIPI operation in mtk_dsi_poweroff
->     function
->
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 73 ++++++++++++++++++++----------
->  1 file changed, 49 insertions(+), 24 deletions(-)
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

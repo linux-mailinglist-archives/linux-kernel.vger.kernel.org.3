@@ -2,182 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881BA4CDF6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769FB4CDF12
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiCDUhi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Mar 2022 15:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S229779AbiCDUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiCDUh2 (ORCPT
+        with ESMTP id S231362AbiCDUiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:37:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582AC219EFB;
-        Fri,  4 Mar 2022 12:36:27 -0800 (PST)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K9KNX3dmXz67Kvx;
-        Sat,  5 Mar 2022 04:35:08 +0800 (CST)
-Received: from lhreml718-chm.china.huawei.com (10.201.108.69) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Fri, 4 Mar 2022 21:36:24 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml718-chm.china.huawei.com (10.201.108.69) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 20:36:24 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Fri, 4 Mar 2022 20:36:24 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYL1LUtVDDY2S/e06nk5NDxfriXKyu5+MQgAC55gCAAA3s0A==
-Date:   Fri, 4 Mar 2022 20:36:24 +0000
-Message-ID: <7a1802e00d1a4741bbf9978b960bfa06@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
-        <0dc03eab33b74e6ea95f2ac0eb39cc83@huawei.com>
- <20220304124410.02423606.alex.williamson@redhat.com>
-In-Reply-To: <20220304124410.02423606.alex.williamson@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.89.131]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 4 Mar 2022 15:38:05 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A065D31CD;
+        Fri,  4 Mar 2022 12:37:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646426237; x=1677962237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4FG8XYoVVruS7FNpnH2bs+u63FbERV1MqJpDIHUQuKE=;
+  b=lq/cfP6lxQ/kzsiqN40FaxT8Vkud8xI6o3eSveKHgYpyylEtQ+Lyua/B
+   vj9ecV5TeFEsIe1XN4vq0rbhZP6Tz/w8y1XRIP9q0P/axD2WLU+nDr9Lt
+   r4pwo8lqpwCgDo7qeS/vJtuZXg1rwFpqTrvWRTJGDD3i3XLMCLAU31dVY
+   1N8U4DFkm58yo6rKlr9ssuA/ITH/8U1g2RCfAz/TtkPy9ceV8P1bU5fFb
+   HNYMIIwtI9beotxRURm/JYzuCByjq/ROUc+DvgRtV8/gkNgEPBjI0b6iH
+   Yoxc10N1nAASMgeoOvrLSbe8iCDQMDzQVgP/tFA74e1qwtPXtOB6giT74
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="252886706"
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="252886706"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 12:37:16 -0800
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="509091847"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 12:37:16 -0800
+Date:   Fri, 4 Mar 2022 12:37:09 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 5/6] selftests/resctrl: Update README about using
+ kselftest framework to build/run resctrl_tests
+Message-ID: <YiJ4YM49fFANO9C2@otcwcpicx3.sc.intel.com>
+References: <20220304103834.486892-1-tan.shaopeng@jp.fujitsu.com>
+ <20220304103834.486892-6-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304103834.486892-6-tan.shaopeng@jp.fujitsu.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 04, 2022 at 07:38:33PM +0900, Shaopeng Tan wrote:
+> In this patch series, I make restrl_tests build/run using kselftest
+> framework, but some users do not known how to build/run resctrl_tests
+> using kseltest framework.
 
+Please don't use "I" or "we" in commit messages. Also the grammar seems
+not right here.
 
-> -----Original Message-----
-> From: Alex Williamson [mailto:alex.williamson@redhat.com]
-> Sent: 04 March 2022 19:44
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; jgg@nvidia.com;
-> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
-> liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
 > 
-> On Fri, 4 Mar 2022 08:48:27 +0000
-> Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> wrote:
-> 
-> > Hi Alex,
-> >
-> > > -----Original Message-----
-> > > From: Shameerali Kolothum Thodi
-> > > Sent: 03 March 2022 23:02
-> > > To: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > linux-crypto@vger.kernel.org
-> > > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com;
-> jgg@nvidia.com;
-> > > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
-> Linuxarm
-> > > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>;
-> Zengtao (B)
-> > > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > > <jonathan.cameron@huawei.com>; Wangzhou (B)
-> <wangzhou1@hisilicon.com>
-> > > Subject: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
-> > >
-> > > From: Longfang Liu <liulongfang@huawei.com>
-> > >
-> > > VMs assigned with HiSilicon ACC VF devices can now perform live
-> migration if
-> > > the VF devices are bind to the hisi_acc_vfio_pci driver.
-> > >
-> > > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > > Signed-off-by: Shameer Kolothum
-> <shameerali.kolothum.thodi@huawei.com>
-> >
-> > [...]
-> > > +
-> > > +static int vf_qm_check_match(struct hisi_acc_vf_core_device
-> *hisi_acc_vdev,
-> > > +			     struct hisi_acc_vf_migration_file *migf) {
-> > > +	struct acc_vf_data *vf_data = &migf->vf_data;
-> > > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > > +	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-> >
-> > Oops, the above has to be,
-> >   struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
-> >
-> > This was actually fixed in v6, but now that I rebased mainly to v5, missed it.
-> > Please let me know if you want a re-spin with the above fix(in case there are
-> no further
-> > comments) or this is something you can take care.
-> 
-> To confirm, you're looking for this change:
-> 
-> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> index aa2e4b6bf598..f2a0c046413f 100644
-> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> @@ -413,7 +413,7 @@ static int vf_qm_check_match(struct
-> hisi_acc_vf_core_device *hisi_acc_vdev,
->  {
->  	struct acc_vf_data *vf_data = &migf->vf_data;
->  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> -	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-> +	struct hisi_qm *pf_qm = &hisi_acc_vdev->pf_qm;
->  	struct device *dev = &vf_qm->pdev->dev;
->  	u32 que_iso_state;
->  	int ret;
-> 
-> Right? 
+> Add manual of how to make resctrl_tests build/run
+> using kselftest framework into README.
 
-Not really. pf_qm is a pointer. This is the change,
+Maybe change the commit message to this:
 
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-index 53e4c5cb3a71..54813772a071 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-@@ -413,7 +413,7 @@ static int vf_qm_check_match(struct hisi_acc_vf_core_device *hisi_acc_vdev,
- {
- 	struct acc_vf_data *vf_data = &migf->vf_data;
- 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
--	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-+	struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
- 	struct device *dev = &vf_qm->pdev->dev;
- 	u32 que_iso_state;
- 	int ret;
+resctrl_tests can be built or run using kselftests framework. Add
+description on how to do so in README.
 
- I can roll that in assuming there are no further comments that
-> would generate a respin.  Thanks,
 > 
-Thanks,
-Shameer
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
+>  tools/testing/selftests/resctrl/README | 31 +++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
+> index 3d2bbd4fa3aa..268cf3f95bd5 100644
+> --- a/tools/testing/selftests/resctrl/README
+> +++ b/tools/testing/selftests/resctrl/README
+> @@ -12,9 +12,37 @@ Allocation test on Intel RDT hardware. More tests will be added in the future.
+>  And the test suit can be extended to cover AMD QoS and ARM MPAM hardware
+>  as well.
+>  
+> +resctrl_tests can be run with or without kselftest framework.
+> +
+> +USE KSELFTEST FRAMEWORK
+> +-----------------------
+> +
+> +BUILD
+> +-----
 
+The "---" under titles are all same. This cannot tell readers clearly
+topic hierarchies.
+
+How about this?
++USE KSELFTEST FRAMEWORK
++-----------------------
++
++* BUILD
++
+
+> +
+> +Execute the following command in top level directory of the kernel source.
+> +
+> +Build resctrl:
+> + $ make -C tools/testing/selftests TARGETS=resctrl
+> +
+> +RUN
+> +---
+
+How about this?
++* RUN
++
+> +
+> +Run resctrl:
+> + $ make -C tools/testing/selftests TARGETS=resctrl run_tests
+
+Run this as sudo or root.
++ $ sudo make -C tools/testing/selftests TARGETS=resctrl run_tests
+
+> +
+> +Using kselftest framework, the ./resctrl_tests will be run without any parameters.
+> +
+> +More details about kselftest framework as follow.
+> +Documentation/dev-tools/kselftest.rst
+> +
+> +NOT USE KSELFTEST FRAMEWORK
+> +---------------------------
+> +
+>  BUILD
+>  -----
+>  
+> +Execute the following command in this directory(tools/testing/selftests/resctrl/).
+>  Run "make" to build executable file "resctrl_tests".
+>  
+>  RUN
+> @@ -24,7 +52,8 @@ To use resctrl_tests, root or sudoer privileges are required. This is because
+>  the test needs to mount resctrl file system and change contents in the file
+>  system.
+>  
+> -Executing the test without any parameter will run all supported tests:
+> +Executing the test without any parameter will run all supported tests.
+> +It takes about 68 seconds on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz.
+
+resctrl will add more tests in the future. Running time may be longer in
+the future. I would suggest to remove the "It takes about 68 seconds..." line.
+
+>  
+>  	sudo ./resctrl_tests
+>  
+> -- 
+> 2.27.0
+> 
+
+Thanks.
+
+-Fenghua

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F347B4CCC44
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6774CCC45
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbiCDD0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S237862AbiCDD0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiCDDZ7 (ORCPT
+        with ESMTP id S237857AbiCDD0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:25:59 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE417F683
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:25:12 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id q8so8180454iod.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 19:25:12 -0800 (PST)
+        Thu, 3 Mar 2022 22:26:08 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349517F692
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:25:21 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id q8so8180701iod.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 19:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Xdoric3RTXYKwt8RzxRE1iq6shIZZ4Zbnw0lFh9QTVo=;
-        b=jeaZuKcsBmQce6PQhFrYx4iFqsn3He+X6muOBJ200kVs09Zu3QRdyk624e3vxeZghv
-         u7vWIXZMzrebbTRdroLdnGa1hv9tt+n6IIyb6Rif4Ry8k7MWhPsRumdFWgxEVE/uPI5D
-         TQwWRHLfih2vxL3zgCRca5/f7tYptB2hwsBE1tnbdpbdNAEbzzK6tzCZLTt05RwoUttZ
-         hZORyRZCSrHXm/cuMN9JJhjPjXgK8U1e/PIdLnFEXAWU/giF4Bm4a8WbeDoHKZf6xhsy
-         vk/JPVaLxDmcJMr9nbKr44RJkw9hl/fH+W53dpsXtqaH52UkbzxCZg232iWUXS8wYqu/
-         BF4g==
+        bh=riAePIdOHWyX+kWI5kEIlQkDYdGowAInsgUw4gn0/e4=;
+        b=BlrpAc0LSalr08lxLvWHUF9xqsdrYeT/1mov5HdmySdHvY7zpjGGpvRBzSVE7uyStd
+         RFfWon9VgWK3xggfoUkXejf4U8sLAeW88vzXIDjUl4CZZ63tpT4qE6fUpp5hRy5ZbDrt
+         nV+6kcnrv5q7GtjDy8B4cuC/te60S6o70rBXya6sDNs0UKra6WerMmeR5cPU5qB4Yn7K
+         Zr+hE8G4Zd67A2sks8WC/4yo6JcqOJvYva1NS8pJKDTSj4Ln2MgUpNcvSXvHCgd6yfHw
+         dBnvBaKOXYA3nV5h24Uy8mbxbdXBqVBFiOe45hX4Q/scfBbfLF16+Gi4pk+w2DDsMGpJ
+         T5Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xdoric3RTXYKwt8RzxRE1iq6shIZZ4Zbnw0lFh9QTVo=;
-        b=TfcVQSNnDdrq34kXSZ6Om6vdLxPdfV7OCqNimrg4OiEqCoFKoeC2OMuYEUXsSKENu7
-         0eUnErjU1N7gg7bisqVOpXgIZgzKHAPdtTstEr71CWRn80/ZJdgs7QzZa3TLb4sHuD+A
-         dUpqYnT8aHehV6tg1Tkb1Z9ZfNtWpHpAdSff7czrRebHns9JYjvfLnICysVgJN1vIemE
-         UrL8ipwCFrIdGxH7kWaNw5Z0U8llYhpoDgsha+qdrYTK6uwNFe1cnssPx/NSv6SXtt+5
-         +jMJD3wCLIbp+daObG8GJQkuvrpgp2wOctPjgUbHKc+vp6SpxvYabdpGdDBM+xzgpbLh
-         xQZA==
-X-Gm-Message-State: AOAM533gku+hz4pLJfdPEwI9J5+2Pciv9WahXD+hli3PNBYkSh3w+rpX
-        E2QeIEa0INFc5sLge3RjmTg=
-X-Google-Smtp-Source: ABdhPJwczl11AmL9YsZuJB7WvjCsPze/5RxIoLnjktu+CCtjBpHKnTXGmtaIq3m4efV1wMbl4R5ZMg==
-X-Received: by 2002:a05:6638:1514:b0:317:738a:8418 with SMTP id b20-20020a056638151400b00317738a8418mr4836433jat.71.1646364312169;
-        Thu, 03 Mar 2022 19:25:12 -0800 (PST)
+        bh=riAePIdOHWyX+kWI5kEIlQkDYdGowAInsgUw4gn0/e4=;
+        b=sxKzrNOL4bm9/0b0BpWujVDZKMZqNUCOH3QvWP1EaATG/tmy8/UKF9BI3sDMhkcgPd
+         oghIIqha0CaNMKinz/ehkBt27a+fsxgTy7ky2stziuwpQDlmcFvOvfAyu93rr7/1sRSM
+         56DfywEeSOmCD+BpnvsS3Z+/r2QwPnlTfifiAFpS3OZ34kVBB212HMfA8MGfkTDFaqmC
+         2+jAj0B7nxZ/T1diS7oU7OKu6zu85wFN0I7g25rGWWydHajnh3vatymXM45pfkwQnJjb
+         YFtzKql3lYjcwVsuBDThmSZoAJesgBE/LX+soukVeBXQN4xu5Y35IOTxKk+3rG7ikqRH
+         fgvw==
+X-Gm-Message-State: AOAM532WBy6/WY9gdBgyQemoLowwvg5RpoqH2TBT+LXl8kX+29uBRiXb
+        PfcMsd2VUq5jy0xNBWFlI0Q=
+X-Google-Smtp-Source: ABdhPJz78E3vx6SBHXiEi1GHfCNZ5vzWX8+ufbWBvKEaxufsqAfodAKhOc+yxeeg/AGwmU7KQpmD/Q==
+X-Received: by 2002:a02:ccea:0:b0:314:8504:cdd8 with SMTP id l10-20020a02ccea000000b003148504cdd8mr32604002jaq.117.1646364321340;
+        Thu, 03 Mar 2022 19:25:21 -0800 (PST)
 Received: from localhost.localdomain (118-208-215-36.tpgi.com.au. [118.208.215.36])
-        by smtp.gmail.com with ESMTPSA id a13-20020a056e02180d00b002c25b51d5ecsm4114751ilv.55.2022.03.03.19.25.07
+        by smtp.gmail.com with ESMTPSA id a13-20020a056e02180d00b002c25b51d5ecsm4114751ilv.55.2022.03.03.19.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 19:25:11 -0800 (PST)
+        Thu, 03 Mar 2022 19:25:21 -0800 (PST)
 From:   Sam Zeter <samuelzeter@gmail.com>
 To:     mhiramat@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -57,9 +57,9 @@ To:     mhiramat@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Samuel Zeter <samuelzeter@gmail.com>,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2 1/2] arch/x86/tools/objdump_reformat.awk: Ensure regex matches fwait
-Date:   Fri,  4 Mar 2022 14:16:10 +1100
-Message-Id: <20220304031611.5763-2-samuelzeter@gmail.com>
+Subject: [PATCH v2 2/2] arch/x86/tools/objdump_reformat.awk: Allow for spaces
+Date:   Fri,  4 Mar 2022 14:16:11 +1100
+Message-Id: <20220304031611.5763-3-samuelzeter@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220304031611.5763-1-samuelzeter@gmail.com>
 References: <YdeGWyzvsXxntcAT@archlinux-ax161>
@@ -78,24 +78,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Samuel Zeter <samuelzeter@gmail.com>
 
-If there is "wait" mnemonic in the line being parsed, it is incorrectly
-handled by the script, and an extra line of "fwait" in
-objdump_reformat's output is inserted. As insn_decoder_test relies
-upon the formatted output, the test fails.
+objdump and llvm-objdump have differing output formats. Specifically,
+objump will format its output as: address:<tab>hex, whereas
+llvm-objdump displays its output as address:<space>hex.
 
-This is reproducible when disassembling with llvm-objdump:
+objdump_reformat.awk incorrectly handles this discrepancy due to
+the unexpected space and as a result insn_decoder_test fails, as
+its input is garbled.
 
-Pre-processed lines:
-ffffffff81033e72: 9b                    wait
-ffffffff81033e73: 48 c7 c7 89 50 42 82  movq
-
-After objdump_reformat.awk:
-ffffffff81033e72:       9b      fwait
-ffffffff81033e72:                               wait
-ffffffff81033e73:       48 c7 c7 89 50 42 82    movq
-
-The regex match now accepts spaces or tabs, along with the "fwait"
-instruction.
+The instruction line being tokenized now handles a space and colon,
+or tab delimiter.
 
 Signed-off-by: Samuel Zeter <samuelzeter@gmail.com>
 ---
@@ -103,18 +95,18 @@ Signed-off-by: Samuel Zeter <samuelzeter@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/x86/tools/objdump_reformat.awk b/arch/x86/tools/objdump_reformat.awk
-index f418c91b7..276e572a6 100644
+index 276e572a6..a4120d907 100644
 --- a/arch/x86/tools/objdump_reformat.awk
 +++ b/arch/x86/tools/objdump_reformat.awk
-@@ -12,7 +12,7 @@ BEGIN {
- 	prev_hex = ""
- 	prev_mnemonic = ""
- 	bad_expr = "(\\(bad\\)|^rex|^.byte|^rep(z|nz)$|^lock$|^es$|^cs$|^ss$|^ds$|^fs$|^gs$|^data(16|32)$|^addr(16|32|64))"
--	fwait_expr = "^9b "
-+	fwait_expr = "^9b[ \t]*fwait"
- 	fwait_str="9b\tfwait"
+@@ -22,7 +22,7 @@ BEGIN {
  }
  
+ /^ *[0-9a-f]+:/ {
+-	if (split($0, field, "\t") < 3) {
++	if (split($0, field, /: |\t/) < 3) {
+ 		# This is a continuation of the same insn.
+ 		prev_hex = prev_hex field[2]
+ 	} else {
 -- 
 2.35.1
 

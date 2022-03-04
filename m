@@ -2,213 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B054CD159
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170D34CD175
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239244AbiCDJkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S239200AbiCDJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237257AbiCDJi1 (ORCPT
+        with ESMTP id S239173AbiCDJl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:38:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C707DF9B;
-        Fri,  4 Mar 2022 01:37:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 958986197E;
-        Fri,  4 Mar 2022 09:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B90BC340E9;
-        Fri,  4 Mar 2022 09:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386657;
-        bh=Kn/vNsiev7dahB6veyuVCK/X3UuJrkBSEBZH8/QcHss=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D2hqedJIoyAa4chosW/kLeSuLOSzMFN9P2rdCHR/4xGMzaIsUzXjZeT+kg0+vO0Io
-         aJWhVzPOE3hL7sLBokq3marXLOeDXrLL4VvKkB7TLAp3hJTOhbH0WPOT8KsaRg1AaL
-         heUzMgELvfhW8AKBS8zq1R53/ZlyTz7T/+jw+VIyoWuEPgMpf6XDvVD2p2qdOU+V3T
-         rJfo4A/zakEHRIHBzgejlbyU6b9vkKQNuakShc+weJ1O3ZPGG8iYYgZbVseTt8CiPX
-         llopNikgYr7wjdY7hGLBpv8wqJM/26szI67po4e58HjY7bmU9KW+cXXSkmhflwsAv4
-         9CpLwnU/vjqoA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH v2.1 30/30] selftests/sgx: Page removal stress test
-Date:   Fri,  4 Mar 2022 11:35:24 +0200
-Message-Id: <20220304093524.397485-30-jarkko@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
-References: <20220304093524.397485-1-jarkko@kernel.org>
+        Fri, 4 Mar 2022 04:41:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75AA1AF8FF;
+        Fri,  4 Mar 2022 01:40:33 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K92q431BSzBrl8;
+        Fri,  4 Mar 2022 17:38:40 +0800 (CST)
+Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
+ 2022 17:40:31 +0800
+Message-ID: <a7d41c01-9032-14a1-b16f-a4a6a954addf@hisilicon.com>
+Date:   Fri, 4 Mar 2022 17:40:31 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v8 6/9] hisi_acc_vfio_pci: Add helper to retrieve the
+ struct pci_driver
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
+        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
+        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
+        <jonathan.cameron@huawei.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
+From:   Zhou Wang <wangzhou1@hisilicon.com>
+In-Reply-To: <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.22]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Reinette Chatre <reinette.chatre@intel.com>
+> struct pci_driver pointer is an input into the pci_iov_get_pf_drvdata().> Introduce helpers to retrieve the ACC PF dev struct pci_driver pointers
+> as we use this in ACC vfio migration driver.
+> 
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
 
-Create enclave with additional heap that consumes all physical SGX
-memory and then remove it.
+Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
 
-Depending on the available SGX memory this test could take a
-significant time to run (several minutes) as it (1) creates the
-enclave, (2) changes the type of every page to be trimmed,
-(3) enters the enclave once per page to run EACCEPT, before
-(4) the pages are finally removed.
+Best,
+Zhou
 
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
- tools/testing/selftests/sgx/main.c | 122 +++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index c691a4864db8..5c4faf6d5640 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -378,7 +378,129 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
- 	EXPECT_EQ(get_op.value, MAGIC);
- 	EXPECT_EEXIT(&self->run);
- 	EXPECT_EQ(self->run.user_data, 0);
-+}
-+
-+TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-+{
-+	struct sgx_enclave_remove_pages remove_ioc;
-+	struct encl_op_get_from_buf get_op;
-+	struct encl_op_eaccept eaccept_op;
-+	struct encl_op_put_to_buf put_op;
-+	struct sgx_enclave_modt modt_ioc;
-+	struct sgx_secinfo secinfo;
-+	struct encl_segment *heap;
-+	unsigned long total_mem;
-+	int ret, errno_save;
-+	unsigned long addr;
-+	unsigned long i;
-+
-+	/*
-+	 * Create enclave with additional heap that is as big as all
-+	 * available physical SGX memory.
-+	 */
-+	total_mem = get_total_epc_mem();
-+	ASSERT_NE(total_mem, 0);
-+	TH_LOG("Creating an enclave with %lu bytes heap may take a while ...",
-+	       total_mem);
-+	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
-+
-+	/*
-+	 * Hardware (SGX2) and kernel support is needed for this test. Start
-+	 * with check that test has a chance of succeeding.
-+	 */
-+	memset(&modt_ioc, 0, sizeof(modt_ioc));
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPE, &modt_ioc);
-+
-+	if (ret == -1) {
-+		if (errno == ENOTTY)
-+			SKIP(return, "Kernel does not support SGX_IOC_ENCLAVE_MODIFY_TYPE ioctl()");
-+		else if (errno == ENODEV)
-+			SKIP(return, "System does not support SGX2");
-+	}
-+
-+	/*
-+	 * Invalid parameters were provided during sanity check,
-+	 * expect command to fail.
-+	 */
-+	EXPECT_EQ(ret, -1);
-+
-+	/* SGX2 is supported by kernel and hardware, test can proceed. */
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	heap = &self->encl.segment_tbl[self->encl.nr_segments - 1];
-+
-+	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
-+	put_op.value = MAGIC;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_op, &self->run, false), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	get_op.header.type = ENCL_OP_GET_FROM_BUFFER;
-+	get_op.value = 0;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_op, &self->run, false), 0);
-+
-+	EXPECT_EQ(get_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	/* Trim entire heap. */
-+	memset(&modt_ioc, 0, sizeof(modt_ioc));
-+	memset(&secinfo, 0, sizeof(secinfo));
-+
-+	secinfo.flags = SGX_PAGE_TYPE_TRIM << 8;
-+	modt_ioc.offset = heap->offset;
-+	modt_ioc.length = heap->size;
-+	modt_ioc.secinfo = (unsigned long)&secinfo;
-+
-+	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPE, &modt_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(modt_ioc.result, 0);
-+	EXPECT_EQ(modt_ioc.count, heap->size);
-+
-+	/* EACCEPT all removed pages. */
-+	addr = self->encl.encl_base + heap->offset;
-+
-+	eaccept_op.flags = SGX_SECINFO_TRIM | SGX_SECINFO_MODIFIED;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
-+	       heap->size);
-+	for (i = 0; i < heap->size; i += 4096) {
-+		eaccept_op.epc_addr = addr + i;
-+		eaccept_op.ret = 0;
- 
-+		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+
-+		EXPECT_EQ(self->run.exception_vector, 0);
-+		EXPECT_EQ(self->run.exception_error_code, 0);
-+		EXPECT_EQ(self->run.exception_addr, 0);
-+		ASSERT_EQ(eaccept_op.ret, 0);
-+		ASSERT_EQ(self->run.function, EEXIT);
-+	}
-+
-+	/* Complete page removal. */
-+	memset(&remove_ioc, 0, sizeof(remove_ioc));
-+
-+	remove_ioc.offset = heap->offset;
-+	remove_ioc.length = heap->size;
-+
-+	TH_LOG("Removing %zd bytes from enclave may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_REMOVE_PAGES, &remove_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(remove_ioc.count, heap->size);
- }
- 
- TEST_F(enclave, clobbered_vdso)
--- 
-2.35.1
-
+> ---
+>  drivers/crypto/hisilicon/hpre/hpre_main.c | 6 ++++++
+>  drivers/crypto/hisilicon/sec2/sec_main.c  | 6 ++++++
+>  drivers/crypto/hisilicon/zip/zip_main.c   | 6 ++++++
+>  include/linux/hisi_acc_qm.h               | 5 +++++
+>  4 files changed, 23 insertions(+)
+> 
+> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
+> index 3589d8879b5e..36ab30e9e654 100644
+> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
+> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
+> @@ -1190,6 +1190,12 @@ static struct pci_driver hpre_pci_driver = {
+>  	.driver.pm		= &hpre_pm_ops,
+>  };
+>  
+> +struct pci_driver *hisi_hpre_get_pf_driver(void)
+> +{
+> +	return &hpre_pci_driver;
+> +}
+> +EXPORT_SYMBOL_GPL(hisi_hpre_get_pf_driver);
+> +
+>  static void hpre_register_debugfs(void)
+>  {
+>  	if (!debugfs_initialized())
+> diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
+> index 311a8747b5bf..421a405ca337 100644
+> --- a/drivers/crypto/hisilicon/sec2/sec_main.c
+> +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
+> @@ -1088,6 +1088,12 @@ static struct pci_driver sec_pci_driver = {
+>  	.driver.pm = &sec_pm_ops,
+>  };
+>  
+> +struct pci_driver *hisi_sec_get_pf_driver(void)
+> +{
+> +	return &sec_pci_driver;
+> +}
+> +EXPORT_SYMBOL_GPL(hisi_sec_get_pf_driver);
+> +
+>  static void sec_register_debugfs(void)
+>  {
+>  	if (!debugfs_initialized())
+> diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
+> index 66decfe07282..4534e1e107d1 100644
+> --- a/drivers/crypto/hisilicon/zip/zip_main.c
+> +++ b/drivers/crypto/hisilicon/zip/zip_main.c
+> @@ -1012,6 +1012,12 @@ static struct pci_driver hisi_zip_pci_driver = {
+>  	.driver.pm		= &hisi_zip_pm_ops,
+>  };
+>  
+> +struct pci_driver *hisi_zip_get_pf_driver(void)
+> +{
+> +	return &hisi_zip_pci_driver;
+> +}
+> +EXPORT_SYMBOL_GPL(hisi_zip_get_pf_driver);
+> +
+>  static void hisi_zip_register_debugfs(void)
+>  {
+>  	if (!debugfs_initialized())
+> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
+> index 6a6477c34666..00f2a4db8723 100644
+> --- a/include/linux/hisi_acc_qm.h
+> +++ b/include/linux/hisi_acc_qm.h
+> @@ -476,4 +476,9 @@ void hisi_qm_pm_init(struct hisi_qm *qm);
+>  int hisi_qm_get_dfx_access(struct hisi_qm *qm);
+>  void hisi_qm_put_dfx_access(struct hisi_qm *qm);
+>  void hisi_qm_regs_dump(struct seq_file *s, struct debugfs_regset32 *regset);
+> +
+> +/* Used by VFIO ACC live migration driver */
+> +struct pci_driver *hisi_sec_get_pf_driver(void);
+> +struct pci_driver *hisi_hpre_get_pf_driver(void);
+> +struct pci_driver *hisi_zip_get_pf_driver(void);
+>  #endif
+> 

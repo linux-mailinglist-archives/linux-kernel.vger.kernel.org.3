@@ -2,154 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA864CDEC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6524CDDF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiCDUDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S229890AbiCDUDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiCDUCr (ORCPT
+        with ESMTP id S229650AbiCDUDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:02:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02E762B4943
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646423674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pM1F1/T2x1AGJPbHCgjIb2A2+Vv+D8cNuQhS+x4EuMs=;
-        b=RoU35dzahap1VPkPWktktHX6NYXWTjGDNDqwOMl0QPkIoro1bzWJ0LZ4MxRnDcqQmTnBZu
-        fYWXH0yLfg9e/OzIMDigf9X1//1dFybLdFrz718orYRcUTE+0hw5bHyoNyOAqZxazFPoCQ
-        yK3UBBD1BKUpdYzkrwqaJGtRvJlo65U=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-jTZAFBd6NIC-4aYOMggsIw-1; Fri, 04 Mar 2022 14:44:13 -0500
-X-MC-Unique: jTZAFBd6NIC-4aYOMggsIw-1
-Received: by mail-ot1-f70.google.com with SMTP id t26-20020a0568301e3a00b005af6b88cf12so6544188otr.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 11:44:12 -0800 (PST)
+        Fri, 4 Mar 2022 15:03:03 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1CB1AF8C9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:54:04 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id qx21so19538301ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 11:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ETvfGVoGLXwDhWPGfvHwKsO/zr0ji0OYPvNdqU+p67c=;
+        b=jWz+XRpv+mw5fFBHNcSDIuUw96ucnDzuIlqQnDDKWkAtP0g3jcvohja1IbZoolKrqs
+         QXK0ZLrPl16cNWRZ8xdl8uVMs2ATrPO8t/Ile0J31U3qX36fVyvbq6Xp3wO99dssUw/G
+         9glD2oaj5XdVP858LqiDcCgqrKzvvBJbKiRT2o4TgXj7FVGTD5AKVWq+XwmG+IxI9LC3
+         P3we66PEZVOOWF67TeHAa392lhrrtzfhle/V++6Kx8rR5B31wmrsAJuVl6uecgUplbT7
+         xFIKJTxRxiykxF1DeTwuOwBR9aex/kHiS7kNcfynnemvNL7te9c736eKtaOhnDA4Ermh
+         1cDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=pM1F1/T2x1AGJPbHCgjIb2A2+Vv+D8cNuQhS+x4EuMs=;
-        b=VmyjuqbvkwB86Jj5a4gOMwJwyBbLcbJf+t7YXQ2gGw1y/RxBZLldF5GIU/0XvSskEh
-         qe8H1RakJeFirkQpRV+piXCiInAk1WxQMKqbrrVgjMXST4RA/pqY7jlHlPtkvceMVHLb
-         dOc/i9izMSyyopdlszq6AO0bViNl63iOIBN/mb5nwI0jvSRUMqeGo92G1ZihyOXrig4b
-         XMyX1eWDS70d81IkMjq/ZOCnFO9QLD7f716fKThKumIDpoo8dLUwOPBugbK+T+Amg9NP
-         vIgIiX7cbZFB50VW24VV2EiZur555eipDcKeMX4tZ75L6rrVE0S3CIabF0FQcsSVceuJ
-         1wmg==
-X-Gm-Message-State: AOAM530S3LsjIWmwg8qZlBMOh6wdLULTtmEBjeEIHuoVj6adU4ebXpyr
-        +p1DWF0PVoSQQ+E7AZk5EgNfnMtcPEZRUNpfLJr6P9OcoEaW62HzeqFmXzxfh2qFVoFEqsZLgIx
-        cRoalfeFxhiDeacrwNf5iQwHN
-X-Received: by 2002:a05:6870:f144:b0:da:b3f:2b88 with SMTP id l4-20020a056870f14400b000da0b3f2b88mr469550oac.295.1646423052399;
-        Fri, 04 Mar 2022 11:44:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLx1Oo2HmRahYyTM2fzwk1l6MYz7YP18iY6J/yREFpr5YIXwj0jeNtz5EMM11fBL1czktGLg==
-X-Received: by 2002:a05:6870:f144:b0:da:b3f:2b88 with SMTP id l4-20020a056870f14400b000da0b3f2b88mr469546oac.295.1646423052181;
-        Fri, 04 Mar 2022 11:44:12 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id g2-20020a9d5f82000000b005af678c9cfdsm2749709oti.41.2022.03.04.11.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 11:44:11 -0800 (PST)
-Date:   Fri, 4 Mar 2022 12:44:10 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Message-ID: <20220304124410.02423606.alex.williamson@redhat.com>
-In-Reply-To: <0dc03eab33b74e6ea95f2ac0eb39cc83@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
-        <0dc03eab33b74e6ea95f2ac0eb39cc83@huawei.com>
-Organization: Red Hat
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ETvfGVoGLXwDhWPGfvHwKsO/zr0ji0OYPvNdqU+p67c=;
+        b=dqQIlJLnsGfpI1Ua2Hi33COu249TEtB1dXkObNg5NmYm1zlQHzsrVzu0QCx1eql9FE
+         sxI6PCMDB8uNxDQcdWe36Mf7tRUGwrkdSLCxjSXqRrdqN10GHLGQQLvSh0w/6Whux2wm
+         P5PoeL77Jb4rwJSoPpMgFbhon/OsOhUshNng455saaCfSMqIsuChIa95MS7/PtKGzq4y
+         j6JAL9Ycc9F1jBmArooXMa5MKzSwf5VntrS/ANI6zW7VK9n6LR+Juf0zDep6xc/lqMvN
+         G+PrZ5oMXK+13siVxMgB36wWEcMpdB5At8X7q/EwSJCTLt4chUN1TsiZM8IeeJ0nB2q3
+         AR1A==
+X-Gm-Message-State: AOAM5305zd86E1pu8SvNOgFXWMqQWbdkpf/Zc/XZXYvYRHb5Y8aMLAGl
+        r77gFZVtczc0gq8JUukkpRmX0//uYrVszg==
+X-Google-Smtp-Source: ABdhPJxm9tqRyk8xsBN77c/Xmt6AJupjBLplMEQ+2Kmms6Qrh+W4GHJMNEDXhpMLq5aO4v57wA0w6Q==
+X-Received: by 2002:a5d:4992:0:b0:1f0:68bd:4c34 with SMTP id r18-20020a5d4992000000b001f068bd4c34mr242607wrq.670.1646423198257;
+        Fri, 04 Mar 2022 11:46:38 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:c62:d373:a349:12ac? ([2a01:e34:ed2f:f020:c62:d373:a349:12ac])
+        by smtp.googlemail.com with ESMTPSA id f186-20020a1c38c3000000b00382a9b91515sm10314281wma.37.2022.03.04.11.46.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 11:46:37 -0800 (PST)
+Message-ID: <80f949af-ddab-b54d-b6ee-0fbcb1f74b51@linaro.org>
+Date:   Fri, 4 Mar 2022 20:46:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 0/6] clocksource/drivers/timer-microchip-pit64b: fixes
+ and improvements
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, tglx@linutronix.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220304133601.2404086-1-claudiu.beznea@microchip.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220304133601.2404086-1-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 08:48:27 +0000
-Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
 
-> Hi Alex,
+Hi Claudiu,
+
+I would like to pick patches 1,2,3 but not the others one because I'm 
+not convinced about the suspend / resume changes and need some time to 
+think about it.
+
+   -- D.
+
+
+On 04/03/2022 14:35, Claudiu Beznea wrote:
+> Hi,
 > 
-> > -----Original Message-----
-> > From: Shameerali Kolothum Thodi
-> > Sent: 03 March 2022 23:02
-> > To: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-crypto@vger.kernel.org
-> > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com; jgg@nvidia.com;
-> > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> > Subject: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live migration
-> > 
-> > From: Longfang Liu <liulongfang@huawei.com>
-> > 
-> > VMs assigned with HiSilicon ACC VF devices can now perform live migration if
-> > the VF devices are bind to the hisi_acc_vfio_pci driver.
-> > 
-> > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>  
+> The series adds one fix and few improvement for PIT64B timer. Patch 1/7
+> was initially posted at [1].
 > 
-> [...]
-> > +
-> > +static int vf_qm_check_match(struct hisi_acc_vf_core_device *hisi_acc_vdev,
-> > +			     struct hisi_acc_vf_migration_file *migf) {
-> > +	struct acc_vf_data *vf_data = &migf->vf_data;
-> > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > +	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;  
+> Thank you,
+> Claudiu Beznea
 > 
-> Oops, the above has to be,
->   struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+> [1] https://lore.kernel.org/lkml/20210707054415.92832-1-claudiu.beznea@microchip.com/
 > 
-> This was actually fixed in v6, but now that I rebased mainly to v5, missed it.
-> Please let me know if you want a re-spin with the above fix(in case there are no further
-> comments) or this is something you can take care.
+> Changes in v3:
+> - removed patch "clocksource/drivers/timer-microchip-pit64b: remove timer-of depenency"
+>    as it breaks build on other platforms
+> - adapt patch 6/6 to comply with kernel-doc specification
+> 
+> Changes in v2:
+> - removed patch 5/7 "clocksource/drivers/timer-microchip-pit64b: add delay timer"
+>    to avoid compilation errors on non ARM platforms; will re-introduce it after
+>    a bit of rework on AT91 specific Kconfig
+> - added patch "clocksource/drivers/timer-microchip-pit64b: fix compilation warnings"
+> - in patch "clocksource/drivers/timer-microchip-pit64b: use mchp_pit64b_{suspend,
+>    resume}" remove gclk_unprepare, pclk_unprepare labels and code under them
+> 
+> 
+> Claudiu Beznea (6):
+>    clocksource/drivers/timer-microchip-pit64b: remove mmio selection
+>    clocksource/drivers/timer-microchip-pit64b: use notrace
+>    clocksource/drivers/timer-microchip-pit64b: use 5MHz for clockevent
+>    clocksource/drivers/timer-microchip-pit64b: remove suspend/resume ops
+>      for ce
+>    clocksource/drivers/timer-microchip-pit64b: use mchp_pit64b_{suspend,
+>      resume}
+>    clocksource/drivers/timer-microchip-pit64b: fix compilation warnings
+> 
+>   drivers/clocksource/Kconfig                  |  1 -
+>   drivers/clocksource/timer-microchip-pit64b.c | 72 ++++++++------------
+>   2 files changed, 30 insertions(+), 43 deletions(-)
+> 
 
-To confirm, you're looking for this change:
 
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-index aa2e4b6bf598..f2a0c046413f 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-@@ -413,7 +413,7 @@ static int vf_qm_check_match(struct hisi_acc_vf_core_device *hisi_acc_vdev,
- {
- 	struct acc_vf_data *vf_data = &migf->vf_data;
- 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
--	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-+	struct hisi_qm *pf_qm = &hisi_acc_vdev->pf_qm;
- 	struct device *dev = &vf_qm->pdev->dev;
- 	u32 que_iso_state;
- 	int ret;
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Right?  I can roll that in assuming there are no further comments that
-would generate a respin.  Thanks,
-
-Alex
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6F04CD318
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B99B14CD31A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236618AbiCDLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
+        id S238188AbiCDLNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbiCDLMy (ORCPT
+        with ESMTP id S237218AbiCDLNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:12:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C33184B42
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:12:06 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nQ5qW-0000S2-O5; Fri, 04 Mar 2022 12:11:40 +0100
-Message-ID: <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
-Date:   Fri, 4 Mar 2022 12:11:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-To:     Tokunori Ikegami <ikegami.t@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
+        Fri, 4 Mar 2022 06:13:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0799B1B01B6
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646392332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
+        b=MXy/d/EyCVeh9gmvu791clf5XToQGT5jqbm3RLdWBbOhtBxexlzXJjiVH0AfMKRY7tAfbR
+        vNai8biU1FthGNFmlk0p9rbzM4KxbsfySdZS/2irV3o2GfZ0qquhXS6jJuo/KgArL+qt8Y
+        pxZ8pO59XZ/qUmbtCCeW6WDv0u4JzkA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-421-fTHAwu5oMceetfMqD1akZA-1; Fri, 04 Mar 2022 06:12:10 -0500
+X-MC-Unique: fTHAwu5oMceetfMqD1akZA-1
+Received: by mail-wm1-f72.google.com with SMTP id l2-20020a1ced02000000b0038482a47e7eso2706592wmh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 03:12:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
+        b=StebT69mTidv6Vo5Fupp3rX4ZKT81G/tSzoISGWPu9H9+cEi3xXM1y2nZ6tkL3E/ig
+         mIWwKPr8t+eqThO4cKt2Oox+lL7dc029F0GuLqNPX+h2SzvsVsc40l48hubZL7PnItUh
+         5HW1U/Qeg+5191wyAruUVB3EWAnwE5Ap/Ms2c26VninEnl+L+07v/V35liJRSlC1IrRb
+         V+jhq/0FMhp1jwkZTb5CohNkv6emRJsELMaxnhnOXjbx023GwhGRmLRtoYlc+yBOkSvd
+         CT66zslfqJ29eC5hRIDuEUKWiJNwjy+pU0+asxehzp1Sv5zGmTOPYBlw5P3f3HxT1Nxp
+         TVSA==
+X-Gm-Message-State: AOAM530kZ779I6i2zQa/nBk3HBhVnCxDGIzpX5IuWG9berTTUjdk4MZ1
+        dPK4DkkuUmzP/GpWxn7Wt9wdTRSgXXS3QHV7TD8tEUzRbd9potxniYxq77yTjzuzc0WKHgpU4mk
+        p2zsxMfhCbZu8iECXm+LCkyg=
+X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074419wri.520.1646392329761;
+        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzvcDuGsktUT/oYRoSqkT5GCN7ol05dt6eg/Yp3ZoumXCrcGzAwTCnCSrQyurvMrQV4T5HLjQ==
+X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074410wri.520.1646392329543;
+        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm5716793wmb.3.2022.03.04.03.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 03:12:08 -0800 (PST)
+Date:   Fri, 4 Mar 2022 11:12:07 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
- <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
- <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
- <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
+Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
+Message-ID: <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220228234322.2073104-1-atomlin@redhat.com>
+ <20220228234322.2073104-14-atomlin@redhat.com>
+ <20220302161917.gx5icfszakoye4uh@maple.lan>
+ <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
+ <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+ <YiDEmRf3X0fxSayK@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YiDEmRf3X0fxSayK@infradead.org>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tokunori-san,
+On Thu 2022-03-03 05:37 -0800, Christoph Hellwig wrote:
+> On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
+> > Do we really want to hide the 'struct list_head modules' from external 
+> > world ?
+> > 
+> > Otherwise we could declare it in include/linux/module.h ?
+> I'd just move the trivial code that uses it from kernel/kdb/ to
+> kernel/module/ as it is tied to module internals and just uses the
+> KDB interfaces exposed to other parts of the kernel.
 
-On 20.02.22 13:22, Tokunori Ikegami wrote:
-> Hi Ahmad-san,
-> 
-> Could you please try the version 2 patch attached for the error case?
-> This version is to check the DQ true data 0xFF by chip_good().
+Hi Christoph,
 
-I had a similar patch locally as well at first. I just tested yours
-and I can't reproduce the issue.
+This is a great idea. I'll do this instead.
 
-> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
 
-That it works for me could be because of Hi-Z 0xff, which is why
-decided against it.
-
->>>>> What seems to work for me is checking if chip_good or chip_ready
->>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
->>>>> (Worst case bus is floating at this point of time and Hi-Z is read
->>>>> as 0xff on CPU data lines...)
->>>> Sorry I am not sure about this.
->>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
->>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
->>> What exactly in the datasheet makes you believe chip_good is not appropriate?
->> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
->> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
-> 
-> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
-> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
-> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
-> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
-
-I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
-
-Cheers and thanks again,
-Ahmad
-
-> 
-> Regards,
-> Ikegami
-> 
->>
->> Regards,
->> Ikegami
->>
->>>
->>> Cheers,
->>> Ahmad
->>>
->>>
-
+Kind regards,
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Aaron Tomlin
+

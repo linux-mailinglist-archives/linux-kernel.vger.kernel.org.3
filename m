@@ -2,164 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8997D4CCBC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6214CCBCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiCDCkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S232975AbiCDClE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiCDCkD (ORCPT
+        with ESMTP id S232738AbiCDClB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:40:03 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569CE45ACD;
-        Thu,  3 Mar 2022 18:39:17 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2240ZbZ6028323;
-        Fri, 4 Mar 2022 02:39:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=Jw2r1B3QDoOrcTh6QjS8F+mwFQbmB4nI/3MuNnRkSMs=;
- b=HTPR3/gjtyMs7UyJOo9bZN2QGFVTQxfXV74CXt3ANrE43p2Hn++SXjAE7/P2Q6Slw48F
- v2+TwT8nsYK9VUCpjfWAbDLFrSejQ3uncAo8LcPB6mE89GF/t5wAjOvOiBykvrFYJa3n
- QTrLrIT6hFdsTV4Fu1D9Gn48XreZFGeOUfBf3wjScRKr2pxMyTAUWs2VSouUtwS04jdY
- 164Yk+8smxY5o4mMyyyb7GN86qo68LofMtVVf0CXcHPx+5jw1UR8101m2B1pYRfXGZmH
- Hgp09J2IfAKIwO1xFC6g10hr8Tj8ugPO+A2pBc2YqSbeKkOQSIC7Q8voN2dafx5GYKjc og== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ek4hw0kjb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 02:39:00 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2242ZZro193997;
-        Fri, 4 Mar 2022 02:38:58 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
-        by userp3020.oracle.com with ESMTP id 3ek4jfy4p5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 02:38:58 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ly523pPYuw1D9jdNtKmxFhf7YtlHV6E6mEYubMainCQ286OFIneUnXO1R96P1whmBa2vcEoUYE8cDrkUAwWZO3wWCq8br1hn570p8BiZBVVvkZ7kaOJrlDJlRG5G9uccKkUR4byZ0CVINiz7e5wYFimTp+0K+9LpF0Y9ie++ODhrkDhvhubfVJUmDrRVq5QgR8Cf9KHuUXm0LWvShXrzSnNTnPQ30fWFuqUDlJ4rZJaL8pwDBr5CjotVKsDtWXNKR5rM/WJxTr7f42eLDVPBpDAkzjMDUNkVgAJrtEREEyN1VYF0IFBSD2o59g67EJ0mA4z6ydpu/0bOR+kfmqjCgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jw2r1B3QDoOrcTh6QjS8F+mwFQbmB4nI/3MuNnRkSMs=;
- b=cdDvJFnEJennGNTyfUlPy75881d36uaEXua1Ixl5Mk+BeI5+DEMuB0HFABYPgpckFMnFFP9X6Jjm1kzPywCRaZwteQAhvruHvsrL8jGd28azrNWLL1KxfvrpCJUnevHgXrQElR7Wref4oLLVyEQJFmh+2pjIDa5FIjiYJjARugQkZ0YyPeDjCz6rcXTv/sjSqjfMb2Ex3EPCCWESPrpSh6mxT6OLs5k9f7oQASLDwCXBkVegWlR1fq+Bh1wFEamoJhE7CprsK/TQtNg+6oniVKUxG1H9IOo0HrN2uUiQvyezICwdAavYSaBVggXUTXWDuD9K46c2ZO/DJV9hGeXtwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jw2r1B3QDoOrcTh6QjS8F+mwFQbmB4nI/3MuNnRkSMs=;
- b=uXEOnBfU0UdiWJ6CkQDccCNamtXFNqfo9qNXp6iRBRlnFVC4RRsh9Em4Sbeft/N4r7uudlXQSpvmOv9KjPmL5yP93aw2w2yxfNn30A56s03f5j+Y4OqC0MDBlP7kyWk35wkpccGW2cAUgwtmt3sM7v3BOF6laNtycnF+eYt5DSY=
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
- by MN2PR10MB3328.namprd10.prod.outlook.com (2603:10b6:208:127::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13; Fri, 4 Mar
- 2022 02:38:54 +0000
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::b51c:77eb:39b5:f67d]) by CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::b51c:77eb:39b5:f67d%3]) with mapi id 15.20.5038.016; Fri, 4 Mar 2022
- 02:38:54 +0000
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        Hannes Reinecke <hare@suse.de>,
-        Klaus Jensen <its@irrelevant.dk>
-Subject: Re: [PATCHv4 8/8] nvme: add support for enhanced metadata
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1v8wuv3v4.fsf@ca-mkp.ca.oracle.com>
-References: <20220303201312.3255347-1-kbusch@kernel.org>
-        <20220303201312.3255347-9-kbusch@kernel.org>
-Date:   Thu, 03 Mar 2022 21:38:52 -0500
-In-Reply-To: <20220303201312.3255347-9-kbusch@kernel.org> (Keith Busch's
-        message of "Thu, 3 Mar 2022 12:13:12 -0800")
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR02CA0052.namprd02.prod.outlook.com
- (2603:10b6:5:177::29) To CO1PR10MB4754.namprd10.prod.outlook.com
- (2603:10b6:303:91::24)
+        Thu, 3 Mar 2022 21:41:01 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26924664A;
+        Thu,  3 Mar 2022 18:40:13 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K8sVj3g22zdZx3;
+        Fri,  4 Mar 2022 10:38:53 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 10:40:11 +0800
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 10:40:11 +0800
+Subject: Re: [PATCH 1/2] iscsi_tcp: Fix NULL pointer dereference in
+ iscsi_sw_tcp_conn_get_param()
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>
+References: <20220304025608.1874516-1-haowenchao@huawei.com>
+ <e2b37e24-44dc-a159-e45d-2c720fe7ffc1@oracle.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+Message-ID: <8fbcbe4d-629f-aaba-494d-1102c8150daa@huawei.com>
+Date:   Fri, 4 Mar 2022 10:40:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7750cb8f-349e-48e0-87da-08d9fd881ff0
-X-MS-TrafficTypeDiagnostic: MN2PR10MB3328:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR10MB3328117D0D54294F9B11F8398E059@MN2PR10MB3328.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FZwlOEOJ44skkSsnu90aP/fTC3QObjybz9aA0x6W04PN5Mdw56bHWCIZS+8Mxn/vvo+/bCPYTBv1fXOF+FRrBY2dVl7MId+AufvzdvgKWRe2LsBgg8c40q1uTLQ4/d6+rbz+esyGaQMKvsXejytcSl9/0edYGMT/i/tdiPs47I9t5spAXeWdCLB18c2I1nxAfQt82AdQ/K0tLwvkNdFH4EI3snKDPO5C4Bd4iAzgVZMzjW7OOTwaUooG6NQKkGmCnRsE2dEMMy4YVE/CtrSz0XJ75SGKKv/ukfk4hcKgGb4UlS/M5FKGX5uA0M1J8PlffJBLata3++YJdM6x5Hybc9a9QskBoSSRmWdMED+DVNsBp4Tulx/CSZ8GPpS1qbOtwWjRPZhTycIewnlwuzvklJ4Q0IkI9f6hG4nQt9Wve51DRHJnduZu4JiE7IBIuMDuv+XYll2wgOeKz/eGNxChBYSL0IsKrOVUZofQQaVezFVLo6av8Nu7Hi8x3bo0U3Ciq8VEPM/2omLyb1VrMIHsUOP/Mv/27AwUFl4byulnObR/Zfj8PUXC97JhxUbZfTRIfLXQgzU95id3Dpox1bjx9zu73kPtlKLHKmCXm/TApUa1Rlsx4LoTgTtPM18jGhu1MvgxaSIEdHF7BJ5Gz9vfQPVF1b38gBxxu3DosVUOqbCcSO4QITBSS6M389l+5Yki4dRRCnH4e4e+O+8i7dTtPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(6512007)(86362001)(26005)(186003)(8676002)(4326008)(66946007)(66556008)(66476007)(54906003)(6486002)(2906002)(508600001)(5660300002)(6916009)(38350700002)(38100700002)(4744005)(52116002)(36916002)(6506007)(316002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sNyDvV+MAcrxkpI9x/V8vEs49mJdUUi0TIzi65O9CJTnF6ysvF+etrCy+tQI?=
- =?us-ascii?Q?oyMrvPj5fbBX8zAxni5BoKrE18AWGzcQ+swjYhQpXPkuelqYgd7syU07VVIV?=
- =?us-ascii?Q?kXhm/9dKwUNfjuDh2dvP8ECaf1+jTC1+PaDR2QeAMecQLPKlr0pt1HeWVccD?=
- =?us-ascii?Q?eSXFYrzfMEfe1BmA9IzBg8uHUPbmVrEXjkuC2Eaoyzumrs35hGBp6+bONZz1?=
- =?us-ascii?Q?t+29FQBZ8FpBLqJ2LEUI1As0VkJtca9K2SlJ88Edm4tWa1XGIMB2/4TgEh2b?=
- =?us-ascii?Q?60UWuFueT7BWEJ/U/Hml8SZWrhwAwidKxWZAzhz5T4CfoLAHr2SZQX4ZGRca?=
- =?us-ascii?Q?KxPmaqhSrXlOEKPl6SYOPFd+tI++pnNQsm/MWcsnI7vFPeBy5yHvU2oaEq7I?=
- =?us-ascii?Q?v7Bz2mot3FJB/pxjEKVRCgZ6QT1i8S8roH1yMiElsd9rbIaksLjAK7egqEWg?=
- =?us-ascii?Q?iZGpgQL9ht6nSAjgnouiV1qfT4ws+B48kc8BWInMVpqiUje4E18tZvqKaGej?=
- =?us-ascii?Q?21LnZ55CAQ7XLFIwb2g8xtkzLKpK+ZmALGHIl9JHCJQ0JZSLo43/T8VPqvPp?=
- =?us-ascii?Q?AnELjp/wFscyJicXH9UyLuGyWWd3UFO/cpPnXzQkrq2r8zDWTLlMeiAgL5lA?=
- =?us-ascii?Q?OvqnobvOfICHnhPXhLXHFBywcAlc7KJxFBw7O2kvzN4VgVuADQYNKB/LAP0J?=
- =?us-ascii?Q?yg2vJfWhQImVNtHquUvfs5/204WzR3VRtJCVDs+tNXFwgfoU+w8v/YpUTYOH?=
- =?us-ascii?Q?rgcsq43f9e34GJSB7XUFbAObxQTL8Y4tEu9ztKCKy7E34mrguowjEQ98brkj?=
- =?us-ascii?Q?jakNabaraUXfUQf/qPd3ta71d5E0CvbV5wOFhBIMjgd1fxnvexids4e7H2+X?=
- =?us-ascii?Q?lao3H6k8asPvKIMPiYpmfSlyG0JojFuE4oIx/d+aC6CnVwzfuBjyBCyfz33H?=
- =?us-ascii?Q?v/W4XL1+rUJPYMKUZLIajAU9y/+AHhu72R9ucusL3SO0e8+tfM/KaWGGsTdl?=
- =?us-ascii?Q?yeo+rZktfPgmtOQHOOc6+Z3EsIz2A0Jrrj14GQ3OVBpJl6Roq/T++Ch9keNh?=
- =?us-ascii?Q?8g+hHrM0HkbC/ndsXOIwbPTtv7weY5CVbzNLEfH5jiO442l0lTm4YUqH2cae?=
- =?us-ascii?Q?WxLZ7Gs0r4edl3h3tEEc+sfXiaUbHzR4VRlG8FqCbmLvgGG0blA1ZsUgoeFA?=
- =?us-ascii?Q?QlfnkAOW+C+m7qzn1N5JzQkTmtlOvBqVlLpC2ydVB3iGTYZ3ZtKB9AnKRLwV?=
- =?us-ascii?Q?j4DhHVmOJU8SiiN1TEL9ViX67g1NDT/UDua+fNAhNTOODX8nYh44mUo41zPJ?=
- =?us-ascii?Q?t5dI3Dak0NN6zHRN9XPrxREoK9+nWaQhHpRsTbys+79uZ90W1HsaCUZktS/M?=
- =?us-ascii?Q?94B+ar9hyplhy+4blLMlJidXCsZdodBiLUDiy80Ztat27oNnkPCBgJF6F1Ba?=
- =?us-ascii?Q?VIk5AXmAXQejCJtGzM1zGvgRxSwGGnafgi9kzyaMqHnZiip1Ew2AOlZwUiOY?=
- =?us-ascii?Q?9VvUeaiO7oWzQdtzyfx+exY/wkEbAoCYX9gWdHaStvkth7vN0+pT7VJ3PZGj?=
- =?us-ascii?Q?LW4Icp4CyW420VoWkq370Mib42dH3sYuwGsNNrOmLuC3ToYw4AKWwPvBN9Cb?=
- =?us-ascii?Q?XRijN4vUyycYJ3HuERr7tqYJBWgpzyiN+bUoXYauZnt86mMSb3QTRBmJEMCI?=
- =?us-ascii?Q?1tHtBQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7750cb8f-349e-48e0-87da-08d9fd881ff0
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 02:38:54.4122
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Erp2YU7yEFxDSUdy2heZ1BlL2kkrjTSoUuIMEvFPV7T4tJ5M01sWGOiBvd0TY0zv2TLHaI1e9WH9MoCLDr8FuzPn2w9K8neL6CbbydY7sK0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3328
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10275 signatures=686983
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=927
- adultscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040008
-X-Proofpoint-ORIG-GUID: IBy2xBhf2TuT-guvuSA_v13_ybqWjwbR
-X-Proofpoint-GUID: IBy2xBhf2TuT-guvuSA_v13_ybqWjwbR
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e2b37e24-44dc-a159-e45d-2c720fe7ffc1@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/3/3 23:03, Mike Christie wrote:
+> On 3/3/22 8:56 PM, Wenchao Hao wrote:
+>> kernel might crash in iscsi_sw_tcp_conn_get_param() because it dereference
+>> an invalid address.
+>>
+>> The initialization of iscsi_conn's dd_data is after device_register() of
+>> struct iscsi_cls_conn, so iscsi_conn's dd_data might not initialized when
+>> iscsi_sw_tcp_conn_get_param() is called.
+>>
+>> Following stack would be reported and kernel would panic.
+>>
+>> [449311.812887] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+>> [449311.812893] Mem abort info:
+>> [449311.812895]   ESR = 0x96000004
+>> [449311.812899]   Exception class = DABT (current EL), IL = 32 bits
+>> [449311.812901]   SET = 0, FnV = 0
+>> [449311.812903]   EA = 0, S1PTW = 0
+>> [449311.812905] Data abort info:
+>> [449311.812907]   ISV = 0, ISS = 0x00000004
+>> [449311.812909]   CM = 0, WnR = 0
+>> [449311.812915] user pgtable: 4k pages, 48-bit VAs, pgdp = 00000000e26e7ace
+>> [449311.812918] [0000000000000008] pgd=0000000000000000
+>> [449311.812925] Internal error: Oops: 96000004 [#1] SMP
+>> [449311.814974] Process iscsiadm (pid: 8286, stack limit = 0xffff800010f78000)
+>> [449311.815570] CPU: 0 PID: 8286 Comm: iscsiadm Kdump: loaded Tainted: G    B   W         4.19.90-vhulk2201.1.0.h1021.kasan.eulerosv2r10.aarch64 #1
+>> [449311.816584] sd 1:0:0:1: [sdg] Attached SCSI disk
+>> [449311.816695] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+>> [449311.817677] pstate: 40400005 (nZcv daif +PAN -UAO)
+>> [449311.818121] pc : iscsi_sw_tcp_conn_get_param+0xec/0x300 [iscsi_tcp]
+>> [449311.818688] lr : iscsi_sw_tcp_conn_get_param+0xe8/0x300 [iscsi_tcp]
+>> [449311.819244] sp : ffff800010f7f890
+>> [449311.819542] x29: ffff800010f7f890 x28: ffff8000cb1bea38
+>> [449311.820025] x27: ffff800010911010 x26: ffff2000028887a4
+>> [449311.820500] x25: ffff800009200d98 x24: ffff800010911000
+>> [449311.820973] x23: 0000000000000000 x22: ffff8000cb1bea28
+>> [449311.821458] x21: 0000000000000015 x20: ffff200081afa000
+>> [449311.821934] x19: 1ffff000021eff20 x18: 0000000000000000
+>> [449311.822414] x17: 0000000000000000 x16: ffff200080618220
+>> [449311.822891] x15: 0000000000000000 x14: 0000000000000000
+>> [449311.823413] x13: 0000000000000000 x12: 0000000000000000
+>> [449311.823897] x11: 1ffff0001ab4f41f x10: ffff10001ab4f41f
+>> [449311.824373] x9 : 0000000000000000 x8 : ffff8000d5a7a100
+>> [449311.824847] x7 : 0000000000000000 x6 : dfff200000000000
+>> [449311.825329] x5 : ffff1000021eff20 x4 : ffff8000cb1bea30
+>> [449311.825806] x3 : ffff200002911178 x2 : ffff2000841ff000
+>> [449311.826281] x1 : e0c234eab8420c00 x0 : ffff8000cb1bea38
+>> [449311.826756] Call trace:
+>> [449311.826987]  iscsi_sw_tcp_conn_get_param+0xec/0x300 [iscsi_tcp]
+>> [449311.827550]  show_conn_ep_param_ISCSI_PARAM_CONN_ADDRESS+0xe4/0x100 [scsi_transport_iscsi]
+>> [449311.828304]  dev_attr_show+0x58/0xb0
+>> [449311.828639]  sysfs_kf_seq_show+0x124/0x210
+>> [449311.829014]  kernfs_seq_show+0x8c/0xa0
+>> [449311.829362]  seq_read+0x188/0x8a0
+>> [449311.829667]  kernfs_fop_read+0x250/0x398
+>> [449311.830024]  __vfs_read+0xe0/0x350
+>> [449311.830339]  vfs_read+0xbc/0x1c0
+>> [449311.830635]  ksys_read+0xdc/0x1b8
+>> [449311.830941]  __arm64_sys_read+0x50/0x60
+>> [449311.831295]  el0_svc_common+0xc8/0x320
+>> [449311.831642]  el0_svc_handler+0xf8/0x160
+>> [449311.831998]  el0_svc+0x10/0x218
+>> [449311.832292] Code: f94006d7 910022e0 940007bb aa1c03e0 (f94006f9)
+>>
+>> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+>> Signed-off-by: Wu Bo <wubo40@huawei.com>
+>> ---
+>>   drivers/scsi/iscsi_tcp.c | 7 ++++++-
+>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+>> index 1bc37593c88f..14db224486be 100644
+>> --- a/drivers/scsi/iscsi_tcp.c
+>> +++ b/drivers/scsi/iscsi_tcp.c
+>> @@ -741,11 +741,16 @@ static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+>>   {
+>>   	struct iscsi_conn *conn = cls_conn->dd_data;
+>>   	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+>> -	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+>> +	struct iscsi_sw_tcp_conn *tcp_sw_conn;
+>>   	struct sockaddr_in6 addr;
+>>   	struct socket *sock;
+>>   	int rc;
+>>   
+>> +	if (!tcp_conn)
+>> +		return -ENOTCONN;
+>> +
+>> +	tcp_sw_conn = tcp_conn->dd_data;
+>> +
+>>   	switch(param) {
+>>   	case ISCSI_PARAM_CONN_PORT:
+>>   	case ISCSI_PARAM_CONN_ADDRESS:
+> 
+> We are actually doing sysfs/device addition wrong.
+> 
+> We should be doing the 2 step setup where in step 1 we alloc/init.
+> When everything is allocated and initialized, then we should do
+> device_add which exposes us to sysfs. On the teardown side, we are
+> then supposed to do 2 steps where the remove function does device_del
+> which waits until sysfs accesses are completed. We can then tear
+> the structs down and free them and call device_put.
+> 
 
-Keith,
+I agree with this, and I would try to split device_add() from 
+iscsi_create_conn().
 
-> NVM Express ratified TP 4068 defines new protection information
-> formats.  Implement support for the CRC64 guard tags.
->
-> Since the block layer doesn't support variable length reference tags,
-> driver support for the Storage Tag space is not supported at this
-> time.
+What's more I would do some check between sysfs files add/remove and 
+kernel object initialize/release to make a micro-refactoring
 
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+> The exposure to NL would be similar where it goes into the wrapper
+> around device_add. However, see my comments on the other patch where
+> I don't think we can hit the bug you mention because every nl cmd
+> that calls into the drivers is done under the rx_queue_mutex.
+> 
+> I think we should separate the iscsi_create_conn function like we
+> do for sessions. This is going to be a little more involved because
+> you need to also convert iscsi_tcp_conn_setup and the drivers since
+> we can call into the drivers for the get_conn_param callout.
+> .
+> 
 
--- 
-Martin K. Petersen	Oracle Linux Engineering

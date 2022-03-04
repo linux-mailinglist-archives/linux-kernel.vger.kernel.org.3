@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB87C4CD99E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2D54CD9A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240869AbiCDRDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S240870AbiCDRFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiCDRDI (ORCPT
+        with ESMTP id S234092AbiCDRFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:03:08 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDE11C6645
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:02:20 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id d17so8139523pfl.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 09:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m9DN8GZLnqfgQbJETPdoOENIKXarw30wjGXDiTZV/WI=;
-        b=cXF7pznqQ+nkIi0dJDdpaB4BbNgUDe53v7wcZZhFbbLznD3OsURa5kfTqQ+T3G7yG5
-         gjcjozJuDDA7oAJRnhV7tiRyNMEn2JlaG1pRvk4dIp/On6jkSiSS2yoL29SOYXUll/hq
-         j0cLZcWuOKiEUGhTk8jQ5E127PzBwO4L4GaOpLmjYQKx5XIUQ/8r0gIMK4XH+ULLWWrZ
-         JQInpJ/j3GKVvUaLpxDsnZrfC+H6Vbdu9PcOGLpjW78RNf9fQj3FmWKZojcVLbbVd61/
-         HovEuaUsh+1Wk3nsDAcrQdEqMrYNeOcwajgLgwraZ1FkDYa6JUmiV/EFJioupZiKmBP2
-         DBvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m9DN8GZLnqfgQbJETPdoOENIKXarw30wjGXDiTZV/WI=;
-        b=OI8Vl5eLsaktUf0vYnfEeU8EgkM1GD8kbnDoqZLOVyJ8ZnHEKIsUs+BCIoi9ZL8zy7
-         pZzy4LGs0HDQanUQai6teI0UvlM9ve2CFn4AZvrx7nbYdjvd7rb7cwuFXQ96QCwXJj3P
-         Z9nBi7kAgTD0wm/L1fT6xesGAWZSQ6dMPmbacPF/WdgNJIYlJnwEndq1wc5JltptLl/M
-         IZsKSD+XXxk5zXOSZYwcf7IJom3rgYL8RlGpUMyALSj/JXmWGevWRYhC68RZOnjZ0jFj
-         jls86/7wpOHQM0LKfwS7XsrKD2gsSWYJuqT30rzGYsqzjqBzbvOYFl1DuxnLWmVkDzRq
-         A2Tg==
-X-Gm-Message-State: AOAM530ikczLcsTiWZSktqQtCThjF3G8qvkN28KZkFhggJR0kp2l6Clj
-        nlIXBao1OaTkN407YE3fuPQ=
-X-Google-Smtp-Source: ABdhPJw1+OU2H8gT2uzN0UKOWZeQRmUsnXEp21lDc2Wxz8YGSRZqFGpgM3kMpvTY+orF8Fq8lDlkBA==
-X-Received: by 2002:a05:6a00:16d3:b0:4cb:51e2:1923 with SMTP id l19-20020a056a0016d300b004cb51e21923mr43816386pfc.7.1646413339783;
-        Fri, 04 Mar 2022 09:02:19 -0800 (PST)
-Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:5388:c313:5e37:a261])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f3581ae086sm6947038pfv.16.2022.03.04.09.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 09:02:19 -0800 (PST)
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>
-Subject: [PATCH v2] mm/page_alloc: call check_new_pages() while zone spinlock is not held
-Date:   Fri,  4 Mar 2022 09:02:15 -0800
-Message-Id: <20220304170215.1868106-1-eric.dumazet@gmail.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+        Fri, 4 Mar 2022 12:05:12 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C97C199D47
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:04:24 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K9DjH2NmCz9sT5;
+        Fri,  4 Mar 2022 18:04:19 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id drbbp6ipNEto; Fri,  4 Mar 2022 18:04:19 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K9DjG2bwRz9sTB;
+        Fri,  4 Mar 2022 18:04:18 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 344CD8B77D;
+        Fri,  4 Mar 2022 18:04:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id v1RuLU4X3cAP; Fri,  4 Mar 2022 18:04:18 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.204.129])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD9548B77A;
+        Fri,  4 Mar 2022 18:04:17 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 224H47an1979756
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 4 Mar 2022 18:04:07 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 224H460u1979755;
+        Fri, 4 Mar 2022 18:04:06 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 1/4] powerpc: Cleanup asm-prototypes.c
+Date:   Fri,  4 Mar 2022 18:04:02 +0100
+Message-Id: <3ed660a585df2080ea8412ec20fbf652f5bf013a.1646413435.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1646413443; l=1963; s=20211009; h=from:subject:message-id; bh=4aqL/Gg0z6WdVeb96pIaD6+eKVywW/RKZ9djzpf8ZKo=; b=SCWCVkNLc550xUQsKjTGdRrJsWYfHn7MH2h9P7z9dzCr02kXqtGzKjplWpp4m9zaHm8kl1KvIYfb 8avfXsWzDPLm1Y3ng1umHvdNTTBKxHFJLS4zjLfaUdGLaLhfd0VM
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+Last call to sys_swapcontext() from ASM was removed by
+commit fbcee2ebe8ed ("powerpc/32: Always save non volatile GPRs at
+syscall entry")
 
-For high order pages not using pcp, rmqueue() is currently calling
-the costly check_new_pages() while zone spinlock is held,
-and hard irqs masked.
+sys_debug_setcontext() prototype not needed anymore since
+commit f3675644e172 ("powerpc/syscalls: signal_{32, 64} - switch
+to SYSCALL_DEFINE")
 
-This is not needed, we can release the spinlock sooner to reduce
-zone spinlock contention.
+sys_switch_endian() prototype not needed anymore since
+commit 81dac8177862 ("powerpc/64: Make sys_switch_endian() traceable")
 
-Note that after this patch, we call __mod_zone_freepage_state()
-before deciding to leak the page because it is in bad state.
+_mount() prototype is already in asm/ftrace.h
 
-v2: We need to keep interrupts disabled to call __mod_zone_freepage_state()
-
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Greg Thelen <gthelen@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: David Rientjes <rientjes@google.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- mm/page_alloc.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ arch/powerpc/include/asm/asm-prototypes.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3589febc6d31928f850ebe5a4015ddc40e0469f3..1804287c1b792b8aa0e964b17eb002b6b1115258 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3706,10 +3706,10 @@ struct page *rmqueue(struct zone *preferred_zone,
- 	 * allocate greater than order-1 page units with __GFP_NOFAIL.
- 	 */
- 	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
--	spin_lock_irqsave(&zone->lock, flags);
+diff --git a/arch/powerpc/include/asm/asm-prototypes.h b/arch/powerpc/include/asm/asm-prototypes.h
+index 41b8a1e1144a..4fd79207fd41 100644
+--- a/arch/powerpc/include/asm/asm-prototypes.h
++++ b/arch/powerpc/include/asm/asm-prototypes.h
+@@ -57,12 +57,7 @@ int enter_vmx_ops(void);
+ void *exit_vmx_ops(void *dest);
  
- 	do {
- 		page = NULL;
-+		spin_lock_irqsave(&zone->lock, flags);
- 		/*
- 		 * order-0 request can reach here when the pcplist is skipped
- 		 * due to non-CMA allocation context. HIGHATOMIC area is
-@@ -3721,15 +3721,15 @@ struct page *rmqueue(struct zone *preferred_zone,
- 			if (page)
- 				trace_mm_page_alloc_zone_locked(page, order, migratetype);
- 		}
--		if (!page)
-+		if (!page) {
- 			page = __rmqueue(zone, order, migratetype, alloc_flags);
--	} while (page && check_new_pages(page, order));
--	if (!page)
--		goto failed;
--
--	__mod_zone_freepage_state(zone, -(1 << order),
--				  get_pcppage_migratetype(page));
--	spin_unlock_irqrestore(&zone->lock, flags);
-+			if (!page)
-+				goto failed;
-+		}
-+		__mod_zone_freepage_state(zone, -(1 << order),
-+					  get_pcppage_migratetype(page));
-+		spin_unlock_irqrestore(&zone->lock, flags);
-+	} while (check_new_pages(page, order));
+ /* signals, syscalls and interrupts */
+-long sys_swapcontext(struct ucontext __user *old_ctx,
+-		    struct ucontext __user *new_ctx,
+-		    long ctx_size);
+ #ifdef CONFIG_PPC32
+-long sys_debug_setcontext(struct ucontext __user *ctx,
+-			  int ndbg, struct sig_dbg_op __user *dbg);
+ int
+ ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp,
+ 	   struct __kernel_old_timeval __user *tvp);
+@@ -81,7 +76,6 @@ unsigned long interrupt_exit_kernel_restart(struct pt_regs *regs);
  
- 	__count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
- 	zone_statistics(preferred_zone, zone, 1);
+ long ppc_fadvise64_64(int fd, int advice, u32 offset_high, u32 offset_low,
+ 		      u32 len_high, u32 len_low);
+-long sys_switch_endian(void);
+ 
+ /* prom_init (OpenFirmware) */
+ unsigned long __init prom_init(unsigned long r3, unsigned long r4,
+@@ -102,7 +96,6 @@ extern int __cmpdi2(s64, s64);
+ extern int __ucmpdi2(u64, u64);
+ 
+ /* tracing */
+-void _mcount(void);
+ unsigned long prepare_ftrace_return(unsigned long parent, unsigned long ip,
+ 						unsigned long sp);
+ 
 -- 
-2.35.1.616.g0bdcbb4464-goog
+2.34.1
 

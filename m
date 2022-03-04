@@ -2,154 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75954CD3C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2FC4CD3C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233210AbiCDLtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S234628AbiCDLur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiCDLtl (ORCPT
+        with ESMTP id S229491AbiCDLuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:49:41 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680F818CC29;
-        Fri,  4 Mar 2022 03:48:52 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3A43951C;
-        Fri,  4 Mar 2022 12:48:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646394530;
-        bh=Tpmci2229+d69SIklAmDsEQusgFyc/vp2PTOJIMLm2I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mn7A7sk9koDrV8kFK7nOrLrJz4m5dHtM1/DeQzlt/y3cqkV0pcKzwQO18olJzNJbt
-         AnjrfaRVlWXsDgZJCGTBtWG1wnIbPv+tA4png3K5nU6+BNuwX0wMXH/76ehXTptVHq
-         5kLuAQW656aszJpVgIgsLGLK7dcVyltzcjHN71m8=
-Date:   Fri, 4 Mar 2022 13:48:37 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: kbuild: Pass DT_SCHEMA_FILES to
- dt-validate
-Message-ID: <YiH8lWq8gOnaQ+7G@pendragon.ideasonboard.com>
-References: <20220303224237.2497570-1-robh@kernel.org>
- <20220303224237.2497570-2-robh@kernel.org>
+        Fri, 4 Mar 2022 06:50:46 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EEE18022F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646394598; x=1677930598;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fUXyJLIdFhiyxULhk8zOA6BP1tAoMR/8RP78/EcpwW0=;
+  b=wWM65DfJJBlGCxTKE2Y35NoPgP24nebFyaSQQ2FgoDBLItzGCe2fjVuv
+   LQAFkRInehUkKlXmXeRjiqRU4+/Tx4mk8eRUW69wuloViMtaaomTflGBp
+   RU+x0N21izHasq6Zvl8DkaYbUovs4BlbLX36I+JO6yYXACyWzb+5ElPZ4
+   N97YU/surm3h6X6VkItQ5en8tbQvbcUWQQNO1NzCR5lBbrm/7ih78/cmo
+   IarpzIEvxJQ6UJe41wl+4vqzyGfGc1DR2DsgS0O9HdfAxcqEij3Kqixg5
+   Zn+kSUr6OBOAvdPpykTflSkksMvW8NxfNimTkdJ87eA1ZfRtUqYwvGV2/
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="87826588"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 04:49:57 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 04:49:57 -0700
+Received: from [10.12.72.98] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 04:49:56 -0700
+Message-ID: <60224607-230a-8933-bb6e-f907df0630c8@microchip.com>
+Date:   Fri, 4 Mar 2022 12:49:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220303224237.2497570-2-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ARM: at91: add support in soc driver for new SAMA5D29
+Content-Language: en-US
+To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Mihai Sain - M19926" <Mihai.Sain@microchip.com>
+References: <20220302155329.27668-1-nicolas.ferre@microchip.com>
+ <63d5bc08-7681-954a-2106-2653abf76b57@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <63d5bc08-7681-954a-2106-2653abf76b57@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:42:36PM -0600, Rob Herring wrote:
-> In preparation for supporting validation of DTB files, the full
-> processed schema will always be needed in order to extract type
-> information from it. Therefore, the processed schema containing only
-> what DT_SCHEMA_FILES specifies won't work. Instead, dt-validate has
-> gained an option, -l or --limit, to specify which schema(s) to use for
-> validation.
+On 03/03/2022 at 09:19, Claudiu Beznea - M18063 wrote:
+> On 02.03.2022 17:53, nicolas.ferre@microchip.com wrote:
+>> From: Mihai Sain <mihai.sain@microchip.com>
+>>
+>> Add detection of new SAMA5D29 by the SoC driver.
+>>
+>> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+>> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> As the command line option is new, we the minimum dtschema version must be
-> updated.
+> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+
+Queued in at91-soc for 5.18.
+
+Best regards,
+   Nicolas
+
 > 
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/Makefile | 28 +++-------------------
->  scripts/Makefile.lib                       |  3 +--
->  2 files changed, 4 insertions(+), 27 deletions(-)
+>> ---
+>>   drivers/soc/atmel/soc.c | 3 +++
+>>   drivers/soc/atmel/soc.h | 1 +
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
+>> index a490ad7e090f..b2d365ae0282 100644
+>> --- a/drivers/soc/atmel/soc.c
+>> +++ b/drivers/soc/atmel/soc.c
+>> @@ -156,6 +156,9 @@ static const struct at91_soc socs[] __initconst = {
+>>   	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
+>>   		 AT91_CIDR_VERSION_MASK, SAMA5D28C_LD2G_EXID_MATCH,
+>>   		 "sama5d28c 256MiB LPDDR2 SiP", "sama5d2"),
+>> +	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
+>> +		 AT91_CIDR_VERSION_MASK, SAMA5D29CN_EXID_MATCH,
+>> +		 "sama5d29", "sama5d2"),
+>>   	AT91_SOC(SAMA5D3_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
+>>   		 AT91_CIDR_VERSION_MASK, SAMA5D31_EXID_MATCH,
+>>   		 "sama5d31", "sama5d3"),
+>> diff --git a/drivers/soc/atmel/soc.h b/drivers/soc/atmel/soc.h
+>> index c3eb3c8f0834..2ecaa75b00f0 100644
+>> --- a/drivers/soc/atmel/soc.h
+>> +++ b/drivers/soc/atmel/soc.h
+>> @@ -95,6 +95,7 @@ at91_soc_init(const struct at91_soc *socs);
+>>   #define SAMA5D28C_LD2G_EXID_MATCH	0x00000072
+>>   #define SAMA5D28CU_EXID_MATCH		0x00000010
+>>   #define SAMA5D28CN_EXID_MATCH		0x00000020
+>> +#define SAMA5D29CN_EXID_MATCH		0x00000023
+>>   
+>>   #define SAMA5D3_CIDR_MATCH		0x0a5c07c0
+>>   #define SAMA5D31_EXID_MATCH		0x00444300
 > 
-> diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-> index 61ec18ecc931..246ba0ecab64 100644
-> --- a/Documentation/devicetree/bindings/Makefile
-> +++ b/Documentation/devicetree/bindings/Makefile
-> @@ -6,7 +6,7 @@ DT_MK_SCHEMA ?= dt-mk-schema
->  DT_SCHEMA_LINT := $(shell which yamllint || \
->    echo "warning: yamllint not installed, skipping. To install, run 'pip install yamllint'" >&2)
->  
-> -DT_SCHEMA_MIN_VERSION = 2021.2.1
-> +DT_SCHEMA_MIN_VERSION = 2022.3
->  
->  PHONY += check_dtschema_version
->  check_dtschema_version:
-> @@ -25,9 +25,6 @@ quiet_cmd_extract_ex = DTEX    $@
->  $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
->  	$(call if_changed,extract_ex)
->  
-> -# Use full schemas when checking %.example.dts
-> -DT_TMP_SCHEMA := $(obj)/processed-schema-examples.json
-> -
->  find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
->  		-name 'processed-schema*' ! \
->  		-name '*.example.dt.yaml' \)
-> @@ -70,29 +67,10 @@ override DTC_FLAGS := \
->  # Disable undocumented compatible checks until warning free
->  override DT_CHECKER_FLAGS ?=
->  
-> -$(obj)/processed-schema-examples.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
-> +$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
->  	$(call if_changed_rule,chkdt)
->  
-> -ifeq ($(DT_SCHEMA_FILES),)
-> -
-> -# Unless DT_SCHEMA_FILES is specified, use the full schema for dtbs_check too.
-> -# Just copy processed-schema-examples.json
-> -
-> -$(obj)/processed-schema.json: $(obj)/processed-schema-examples.json FORCE
-> -	$(call if_changed,copy)
-> -
-> -else
-> -
-> -# If DT_SCHEMA_FILES is specified, use it for processed-schema.json
-> -
-> -$(obj)/processed-schema.json: DT_MK_SCHEMA_FLAGS := -u
-> -$(obj)/processed-schema.json: $(CHK_DT_DOCS) check_dtschema_version FORCE
-> -	$(call if_changed,mk_schema)
-> -
-> -endif
-> -
-> -always-$(CHECK_DT_BINDING) += processed-schema-examples.json
-> -always-$(CHECK_DTBS)       += processed-schema.json
-> +always-y += processed-schema.json
->  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
->  always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dt.yaml, $(CHK_DT_DOCS))
->  
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 79be57fdd32a..9f1e8442564e 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -361,9 +361,8 @@ $(multi-dtb-y): FORCE
->  $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
->  
->  DT_CHECKER ?= dt-validate
-> -DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),,-m)
-> +DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
->  DT_BINDING_DIR := Documentation/devicetree/bindings
-> -# DT_TMP_SCHEMA may be overridden from Documentation/devicetree/bindings/Makefile
->  DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
 
-This could now use := instead of ?=
-
-Apart from the fact that 2022.3 hasn't been tagged yet as pointed out by
-Geert, this looks fine to me (but I'm no expert in this area).
-
->  
->  quiet_cmd_dtb_check =	CHECK   $@
 
 -- 
-Regards,
-
-Laurent Pinchart
+Nicolas Ferre

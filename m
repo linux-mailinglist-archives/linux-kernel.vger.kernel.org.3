@@ -2,333 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D609C4CCFF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261F34CCFF5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiCDIb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S233520AbiCDIbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiCDIb4 (ORCPT
+        with ESMTP id S233522AbiCDIbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:31:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8939D19BE4D;
-        Fri,  4 Mar 2022 00:31:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F25061015;
-        Fri,  4 Mar 2022 08:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8064C340E9;
-        Fri,  4 Mar 2022 08:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646382663;
-        bh=fwzhEw5YqiuNQASpOM0rdBn+ZueUJTulpkPCJl4FRD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iQPMNgIOVMbPo2z4bssQovKPfoWBWK9E4of+Mn9kMAf1shu8/6b9LBKxtJl0lsq0+
-         P8E8Il3euNLHVqYMVSy1NOWODd+HZVGCUxG6L9E/ZMPLHEyxXtH2zzEFszN0/hxt61
-         GaC0BEwmkwtmfw9vthxmHO8YJE2f8eWxSl3Zm5b4kZeXgAHAIJMynYz4GVVgk6wdVi
-         lUTKic+is8MrxhP80ovlP5iU7dwNr/wE7l985cQd1rDPwav45W6ggETNR0r/EQ9PqG
-         r6s93dHaDr+9UEO3sefQv2XZeP+y8uKyAS5nrt/kPps34IGQ7g834LVTsa0t+PplMB
-         TtxXxJZ3W/r4g==
-Date:   Fri, 4 Mar 2022 10:30:22 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YiHOHn3q4gwoFv+u@iki.fi>
-References: <Yhy/GvJegnTqYdq6@iki.fi>
- <f6a256a6-a7d7-a8e7-c9a8-e232203c63af@intel.com>
- <Yh4fGORDaJyVrJQW@iki.fi>
- <Yh4i4hVcnfZ8QDAl@iki.fi>
- <2d2d3471-78ce-9faa-daf6-138078f5ffaa@intel.com>
- <Yh7Q5fbOtr+6YWaS@iki.fi>
- <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com>
- <op.1igppyk9wjvjmi@hhuan26-mobl1.mshome.net>
- <YiFMyZ4t2MC0n5Pn@iki.fi>
- <op.1ihmv4mvwjvjmi@hhuan26-mobl1.mshome.net>
+        Fri, 4 Mar 2022 03:31:32 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D87E19BE5D;
+        Fri,  4 Mar 2022 00:30:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646382645; x=1677918645;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=7P4BzgSeUwlv8v8k82kCYoFJ++vWQxwRS9G/hRHPD0E=;
+  b=nFl7Jm4wx5qIJnQoT6fZH3+nf+ivBCrpD3GuOGlcMRL7JcylP4xt6JRH
+   vD59yoTcvZZlHqNiJIm8+0o1+rFEJ3rYLCtlg8tlerAk4B2x2jENy2dzi
+   ZnRmC8iuBQqJT6lM44qo2rheHdheOACBsbhbX1kW+qi3KFAXvi1qeEUqM
+   8dy0z7W99LR7WY37C0IrLoakWIKOcmpQ5PVOPVkjWJs5V4D9noW1UtRhb
+   SP5P61VUyS8+jH/ODMSLq/KdBPFzg3ttpd8xI3R435r0+99QpApHR5dkS
+   SwjJnZMMTh8oHPjjKhxnEBAoCOIvVUVCbAoSKs741kHX9+eKFfCxGyGd6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,154,1643698800"; 
+   d="scan'208";a="155244848"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 01:30:45 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 01:30:43 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 01:30:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QNE9nIT9IsChB2YdsxifG/didXt70UJ0JBBB9ZFSwqdnucgNMDmrBjYExu+kHr/J3Ij/AunFUorMl8TYOot6MO7pCxjOPMV92pksnrqdiFdEwnnEW3fhc7adUOI3hwrPsnBK7qkpsi9s/cUGd/cwvvo4Sq0Ncx8ucQPcYaPaoVLXu/63l0yShQyk9W+UHpsNKEjgY4NdjHLQIKhQUHzagUXWZqA6jxinqOlve1eiq8Qgcp7/hVpGK3+1q00Dn3qCXcLOUD3zDLu4hp+ARs+YeGFNZschRqsJLYTEI9ng4iM9em2e7dqvamrepj0B9FAFjMIYWG2SgFtWvXqXbBZZxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7P4BzgSeUwlv8v8k82kCYoFJ++vWQxwRS9G/hRHPD0E=;
+ b=MXEfFWGAmDdKFsUyXX4OCxU98iefFdI77k1rhurByi0EcJYxHVEwFHZBnEzF+9QsK4ZWqQRz6+7KWpqclBk6qTGdyU7DeXQCibFNFLDlatTGAF7oFYRR29KkDFVNCZH1b0ws/c6Wo9dQgISeqBH9ANWLTCYy0i97/vhb7sFJ+KGAsWRxJcrK2+b+KIqbrLThTzgMbVROobwG1i532xIAx3aiBpF9qNLYbDLWLqx1KMxsOUUM+zKWstwrzfRhVV9C6IfSlZy1Ncl3WPysTw7xZJzc0IP9qY9aVJSSjgzSFVBWemHus9YP/A5cO4U9Rnfebyl/pWMzuBI1g6LokDmSng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7P4BzgSeUwlv8v8k82kCYoFJ++vWQxwRS9G/hRHPD0E=;
+ b=fHo2EeqjbLmj87omYxQtDX42dJEp3bfoF/9npp7zpE6hMmGJ+rkgchBm0OKN15L1c2IVjZAfutsFc6zRIUP4l4y2TYtnbUHw89aAU/bebtRnQv+NJiTnGRT1utbof+C9vCMZaxa5XFR5XKVs+mCjapMVPlRJ9PVYW2MhvwtoIiI=
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
+ by DM6PR11MB2667.namprd11.prod.outlook.com (2603:10b6:5:c1::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 08:30:41 +0000
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b%5]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 08:30:41 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <michael@walle.cc>, <Kavyasree.Kotagiri@microchip.com>,
+        <Nicolas.Ferre@microchip.com>
+CC:     <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>,
+        <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v1 4/6] ARM: dts: lan966x: add flexcom SPI nodes
+Thread-Topic: [PATCH v1 4/6] ARM: dts: lan966x: add flexcom SPI nodes
+Thread-Index: AQHYL6IiyC+zEoMHxUG0LsPLdsE1fw==
+Date:   Fri, 4 Mar 2022 08:30:41 +0000
+Message-ID: <b69dac52-335d-539a-369a-6614f9eeb61a@microchip.com>
+References: <20220303160323.3316317-1-michael@walle.cc>
+ <20220303160323.3316317-5-michael@walle.cc>
+In-Reply-To: <20220303160323.3316317-5-michael@walle.cc>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3fe989d2-ec29-4d3d-70d8-08d9fdb944f1
+x-ms-traffictypediagnostic: DM6PR11MB2667:EE_
+x-microsoft-antispam-prvs: <DM6PR11MB266791FA1D41F1B5E54B926C87059@DM6PR11MB2667.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GIMOUIZRoUUIu4ffZWEtFCV7qey+lrvHsy0KUGCfc+2VvLH+iYNzNZmz0DYo/3YxnjFM57+ZtV15ClOT6v2o60JCNgxqzJCrfvEO2hwNHYGrWocYzCHx5T/s/aEuLtv1dUfgWGqRhjVHbsx4hTfm4xNcFkXJf0X7Dn0gqpIR0zIwhaf2Xt/GaJX3Dnrtkbx+EedrFe0s0iqwILBmVMUIGzBXCAyxgfQknJSozEM3SNBr2mN4mg0jQjqtnPfoQ36l++H3elBVBTtUhqH1+THGjUT8JE9cQUx2EfZ17kyYr4W/DS7zKwD54qSOfAYSAvrvxVJfjlWG3+fcRofbHy9KWcQ8+yrslRq6FZdxMCnVrhe12pTilt5Toldrbueoh86jRQoyDZ1rlxPVKQAM/6HR+iiXPFMA8gJe6WeGsJd8+/8rmHX8ANJ/k47Y81L2Qmr1qamW41lf/NtTgkUnaxrK4qWyzR8oTcEhbxVkasFQEXQ7AXaopCcPeCGPBn5lKhsmhgBn64ji1i5FaZbVqJt7IPPjd2qaFnn8DU5NjgZzy/7BYayCDzqrAd5ooZukkRrlaL8M8gyur9x0XSUt9KrG9UykTwiVC4Just3dun4iMDygGuux2xBVq7lX1CvwLhfSDvB1R2Cu5WefZvwVdr2wbPl9F4ukpOr/gfKr1CZVEWC4lHTsRoO6DWljhHom/V0Ko5Vy0CptHrJLuK+QM0a5c/uE255ZfWIOqotFPen8t5bMoVYaIq9xx6wiMsuWbQk4mL6rGJFX6d8bOD7rNRzhcA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(5660300002)(6512007)(6486002)(7416002)(86362001)(8936002)(76116006)(6506007)(6636002)(186003)(110136005)(26005)(54906003)(2906002)(2616005)(38100700002)(122000001)(31686004)(31696002)(38070700005)(83380400001)(66476007)(64756008)(8676002)(36756003)(66446008)(71200400001)(4326008)(508600001)(316002)(66946007)(91956017)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M0txdnhmSk1PL3ZtM29wNlVtNXhNY2J2Z0YyUldtKzlpQTFiTlFGWGRjMGxG?=
+ =?utf-8?B?aDVtQkZLc3djTVVFUk5qL2dBQytGRllVYWhHTmp4OHprVFF5bTUrOWh1YkRv?=
+ =?utf-8?B?bFhFQzBOSVlpbytMcFVJL1hCZXZLSElrWlFKUXpmTTQ3WGREOERoSktYS29j?=
+ =?utf-8?B?OHhvQ1F3ZTVZcVJ5WGU3VlBSbktHNWduWU1JdHhtQzltSmk5UUZDdGxIQU5Z?=
+ =?utf-8?B?REEzNDEwT1pCM0dZWUMwbzAweXJjTW5Cbi95UWpwajMyajhxZHYwcXo0TGFo?=
+ =?utf-8?B?QUZKUUI1UkI2YUNGa2JqMm9DYTdqZTFQWVRieU9UelExTnFwTjRRWUZsdSsv?=
+ =?utf-8?B?MU5QVnorLzg5TC9kRTRCdzQ1YUF5MGVsbG1QeWpsakdPUHN5UjRTZmtTelEx?=
+ =?utf-8?B?cm9zQmwxNEYrKytQNk1jRWVYZ3FUbGkyTUlBR095RWhmT3NYeG52dnBEU0tS?=
+ =?utf-8?B?ajMyZnh2ZHV3NUd0b2Nsd1Q2eklrZFFKMTRYVEZCeGhOVElWaUJGYkg5RUVk?=
+ =?utf-8?B?dEEwVnI3Uk9ueUNKK21GbG1jREJyY2kyZ2tEQlBnbGIyem1OeGR3Sk9uajZR?=
+ =?utf-8?B?SllXSnVDVkJ6MW9vUGRPK2RUbnB5cVlKeHB5VW1kUkdFeCsySDVYQ0hoaldu?=
+ =?utf-8?B?MjF2R1ByQ1dnUnZzVHluNDhhQ2F6SWdWa1V1RjFIbEg3TnRLaTdxSUI3ZHZY?=
+ =?utf-8?B?ajQvelNhVndvcEx1NXJyNEEzTTlDWnBkamthbjBiS3FmdWhPY1ZjRVlGRHJQ?=
+ =?utf-8?B?eFFDUHV0RXdqVnpCNmRXSFBHdTVSYWdISXpvU29iazEwSFd6czlXZkw4NlZa?=
+ =?utf-8?B?SXh2ZloyKzRleFFzWWdPWnUxWjlXNDRCdU1saEpzbUNrSVBZYkxKRS9HZHpu?=
+ =?utf-8?B?RjBFQUlmbWxtNDl5MHh3NzRudHdKUlBhU3NhMUZaZDJ2dHJ0bUhRRjNFWFl6?=
+ =?utf-8?B?SytMQjFoZzlPMWFuRWdoanBnbm1lRHlZNWlkK0N2Mm55a0RMZUVVRzNVSHRs?=
+ =?utf-8?B?YXQ2ZVdRVkxjcnJSWHhveXZHUmgrUGNDZUt1SjFFQTNyMEVSeVlTdSsybXlp?=
+ =?utf-8?B?dGJNcmEwYUlEK1J6a05jMVBjeCszdk14U0c4aktpdllaSnpKdm01MVBkbTk4?=
+ =?utf-8?B?YXVaK0xuakdtV1VtaEV1Mno3QloweG96WnM1VExUTVJxUEwzWmN0RlRkSFhq?=
+ =?utf-8?B?UnlUQWltN3R1bTNiYzVJemVkVUdCd3NCSjYwQ1UybWYvdlFvN0tTTS9Xc1I5?=
+ =?utf-8?B?MkZyZGRncUFnTWttYlR0aVZCaE8yM1AzTk45V0tzUXhzVXlxOFpORWR2SEF1?=
+ =?utf-8?B?ZnpVZlZDcXhPUzNNZnRidEhXcDdDNkd1bWxFeTlkRHZvN3p4cE1NcDM0QXht?=
+ =?utf-8?B?dDVCM1ZlVDhkbTNGUG1XWHdLa29QQnVqTGE0ZG9IYWNxZWpCNFNacldLT2pC?=
+ =?utf-8?B?ME5sM3Y2YVV2MWhkMktiNmxrd0poQnBmNW42Zkw1ajkxU1N6b1FMM2FhUUNZ?=
+ =?utf-8?B?eUg1WkMxS1d5Snk2Nlpya2krWkZycmRSeUsxeU9HalpIYXRPb0NVckFHZGdE?=
+ =?utf-8?B?MThxcTI4K3h3UUhFWEg1eTIwU2lVb1BoNzVORXMwYkt3NzdrSzY5NWpqZ1hw?=
+ =?utf-8?B?ampTRTdOY2hUTDVZa2p5WUgvRk91VEFLNWhxclE2RGVFaWswVzBPNzJPcitT?=
+ =?utf-8?B?dStDU1Y0NktGUVJiSk0zUHFGY3Z5amM4M3IvM1F2MitWVmRueElXMU1zS3Fw?=
+ =?utf-8?B?UC8ydXltY1Jtbzg0TE44VVZMUU5BTjgrWWtUMndMS0U1QkdvbnJNeUZUc2h4?=
+ =?utf-8?B?czY4SFU0Qjd0TzVUb0hxaDRXMnNlK0VjQUczOGxXSDJieE5JMHYzcG10R2Vz?=
+ =?utf-8?B?YUhCRXRRT3I3cjdpUzBFVnR6aTQzY29iaExpbHJRZU5SOFdZVnBFRmRpOExs?=
+ =?utf-8?B?ekErUStJMDlPQ2VYcG04QmlVMUdVZzltVzdRc0lZMTBscGlKOVVCY2NHWVdX?=
+ =?utf-8?B?WmtzTVMxd1YwZXR4RHJLNnNEOVhiZkxtMS9MVW1XQkZNOWxZK1hSYjlNNXI3?=
+ =?utf-8?B?OW9Ic2gzbG82cmxkV2MvMm9RenFGZTJMdXJDNHZtOHgwcEpnNzRsMmFPNldm?=
+ =?utf-8?B?blo0K1pTT0RzVmpQNXdYdVRlTERDa3g2SWZuNlpVT1dORHN2UHE0c0NsMnZS?=
+ =?utf-8?B?UnJkRzk5bkcvanhyS3lUUW5rSTAzdjNLNDB1QlpBa3BFU0thb2dYWFg3MGxm?=
+ =?utf-8?B?TzdDdTMyc1RNMzRUUExLd3A2anhRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F00512A10B1ADE4F95B3B02DD266947C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <op.1ihmv4mvwjvjmi@hhuan26-mobl1.mshome.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fe989d2-ec29-4d3d-70d8-08d9fdb944f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 08:30:41.5368
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0Oi5luW4HwAh2X9kz8ay1I8ae8oW5GJVyV4wmd7KM1T5syJ6jmgao7nrbxrSpI8eLbeDkBW8baF7ovfbySnr0+XYsE2yfRrRpUe9jqBSXgg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2667
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 10:03:30PM -0600, Haitao Huang wrote:
-> 
-> On Thu, 03 Mar 2022 17:18:33 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> wrote:
-> 
-> > On Thu, Mar 03, 2022 at 10:08:14AM -0600, Haitao Huang wrote:
-> > > Hi all,
-> > > 
-> > > On Wed, 02 Mar 2022 16:57:45 -0600, Reinette Chatre
-> > > <reinette.chatre@intel.com> wrote:
-> > > 
-> > > > Hi Jarkko,
-> > > >
-> > > > On 3/1/2022 6:05 PM, Jarkko Sakkinen wrote:
-> > > > > On Tue, Mar 01, 2022 at 09:48:48AM -0800, Reinette Chatre wrote:
-> > > > > > Hi Jarkko,
-> > > > > >
-> > > > > > On 3/1/2022 5:42 AM, Jarkko Sakkinen wrote:
-> > > > > > > > With EACCEPTCOPY (kudos to Mark S. for reminding me of
-> > > > > > > > this version of
-> > > > > > > > EACCEPT @ chat.enarx.dev) it is possible to make R and RX
-> > > pages but
-> > > > > > > > obviously new RX pages are now out of the picture:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > 	/*
-> > > > > > > > 	 * Adding a regular page that is architecturally allowed
-> > > to only
-> > > > > > > > 	 * be created with RW permissions.
-> > > > > > > > 	 * TBD: Interface with user space policy to support max
-> > > permissions
-> > > > > > > > 	 * of RWX.
-> > > > > > > > 	 */
-> > > > > > > > 	prot = PROT_READ | PROT_WRITE;
-> > > > > > > > 	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> > > > > > > > 	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
-> > > > > > > >
-> > > > > > > > If that TBD is left out to the final version the page
-> > > > > > > > augmentation has a
-> > > > > > > > risk of a API bottleneck, and that risk can realize then
-> > > > > > > > also in the page
-> > > > > > > > permission ioctls.
-> > > > > > > >
-> > > > > > > > I.e. now any review comment is based on not fully known
-> > > > > > > > territory, we have
-> > > > > > > > one known unknown, and some unknown unknowns from
-> > > > > > > > unpredictable effect to
-> > > > > > > > future API changes.
-> > > > > >
-> > > > > > The plan to complete the "TBD" in the above snippet was to
-> > > > > > follow this work
-> > > > > > with user policy integration at this location. On a high level
-> > > > > > the plan was
-> > > > > > for this to look something like:
-> > > > > >
-> > > > > >
-> > > > > >  	/*
-> > > > > >  	 * Adding a regular page that is architecturally allowed to only
-> > > > > >  	 * be created with RW permissions.
-> > > > > >  	 * Interface with user space policy to support max permissions
-> > > > > >  	 * of RWX.
-> > > > > >  	 */
-> > > > > >  	prot = PROT_READ | PROT_WRITE;
-> > > > > >  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> > > > > >
-> > > > > >         if (user space policy allows RWX on dynamically added
-> > > pages)
-> > > > > > 	 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
-> > > > > > PROT_WRITE | PROT_EXEC, 0);
-> > > > > > 	else
-> > > > > > 		encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
-> > > > > > PROT_WRITE, 0);
-> > > > > >
-> > > > > > The work that follows this series aimed to do the integration
-> > > with user
-> > > > > > space policy.
-> > > > >
-> > > > > What do you mean by "user space policy" anyway exactly? I'm
-> > > sorry but I
-> > > > > just don't fully understand this.
-> > > >
-> > > > My apologies - I just assumed that you would need no reminder
-> > > about this
-> > > > contentious
-> > > > part of SGX history. Essentially it means that, yes, the kernel could
-> > > > theoretically
-> > > > permit any kind of access to any file/page, but some accesses are
-> > > known
-> > > > to generally
-> > > > be a bad idea - like making memory executable as well as writable
-> > > - and
-> > > > thus there
-> > > > are additional checks based on what user space permits before the
-> > > kernel
-> > > > allows
-> > > > such accesses.
-> > > >
-> > > > For example,
-> > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect()
-> > > >
-> > > > User policy and SGX has seen significant discussion. Some notable
-> > > > threads:
-> > > > https://lore.kernel.org/linux-security-module/CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com/
-> > > > https://lore.kernel.org/linux-security-module/20190619222401.14942-1-sean.j.christopherson@intel.com/
-> > > >
-> > > > > It's too big of a risk to accept this series without X taken care
-> > > > > of. Patch
-> > > > > series should neither have TODO nor TBD comments IMHO. I don't want
-> > > > > to ack
-> > > > > a series based on speculation what might happen in the future.
-> > > >
-> > > > ok
-> > > >
-> > > > >
-> > > > > > > I think the best way to move forward would be to do EAUG's
-> > > > > > > explicitly with
-> > > > > > > an ioctl that could also include secinfo for permissions.
-> > > Then you can
-> > > > > > > easily do the rest with EACCEPTCOPY inside the enclave.
-> > > > > >
-> > > > > > SGX_IOC_ENCLAVE_ADD_PAGES already exists and could possibly be
-> > > used for
-> > > > > > this purpose. It already includes SECINFO which may also be
-> > > useful if
-> > > > > > needing to later support EAUG of PT_SS* pages.
-> > > > >
-> > > > > You could also simply add SGX_IOC_ENCLAVE_AUGMENT_PAGES and call it
-> > > > > a day.
-> > > >
-> > > > I could, yes.
-> > > >
-> > > > > And if there is plan to extend SGX_IOC_ENCLAVE_ADD_PAGES what is
-> > > > > this weird
-> > > > > thing added to the #PF handler? Why is it added at all then?
-> > > >
-> > > > I was just speculating in my response, there is no plan to extend
-> > > > SGX_IOC_ENCLAVE_ADD_PAGES (that I am aware of).
-> > > >
-> > > > > > How this could work is user space calls SGX_IOC_ENCLAVE_ADD_PAGES
-> > > > > > after enclave initialization on any memory region within the
-> > > > > > enclave where
-> > > > > > pages are planned to be added dynamically. This ioctl() calls
-> > > > > > EAUG to add the
-> > > > > > new pages with RW permissions and their vm_max_prot_bits can be
-> > > > > > set to the
-> > > > > > permissions found in the included SECINFO. This will support
-> > > > > > later EACCEPTCOPY
-> > > > > > as well as SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-> > > > >
-> > > > > I don't like this type of re-use of the existing API.
-> > > >
-> > > > I could proceed with SGX_IOC_ENCLAVE_AUGMENT_PAGES if there is
-> > > consensus
-> > > > after
-> > > > considering the user policy question (above) and performance trade-off
-> > > > (more below).
-> > > >
-> > > > >
-> > > > > > The big question is whether communicating user policy after
-> > > > > > enclave initialization
-> > > > > > via the SECINFO within SGX_IOC_ENCLAVE_ADD_PAGES is acceptable
-> > > > > > to all? I would
-> > > > > > appreciate a confirmation on this direction considering the
-> > > > > > significant history
-> > > > > > behind this topic.
-> > > > >
-> > > > > I have no idea because I don't know what is user space policy.
-> > > >
-> > > > This discussion is about some enclave usages needing RWX permissions
-> > > > on dynamically added enclave pages. RWX permissions on dynamically
-> > > added
-> > > > pages is
-> > > > not something that should blindly be allowed for all SGX enclaves but
-> > > > instead the user
-> > > > needs to explicitly allow specific enclaves to have such ability. This
-> > > > is equivalent
-> > > > to (but not the same as) what exists in Linux today with LSM. As
-> > > seen in
-> > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect() Linux
-> > > is able
-> > > > to make
-> > > > files and memory be both writable and executable, but it would only do
-> > > > so for those
-> > > > files and memory that the LSM (which is how user policy is
-> > > communicated,
-> > > > like SELinux)
-> > > > indicates it is allowed, not blindly do so for all files and all
-> > > memory.
-> > > >
-> > > > > > > Putting EAUG to the #PF handler and implicitly call it just
-> > > > > > > too flakky and
-> > > > > > > hard to make deterministic for e.g. JIT compiler in our use
-> > > > > > > case (not to
-> > > > > > > mention that JIT is not possible at all because inability to
-> > > > > > > do RX pages).
-> > > >
-> > > > I understand how SGX_IOC_ENCLAVE_AUGMENT_PAGES can be more
-> > > deterministic
-> > > > but from
-> > > > what I understand it would have a performance impact since it would
-> > > > require all memory
-> > > > that may be needed by the enclave be pre-allocated from outside the
-> > > > enclave and not
-> > > > just dynamically allocated from within the enclave at the time it is
-> > > > needed.
-> > > >
-> > > > Would such a performance impact be acceptable?
-> > > >
-> > > 
-> > > User space won't always have enough info to decide whether the pages
-> > > to be
-> > > EAUG'd immediately. In some cases (shared libraries, JVM for
-> > > example) lots
-> > > of code/data pages can be mapped but never actually touched. One
-> > > enclave/process does not know if any other more important
-> > > enclave/process
-> > > would need the EPC.
-> > > 
-> > > It should be for kernel to make the final decision as it has overall
-> > > picture
-> > > of the system EPC usage and availability.
-> > 
-> > EAUG ioctl does not give better capabilities for user space to waste
-> > EPC given that EADD ioctl already exists, i.e. your argument is logically
-> > incorrect.
-> 
-> The point of adding EAUG is to allow more efficient use of EPC pages.
-> Without EAUG, enclaves have to EADD everything upfront into EPC, consuming
-> predetermined number of EPC pages, some of which may not be used at all.
-> With EAUG, enclaves should be able to load minimal pages to get started,
-> pages added on #PF as they are actually accessed.
-> 
-> Obviously as you pointed out, some usages make more sense to pre-EAUG (EAUG
-> before #PF). But your proposal of supporting only pre-EAUG here essentially
-> makes EAUG behave almost the same as EADD.  If the current implementation
-> with EAUG on #PF can also use MAP_POPULATE for pre-EAUG (seems possible
-> based on Dave's comments), then it is flxible to cover all cases and allow
-> kernel to optimize allocation of EPC pages.
-
-There is no even a working #PF based implementation in existance, and your
-argument has too many if's for my taste.
-
-Reinette, can you squash this fixup to your patch set and send v3 so that
-we get to a working implementation that can be benchmarked against e.g.
-ioctl based version:
-
-https://lore.kernel.org/linux-sgx/20220304033918.361495-1-jarkko@kernel.org/T/#u
-
-This also objectively fixes some performance issues, e.g. EMODPE can be
-just used without any round-trips (v2 requires relax ioctl).
-
-BR, Jark
+T24gMDMuMDMuMjAyMiAxODowMywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gRVhURVJOQUwgRU1B
+SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
+dyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBBZGQgYWxsIHRoZSBTUEkgbm9kZXMgZm9yIHRo
+ZSBmbGV4Y29tIElQIGJsb2NrLiBLZWVwIHRoZW0NCj4gZGlzYWJsZWQgYnkgZGVmYXVsdC4NCj4g
+DQo+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgV2FsbGUgPG1pY2hhZWxAd2FsbGUuY2M+DQo+IC0t
+LQ0KPiAgYXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2eC5kdHNpIHwgNzUgKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDc1IGluc2VydGlvbnMoKykN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LmR0c2kgYi9hcmNo
+L2FybS9ib290L2R0cy9sYW45NjZ4LmR0c2kNCj4gaW5kZXggYmVhNjliNmQyNzQ5Li4wNjE2OTI3
+ZjFiYjEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2xhbjk2NnguZHRzaQ0KPiAr
+KysgYi9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LmR0c2kNCj4gQEAgLTEwNSw2ICsxMDUsMjEg
+QEAgdXNhcnQwOiBzZXJpYWxAMjAwIHsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBhdG1lbCxmaWZvLXNpemUgPSA8MzI+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIH07DQo+
+ICsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgc3BpMDogc3BpQDQwMCB7DQo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhdG1lbCxhdDkxcm05MjAwLXNwaSI7
+DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVnID0gPDB4NDAwIDB4MjAwPjsN
+Cg0KdHJ5IHRvIGtlZXAgdGhlOg0KLSBjb21wYXRpYmxlDQotIHJlZw0KZmlyc3QgYXMgYWxsIHRo
+ZSBvdGhlciBub2RlcyBpbiB0aGlzIERULiBJdCB3b3VsZCBiZSBzaW1wbGUgdG8gZm9sbG93Lg0K
+DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJ
+IDQ4IElSUV9UWVBFX0xFVkVMX0hJR0g+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIGRtYXMgPSA8JmRtYTAgQVQ5MV9YRE1BQ19EVF9QRVJJRCgzKT4sDQo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8JmRtYTAgQVQ5MV9YRE1BQ19EVF9QRVJJ
+RCgyKT47DQoNCkFsaWduIGRtYSBlbnRyaWVzLiBTYW1lIGZvciB0aGUgcmVzdCBvZiBub2RlcyBh
+ZGRlZC4NCg0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRtYS1uYW1lcyA9ICJ0
+eCIsICJyeCI7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xvY2tzID0gPCZu
+aWNfY2xrPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbG9jay1uYW1lcyA9
+ICJzcGlfY2xrIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBhdG1lbCxmaWZv
+LXNpemUgPSA8MzI+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0YXR1cyA9
+ICJkaXNhYmxlZCI7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIH07DQo+ICAgICAgICAgICAg
+ICAgICB9Ow0KPiANCj4gICAgICAgICAgICAgICAgIGZseDE6IGZsZXhjb21AZTAwNDQwMDAgew0K
+PiBAQCAtMTI4LDYgKzE0MywyMSBAQCB1c2FydDE6IHNlcmlhbEAyMDAgew0KPiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIGF0bWVsLGZpZm8tc2l6ZSA9IDwzMj47DQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsNCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgfTsNCj4gKw0KPiArICAgICAgICAgICAgICAgICAgICAgICBzcGkxOiBz
+cGlANDAwIHsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjYWRkcmVzcy1jZWxs
+cyA9IDwxPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjc2l6ZS1jZWxscyA9
+IDwwPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImF0
+bWVsLGF0OTFybTkyMDAtc3BpIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBy
+ZWcgPSA8MHg0MDAgMHgyMDA+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlu
+dGVycnVwdHMgPSA8R0lDX1NQSSA0OSBJUlFfVFlQRV9MRVZFTF9ISUdIPjsNCj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBkbWFzID0gPCZkbWEwIEFUOTFfWERNQUNfRFRfUEVSSUQo
+NSk+LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPCZkbWEw
+IEFUOTFfWERNQUNfRFRfUEVSSUQoNCk+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIGRtYS1uYW1lcyA9ICJ0eCIsICJyeCI7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgY2xvY2tzID0gPCZuaWNfY2xrPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBjbG9jay1uYW1lcyA9ICJzcGlfY2xrIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBhdG1lbCxmaWZvLXNpemUgPSA8MzI+Ow0KPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICsgICAgICAgICAgICAgICAgICAgICAg
+IH07DQo+ICAgICAgICAgICAgICAgICB9Ow0KPiANCj4gICAgICAgICAgICAgICAgIHRybmc6IHJu
+Z0BlMDA0ODAwMCB7DQo+IEBAIC0xNjgsNiArMTk4LDIxIEBAIHVzYXJ0Mjogc2VyaWFsQDIwMCB7
+DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXRtZWwsZmlmby1zaXplID0gPDMy
+PjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAiZGlzYWJsZWQi
+Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiArDQo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgIHNwaTI6IHNwaUA0MDAgew0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICNzaXplLWNlbGxzID0gPDA+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNv
+bXBhdGlibGUgPSAiYXRtZWwsYXQ5MXJtOTIwMC1zcGkiOw0KPiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHJlZyA9IDwweDQwMCAweDIwMD47DQo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDUwIElSUV9UWVBFX0xFVkVMX0hJR0g+
+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRtYXMgPSA8JmRtYTAgQVQ5MV9Y
+RE1BQ19EVF9QRVJJRCg3KT4sDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICA8JmRtYTAgQVQ5MV9YRE1BQ19EVF9QRVJJRCg2KT47DQo+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgZG1hLW5hbWVzID0gInR4IiwgInJ4IjsNCj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBjbG9ja3MgPSA8Jm5pY19jbGs+Ow0KPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIGNsb2NrLW5hbWVzID0gInNwaV9jbGsiOw0KPiArICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIGF0bWVsLGZpZm8tc2l6ZSA9IDwzMj47DQo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgfTsNCj4gICAgICAgICAgICAgICAgIH07DQo+IA0KPiAgICAgICAgICAg
+ICAgICAgZmx4MzogZmxleGNvbUBlMDA2NDAwMCB7DQo+IEBAIC0xOTEsNiArMjM2LDIxIEBAIHVz
+YXJ0Mzogc2VyaWFsQDIwMCB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXRt
+ZWwsZmlmby1zaXplID0gPDMyPjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBz
+dGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiArDQo+
+ICsgICAgICAgICAgICAgICAgICAgICAgIHNwaTM6IHNwaUA0MDAgew0KPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICNzaXplLWNlbGxzID0gPDA+Ow0KPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXRtZWwsYXQ5MXJtOTIwMC1zcGkiOw0KPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDQwMCAweDIwMD47DQo+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDUxIElS
+UV9UWVBFX0xFVkVMX0hJR0g+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRt
+YXMgPSA8JmRtYTAgQVQ5MV9YRE1BQ19EVF9QRVJJRCg5KT4sDQo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICA8JmRtYTAgQVQ5MV9YRE1BQ19EVF9QRVJJRCg4KT47
+DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZG1hLW5hbWVzID0gInR4IiwgInJ4
+IjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbG9ja3MgPSA8Jm5pY19jbGs+
+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsb2NrLW5hbWVzID0gInNwaV9j
+bGsiOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGF0bWVsLGZpZm8tc2l6ZSA9
+IDwzMj47DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2Fi
+bGVkIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gICAgICAgICAgICAgICAgIH07
+DQo+IA0KPiAgICAgICAgICAgICAgICAgZG1hMDogZG1hLWNvbnRyb2xsZXJAZTAwNjgwMDAgew0K
+PiBAQCAtMjMzLDYgKzI5MywyMSBAQCB1c2FydDQ6IHNlcmlhbEAyMDAgew0KPiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIGF0bWVsLGZpZm8tc2l6ZSA9IDwzMj47DQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsNCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgfTsNCj4gKw0KPiArICAgICAgICAgICAgICAgICAgICAgICBzcGk0OiBz
+cGlANDAwIHsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjYWRkcmVzcy1jZWxs
+cyA9IDwxPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjc2l6ZS1jZWxscyA9
+IDwwPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImF0
+bWVsLGF0OTFybTkyMDAtc3BpIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBy
+ZWcgPSA8MHg0MDAgMHgyMDA+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlu
+dGVycnVwdHMgPSA8R0lDX1NQSSA1MiBJUlFfVFlQRV9MRVZFTF9ISUdIPjsNCj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBkbWFzID0gPCZkbWEwIEFUOTFfWERNQUNfRFRfUEVSSUQo
+MTEpPiwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwmZG1h
+MCBBVDkxX1hETUFDX0RUX1BFUklEKDEwKT47DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgZG1hLW5hbWVzID0gInR4IiwgInJ4IjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBjbG9ja3MgPSA8Jm5pY19jbGs+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIGNsb2NrLW5hbWVzID0gInNwaV9jbGsiOw0KPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGF0bWVsLGZpZm8tc2l6ZSA9IDwzMj47DQo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgfTsNCj4gICAgICAgICAgICAgICAgIH07DQo+IA0KPiAgICAgICAgICAgICAgICAgdGltZXIw
+OiB0aW1lckBlMDA4YzAwMCB7DQo+IC0tDQo+IDIuMzAuMg0KPiANCg0K

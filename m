@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B6F4CD80E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E914CD80D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239520AbiCDPiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S240417AbiCDPiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiCDPiJ (ORCPT
+        with ESMTP id S236785AbiCDPiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:38:09 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E98C1C60F4;
-        Fri,  4 Mar 2022 07:37:22 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id 12so8135620oix.12;
-        Fri, 04 Mar 2022 07:37:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PACe0xmx6r81EAuaFyvZQyZNTfONIujSTfg4d0qd68c=;
-        b=vpukUqwii8CHpeNsgD5/uQWrqDEyOCWdzc6fAFEfyJt6X/jct52/6QihjbY55vEIic
-         aRsklFMl0Xjup4jcyzx93Qi7EOV02xNJlNo4SUx/AcmURR6/usrmX/eyAvCGCJAg7VJj
-         otjc7IEwAFLZ4RJXiAPLrIbyen6iDGG2jFiyx+7Z52w/jqJ+y4w1+OayenbxxkC1j902
-         ru4+hHUX/WBl6rRHXBq4OlvKeXzI82293ToiQiz12vmN2kFkSLqdz8agNH44L+b9MmbE
-         fyuCtL3h4clNruoOiOep27uen8Clr2Pzf09r2UstGxnpUwEHH1ohI266pUZclPbmLXeT
-         mZ3A==
-X-Gm-Message-State: AOAM533s8Uh7uv7cXUEjJ9lHiFrfrI5oGatfMab67tCF6sr/4iatTqTx
-        H8jMJLEEU2ahSD0T1vovfQ==
-X-Google-Smtp-Source: ABdhPJyof2S988VwMuNZcB9U5XecU80emaNMSFoZxgT+mxIr6cGyJM+vro5tIuRKk2C7lcM5e49grw==
-X-Received: by 2002:a05:6808:1301:b0:2d5:4226:87e4 with SMTP id y1-20020a056808130100b002d5422687e4mr9716207oiv.136.1646408241690;
-        Fri, 04 Mar 2022 07:37:21 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id m26-20020a05680806da00b002d797266870sm2690848oih.9.2022.03.04.07.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 07:37:21 -0800 (PST)
-Received: (nullmailer pid 3983773 invoked by uid 1000);
-        Fri, 04 Mar 2022 15:37:19 -0000
-Date:   Fri, 4 Mar 2022 09:37:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
-        matthias.bgg@gmail.com, mcoquelin.stm32@gmail.com,
-        linux-mediatek@lists.infradead.org,
-        krzysztof.kozlowski@canonical.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alexandre.torgue@foss.st.com,
-        ck.hu@mediatek.com, linux-stm32@st-md-mailman.stormreply.com,
-        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, jason-jh.lin@mediatek.com
-Subject: Re: [PATCH 1/3] dt-bindings: display: mediatek,mutex: Fix
- mediatek,gce-events type
-Message-ID: <YiIyL+Vd1zWiDKbm@robh.at.kernel.org>
-References: <20220304095458.12409-1-angelogioacchino.delregno@collabora.com>
- <20220304095458.12409-2-angelogioacchino.delregno@collabora.com>
+        Fri, 4 Mar 2022 10:38:18 -0500
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C832821A1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:37:29 -0800 (PST)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id EA73022D0D7
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:37:28 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id Q9zknZmGWXvvJQ9zkn3bvR; Fri, 04 Mar 2022 09:37:28 -0600
+X-Authority-Reason: nr=8
+Received: from host-82-63-1-3.business.telecomitalia.it ([82.63.1.3]:40142 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nQ9zk-001CZJ-0l; Fri, 04 Mar 2022 09:37:28 -0600
+Message-ID: <bc048c18-0ba7-1cb9-90a0-0bc049997c23@kernel.org>
+Date:   Fri, 4 Mar 2022 16:37:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304095458.12409-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
+Content-Language: en-US
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        mtosatti@redhat.com, paulmck@kernel.org, rostedt@goodmis.org,
+        Juri Lelli <juri.lelli@redhat.com>
+References: <20220228141423.259691-1-nsaenzju@redhat.com>
+ <78d798aa-388c-70bc-4227-985ba76c1d7e@kernel.org>
+ <b5e1f0d14a48c0815863af623cedbdc8c1bc255f.camel@redhat.com>
+ <abb789c3-0d1a-28e9-3b8d-e4a68e3f57f5@kernel.org>
+ <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 82.63.1.3
+X-Source-L: No
+X-Exim-ID: 1nQ9zk-001CZJ-0l
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-82-63-1-3.business.telecomitalia.it ([10.0.0.45]) [82.63.1.3]:40142
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 5
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Mar 2022 10:54:56 +0100, AngeloGioacchino Del Regno wrote:
-> The mediatek,gce-events property needs as value an array of uint32
-> corresponding to the CMDQ events to listen to, and not any phandle.
-> 
-> Fixes: 4ed545e7d100 ("dt-bindings: display: mediatek: disp: split each block to individual yaml")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,mutex.yaml    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On 3/4/22 16:28, Nicolas Saenz Julienne wrote:
+> Some comments:
+>  - You're not exiting/entering EQS on IRQ/NMI entry/exit. See
+>    irqentry_{enter,exit}() and irqentry_nmi_{enter,exit}().
 
-Acked-by: Rob Herring <robh@kernel.org>
+hummm, right!
+
+>  - See this series[1], if we ever pursue this approach, it's important we got
+>    through context tracking, instead of poking at RCU directly.
+
+I had a test patch with context_tracking as well... entering and leaving using
+it. Lemme find it.... but it basically works in the same way as for RCU (or
+pretend to work).
+
+> 
+> [1] https://lore.kernel.org/lkml/20220302154810.42308-1-frederic@kernel.org/T/#t
+

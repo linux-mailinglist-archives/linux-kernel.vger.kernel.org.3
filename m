@@ -2,203 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B022E4CDF3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7184CDEFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiCDUlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S229464AbiCDUoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiCDUlM (ORCPT
+        with ESMTP id S229538AbiCDUoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:41:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 304C7229C88
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:40:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646426419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wr1j0Q9GrEu/M997PaXJG90KOpK/+p0oOfneHb/0ilg=;
-        b=Ew8rhlGQe7y7wUwX+B5bZ0i3EBiHqLkrwlYuhfDrosNLnSvQ8oyzXu2yDhQs+W3VXkTEXM
-        GS7STTxQe4qWp9/D/RCTPiIzLhZrPtMQNSekL5/0is3HqQxeI6M/PappHL5BUZQNJXAz7Q
-        NqXcmGZNe2Ley2edRXrzocUszF9aEqo=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217--39XQIZ0PkuVe5k7_vbTyg-1; Fri, 04 Mar 2022 15:40:18 -0500
-X-MC-Unique: -39XQIZ0PkuVe5k7_vbTyg-1
-Received: by mail-oo1-f69.google.com with SMTP id u13-20020a4ab5cd000000b002e021ad5bbcso6528495ooo.17
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:40:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Wr1j0Q9GrEu/M997PaXJG90KOpK/+p0oOfneHb/0ilg=;
-        b=CZSgJQMAhsu9NkT/qaFxgGy2I2cYDBHvHoX3ZAYtY7tX3Z0eee5PDtQWVWls5ucLDj
-         ddDMV5tGtaLtUNE5vkhzxBpcOTLh9vCHJJVyWNGM9HtQkd8Ufs9Pj9XXNyLb5fO+E7RD
-         nv0cWmahXU4DwMYWiTKDKLra6IvgGVI0ftakVUYLkWkmFDo8amtmOJVQ5BQWBY0CMyNY
-         nR2hXEvXaMCd22bA1owTJTZHYt+5TnZz5KoH6/U8mIFK9oPGURclQ4m5l/KZ4TFsO4ty
-         u9bwNm3nitWpW6bz/p9srXsuT+vzFppbZYw5GCEasRVa/FyLUTqlOUMac7P14T4JvyJa
-         2AnQ==
-X-Gm-Message-State: AOAM532QRjz/tTHc5BA3mhd3M7mfwx1ksEn4aawUMrtZNVofIwRE+LsS
-        5JBHr0vw/phRBc/tMNY4oN5DE3x/xRR+wo9HWl2Igy2YdpGT6y7mkPvJDnZiqWZbmPqHd5uGGhu
-        b31naQ3Pu0iR700TFlaQNKDkv
-X-Received: by 2002:a9d:2a:0:b0:5af:7c41:60e5 with SMTP id 39-20020a9d002a000000b005af7c4160e5mr219210ota.263.1646426416085;
-        Fri, 04 Mar 2022 12:40:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJybtTT/cPPYByvp1wxcuk0IX2gHFMWqWtsv+GxS/bDKSvfwUQjODSvmnJ0jx7kprIQUvq7aWQ==
-X-Received: by 2002:a9d:2a:0:b0:5af:7c41:60e5 with SMTP id 39-20020a9d002a000000b005af7c4160e5mr219191ota.263.1646426415832;
-        Fri, 04 Mar 2022 12:40:15 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id e23-20020a056808111700b002d98a3c1e56sm2461814oih.16.2022.03.04.12.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 12:40:15 -0800 (PST)
-Date:   Fri, 4 Mar 2022 13:40:14 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Message-ID: <20220304134014.32ba4360.alex.williamson@redhat.com>
-In-Reply-To: <7a1802e00d1a4741bbf9978b960bfa06@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
-        <0dc03eab33b74e6ea95f2ac0eb39cc83@huawei.com>
-        <20220304124410.02423606.alex.williamson@redhat.com>
-        <7a1802e00d1a4741bbf9978b960bfa06@huawei.com>
-Organization: Red Hat
+        Fri, 4 Mar 2022 15:44:00 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C44230E68;
+        Fri,  4 Mar 2022 12:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646426558;
+        bh=avVKest8nf1VF3/YI54jobn1lGq5BmcOz47RyPALIck=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=bR/J+w2eKA8Fr4ZmFuRBiXjAoZ7sAMdRaBkCKpkBfWQ8J6UxXubHPBQ9v0cSPFWxV
+         GFVWZCzFaIx2SA8k40/4dhgnSugqBmJPVkr04LrX+yaNNdvwUS7lhNN6AlnXrar/t2
+         OZjYZ+UcGJ+c3fG0K/tk9imAgQd6Zswn5ZB0oAc4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0G1d-1oMJaM35Fv-00xIgu; Fri, 04
+ Mar 2022 21:42:37 +0100
+Date:   Fri, 4 Mar 2022 21:42:34 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tali Perry <tali.perry1@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        yangyicong@hisilicon.com, Linux I2C <linux-i2c@vger.kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        JJLIU0@nuvoton.com, lukas.bulwahn@gmail.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, bence98@sch.bme.hu,
+        arnd@arndb.de, sven@svenpeter.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        Tyrone Ting <warp5tw@gmail.com>, semen.protsenko@linaro.org,
+        jie.deng@intel.com, avifishman70@gmail.com,
+        Patrick Venture <venture@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, kfting@nuvoton.com,
+        Tali Perry <tali.perry@nuvoton.com>, olof@lixom.net
+Subject: Re: [PATCH v3 08/11] i2c: npcm: Correct register access width
+Message-ID: <YiJ5unrCb82ZMV4Z@latitude>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-9-warp5tw@gmail.com>
+ <YiCZlhJoXPLpQ6/D@smile.fi.intel.com>
+ <CAHb3i=t+Ai3w5mMhmZxxMsD7Zv0xpM4ZicMCmdDMtVn_OMbWYA@mail.gmail.com>
+ <YiDNdlEKqorDFkZB@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PXMPnXsV2kwhaoxF"
+Content-Disposition: inline
+In-Reply-To: <YiDNdlEKqorDFkZB@smile.fi.intel.com>
+X-Provags-ID: V03:K1:Zli3HN5UeRh8y7YdfY7dSXaXcoTBQJonefjHcxXAcSPHHiLbEUo
+ COUWcmB3iv+h63RKwjP8auhxTimzHpMO0E7dpg6Nddpx678VDmNrR+vzqUTX5EKaP/7WloY
+ FD3ANPuTqADzACb/t6LPyyBxCrFN/iviQlJ+JGqH87km+zF4Y0NJOr5TpCvOZr930esCkgO
+ F4gxdgS4iye97RMJaEapw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iR6a6/NuSJw=:B5Me0AONULYMpmO5CvccFi
+ W62cBkOpnOmnYttFnp7/QWj4u/EJ0b/3/RzF1TlxnFgYKYTNTlLNx3N4aCAa7hqqD2vBjIPKm
+ 5M4uSiMDGg/KcMkxKvB19vkq1RuV/48YEwT0OzbeJd3DwhnP0ZunakUeVmVMLuT+z9UQ6Wn+3
+ CsXWz05DRX33fSaXEWjW5BAdbtn33OP5MdXM8BBDtZgFluNWbfiwxmrn3FKxB2yM89BVO2P3O
+ OJq4CKZcm1S1GwqBhmRBj0KUpoP/0xa2XNpGpu9Yc6Ix540mflHFCUecqRxSUvssVp6Ap/viB
+ FeVax6wYjhtQljYbVwcZhIk90iTATJaLNIkJy8GpsCegkIwLoO7Tu4u0p415uMhIZ8NLfKQVO
+ oN5c8l6quAP6RkuB2sCymtyjml+Aq1KnXCxRSBvgLYaVJwzOTJH0mn7XiAbm5mn78OYxLtWFl
+ Pinb4pbKIoCFIT4I6KxidMdl9NpTwHMkNkxh6xCbThbqSxEEmf0ZdI0CHDmW82Sb7M80jCgeV
+ w/50LQuyc23GCINlR96eCEtLMznApSe2qTLknHzlL5Kwgbh6c4MvigbWWyTV+S+sFtl4DCa5G
+ LxmoAl3Gg36JX+SDNOniD0PyBqrpMq183zDOxvQcoPbsRP7oDfHPz2U3iLgQH7LXgmHVIcsS4
+ U++MyObQCgJQu+WKvY0pmAco9p9S7UGTYvnwfl14uFUXLo0vUF1PNupLaAHT+cHNDGNjqrz8U
+ iyEb77N7yarc31zw7ICTyrCElY/k/HmHQVLwyvSixAIxPZW4bM1EvnwutZTB+UoZnNNJO+i1X
+ g6rEX74oJ/1FCn1EubPV1lDAEKRmXYT1CqZKNYIuQdZrimFnSdmX8CpvqWJwqNb5FbEOu9I5u
+ wij/YIRZJU9FGx3tWxuAee8iI9ZCcgdu/3eP9L2pmC6JFOP/S0md3d+pEyc3qiFISlKdX+kTU
+ k13nO/rgbCdfhox6VDp4BWZYM4/ZZSNNqiOjGSEXAOIZJq57tXjekjTpCkbx4+BFLTcPeSjf5
+ /3eK9fpB+J2Fc/33uBe0og/VlvwMdgNLzUYzbBALMLsqal/NamVU/KFnGk/hPjxGDCmQq3s8X
+ K3RsRYLAviA8Ak=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 20:36:24 +0000
-Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
 
-> > -----Original Message-----
-> > From: Alex Williamson [mailto:alex.williamson@redhat.com]
-> > Sent: 04 March 2022 19:44
-> > To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> > Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; jgg@nvidia.com;
-> > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
-> > liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> > Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
-> > migration
-> > 
-> > On Fri, 4 Mar 2022 08:48:27 +0000
-> > Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> > wrote:
-> >   
-> > > Hi Alex,
-> > >  
-> > > > -----Original Message-----
-> > > > From: Shameerali Kolothum Thodi
-> > > > Sent: 03 March 2022 23:02
-> > > > To: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > > linux-crypto@vger.kernel.org
-> > > > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com;  
-> > jgg@nvidia.com;  
-> > > > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;  
-> > Linuxarm  
-> > > > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>;  
-> > Zengtao (B)  
-> > > > <prime.zeng@hisilicon.com>; Jonathan Cameron
-> > > > <jonathan.cameron@huawei.com>; Wangzhou (B)  
-> > <wangzhou1@hisilicon.com>  
-> > > > Subject: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live  
-> > migration  
+--PXMPnXsV2kwhaoxF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Thu, Mar 03, 2022 at 04:15:18PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 03, 2022 at 02:54:27PM +0200, Tali Perry wrote:
+> > > On Thu, Mar 03, 2022 at 04:31:38PM +0800, Tyrone Ting wrote:
+> > > > From: Tyrone Ting <kfting@nuvoton.com>
 > > > >
-> > > > From: Longfang Liu <liulongfang@huawei.com>
-> > > >
-> > > > VMs assigned with HiSilicon ACC VF devices can now perform live  
-> > migration if  
-> > > > the VF devices are bind to the hisi_acc_vfio_pci driver.
-> > > >
-> > > > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > > > Signed-off-by: Shameer Kolothum  
-> > <shameerali.kolothum.thodi@huawei.com>  
+> > > > Use ioread8 instead of ioread32 to access the SMBnCTL3 register sin=
+ce
+> > > > the register is only 8-bit wide.
 > > >
-> > > [...]  
-> > > > +
-> > > > +static int vf_qm_check_match(struct hisi_acc_vf_core_device  
-> > *hisi_acc_vdev,  
-> > > > +			     struct hisi_acc_vf_migration_file *migf) {
-> > > > +	struct acc_vf_data *vf_data = &migf->vf_data;
-> > > > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > > > +	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;  
+> > > > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller=
+ driver")
 > > >
-> > > Oops, the above has to be,
-> > >   struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+> > > No, this is bad commit message, since you have bitwise masks and ther=
+e is
+> > > nothing to fix from functional point of view. So, why is this a fix?
 > > >
-> > > This was actually fixed in v6, but now that I rebased mainly to v5, missed it.
-> > > Please let me know if you want a re-spin with the above fix(in case there are  
-> > no further  
-> > > comments) or this is something you can take care.  
-> > 
-> > To confirm, you're looking for this change:
-> > 
-> > diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> > b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> > index aa2e4b6bf598..f2a0c046413f 100644
-> > --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> > +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> > @@ -413,7 +413,7 @@ static int vf_qm_check_match(struct
-> > hisi_acc_vf_core_device *hisi_acc_vdev,
-> >  {
-> >  	struct acc_vf_data *vf_data = &migf->vf_data;
-> >  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > -	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-> > +	struct hisi_qm *pf_qm = &hisi_acc_vdev->pf_qm;
-> >  	struct device *dev = &vf_qm->pdev->dev;
-> >  	u32 que_iso_state;
-> >  	int ret;
-> > 
-> > Right?   
-> 
-> Not really. pf_qm is a pointer. This is the change,
-> 
-> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> index 53e4c5cb3a71..54813772a071 100644
-> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> @@ -413,7 +413,7 @@ static int vf_qm_check_match(struct hisi_acc_vf_core_device *hisi_acc_vdev,
->  {
->  	struct acc_vf_data *vf_data = &migf->vf_data;
->  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> -	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
-> +	struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
->  	struct device *dev = &vf_qm->pdev->dev;
->  	u32 que_iso_state;
->  	int ret;
-> 
+> >=20
+> > The next gen of this device is a 64 bit cpu.
+> > The module is and was 8 bit.
+> >=20
+> > The ioread32 that seemed to work smoothly on a 32 bit machine
+> > was causing a panic on a 64 bit machine.
+> > since the module is 8 bit we changed to ioread8.
+> > This is working both for the 32 and 64 CPUs with no issue.
+>=20
+> Then the commit message is completely wrong here.
 
-Got it.  Thanks,
+I disagree: The commit message is perhaps incomplete, but not wrong.
+The SMBnCTL3 register was specified as 8 bits wide in the datasheets of
+multiple chip generations, as far as I can tell, but the driver wrongly
+made a 32-bit access, which just happened not to blow up.
 
-Alex
+So, indeed, "since the register is only 8-bit wide" seems to be a
+correct claim.
 
+> And provide necessary (no need to have noisy commit messages)
+> bits of the oops to show what's going on
+
+I guess it's blowing up now because SMBnCTL3 isn't 32-bit aligned
+(being at offset 0x0e in the controller).
+
+
+Jonathan
+
+--PXMPnXsV2kwhaoxF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIieZgACgkQCDBEmo7z
+X9vLSg//fITuy/ADChnXLOLttsuqN0fnIxt64hs6/pBiL3cnl2CIy2UYqmqWn/cJ
+EldCmMStePptCzalodvcviUUuEzLdFbIhRhCf+3KiMvsiHAxpb1btCpO/tSWO7KZ
+XERAbEgWgfMsl8cTnX6FQzbjDCGRZ7GdYHL8duoQwa0UcR1UY5n83S2SkhrBCEF5
+Ls0ooLJ1A/bjK16EdLai2g6U5IF+/n6reWCXXTQz8i20BLVtPznqgaXXeskTnCwr
+PMwOogzXEB9/5zsbEDY9pTH4WT1k+/sISONAI5R31A5NCqZ9ITkVKb+kHjom9HtT
+HoxHRra/i33qmiOsBXF8TF8H5UuMGmucItead9upr9NCOXmqwyks5lcdphPPsysS
+s518aMEDTqcJxNQJ7Ko4veKKgy7bXr6Lct7GO/tbV3zeEdJayIVkdxroFeV1mrFj
+PhOhl6/kd4JUluD4BSJXWU6BVp2CrwoGRAPSB9q+KyLZt0Zlx6jJ/AX86x+jn3em
+tbqlADio6jbSUvOgN2HGuj9ey6XFemQCnxPdVZFRYYSjUKZP70p3Td9GXkNVmgOs
+Oa/YO829ME+h6WelCPi6n6jHquf7AZM2ounhk4timphHvMvRjHSuJdBetSImnWq8
+acxQRLbfZgB/xdBBLTTPyPOgYr79+44fh2GjFWsMVY0DPMFVZx0=
+=ay5W
+-----END PGP SIGNATURE-----
+
+--PXMPnXsV2kwhaoxF--

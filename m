@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105124CDC80
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A84CDC6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241671AbiCDSbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S241675AbiCDS3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbiCDSbg (ORCPT
+        with ESMTP id S239963AbiCDS3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:31:36 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F081D3AE2
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:30:47 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id bd1so8464529plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4TXeZfUVYIjCnHQMV6GLGvwrY0CWJzDnslUJHUckzkQ=;
-        b=JbrcThimgiaKc5S2YQMaLPzVI7b4VpmiL4LZyRwYBbYzH35zGMw49m0tLZRCurJ9QP
-         F74959iH9i2Rkb6nxh59Zu2oQp03sindhh36rPwErHSj6CBwRTlbz740QEXrOfLk7GpE
-         oOUJdvhK3UCpAqWFjXQiZ4vDwG5gMQUgz2H9LKLieqiMmteTFE1ZOOhVWGZIWa3NSgZC
-         qXFk0I7pPC73+c3IqozDVhvEgAr7JgDlPGG+ZEWmN5bzWPhftUdk3B+cWpwJsKLfXgjS
-         WCaMdevWEJGtkqmlgREDvYSdNsedckjjpxhS07+ERSFtstRzWvWwvWOt9jS0/oC7gOSP
-         xxfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4TXeZfUVYIjCnHQMV6GLGvwrY0CWJzDnslUJHUckzkQ=;
-        b=zw5oJKmE1u4tijcfm4Gnpf8ao22G1/NgP7SbfSrrQ4TIoXl8ziZswN1NynjaCN/tJu
-         byBnHIgSoOMdez61wWoHXqRxq5xrLPwE9+jJWK3tkFjW29TgBoOklcqC9BhmBSy7WVpE
-         6wLnhyI2Uo6RH50rhSskI72lncwgw6dAbcOvCvhtH5/Qh4/w1z8pfgzbl5tln54uxQJh
-         PFP9dHbOq3owpB3uzGRdAEipg3nwfvc98gIK/spKzERCsPjVRK5ZgsNsnF6R9+RjsopI
-         jENymKcyyLqVFoHSl3P8iWqCxEaOoRrPnanMaCKsxP8kUkXA39SmkC3NGbcRwgz7oEYo
-         wgxQ==
-X-Gm-Message-State: AOAM530hHdHF3sGNqBcUgH/prk0MTUcO2cO+XSS6Mhxc7yF/Xg7CX/yY
-        cSGWkWzTt5ObcBYBbIjMvXXzpy6kee01RqomwzjwU4h4
-X-Google-Smtp-Source: ABdhPJx6A0futcYkk5JbU5g+4xbv7vqSLzojRm+OEOU8dYMdPjKY5ewTBjlJRcXONf/pStKwe/8/5CfaySChj1JsAxk=
-X-Received: by 2002:a17:90b:4f8f:b0:1bf:ac1:2016 with SMTP id
- qe15-20020a17090b4f8f00b001bf0ac12016mr10854185pjb.21.1646418647497; Fri, 04
- Mar 2022 10:30:47 -0800 (PST)
+        Fri, 4 Mar 2022 13:29:32 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCF64C79B;
+        Fri,  4 Mar 2022 10:28:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646418524; x=1677954524;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=GiSHayaTp3plS/8dF4tiE4fhYopJ+xm/lVEP2Z67CGk=;
+  b=EiDoe8kLGaOx5oA41UB+Nx9CHOqFoJm3GqEW2zqpNFMKTXyyfBZithAG
+   rV9X8pH+hkntnhMYR3jC6f1OVx1l9LRMlNzDk1MYqiJOVWZZlv1oi2u4z
+   urZZtD9mMb9P+We4dR0+BLBoC2ABYbql1uEM3Aj/2m7hYTNYiGO0igXeH
+   ql3bgNfT12BuUx7gXbiRSu0mGoFjGdos3ATbGAU+wb4IiK0O7jrSCGHk0
+   3opOcnALZXGaGaFaG3KjVw7c2e6FhvFxLPupW/2g/Ah8RmN4NrSuRNV3+
+   hdbIijUfgG5sewN/2gbGfB1UCWbZZEVy01ym1pUFQabu0ClhuiypeiRnR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="278726905"
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="278726905"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 10:28:44 -0800
+X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
+   d="scan'208";a="552318052"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.40])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 10:28:43 -0800
+Date:   Fri, 4 Mar 2022 10:30:47 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Russ Weight <russell.h.weight@intel.com>
+cc:     Tom Rix <trix@redhat.com>, hao.wu@intel.com, yilun.xu@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dan.j.williams@intel.com,
+        ashok.raj@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v2 1/2] Documentation: fpga: dfl: add PCI Identification
+ documentation
+In-Reply-To: <bc41bc12-0d88-771f-7e78-4e29361fcfd8@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2203041021240.3408681@rhweight-WRK1>
+References: <20220303003534.3307971-1-matthew.gerlach@linux.intel.com> <20220303003534.3307971-2-matthew.gerlach@linux.intel.com> <6448f21f-7ce1-d9ce-1048-29aca14f9d3d@redhat.com> <bc41bc12-0d88-771f-7e78-4e29361fcfd8@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220303222014.517033-1-shy828301@gmail.com> <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
-In-Reply-To: <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 4 Mar 2022 10:30:35 -0800
-Message-ID: <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting PMD
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/mixed; boundary="8323328-2071792777-1646418653=:3408681"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,131 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:06 PM David Hildenbrand <david@redhat.com> wrote:
->
-> Hi,
->
-> This probably bounces on the list due to html junk from the gmail app.
->
-> What happened to
->
-> https://lore.kernel.org/linux-mm/20220131162940.210846-10-david@redhat.co=
-m/
->
-> Included in the very series mentioned below?
->
-> Was this silently dropped due to folio conversion collisions? :/
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I really didn't notice you already proposed this. Maybe folio
-conversion, maybe mlock cleanup, I can't tell. But anyway this patch
-needs to get rebased. I will submit v2 to solve the comment, will add
-your signed-off-by.
+--8323328-2071792777-1646418653=:3408681
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+
+
+
+On Fri, 4 Mar 2022, Russ Weight wrote:
 
 >
-> Yang Shi <shy828301@gmail.com> schrieb am Do. 3. M=C3=A4rz 2022 um 23:20:
+>
+> On 3/3/22 14:04, Tom Rix wrote:
 >>
->> The commit c444eb564fb1 ("mm: thp: make the THP mapcount atomic against
->> __split_huge_pmd_locked()") locked the page for PMD split to make
->> mapcount stable for reuse_swap_page(), then commit 1c2f67308af4 ("mm:
->> thp: fix MADV_REMOVE deadlock on shmem THP") reduce the scope to
->> anonymous page only.
+>> On 3/2/22 4:35 PM, matthew.gerlach@linux.intel.com wrote:
+>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>
+>>> Add documentation on identifying FPGA based PCI cards prompted
+>>> by discussion on the linux-fpga@vger.kernel.org mailing list.
+>>>
+>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>> ---
+>>> v2: Introduced in v2.
+>>> ---
+>>>   Documentation/fpga/dfl.rst | 20 ++++++++++++++++++++
+>>>   1 file changed, 20 insertions(+)
+>>>
+>>> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+>>> index ef9eec71f6f3..5fb2ca8e76d7 100644
+>>> --- a/Documentation/fpga/dfl.rst
+>>> +++ b/Documentation/fpga/dfl.rst
+>>> @@ -502,6 +502,26 @@ Developer only needs to provide a sub feature driver with matched feature id.
+>>>   FME Partial Reconfiguration Sub Feature driver (see drivers/fpga/dfl-fme-pr.c)
+>>>   could be a reference.
+>>>   +PCI Device Identification
+>>> +================================
+>>> +Since FPGA based PCI cards can be reconfigured to a perform a completely
+>>> +new function at runtime, properly identifying such cards and binding the
+>>> +correct driver can be challenging. In many use cases, deployed FPGA based
+>>> +PCI cards are essentially static and the PCI Product ID and Vendor ID pair
+>>> +is sufficient to identify the card.  The DFL framework helps with the
+>>> +dynamic case of deployed FPGA cards changing at run time by providing
+>>> +more detailed information about card discoverable at runtime.
+>>> +
+>>> +At one level, the DFL on a PCI card describes the function of the card.
+>>> +However, the same DFL could be instantiated on different physical cards.
+>>> +Conversely, different DFLs could be instantiated on the same physical card.
+>>> +Practical management of a cloud containing a heterogeneous set of such cards
+>>> +requires a PCI level of card identification. While the PCI Product ID and
+>>> +Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
+>>> +that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
+>>> +Vendor ID values. PCI Vital Product Data (VPD) can also be used for
+>>> +more granular information about the board.
 >>
->> However COW has not used mapcount to determine if the page is shared or
->> not anymore due to the COW fixes [1] from David Hildenbrand and the
->> reuse_swap_page() was removed as well.  So PMD split doesn't have to
->> lock the page anymore.  This patch basically reverted the above two
->> commits.
+>> This describes a bit more of the problem, it should describe it wrt ofs dev id. The introduction of the ofs dev should be explicitly called out as a generic pci id.
+
+The problem I'm describing exists for all FPGA based PCI cards; so I am 
+purposely trying to be abstract as much as possible.
+
 >>
->> [1] https://lore.kernel.org/linux-mm/20220131162940.210846-1-david@redha=
-t.com/
+>> Why couldn't one of the old pci id's be reused ?
+
+Yes, old pci id's could be reused, and people have done just that.  We 
+thought a new PCI ID would minimize confusion with cards that have already 
+been deployed.
+
 >>
->> Cc: David Hildenbrand <david@redhat.com>
->> Cc: Andrea Arcangeli <aarcange@redhat.com>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
->> Signed-off-by: Yang Shi <shy828301@gmail.com>
->> ---
->>  mm/huge_memory.c | 44 +++++---------------------------------------
->>  1 file changed, 5 insertions(+), 39 deletions(-)
+>> How will the subvendor/subid be enforced ?
+
+Subvendor and Subid are managed just like any other PCI card with or 
+without a FPGA.
+
 >>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index b49e1a11df2e..daaa698bd273 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -2134,8 +2134,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, =
-pmd_t *pmd,
->>  {
->>         spinlock_t *ptl;
->>         struct mmu_notifier_range range;
->> -       bool do_unlock_folio =3D false;
->> -       pmd_t _pmd;
+>> Is the current security manager patchset smart enough to save the board from being bricked when a user doesn't look beyond the pci id ?
+>
+> Yes - the security manager is invoked based of DFL feature ID and revision, and the functionality is differentiated based on the same information.
+>
 >>
->>         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->v=
-m_mm,
->>                                 address & HPAGE_PMD_MASK,
->> @@ -2148,48 +2146,16 @@ void __split_huge_pmd(struct vm_area_struct *vma=
-, pmd_t *pmd,
->>          * pmd against. Otherwise we can end up replacing wrong folio.
->>          */
->>         VM_BUG_ON(freeze && !folio);
->> -       if (folio) {
->> -               VM_WARN_ON_ONCE(!folio_test_locked(folio));
->> -               if (folio !=3D page_folio(pmd_page(*pmd)))
->> -                       goto out;
->> -       }
->> +       if (folio && folio !=3D page_folio(pmd_page(*pmd)))
->> +               goto out;
+>> What happens if a board uses this device id but doesn't have a max10 to do the update ?
+
+If a board doesn't have a max10, then there will be no DFH for a max10 in 
+the board's DFLs.  Presumeably, the board would need some update process, 
+and an approprate DFH would be in that board's DFL.
+
 >>
->> -repeat:
->> -       if (pmd_trans_huge(*pmd)) {
->> -               if (!folio) {
->> -                       folio =3D page_folio(pmd_page(*pmd));
->> -                       /*
->> -                        * An anonymous page must be locked, to ensure t=
-hat a
->> -                        * concurrent reuse_swap_page() sees stable mapc=
-ount;
->> -                        * but reuse_swap_page() is not used on shmem or=
- file,
->> -                        * and page lock must not be taken when zap_pmd_=
-range()
->> -                        * calls __split_huge_pmd() while i_mmap_lock is=
- held.
->> -                        */
->> -                       if (folio_test_anon(folio)) {
->> -                               if (unlikely(!folio_trylock(folio))) {
->> -                                       folio_get(folio);
->> -                                       _pmd =3D *pmd;
->> -                                       spin_unlock(ptl);
->> -                                       folio_lock(folio);
->> -                                       spin_lock(ptl);
->> -                                       if (unlikely(!pmd_same(*pmd, _pm=
-d))) {
->> -                                               folio_unlock(folio);
->> -                                               folio_put(folio);
->> -                                               folio =3D NULL;
->> -                                               goto repeat;
->> -                                       }
->> -                                       folio_put(folio);
->> -                               }
->> -                               do_unlock_folio =3D true;
->> -                       }
->> -               }
->> -       } else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
->> +       if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
->>                 goto out;
->> +
->>         __split_huge_pmd_locked(vma, pmd, range.start, freeze);
->>  out:
->>         spin_unlock(ptl);
->> -       if (do_unlock_folio)
->> -               folio_unlock(folio);
->> +
->>         /*
->>          * No need to double call mmu_notifier->invalidate_range() callb=
-ack.
->>          * They are 3 cases to consider inside __split_huge_pmd_locked()=
-:
->> --
->> 2.26.3
+>> Tom
 >>
+>>> +
+>>>   Location of DFLs on a PCI Device
+>>>   ================================
+>>>   The original method for finding a DFL on a PCI device assumed the start of the
+>>
+>
+>
+--8323328-2071792777-1646418653=:3408681--

@@ -2,76 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B01D4CD631
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B1B4CD64B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238443AbiCDOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S239665AbiCDO07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiCDOSi (ORCPT
+        with ESMTP id S229961AbiCDO04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:18:38 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1842559B;
-        Fri,  4 Mar 2022 06:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646403470; x=1677939470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=or3pXL7frdL+sQOxlxnzqbp2iB/FyXVFN2iAqqfq00c=;
-  b=gFMQ9jfeg38vNguS5itQreotU4r2bH/Brn7m+7HSPGJ63/+LFihsNQp+
-   2azxkFZPQ28jKmGDY8s5zjVYH3ufj3L8/pPEoD4X0+ND1Jhm+qMvCOuKS
-   rtRzGHOsotROQfa4BmiGsrL2cbWV/ps0p5LfJUGQlL3l9ZXRSKvN1GDt/
-   ZWcTyPCwWF6kqadDRhou9FTLtyl3yS8Nj7eN5OwihB/8Cq4XQV3LFIsAv
-   VJutUV+urkdsRLvzg/CCxyBaPrF+wHmNvx+tg47awQCqGOwCK5OmWl4iU
-   H/XtkoJhlGFopRg1P8aT3gJzN+orsJiUXEeQ7QxS9ulvthT7ymDj/wTOd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="253711653"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="253711653"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 06:17:50 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="710345703"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 06:17:48 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 04 Mar 2022 16:17:45 +0200
-Date:   Fri, 4 Mar 2022 16:17:45 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH v2 1/5] thunderbolt: Retry DROM reads for more failure
- scenarios
-Message-ID: <YiIfiYyJrdmavuAD@lahna>
-References: <20220303131328.4150454-1-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303131328.4150454-1-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 09:26:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729AB1BAF22
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 06:26:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FEE5617E5
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 14:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697B9C340E9;
+        Fri,  4 Mar 2022 14:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646403963;
+        bh=QiEeOJ7rebdrAU94OlMmketbBtb1BBpaT/qA8z0cp70=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NQ7Sl32GvWnrWfx1jY7zhgaaLWVCN5KO6B9l4JUur+2lmXeOKZ6TKRuuec1dfvpqH
+         oVf9gGBf7/NiYTTYCQSZkFQyBGHAXjPxXtmVp8ZjivVJXgL+CSYSbjxNVfYqU/WBb5
+         HnqR0bisl3D7RiILHoiUIhOrOU56PHjNZy0Tff2vkVp8ncIAr4/wiEfka+firRH+Qd
+         kV7hxsb5jXIDwHyz+cDdOFZu/WIxrGp3hY9zSVLS1JDdpe4+pb9jzrXN7D8HzeAZ1q
+         7bixBVc/mw/HuIl4Q53LXyni/61ihT/u1xwPtimdd7PTaYw7lmLoR1dZEciAoJX8oX
+         z38Ol88Cc2SGA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQ8sb-00CEuP-1o; Fri, 04 Mar 2022 14:26:01 +0000
+Date:   Fri, 04 Mar 2022 14:26:00 +0000
+Message-ID: <87o82l23rb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        Zeal Robot <zealci@zte.com.cn>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/sysdev: Use of_device_get_match_data()
+In-Reply-To: <6481b730-e338-294d-3602-bb899654ed2b@csgroup.eu>
+References: <20220304011830.2061591-1-chi.minghao@zte.com.cn>
+        <6481b730-e338-294d-3602-bb899654ed2b@csgroup.eu>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: christophe.leroy@csgroup.eu, cgel.zte@gmail.com, mpe@ellerman.id.au, zealci@zte.com.cn, linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn, jgg@ziepe.ca, paulus@samba.org, tglx@linutronix.de, linuxppc-dev@lists.ozlabs.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On Fri, 04 Mar 2022 13:10:19 +0000,
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+>=20
+>=20
+>=20
+> Le 04/03/2022 =C3=A0 02:18, cgel.zte@gmail.com a =C3=A9crit=C2=A0:
+> > From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> >=20
+> > Use of_device_get_match_data() to simplify the code.
+> >=20
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> > ---
+> >   arch/powerpc/sysdev/fsl_msi.c | 6 +-----
+> >   1 file changed, 1 insertion(+), 5 deletions(-)
+> >=20
+> > diff --git a/arch/powerpc/sysdev/fsl_msi.c b/arch/powerpc/sysdev/fsl_ms=
+i.c
+> > index b3475ae9f236..9d135bbb30b7 100644
+> > --- a/arch/powerpc/sysdev/fsl_msi.c
+> > +++ b/arch/powerpc/sysdev/fsl_msi.c
+> > @@ -387,7 +387,6 @@ static int fsl_msi_setup_hwirq(struct fsl_msi *msi,=
+ struct platform_device *dev,
+> >   static const struct of_device_id fsl_of_msi_ids[];
+> >   static int fsl_of_msi_probe(struct platform_device *dev)
+> >   {
+> > -	const struct of_device_id *match;
+> >   	struct fsl_msi *msi;
+> >   	struct resource res, msiir;
+> >   	int err, i, j, irq_index, count;
+> > @@ -397,10 +396,7 @@ static int fsl_of_msi_probe(struct platform_device=
+ *dev)
+> >   	u32 offset;
+> >   	struct pci_controller *phb;
+> >  =20
+> > -	match =3D of_match_device(fsl_of_msi_ids, &dev->dev);
+> > -	if (!match)
+> > -		return -EINVAL;
+> > -	features =3D match->data;
+> > +	features =3D of_device_get_match_data(&dev->dev);
+>=20
+> What happens when features is NULL ?
 
-On Thu, Mar 03, 2022 at 07:13:24AM -0600, Mario Limonciello wrote:
-> Currently DROM reads are only retried in the case that parsing failed.
-> However if the size or CRC fails, then there should also be a retry.
-> 
-> This helps with reading the DROM on TBT3 devices connected to AMD
-> Yellow Carp which will sometimes fail on the first attempt.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+I did jump at that one too, but as it turns out, it cannot happen, by
+construction. All the fsl_of_msi_ids[] entries have a non-NULL .data
+pointer, and you only enter probe if you match a fsl_of_msi_ids[]
+entry with the DT.
 
-This and the rest of the patches applied to thunderbolt.git/next,
-thanks!
+So the current check for a NULL match is not something that can happen
+short of some other bug somewhere.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

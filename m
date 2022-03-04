@@ -2,207 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D662E4CCB7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE484CCB80
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbiCDB66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 20:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S236998AbiCDCAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236861AbiCDB6y (ORCPT
+        with ESMTP id S232535AbiCDCA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 20:58:54 -0500
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FAE731DDC;
-        Thu,  3 Mar 2022 17:58:05 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACnrfkhciFi_nwxAg--.40389S2;
-        Fri, 04 Mar 2022 09:57:55 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ckeepax@opensource.cirrus.com
-Cc:     sre@kernel.org, patches@opensource.cirrus.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] power: supply: Handle error for wm8350_register_irq
-Date:   Fri,  4 Mar 2022 09:57:51 +0800
-Message-Id: <20220304015751.367280-1-jiasheng@iscas.ac.cn>
+        Thu, 3 Mar 2022 21:00:28 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE9B12168D;
+        Thu,  3 Mar 2022 17:59:41 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id b13so5406455qkj.12;
+        Thu, 03 Mar 2022 17:59:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hPxZniYbsdME7IwFNKIAC4U4H+A/bP4PnATkKwGBL9g=;
+        b=FR+E635Su1qePwmL2VjYxRW7K8qihJu9NkgOUP9/0BpZzaV2gI0j9+If3EyUwTRkH5
+         1cRkhXvR4MmbFNJAInLu5PvrVuQOflv+3zDMwrdNKpQ3FFlv1btIs4NJdDGo+pzt/wMa
+         EC5Y89rS58mLFRQ6b6IfvRTp0JHqAIgor8qf70HUVyg7CR/w36MsOa+Eu7yui9ay5i3X
+         N7UlJWrIJh9uK60XsSxA8Lh57eXABCqvFFIRWXCb1mLWOclZ8TCTh1FUGF0t24BHSu4y
+         GqduVyFFVCSCl+OSQCRLBEz2LM7fnvC9rETT/OHIwKAc2/nvmuCJHVLQP/g7canRPkN1
+         SZeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hPxZniYbsdME7IwFNKIAC4U4H+A/bP4PnATkKwGBL9g=;
+        b=KD1CM0qul0hopHQz1kN0cATIxIvBDr3bQfPFkkzAs4gRKND3EtweFkDB/4gpc2vxgQ
+         Eiu4JcAkFcNdU/iu/OoP1MluNr6Pn7Obn1bg0+3ygTUa58wyNuZZHQzof3i/XO1pzXjd
+         aO/HVGSxwAlTNpczM+NU3uSV7Df8VCU+wl7CKtTiAIl1UA36Hls1c92QOP/rs9TuHO80
+         ZS7m+kDAgVZUyi34rQ6e/BdPM2OzuH+W6fWRKh7zELFz9gGrnXG2wO33A//bPXJH8pJr
+         cJ3hsG8cYIWmrhaEYlnpCU55ZxOvcOVUawaH/GanEQeaCXXLIShlrFljLVXDYkJOo6Wu
+         Bs2g==
+X-Gm-Message-State: AOAM533gya8KfVsD3KaBe2rQVAZJkmCTbXHp44LYTJmAssaGUmxW60Uc
+        8DDbWxWPZ5lYMWk2cKAuB7Q=
+X-Google-Smtp-Source: ABdhPJyaNKmVUoEK6j9JEv8+I6Pe+grVQ6B9KPcnMorkG8Er/9o+d4uPDiLE3dpttVFUL0Siu/CTFw==
+X-Received: by 2002:a37:bc45:0:b0:47e:292:4b8d with SMTP id m66-20020a37bc45000000b0047e02924b8dmr1295977qkf.484.1646359180557;
+        Thu, 03 Mar 2022 17:59:40 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j18-20020ac85c52000000b002deaca065dfsm2620349qtj.10.2022.03.03.17.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Mar 2022 17:59:40 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, tangbin@cmss.chinamobile.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] iio:adc:twl6030: Use of_device_get_match_data()
+Date:   Fri,  4 Mar 2022 01:59:32 +0000
+Message-Id: <20220304015932.2061712-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACnrfkhciFi_nwxAg--.40389S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFWUCFWfAw45GrykKF4rXwb_yoW7Xw4Up3
-        yIkry7CFyUKFW5XF1F9r1DZr4DJF42qrZF9ry8Cr1xXa42k3Z5tr4UZFnFqr1UJFW0qwnx
-        trW3tw4ru3WrJrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyE14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, use 'free_' in order to avoid same code.
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Use of_device_get_match_data() to simplify the code.
+
+v1->v2:
+  iio:adc:->iio:adc:twl6030:
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
-Changelog:
+ drivers/iio/adc/twl6030-gpadc.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-v1 -> v2
-
-* Change 1. Change to non-caps labels.
----
- drivers/power/supply/wm8350_power.c | 96 ++++++++++++++++++++++++-----
- 1 file changed, 82 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
-index e05cee457471..9c46c48dccb1 100644
---- a/drivers/power/supply/wm8350_power.c
-+++ b/drivers/power/supply/wm8350_power.c
-@@ -408,44 +408,112 @@ static const struct power_supply_desc wm8350_usb_desc = {
-  *		Initialisation
-  *********************************************************************/
+diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
+index afdb59e0b526..6a022e583658 100644
+--- a/drivers/iio/adc/twl6030-gpadc.c
++++ b/drivers/iio/adc/twl6030-gpadc.c
+@@ -867,16 +867,11 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct twl6030_gpadc_data *gpadc;
+ 	const struct twl6030_gpadc_platform_data *pdata;
+-	const struct of_device_id *match;
+ 	struct iio_dev *indio_dev;
+ 	int irq;
+ 	int ret;
  
--static void wm8350_init_charger(struct wm8350 *wm8350)
-+static int wm8350_init_charger(struct wm8350 *wm8350)
- {
-+	int ret;
-+
- 	/* register our interest in charger events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
- 			    wm8350_charger_handler, 0, "Battery hot", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
-+	if (ret)
-+		goto err;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
- 			    wm8350_charger_handler, 0, "Battery cold", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
-+	if (ret)
-+		goto free_chg_bat_hot;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
- 			    wm8350_charger_handler, 0, "Battery fail", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
-+	if (ret)
-+		goto free_chg_bat_cold;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
- 			    wm8350_charger_handler, 0,
- 			    "Charger timeout", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
-+	if (ret)
-+		goto free_chg_bat_fail;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
- 			    wm8350_charger_handler, 0,
- 			    "Charge end", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
-+	if (ret)
-+		goto free_chg_to;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
- 			    wm8350_charger_handler, 0,
- 			    "Charge start", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
-+	if (ret)
-+		goto free_chg_end;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
- 			    wm8350_charger_handler, 0,
- 			    "Fast charge ready", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
-+	if (ret)
-+		goto free_chg_start;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.9V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
-+	if (ret)
-+		goto free_chg_fast_rdy;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.1V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p9;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <2.85V", wm8350);
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p1;
+-	match = of_match_device(of_twl6030_match_tbl, dev);
+-	if (!match)
+-		return -EINVAL;
+-
+-	pdata = match->data;
++	pdata = of_device_get_match_data(dev);
  
- 	/* and supply change events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
- 			    wm8350_charger_handler, 0, "USB", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
-+	if (ret)
-+		goto free_chg_vbatt_lt_2p85;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
- 			    wm8350_charger_handler, 0, "Wall", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
-+	if (ret)
-+		goto free_ext_usb_fb;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
- 			    wm8350_charger_handler, 0, "Battery", wm8350);
-+	if (ret)
-+		goto free_ext_wall_fb;
-+
-+	return 0;
-+
-+free_ext_wall_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_WALL_FB, wm8350);
-+free_ext_usb_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_USB_FB, wm8350);
-+free_chg_vbatt_lt_2p85:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85, wm8350);
-+free_chg_vbatt_lt_3p1:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1, wm8350);
-+free_chg_vbatt_lt_3p9:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9, wm8350);
-+free_chg_fast_rdy:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY, wm8350);
-+free_chg_start:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_START, wm8350);
-+free_chg_end:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_END, wm8350);
-+free_chg_to:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_TO, wm8350);
-+free_chg_bat_fail:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL, wm8350);
-+free_chg_bat_cold:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD, wm8350);
-+free_chg_bat_hot:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT, wm8350);
-+err:
-+	return ret;
- }
- 
- static void free_charger_irq(struct wm8350 *wm8350)
+ 	indio_dev = devm_iio_device_alloc(dev, sizeof(*gpadc));
+ 	if (!indio_dev)
 -- 
 2.25.1
 

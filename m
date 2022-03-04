@@ -2,226 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3032D4CCE14
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953A74CCE15
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238559AbiCDGsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S238568AbiCDGtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiCDGsr (ORCPT
+        with ESMTP id S233196AbiCDGtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:48:47 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903F74DF5C;
-        Thu,  3 Mar 2022 22:47:51 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id d19so8560028ioc.8;
-        Thu, 03 Mar 2022 22:47:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
-        b=O4anCBKrsFyHyGzL2RF8B7cVoEGN7VorjGDN2lWfWk7InIipFAsHECPDsdOCfaRbpB
-         2Kt82y1BnVO5YHOf3TxW7h/ybyzM3bT9MqjlwgrpF2WtQIymp3JrcV5QOJEJ8rNAIy4a
-         PLCK58ysJgdl6mAUW1D1vHWF/bPt2T/nCsKva5+pRKypjda9JkxpjO555iUWjqjtp6yX
-         zHOy96yoFqH9Ox7QiF69+hVa9y7GMf1LfN3bnbRccWkQk1lRwTQ5rw3V4NJLJHSc6e0c
-         VwIf3JuNMtpCudUkuFthPr30ar6Xx9zkMXFuboIjXHL3QE+cBaOVO72cXXKQ0MYLNUUC
-         qmAQ==
+        Fri, 4 Mar 2022 01:49:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAAD3793B2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646376508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SYw46/juAkVUmAthbyDhSf57VAFYaSUG9vWYk421L9A=;
+        b=TkIvDvAvwkFcxAyotONlGicDbzZ7TSN2owC8pYbRk/pVNGdCNysLzEm/cZykLkwPayZJ5g
+        kjmwT+DoZElinFgShaxI2Nw5nEmn8bGSVO9aDx3XrnWpw1sOot+6W56TzK3qaaCgYbbDxp
+        2I9N9PeXt2QRin7TqoCsXbfIgJCa0lc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-60-l8fGs-wcNlydSii7iNoacw-1; Fri, 04 Mar 2022 01:48:27 -0500
+X-MC-Unique: l8fGs-wcNlydSii7iNoacw-1
+Received: by mail-ed1-f70.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso4132888edh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:48:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
-        b=EIWJKxLuaZjNPU0LmcF8cDkwAq9ngR+mdK8bsVpJCGcbFbjpMPcLDvzWHYpAn9yq47
-         Icd443w3TnxHlDHSPJxGJEWejQaeQ8MUUNzCfKYbOxSR71OgZ3U/Y3bxo0RKb6orkhCM
-         WLRC5ME66XoaWdf8woMGmJexguOVua8cULNdOU1dSI/TQ9yz75sKn1qq8z8eOxZWfwl0
-         Esmaz7Tu7i6oZBYCmF15YWMAJTn5kqMBdJEH0KjgLmRfAosgOq8vpPCIKGH+O/o0No2L
-         dlDWx/hEGVDmoyHKAVtl8iwhpIt91Jt+HHHh+E/w5Ru/BZG75HBw+3+JvFBaDZqwOyb0
-         ukZw==
-X-Gm-Message-State: AOAM530QWvkRdgD7Nl6oOSuSxW7IAvy26KMZXE/uLE4LLVfu10TPlUpO
-        FLi+ws4Jt91Kni9DdMlxbnFK7iTvlofHV2tlHwU=
-X-Google-Smtp-Source: ABdhPJxjDfv6jFJYN4fxfZbOXWdF3sJLBJrEkBPrcaNpWv3Ngca5sjQyQ48mqksXjVECGHbzT/Tk6PN8pi5cV3tELNU=
-X-Received: by 2002:a05:6638:a9b:b0:317:12d1:5a46 with SMTP id
- 27-20020a0566380a9b00b0031712d15a46mr15095078jas.306.1646376471271; Thu, 03
- Mar 2022 22:47:51 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SYw46/juAkVUmAthbyDhSf57VAFYaSUG9vWYk421L9A=;
+        b=mdfuihfTSc1RjBg/10GJa97WdfAGx/EwG80OIfGeVL0T+nDGy09PWK3x6oxyOUVcuk
+         Fv5Gwx818gc0YhtI5YPb3FBnsl8mFA7LAl/pgy7D3EFLd8y7C3XWnbk+mDZs7ZxLk1n+
+         YJxoa58nI1RUc6dZ8zG/gZ9IJqk+0qXc5wMqV7GYI/Cjj7EUrrhkdaC3lExMgOOTlJb1
+         JocJLnefsfrI4rLCb93/hGTG1MVFi8sAjlRCjZ0s4S4/7hR97F7QLbr/tVzZZIzRStJ5
+         t/n6Hg5VRiEFsfm84RA5fFoHGg/ozrJlW5I2kiDrB9b+evkCjVFCEWqqS2tfRHVoOGKs
+         WzjA==
+X-Gm-Message-State: AOAM533hW8ecjN7inGGggC4gknAcDRx3ikf/rJwcqFYcsuHtq/wsi7ng
+        wDtv+wT+BZWYZOeY3QBrQA/NNAdKRv+uRIstvwuUBjvM0BLfsWuUpAhFq3sWFcMFKfGtkPvIZ3B
+        YFwLnbnSbhkeLntq98vFLTqug
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr38090079edb.228.1646376506581;
+        Thu, 03 Mar 2022 22:48:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy1wppOn/f0V2yisR+TjpMzXr2rsZtTf4v8keVhYhkYrwzXX2jWMUo09KtjajHgzmgLDaDAPw==
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr38090071edb.228.1646376506390;
+        Thu, 03 Mar 2022 22:48:26 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id f5-20020a1709067f8500b006da68bfdfc7sm1431372ejr.12.2022.03.03.22.48.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 22:48:25 -0800 (PST)
+Message-ID: <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
+Date:   Fri, 4 Mar 2022 07:48:19 +0100
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
- <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
- <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
- <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com> <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
-In-Reply-To: <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 4 Mar 2022 07:47:14 +0100
-Message-ID: <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
+ asynchronous worker
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-22-pbonzini@redhat.com> <YiExLB3O2byI4Xdu@google.com>
+ <YiEz3D18wEn8lcEq@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YiEz3D18wEn8lcEq@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Sedat,
->
-> On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
-> > Hey Nick!
-> >
-> > This only applies 1/3.
-> >
-> > $ b4 --version
-> > 0.8.0
-> >
-> > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kern=
-el.org/
-> > -o - | git am -3
-> > Analyzing 14 messages in the thread
-> > Will use the latest revision: v3
-> > You can pick other revisions using the -vN flag
-> > Checking attestation on all messages, may take a moment...
-> > ---
-> >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
-> >    =E2=9C=93 Signed: DKIM/kernel.org
-> >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 DKIM=
-/kernel.org)
-> >  ERROR: missing [2/3]!
-> >  ERROR: missing [3/3]!
-> >  ---
-> >  NOTE: install patatt for end-to-end signature verification
-> > ---
-> > Total patches: 1
-> > ---
-> > WARNING: Thread incomplete!
-> > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.or=
-g
-> > Base: not specified
-> > Wende an: Kbuild: move to -std=3Dgnu11
->
-> It looks like the threading somehow got broken, likely due to the [v3]
-> on the first patch and not the second or third:
->
-> This worked for me on v5.17-rc6:
->
-> $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-arnd=
-@kernel.org; done
->
-> "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
-> "-P _" tells b4 to only fetch that exact message ID, not the whole
-> thread.
->
+On 3/3/22 22:32, Sean Christopherson wrote:
 
-Hmm, the universe is not good to me...
+> The re-queue scenario happens if a root is queued and zapped, but is kept alive
+> by a vCPU that hasn't yet put its reference.  If another memslot comes along before
+> the (sleeping) vCPU drops its reference, this will re-queue the root.
+> 
+> It's not a major problem in this patch as it's a small amount of wasted effort,
+> but it will be an issue when the "put" path starts using the queue, as that will
+> create a scenario where a memslot update (or NX toggle) can come along while a
+> defunct root is in the zap queue.
 
-$ for i in $(seq 1 3); do b4 shazam -P _
-20220301145233.3689119-"$i"-arnd@kernel.org; done
-usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
-usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
-b4: error: argument subcmd: invalid choice: 'shazam' (choose from
-'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+As of this patch it's not a problem because 
+kvm_tdp_mmu_invalidate_all_roots()'s caller holds kvm->slots_lock, so 
+kvm_tdp_mmu_invalidate_all_roots() is guarantee to queue its work items 
+on an empty workqueue.  In effect the workqueue is just a fancy list. 
+But as you point out in the review to patch 24, it becomes a problem 
+when there's no kvm->slots_lock to guarantee that.  Then it needs to 
+check that the root isn't already invalid.
 
-Do I need a higher version of b4 (here: v0.8.0)?
+>>> The only issue is that kvm_tdp_mmu_invalidate_all_roots() now assumes that
+>>> there is at least one reference in kvm->users_count; so if the VM is dying
+>>> just go through the slow path, as there is nothing to gain by using the fast
+>>> zapping.
+>> This isn't actually implemented.:-)
+> Oh, and when you implement it (or copy paste), can you also add a lockdep and a
+> comment about the check being racy, but that the race is benign?  It took me a
+> second to realize why it's safe to use a work queue without holding a reference
+> to @kvm.
 
-Check myself... b4.git:
+I didn't remove the paragraph from the commit message, but I think it's 
+unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and 
+kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to 
+take a reference to the VM.
 
-commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
-("shazam: change default behaviour to be "apply-here"")
+I think I don't even need to check kvm->users_count in the defunct root 
+case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the 
+workqueue before it checks that the lists are empty.
 
-...is post-v0.8.0.
+I'll wait to hear from you later today before sending out v5.
 
-Lemme see if I can apply this patch...
+Paolo
 
-# cd /usr/lib/python3/dist-packages
-
-# LC_ALL=3DC git apply --check --verbose /root/b4-shazam.patch
-Checking patch b4/command.py...
-error: while searching for:
-   sp.add_argument('-M', '--save-as-maildir', dest=3D'maildir',
-action=3D'store_true', default=3DFalse,
-                   help=3D'Save as maildir (avoids mbox format ambiguities)=
-')
-
-def cmd_am_common_opts(sp):
-   sp.add_argument('-v', '--use-version', dest=3D'wantver', type=3Dint,
-default=3DNone,
-                   help=3D'Get a specific version of the patch/series')
-
-error: patch failed: b4/command.py:35
-error: b4/command.py: patch does not apply
-Checking patch b4/mbox.py...
-error: while searching for:
-       ifh =3D io.StringIO()
-       b4.save_git_am_mbox(am_msgs, ifh)
-       ambytes =3D ifh.getvalue().encode()
-       if cmdargs.applyhere:
-           amflags =3D config.get('git-am-flags', '')
-           sp =3D shlex.shlex(amflags, posix=3DTrue)
-           sp.whitespace_split =3D True
-
-error: patch failed: b4/mbox.py:262
-error: b4/mbox.py: patch does not apply
-
-Nope.
-Dunno if I am willing to do that manually or build-from-git.
-
-Anyway, can you add this b4 shazam tipp/trick to our wiki, please?
-
-Last question:
-
-LLVM/Clang-14...
-Do I need any patches to Linux v5.17-rc6 or upstream Git?
-Dependent/Independent of "std-gnu-11"?
-
-I can see on my Debian/unstable AMD64 system:
-
-# LC_ALL=3DC apt-cache policy clang-14
-clang-14:
- Installed: (none)
- Candidate: 1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85
- Version table:
-    1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85 99
-        99 https://apt.llvm.org/unstable llvm-toolchain-14/main amd64 Packa=
-ges
-    1:14.0.0~+rc1-1 99
-        99 https://ftp.debian.org/debian unstable/main amd64 Packages
-        99 https://deb.debian.org/debian unstable/main amd64 Packages
-
-The one from apt.llvm.org I guess is LLVM/Clang v14.0.0-rc2?
-
-Maybe, I wait until Masahiroy has the triple in his kbuild Git tree...
-
-Thanks.
-
-Have a nice Friday,
-- sed@ -
-
-[1] https://git.kernel.org/pub/scm/utils/b4/b4.git/tag/?h=3Dv0.8.0
-[2] https://git.kernel.org/pub/scm/utils/b4/b4.git/commit/?id=3D7c1d044ff1d=
-5235e598d4c777c4abfe60e0a09a8
-[3] https://github.com/ClangBuiltLinux/linux/wiki/Command-line-tips-and-tri=
-cks
